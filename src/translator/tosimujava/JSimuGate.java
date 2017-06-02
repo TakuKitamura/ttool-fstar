@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator.tosimujava;
 
-import translator.tojava.*;
+import translator.tojava.JKeyword;
 
 public class JSimuGate implements Comparable {
     private String name;

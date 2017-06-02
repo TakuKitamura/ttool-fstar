@@ -47,13 +47,14 @@
 
 package ui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import javax.swing.*;
-import java.util.*;
+import myutil.GraphicLib;
 
-import myutil.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Line2D;
+import java.util.Vector;
 
 public abstract class TGConnector extends TGCScalableWithInternalComponent      {
 

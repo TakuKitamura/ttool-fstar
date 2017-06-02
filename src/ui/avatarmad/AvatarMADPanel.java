@@ -47,7 +47,6 @@
 package ui.avatarmad;
 
 //import java.awt.*;
-import java.util.*;
 
 import ui.*;
 

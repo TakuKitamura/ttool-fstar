@@ -46,8 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 package translator.tosimujava;
 
 
-import translator.tojava.*;
-import myutil.*;
+import myutil.FileException;
+import myutil.FileUtils;
+import translator.tojava.JKeyword;
+import translator.tojava.TURTLE2Java;
 
 public class MainClassSimu {
     

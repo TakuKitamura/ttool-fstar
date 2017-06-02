@@ -46,11 +46,11 @@
 
 package avatartranslator;
 
-import java.util.HashMap;
-
 import myutil.TraceManager;
 import translator.RTLOTOSKeyword;
 import translator.tojava.JKeyword;
+
+import java.util.HashMap;
 
 public abstract class AvatarTerm extends AvatarElement {
 

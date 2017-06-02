@@ -46,15 +46,12 @@
 
 package ui.avatarad;
 
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class AvatarADAcceptEventAction extends AvatarADBasicComponent implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;

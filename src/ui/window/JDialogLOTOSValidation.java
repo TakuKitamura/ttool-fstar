@@ -46,14 +46,17 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.ScrolledJTextArea;
+import ui.FormatManager;
+import ui.IconManager;
+import ui.MainGUI;
 
-import launcher.*;
-import myutil.*;
-import ui.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class JDialogLOTOSValidation extends javax.swing.JDialog implements ActionListener, Runnable  {
 	private static boolean verboseChecked, monitorChecked, safetyChecked, gradualChecked, v3v4Checked, fc2Checked, distributorChecked, autChecked = true, dotChecked=true, bcgChecked = false;

@@ -45,10 +45,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tree;
 
-import ui.*;
-import myutil.*;
+import myutil.GenericTree;
+import ui.Invariant;
+import ui.MainGUI;
 
-import java.util.*;
+import java.util.List;
 
 public class InvariantDataTree implements GenericTree {
     

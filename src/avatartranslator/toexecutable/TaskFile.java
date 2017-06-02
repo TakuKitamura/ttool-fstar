@@ -45,12 +45,6 @@
 
 package avatartranslator.toexecutable;
 
-import java.awt.*;
-import java.util.*;
-
-import myutil.*;
-import avatartranslator.*;
-
 public class TaskFile {
     /////////////////////RG
     //1) enlever pthread.h

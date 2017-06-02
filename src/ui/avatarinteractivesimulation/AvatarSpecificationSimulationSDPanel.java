@@ -48,18 +48,21 @@
 
 package ui.avatarinteractivesimulation;
 
+import avatartranslator.*;
+import avatartranslator.directsimulation.AvatarSimulationBlock;
+import avatartranslator.directsimulation.AvatarSimulationTransaction;
+import avatartranslator.directsimulation.AvatarSpecificationSimulation;
+import myutil.GraphicLib;
+import ui.ColorManager;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
-import java.util.*;
-
-import java.awt.image.*;
-
-import avatartranslator.*;
-import avatartranslator.directsimulation.*;
-import myutil.*;
-import ui.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Vector;
 
 public class AvatarSpecificationSimulationSDPanel extends JPanel implements MouseMotionListener  {
 

@@ -47,10 +47,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package copyfromJAVAsource;
 
-import java.util.*;
-
-
 import android.util.Log;
+
+import java.util.Vector;
 
 
 //import myutil.*;

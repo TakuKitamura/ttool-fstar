@@ -46,18 +46,15 @@
 
 package ui;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import javax.swing.JFrame;
-
+import myutil.Conversion;
+import myutil.GraphicLib;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import myutil.Conversion;
-import myutil.GraphicLib;
 import ui.window.JDialogNote;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class TGCNote extends TGCScalableWithoutInternalComponent {
 

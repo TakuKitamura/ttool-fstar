@@ -44,10 +44,11 @@ knowledge of the CeCILL license and that you accept its terms.
  */
 
 package translator;
- 
-import java.util.*;
 
-import myutil.*;
+import myutil.TraceManager;
+
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSizeTClass, TClassEventCommon {
   private int nbPara;

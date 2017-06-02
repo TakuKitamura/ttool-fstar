@@ -47,10 +47,13 @@
 
 package avatartranslator.directsimulation;
 
-import java.util.*;
-
 import avatartranslator.*;
-import myutil.*;
+import myutil.BoolExpressionEvaluator;
+import myutil.Conversion;
+import myutil.IntExpressionEvaluator;
+import myutil.TraceManager;
+
+import java.util.Vector;
 
 public class AvatarSimulationBlock  {
     public final static int NOT_STARTED = 0;

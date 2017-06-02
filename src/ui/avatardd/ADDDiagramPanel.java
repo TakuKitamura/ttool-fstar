@@ -48,11 +48,12 @@
 package ui.avatardd;
 
 
-import org.w3c.dom.*;
-import java.util.*;
-
+import myutil.TraceManager;
+import org.w3c.dom.Element;
 import ui.*;
-import myutil.*;
+
+import java.util.ListIterator;
+import java.util.Vector;
 
 public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
     private int masterClockFrequency = 200; // in MHz

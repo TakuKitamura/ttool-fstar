@@ -47,13 +47,21 @@
 
 package ui;
 
-import java.awt.*;
+import myutil.GraphicLib;
+import ui.tmlad.TMLActivityDiagramPanel;
+import ui.tmlad.TMLActivityDiagramToolBar;
+import ui.tmlcd.TMLTaskDiagramPanel;
+import ui.tmlcd.TMLTaskDiagramToolBar;
+import ui.tmlcd.TMLTaskOperator;
+import ui.tmldd.TMLArchiDiagramPanel;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-import ui.tmlcd.*;
-import ui.tmlad.*;
-import ui.tmldd.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Vector;
 
 public class TMLDesignPanel extends TURTLEPanel {
     public TMLTaskDiagramPanel tmltdp;
@@ -61,12 +69,18 @@ public class TMLDesignPanel extends TURTLEPanel {
 
     public TMLDesignPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+        
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        
         cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneDesignAction(e);
-                }
-            };
+        	
+        	@Override
+            public void stateChanged(ChangeEvent e){
+                mgui.paneDesignAction(e);
+            }
+        };
+
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }

@@ -46,12 +46,13 @@
 
 package ui;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import java.util.ArrayList;
-
 import ui.window.JDialogSearchBox;
+
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 public class TDiagramMouseManager implements MouseListener, MouseMotionListener  {
 

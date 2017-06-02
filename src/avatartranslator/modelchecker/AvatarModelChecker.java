@@ -47,10 +47,13 @@
 
 package avatartranslator.modelchecker;
 
-import java.util.*;
-
 import avatartranslator.*;
-import myutil.*;
+import myutil.BoolExpressionEvaluator;
+import myutil.Conversion;
+import myutil.IntExpressionEvaluator;
+import myutil.TraceManager;
+
+import java.util.*;
 
 public class AvatarModelChecker implements Runnable, myutil.Graph {
     private final static int DEFAULT_NB_OF_THREADS = 12;

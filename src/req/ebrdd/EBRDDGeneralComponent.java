@@ -45,9 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package req.ebrdd;
 
-import java.util.*;
-
-import tmltranslator.*;
+import tmltranslator.DIPLOElement;
 
 public abstract class EBRDDGeneralComponent extends DIPLOElement  {
 	protected Object referenceObject;

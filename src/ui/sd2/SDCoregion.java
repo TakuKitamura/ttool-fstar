@@ -46,10 +46,10 @@
 
 package ui.sd2;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class SDCoregion extends TGCScalableOneLineText implements SwallowedTGComponent {
 

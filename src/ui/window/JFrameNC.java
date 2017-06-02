@@ -45,20 +45,15 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-//import java.io.*;
+import myutil.GraphicLib;
+import myutil.TableSorter;
+import nc.NCStructure;
+import ui.IconManager;
+
 import javax.swing.*;
-//import javax.swing.event.*;
-import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-
-
-import myutil.*;
-import ui.*;
-import ui.file.*;
-
-import nc.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
@@ -602,8 +597,9 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 		
 		
 		*/
-		
-		mainTabbedPane = new JTabbedPane();
+
+		// Issue #41 Ordering of tabbed panes 
+		mainTabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 		mainTabbedPane.addTab("General info.", IconManager.imgic13, jspGeneralInfo, "Information on diagram");
 		mainTabbedPane.addTab("Equipments", IconManager.imgic13, jspEquipmentInfo, "Information on equipments");
 		mainTabbedPane.addTab("Switches", IconManager.imgic13, jspSwitchInfo, "Information on switches");
@@ -635,7 +631,7 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 	
 
 	
-	private void compute(int idFunc) {
+//	private void compute(int idFunc) {
 		/*computingPath = true;
 		GraphAlgorithms.go = true;
 		String info;
@@ -730,27 +726,22 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 		t.setExternalCall((ExternalCall)this);
 		t.setStoppableGUIElement((StoppableGUIElement)this);
 		t.go();*/
-	}
-	
-	
-
-	
-	private int maxLengthColumn(Component c, AbstractTableModel tm, int index) {
-		int w = 0, wtmp;
-		FontMetrics fm = c.getFontMetrics(c.getFont());
-		if (fm == null) {
-			return 0;
-		}
-		
-		String s;
-		
-		for(int i=0; i<tm.getRowCount(); i++) {
-			s = tm.getValueAt(i, index).toString();
-			wtmp = fm.stringWidth(s);
-			w = Math.max(w, wtmp);
-		}
-		return w;
-	}
-	
-	
+//	}
+//		
+//	private int maxLengthColumn(Component c, AbstractTableModel tm, int index) {
+//		int w = 0, wtmp;
+//		FontMetrics fm = c.getFontMetrics(c.getFont());
+//		if (fm == null) {
+//			return 0;
+//		}
+//		
+//		String s;
+//		
+//		for(int i=0; i<tm.getRowCount(); i++) {
+//			s = tm.getValueAt(i, index).toString();
+//			wtmp = fm.stringWidth(s);
+//			w = Math.max(w, wtmp);
+//		}
+//		return w;
+//	}
 } // Class

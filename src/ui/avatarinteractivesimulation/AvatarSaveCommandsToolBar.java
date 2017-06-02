@@ -48,8 +48,6 @@ package ui.avatarinteractivesimulation;
 
 import javax.swing.*;
 
-import ui.*;
-
 public class AvatarSaveCommandsToolBar extends AvatarInteractiveSimulationBar {
     
     

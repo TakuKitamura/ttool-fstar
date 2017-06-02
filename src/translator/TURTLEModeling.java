@@ -45,10 +45,12 @@
 
 package translator;
 
-import java.util.*;
-
-import myutil.*;
+import myutil.Conversion;
 import ui.CheckingError;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public class TURTLEModeling {
 	private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}"};

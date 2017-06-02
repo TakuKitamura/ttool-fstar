@@ -1,13 +1,9 @@
 package project.alwaystry;
 
-import java.util.LinkedList;
-
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
+import android.graphics.*;
 import android.view.View;
+
+import java.util.LinkedList;
 
 public class AvatarBDCompositionConnectorAndroid extends TGConnectorAndroid{
 

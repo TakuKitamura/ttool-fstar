@@ -46,8 +46,6 @@
 
 package avatartranslator;
 
-import myutil.Conversion;
-
 /**
  * An AvatarSimpleGuard is an {@link AvatarGuard} that is of the form:
  * {@link AvatarTerm} binaryOp {@link AvatarTerm} or simply {@link AvatarTerm}, or else

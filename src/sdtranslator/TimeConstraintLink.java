@@ -45,8 +45,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package sdtranslator;
 
-import sddescription.*;
-import translator.*;
+import sddescription.MSC;
+import sddescription.TimeConstraint;
+import translator.AbsoluteTimeConstraintTClass;
+import translator.Gate;
+import translator.RelativeTimeConstraintTClass;
+import translator.TimeConstraintTClass;
 
 public class TimeConstraintLink {
     

@@ -46,17 +46,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlcompd;
 
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+
 import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
-
-import tmltranslator.*;
 
 public class TMLCChannelOutPort extends TMLCPrimitivePort {
 	

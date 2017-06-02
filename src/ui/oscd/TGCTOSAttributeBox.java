@@ -54,7 +54,10 @@ package ui.oscd;
 
 //import myutil.*;
 
-import ui.*;
+import ui.TDiagramPanel;
+import ui.TGCAttributeBox;
+import ui.TGComponent;
+import ui.TGConnectingPoint;
 
 //import ui.window.*;
 

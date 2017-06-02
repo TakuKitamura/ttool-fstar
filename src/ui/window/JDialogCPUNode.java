@@ -46,39 +46,38 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.math.*;
-import java.awt.event.*;
-import javax.swing.*;
-import ui.*;
-import ui.tmlcd.*;
-import java.util.*;
-import tmltranslator.modelcompiler.*;
-import ui.*;
-import ui.tmldd.*;
-import ui.interactivesimulation.*;
+import myutil.GraphicLib;
+import tmltranslator.modelcompiler.ArchUnitMEC;
+import ui.ColorManager;
+import ui.IconManager;
+import ui.interactivesimulation.SimulationTransaction;
+import ui.tmldd.TMLArchiCPUNode;
 
-import myutil.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class JDialogCPUNode extends javax.swing.JDialog implements ActionListener  {
     //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
-    private static String[] tracemodeTab = {"VCI logger"};
+//    private static String[] tracemodeTab = {"VCI logger"};
     private boolean regularClose;
 
     private JPanel panel2, panel4, panel5;
-    private Frame frame;
+ //   private Frame frame;
     private TMLArchiCPUNode node;
 
     private ArchUnitMEC MECType;
 
-    protected JComboBox tracemode;
-    private static int selectedTracemode = 0;
+    protected JComboBox<String> tracemode;
+ //   private static int selectedTracemode = 0;
     // Panel1
     protected JTextField nodeName;
 
     // Panel2
     protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles, taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime, monitored;
-    protected JComboBox schedulingPolicy, MECTypeCB, encryption;
+    protected JComboBox<String> schedulingPolicy, MECTypeCB, encryption;
 
     // Tabbed pane for panel1 and panel2
     private JTabbedPane tabbedPane;
@@ -90,17 +89,17 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     /** Creates new form  */
     public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, ArrayList<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
-        frame = _frame;
+      //  frame = _frame;
         node = _node;
         MECType = _MECType;
         transactions = _transactions;
         initComponents();
-        myInitComponents();
+   //     myInitComponents();
         pack();
     }
-
-    private void myInitComponents() {
-    }
+//
+//    private void myInitComponents() {
+//    }
 
     private void initComponents() {
         Container c = getContentPane();
@@ -123,7 +122,8 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         panel2.setBorder(new javax.swing.border.TitledBorder("CPU attributes"));
         panel2.setPreferredSize(new Dimension(400, 300));
 
-        tabbedPane = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         c2.gridwidth = 1;
         c2.gridheight = 1;
@@ -145,7 +145,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         panel2.add(new JLabel("Scheduling policy:"), c2);
 
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        schedulingPolicy = new JComboBox();
+        schedulingPolicy = new JComboBox<String>();
         schedulingPolicy.addItem("Round Robin");
         schedulingPolicy.addItem("Round Robin - Priority Based");
         schedulingPolicy.setSelectedIndex(node.getSchedulingPolicy());
@@ -255,7 +255,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
           c4.anchor = GridBagConstraints.CENTER;*/
         panel4.add(new JLabel("Encryption:"), c4);
         c4.gridwidth = GridBagConstraints.REMAINDER;
-        encryption = new JComboBox();
+        encryption = new JComboBox<String>();
         encryption.addItem("None");
         encryption.addItem("Software Encryption");
         encryption.addItem("Hardware Security Module");
@@ -264,7 +264,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
         c4.gridwidth = 1;
         panel4.add(new JLabel("CPU Extension Construct:"), c4);
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-        MECTypeCB = new JComboBox( ArchUnitMEC.stringTypes );
+        MECTypeCB = new JComboBox<String>( ArchUnitMEC.stringTypes );
         if( MECType == null )   {
             MECTypeCB.setSelectedIndex( 0 );
         }
@@ -319,9 +319,9 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
            return;
            }*/
 
-        if (evt.getSource() == tracemode) {
-            selectedTracemode = tracemode.getSelectedIndex();
-        }
+//        if (evt.getSource() == tracemode) {
+//            selectedTracemode = tracemode.getSelectedIndex();
+//        }
 
         String command = evt.getActionCommand();
 
@@ -431,6 +431,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
             return false;
         }
     }
+    
     class MyFrame extends JPanel implements MouseMotionListener, MouseListener{
         Map<Range, String> toolMap = new HashMap<Range, String>();
         public MyFrame(){
@@ -439,26 +440,41 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
             addMouseMotionListener(this);
             addMouseListener(this);
         }
+        
+        @Override
         public void mouseDragged(MouseEvent e) {
             //do something
         }
+
+        @Override
         public void mouseMoved(MouseEvent e){
             drawToolTip(e);
         }
+
+        @Override
         public void mouseClicked(MouseEvent e) {
             drawToolTip(e);
         }
+
+        @Override
         public void mousePressed(MouseEvent e) {
             drawToolTip(e);
         }
+
+        @Override
         public void mouseExited(MouseEvent e){
             ///
         }
+
+        @Override
         public void mouseReleased(MouseEvent e){
             ///
         }
+
+        @Override
         public void mouseEntered(MouseEvent e){
         }
+
         public void drawToolTip(MouseEvent e){
 
             setToolTipText(null);
@@ -480,7 +496,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
             int i=0;
             java.util.List<String> tasks=new ArrayList<String>();
             Map<String, java.util.List<SimulationTransaction>> tasktrans = new HashMap<String, java.util.List<SimulationTransaction>>();
-            double incr=0.0;
+           // double incr=0.0;
             BigDecimal maxtime = new BigDecimal("0");
             BigDecimal mintime=new BigDecimal("9999999999999999999999999999");
             //Colors

@@ -46,12 +46,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import ui.*;
+import ui.IconManager;
+import ui.MainGUI;
+import ui.oscd.TOSClass;
 
-import ui.oscd.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class JDialogTOSClass extends javax.swing.JDialog implements ActionListener {
 

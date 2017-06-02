@@ -47,7 +47,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatardd;
 
-import ui.*;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
 
 public abstract class ADDCommunicationNode extends ADDNode {
     

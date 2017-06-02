@@ -45,9 +45,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tpndescription;
 
-import java.util.*;
+import myutil.IntMatrix;
 
-import myutil.*;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class TPN {
     public static int INDEX  = 0;

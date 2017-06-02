@@ -45,9 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tepe;
 
-import java.util.*;
-
-import myutil.*;
+import java.util.Vector;
 
 public  class TEPEAttributeComponent  extends TEPEComponent  {
 	protected String blockName;

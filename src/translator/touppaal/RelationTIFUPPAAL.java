@@ -45,12 +45,12 @@
 
 package translator.touppaal;
 
-import java.awt.*;
-import java.util.*;
+import translator.ADComponent;
+import translator.TClass;
+import uppaaldesc.UPPAALLocation;
+import uppaaldesc.UPPAALTemplate;
 
-import uppaaldesc.*;
-import myutil.*;
-import translator.*;
+import java.util.ArrayList;
 
 public class RelationTIFUPPAAL {
     

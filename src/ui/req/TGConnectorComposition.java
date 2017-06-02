@@ -47,13 +47,12 @@
 
 package ui.req;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import java.util.*;
-
-import myutil.*;
-
 import ui.*;
+
+import java.awt.*;
+import java.util.Vector;
+
+//import java.awt.geom.*;
 
 public  class TGConnectorComposition extends TGConnector {
     int w, h;

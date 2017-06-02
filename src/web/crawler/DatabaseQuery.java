@@ -48,7 +48,8 @@
 
 package web.crawler;
 
-import java.awt.AWTException;
+import javax.xml.transform.TransformerException;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +61,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.xml.transform.TransformerException;
+
 import static web.crawler.FileManagement.StoreResultsInFile;
 
 

@@ -45,9 +45,9 @@
 
 package ui.graph;
 
-import myutil.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class AUTBlock  implements Comparable<AUTBlock> {
 

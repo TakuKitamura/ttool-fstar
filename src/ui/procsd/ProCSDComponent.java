@@ -46,25 +46,25 @@
 
 package ui.procsd;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-
 import ui.prosmd.ProSMDStartState;
 import ui.prosmd.ProSMDStopState;
 import ui.prosmd.ProSMDSubmachine;
 import ui.prosmd.ProactiveSMDPanel;
-import ui.window.*;
+import ui.window.JDialogAttribute;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 public class ProCSDComponent extends TGCWithInternalComponent implements
 		SwallowTGComponent, SwallowedTGComponent, ActionListener {

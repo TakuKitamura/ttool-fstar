@@ -47,9 +47,14 @@
 
 package tmltranslator;
 
-import java.util.*;
-import java.io.*;
-import myutil.*;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TMLArchiTextSpecification {
     public final static String CR = "\n";

@@ -44,11 +44,17 @@
 
 package ui;
 
-import java.util.*;
-
-import ui.ebrdd.*;
 import req.ebrdd.*;
-import tmltranslator.*;
+import tmltranslator.TMLType;
+import ui.ebrdd.EBRDDAttributeBox;
+import ui.ebrdd.EBRDDPanel;
+import ui.ebrdd.EBRDDStartState;
+import ui.ebrdd.TGConnectorEBRDDERC;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 
 public class EBRDDTranslator {

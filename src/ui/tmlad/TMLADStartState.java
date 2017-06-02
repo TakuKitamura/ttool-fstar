@@ -46,11 +46,11 @@
 
 package ui.tmlad;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class TMLADStartState extends TGCWithoutInternalComponent implements EmbeddedComment{
     private int lineLength = 5;

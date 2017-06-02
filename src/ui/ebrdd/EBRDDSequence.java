@@ -47,10 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ebrdd;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class EBRDDSequence extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint {
     private int lineLength = 0;

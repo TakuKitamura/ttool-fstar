@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ddtranslator;
 
-import translator.*;
+import translator.Gate;
 
 public class DDStructLink  {
     public Gate lgate;

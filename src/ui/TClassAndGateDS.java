@@ -47,7 +47,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import translator.*;
+import translator.Gate;
+import translator.TClass;
 
 public class TClassAndGateDS implements Comparable {
     

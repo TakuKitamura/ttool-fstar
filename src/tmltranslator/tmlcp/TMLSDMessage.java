@@ -46,9 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
+import tmltranslator.TMLAttribute;
+import tmltranslator.TMLElement;
 
-import tmltranslator.*;
+import java.util.ArrayList;
 
 public class TMLSDMessage extends TMLElement  {
 

@@ -38,38 +38,21 @@
 
 package ui.window;
 
-import java.util.LinkedList;
-import java.util.Collections;
-
-import javax.swing.JFrame;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-
-import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import ui.TAttribute;
-import ui.IconManager;
+import myutil.GraphicLib;
 import ui.AvatarMethod;
 import ui.AvatarSignal;
+import ui.IconManager;
+import ui.TAttribute;
 import ui.avatarbd.AvatarBDLibraryFunction;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.LinkedList;
 
 /**
  * Dialog for managing parameters, return values, attributes, methods and signals of Avatar Library Functions
@@ -554,7 +537,8 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         this.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
 
         // Add the tabs panel
-        this.tabbedPane = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        this.tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         tabbedPane.addTab ("Parameters", this.initParametersTab ());            // Parameters Tab
         tabbedPane.addTab ("Signals", this.initSignalsTab ());                  // Signals Tab

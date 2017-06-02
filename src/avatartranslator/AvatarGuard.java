@@ -46,10 +46,10 @@
 
 package avatartranslator;
 
-import java.util.HashMap;
-
-import myutil.TraceManager;
 import myutil.Conversion;
+import myutil.TraceManager;
+
+import java.util.HashMap;
 
 public abstract class AvatarGuard {
 

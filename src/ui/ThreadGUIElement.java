@@ -47,13 +47,17 @@
 
 package ui;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
+import myutil.ExternalCall;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import ui.graph.AUTGraph;
+import ui.graph.RG;
+import ui.window.JDialogCancel;
+import ui.window.JFrameStatistics;
 
-import myutil.*;
-import ui.window.*;
-import ui.graph.*;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Vector;
 
 
 public class ThreadGUIElement extends Thread {

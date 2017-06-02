@@ -46,15 +46,18 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import myutil.*;
+import translator.tosimujava.TURTLE2SimuJava;
+import ui.IconManager;
+import ui.MainGUI;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 //import javax.swing.event.*;
 //import java.util.*;
-
-import myutil.*;
-import translator.tosimujava.*;
-import ui.*;
 
 
 public class JDialogJavaSimulation extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
@@ -147,21 +150,14 @@ public class JDialogJavaSimulation extends javax.swing.JDialog implements Action
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
-        jp1 = new JTabbedPane();
+        jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
         
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
         GridBagConstraints c01 = new GridBagConstraints();
         jp01.setLayout(gridbag01);
         jp01.setBorder(new javax.swing.border.TitledBorder("Code generation"));
-        
-        //JPanel jp02 = new JPanel();
-        //GridBagLayout gridbag02 = new GridBagLayout();
-        //GridBagConstraints c02 = new GridBagConstraints();
-        //jp02.setLayout(gridbag02);
-        //jp02.setBorder(new javax.swing.border.TitledBorder("Compilation"));
         
         JPanel jp03 = new JPanel();
         GridBagLayout gridbag03 = new GridBagLayout();
@@ -418,10 +414,10 @@ public class JDialogJavaSimulation extends javax.swing.JDialog implements Action
                 pt = new ProcessThread(cmd, this);
                 pt.start();
                 
-                Thread.currentThread().sleep(250);
+                Thread.sleep(250);
                 
                 while(pt.isStarted() == true) {
-                    Thread.currentThread().sleep(250);
+                    Thread.sleep(250);
                 }
                 jta.append("Simluation environment compiled\n");
                 
@@ -437,10 +433,10 @@ public class JDialogJavaSimulation extends javax.swing.JDialog implements Action
                 pt = new ProcessThread(cmd, this);
                 pt.start();
                 
-                Thread.currentThread().sleep(250);
+                Thread.sleep(250);
                 
                 while(pt.isStarted() == true) {
-                    Thread.currentThread().sleep(250);
+                    Thread.sleep(250);
                 }
                 
                 jta.append("Simulation done\n");

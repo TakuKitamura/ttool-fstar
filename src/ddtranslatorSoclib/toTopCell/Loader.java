@@ -42,8 +42,8 @@
 
 
 package ddtranslatorSoclib.toTopCell;
-import java.util.*;
-import ddtranslatorSoclib.*;
+
+import ddtranslatorSoclib.AvatarChannel;
 
 public class Loader {
 

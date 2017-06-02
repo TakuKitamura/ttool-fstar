@@ -45,12 +45,18 @@
 
 package translator;
 
-import ui.*;
-import compiler.tmlparser.*;
+import compiler.tmlparser.ParseException;
+import compiler.tmlparser.SimpleNode;
+import compiler.tmlparser.TMLExprParser;
+import compiler.tmlparser.TokenMgrError;
+import myutil.TraceManager;
+import ui.CheckingError;
+import ui.CorrespondanceTGElement;
+import ui.TGComponent;
 
-import java.util.*;
-import java.io.*;
-import myutil.*;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class TURTLEModelChecker {

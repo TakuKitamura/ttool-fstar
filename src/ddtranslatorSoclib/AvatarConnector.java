@@ -45,7 +45,6 @@
 
 
 package ddtranslatorSoclib;
-import java.util.*;
 
 public class AvatarConnector{
     

@@ -44,13 +44,12 @@
 
 package ui;
 
-import java.util.*;
-
-
-
-import myutil.*;
-import ui.avatarpd.*;
+import myutil.TraceManager;
 import tepe.*;
+import ui.avatarpd.*;
+
+import java.util.ListIterator;
+import java.util.Vector;
 
 
 public class AvatarRequirementPanelTranslator {

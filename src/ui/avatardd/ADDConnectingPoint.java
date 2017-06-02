@@ -47,7 +47,9 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.avatardd;
 
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class ADDConnectingPoint extends  TGConnectingPointWidthHeight{
     

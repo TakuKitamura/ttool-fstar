@@ -47,10 +47,6 @@
 
 package avatartranslator.modelchecker;
 
-import java.util.*;
-
-import myutil.*;
-
 public class SpecificationLink  {
 
     public SpecificationState originState;

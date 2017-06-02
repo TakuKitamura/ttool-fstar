@@ -1,11 +1,5 @@
 package project.alwaystry;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Vector;
-
-import myutilandroid.GraphicLibAndroid;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,6 +10,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import copyfromJAVAsource.AvatarSignal;
+import myutilandroid.GraphicLibAndroid;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public class AvatarBDPanelAndroid extends View {
 	

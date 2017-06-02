@@ -46,11 +46,13 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import ui.IconManager;
+import ui.StoppableGUIElement;
 
-import ui.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class JDialogCancel extends javax.swing.JDialog implements ActionListener, Runnable  {
 

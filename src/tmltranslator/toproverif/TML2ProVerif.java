@@ -45,21 +45,18 @@
 
 package tmltranslator.toproverif;
 
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-import java.io.*;
-import javax.swing.*;
-
-
-import ui.ConfigurationTTool;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
 import proverifspec.*;
-import myutil.*;
 import tmltranslator.*;
+import ui.ConfigurationTTool;
+
+import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.*;
 
 public class TML2ProVerif {
 

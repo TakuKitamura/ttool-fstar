@@ -46,10 +46,10 @@
 
 package ui.sd2;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class SDGuard extends TGCScalableOneLineText implements SwallowedTGComponent {
     protected int lineLength = 5;

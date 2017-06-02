@@ -46,11 +46,11 @@
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
 package ddtranslatorSoclib.toTopCell;
-import ddtranslatorSoclib.*;
-import java.io.*;
-import java.io.Writer.*;
-import java.util.*;
 
+import ddtranslatorSoclib.*;
+
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TopCellGenerator

@@ -46,8 +46,10 @@
 
 package tmltranslator.tmlcp;
 
+import tmltranslator.TMLCP;
+import tmltranslator.TMLElement;
+
 import java.util.*;
-import tmltranslator.*;
 
 public class TMLCPActivityDiagram  extends TMLElement {
 

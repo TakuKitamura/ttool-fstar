@@ -48,9 +48,9 @@ package ui.sd2;
 
 //import java.awt.*;
 
-import ui.*;
-
-import myutil.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class TGConnectingPointMessageSD extends  TGConnectingPointWidthHeight {
 

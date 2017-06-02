@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
-import myutil.*;
+import myutil.TraceManager;
 
 public abstract class TMLCommunicationElement extends TMLElement {
    //private boolean infected;

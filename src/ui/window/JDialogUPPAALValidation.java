@@ -46,17 +46,24 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-
-import avatartranslator.*;
-import avatartranslator.touppaal.*;
-import uppaaldesc.*;
-import launcher.*;
-import myutil.*;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarSpecification;
+import avatartranslator.touppaal.AVATAR2UPPAAL;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.ScrolledJTextArea;
+import myutil.TraceManager;
 import ui.*;
+import uppaaldesc.UPPAALSpec;
+import uppaaldesc.UPPAALTemplate;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
 
 public class JDialogUPPAALValidation extends javax.swing.JDialog implements ActionListener, Runnable  {
     private static boolean deadlockAChecked/*, deadlockEChecked*/, generateTraceChecked, customChecked, stateAChecked, stateEChecked, stateLChecked, showDetailsChecked, translateChecked;

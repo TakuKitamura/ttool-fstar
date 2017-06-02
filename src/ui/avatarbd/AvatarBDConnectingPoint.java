@@ -46,7 +46,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatarbd;
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class AvatarBDConnectingPoint extends  TGConnectingPointWidthHeight {
     

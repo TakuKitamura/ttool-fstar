@@ -46,11 +46,12 @@
 
 package ui.ucd;
 
+import myutil.TraceManager;
+import ui.MainGUI;
+import ui.TGUIAction;
+import ui.TToolBar;
+
 import javax.swing.*;
-
-
-import ui.*;
-import myutil.*;
 
 public class UseCaseDiagramToolBar extends TToolBar {
 

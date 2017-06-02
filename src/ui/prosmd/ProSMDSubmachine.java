@@ -46,20 +46,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.prosmd;
 
+import myutil.GraphicLib;
+import ui.*;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.*;
-import java.util.*;
-
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.procsd.ProActiveCompSpecificationCSDPanel;
-import ui.window.*;
+import java.util.Vector;
 
 public class  ProSMDSubmachine extends TGCOneLineText implements ActionListener {
     protected int lineLength = 5;

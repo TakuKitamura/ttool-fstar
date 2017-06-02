@@ -47,9 +47,11 @@
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
+import tmltranslator.TMLAttribute;
+import tmltranslator.TMLElement;
 
-import tmltranslator.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TMLCPSequenceDiagram  extends TMLElement {
 

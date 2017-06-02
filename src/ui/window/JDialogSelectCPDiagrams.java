@@ -47,17 +47,21 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import myutil.TraceManager;
+import ui.IconManager;
+import ui.TGComponent;
+import ui.tmlcp.TMLCPRefAD;
+import ui.tmlcp.TMLCPRefSD;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.List;
-
-import myutil.*;
-
-import ui.*;
-import ui.tmlcp.*;
+import java.util.Vector;
 
 
 public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {

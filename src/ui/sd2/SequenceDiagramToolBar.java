@@ -46,9 +46,11 @@
 
 package ui.sd2;
 
-import javax.swing.*;
+import ui.MainGUI;
+import ui.TGUIAction;
+import ui.TToolBar;
 
-import ui.*;
+import javax.swing.*;
 
 public class SequenceDiagramToolBar extends TToolBar {
 

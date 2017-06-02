@@ -46,11 +46,9 @@
 
 package ui.sysmlsecmethodology;
 
-import ui.*;
-
+import myutil.TraceManager;
 import org.w3c.dom.Element;
-
-import myutil.*;
+import ui.*;
 
 public class SysmlsecMethodologyDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
     //public Vector validated, ignored;

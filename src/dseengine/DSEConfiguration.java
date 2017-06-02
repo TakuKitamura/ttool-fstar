@@ -46,20 +46,28 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package dseengine;
 
-import java.awt.Point;
-import java.io.*;
-import java.util.*;
-
+import myutil.Conversion;
+import myutil.FileUtils;
+import myutil.TraceManager;
 import tmltranslator.*;
+import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
+import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
+import ui.GTMLModeling;
+import ui.MainGUI;
+import ui.TMLArchiPanel;
+import ui.TMLComponentDesignPanel;
+import ui.tmldd.*;
+
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.List;
+
 //import tmltranslator.touppaal.*;
 //import tmltranslator.tomappingsystemc.*;
-import tmltranslator.tomappingsystemc2.*;
 //import tmltranslator.toturtle.*;
-
-import myutil.*;
-
-import ui.*;
-import ui.tmldd.*;
 
 //import uppaaldesc.*;
 

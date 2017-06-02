@@ -46,15 +46,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatarcd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
 
 
 public class AvatarCDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {

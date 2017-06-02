@@ -45,12 +45,17 @@
 
 package tmltranslator.toautomata;
 
-import java.util.*;
+import automata.Automata;
+import myutil.FileException;
+import myutil.FileUtils;
+import tmltranslator.TMLModeling;
+import tmltranslator.TMLTask;
+import translator.TURTLEModeling;
+import translator.TURTLETranslator;
 
-import translator.*;
-import tmltranslator.*;
-import automata.*;
-import myutil.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class TML2AUTviaLOTOS {

@@ -46,11 +46,11 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui.tmlcp;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class TMLCPStartState extends TGCWithoutInternalComponent{
 	private int lineLength = 5;

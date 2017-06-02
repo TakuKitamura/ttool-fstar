@@ -48,8 +48,6 @@ package avatartranslator;
 
 import java.util.HashMap;
 
-import myutil.Conversion;
-
 /**
  * An AvatarGuardElse is an {@link AvatarGuard} that is of the form:
  * else

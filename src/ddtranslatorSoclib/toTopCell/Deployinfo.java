@@ -71,10 +71,10 @@
  */
 
 package ddtranslatorSoclib.toTopCell;
-import ddtranslatorSoclib.*;
-import java.util.*;
-import avatartranslator.AvatarRelation;
+
 import avatartranslator.AvatarSpecification;
+import ddtranslatorSoclib.AvatarCPU;
+import ddtranslatorSoclib.AvatarRAM;
 
 public class Deployinfo {
 

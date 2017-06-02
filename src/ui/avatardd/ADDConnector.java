@@ -47,16 +47,17 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.avatardd;
 
 
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.TraceManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 public  class ADDConnector extends TGConnector  {
     public static final String NO_SPY = "Remove spy";

@@ -47,11 +47,10 @@
 
 package ui.tmlcd;
 
-import java.awt.*;
-
-import myutil.*;
-
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public abstract class TMLCompositionOperator extends TGCWithInternalComponent {
     public String oldValue;

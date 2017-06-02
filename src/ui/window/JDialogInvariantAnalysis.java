@@ -47,20 +47,21 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarSpecification;
 import myutil.*;
-import avatartranslator.totpn.*;
-import avatartranslator.*;
-import tpndescription.*;
+import tpndescription.TPN;
 import ui.*;
-import ui.avatarsmd.*;
-import launcher.*;
-//import frompipe.*;
+import ui.avatarsmd.AvatarSMDReceiveSignal;
+import ui.avatarsmd.AvatarSMDSendSignal;
+import ui.avatarsmd.AvatarSMDStartState;
+import ui.avatarsmd.AvatarSMDState;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.BitSet;
 
 
 public class JDialogInvariantAnalysis extends javax.swing.JDialog implements ActionListener, Runnable  {
@@ -92,7 +93,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     
     private Thread t;
     private boolean go = false;
-    private boolean hasError = false;
+//    private boolean hasError = false;
 	protected boolean startProcess = false;
     private IntMatrix im;
     
@@ -123,9 +124,9 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         Font f = new Font("Courrier", Font.BOLD, 12);
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
-        jp1 = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
         
         JPanel panelCompute = new JPanel(new BorderLayout());
         JPanel panelCheck = new JPanel(new BorderLayout());
@@ -491,7 +492,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     	 	 	 percS = String.format("%.2f", perc/100);
     	 	 	 //TraceManager.addDev("PercS=" + percS);
     	 	 	 info.setText(percS+" %, matrix:" + im.sizeRow + "x" + im.sizeColumn);
-    	 	 	 Thread.currentThread().sleep(100);
+    	 	 	 Thread.sleep(100);
     	 	 	 if (im.isFinished()) {
     	 	 	 	 cont = false;
     	 	 	 }
@@ -534,12 +535,12 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             AvatarBlock ab = null;
             AvatarBlock ab1, ab2;
             Object o;
-            int state;
+         //   int state;
             int valToken = 0;
             
             boolean sameBlock;
             AvatarBlock prevBlock, prevBlock1;
-            int ignored = 0;
+         //   int ignored = 0;
             TGComponent tgc1, tgc2;
             
             int valLine;
@@ -586,7 +587,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	
             	// Putting components
 
-            	state = 0;
+            //	state = 0;
             	for(int j=0; j<elts.length; j++) {
             		
             		tmp = elts[j].trim();
@@ -736,7 +737,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
 					} else {
 						//TraceManager.addDev("Invariant ignored " + inv);
 						jtainvariants.append("Ignored invariant: " + inv + "\n");
-						ignored ++;
+					//	ignored ++;
 					}
             	}
             	
@@ -745,7 +746,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     
     public void run() {
     	TPN tpn;
-        hasError = false;
+      //  hasError = false;
 		
         
 		TraceManager.addDev("Thread started");
@@ -771,7 +772,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             
             jta.append("Computing incidence matrix\n");
             im = tpn.getIncidenceMatrix();
-            int nbOfColumn = im.sizeColumn;
+         //   int nbOfColumn = im.sizeColumn;
             if ((im.sizeRow < 100) && (im.sizeColumn<100)) {
     	 		jtamatrix.append("Incidence matrix: " + im.sizeRow + "x" + im.sizeColumn +"\n" + im.toString() + "\n\n");
             } else {
@@ -879,8 +880,8 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     public boolean hasToContinue() {
     	return (go == true);
     }
-    
-    public void setError() {
-    	hasError = true;
-    }
+//    
+//    public void setError() {
+//    	hasError = true;
+//    }
 }

@@ -47,7 +47,6 @@
 package ui.diplodocusmethodology;
 
 import org.w3c.dom.Element;
-
 import ui.*;
 
 public class DiplodocusMethodologyDiagramPanel extends TDiagramPanel implements TDPWithAttributes {

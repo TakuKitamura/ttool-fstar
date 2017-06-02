@@ -46,10 +46,7 @@
 
 package remotesimulation;
 
-import java.io.*;
-import java.net.*;
-import javax.swing.*;
-import java.util.*;
+import java.util.ArrayList;
 
 
 public class CommandParser {

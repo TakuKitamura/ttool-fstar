@@ -47,9 +47,15 @@
 
 package tmltranslator;
 
-import java.util.*;
-import java.io.*;
-import myutil.*;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
+
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class TMLTextSpecification {
     public final static String CR = "\n";

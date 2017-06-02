@@ -45,12 +45,12 @@
 
 package tmltranslator.touppaal;
 
-import java.awt.*;
-import java.util.*;
+import tmltranslator.TMLActivityElement;
+import tmltranslator.TMLTask;
+import uppaaldesc.UPPAALLocation;
+import uppaaldesc.UPPAALTemplate;
 
-import uppaaldesc.*;
-import myutil.*;
-import tmltranslator.*;
+import java.util.ArrayList;
 
 public class RelationTMLUPPAAL {
     

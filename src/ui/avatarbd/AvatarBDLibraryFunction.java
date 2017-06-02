@@ -38,37 +38,19 @@
 
 package ui.avatarbd;
 
-import java.util.LinkedList;
-import java.util.Iterator;
-
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-
-import java.awt.Graphics;
-import java.awt.Font;
-import java.awt.Color;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import myutil.GraphicLib;
 import myutil.TraceManager;
-
-import ui.TGCScalableWithoutInternalComponent;
-import ui.TAttribute;
-import ui.TGComponent;
-import ui.TDiagramPanel;
-import ui.MalformedModelingException;
-import ui.TGConnectingPoint;
-import ui.IconManager;
-import ui.ColorManager;
-import ui.TGComponentManager;
-import ui.AvatarSignal;
-import ui.AvatarMethod;
-import ui.AvatarDesignPanel;
-import ui.SwallowedTGComponent;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import ui.*;
 import ui.avatarsmd.AvatarSMDPanel;
 import ui.window.JDialogAvatarLibraryFunction;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * This class represent a Library Function block on an avatar block diagram.

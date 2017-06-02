@@ -46,10 +46,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.osad;
 
+import ui.MainGUI;
+import ui.TGUIAction;
+import ui.TToolBar;
+
 import javax.swing.*;
-
-
-import ui.*;
 
 public class TURTLEOSActivityDiagramToolBar extends TToolBar {
     

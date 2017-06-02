@@ -47,7 +47,7 @@
 
 package tmltranslator;
 
-import tmltranslator.tmlcp.*;
+import tmltranslator.tmlcp.TMLCPElement;
 
 public class TMLCPError {
     

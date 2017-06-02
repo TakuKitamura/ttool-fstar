@@ -48,11 +48,12 @@
 package avatartranslator.modelchecker;
 
 
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarSpecification;
 
-import java.util.*;
-
-import avatartranslator.*;
-import myutil.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class SpecificationState implements Comparable<SpecificationState>  {
 

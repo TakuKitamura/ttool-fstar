@@ -45,9 +45,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator;
 
-import java.util.*;
+import myutil.Conversion;
 
-import myutil.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 public class ActivityDiagram extends Vector<ADComponent>{
     

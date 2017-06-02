@@ -45,7 +45,8 @@
 
 package tpndescription;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class Transition {
     public static int INDEX  = 0;

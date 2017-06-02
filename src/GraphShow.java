@@ -46,11 +46,11 @@
    * @see
    */
 
-import java.io.File;
-
 import myutil.FileUtils;
 import myutil.TraceManager;
-import ui.graph.AUTGraph; 
+import ui.graph.AUTGraph;
+
+import java.io.File;
 
 public class GraphShow  {
 

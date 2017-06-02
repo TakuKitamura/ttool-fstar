@@ -47,16 +47,18 @@
 package ui.tmlcd;
 
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import ui.tmlad.*;
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
+import ui.tmlad.TMLActivityDiagramPanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTaskInterface {
     public String oldValue;

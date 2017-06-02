@@ -45,7 +45,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package sddescription;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class HMSC {
     private String name;

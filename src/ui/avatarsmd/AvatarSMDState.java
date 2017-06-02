@@ -46,15 +46,18 @@
 
 package ui.avatarsmd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogAvatarState;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.Vector;
 
 
 public class AvatarSMDState extends TGCScalableWithInternalComponent implements AllowedBreakpoint, CheckableAccessibility, CheckableLatency, CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant, WithAttributes {
@@ -783,6 +786,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             //TraceManager.addDev("Setting state " + _name + " as info=" + _info);
             securityInformation = _info;
         }
+        // FIXME: does it really work? Name comes in the form "s1__s2__s3" and we compare only to "s1", "s2" and "s3"
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarSMDState) {
                 ((AvatarSMDState)tgcomponent[i]).setSecurityInfo(_info, _name);

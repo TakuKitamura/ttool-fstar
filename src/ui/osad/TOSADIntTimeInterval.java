@@ -46,9 +46,12 @@
 
 package ui.osad;
 
-import java.awt.*;
+import ui.IconManager;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
 
-import ui.*;
+import java.awt.*;
 
 public class TOSADIntTimeInterval extends TOSADTimeInterval {
     private int lineLength = 5;

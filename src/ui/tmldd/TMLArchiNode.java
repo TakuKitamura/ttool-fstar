@@ -46,8 +46,6 @@
 
 package ui.tmldd;
 
-import java.util.ArrayList;
-
 import tmltranslator.HwNode;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import tmltranslator.modelcompiler.CpuMEC;
@@ -55,6 +53,8 @@ import ui.SwallowTGComponent;
 import ui.TDiagramPanel;
 import ui.TGCWithInternalComponent;
 import ui.TGComponent;
+
+import java.util.ArrayList;
 
 public abstract class TMLArchiNode extends TGCWithInternalComponent implements SwallowTGComponent {
     protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;

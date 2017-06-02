@@ -46,12 +46,16 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.ScrolledJTextArea;
+import ui.IconManager;
+import ui.MainGUI;
+
 import javax.swing.*;
-import launcher.*;
-import myutil.*;
-import ui.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class JDialogTPNValidation extends javax.swing.JDialog implements ActionListener, Runnable  {
 	private static boolean verboseChecked, summaryChecked = false;

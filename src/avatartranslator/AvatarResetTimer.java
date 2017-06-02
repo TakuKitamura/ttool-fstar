@@ -45,9 +45,6 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-
 public class AvatarResetTimer extends AvatarTimerOperator {
 	
     public AvatarResetTimer(String _name, Object _referenceObject) {

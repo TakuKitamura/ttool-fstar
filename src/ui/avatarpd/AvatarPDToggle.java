@@ -46,15 +46,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatarpd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public abstract class  AvatarPDToggle extends TGCScalableWithInternalComponent {
 	

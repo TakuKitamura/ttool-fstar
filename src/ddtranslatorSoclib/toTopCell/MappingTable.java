@@ -46,8 +46,9 @@
 
 
 package ddtranslatorSoclib.toTopCell;
-import ddtranslatorSoclib.*;
-import java.util.*;
+
+import ddtranslatorSoclib.AvatarRAM;
+import ddtranslatorSoclib.AvatarTTY;
 
 public class MappingTable {
 	

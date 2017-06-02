@@ -1,12 +1,12 @@
 package ui.prosmd.util;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import translator.ADComponent;
 import ui.TGComponent;
 import ui.prosmd.ProSMDState;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CorrespondanceSMDManager {
 

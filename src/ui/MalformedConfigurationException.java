@@ -48,6 +48,11 @@ package ui;
 
 public	class MalformedConfigurationException extends Exception {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3702606106817772428L;
+
 	public MalformedConfigurationException(String s) {
 		super(s);
 	}

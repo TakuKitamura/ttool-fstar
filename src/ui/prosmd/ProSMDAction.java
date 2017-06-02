@@ -46,16 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.prosmd;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import java.awt.*;
 
 public class   ProSMDAction extends TGCOneLineText {
     protected int lineLength = 5;

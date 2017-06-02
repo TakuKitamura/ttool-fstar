@@ -46,11 +46,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
+import myutil.GraphicLib;
+
 import java.awt.*;
+
 //import java.awt.geom.*;
 //import javax.swing.*;
-
-import myutil.*;
 
 public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
     private int width = 8;

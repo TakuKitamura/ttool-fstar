@@ -47,9 +47,9 @@
 
 package avatartranslator;
 
-import java.util.*;
+import myutil.TraceManager;
 
-import myutil.*;
+import java.util.*;
 
 public class AvatarStateMachine extends AvatarElement {
     // to be used by code generator for fast access to states

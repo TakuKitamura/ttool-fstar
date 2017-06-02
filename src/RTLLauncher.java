@@ -45,10 +45,8 @@
    */
 
 
-
-import launcher.*;
-
-import myutil.*;
+import launcher.RshServer;
+import myutil.TraceManager;
 
 public class RTLLauncher implements Runnable {
 

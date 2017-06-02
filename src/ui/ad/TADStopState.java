@@ -46,10 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui.ad;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class TADStopState extends TGCWithoutInternalComponent{
 	private int internalCircleSize = 16;

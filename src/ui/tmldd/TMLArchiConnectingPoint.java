@@ -47,7 +47,9 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.tmldd;
 
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class TMLArchiConnectingPoint extends  TGConnectingPointWidthHeight{
     

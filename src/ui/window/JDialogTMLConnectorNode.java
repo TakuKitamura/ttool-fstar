@@ -46,15 +46,16 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import ui.IconManager;
+import ui.tmldd.TMLArchiConnectorNode;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
+
 //import javax.swing.event.*;
-import java.util.*;
-
-import ui.*;
-
-import ui.tmldd.*;
 
 
 public class JDialogTMLConnectorNode extends javax.swing.JDialog implements ActionListener  {

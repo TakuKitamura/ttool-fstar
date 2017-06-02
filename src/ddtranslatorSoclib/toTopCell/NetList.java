@@ -43,8 +43,11 @@
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
 package ddtranslatorSoclib.toTopCell;
-import java.util.*;
-import ddtranslatorSoclib.*;
+
+import ddtranslatorSoclib.AvatarCPU;
+import ddtranslatorSoclib.AvatarCoproMWMR;
+import ddtranslatorSoclib.AvatarRAM;
+import ddtranslatorSoclib.AvatarTTY;
 
 public class NetList {
     public static final String NAME_CLK = "signal_clk";

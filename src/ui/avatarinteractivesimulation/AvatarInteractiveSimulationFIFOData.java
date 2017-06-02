@@ -46,9 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatarinteractivesimulation;
 
-import javax.swing.*;
-
-import avatartranslator.*;
+import avatartranslator.AvatarRelation;
 
 
 public  class AvatarInteractiveSimulationFIFOData  {

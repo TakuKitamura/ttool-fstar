@@ -45,8 +45,8 @@
 
 package tmltranslator.touppaal;
 
-import tmltranslator.*;
-import uppaaldesc.*;
+import tmltranslator.TMLActivityElement;
+import uppaaldesc.UPPAALLocation;
 
 public class TMLActivityElementLocation {
 	public TMLActivityElement elt;

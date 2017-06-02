@@ -45,25 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
 import myutil.FileException;
 import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
@@ -73,6 +54,11 @@ import ui.IconManager;
 import ui.StoppableGUIElement;
 import ui.graph.AUTGraph;
 import ui.graph.VCDGenerator;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public	class JFramePowerManagementAnalysis extends JFrame implements ActionListener, StoppableGUIElement, Runnable {

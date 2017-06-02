@@ -45,12 +45,20 @@
 
 package translator.touppaal;
 
-import java.awt.*;
-import java.util.*;
-
-import uppaaldesc.*;
-import myutil.*;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
 import translator.*;
+import uppaaldesc.UPPAALLocation;
+import uppaaldesc.UPPAALSpec;
+import uppaaldesc.UPPAALTemplate;
+import uppaaldesc.UPPAALTransition;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Vector;
 
 public class TURTLE2UPPAAL {
 	

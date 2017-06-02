@@ -45,10 +45,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator.tosimujava;
 
-import java.util.*;
+import myutil.FileException;
+import myutil.FileUtils;
+import translator.tojava.JAttribute;
+import translator.tojava.JKeyword;
+import translator.tojava.JOperation;
+import translator.tojava.TURTLE2Java;
 
-import translator.tojava.*;
-import myutil.*;
+import java.util.Vector;
 
 public class TJavaProcess {
     

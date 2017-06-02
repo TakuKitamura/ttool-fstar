@@ -46,10 +46,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.awt.*;
-import java.io.*;
+import myutil.Conversion;
 
-import myutil.*;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.StringReader;
 
 public class FormatManager {
     

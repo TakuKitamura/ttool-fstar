@@ -46,15 +46,11 @@
 
 package ui.avatarpd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class AvatarPDAttributeSetting extends AvatarPDToggle implements ConstraintListInterface {
     private int textY1 = 3;

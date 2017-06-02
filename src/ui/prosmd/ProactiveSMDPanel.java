@@ -46,17 +46,11 @@
 
 package ui.prosmd;
 
-import java.awt.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-import org.xml.sax.*;
-
 import fr.inria.oasis.vercors.cttool.model.Behaviour;
-
-import javax.xml.parsers.*;
-
-import ui.*;
+import ui.MainGUI;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TToolBar;
 
 public class ProactiveSMDPanel extends TDiagramPanel implements Behaviour {
     

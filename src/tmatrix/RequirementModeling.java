@@ -47,14 +47,19 @@
 
 package tmatrix;
 
-import java.util.*;
-
-
+import sddescription.HMSC;
+import sdtranslator.SDTranslationException;
+import sdtranslator.SDTranslator;
 import translator.*;
 import ui.*;
-import ui.req.*;
-import sddescription.*;
-import sdtranslator.*;
+import ui.req.Requirement;
+import ui.req.RequirementDiagramPanel;
+import ui.req.RequirementObserver;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 public class RequirementModeling {
     protected static final String NOT_FORMAL = "Requirement is not a formal requirement";

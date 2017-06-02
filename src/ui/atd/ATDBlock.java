@@ -46,15 +46,12 @@
 
 package ui.atd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Vector;
 
 
 public class ATDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent {

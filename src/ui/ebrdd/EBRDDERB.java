@@ -46,16 +46,16 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ebrdd;
 
-import java.awt.*;
-import java.awt.geom.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import ui.*;
+import ui.window.JDialogERB;
 
 import javax.swing.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
-
-import org.w3c.dom.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class EBRDDERB extends TGCOneLineText implements SwallowedTGComponent {
     protected int lineLength = 5;

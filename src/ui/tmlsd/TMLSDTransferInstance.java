@@ -47,10 +47,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlsd;
 
-import javax.swing.*;
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogTMLCPTransferInstance;
+
+import javax.swing.*;
 
 public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGComponent {
 

@@ -46,12 +46,6 @@
 
 package ui.interactivesimulation;
 
-import java.util.*;
-import javax.swing.table.*;
-
-import myutil.*;
-import tmltranslator.*;
-
 public class SimulationTransaction  {
 
     public final static int NODE_TYPE_CPU = 0;

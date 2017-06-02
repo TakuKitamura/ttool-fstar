@@ -45,11 +45,6 @@
 
 package avatartranslator;
 
-import java.util.*;
-import ui.avatarbd.*;
-import myutil.*;
-import ui.*;
-
 public class AvatarAttributeState extends AvatarElement {
     private AvatarAttribute attribute;
     private AvatarState state;
@@ -73,5 +68,10 @@ public class AvatarAttributeState extends AvatarElement {
         AvatarAttributeState result = new AvatarAttributeState (this.name, this.referenceObject, aa, aa.getBlock().getStateMachine().getStateWithName(this.state.getName()));
         this.cloneLinkToReferenceObjects (result);
         return result;
+    }
+
+    public String toString()
+    {
+        return this.attribute.getBlock().getName().replaceAll("__", ".") + "." + this.state.getName() + "." + this.attribute.getName();
     }
 }

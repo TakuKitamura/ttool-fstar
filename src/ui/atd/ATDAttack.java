@@ -46,14 +46,16 @@
 
 package ui.atd;
 
-import java.awt.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogAttack;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility, CanBeDisabled {
     private int textY1 = 3;

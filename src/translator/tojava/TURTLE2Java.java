@@ -45,11 +45,14 @@
 
 package translator.tojava;
 
-import java.util.*;
-
-import ddtranslator.*;
-import myutil.*;
+import ddtranslator.TClassLinkNode;
+import myutil.Conversion;
+import myutil.FileException;
 import translator.*;
+
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Vector;
 
 public class TURTLE2Java {
     

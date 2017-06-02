@@ -46,12 +46,12 @@
 
 package ui.sd2;
 
-import myutil.*;
+import ui.*;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 //import java.awt.*;
-import java.util.*;
-
-import ui.*;
 
 public class SequenceDiagramPanel extends TDiagramPanel {
 

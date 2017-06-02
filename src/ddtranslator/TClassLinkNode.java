@@ -44,10 +44,9 @@ knowledge of the CeCILL license and that you accept its terms.
  */
 
 package ddtranslator;
- 
 
 
-import myutil.*;
+import myutil.Conversion;
 import translator.*;
 
 public class TClassLinkNode extends TClass {

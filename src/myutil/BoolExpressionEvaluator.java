@@ -45,7 +45,7 @@
 
 package myutil;
 
-import java.util.*;
+import java.util.StringTokenizer;
 
 public class BoolExpressionEvaluator {
 
@@ -94,6 +94,13 @@ public class BoolExpressionEvaluator {
             res = BOOL_TERM;
             father = _father;
         }
+
+	public  IntBoolRes getTop() {
+	    if (father == null) {
+		return this;
+	    }
+	    else return father.getTop();
+	}
 
         public IntBoolRes addTerminalInt(int _value) {
             if (isFull()) {
@@ -412,21 +419,7 @@ public class BoolExpressionEvaluator {
                 return new Boolean((elt1 != 0) && (elt2 != 0));
             }
 
-	    if (op == LT_TOKEN) {
-		return new Boolean(elt1 < elt2);
-	    }
 
-	     if (op == GT_TOKEN) {
-		return new Boolean(elt1 > elt2);
-	    }
-
-	     if (op == LTEQ_TOKEN) {
-		return new Boolean(elt1 <= elt2);
-	    }
-
-	     if (op == GTEQ_TOKEN) {
-		return new Boolean(elt1 >= elt2);
-	    }
 
             return null;
         }
@@ -449,6 +442,26 @@ public class BoolExpressionEvaluator {
                 return new Integer(elt1 / elt2);
             }
 
+	    return null;
+	}
+
+	private Boolean makeIntegerToBooleanOp(int op, int elt1, int elt2) {
+
+	    if (op == LT_TOKEN) {
+		return new Boolean(elt1 < elt2);
+	    }
+
+	     if (op == GT_TOKEN) {
+		return new Boolean(elt1 > elt2);
+	    }
+
+	     if (op == LTEQ_TOKEN) {
+		return new Boolean(elt1 <= elt2);
+	    }
+
+	     if (op == GTEQ_TOKEN) {
+		return new Boolean(elt1 >= elt2);
+	    }
 
             return null;
         }
@@ -510,6 +523,11 @@ public class BoolExpressionEvaluator {
                 if ((ob1 instanceof Integer) && (ob2 instanceof Integer)) {
                     int elt1 = analysisArg(ob1);
                     int elt2 = analysisArg(ob2);
+
+		    if (isIntToBooleanOperator(op)) {
+			Boolean resB = makeIntegerToBooleanOp(op, elt1, elt2);
+			return resB;
+		    }
 
                     Integer result = makeIntegerOp(op, elt1, elt2);
                     TraceManager.addDev("Result int=" + result);
@@ -612,6 +630,10 @@ public class BoolExpressionEvaluator {
 
     public static final String [] VAL_S = {"true", "false", "nb", "bool", "==", "<", ">", "not", "or", "and", "=<", ">=", "eol", "(", ")", " ", "!=", "-", "/", "*", "+"};
 
+    public static final boolean isIntToBooleanOperator(int op) {
+	return ((op == LT_TOKEN) || (op == GT_TOKEN) || (op == LTEQ_TOKEN) || (op == GTEQ_TOKEN));
+    }
+
     public static String toStringAction(int val) {
         if (val >= 0) {
             return VAL_S[val];
@@ -689,8 +711,8 @@ public class BoolExpressionEvaluator {
         _expr = Conversion.replaceAllString(_expr, "and", "&").trim();
         _expr = Conversion.replaceAllString(_expr, "==", "=").trim();
         _expr = Conversion.replaceAllString(_expr, "!=", "$").trim();
-        _expr = Conversion.replaceAllString(_expr, ">=", ":").trim();
-        _expr = Conversion.replaceAllString(_expr, "<=", ";").trim();
+        //_expr = Conversion.replaceAllString(_expr, ">=", ":").trim();
+        //_expr = Conversion.replaceAllString(_expr, "<=", ";").trim();
 
         // For not() -> must find the closing bracket
 
@@ -1683,9 +1705,9 @@ public class BoolExpressionEvaluator {
     public IntBoolRes parseAndMakeTree(IntBoolRes current, String token) {
         ID = 0;
         IntBoolRes newElt;
-
-        TraceManager.addDev("<><><><><><> Dealing with token:" + token);
-
+	
+	//TraceManager.addDev(current.getTop().toString());
+        //TraceManager.addDev("<><><><><><> Dealing with token:" + token + " current=" + current);
 
         char c1 = token.charAt(0);
 
@@ -1759,6 +1781,42 @@ public class BoolExpressionEvaluator {
 
 	if (c1 == '<') {
             newElt = current.addIntOperator(LT_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	if (c1 == '>') {
+            newElt = current.addIntOperator(GT_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	if (c1 == '>') {
+            newElt = current.addIntOperator(GT_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	if (c1 == ';') {
+            newElt = current.addIntOperator(LTEQ_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed int operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+	if (c1 == ':') {
+            newElt = current.addIntOperator(GTEQ_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed int operator:" + token;
                 return null;

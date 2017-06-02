@@ -46,11 +46,15 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui;
 
-import java.awt.*;
+import myutil.GraphicLib;
+import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmldd.TMLArchiDiagramToolBar;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-import ui.tmldd.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.Vector;
 
 public class TMLArchiPanel extends TURTLEPanel {
     public TMLArchiDiagramPanel tmlap; 
@@ -58,16 +62,23 @@ public class TMLArchiPanel extends TURTLEPanel {
     
     public TMLArchiPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+        
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        
         cl = new ChangeListener() {
+        	
+        	@Override
             public void stateChanged(ChangeEvent e){
                 mgui.paneDesignAction(e);
             }
         };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
     
+    @Override
     public void init() {
          
         //  Class Diagram toolbar
@@ -80,10 +91,10 @@ public class TMLArchiPanel extends TURTLEPanel {
         //Class	diagram
         tmlap = new TMLArchiDiagramPanel(mgui, toolBarTML);
         tmlap.setName("DIPLODOCUS architecture and mapping Diagram");
-	toolBarTML.setPanel(tmlap);
-	// Diagram toolbar
-   
-        
+
+        toolBarTML.setPanel(tmlap);
+		// Diagram toolbar
+           
         tmlap.tp = this;
         tdp = tmlap;
         panels.add(tmlap); // Always first in list

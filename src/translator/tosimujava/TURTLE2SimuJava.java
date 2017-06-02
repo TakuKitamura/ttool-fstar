@@ -45,12 +45,19 @@
 
 package translator.tosimujava;
 
-import java.util.*;
+import myutil.Conversion;
+import myutil.FileException;
+import translator.*;
+import translator.tojava.ComponentId;
+import translator.tojava.JAttribute;
+import translator.tojava.JKeyword;
+import translator.tojava.JOperation;
+
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Vector;
 
 //import ddtranslator.*;
-import myutil.*;
-import translator.*;
-import translator.tojava.*;
 
 public class TURTLE2SimuJava {
     

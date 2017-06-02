@@ -45,8 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package req.ebrdd;
 
-import java.util.*;
-
 public abstract class ERCElement extends EBRDDGeneralComponent implements Cloneable {
     protected boolean negated;
 	

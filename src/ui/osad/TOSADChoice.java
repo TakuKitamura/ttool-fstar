@@ -47,10 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.osad;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class TOSADChoice extends TGCWithInternalComponent{
     private int lineLength = 10;

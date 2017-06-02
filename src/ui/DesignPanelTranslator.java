@@ -44,15 +44,16 @@
 
 package ui;
 
-import java.util.*;
-
-import myutil.*;
+import myutil.Conversion;
+import translator.*;
 import ui.ad.*;
 import ui.cd.*;
-
-import translator.*;
-
 import ui.osad.*;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 public class DesignPanelTranslator {
     protected TURTLEDesignPanelInterface dp;

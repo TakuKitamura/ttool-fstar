@@ -1,10 +1,14 @@
 package tmltranslator.tomappingsystemc2;
 
-import java.util.*;
+import myutil.TraceManager;
 import tmltranslator.*;
-import java.util.regex.*;
 
-import myutil.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 //import java.util.HashSet;
 
 public class StaticAnalysis{

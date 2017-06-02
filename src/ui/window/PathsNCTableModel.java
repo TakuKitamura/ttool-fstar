@@ -46,11 +46,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.util.*;
-import javax.swing.table.*;
+import nc.NCPath;
+import nc.NCStructure;
+import nc.NCSwitch;
 
-import myutil.*;
-import nc.*;
+import javax.swing.table.AbstractTableModel;
 
 public class PathsNCTableModel extends AbstractTableModel {
 	private NCStructure ncs;

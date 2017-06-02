@@ -46,11 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.util.*;
-import javax.swing.table.*;
+import nc.NCStructure;
+import nc.NCTraffic;
 
-import myutil.*;
-import nc.*;
+import javax.swing.table.AbstractTableModel;
 
 public class TrafficsNCTableModel extends AbstractTableModel {
 	private NCStructure ncs;

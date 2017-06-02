@@ -47,10 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlad;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class TMLADSequence extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint {
     private int lineLength = 0;

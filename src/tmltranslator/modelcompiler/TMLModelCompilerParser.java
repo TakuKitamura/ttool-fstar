@@ -49,9 +49,13 @@
 
 package tmltranslator.modelcompiler;
 
+import myutil.TraceManager;
 import tmltranslator.*;
-import java.util.*;
-import myutil.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class TMLModelCompilerParser {
     

@@ -46,15 +46,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatarpd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class AvatarPDAttribute extends AvatarPDToggle implements SwallowedTGComponent {
     private int textY1 = 3;

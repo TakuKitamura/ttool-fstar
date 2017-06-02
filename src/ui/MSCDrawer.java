@@ -46,11 +46,15 @@
 
 package ui;
 
-import java.util.*;
-
 import sddescription.*;
-import ui.sd.*;
-import ui.iod.*;
+import ui.iod.InteractionOverviewDiagramPanel;
+import ui.sd.SDInstance;
+import ui.sd.SequenceDiagramPanel;
+import ui.sd.TGConnectorMessageSD;
+
+import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Vector;
 
 public class MSCDrawer {
     public final static int DEC = 50;

@@ -46,11 +46,11 @@
 
 package ui.tmlad;
 
-import java.awt.*;
-import java.awt.geom.*;
-
+import myutil.GraphicLib;
 import ui.*;
-import myutil.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class TMLADExecCInterval extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;

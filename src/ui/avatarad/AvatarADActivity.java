@@ -46,15 +46,12 @@
 
 package ui.avatarad;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
 
 
 public class AvatarADActivity extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {

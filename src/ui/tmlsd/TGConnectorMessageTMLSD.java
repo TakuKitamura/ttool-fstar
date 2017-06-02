@@ -46,15 +46,17 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlsd;
 
-import javax.swing.*;
-
-import java.awt.Point;
-import java.util.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
-import org.w3c.dom.*;
+import ui.window.JDialogMultiStringCP;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public abstract class TGConnectorMessageTMLSD extends TGConnector {
 	protected int arrowLength = 10;

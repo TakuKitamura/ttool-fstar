@@ -45,11 +45,17 @@
 
 package avatartranslator;
 
-import java.io.*;
-import java.util.*;
+import compiler.tmlparser.ParseException;
+import compiler.tmlparser.SimpleNode;
+import compiler.tmlparser.TMLExprParser;
+import compiler.tmlparser.TokenMgrError;
+import myutil.BoolExpressionEvaluator;
+import myutil.Conversion;
+import myutil.IntExpressionEvaluator;
+import myutil.TraceManager;
 
-import compiler.tmlparser.*;
-import myutil.*;
+import java.io.StringReader;
+import java.util.ArrayList;
 
 
 public class AvatarSyntaxChecker  {

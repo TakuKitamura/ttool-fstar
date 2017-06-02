@@ -46,10 +46,10 @@
 
 package ui.avatarsmd;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class AvatarSMDStopState extends AvatarSMDBasicComponent implements EmbeddedComment, AllowedBreakpoint, PartOfInvariant, PartOfHighInvariant {
     private int internalCircleSize = 16;

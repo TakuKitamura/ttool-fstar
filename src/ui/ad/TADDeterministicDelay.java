@@ -46,11 +46,11 @@
 
 package ui.ad;
 
-import java.awt.*;
-import java.awt.geom.*;
-
+import myutil.GraphicLib;
 import ui.*;
-import myutil.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class TADDeterministicDelay extends TGCWithInternalComponent {
     private int lineLength = 5;

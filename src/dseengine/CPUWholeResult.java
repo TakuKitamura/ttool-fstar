@@ -46,11 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package dseengine;
 
-import java.io.*;
-import java.util.*;
+import myutil.TraceManager;
 
-
-import myutil.*;
+import java.util.Hashtable;
+import java.util.Vector;
 
 
 //import uppaaldesc.*;

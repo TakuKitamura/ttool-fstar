@@ -45,20 +45,23 @@
 
 package ui.window;
 
-//import java.io.*;
-import javax.swing.*;
-//import javax.swing.event.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-
-
+import automata.Automata;
+import automata.State;
+import automata.Transition;
 import myutil.*;
-import ui.*;
-import ui.graph.*;
-import ui.file.*;
-import automata.*;
+import ui.ConfigurationTTool;
+import ui.IconManager;
+import ui.StoppableGUIElement;
+import ui.ThreadGUIElement;
+import ui.file.AUTFileFilter;
+import ui.graph.AUTGraph;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 
 public  class JFrameStatistics extends JFrame implements ActionListener, StoppableGUIElement, SteppedAlgorithm, ExternalCall {
@@ -531,18 +534,13 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
             return;
         }
 
-        //System.out.println("Making last elements");
-        mainTabbedPane = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        mainTabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
         mainTabbedPane.addTab("General info.", IconManager.imgic13, jp, "# states, #transitions");
         mainTabbedPane.addTab("Statistics", IconManager.imgic13, jsp, "Statistics on states & transitions");
-        //if (graph.getNbTransition() < MAX_TRANSITIONS) {
         mainTabbedPane.addTab("Deadlocks", IconManager.imgic13, jspDeadlock, "Potential deadlocks");
         mainTabbedPane.addTab("Shortest Paths", IconManager.imgic13, jp2, "Shortest paths");
         mainTabbedPane.addTab("Longest Paths", IconManager.imgic13, jp4, "Longest paths");
-        //}
-        //}
-
-
 
         if (shouldIStop()) {
             return;

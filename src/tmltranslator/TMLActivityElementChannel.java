@@ -45,7 +45,7 @@
 
 package tmltranslator;
 
-import java.util.*;
+import java.util.ArrayList;
 
 
 public class TMLActivityElementChannel extends TMLActivityElement {

@@ -47,7 +47,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package myutil;
 
 
-import java.io.*;
+import java.io.BufferedReader;
 
 
 public class ErrorThread extends Thread {

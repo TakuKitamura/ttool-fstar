@@ -46,7 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 public class TAction  {
 	

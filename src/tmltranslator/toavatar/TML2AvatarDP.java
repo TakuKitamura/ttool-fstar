@@ -44,17 +44,21 @@
 
 package tmltranslator.toavatar;
 
-import java.util.*;
-import java.awt.*;
-import tmltranslator.*;
-import ui.*;
-import myutil.*;
-import ui.avatarbd.*;
+import avatartranslator.*;
+import tmltranslator.TMLMapping;
+import ui.AvatarDesignPanel;
+import ui.TAttribute;
+import ui.TGComponent;
+import ui.TGConnectingPoint;
+import ui.avatarbd.AvatarBDBlock;
+import ui.avatarbd.AvatarBDPanel;
+import ui.avatarbd.AvatarBDPortConnector;
+import ui.avatarbd.AvatarBDPragma;
 import ui.avatarsmd.*;
 
-import avatartranslator.*;
+import java.util.*;
+
 //import translator.*;
-import ui.window.*;
 
 
 public class TML2AvatarDP {

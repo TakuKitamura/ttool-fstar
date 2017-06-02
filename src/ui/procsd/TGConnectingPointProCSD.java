@@ -47,7 +47,10 @@
 package ui.procsd;
 
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class TGConnectingPointProCSD extends  TGConnectingPointWidthHeight{
     private TGComponent myOwnerComp;

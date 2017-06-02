@@ -47,10 +47,13 @@
 
 package ui;
 
-import myutil.*;
-import java.awt.*;
-//import java.awt.geom.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
+
 import javax.swing.*;
+import java.awt.*;
+
+//import java.awt.geom.*;
 
 //import java.awt.*;
 

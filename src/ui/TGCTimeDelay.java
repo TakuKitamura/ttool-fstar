@@ -46,13 +46,16 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import javax.swing.*;
-import org.w3c.dom.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import ui.window.JDialogTimeIntervalUnit;
 
-import myutil.*;
-import ui.window.*;
+import javax.swing.*;
+import java.awt.*;
+
+//import java.awt.geom.*;
 
 public class TGCTimeDelay extends TGCWithoutInternalComponent{
     protected int minWidth = 10;

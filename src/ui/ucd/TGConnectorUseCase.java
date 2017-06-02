@@ -46,11 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ucd;
 
-import java.awt.*;
-import java.util.*;
-
-
 import ui.*;
+
+import java.awt.*;
+import java.util.Vector;
 
 public  class TGConnectorUseCase extends TGConnector {
     

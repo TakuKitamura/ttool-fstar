@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package attacktrees;
 
-import java.util.*;
+import java.util.ArrayList;
 
 
 public class Attack { 

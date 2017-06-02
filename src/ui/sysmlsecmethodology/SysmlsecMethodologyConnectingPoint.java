@@ -48,7 +48,9 @@ package ui.sysmlsecmethodology;
 
 //import java.awt.*;
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class SysmlsecMethodologyConnectingPoint extends  TGConnectingPointWidthHeight {
 

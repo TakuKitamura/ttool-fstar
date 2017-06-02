@@ -45,11 +45,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
+import ui.MainGUI;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-
-import ui.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 
 public	class JFrameBird extends JFrame implements WindowListener {

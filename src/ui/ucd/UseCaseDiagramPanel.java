@@ -46,9 +46,9 @@
 
 package ui.ucd;
 
-import java.util.*;
-
 import ui.*;
+
+import java.util.ListIterator;
 
 public class UseCaseDiagramPanel extends TDiagramPanel {
 

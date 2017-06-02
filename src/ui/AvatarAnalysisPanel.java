@@ -46,29 +46,36 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-
-import ui.iod.*;
-import ui.sd.*;
-import ui.sd2.*;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import ui.avatarad.AvatarADPanel;
+import ui.avatarad.AvatarADToolBar;
+import ui.avatarcd.AvatarCDPanel;
+import ui.avatarcd.AvatarCDToolBar;
 import ui.ucd.*;
-import ui.avatarcd.*;
-import ui.avatarad.*;
-import myutil.*;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class AvatarAnalysisPanel extends TURTLEPanel {
 
     public AvatarAnalysisPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+
         cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneAnalysisAction(e);
-                }
-            };
+        	@Override
+            public void stateChanged(ChangeEvent e){
+                mgui.paneAnalysisAction(e);
+            }
+        };
+
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
@@ -91,7 +98,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(sdp);
         sdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
         toolBarPanel.add(toolBarSequence, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic18, toolBarPanel, "Open the sequence diagram of " + s);
@@ -118,7 +125,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(sdp);
         sdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarSequence, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic18, toolBarPanel, "Open the sequence diagram of " + s);
@@ -146,7 +153,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(ucdp);
         ucdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarUC, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic19, toolBarPanel, "Open the use case diagram of " + s);
@@ -168,7 +175,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(acdp);
         acdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarACD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic600, toolBarPanel, "Open the context diagram of " + s);
@@ -190,7 +197,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(aadp);
         aadp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarAAD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic5048, toolBarPanel, "Open the activity diagram of " + s);
@@ -261,7 +268,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
 
         //TraceManager.addDev("Adding instances to last SD Step 2");
 
-        ListIterator iterator = _ucdp.getComponentList().listIterator();
+        Iterator<TGComponent> iterator = _ucdp.getComponentList().iterator();
         TGComponent tgc;
 
         // To determine whether an actor is on the left, or on the right
@@ -275,7 +282,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         } else {
             systemName = "System";
             while(iterator.hasNext()) {
-                tgc = (TGComponent)(iterator.next());
+                tgc = iterator.next();
                 if ((tgc instanceof UCDActor) || (tgc instanceof UCDActorBox)) {
                     middleX = middleX + tgc.getX();
                     cptTotal ++;
@@ -287,11 +294,11 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         //TraceManager.addDev("Adding instances to last SD Step 3");
 
         // Classify actors
-        LinkedList <TGComponent> actors = new LinkedList();
-        iterator = _ucdp.getComponentList().listIterator();
+        java.util.List<TGComponent> actors = new LinkedList<TGComponent>();
+        iterator = _ucdp.getComponentList().iterator();
         int i;
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if ((tgc instanceof UCDActor) || (tgc instanceof UCDActorBox)) {
                 for(i=0; i<actors.size(); i++) {
                     if (actors.get(i).getX() > tgc.getX()) {

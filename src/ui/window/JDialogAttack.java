@@ -46,15 +46,15 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import ui.IconManager;
+import ui.atd.ATDAttack;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 //import javax.swing.event.*;
-import java.util.*;
-
-import ui.*;
-
-import ui.atd.*;
 
 
 public class JDialogAttack extends javax.swing.JDialog implements ActionListener  {

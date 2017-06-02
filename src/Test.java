@@ -45,9 +45,10 @@ knowledge of the CeCILL license and that you accept its terms.
  */
 
 
-
-import myutil.*;
-import ui.graph.*;
+import myutil.BoolExpressionEvaluator;
+import myutil.TraceManager;
+import ui.graph.AUTGraph;
+import ui.graph.AUTTransition;
 
 
 public class Test  {
@@ -108,7 +109,7 @@ public class Test  {
 	nbOfPb += evalBoolInt("3==1+2", true, false);
     	nbOfPb += evalBoolInt("1+2==3", true, false);
 	nbOfPb += evalBoolInt("1+2+3+4+5==3+7", false, false);
-	nbOfPb += evalBoolInt("(1+2==3)==(8==4+5)", false, false);
+	nbOfPb += evalBoolInt("(1+2==3)==(5==4)", false, false);
 	nbOfPb += evalBoolInt("2*3==6", true, false);
 	nbOfPb += evalBoolInt("1*4+2==6", true, false);
 	nbOfPb += evalBoolInt("2+1*4==6", true, false);
@@ -120,8 +121,15 @@ public class Test  {
 
 	nbOfPb += evalBoolInt("(3==3) or (3==4)", true, false);
 
-	nbOfPb += evalBoolInt("1<3", true, false);
 	nbOfPb += evalBoolInt("not(((1)==(3)))", true, false);
+
+	nbOfPb += evalBoolInt("1<3", true, false);
+	nbOfPb += evalBoolInt("not(1<3)", false, false);
+	nbOfPb += evalBoolInt("not(1<3<2)", false, true);
+	nbOfPb += evalBoolInt("(1+2)==4", false, false);
+	nbOfPb += evalBoolInt("(5>=4)==true", true, false);
+	nbOfPb += evalBoolInt("(5<=4)==true", false, false);
+	nbOfPb += evalBoolInt("(1+2==3)==(5>4)", true, false);
 	
 	//nbOfPb += evalBoolInt("not(1==1)", false, false);
 	

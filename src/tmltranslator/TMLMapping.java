@@ -46,10 +46,13 @@
 
 package tmltranslator;
 
+import myutil.TraceManager;
+import tmltranslator.toproverif.TML2ProVerif;
+import ui.CorrespondanceTGElement;
+import ui.TMLArchiPanel;
+import ui.TMLComponentDesignPanel;
+
 import java.util.*;
-import myutil.*;
-import tmltranslator.toproverif.*;
-import ui.*;
 
 public class TMLMapping {
 

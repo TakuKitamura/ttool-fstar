@@ -45,9 +45,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ddtranslator;
 
-import java.util.*;
+import translator.Param;
+import translator.TClass;
 
-import translator.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class DDStructSynchro  {
     private List<String> list;

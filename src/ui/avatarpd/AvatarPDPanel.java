@@ -47,13 +47,15 @@
 package ui.avatarpd;
 
 //import java.awt.*;
-import java.util.*;
+
+import ui.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 //import org.w3c.dom.*;
 //import org.xml.sax.*;
 //import javax.xml.parsers.*;
-
-import ui.*;
 
 public class AvatarPDPanel extends TDiagramPanel implements TDPWithAttributes{
     

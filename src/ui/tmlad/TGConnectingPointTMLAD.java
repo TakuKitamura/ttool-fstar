@@ -47,7 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.tmlad;
 
 //import java.awt.*;
-import ui.*;
+
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class TGConnectingPointTMLAD extends  TGConnectingPointWidthHeight{
 

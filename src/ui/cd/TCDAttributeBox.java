@@ -48,12 +48,13 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.cd;
 
 
-import java.util.*;
+import ui.*;
+import ui.window.JDialogAttribute;
 
+import java.util.Iterator;
+import java.util.List;
 
 //import myutil.*;
-import ui.*;
-import ui.window.*;
 
 public class TCDAttributeBox extends TGCAttributeBox {
     

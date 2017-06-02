@@ -46,24 +46,30 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-import ui.avatarmad.*;
+import myutil.GraphicLib;
+import ui.avatarmad.AvatarMADPanel;
+import ui.avatarmad.AvatarMADToolBar;
 
-import myutil.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class AvatarMADsPanel extends TURTLEPanel {
     
     public AvatarMADsPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+
+        // Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
         cl = new ChangeListener() {
+        	
+        	@Override
             public void stateChanged(ChangeEvent e){
                 mgui.paneMADAction(e);
             }
         };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
@@ -93,7 +99,7 @@ public class AvatarMADsPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(amadp);
         amadp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         panels.add(amadp);

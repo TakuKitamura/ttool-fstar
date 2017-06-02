@@ -46,13 +46,15 @@
 
 package ui;
 
-import java.awt.*;
+import myutil.GraphicLib;
+import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
+import ui.diplodocusmethodology.DiplodocusMethodologyDiagramToolbar;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import ui.diplodocusmethodology.*;
-
-
-import java.util.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.Vector;
 
 public class DiplodocusMethodologyPanel extends TURTLEPanel {
     public DiplodocusMethodologyDiagramPanel dmd;
@@ -60,20 +62,23 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
     public DiplodocusMethodologyPanel(MainGUI _mgui) {
         super(_mgui);
 
-        tabbedPane = new JTabbedPane();
-        UIManager.put("TabbedPane.tabAreaBackground", _mgui.BACK_COLOR);
-        UIManager.put("TabbedPane.selected", _mgui.BACK_COLOR);
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
         SwingUtilities.updateComponentTreeUI(tabbedPane);
         //tabbedPane.setOpaque(true);
 
         cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneDiplodocusMethodologyAction(e);
-                }
-            };
+        	
+        	@Override
+            public void stateChanged(ChangeEvent e){
+                mgui.paneDiplodocusMethodologyAction(e);
+            }
+        };
+
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-
     }
 
     // Put the methodology
@@ -89,7 +94,7 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
         TGConnectingPoint p1, p2;
         p1 = tgc1.getTGConnectingPointAtIndex(0);
         p2 = tgc3.getTGConnectingPointAtIndex(0);
-        Vector listPoint = new Vector();
+        Vector<Point> listPoint = new Vector<Point>();
         TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
         p1.setFree(false);
         p2.setFree(false);
@@ -98,7 +103,7 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
         // cp -> mapping
         p1 = tgc4.getTGConnectingPointAtIndex(0);
         p2 = tgc3.getTGConnectingPointAtIndex(2);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
         p1.setFree(false);
         p2.setFree(false);
@@ -107,7 +112,7 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
         // Archi -> mapping
         p1 = tgc2.getTGConnectingPointAtIndex(0);
         p2 = tgc3.getTGConnectingPointAtIndex(1);
-        listPoint = new Vector();
+        listPoint = new Vector<Point>();
         tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
         p1.setFree(false);
         p2.setFree(false);
@@ -147,7 +152,7 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(dmd);
         dmd.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(dmdt, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic98, toolBarPanel, "Opens diplodocus methodology");

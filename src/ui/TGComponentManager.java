@@ -48,51 +48,44 @@
 package ui;
 
 //import java.awt.*;
-import java.util.*;
-import myutil.*;
 
 import ui.ad.*;
-import ui.cd.*;
-import ui.dd.*;
-import ui.iod.*;
-import ui.sd.*;
-import ui.sd2.*;
-import ui.ucd.*;
-
-import ui.req.*;
-import ui.ebrdd.*;
-
 import ui.atd.*;
-
-
-// DIPLODOCUS
-import ui.tmlad.*;
-import ui.tmlcd.*;
-import ui.tmldd.*;
-import ui.tmlcompd.*;
-import ui.tmlcp.*;
-import ui.tmlsd.*;
+import ui.avatarad.*;
+import ui.avatarbd.*;
+import ui.avatarcd.*;
+import ui.avatardd.*;
+import ui.avatarmad.*;
+import ui.avatarmethodology.*;
+import ui.avatarpd.*;
+import ui.avatarrd.*;
+import ui.avatarsmd.*;
+import ui.cd.*;
+import ui.dd.TDDArtifact;
+import ui.dd.TDDNode;
+import ui.dd.TGConnectorLinkNode;
 import ui.diplodocusmethodology.*;
-
+import ui.ebrdd.*;
+import ui.iod.*;
+import ui.ncdd.*;
+import ui.osad.*;
+import ui.oscd.*;
 import ui.procsd.*;
 import ui.prosmd.*;
-
-import ui.oscd.*;
-import ui.osad.*;
-
-import ui.ncdd.*;
-
-import ui.avatarmethodology.*;
-import ui.avatarmad.*;
-import ui.avatarbd.*;
-import ui.avatardd.*;
-import ui.avatarsmd.*;
-import ui.avatarrd.*;
-import ui.avatarpd.*;
-import ui.avatarcd.*; // Context Diagram
-import ui.avatarad.*; // Activity Diagram
-
+import ui.req.*;
 import ui.sysmlsecmethodology.*;
+import ui.tmlad.*;
+import ui.tmlcd.*;
+import ui.tmlcompd.*;
+import ui.tmlcp.*;
+import ui.tmldd.*;
+import ui.tmlsd.*;
+import ui.ucd.*;
+
+import java.util.LinkedList;
+import java.util.Vector;
+
+// DIPLODOCUS
 
 public class TGComponentManager {
 

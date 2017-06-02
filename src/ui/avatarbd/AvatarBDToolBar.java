@@ -46,11 +46,14 @@
 
 package ui.avatarbd;
 
+import ui.MainGUI;
+import ui.TGUIAction;
+import ui.TToolBar;
+
 import javax.swing.*;
+
 //import java.awt.*;
 //import java.awt.event.*;
-
-import ui.*;
 
 public class AvatarBDToolBar extends TToolBar {
 

@@ -46,9 +46,11 @@
 
 package ui.req;
 
-import java.util.*;
-
 import ui.*;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
     

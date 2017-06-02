@@ -46,12 +46,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ucd;
 
+import myutil.GraphicLib;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGConnectingPoint;
+import ui.TGConnector;
+
 import java.awt.*;
-import java.util.*;
-
-import myutil.*;
-
-import ui.*;
+import java.util.Vector;
 
 public  abstract class TGConnectorUC extends TGConnector {
     int w, h;

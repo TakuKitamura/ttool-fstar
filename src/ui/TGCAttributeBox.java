@@ -46,16 +46,17 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.awt.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import ui.cd.TCDTClass;
+import ui.cd.TGConnectingPointTClasses;
+import ui.window.JDialogAttribute;
+
 import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
-
-import ui.cd.*;
-import ui.window.*;
+import java.awt.*;
+import java.util.LinkedList;
 
 public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
     public String oldValue;

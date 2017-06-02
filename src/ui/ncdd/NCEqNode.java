@@ -46,13 +46,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ncdd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogNCEqNode;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 
 public class NCEqNode extends TGCWithInternalComponent implements SwallowTGComponent/*, WithAttributes*/ {

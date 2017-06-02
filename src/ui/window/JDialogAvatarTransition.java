@@ -46,13 +46,18 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
+import ui.AvatarMethod;
+import ui.IconManager;
+import ui.TAttribute;
 
-import myutil.*;
-import ui.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public class JDialogAvatarTransition extends javax.swing.JDialog implements ActionListener  {
 
@@ -73,7 +78,7 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
     // Panel1
     private JTextField guardT, afterMinT, afterMaxT, computeMinT, computeMaxT;
     private JTextArea actionsT;
-    private JComboBox elements;
+    private JComboBox<String> elements;
     private JButton insertElement;
 
     // Main Panel
@@ -106,12 +111,12 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         makeElements();
 
         initComponents();
-        myInitComponents();
+    //    myInitComponents();
         pack();
     }
 
     private void makeElements() {
-        int i;
+       // int i;
 
         allElements = new Vector<String>();
         insertElements = new Vector<String>();
@@ -127,184 +132,184 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         }
     }
 
-
-    private void myInitComponents() {
-    }
-
+//
+//    private void myInitComponents() {
+//    }
+//
     private void initComponents() {
-        int i;
+    	int i;
 
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
+    	Container c = getContentPane();
+    	GridBagLayout gridbag0 = new GridBagLayout();
+    	GridBagLayout gridbag1 = new GridBagLayout();
+    	GridBagLayout gridbag2 = new GridBagLayout();
+    	GridBagConstraints c0 = new GridBagConstraints();
+    	GridBagConstraints c1 = new GridBagConstraints();
+    	GridBagConstraints c2 = new GridBagConstraints();
 
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        //c.setLayout(gridbag0);
-	c.setLayout(new BorderLayout());
+    	setFont(new Font("Helvetica", Font.PLAIN, 14));
+    	//c.setLayout(gridbag0);
+    	c.setLayout(new BorderLayout());
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
+    	panel1 = new JPanel();
+    	panel1.setLayout(gridbag1);
 
-        panel1.setBorder(new javax.swing.border.TitledBorder("Transition parameters"));
+    	panel1.setBorder(new javax.swing.border.TitledBorder("Transition parameters"));
 
-        //panel1.setPreferredSize(new Dimension(350, 350));
+    	//panel1.setPreferredSize(new Dimension(350, 350));
 
-        // guard
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 1;
-        panel1.add(new JLabel("guard = "), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        guardT = new JTextField(guard);
-        panel1.add(guardT, c1);
+    	// guard
+    	c1.weighty = 1.0;
+    	c1.weightx = 1.0;
+    	c1.gridwidth = 1;
+    	c1.gridheight = 1;
+    	c1.fill = GridBagConstraints.BOTH;
+    	c1.gridheight = 1;
+    	panel1.add(new JLabel("guard = "), c1);
+    	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+    	guardT = new JTextField(guard);
+    	panel1.add(guardT, c1);
 
-        // After
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        panel1.add(new JLabel("after ("), c1);
-        afterMinT = new JTextField(afterMin, 10);
-        panel1.add(afterMinT, c1);
-        panel1.add(new JLabel(","), c1);
-        afterMaxT = new JTextField(afterMax, 10);
-        panel1.add(afterMaxT, c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        panel1.add(new JLabel(")"), c1);
+    	// After
+    	c1.gridwidth = 1;
+    	c1.gridheight = 1;
+    	c1.weighty = 1.0;
+    	c1.weightx = 1.0;
+    	panel1.add(new JLabel("after ("), c1);
+    	afterMinT = new JTextField(afterMin, 10);
+    	panel1.add(afterMinT, c1);
+    	panel1.add(new JLabel(","), c1);
+    	afterMaxT = new JTextField(afterMax, 10);
+    	panel1.add(afterMaxT, c1);
+    	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+    	panel1.add(new JLabel(")"), c1);
 
-        // Compute
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        panel1.add(new JLabel("compute for ("), c1);
-        computeMinT = new JTextField(computeMin, 10);
-        panel1.add(computeMinT, c1);
-        panel1.add(new JLabel(","), c1);
-        computeMaxT = new JTextField(computeMax, 10);
-        panel1.add(computeMaxT, c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        panel1.add(new JLabel(")"), c1);
-
-
-        // actions
-
-        elements = new JComboBox(allElements);
-        panel1.add(elements, c1);
-
-        insertElement = new JButton("Insert");
-        insertElement.setEnabled(allElements.size() > 0);
-        insertElement.addActionListener(this);
-        panel1.add(insertElement, c1);
-
-        c1.gridheight = 10;
-        c1.weighty = 10.0;
-        c1.weightx = 10.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        actionsT = new JTextArea();
-        actionsT.setEditable(true);
-        actionsT.setMargin(new Insets(10, 10, 10, 10));
-        actionsT.setTabSize(3);
-        actionsT.setFont(new Font("times", Font.PLAIN, 12));
-        //actionsT.setPreferredSize(new Dimension(350, 250));
-        JScrollPane jsp = new JScrollPane(actionsT, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        for(i=0; i<actions.size(); i++) {
-            actionsT.append(actions.get(i) + "\n");
-        }
-        panel1.add(jsp, c1);
+    	// Compute
+    	c1.gridwidth = 1;
+    	c1.gridheight = 1;
+    	c1.weighty = 1.0;
+    	c1.weightx = 1.0;
+    	panel1.add(new JLabel("compute for ("), c1);
+    	computeMinT = new JTextField(computeMin, 10);
+    	panel1.add(computeMinT, c1);
+    	panel1.add(new JLabel(","), c1);
+    	computeMaxT = new JTextField(computeMax, 10);
+    	panel1.add(computeMaxT, c1);
+    	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+    	panel1.add(new JLabel(")"), c1);
 
 
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
+    	// actions
 
-        panel2.setBorder(new javax.swing.border.TitledBorder("Code"));
-        // guard
-        c2.weighty = 1.0;
-        c2.weightx = 1.0;
-        c2.gridwidth = 1;
-        c2.gridheight = 1;
-        c2.fill = GridBagConstraints.BOTH;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        c2.gridheight = 1;
-        panel2.add(new JLabel("Files to include:"), c2);
-        jtaFiles = new JTextArea();
-        jtaFiles.setEditable(true);
-        jtaFiles.setMargin(new Insets(10, 10, 10, 10));
-        jtaFiles.setTabSize(3);
-        String files = "";
-        if (filesToInclude != null) {
-            for(i=0; i<filesToInclude.length; i++) {
-                files += filesToInclude[i] + "\n";
-            }
-        }
-        jtaFiles.append(files);
-        jtaFiles.setFont(new Font("times", Font.PLAIN, 12));
-        jsp = new JScrollPane(jtaFiles, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        //jsp.setPreferredSize(new Dimension(300, 300));
-        panel2.add(jsp, c2);
-        panel2.add(new JLabel("Code to execute at the end of the transition"), c2);
-        jtaCode = new JTextArea();
-        jtaCode.setEditable(true);
-        jtaCode.setMargin(new Insets(10, 10, 10, 10));
-        jtaCode.setTabSize(3);
-        String code = "";
-        if (codeToInclude != null) {
-            for(i=0; i<codeToInclude.length; i++) {
-                code += codeToInclude[i] + "\n";
-            }
-        }
-        jtaCode.append(code);
-        jtaCode.setFont(new Font("times", Font.PLAIN, 12));
-        jsp = new JScrollPane(jtaCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        //jsp.setPreferredSize(new Dimension(300, 300));
-        panel2.add(jsp, c2);
+    	elements = new JComboBox<String>(allElements);
+    	panel1.add(elements, c1);
+
+    	insertElement = new JButton("Insert");
+    	insertElement.setEnabled(allElements.size() > 0);
+    	insertElement.addActionListener(this);
+    	panel1.add(insertElement, c1);
+
+    	c1.gridheight = 10;
+    	c1.weighty = 10.0;
+    	c1.weightx = 10.0;
+    	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+    	c1.fill = GridBagConstraints.BOTH;
+    	actionsT = new JTextArea();
+    	actionsT.setEditable(true);
+    	actionsT.setMargin(new Insets(10, 10, 10, 10));
+    	actionsT.setTabSize(3);
+    	actionsT.setFont(new Font("times", Font.PLAIN, 12));
+    	//actionsT.setPreferredSize(new Dimension(350, 250));
+    	JScrollPane jsp = new JScrollPane(actionsT, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    	for(i=0; i<actions.size(); i++) {
+    		actionsT.append(actions.get(i) + "\n");
+    	}
+    	panel1.add(jsp, c1);
 
 
-        // button panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+    	panel2 = new JPanel();
+    	panel2.setLayout(gridbag2);
+
+    	panel2.setBorder(new javax.swing.border.TitledBorder("Code"));
+    	// guard
+    	c2.weighty = 1.0;
+    	c2.weightx = 1.0;
+    	c2.gridwidth = 1;
+    	c2.gridheight = 1;
+    	c2.fill = GridBagConstraints.BOTH;
+    	c2.gridwidth = GridBagConstraints.REMAINDER;
+    	c2.gridheight = 1;
+    	panel2.add(new JLabel("Files to include:"), c2);
+    	jtaFiles = new JTextArea();
+    	jtaFiles.setEditable(true);
+    	jtaFiles.setMargin(new Insets(10, 10, 10, 10));
+    	jtaFiles.setTabSize(3);
+    	String files = "";
+    	if (filesToInclude != null) {
+    		for(i=0; i<filesToInclude.length; i++) {
+    			files += filesToInclude[i] + "\n";
+    		}
+    	}
+    	jtaFiles.append(files);
+    	jtaFiles.setFont(new Font("times", Font.PLAIN, 12));
+    	jsp = new JScrollPane(jtaFiles, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    	//jsp.setPreferredSize(new Dimension(300, 300));
+    	panel2.add(jsp, c2);
+    	panel2.add(new JLabel("Code to execute at the end of the transition"), c2);
+    	jtaCode = new JTextArea();
+    	jtaCode.setEditable(true);
+    	jtaCode.setMargin(new Insets(10, 10, 10, 10));
+    	jtaCode.setTabSize(3);
+    	String code = "";
+    	if (codeToInclude != null) {
+    		for(i=0; i<codeToInclude.length; i++) {
+    			code += codeToInclude[i] + "\n";
+    		}
+    	}
+    	jtaCode.append(code);
+    	jtaCode.setFont(new Font("times", Font.PLAIN, 12));
+    	jsp = new JScrollPane(jtaCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    	//jsp.setPreferredSize(new Dimension(300, 300));
+    	panel2.add(jsp, c2);
 
 
+    	// button panel;
+    	c0.gridwidth = 1;
+    	c0.gridheight = 10;
+    	c0.weighty = 1.0;
+    	c0.weightx = 1.0;
+    	c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 
-        JTabbedPane jtp = new JTabbedPane();
-        jtp.add("General", panel1);
-        //jtp.add("Prototyping", panel2);
-        //c.add(jtp, c0);
-	c.add(jtp, BorderLayout.CENTER);
+    	// Issue #41 Ordering of tabbed panes 
+    	JTabbedPane jtp = GraphicLib.createTabbedPane();//new JTabbedPane();
+    	jtp.add("General", panel1);
+    	//jtp.add("Prototyping", panel2);
+    	//c.add(jtp, c0);
+    	c.add(jtp, BorderLayout.CENTER);
 
-	JPanel buttons = new JPanel();
-	buttons.setLayout(gridbag0);
+    	JPanel buttons = new JPanel();
+    	buttons.setLayout(gridbag0);
 
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
+    	c0.gridwidth = 1;
+    	c0.gridheight = 1;
+    	c0.fill = GridBagConstraints.HORIZONTAL;
+    	closeButton = new JButton("Save and Close", IconManager.imgic25);
+    	//closeButton.setPreferredSize(new Dimension(600, 50));
 
 
-        closeButton.addActionListener(this);
-        buttons.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        buttons.add(cancelButton, c0);
+    	closeButton.addActionListener(this);
+    	buttons.add(closeButton, c0);
+    	c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+    	cancelButton = new JButton("Cancel", IconManager.imgic27);
+    	cancelButton.addActionListener(this);
+    	buttons.add(cancelButton, c0);
 
-	c.add(buttons, BorderLayout.SOUTH);
+    	c.add(buttons, BorderLayout.SOUTH);
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt)  {
         //String command = evt.getActionCommand();
 

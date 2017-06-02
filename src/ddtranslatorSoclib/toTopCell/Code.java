@@ -44,15 +44,14 @@
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
 package ddtranslatorSoclib.toTopCell;
-import java.util.*;
-import ddtranslatorSoclib.*;
-import java.io.*;
-import myutil.FileException;
-import myutil.FileUtils;
-import ui.*;
-import ui.avatardd.*;
-import ui.window.*;
-import tmltranslator.*;
+
+import ddtranslatorSoclib.AvatarCPU;
+import ui.ConfigurationTTool;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 //import ui.TGComponentManager;
 //import ui.TDiagramPanel;
 //import ui.TURTLEPanel;

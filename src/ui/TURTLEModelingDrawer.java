@@ -46,11 +46,13 @@
 
 package ui;
 
-import java.util.*;
-
 import translator.*;
-import ui.cd.*;
 import ui.ad.*;
+import ui.cd.TCDCompositionOperatorWithSynchro;
+import ui.cd.TCDTClass;
+
+import java.util.LinkedList;
+import java.util.Vector;
 
 public class TURTLEModelingDrawer {
     private MainGUI mgui;

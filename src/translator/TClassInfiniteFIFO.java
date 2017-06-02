@@ -44,8 +44,10 @@ knowledge of the CeCILL license and that you accept its terms.
  */
 
 package translator;
- 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class TClassInfiniteFIFO extends TClassBuffer implements FIFOInfiniteAndGetSizeTClass, TClassEventCommon {
 

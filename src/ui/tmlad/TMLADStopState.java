@@ -46,10 +46,10 @@
 
 package ui.tmlad;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class TMLADStopState extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint {
     private int internalCircleSize = 16;

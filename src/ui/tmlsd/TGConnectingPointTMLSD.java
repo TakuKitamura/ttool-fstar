@@ -48,7 +48,9 @@ package ui.tmlsd;
 
 //import java.awt.*;
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 
 public class TGConnectingPointTMLSD extends  TGConnectingPoint{
     

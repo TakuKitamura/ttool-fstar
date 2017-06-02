@@ -47,16 +47,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlsd;
 
-import javax.swing.JFrame;
-
 import myutil.GraphicLib;
-import ui.IconManager;
-import ui.SwallowTGComponent;
-import ui.TAttribute;
-import ui.TDiagramPanel;
-import ui.TGComponent;
-import ui.TGComponentManager;
+import ui.*;
 import ui.window.JDialogTMLCPControllerInstance;
+
+import javax.swing.*;
 
 public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGComponent {
 

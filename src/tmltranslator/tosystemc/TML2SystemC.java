@@ -45,10 +45,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tosystemc;
 
-import java.util.*;
-
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
 import tmltranslator.*;
-import myutil.*;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class TML2SystemC {

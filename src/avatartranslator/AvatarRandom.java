@@ -45,9 +45,6 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-
 public class AvatarRandom extends AvatarStateMachineElement {
     protected String variable;
     protected String minValue;

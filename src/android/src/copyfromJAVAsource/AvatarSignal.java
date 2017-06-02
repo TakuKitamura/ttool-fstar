@@ -49,8 +49,6 @@ package copyfromJAVAsource;
 
 //import translator.*;
 //import translator.tojava.*;
-import java.util.*;
-
 //import myutil.*;
 
 public class AvatarSignal extends AvatarMethod {

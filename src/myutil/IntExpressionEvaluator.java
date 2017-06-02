@@ -45,7 +45,7 @@
 
 package myutil;
 
-import java.util.*;
+import java.util.StringTokenizer;
 
 public class IntExpressionEvaluator {
     public static final int NUMBER_TOKEN = -1;

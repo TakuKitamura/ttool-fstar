@@ -47,15 +47,15 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.cd;
 
 
-import java.awt.*;
-//import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-
-//import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
+
+//import java.awt.event.*;
+//import org.w3c.dom.*;
 //import ui.ad.*;
 //import ui.window.*;
 

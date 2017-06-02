@@ -46,15 +46,17 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.cd;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Vector;
+
+//import java.awt.geom.*;
 
 public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
     protected TClassInterface t1;

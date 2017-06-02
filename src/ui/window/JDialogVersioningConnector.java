@@ -46,18 +46,17 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import ui.IconManager;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import ui.*;
-
-public class JDialogVersioningConnector extends javax.swing.JDialog implements ActionListener  {
+public class JDialogVersioningConnector extends JDialog implements ActionListener  {
     
     
-    private JPanel panel1, panel2, panel3, panel4, panel5;
+    private JPanel panel1;//, panel2, panel3, panel4, panel5;
     
     // Panel1
     int oldVersion, newVersion;
@@ -81,16 +80,16 @@ public class JDialogVersioningConnector extends javax.swing.JDialog implements A
         
         
         initComponents();
-        myInitComponents();
+//        myInitComponents();
         pack();
     }
-    
-    
-    private void myInitComponents() {
-    }
+//    
+//    
+//    private void myInitComponents() {
+//    }
     
     private void initComponents() {
-        JTabbedPane tabbedPane = new JTabbedPane();
+       // JTabbedPane tabbedPane = new JTabbedPane();
         //tabbedPane.setPreferredSize(new Dimension(550, 400));
         
         Container c = getContentPane();

@@ -49,7 +49,8 @@
 
 package tmltranslator.modelcompiler;
 
-import tmltranslator.*;
+import tmltranslator.TMLActivityElement;
+import tmltranslator.TMLTask;
 
 public class TMLModelCompilerError {
     

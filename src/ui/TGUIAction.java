@@ -46,21 +46,23 @@
 
 package ui;
 
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.*;
-
-import javax.swing.event.EventListenerList;
-
 
 public class TGUIAction extends AbstractAction {
-    // Actions
+    
+    private static final long serialVersionUID = -4942930048930203001L;
+	
+	// Actions
     public static final int ACT_NEW = 0;
     public static final int ACT_NEW_DESIGN = 100;
     public static final int ACT_NEW_ANALYSIS = 101;
     public static final int ACT_OPEN = 1;
+    public static final int ACT_OPEN_FROM_NETWORK = 455;
     public static final int ACT_OPEN_LAST = 154;
     public static final int ACT_MERGE = 228;
     public static final int ACT_SAVE = 2;
@@ -467,7 +469,6 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_GEN_RTLOTOS = 27;
     public static final int ACT_GEN_LOTOS = 155;
     public static final int ACT_GEN_UPPAAL = 204;
-    public static final int ACT_GEN_PROVERIF = 331;
     public static final int ACT_AVATAR_MODEL_CHECKER = 433;
     public static final int ACT_GEN_JAVA = 112;
     public static final int ACT_SIMU_JAVA = 167;
@@ -599,7 +600,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_INTERNAL_SEARCH = 415;
     //--
 
-    public static final int NB_ACTION = 455;
+    public static final int NB_ACTION = 456;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -645,7 +646,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_NEW] = new TAction("new-command", "New", IconManager.imgic20, IconManager.imgic21, "New", "New modeling", 'N');
         actions[ACT_NEW_DESIGN] = new TAction("new-command-design", "New design", IconManager.imgic14, IconManager.imgic14, "New design", "New TURTLE design", 0);
         actions[ACT_NEW_ANALYSIS] = new TAction("new-command-analysis", "New analysis", IconManager.imgic17, IconManager.imgic17, "New analysis", "New TURTLE analysis", 0);
-        actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TURTLE modeling",'O', true);
+        actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TTooll model",'O', true);
+	actions[ACT_OPEN_FROM_NETWORK] = new TAction("open-command-from-network","Open from TTool repository", IconManager.imgic22, IconManager.imgic23, "Open from TTool repository", "Open an existing TTool model from the TTool repository (TTool website)",'O', true);
         actions[ACT_OPEN_LAST] = new TAction("openlast-command","Open file: " + ConfigurationTTool.LastOpenFile, IconManager.imgic22, IconManager.imgic23, "Open: " + ConfigurationTTool.LastOpenFile, "Open the lastly saved TTool model", 0);
         actions[ACT_MERGE] = new TAction("merge-command","Merge", IconManager.imgic22, IconManager.imgic23, "Merge", "Merge the current TTool modeling with another one saved in a file ", 0);
         actions[ACT_SAVE] = new TAction("save-command", "Save",IconManager.imgic24, IconManager.imgic25, "Save", "Save an opened or a new TTool modeling", 'S', true);
@@ -702,7 +704,6 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_ONECLICK_LOTOS_RG] = new TAction("gen_rglotos-command", "One-click LOTOS-based verification", IconManager.imgic342, IconManager.imgic342, "One-click LOTOS-based verification",  "Generates a LOTOS-based RG  from TTool diagrams", '0');
         actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TTool diagrams", '0');
         actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Safety formal verification with UPPAAL", IconManager.imgic86, IconManager.imgic86, "Generate UPPAAL specification",  "Generates a UPPAAL specification from TTool diagrams", '0');
-        actions[ACT_GEN_PROVERIF] = new TAction("gen_proverif-command", "Generate ProVerif Code", IconManager.imgic34, IconManager.imgic35, "Generate ProVerif specification",  "Generates a ProVerif specification from AVATAR diagrams", '0');
 	actions[ACT_AVATAR_MODEL_CHECKER] = new TAction("avatar-model-checker", "Avatar model checker", IconManager.imgic140, IconManager.imgic140, "Avatar model checker",  "Executes the AVATAR model checker from an AVATAR design", '0');
         actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
         actions[ACT_SIMU_JAVA] = new TAction("gen_simujava-command", "Java-based simulation", IconManager.imgic38, IconManager.imgic39, "JAVA-based simualtion",  "Simulate diagrams using Java language", 0);

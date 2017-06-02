@@ -46,7 +46,9 @@
 
 package tmltranslator.modelcompiler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class OperationMEC	{
 

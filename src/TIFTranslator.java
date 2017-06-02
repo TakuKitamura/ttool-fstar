@@ -44,12 +44,15 @@ knowledge of the CeCILL license and that you accept its terms.
  * @see
  */
 
-import java.io.*;
- 
-import translator.*;
-import translator.touppaal.*;
-import myutil.*;
-import uppaaldesc.*;
+import myutil.FileUtils;
+import translator.TIFExchange;
+import translator.TURTLEModeling;
+import translator.TURTLETranslator;
+import translator.touppaal.TURTLE2UPPAAL;
+import uppaaldesc.UPPAALSpec;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class TIFTranslator  {
 	// 0 -> RT-LOTOS

@@ -47,9 +47,11 @@
  */
 
 package myutil;
+
 import java.io.IOException;
-import java.net.*;
-import java.lang.Runtime;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 
 public final class CheckConnection {

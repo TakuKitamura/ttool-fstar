@@ -46,17 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlcompd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
 
-import tmltranslator.*;
+import java.awt.*;
 
 public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedTGComponent, WithAttributes {
 	//private Color myColor, portColor;

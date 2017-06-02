@@ -45,10 +45,11 @@
 
 package tmltranslator;
 
-import myutil.*;
-
-import java.util.*;
+import myutil.TraceManager;
 import ui.tmlcompd.TMLCPrimitivePort;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TMLChannel extends TMLCommunicationElement {
 

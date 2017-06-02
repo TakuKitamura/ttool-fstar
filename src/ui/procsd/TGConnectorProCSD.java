@@ -51,17 +51,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.procsd;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.*;
-import java.util.*;
-
-import javax.swing.JPopupMenu;
-
-import myutil.*;
 import ui.*;
-import ui.cd.TGConnectorAssociation;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 //this is a binding 
 //from a port to another port

@@ -47,10 +47,9 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.avatarinteractivesimulation;
 
 import javax.swing.*;
+
 //import java.awt.*;
 //import java.awt.event.*;
-
-import ui.*;
 
 public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
     

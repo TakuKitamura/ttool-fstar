@@ -45,7 +45,7 @@
 
 package ui.graph;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class AUTSplitter  {
 

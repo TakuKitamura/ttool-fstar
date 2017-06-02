@@ -47,9 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.util.*;
+import ui.cd.TCDTClass;
 
-import ui.cd.*;
+import java.util.Collection;
+import java.util.Vector;
 
 
 public class VectorLRArtifactTClassGate extends Vector {

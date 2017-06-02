@@ -46,11 +46,14 @@
 
 package ui.avatarrd;
 
+import ui.MainGUI;
+import ui.TGUIAction;
+import ui.TToolBar;
+
 import javax.swing.*;
+
 //import java.awt.*;
 //import java.awt.event.*;
-
-import ui.*;
 
 public class AvatarRDToolBar extends TToolBar {
 

@@ -46,17 +46,10 @@
 
 package ui.tmlcompd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
 
-import tmltranslator.*;
+import java.awt.*;
 
 public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
     protected int radius = 11;

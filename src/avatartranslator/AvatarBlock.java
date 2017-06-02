@@ -45,9 +45,8 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-import myutil.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwner {

@@ -46,14 +46,19 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import ui.IconManager;
+import ui.TAttribute;
+import ui.TClassSynchroInterface;
+import ui.TTwoAttributes;
+import ui.cd.TCDSynchroGateList;
 
-import ui.*;
-import ui.cd.*;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 
 public class JDialogSynchro extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {

@@ -45,12 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.graph;
 
-import java.util.*;
-import java.io.*;
-
-import myutil.*;
-import vcd.*;
-
 public class CorePowerConsumption  {
     
 	private int nbOfModes;

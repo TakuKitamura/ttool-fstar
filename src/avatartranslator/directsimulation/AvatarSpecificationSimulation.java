@@ -47,11 +47,12 @@
 
 package avatartranslator.directsimulation;
 
-import java.awt.*;
-import java.util.*;
-
 import avatartranslator.*;
-import myutil.*;
+import myutil.IntExpressionEvaluator;
+import myutil.TraceManager;
+
+import java.awt.*;
+import java.util.Vector;
 
 
 public class AvatarSpecificationSimulation  {

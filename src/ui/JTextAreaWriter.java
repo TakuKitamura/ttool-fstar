@@ -1,9 +1,8 @@
 package ui;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.Writer;
-
-import javax.swing.JTextArea;
 
 public class JTextAreaWriter extends Writer {
 

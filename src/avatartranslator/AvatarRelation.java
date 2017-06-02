@@ -47,7 +47,9 @@
 
 package avatartranslator;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class AvatarRelation extends AvatarElement {
 
@@ -149,6 +151,14 @@ public class AvatarRelation extends AvatarElement {
 
     public AvatarSignal getSignal2(int _index) {
         return signals2.get(_index);
+    }
+
+    public AvatarBlock getBlock1() {
+        return this.block1;
+    }
+
+    public AvatarBlock getBlock2() {
+        return this.block2;
     }
 
     public AvatarSignal getInSignal(int _index) {

@@ -48,9 +48,12 @@
 
 package tmltranslator;
 
-import java.util.*;
-import myutil.*;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
 import tmltranslator.tmlcp.*;
+
+import java.util.*;
 
 public class TMLCPTextSpecification {
     public final static String CR = "\n";

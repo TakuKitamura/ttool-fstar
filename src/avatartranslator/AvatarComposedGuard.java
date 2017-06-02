@@ -46,8 +46,6 @@
 
 package avatartranslator;
 
-import myutil.Conversion;
-
 public abstract class AvatarComposedGuard extends AvatarGuard {
     public AvatarComposedGuard getOpposite () {
         return new AvatarUnaryGuard ("not", "(", ")", this);

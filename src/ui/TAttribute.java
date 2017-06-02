@@ -47,11 +47,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.util.*;
+import tmltranslator.TMLTextSpecification;
+import translator.RTLOTOSKeyword;
+import translator.tojava.JKeyword;
 
-import translator.*;
-import translator.tojava.*;
-import tmltranslator.*;
+import java.util.List;
 
 public class TAttribute {
     

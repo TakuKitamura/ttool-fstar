@@ -49,13 +49,14 @@ package ui.cd;
 
 //import java.awt.*;
 //import javax.swing.*;
-import java.util.*;
+
+import ui.*;
+import ui.window.JDialogReducedAttribute;
+
+import java.util.List;
 
 //import org.w3c.dom.*;
-
 //import myutil.*;
-import ui.*;
-import ui.window.*;
 
 public class TCDReducedAttributeBox extends TGCReducedAttributeBox {
     

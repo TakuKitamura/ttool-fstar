@@ -47,15 +47,14 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import ui.IconManager;
+import ui.TAttribute;
 
-import ui.*;
-import ui.tmldd.*;
-import myutil.*;
+import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 
 public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements ActionListener, ListSelectionListener  {

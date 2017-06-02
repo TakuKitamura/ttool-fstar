@@ -45,7 +45,8 @@
 
 package req.ebrdd;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 
 public class EBRDDSequence extends EBRDDComponent{

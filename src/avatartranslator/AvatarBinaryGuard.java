@@ -48,8 +48,6 @@ package avatartranslator;
 
 import java.util.HashMap;
 
-import myutil.Conversion;
-
 public class AvatarBinaryGuard extends AvatarComposedGuard {
     AvatarComposedGuard guardA;
     AvatarComposedGuard guardB;

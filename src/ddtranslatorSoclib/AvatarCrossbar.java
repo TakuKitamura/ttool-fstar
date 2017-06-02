@@ -44,7 +44,6 @@
    * @author  Daniela Genius */
 
 package ddtranslatorSoclib;
-import java.util.*;
 
 public class AvatarCrossbar extends AvatarComponent{
 

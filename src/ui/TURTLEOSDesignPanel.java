@@ -46,26 +46,35 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.awt.*;
+import myutil.GraphicLib;
+import ui.osad.TURTLEOSActivityDiagramPanel;
+import ui.osad.TURTLEOSActivityDiagramToolBar;
+import ui.oscd.TURTLEOSClassDiagramPanel;
+import ui.oscd.TURTLEOSClassDiagramToolBar;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-import ui.oscd.*;
-import ui.osad.*;
-//import ui.tmlcd.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class TURTLEOSDesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterface {
-    public Vector validated, ignored;
+    //public Vector validated, ignored;
     public TURTLEOSClassDiagramPanel toscdp;
 
     public TURTLEOSDesignPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+        
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        
         cl = new ChangeListener() {
+        	
+        	@Override
             public void stateChanged(ChangeEvent e){
                 mgui.paneDesignAction(e);
             }
         };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
@@ -102,7 +111,7 @@ public class TURTLEOSDesignPanel extends TURTLEPanel implements TURTLEDesignPane
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tosadp);
         tosadp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
         toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         panels.add(tosadp);
@@ -128,7 +137,7 @@ public class TURTLEOSDesignPanel extends TURTLEPanel implements TURTLEDesignPane
           JScrollDiagramPanel jsp	= new JScrollDiagramPanel(toscdp);
           toscdp.jsp = jsp;
           jsp.setWheelScrollingEnabled(true);
-          jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+          jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
           toolBarPanel.add(toolBarTOS, BorderLayout.NORTH);
           toolBarPanel.add(jsp, BorderLayout.CENTER);
           tabbedPane.addTab("TURTLE-OS Class diagram", IconManager.imgic62, toolBarPanel, "Opens TURTLE-OS class diagram");

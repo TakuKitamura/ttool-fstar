@@ -46,10 +46,10 @@
 
 package ui.avatarad;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class AvatarADStopFlow extends AvatarADBasicComponent implements EmbeddedComment, AllowedBreakpoint {
     private int internalCircleSize = 16;

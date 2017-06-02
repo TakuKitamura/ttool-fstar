@@ -47,10 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.cd;
 
-import java.awt.*;
-
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogReducedAttribute;
+
+import java.awt.*;
 
 public class TCDReducedAttributeGateBox extends TGCReducedAttributeBox {
     protected Color myColor;

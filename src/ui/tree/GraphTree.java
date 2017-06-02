@@ -45,11 +45,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tree;
 
-import ui.*;
-import myutil.*;
-import ui.graph.*;
+import myutil.GenericTree;
+import ui.MainGUI;
+import ui.graph.RG;
 
-import java.util.*;
+import java.util.List;
 
 public class GraphTree implements GenericTree {
     

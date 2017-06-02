@@ -46,11 +46,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ncdd;
 
+import ui.MainGUI;
+import ui.TGUIAction;
+import ui.TToolBar;
+
 import javax.swing.*;
+
 //import java.awt.*;
 //import java.awt.event.*;
-
-import ui.*;
 
 public class NCDiagramToolBar extends TToolBar {
     

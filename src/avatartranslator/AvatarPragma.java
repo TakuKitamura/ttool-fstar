@@ -45,10 +45,11 @@
 
 package avatartranslator;
 
-import java.util.*;
-import myutil.*;
-import ui.*;
+import myutil.TraceManager;
+import ui.TAttribute;
 import ui.avatarbd.AvatarBDPragma;
+
+import java.util.*;
 
 public abstract class AvatarPragma extends AvatarElement {
     public static final String[] PRAGMAS =               {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "PublicConstant", "PrivateConstant"};
@@ -352,10 +353,12 @@ public abstract class AvatarPragma extends AvatarElement {
             }
             switch(header){
                 case "Confidentiality":
-                    pragmas.add(new AvatarPragmaSecret(str, obj, attrs));
+                    for (AvatarAttribute attr: attrs)
+                        pragmas.add(new AvatarPragmaSecret(str, obj, attr));
                     break;
                 case "Secret":
-                    pragmas.add(new AvatarPragmaSecret(str, obj, attrs));
+                    for (AvatarAttribute attr: attrs)
+                        pragmas.add(new AvatarPragmaSecret(str, obj, attr));
                     break;
                 case "SecrecyAssumption":
                     pragmas.add(new AvatarPragmaSecrecyAssumption(str, obj, attrs));

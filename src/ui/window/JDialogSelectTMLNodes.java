@@ -46,14 +46,17 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import ui.IconManager;
+import ui.TGComponent;
+import ui.tmldd.TMLArchiNode;
 
-import ui.*;
-import ui.tmldd.*;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 
 public class JDialogSelectTMLNodes extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {

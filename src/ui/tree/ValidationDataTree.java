@@ -45,8 +45,8 @@
 
 package ui.tree;
 
-import ui.*;
-import myutil.*;
+import myutil.GenericTree;
+import ui.MainGUI;
 
 public class ValidationDataTree implements GenericTree {
 

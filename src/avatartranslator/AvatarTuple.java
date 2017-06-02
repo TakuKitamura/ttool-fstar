@@ -46,10 +46,8 @@
 
 package avatartranslator;
 
-import java.util.LinkedList;
 import java.util.HashMap;
-
-import myutil.TraceManager;
+import java.util.LinkedList;
 
 public class AvatarTuple extends AvatarLeftHand {
     LinkedList<AvatarTerm> components;

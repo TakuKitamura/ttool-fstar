@@ -52,8 +52,9 @@ package ui.oscd;
 //import java.util.*;
 
 //import myutil.*;
+
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogAttribute;
 
 public class TOSCDAttributeGateBox extends TGCAttributeBox {
     

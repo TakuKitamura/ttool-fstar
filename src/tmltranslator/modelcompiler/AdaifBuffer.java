@@ -46,20 +46,12 @@
 
 package tmltranslator.modelcompiler;
 
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.util.ArrayList;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import org.w3c.dom.Element;
-
 import tmltranslator.TMLTask;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class AdaifBuffer extends Buffer	{
 

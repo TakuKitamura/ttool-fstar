@@ -46,12 +46,13 @@
 
 package ui.tmlcd;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import java.util.*;
-
+import myutil.GraphicLib;
 import ui.*;
-import myutil.*;
+
+import java.awt.*;
+import java.util.Vector;
+
+//import java.awt.geom.*;
 
 public  class TGConnectorTMLCompositionOperator extends TGConnector {
     

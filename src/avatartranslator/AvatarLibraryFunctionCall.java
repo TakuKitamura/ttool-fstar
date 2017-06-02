@@ -38,8 +38,8 @@
 
 package avatartranslator;
 
-import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * AvatarLibraryFunctionCall represent a call to a library function. It is part of an {@link AvatarStateMachine}.

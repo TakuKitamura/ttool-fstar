@@ -45,242 +45,419 @@
 
 package proverifspec;
 
-import java.util.*;
-import java.util.regex.*;
-import myutil.*;
-import java.io.*;
-
+import avatartranslator.*;
 import avatartranslator.toproverif.AVATAR2ProVerif;
-import avatartranslator.AvatarAttribute;
-import avatartranslator.AvatarBlock;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class ProVerifOutputAnalyzer {
-
-
-    private LinkedList<String> reachableEvents;
-    private LinkedList<String> nonReachableEvents;
-    private LinkedList<String> secretTerms;
-    private LinkedList<String> nonSecretTerms;
-    private LinkedList<String> satisfiedAuthenticity;
-    private LinkedList<String> satisfiedWeakAuthenticity;
-    private LinkedList<String> nonSatisfiedAuthenticity;
-    private LinkedList<String> errors;
-    private LinkedList<String> notproved;
-    private final static String typedEvent = "not event(";
-    private final static String untypedEvent = "not ev:";
+    private final static String typedEvent = "not event(enteringState" + AVATAR2ProVerif.ATTR_DELIM;
+    private final static String untypedEvent = "not ev:enteringState" + AVATAR2ProVerif.ATTR_DELIM;
     private final static String typedFalse = ") is false";
     private final static String typedTrue = ") is true";
+    private final static String typedCannotBeProved = ") cannot be proved";
+    private final static String untypedCannotBeProved = " cannot be proved";
     private final static String untypedFalse = " is false";
     private final static String untypedTrue = " is true";
     private final static String typedSecret = "not attacker(";
     private final static String untypedSecret = "not attacker:";
-    private final static String typedStrongAuth = "inj-event(authenticity__";
-    private final static String untypedStrongAuth = "evinj:authenticity__";
-    private final static String typedWeakAuth = "(but event(authenticity__";
-    private final static String untypedWeakAuth = "(but ev:authenticity__";
-    private final static String typedAuthSplit = "==> inj-event(authenticity__";
-    private final static String typedWeakAuthSplit = "==> event(authenticity__";
-    private final static String untypedAuthSplit = "==> evinj:authenticity__";
-    private final static String untypedWeakAuthSplit = "==> ev:authenticity__";
+    private final static String typedStrongAuth = "inj-event(authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    private final static String untypedStrongAuth = "evinj:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    private final static String typedWeakAuth = "(but event(authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    private final static String untypedWeakAuth = "(but ev:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    private final static String typedWeakNonAuth = "(even event(authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    private final static String untypedWeakNonAuth = "(even ev:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    private final static String typedAuthSplit = "==> inj-event(authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    private final static String typedWeakAuthSplit = "==> event(authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    private final static String untypedAuthSplit = "==> evinj:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    private final static String untypedWeakAuthSplit = "==> ev:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+
+    private HashMap<AvatarPragma, ProVerifQueryResult> results;
+    private LinkedList<String> errors;
 
     private AVATAR2ProVerif avatar2proverif;
 
     public ProVerifOutputAnalyzer(AVATAR2ProVerif avatar2proverif) {
         this.avatar2proverif = avatar2proverif;
-
-        reachableEvents = new LinkedList<String>();
-        nonReachableEvents = new LinkedList<String>();
-        secretTerms = new LinkedList<String>();
-        nonSecretTerms = new LinkedList<String>();
-        satisfiedAuthenticity = new LinkedList<String>();
-        satisfiedWeakAuthenticity = new LinkedList<String>();
-        nonSatisfiedAuthenticity = new LinkedList<String>();
-
-        errors = new LinkedList<String>();
-        notproved = new LinkedList<String>();
-    }
-
-    public void analyzeTypedOutput(String _s) {
-        String str, previous="";
-        int index0, index1;
-
-        BufferedReader reader = new BufferedReader(new StringReader(_s));
-        try {
-            while ((str = reader.readLine()) != null) {
-                if (str.contains("RESULT")){
-                    if (str.contains(typedEvent)){
-                        if (str.contains(typedTrue)){
-                            //Add string between tags
-                            //Pattern.quote converts string into regex adding escape characters
-                            nonReachableEvents.add(str.split(Pattern.quote(typedEvent))[1].split(Pattern.quote(typedTrue))[0]);
-                        }
-                        else if (str.contains(typedFalse)) {
-                            reachableEvents.add(str.split(Pattern.quote(typedEvent))[1].split(Pattern.quote(typedFalse))[0]);
-                        }
-                    }
-                    else if (str.contains(typedSecret)){
-                        if (str.contains(typedTrue)){
-                            //Add string between tags
-                            secretTerms.add(str.split(Pattern.quote(typedSecret))[1].split("\\[")[0]);
-                        }
-                        else if (str.contains(typedFalse)) {
-                            nonSecretTerms.add(str.split(Pattern.quote(typedSecret))[1].split("\\[")[0]);
-                        }
-                    }
-                    else if (str.contains(typedStrongAuth)){
-                        if (str.contains(typedTrue)){
-                            //Add string between tags
-                            satisfiedAuthenticity.add(str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
-                        }
-                        else if (str.contains(typedFalse)) {
-                            nonSatisfiedAuthenticity.add(str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
-                        }
-			else if (str.contains("cannot be proved")){
-			    notproved.add("Strong Authenticity "+ str.split(Pattern.quote(typedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0]);
-			}
-                    }
-                    else if (str.contains(typedWeakAuth)) {
-                        if (str.contains(typedTrue)){
-                            //Add string between tags
-                            satisfiedWeakAuthenticity.add(str.split(Pattern.quote(typedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedWeakAuthSplit))[1].split("\\(")[0]);
-                        }
-			else if (str.contains("cannot be proved")){
-			    notproved.add("Weak Authenticity "+ str.split(Pattern.quote(typedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(typedWeakAuthSplit))[1].split("\\(")[0]);
-			}    	
-                    }
-                }
-                if (str.contains("Error:")){
-                    errors.add(str + ": " + previous);
-                }
-                else if (str.contains("cannot be proved")){
-                 //   notproved.add(str);
-                }    
-            previous = str;
-            }  
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
+        this.errors = null;
+        this.results = null;
     }
 
     public void analyzeOutput(String _s, boolean isTyped) {
-        String str, previous="";
-        int index0, index1;
-        if (isTyped) {
-            analyzeTypedOutput(_s);
-            return;
-        }
         BufferedReader reader = new BufferedReader(new StringReader(_s));
+        List<AvatarPragma> pragmas = this.avatar2proverif.getAvatarSpecification().getPragmas();
+        String previous = null;
+        String str;
+        ProVerifQueryAuthResult previousAuthPragma = null;
+        LinkedList<String> proverifProcess = new LinkedList<String> ();
+        ProVerifResultTrace resultTrace = new ProVerifResultTrace(proverifProcess);
+        boolean isInTrace = false;
+
+        this.results = new HashMap<AvatarPragma, ProVerifQueryResult> ();
+        this.errors = new LinkedList<String>();
+
+        Pattern procPattern = Pattern.compile(" *\\{\\d+\\}(.*)");
+
         try {
-            while ((str = reader.readLine()) != null) {
-                if (str.contains("RESULT")){
-                    if (str.contains(untypedEvent)){
-                        if (str.contains(untypedTrue)){
-                            //Add string between tags
-                            //Pattern.quote converts string into regex adding escape characters
-                            nonReachableEvents.add(str.split(Pattern.quote(untypedEvent))[1].split("\\(")[0]);
-                        }
-                        else if (str.contains(untypedFalse)) {
-                            reachableEvents.add(str.split(Pattern.quote(untypedEvent))[1].split("\\(")[0]);
-                        }
-                    }
-                    else if (str.contains(untypedSecret)){
-                        if (str.contains(untypedTrue)){
-                            //Add string between tags
-                            secretTerms.add(str.split(Pattern.quote(untypedSecret))[1].split("\\[")[0]);
-                        }
-                        else if (str.contains(untypedFalse)) {
-                            nonSecretTerms.add(str.split(Pattern.quote(untypedSecret))[1].split("\\[")[0]);
-                        }
-                    }
-                    else if (str.contains(untypedStrongAuth)){
-                        if (str.contains(untypedTrue)){
-                            //Add string between tags
-                            satisfiedAuthenticity.add(str.split(untypedStrongAuth)[1].split(untypedAuthSplit)[0].split("\\(")[0] + " ==> " + str.split(untypedAuthSplit)[1].split("\\(")[0]);
-                        }
-                        else if (str.contains(untypedFalse)) {
-                            nonSatisfiedAuthenticity.add(str.split(Pattern.quote(untypedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedAuthSplit))[1].split("\\(")[0]);
-                        }
-			else if (str.contains("cannot be proved")){
-			    notproved.add("Strong Authenticity "+ str.split(Pattern.quote(untypedStrongAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedAuthSplit))[1].split("\\(")[0]);
-			}
-                    }
-                    else if (str.contains(untypedWeakAuth)) {
-                        if (str.contains(untypedTrue)){
-                            //Add string between tags
-                            satisfiedWeakAuthenticity.add(str.split(Pattern.quote(untypedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedWeakAuthSplit))[1].split("\\(")[0]);
-                        }    	
-			else if (str.contains("cannot be proved")){
-			    notproved.add("Weak Authenticity "+ str.split(Pattern.quote(untypedWeakAuth))[1].split("\\(")[0] + " ==> " + str.split(Pattern.quote(untypedWeakAuthSplit))[1].split("\\(")[0]);
-			}  
-                    }
+
+            // Loop through every line in the output
+            while ((str = reader.readLine()) != null)
+            {
+                if (str.isEmpty())
+                    continue;
+                
+                Matcher m = procPattern.matcher(str);
+
+                if (isInTrace && (str.startsWith("A more detailed") || str.startsWith("Could not find")))
+                {
+                    isInTrace = false;
+                    resultTrace.finalize();
+                    continue;
                 }
-                if (str.contains("Error:")){
-                    errors.add(str + ": " + previous);
+                else if (!isInTrace && str.startsWith("1. "))
+                {
+                    isInTrace = true;
                 }
-                else if (str.contains("cannot be proved")){
-           //         notproved.add(str);
-                }    
-            previous = str;
+
+                // Found a trace step
+                if (isInTrace)
+                {
+                    resultTrace.addTraceStep(str);
+                }
+
+                else if (m.matches())
+                {
+                    proverifProcess.add(m.group(1));
+                }
+
+                // Found a line with a RESULT
+                else if (str.startsWith("RESULT "))
+                {
+                    // Remove 'RESULT ' at the begining
+                    str = str.substring(7);
+                    ProVerifQueryResult result = new ProVerifQueryResult(true, true);
+
+                    // This concerns an enteringState event
+                    if (str.startsWith(isTyped ? typedEvent : untypedEvent))
+                    {
+                        str = str.substring((isTyped ? typedEvent : untypedEvent).length());
+                        String stateName = null;
+
+                        previousAuthPragma = null;
+
+                        if (isTyped)
+                        {
+                            if (str.contains(typedTrue))
+                            {
+                                result.setSatisfied(false);
+                                stateName = str.split(Pattern.quote(typedTrue))[0];
+                            }
+                            else if (str.contains(typedFalse))
+                            {
+                                result.setTrace(resultTrace);
+                                stateName = str.split(Pattern.quote(typedFalse))[0];
+                            }
+                            else if (str.contains(typedCannotBeProved))
+                            {
+                                result.setProved(false);
+                                result.setTrace(resultTrace);
+                                stateName = str.split(Pattern.quote(typedCannotBeProved))[0];
+                            }
+                        }
+                        else
+                        {
+                            stateName = str.split("\\(")[0];
+                            if (str.contains(untypedTrue))
+                            {
+                                result.setSatisfied(false);
+                            }
+                            else if (str.contains(untypedFalse))
+                            {
+                                result.setTrace(resultTrace);
+                            }
+                            else if (str.contains(untypedCannotBeProved))
+                            {
+                                result.setTrace(resultTrace);
+                                result.setProved(false);
+                            }
+                        }
+
+                        AvatarPragmaReachability reachabilityPragma = this.getAvatarPragmaReachabilityFromString(stateName);
+                        if (reachabilityPragma != null)
+                        {
+                            this.results.put(reachabilityPragma, result);
+                        }
+                    }
+
+                    // This concerns a confidentiality check
+                    else if (str.contains(isTyped ? typedSecret : untypedSecret))
+                    {
+                        String attributeName = str.substring((isTyped ? typedSecret : untypedSecret).length()).split("\\[")[0];
+
+                        previousAuthPragma = null;
+
+                        if (str.contains(isTyped ? typedFalse : untypedFalse))
+                        {
+                            result.setTrace(resultTrace);
+                            result.setSatisfied(false);
+                        }
+                        else if (str.contains(isTyped ? typedCannotBeProved : untypedCannotBeProved))
+                        {
+                            result.setTrace(resultTrace);
+                            result.setProved(false);
+                        }
+
+                        AvatarAttribute attribute = this.getAvatarAttributeFromString(attributeName);
+                        if (attribute != null)
+                        {
+                            for (AvatarPragma pragma: pragmas)
+                            {
+                                if (pragma instanceof AvatarPragmaSecret)
+                                {
+                                    String trueName = this.avatar2proverif.getTrueName(((AvatarPragmaSecret) pragma).getArg());
+                                    if (trueName != null && trueName.equals(attributeName))
+                                    {
+                                        this.results.put(pragma, result);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // This concerns a strong authenticity check
+                    else if (str.contains(isTyped ? typedStrongAuth : untypedStrongAuth))
+                    {
+                        str = str.substring((isTyped ? typedStrongAuth : untypedStrongAuth).length());
+
+                        String attributeStateName1 = null;
+                        String attributeStateName2 = null;
+
+                        previousAuthPragma = new ProVerifQueryAuthResult(true, true);
+                        result = previousAuthPragma;
+
+                        if (isTyped)
+                        {
+                            attributeStateName1 = str.split("\\(")[0];
+                            attributeStateName2 = str.split(Pattern.quote(typedAuthSplit))[1].split("\\(")[0];
+                            if (str.contains(typedFalse))
+                            {
+                                result.setTrace(resultTrace);
+                                result.setSatisfied(false);
+                            }
+                            else if (str.contains(typedCannotBeProved))
+                            {
+                                result.setTrace(resultTrace);
+                                result.setProved(false);
+                            }
+                        }
+                        else
+                        {
+                            attributeStateName1 = str.split("\\(")[0];
+                            attributeStateName2 = str.split(untypedAuthSplit)[1].split("\\(")[0];
+                            if (str.contains(untypedFalse))
+                            {
+                                result.setTrace(resultTrace);
+                                result.setSatisfied(false);
+                            }
+                            else if (str.contains(untypedCannotBeProved))
+                            {
+                                result.setTrace(resultTrace);
+                                result.setProved(false);
+                            }
+                        }
+
+                        AvatarAttribute attribute1 = null;
+                        AvatarAttribute attribute2 = null;
+                        AvatarState state1 = null;
+                        AvatarState state2 = null;
+
+                        String[] tmp = attributeStateName1.split(AVATAR2ProVerif.ATTR_DELIM);
+                        if (tmp.length == 3)
+                        {
+                            attribute1 = this.getAvatarAttributeFromString(tmp[0] + AVATAR2ProVerif.ATTR_DELIM + tmp[1]);
+                            state1 = this.getAvatarStateFromString(tmp[0] + AVATAR2ProVerif.ATTR_DELIM + tmp[2]);
+                        }
+
+                        tmp = attributeStateName2.split(AVATAR2ProVerif.ATTR_DELIM);
+                        if (tmp.length == 3)
+                        {
+                            attribute2 = this.getAvatarAttributeFromString(tmp[0] + AVATAR2ProVerif.ATTR_DELIM + tmp[1]);
+                            state2 = this.getAvatarStateFromString(tmp[0] + AVATAR2ProVerif.ATTR_DELIM + tmp[2]);
+                        }
+
+                        if (attribute1 != null && attribute2 != null && state1 != null && state2 != null)
+                        {
+                            for (AvatarPragma pragma: pragmas)
+                            {
+                                if (pragma instanceof AvatarPragmaAuthenticity)
+                                {
+                                    AvatarPragmaAuthenticity pragmaAuth = (AvatarPragmaAuthenticity) pragma;
+                                    if (pragmaAuth.getAttrA().getState() == state2
+                                            && pragmaAuth.getAttrA().getAttribute() == attribute2
+                                            && pragmaAuth.getAttrB().getState() == state1
+                                            && pragmaAuth.getAttrB().getAttribute() == attribute1)
+                                    {
+                                        this.results.put(pragma, result);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // This concerns a satsified weak authenticity check
+                    else if (str.contains(isTyped ? typedWeakAuth : untypedWeakAuth))
+                    {
+
+                        if (previousAuthPragma != null)
+                        {
+                            previousAuthPragma.setWeakSatisfied(true);
+                        }
+                        previousAuthPragma = null;
+                    }
+
+                    // This concerns a failed weak authenticity check
+                    else if (str.contains(isTyped ? typedWeakNonAuth : untypedWeakNonAuth))
+                    {
+
+                        if (previousAuthPragma != null)
+                        {
+                            previousAuthPragma.setWeakSatisfied(false);
+                        }
+                        previousAuthPragma = null;
+                    }
+
+                    resultTrace = new ProVerifResultTrace(proverifProcess);
+                }
+
+                // Found an error
+                else if (str.contains("Error:"))
+                {
+                    this.errors.add(str + ": " + previous);
+                }
+
+                previous = str;
             }
+
+
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    public LinkedList<String> getReachableEvents() {
-        return reachableEvents;
+    private AvatarAttribute getAvatarAttributeFromString(String name)
+    {
+        String[] tmp = name.split(AVATAR2ProVerif.ATTR_DELIM);
+        if (tmp.length != 2)
+            return null;
+
+        AvatarBlock block = this.avatar2proverif.getAvatarSpecification().getBlockWithName(tmp[0]);
+        if (block == null)
+            return null;
+
+        return block.getAvatarAttributeWithName(tmp[1]);
     }
 
-    public LinkedList<String> getNonReachableEvents() {
-        return nonReachableEvents;
+    private AvatarPragmaReachability getAvatarPragmaReachabilityFromString(String name)
+    {
+        String[] tmp = name.split(AVATAR2ProVerif.ATTR_DELIM);
+        if (tmp.length != 2)
+            return null;
+
+        AvatarBlock block = this.avatar2proverif.getAvatarSpecification().getBlockWithName(tmp[0]);
+        if (block == null)
+            return null;
+
+        AvatarState state = block.getStateMachine().getStateWithName(tmp[1]);
+        if (state == null)
+            return null;
+
+        return new AvatarPragmaReachability("reachability" + AVATAR2ProVerif.ATTR_DELIM + name, null, block, state);
     }
 
-    public LinkedList<AvatarAttribute> getSecretTerms() {
-        LinkedList<AvatarAttribute> result = new LinkedList<AvatarAttribute> ();
-        for (AvatarBlock block: this.avatar2proverif.getAvatarSpecification ().getListOfBlocks ())
-            for (AvatarAttribute attr: block.getAttributes ()) {
-                String trueName = this.avatar2proverif.getTrueName (attr);
-                if (this.secretTerms.contains (trueName))
-                    result.add (attr);
+    private AvatarState getAvatarStateFromString(String name)
+    {
+        String[] tmp = name.split(AVATAR2ProVerif.ATTR_DELIM);
+        if (tmp.length != 2)
+            return null;
+
+        AvatarBlock block = this.avatar2proverif.getAvatarSpecification().getBlockWithName(tmp[0]);
+        if (block == null)
+            return null;
+
+        AvatarState state = block.getStateMachine().getStateWithName(tmp[1]);
+
+        return state;
+    }
+
+    public HashMap<AvatarPragma, ProVerifQueryResult> getResults()
+    {
+        return this.results;
+    }
+
+    public HashMap<AvatarPragmaSecret, ProVerifQueryResult> getConfidentialityResults()
+    {
+        if (this.results == null)
+            return null;
+
+        HashMap<AvatarPragmaSecret, ProVerifQueryResult> resultMap = new HashMap<AvatarPragmaSecret, ProVerifQueryResult> ();
+
+        for (AvatarPragma pragma: this.results.keySet())
+        {
+            if (pragma instanceof AvatarPragmaSecret)
+            {
+                resultMap.put((AvatarPragmaSecret) pragma, this.results.get(pragma));
             }
-        return result;
+        }
+
+        return resultMap;
     }
 
-    // FIXME what about cannot be proved ?
+    public HashMap<AvatarPragmaReachability, ProVerifQueryResult> getReachabilityResults()
+    {
+        if (this.results == null)
+            return null;
 
-	public LinkedList<String> getNonSecretStrings(){
-		return nonSecretTerms;
-	}
+        HashMap<AvatarPragmaReachability, ProVerifQueryResult> resultMap = new HashMap<AvatarPragmaReachability, ProVerifQueryResult> ();
 
-    public LinkedList<AvatarAttribute> getNonSecretTerms() {
-        LinkedList<AvatarAttribute> result = new LinkedList<AvatarAttribute> ();
-        for (AvatarBlock block: this.avatar2proverif.getAvatarSpecification ().getListOfBlocks ())
-            for (AvatarAttribute attr: block.getAttributes ()) {
-                String trueName = this.avatar2proverif.getTrueName (attr);
-                if (this.nonSecretTerms.contains (trueName))
-                    result.add (attr);
+        for (AvatarPragma pragma: this.results.keySet())
+        {
+            if (pragma instanceof AvatarPragmaReachability)
+            {
+                resultMap.put((AvatarPragmaReachability) pragma, this.results.get(pragma));
             }
-        return result;
+        }
+
+        return resultMap;
     }
 
-    public LinkedList<String> getSatisfiedAuthenticity() {
-        return satisfiedAuthenticity;
-    }
-    public LinkedList<String> getSatisfiedWeakAuthenticity() {
-        return satisfiedWeakAuthenticity;
-    }
+    public HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> getAuthenticityResults()
+    {
+        if (this.results == null)
+            return null;
 
-    public LinkedList<String> getNonSatisfiedAuthenticity() {
-        return nonSatisfiedAuthenticity;
+        HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> resultMap = new HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> ();
+
+        for (AvatarPragma pragma: this.results.keySet())
+        {
+            if (pragma instanceof AvatarPragmaAuthenticity)
+            {
+                resultMap.put((AvatarPragmaAuthenticity) pragma, (ProVerifQueryAuthResult) this.results.get(pragma));
+            }
+        }
+
+        return resultMap;
     }
 
     public LinkedList<String> getErrors() {
         return errors;
     }
-
-    public LinkedList<String> getNotProved() {
-        return notproved;
-    }
-
 }

@@ -48,8 +48,8 @@
 
 package ui;
 
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class ActionPerformer {
 
@@ -62,7 +62,9 @@ public class ActionPerformer {
             mgui.newDesign();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_ANALYSIS].getActionCommand())) {
             mgui.newAnalysis();
-        } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN_FROM_NETWORK].getActionCommand())) {
+            mgui.openNetworkProject();
+	} else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN].getActionCommand())) {
             mgui.openProject();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_MERGE].getActionCommand())) {
             mgui.mergeProject();
@@ -155,8 +157,6 @@ public class ActionPerformer {
             mgui.generateAUTS();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_GEN_UPPAAL].getActionCommand())) {
             mgui.generateUPPAAL();
-        } else if (command.equals(mgui.actions[TGUIAction.ACT_GEN_PROVERIF].getActionCommand())) {
-            mgui.generateProVerif();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_DSE].getActionCommand())) {
             mgui.dse();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].getActionCommand())) {

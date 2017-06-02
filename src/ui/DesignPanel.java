@@ -46,25 +46,38 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui;
 
-import java.awt.*;
+import myutil.GraphicLib;
+import ui.ad.TActivityDiagramPanel;
+import ui.ad.TActivityDiagramToolBar;
+import ui.cd.TCDTClass;
+import ui.cd.TClassDiagramPanel;
+import ui.cd.TClassDiagramToolBar;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import ui.cd.*;
-import ui.ad.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class DesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterface {
-    public TClassDiagramPanel tcdp; 
-    public java.util.List<TClassInterface> validated, ignored;
 
+	public TClassDiagramPanel tcdp; 
+    
+	public java.util.List<TClassInterface> validated, ignored;
 
     public DesignPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+        
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        
         cl = new ChangeListener() {
+        	
+        	@Override
             public void stateChanged(ChangeEvent e){
                 mgui.paneDesignAction(e);
             }
         };
+        
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }

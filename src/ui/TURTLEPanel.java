@@ -46,11 +46,13 @@
 
 package ui;
 
-import java.awt.*;
+import myutil.GenericTree;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-import myutil.*;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public abstract class TURTLEPanel implements GenericTree {
     public JTabbedPane tabbedPane;

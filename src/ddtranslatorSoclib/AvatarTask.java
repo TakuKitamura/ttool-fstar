@@ -47,7 +47,6 @@
 
 
 package ddtranslatorSoclib;
-import java.util.*;
 
 public class AvatarTask extends AvatarMappedObject{
 

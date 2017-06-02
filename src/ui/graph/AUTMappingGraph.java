@@ -46,10 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.graph;
 
 import java.awt.*;
-import java.util.*;
-import java.io.*;
-
-import myutil.*;
+import java.util.ArrayList;
 
 public class AUTMappingGraph  extends AUTGraph {
 	

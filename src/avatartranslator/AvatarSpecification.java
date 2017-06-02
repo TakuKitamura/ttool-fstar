@@ -47,9 +47,13 @@
 
 package avatartranslator;
 
-import java.util.*;
+import myutil.Conversion;
+import myutil.TraceManager;
 
-import myutil.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class AvatarSpecification extends AvatarElement {
     public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};

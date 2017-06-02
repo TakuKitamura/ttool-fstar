@@ -45,9 +45,10 @@
 
 package tmltranslator;
 
-import java.util.*;
+import myutil.TraceManager;
 
-import myutil.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TMLArchitecture {
     private List<HwNode> hwnodes;

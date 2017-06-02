@@ -47,12 +47,12 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.tmlcd;
 
 
-import org.w3c.dom.*;
-
+import org.w3c.dom.Element;
 import ui.*;
-import ui.tmldd.*;
-import ui.tmlcd.*;
-import java.util.*;
+import ui.tmldd.TMLArchiDiagramPanel;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class TMLTaskDiagramPanel extends TDiagramPanel {
     

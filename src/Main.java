@@ -44,17 +44,19 @@
    * @see
    */
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Locale;
-import java.net.URL;
-//import java.io.*;
-import javax.swing.ImageIcon;
-import javax.swing.*;
-
-import myutil.*;
+import myutil.BoolExpressionEvaluator;
+import myutil.TraceManager;
 import ui.*;
-import ui.window.*;
+import ui.window.JStartingWindow;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+import java.util.Locale;
+
+//import java.io.*;
 
 public class Main implements ActionListener {
     public boolean finish = false;

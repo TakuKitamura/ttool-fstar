@@ -44,8 +44,6 @@ knowledge of the CeCILL license and that you accept its terms.
  */
 
 package translator;
- 
-import java.util.*;
 
 public class TClassBufferIn extends TClassBuffer {
     

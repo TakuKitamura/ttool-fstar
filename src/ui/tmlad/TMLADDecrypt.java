@@ -46,16 +46,17 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlad;
 
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
-import myutil.*;
+import ui.window.JDialogMultiString;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
 public class TMLADDecrypt extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;

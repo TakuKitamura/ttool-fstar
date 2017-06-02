@@ -48,9 +48,7 @@
 
 package ui;
 
-import java.awt.event.*;
-import javax.swing.*;
-import myutil.*;
+import myutil.TraceManager;
 
 public class ModeManager {
 
@@ -60,6 +58,7 @@ public class ModeManager {
             mgui.activeActions(false);
             actions[TGUIAction.ACT_NEW].setEnabled(true);
             actions[TGUIAction.ACT_OPEN].setEnabled(true);
+	    actions[TGUIAction.ACT_OPEN_FROM_NETWORK].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_TIF].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_SD].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_LAST].setEnabled(true);
@@ -151,10 +150,6 @@ public class ModeManager {
             //actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             //actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
             break;
-        case MainGUI.MODEL_PROVERIF_OK:
-            actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(true);
-
-            break;
         case MainGUI.EDIT_PROVERIF_OK:
             actions[TGUIAction.ACT_VIEW_RTLOTOS].setEnabled(true);
             break;
@@ -217,7 +212,6 @@ public class ModeManager {
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
-            actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
             actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
@@ -243,7 +237,6 @@ public class ModeManager {
             actions[TGUIAction.ACT_GEN_TMLTXT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_CCODE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
-            actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
             //actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
@@ -263,7 +256,6 @@ public class ModeManager {
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
-            actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
             actions[TGUIAction.ACT_SIMULATION].setEnabled(false);

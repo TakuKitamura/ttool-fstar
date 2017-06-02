@@ -46,16 +46,24 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.table.*;
-import java.util.*;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.ScrolledJTextArea;
+import myutil.TableSorter;
+import tmatrix.RequirementModeling;
+import tmatrix.Requirements;
+import ui.FormatManager;
+import ui.IconManager;
+import ui.MainGUI;
 
-import launcher.*;
-import myutil.*;
-import tmatrix.*;
-import ui.*;
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Vector;
 
 public class JDialogTMatrixManagement extends JFrame implements ActionListener, Runnable  {
     

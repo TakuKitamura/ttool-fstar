@@ -46,11 +46,10 @@
 
 package ui.avatarinteractivesimulation;
 
-import java.util.*;
-import javax.swing.table.*;
+import avatartranslator.directsimulation.AvatarSimulationBlock;
+import avatartranslator.directsimulation.AvatarSpecificationSimulation;
 
-import myutil.*;
-import avatartranslator.directsimulation.*;
+import javax.swing.table.AbstractTableModel;
 
 public class BlockTableModel extends AbstractTableModel {
     private AvatarSpecificationSimulation ass;

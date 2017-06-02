@@ -46,10 +46,8 @@
 
 
 package ddtranslatorSoclib;
-import java.util.*;
-import ddtranslatorSoclib.*;
 
-public class AvatarTTY extends AvatarComponent {	
+public class AvatarTTY extends AvatarComponent {
 
     private int index = 0;
     private String ttyName;

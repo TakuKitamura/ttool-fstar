@@ -46,13 +46,17 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import myutil.GraphicLib;
+import ui.tmlcp.TMLCPPanel;
+import ui.tmlcp.TMLCPToolBar;
+import ui.tmlsd.TMLSDPanel;
+import ui.tmlsd.TMLSDToolBar;
 
-import ui.tmlcp.*;
-import ui.tmlsd.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.Vector;
 
 public class TMLCommunicationPatternPanel extends TURTLEPanel {
     public TMLCPPanel tmlcpp;
@@ -60,12 +64,18 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
 
     public TMLCommunicationPatternPanel(MainGUI _mgui) {
         super(_mgui);
-        tabbedPane = new JTabbedPane();
+        
+    	// Issue #41 Ordering of tabbed panes 
+        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        
         cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneAnalysisAction(e);
-                }
-            };
+        	
+        	@Override
+            public void stateChanged(ChangeEvent e){
+                mgui.paneAnalysisAction(e);
+            }
+        };
+
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }

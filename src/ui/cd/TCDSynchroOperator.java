@@ -47,10 +47,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.cd;
 
-import java.awt.*;
-
-
 import ui.*;
+
+import java.awt.*;
 
 public class TCDSynchroOperator extends TCDCompositionOperatorWithSynchro {
     protected TClassSynchroInterface oldt1;

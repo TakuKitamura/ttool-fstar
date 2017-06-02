@@ -45,8 +45,6 @@
 
 package ui.graph;
 
-import java.util.*;
-
 public class AUTElement implements Comparable<AUTElement> {
 
     public String value;

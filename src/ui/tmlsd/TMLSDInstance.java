@@ -47,14 +47,17 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlsd;
 
-import java.awt.*;
-import javax.swing.*;
-import org.w3c.dom.*;
-import java.awt.event.*;
-import java.util.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 //Abstract class, getType() and editOndoubleClick( JFrame ) are abstract
 public abstract class TMLSDInstance extends TGCWithInternalComponent implements SwallowTGComponent {

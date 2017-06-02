@@ -47,9 +47,9 @@
 
 package ui;
 
-import java.awt.*;
+import myutil.GraphicLib;
 
-import myutil.*;
+import java.awt.*;
 
 public class TGConnectingPoint implements CDElement {
 

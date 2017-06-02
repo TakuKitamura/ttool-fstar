@@ -46,12 +46,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.oscd;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import javax.swing.*;
-
+import myutil.Conversion;
+import myutil.GraphicLib;
 import ui.*;
-import myutil.*;
+
+import javax.swing.*;
+import java.awt.*;
+
+//import java.awt.geom.*;
 
 public class TOSCallInfo extends TGCWithoutInternalComponent{
     

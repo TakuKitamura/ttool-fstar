@@ -48,8 +48,6 @@ package avatartranslator;
 
 import java.util.HashMap;
 
-import myutil.Conversion;
-
 /**
  * An AvatarGuardEmpty is an empty {@link AvatarGuard}
  */

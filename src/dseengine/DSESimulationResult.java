@@ -46,16 +46,22 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package dseengine;
 
-import java.io.*;
-import java.util.*;
+import myutil.FileUtils;
+import myutil.TraceManager;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-
-import myutil.*;
-
-
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import javax.xml.parsers.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Vector;
 
 //import uppaaldesc.*;
 

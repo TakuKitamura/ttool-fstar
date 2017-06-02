@@ -47,17 +47,15 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import myutil.GraphicLib;
+import ui.IconManager;
+
 import javax.swing.*;
-import java.util.*;
+import java.awt.*;
 
-import myutil.*;
-import ui.*;
-
-public class JDialogADConnector extends javax.swing.JDialog implements ActionListener  {
+public class JDialogADConnector extends JDialog {//implements ActionListener  {
     
-  //private Vector<String> actions;
+	//private Vector<String> actions;
 	private String guard;//, afterMin, afterMax, computeMin, computeMax; 
 	/*private Vector myAttributes, myMethods;
 	private Vector<String> allElements, insertElements;
@@ -68,17 +66,17 @@ public class JDialogADConnector extends javax.swing.JDialog implements ActionLis
 	private boolean cancelled = false;
     
   private JPanel panel1;
-	private JPanel panel2;
+	//private JPanel panel2;
     
     // Panel1
-	private JTextField guardT, afterMinT, afterMaxT, computeMinT, computeMaxT;
-	private JTextArea actionsT;
-	private JComboBox elements;
-	private JButton insertElement;
+	private JTextField guardT;//, afterMinT, afterMaxT, computeMinT, computeMaxT;
+	//private JTextArea actionsT;
+	//private JComboBox<String> elements;
+	//private JButton insertElement;
     
     // Main Panel
-  private JButton closeButton;
-  private JButton cancelButton;
+	private JButton closeButton;
+	private JButton cancelButton;
 	
 	// Panel of code and files
 	protected JTextArea jtaCode, jtaFiles;
@@ -138,15 +136,15 @@ public class JDialogADConnector extends javax.swing.JDialog implements ActionLis
 	}
     
     private void initComponents() {
-		int i;
+		//int i;
 		
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
-		GridBagLayout gridbag2 = new GridBagLayout();
+		//GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
-		GridBagConstraints c2 = new GridBagConstraints();
+	//	GridBagConstraints c2 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -282,9 +280,8 @@ public class JDialogADConnector extends javax.swing.JDialog implements ActionLis
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         
-		
-        
-		JTabbedPane jtp = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+		JTabbedPane jtp = GraphicLib.createTabbedPane();//new JTabbedPane();
 		jtp.add("General", panel1);
 		//jtp.add("Prototyping", panel2);
         c.add(jtp, c0);
@@ -296,29 +293,29 @@ public class JDialogADConnector extends javax.swing.JDialog implements ActionLis
         //closeButton.setPreferredSize(new Dimension(600, 50));
 		
 		
-        closeButton.addActionListener(this);
+       // closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
+      //  cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        //String command = evt.getActionCommand();
-        int fake = 0;
-        // Compare the action command to the known actions.
-        if (evt.getSource() == closeButton)  {
-            //closeDialog();
-						fake++;
-        } else if (evt.getSource() == cancelButton)  {
-            //cancelDialog();
-						fake++;
-        } else if (evt.getSource() == insertElement)  {
-            //insertElements();
-						fake++;
-        } 
-    }
+//    
+//    public void	actionPerformed(ActionEvent evt)  {
+//        //String command = evt.getActionCommand();
+//      //  int fake = 0;
+//        // Compare the action command to the known actions.
+//        if (evt.getSource() == closeButton)  {
+//            //closeDialog();
+//						fake++;
+//        } else if (evt.getSource() == cancelButton)  {
+//            //cancelDialog();
+//						fake++;
+//        } else if (evt.getSource() == insertElement)  {
+//            //insertElements();
+//						fake++;
+//        } 
+//    }
 	
 	/*public void insertElements() {
 		int index = elements.getSelectedIndex();

@@ -1,5 +1,6 @@
 package tmltranslator;
-import avatartranslator.*;
+
+import avatartranslator.AvatarState;
 
 public class SecurityPattern {
 

@@ -48,15 +48,9 @@
 package ui.sysmlsecmethodology;
 
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.TraceManager;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogSystemCGeneration;
 
 public class SysmlsecMethodologyReferenceToApplication extends SysmlsecMethodologyDiagramReference  {
 

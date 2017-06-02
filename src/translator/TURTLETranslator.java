@@ -45,10 +45,12 @@
 
 package translator;
 
-import java.util.*;
+import myutil.Conversion;
+import ui.CheckingError;
 
-import ui.*;
-import myutil.*;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Vector;
 
 public class TURTLETranslator {
 

@@ -47,13 +47,16 @@
 package ui.avatarbd;
 
 
-import org.w3c.dom.*;
-
+import myutil.Conversion;
+import myutil.TraceManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.avatardd.*;
-import java.util.*;
+import ui.avatardd.ADDDiagramPanel;
 import ui.avatarsmd.AvatarSMDPanel;
-import myutil.*;
+
+import java.util.*;
 
 public class AvatarBDPanel extends TDiagramPanel {
     private LinkedList<AvatarBDStateMachineOwner> validated, ignored;
@@ -500,6 +503,36 @@ public class AvatarBDPanel extends TDiagramPanel {
             }
 
         return list;
+    }
+
+    public AvatarBDBlock getBlockFromFQN (String name) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof AvatarBDBlock) {
+                if (((AvatarBDBlock) tgc).getFullyQualifiedName().equals(name))
+                    return (AvatarBDBlock) tgc;
+
+                for (AvatarBDBlock subBlock: ((AvatarBDBlock) tgc).getFullBlockList()) {
+                    if (subBlock.getFullyQualifiedName().equals(name))
+                        return subBlock;
+                }
+            }
+
+        return null;
+    }
+
+    public AvatarBDBlock getBlockFromOwnerName (String name) {
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof AvatarBDBlock) {
+                if (((AvatarBDBlock) tgc).getOwnerName().equals(name))
+                    return (AvatarBDBlock) tgc;
+
+                for (AvatarBDBlock subBlock: ((AvatarBDBlock) tgc).getFullBlockList()) {
+                    if (subBlock.getOwnerName().equals(name))
+                        return subBlock;
+                }
+            }
+
+        return null;
     }
 
     public LinkedList<AvatarBDLibraryFunction> getFullLibraryFunctionList () {

@@ -46,11 +46,13 @@
 
 package ui.interactivesimulation;
 
-import java.util.*;
-import javax.swing.table.*;
+import tmltranslator.HwBus;
+import tmltranslator.HwNode;
+import tmltranslator.TMLMapping;
 
-import myutil.*;
-import tmltranslator.*;
+import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class BusTableModel extends AbstractTableModel {
     private TMLMapping tmap;

@@ -47,17 +47,20 @@
 package ui.cd;
 
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.ad.*;
-import ui.window.*;
+import ui.ad.TActivityDiagramPanel;
+import ui.window.JDialogTObjectName;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 public class TCDTObject extends TGCWithInternalComponent implements TClassInterface, TClassSynchroInterface {
     public String oldValue;

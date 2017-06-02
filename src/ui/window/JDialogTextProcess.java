@@ -46,13 +46,17 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.Conversion;
+import myutil.FileUtils;
+import ui.IconManager;
+import ui.JTextAreaWriter;
 
 import javax.swing.*;
-import launcher.*;
-import myutil.*;
-import ui.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class JDialogTextProcess extends javax.swing.JDialog implements ActionListener, Runnable  {

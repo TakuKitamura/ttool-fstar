@@ -45,9 +45,7 @@
 
 package proverifspec;
 
-import java.util.*;
-
-import myutil.*;
+import java.util.LinkedList;
 
 
 public class ProVerifSpec implements ProVerifDeclaration {

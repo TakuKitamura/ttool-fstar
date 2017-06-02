@@ -47,11 +47,11 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui.oscd;
 
-import java.awt.*;
-import javax.swing.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class TOSCDOperationBox extends TGCWithoutInternalComponent {
 	public String oldValue;

@@ -46,10 +46,10 @@
 
 package ui.prosmd;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class ProSMDStopState extends TGCWithoutInternalComponent{
     private int internalCircleSize = 16;

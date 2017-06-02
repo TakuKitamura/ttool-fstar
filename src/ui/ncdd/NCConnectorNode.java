@@ -46,15 +46,16 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ncdd;
 
-import java.awt.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogLinkNCNode;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Vector;
 
 public  class NCConnectorNode extends TGConnector implements WithAttributes {
     protected int arrowLength = 10;

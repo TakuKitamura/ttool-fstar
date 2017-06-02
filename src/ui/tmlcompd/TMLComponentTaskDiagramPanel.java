@@ -48,13 +48,12 @@
 package ui.tmlcompd;
 
 
-import org.w3c.dom.*;
-
+import myutil.TraceManager;
+import org.w3c.dom.Element;
 import ui.*;
-import ui.tmldd.*;
-import java.util.*;
+import ui.tmldd.TMLArchiDiagramPanel;
 
-import myutil.*;
+import java.util.*;
 
 public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 

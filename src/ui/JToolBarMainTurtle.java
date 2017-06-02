@@ -45,12 +45,13 @@
 
 package ui;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
+import myutil.TraceManager;
 
-import myutil.*;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Class        *
@@ -197,11 +198,6 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
             genlotos = add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
             genlotos.addMouseListener(mgui.mouseHandler);
         }
-
-        /*if (MainGUI.proverifOn) {
-          button = add(mgui.actions[TGUIAction.ACT_GEN_PROVERIF]);
-          button.addMouseListener(mgui.mouseHandler);
-          }*/
 
         addSeparator();
 

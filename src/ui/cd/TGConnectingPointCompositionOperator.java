@@ -47,8 +47,9 @@
 package ui.cd;
 
 
-
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 
 public class TGConnectingPointCompositionOperator extends  TGConnectingPoint{
     

@@ -47,17 +47,12 @@
 
 package ui.tmldd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
+import ui.SwallowTGComponent;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
 
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
-
-import tmltranslator.*;
+import java.util.ArrayList;
 
 public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements SwallowTGComponent {
 

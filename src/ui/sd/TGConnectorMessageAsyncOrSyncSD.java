@@ -47,12 +47,12 @@
 package ui.sd;
 
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Vector;
 
 
 public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {

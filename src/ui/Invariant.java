@@ -46,9 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui;
 
-import myutil.*;
+import myutil.GenericTree;
+import myutil.TraceManager;
 
-import java.util.*;
+import java.util.LinkedList;
 
 
 public class Invariant implements GenericTree {

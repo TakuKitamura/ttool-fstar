@@ -46,12 +46,14 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
+import ui.IconManager;
+import ui.TType;
 
-import ui.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 public class JDialogParamFIFO extends javax.swing.JDialog implements ActionListener {
     

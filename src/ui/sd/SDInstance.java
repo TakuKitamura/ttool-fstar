@@ -47,13 +47,15 @@
 
 package ui.sd;
 
-import java.awt.*;
-import javax.swing.*;
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogSDInstance;
+
+import javax.swing.*;
+import java.awt.*;
 
 
 

@@ -46,11 +46,6 @@
 
 package remotesimulation;
 
-import java.io.*;
-import java.net.*;
-import javax.swing.*;
-
-
 public class SimulationCommand {
     public String userCommand;
     public String alias;

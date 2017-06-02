@@ -47,10 +47,10 @@
 
 package avatartranslator.directsimulation;
 
-import java.util.*;
+import avatartranslator.AvatarRelation;
+import avatartranslator.AvatarSignal;
 
-import avatartranslator.*;
-import myutil.*;
+import java.util.Vector;
 
 public class AvatarSimulationAsynchronousTransaction  {
 

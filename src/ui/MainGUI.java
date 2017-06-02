@@ -48,76 +48,17 @@
 
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import avatartranslator.AvatarSpecification;
 import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
 import launcher.RemoteExecutionThread;
 import launcher.RshClient;
-import myutil.BrowserControl;
-import myutil.FileException;
-import myutil.FileUtils;
-import myutil.GraphicLib;
-import myutil.PeriodicBehavior;
-import myutil.PeriodicBehaviorThread;
-import myutil.TraceManager;
+import myutil.*;
 import proverifspec.ProVerifOutputAnalyzer;
 import translator.MasterGateManager;
 import ui.ad.TActivityDiagramPanel;
 import ui.atd.AttackTreeDiagramPanel;
 import ui.avatarad.AvatarADPanel;
-// AVATAR
 import ui.avatarbd.AvatarBDLibraryFunction;
 import ui.avatarbd.AvatarBDPortConnector;
 import ui.avatarbd.AvatarBDStateMachineOwner;
@@ -130,23 +71,13 @@ import ui.avatarrd.AvatarRDPanel;
 import ui.avatarsmd.AvatarSMDPanel;
 import ui.cd.TClassDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
-import ui.file.AUTFileFilter;
-import ui.file.DTAFileFilter;
-import ui.file.MSCFilter;
-import ui.file.RGFileFilter;
-import ui.file.RTLFileFilter;
-import ui.file.TDotFilter;
-import ui.file.TFileFilter;
-import ui.file.TImgFilter;
-import ui.file.TLSAFileFilter;
-import ui.file.TLibFilter;
-import ui.file.TSVGFilter;
-import ui.file.TTIFFilter;
+import ui.file.*;
 import ui.graph.AUTGraph;
 import ui.graph.RG;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.iod.InteractionOverviewDiagramPanel;
+import ui.networkmodelloader.JDialogLoadingNetworkModel;
 import ui.osad.TURTLEOSActivityDiagramPanel;
 import ui.prosmd.ProactiveSMDPanel;
 import ui.req.Requirement;
@@ -163,6 +94,22 @@ import ui.tree.DiagramTreeRenderer;
 import ui.tree.JDiagramTree;
 import ui.ucd.UseCaseDiagramPanel;
 import ui.window.*;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+// AVATAR
 
 public  class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior {
 
@@ -227,7 +174,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     //@author: Huy TRUONG
     public JDialogSearchBox searchBox;
- 
+
 
     public final static byte NOT_OPENED = 0;
     public final static byte OPENED = 1;
@@ -274,7 +221,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public final static byte UPPAAL_OK = 42;
     public final static byte NC_OK = 43;
     public final static byte MODEL_UPPAAL_OK = 44;
-    public final static byte MODEL_PROVERIF_OK = 45;
     public final static byte EDIT_PROVERIF_OK = 46;
     public final static byte AVATAR_SYNTAXCHECKING_OK = 47;
     public final static byte PANEL_CHANGED = 48;
@@ -362,10 +308,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // Invariants
     Invariant currentInvariant;
 
-    // Thread fof autosave
+    // Thread for autosave
     PeriodicBehaviorThread pbt;
 
     private TMLArchiPanel tmlap;    // USed to retrieve the currently opened architecture panel
+
+    // Plugin management
+    //public static PluginManager pluginManager;
+
 
     public MainGUI(boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
                    _avatarOnly, boolean _experimental) {
@@ -385,6 +335,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         currentInvariant = null;
 
         pbt = new PeriodicBehaviorThread(this, 120000); // save every two minutes
+
+        PluginManager.pluginManager = new PluginManager();
 
     }
 
@@ -636,7 +588,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void setMode(byte m) {
         mode = m;
-	ModeManager.setMode(mode, actions, mainBar, this);
+        ModeManager.setMode(mode, actions, mainBar, this);
     }
 
 
@@ -1077,7 +1029,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 list.addAll( ((TMLComponentDesignPanel)tp).getAllTMLTasksAttributes() );
             }
         }
-        
+
         return list;
     }
 
@@ -1473,8 +1425,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private void addTURTLEPanel() {
 
         //TraceManager.addDev("New TURTLE Panels");
-        // tabbed pane
-        mainTabbedPane = new JTabbedPane();
+		// Issue #41 Ordering of tabbed panes 
+        mainTabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
         mainTabbedPane.setBackground(ColorManager.MainTabbedPane);
         mainTabbedPane.setForeground(Color.black);
 
@@ -2222,16 +2174,33 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
 
-		if (gtm.getCheckingErrors().size() > 0) {
-		    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
+                if (gtm.getCheckingErrors().size() > 0) {
+                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+                }
+
             } catch (MalformedModelingException mme) {
                 JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
             }
             dtree.forceUpdate();
         }
 
+    }
+
+    public void openNetworkProject() {
+        boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
+        if (b) {
+            if (!saveBeforeAction("Save and Open", "Open")) {
+                return;
+            }
+            /*  int back = JOptionPane.showConfirmDialog(frame, "Current modeling has not been saved\nDo you really want to open a new one ?", "To quit, or not to quit ?", JOptionPane.OK_CANCEL_OPTION);
+                if (back == JOptionPane.CANCEL_OPTION) {
+                return;
+                }*/
+        }
+
+	JDialogLoadingNetworkModel jdlnm = new JDialogLoadingNetworkModel(frame, this, "Opening a network model", ConfigurationTTool.URL_MODEL);
+	GraphicLib.centerOnParent(jdlnm, 700, 800);
+	jdlnm.setVisible(true); // blocked until dialog has been closed
     }
 
 
@@ -2257,12 +2226,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfc.getSelectedFile();
+	    openProjectFromFile(file);
         }
 
+    }
+
+    public void openProjectFromFile(File _f) {
+
         String s = null;
-        if(checkFileForOpen(file)) {
+        if(checkFileForOpen(_f)) {
             try {
-                FileInputStream fis = new FileInputStream(file);
+                FileInputStream fis = new FileInputStream(_f);
                 int nb = fis.available();
 
                 byte [] ba = new byte[nb];
@@ -2285,7 +2259,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             gtm.enableUndo(false);
 
             // Update configuration
-            updateLastOpenFile(file);
+            updateLastOpenFile(_f);
 
             //TraceManager.addDev("Loading");
             // load the new TURTLE modeling
@@ -2294,11 +2268,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 //gtm.saveOperation(tcdp);
                 frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
-		
-		if (gtm.getCheckingErrors().size() > 0) {
-		    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-		
-		}
+
+                if (gtm.getCheckingErrors().size() > 0) {
+                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+
+                }
             } catch (MalformedModelingException mme) {
                 JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
                 frame.setTitle("TToolt: unamed project");
@@ -2350,16 +2324,16 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 //gtm.saveOperation(tcdp);
                 frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
-				
-				if (gtm.getCheckingErrors().size() > 0) {
-				    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-				}
+
+                if (gtm.getCheckingErrors().size() > 0) {
+                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
             catch (MalformedModelingException mme) {
                 JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
                 frame.setTitle("TTool: unamed project");
             }
-            
+
             dtree.forceUpdate();
             gtm.enableUndo(true);
             gtm.saveOperation(getCurrentSelectedPoint());
@@ -2524,7 +2498,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         if( checkFileForSave(file)) {
             String s = gtm.makeXMLFromTurtleModeling(-1);
-            
+
             try {
                 if (gtm == null) {
                     throw new Exception("Internal model Error 1");
@@ -2782,7 +2756,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         } else {
             s += zoom + "%";
         }
-	//TraceManager.addDev("Seeting zoom in " + getCurrentTDiagramPanel());
+        //TraceManager.addDev("Seeting zoom in " + getCurrentTDiagramPanel());
         actions[TGUIAction.ACT_SHOW_ZOOM].setName(TGUIAction.ACT_SHOW_ZOOM, s);
     }
 
@@ -2796,11 +2770,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void nextDiag() {
         getCurrentJTabbedPane().setSelectedIndex(Math.min(getCurrentJTabbedPane().getTabCount(), getCurrentJTabbedPane().getSelectedIndex() + 1));
-     }
+    }
 
     public void lastDiag() {
         getCurrentJTabbedPane().setSelectedIndex(getCurrentJTabbedPane().getTabCount() - 1);
-     }
+    }
 
     //@author: Huy TRUONG
     //open a new External Search Dialog
@@ -2838,7 +2812,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void aboutVersion() {
-         JFrameBasicText jft = new JFrameBasicText("About TTool ...", DefaultText.getAboutText(), IconManager.imgic324);
+        JFrameBasicText jft = new JFrameBasicText("About TTool ...", DefaultText.getAboutText(), IconManager.imgic324);
         jft.setIconImage(IconManager.img8);
         GraphicLib.centerOnParent(jft, 700, 800 );
         jft.setVisible(true);
@@ -2846,7 +2820,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void showTToolConfiguration() {
-         JFrameBasicText jft = new JFrameBasicText("Your configuration of TTool ...", ConfigurationTTool.getConfiguration(systemcOn), IconManager.imgic76);
+        JFrameBasicText jft = new JFrameBasicText("Your configuration of TTool ...", ConfigurationTTool.getConfiguration(systemcOn), IconManager.imgic76);
         jft.setIconImage(IconManager.img8);
         //jft.setSize(700, 800);
         GraphicLib.centerOnParent(jft, 700, 800 );
@@ -2871,7 +2845,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void oneClickLOTOSRG() {
-       // boolean ret;
+        // boolean ret;
         if (!checkModelingSyntax(true)) {
             TraceManager.addDev("Syntax error");
             return;
@@ -2886,7 +2860,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void oneClickRTLOTOSRG() {
-       // boolean ret;
+        // boolean ret;
         if (!checkModelingSyntax(true)) {
             TraceManager.addDev("Syntax error");
             return;
@@ -3083,7 +3057,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 if (b) {
                     ret = true;
                     setMode(MainGUI.AVATAR_SYNTAXCHECKING_OK);
-                    //setMode(MainGUI.MODEL_PROVERIF_OK);
                     //setMode(MainGUI.GEN_DESIGN_OK);
                     /*
                       if (!automatic) {
@@ -3142,7 +3115,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 if (b) {
                     ret = true;
                     setMode(MainGUI.AVATAR_SYNTAXCHECKING_OK);
-                    //setMode(MainGUI.MODEL_PROVERIF_OK);
                     //setMode(MainGUI.GEN_DESIGN_OK);
                     /*
                       if (!automatic) {
@@ -3370,12 +3342,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 JDialogSelectRequirements.ignored = rdp.ignored;
                 Vector<Requirement> reqsToValidate = new Vector<Requirement>();
                 JDialogSelectRequirements jdsreq = new JDialogSelectRequirements(frame, reqsToValidate, rdp.getComponentList(), "Choosing requirements to verify");
-                
+
                 if (!automatic) {
                     GraphicLib.centerOnParent(jdsreq);
                     jdsreq.setVisible(true); // Blocked until dialog has been closed
                 }
-                
+
                 if (reqsToValidate.size() > 0) {
                     rdp.validated = JDialogSelectRequirements.validated;
                     rdp.ignored = JDialogSelectRequirements.ignored;
@@ -3598,7 +3570,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (tp == null) {return null;}
         if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
         TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
-        ArrayList<String> strlist = tmlcomp.getAllCryptoConfig();
+        List<String> strlist = tmlcomp.getAllCryptoConfig();
         String[] strarray = new String[strlist.size()];
         strlist.toArray(strarray);
         return strarray;
@@ -3608,7 +3580,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (tp == null) {return null;}
         if (!(tp instanceof TMLComponentDesignPanel)) {return null;}
         TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
-        ArrayList<String> strlist = tmlcomp.getAllNonce();
+        List<String> strlist = tmlcomp.getAllNonce();
         String[] strarray = new String[strlist.size()];
         strlist.toArray(strarray);
         return strarray;
@@ -3682,14 +3654,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 }*/
             gtm.getTMLMapping().getTMLModeling().clearBacktracing();
             gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, getTabName(tp));
-            gtm.getTML2Avatar().backtraceReachability(pvoa.getReachableEvents(), pvoa.getNonReachableEvents());
-            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getSatisfiedAuthenticity(), pvoa.getSatisfiedWeakAuthenticity(), pvoa.getNonSatisfiedAuthenticity(), getTabName(tp));
+            gtm.getTML2Avatar().backtraceReachability(pvoa.getReachabilityResults());
+            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getAuthenticityResults(), getTabName(tp));
         }
         else if (tp instanceof TMLComponentDesignPanel){
             gtm.getTMLMapping().getTMLModeling().clearBacktracing();
             gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, "Default Mapping");
-            gtm.getTML2Avatar().backtraceReachability(pvoa.getReachableEvents(), pvoa.getNonReachableEvents());
-            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getSatisfiedAuthenticity(), pvoa.getSatisfiedWeakAuthenticity(), pvoa.getNonSatisfiedAuthenticity(), "Default Mapping");
+            gtm.getTML2Avatar().backtraceReachability(pvoa.getReachabilityResults());
+            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getAuthenticityResults(), "Default Mapping");
         }
         return;
     }
@@ -3888,7 +3860,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void generateAUTS() {
         JDialogGenAUTS jdgauts = new JDialogGenAUTS(frame, this, "Generation of automata via LOTOS", gtm.getPathCaesar(),
-        											GTURTLEModeling.getPathBcgio(),
+                                                    GTURTLEModeling.getPathBcgio(),
                                                     REMOTE_RTL_LOTOS_FILE,
                                                     GTURTLEModeling.getCaesarHost(), ConfigurationTTool.TGraphPath);
         //  jdgauts.setSize(450, 600);
@@ -3909,7 +3881,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarSimulation() {
         TraceManager.addDev("Avatar simulation");
-        jfais = new JFrameAvatarInteractiveSimulation(frame, this, "Interactive simulation", gtm.getAvatarSpecification());
+        jfais = new JFrameAvatarInteractiveSimulation( /*frame,*/ this, "Interactive simulation", gtm.getAvatarSpecification());
         jfais.setIconImage(IconManager.img9);
         // jfais.setSize(900, 600);
         GraphicLib.centerOnParent(jfais, 900, 600);
@@ -3932,8 +3904,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarProVerifVerification() {
         TraceManager.addDev("Avatar proverif fv");
-        //JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
-        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
+        TURTLEPanel tp = this.getCurrentTURTLEPanel();
+        AvatarDesignPanel adp = null;
+        if (tp instanceof AvatarDesignPanel)
+            adp = (AvatarDesignPanel) tp;
+        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp);
         // jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);
@@ -4025,21 +4000,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                   }*/
                 TraceManager.addDev( "About to open the window at line 4198" );
                 if (showWindow) {
-		    TURTLEPanel tp = getCurrentTURTLEPanel();
-		    boolean result = false;
-		    
-		    if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
-			result = gtm.generateUPPAALFromTML(ConfigurationTTool.UPPAALCodeDirectory, false, 1024, true);
-		    }
-		    if (result != false) {
-			formalValidation();
-		    }
+                    TURTLEPanel tp = getCurrentTURTLEPanel();
+                    boolean result = false;
+
+                    if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
+                        result = gtm.generateUPPAALFromTML(ConfigurationTTool.UPPAALCodeDirectory, false, 1024, true);
+                    }
+                    if (result != false) {
+                        formalValidation();
+                    }
                     /*JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);
                     //  jgen.setSize(450, 500);
                     GraphicLib.centerOnParent(jgen, 450, 500);
                     jgen.setVisible(true);*/
-		    
-		    }
+
+                }
                 return;
             }
         }
@@ -4059,40 +4034,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TraceManager.addDev("Execute avatar model checker");
         gtm.generateAvatarFromTML(true,false);
         if (gtm.getAvatarSpecification()==null){
-	    TraceManager.addDev("Null avatar spec");
+            TraceManager.addDev("Null avatar spec");
             return;
         }
         JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), ConfigurationTTool.TGraphPath, experimentalOn);
         // jmc.setSize(550, 600);
         GraphicLib.centerOnParent(jmc, 550, 600);
         jmc.setVisible(true);
-    }
-
-
-    public void generateProVerif() {
-        TraceManager.addDev("Generate ProVerif!");
-
-        JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
-        //jgen.setSize(500, 450);
-        GraphicLib.centerOnParent(jgen, 500, 450);
-        jgen.setVisible(true);
-        dtree.toBeUpdated();
-
-        // Generate from AVATAR
-        /*if (gtm.getTURTLEModelingState() == 3) {
-          boolean result = gtm.generateProVerifFromAVATAR(ConfigurationTTool.ProVerifCodeDirectory);
-          if (result) {
-          JOptionPane.showMessageDialog(frame,
-          "0 error, " + getCheckingWarnings().size() + " warning(s). ProVerif specification generated",
-          "Successful translation from the Avatar to a ProVerif specification",
-          JOptionPane.INFORMATION_MESSAGE);
-          } else {
-          JOptionPane.showMessageDialog(frame,
-          "" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). ProVerif specification could NOT be generated",
-          "ERROR during translation from AVATAR to UPPAAL",
-          JOptionPane.INFORMATION_MESSAGE);
-          }
-          }*/
     }
 
 
@@ -5073,7 +5021,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         TURTLEPanel tp;// = getCurrentTURTLEPanel();
         TDiagramPanel tdp1;
-      //  BufferedImage image;
+        //  BufferedImage image;
         File file1;
         String name = file.getAbsolutePath();
         name = name.substring(0, name.length() - 4);
@@ -5364,15 +5312,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public List<TGComponent> getAllTMLComponents() {
         TURTLEPanel tp;
         List<TGComponent> ll = new LinkedList<TGComponent>();
-        
+
         for(int i=0; i<tabs.size(); i++) {
             tp = (TURTLEPanel)(tabs.elementAt(i));
-            
+
             if (tp instanceof TMLComponentDesignPanel) {
                 ll.addAll(((TMLComponentDesignPanel)tp).tmlctdp.getComponentList());
             }
         }
-        
+
         return ll;
     }
 
@@ -5778,7 +5726,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return false;
     }
 
-     public boolean openSequenceDiagramZV(String s) {
+    public boolean openSequenceDiagramZV(String s) {
         int index = getCurrentJTabbedPane().indexOfTab(s);
         if (index > -1) {
             getCurrentJTabbedPane().setSelectedIndex(index);
@@ -5877,14 +5825,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return getSequenceDiagramPanel(tp, s);
     }
 
-    
+
     public ui.sd2.SequenceDiagramPanel getSequenceDiagramPanelZV(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
         return getSequenceDiagramPanelZV(tp, s);
     }
 
-    
+
     public AttackTreeDiagramPanel getAttackTreeDiagramPanel(int index, int indexTab, String s) {
         //TraceManager.addDev("Searching for " + s);
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
@@ -6029,7 +5977,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         setPanelMode();
         return true;
     }
-    
+
     public boolean createUniqueSequenceDiagram(TURTLEPanel tp, String s) {
         int i;
         for(i=0; i<1000; i++) {
@@ -6047,7 +5995,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         setPanelMode();
         return true;
     }
-    
+
 
     public boolean createUniqueSequenceDiagramZV(TURTLEPanel tp, String s) {
         int i;
@@ -6561,7 +6509,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             getCurrentTDiagramPanel().repaint();
         }
 
-	if (getCurrentTDiagramPanel() instanceof ui.sd2.SequenceDiagramPanel) {
+        if (getCurrentTDiagramPanel() instanceof ui.sd2.SequenceDiagramPanel) {
             ((ui.sd2.SequenceDiagramPanel)(getCurrentTDiagramPanel())).alignInstances();
             changeMade(getCurrentTDiagramPanel(), TDiagramPanel.MOVE_COMPONENT);
             getCurrentTDiagramPanel().repaint();
@@ -8158,6 +8106,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         private Action listener = new AbstractAction() {
 
+                /**
+                 *
+                 */
+                private static final long serialVersionUID = -3632935027104753332L;
+
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     JMenuItem item = (JMenuItem)e.getSource();
                     String ac = item.getActionCommand();
@@ -8217,8 +8171,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     }
                 }
             };
-
-
     }
 
 

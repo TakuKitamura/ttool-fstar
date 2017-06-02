@@ -45,7 +45,7 @@
 
 package translator;
 
-import java.util.*;
+import java.util.Vector;
 
 public class HLProcess extends Process {
     private TClass tc;

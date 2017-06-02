@@ -45,7 +45,7 @@
 
 package nc;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class NCPath extends NCElement {
 	public NCTraffic traffic;

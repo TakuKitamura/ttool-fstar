@@ -45,42 +45,41 @@
 
 package ui.avatarinteractivesimulation;
 
-//import java.io.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
-
-
-import myutil.*;
-import ui.*;
-import ui.file.*;
-
 import avatartranslator.*;
 import avatartranslator.directsimulation.*;
-import ui.avatarbd.*;
+import myutil.*;
+import ui.*;
+import ui.avatarbd.AvatarBDPortConnector;
 
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public  class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener, WindowListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
     private static int TRACED_TRANSACTIONS = 1000;
     private static int LAST_TRANSACTIONS = 0;
 
 
-    private static String buttonStartS = "Start simulator";
-    private static String buttonStopAndCloseS = "Stop simulator and close";
-
-    private static int NOT_STARTED = 0;
-    private static int STARTED = 1;
+//    private static String buttonStartS = "Start simulator";
+//    private static String buttonStopAndCloseS = "Stop simulator and close";
+//
+//    private static int NOT_STARTED = 0;
+//    private static int STARTED = 1;
 
     private static long SPACE_UPDATE_TIME = 100;
 
-    private Frame f;
+   // private Frame f;
     private MainGUI mgui;
-    private String title;
+ //   private String title;
 
     protected JButton buttonClose, buttonStart, buttonStopAndClose;
     protected JTextArea jta;
@@ -112,7 +111,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     //List of transactions
 
-    private JList listPendingTransactions;
+    private JList<AvatarSimulationPendingTransaction> listPendingTransactions;
     private TGComponent selectedComponentForTransaction1, selectedComponentForTransaction2;
     private AvatarSimulationBlock previousBlock;
 
@@ -172,10 +171,10 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     // Asynchronous transactions
     private JPanel asyncPanel;
-    private JComboBox comboFIFOs;
+    private JComboBox<AvatarInteractiveSimulationFIFOData> comboFIFOs;
     private Vector<AvatarInteractiveSimulationFIFOData> fifos;
     private JButton delete, up, down;
-    private JList asyncmsgs;
+    private JList<AvatarSimulationAsynchronousTransaction> asyncmsgs;
     private int nbOfAsyncMsgs;
 
     // Sequence Diagram
@@ -203,8 +202,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     private AvatarSpecification avspec;
     private AvatarSpecificationSimulation ass;
     private Thread simulationThread;
-    private boolean resetThread;
-    private boolean killThread;
+//    private boolean resetThread;
+//    private boolean killThread;
 
     private LinkedList<TGComponent> runningTGComponents;
     private int nbOfAllExecutedElements = 0;
@@ -217,12 +216,12 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     // Async messages
     Vector<AvatarSimulationAsynchronousTransaction> lastAsyncmsgs;
 
-    public JFrameAvatarInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, AvatarSpecification _avspec) {
+    public JFrameAvatarInteractiveSimulation(/*Frame _f,*/ MainGUI _mgui, String _title, AvatarSpecification _avspec) {
         super(_title);
 
-        f = _f;
+     //   f = _f;
         mgui = _mgui;
-        title = _title;
+      //  title = _title;
         avspec = _avspec;
 
         addWindowListener(this);
@@ -390,32 +389,21 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         sdpanel.setMyScrollPanel(jsp);
         jsp.setWheelScrollingEnabled(true);
         //jsp.setPreferredSize(new Dimension(800, 400));
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         lowerPartPanel.add(jsp, BorderLayout.CENTER);
-
-
 
         // Commands
         commands = new JPanel(new BorderLayout());
-        //commands.setFloatable(true);
-        //commands.setMinimumSize(new Dimension(300, 250));
         commands.setBorder(new javax.swing.border.TitledBorder("Commands"));
 
-
-
-
-        commandTab = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        commandTab = GraphicLib.createTabbedPane();//new JTabbedPane();
         commands.add(commandTab, BorderLayout.CENTER);
-        //commandTab.setBackground(ColorManager.InteractiveSimulationBackground);
 
 
         // Control commands
         jp01 = new JPanel(new BorderLayout());
         commandTab.addTab("Control", null, jp01, "Main control commands");
-        //jp01.setMinimumSize(new Dimension(375, 400));
-        //gridbag01 = new GridBagLayout();
-        //c01 = new GridBagConstraints();
-        //jp01.setLayout(gridbag01);
 
         mctb = new AvatarMainCommandsToolBar(this);
         jp01.add(mctb, BorderLayout.NORTH);
@@ -442,7 +430,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         panellpt.setLayout(new BorderLayout());
         panellpt.setBorder(new javax.swing.border.TitledBorder("Pending transactions"));
 
-        listPendingTransactions = new JList();
+        listPendingTransactions = new JList<AvatarSimulationPendingTransaction>();
         //listPendingTransactions.setPreferredSize(new Dimension(400, 300));
         listPendingTransactions.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION );
         listPendingTransactions.addListSelectionListener(this);
@@ -524,8 +512,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         //c02.gridwidth = GridBagConstraints.REMAINDER; //end row
 
-
-        infoTab = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        infoTab = GraphicLib.createTabbedPane();// new JTabbedPane();
         infoTab.setPreferredSize(new Dimension(300, 200));
         infos.add(infoTab, BorderLayout.CENTER);
 
@@ -884,7 +872,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         ca.fill = GridBagConstraints.HORIZONTAL;
         ca.gridheight = 1;
 
-        comboFIFOs = new JComboBox(fifos);
+        comboFIFOs = new JComboBox<AvatarInteractiveSimulationFIFOData>(fifos);
         comboFIFOs.addActionListener(this);
         asyncPanel.add(comboFIFOs, ca);
         ca.fill = GridBagConstraints.BOTH;
@@ -899,7 +887,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         cb.fill = GridBagConstraints.BOTH;
         cb.gridheight = 1;
         borderjlist.setBorder(new javax.swing.border.TitledBorder("Top of selected FIFO:"));
-        asyncmsgs = new JList();
+        asyncmsgs = new JList<AvatarSimulationAsynchronousTransaction>();
         JScrollPane pane = new JScrollPane(asyncmsgs);
         borderjlist.add(pane, cb);
         asyncPanel.add(borderjlist, ca);
@@ -1408,8 +1396,6 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 for(AvatarInteractiveSimulationFIFOData fifo: fifos) {
                     fifo.nb=0;
                 }
-
-
             }
 
             if (lastAsyncmsgs != null) {

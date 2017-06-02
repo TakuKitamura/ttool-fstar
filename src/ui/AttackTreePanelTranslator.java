@@ -44,15 +44,13 @@
 
 package ui;
 
-import java.util.*;
-
-import myutil.*;
+import attacktrees.*;
+import avatartranslator.*;
 import ui.atd.*;
 
-import attacktrees.*;
+import java.util.LinkedList;
+
 //import translator.*;
-import ui.window.*;
-import avatartranslator.*;
 
 
 public class AttackTreePanelTranslator {

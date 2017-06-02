@@ -47,7 +47,6 @@
 package ui.avatarmethodology;
 
 import org.w3c.dom.Element;
-
 import ui.*;
 
 public class AvatarMethodologyDiagramPanel extends TDiagramPanel implements TDPWithAttributes {

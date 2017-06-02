@@ -47,11 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatarsmd;
 
-import java.awt.*;
-
-import myutil.*;
-
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class AvatarSMDParallel extends AvatarSMDBasicComponent{
     private int lineLength = 0;

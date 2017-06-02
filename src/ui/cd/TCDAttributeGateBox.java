@@ -48,9 +48,8 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.cd;
 
 
-
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogAttribute;
 
 public class TCDAttributeGateBox extends TGCAttributeBox {
     

@@ -46,12 +46,12 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.Arrays;
+import ui.IconManager;
 
-import ui.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class JDialogCryptographicConfiguration extends javax.swing.JDialog implements ActionListener  {
@@ -115,7 +115,7 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  	if (values[1].contains("Encryption") || values[1].isEmpty()){
+  	if (values[1].contains("Encryption") || values[1].equals("MAC") || values[1].isEmpty()){
 	    panel1= new EncryptPanel(this);
 	}
 	else {

@@ -45,9 +45,16 @@
 
 package tmltranslator.tomappingsystemc2;
 
-import java.util.*;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
 import tmltranslator.*;
-import myutil.*;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 
 public class MappedSystemCTask {
@@ -60,7 +67,7 @@ public class MappedSystemCTask {
     private TMLMapping tmlmapping;
     private int commentNum;
     private boolean debug;
-    private boolean optimize;
+   // private boolean optimize;
     private StaticAnalysis _analysis;
     private LiveVariableNode _startAnaNode=null;
 
@@ -91,7 +98,7 @@ public class MappedSystemCTask {
         functionSig="";
         commentText="";
         commentNum=0;
-        optimize=false;
+       // optimize=false;
 
         _analysis = new StaticAnalysis(_task, _channels, _events, _requests, _depChannels);
         _startAnaNode = _analysis.startAnalysis();
@@ -110,7 +117,7 @@ public class MappedSystemCTask {
         //_startAnaNode = _analysis.startAnalysis();
         //_analysis.determineCheckpoints(aStatistics); //NEW
         debug = _debug;
-        optimize=_optimize;
+     //   optimize=_optimize;
         basicCPPCode();
         makeClassCode();
     }
@@ -215,12 +222,12 @@ public class MappedSystemCTask {
         hcode = Conversion.indentString(hcode, 4);
         cppcode = Conversion.indentString(cppcode, 4);
     }
-
-    private String makeDestructor(){
-        String dest=reference + "::~" + reference + "(){" + CR;
-        if (commentNum!=0) dest+="delete[] _comment" + SCCR;
-        return dest+"}"+CR;
-    }
+//
+//    private String makeDestructor(){
+//        String dest=reference + "::~" + reference + "(){" + CR;
+//        if (commentNum!=0) dest+="delete[] _comment" + SCCR;
+//        return dest+"}"+CR;
+//    }
 
     private String makeConstructorSignature(){
         String constSig=reference+ "(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs"+CR;
@@ -596,7 +603,7 @@ public class MappedSystemCTask {
 
         } else if (currElem instanceof TMLSendEvent){
             if (debug) TraceManager.addDev("Checking Send\n");
-            TMLSendEvent sendEvt=(TMLSendEvent)currElem;
+           // TMLSendEvent sendEvt=(TMLSendEvent)currElem;
             cmdName= "_send" + currElem.getID();
             hcode+="TMLSendCommand " + cmdName + SCCR;
             handleParameters(currElem, cmdName, false, getFormattedLiveVarStr(currElem));
@@ -604,7 +611,7 @@ public class MappedSystemCTask {
 
         } else if (currElem instanceof TMLSendRequest){
             if (debug) TraceManager.addDev("Checking Request\n");
-            TMLSendRequest sendReq=(TMLSendRequest)currElem;
+            //TMLSendRequest sendReq=(TMLSendRequest)currElem;
             cmdName= "_request" + currElem.getID();
             hcode+="TMLRequestCommand " + cmdName + SCCR;
             handleParameters(currElem, cmdName, false, getFormattedLiveVarStr(currElem));
@@ -612,7 +619,7 @@ public class MappedSystemCTask {
 
         } else if (currElem instanceof TMLWaitEvent){
             if (debug) TraceManager.addDev("Checking Wait\n");
-            TMLWaitEvent waitEvt = (TMLWaitEvent)currElem;
+           // TMLWaitEvent waitEvt = (TMLWaitEvent)currElem;
             cmdName= "_wait" + currElem.getID();
             hcode+="TMLWaitCommand " + cmdName + SCCR;
             handleParameters(currElem, cmdName, true, getFormattedLiveVarStr(currElem));
@@ -808,8 +815,11 @@ public class MappedSystemCTask {
         LinkedList<HwCommunicationNode> commNodeRefList = tmlmapping.findNodesForElement(writeCmd.getChannel(0));
         for(int i=1; i<writeCmd.getNbOfChannels(); i++){
             LinkedList<HwCommunicationNode> commNodeCmpList = tmlmapping.findNodesForElement(writeCmd.getChannel(i));
+            
             if (commNodeCmpList.size()!=commNodeRefList.size()) return false;
-            Iterator it = commNodeCmpList.iterator();
+            
+            Iterator<HwCommunicationNode> it = commNodeCmpList.iterator();
+            
             for(HwCommunicationNode cmnode: commNodeRefList) {
                 if (it.next()!=cmnode) return false;
             }
@@ -900,7 +910,7 @@ public class MappedSystemCTask {
 
     private String makeAttributesCode() {
         String code = "";
-        int i;
+       // int i;
         for(TMLAttribute att: task.getAttributes()) {
             //if (!att.name.endsWith("__req")){ //NEW
             if (att.hasInitialValue())
@@ -917,7 +927,7 @@ public class MappedSystemCTask {
 
     private String makeAttributesDeclaration() {
         String code = "";
-        int i;
+      //  int i;
         for(TMLAttribute att: task.getAttributes()) {
             //if (!att.name.endsWith("__req")){  //NEW
             code += "ParamType " + att.name;

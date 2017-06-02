@@ -48,8 +48,6 @@ package avatartranslator;
 
 import java.util.HashMap;
 
-import myutil.Conversion;
-
 /**
  * An AvatarSimpleGuardDuo is an {@link AvatarSimpleGuard} that is of the form:
  * {@link AvatarTerm} binaryOp {@link AvatarTerm}

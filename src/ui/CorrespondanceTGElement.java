@@ -47,16 +47,25 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.awt.*;
-import java.util.*;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarLibraryFunction;
+import req.ebrdd.EBRDDComponent;
+import req.ebrdd.EBRDDGeneralComponent;
+import sddescription.Evt;
+import sddescription.HMSCElement;
+import sddescription.HMSCNode;
+import sddescription.MSC;
+import tepe.TEPEComponent;
+import tmltranslator.DIPLOElement;
+import tmltranslator.HwNode;
+import tmltranslator.TMLActivityElement;
+import translator.ADComponent;
+import translator.TClass;
+import ui.cd.TCDTClass;
 
-import avatartranslator.*;
-import req.ebrdd.*;
-import translator.*;
-import tmltranslator.*;
-import sddescription.*;
-import ui.cd.*;
-import tepe.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class CorrespondanceTGElement {
     private Vector<TGComponent> tg; //tgelement

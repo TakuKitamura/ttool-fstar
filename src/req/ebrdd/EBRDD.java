@@ -45,9 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package req.ebrdd;
 
-import java.util.*;
-
-import myutil.*;
+import java.util.ArrayList;
 
 public class EBRDD extends ArrayList<EBRDDComponent> {
     private String name;

@@ -45,12 +45,15 @@
 
 package tmltranslator.tomappingsystemc2;
 
-import java.util.*;
-
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
+import req.ebrdd.EBRDD;
+import tepe.TEPE;
 import tmltranslator.*;
-import myutil.*;
-import req.ebrdd.*;
-import tepe.*;
+
+import java.util.*;
 
 
 public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator {

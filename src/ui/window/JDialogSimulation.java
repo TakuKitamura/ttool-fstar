@@ -46,13 +46,18 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.FileUtils;
+import myutil.ScrolledJTextArea;
+import ui.FormatManager;
+import ui.IconManager;
+import ui.MainGUI;
 
-import launcher.*;
-import myutil.*;
-import ui.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class JDialogSimulation extends javax.swing.JDialog implements ActionListener, Runnable  {
     

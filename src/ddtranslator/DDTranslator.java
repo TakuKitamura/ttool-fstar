@@ -46,13 +46,15 @@ knowledge of the CeCILL license and that you accept its terms.
 package ddtranslator;
 
 
-import java.util.*;
-
-
 import translator.*;
 import ui.*;
-import ui.cd.*;
-import ui.dd.*;
+import ui.cd.TCDTClass;
+import ui.dd.TDDNode;
+import ui.dd.TGConnectorLinkNode;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class DDTranslator {
     

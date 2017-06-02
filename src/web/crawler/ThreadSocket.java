@@ -47,17 +47,17 @@
 
 package web.crawler;
 
-import myutil.externalSearch.*;
+import myutil.externalSearch.Message;
 
-import java.awt.AWTException;
-import java.net.Socket;
-import java.io.*;
+import javax.net.ssl.SSLSocket;
+import javax.xml.transform.TransformerException;
+import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.transform.TransformerException;
-import myutil.externalSearch.Message;
-import javax.net.ssl.SSLSocket;
 
 
 

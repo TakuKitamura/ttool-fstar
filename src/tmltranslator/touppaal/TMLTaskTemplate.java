@@ -45,8 +45,8 @@
 
 package tmltranslator.touppaal;
 
-import tmltranslator.*;
-import uppaaldesc.*;
+import tmltranslator.TMLTask;
+import uppaaldesc.UPPAALTemplate;
 
 public class TMLTaskTemplate {
 	public TMLTask task;

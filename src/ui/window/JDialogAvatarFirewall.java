@@ -46,17 +46,22 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import ui.IconManager;
+import ui.avatarbd.AvatarBDBlock;
+import ui.avatarbd.AvatarBDFirewall;
+import ui.avatarbd.AvatarBDPanel;
+
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Vector;
+
 //import javax.swing.event.*;
 //import java.util.*;
-
-import ui.*;
-
-import ui.avatarbd.*;
 
 
 public class JDialogAvatarFirewall extends javax.swing.JDialog implements ActionListener,ListSelectionListener  {

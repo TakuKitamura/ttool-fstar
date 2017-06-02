@@ -47,16 +47,20 @@
 
 package ui.avatarsmd;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogAvatarTransition;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.Vector;
+
+//import java.awt.geom.*;
 
 public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 

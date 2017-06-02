@@ -45,7 +45,7 @@
 
 package avatartranslator;
 
-import java.util.*;
+import java.util.List;
 
 public class AvatarPragmaAuthenticity extends AvatarPragma {
 
@@ -72,6 +72,15 @@ public class AvatarPragmaAuthenticity extends AvatarPragma {
     
     public AvatarAttributeState getAttrB(){
 	return attrB;
+    }
+
+    @Override
+    public String toString()
+    {
+        if (this.attrA == null || this.attrB == null)
+            return "<undefined>";
+
+        return this.attrA.toString() + " ==> " + this.attrB.toString();
     }
 
     @Override

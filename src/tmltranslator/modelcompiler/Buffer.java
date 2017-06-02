@@ -46,11 +46,11 @@
 
 package tmltranslator.modelcompiler;
 
-import java.util.List;
-
 import tmltranslator.TMLCPLibArtifact;
 import tmltranslator.TMLPort;
 import tmltranslator.TMLTask;
+
+import java.util.List;
 
 public class Buffer	{
 

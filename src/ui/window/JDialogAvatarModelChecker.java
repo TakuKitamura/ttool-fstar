@@ -46,30 +46,31 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.io.*;
-
-import java.text.*;
-
+import avatartranslator.AvatarSpecification;
+import avatartranslator.AvatarStateMachineElement;
+import avatartranslator.modelchecker.AvatarModelChecker;
+import avatartranslator.modelchecker.SpecificationReachability;
+import avatartranslator.modelchecker.SpecificationReachabilityType;
 import myutil.*;
-import avatartranslator.*;
-import avatartranslator.modelchecker.*;
-import ui.*;
+import ui.IconManager;
+import ui.MainGUI;
+import ui.TGComponent;
+import ui.graph.RG;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import ui.graph.*;
-
-
-
 public class JDialogAvatarModelChecker extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
-    public final static String [] INFOS = {"Not started", "Running", "Stopped by user", "Finished"};
-    public final static Color []  COLORS = {Color.darkGray, Color.magenta, Color.red, Color.blue};
+    private final static String [] INFOS = {"Not started", "Running", "Stopped by user", "Finished"};
+    private final static Color []  COLORS = {Color.darkGray, Color.magenta, Color.red, Color.blue};
 
 
     public final static int REACHABILITY_ALL        = 1;
@@ -142,7 +143,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
     private Thread t;
     private boolean go = false;
-    private boolean hasError = false;
+  //  private boolean hasError = false;
     private java.util.Timer timer;
     //protected boolean startProcess = false;
 
@@ -163,7 +164,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             graphDirDot = _graphDir + File.separator + "rgavatar$.dot";
         }
 
-	showLiveness = _showLiveness;
+        showLiveness = _showLiveness;
 	
         initComponents();
         myInitComponents();
@@ -190,7 +191,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        jp1 = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
@@ -470,14 +472,14 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     }
 
     public void run() {
-        String cmd;
-        String list, data;
-        int cycle = 0;
+ //       String cmd;
+   //     String list, data;
+     //   int cycle = 0;
 
-        hasError = false;
+     //   hasError = false;
 
         TraceManager.addDev("Thread started");
-        File testFile;
+     //   File testFile;
         try {
             reinitValues();
             jta.append("Starting the model checker\n");
@@ -715,8 +717,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         jta.append(s);
     }
 
+    @Override
     public void setError() {
-        hasError = true;
+//        hasError = true;
     }
 
     public void updateValues() {
@@ -757,8 +760,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                                          duration
                                          );
 
-                long diffInSeconds = TimeUnit.MILLISECONDS.toSeconds(duration);
-                long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+//                long diffInSeconds = TimeUnit.MILLISECONDS.toSeconds(duration);
+//                long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration);
                 //long diffInMs = TimeUnit.MILLISECONDS.toMilliseconds(duration);
                 elapsedTime.setText(t);
                 long diff = 0;

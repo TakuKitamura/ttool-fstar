@@ -48,10 +48,14 @@
 
 package tmltranslator;
 
-import java.io.*;
-import java.util.*;
-import compiler.tmlparser.*;
+import compiler.tmlparser.ParseException;
+import compiler.tmlparser.SimpleNode;
+import compiler.tmlparser.TMLExprParser;
+import compiler.tmlparser.TokenMgrError;
 import tmltranslator.tmlcp.*;
+
+import java.io.StringReader;
+import java.util.*;
 
 
 public class TMLCPSyntaxChecking {

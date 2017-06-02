@@ -45,11 +45,11 @@
 
 package sdtranslator;
 
-import sddescription.*;
+import myutil.Conversion;
+import sddescription.Evt;
 import translator.*;
-import myutil.*;
 
-import java.util.*;
+import java.util.Vector;
 
 public class ActionEvt {
     

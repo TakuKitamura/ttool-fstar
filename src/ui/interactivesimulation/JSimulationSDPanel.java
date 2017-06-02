@@ -48,19 +48,19 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.interactivesimulation;
 
+import myutil.Conversion;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import ui.ColorManager;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.*;
-
-import java.awt.image.*;
-
-import avatartranslator.*;
-import avatartranslator.directsimulation.*;
-import myutil.*;
-import ui.*;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class JSimulationSDPanel extends JPanel implements MouseMotionListener, Runnable  {
 	
@@ -84,12 +84,13 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	private int spaceVerticalText = 2;
 	private int spaceHorizontalText = 2;
 	private int spaceStop = 20;
-	private int verticalLink = 7;
+	private int verticalLink = 10;
 	private int lengthAsync = 50;
 	private int spaceBroadcast = 25;
 	
 	// Transactions
-	protected String fileReference;
+        private BufferedReader inputStream;
+        private String fileReference;
 	
 	private int maxNbOfTransactions = 10000;
 	private int drawnTransactions = 10000;
@@ -113,6 +114,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	
 	private final int NO_MODE = 0;
 	private final int FILE_MODE = 1;
+	private final int STREAM_MODE = 2;
 	private int mode;
 	private boolean go;
 	private Thread t;
@@ -249,7 +251,19 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 				spaceBetweenLifeLines = w+minSpaceBetweenLifeLines;
 			}
 		}
-		
+
+                for (GenericTransaction gt: this.transactions) {
+                    if (gt.type == gt.SYNCHRO) {
+		        String messageName = gt.name + "(" + gt.params + ")";
+                        w = g.getFontMetrics().stringWidth(messageName);
+                        if (w+this.minSpaceBetweenLifeLines > this.spaceBetweenLifeLines)
+                            this.spaceBetweenLifeLines = w+this.minSpaceBetweenLifeLines;
+                    }
+                }
+
+                int m = this.getSize().width / (this.entityNames.size()+1);
+                if (this.spaceBetweenLifeLines > m)
+                    this.spaceBetweenLifeLines = m;
 	}
 	
 	public void setNewSize() {
@@ -434,7 +448,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		// Putting the message name
 		w = g.getFontMetrics().stringWidth(messageName);
 		int xtmp = (xOf2ndBlock + currentX)/2 - w/2;
-		g.drawString(messageName, xtmp, currentY-2); 
+		g.drawString(messageName, xtmp, currentY-4); 
 		
 		currentY += 10;
 		
@@ -917,25 +931,45 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	}
 	
 	public void setFileReference(String _fileReference) {
-		fileReference = _fileReference;
-		
-		mode = FILE_MODE;
-		
-		Thread t = new Thread(this);
-		t.start();
+            try {
+                // Open the file that is the first 
+                // command line parameter
+                this.fileReference = _fileReference;
+                this.mode = FILE_MODE;
+                FileInputStream fstream = new FileInputStream(_fileReference);
+                BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(fstream)));
+                // Get the object of DataInputStream
+                this.setFileReference(br, _fileReference);
+            } catch(FileNotFoundException e) {
+                TraceManager.addDev("File " + _fileReference + " not found.");
+            } catch(SecurityException e) {
+                TraceManager.addDev("Reading file Error: " + e.getMessage());
+            }
 	}
+
+        public void setFileReference(BufferedReader inputStream) {
+            this.mode = STREAM_MODE;
+            this.setFileReference(inputStream, "from unnamed input stream");
+        }
+
+        private void setFileReference(BufferedReader inputStream, String fileReference) {
+            getExclu();
+            jfssdp.setStatus("Reading " + fileReference);
+            this.inputStream = inputStream;
+            this.entityNames.clear();
+            this.transactions.clear();
+            this.transactionsOfPoints.clear();
+            this.points.clear();
+            removeExclu();
+            
+            Thread t = new Thread(this);
+            t.start();
+        }
 	
 	public synchronized void refresh() {
-		if (mode == FILE_MODE) {
-			entityNames.clear();
-			transactions.clear();
-			transactionsOfPoints.clear();
-			points.clear();
-			if (t == null) {
-				Thread t = new Thread(this);
-				t.start();
-			}
-		}
+            if (mode == FILE_MODE) {
+                this.setFileReference(this.fileReference);
+            }
 	}
 	
 	public void run() {
@@ -950,31 +984,22 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			return;
 		}
 		
-		if (mode == FILE_MODE) {
-			// Open the file
+		if ((this.mode == FILE_MODE || this.mode == STREAM_MODE) && this.inputStream != null) {
 			// Read the content of the file
 			// Read line by line
 			// Upate the graphic regularly
 			getExclu();
-			jfssdp.setStatus("Reading " + fileReference);
+
 			try{
-				// Open the file that is the first 
-				// command line parameter
-				FileInputStream fstream = new FileInputStream(fileReference);
-				// Get the object of DataInputStream
-				DataInputStream in = new DataInputStream(fstream);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in));
-				String strLine;
-				//Read File Line By Line
-				while ((strLine = br.readLine()) != null)   {
-					// Print the content on the console
-					//TraceManager.addDev("Computing transaction:" + strLine);
-					addGenericTransaction(strLine);
-				}
+                                String strLine;
+                                //Read File Line By Line
+                                while ((strLine = this.inputStream.readLine()) != null)   {
+                                        addGenericTransaction(strLine);
+                                }
 				//Close the input stream
-				in.close();
+				this.inputStream.close();
 			} catch (Exception e){//Catch exception if any
-				TraceManager.addDev("Reading file Error: " + e.getMessage());
+				TraceManager.addDev("Closing file Error: " + e.getMessage());
 			}
 			
 			if (jfssdp != null) {
@@ -986,6 +1011,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		} 
 		
 		t = null;
+                this.inputStream = null;
 	}
 	
 	private void updateInfoOnTransactions() {
@@ -1158,9 +1184,13 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		}
 		
 		String ret = main.substring(index+sel.length(), main.length());
-		index = ret.indexOf(' ');
+                if (ret.charAt(0) == '"') {
+                    ret = ret.substring(1);
+                    index = ret.indexOf('"');
+                } else
+                    index = ret.indexOf(' ');
 		
-		if (index != -1) {
+		if (index >= 0) {
 			ret = ret.substring(0, index);
 		}
 		

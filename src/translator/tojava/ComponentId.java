@@ -46,7 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator.tojava;
 
-import translator.*;
+import translator.ADComponent;
 
 public class ComponentId  {
     public ADComponent adc;

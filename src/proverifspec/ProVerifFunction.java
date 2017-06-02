@@ -45,11 +45,6 @@
 
 package proverifspec;
 
-import java.util.*;
-
-import myutil.*;
-
-
 public class ProVerifFunction {
 	public String functionName;
 	public int functionArity;

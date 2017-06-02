@@ -48,23 +48,27 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-
+import avatartranslator.AvatarSpecification;
+import ddtranslatorSoclib.AvatarddSpecification;
+import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
+import ddtranslatorSoclib.toTopCell.TopCellGenerator;
+import launcher.LauncherException;
+import launcher.RshClient;
 import myutil.*;
-import ui.*;
+import ui.AvatarDeploymentPanelTranslator;
+import ui.ConfigurationTTool;
+import ui.IconManager;
+import ui.MainGUI;
+import ui.avatardd.ADDDiagramPanel;
+import ui.interactivesimulation.JFrameSimulationSDPanel;
 
-
-import avatartranslator.*;
-import launcher.*;
-
-import ui.interactivesimulation.*;
-import ddtranslatorSoclib.toSoclib.*;
-import ddtranslatorSoclib.toTopCell.*;
-import ddtranslatorSoclib.*;
-import ui.avatardd.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.StringWriter;
+import java.io.Writer;
 
 public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
 
@@ -117,7 +121,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
     protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode, putUserCode;
-    protected JComboBox versionCodeGenerator, units;
+    protected JComboBox<String> versionCodeGenerator, units;
     protected JButton showSimulationTrace,showOverflowStatus;
 
     private static int selectedUnit = 2;
@@ -132,7 +136,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
     private boolean hasError = false;
     protected boolean startProcess = false;
 
-    private AvatarRelation FIFO;
+  //  private AvatarRelation FIFO;
 
     private String hostExecute;
 
@@ -188,9 +192,9 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        jp1 = new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes 
+        jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
@@ -267,14 +271,14 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
         jp01.add(new JLabel("1 time unit ="), c01);
 
-        units = new JComboBox(unitTab);
+        units = new JComboBox<String>(unitTab);
         units.setSelectedIndex(selectedUnit);
         units.addActionListener(this);
         jp01.add(units, c01);
 
         jp01.add(new JLabel("Code generator used:"), c01);
 
-        versionCodeGenerator = new JComboBox(codes);
+        versionCodeGenerator = new JComboBox<String>(codes);
 	// versionCodeGenerator.setSelectedIndex(selectedItem);
         versionCodeGenerator.addActionListener(this);
         jp01.add(versionCodeGenerator, c01);
@@ -799,11 +803,14 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
 /*idealement il faudrait inclure un moyen de detecter l'OS sur lequel l'application est lancé car le script utilise la commande "acroread" qui ne fonctionne que sur linux.
 Ainsi ajouter un paramètre avec l'OS permetterais de générer la commande appropriée sur windows ou mac*/
-	    
+	    // Use System.getProperty( "os.name" );
 	    ProcessBuilder pb = new ProcessBuilder(commande);//Letitia Runtime.runtimexec()
 	    pb.redirectError(ProcessBuilder.Redirect.INHERIT);
 	    Process p = pb.start();
+
+	    // FIXME: Should the return code be tested?
 	    int exitStatus = p.waitFor();
+	    
 	} catch (InterruptedException e) {
 	    e.printStackTrace();
 	} catch (Exception e) {

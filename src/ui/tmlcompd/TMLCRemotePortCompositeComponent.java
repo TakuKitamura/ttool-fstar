@@ -46,12 +46,10 @@
 
 package ui.tmlcompd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class TMLCRemotePortCompositeComponent extends TGCWithInternalComponent implements SwallowedTGComponent, WithAttributes {
     private TMLCCompositePort port;

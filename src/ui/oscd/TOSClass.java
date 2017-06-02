@@ -47,17 +47,19 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.oscd;
 
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import ui.osad.*;
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
+import ui.osad.TURTLEOSActivityDiagramPanel;
+import ui.window.JDialogTOSClass;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 public class TOSClass extends TGCWithInternalComponent implements TClassInterface {
     public String oldValue;

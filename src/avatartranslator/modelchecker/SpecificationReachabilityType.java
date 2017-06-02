@@ -47,11 +47,6 @@
 
 package avatartranslator.modelchecker;
 
-import avatartranslator.*;
-import java.util.*;
-
-import myutil.*;
-
 public enum SpecificationReachabilityType  {
     NOTCOMPUTED, REACHABLE, NONREACHABLE
 }

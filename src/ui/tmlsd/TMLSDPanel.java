@@ -47,9 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.tmlsd;
 
 //import java.awt.*;
-import java.util.*;
 
 import ui.*;
+
+import java.util.Iterator;
 
 public class TMLSDPanel extends TDiagramPanel {
     

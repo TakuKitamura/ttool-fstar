@@ -45,9 +45,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator;
 
-import java.util.*;
+import myutil.Conversion;
 
-import myutil.*;
+import java.util.Vector;
 
 public class ADParallel extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
     protected String valueGate;

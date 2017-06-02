@@ -46,15 +46,21 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-import java.util.List;
+import ui.IconManager;
+import ui.TGComponent;
+import ui.tmlcompd.TMLCCompositeComponent;
+import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLCRemoteCompositeComponent;
 
-import ui.*;
-import ui.tmlcompd.*;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 
 public class JDialogSelectTMLComponent extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {

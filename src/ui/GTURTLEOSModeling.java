@@ -47,10 +47,12 @@
 
 package ui;
 
-import java.util.*;
+import translator.TClass;
+import translator.TURTLEModeling;
+import ui.oscd.TOSClass;
 
-import ui.oscd.*;
-import translator.*;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class GTURTLEOSModeling  {
     private TURTLEOSDesignPanel tosdp;

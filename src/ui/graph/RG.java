@@ -45,11 +45,6 @@
 
 package ui.graph;
 
-import java.util.*;
-import java.io.*;
-
-import myutil.*;
-
 public class RG {
 
     public String name;

@@ -46,17 +46,22 @@
 
 package ui.tmldd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import tmltranslator.modelcompiler.CPMEC;
+import tmltranslator.modelcompiler.CpuMemoryCopyMEC;
+import tmltranslator.modelcompiler.DoubleDmaMEC;
+import tmltranslator.modelcompiler.SingleDmaMEC;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogCommPatternMapping;
 
-import tmltranslator.modelcompiler.*;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Vector;
 
 public class TMLArchiCPNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiCPInterface {
     private int textY1 = 15;

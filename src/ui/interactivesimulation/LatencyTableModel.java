@@ -46,11 +46,8 @@
 
 package ui.interactivesimulation;
 
-import java.util.*;
-import javax.swing.table.*;
-
-import myutil.*;
-import tmltranslator.*;
+import javax.swing.table.AbstractTableModel;
+import java.util.Vector;
 
 public class LatencyTableModel extends AbstractTableModel {
     private JFrameInteractiveSimulation jfis;

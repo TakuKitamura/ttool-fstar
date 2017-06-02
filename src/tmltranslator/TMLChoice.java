@@ -45,9 +45,9 @@
 
 package tmltranslator;
 
-import java.util.*;
+import myutil.Conversion;
 
-import myutil.*;
+import java.util.ArrayList;
 
 public class TMLChoice extends TMLActivityElement{
     private ArrayList<String> guards;

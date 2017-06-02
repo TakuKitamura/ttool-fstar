@@ -49,7 +49,10 @@ package ui.avatarmad;
 
 //import java.awt.*;
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
+import ui.TGConnectingPointWidthHeight;
 
 public class AvatarMADToAssumptionsConnectingPoint extends  TGConnectingPointWidthHeight {
     

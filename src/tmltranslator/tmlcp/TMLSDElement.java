@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;
 
-import tmltranslator.*;
+import tmltranslator.TMLElement;
 
 public abstract class TMLSDElement extends TMLElement  {
 	

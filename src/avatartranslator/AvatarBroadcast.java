@@ -47,9 +47,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package avatartranslator;
 
-import java.util.*;
-
-import myutil.*;
+import java.util.LinkedList;
 
 public class AvatarBroadcast extends AvatarElement {
     

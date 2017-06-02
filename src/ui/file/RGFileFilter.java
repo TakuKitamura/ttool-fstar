@@ -44,9 +44,10 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui.file;
 
+import myutil.FileUtils;
+
+import javax.swing.filechooser.FileFilter;
 import java.io.File;
-import javax.swing.filechooser.*;
-import myutil.*;
 
 
 public class RGFileFilter extends FileFilter {

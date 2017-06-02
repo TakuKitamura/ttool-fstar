@@ -46,8 +46,10 @@
 
 package tmltranslator.tmlcp;
 
-import tmltranslator.*;
-import java.util.*;
+import tmltranslator.TMLElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class TMLCPElement extends TMLElement  {
     protected List<TMLCPElement> nexts;

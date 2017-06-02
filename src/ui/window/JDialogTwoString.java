@@ -46,10 +46,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import ui.IconManager;
+
 import javax.swing.*;
-import ui.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class JDialogTwoString extends javax.swing.JDialog implements ActionListener  {
     

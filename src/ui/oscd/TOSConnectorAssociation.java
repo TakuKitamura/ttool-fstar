@@ -46,13 +46,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.oscd;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import java.util.*;
-
-//import myutil.*;
-
 import ui.*;
+
+import java.awt.*;
+import java.util.Vector;
+
+//import java.awt.geom.*;
+//import myutil.*;
 
 public  class TOSConnectorAssociation extends TGConnector {
 	protected TGConnectingPointGroup tg;

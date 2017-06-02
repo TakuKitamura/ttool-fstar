@@ -47,37 +47,20 @@
 
 package ddtranslatorSoclib.toSoclib;
 
-import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
-
-import avatartranslator.AvatarAction;
-import avatartranslator.AvatarActionAssignment;
-import avatartranslator.AvatarActionOnSignal;
-import avatartranslator.AvatarAttribute;
-import avatartranslator.AvatarBlock;
-import avatartranslator.AvatarMethod;
-import avatartranslator.AvatarRandom;
-import avatartranslator.AvatarRelation;
-import avatartranslator.AvatarSignal;
-import avatartranslator.AvatarSpecification;
-import avatartranslator.AvatarStartState;
-import avatartranslator.AvatarState;
-import avatartranslator.AvatarStateMachine;
-import avatartranslator.AvatarStateMachineElement;
-import avatartranslator.AvatarStopState;
-import avatartranslator.AvatarTransition;
-import avatartranslator.AvatarType;
+import avatartranslator.*;
+import ddtranslatorSoclib.AvatarRAM;
 import ddtranslatorSoclib.AvatarTask;
 import ddtranslatorSoclib.AvatarddSpecification;
+import ddtranslatorSoclib.toTopCell.TopCellGenerator;
 import myutil.Conversion;
 import myutil.FileException;
 import myutil.FileUtils;
 import myutil.TraceManager;
-import ddtranslatorSoclib.toTopCell.TopCellGenerator;
-import ddtranslatorSoclib.AvatarRAM;
-import ddtranslatorSoclib.AvatarChannel;
+
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 public class TasksAndMainGenerator {
 

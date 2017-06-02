@@ -44,8 +44,9 @@
 
 package ui;
 
+import myutil.GraphicLib;
+
 import java.awt.*;
-import myutil.*;
 
 /**
  * Class
@@ -74,6 +75,7 @@ public class ColorManager {
     public static final Color TEPEID = new Color(163, 5, 253);
     public static final Color AVATARID = new Color(163, 5, 253);
     public static Color SELECTED_0 = Color.blue;
+    public static Color SELECTED_ELEMENT = Color.green;
     public static final Color MOVING_0 = Color.magenta;
     public static final Color ADDING_0 = Color.lightGray;
 
