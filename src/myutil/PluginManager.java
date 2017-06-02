@@ -45,8 +45,8 @@
 
 package myutil;
 
-import java.util.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class PluginManager  {
     public ArrayList<Plugin> plugins;

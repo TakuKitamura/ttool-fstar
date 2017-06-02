@@ -45,25 +45,17 @@
 
 package proverifspec;
 
+import avatartranslator.*;
+import avatartranslator.toproverif.AVATAR2ProVerif;
+
 import java.io.BufferedReader;
-import java.io.StringReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-
-import myutil.TraceManager;
-
-import avatartranslator.toproverif.AVATAR2ProVerif;
-import avatartranslator.AvatarAttribute;
-import avatartranslator.AvatarBlock;
-import avatartranslator.AvatarState;
-import avatartranslator.AvatarPragma;
-import avatartranslator.AvatarPragmaAuthenticity;
-import avatartranslator.AvatarPragmaReachability;
-import avatartranslator.AvatarPragmaSecret;
+import java.util.regex.Pattern;
 
 
 public class ProVerifOutputAnalyzer {

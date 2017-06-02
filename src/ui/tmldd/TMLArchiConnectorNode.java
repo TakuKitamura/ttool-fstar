@@ -46,30 +46,19 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmldd;
 
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Vector;
-
-import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-
+import myutil.GraphicLib;
+import myutil.TraceManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import myutil.GraphicLib;
-import myutil.TraceManager;
-import ui.IconManager;
-import ui.MalformedModelingException;
-import ui.TDiagramPanel;
-import ui.TGComponent;
-import ui.TGComponentManager;
-import ui.TGConnectingPoint;
-import ui.TGConnector;
-import ui.WithAttributes;
+import ui.*;
 import ui.window.JDialogTMLConnectorNode;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 public  class TMLArchiConnectorNode extends TGConnector implements WithAttributes {
     protected int arrowLength = 10;

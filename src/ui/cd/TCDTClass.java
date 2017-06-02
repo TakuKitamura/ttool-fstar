@@ -47,16 +47,18 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.cd;
 
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import ui.ad.*;
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
+import ui.ad.TActivityDiagramPanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 public class TCDTClass extends TGCWithInternalComponent implements TClassInterface, TClassSynchroInterface {
     public String oldValue;

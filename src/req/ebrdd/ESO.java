@@ -45,7 +45,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package req.ebrdd;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class ESO extends ERCElement {
 	public final static String [] ESOSTR = {"Conjunction", "Disjunction", "Sequence", "Strict sequence", "Simultaneous", "At least/At most"};

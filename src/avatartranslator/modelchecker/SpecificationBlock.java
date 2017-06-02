@@ -47,10 +47,11 @@
 
 package avatartranslator.modelchecker;
 
-import avatartranslator.*;
-import java.util.*;
+import avatartranslator.AvatarAttribute;
+import avatartranslator.AvatarBlock;
 
-import myutil.*;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class SpecificationBlock  {
     

@@ -45,14 +45,18 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.io.*;
+import translator.Gate;
+import translator.GroupOfGates;
+import translator.MasterGateManager;
+import ui.IconManager;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-
-import translator.*;
-import ui.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.Vector;
 
 public	class JFrameSimulationTrace extends JFrame	implements ActionListener {
     private Vector trace;

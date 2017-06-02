@@ -47,19 +47,21 @@ package ui;
 //import java.io.*;
 //import java.awt.*;
 //import javax.swing.*;
-import java.util.*;
 
-
-
-//import myutil.*;
+import sddescription.*;
 import ui.iod.*;
 import ui.sd.*;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
+
+//import myutil.*;
 //import ui.ucd.*;
 //import ui.tree.*;
 //import ui.window.*;
-
 //import ddtranslator.*;
-import sddescription.*;
 //import sdtranslator.*;
 
 public class AnalysisPanelTranslator {

@@ -45,8 +45,6 @@
 
 package proverifspec;
 
-import myutil.*;
-
 public abstract class ProVerifSyntaxer {
 
     public static final String DEC = "\t";

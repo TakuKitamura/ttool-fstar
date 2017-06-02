@@ -45,12 +45,13 @@
 
 package avatartranslator.toturtle;
 
-import java.util.*;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarSpecification;
+import translator.ActivityDiagram;
+import translator.TClass;
+import translator.TURTLEModeling;
 
-import avatartranslator.*;
-import myutil.*;
-import translator.*;
-import ui.*;
+import java.util.Vector;
 
 
 public class AVATAR2TURTLE {

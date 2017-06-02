@@ -45,8 +45,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tree;
 
-import translator.*;
-import myutil.*;
+import myutil.GenericTree;
+import translator.GroupOfGates;
+import translator.MasterGateManager;
 
 public class CorrespondanceValidationDataTree implements GenericTree {
     	

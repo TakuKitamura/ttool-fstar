@@ -48,10 +48,10 @@
 package ui.tmlcd;
 
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class TMLActivityDiagramBox extends TGCWithoutInternalComponent {
     public String oldValue;

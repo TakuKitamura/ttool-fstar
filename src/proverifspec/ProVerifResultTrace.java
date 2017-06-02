@@ -45,21 +45,18 @@
 
 package proverifspec;
 
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-
+import avatartranslator.toproverif.AVATAR2ProVerif;
 import myutil.TraceManager;
-
 import ui.AvatarDesignPanel;
 import ui.TAttribute;
 import ui.avatarbd.AvatarBDBlock;
 
-import avatartranslator.toproverif.AVATAR2ProVerif;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ProVerifResultTrace {
     private static Pattern tracePattern;

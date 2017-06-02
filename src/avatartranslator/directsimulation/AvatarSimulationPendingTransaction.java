@@ -47,11 +47,11 @@
 
 package avatartranslator.directsimulation;
 
-import java.awt.*;
-import java.util.*;
+import avatartranslator.AvatarStateMachineElement;
+import myutil.TraceManager;
 
-import avatartranslator.*;
-import myutil.*;
+import java.awt.*;
+import java.util.Vector;
 
 
 public class AvatarSimulationPendingTransaction  {

@@ -47,8 +47,6 @@
 
 package ui;
 
-import myutil.TraceManager;
-
 //import java.awt.*;
 
 public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInternalComponent implements ScalableTGComponent {

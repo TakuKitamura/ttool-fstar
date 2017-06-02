@@ -47,11 +47,11 @@
 
 package ui.tmlcd;
 
-import java.awt.*;
-import javax.swing.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class TMLOperationBox extends TGCWithoutInternalComponent {
     public String oldValue;

@@ -45,10 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package attacktrees;
 
-import java.util.*;
-
-
-public class BeforeNode extends TimeNode { 
+public class BeforeNode extends TimeNode {
 
     public BeforeNode(String _name, Object _referenceObject, int _time) {
 	super(_name, _referenceObject, _time);

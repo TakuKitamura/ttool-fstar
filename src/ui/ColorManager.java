@@ -44,8 +44,9 @@
 
 package ui;
 
+import myutil.GraphicLib;
+
 import java.awt.*;
-import myutil.*;
 
 /**
  * Class

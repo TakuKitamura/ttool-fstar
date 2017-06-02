@@ -45,11 +45,6 @@
 
 package proverifspec;
 
-import java.util.*;
-
-import myutil.*;
-
-
 public class ProVerifProcess extends ProVerifProcInstr {
     protected String name;
     protected ProVerifVar[] args;

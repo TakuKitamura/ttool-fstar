@@ -44,22 +44,18 @@
  */
 
 package tmltranslator.toavatar;
+
+import avatartranslator.*;
+import myutil.TraceManager;
+import proverifspec.ProVerifQueryResult;
 import tmltranslator.*;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.Map;
+import ui.TGComponent;
+import ui.tmlad.*;
+import ui.tmlcompd.TMLCPrimitivePort;
+
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.ArrayList;
-
-import ui.tmlcompd.*;
-import ui.tmlad.*;
-import ui.TGComponent;
-import myutil.*;
-import avatartranslator.*;
-
-import proverifspec.ProVerifQueryResult;
 
 public class TML2Avatar {
 	private TMLMapping tmlmap;

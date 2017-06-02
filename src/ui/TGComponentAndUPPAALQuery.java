@@ -47,8 +47,6 @@
 
 package ui;
 
-import java.util.*;
-
 public class TGComponentAndUPPAALQuery {
     public TGComponent tgc;
     public String uppaalQuery;

@@ -46,11 +46,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.interactivesimulation;
 
-import java.util.*;
-import javax.swing.table.*;
+import tmltranslator.HwMemory;
+import tmltranslator.HwNode;
+import tmltranslator.TMLMapping;
 
-import myutil.*;
-import tmltranslator.*;
+import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class MemTableModel extends AbstractTableModel {
 	private TMLMapping tmap;

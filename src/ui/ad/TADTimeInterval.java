@@ -46,12 +46,11 @@
 
 package ui.ad;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class TADTimeInterval extends TGCWithInternalComponent{
     private int lineLength = 5;

@@ -45,13 +45,20 @@
 
 package tmltranslator;
 
-import java.util.*;
-import myutil.*;
-import ui.TGComponent;
-import ui.tmlcompd.*;
+import avatartranslator.AvatarAttribute;
+import avatartranslator.AvatarPragmaAuthenticity;
+import avatartranslator.AvatarPragmaSecret;
+import myutil.Conversion;
+import myutil.TraceManager;
+import proverifspec.ProVerifOutputAnalyzer;
+import proverifspec.ProVerifQueryAuthResult;
+import proverifspec.ProVerifQueryResult;
 import ui.TAttribute;
-import avatartranslator.*;
-import proverifspec.*;
+import ui.TGComponent;
+import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLCPrimitivePort;
+
+import java.util.*;
 
 
 public class TMLModeling {

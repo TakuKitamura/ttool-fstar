@@ -47,10 +47,6 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-import myutil.*;
-
 public class AvatarSignal extends AvatarMethod {
 
     // Signa type

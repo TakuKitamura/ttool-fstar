@@ -46,12 +46,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatarcd;
 
-import java.awt.*;
-import java.util.*;
-
-import myutil.*;
-
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.util.Vector;
 
 public  class AvatarCDAssociationConnector extends TGConnector {
     int w, h;

@@ -46,15 +46,18 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import myutil.*;
+import translator.tojava.TURTLE2Java;
+import ui.IconManager;
+import ui.MainGUI;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 //import javax.swing.event.*;
 //import java.util.*;
-
-import myutil.*;
-import translator.tojava.*;
-import ui.*;
 
 
 public class JDialogJavaGeneration extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {

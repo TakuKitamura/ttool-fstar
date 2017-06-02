@@ -38,35 +38,17 @@
 
 package ui.avatarsmd;
 
-import java.util.LinkedList;
-
-import java.awt.Graphics;
-import java.awt.Color;
-
-import javax.swing.JFrame;
-
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element; 
-
 import myutil.GraphicLib;
-
-import ui.TAttribute;
-import ui.AvatarSignal;
-import ui.BasicErrorHighlight;
-import ui.TGCScalableWithoutInternalComponent;
-import ui.TGComponent;
-import ui.TDiagramPanel;
-import ui.TGConnectingPoint;
-import ui.IconManager;
-import ui.ErrorHighlight;
-import ui.ColorManager;
-import ui.TGComponentManager;
-import ui.MalformedModelingException;
-import ui.MainGUI;
-import ui.TURTLEPanel;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import ui.*;
 import ui.avatarbd.AvatarBDLibraryFunction;
 import ui.window.JDialogSMDLibraryFunctionCall;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
 
 /**
 * @version 1.0 04.18.2016

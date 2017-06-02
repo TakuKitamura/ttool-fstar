@@ -48,15 +48,7 @@
 package ui.sysmlsecmethodology;
 
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
 import ui.*;
-import ui.window.*;
 
 public class SysmlsecMethodologyReferenceToAssumptions extends SysmlsecMethodologyDiagramReference  {
 

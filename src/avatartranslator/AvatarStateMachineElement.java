@@ -45,10 +45,10 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-import myutil.*;
 import ui.TGComponent;
+
+import java.util.HashMap;
+import java.util.LinkedList;
 
 
 public abstract class AvatarStateMachineElement extends AvatarElement {

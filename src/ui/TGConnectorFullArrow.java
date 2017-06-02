@@ -46,11 +46,11 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
+import myutil.GraphicLib;
 
-import myutil.*;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Vector;
 
 public  class TGConnectorFullArrow extends TGConnector implements TGConnectorBetweenElementsInterface {
 	protected int arrowLength = 10;

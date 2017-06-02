@@ -46,11 +46,11 @@
 
 package ui.interactivesimulation;
 
-import java.util.*;
-import javax.swing.table.*;
+import tmltranslator.TMLModeling;
+import tmltranslator.TMLTask;
 
-import myutil.*;
-import tmltranslator.*;
+import javax.swing.table.AbstractTableModel;
+import java.util.Hashtable;
 
 public class TaskVariableTableModel extends AbstractTableModel {
     private TMLModeling tmlm;

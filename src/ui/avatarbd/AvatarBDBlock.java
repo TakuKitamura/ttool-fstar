@@ -46,16 +46,21 @@
 
 package ui.avatarbd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.Conversion;
+import myutil.GenericTree;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
-import ui.avatarsmd.*;
+import ui.avatarsmd.AvatarSMDPanel;
+import ui.window.JDialogAvatarBlock;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 
 public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree, AvatarBDStateMachineOwner {

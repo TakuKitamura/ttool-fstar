@@ -46,7 +46,8 @@
 
 package tmltranslator.modelcompiler;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Vector;
 
 public class FepMEC extends ArchUnitMEC	{
 

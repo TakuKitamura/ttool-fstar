@@ -46,14 +46,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlcp;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import javax.swing.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Vector;
 
 public class TGConnectorTMLCP extends TGConnector {
     protected int arrowLength = 10;

@@ -46,13 +46,13 @@
 
 package ui.avatarsmd;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import javax.swing.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Vector;
 
 public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints {
     protected int arrowLength = 10;

@@ -45,8 +45,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package sdtranslator;
 
-import sddescription.*;
-import translator.*;
+import sddescription.Evt;
+import translator.Gate;
+import translator.Param;
+import translator.TClass;
 
 public class EvtToLink {
     public static final int SYNC = 0;

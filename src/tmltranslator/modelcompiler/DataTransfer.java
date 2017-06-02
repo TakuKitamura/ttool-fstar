@@ -46,11 +46,11 @@
 
 package tmltranslator.modelcompiler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import tmltranslator.TMLCP;
 import tmltranslator.TMLCPLib;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataTransfer	{
 

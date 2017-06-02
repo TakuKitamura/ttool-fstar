@@ -46,44 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import ddtranslatorSoclib.*;
+import ui.avatardd.*;
 
-import ddtranslatorSoclib.AvatarBridge;
-import ddtranslatorSoclib.AvatarBus;
-import ddtranslatorSoclib.AvatarCPU;
-import ddtranslatorSoclib.AvatarChannel;
-import ddtranslatorSoclib.AvatarComponent;
-import ddtranslatorSoclib.AvatarConnectingPoint;
-import ddtranslatorSoclib.AvatarConnector;
-import ddtranslatorSoclib.AvatarCoproMWMR;
-import ddtranslatorSoclib.AvatarCrossbar;
-import ddtranslatorSoclib.AvatarICU;
-import ddtranslatorSoclib.AvatarMappedObject;
-import ddtranslatorSoclib.AvatarRAM;
-import ddtranslatorSoclib.AvatarTTY;
-import ddtranslatorSoclib.AvatarTask;
-import ddtranslatorSoclib.AvatarTimer;
-import ddtranslatorSoclib.AvatarVgmn;
-import ddtranslatorSoclib.AvatarddSpecification;
-import ui.avatardd.ADDBlockArtifact;
-import ui.avatardd.ADDBridgeNode;
-import ui.avatardd.ADDBusNode;
-import ui.avatardd.ADDCPUNode;
-import ui.avatardd.ADDChannelArtifact;
-import ui.avatardd.ADDConnector;
-import ui.avatardd.ADDCoproMWMRNode;
-import ui.avatardd.ADDCrossbarNode;
-import ui.avatardd.ADDDiagramPanel;
-import ui.avatardd.ADDICUNode;
-import ui.avatardd.ADDMemoryNode;
-import ui.avatardd.ADDRAMNode;
-import ui.avatardd.ADDTTYNode;
-import ui.avatardd.ADDTimerNode;
-import ui.avatardd.ADDVgmnNode;
+import java.util.*;
 
 public class AvatarDeploymentPanelTranslator {
 

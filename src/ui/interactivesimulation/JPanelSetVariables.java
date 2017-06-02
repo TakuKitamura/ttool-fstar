@@ -46,27 +46,12 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.interactivesimulation;
 
 //import java.io.*;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-
-
-import myutil.*;
-import ui.*;
-import ui.file.*;
-
-import tmltranslator.*; 
-
-import launcher.*;
-import remotesimulation.*;
-
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import javax.xml.parsers.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Hashtable;
 
 
 public	class JPanelSetVariables extends JPanel implements ActionListener  {

@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package myutil;
 
-import java.util.*;
+import java.util.BitSet;
 
 public class IntLine  {
    public int [] line;

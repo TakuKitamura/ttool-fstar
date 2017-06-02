@@ -47,9 +47,12 @@
 package ui.avatarrd;
 
 //import java.awt.*;
-import java.util.*;
 
 import ui.*;
+
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Vector;
 
 public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
     public Vector validated, ignored;

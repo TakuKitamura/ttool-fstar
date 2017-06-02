@@ -47,17 +47,10 @@
 package ui.tmlcompd;
 
 
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
 import ui.*;
-import ui.cd.*;
-import ui.window.*;
+
+import java.awt.*;
+import java.util.Vector;
 
 public  class TMLCPortConnector extends TGConnector implements ScalableTGComponent, SpecificActionAfterAdd,  SpecificActionAfterMove{
     //protected int arrowLength = 10;

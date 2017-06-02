@@ -47,16 +47,11 @@
 package ui.avatarrd;
 
 
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class AvatarRDElementReference extends TGCScalableWithInternalComponent implements TGAutoAdjust {
     public String oldValue;

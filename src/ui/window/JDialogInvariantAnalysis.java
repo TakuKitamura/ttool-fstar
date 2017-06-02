@@ -47,16 +47,21 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarSpecification;
 import myutil.*;
-import avatartranslator.*;
-import tpndescription.*;
+import tpndescription.TPN;
 import ui.*;
-import ui.avatarsmd.*;
+import ui.avatarsmd.AvatarSMDReceiveSignal;
+import ui.avatarsmd.AvatarSMDSendSignal;
+import ui.avatarsmd.AvatarSMDStartState;
+import ui.avatarsmd.AvatarSMDState;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.BitSet;
 
 
 public class JDialogInvariantAnalysis extends javax.swing.JDialog implements ActionListener, Runnable  {

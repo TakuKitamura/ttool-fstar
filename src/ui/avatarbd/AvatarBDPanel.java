@@ -47,13 +47,16 @@
 package ui.avatarbd;
 
 
-import org.w3c.dom.*;
-
+import myutil.Conversion;
+import myutil.TraceManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.avatardd.*;
-import java.util.*;
+import ui.avatardd.ADDDiagramPanel;
 import ui.avatarsmd.AvatarSMDPanel;
-import myutil.*;
+
+import java.util.*;
 
 public class AvatarBDPanel extends TDiagramPanel {
     private LinkedList<AvatarBDStateMachineOwner> validated, ignored;

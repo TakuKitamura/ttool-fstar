@@ -43,8 +43,6 @@
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
 package ddtranslatorSoclib.toTopCell;
-import java.util.*;
-import ddtranslatorSoclib.*;
 
 public class Simulation {
 	

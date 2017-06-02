@@ -46,8 +46,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package req.ebrdd;
 
-import java.util.*;
-
 public class ERB extends ERCElement  {
 	
 	protected String evt, condition, action; 

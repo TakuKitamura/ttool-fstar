@@ -46,10 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui.ad;
 
-import java.awt.*;
-import java.awt.geom.*;
-
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 
 public class TADJunction extends TGCWithoutInternalComponent {

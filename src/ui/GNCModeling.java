@@ -47,12 +47,13 @@
 
 package ui;
 
-import java.util.*;
-
-
-import ui.ncdd.*;
+import myutil.TreeCell;
 import nc.*;
-import myutil.*;
+import ui.ncdd.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class GNCModeling  {
 	private NCStructure ncs;

@@ -1,9 +1,9 @@
 package ui.procsd;
 
-import java.util.Vector;
-
 import ui.MainGUI;
 import ui.TToolBar;
+
+import java.util.Vector;
 
 public class ProActiveCompSpecificationCSDPanel extends ProactiveCSDPanel{
 

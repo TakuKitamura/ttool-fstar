@@ -45,7 +45,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
-import tmltranslator.modelcompiler.*;
+import tmltranslator.modelcompiler.ArchUnitMEC;
+import tmltranslator.modelcompiler.CpuMEC;
 
 
 public class HwCPU extends HwExecutionNode  {

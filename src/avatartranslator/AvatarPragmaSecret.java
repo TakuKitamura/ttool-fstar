@@ -45,11 +45,6 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-import myutil.*;
-
-
 public class AvatarPragmaSecret extends AvatarPragma {
 
     private AvatarAttribute argument;

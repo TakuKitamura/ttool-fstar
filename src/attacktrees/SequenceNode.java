@@ -45,10 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package attacktrees;
 
-import java.util.*;
-
-
-public class SequenceNode extends AttackNode { 
+public class SequenceNode extends AttackNode {
     
     public SequenceNode(String _name, Object _referenceObject) {
 	super(_name, _referenceObject);

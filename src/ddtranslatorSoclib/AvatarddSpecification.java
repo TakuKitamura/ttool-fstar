@@ -45,7 +45,9 @@
    * @author  Julien Henon, Daniela Genius */
 
 package ddtranslatorSoclib;
-import java.util.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class AvatarddSpecification{
 	

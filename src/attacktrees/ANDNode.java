@@ -45,10 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package attacktrees;
 
-import java.util.*;
-
-
-public class ANDNode extends BooleanNode { 
+public class ANDNode extends BooleanNode {
     
     public ANDNode(String _name, Object _referenceObject) {
 	super(_name, _referenceObject);

@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package req.ebrdd;
 
-import java.util.*;
+import java.util.ArrayList;
 
 
 public class EBRDDERC extends EBRDDComponent {

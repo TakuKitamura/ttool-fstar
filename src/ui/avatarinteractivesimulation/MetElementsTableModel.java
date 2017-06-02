@@ -46,13 +46,13 @@
 
 package ui.avatarinteractivesimulation;
 
-import java.util.*;
-import javax.swing.table.*;
+import avatartranslator.AvatarState;
+import avatartranslator.directsimulation.AvatarSimulationBlock;
+import avatartranslator.directsimulation.AvatarSpecificationSimulation;
+import ui.avatarsmd.AvatarSMDState;
 
-import myutil.*;
-import avatartranslator.*;
-import avatartranslator.directsimulation.*;
-import ui.avatarsmd.*;
+import javax.swing.table.AbstractTableModel;
+import java.util.Vector;
 
 public class MetElementsTableModel extends AbstractTableModel {
     private static String ERROR_STRING = "-";

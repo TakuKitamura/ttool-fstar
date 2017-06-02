@@ -46,27 +46,12 @@
 package ui.interactivesimulation;
 
 //import java.io.*;
+
+import myutil.TableSorter;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-
-
-import myutil.*;
-import ui.*;
-import ui.file.*;
-
-import tmltranslator.*;
-
-import launcher.*;
-import remotesimulation.*;
-
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import javax.xml.parsers.*;
+import java.util.Vector;
 
 
 public  class JPanelTransactions extends JPanel  {

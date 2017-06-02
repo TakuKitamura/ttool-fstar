@@ -45,11 +45,8 @@
 
 package myutil;
 
-import java.net.*;
-import java.io.*;
-import java.awt.image.*;
 import java.awt.*;
-import javax.imageio.*;
+import java.awt.image.BufferedImage;
 
 
 public final class ImageManager {

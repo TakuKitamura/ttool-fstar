@@ -45,10 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package attacktrees;
 
-import java.util.*;
-
-
-public class XORNode extends BooleanNode { 
+public class XORNode extends BooleanNode {
     
     public XORNode(String _name, Object _referenceObject) {
 	super(_name, _referenceObject);

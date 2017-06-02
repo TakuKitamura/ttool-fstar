@@ -46,11 +46,10 @@
 
 package ui.avatarad;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class AvatarADPartition extends AvatarADBasicComponent implements EmbeddedComment{
     private int lineLength = 5;

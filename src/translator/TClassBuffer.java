@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public abstract class TClassBuffer extends TClass {
 	

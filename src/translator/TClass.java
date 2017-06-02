@@ -45,8 +45,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator;
 
-import java.util.*;
-import myutil.*;
+import myutil.Conversion;
+
+import java.util.Vector;
 
 public class TClass {
     private String name;

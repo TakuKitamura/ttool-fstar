@@ -46,11 +46,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.iod;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class IODChoice extends TGCWithInternalComponent {
     private int lineLength = 10;

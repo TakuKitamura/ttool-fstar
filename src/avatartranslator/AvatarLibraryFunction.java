@@ -38,11 +38,9 @@
 
 package avatartranslator;
 
-import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import myutil.TraceManager;
+import java.util.LinkedList;
 
 /**
  * AvatarLibraryFunction is used to represent a library function that can be further used in state machine diagrams.

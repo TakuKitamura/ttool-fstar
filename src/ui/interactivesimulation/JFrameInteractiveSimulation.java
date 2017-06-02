@@ -45,91 +45,35 @@
 
 package ui.interactivesimulation;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.Collections;
-
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import java.util.Date;
-import java.text.*;
-
-import launcher.LauncherException;
-import launcher.RshClient;
-import myutil.Conversion;
-import myutil.GraphicLib;
-import myutil.ScrolledJTextArea;
-import myutil.TableSorter;
-import myutil.TraceManager;
 import remotesimulation.CommandParser;
 import remotesimulation.RemoteConnection;
 import remotesimulation.RemoteConnectionException;
-import tmltranslator.HwA;
-import tmltranslator.HwBus;
-import tmltranslator.HwCPU;
-import tmltranslator.HwMemory;
-import tmltranslator.HwNode;
-import tmltranslator.TMLElement;
-import tmltranslator.TMLMapping;
-import tmltranslator.TMLTask;
-import ui.ColorManager;
-import ui.ConfigurationTTool;
-import ui.IconManager;
-import ui.MainGUI;
-import ui.TGComponent;
+import tmltranslator.*;
+import ui.*;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
 
 public class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 

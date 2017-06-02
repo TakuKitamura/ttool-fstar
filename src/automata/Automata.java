@@ -45,7 +45,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package automata;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 
 public class Automata {

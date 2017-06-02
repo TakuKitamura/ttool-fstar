@@ -47,11 +47,11 @@
 
 package ui.avatarad;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class AvatarADChoice extends TGCScalableWithInternalComponent implements SwallowedTGComponent, EmbeddedComment, BasicErrorHighlight {
     private int lineLength = 10;

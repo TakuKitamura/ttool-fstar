@@ -45,10 +45,13 @@
 
 package tmltranslator.tomappingsystemc;
 
-import java.util.*;
-
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
 import tmltranslator.*;
-import myutil.*;
+
+import java.util.Iterator;
+import java.util.List;
 
 
 public class MappedSystemCTask {

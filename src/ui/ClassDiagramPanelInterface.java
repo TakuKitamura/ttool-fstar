@@ -47,7 +47,7 @@
 
 package ui;
 
-import java.util.*;
+import java.util.List;
 
 public interface ClassDiagramPanelInterface {
   public List<TGComponent> getComponentList();

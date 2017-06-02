@@ -46,13 +46,16 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
-import ui.oscd.*;
-import ui.osad.*;
+import ui.osad.TURTLEOSActivityDiagramPanel;
+import ui.osad.TURTLEOSActivityDiagramToolBar;
+import ui.oscd.TURTLEOSClassDiagramPanel;
+import ui.oscd.TURTLEOSClassDiagramToolBar;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class TURTLEOSDesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterface {
     //public Vector validated, ignored;

@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package vcd;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class VCDTimeChange  {
     private String timeValue;

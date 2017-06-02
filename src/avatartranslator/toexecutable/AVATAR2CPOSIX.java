@@ -45,13 +45,15 @@
 
 package avatartranslator.toexecutable;
 
-import java.awt.*;
-import java.util.*;
-
-import java.io.*;
-
-import myutil.*;
 import avatartranslator.*;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
+
+import java.io.File;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public class AVATAR2CPOSIX {
 

@@ -38,12 +38,12 @@
 
 package ui.avatarbd;
 
-import java.util.LinkedList;
-
-import ui.AvatarSignal;
 import ui.AvatarMethod;
+import ui.AvatarSignal;
 import ui.TAttribute;
 import ui.avatarsmd.AvatarSMDPanel;
+
+import java.util.LinkedList;
 
 /**
  * This interface represent block diagram elements that are associated to a state machine.

@@ -47,13 +47,16 @@
 package ui.ebrdd;
 
 //import java.awt.*;
-import java.util.*;
+
+import ui.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Vector;
 
 //import org.w3c.dom.*;
 //import org.xml.sax.*;
 //import javax.xml.parsers.*;
-
-import ui.*;
 
 public class EBRDDPanel extends TDiagramPanel {
     

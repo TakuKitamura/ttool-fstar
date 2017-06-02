@@ -46,14 +46,15 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
-import ui.atd.*;
+import ui.atd.AttackTreeDiagramPanel;
+import ui.atd.AttackTreeDiagramToolbar;
 
-import java.util.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.Iterator;
 
 public class AttackTreePanel extends TURTLEPanel {
     public AttackTreeDiagramPanel atdp;

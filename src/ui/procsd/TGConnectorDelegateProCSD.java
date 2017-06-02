@@ -51,13 +51,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.procsd;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.cd.TGConnectorAssociation;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Vector;
 
 public  class TGConnectorDelegateProCSD extends TGConnectorProCSD {
     protected int arrowLength = 10;

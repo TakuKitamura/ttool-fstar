@@ -46,9 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.awt.*;
-//import java.awt.geom.*;
 import javax.swing.*;
+import java.awt.*;
+
+//import java.awt.geom.*;
 
 
 /**

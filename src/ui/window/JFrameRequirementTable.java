@@ -45,17 +45,19 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import javax.swing.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-
-
 import myutil.*;
 import ui.*;
-import ui.req.*;
-import ui.avatarrd.*;
+import ui.avatarrd.AvatarRDPanel;
+import ui.req.RequirementDiagramPanel;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public	class JFrameRequirementTable extends JFrame implements ActionListener /*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 	

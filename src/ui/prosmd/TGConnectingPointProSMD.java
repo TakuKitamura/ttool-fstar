@@ -46,8 +46,9 @@
 
 package ui.prosmd;
 
-import java.awt.*;
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class TGConnectingPointProSMD extends  TGConnectingPointWidthHeight{
     

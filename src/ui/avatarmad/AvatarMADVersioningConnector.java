@@ -46,17 +46,17 @@
 
 package ui.avatarmad;
 
-import java.awt.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
-
-
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogVersioningConnector;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Vector;
 
 public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnectionPoints {
     int w, h, w1;

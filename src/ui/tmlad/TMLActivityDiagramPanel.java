@@ -47,13 +47,17 @@
 package ui.tmlad;
 
 //import java.awt.*;
-import java.util.*;
+
+import ui.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 //import org.w3c.dom.*;
 //import org.xml.sax.*;
 //import javax.xml.parsers.*;
-
-import ui.*;
 
 public class TMLActivityDiagramPanel extends TDiagramPanel {
     

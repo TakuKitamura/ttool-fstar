@@ -46,10 +46,10 @@
 
 package ui.ebrdd;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class EBRDDStopState extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint {
     private int internalCircleSize = 16;

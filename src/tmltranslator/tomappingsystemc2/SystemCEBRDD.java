@@ -45,11 +45,14 @@
 
 package tmltranslator.tomappingsystemc2;
 
-import java.util.*;
-
-import tmltranslator.*;
-import myutil.*;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
 import req.ebrdd.*;
+import tmltranslator.*;
+
+import java.util.LinkedList;
 
 
 public class SystemCEBRDD {

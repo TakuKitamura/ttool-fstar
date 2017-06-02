@@ -46,17 +46,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatardd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
+import tmltranslator.HwNode;
+import ui.TDiagramPanel;
+import ui.TGCWithInternalComponent;
+import ui.TGComponent;
 
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
-
-import tmltranslator.*;
+import java.util.ArrayList;
 
 public abstract class ADDNode extends TGCWithInternalComponent  {
     protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;

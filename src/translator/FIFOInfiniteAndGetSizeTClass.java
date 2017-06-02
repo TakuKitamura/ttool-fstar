@@ -45,7 +45,7 @@
 
 package translator;
 
-import java.util.*;
+import java.util.LinkedList;
 
 public interface FIFOInfiniteAndGetSizeTClass  {
     public int getNbPara();

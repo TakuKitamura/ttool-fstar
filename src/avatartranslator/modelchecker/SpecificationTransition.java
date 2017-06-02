@@ -47,10 +47,8 @@
 
 package avatartranslator.modelchecker;
 
-import avatartranslator.*;
-import java.util.*;
-
-import myutil.*;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarTransition;
 
 public class SpecificationTransition  {
     public int clockMin, clockMax;

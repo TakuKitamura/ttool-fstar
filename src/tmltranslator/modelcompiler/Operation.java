@@ -46,11 +46,11 @@
 
 package tmltranslator.modelcompiler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import tmltranslator.HwNode;
 import tmltranslator.TMLTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Operation	{
 

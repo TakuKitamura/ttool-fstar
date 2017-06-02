@@ -45,8 +45,6 @@
 
 package proverifspec;
 
-import java.util.*;
-
 public class ProVerifProperty implements ProVerifDeclaration {
     protected String prop;
 

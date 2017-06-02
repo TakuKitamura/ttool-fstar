@@ -46,17 +46,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ncdd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
-
-
 public class NCRoute {
     public String inputInterface = "";
 	public String traffic = "";

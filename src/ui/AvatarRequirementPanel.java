@@ -46,15 +46,17 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
-import ui.avatarrd.*;
-import ui.avatarpd.*;
+import ui.avatarpd.AvatarPDPanel;
+import ui.avatarpd.AvatarPDToolBar;
+import ui.avatarrd.AvatarRDPanel;
+import ui.avatarrd.AvatarRDToolBar;
 
-import java.util.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class AvatarRequirementPanel extends TURTLEPanel {
     public AvatarRDPanel ardp;

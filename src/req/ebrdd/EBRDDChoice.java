@@ -45,9 +45,9 @@
 
 package req.ebrdd;
 
-import java.util.*;
+import myutil.Conversion;
 
-import myutil.*;
+import java.util.ArrayList;
 
 public class EBRDDChoice extends EBRDDComponent {
     private ArrayList<String> guards;

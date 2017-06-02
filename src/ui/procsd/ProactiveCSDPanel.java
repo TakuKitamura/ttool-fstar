@@ -46,13 +46,13 @@
 
 package ui.procsd;
 
+import ui.*;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
-
-import javax.swing.JMenuItem;
-
-import ui.*;
+import java.util.Iterator;
+import java.util.Vector;
 
 public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
     public static int NORMAL_FONT=1;

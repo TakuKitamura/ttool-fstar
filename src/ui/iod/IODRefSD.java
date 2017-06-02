@@ -47,13 +47,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.iod;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import javax.swing.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Line2D;
 
 public class IODRefSD extends TGCOneLineText {
     protected int lineLength = 5;

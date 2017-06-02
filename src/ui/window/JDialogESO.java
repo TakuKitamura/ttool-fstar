@@ -46,16 +46,16 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import ui.IconManager;
+import ui.ebrdd.EBRDDESO;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 //import javax.swing.event.*;
 //import java.util.*;
-
-import ui.*;
-import ui.ebrdd.*;
-
-import ui.tmldd.*;
 
 
 public class JDialogESO extends javax.swing.JDialog implements ActionListener  {

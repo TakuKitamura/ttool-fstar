@@ -46,16 +46,17 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
+import ui.tmlcp.TMLCPPanel;
+import ui.tmlcp.TMLCPToolBar;
+import ui.tmlsd.TMLSDPanel;
+import ui.tmlsd.TMLSDToolBar;
 
-import java.util.*;
-
-import ui.tmlcp.*;
-import ui.tmlsd.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.Vector;
 
 public class TMLCommunicationPatternPanel extends TURTLEPanel {
     public TMLCPPanel tmlcpp;

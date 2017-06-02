@@ -45,15 +45,8 @@
 
 package avatartranslator.toexecutable;
 
-import java.awt.*;
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import java.lang.reflect.*;
-import java.lang.reflect.Method;
-
-import myutil.*;
-import avatartranslator.*;
+import myutil.PluginManager;
+import myutil.TraceManager;
 
 public class MainFile {
 

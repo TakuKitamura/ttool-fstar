@@ -46,11 +46,14 @@
 
 package ui.window;
 
-import java.util.*;
-import javax.swing.table.*;
+import myutil.DijkstraState;
+import myutil.GraphAlgorithms;
+import ui.graph.AUTGraph;
+import ui.graph.AUTTransition;
 
-import myutil.*;
-import ui.graph.*;
+import javax.swing.table.AbstractTableModel;
+import java.util.Collections;
+import java.util.Vector;
 
 public class DeadlockTableModel extends AbstractTableModel {
     Vector deadlockData;

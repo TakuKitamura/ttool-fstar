@@ -45,10 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package attacktrees;
 
-import java.util.*;
-
-
-public abstract class TimeNode extends AttackNode{ 
+public abstract class TimeNode extends AttackNode{
     protected int time;
 
     public TimeNode(String _name, Object _objectReference, int _time) {

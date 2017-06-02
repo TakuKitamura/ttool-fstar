@@ -46,13 +46,18 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
+import ui.AvatarMethod;
+import ui.IconManager;
+import ui.TAttribute;
 
-import myutil.*;
-import ui.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public class JDialogAvatarTransition extends javax.swing.JDialog implements ActionListener  {
 

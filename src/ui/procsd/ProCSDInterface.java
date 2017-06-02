@@ -44,30 +44,21 @@
  * @see
  */
 package ui.procsd;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-
-
-
-import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-
+import myutil.GraphicLib;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import myutil.GraphicLib;
-
-import java.util.Collection;
-import java.util.LinkedList;
+import ui.*;
 import ui.cd.TCDCompositionOperator;
 import ui.cd.TCDTClass;
-import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class ProCSDInterface extends TCDCompositionOperator implements  ActionListener {
     

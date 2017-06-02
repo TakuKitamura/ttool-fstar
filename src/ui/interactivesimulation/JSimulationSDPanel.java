@@ -48,19 +48,19 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.interactivesimulation;
 
+import myutil.Conversion;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import ui.ColorManager;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.*;
-
-import java.awt.image.*;
-
-import avatartranslator.*;
-import avatartranslator.directsimulation.*;
-import myutil.*;
-import ui.*;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class JSimulationSDPanel extends JPanel implements MouseMotionListener, Runnable  {
 	

@@ -46,11 +46,15 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
+import ui.ColorManager;
+import ui.MainGUI;
+import ui.TDiagramPanel;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-
-import ui.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 
 public class JBirdPanel extends JPanel implements MouseListener, MouseMotionListener {

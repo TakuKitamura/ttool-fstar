@@ -45,10 +45,10 @@
 
 package myutil;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.util.Vector;
 
 
 public final class GraphicLib {

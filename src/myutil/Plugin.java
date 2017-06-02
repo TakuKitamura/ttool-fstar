@@ -45,10 +45,11 @@
 
 package myutil;
 
-import java.util.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.*;
+import java.io.File;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.HashMap;
 
 public class Plugin {
     private String name;

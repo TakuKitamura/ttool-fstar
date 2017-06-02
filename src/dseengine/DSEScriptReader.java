@@ -46,20 +46,17 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package dseengine;
 
-import java.io.*;
-import java.util.*;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
+
+import java.io.BufferedReader;
+import java.io.StringReader;
 
 //import tmltranslator.*;
 //import tmltranslator.touppaal.*;
-//import tmltranslator.tomappingsystemc.*; 
-import tmltranslator.tomappingsystemc2.*;
+//import tmltranslator.tomappingsystemc.*;
 //import tmltranslator.toturtle.*;
-
-import translator.*;
-
-import dseengine.*;
-
-import myutil.*;
 
 
 //import uppaaldesc.*;

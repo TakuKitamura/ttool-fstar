@@ -46,9 +46,9 @@
 
 package ui.avatardd;
 
-import java.util.*;
-
 import ui.*;
+
+import java.util.Vector;
 
 
 public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, WithAttributes {

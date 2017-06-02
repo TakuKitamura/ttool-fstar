@@ -45,11 +45,6 @@
 
 package proverifspec;
 
-import java.util.*;
-
-import myutil.*;
-
-
 public class ProVerifQuery {
 	public String query;
 

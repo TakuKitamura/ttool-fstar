@@ -45,9 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tepe;
 
-import java.util.*;
-
-import myutil.*;
+import java.util.Vector;
 
 public abstract class TEPEComponent  {
 	private static int ID = 0;

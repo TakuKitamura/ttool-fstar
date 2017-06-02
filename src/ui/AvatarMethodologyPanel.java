@@ -46,15 +46,15 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
-import ui.avatarmethodology.*;
+import ui.avatarmethodology.AvatarMethodologyDiagramPanel;
+import ui.avatarmethodology.AvatarMethodologyDiagramToolbar;
 
-
-import java.util.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.Vector;
 
 public class AvatarMethodologyPanel extends TURTLEPanel {
     

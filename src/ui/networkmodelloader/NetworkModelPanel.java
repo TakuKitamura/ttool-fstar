@@ -47,15 +47,20 @@
 
 package ui.networkmodelloader;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import java.util.*;
+import myutil.GraphicLib;
+import myutil.ImageManager;
+import myutil.LoaderFacilityInterface;
+import myutil.TraceManager;
+import ui.ColorManager;
 
-import myutil.*;
-import ui.*;
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 
 

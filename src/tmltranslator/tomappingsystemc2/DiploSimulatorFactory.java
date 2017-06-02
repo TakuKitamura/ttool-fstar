@@ -1,11 +1,11 @@
 package tmltranslator.tomappingsystemc2;
 
-import java.util.List;
-
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
 import tmltranslator.TMLMapping;
 import tmltranslator.TMLModeling;
+
+import java.util.List;
 
 public class DiploSimulatorFactory {
 	

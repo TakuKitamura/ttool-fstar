@@ -46,14 +46,13 @@
 
 package ui;
 
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import java.awt.*;
-import javax.swing.*;
-
-
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.window.*;
 
 public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
 

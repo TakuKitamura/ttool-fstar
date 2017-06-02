@@ -45,8 +45,9 @@
 
 package uppaaldesc;
 
-import java.awt.Point;
-import myutil.*;
+import myutil.Conversion;
+
+import java.awt.*;
 
 
 public class UPPAALLocation {

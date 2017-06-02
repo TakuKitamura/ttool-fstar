@@ -46,8 +46,6 @@
 
 package ui;
 
-import myutil.*;
-
 //import java.awt.*;
 
 public abstract class TGCScalableWithInternalComponent extends TGCWithInternalComponent implements ScalableTGComponent {

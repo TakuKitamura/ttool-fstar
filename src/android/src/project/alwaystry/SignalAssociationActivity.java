@@ -1,29 +1,18 @@
 package project.alwaystry;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
-import copyfromJAVAsource.AvatarSignal;
-import copyfromJAVAsource.TAttribute;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioGroup;
+import android.widget.*;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import copyfromJAVAsource.AvatarSignal;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 public class SignalAssociationActivity extends Activity{
 	

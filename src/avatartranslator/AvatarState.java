@@ -45,11 +45,6 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-import myutil.*;
-
-
 public class AvatarState extends AvatarStateElement {
     private String entryCode;
     private boolean hidden; // i.e, not present in the original state machine

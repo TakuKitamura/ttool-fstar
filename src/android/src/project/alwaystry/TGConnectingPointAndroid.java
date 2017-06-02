@@ -1,10 +1,10 @@
 package project.alwaystry;
 
-import myutilandroid.GraphicLibAndroid;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
+import myutilandroid.GraphicLibAndroid;
 
 
 

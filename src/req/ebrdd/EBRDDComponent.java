@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package req.ebrdd;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public abstract class EBRDDComponent extends EBRDDGeneralComponent implements Cloneable {
 	protected int nbNext = 1; // -1 means more than 1

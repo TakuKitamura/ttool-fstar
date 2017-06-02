@@ -44,12 +44,16 @@
 
 package tmltranslator.toturtle;
 
-import java.util.*;
-
+import myutil.Conversion;
+import myutil.TraceManager;
 import tmltranslator.*;
-import myutil.*;
 import translator.*;
-import ui.*;
+import ui.CheckingError;
+import ui.TGComponent;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class Mapping2TIF {

@@ -45,9 +45,6 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-
 public class AvatarStopState extends AvatarStateElement {
 
     public AvatarStopState(String _name, Object _referenceObject) {

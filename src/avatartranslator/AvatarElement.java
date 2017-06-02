@@ -45,9 +45,9 @@
 
 package avatartranslator;
 
-import java.util.*;
+import myutil.TraceManager;
 
-import myutil.*;
+import java.util.Vector;
 
 public class AvatarElement {
 

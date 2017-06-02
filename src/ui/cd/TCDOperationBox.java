@@ -47,11 +47,11 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui.cd;
 
-import java.awt.*;
-import javax.swing.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class TCDOperationBox extends TGCWithoutInternalComponent {
 	public String oldValue;

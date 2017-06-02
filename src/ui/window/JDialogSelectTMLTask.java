@@ -46,14 +46,17 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import ui.IconManager;
+import ui.TGComponent;
+import ui.tmlcd.TMLTaskOperator;
 
-import ui.*;
-import ui.tmlcd.*;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 
 public class JDialogSelectTMLTask extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {

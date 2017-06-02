@@ -48,60 +48,6 @@
 
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-
-import ui.networkmodelloader.*;
 import avatartranslator.AvatarSpecification;
 import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
@@ -113,7 +59,6 @@ import translator.MasterGateManager;
 import ui.ad.TActivityDiagramPanel;
 import ui.atd.AttackTreeDiagramPanel;
 import ui.avatarad.AvatarADPanel;
-// AVATAR
 import ui.avatarbd.AvatarBDLibraryFunction;
 import ui.avatarbd.AvatarBDPortConnector;
 import ui.avatarbd.AvatarBDStateMachineOwner;
@@ -126,23 +71,13 @@ import ui.avatarrd.AvatarRDPanel;
 import ui.avatarsmd.AvatarSMDPanel;
 import ui.cd.TClassDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
-import ui.file.AUTFileFilter;
-import ui.file.DTAFileFilter;
-import ui.file.MSCFilter;
-import ui.file.RGFileFilter;
-import ui.file.RTLFileFilter;
-import ui.file.TDotFilter;
-import ui.file.TFileFilter;
-import ui.file.TImgFilter;
-import ui.file.TLSAFileFilter;
-import ui.file.TLibFilter;
-import ui.file.TSVGFilter;
-import ui.file.TTIFFilter;
+import ui.file.*;
 import ui.graph.AUTGraph;
 import ui.graph.RG;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.iod.InteractionOverviewDiagramPanel;
+import ui.networkmodelloader.JDialogLoadingNetworkModel;
 import ui.osad.TURTLEOSActivityDiagramPanel;
 import ui.prosmd.ProactiveSMDPanel;
 import ui.req.Requirement;
@@ -159,6 +94,22 @@ import ui.tree.DiagramTreeRenderer;
 import ui.tree.JDiagramTree;
 import ui.ucd.UseCaseDiagramPanel;
 import ui.window.*;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+// AVATAR
 
 public  class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior {
 

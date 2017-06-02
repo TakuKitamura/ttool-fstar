@@ -46,17 +46,10 @@
 
 package ui.tmlcompd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
 
-import tmltranslator.*;
+import java.awt.*;
 
 public abstract class TMLCChannelFacility extends TGCScalableWithInternalComponent {
     protected Color myColor, portColor;

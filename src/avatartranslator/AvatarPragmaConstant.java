@@ -45,9 +45,7 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-import myutil.*;
+import java.util.LinkedList;
 
 
 public class AvatarPragmaConstant extends AvatarPragma {

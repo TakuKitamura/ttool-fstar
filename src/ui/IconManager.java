@@ -45,9 +45,9 @@
 
 package ui;
 
-import java.net.*;
+import javax.swing.*;
 import java.awt.*;
-import javax.swing.ImageIcon;
+import java.net.URL;
 
 /**
  * Class

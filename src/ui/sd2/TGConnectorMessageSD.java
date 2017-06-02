@@ -47,14 +47,15 @@
 package ui.sd2;
 
 
-
-import java.awt.event.*;
-//import java.awt.geom.*;
-import javax.swing.*;
-import java.util.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.util.Vector;
+
+//import java.awt.geom.*;
 
 public abstract class TGConnectorMessageSD extends TGConnector {
     public final String TO_SYNC = "To synchronous message";

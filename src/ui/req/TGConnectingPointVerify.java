@@ -48,7 +48,9 @@ package ui.req;
 
 //import java.awt.*;
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class TGConnectingPointVerify extends  TGConnectingPointWidthHeight {
     

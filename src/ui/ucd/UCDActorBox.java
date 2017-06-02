@@ -46,10 +46,10 @@
 
 package ui.ucd;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText {
     /*protected int lineLength = 5;

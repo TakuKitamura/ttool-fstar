@@ -44,15 +44,9 @@
    * @see
    */
 
-package tmltranslator.modelcompiler;;
+package tmltranslator.modelcompiler;
 
-import java.util.*;
-import java.nio.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import myutil.*;
-
-import tmltranslator.*;
+;
 
 public class DMAContext	{
 

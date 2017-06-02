@@ -49,7 +49,9 @@ package ui.avatarrd;
 
 //import java.awt.*;
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class AvatarRDConnectingPointSatisfy extends  TGConnectingPointWidthHeight {
 

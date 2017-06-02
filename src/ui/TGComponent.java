@@ -47,23 +47,29 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-
-import java.util.*;
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.procsd.ProCSDPort;
+import myutil.Conversion;
+import myutil.GenericTree;
+import myutil.GraphicLib;
+import org.w3c.dom.NodeList;
+import ui.interactivesimulation.SimulationTransaction;
 import ui.procsd.ProCSDComponent;
+import ui.procsd.ProCSDPort;
+import ui.tmlad.TMLActivityDiagramPanel;
+import ui.tmlcd.TMLTaskDiagramPanel;
+import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLComponentTaskDiagramPanel;
+import ui.tmldd.TMLArchiArtifact;
+import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmldd.TMLArchiFirewallNode;
 
-import ui.tmlad.*;
-import ui.tmlcd.*;
-import ui.tmlcompd.*;
-import ui.tmldd.*;
-import ui.interactivesimulation.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public abstract class TGComponent implements CDElement, GenericTree {
 

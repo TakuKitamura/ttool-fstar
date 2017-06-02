@@ -46,9 +46,11 @@
    * @see
    */
 
+import myutil.FileUtils;
+import myutil.TraceManager;
+import ui.graph.AUTGraph;
+
 import java.io.File;
-import myutil.*;
-import ui.graph.*; 
 
 public class GraphMinimize {
 

@@ -46,17 +46,10 @@
 
 package ui.tmlcompd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
+import ui.TGComponent;
 
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
-
-import tmltranslator.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TMLCPath  {
 

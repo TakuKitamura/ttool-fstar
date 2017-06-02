@@ -45,8 +45,9 @@
 
 package uppaaldesc;
 
-import java.awt.Point;
-import tmltranslator.*;
+import tmltranslator.TMLRequest;
+
+import java.awt.*;
 
 
 public class UPPAALRequestTemplateWithLoss extends  UPPAALTemplate{

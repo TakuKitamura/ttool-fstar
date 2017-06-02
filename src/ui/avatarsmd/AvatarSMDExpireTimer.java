@@ -46,15 +46,15 @@
 
 package ui.avatarsmd;
 
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-
-import java.util.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogAvatarTimer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.util.LinkedList;
 
 public class AvatarSMDExpireTimer extends AvatarSMDBasicComponent implements BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;

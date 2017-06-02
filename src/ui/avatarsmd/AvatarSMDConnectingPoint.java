@@ -47,7 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.avatarsmd;
 
 //import java.awt.*;
-import ui.*;
+
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class AvatarSMDConnectingPoint extends  TGConnectingPointWidthHeight{
 

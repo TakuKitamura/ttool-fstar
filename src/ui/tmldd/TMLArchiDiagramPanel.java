@@ -47,11 +47,14 @@
 
 package ui.tmldd;
 
-import myutil.*;
-import org.w3c.dom.*;
-import java.util.*;
-
+import myutil.TraceManager;
+import org.w3c.dom.Element;
 import ui.*;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 

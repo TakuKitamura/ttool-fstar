@@ -46,13 +46,15 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.prosmd;
 
-import java.awt.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ProSMDSendMsg extends TGCOneLineText {
     protected int lineLength = 5;

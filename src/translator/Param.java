@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator;
 
-import translator.tojava.*;
+import translator.tojava.JKeyword;
 
 public class Param {
     private String name;

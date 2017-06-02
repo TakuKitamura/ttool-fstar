@@ -46,9 +46,6 @@
 package avatartranslator;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-
-import myutil.TraceManager;
 
 public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
     AvatarTuple args;

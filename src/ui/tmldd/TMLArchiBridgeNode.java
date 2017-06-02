@@ -46,16 +46,16 @@
 
 package ui.tmldd;
 
-import java.awt.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import tmltranslator.HwBridge;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogBridgeNode;
 
-import tmltranslator.*;
+import javax.swing.*;
+import java.awt.*;
 
 public class TMLArchiBridgeNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
     private int textY1 = 15;

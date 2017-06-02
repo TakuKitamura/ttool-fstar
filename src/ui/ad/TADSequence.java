@@ -47,11 +47,10 @@
 
 package ui.ad;
 
-import java.awt.*;
-
-import myutil.*;
-
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class TADSequence extends TGCWithInternalComponent{
     private int lineLength = 0;

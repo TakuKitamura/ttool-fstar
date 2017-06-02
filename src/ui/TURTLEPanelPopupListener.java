@@ -46,12 +46,14 @@
 
 package ui;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import myutil.GraphicLib;
+import ui.ucd.UseCaseDiagramPanel;
 
-import ui.ucd.*;
-import myutil.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto tabs */ {

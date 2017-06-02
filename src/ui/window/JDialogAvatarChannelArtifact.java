@@ -46,15 +46,17 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import ui.IconManager;
+import ui.avatardd.ADDChannelArtifact;
+import ui.avatardd.ADDDiagramPanel;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
+
 //import javax.swing.event.*;
-import java.util.*;
-
-import ui.*;
-
-import ui.avatardd.*;
 
 
 public class JDialogAvatarChannelArtifact extends javax.swing.JDialog implements ActionListener  {

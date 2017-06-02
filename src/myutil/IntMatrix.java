@@ -45,7 +45,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package myutil;
 
-import java.util.*;
+import java.util.BitSet;
+import java.util.LinkedList;
 
 public class IntMatrix implements Runnable {
    public int [][] matrice;

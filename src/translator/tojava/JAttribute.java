@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator.tojava;
 
-import translator.*;
+import translator.Param;
 
 public class JAttribute {
     private String access;

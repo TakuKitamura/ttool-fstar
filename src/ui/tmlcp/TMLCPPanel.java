@@ -46,9 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlcp;
 
-import java.util.*;
-
 import ui.*;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 public class TMLCPPanel extends TDiagramPanel {
     

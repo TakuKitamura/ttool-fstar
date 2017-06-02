@@ -45,8 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator;
 
-import java.util.*;
-
 public class TClassBasicFIFO extends TClassBuffer {
     
     public TClassBasicFIFO(String name) {

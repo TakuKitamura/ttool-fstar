@@ -47,24 +47,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.util.*;
-
-import fr.inria.oasis.vercors.cttool.model.Attribute;
-import fr.inria.oasis.vercors.cttool.model.Component;
-import fr.inria.oasis.vercors.cttool.model.ComponentImpl;
-import fr.inria.oasis.vercors.cttool.model.InPort;
-import fr.inria.oasis.vercors.cttool.model.Interface;
-import fr.inria.oasis.vercors.cttool.model.InterfaceImpl;
-import fr.inria.oasis.vercors.cttool.model.Message;
-import fr.inria.oasis.vercors.cttool.model.MessageImpl;
-import fr.inria.oasis.vercors.cttool.model.OutPort;
-import fr.inria.oasis.vercors.cttool.model.Port;
-
+import fr.inria.oasis.vercors.cttool.model.*;
 import translator.*;
-
 import ui.procsd.*;
 import ui.prosmd.*;
 import ui.prosmd.util.CorrespondanceSMDManager;
+
+import java.util.*;
 
 public class GProactiveDesign  {
     private TURTLEModeling tm;

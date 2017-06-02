@@ -46,16 +46,18 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
+import ui.ArtifactTClassGate;
+import ui.IconManager;
+import ui.LRArtifactTClassGate;
 
-import java.util.*;
-
-import ui.*;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 public class JDialogLinkNode extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
     

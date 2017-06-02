@@ -47,16 +47,21 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
+import ui.tmlad.TMLActivityDiagramPanel;
+import ui.tmlad.TMLActivityDiagramToolBar;
+import ui.tmlcd.TMLTaskDiagramPanel;
+import ui.tmlcd.TMLTaskDiagramToolBar;
+import ui.tmlcd.TMLTaskOperator;
+import ui.tmldd.TMLArchiDiagramPanel;
 
-import java.util.*;
-import ui.tmlcd.*;
-import ui.tmlad.*;
-import ui.tmldd.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Vector;
 
 public class TMLDesignPanel extends TURTLEPanel {
     public TMLTaskDiagramPanel tmltdp;

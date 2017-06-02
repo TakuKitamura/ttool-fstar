@@ -48,9 +48,9 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.cd;
 
 
-import java.util.*;
-
 import ui.*;
+
+import java.util.LinkedList;
 
 public abstract class TCDCompositionOperatorWithSynchro extends TCDCompositionOperator {
 	protected TClassSynchroInterface t1;

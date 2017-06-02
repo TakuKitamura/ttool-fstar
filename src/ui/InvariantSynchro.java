@@ -46,9 +46,7 @@
 
 package ui;
 
-import myutil.*;
-
-import java.util.*;
+import myutil.GenericTree;
 
 
 public class InvariantSynchro implements GenericTree {

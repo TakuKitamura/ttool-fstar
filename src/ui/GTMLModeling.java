@@ -48,18 +48,31 @@
 
 package ui;
 
-import java.util.*;
-
-import ui.tmlad.*;
-import ui.tmlcd.*;
-import ui.tmlcompd.*;
-import ui.tmldd.*;
-import ui.tmlsd.*;
+import avatartranslator.AvatarSpecification;
+import myutil.Conversion;
+import myutil.TraceManager;
 import tmltranslator.*;
-import tmltranslator.tmlcp.*;
-import myutil.*;
-import tmltranslator.modelcompiler.*;
-import avatartranslator.*;
+import tmltranslator.modelcompiler.ArchUnitMEC;
+import tmltranslator.tmlcp.TMLCPElement;
+import tmltranslator.tmlcp.TMLSDAction;
+import tmltranslator.tmlcp.TMLSDEvent;
+import tmltranslator.tmlcp.TMLSDMessage;
+import ui.tmlad.*;
+import ui.tmlcd.TMLChannelOperator;
+import ui.tmlcd.TMLEventOperator;
+import ui.tmlcd.TMLRequestOperator;
+import ui.tmlcd.TMLTaskOperator;
+import ui.tmlcompd.TMLCPath;
+import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLCPrimitivePort;
+import ui.tmlcompd.TMLCRecordComponent;
+import ui.tmldd.*;
+import ui.tmlsd.TGConnectorMessageTMLSD;
+import ui.tmlsd.TMLSDControllerInstance;
+import ui.tmlsd.TMLSDStorageInstance;
+import ui.tmlsd.TMLSDTransferInstance;
+
+import java.util.*;
 
 
 public class GTMLModeling  {

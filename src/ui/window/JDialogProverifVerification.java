@@ -46,22 +46,35 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-import java.io.*;
-
-import myutil.*;
-import avatartranslator.toproverif.*;
-import avatartranslator.*;
-import proverifspec.*;
-import ui.*;
-
+import avatartranslator.AvatarPragma;
+import avatartranslator.AvatarPragmaAuthenticity;
+import avatartranslator.AvatarPragmaReachability;
+import avatartranslator.AvatarPragmaSecret;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.GraphicLib;
+import myutil.MasterProcessInterface;
+import myutil.TraceManager;
+import proverifspec.ProVerifOutputAnalyzer;
+import proverifspec.ProVerifQueryAuthResult;
+import proverifspec.ProVerifQueryResult;
+import proverifspec.ProVerifResultTraceStep;
+import ui.AvatarDesignPanel;
+import ui.IconManager;
+import ui.MainGUI;
 import ui.interactivesimulation.JFrameSimulationSDPanel;
 
-import launcher.*;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 
 public class JDialogProverifVerification extends javax.swing.JDialog implements ActionListener, ListSelectionListener, MouseListener, Runnable, MasterProcessInterface  {

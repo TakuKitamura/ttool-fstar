@@ -47,8 +47,6 @@ package avatartranslator;
 
 import java.util.HashMap;
 
-import myutil.TraceManager;
-
 public class AvatarArithmeticOp extends AvatarTerm {
     AvatarTerm term1;
     AvatarTerm term2;

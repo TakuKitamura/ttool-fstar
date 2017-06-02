@@ -46,13 +46,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.procsd;
 
+import myutil.GraphicLib;
+import ui.*;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
-
-import myutil.*;
-import ui.*;
 
 
 public class ProCSDInPort extends ProCSDPort implements SwallowedTGComponent, ActionListener {

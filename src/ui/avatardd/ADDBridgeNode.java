@@ -47,12 +47,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatardd;
 
-import java.awt.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ADDBridgeNode extends ADDCommunicationNode implements WithAttributes {
     private int textY1 = 15;

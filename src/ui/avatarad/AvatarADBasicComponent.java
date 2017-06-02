@@ -46,10 +46,6 @@
 
 package ui.avatarad;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
 import ui.*;
 
 public abstract class AvatarADBasicComponent extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {

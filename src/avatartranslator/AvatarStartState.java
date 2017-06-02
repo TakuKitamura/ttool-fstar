@@ -45,9 +45,6 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-
 public class AvatarStartState extends AvatarStateElement {
 
 

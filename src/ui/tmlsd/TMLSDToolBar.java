@@ -48,12 +48,15 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlsd;
 
+import myutil.TraceManager;
+import ui.MainGUI;
+import ui.TGUIAction;
+import ui.TToolBar;
+
 import javax.swing.*;
+
 //import java.awt.*;
 //import java.awt.event.*;
-
-import ui.*;
-import myutil.*;
 
 public class TMLSDToolBar extends TToolBar {
     

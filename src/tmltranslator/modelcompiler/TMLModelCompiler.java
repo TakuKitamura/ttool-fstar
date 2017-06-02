@@ -48,6 +48,15 @@
 
 package tmltranslator.modelcompiler;
 
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
+import tmltranslator.*;
+import ui.ConfigurationTTool;
+import ui.GTMLModeling;
+import ui.TMLCommunicationPatternPanel;
+
+import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -55,24 +64,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
-import javax.swing.JFrame;
-
-import myutil.FileException;
-import myutil.FileUtils;
-import myutil.TraceManager;
-import tmltranslator.HwNode;
-import tmltranslator.TMLArchitecture;
-import tmltranslator.TMLCP;
-import tmltranslator.TMLCPLib;
-import tmltranslator.TMLChannel;
-import tmltranslator.TMLMapping;
-import tmltranslator.TMLModeling;
-import tmltranslator.TMLPort;
-import tmltranslator.TMLTask;
-import ui.ConfigurationTTool;
-import ui.GTMLModeling;
-import ui.TMLCommunicationPatternPanel;
 
 public class TMLModelCompiler	{
 

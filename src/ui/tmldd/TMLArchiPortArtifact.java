@@ -46,16 +46,20 @@
 
 package ui.tmldd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import tmltranslator.modelcompiler.*;
+import ui.*;
+import ui.window.JDialogPortArtifact;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Vector;
 
 public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiPortInterface {
     protected int lineLength = 5;

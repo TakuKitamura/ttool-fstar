@@ -47,11 +47,8 @@
 
 package ui;
 
-import translator.*;
-import translator.tojava.*;
-import java.util.*;
-
-import myutil.*;
+import myutil.Conversion;
+import myutil.TraceManager;
 
 public class AvatarSignal extends AvatarMethod {
 

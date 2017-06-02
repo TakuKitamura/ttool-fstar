@@ -47,15 +47,14 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.avatarpd;
 
 
-
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-import java.util.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogAvatarPropertyConnector;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Vector;
 
 public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;

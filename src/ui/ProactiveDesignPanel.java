@@ -46,13 +46,17 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
-import ui.procsd.*;
-import ui.prosmd.*;
+import ui.procsd.ProActiveCompSpecificationCSDPanel;
+import ui.procsd.ProactiveCSDPanel;
+import ui.procsd.ProactiveCSDToolBar;
+import ui.prosmd.ProactiveSMDPanel;
+import ui.prosmd.ProactiveSMDToolBar;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class ProactiveDesignPanel extends TURTLEPanel {
    

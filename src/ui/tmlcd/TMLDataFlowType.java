@@ -46,16 +46,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlcd;
 
-import java.awt.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
-
 public abstract class TMLDataFlowType	{
 
     public static final String UINT_16 = "uint_16";

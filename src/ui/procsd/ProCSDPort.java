@@ -47,30 +47,18 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.procsd;
 
-import ui.IconManager;
-import ui.MalformedModelingException;
-import ui.TDiagramPanel;
-import ui.TGCWithoutInternalComponent;
-import ui.TGComponent;
-import ui.TGComponentManager;
-import ui.TGConnectingPoint;
-import ui.TGConnectorAttribute;
-
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.lang.reflect.Method;
-import java.util.Vector;
-import ui.TAttribute;
-import java.util.List;
-
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import ui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Vector;
 
 public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements ActionListener {
 

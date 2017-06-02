@@ -48,9 +48,7 @@
 
 package ui;
 
-import java.awt.event.*;
-import javax.swing.*;
-import myutil.*;
+import myutil.TraceManager;
 
 public class ModeManager {
 

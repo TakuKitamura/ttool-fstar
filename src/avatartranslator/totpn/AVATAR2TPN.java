@@ -45,11 +45,16 @@
 
 package avatartranslator.totpn;
 
-import java.util.*;
-
-import tpndescription.*;
-import myutil.*;
 import avatartranslator.*;
+import myutil.TraceManager;
+import tpndescription.Place;
+import tpndescription.TPN;
+import tpndescription.Transition;
+
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class AVATAR2TPN {
 

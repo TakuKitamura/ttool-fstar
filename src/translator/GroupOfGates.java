@@ -46,8 +46,8 @@ knowledge of the CeCILL license and that you accept its terms.
 package translator;
 
 
-
-import myutil.*;
+import myutil.GenericTree;
+import myutil.SortedVector;
 
 public class GroupOfGates extends SortedVector implements Comparable<GroupOfGates>, GenericTree {
     /**

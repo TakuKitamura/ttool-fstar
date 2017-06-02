@@ -4,7 +4,8 @@
    * @author  Julien Henon, Daniela Genius */
 
 package ddtranslatorSoclib;
-import java.util.*;
+
+import java.util.LinkedList;
 
 public class AvatarCPU extends AvatarComponent{
 

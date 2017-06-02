@@ -45,10 +45,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tree;
 
-import java.util.List;
+import myutil.GenericTree;
+import ui.CheckingError;
+import ui.MainGUI;
 
-import ui.*;
-import myutil.*;
+import java.util.List;
 
 public class SyntaxAnalysisErrorTree implements GenericTree {
     

@@ -46,11 +46,11 @@
 
 package ui.ebrdd;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class EBRDDStartState extends TGCWithoutInternalComponent implements EmbeddedComment{
     private int lineLength = 5;

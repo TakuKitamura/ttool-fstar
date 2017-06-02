@@ -45,11 +45,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.graph;
 
-import java.util.*;
-import java.io.*;
+import myutil.FileException;
+import myutil.FileUtils;
+import vcd.VCDContent;
+import vcd.VCDTimeChange;
+import vcd.VCDVariable;
 
-import myutil.*;
-import vcd.*;
+import java.util.ArrayList;
 
 public class VCDGenerator  {
     

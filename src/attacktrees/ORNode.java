@@ -45,10 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package attacktrees;
 
-import java.util.*;
-
-
-public class ORNode extends BooleanNode { 
+public class ORNode extends BooleanNode {
     
     public ORNode(String _name, Object _referenceObject) {
 	super(_name, _referenceObject);

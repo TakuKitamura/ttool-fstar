@@ -46,15 +46,20 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import ui.avatarad.AvatarADPanel;
+import ui.avatarad.AvatarADToolBar;
+import ui.avatarcd.AvatarCDPanel;
+import ui.avatarcd.AvatarCDToolBar;
 import ui.ucd.*;
-import ui.avatarcd.*;
-import ui.avatarad.*;
-import myutil.*;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class AvatarAnalysisPanel extends TURTLEPanel {
 

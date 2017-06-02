@@ -45,10 +45,11 @@
 
 package avatartranslator;
 
-import java.util.*;
-import myutil.*;
-import ui.*;
+import myutil.TraceManager;
+import ui.TAttribute;
 import ui.avatarbd.AvatarBDPragma;
+
+import java.util.*;
 
 public abstract class AvatarPragma extends AvatarElement {
     public static final String[] PRAGMAS =               {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "PublicConstant", "PrivateConstant"};

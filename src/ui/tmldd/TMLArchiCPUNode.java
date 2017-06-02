@@ -46,33 +46,18 @@
 
 package ui.tmldd;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Polygon;
-import java.util.Vector;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
+import myutil.GraphicLib;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import myutil.GraphicLib;
 import tmltranslator.HwCPU;
 import tmltranslator.modelcompiler.ArchUnitMEC;
-import ui.ColorManager;
-import ui.IconManager;
-import ui.MalformedModelingException;
-import ui.SwallowTGComponent;
-import ui.TAttribute;
-import ui.TDiagramPanel;
-import ui.TGComponent;
-import ui.TGComponentManager;
-import ui.TGConnectingPoint;
-import ui.WithAttributes;
+import ui.*;
 import ui.window.JDialogCPUNode;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Vector;
 
 public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
     private int textY1 = 15;

@@ -47,11 +47,14 @@
 
 package tmltranslator.tmlcp;
 
-import tmltranslator.*;
-import ui.tmldd.*;
-import java.util.*;
+import tmltranslator.TMLAttribute;
+import tmltranslator.TMLElement;
+import tmltranslator.TMLType;
+import ui.tmldd.TMLArchiNode;
+import ui.tmlsd.TGConnectorMessageTMLSD;
 
-import ui.tmlsd.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class TMLSDInstance extends TMLElement  {
 

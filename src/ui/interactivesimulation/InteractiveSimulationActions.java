@@ -46,14 +46,13 @@
 
 package ui.interactivesimulation;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import ui.IconManager;
+import ui.TAction;
 
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
-
-import ui.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class InteractiveSimulationActions extends AbstractAction {
     // Actions

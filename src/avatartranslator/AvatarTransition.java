@@ -45,9 +45,10 @@
 
 package avatartranslator;
 
-import java.util.*;
+import myutil.TraceManager;
 
-import myutil.*;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 
 public class AvatarTransition extends AvatarStateMachineElement {

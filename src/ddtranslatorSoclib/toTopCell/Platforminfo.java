@@ -45,8 +45,6 @@
 /* authors: v1.0 Daniela GENIUS august 2016 */
 
 package ddtranslatorSoclib.toTopCell;
-import ddtranslatorSoclib.*;
-import java.util.*;
 
 public class Platforminfo {
 

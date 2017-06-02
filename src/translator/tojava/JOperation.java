@@ -45,8 +45,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator.tojava;
 
-import myutil.*;
-import translator.*;
+import myutil.Conversion;
+import translator.ADComponent;
 
 public class JOperation  {
     public String name;

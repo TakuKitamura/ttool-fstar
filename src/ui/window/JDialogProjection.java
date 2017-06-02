@@ -46,17 +46,23 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-
-import launcher.*;
-import myutil.*;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.FileUtils;
+import myutil.ScrolledJTextArea;
 import translator.*;
 import ui.*;
-import ui.cd.*;
+import ui.cd.TClassDiagramPanel;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Vector;
 
 
 public class JDialogProjection extends javax.swing.JDialog implements ActionListener, ListSelectionListener, Runnable  {

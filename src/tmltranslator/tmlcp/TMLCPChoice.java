@@ -46,7 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tmlcp;
 
-import java.util.*;
+import java.util.ArrayList;
 
 //The method is not very suited for the language, I should come back later...
 public class TMLCPChoice extends TMLCPElement  {

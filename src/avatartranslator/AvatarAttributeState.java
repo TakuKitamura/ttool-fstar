@@ -45,11 +45,6 @@
 
 package avatartranslator;
 
-import java.util.*;
-import ui.avatarbd.*;
-import myutil.*;
-import ui.*;
-
 public class AvatarAttributeState extends AvatarElement {
     private AvatarAttribute attribute;
     private AvatarState state;

@@ -1,8 +1,8 @@
 package project.alwaystry;
 
-import myutilandroid.GraphicLibAndroid;
 import android.graphics.Canvas;
 import android.view.View;
+import myutilandroid.GraphicLibAndroid;
 
 public abstract class TGConnectorAndroid extends TGComponentAndroid{
 	

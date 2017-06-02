@@ -1,31 +1,24 @@
 package project.alwaystry;
 
-import java.util.Vector;
-
-import copyfromJAVAsource.AvatarMethod;
-import copyfromJAVAsource.AvatarSignal;
-import copyfromJAVAsource.TAttribute;
-
-import myutilandroid.GraphicLibAndroid;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.os.Bundle;
 import android.text.TextPaint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import copyfromJAVAsource.AvatarMethod;
+import copyfromJAVAsource.AvatarSignal;
+import copyfromJAVAsource.TAttribute;
+import myutilandroid.GraphicLibAndroid;
+
+import java.util.Vector;
 
 public class AvatarBDBlockAndroid extends TGComponentAndroid{
 

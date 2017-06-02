@@ -46,15 +46,19 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.swing.*;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.FileUtils;
+import myutil.ScrolledJTextArea;
+import ui.ConfigurationTTool;
+import ui.IconManager;
+import ui.file.AUTFileFilter;
 
-import launcher.*;
-import myutil.*;
-import ui.*;
-import ui.file.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 
 public class JDialogBisimulation extends javax.swing.JDialog implements ActionListener, Runnable  {

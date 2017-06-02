@@ -46,15 +46,16 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tree;
 
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import java.util.Vector;
-
-import translator.*;
+import myutil.GenericTree;
+import translator.GroupOfGates;
 import ui.*;
-import myutil.*;
+import ui.avatarbd.AvatarBDBlock;
+import ui.avatarbd.AvatarBDDataType;
 
-import ui.avatarbd.*;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import java.util.Vector;
 
 public class DiagramTreeModel implements TreeModel {
     private MainGUI mgui;

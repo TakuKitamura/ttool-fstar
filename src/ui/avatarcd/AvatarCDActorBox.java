@@ -46,10 +46,10 @@
 
 package ui.avatarcd;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class AvatarCDActorBox extends TGCScalableOneLineText {
     /*protected int lineLength = 5;

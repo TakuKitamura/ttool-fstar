@@ -45,12 +45,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
+import ui.IconManager;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-//import myutil.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import ui.*;
+//import myutil.*;
 
 
 public	class JFrameBasicText extends JFrame implements ActionListener {

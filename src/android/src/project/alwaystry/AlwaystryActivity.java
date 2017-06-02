@@ -1,28 +1,17 @@
 package project.alwaystry;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Intent;
-import android.gesture.Gesture;
-import android.gesture.GestureLibraries;
-import android.gesture.GestureLibrary;
-import android.gesture.GestureOverlayView;
+import android.gesture.*;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
-import android.gesture.Prediction;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TabHost;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class AlwaystryActivity extends TabActivity implements OnGesturePerformedListener{//implements OnTouchListener{//implements OnLongClickListener,OnTouchListener{
 	

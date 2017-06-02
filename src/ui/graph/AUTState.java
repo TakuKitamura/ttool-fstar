@@ -45,7 +45,9 @@
 
 package ui.graph;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Random;
 
 public class AUTState implements Comparable<AUTState> {
 

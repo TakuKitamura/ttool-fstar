@@ -45,7 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator;
 
-import java.util.*;
+import java.util.Vector;
 
 public abstract class ADComponent implements Cloneable {
     protected boolean selected = false;

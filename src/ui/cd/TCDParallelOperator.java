@@ -50,7 +50,10 @@ package ui.cd;
 //import java.awt.*;
 //import javax.swing.*;
 
-import ui.*;
+import ui.IconManager;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
 
 public class TCDParallelOperator extends TCDCompositionOperator {
 

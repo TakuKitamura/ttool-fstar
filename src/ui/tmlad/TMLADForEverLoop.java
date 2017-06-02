@@ -46,15 +46,11 @@
 
 package ui.tmlad;
 
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class TMLADForEverLoop extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;

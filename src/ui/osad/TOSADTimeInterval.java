@@ -46,10 +46,10 @@
 
 package ui.osad;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class TOSADTimeInterval extends TGCWithInternalComponent {
     private int lineLength = 5;

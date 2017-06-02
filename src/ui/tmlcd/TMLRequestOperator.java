@@ -47,9 +47,9 @@
 
 package ui.tmlcd;
 
-import java.awt.*;
-
 import ui.*;
+
+import java.awt.*;
 
 public class TMLRequestOperator extends TMLCompositionOperator {
     

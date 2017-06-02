@@ -1,24 +1,13 @@
 package project.alwaystry;
- 
-import java.util.List;
- 
+
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.view.FocusFinder;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.VelocityTracker;
-import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
-import android.view.ViewParent;
+import android.view.*;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Scroller;
-import android.widget.TextView;
+import android.widget.*;
+
+import java.util.List;
  
 /**
  * Layout container for a view hierarchy that can be scrolled by the user,

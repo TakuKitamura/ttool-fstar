@@ -45,10 +45,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tree;
 
-import java.util.*;
+import myutil.GenericTree;
+import myutil.TraceManager;
+import ui.MainGUI;
 
-import ui.*;
-import myutil.*;
+import java.util.Vector;
 
 public class SearchTree implements GenericTree {
     

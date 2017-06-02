@@ -47,12 +47,14 @@
 
 package ui.sysmlsecmethodology;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import javax.swing.*;
-
+import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.*;
-import myutil.*;
+
+import javax.swing.*;
+import java.awt.*;
+
+//import java.awt.geom.*;
 
 public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
     //protected boolean emptyText;

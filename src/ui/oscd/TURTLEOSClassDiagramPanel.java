@@ -47,13 +47,15 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.oscd;
 
 //import java.awt.*;
-import java.util.*;
+
+import ui.*;
+
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 //import org.w3c.dom.*;
 //import org.xml.sax.*;
 //import javax.xml.parsers.*;
-
-import ui.*;
 
 public class TURTLEOSClassDiagramPanel extends TDiagramPanel implements ClassDiagramPanelInterface {
     

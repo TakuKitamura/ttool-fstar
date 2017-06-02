@@ -46,38 +46,32 @@
 
 package ui.window;
 
-import web.crawler.*;
-import myutil.TraceManager;
-
-
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-import myutil.GoogleSearch;
-import myutil.GraphicLib;
-import java.lang.Object;
-import java.awt.Desktop;
-import java.net.URI;
-import myutil.TableSorter;
-import java.util.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.text.html.HTMLDocument;
-
-import myutil.CheckConnection;
+import myutil.*;
+import myutil.externalSearch.Client;
+import myutil.externalSearch.Message;
 import myutil.externalSearch.Record;
 import ui.ConfigurationTTool;
 import ui.IconManager;
 import ui.MalformedConfigurationException;
 import ui.TDiagramMouseManager;
-import myutil.externalSearch.Message;
-import myutil.externalSearch.Client;
+import web.crawler.WebCrawler;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.html.HTMLDocument;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
 
 //TODO : change display to tab.
 //TODO: decorate the text box

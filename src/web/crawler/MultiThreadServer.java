@@ -47,25 +47,15 @@
 
 package web.crawler;
 
-import java.awt.AWTException;
+import myutil.externalSearch.Message;
+import org.apache.commons.io.FileUtils;
+
+import javax.xml.transform.TransformerException;
+import java.awt.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Scanner;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.transform.TransformerException;
-import org.apache.commons.io.FileUtils;
-import web.crawler.WebCrawler;
-import myutil.externalSearch.Message;
 
 
 public class MultiThreadServer {

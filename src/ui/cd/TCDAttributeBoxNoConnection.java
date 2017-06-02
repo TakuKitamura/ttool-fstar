@@ -49,7 +49,7 @@ package ui.cd;
 
 
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogAttribute;
 
 public class TCDAttributeBoxNoConnection extends TCDAttributeBox {
     

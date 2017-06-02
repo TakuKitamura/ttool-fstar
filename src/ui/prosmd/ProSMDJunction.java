@@ -46,17 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.prosmd;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.ad.TGConnectingPointAD;
-import ui.window.*;
+
+import java.awt.*;
 
 public class ProSMDJunction extends TGCWithoutInternalComponent {
     protected int lineLength = 10;

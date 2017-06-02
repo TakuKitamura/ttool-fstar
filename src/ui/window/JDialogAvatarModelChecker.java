@@ -46,22 +46,27 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import avatartranslator.AvatarSpecification;
+import avatartranslator.AvatarStateMachineElement;
+import avatartranslator.modelchecker.AvatarModelChecker;
+import avatartranslator.modelchecker.SpecificationReachability;
+import avatartranslator.modelchecker.SpecificationReachabilityType;
+import myutil.*;
+import ui.IconManager;
+import ui.MainGUI;
+import ui.TGComponent;
+import ui.graph.RG;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimerTask;
-import java.io.*;
-
-import java.text.*;
-
-import myutil.*;
-import avatartranslator.*;
-import avatartranslator.modelchecker.*;
-import ui.*;
 import java.util.concurrent.TimeUnit;
-
-import ui.graph.*;
 
 public class JDialogAvatarModelChecker extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
     private final static String [] INFOS = {"Not started", "Running", "Stopped by user", "Finished"};

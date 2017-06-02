@@ -45,10 +45,12 @@
 
 package uppaaldesc;
 
-import java.util.*;
-
-import java.awt.Point;
 import myutil.Conversion;
+
+import java.awt.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class UPPAALTransition {

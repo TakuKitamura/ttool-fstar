@@ -45,24 +45,19 @@
    * @see
    */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.List;
-
 import myutil.FileUtils;
-import tmltranslator.TMLError;
-import tmltranslator.TMLMapping;
-import tmltranslator.TMLMappingTextSpecification;
-import tmltranslator.TMLModeling;
-import tmltranslator.TMLSyntaxChecking;
-import tmltranslator.TMLTextSpecification;
-import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
+import tmltranslator.*;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
+import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.toturtle.Mapping2TIF;
 import tmltranslator.toturtle.TML2TURTLE;
 import tmltranslator.touppaal.TML2UPPAAL;
 import translator.TURTLEModeling;
 import translator.TURTLETranslator;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
 
 public class TMLTranslator  {
     // 0 -> LOTOS

@@ -46,10 +46,6 @@
 
 package ui.avatarsmd;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
 import ui.*;
 
 public abstract class AvatarSMDBasicComponent extends TGCWithoutInternalComponent implements SwallowedTGComponent {

@@ -46,23 +46,25 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
-import ui.avatarbd.*;
-import ui.avatardd.*;
-import ui.avatarsmd.*;
-
 import avatartranslator.AvatarAttribute;
-import avatartranslator.AvatarPragmaSecret;
-import avatartranslator.AvatarPragmaReachability;
 import avatartranslator.AvatarPragmaAuthenticity;
+import avatartranslator.AvatarPragmaReachability;
+import avatartranslator.AvatarPragmaSecret;
+import myutil.GraphicLib;
+import proverifspec.ProVerifOutputAnalyzer;
+import proverifspec.ProVerifQueryAuthResult;
+import proverifspec.ProVerifQueryResult;
+import ui.avatarbd.*;
+import ui.avatardd.ADDDiagramPanel;
+import ui.avatarsmd.AvatarSMDPanel;
+import ui.avatarsmd.AvatarSMDState;
+import ui.avatarsmd.AvatarSMDToolBar;
 
-
-import proverifspec.*;
-
-import myutil.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.*;
 
 public class AvatarDesignPanel extends TURTLEPanel {
     public AvatarBDPanel abdp;

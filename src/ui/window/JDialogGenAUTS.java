@@ -46,15 +46,20 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-import java.io.*;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.ScrolledJTextArea;
+import myutil.SortedVector;
+import ui.ConfigurationTTool;
+import ui.IconManager;
+import ui.MainGUI;
 
-import launcher.*;
-import myutil.*;
-import ui.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Iterator;
 
 public class JDialogGenAUTS extends javax.swing.JDialog implements ActionListener, Runnable  {
     

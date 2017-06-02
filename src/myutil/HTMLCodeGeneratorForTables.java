@@ -46,12 +46,16 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package myutil;
 
-import java.util.*;
-//import java.awt.*;
-import javax.swing.table.*;
-import java.text.*;
+import ui.DefaultText;
 
-import ui.*;
+import javax.swing.table.AbstractTableModel;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+//import java.awt.*;
 
 public class HTMLCodeGeneratorForTables  {
 	

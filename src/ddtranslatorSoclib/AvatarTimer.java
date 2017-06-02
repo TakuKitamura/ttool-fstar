@@ -46,7 +46,6 @@
 
 
 package ddtranslatorSoclib;
-import java.util.*;
 
 public class AvatarTimer extends AvatarComponent{
 

@@ -47,7 +47,8 @@
 
 package req.ebrdd;
 
-import tmltranslator.*;
+import tmltranslator.DIPLOElement;
+import tmltranslator.TMLType;
 
 
 public class EBRDDAttribute extends DIPLOElement {

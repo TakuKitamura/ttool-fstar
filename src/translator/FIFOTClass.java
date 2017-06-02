@@ -45,7 +45,7 @@
 
 package translator;
 
-import java.util.*;
+import java.util.LinkedList;
 
 public interface FIFOTClass  {
     public int getNbPara();

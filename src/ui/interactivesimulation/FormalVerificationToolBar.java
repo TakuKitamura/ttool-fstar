@@ -47,10 +47,9 @@
 package ui.interactivesimulation;
 
 import javax.swing.*;
+
 //import java.awt.*;
 //import java.awt.event.*;
-
-import ui.*;
 
 public class FormalVerificationToolBar extends InteractiveSimulationBar {
 

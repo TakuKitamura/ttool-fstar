@@ -46,49 +46,42 @@
 
 package ui.tree;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.tree.*;
-
-import translator.*;
+import translator.GroupOfGates;
 import ui.*;
-import ui.ad.*;
-import ui.atd.*;
-import ui.cd.*;
-import ui.iod.*;
-import ui.ebrdd.*;
-import ui.req.*;
-import ui.sd.*;
-import ui.dd.*;
-import ui.ucd.*;
-import ui.tmlad.*;
-import ui.tmlcd.*;
-import ui.tmldd.*;
-import ui.tmlcompd.*;
-import ui.tmlcp.*;
-import ui.tmlsd.*;
+import ui.ad.TActivityDiagramPanel;
+import ui.atd.AttackTreeDiagramPanel;
+import ui.avatarad.AvatarADPanel;
+import ui.avatarbd.AvatarBDPanel;
+import ui.avatarcd.AvatarCDPanel;
+import ui.avatardd.ADDDiagramPanel;
+import ui.avatarmad.AvatarMADPanel;
+import ui.avatarmethodology.AvatarMethodologyDiagramPanel;
+import ui.avatarpd.AvatarPDPanel;
+import ui.avatarrd.AvatarRDPanel;
+import ui.avatarsmd.AvatarSMDPanel;
+import ui.cd.TClassDiagramPanel;
+import ui.dd.TDeploymentDiagramPanel;
+import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
+import ui.ebrdd.EBRDDPanel;
+import ui.graph.RG;
+import ui.iod.InteractionOverviewDiagramPanel;
+import ui.ncdd.NCDiagramPanel;
+import ui.osad.TURTLEOSActivityDiagramPanel;
+import ui.oscd.TURTLEOSClassDiagramPanel;
+import ui.req.RequirementDiagramPanel;
+import ui.sd.SequenceDiagramPanel;
+import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
+import ui.tmlad.TMLActivityDiagramPanel;
+import ui.tmlcd.TMLTaskDiagramPanel;
+import ui.tmlcompd.TMLComponentTaskDiagramPanel;
+import ui.tmlcp.TMLCPPanel;
+import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmlsd.TMLSDPanel;
+import ui.ucd.UseCaseDiagramPanel;
 
-import ui.ncdd.*;
-
-import ui.graph.*;
-
-import ui.oscd.*;
-import ui.osad.*;
-
-import ui.avatarbd.*;
-import ui.avatarsmd.*;
-import ui.avatarrd.*;
-import ui.avatarpd.*;
-import ui.avatarmad.*;
-import ui.avatarad.*;
-import ui.avatarcd.*;
-import ui.avatardd.*;
-
-import ui.diplodocusmethodology.*;
-import ui.avatarmethodology.*;
-import ui.sysmlsecmethodology.*;
-
-import ui.graph.*;
+import javax.swing.*;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
 
 
 

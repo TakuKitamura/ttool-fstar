@@ -46,7 +46,8 @@
 
 
 package ddtranslatorSoclib;
-import java.util.*;
+
+import java.util.LinkedList;
 
 public class AvatarRAM extends AvatarComponent{
     

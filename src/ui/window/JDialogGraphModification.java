@@ -46,16 +46,19 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.swing.*;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.FileUtils;
+import myutil.ScrolledJTextArea;
+import ui.ConfigurationTTool;
+import ui.IconManager;
+import ui.file.AUTFileFilter;
+import ui.graph.AUTMappingGraph;
 
-import launcher.*;
-import myutil.*;
-import ui.*;
-import ui.file.*;
-import ui.graph.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class JDialogGraphModification extends javax.swing.JDialog implements ActionListener, Runnable  {

@@ -46,15 +46,15 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
-import ui.sysmlsecmethodology.*;
+import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
+import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramToolbar;
 
-
-import java.util.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.Vector;
 
 public class SysmlsecMethodologyPanel extends TURTLEPanel {
     public SysmlsecMethodologyDiagramPanel dmd;

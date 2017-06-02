@@ -47,11 +47,9 @@
 
 package avatartranslator;
 
-import java.util.*;
+import myutil.TraceManager;
 
-import myutil.*;
-import translator.*;
-import translator.tojava.*;
+import java.util.HashMap;
 
 public class AvatarAttribute extends AvatarLeftHand {
 

@@ -46,14 +46,15 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ebrdd;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
 
-import org.w3c.dom.*;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Vector;
 
 public  class TGConnectorEBRDDERC extends TGConnector {
     protected int arrowLength = 10;

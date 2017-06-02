@@ -46,15 +46,17 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
-import ui.req.*;
-import ui.ebrdd.*;
+import ui.ebrdd.EBRDDPanel;
+import ui.ebrdd.EBRDDToolBar;
+import ui.req.RequirementDiagramPanel;
+import ui.req.RequirementDiagramToolBar;
 
-import java.util.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class RequirementPanel extends TURTLEPanel {
     public RequirementDiagramPanel rdp;

@@ -45,14 +45,15 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
+import myutil.GraphicLib;
+import myutil.TableSorter;
+import nc.NCStructure;
+import ui.IconManager;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-
-import myutil.*;
-import ui.*;
-
-import nc.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {

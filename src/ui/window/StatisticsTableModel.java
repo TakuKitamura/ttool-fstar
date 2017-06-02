@@ -46,12 +46,15 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.util.*;
-import java.io.*;
-import javax.swing.table.*;
+import myutil.SteppedAlgorithm;
+import ui.graph.AUTGraph;
+import ui.graph.AUTTransition;
 
-import ui.graph.*;
-import myutil.*;
+import javax.swing.table.AbstractTableModel;
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.Collections;
+import java.util.Vector;
 
 public class StatisticsTableModel extends AbstractTableModel implements SteppedAlgorithm {
 	Vector statisticData;

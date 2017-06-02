@@ -45,21 +45,18 @@
    */
 package myutil.externalSearch;
 
+import myutil.TraceManager;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
-import java.net.*;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-import myutil.TraceManager;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.jsoup.parser.Parser;
-import org.jsoup.nodes.Document;
-
-import myutil.*;
 
 public class Client {
     public  Object parserAnswerMessage(Message answerMsg) {

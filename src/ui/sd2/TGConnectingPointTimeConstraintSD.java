@@ -48,7 +48,9 @@ package ui.sd2;
 
 //import java.awt.*;
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 
 public class TGConnectingPointTimeConstraintSD extends  TGConnectingPoint{
     

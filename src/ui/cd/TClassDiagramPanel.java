@@ -47,12 +47,11 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.cd;
 
 
-import java.util.*;
-
-import org.w3c.dom.*;
-
-
+import org.w3c.dom.Element;
 import ui.*;
+
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class TClassDiagramPanel extends TDiagramPanel implements ClassDiagramPanelInterface {
     

@@ -48,15 +48,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.avatarmethodology;
 
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
 import ui.*;
-import ui.window.*;
 
 public class AvatarMethodologyReferenceToAnalysis extends AvatarMethodologyDiagramReference  {
    

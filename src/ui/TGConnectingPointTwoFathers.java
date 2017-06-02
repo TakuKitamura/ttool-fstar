@@ -46,8 +46,9 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui;
 
+import myutil.GraphicLib;
+
 import java.awt.*;
-import myutil.*;
 
 public class TGConnectingPointTwoFathers extends TGConnectingPoint{
 	protected CDElement container2;

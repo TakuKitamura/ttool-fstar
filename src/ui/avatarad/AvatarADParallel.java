@@ -47,11 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatarad;
 
-import java.awt.*;
-
-import myutil.*;
-
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class AvatarADParallel extends AvatarADBasicComponent{
     private int lineLength = 0;

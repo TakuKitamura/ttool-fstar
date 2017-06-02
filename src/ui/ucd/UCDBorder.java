@@ -46,10 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ucd;
 
-import java.awt.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class UCDBorder extends TGCScalableWithoutInternalComponentOneLineText {
     /*protected int lineLength = 5;

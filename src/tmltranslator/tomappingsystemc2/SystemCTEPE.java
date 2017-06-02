@@ -45,10 +45,15 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tomappingsystemc2;
 
-import java.util.*;
-import myutil.*;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
 import tepe.*;
-import java.util.regex.*;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SystemCTEPE {

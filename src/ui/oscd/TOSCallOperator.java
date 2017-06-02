@@ -47,10 +47,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.oscd;
 
-import java.awt.*;
-
-
 import ui.*;
+
+import java.awt.*;
 
 public class TOSCallOperator extends TOSCompositionOperator {
 

@@ -48,15 +48,19 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-import java.util.List;
-
-import ui.*;
-import ui.tmldd.*;
 import tmltranslator.modelcompiler.*;
+import ui.IconManager;
+import ui.TGComponent;
+import ui.tmldd.TMLArchiMemoryNode;
+import ui.tmldd.TMLArchiPortArtifact;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 
 public class JDialogPortArtifact extends javax.swing.JDialog implements ActionListener  {

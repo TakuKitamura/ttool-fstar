@@ -46,15 +46,15 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
-import ui.diplodocusmethodology.*;
+import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
+import ui.diplodocusmethodology.DiplodocusMethodologyDiagramToolbar;
 
-
-import java.util.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.util.Vector;
 
 public class DiplodocusMethodologyPanel extends TURTLEPanel {
     public DiplodocusMethodologyDiagramPanel dmd;

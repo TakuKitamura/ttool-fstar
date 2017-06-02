@@ -46,18 +46,21 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import myutil.ScrolledJTextArea;
+import ui.IconManager;
+import ui.MainGUI;
+import ui.graph.AUTGraph;
+import ui.graph.RG;
 
-import launcher.*;
-import myutil.*;
-import translator.*;
-import ui.*;
-import ui.cd.*;
-import ui.graph.*;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 
 
 public class JFrameMinimize extends javax.swing.JFrame implements ActionListener, ListSelectionListener, Runnable  {

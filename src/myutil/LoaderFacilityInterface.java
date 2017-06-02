@@ -45,12 +45,6 @@
 
 package myutil;
 
-import java.net.*;
-import java.io.*;
-import java.awt.image.*;
-import javax.imageio.*;
-
-
 public interface LoaderFacilityInterface {
 
     public void load(int index);

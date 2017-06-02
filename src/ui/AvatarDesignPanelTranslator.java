@@ -44,13 +44,13 @@
 
 package ui;
 
-import java.util.*;
-
-import myutil.*;
+import avatartranslator.*;
+import myutil.Conversion;
+import myutil.TraceManager;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
 
-import avatartranslator.*;
+import java.util.*;
 
 public class AvatarDesignPanelTranslator {
 

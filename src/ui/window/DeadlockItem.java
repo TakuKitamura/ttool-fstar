@@ -47,7 +47,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.window;
 
 
-import java.util.*;
+import java.util.Vector;
 
 public class DeadlockItem implements Comparable {
     private String name;

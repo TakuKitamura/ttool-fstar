@@ -47,13 +47,10 @@
 
 package ui.sd2;
 
-import java.awt.*;
-import javax.swing.*;
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import java.awt.*;
 
 
 

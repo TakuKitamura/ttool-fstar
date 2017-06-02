@@ -47,9 +47,7 @@
 
 package ui.networkmodelloader;
 
-import javax.swing.*;
-import java.io.File;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
 
 
 public class NetworkModel  {

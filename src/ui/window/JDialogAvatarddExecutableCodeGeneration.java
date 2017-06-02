@@ -48,23 +48,27 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.io.*;
-
+import avatartranslator.AvatarSpecification;
+import ddtranslatorSoclib.AvatarddSpecification;
+import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
+import ddtranslatorSoclib.toTopCell.TopCellGenerator;
+import launcher.LauncherException;
+import launcher.RshClient;
 import myutil.*;
-import ui.*;
+import ui.AvatarDeploymentPanelTranslator;
+import ui.ConfigurationTTool;
+import ui.IconManager;
+import ui.MainGUI;
+import ui.avatardd.ADDDiagramPanel;
+import ui.interactivesimulation.JFrameSimulationSDPanel;
 
-
-import avatartranslator.*;
-import launcher.*;
-
-import ui.interactivesimulation.*;
-import ddtranslatorSoclib.toSoclib.*;
-import ddtranslatorSoclib.toTopCell.*;
-import ddtranslatorSoclib.*;
-import ui.avatardd.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.StringWriter;
+import java.io.Writer;
 
 public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
 

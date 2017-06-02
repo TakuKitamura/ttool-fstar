@@ -47,9 +47,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.util.List;
+import ui.cd.TCDSynchroGateList;
 
-import ui.cd.*;
+import java.util.List;
 
 public interface TClassSynchroInterface extends TClassInterface  {
     public List<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl);

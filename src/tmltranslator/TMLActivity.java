@@ -45,9 +45,10 @@
 
 package tmltranslator;
 
-import java.util.*;
+import myutil.Conversion;
+import myutil.TraceManager;
 
-import myutil.*;
+import java.util.Vector;
 
 
 public class TMLActivity extends TMLElement {

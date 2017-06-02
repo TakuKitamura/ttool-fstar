@@ -45,9 +45,6 @@
 
 package copyfromJAVAsource;
 
-import java.io.*;
-
-
 public class TraceManager {
 	public final static int TO_CONSOLE = 0;
 	public final static int TO_FILE = 1;

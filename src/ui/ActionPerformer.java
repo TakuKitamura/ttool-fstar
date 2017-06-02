@@ -48,8 +48,8 @@
 
 package ui;
 
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class ActionPerformer {
 

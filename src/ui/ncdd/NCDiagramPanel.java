@@ -47,10 +47,13 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.ncdd;
 
 
-import org.w3c.dom.*;
-import java.util.*;
-
+import org.w3c.dom.Element;
 import ui.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 	

@@ -46,12 +46,14 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
-import ui.dd.*;
+import ui.dd.TDeploymentDiagramPanel;
+import ui.dd.TDeploymentDiagramToolBar;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class DeploymentPanel extends TURTLEPanel {
     public TDeploymentDiagramPanel tddp; 

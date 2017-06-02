@@ -45,9 +45,10 @@ knowledge of the CeCILL license and that you accept its terms.
  */
 
 
-
-import myutil.*;
-import ui.graph.*;
+import myutil.BoolExpressionEvaluator;
+import myutil.TraceManager;
+import ui.graph.AUTGraph;
+import ui.graph.AUTTransition;
 
 
 public class Test  {

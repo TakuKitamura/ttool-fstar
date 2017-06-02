@@ -46,15 +46,18 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import myutil.*;
+import translator.tosimujava.TURTLE2SimuJava;
+import ui.IconManager;
+import ui.MainGUI;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 //import javax.swing.event.*;
 //import java.util.*;
-
-import myutil.*;
-import translator.tosimujava.*;
-import ui.*;
 
 
 public class JDialogJavaSimulation extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {

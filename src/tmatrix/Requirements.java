@@ -47,9 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmatrix;
 
-import translator.*;
-import ui.req.*;
-import ui.graph.*;
+import translator.TURTLEModeling;
+import ui.graph.AUTGraph;
+import ui.req.Requirement;
+import ui.req.RequirementObserver;
 
 public class Requirements {
     public Requirement req;

@@ -45,8 +45,8 @@
 
 package translator.touppaal;
 
-import translator.*;
-import uppaaldesc.*;
+import translator.TClass;
+import uppaaldesc.UPPAALTemplate;
 
 public class TClassTemplate {
 	public TClass tclass;

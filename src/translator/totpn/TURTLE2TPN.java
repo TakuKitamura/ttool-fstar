@@ -45,12 +45,14 @@
 
 package translator.totpn;
 
-import java.util.*;
-
-import tpndescription.*;
-import myutil.*;
+import myutil.FileException;
+import tpndescription.Place;
+import tpndescription.TPN;
+import tpndescription.Transition;
 import translator.*;
 import ui.CheckingError;
+
+import java.util.LinkedList;
 
 public class TURTLE2TPN {
     

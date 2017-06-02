@@ -47,20 +47,25 @@
 
 package ui;
 
-import javax.swing.*;
-import java.util.*;
-import java.io.*;
-import java.awt.image.*;
-import javax.imageio.*;
-import java.text.*;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.SteppedAlgorithm;
+import ui.ad.TActivityDiagramPanel;
+import ui.avatarsmd.AvatarSMDPanel;
+import ui.dd.TDeploymentDiagramPanel;
+import ui.tmlad.TMLActivityDiagramPanel;
+import ui.tmlcd.TMLTaskDiagramPanel;
+import ui.tmldd.TMLArchiDiagramPanel;
 
-import myutil.*;
-import ui.ad.*;
-import ui.dd.*;
-import ui.tmlad.*;
-import ui.tmlcd.*;
-import ui.tmldd.*;
-import ui.avatarsmd.*;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Vector;
 
 public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIElement {
 

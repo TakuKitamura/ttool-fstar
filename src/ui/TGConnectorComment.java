@@ -46,11 +46,12 @@
 
 package ui;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import java.util.*;
+import myutil.GraphicLib;
 
-import myutil.*;
+import java.awt.*;
+import java.util.Vector;
+
+//import java.awt.geom.*;
 
 public  class TGConnectorComment extends TGConnector {
 

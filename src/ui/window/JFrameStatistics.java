@@ -45,18 +45,23 @@
 
 package ui.window;
 
-import javax.swing.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-
-
+import automata.Automata;
+import automata.State;
+import automata.Transition;
 import myutil.*;
-import ui.*;
-import ui.graph.*;
-import ui.file.*;
-import automata.*;
+import ui.ConfigurationTTool;
+import ui.IconManager;
+import ui.StoppableGUIElement;
+import ui.ThreadGUIElement;
+import ui.file.AUTFileFilter;
+import ui.graph.AUTGraph;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 
 public  class JFrameStatistics extends JFrame implements ActionListener, StoppableGUIElement, SteppedAlgorithm, ExternalCall {

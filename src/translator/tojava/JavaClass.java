@@ -45,9 +45,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package translator.tojava;
 
-import java.util.*;
+import myutil.FileException;
+import myutil.FileUtils;
 
-import myutil.*;
+import java.util.Vector;
 
 public class JavaClass {
     

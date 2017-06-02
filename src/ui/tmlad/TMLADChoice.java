@@ -47,11 +47,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlad;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class TMLADChoice extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 10;

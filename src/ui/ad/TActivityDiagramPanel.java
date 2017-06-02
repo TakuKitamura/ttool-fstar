@@ -46,11 +46,11 @@
 
 package ui.ad;
 
-import java.util.*;
-
-import org.w3c.dom.*;
-
+import org.w3c.dom.Element;
 import ui.*;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiagramPanelInterface {
     

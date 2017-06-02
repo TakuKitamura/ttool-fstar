@@ -45,14 +45,18 @@
    */
   
   package ui.window;
-  
-  import java.awt.*;
-  import java.awt.event.*;
+
+  import launcher.LauncherException;
+  import launcher.RshClient;
+  import myutil.FileUtils;
+  import myutil.ScrolledJTextArea;
+  import ui.IconManager;
+  import ui.MainGUI;
+
   import javax.swing.*;
-  
-  import launcher.*;
-  import myutil.*;
-  import ui.*;
+  import java.awt.*;
+  import java.awt.event.ActionEvent;
+  import java.awt.event.ActionListener;
   
   public class JDialogLOTOSAnalysis extends javax.swing.JDialog implements ActionListener, Runnable  {
       private static boolean warningChecked = false;

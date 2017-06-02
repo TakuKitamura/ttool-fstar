@@ -47,10 +47,8 @@
 
 package avatartranslator.modelchecker;
 
-import avatartranslator.*;
-import java.util.*;
-
-import myutil.*;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarStateMachineElement;
 
 public class SpecificationLiveness  {
     public Object ref1, ref2; // ref1 must be provided, ref2 might be null

@@ -47,16 +47,19 @@
 
 package ui.networkmodelloader;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.util.*;
-import javax.swing.*;
-import java.net.*;
-import java.io.*;
-
-import ui.*;
 import myutil.*;
+import ui.ConfigurationTTool;
+import ui.IconManager;
+import ui.JTextAreaWriter;
+import ui.MainGUI;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.util.ArrayList;
 
 public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable, LoaderFacilityInterface, CallbackLoaderInterface  {
 

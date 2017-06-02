@@ -45,7 +45,7 @@
 
 package proverifspec;
 
-import java.util.*;
+import java.util.LinkedList;
 
 public class ProVerifComment implements ProVerifDeclaration {
     protected LinkedList<String> lines;

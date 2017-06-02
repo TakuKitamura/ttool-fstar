@@ -45,21 +45,26 @@
 
 package avatartranslator.toproverif;
 
-import java.util.LinkedList;
-import java.util.List;
+import avatartranslator.*;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
+import proverifspec.*;
+import ui.AvatarDesignPanel;
+import ui.CheckingError;
+import ui.ConfigurationTTool;
+import ui.TGComponent;
+import ui.window.JDialogProverifVerification;
+
+import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.io.*;
-import javax.swing.*;
-
-import ui.ConfigurationTTool;
-import ui.CheckingError;
-import ui.AvatarDesignPanel;
-import ui.window.JDialogProverifVerification;
-import ui.TGComponent;
-import proverifspec.*;
-import myutil.*;
-import avatartranslator.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AVATAR2ProVerif implements AvatarTranslator {
 

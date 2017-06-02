@@ -1,18 +1,12 @@
 package ui.procsd;
 
-import java.awt.Point;
-import java.util.Vector;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import ui.*;
 
-import ui.MalformedModelingException;
-import ui.TDiagramPanel;
-import ui.TGComponent;
-import ui.TGComponentManager;
-import ui.TGConnectingPoint;
-import ui.TGConnectorAttribute;
+import java.awt.*;
+import java.util.Vector;
 
 public class TGConnectorPortInterface extends TGConnectorAttribute{
 

@@ -45,13 +45,21 @@
 
 package avatartranslator.touppaal;
 
-import java.awt.*;
-import java.util.*;
-
-import uppaaldesc.*;
-import myutil.*;
 import avatartranslator.*;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
 import ui.CheckingError;
+import uppaaldesc.UPPAALLocation;
+import uppaaldesc.UPPAALSpec;
+import uppaaldesc.UPPAALTemplate;
+import uppaaldesc.UPPAALTransition;
+
+import java.awt.*;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class AVATAR2UPPAAL {
 

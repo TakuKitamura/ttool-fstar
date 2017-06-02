@@ -46,13 +46,14 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
+import ui.avatardd.ADDDiagramPanel;
+import ui.avatardd.ADDDiagramToolBar;
 
-import ui.avatardd.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class ADDPanel extends TURTLEPanel {
     public ADDDiagramPanel tmladd;

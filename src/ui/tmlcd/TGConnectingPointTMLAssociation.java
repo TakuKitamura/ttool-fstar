@@ -48,7 +48,9 @@ package ui.tmlcd;
 
 //import java.awt.*;
 
-import ui.*;
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointTwoFathers;
 
 public class TGConnectingPointTMLAssociation extends  TGConnectingPointTwoFathers{
     

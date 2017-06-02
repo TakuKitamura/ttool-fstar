@@ -43,7 +43,7 @@
 	    v2.1 Daniela GENIUS, summer 2016*/
 
 package ddtranslatorSoclib.toTopCell;
-import java.util.*;
+
 import ddtranslatorSoclib.*;
 
 public class Declaration {

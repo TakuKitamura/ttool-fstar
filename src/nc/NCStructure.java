@@ -45,7 +45,7 @@
 
 package nc;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class NCStructure extends NCElement {
 	public ArrayList<NCEquipment> equipments;

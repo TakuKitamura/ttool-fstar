@@ -45,8 +45,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tree;
 
-import ui.*;
-import myutil.*;
+import myutil.GenericTree;
+import ui.MainGUI;
 
 public class SyntaxAnalysisTree implements GenericTree {
     

@@ -45,10 +45,10 @@
 
 package tmltranslator.tosystemc;
 
-import java.util.*;
-
+import myutil.Conversion;
 import tmltranslator.*;
-import myutil.*;
+
+import java.util.ListIterator;
 
 
 public class SystemCTask {

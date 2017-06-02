@@ -47,10 +47,12 @@
 
 package avatartranslator.directsimulation;
 
-import java.util.*;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarStateMachineElement;
 
-import avatartranslator.*;
-import myutil.*;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public class AvatarSimulationTransaction  {
 

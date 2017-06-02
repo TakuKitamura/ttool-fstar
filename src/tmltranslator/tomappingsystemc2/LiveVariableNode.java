@@ -1,10 +1,12 @@
 package tmltranslator.tomappingsystemc2;
 
-import java.util.*;
+import myutil.TraceManager;
 import tmltranslator.*;
-import javax.script.*;
 
-import myutil.*;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import java.util.LinkedList;
 
 public class LiveVariableNode{
 	private LinkedList<LiveVariableNode> _succList = new LinkedList<LiveVariableNode>(), _predList = new LinkedList<LiveVariableNode>();

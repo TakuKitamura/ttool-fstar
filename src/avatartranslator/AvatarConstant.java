@@ -48,10 +48,6 @@ package avatartranslator;
 
 import java.util.HashMap;
 
-import myutil.TraceManager;
-import translator.RTLOTOSKeyword;
-import translator.tojava.JKeyword;
-
 public class AvatarConstant extends AvatarTerm {
 
     public static final AvatarConstant TRUE = new AvatarConstant ("true", null);

@@ -45,12 +45,14 @@
 
 package tmltranslator.toturtle;
 
-import java.util.*;
-
+import myutil.Conversion;
+import myutil.TraceManager;
 import tmltranslator.*;
-import myutil.*;
 import translator.*;
-import ui.*;
+import ui.CheckingError;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 
 public class TML2TURTLE {

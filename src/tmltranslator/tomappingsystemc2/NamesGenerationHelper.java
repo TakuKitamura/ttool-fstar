@@ -1,20 +1,9 @@
 package tmltranslator.tomappingsystemc2;
 
+import tmltranslator.*;
+
 import java.util.Arrays;
 import java.util.Collection;
-
-import tmltranslator.CPPCodeGenerationHelper;
-import tmltranslator.HwA;
-import tmltranslator.HwBridge;
-import tmltranslator.HwBus;
-import tmltranslator.HwCPU;
-import tmltranslator.HwCommunicationNode;
-import tmltranslator.HwExecutionNode;
-import tmltranslator.HwMemory;
-import tmltranslator.HwNode;
-import tmltranslator.TMLChannel;
-import tmltranslator.TMLEvent;
-import tmltranslator.TMLTask;
 
 public class NamesGenerationHelper {
 	

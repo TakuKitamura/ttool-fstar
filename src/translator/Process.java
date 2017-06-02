@@ -45,7 +45,7 @@
 
 package translator;
 
-import java.util.*;
+import java.util.Vector;
 
 public class Process {
     protected String name;

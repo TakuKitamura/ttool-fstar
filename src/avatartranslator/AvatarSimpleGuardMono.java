@@ -47,9 +47,6 @@
 package avatartranslator;
 
 import java.util.HashMap;
-import myutil.TraceManager;
-
-import myutil.Conversion;
 
 /**
  * An AvatarSimpleGuardMono is an {@link AvatarSimpleGuard} that is of the form:

@@ -3,12 +3,6 @@
 
 package ddtranslatorSoclib.toSoclib;
 
-import java.awt.*;
-import java.util.*;
-
-import myutil.*;
-import avatartranslator.*;
-
 public class MainFileSoclib {
 	
     private final static String H_DEF = "#ifndef MAIN_H\n#define MAIN_H\n";

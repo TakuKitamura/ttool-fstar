@@ -47,8 +47,6 @@ package avatartranslator;
 
 import java.util.HashMap;
 
-import myutil.TraceManager;
-
 public interface AvatarAction {
     public boolean isAMethodCall ();
     public boolean isAVariableSetting ();

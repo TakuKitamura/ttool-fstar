@@ -45,14 +45,17 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.io.*;
+import myutil.FileUtils;
+import ui.ConfigurationTTool;
+import ui.IconManager;
+import ui.file.RTLFileFilter;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import myutil.*;
-
-import ui.*;
-import ui.file.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
 
 
 public	class JFrameText extends JFrame	implements ActionListener {

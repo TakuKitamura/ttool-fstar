@@ -45,11 +45,15 @@
 
 package tmltranslator.touppaal;
 
-import java.util.*;
-
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
 import tmltranslator.*;
-import myutil.*;
 import uppaaldesc.*;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 
 public class TML2UPPAAL {

@@ -46,16 +46,18 @@
 
 package ui.tmlcd;
 
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import ui.*;
+import ui.window.JDialogParam;
+
+import javax.swing.*;
 import java.awt.*;
+
 //import java.awt.geom.*;
 //import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
-import ui.*;
-import ui.window.*;
 
 public class TMLRequestProperties extends TGCWithoutInternalComponent {
     

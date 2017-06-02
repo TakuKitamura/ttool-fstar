@@ -1,28 +1,19 @@
 package project.alwaystry;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
-import copyfromJAVAsource.AvatarMethod;
-import copyfromJAVAsource.AvatarSignal;
-import copyfromJAVAsource.TAttribute;
-
 import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TabHost;
-import android.widget.Toast;
+import android.widget.*;
+import copyfromJAVAsource.AvatarMethod;
+import copyfromJAVAsource.AvatarSignal;
+import copyfromJAVAsource.TAttribute;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 public class EditAttributesActivity extends TabActivity {
 	

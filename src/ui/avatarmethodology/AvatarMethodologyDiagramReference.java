@@ -48,14 +48,16 @@
 package ui.avatarmethodology;
 
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogManageListOfString;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithInternalComponent implements SwallowTGComponent  {
     public String oldValue;

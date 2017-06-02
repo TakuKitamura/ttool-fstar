@@ -48,18 +48,14 @@
 
 package web.crawler;
 
-import myutil.*;
-
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.io.*;
-import java.net.InetAddress;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import myutil.TraceManager;
 import org.apache.derby.drda.NetworkServerControl;
+
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.sql.*;
 
 /**
  * All the function necessary for the creation of the database, creation of tables in the database and the storage of this databse

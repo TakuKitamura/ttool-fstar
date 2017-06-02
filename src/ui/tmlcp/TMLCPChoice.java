@@ -47,12 +47,12 @@
 
 package ui.tmlcp;
 
-import java.awt.*;
-import java.util.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
 public class TMLCPChoice extends TGCWithInternalComponent {
     private int lineLength = 10;

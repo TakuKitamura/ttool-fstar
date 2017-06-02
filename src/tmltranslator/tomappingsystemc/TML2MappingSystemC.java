@@ -45,10 +45,14 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator.tomappingsystemc;
 
-import java.util.*;
-
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
 import tmltranslator.*;
-import myutil.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class TML2MappingSystemC {

@@ -48,7 +48,8 @@ package ui.procsd;
 
 //import java.awt.*;
 
-import ui.*;
+import ui.CDElement;
+import ui.TGConnectingPointTwoFathers;
 
 public class TGConnectingPointAssociationProCSD extends  TGConnectingPointTwoFathers{
     

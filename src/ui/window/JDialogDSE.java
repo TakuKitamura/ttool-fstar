@@ -47,18 +47,23 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import dseengine.DSEConfiguration;
+import launcher.LauncherException;
+import launcher.RshClient;
+import myutil.GraphicLib;
+import myutil.ScrolledJTextArea;
+import myutil.TraceManager;
+import tmltranslator.TMLMapping;
+import ui.IconManager;
+import ui.MainGUI;
+
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
-
-import ui.*;
-
-import myutil.*;
-import tmltranslator.*;
-import dseengine.*;
-import launcher.*;
 
 public class JDialogDSE extends javax.swing.JDialog implements ActionListener, ListSelectionListener, Runnable  {
 

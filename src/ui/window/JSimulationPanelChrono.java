@@ -46,15 +46,19 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
+import myutil.GraphicLib;
+import translator.Gate;
+import translator.GroupOfGates;
+import ui.ColorManager;
+import ui.ErrorGUI;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
-import java.util.*;
-
-import translator.*;
-import ui.*;
-import myutil.*;
+import java.util.Vector;
 
 public class JSimulationPanelChrono extends JPanel implements JSimulationPanelInterface, MouseListener, MouseMotionListener {
     private JFrameSimulationTrace jfst;

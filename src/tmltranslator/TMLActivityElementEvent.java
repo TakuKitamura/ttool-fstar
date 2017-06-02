@@ -45,7 +45,8 @@
 
 package tmltranslator;
 
-import java.util.*;
+import java.util.List;
+import java.util.Vector;
 
 
 public abstract class TMLActivityElementEvent extends TMLActivityElement {

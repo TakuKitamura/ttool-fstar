@@ -46,13 +46,14 @@
 
 package ui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import myutil.GraphicLib;
+import ui.ncdd.NCDiagramPanel;
+import ui.ncdd.NCDiagramToolBar;
 
-import ui.ncdd.*;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class NCPanel extends TURTLEPanel {
     public NCDiagramPanel ncdp;

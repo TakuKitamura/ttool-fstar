@@ -45,11 +45,17 @@
 
 package tmltranslator.toautomata;
 
-import java.util.*;
-
+import automata.Automata;
+import automata.State;
+import automata.Transition;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
 import tmltranslator.*;
-import automata.*;
-import myutil.*;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 
 public class TML2AUT {

@@ -46,13 +46,16 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
+import ui.IconManager;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import ui.*;
-import java.util.*;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JDialogPragma extends javax.swing.JDialog implements ActionListener {
     

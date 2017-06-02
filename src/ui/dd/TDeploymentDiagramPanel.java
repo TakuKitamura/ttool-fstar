@@ -47,9 +47,11 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.dd;
 
 
-import java.util.*;
-
 import ui.*;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TDeploymentDiagramPanel extends TDiagramPanel {
     

@@ -47,18 +47,14 @@
 package ui.atd;
 
 
-
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-import java.util.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
 import ui.*;
-import ui.cd.*;
-import ui.window.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Vector;
 
 public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;

@@ -45,10 +45,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import avatartranslator.*;
-
-import translator.*;
-import tmltranslator.*;
+import avatartranslator.AvatarBlock;
+import tmltranslator.TMLTask;
+import translator.Relation;
+import translator.TClass;
 
 
 

@@ -45,9 +45,9 @@
 
 package translator;
 
-import java.util.*;
+import myutil.Conversion;
 
-import myutil.*;
+import java.util.Vector;
 
 public class ADChoice extends ADComponent implements NonBlockingADComponent {
     protected Vector guard; // String

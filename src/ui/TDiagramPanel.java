@@ -46,35 +46,12 @@
 
 package ui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
-
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.RepaintManager;
-
 import myutil.GenericTree;
 import myutil.GraphicLib;
 import myutil.SVGGraphics;
 import myutil.TraceManager;
 import ui.atd.ATDBlock;
 import ui.avatarad.AvatarADActivity;
-// AVATAR
 import ui.avatarbd.AvatarBDBlock;
 import ui.avatarbd.AvatarBDDataType;
 import ui.avatarbd.AvatarBDLibraryFunction;
@@ -82,12 +59,7 @@ import ui.avatarcd.AvatarCDBlock;
 import ui.avatarmad.AvatarMADAssumption;
 import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
-import ui.cd.TCDCompositionOperatorWithSynchro;
-import ui.cd.TCDSynchroGateList;
-import ui.cd.TCDTClass;
-import ui.cd.TCDTData;
-import ui.cd.TCDTObject;
-import ui.cd.TGConnectorAssociation;
+import ui.cd.*;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
 import ui.ncdd.NCSwitchNode;
@@ -101,6 +73,16 @@ import ui.tmlcompd.TMLCRecordComponent;
 import ui.window.JDialogCode;
 import ui.window.JDialogNote;
 import ui.window.JDialogSearchBox;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.List;
+
+// AVATAR
 
 public abstract class TDiagramPanel extends JPanel implements GenericTree {
 

@@ -43,7 +43,6 @@
    * @author  Julien Henon, Daniela Genius */
 
 package ddtranslatorSoclib;
-import java.util.*;
 
 public class AvatarBridge extends AvatarComponent{
 

@@ -47,11 +47,12 @@
 
 package ui;
 
-import translator.*;
-import translator.tojava.*;
-import java.util.*;
+import myutil.Conversion;
+import myutil.TraceManager;
+import translator.RTLOTOSKeyword;
+import translator.tojava.JKeyword;
 
-import myutil.*;
+import java.util.Vector;
 
 public class AvatarMethod {
 

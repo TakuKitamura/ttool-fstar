@@ -46,18 +46,19 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-
 import myutil.GraphicLib;
+import tmltranslator.modelcompiler.Buffer;
+import ui.IconManager;
+import ui.tmldd.TMLArchiMemoryNode;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Vector;
 
 //import javax.swing.event.*;
-import java.util.*;
-
-import ui.*;
-import ui.tmldd.*;
-import tmltranslator.modelcompiler.*;
 
 
 public class JDialogMemoryNode extends javax.swing.JDialog implements ActionListener  {

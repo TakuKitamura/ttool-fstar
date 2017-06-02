@@ -45,9 +45,9 @@
 
 package uppaaldesc;
 
-import java.awt.Point;
+import tmltranslator.TMLEvent;
 
-import tmltranslator.*;
+import java.awt.*;
 
 
 public class UPPAALEventTemplateWithLoss extends  UPPAALTemplate{

@@ -46,10 +46,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
-import java.awt.*;
-import java.io.*;
-import java.net.*;
 import javax.swing.*;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 
 
 public class TToolUpdater extends Thread {

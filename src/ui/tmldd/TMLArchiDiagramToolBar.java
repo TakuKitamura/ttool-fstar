@@ -47,12 +47,14 @@
 
 package ui.tmldd;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import myutil.TraceManager;
+import ui.MainGUI;
+import ui.TGUIAction;
+import ui.TToolBar;
 
-import ui.*;
-import myutil.*;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener {
 

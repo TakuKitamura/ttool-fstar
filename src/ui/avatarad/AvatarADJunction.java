@@ -46,10 +46,10 @@
 
 package ui.avatarad;
 
-import java.awt.*;
-import java.awt.geom.*;
-
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 
 public class AvatarADJunction extends AvatarADBasicComponent {

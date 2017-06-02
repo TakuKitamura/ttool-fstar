@@ -51,7 +51,11 @@ package ui.cd;
 //import javax.swing.*;
 
 //import myutil.*;
-import ui.*;
+
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 
 public class TCDOperationBoxNoConnection extends TCDOperationBox {
     

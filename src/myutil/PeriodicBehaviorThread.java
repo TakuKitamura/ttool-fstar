@@ -47,9 +47,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package myutil;
 
 
-import java.io.*;
-
-
 public class PeriodicBehaviorThread extends Thread {
     
 	private PeriodicBehavior pb;

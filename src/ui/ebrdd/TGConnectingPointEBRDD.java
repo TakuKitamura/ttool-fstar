@@ -47,7 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.ebrdd;
 
 //import java.awt.*;
-import ui.*;
+
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 public class TGConnectingPointEBRDD extends  TGConnectingPointWidthHeight{
 

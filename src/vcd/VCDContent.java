@@ -45,10 +45,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package vcd;
 
-import java.util.*;
-import java.text.*;
+import ui.DefaultText;
 
-import ui.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class VCDContent  {
     private String timeScale = "1 ns";

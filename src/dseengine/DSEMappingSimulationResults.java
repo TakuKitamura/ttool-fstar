@@ -46,17 +46,10 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package dseengine;
 
-import java.io.*;
-import java.util.*;
+import myutil.Conversion;
+import tmltranslator.TMLMapping;
 
-import tmltranslator.*;
-
-import myutil.*;
-
-
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import javax.xml.parsers.*;
+import java.util.Vector;
 
 //import uppaaldesc.*;
 

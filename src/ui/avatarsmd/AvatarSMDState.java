@@ -46,15 +46,18 @@
 
 package ui.avatarsmd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogAvatarState;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.Vector;
 
 
 public class AvatarSMDState extends TGCScalableWithInternalComponent implements AllowedBreakpoint, CheckableAccessibility, CheckableLatency, CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant, WithAttributes {

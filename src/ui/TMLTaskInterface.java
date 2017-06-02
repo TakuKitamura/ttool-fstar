@@ -48,7 +48,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui;
 
 
-import ui.tmlad.*;
+import ui.tmlad.TMLActivityDiagramPanel;
 
 public interface TMLTaskInterface  {
     public String getTaskName();

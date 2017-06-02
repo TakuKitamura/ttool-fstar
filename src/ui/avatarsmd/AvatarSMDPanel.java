@@ -47,13 +47,14 @@
 package ui.avatarsmd;
 
 //import java.awt.*;
+
+import ui.*;
+
 import java.util.*;
 
 //import org.w3c.dom.*;
 //import org.xml.sax.*;
 //import javax.xml.parsers.*;
-
-import ui.*;
 
 public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
     

@@ -45,21 +45,24 @@
 
 package ui.avatarinteractivesimulation;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
-
-
-import myutil.*;
-import ui.*;
-
 import avatartranslator.*;
 import avatartranslator.directsimulation.*;
-import ui.avatarbd.*;
+import myutil.*;
+import ui.*;
+import ui.avatarbd.AvatarBDPortConnector;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Vector;
 
 public  class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener, WindowListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
     private static int TRACED_TRANSACTIONS = 1000;

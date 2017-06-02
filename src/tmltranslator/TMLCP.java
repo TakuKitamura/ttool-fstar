@@ -46,8 +46,11 @@
 
 package tmltranslator;
 
-import java.util.*;
 import tmltranslator.tmlcp.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TMLCP extends TMLElement {
 

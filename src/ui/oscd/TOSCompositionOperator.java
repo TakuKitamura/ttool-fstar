@@ -47,11 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui.oscd;
 
-import java.awt.*;
-
-import myutil.*;
-
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
 
 public class TOSCompositionOperator extends TGCWithInternalComponent {
 	public String oldValue;

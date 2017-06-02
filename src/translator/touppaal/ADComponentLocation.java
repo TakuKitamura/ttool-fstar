@@ -45,8 +45,8 @@
 
 package translator.touppaal;
 
-import translator.*;
-import uppaaldesc.*;
+import translator.ADComponent;
+import uppaaldesc.UPPAALLocation;
 
 public class ADComponentLocation {
 	public ADComponent adc;

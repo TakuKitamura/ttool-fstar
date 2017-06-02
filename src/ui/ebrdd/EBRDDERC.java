@@ -46,18 +46,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ebrdd;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
 
-import tmltranslator.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.util.Vector;
 
 public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGComponent {
     /*private int textY1 = 15;

@@ -1,11 +1,11 @@
 package project.alwaystry;
 
-import myutilandroid.GraphicLibAndroid;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import myutilandroid.GraphicLibAndroid;
 
 public class TDiagramTouchManagerAndroid implements OnTouchListener{
 

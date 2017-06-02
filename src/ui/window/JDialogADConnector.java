@@ -47,11 +47,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import javax.swing.*;
-
 import myutil.GraphicLib;
-import ui.*;
+import ui.IconManager;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class JDialogADConnector extends JDialog {//implements ActionListener  {
     

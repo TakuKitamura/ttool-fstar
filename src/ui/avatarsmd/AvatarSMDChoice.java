@@ -47,11 +47,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatarsmd;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class AvatarSMDChoice extends AvatarSMDBasicComponent implements EmbeddedComment, BasicErrorHighlight, PartOfInvariant {
     private int lineLength = 10;

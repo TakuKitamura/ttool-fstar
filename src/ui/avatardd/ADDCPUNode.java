@@ -46,15 +46,16 @@
 
 package ui.avatardd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogADDCPUNode;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Vector;
 
 public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttributes {
     private int textY1 = 15;

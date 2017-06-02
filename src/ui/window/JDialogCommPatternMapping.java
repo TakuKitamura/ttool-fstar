@@ -47,21 +47,29 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import tmltranslator.TMLAttribute;
+import tmltranslator.TMLCP;
+import tmltranslator.TMLType;
+import tmltranslator.modelcompiler.CPMEC;
+import tmltranslator.tmlcp.TMLCPSequenceDiagram;
+import ui.*;
+import ui.tmldd.TMLArchiCPNode;
+import ui.tmldd.TMLArchiNode;
+import ui.tmlsd.TMLSDControllerInstance;
+import ui.tmlsd.TMLSDPanel;
+import ui.tmlsd.TMLSDStorageInstance;
+import ui.tmlsd.TMLSDTransferInstance;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
-import java.util.Collections;
-
-import ui.*;
-import ui.tmldd.*;
-import ui.tmlsd.*;
-import tmltranslator.modelcompiler.*;
-import tmltranslator.tmlcp.*;
-import tmltranslator.*;
-import myutil.*;
 
 public class JDialogCommPatternMapping extends JDialog /* implements ActionListener, ListSelectionListener*/  {
 	

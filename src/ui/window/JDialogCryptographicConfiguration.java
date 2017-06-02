@@ -46,12 +46,12 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.Arrays;
+import ui.IconManager;
 
-import ui.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class JDialogCryptographicConfiguration extends javax.swing.JDialog implements ActionListener  {

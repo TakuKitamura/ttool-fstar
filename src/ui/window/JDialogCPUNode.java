@@ -46,17 +46,18 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.math.*;
-import java.awt.event.*;
-import javax.swing.*;
-import ui.*;
-import java.util.*;
-import tmltranslator.modelcompiler.*;
-import ui.tmldd.*;
-import ui.interactivesimulation.*;
+import myutil.GraphicLib;
+import tmltranslator.modelcompiler.ArchUnitMEC;
+import ui.ColorManager;
+import ui.IconManager;
+import ui.interactivesimulation.SimulationTransaction;
+import ui.tmldd.TMLArchiCPUNode;
 
-import myutil.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.math.BigDecimal;
+import java.util.*;
 
 public class JDialogCPUNode extends javax.swing.JDialog implements ActionListener  {
     //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};

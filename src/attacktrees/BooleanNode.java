@@ -45,10 +45,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package attacktrees;
 
-import java.util.*;
-
-
-public abstract class BooleanNode extends AttackNode{ 
+public abstract class BooleanNode extends AttackNode{
     
     public BooleanNode(String _name, Object _referenceObject) {
 	super(_name, _referenceObject);

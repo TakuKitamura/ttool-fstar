@@ -46,13 +46,15 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
+import ui.IconManager;
+import ui.cd.TCDTClass;
+import ui.cd.TCDTObject;
 
-import ui.*;
-import ui.cd.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 public class JDialogTObjectName extends javax.swing.JDialog implements ActionListener {
         TCDTObject to;

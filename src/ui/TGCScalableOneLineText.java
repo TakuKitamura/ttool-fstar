@@ -46,11 +46,13 @@
 
 package ui;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import javax.swing.*;
+import myutil.Conversion;
+import myutil.GraphicLib;
 
-import myutil.*;
+import javax.swing.*;
+import java.awt.*;
+
+//import java.awt.geom.*;
 
 public class TGCScalableOneLineText extends TGCScalableWithoutInternalComponent {
     protected boolean emptyText;

@@ -47,16 +47,26 @@
 package ui.tree;
 
 //import java.awt.*;
-import java.awt.event.*;
+
+import ui.*;
+import ui.graph.RG;
+
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import java.util.*;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 //import translator.*;
-import ui.*;
-import ui.graph.*;
-import myutil.*;
 
 
 public class JDiagramTree extends javax.swing.JTree implements ActionListener, MouseListener, TreeExpansionListener, TreeSelectionListener, Runnable   {

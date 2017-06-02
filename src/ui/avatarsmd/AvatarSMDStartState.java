@@ -46,11 +46,11 @@
 
 package ui.avatarsmd;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class AvatarSMDStartState extends AvatarSMDBasicComponent implements EmbeddedComment, PartOfInvariant{
     private int lineLength = 5;

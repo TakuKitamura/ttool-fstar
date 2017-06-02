@@ -48,8 +48,6 @@ package avatartranslator;
 
 import java.util.HashMap;
 
-import myutil.Conversion;
-
 /**
  * An AvatarConstantGuard is an {@link AvatarSimpleGuard} that is of the form:
  * {@link AvatarConstant}

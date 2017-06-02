@@ -46,17 +46,20 @@
 
 package ui.window;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-//import javax.swing.event.*;
-import java.util.*;
-
-import ui.*;
-import ui.tmldd.*;
+import myutil.GraphicLib;
+import myutil.TraceManager;
 import tmltranslator.modelcompiler.*;
+import ui.IconManager;
+import ui.tmldd.TMLArchiArtifact;
+import ui.tmldd.TMLArchiDiagramPanel;
 
-import myutil.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
+
+//import javax.swing.event.*;
 
 public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements ActionListener {
 

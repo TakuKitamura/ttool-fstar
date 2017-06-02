@@ -45,9 +45,10 @@
 
 package uppaaldesc;
 
-import java.util.*;
+import myutil.Conversion;
 
-import myutil.*;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 
 public class UPPAALTemplate {

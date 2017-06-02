@@ -47,9 +47,10 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.window;
 
 
-import javax.swing.table.*;
+import tmatrix.RequirementModeling;
+import tmatrix.Requirements;
 
-import tmatrix.*;
+import javax.swing.table.AbstractTableModel;
 
 public class TMatrixTableModel extends AbstractTableModel {
     RequirementModeling rm;

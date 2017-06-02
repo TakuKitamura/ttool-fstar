@@ -45,9 +45,6 @@
 
 package avatartranslator;
 
-import java.util.*;
-
-
 public class AvatarExpireTimer extends AvatarTimerOperator {
 	
     public AvatarExpireTimer(String _name, Object _referenceObject) {

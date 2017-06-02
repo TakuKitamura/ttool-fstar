@@ -46,17 +46,17 @@
 
 package ui.tmldd;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import tmltranslator.HwCPU;
 import ui.*;
-import ui.window.*;
+import ui.window.JDialogHwANode;
 
-import tmltranslator.*;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Vector;
 
 public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent, WithAttributes {
     private int textY1 = 15;

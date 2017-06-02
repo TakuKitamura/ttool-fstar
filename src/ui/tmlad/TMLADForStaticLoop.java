@@ -46,15 +46,12 @@
 
 package ui.tmlad;
 
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-
-import org.w3c.dom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
-import ui.window.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class TMLADForStaticLoop extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private final static String IN_LOOP = "inside loop";

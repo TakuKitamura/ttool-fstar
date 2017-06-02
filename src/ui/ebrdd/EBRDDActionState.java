@@ -46,11 +46,11 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ebrdd;
 
-import java.awt.*;
-import java.awt.geom.*;
-
-import myutil.*;
+import myutil.GraphicLib;
 import ui.*;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class EBRDDActionState extends TGCOneLineText implements PreJavaCode, PostJavaCode, CheckableAccessibility, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;

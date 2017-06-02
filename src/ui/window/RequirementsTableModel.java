@@ -46,14 +46,13 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.window;
 
-import java.util.*;
-import java.awt.*;
-import javax.swing.table.*;
+import ui.TGComponent;
+import ui.avatarrd.AvatarRDRequirement;
+import ui.req.Requirement;
 
-import myutil.*;
-import ui.*;
-import ui.req.*;
-import ui.avatarrd.*;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.util.LinkedList;
 
 public class RequirementsTableModel extends AbstractTableModel {
 	private LinkedList<TGComponent> list;

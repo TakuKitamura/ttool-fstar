@@ -46,12 +46,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.avatarinteractivesimulation;
 
-import java.util.*;
-import javax.swing.table.*;
+import avatartranslator.AvatarAttribute;
+import avatartranslator.directsimulation.AvatarSimulationBlock;
+import avatartranslator.directsimulation.AvatarSpecificationSimulation;
 
-import myutil.*;
-import avatartranslator.*;
-import avatartranslator.directsimulation.*;
+import javax.swing.table.AbstractTableModel;
+import java.util.Vector;
 
 public class VariableTableModel extends AbstractTableModel {
 	private static String ERROR_STRING = "-"; 
