@@ -70,15 +70,13 @@ public class NetworkModel  {
 	features = new boolean[JDialogLoadingNetworkModel.FEATURES.length];
 	features[0] = true;
 	props = new boolean[JDialogLoadingNetworkModel.PROPS.length];
-	props[0] = true;
-	
     }
 
     public void update() {
 	
     }
 
-    public static NetworkModelType stringToNetworkModelType(String type) {
+    /*public static NetworkModelType stringToNetworkModelType(String type) {
 	type = type.toLowerCase();
 	if (type.compareTo("software design") == 0) {
 	    return NetworkModelType.SOFTWARE_DESIGN;
@@ -97,6 +95,6 @@ public class NetworkModel  {
 	}
 
 	return NetworkModelType.SOFTWARE_DESIGN;
-    }
+	}*/
 
 }

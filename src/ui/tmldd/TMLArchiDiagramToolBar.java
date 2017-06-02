@@ -142,15 +142,15 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
             button = this.add(mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT]);
             button.addMouseListener(mgui.mouseHandler);
         }
-		button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
+        button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
-		button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
+        button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
-		button = this.add(mgui.actions[TGUIAction.TMLARCHI_KEY]);
+        button = this.add(mgui.actions[TGUIAction.TMLARCHI_KEY]);
         button.addMouseListener(mgui.mouseHandler);
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
@@ -166,32 +166,32 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
 
         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
         button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
+
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
         button.addMouseListener(mgui.mouseHandler);
 
-	this.addSeparator();
-	if (viewInfos == null) {
-	    TraceManager.addDev("null viewInfos");   
-	}
-	box = new JComboBox(viewInfos);
-	this.add(box);
-	box.addActionListener(this);
+        this.addSeparator();
+        if (viewInfos == null) {
+            TraceManager.addDev("null viewInfos");
+        }
+        box = new JComboBox(viewInfos);
+        this.add(box);
+        box.addActionListener(this);
     }
 
     public void setPanel(TMLArchiDiagramPanel _panel) {
-	panel = _panel;
+        panel = _panel;
     }
 
-    
+
     public void actionPerformed(ActionEvent e) {
-	if (e.getSource() == box) {
-	    if (panel != null) {
-		panel.setCurrentView(box.getSelectedIndex());
-	    }
-	}
+        if (e.getSource() == box) {
+            if (panel != null) {
+                panel.setCurrentView(box.getSelectedIndex());
+            }
+        }
     }
-    
+
 } // Class

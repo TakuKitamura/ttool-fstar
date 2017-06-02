@@ -60,9 +60,9 @@ import myutil.*;
 
 public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable, LoaderFacilityInterface, CallbackLoaderInterface  {
 
-    public final static String [] FEATURES = {"All",  "Requirements", "Attacktrees", "Properties", "Partitioning", "Analysis", "Design", "Prototyping", "Security protocol"};
+    public final static String [] FEATURES = {"all",  "requirements", "attacktrees", "properties", "partitioning", "analysis", "design", "prototyping", "security protocol"};
 
-    public final static String [] PROPS = {"All", "Safety", "Security", "Performance"};
+    public final static String [] PROPS = {"safety", "security", "performance"};
     
     private ArrayList<NetworkModel> listOfModels;
 
@@ -80,7 +80,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     private JTextAreaWriter textAreaWriter;
     protected JButton start;
     protected JButton stop;
-    protected JList<String> featureList;
+    protected JComboBox<String> featureList;
+    protected JCheckBox [] props;
 
     protected JScrollPane jsp;
 
@@ -147,8 +148,18 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 	jsp.setPreferredSize(new Dimension(400, 200));
 
 	JPanel options = new JPanel();
-	featureList = new JList<String>(FEATURES);
+	featureList = new JComboBox<String>(FEATURES);
+	featureList.addActionListener(this);
 	options.add(featureList);
+
+	props = new JCheckBox[PROPS.length];
+	for (int i=0; i<props.length; i++) {
+	    props[i] = new JCheckBox(PROPS[i]);
+	    props[i].addActionListener(this);
+	    props[i].setSelected(true);
+	    options.add(props[i]);
+	}
+	
 	lowPart.add(options, BorderLayout.NORTH);
 	
 
@@ -182,16 +193,24 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         //String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-        if (evt.getSource() == start)  {
-            loadFile();
-        } else if (evt.getSource() == stop) {
+	if (evt.getSource() == stop) {
             cancel();
-        }
+	    return ;
+        } else if (evt.getSource() == featureList) {
+	    featureSelectionMade();
+	    return;
+	}
+
+	for (int i = 0; i<props.length; i++) {
+	    if (evt.getSource() == props[i]) {
+		panel.setProperty(i, props[i].isSelected());
+		return;
+	    }
+	}
     }
 
-
-    public void loadFile() {
-        // Run the retreiver + analyzer
+    public void featureSelectionMade() {
+	panel.setFeatureSelectedIndex(featureList.getSelectedIndex());
     }
 
     public void cancel() {
@@ -229,7 +248,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 		
 		if (inputLine.startsWith("-FEATURES")) {
 		    if (nm != null) {
-			String tmp = inputLine.substring(9, inputLine.length()).trim();
+			String tmp = inputLine.substring(9, inputLine.length()).trim().toLowerCase();
 			for (int i=1; i<FEATURES.length; i++) {
 			    nm.features[i] = tmp.indexOf(FEATURES[i]) != -1;
 			}
@@ -239,8 +258,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
 		if (inputLine.startsWith("-PROPS")) {
 		    if (nm != null) {
-			String tmp = inputLine.substring(6, inputLine.length()).trim();
-			for (int i=1; i<PROPS.length; i++) {
+			String tmp = inputLine.substring(6, inputLine.length()).trim().toLowerCase();
+			for (int i=0; i<PROPS.length; i++) {
 			    nm.props[i] = tmp.indexOf(PROPS[i]) != -1;
 			}
 			//nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
@@ -307,6 +326,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         }
     }
 
+
+    // LoaderFacilityInterface
     public void load(int index) {
 	String fileName = listOfModels.get(index).fileName;
 	jta.append("Loading model: " + fileName);
@@ -320,6 +341,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 	}
     }
 
+    // CallbackLoaderInterface
     public void loadDone() {
 	jta.append("Model transfered, opening it in TTool\n");
 	this.dispose();
@@ -331,7 +353,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 	panel.reactivateSelection();
     }
 
-
+    
+    // JTA manipulation by external objects
     public void appendOut(String s) {
         jta.append(s);
     }
