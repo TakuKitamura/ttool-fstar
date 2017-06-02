@@ -76,20 +76,20 @@ void executeSendSyncTransaction(request *req) {
      if(sync_write(req->syncChannel->mwmr_fifo, &(req->params), req->nbOfParams*sizeof(req->params))!=req->nbOfParams*sizeof(req->params))continue;
      break;
      }*/
-  selectedReq->syncChannel->ok=1;
+  selectedReq->syncChannel->ok_send=1;
   if(req->nbOfParams==0){
      debugMsg("no params");
      if(sync_write(req->syncChannel->mwmr_fifo, &(req->params), 4)!=4){ debugMsg("****syncchannel write echec");//req->executable==0;
-       selectedReq->syncChannel->ok=0;selectedReq->syncChannel->ok2=1;
+       selectedReq->syncChannel->ok_send=0;selectedReq->syncChannel->ok_receive=1;
      }else{ debugMsg("****syncchannel write success");//req->executable==1;
-       selectedReq->syncChannel->ok=0;selectedReq->syncChannel->ok2=1;
+       selectedReq->syncChannel->ok_send=0;selectedReq->syncChannel->ok_receive=1;
 }
   }
      else{
        if(sync_write(req->syncChannel->mwmr_fifo, &(req->params), req->nbOfParams*sizeof(req->params))!=req->nbOfParams*sizeof(req->params)){ debugMsg("****syncchannel write echec");//req->executable==0;
-selectedReq->syncChannel->ok=0;selectedReq->syncChannel->ok2=1;
+selectedReq->syncChannel->ok_send=0;selectedReq->syncChannel->ok_receive=1;
        }else{debugMsg("****syncchannel write success");//req->executable==1;
-	 selectedReq->syncChannel->ok=0;selectedReq->syncChannel->ok2=1;
+	 selectedReq->syncChannel->ok_send=0;selectedReq->syncChannel->ok_receive=1;
 }
      }
   
@@ -136,7 +136,7 @@ void executeReceiveSyncTransaction(request *req) {
   debugInt("syncchannel burst \n", req->nbOfParams*sizeof(req->params));
   debugInt("syncchannel params \n", req->params[0]);
   debugInt("syncchannel paramsize \n", sizeof(req->params));
-  /* while(1){
+  /* while(){
   if(req->nbOfParams==0){ 
     debugMsg("pas de params");
     if(sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params), 4 )!=4) continue
@@ -148,22 +148,24 @@ void executeReceiveSyncTransaction(request *req) {
   break;
   }*/
   //DG 11.05.
- selectedReq->syncChannel->ok=1;
+  // int ko=1;
+  //while(ko){
+ selectedReq->syncChannel->ok_send=1;
  if(req->nbOfParams==0){ 
     debugMsg("pas de params");
     if(sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params), 4 )!=4){ debugMsg("****syncchannel read echec");//req->executable==0;
-      selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2=0;
+      selectedReq->syncChannel->ok_send=1;selectedReq->syncChannel->ok_receive=0;
     } else { debugMsg("****syncchannel read success");//req->executable==1;
-      selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2=0;
+      selectedReq->syncChannel->ok_send=1;selectedReq->syncChannel->ok_receive=0;//ko=0;
 }}
  else{
    if(sync_read(selectedReq->syncChannel->mwmr_fifo, &(selectedReq->params),  selectedReq->nbOfParams*sizeof(selectedReq->params))!= selectedReq->nbOfParams*sizeof(selectedReq->params)){debugMsg("****syncchannel read echec");//req->executable==0;
-     selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2=0;
+     selectedReq->syncChannel->ok_send=1;selectedReq->syncChannel->ok_receive=0;
 }else{ 
      debugMsg("****syncchannel read success");//req->executable==1;
-     selectedReq->syncChannel->ok=1;selectedReq->syncChannel->ok2=0;
+     selectedReq->syncChannel->ok_send=1;selectedReq->syncChannel->ok_receive=0;//ko=0;
 }}
-
+ // }
   debugMsg("after syncchannel read");
   debugInt("req->params \n", req->params);
   traceSynchroRequest(selectedReq, req);
@@ -328,24 +330,32 @@ int executable(setOfRequests *list, int nb) {
     req->executable = 0;
     if (req->delayElapsed) {
       if (req->type == SEND_SYNC_REQUEST) {
-	//DG 8.2. ici le probleme! wait queue empty pour B0 :(
-	debugMsg("Send sync");
-	debugInt("req->syncChannel->inWaitQueue ",req->syncChannel->inWaitQueue);
-	debugInt("req->syncChannel address", &(req->syncChannel));
 
-	//if ((req->syncChannel->inWaitQueue != NULL)&&(req->syncChannel->ok==1)) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
+	debugMsg("Send sync");
+	debugInt("req->syncChannel->inWaitQueue ",req->syncChannel->inWaitQueue);	debugInt("req->syncChannel->outWaitQueue ",req->syncChannel->outWaitQueue);
+	debugInt("req->syncChannel address ", &(req->syncChannel->mwmr_fifo));
+debug2Msg("req->syncChannel outname ", (req->syncChannel->outname));
+debug2Msg("req->syncChannel inname ", (req->syncChannel->inname));
+	debugInt("req->syncChannel ok ", (req->syncChannel->ok_send));
+
+	//if ((req->syncChannel->inWaitQueue != NULL)&&(req->syncChannel->ok_send==1)) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
         //if (req->syncChannel->outWaitQueue != NULL) {//DG 8.2.??
-	if ((req->syncChannel->inWaitQueue != NULL)){
-	  debugMsg("Send sync executable");
-	  debugInt("ok=",req->syncChannel->ok);
-	  //req->syncChannel->ok==0;
-	  req->syncChannel->ok2==0;
+	//if ((req->syncChannel->inWaitQueue != NULL)){
+	if ((req->syncChannel->inWaitQueue != NULL)&&req->syncChannel->ok_send==1){//DG 1.6.
+	  debug2Msg(list->owner,"Send sync executable");
+	  debugInt("ok_send=",req->syncChannel->ok_send);
+	  req->syncChannel->ok_send=0;
+	  req->syncChannel->ok_receive=1;
 	  req->executable = 1;
+	  req->syncChannel->outWaitQueue = addToRequestQueue(req->syncChannel->outWaitQueue, req);	//DG 01.06. inWaitQueue for corresponding receive even if no made pending
 	  cpt ++;
 	  }  else {
-
-	  debugMsg("Send sync not executable"); 
-	  debugInt("not exe ok=",req->syncChannel->ok);
+	  // req->syncChannel->ok_receive=1; //DG 1.6.??
+	  debug2Msg(list->owner,"Send sync not executable"); 
+	  //req->syncChannel->ok_send=1;
+	  req->syncChannel->ok_receive=1;
+	  debugInt("ok_send=",req->syncChannel->ok_send);
+	  debugInt("ok_receive=",req->syncChannel->ok_receive);
 	  }
 	  ////index ++;
       }
@@ -353,21 +363,29 @@ int executable(setOfRequests *list, int nb) {
       if (req->type == RECEIVE_SYNC_REQUEST) {
 	debugMsg("receive sync");
 	debugInt("req->syncChannel->outWaitQueue ",req->syncChannel->outWaitQueue);
-        debugInt("req->syncChannel address", &(req->syncChannel));
+	debugInt("req->syncChannel->inWaitQueue ",req->syncChannel->inWaitQueue);
+        debugInt("req->syncChannel address", &(req->syncChannel->mwmr_fifo));
+debug2Msg("req->syncChannel outname ", (req->syncChannel->outname));
+debug2Msg("req->syncChannel inname ", (req->syncChannel->inname));
+	debugInt("req->syncChannel ok_receive ", (req->syncChannel->ok_send));
 	//if ((req->syncChannel->outWaitQueue != NULL)&&(req->syncChannel->inWaitQueue != NULL)) {
-	//	if ((req->syncChannel->outWaitQueue != NULL)&&(req->syncChannel->ok==1)) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
+	//	if ((req->syncChannel->outWaitQueue != NULL)&&(req->syncChannel->ok_send==1)) {// DG 8.2. non c'est correct: il faut un rendez-vous synchrone entre inqueue et outqueue
         //if (req->syncChannel->inWaitQueue != NULL) {//DG 8.2.??
-	//if ((req->syncChannel->ok2==1)&&(req->syncChannel->inWaitQueue != NULL)) {
-	//if (req->syncChannel->ok2==1){
-	if ((req->syncChannel->outWaitQueue != NULL)&&req->syncChannel->ok2==1){
+	//if ((req->syncChannel->ok_receive==1)&&(req->syncChannel->inWaitQueue != NULL)) {
+	//if (req->syncChannel->ok_receive==1){
+	//if ((req->syncChannel->outWaitQueue != NULL)&&req->syncChannel->ok_receive==1){
+	if ((req->syncChannel->outWaitQueue != NULL)&&req->syncChannel->ok_receive==1){//DG 1.6.
 	  req->executable = 1;
-	  debugMsg("Receive sync executable");
-	  //req->syncChannel->ok2==0;
-	  req->syncChannel->ok=0;
+	  // req->syncChannel->inWaitQueue = addToRequestQueue(req->syncChannel->inWaitQueue, req);//DG 1.6.
+	  debug2Msg(list->owner,"Receive sync executable");
+	  req->syncChannel->ok_receive=0;
+	  req->syncChannel->ok_send=1;
 	  cpt ++;
 	}
  else {
-   debugMsg("Receive sync not executable");
+   debug2Msg(list->owner,"Receive sync not executable");  
+   //req->syncChannel->ok_receive=1;
+   req->syncChannel->ok_send=1;
 	  }
 	//index ++;
       }
@@ -442,16 +460,21 @@ void private__makeRequestPending(setOfRequests *list) {
   while(req != NULL) {
     if ((req->delayElapsed) && (!(req->alreadyPending))) {
       if (req->type == SEND_SYNC_REQUEST) {
-	debug2Msg(list->owner,"Adding pending sync request in outWaitqueue");
-	req->syncChannel->outWaitQueue = addToRequestQueue(req->syncChannel->outWaitQueue, req);
-
+	debug2Msg(list->owner,"Adding pending send sync request in outWaitqueue");
+	//debug2Msg(list->owner,"Adding pending send sync request in inWaitqueue");
+req->syncChannel->outWaitQueue = addToRequestQueue(req->syncChannel->outWaitQueue, req);
+//req->syncChannel->inWaitQueue = addToRequestQueue(req->syncChannel->inWaitQueue, req);	//DG 01.06. inWaitQueue
 	req->alreadyPending = 1;
       }
 
       if (req->type ==  RECEIVE_SYNC_REQUEST) {
-	debugMsg("Adding pending request in inWaitqueue");
+	debug2Msg(list->owner,"Adding pending receive sync request in inWaitqueue");	
+	
+	//debug2Msg(list->owner,"Adding pending receive sync request in outWaitqueue");
 	req->alreadyPending = 1;
 	req->syncChannel->inWaitQueue = addToRequestQueue(req->syncChannel->inWaitQueue, req);
+	//req->syncChannel->outWaitQueue = addToRequestQueue(req->syncChannel->outWaitQueue, req);
+	//DG 01.06. outWaitQueue
       }
 
       if (req->type == SEND_ASYNC_REQUEST) {
@@ -536,7 +559,7 @@ request *private__executeRequests0(setOfRequests *list, int nb) {
   // Compute which requests can be executed
  
   howMany = executable(list, nb);
- 
+  debug2Msg(list->owner, " counting executable requests");
   debugInt("Counting requests=", howMany);
  
   if (howMany == 0) {
@@ -587,6 +610,7 @@ request *private__executeRequests(setOfRequests *list) {
   // Is a request already selected?
 
   if (list->selectedRequest != NULL) {
+
     return list->selectedRequest;
   }
 

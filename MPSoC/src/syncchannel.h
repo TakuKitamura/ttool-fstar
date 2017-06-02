@@ -13,8 +13,8 @@ struct syncchannel {
   struct request* outWaitQueue; 
   bool isBroadcast;
   struct mwmr_s *mwmr_fifo;
-  int ok; 
-  int ok2;
+  int ok_send; 
+  int ok_receive;
 };
 
 typedef struct syncchannel syncchannel;
