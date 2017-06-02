@@ -212,9 +212,10 @@ public class TasksAndMainGenerator {
         mainFile.appendToMainCode("/* Synchronous channels */" + CR);
 
         for(AvatarRelation ar: avspec.getRelations()) {
-	    
+	     k=0;
 	if (!ar.isAsynchronous()) {
-k= ar.nbOfSignals()-1;     
+	    //k=0;
+	    //k= ar.nbOfSignals()-1;    //DG 2.6. 
 	   		    
 	    for(i=0; i<ar.nbOfSignals() ; i++) {
 		ar.setId(i);
@@ -268,8 +269,8 @@ if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);
 		
 	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);
-				
-	k--;//DG 24.05.	    
+	k++;			
+	//k--;//DG 24.05.//DG 2.6.	    
 	    }
 	}
 	}
@@ -337,7 +338,8 @@ if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);
 		
 	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);
-	k--;	    
+	//k--;	    
+	k++;//DG 2.6.
 		    }
 		}
 	    }
