@@ -311,13 +311,13 @@ class ExecutionThread extends Thread {
                     return;
                 }
 
-                TraceManager.addDev("Going to start command " + cmd + "..." );
+                // TraceManager.addDev("Going to start command " + cmd + "..." );
                 final PrintStream out = new PrintStream( s.getOutputStream(), true );
 
                 proc = Runtime.getRuntime().exec(cmd);
 
                 if ( parentExecThread != null ) {
-                    TraceManager.addDev( "Giving my pipe to the other..." );
+                    // TraceManager.addDev( "Giving my pipe to the other..." );
                     parentExecThread.setMyPipe( proc.getOutputStream() );
                 }
 
@@ -326,7 +326,7 @@ class ExecutionThread extends Thread {
 
                 //TraceManager.addDev("Reading the output stream of the process " + cmd);
                 while ( go && ( str = proc_in.readLine() ) != null ) {
-                    TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
                     respond( out, ResponseCode.PROCESS_OUTPUT, str );
                 }
 

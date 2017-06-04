@@ -176,6 +176,11 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	public void setMyScrollPanel(JScrollPane _jsp) {
 		jsp = _jsp;
 	}
+
+        public void resized() {
+            this.spaceBetweenLifeLinesComputed = false;
+            this.repaint();
+        }
 	
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
