@@ -210,9 +210,9 @@ public class TasksAndMainGenerator {
         mainFile.appendToHCode("/* Synchronous channels */" + CR);
         mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
         mainFile.appendToMainCode("/* Synchronous channels */" + CR);
-
+ k=0;
         for(AvatarRelation ar: avspec.getRelations()) {
-	     k=0;
+	    // k=0; DG 6.6.
 	if (!ar.isAsynchronous()) {
 	    //k=0;
 	    //k= ar.nbOfSignals()-1;    //DG 2.6. 
