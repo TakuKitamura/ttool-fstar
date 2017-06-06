@@ -60,10 +60,10 @@ import myutil.*;
 
 public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable, LoaderFacilityInterface, CallbackLoaderInterface  {
 
-    public final static String [] FEATURES = {"all",  "diplodocus", "avatar", "sysml-sec", "assumptions", "requirements", "attacktrees", "properties", "partitioning", "analysis", "design", "prototyping", "security protocol"};
+    public final static String [] FEATURES = {"all",  "diplodocus", "avatar", "sysml-sec", "assumptions", "requirements", "attacktrees", "properties", "partitioning", "analysis", "design", "prototyping", "securityprotocol"};
 
     public final static String [] PROPS = {"safety", "security", "performance"};
-    
+
     private ArrayList<NetworkModel> listOfModels;
 
     protected Frame f;
@@ -131,13 +131,13 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        
 
-	JPanel lowPart = new JPanel(new BorderLayout());
+
+        JPanel lowPart = new JPanel(new BorderLayout());
 
         jta = new ScrolledJTextArea();
         jta.setEditable(false);
-	jta.setLineWrap(true);
+        jta.setLineWrap(true);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
         jta.append("Connecting to " + url + ".\n Please wait ...\n\n");
@@ -146,23 +146,27 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         textAreaWriter = new JTextAreaWriter( jta );
 
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-	jsp.setPreferredSize(new Dimension(400, 200));
+        jsp.setPreferredSize(new Dimension(400, 200));
 
-	JPanel options = new JPanel();
-	featureList = new JComboBox<String>(FEATURES);
-	featureList.addActionListener(this);
-	options.add(featureList);
+        JPanel options = new JPanel();
 
-	props = new JCheckBox[PROPS.length];
-	for (int i=0; i<props.length; i++) {
-	    props[i] = new JCheckBox(PROPS[i]);
-	    props[i].addActionListener(this);
-	    props[i].setSelected(true);
-	    options.add(props[i]);
-	}
+	JLabel infoModels = new JLabel("Not loaded");
+	options.add(infoModels);
 	
-	lowPart.add(options, BorderLayout.NORTH);
-	
+        featureList = new JComboBox<String>(FEATURES);
+        featureList.addActionListener(this);
+        options.add(featureList);
+
+        props = new JCheckBox[PROPS.length];
+        for (int i=0; i<props.length; i++) {
+            props[i] = new JCheckBox(PROPS[i]);
+            props[i].addActionListener(this);
+            props[i].setSelected(true);
+            options.add(props[i]);
+        }
+
+        lowPart.add(options, BorderLayout.NORTH);
+
 
         lowPart.add(jsp, BorderLayout.CENTER);
 
@@ -181,11 +185,11 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
         lowPart.add(jp2, BorderLayout.SOUTH);
 
-	c.add(lowPart, BorderLayout.SOUTH);
+        c.add(lowPart, BorderLayout.SOUTH);
 
-	panel = new NetworkModelPanel(this, listOfModels, this, jta);
+        panel = new NetworkModelPanel(this, listOfModels, this, jta, infoModels);
         jsp = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	panel.setJSP(jsp);
+        panel.setJSP(jsp);
 
         c.add(jsp, BorderLayout.CENTER);
     }
@@ -194,24 +198,24 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         //String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-	if (evt.getSource() == stop) {
+        if (evt.getSource() == stop) {
             cancel();
-	    return ;
+            return ;
         } else if (evt.getSource() == featureList) {
-	    featureSelectionMade();
-	    return;
-	}
+            featureSelectionMade();
+            return;
+        }
 
-	for (int i = 0; i<props.length; i++) {
-	    if (evt.getSource() == props[i]) {
-		panel.setProperty(i, props[i].isSelected());
-		return;
-	    }
-	}
+        for (int i = 0; i<props.length; i++) {
+            if (evt.getSource() == props[i]) {
+                panel.setProperty(i, props[i].isSelected());
+                return;
+            }
+        }
     }
 
     public void featureSelectionMade() {
-	panel.setFeatureSelectedIndex(featureList.getSelectedIndex());
+        panel.setFeatureSelectedIndex(featureList.getSelectedIndex());
     }
 
     public void cancel() {
@@ -223,84 +227,84 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         // Loading main file describing models, giving information on this, and filling the array of models
         // Accsing the main file
         try {
-	    /*HttpURLConnection connection;
-	    TraceManager.addDev("URL: going to create it to: " + url);
-            URL mainFile = new URL(url);
-	    TraceManager.addDev("URL creation");
-	    connection = (HttpURLConnection)(mainFile.openConnection());
-	    TraceManager.addDev("Connection setup 0");
-	    String redirect = connection.getHeaderField("Location");
-	    if (redirect != null){
-		TraceManager.addDev("Redirection found");
-		connection = (HttpURLConnection)(new URL(redirect).openConnection());
-	    }
-	    //connection.setRequestMethod("GET");
-	    //connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
-	    TraceManager.addDev("Connection setup 1");*/
-	    BufferedReader in = URLManager.getBufferedReader(url);
+            /*HttpURLConnection connection;
+              TraceManager.addDev("URL: going to create it to: " + url);
+              URL mainFile = new URL(url);
+              TraceManager.addDev("URL creation");
+              connection = (HttpURLConnection)(mainFile.openConnection());
+              TraceManager.addDev("Connection setup 0");
+              String redirect = connection.getHeaderField("Location");
+              if (redirect != null){
+              TraceManager.addDev("Redirection found");
+              connection = (HttpURLConnection)(new URL(redirect).openConnection());
+              }
+              //connection.setRequestMethod("GET");
+              //connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
+              TraceManager.addDev("Connection setup 1");*/
+            BufferedReader in = URLManager.getBufferedReader(url);
             jta.append("Connection established...\n");
             String inputLine;
-	    NetworkModel nm = null;
+            NetworkModel nm = null;
             while ((inputLine = in.readLine()) != null) {
-		if (inputLine.startsWith("#FILE")) {
-		    nm = new NetworkModel(inputLine.substring(5, inputLine.length()).trim());
-		    listOfModels.add(nm);
-		}
-		
-		if (inputLine.startsWith("-FEATURES")) {
-		    if (nm != null) {
-			String tmp = inputLine.substring(9, inputLine.length()).trim().toLowerCase();
-			for (int i=1; i<FEATURES.length; i++) {
-			    nm.features[i] = tmp.indexOf(FEATURES[i]) != -1;
-			}
-			//nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
-		    }
-		}
+                if (inputLine.startsWith("#FILE")) {
+                    nm = new NetworkModel(inputLine.substring(5, inputLine.length()).trim());
+                    listOfModels.add(nm);
+                }
 
-		if (inputLine.startsWith("-PROPS")) {
-		    if (nm != null) {
-			String tmp = inputLine.substring(6, inputLine.length()).trim().toLowerCase();
-			for (int i=0; i<PROPS.length; i++) {
-			    nm.props[i] = tmp.indexOf(PROPS[i]) != -1;
-			}
-			//nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
-		    }
-		}
+                if (inputLine.startsWith("-FEATURES")) {
+                    if (nm != null) {
+                        String tmp = inputLine.substring(9, inputLine.length()).trim().toLowerCase();
+                        for (int i=1; i<FEATURES.length; i++) {
+                            nm.features[i] = tmp.indexOf(FEATURES[i]) != -1;
+                        }
+                        //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
+                    }
+                }
 
-		if (inputLine.startsWith("-AUTHOR")) {
-		    if (nm != null) {
-			nm.author = inputLine.substring(7, inputLine.length()).trim();
-		    }
-		}
-	    
+                if (inputLine.startsWith("-PROPS")) {
+                    if (nm != null) {
+                        String tmp = inputLine.substring(6, inputLine.length()).trim().toLowerCase();
+                        for (int i=0; i<PROPS.length; i++) {
+                            nm.props[i] = tmp.indexOf(PROPS[i]) != -1;
+                        }
+                        //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
+                    }
+                }
 
-		if (inputLine.startsWith("-DESCRIPTION")) {
-		    if (nm != null) {
-			nm.description = inputLine.substring(12, inputLine.length()).trim();
-		    }
-		}
+                if (inputLine.startsWith("-AUTHOR")) {
+                    if (nm != null) {
+                        nm.author = inputLine.substring(7, inputLine.length()).trim();
+                    }
+                }
 
-		if (inputLine.startsWith("-IMG")) {
-		    if (nm != null) {
-			nm.image = inputLine.substring(4, inputLine.length()).trim();
-			TraceManager.addDev("Dealing with image:" + nm.image);
-			nm.bi = URLManager.getBufferedImageFromURL(URLManager.getBaseURL(url) + nm.image);
-		    }
-		}
-		
+
+                if (inputLine.startsWith("-DESCRIPTION")) {
+                    if (nm != null) {
+                        nm.description = inputLine.substring(12, inputLine.length()).trim();
+                    }
+                }
+
+                if (inputLine.startsWith("-IMG")) {
+                    if (nm != null) {
+                        nm.image = inputLine.substring(4, inputLine.length()).trim();
+                        //TraceManager.addDev("Dealing with image:" + nm.image);
+                        //nm.bi = URLManager.getBufferedImageFromURL(URLManager.getBaseURL(url) + nm.image);
+                    }
+                }
+
                 //System.out.println(inputLine);
-		
-	    }
-		jta.append("\n" + listOfModels.size() + " remote models found.\nSelect a model to download it locally and open it.\n\n");
-	    mode = LISTED;
-	    panel.preparePanel();
-	    panel.repaint();
+
+            }
+            jta.append("\n" + listOfModels.size() + " remote models found.\nSelect a model to download it locally and open it.\n\n");
+            mode = LISTED;
+            panel.preparePanel(url);
+            panel.repaint();
             in.close();
 
-	    // Wait 5seconds before refreshing panel
-	    Thread.sleep(5000);
-	    panel.repaint();
-	    
+            // Wait 5seconds before refreshing panel
+            Thread.sleep(5000);
+            panel.repaint();
+
         } catch (Exception e) {
             jta.append("Error: " + e.getMessage() + " when retreiving file " + url );
         }
@@ -336,31 +340,31 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
     // LoaderFacilityInterface
     public void load(int index) {
-	String fileName = listOfModels.get(index).fileName;
-	jta.append("Loading model: " + fileName);
-	String urlToLoad = URLManager.getBaseURL(url) + fileName;
-	URLManager urlm = new URLManager();
-	filePath = ConfigurationTTool.FILEPath + "/" + fileName;
-	boolean ok = urlm.downloadFile(ConfigurationTTool.FILEPath + "/" + fileName, urlToLoad,this);
-	if (!ok) {
-	    jta.append("Model transfer failed\nPlease, select another model, or retry\n");
-	    panel.reactivateSelection();
-	}
+        String fileName = listOfModels.get(index).fileName;
+        jta.append("Loading model: " + fileName);
+        String urlToLoad = URLManager.getBaseURL(url) + fileName;
+        URLManager urlm = new URLManager();
+        filePath = ConfigurationTTool.FILEPath + "/" + fileName;
+        boolean ok = urlm.downloadFile(ConfigurationTTool.FILEPath + "/" + fileName, urlToLoad,this);
+        if (!ok) {
+            jta.append("Model transfer failed\nPlease, select another model, or retry\n");
+            panel.reactivateSelection();
+        }
     }
 
     // CallbackLoaderInterface
     public void loadDone() {
-	jta.append("Model transfered, opening it in TTool\n");
-	this.dispose();
-	mgui.openProjectFromFile(new File(filePath));
+        jta.append("Model transfered, opening it in TTool\n");
+        this.dispose();
+        mgui.openProjectFromFile(new File(filePath));
     }
 
     public void loadFailed() {
-	jta.append("Model transfer failed\nPlease, select another model, or retry\n");
-	panel.reactivateSelection();
+        jta.append("Model transfer failed\nPlease, select another model, or retry\n");
+        panel.reactivateSelection();
     }
 
-    
+
     // JTA manipulation by external objects
     public void appendOut(String s) {
         jta.append(s);

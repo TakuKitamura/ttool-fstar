@@ -59,7 +59,7 @@ import ui.*;
 
 
 
-public class NetworkModelPanel extends JPanel implements MouseListener, MouseMotionListener {
+public class NetworkModelPanel extends JPanel implements Runnable, MouseListener, MouseMotionListener {
 
     private static int ImgSizeX = 220;
     private static int ImgSizeY = 120;
@@ -82,17 +82,22 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
 
     private JTextArea jta;
     private JScrollPane jsp;
+    private JLabel infoModels;
+    private int nbOfModels = -1;
 
     private int featureSelectedIndex = 0;
     private boolean props[];
-    
-	
 
-    public NetworkModelPanel(LoaderFacilityInterface _loader, ArrayList<NetworkModel> _listOfModels, ActionListener _listener, JTextArea _jta) {
+    private String url;
+
+
+
+    public NetworkModelPanel(LoaderFacilityInterface _loader, ArrayList<NetworkModel> _listOfModels, ActionListener _listener, JTextArea _jta, JLabel _infoModels) {
         loader = _loader;
         listOfModels = _listOfModels;
         listener = _listener;
         jta = _jta;
+	infoModels = _infoModels;
 
         //Dimension pSize = new Dimension(500, 400);
         Dimension mSize = new Dimension(400, 300);
@@ -102,13 +107,13 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
         setBackground(new java.awt.Color(250, 250, 250));
         setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
-	// properties
-	props = new boolean[JDialogLoadingNetworkModel.PROPS.length];
-	for (int i=0; i<props.length; i++) {
-	    props[i] = true;
-	}
+        // properties
+        props = new boolean[JDialogLoadingNetworkModel.PROPS.length];
+        for (int i=0; i<props.length; i++) {
+            props[i] = true;
+        }
 
-	// Mouse management
+        // Mouse management
         addMouseMotionListener(this);
         addMouseListener(this);
     }
@@ -120,20 +125,17 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
 
     public void setFeatureSelectedIndex(int _index) {
         featureSelectedIndex = _index;
-	indexOfSelected = -1;
+        indexOfSelected = -1;
         repaint();
     }
 
     public void setProperty(int _index, boolean _mode) {
-	props[_index] = _mode;
-	indexOfSelected = -1;
-	repaint();
+        props[_index] = _mode;
+        indexOfSelected = -1;
+        repaint();
     }
 
-
-    public void preparePanel() {
-        //int cptColumn = 0;
-        //int cptRow = 0;
+    public void run() {
         for(NetworkModel button: listOfModels) {
             //Dimension d = new Dimension(buttonSizeX, buttonSizeY);
             //button.setPreferredSize(d);
@@ -145,39 +147,41 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
               button.setToolTipText(button.description);
               }*/
 
-            if (button.bi != null) {
-                TraceManager.addDev("Adding image");
+            if (button.image != null) {
+                //TraceManager.addDev("Adding image");
+                button.bi = URLManager.getBufferedImageFromURL(URLManager.getBaseURL(url) + button.image);
+                if (button.bi != null) {
+                    /*BufferedImage newImage = new BufferedImage(ImgSizeX, ImgSizeY, button.bi.getType());
+                      Graphics g = newImage.createGraphics();
+                      g.drawImage(button.bi, 0, 0, ImgSizeX, ImgSizeY, null);
+                      g.dispose();*/
+                    button.scaledImg = ImageManager.getScaledImage(button.bi, ImgSizeX, ImgSizeY);
+                    repaint();
+                }
 
-                /*BufferedImage newImage = new BufferedImage(ImgSizeX, ImgSizeY, button.bi.getType());
-                  Graphics g = newImage.createGraphics();
-                  g.drawImage(button.bi, 0, 0, ImgSizeX, ImgSizeY, null);
-                  g.dispose();*/
-                button.scaledImg = ImageManager.getScaledImage(button.bi, ImgSizeX, ImgSizeY);
             }
-
-            //button.setBorder(BorderFactory.createEmptyBorder());
-            //button.setContentAreaFilled(false);
-            //add(button);
-            /*cptColumn ++;
-              if (cptColumn == nbOfButtonsPerColumn) {
-              cptRow ++;
-              cptColumn = 0;
-              }*/
         }
     }
 
 
-    private boolean hasAtLeastOneSelectedProperty(NetworkModel _nm) {
-	for (int i=0; i<props.length; i++) {
-	    if (props[i]) {
-		if (_nm.props[i]) {
-		    return true;
-		}
-	    }
-	}
-	return false;
+    public void preparePanel(String _url) {
+	url = _url;
+        Thread t = new Thread(this);
+        t.start();
     }
-    
+
+
+    private boolean hasAtLeastOneSelectedProperty(NetworkModel _nm) {
+        for (int i=0; i<props.length; i++) {
+            if (props[i]) {
+                if (_nm.props[i]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public void paintComponent(Graphics g) {
@@ -186,6 +190,8 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
         int cptRow = 0;
 
         int index = 0;
+	int modelsDrawn = 0;
+	
         for(NetworkModel button: listOfModels) {
             if ((button.features[featureSelectedIndex]) && hasAtLeastOneSelectedProperty(button)){
                 Color c = g.getColor();
@@ -199,6 +205,7 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
                     g.setColor(c);
                     GraphicLib.centerString(g, "No picture", tmpX, tmpY + buttonSizeY/2, buttonSizeX);
                 }
+		modelsDrawn ++;
 
                 GraphicLib.centerString(g, button.fileName, tmpX, tmpY + buttonSizeY + 15, buttonSizeX);
 
@@ -230,11 +237,11 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
                     g.setColor(c);
                 }
             } else {
-		button.x = -1;
+                button.x = -1;
                 button.y = -1;
                 button.width = -1;
                 button.height = -1;
-	    }
+            }
 
             index ++;
         }
@@ -245,12 +252,17 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
 
         if (!((currentPSize.getWidth() == pSize.getWidth()) && (currentPSize.getHeight() == pSize.getHeight()))) {
             if (jsp != null) {
-                TraceManager.addDev("repainting jsp");
+                //TraceManager.addDev("repainting jsp");
                 jsp.setViewportView(this);
                 //jsp.revalidate();
                 //jsp.repaint();
             }
         }
+
+	if ((modelsDrawn != nbOfModels) && (infoModels != null)) {
+	    nbOfModels = modelsDrawn;
+	    infoModels.setText(nbOfModels + " model(s)");
+	}
 
 
         //g.drawString(listOfModels.size() + " model(s) available", 20, 20);
@@ -268,13 +280,13 @@ public class NetworkModelPanel extends JPanel implements MouseListener, MouseMot
             boolean found = false;;
             int index = 0;
             for(NetworkModel button: listOfModels) {
-		if ((button.features[featureSelectedIndex]) && hasAtLeastOneSelectedProperty(button)) {
-		    if ((e.getX() > button.x) && (e.getX() < button.x + button.width) &&  (e.getY() > button.y) && (e.getY() < button.y + button.height)) {
-			indexOfSelected = index;
-			found = true;
-			break;
-		    }
-		}
+                if ((button.features[featureSelectedIndex]) && hasAtLeastOneSelectedProperty(button)) {
+                    if ((e.getX() > button.x) && (e.getX() < button.x + button.width) &&  (e.getY() > button.y) && (e.getY() < button.y + button.height)) {
+                        indexOfSelected = index;
+                        found = true;
+                        break;
+                    }
+                }
                 index ++;
             }
             if (!found) {
