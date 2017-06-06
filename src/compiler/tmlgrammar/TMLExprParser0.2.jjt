@@ -9,6 +9,8 @@ options {
 
 PARSER_BEGIN(TMLExprParser)
 
+package compiler.tmlgrammar;
+
 public class TMLExprParser {
   private int x;
 

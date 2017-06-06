@@ -33,7 +33,8 @@ options {
 
 PARSER_BEGIN(CPparser) /* The parser class */
 
-//package compiler.tmlCPparser;
+package compiler.tmlCPparser;
+
 import tmltranslator.*;
 import tmltranslator.tmlcp.*;
 import java.util.*;

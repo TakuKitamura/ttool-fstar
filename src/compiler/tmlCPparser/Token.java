@@ -4,6 +4,8 @@
  * Describes the input token stream.
  */
 
+package compiler.tmlCPparser;
+
 public class Token implements java.io.Serializable {
 
   /**
