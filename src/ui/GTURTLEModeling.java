@@ -1990,7 +1990,7 @@ public class GTURTLEModeling {
 
 			rshc.setCmd(ConfigurationTTool.ProVerifVerifierPath + " -in pitype pvspec");
 			rshc.sendExecuteCommandRequest();
-			String data  = rshc.getDataFromProcess();
+			Reader data  = rshc.getDataReaderFromProcess();
 
 			ProVerifOutputAnalyzer pvoa = getProVerifOutputAnalyzer ();
 			pvoa.analyzeOutput(data, true);

@@ -48,10 +48,12 @@ package proverifspec;
 import avatartranslator.*;
 import avatartranslator.toproverif.AVATAR2ProVerif;
 
+import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -80,8 +82,10 @@ public class ProVerifOutputAnalyzer {
     private final static String untypedAuthSplit = "==> evinj:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
     private final static String untypedWeakAuthSplit = "==> ev:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
 
-    private HashMap<AvatarPragma, ProVerifQueryResult> results;
+    private ConcurrentHashMap<AvatarPragma, ProVerifQueryResult> results;
     private LinkedList<String> errors;
+
+    private LinkedList<ProVerifOutputListener> listeners;
 
     private AVATAR2ProVerif avatar2proverif;
 
@@ -89,10 +93,27 @@ public class ProVerifOutputAnalyzer {
         this.avatar2proverif = avatar2proverif;
         this.errors = null;
         this.results = null;
+        this.listeners = new LinkedList<>();
     }
 
-    public void analyzeOutput(String _s, boolean isTyped) {
-        BufferedReader reader = new BufferedReader(new StringReader(_s));
+    public void addListener(ProVerifOutputListener listener)
+    {
+        this.listeners.add(listener);
+    }
+
+    public void removeListener(ProVerifOutputListener listener)
+    {
+        this.listeners.remove(listener);
+    }
+
+    private void notifyListeners()
+    {
+        for (ProVerifOutputListener listener: this.listeners)
+            listener.proVerifOutputChanged();
+    }
+
+    public void analyzeOutput(Reader reader, boolean isTyped) {
+        BufferedReader bReader = new BufferedReader(reader);
         List<AvatarPragma> pragmas = this.avatar2proverif.getAvatarSpecification().getPragmas();
         String previous = null;
         String str;
@@ -101,7 +122,7 @@ public class ProVerifOutputAnalyzer {
         ProVerifResultTrace resultTrace = new ProVerifResultTrace(proverifProcess);
         boolean isInTrace = false;
 
-        this.results = new HashMap<AvatarPragma, ProVerifQueryResult> ();
+        this.results = new ConcurrentHashMap<AvatarPragma, ProVerifQueryResult> ();
         this.errors = new LinkedList<String>();
 
         Pattern procPattern = Pattern.compile(" *\\{\\d+\\}(.*)");
@@ -109,7 +130,7 @@ public class ProVerifOutputAnalyzer {
         try {
 
             // Loop through every line in the output
-            while ((str = reader.readLine()) != null)
+            while ((str = bReader.readLine()) != null)
             {
                 if (str.isEmpty())
                     continue;
@@ -194,6 +215,7 @@ public class ProVerifOutputAnalyzer {
                         if (reachabilityPragma != null)
                         {
                             this.results.put(reachabilityPragma, result);
+                            this.notifyListeners();
                         }
                     }
 
@@ -226,6 +248,7 @@ public class ProVerifOutputAnalyzer {
                                     if (trueName != null && trueName.equals(attributeName))
                                     {
                                         this.results.put(pragma, result);
+                                        this.notifyListeners();
                                     }
                                 }
                             }
@@ -306,6 +329,7 @@ public class ProVerifOutputAnalyzer {
                                             && pragmaAuth.getAttrB().getAttribute() == attribute1)
                                     {
                                         this.results.put(pragma, result);
+                                        this.notifyListeners();
                                         break;
                                     }
                                 }
@@ -320,6 +344,7 @@ public class ProVerifOutputAnalyzer {
                         if (previousAuthPragma != null)
                         {
                             previousAuthPragma.setWeakSatisfied(true);
+                            this.notifyListeners();
                         }
                         previousAuthPragma = null;
                     }
@@ -331,6 +356,7 @@ public class ProVerifOutputAnalyzer {
                         if (previousAuthPragma != null)
                         {
                             previousAuthPragma.setWeakSatisfied(false);
+                            this.notifyListeners();
                         }
                         previousAuthPragma = null;
                     }
@@ -341,7 +367,9 @@ public class ProVerifOutputAnalyzer {
                 // Found an error
                 else if (str.contains("Error:"))
                 {
-                    this.errors.add(str + ": " + previous);
+                    synchronized(errors) {
+                        this.errors.add(str + ": " + previous);
+                    }
                 }
 
                 previous = str;
@@ -398,7 +426,7 @@ public class ProVerifOutputAnalyzer {
         return state;
     }
 
-    public HashMap<AvatarPragma, ProVerifQueryResult> getResults()
+    public Map<AvatarPragma, ProVerifQueryResult> getResults()
     {
         return this.results;
     }
@@ -458,6 +486,8 @@ public class ProVerifOutputAnalyzer {
     }
 
     public LinkedList<String> getErrors() {
-        return errors;
+        synchronized(errors) {
+            return errors;
+        }
     }
 }

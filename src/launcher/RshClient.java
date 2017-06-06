@@ -318,6 +318,15 @@ public class RshClient {
         }
     }
 
+    public RshClientReader getDataReaderFromProcess() throws LauncherException {
+        Socket socket = connect(portString);
+        try {
+            return new RshClientReader(socket);
+        } catch(IOException e) {
+            throw new LauncherException(IO_ERROR, e);
+        }
+    }
+
     public void writeCommandMessages( final Writer output )
     throws LauncherException {
     	

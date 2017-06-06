@@ -55,6 +55,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.BufferedReader;
 
 //import javax.swing.event.*;
@@ -105,6 +107,14 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
 		initActions();
 		makeComponents();
 		//setComponents();
+                this.addComponentListener(new ComponentAdapter() {
+                    @Override
+                    public void componentResized(ComponentEvent e)
+                    {
+                        if (JFrameSimulationSDPanel.this.sdpanel != null)
+                            JFrameSimulationSDPanel.this.sdpanel.resized();
+                    }
+                });
 	}
 	
 	private JLabel createStatusBar()  {

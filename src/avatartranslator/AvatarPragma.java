@@ -51,7 +51,7 @@ import ui.avatarbd.AvatarBDPragma;
 
 import java.util.*;
 
-public abstract class AvatarPragma extends AvatarElement {
+public abstract class AvatarPragma extends AvatarElement implements Comparable<AvatarPragma> {
     public static final String[] PRAGMAS =               {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "PublicConstant", "PrivateConstant"};
     public static final String[] PRAGMAS_TRANSLATION =    {"Secret",          "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Public", "PublicConstant", "PrivateConstant"};
 
@@ -423,4 +423,10 @@ public abstract class AvatarPragma extends AvatarElement {
      * @return A full clone of the pragma.
      */
     public abstract AvatarPragma advancedClone(AvatarSpecification avspec); 
+
+    @Override
+    public int compareTo(AvatarPragma b)
+    {
+        return this.toString().compareTo(b.toString());
+    }
 }

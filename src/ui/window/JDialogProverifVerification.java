@@ -52,6 +52,7 @@ import avatartranslator.AvatarPragmaReachability;
 import avatartranslator.AvatarPragmaSecret;
 import launcher.LauncherException;
 import launcher.RshClient;
+import launcher.RshClientReader;
 import myutil.GraphicLib;
 import myutil.MasterProcessInterface;
 import myutil.TraceManager;
@@ -59,6 +60,7 @@ import proverifspec.ProVerifOutputAnalyzer;
 import proverifspec.ProVerifQueryAuthResult;
 import proverifspec.ProVerifQueryResult;
 import proverifspec.ProVerifResultTraceStep;
+import proverifspec.ProVerifOutputListener;
 import ui.AvatarDesignPanel;
 import ui.IconManager;
 import ui.MainGUI;
@@ -73,11 +75,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.LinkedList;
+import java.util.Collections;
 
 
-public class JDialogProverifVerification extends javax.swing.JDialog implements ActionListener, ListSelectionListener, MouseListener, Runnable, MasterProcessInterface  {
+public class JDialogProverifVerification extends javax.swing.JDialog implements ActionListener, ListSelectionListener, MouseListener, Runnable, MasterProcessInterface, ProVerifOutputListener {
 
     private static final Insets insets = new Insets(0, 0, 0, 0);
     private static final Insets WEST_INSETS = new Insets(0, 0, 0, 0);
@@ -102,6 +105,8 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     public final static int REACHABILITY_NONE       = 3;
 
     int mode;
+
+    private ProVerifOutputAnalyzer pvoa;
 
     //components
     protected JPanel jta;
@@ -141,7 +146,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     private JList<AvatarPragma> satisfiedWeakAuthList;
     private JList<AvatarPragma> nonSatisfiedAuthList;
     private JList<AvatarPragma> nonProvedList;
-    private HashMap<AvatarPragma, ProVerifQueryResult> results;
+    private Map<AvatarPragma, ProVerifQueryResult> results;
 
     private Thread t;
     private boolean go = false;
@@ -172,6 +177,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
 
         mgui = _mgui;
         this.adp = adp;
+        this.pvoa = null;
 
         if (pathCode == null) {
             pathCode = _pathCode;
@@ -356,6 +362,9 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     }
 
     public void closeDialog() {
+        if (this.pvoa != null) {
+            this.pvoa.removeListener(this);
+        }
         if (mode == STARTED) {
             stopProcess();
         }
@@ -409,7 +418,6 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         hasError = false;
 
         TraceManager.addDev("Thread started");
-        this.jta.removeAll();
         File testFile;
         try {
 
@@ -473,120 +481,16 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
             //jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
             testGo();
 
-            rshc = new RshClient(hostProVerif);
-            rshc.setCmd(cmd);
-            rshc.sendExecuteCommandRequest();
-            String data = rshc.getDataFromProcess();
+            this.rshc = new RshClient(hostProVerif);
+            this.rshc.setCmd(cmd);
+            this.rshc.sendExecuteCommandRequest();
+            RshClientReader reader = this.rshc.getDataReaderFromProcess();
 
-            ProVerifOutputAnalyzer pvoa = mgui.gtm.getProVerifOutputAnalyzer ();
-            pvoa.analyzeOutput(data, typedLanguage.isSelected());
-
-            if (pvoa.getErrors().size() != 0) {
-                int y = 0;
-
-                JLabel label = new JLabel("Errors found in the generated code:");
-                label.setAlignmentX(Component.LEFT_ALIGNMENT);
-                this.jta.add(label, this.createGbc(0, y++));
-                label = new JLabel("----------------");
-                label.setAlignmentX(Component.LEFT_ALIGNMENT);
-                this.jta.add(label, this.createGbc(0, y++));
-                this.jta.add(Box.createRigidArea(new Dimension(0,5)), this.createGbc(0, y++));
-                for(String error: pvoa.getErrors()) {
-                    label = new JLabel(error);
-                    label.setAlignmentX(Component.LEFT_ALIGNMENT);
-                    this.jta.add(label,this.createGbc(0, y++));
-                }
-            } else {
-                LinkedList<AvatarPragma> reachableEvents = new LinkedList<AvatarPragma> ();
-                LinkedList<AvatarPragma> nonReachableEvents = new LinkedList<AvatarPragma> ();
-                LinkedList<AvatarPragma> secretTerms = new LinkedList<AvatarPragma> ();
-                LinkedList<AvatarPragma> nonSecretTerms = new LinkedList<AvatarPragma> ();
-                LinkedList<AvatarPragma> satisfiedStrongAuth = new LinkedList<AvatarPragma> ();
-                LinkedList<AvatarPragma> satisfiedWeakAuth = new LinkedList<AvatarPragma> ();
-                LinkedList<AvatarPragma> nonSatisfiedAuth = new LinkedList<AvatarPragma> ();
-                LinkedList<AvatarPragma> nonProved = new LinkedList<AvatarPragma> ();
-
-                this.results = pvoa.getResults();
-                for (AvatarPragma pragma: this.results.keySet())
-                {
-                    if (pragma instanceof AvatarPragmaReachability)
-                    {
-                        ProVerifQueryResult r = this.results.get(pragma);
-                        if (r.isProved())
-                        {
-                            if (r.isSatisfied())
-                                reachableEvents.add(pragma);
-                            else
-                                nonReachableEvents.add(pragma);
-                        }
-                        else
-                            nonProved.add(pragma);
-                    }
-
-                    else if (pragma instanceof AvatarPragmaSecret)
-                    {
-                        ProVerifQueryResult r = this.results.get(pragma);
-                        if (r.isProved())
-                        {
-                            if (r.isSatisfied())
-                                secretTerms.add(pragma);
-                            else
-                                nonSecretTerms.add(pragma);
-                        }
-                        else
-                            nonProved.add(pragma);
-                    }
-
-                    else if (pragma instanceof AvatarPragmaAuthenticity)
-                    {
-                        ProVerifQueryAuthResult r = (ProVerifQueryAuthResult) this.results.get(pragma);
-                        if (!r.isWeakProved())
-                        {
-                            nonProved.add(pragma);
-                        }
-                        else
-                        {
-                            if (!r.isProved())
-                                nonProved.add(pragma);
-                            if (r.isProved() && r.isSatisfied())
-                                satisfiedStrongAuth.add(pragma);
-                            else if (r.isWeakSatisfied())
-                                satisfiedWeakAuth.add(pragma);
-                            else
-                                nonSatisfiedAuth.add(pragma);
-                        }
-                    }
-                }
-
-                LinkedList<ProVerifResultSection> sectionsList = new LinkedList<ProVerifResultSection> ();
-                sectionsList.add(new ProVerifResultSection("Reachable states:", reachableEvents, this.reachableEventsList));
-                sectionsList.add(new ProVerifResultSection("Non reachable states:", nonReachableEvents, this.nonReachableEventsList));
-                sectionsList.add(new ProVerifResultSection("Confidential Data:", secretTerms, this.secretTermsList));
-                sectionsList.add(new ProVerifResultSection("Non confidential Data:", nonSecretTerms, this.nonSecretTermsList));
-                sectionsList.add(new ProVerifResultSection("Satisfied Strong Authenticity:", satisfiedStrongAuth, this.satisfiedStrongAuthList));
-                sectionsList.add(new ProVerifResultSection("Satisfied Weak Authenticity:", satisfiedWeakAuth, this.satisfiedWeakAuthList));
-                sectionsList.add(new ProVerifResultSection("Non Satisfied Authenticity:", nonSatisfiedAuth, this.nonSatisfiedAuthList));
-                sectionsList.add(new ProVerifResultSection("Not Proved Queries:", nonProved, this.nonProvedList));
-
-                int y = 0;
-
-                for (ProVerifResultSection section: sectionsList)
-                {
-                    if (!section.results.isEmpty())
-                    {
-                        JLabel label = new JLabel(section.title);
-                        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-                        this.jta.add(label, this.createGbc(0, y++));
-                        this.jta.add(Box.createRigidArea(new Dimension(0,5)), this.createGbc(0, y++));
-                        section.jlist = new JList<AvatarPragma> (section.results.toArray (new AvatarPragma[0]));
-                        section.jlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-                        section.jlist.addMouseListener(this);
-                        section.jlist.setAlignmentX(Component.LEFT_ALIGNMENT);
-                        this.jta.add(section.jlist, this.createGbc(0, y++));
-                        this.jta.add(Box.createRigidArea(new Dimension(0,10)), this.createGbc(0, y++));
-                    }
-                }
+            if (this.pvoa == null) {
+                this.pvoa = mgui.gtm.getProVerifOutputAnalyzer ();
+                this.pvoa.addListener(this);
             }
+            this.pvoa.analyzeOutput(reader, typedLanguage.isSelected());
 
             mgui.modelBacktracingProVerif(pvoa);
 
@@ -701,5 +605,130 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     public void valueChanged(ListSelectionEvent e)
     {
         // TODO: unselect the other lists
+    }
+
+    @Override
+    public void proVerifOutputChanged()
+    {
+        JLabel label;
+        this.jta.removeAll();
+
+        if (pvoa.getErrors().size() != 0) {
+            int y = 0;
+
+            label = new JLabel("Errors found in the generated code:");
+            label.setAlignmentX(Component.LEFT_ALIGNMENT);
+            this.jta.add(label, this.createGbc(0, y++));
+            label = new JLabel("----------------");
+            label.setAlignmentX(Component.LEFT_ALIGNMENT);
+            this.jta.add(label, this.createGbc(0, y++));
+            this.jta.add(Box.createRigidArea(new Dimension(0,5)), this.createGbc(0, y++));
+            for(String error: pvoa.getErrors()) {
+                label = new JLabel(error);
+                label.setAlignmentX(Component.LEFT_ALIGNMENT);
+                this.jta.add(label,this.createGbc(0, y++));
+            }
+        } else {
+            LinkedList<AvatarPragma> reachableEvents = new LinkedList<AvatarPragma> ();
+            LinkedList<AvatarPragma> nonReachableEvents = new LinkedList<AvatarPragma> ();
+            LinkedList<AvatarPragma> secretTerms = new LinkedList<AvatarPragma> ();
+            LinkedList<AvatarPragma> nonSecretTerms = new LinkedList<AvatarPragma> ();
+            LinkedList<AvatarPragma> satisfiedStrongAuth = new LinkedList<AvatarPragma> ();
+            LinkedList<AvatarPragma> satisfiedWeakAuth = new LinkedList<AvatarPragma> ();
+            LinkedList<AvatarPragma> nonSatisfiedAuth = new LinkedList<AvatarPragma> ();
+            LinkedList<AvatarPragma> nonProved = new LinkedList<AvatarPragma> ();
+
+            this.results = this.pvoa.getResults();
+            for (AvatarPragma pragma: this.results.keySet())
+            {
+                if (pragma instanceof AvatarPragmaReachability)
+                {
+                    ProVerifQueryResult r = this.results.get(pragma);
+                    if (r.isProved())
+                    {
+                        if (r.isSatisfied())
+                            reachableEvents.add(pragma);
+                        else
+                            nonReachableEvents.add(pragma);
+                    }
+                    else
+                        nonProved.add(pragma);
+                }
+
+                else if (pragma instanceof AvatarPragmaSecret)
+                {
+                    ProVerifQueryResult r = this.results.get(pragma);
+                    if (r.isProved())
+                    {
+                        if (r.isSatisfied())
+                            secretTerms.add(pragma);
+                        else
+                            nonSecretTerms.add(pragma);
+                    }
+                    else
+                        nonProved.add(pragma);
+                }
+
+                else if (pragma instanceof AvatarPragmaAuthenticity)
+                {
+                    ProVerifQueryAuthResult r = (ProVerifQueryAuthResult) this.results.get(pragma);
+                    if (!r.isWeakProved())
+                    {
+                        nonProved.add(pragma);
+                    }
+                    else
+                    {
+                        if (!r.isProved())
+                            nonProved.add(pragma);
+                        if (r.isProved() && r.isSatisfied())
+                            satisfiedStrongAuth.add(pragma);
+                        else if (r.isWeakSatisfied())
+                            satisfiedWeakAuth.add(pragma);
+                        else
+                            nonSatisfiedAuth.add(pragma);
+                    }
+                }
+            }
+
+            LinkedList<ProVerifResultSection> sectionsList = new LinkedList<ProVerifResultSection> ();
+            Collections.sort(reachableEvents);
+            Collections.sort(nonReachableEvents);
+            Collections.sort(secretTerms);
+            Collections.sort(nonSecretTerms);
+            Collections.sort(satisfiedStrongAuth);
+            Collections.sort(satisfiedWeakAuth);
+            Collections.sort(nonSatisfiedAuth);
+            Collections.sort(nonProved);
+            sectionsList.add(new ProVerifResultSection("Reachable states:", reachableEvents, this.reachableEventsList));
+            sectionsList.add(new ProVerifResultSection("Non reachable states:", nonReachableEvents, this.nonReachableEventsList));
+            sectionsList.add(new ProVerifResultSection("Confidential Data:", secretTerms, this.secretTermsList));
+            sectionsList.add(new ProVerifResultSection("Non confidential Data:", nonSecretTerms, this.nonSecretTermsList));
+            sectionsList.add(new ProVerifResultSection("Satisfied Strong Authenticity:", satisfiedStrongAuth, this.satisfiedStrongAuthList));
+            sectionsList.add(new ProVerifResultSection("Satisfied Weak Authenticity:", satisfiedWeakAuth, this.satisfiedWeakAuthList));
+            sectionsList.add(new ProVerifResultSection("Non Satisfied Authenticity:", nonSatisfiedAuth, this.nonSatisfiedAuthList));
+            sectionsList.add(new ProVerifResultSection("Not Proved Queries:", nonProved, this.nonProvedList));
+
+            int y = 0;
+
+            for (ProVerifResultSection section: sectionsList)
+            {
+                if (!section.results.isEmpty())
+                {
+                    label = new JLabel(section.title);
+                    label.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    this.jta.add(label, this.createGbc(0, y++));
+                    this.jta.add(Box.createRigidArea(new Dimension(0,5)), this.createGbc(0, y++));
+                    section.jlist = new JList<AvatarPragma> (section.results.toArray (new AvatarPragma[0]));
+                    section.jlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                    section.jlist.addMouseListener(this);
+                    section.jlist.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    this.jta.add(section.jlist, this.createGbc(0, y++));
+                    this.jta.add(Box.createRigidArea(new Dimension(0,10)), this.createGbc(0, y++));
+                }
+            }
+        }
+
+        this.repaint();
+        this.revalidate();
     }
 }
