@@ -1,0 +1,40 @@
+apply plugin: 'application'
+
+// This defines the source sets for this subproject
+sourceSets {
+    main {
+        java {
+            srcDir "${rootProject.absPath}/src/main/java/myutil"
+            srcDir "${rootProject.absPath}/src/main/java/ui/util"
+            srcDir "${rootProject.absPath}/src/main/java/translator"
+            exclude "tojava/**"
+            exclude "tosimujava/**"
+            srcDir "${rootProject.absPath}/src/main/java/tpndescription"
+            srcDir "${rootProject.absPath}/src/main/java/uppaaldesc"
+            exclude "tmltouppaal/**"
+            srcDir "${rootProject.absPath}/src/main/java/tmltranslator"
+            exclude "toautomata/**"
+            exclude "toavatar/**"
+            exclude "tomappingsystemc/**"
+            exclude "toproverif/**"
+            exclude "tosystemc/**"
+        }
+    }
+}
+
+dependencies {
+    compileOnly name: 'commons-io-2.5'
+    compileOnly name: 'jsoup-1.8.1'
+    compileOnly name: 'commons-codec-1.10'
+}
+
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+      'Main-Class': 'TMLTranslator'
+    )
+  }
+}
+
+mainClassName = 'TMLTranslator'

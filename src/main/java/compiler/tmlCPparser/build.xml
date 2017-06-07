@@ -1,0 +1,28 @@
+<project name="CommunicationPatternParser" default="CPparser" basedir="./">
+
+  <property name="javacc.home" value="/usr/share/java/"/>
+
+  <target name="CPparser" description="Builds CPparser">
+		<delete dir="parser"/>
+		<mkdir dir="parser"/>
+		<copy file="CPparser.jjt" todir="parser"/>
+    <jjtree target="CPparser.jjt" outputdirectory="parser" javacchome="${javacc.home}"/>
+    <javacc target="parser/CPparser.jj" outputdirectory="parser" javacchome="${javacc.home}"/>
+    <javac deprecation="false" srcdir="parser" destdir="parser"/>
+    <echo message="*******"/>
+    <echo message="******* Now type 'cd parser' and run 'java CPparser' with the proper input file ******"/>
+    <echo message="*******"/>
+  </target>
+
+  <target name="all" description="Builds all examples" depends="CPparser">
+    <echo message="*******"/>
+    <echo message="******* All Built ******"/>
+    <echo message="*******"/>
+  </target>
+    
+  <target name="clean" description="Cleans up any example directories">
+    <delete dir="parser"/>
+  </target>
+    
+
+</project>

@@ -1,0 +1,33 @@
+apply plugin: 'application'
+
+// This defines the source sets for this subproject
+sourceSets {
+    main {
+        java {
+            srcDir "${rootProject.absPath}/src/main/java/ui/graph"
+            srcDir "${rootProject.absPath}/src/main/java/ui/util"
+            srcDir "${rootProject.absPath}/src/main/java/ui/file"
+            srcDir "${rootProject.absPath}/src/main/java/vcd"
+            srcDir "${rootProject.absPath}/src/main/java/myutil"
+        }
+    }
+}
+
+dependencies {
+    compile name: 'gs-core-1.3'
+    compile name: 'gs-ui-1.3'
+    compileOnly name: 'commons-io-2.5'
+    compileOnly name: 'commons-codec-1.10'
+    compileOnly name: 'jsoup-1.8.1'
+}
+
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+      'Main-Class': 'GraphShow'
+    )
+  }
+}
+
+mainClassName = 'GraphShow'
