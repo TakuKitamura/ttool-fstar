@@ -894,12 +894,16 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_BLOCK);
         } else if (command.equals(mgui.actions[TGUIAction.ATD_ATTACK].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_ATTACK);
+	} else if (command.equals(mgui.actions[TGUIAction.ATD_COUNTERMEASURE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_COUNTERMEASURE);
         } else if (command.equals(mgui.actions[TGUIAction.ATD_CONSTRAINT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_CONSTRAINT);
         } else if (command.equals(mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_COMPOSITION_CONNECTOR);
         } else if (command.equals(mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_ATTACK_CONNECTOR);
+	} else if (command.equals(mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_COUNTERMEASURE_CONNECTOR);
 
             // TURTLE-OS
         } else if (command.equals(mgui.actions[TGUIAction.TOS_TCLASS].getActionCommand())) {

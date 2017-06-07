@@ -149,6 +149,7 @@ public class TGComponentManager {
 
     public static final int ATD_COMPOSITION_CONNECTOR = 132;
     public static final int ATD_ATTACK_CONNECTOR = 133;
+    public static final int ATD_COUNTERMEASURE_CONNECTOR = 137;
 
     public static final int CONNECTOR_MESSAGE_ASYNC_SDZV = 134;
     public static final int CONNECTOR_MESSAGE_SYNC_SDZV = 135;
@@ -296,6 +297,7 @@ public class TGComponentManager {
     public static final int ATD_BLOCK = 1400;
     public static final int ATD_ATTACK = 1401;
     public static final int ATD_CONSTRAINT = 1402;
+    public static final int ATD_COUNTERMEASURE = 1403;
 
     // TML Communication patterns and TMLSD
     public static final int TMLCP_CHOICE = 1500;
@@ -997,6 +999,9 @@ public class TGComponentManager {
             break;
         case ATD_CONSTRAINT:
             tgc = new ATDConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	case ATD_COUNTERMEASURE:
+            tgc = new ATDCountermeasure(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case DIPLODODUSMETHODOLOGY_REF_APPLICATION:
             tgc = new DiplodocusMethodologyDiagramReferenceToApplication(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1745,12 +1750,16 @@ public class TGComponentManager {
             return ATD_BLOCK;
         } else if (tgc instanceof ATDAttack) {
             return ATD_ATTACK;
+	} else if (tgc instanceof ATDCountermeasure) {
+            return ATD_COUNTERMEASURE;
         } else if (tgc instanceof ATDConstraint) {
             return ATD_CONSTRAINT;
         } else if (tgc instanceof ATDCompositionConnector) {
             return ATD_COMPOSITION_CONNECTOR;
         } else if (tgc instanceof ATDAttackConnector) {
             return ATD_ATTACK_CONNECTOR;
+	} else if (tgc instanceof ATDCountermeasureConnector) {
+            return ATD_COUNTERMEASURE_CONNECTOR;
         } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToApplication) {
             return DIPLODODUSMETHODOLOGY_REF_APPLICATION;
         } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToCP) {
@@ -2205,6 +2214,10 @@ public class TGComponentManager {
         case ATD_ATTACK_CONNECTOR:
             tgc = new ATDAttackConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
+	case ATD_COUNTERMEASURE_CONNECTOR:
+            tgc = new ATDCountermeasureConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            break;
+	    
 
         case DIPLODOCUSMETHODOLOGY_CONNECTOR:
             tgc = new DiplodocusMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);

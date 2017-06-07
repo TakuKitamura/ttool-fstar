@@ -83,8 +83,8 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         height = (int)(40 * tdp.getZoom());
         minWidth = 100;
 
-        nbConnectingPoint = 12;
-        connectingPoint = new TGConnectingPoint[12];
+        nbConnectingPoint = 24;
+        connectingPoint = new TGConnectingPoint[24];
 
         connectingPoint[0] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
         connectingPoint[1] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
@@ -98,6 +98,18 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         connectingPoint[9] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
         connectingPoint[10] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
         connectingPoint[11] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+	connectingPoint[12] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[13] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[14] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[15] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[16] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[17] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[18] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
+        connectingPoint[19] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
+        connectingPoint[20] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
+        connectingPoint[21] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+        connectingPoint[22] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+        connectingPoint[23] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
 
         moveable = true;

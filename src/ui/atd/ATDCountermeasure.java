@@ -51,7 +51,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.JDialogAttack;
+import ui.window.JDialogCountermeasure;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,17 +84,17 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         connectingPoint = new TGConnectingPoint[12];
 
         connectingPoint[0] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[1] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[2] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[3] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-        connectingPoint[4] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[5] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[6] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
-        connectingPoint[7] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[8] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[9] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
-        connectingPoint[10] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[11] = new ATDCountermeasureAttackConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[1] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[2] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[3] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[4] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[5] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[6] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
+        connectingPoint[7] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
+        connectingPoint[8] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
+        connectingPoint[9] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+        connectingPoint[10] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+        connectingPoint[11] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
 
         moveable = true;
@@ -244,7 +244,7 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         String tmp;
         boolean error = false;
 
-        JDialogAttack dialog = new JDialogAttack(frame, "Setting attack attributes", this);
+        JDialogCountermeasure dialog = new JDialogCountermeasure(frame, "Setting countermeasure attributes", this);
    //     dialog.setSize(450, 350);
         GraphicLib.centerOnParent(dialog, 450, 350);
         dialog.setVisible( true ); // blocked until dialog has been closed
@@ -270,8 +270,6 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         if (dialog.getDescription() != null) {
             description = dialog.getDescription();
         }
-
-        isRootAttack = dialog.isRootAttack();
 
         if (error) {
             JOptionPane.showMessageDialog(frame,
