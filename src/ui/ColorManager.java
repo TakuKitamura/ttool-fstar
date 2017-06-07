@@ -154,6 +154,7 @@ public class ColorManager {
     public static  Color ATD_ATTACK_DISABLED = new Color(214, 206, 198);
     public static  Color ATD_ROOT_ATTACK = new Color(243, 131, 10);
     public static  Color ATD_CONSTRAINT = new Color(191, 153, 161);
+    public static  Color ATD_COUNTERMEASURE = new Color(209, 218, 174);
 
     //public static final Color AVATAR_BLOCK = new Color(128, 180, 205);
     //public static final Color AVATAR_BLOCK = new Color(158, 218, 227);

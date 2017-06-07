@@ -39,7 +39,7 @@
    * Class ATDCountermeasureConnector
    * Connector used in Attack Tree Diagrams
    * Creation: 06/06/2017
-   * @version 1.0 06/°6/2017
+   * @version 1.0 06/06/2017
    * @author Ludovic APVRILLE
    * @see
    */
@@ -72,116 +72,15 @@ public  class ATDCountermeasureConnector extends TGConnectorWithCommentConnectio
         oldScaleFactor = tdp.getZoom();
     }
 
+
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-          g.drawLine(x1, y1, x2, y2);
-          } else {
-          GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-          }*/
-
-        //g.drawLine(x1, y1, x2, y2);
-        int cz = (int)(tdp.getZoom() * c);
-
-        // white squares only if ATDConstraint
-
-        TGConnectingPoint cp = p1;
-        CDElement comp = cp.getFather();
-        int decX = 0;
-        int decY = 0;
-        // Origin = constraint?
-        if (comp instanceof ATDConstraint) {
-            if (comp.getX() == cp.getX()) {
-                decX = 0;
-            } else if (comp.getX() + comp.getWidth() == cp.getX()) {
-                decX = -cz;
-            } else {
-                decX = -cz/2;
-            }
-
-            if (comp.getY() == cp.getY()) {
-                decY = 0;
-            } else if (comp.getY() + comp.getHeight() == cp.getY()) {
-                decY = -cz;
-            } else {
-                decY = -cz/2;
-            }
-
-            g.drawRect(cp.getX() + decX, cp.getY() + decY, cz, cz);
-        }
-        cp = p2;
-        comp = cp.getFather();
-        if (comp instanceof ATDConstraint) {
-            if (comp.getX() == cp.getX()) {
-                decX = 0;
-            } else if (comp.getX() + comp.getWidth() == cp.getX()) {
-                decX = -cz;
-            } else {
-                decX = -cz/2;
-            }
-
-            if (comp.getY() == cp.getY()) {
-                decY = 0;
-            } else if (comp.getY() + comp.getHeight() == cp.getY()) {
-                decY = -cz;
-            } else {
-                decY = -cz/2;
-            }
-            g.drawRect(x2+decX, y2+decY, cz, cz);
-        }
-
-
-        /*g.fillRect(x2-(cz/2), y2-(cz/2), cz, cz);
-          g.fillRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);*/
-
-        Point p = new Point(x2, y2);
-        if (p == null) {
-            //System.out.println("null point");
-        } else {
-            if (Point2D.distance(x1, y1, p.x, p.y) < GraphicLib.longueur * 1.5) {
-                //System.out.println("p.x=" + p.x + " x1=" + x1 + "p.y=" + p.y + " y1=" + y1);
-                if ((p.x != x1) || (p.y != y1)) {
-                    g.drawLine(x1, y1, p.x, p.y);
-                    //System.out.println("drawn");
-                }
-            } else {
-                GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
-            }
-        }
-
-        if (value.length() > 0) {
-            Font f = g.getFont();
-            if (tdp.getZoom() < 1) {
-                Font f0 =  f.deriveFont((float)(fontSize*tdp.getZoom()));
-                g.setFont(f0);
-            }
-            g.drawString(value, x2+(cz/2)+1, y2);
-            g.setFont(f);
-        }
+        GraphicLib.dashedLine(g, x1, y1, x2, y2);
 
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
-        String oldValue = value;
-        String text = getName() + "Connector";
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-                                                       "Setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                                                       null,
-                                                       getValue());
-
-        if (s != null) {
-            s = Conversion.removeFirstSpaces(s);
-        }
-
-        //System.out.println("emptytext=" + emptyText);
-
-        if ((s != null) && (!s.equals(oldValue))) {
-            setValue(s);
-            return true;
-        }
-
-        return false;
+    protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        GraphicLib.dashedLine(g, x1, y1, x2, y2);
     }
-
 
     public int getType() {
         return TGComponentManager.ATD_COUNTERMEASURE_CONNECTOR;

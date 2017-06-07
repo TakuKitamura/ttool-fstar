@@ -140,7 +140,7 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         // Core of the attack
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
-	g.setColor(ColorManager.ATD_ATTACK);
+	g.setColor(ColorManager.ATD_COUNTERMEASURE);
 	
 
         g.fill3DRect(x+1, y+1, width-1, height-1, true);

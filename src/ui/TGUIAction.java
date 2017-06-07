@@ -1075,7 +1075,7 @@ public class TGUIAction extends AbstractAction {
         actions[ATD_ATTACK_CONNECTOR] = new TAction("atd-attack-connector", "Add a connector between attacks /constraints", IconManager.imgic1080, IconManager.imgic1080, "Connector", "Add a connector between attacks / constraints of the currently opened attack tree diagram", 0);
         actions[ATD_COMPOSITION_CONNECTOR] = new TAction("atd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Composition connector", "Add a composition between blocks of the currently opened attack tree diagram", 0);
         actions[ATD_CONSTRAINT] = new TAction("atd-constraint", "Add an constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened attack tree diagram", 0);
-	actions[ATD_COUNTERMEASURE] = new TAction("atd-countermeasure", "Add a countermeasure", IconManager.imgic1072, IconManager.imgic1072, "Countermeasure", "Add a countermeasure to the currently opened attack tree diagram", 0);
+	actions[ATD_COUNTERMEASURE] = new TAction("atd-countermeasure", "Add a countermeasure", IconManager.imgic1082, IconManager.imgic1082, "Countermeasure", "Add a countermeasure to the currently opened attack tree diagram", 0);
 	actions[ATD_COUNTERMEASURE_CONNECTOR] = new TAction("atd-countermeasure-connector", "Add a connector between attacks / countermeasures", IconManager.imgic1080, IconManager.imgic1080, "Connector", "Add a connector between attacks / countermeasures of the currently opened attack tree diagram", 0);
 
         // TURTLE-OS
