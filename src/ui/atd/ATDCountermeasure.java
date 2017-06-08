@@ -67,7 +67,7 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
     protected String description = "";
     private String stereotype = "countermeasure";
 
-    private static int decPar = 20;
+    private static double percentageDecPar = 0.15;
     
     private static int maxFontSize = 14;
     private static int minFontSize = 4;
@@ -86,15 +86,15 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         connectingPoint = new TGConnectingPoint[12];
 
         connectingPoint[0] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[1] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[2] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[1] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0 - percentageDecPar/2, 0.5);
+        connectingPoint[2] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0 + percentageDecPar/2 , 0.5);
         connectingPoint[3] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
         connectingPoint[4] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
         connectingPoint[5] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[6] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
-        connectingPoint[7] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[8] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[9] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+        connectingPoint[6] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0 - percentageDecPar/4, 0.25);
+        connectingPoint[7] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0 + percentageDecPar * 0.75, 0.25);
+        connectingPoint[8] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0 - percentageDecPar * 0.75, 0.75);
+        connectingPoint[9] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0 + percentageDecPar * 0.25, 0.75);
         connectingPoint[10] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
         connectingPoint[11] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
@@ -141,13 +141,12 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         }
         // Core of the countermeasure
         Color c = g.getColor();
-	Polygon p = new Polygon();
-        g.draw3DRect(x, y, width, height, true);
+	Polygon p = getMyPolygon();
 	g.setColor(ColorManager.ATD_COUNTERMEASURE);
+	g.fillPolygon(p);
+	g.setColor(c);
+        g.drawPolygon(p);
 	
-
-        g.fill3DRect(x+1, y+1, width-1, height-1, true);
-        g.setColor(c);
 
         // Strings
         int w;
@@ -202,6 +201,15 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
 
         g.setFont(fold);
 
+    }
+
+    private Polygon getMyPolygon() {
+	Polygon p = new Polygon();
+	p.addPoint(x, y);
+	p.addPoint((int)(x+width+(percentageDecPar*width)), y);
+	p.addPoint(x+width, y+height);
+	p.addPoint((int)(x-(percentageDecPar*width)), y+height);
+	return p;
     }
 
     public void setValue(String val, Graphics g) {
@@ -285,10 +293,10 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
     }
 
     public TGComponent isOnOnlyMe(int x1, int y1) {
-
-        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-            return this;
-        }
+	Polygon p = getMyPolygon();
+	if (p.contains(x1, y1)) {
+	    return this;
+	}
         return null;
     }
 
