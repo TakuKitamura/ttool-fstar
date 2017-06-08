@@ -171,12 +171,6 @@ public class WebCrawler {
 
     }
 
-    public static void main(String args[]) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException, AWTException, Exception {
-        WebCrawler wc = new WebCrawler("../localdb/");
-        wc.start();
-    }
-
-
     public void start() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException, AWTException, Exception {
 
         if (pathToFiles == null) {

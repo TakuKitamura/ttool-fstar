@@ -10,6 +10,10 @@ ext {
     absPath = projectDir.getAbsolutePath()
 }
 
+subprojects.each { p ->
+    println p.path
+}
+
 subprojects {
     apply plugin: 'java'
     sourceCompatibility = 1.7
@@ -38,8 +42,9 @@ subprojects {
     libsDirName = "${rootProject.absPath}/bin"
 
     task copyRuntimeLibs(type: Copy) {
-        into "${rootProject.absPath}/bin"
         from configurations.runtime
+        from 'runtime'
+        into "${rootProject.absPath}/bin"
     }
     build.finalizedBy(copyRuntimeLibs)
 

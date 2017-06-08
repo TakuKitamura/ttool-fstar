@@ -1,0 +1,2 @@
+Main-Class: launcher.Main
+Class-Path: ./commons-codec-1.10.jar

@@ -21,9 +21,9 @@ jar {
   manifest {
     attributes(
       'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-      'Main-Class': 'launcher.RTLLauncher'
+      'Main-Class': 'launcher.Main'
     )
   }
 }
 
-mainClassName = 'launcher.RTLLauncher'
+mainClassName = 'launcher.Main'

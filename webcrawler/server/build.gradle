@@ -29,9 +29,9 @@ jar {
   manifest {
     attributes(
       'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-      'Main-Class': 'web.crawler.WebCrawler'
+      'Main-Class': 'web.crawler.Server'
     )
   }
 }
 
-mainClassName = 'web.crawler.WebCrawler'
+mainClassName = 'web.crawler.Server'
