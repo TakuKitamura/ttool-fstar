@@ -67,6 +67,8 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
     protected String description = "";
     private String stereotype = "countermeasure";
 
+    private static int decPar = 20;
+    
     private static int maxFontSize = 14;
     private static int minFontSize = 4;
     private int currentFontSize = -1;
@@ -137,8 +139,9 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
                 setValue(value, g);
             }
         }
-        // Core of the attack
+        // Core of the countermeasure
         Color c = g.getColor();
+	Polygon p = new Polygon();
         g.draw3DRect(x, y, width, height, true);
 	g.setColor(ColorManager.ATD_COUNTERMEASURE);
 	
