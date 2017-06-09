@@ -46,7 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package translator;
 
 
-public class TClassGate implements Comparable {
+public class TClassGate implements Comparable<TClassGate> {
     private TClass t;
     private Gate g;
     
@@ -67,13 +67,8 @@ public class TClassGate implements Comparable {
         return t.getName() + "." + g.getName();
     }
     
-    public int compareTo(Object o) {
-        if (!(o instanceof TClassGate)) {
-            return 0;
-        } else {
-            return toString().compareTo(o.toString());
-        }
-        
+    public int compareTo(TClassGate o) {
+        return toString().compareTo(o.toString());
     }
     
 }

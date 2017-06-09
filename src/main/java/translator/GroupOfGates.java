@@ -49,7 +49,7 @@ package translator;
 import myutil.GenericTree;
 import myutil.SortedVector;
 
-public class GroupOfGates extends SortedVector implements Comparable<GroupOfGates>, GenericTree {
+public class GroupOfGates extends SortedVector<TClassGate> implements Comparable<GroupOfGates>, GenericTree {
     /**
 	 * 
 	 */
@@ -68,19 +68,16 @@ public class GroupOfGates extends SortedVector implements Comparable<GroupOfGate
         return masterGate;
     }
     
-    public boolean add(Object o) {
-        if (o instanceof TClassGate) {
-            return (super.add(o));
-        }
-        return false;
+    public boolean add(TClassGate o) {
+        return super.add(o);
     }
     
     public Gate getGateAt(int i) {
-        return ((TClassGate)(elementAt(i))).getGate();
+        return (elementAt(i)).getGate();
     }
     
     public TClass getTClassAt(int i) {
-        return ((TClassGate)(elementAt(i))).getTClass();
+        return (elementAt(i)).getTClass();
     }
     
     

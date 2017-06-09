@@ -51,7 +51,9 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -74,8 +76,8 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
     private JButton modifyButtons[];
     private JButton upButtons[];
     private JButton downButtons[];
-    private JList<Object> listAttribute[];
-    private LinkedList<Object> attributes[];
+    private HashMap<Integer,JList<Object>> listAttribute;
+    private ArrayList<LinkedList<Object>> attributes;
 
     // Parameters Tab
     private JComboBox<String> parametersAccessBox;
@@ -114,28 +116,33 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         this.modifyButtons = new JButton [5];
         this.upButtons = new JButton [5];
         this.downButtons = new JButton [5];
-        this.listAttribute = new JList [5];
-        this.attributes = new LinkedList [5];
+        this.listAttribute = new HashMap<>();
+        this.attributes = new ArrayList<>();
 
-        this.attributes[0] = new LinkedList ();
+        LinkedList<Object> l = new LinkedList<> ();
         for (TAttribute attr: this.bdElement.getParameters ())
-            this.attributes[0].add (attr.makeClone ());
+            l.add (attr.makeClone ());
+        this.attributes.add(l);
 
-        this.attributes[1] = new LinkedList ();
+        l = new LinkedList<> ();
         for (AvatarSignal signal: this.bdElement.getSignals ())
-            this.attributes[1].add (signal.makeClone ());
+            l.add (signal.makeClone ());
+        this.attributes.add(l);
 
-        this.attributes[2] = new LinkedList ();
+        l = new LinkedList<> ();
         for (TAttribute attr: this.bdElement.getReturnAttributes ())
-            this.attributes[2].add (attr.makeClone ());
+            l.add (attr.makeClone ());
+        this.attributes.add(l);
 
-        this.attributes[3] = new LinkedList ();
+        l = new LinkedList<> ();
         for (TAttribute attr: this.bdElement.getAttributes ())
-            this.attributes[3].add (attr.makeClone ());
+            l.add (attr.makeClone ());
+        this.attributes.add(l);
 
-        this.attributes[4] = new LinkedList ();
+        l = new LinkedList<> ();
         for (AvatarMethod meth: this.bdElement.getMethods ())
-            this.attributes[4].add (meth.makeClone ());
+            l.add (meth.makeClone ());
+        this.attributes.add(l);
 
         this.initComponents ();
 
@@ -232,10 +239,10 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         panelEast.setPreferredSize (new Dimension (300, 450));
 
         //      first line east panel
-        this.listAttribute[tabIndex] = new JList <Object> (this.attributes[tabIndex].toArray ());
-        this.listAttribute[tabIndex].setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        this.listAttribute[tabIndex].addListSelectionListener(this);
-        JScrollPane scrollPane = new JScrollPane(this.listAttribute[tabIndex]);
+        this.listAttribute.put(tabIndex, new JList <> (this.attributes.get(tabIndex).toArray ()));
+        this.listAttribute.get(tabIndex).setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.listAttribute.get(tabIndex).addListSelectionListener(this);
+        JScrollPane scrollPane = new JScrollPane(this.listAttribute.get(tabIndex));
         scrollPane.setSize(300, 250);
         gridConstraints = new GridBagConstraints();
         gridConstraints.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -352,10 +359,10 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         panelEast.setPreferredSize(new Dimension(300, 250));
 
         //      first line east panel
-        this.listAttribute[1] = new JList<Object> (this.attributes[1].toArray ());
-        this.listAttribute[1].setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        this.listAttribute[1].addListSelectionListener(this);
-        JScrollPane scrollPane = new JScrollPane(listAttribute[1]);
+        this.listAttribute.put(1, new JList<> (this.attributes.get(1).toArray ()));
+        this.listAttribute.get(1).setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.listAttribute.get(1).addListSelectionListener(this);
+        JScrollPane scrollPane = new JScrollPane(this.listAttribute.get(1));
         scrollPane.setSize(300, 250);
         gridConstraints = new GridBagConstraints();
         gridConstraints.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -487,10 +494,10 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         panelEast.setPreferredSize(new Dimension(300, 250));
 
         //      first line east panel
-        this.listAttribute[4] = new JList<Object> (this.attributes[4].toArray ());
-        this.listAttribute[4].setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        this.listAttribute[4].addListSelectionListener(this);
-        JScrollPane scrollPane = new JScrollPane(listAttribute[4]);
+        this.listAttribute.put(4, new JList<> (this.attributes.get(4).toArray ()));
+        this.listAttribute.get(4).setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.listAttribute.get(4).addListSelectionListener(this);
+        JScrollPane scrollPane = new JScrollPane(this.listAttribute.get(4));
         scrollPane.setSize(300, 250);
         gridConstraints = new GridBagConstraints();
         gridConstraints.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -634,19 +641,19 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
     
     private void save () {
         this.bdElement.resetParameters ();
-        for (Object o: this.attributes[0])
+        for (Object o: this.attributes.get(0))
             this.bdElement.addParameter ((TAttribute) o);
         this.bdElement.resetSignals ();
-        for (Object o: this.attributes[1])
+        for (Object o: this.attributes.get(1))
             this.bdElement.addSignal ((AvatarSignal) o);
         this.bdElement.resetReturnAttributes ();
-        for (Object o: this.attributes[2])
+        for (Object o: this.attributes.get(2))
             this.bdElement.addReturnAttribute ((TAttribute) o);
         this.bdElement.resetAttributes ();
-        for (Object o: this.attributes[3])
+        for (Object o: this.attributes.get(3))
             this.bdElement.addAttribute ((TAttribute) o);
         this.bdElement.resetMethods ();
-        for (Object o: this.attributes[4])
+        for (Object o: this.attributes.get(4))
             this.bdElement.addMethod ((AvatarMethod) o);
     }
 
@@ -740,15 +747,15 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         int index;
         Object old = null;
         if (modify) {
-            index = this.listAttribute[tabIndex].getSelectedIndex ();
-            old = this.attributes[tabIndex].remove (index);
+            index = this.listAttribute.get(tabIndex).getSelectedIndex ();
+            old = this.attributes.get(tabIndex).remove (index);
         } else
-            index = this.attributes[tabIndex].size ();
+            index = this.attributes.get(tabIndex).size ();
 
         //checks whether an attribute with this identifier already belongs to the list
-        if (this.attributes[0].contains (a) || this.attributes[2].contains (a) || this.attributes[3].contains (a)) {
+        if (this.attributes.get(0).contains (a) || this.attributes.get(2).contains (a) || this.attributes.get(3).contains (a)) {
             if (modify)
-                this.attributes[tabIndex].add (index, old);
+                this.attributes.get(tabIndex).add (index, old);
             JOptionPane.showMessageDialog (this,
                                           "Bad Identifier: another attribute or parameter already has the same name.",
                                           "Error",
@@ -757,10 +764,10 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
             return;
         }
 
-        this.attributes[tabIndex].add (index, a);
-        this.listAttribute[tabIndex].setListData (this.attributes[tabIndex].toArray ());
-        this.listAttribute[tabIndex].setSelectedIndex(index);
-        this.listAttribute[tabIndex].requestFocus ();
+        this.attributes.get(tabIndex).add (index, a);
+        this.listAttribute.get(tabIndex).setListData (this.attributes.get(tabIndex).toArray ());
+        this.listAttribute.get(tabIndex).setSelectedIndex(index);
+        this.listAttribute.get(tabIndex).requestFocus ();
     }
 
     private void addMethod (boolean modify) {
@@ -786,15 +793,15 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         int index;
         Object old = null;
         if (modify) {
-            index = this.listAttribute[4].getSelectedIndex ();
-            old = this.attributes[4].remove (index);
+            index = this.listAttribute.get(4).getSelectedIndex ();
+            old = this.attributes.get(4).remove (index);
         } else
-            index = this.attributes[4].size ();
+            index = this.attributes.get(4).size ();
 
         // Checks whether the same method already belongs to the list
-        if (this.attributes[4].contains (am)) {
+        if (this.attributes.get(4).contains (am)) {
             if (modify)
-                this.attributes[4].add (index, old);
+                this.attributes.get(4).add (index, old);
             JOptionPane.showMessageDialog (this,
                                           "This method already exists",
                                           "Error",
@@ -803,10 +810,10 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
             return;
         }
 
-        this.attributes[4].add (index, am);
-        this.listAttribute[4].setListData (this.attributes[4].toArray ());
-        this.listAttribute[4].setSelectedIndex(index);
-        this.listAttribute[4].requestFocus ();
+        this.attributes.get(4).add (index, am);
+        this.listAttribute.get(4).setListData (this.attributes.get(4).toArray ());
+        this.listAttribute.get(4).setSelectedIndex(index);
+        this.listAttribute.get(4).requestFocus ();
     }
 
     private void addSignal (boolean modify) {
@@ -830,16 +837,16 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         int index;
         Object old = null;
         if (modify) {
-            index = this.listAttribute[1].getSelectedIndex ();
-            old = this.attributes[1].remove (index);
+            index = this.listAttribute.get(1).getSelectedIndex ();
+            old = this.attributes.get(1).remove (index);
         } else
-            index = this.attributes[1].size ();
+            index = this.attributes.get(1).size ();
 
 
         // Checks whether the same signal already belongs to the list
-        if (this.attributes[1].contains (as)) {
+        if (this.attributes.get(1).contains (as)) {
             if (modify)
-                this.attributes[1].add (index, old);
+                this.attributes.get(1).add (index, old);
             JOptionPane.showMessageDialog (this,
                                           "This signal already exists",
                                           "Error",
@@ -848,10 +855,10 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
             return;
         }
 
-        this.attributes[1].add (index, as);
-        this.listAttribute[1].setListData (this.attributes[1].toArray ());
-        this.listAttribute[1].setSelectedIndex(index);
-        this.listAttribute[1].requestFocus ();
+        this.attributes.get(1).add (index, as);
+        this.listAttribute.get(1).setListData (this.attributes.get(1).toArray ());
+        this.listAttribute.get(1).setSelectedIndex(index);
+        this.listAttribute.get(1).requestFocus ();
     }
 
     private void handleModify () {
@@ -879,21 +886,21 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
 
     private void handleUp () {
         int selectedTab = this.tabbedPane.getSelectedIndex ();
-        int i = this.listAttribute[selectedTab].getSelectedIndex();
+        int i = this.listAttribute.get(selectedTab).getSelectedIndex();
         if (i != -1 && i != 0) {
-            Collections.swap (this.attributes[selectedTab], i, i-1);
-            this.listAttribute[selectedTab].setListData(this.attributes[selectedTab].toArray ());
-            this.listAttribute[selectedTab].setSelectedIndex(i-1);
+            Collections.swap (this.attributes.get(selectedTab), i, i-1);
+            this.listAttribute.get(selectedTab).setListData(this.attributes.get(selectedTab).toArray ());
+            this.listAttribute.get(selectedTab).setSelectedIndex(i-1);
         }
     }
 
     private void handleDown () {
         int selectedTab = this.tabbedPane.getSelectedIndex ();
-        int i = this.listAttribute[selectedTab].getSelectedIndex();
-        if (i != -1 && i != this.attributes[selectedTab].size() - 1) {
-            Collections.swap (this.attributes[selectedTab], i, i+1);
-            this.listAttribute[selectedTab].setListData(this.attributes[selectedTab].toArray ());
-            this.listAttribute[selectedTab].setSelectedIndex(i+1);
+        int i = this.listAttribute.get(selectedTab).getSelectedIndex();
+        if (i != -1 && i != this.attributes.get(selectedTab).size() - 1) {
+            Collections.swap (this.attributes.get(selectedTab), i, i+1);
+            this.listAttribute.get(selectedTab).setListData(this.attributes.get(selectedTab).toArray ());
+            this.listAttribute.get(selectedTab).setSelectedIndex(i+1);
         }
     }
 
@@ -921,44 +928,44 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
     }
 
     private void removeAttribute (int tabIndex) {
-        int i = this.listAttribute[tabIndex].getSelectedIndex ();
+        int i = this.listAttribute.get(tabIndex).getSelectedIndex ();
         if (i != -1) {
-            ((TAttribute) this.attributes[tabIndex].get (i)).setAccess (-1);
-            this.attributes[tabIndex].remove (i);
-            this.listAttribute[tabIndex].setListData (this.attributes[tabIndex].toArray ());
+            ((TAttribute) this.attributes.get(tabIndex).get (i)).setAccess (-1);
+            this.attributes.get(tabIndex).remove (i);
+            this.listAttribute.get(tabIndex).setListData (this.attributes.get(tabIndex).toArray ());
         }
     }
 
     private void removeSignal () {
-        int i = this.listAttribute[1].getSelectedIndex ();
+        int i = this.listAttribute.get(1).getSelectedIndex ();
         if (i != -1) {
-            this.attributes[1].remove (i);
-            this.listAttribute[1].setListData(this.attributes[1].toArray ());
+            this.attributes.get(1).remove (i);
+            this.listAttribute.get(1).setListData(this.attributes.get(1).toArray ());
         }
     }
 
     private void removeMethod () {
-        int i = this.listAttribute[4].getSelectedIndex();
+        int i = this.listAttribute.get(4).getSelectedIndex();
         if (i!= -1) {
-            this.attributes[4].remove (i);
-            this.listAttribute[4].setListData (this.attributes[4].toArray ());
+            this.attributes.get(4).remove (i);
+            this.listAttribute.get(4).setListData (this.attributes.get(4).toArray ());
         }
     }
 
     public void valueChanged (ListSelectionEvent e) {
         int selectedTab = this.tabbedPane.getSelectedIndex ();
-        int i = this.listAttribute[selectedTab].getSelectedIndex() ;
+        int i = this.listAttribute.get(selectedTab).getSelectedIndex() ;
 
         this.removeButtons[selectedTab].setEnabled(i != -1);
         this.modifyButtons[selectedTab].setEnabled(i != -1);
         this.upButtons[selectedTab].setEnabled(i > 0);
-        this.downButtons[selectedTab].setEnabled(i != -1 && i < this.attributes[selectedTab].size ()-1);
+        this.downButtons[selectedTab].setEnabled(i != -1 && i < this.attributes.get(selectedTab).size ()-1);
 
         if (selectedTab == 1) { // Signals
             if (i == -1)
                 this.signalText.setText ("");
             else {
-                AvatarSignal as = (AvatarSignal) (this.attributes[1].get (i));
+                AvatarSignal as = (AvatarSignal) (this.attributes.get(1).get (i));
                 this.signalText.setText (as.toBasicString());
                 this.signalInOutBox.setSelectedIndex (as.getInOut());
             }
@@ -966,7 +973,7 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
             if (i == -1)
                 this.methodText.setText ("");
             else {
-                AvatarMethod am = (AvatarMethod) (this.attributes[4].get (i));
+                AvatarMethod am = (AvatarMethod) (this.attributes.get(4).get (i));
                 this.methodText.setText (am.toString());
             }
         } else { // Attributes
@@ -996,7 +1003,7 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
                 accessBox.setSelectedIndex(0);
                 typeBox.setSelectedIndex(0);
             } else {
-                TAttribute a = (TAttribute) (this.attributes[selectedTab].get (i));
+                TAttribute a = (TAttribute) (this.attributes.get(selectedTab).get (i));
                 textField.setText (a.getId ());
                 initialValue.setText(a.getInitialValue());
                 this.select (accessBox, a.getStringAccess(a.getAccess()));

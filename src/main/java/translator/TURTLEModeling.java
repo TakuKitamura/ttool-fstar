@@ -55,15 +55,15 @@ public class TURTLEModeling {
 	private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}"};
     
 	
-    private Vector tclass;
-    private Vector relation;
+    private Vector<TClass> tclass;
+    private Vector<Relation> relation;
 	//private ArrayList<ADComponent> componentsRA; //Components tag with reachability analysis
     //private Vector hlprocess;
     private int classIndex = 0;
     
     public TURTLEModeling() {
-        tclass = new Vector();
-        relation = new Vector();
+        tclass = new Vector<>();
+        relation = new Vector<>();
 		//componentsRA = new ArrayList<ADComponent>();
     }
     
@@ -129,13 +129,13 @@ public class TURTLEModeling {
         if (i >= tclass.size())
             return null;
         else
-            return (TClass)(tclass.elementAt(i));
+            return tclass.elementAt(i);
     }
     
     public TClass getTClassWithName(String s) {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             if (t.getName().equals(s)) {
                 return t;
             }
@@ -146,7 +146,7 @@ public class TURTLEModeling {
 	public TClass findTClass(ADComponent adc) {
 		TClass tmp;
         for(int i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
             if (tmp.has(adc)) {
                 return tmp;
             }
@@ -157,7 +157,7 @@ public class TURTLEModeling {
 	public void addAllTClassesEndingWith(ArrayList<TClass> tclasses, String end) {
 		TClass tmp;
         for(int i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
 			if (tmp.getName().endsWith(end)) {
 				tclasses.add(tmp);
 				System.out.println("Adding tclass:" + tmp.getName());
@@ -172,7 +172,7 @@ public class TURTLEModeling {
     public boolean belongsToMe(TClass t) {
         TClass tmp;
         for(int i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
             if (tmp == t) {
                 return true;
             }
@@ -184,14 +184,14 @@ public class TURTLEModeling {
         if (i > relation.size())
             return null;
         else
-            return (Relation)(relation.elementAt(i));
+            return relation.elementAt(i);
     }
     
     public Relation syncRelationWith(TClass t1, Gate g1) {
 		Relation r;
         
         for(int i=0; i<relation.size(); i++) {
-            r = (Relation)(relation.elementAt(i));
+            r = relation.elementAt(i);
             if (r.correspondingGate(g1, t1) != null) {
                 return r;
             }
@@ -203,7 +203,7 @@ public class TURTLEModeling {
         Relation r;
         
         for(int i=0; i<relation.size(); i++) {
-            r = (Relation)(relation.elementAt(i));
+            r = relation.elementAt(i);
             if (((t1 == r.t1) && (t2 == r.t2)) || ((t2 == r.t1) && (t1 == r.t2))) {
                 return r;
             }
@@ -214,7 +214,7 @@ public class TURTLEModeling {
     public boolean knownAction(String action) {
         TClass tmp;
         for(int i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
             if (tmp.getGateByName(action) != null) {
                 return true;
             }
@@ -227,7 +227,7 @@ public class TURTLEModeling {
         int cpt=0;
         
         for(int i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
             if (tmp.getGateByName(action) != null) {
                 cpt ++;
             }
@@ -243,7 +243,7 @@ public class TURTLEModeling {
         //int cpt=0;
         
         for(int i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
             if (tmp.getGateByName(action) != null) {
                 return tmp;
             }
@@ -278,7 +278,7 @@ public class TURTLEModeling {
 		Relation r;
         
         for(int i=0; i<relation.size(); i++) {
-            r = (Relation)(relation.elementAt(i));
+            r = relation.elementAt(i);
             if (!(r.type < 4)) {
 				return false;
             }
@@ -289,7 +289,7 @@ public class TURTLEModeling {
 	public boolean hasOnlyRegularTClasses(boolean choicesDeterministic, boolean variableAsActions) {
 		TClass tmp;
         for(int i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
             if (!isRegularTClass(tmp.getActivityDiagram(), choicesDeterministic, variableAsActions)) {
                 return false;
             }
@@ -364,7 +364,7 @@ public class TURTLEModeling {
         int cpt = 0;
         
         for(int i=0; i<relation.size(); i++) {
-            r = (Relation)(relation.elementAt(i));
+            r = relation.elementAt(i);
             if ((t == r.t1) && (r.type == Relation.SEQ)) {
                 cpt ++;
             }
@@ -377,7 +377,7 @@ public class TURTLEModeling {
         int cpt = 0;
         
         for(int i=0; i<relation.size(); i++) {
-            r = (Relation)(relation.elementAt(i));
+            r = relation.elementAt(i);
             if ((t == r.t1) && (r.type == Relation.PRE)) {
                 cpt ++;
             }
@@ -395,7 +395,7 @@ public class TURTLEModeling {
         
         // setting lotos name = default name
         for(i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
             tmp.setLotosName(tmp.getName());
             
             v = tmp.getParamList();
@@ -407,7 +407,7 @@ public class TURTLEModeling {
         
         
         for(i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
             // Tclass name
             name = tmp.getLotosName();
             if (RTLOTOSKeyword.isAKeyword(name)) {
@@ -457,7 +457,7 @@ public class TURTLEModeling {
         
         
         for(i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
             
             // TClasses attributes
             v = tmp.getParamList();
@@ -486,14 +486,14 @@ public class TURTLEModeling {
 	}*/
     
     public void makeNameOfHiddenGatesUnic() {
-        Vector v = new Vector();
-        Vector gates;
+        Vector<Gate> v = new Vector<>();
+        Vector<Gate> gates;
         int i, j;
         TClass t;
         Gate g;
         
         for(i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             gates = t.getGateList();
             for(j=0; j<gates.size(); j++) {
                 v.addElement(gates.elementAt(j));
@@ -501,7 +501,7 @@ public class TURTLEModeling {
         }
         
         for(i=0; i<v.size(); i++) {
-            g = (Gate)(v.elementAt(i));
+            g = v.elementAt(i);
             if (!okGateName(g.getLotosName(), g, v)) {
                 g.setLotosName(generateUnicGateName(g, v));
             }
@@ -531,7 +531,7 @@ public class TURTLEModeling {
         TClass tmp;
         
         for(int i=0; i<tclass.size(); i++) {
-            tmp = (TClass)(tclass.elementAt(i));
+            tmp = tclass.elementAt(i);
             if ((tmp != t) && (tmp.getLotosName().equals(name))) {
                 return false;
             }
@@ -846,7 +846,7 @@ public class TURTLEModeling {
         int i, j;
         
         for(i=0; i<relation.size(); i++) {
-            r = (Relation)(relation.elementAt(i));
+            r = relation.elementAt(i);
             if (r.type == Relation.INV) {
                 // This is a Invocation relation
                 // Let T1 be the invoker tclass
@@ -870,7 +870,7 @@ public class TURTLEModeling {
         //String name = "unknown";
         
         for(i=0; i<relation.size(); i++) {
-            r = (Relation)(relation.elementAt(i));
+            r = relation.elementAt(i);
             if (r.type == Relation.WAT) {
                 t = r.t1;
                 //watchdog = r.t2;
@@ -885,7 +885,7 @@ public class TURTLEModeling {
     public void translateActionStatesWithMultipleParams() {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             t.getActivityDiagram().translateActionStatesWithMultipleParams(t);
         }
     }
@@ -928,7 +928,7 @@ public class TURTLEModeling {
     private void removeUselessParallel() {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             //System.out.println("t=" + t.getName());
             removeUselessParallel(t.getActivityDiagram());
         }
@@ -937,7 +937,7 @@ public class TURTLEModeling {
     private void removeUselessJunction() {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             //System.out.println("t=" + t.getName());
             removeUselessJunction(t.getActivityDiagram());
         }
@@ -946,7 +946,7 @@ public class TURTLEModeling {
     private void removeUselessSequence() {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             //System.out.println("t=" + t.getName());
             removeUselessSequence(t.getActivityDiagram());
         }
@@ -1194,7 +1194,7 @@ public class TURTLEModeling {
 	public void removeUselessVariables(LinkedList<CheckingError> warnings) {
 		 TClass t;
 		 for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             removeUselessVariables(t, warnings);
 		 }
 	}
@@ -1488,7 +1488,7 @@ public class TURTLEModeling {
 	public void removeUselessGates(LinkedList<CheckingError> warnings) {
 		 TClass t;
 		 for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             removeUselessGates(t, warnings);
 		 }
 	}
@@ -1529,7 +1529,7 @@ public class TURTLEModeling {
 		
 		// Checks in relations
 		for(i=0; i<relationNb(); i++) {
-			r = (Relation)(relation.get(i));
+			r = relation.get(i);
 			og = r.correspondingGate(g, t);
 			if (og != null) {
 				usage = checkGateInAD(r.otherTClass(t), og);
@@ -1602,7 +1602,7 @@ public class TURTLEModeling {
         int i;
         
         for(i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             System.out.println("\nTClass " + t.getName());
 			t.printParamsValues();
 			t.printGates();
@@ -1610,7 +1610,7 @@ public class TURTLEModeling {
         }
         
         for(i=0; i<relation.size(); i++) {
-            r = (Relation)(relation.elementAt(i));
+            r = relation.elementAt(i);
             //System.out.println("\nTClass " + t.getName());
             r.print();
         }
@@ -1623,7 +1623,7 @@ public class TURTLEModeling {
         int i;
         
         for(i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             if (t.getName().compareTo(className) ==0) {
                 System.out.println("\nTClass " + t.getName());
                 t.getActivityDiagram().print();
@@ -1639,14 +1639,14 @@ public class TURTLEModeling {
         int i;
         
         for(i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             sb.append("\nTClass " + t.getName()+ "\n");
             t.getActivityDiagram().printToStringBuffer(sb);
         }
         
         sb.append("\n\nRelations:\n");
         for(i=0; i<relation.size(); i++) {
-            r = (Relation)(relation.elementAt(i));
+            r = relation.elementAt(i);
             //System.out.println("\nTClass " + t.getName());
             r.printToStringBuffer(sb);
         }
@@ -1656,7 +1656,7 @@ public class TURTLEModeling {
     public void simplify() {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             System.out.println("\nSimplifying 1  t=" + t.getName());
             removeAllUselessComponent(t.getActivityDiagram(), false);
         }
@@ -1665,7 +1665,7 @@ public class TURTLEModeling {
     public void simplify(boolean debug) {
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
 			
             if (debug) {
 				System.out.println("\n********************** Simplifying t=" + t.getName());
@@ -1682,7 +1682,7 @@ public class TURTLEModeling {
     public void simplify(boolean debug, boolean specialChoices) {
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
 			
             if (debug) {
 				System.out.println("\n********************** Simplifying t=" + t.getName());
@@ -1698,7 +1698,7 @@ public class TURTLEModeling {
 	public void countJunctions() {
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
 			System.out.println("\n********************** Counting for t=" + t.getName());
 			System.out.println("***** nbOfjunctions=" + t.getNbOfJunctions());
         }
@@ -1714,7 +1714,7 @@ public class TURTLEModeling {
     public void removeInfiniteLoops() {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             //System.out.println("Testing " + t.getName());
             /*if (t.getName().compareTo("StreamDataServ") == 0) {
                 removeInfiniteLoopsAD(t.getActivityDiagram(), true);
@@ -1760,9 +1760,9 @@ public class TURTLEModeling {
         return false;
     }
     
-    public Vector needsUnrolling(ActivityDiagram ad, ADComponent adc) {
+    private Vector<ADComponent> needsUnrolling(ActivityDiagram ad, ADComponent adc) {
         // infinite loop leading to the same choice ?
-        Vector tested = new Vector();
+        Vector<ADComponent> tested = new Vector<>();
         boolean b = infinitePathFromTo(adc, adc, tested);
         if (b) {
             return tested;
@@ -1771,7 +1771,7 @@ public class TURTLEModeling {
         }
     }
     
-    public boolean infinitePathFromTo(ADComponent ad1, ADComponent ad2, Vector tested) {
+    private boolean infinitePathFromTo(ADComponent ad1, ADComponent ad2, Vector<ADComponent> tested) {
         
         tested.add(ad1);
         Vector list = ad1.getAllNext();
@@ -1849,7 +1849,7 @@ public class TURTLEModeling {
         //System.out.println("Substitute to null");
         ad.setAllSubstituteToNull();
         
-        Vector pathOld = new Vector();
+        Vector<ADComponent> pathOld = new Vector<>();
         //Vector adNew = new Vector();
         
         pathOld.add(adc.getNext(0)); // A junction has only one next component
@@ -1909,8 +1909,8 @@ public class TURTLEModeling {
         ad.print();*/
     }
     
-    public void RebuildADFrom(ActivityDiagram ad, Vector path, ADComponent adcToAvoid, boolean debug) {
-        ADComponent adc = (ADComponent)(path.get(path.size()-1));
+    public void RebuildADFrom(ActivityDiagram ad, Vector<ADComponent> path, ADComponent adcToAvoid, boolean debug) {
+        ADComponent adc = path.get(path.size()-1);
         //ADComponent cloned;
         ADComponent adctmp;
         Vector nexts = new Vector();
@@ -1939,7 +1939,7 @@ public class TURTLEModeling {
         }
     }
     
-    public void createAD(Vector path, ADComponent finalAdc, ADComponent adcToAvoid, boolean debug) {
+    public void createAD(Vector<ADComponent> path, ADComponent finalAdc, ADComponent adcToAvoid, boolean debug) {
         int i, j;
         ADComponent adc;
         //Vector nexts;
@@ -1952,7 +1952,7 @@ public class TURTLEModeling {
         // Go though throws path and check whether the component exists or not -> if yes, then goes on
         
         for(i=0; i<path.size()-1; i++) {
-            adc = (ADComponent)(path.elementAt(i));
+            adc = path.elementAt(i);
             if (adc.substitute == null) {
                 // Must create the substitute and link it to the previous one
                 //nexts = adc.getAllNext();
@@ -2003,8 +2003,8 @@ public class TURTLEModeling {
         int index;
         
         for(i=0; i<path.size()-1; i++) {
-            adc1 = (ADComponent)(path.elementAt(i));
-            adc2 = (ADComponent)(path.elementAt(i+1));
+            adc1 = path.elementAt(i);
+            adc2 = path.elementAt(i+1);
             adc3 = adc1.substitute;
             adc4 = adc2.substitute;
             index = adc1.getAllNext().indexOf(adc2);
@@ -2012,7 +2012,7 @@ public class TURTLEModeling {
         }
         
         // last one: finalAdc
-        adc1 = (ADComponent)(path.elementAt(path.size()-2));
+        adc1 = path.elementAt(path.size()-2);
         adc3 = adc1.substitute;
         index = adc1.getAllNext().indexOf(finalAdc);
         //System.out.println("Index:" + index);
@@ -2239,7 +2239,7 @@ public class TURTLEModeling {
     public void removeChoicesLeadingToStop() {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
-            t = (TClass)(tclass.elementAt(i));
+            t = tclass.elementAt(i);
             //System.out.println("----------------------- Testing choices of " + t.getName());
             removeChoicesLeadingToStopAD(t.getActivityDiagram());
         }
@@ -2287,12 +2287,12 @@ public class TURTLEModeling {
     }
     
     public int getPathAction(ADChoice adch) {
-        Vector list = adch.getAllNext();
-        Vector path = new Vector();
+        Vector<ADComponent> list = adch.getAllNext();
+        Vector<ADComponent> path = new Vector<>();
         ADComponent adc;
         boolean foundAction;
         for (int i=0; i<list.size(); i++) {
-            adc = (ADComponent)(list.elementAt(i));
+            adc = list.elementAt(i);
             foundAction = explorePathAction(adc, path, adch);
             if (foundAction) {
                 return i;
@@ -2301,7 +2301,7 @@ public class TURTLEModeling {
         return -1;
     }
     
-    public boolean explorePathAction(ADComponent adc, Vector path, ADComponent adch) {
+    public boolean explorePathAction(ADComponent adc, Vector<ADComponent> path, ADComponent adch) {
         ADComponent adcbis;
         
         if (adc == null) {
@@ -2325,9 +2325,9 @@ public class TURTLEModeling {
         }
         
         path.add(adc);
-        Vector list = adc.getAllNext();
+        Vector<ADComponent> list = adc.getAllNext();
         for(int i=0; i<list.size(); i++) {
-            adcbis = (ADComponent)(list.elementAt(i));
+            adcbis = list.elementAt(i);
             if (explorePathAction(adcbis, path, adch)) {
                 return true;
             }
@@ -2337,13 +2337,13 @@ public class TURTLEModeling {
     }
     
     public int getPathStop(ADChoice adch) {
-        Vector list = adch.getAllNext();
-        Vector path = new Vector();
+        Vector<ADComponent> list = adch.getAllNext();
+        Vector<ADComponent> path = new Vector<>();
         ADComponent adc;
         boolean foundAction;
         boolean foundStop;
         for (int i=0; i<list.size(); i++) {
-            adc = (ADComponent)(list.elementAt(i));
+            adc = list.elementAt(i);
             foundAction = explorePathAction(adc, path, adch);
             path.removeAllElements();
             foundStop = explorePathStop(adc, path, adch);
@@ -2355,8 +2355,7 @@ public class TURTLEModeling {
         return -1;
     }
     
-    public boolean explorePathStop(ADComponent adc, Vector path, ADComponent adch) {
-        ADComponent adcbis;
+    public boolean explorePathStop(ADComponent adc, Vector<ADComponent> path, ADComponent adch) {
         if (adc == adch) {
             return false;
         }
@@ -2376,9 +2375,9 @@ public class TURTLEModeling {
         
         
         path.add(adc);
-        Vector list = adc.getAllNext();
+        Vector<ADComponent> list = adc.getAllNext();
         for(int i=0; i<list.size(); i++) {
-            adcbis = (ADComponent)(list.elementAt(i));
+            ADComponent adcbis = list.elementAt(i);
             if (explorePathStop(adcbis, path, adch)) {
                 return true;
             }
@@ -2519,7 +2518,7 @@ public class TURTLEModeling {
     }
     
     public boolean canReachSynchroOn(ADParallel adp, Gate g) {
-		LinkedList ll = new LinkedList();
+		LinkedList<ADComponent> ll = new LinkedList<>();
 		for(int i=0; i<adp.getNbNext(); i++) {
 			if (canReachSynchroOn(adp, g, adp.getNext(i), ll)) {
 				return true;
@@ -2528,7 +2527,7 @@ public class TURTLEModeling {
 		return false;
     }
 	
-    public boolean canReachSynchroOn(ADParallel adp, Gate g, ADComponent adc, LinkedList ll) {
+    public boolean canReachSynchroOn(ADParallel adp, Gate g, ADComponent adc, LinkedList<ADComponent> ll) {
 		if (adc == adp) {
 			return true;
 		}
@@ -2561,7 +2560,7 @@ public class TURTLEModeling {
     public void unrollRecursions(int n) {
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
-			t = (TClass)(tclass.elementAt(i));
+			t = tclass.elementAt(i);
 			//System.out.println("----------------------- Testing choices of " + t.getName());
 			unrollRecursions(t.getActivityDiagram(), n);
         }
@@ -2591,7 +2590,7 @@ public class TURTLEModeling {
     }
     
     public boolean hasRecursion(ADComponent adc) {
-		LinkedList ll = new LinkedList();
+		LinkedList<ADComponent> ll = new LinkedList<>();
 		for(int i=0; i<adc.getNbNext(); i++) {
 			if (hasRecursion(adc, adc.getNext(i), ll)) {
 				return true;
@@ -2601,7 +2600,7 @@ public class TURTLEModeling {
     }
     
     public int getFirstNextRecursion(ADComponent adc) {
-		LinkedList ll = new LinkedList();
+		LinkedList<ADComponent> ll = new LinkedList<>();
 		for(int i=0; i<adc.getNbNext(); i++) {
 			if (hasRecursion(adc, adc.getNext(i), ll)) {
 				return i;
@@ -2610,7 +2609,7 @@ public class TURTLEModeling {
 		return -1;
     }
     
-    public boolean hasRecursion(ADComponent base, ADComponent current, LinkedList ll) {
+    public boolean hasRecursion(ADComponent base, ADComponent current, LinkedList<ADComponent> ll) {
 		if (base == current) {
 			return true;
 		}
@@ -2629,8 +2628,8 @@ public class TURTLEModeling {
     }
     
     public boolean unroll(ADComponent adc, int n) {
-		LinkedList path = new LinkedList();
-		calculateOneRecursionPath(adc, new LinkedList(), path);
+		LinkedList<ADComponent> path = new LinkedList<>();
+		calculateOneRecursionPath(adc, new LinkedList<ADComponent>(), path);
 		
 		// A path has been built -> clone it n times
 		// Find the ADJunction
@@ -2645,11 +2644,11 @@ public class TURTLEModeling {
 		return true;
     }
     
-    public ADJunction lastADJunction(LinkedList path) {
+    public ADJunction lastADJunction(LinkedList<ADComponent> path) {
 		ADComponent adc;
 		
 		for(int i=path.size()-1; i>-1; i++) {
-			adc = (ADComponent)(path.get(i));
+			adc = path.get(i);
 			if (adc instanceof ADJunction) {
 				return (ADJunction)adc;
 			}
@@ -2657,17 +2656,16 @@ public class TURTLEModeling {
 		return null;
     }
     
-    public void calculateOneRecursionPath(ADComponent adc, LinkedList explored, LinkedList path) {
+    private void calculateOneRecursionPath(ADComponent adc, LinkedList<ADComponent> explored, LinkedList<ADComponent> path) {
 		explored.add(adc);
 		for(int i=0; i<adc.getNbNext(); i++) {
 			if (calculateOneRecursionPath(adc, adc.getNext(i), explored, path)) {
 				return;
 			}
 		}
-		return;
     }
     
-    public boolean calculateOneRecursionPath(ADComponent base, ADComponent current, LinkedList explored, LinkedList path) {
+    private boolean calculateOneRecursionPath(ADComponent base, ADComponent current, LinkedList<ADComponent> explored, LinkedList<ADComponent> path) {
 		if (current == base) {
 			path.add(current);
 			return true;
@@ -2692,7 +2690,7 @@ public class TURTLEModeling {
 		System.out.println("Unmerging choices: algorithm");
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
-			t = (TClass)(tclass.elementAt(i));
+			t = tclass.elementAt(i);
 			unmergeChoices(t.getActivityDiagram());
         }
 	}
@@ -2741,7 +2739,7 @@ public class TURTLEModeling {
 		System.out.println("Merging choices: algorithm");
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
-			t = (TClass)(tclass.elementAt(i));
+			t = tclass.elementAt(i);
 			mergeChoices(t.getActivityDiagram());
         }
 		System.out.println("End merging choices: algorithm");
@@ -2817,7 +2815,7 @@ public class TURTLEModeling {
 		//Second option: save data with synchro, and load data with synchro
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
-			t = (TClass)(tclass.elementAt(i));
+			t = tclass.elementAt(i);
 			makeSequenceWithDataSave(t);
         }
 	}
@@ -2835,7 +2833,7 @@ public class TURTLEModeling {
 			return;
 		}	
 		
-		Vector v = t.getParamList();
+		Vector<Param> v = t.getParamList();
 		
 		// No parameter to save?
 		if ((v == null) || (v.size() == 0)) {
@@ -2849,7 +2847,7 @@ public class TURTLEModeling {
 		int i;
 		
 		for(i=0; i<v.size(); i++) {
-			p=(Param)(v.get(i));
+			p=v.get(i);
 			list1+="!" + p.getName();
 			list2+="?" + p.getName() + ":nat";
 		}
@@ -2864,7 +2862,7 @@ public class TURTLEModeling {
 		adp.setValueGate("[putseq__, getseq__]");
 		adp.setNewNext(ads.getAllNext());
 		ad.add(adp);
-		ads.setNewNext(new Vector());
+		ads.setNewNext(new Vector<ADComponent>());
 		ads.addNext(adp);
 		
 		
@@ -2893,14 +2891,14 @@ public class TURTLEModeling {
 		ADComponent adc, adc1;
 		ADActionStateWithGate adsg;
 		for(i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.get(i));
+			adc = ad.get(i);
 			if (adc instanceof ADStop) {
 				adc1 = ad.getFirstComponentLeadingTo(adc);
 				if (adc1 != null ){
 					adsg = new ADActionStateWithGate(gput);
 					adsg.setActionValue(list1);
 					ad.add(adsg);
-					adc1.setNewNext(new Vector());
+					adc1.setNewNext(new Vector<ADComponent>());
 					adc1.addNext(adsg);
 					adsg.addNext(adc);
 				}
@@ -2910,19 +2908,19 @@ public class TURTLEModeling {
 		// All next element of sequences must start with an action state on get
 		int j;
 		for(i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.get(i));
+			adc = ad.get(i);
 			if (adc instanceof ADSequence) {
-				v = new Vector();
-				v.add(adc.getNext(0));
+				Vector<ADComponent> vad = new Vector<>();
+				vad.add(adc.getNext(0));
 				for(j=1; j<adc.getNbNext(); j++) {
 					adc1 = adc.getNext(j);
 					adsg = new ADActionStateWithGate(gget);
 					adsg.setActionValue(list2);
 					ad.add(adsg);
 					adsg.addNext(adc1);
-					v.add(adsg);
+					vad.add(adsg);
 				}
-				adc.setNewNext(v);
+				adc.setNewNext(vad);
 			}
 		}
 	}
@@ -2932,7 +2930,7 @@ public class TURTLEModeling {
 		//Second option: save data with synchro, and load data with synchro
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
-			t = (TClass)(tclass.elementAt(i));
+			t = tclass.elementAt(i);
 			removeSequencesDataSave(t.getActivityDiagram());
         }
 	}

@@ -58,8 +58,8 @@ public class TPN {
     private LinkedList attributes;
     
     public TPN() {
-        places = new LinkedList();
-        transitions = new LinkedList();
+        places = new LinkedList<>();
+        transitions = new LinkedList<>();
     }
     
     public LinkedList<Place> getPlaces() {

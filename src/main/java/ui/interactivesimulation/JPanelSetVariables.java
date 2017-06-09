@@ -61,8 +61,8 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 	
  
 	
-	private JComboBox tasks;
-	private JComboBox variables;
+	private JComboBox<String> tasks;
+	private JComboBox<String> variables;
 	private JTextField currentValue, newValue;
 	private JButton setButton;
 	
@@ -101,18 +101,18 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 		add(new JLabel(" "), c2);
 		
 		if (taskIDs == null) {
-			tasks = new JComboBox();
+			tasks = new JComboBox<>();
 		} else {
-			tasks = new JComboBox(taskIDs);
+			tasks = new JComboBox<>(taskIDs);
 			tasks.addActionListener(this);
 		}
 		add(tasks, c2);
 		
 		if ((taskIDs == null) || (taskIDs.length == 0)) {
-			variables = new JComboBox();
+			variables = new JComboBox<>();
 		} else {
 			variableIDs = jfis.makeVariableIDs(0);
-			variables = new JComboBox(variableIDs);
+			variables = new JComboBox<>(variableIDs);
 			variables.addActionListener(this);
 		}
 		add(variables, c2);

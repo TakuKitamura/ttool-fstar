@@ -49,7 +49,7 @@ package myutil;
 import java.util.Vector;
 
 
-public class SortedVector<T> extends Vector<T>{
+public class SortedVector<T extends Comparable<T>> extends Vector<T>{
     
     /**
 	 * 
@@ -65,9 +65,9 @@ public class SortedVector<T> extends Vector<T>{
     }
     
     public boolean add(T o) {
-        if (o instanceof Comparable<?>) {
+        if (o != null) {
             int i = 0;
-            while((i<size()) && (((Comparable)o).compareTo(elementAt(i)) >= 0)) {
+            while((i<size()) && (o.compareTo(elementAt(i)) >= 0)) {
                 i++;
             }
             add(i, o);
