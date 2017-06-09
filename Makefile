@@ -162,7 +162,10 @@ PROD_USERNAME			= apvrille
 PROD_ADDRESS			= ssh.enst.fr
 PROD_PATH			= public_html/docs
 
-TTOOL_DOC_SOCLIB 		= $(TTOOL_DOC)/document_soclib
+TTOOL_DOC_SOCLIB_USERGUIDE_DIR 	= $(TTOOL_DOC)/documents_soclib/USER_GUIDE
+TTOOL_DOC_SOCLIB_USERGUIDE_CMD 	= make user_guide
+TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR 	= $(TTOOL_DOC)/documents_soclib/INSTALLATION_GUIDE
+TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_CMD 	= make installation_guide
 TTOOL_MODELING			= $(TTOOL_PATH)/modeling
 TTOOL_SIMULATORS 		= $(TTOOL_PATH)/simulators
 TTOOL_FIGURES 			= $(TTOOL_PATH)/figures
@@ -225,7 +228,12 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 #NC
 	@mkdir -p $(TTOOL_TARGET)/nc
 	@cp $(TTOOL_DOC)/README_nc $(TTOOL_TARGET)/nc
-	@cp $(TTOOL_DOC_SOCLIB)/doc_ttool_soclib.pdf  $(TTOOL_TARGET)/doc/
+
+	@cd $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR)/&&$(TTOOL_DOC_SOCLIB_USERGUIDE_CMD)
+	@cp $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR)/build/user_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_user_guide.pdf
+	@cd $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR)/&&$(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_CMD)	
+	@cp $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR)/build/installation_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_installation_guide.pdf
+
 # Figures
 	@cp $(TTOOL_FIGURES)/Makefile $(TTOOL_TARGET)/figures
 	@cp $(TTOOL_FIGURES)/mli.mk $(TTOOL_TARGET)/figures
@@ -236,7 +244,7 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 # Basic bin
 	@cp $(TTOOL_EXE) $(TTOOL_TARGET)/
 	@cp $(TTOOL_LOTOS_H) $(TTOOL_TARGET)/bin
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/java TTool/figures TTool/nc TTool/lotos TTool/doc/doc_ttool_soclib.pdf $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE))
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/java TTool/figures TTool/nc TTool/lotos TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE))
 
 $(ADVANCED_RELEASE:.tgz=.tar): $(STDRELEASE:.tgz=.tar) documentation
 	@echo "$(PREFIX) Generating advanced release"

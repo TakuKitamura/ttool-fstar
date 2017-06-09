@@ -3,6 +3,8 @@ TOP		= installation_guide.tex
 # Bibliography (if any)
 BIBLIO		= 
 
+SHELL		= /bin/bash
+
 # Figures directory
 FIGDIR		= fig
 

@@ -1,7 +1,9 @@
 # Top LaTeX document (without .tex extension)
-TOP		= euser_guide.tex
+TOP		= user_guide.tex
 # Bibliography (if any)
 BIBLIO		= 
+
+SHELL		= /bin/bash
 
 # Figures directory
 FIGDIR		= fig
@@ -10,7 +12,7 @@ FIGDIR		= fig
 MAXPASSES	?= 5
 
 # Main, common, Makefile
-include mli.mk
+include ../mli.mk
 #include Makefile.inc
 
 # Main PDF depends on other PDFs generated from fig, dot, dia, gnuplot or
