@@ -177,7 +177,7 @@ public class JStartingWindow extends Window {
         	w = new JStartingWindow(f, splashImage, msg);
         	// Show the window.
         	w.toFront();
-        	w.show();
+        	w.setVisible(true);
         } catch (Exception e) {
         	return null;
         }

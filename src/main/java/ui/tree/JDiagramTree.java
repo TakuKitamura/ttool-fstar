@@ -77,7 +77,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     private DiagramTreeModel dtm;
 
     //for update
-    private Set m_expandedTreePaths = new HashSet();
+    private Set<TreePath> m_expandedTreePaths = new HashSet<>();
     private TreePath[] m_selectedTreePaths = new TreePath[0];
     //private boolean m_nodeWasSelected = false;
 
@@ -204,11 +204,11 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
     public synchronized void run(){
         checkPaths();
-        Iterator l_keys = m_expandedTreePaths.iterator();
+        Iterator<TreePath> l_keys = m_expandedTreePaths.iterator();
         TreePath l_path = null;
         while(l_keys.hasNext()){
             try {
-                l_path = (TreePath) l_keys.next();
+                l_path = l_keys.next();
                 TreePath parent = l_path.getParentPath();
                 //System.out.println("Path: " + l_path);
                 //System.out.println("Parent path: " + parent);
@@ -228,9 +228,9 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
     private void checkPaths() {
         TreePath l_path = null;
-        Iterator l_keys = m_expandedTreePaths.iterator();
+        Iterator<TreePath> l_keys = m_expandedTreePaths.iterator();
         while(l_keys.hasNext()){
-            l_path = (TreePath) l_keys.next();
+            l_path = l_keys.next();
             if (!isAPathOf(l_path)) {
                 m_expandedTreePaths.remove(l_path);
             }
@@ -273,11 +273,11 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     public void treeExpanded(TreeExpansionEvent treeExpansionEvent) {
         TreePath tp = treeExpansionEvent.getPath();
         m_expandedTreePaths.add(tp);
-        Iterator l_keys = m_expandedTreePaths.iterator();
+        Iterator<TreePath> l_keys = m_expandedTreePaths.iterator();
         while(l_keys.hasNext()){
             TreePath l_path = null;
             try {
-                l_path = (TreePath) l_keys.next();
+                l_path = l_keys.next();
                 TreePath parent = l_path.getParentPath();
                 if ((l_path.getPathCount() == 1) || (m_expandedTreePaths.contains(parent))) {
                     expandPath(l_path);

@@ -117,7 +117,7 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
     
     public void enhance() {
         //System.out.println("enhance");
-        Vector v = new Vector();
+        Vector<TGComponent> v = new Vector<>();
         Object o;
         Iterator iterator = componentList.listIterator();
         
@@ -132,7 +132,7 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
         repaint();
     }
     
-    public void enhance(Vector v, TGComponent tgc) {
+    public void enhance(Vector<TGComponent> v, TGComponent tgc) {
         TGComponent tgc1;
         TGConnector tgcon;
         int i;

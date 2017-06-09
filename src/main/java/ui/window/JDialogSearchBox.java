@@ -88,12 +88,12 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     public static final int MAXLENGTH_INPUT = 100;
     public static final String ERROR_INPUT_TOO_LONG="The input is too long.";
 
-    private javax.swing.JList ListKeywords;
-    private javax.swing.JComboBox combobox_Score;
-    private javax.swing.JComboBox combobox_System;
-    private javax.swing.JComboBox combobox_Year;
-    private javax.swing.JComboBox combobox_Diagram;
-    private javax.swing.JComboBox combobox_Num;
+    private javax.swing.JList<String> ListKeywords;
+    private javax.swing.JComboBox<String> combobox_Score;
+    private javax.swing.JComboBox<String> combobox_System;
+    private javax.swing.JComboBox<String> combobox_Year;
+    private javax.swing.JComboBox<String> combobox_Diagram;
+    private javax.swing.JComboBox<String> combobox_Num;
     private javax.swing.JCheckBox databaseCb;
     private javax.swing.JTextPane detailText_db;
     private javax.swing.JTextPane detailText_google;
@@ -145,7 +145,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
 
 
-    private DefaultListModel listModel;
+    private DefaultListModel<String> listModel;
     //ArrayList<GoogleSearch> resultGoogle;
     int searchGoogle;
     //ArrayList<GoogleSearch> resultGoogleScholar;
@@ -192,7 +192,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     private void initComponents(){
         jScrollPane1 = new javax.swing.JScrollPane();
-        ListKeywords = new javax.swing.JList();
+        ListKeywords = new javax.swing.JList<>();
         removeBt = new javax.swing.JButton();
         searchBt = new javax.swing.JButton();
         searchBox = new javax.swing.JTextField();
@@ -207,7 +207,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jScrollPane4 = new javax.swing.JScrollPane();
         resultTable_google = new javax.swing.JTable();
         resultTable_googleScholar = new javax.swing.JTable();
-        listModel = new DefaultListModel();
+        listModel = new DefaultListModel<>();
         jLabel_Keyword = new javax.swing.JLabel();
 
         jLabel_Result = new javax.swing.JLabel();
@@ -220,10 +220,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jPanel_GoogleTab = new javax.swing.JPanel();
         jPanel_DBTab = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
-        combobox_Score = new javax.swing.JComboBox();
-        combobox_System = new javax.swing.JComboBox();;
-        combobox_Year = new javax.swing.JComboBox();
-        combobox_Num = new javax.swing.JComboBox();
+        combobox_Score = new javax.swing.JComboBox<>();
+        combobox_System = new javax.swing.JComboBox<>();
+        combobox_Year = new javax.swing.JComboBox<>();
+        combobox_Num = new javax.swing.JComboBox<>();
         jLabel_System = new javax.swing.JLabel();
         jLabel_Score = new javax.swing.JLabel();
         jLabel_Number = new javax.swing.JLabel();
@@ -238,7 +238,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jScrollPane9= new JScrollPane();
         jTextaddressDB = new JTextField();
 
-        combobox_Diagram = new javax.swing.JComboBox();
+        combobox_Diagram = new javax.swing.JComboBox<>();
         drawBt = new JButton();
         String NUM_LIST[] = {"10","15","20","30","40","50"};
         String DIAGRAM_LIST[] = {"None","Statistic","Histogram"};
@@ -269,8 +269,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         searchGoogle=0;
         searchGoogle = 0;
         searchDatabase =0;
-        rowsGoogle=new ArrayList<Object[]>();
-        rowsGoogleScholar=new ArrayList<Object[]>();
+        rowsGoogle=new ArrayList<>();
+        rowsGoogleScholar=new ArrayList<>();
 
         jLabel_System.setText("System");
         jLabel_Number.setText("Number of result");
@@ -457,15 +457,15 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
         jTabbedPane2.addTab(DB, jPanel_DBTab);
 
 
-        combobox_System.setModel(new javax.swing.DefaultComboBoxModel(SYSTEM_LIST));
+        combobox_System.setModel(new javax.swing.DefaultComboBoxModel<>(SYSTEM_LIST));
 
-        combobox_Year.setModel(new javax.swing.DefaultComboBoxModel(TIME_LIST));
+        combobox_Year.setModel(new javax.swing.DefaultComboBoxModel<>(TIME_LIST));
 
-        combobox_Score.setModel(new javax.swing.DefaultComboBoxModel(SCORE_LIST));
+        combobox_Score.setModel(new javax.swing.DefaultComboBoxModel<>(SCORE_LIST));
 
-        combobox_Diagram.setModel(new javax.swing.DefaultComboBoxModel(DIAGRAM_LIST));
+        combobox_Diagram.setModel(new javax.swing.DefaultComboBoxModel<>(DIAGRAM_LIST));
 
-        combobox_Num.setModel(new javax.swing.DefaultComboBoxModel(NUM_LIST));
+        combobox_Num.setModel(new javax.swing.DefaultComboBoxModel<>(NUM_LIST));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -749,7 +749,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                     Message returnMsg = sendMessage(msg);
 
                                     if (returnMsg != null) {
-                                        Record r = (Record) parserMessage(returnMsg);
+                                        Record r = parserMessage(returnMsg).get(0);
                                         printDetailRecord(r);
                                     }
                                 }
@@ -918,14 +918,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     }
 
-    /**
-     *
-     * @param msg
-     * @return Object
-     */
-    public Object parserMessage(Message msg){
+    public ArrayList<Record> parserMessage(Message msg){
         Client cl = new Client();
         return cl.parserAnswerMessage(msg);
+    }
+
+    public byte[] parserMessageAsBytes(Message msg){
+        Client cl = new Client();
+        return cl.parserAnswerMessageAsBytes(msg);
     }
 
     private void ListKeywordsComponentAdded(java.awt.event.ContainerEvent evt) {
@@ -941,14 +941,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             String query = "";
             //first value
             if (this.listModel.getSize() > 0){
-                String element = (String) this.listModel.elementAt(0);
+                String element = this.listModel.elementAt(0);
                 String value = splitAndConcat(element);
                 query = value;
             }
 
             for (int i = 1; i < this.listModel.getSize(); i++) {
 
-                String element = (String) this.listModel.elementAt(i);
+                String element = this.listModel.elementAt(i);
                 String value = splitAndConcat(element);
 
                 query = query + " + " + value; //(String) this.listModel.elementAt(i);
@@ -1110,7 +1110,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                         Message returnMsg = sendMessage(msg);
 
 
-                        ArrayList<Record> re = (ArrayList<Record>)parserMessage(returnMsg);
+                        ArrayList<Record> re = parserMessage(returnMsg);
                         putDBToTable(re);
                         showtable(rowsDB, modelDB,2);
 
@@ -1252,12 +1252,12 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             String query = "";
             if (this.listModel.getSize()>0)
                 //split the string
-                query = splitAndConcat((String) this.listModel.elementAt(0));
+                query = splitAndConcat(this.listModel.elementAt(0));
             for (int i=1; i< this.listModel.getSize(); i++ ){
                 if (query != "")
-                    query= query + " + " + splitAndConcat((String) this.listModel.elementAt(i));
+                    query= query + " + " + splitAndConcat(this.listModel.elementAt(i));
                 else
-                    query = splitAndConcat((String) this.listModel.elementAt(i));
+                    query = splitAndConcat(this.listModel.elementAt(i));
             }
             this.searchBox.setText(query);
         }
@@ -1352,7 +1352,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             Message ret = sendMessage(msg);
             if (ret !=null)
                 {
-                    byte[] b = (byte[])parserMessage(ret);
+                    byte[] b = parserMessageAsBytes(ret);
                     if(b != null) {
                         ByteArrayInputStream in = new ByteArrayInputStream(b);
                         img = ImageIO.read(in);
@@ -1377,7 +1377,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
             Message ret = sendMessage(msg);
             if (ret !=null)
                 {
-                    byte[] b = (byte[])parserMessage(ret);
+                    byte[] b = parserMessageAsBytes(ret);
                     if(b != null) {
                         ByteArrayInputStream in = new ByteArrayInputStream(b);
                         img = ImageIO.read(in);

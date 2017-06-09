@@ -59,7 +59,26 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Client {
-    public  Object parserAnswerMessage(Message answerMsg) {
+    public  byte[] parserAnswerMessageAsBytes(Message answerMsg) {
+        if (answerMsg ==null){
+            return null;
+        }
+
+        String cmd = answerMsg.getCmd();
+        if (cmd != null) {
+            if (cmd.equals(Message.RESULT_STATISTIC)) {
+                // the content are image.
+                return (byte[]) answerMsg.getContent().get(0);
+            } else if (cmd.equals(Message.RESULT_HISTOGRAM)) {
+                // the content are image.
+                return (byte[]) answerMsg.getContent().get(0);
+            }
+        }
+
+        return null;
+    }
+
+    public  ArrayList<Record> parserAnswerMessage(Message answerMsg) {
         //Analyse the message from the server,
         //Depends on the cmd, we can determine the values
         if (answerMsg ==null){
@@ -143,17 +162,9 @@ public class Client {
 
             }
 
-            return r;
-
-        } else if (cmd.equals(Message.RESULT_STATISTIC)) {
-            // the content are image.
-            byte[] encoded = (byte[]) answerMsg.getContent().get(0);
-            return encoded;
-        }  else if (cmd.equals(Message.RESULT_HISTOGRAM)) {
-            // the content are image.
-            byte[] encoded = (byte[]) answerMsg.getContent().get(0);
-            return encoded;
-
+            ArrayList<Record> lrecord = new ArrayList<>();
+            lrecord.add(r);
+            return lrecord;
         } else
             //TraceManager.addDev("The command is not supported\n");
             return null;

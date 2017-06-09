@@ -117,14 +117,14 @@ public class EBRDDPanel extends TDiagramPanel {
     
     public void enhance() {
         //System.out.println("enhance");
-        Vector v = new Vector();
+        Vector<TGComponent> v = new Vector<>();
         Object o;
         Iterator iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
             o = iterator.next();
             if (o instanceof EBRDDStartState){
-                enhance(v, (EBRDDStartState)o);
+                this.enhance(v, (EBRDDStartState)o);
             }
         }
         
@@ -132,7 +132,7 @@ public class EBRDDPanel extends TDiagramPanel {
         repaint();
     }
     
-    public void enhance(Vector v, TGComponent tgc) {
+    public void enhance(Vector<TGComponent> v, TGComponent tgc) {
         TGComponent tgc1;
         TGConnector tgcon;
         int i;
@@ -165,7 +165,7 @@ public class EBRDDPanel extends TDiagramPanel {
         // Explore next elements
         for(i=0; i<tgc.getNbNext(); i++) {
             tgc1 = getNextTGComponent(tgc, i);
-            enhance(v, tgc1);
+            this.enhance(v, tgc1);
         }
     }
 	
