@@ -9342,12 +9342,17 @@ public class GTURTLEModeling {
 			if (originDestMap.containsKey(bl1.split("__")[bl1.split("__").length-1])){
 				originDestMap.get(bl1.split("__")[bl1.split("__").length-1]).add(bl2.split("__")[bl2.split("__").length-1]);
 			}
+			else if (originDestMap.containsKey(bl2.split("__")[bl2.split("__").length-1])){
+				originDestMap.get(bl2.split("__")[bl2.split("__").length-1]).add(bl1.split("__")[bl1.split("__").length-1]);
+			}
 			else {
 				Set<String> hs= new HashSet<String>();
 				hs.add(bl2.split("__")[bl2.split("__").length-1]);
 				originDestMap.put(bl1.split("__")[bl1.split("__").length-1], hs);
 			}
 		}
+
+		//System.out.println(originDestMap);
 		//Add Relations
 
 		for (String bl1: originDestMap.keySet()){

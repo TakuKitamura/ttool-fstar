@@ -187,10 +187,13 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         mutexStates = null;
     }
 
+
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
         Font fold = f;
-
+		f = f.deriveFont(minFontSize);
+		//width = g.getFontMetrics().stringWidth(value)+2*textX;
+		//height=width/3;
         //System.out.println("width=" + width + " height=" + height);
 
         if ((rescaled) && (!tdp.isScaled())) {
@@ -210,8 +213,12 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             f = f.deriveFont((float)maxCurrentFontSize);
             g.setFont(f);
             //System.out.println("max current font size:" + maxCurrentFontSize);
+
+
             while(maxCurrentFontSize > (minFontSize-1)) {
                 w0 = g.getFontMetrics().stringWidth(value);
+
+	       	
                 if (w0 < (width - (2*textX))) {
                     break;
                 }
@@ -231,7 +238,6 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
         }
 
-        //System.out.println("Current font size:" + currentFontSize);
 
         Color c = g.getColor();
         //g.setColor(ColorManager.AVATAR_STATE);
@@ -240,7 +246,6 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         g.fillRoundRect(x, y, width, height, 5, 5);
         g.setColor(c);
         g.drawRoundRect(x, y, width, height, 5, 5);
-
 
 
         // Strings
@@ -407,6 +412,10 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
     }
 
+	public void recalculateSize(){
+		width=Math.max(width,value.length()*11);
+	//	System.out.println(width + " " + value);
+	}
 
     public int getType() {
         return TGComponentManager.AVATARSMD_STATE;
