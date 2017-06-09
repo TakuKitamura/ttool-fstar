@@ -1,4 +1,4 @@
-PREFIX			= [TTOOL]            
+PREFIX			= [$(COLOR)TTOOL$(RESET)]            
 
 MANIFEST		= $(TTOOL_DIR)/ttool.txt
 

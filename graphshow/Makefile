@@ -1,4 +1,4 @@
-PREFIX			= [GRAPHSHOW]        
+PREFIX			= [$(COLOR)GRAPHSHOW$(RESET)]        
 
 MANIFEST		= $(GRAPHSHOW_DIR)/manifest.txt
 

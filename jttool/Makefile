@@ -1,4 +1,4 @@
-PREFIX			= [JTTOOL]           
+PREFIX			= [$(COLOR)JTTOOL$(RESET)]           
 
 LOCAL_SRC_DIR		= $(JTTOOL_DIR)/src/main/java
 LOCAL_BUILD_DIR		= $(JTTOOL_DIR)/build/classes/main
