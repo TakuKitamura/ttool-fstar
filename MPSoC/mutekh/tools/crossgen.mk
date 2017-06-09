@@ -28,8 +28,8 @@
 TARGET=powerpc
 
 # Install PATH
-#PREFIX=/opt/mutekh
-PREFIX=/users/cao/genius/mutekh
+PREFIX=/opt/mutekh
+#PREFIX=/users/cao/genius/mutekh
 
 # Temp directory
 WORKDIR=/tmp/crossgen
