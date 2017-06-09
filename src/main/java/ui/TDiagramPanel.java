@@ -226,6 +226,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public static boolean AVATAR_ANIMATE_ON;
 
 
+    public boolean drawable = true;
+    
+
 
     // Constructor
     public TDiagramPanel(MainGUI _mgui, TToolBar _ttb) {
@@ -393,6 +396,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     private Font fontToUse = null;
     public void paintMycomponents(Graphics g, boolean b, double w, double h) {
+
+	if (!drawable) {
+	    return;
+	}
+
+	
         if (this.fontToUse == null)
             this.fontToUse = g.getFont ();
         else

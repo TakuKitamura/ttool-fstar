@@ -168,6 +168,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
     
     public void internalDrawingAux (Graphics graph) {
+
+	//TraceManager.addDev("Block drawing aux = " + this);
+	
         // Draw outer rectangle (for border)
         Color c = graph.getColor ();
         graph.drawRect (this.x, this.y, this.width, this.height);
@@ -826,6 +829,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             //System.out.println("Loading attributes");
             //System.out.println(nl.toString());
 
+	    //TraceManager.addDev("LEP Begin Block  = " + this + " trace=");
+	    //Thread.currentThread().dumpStack();
+
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
@@ -940,6 +946,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         } else {
             globalCode = Conversion.wrapText(tmpGlobalCode);
         }
+	
+	//TraceManager.addDev("LEP End Block  = " + this);
+	
     }
 
     public String getBlockName() {

@@ -2235,7 +2235,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void openProjectFromFile(File _f) {
-
+	file = _f;
         String s = null;
         if(checkFileForOpen(_f)) {
             try {

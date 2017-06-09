@@ -370,5 +370,4 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         jta.append(s);
     }
 
-
 }
