@@ -1,0 +1,501 @@
+\documentclass{beamer} 
+
+\definecolor{blue1}{RGB}{197,229,240} % blue of figures
+
+%\newcommand{\LinkToMethodo}{
+%\begin{textblock}{25}(92,89)
+%  \hyperlink{METHODO}{\beamergotobutton{Back to methodology}}
+% \end{textblock}
+%} 
+
+\graphicspath{{./fig/}}
+
+
+% *** TPT STYLE with added Lip6 logo ***
+
+\definecolor{colorframetitle}{RGB}{191,18,56} % Title of frames
+\definecolor{redbox}{RGB}{191,18,56} % 
+\definecolor{blackbox}{RGB}{0,0,0} % 
+\definecolor{brownbox}{RGB}{128,99,90} % 
+\definecolor{bluebox}{RGB}{0,0,128} % 
+
+\usepackage[absolute,overlay]{textpos}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\setlength{\TPHorizModule}{1mm}
+\setlength{\TPVertModule}{1mm}
+
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing,calc}
+\usetikzlibrary{arrows,shapes,decorations,automata,backgrounds,petri}
+\usepackage{scalefnt}
+
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+
+\tikzstyle{mybox} = [draw=redbox, fill=redbox!20, very thick,
+    rectangle, rounded corners, inner sep=10pt, inner ysep=20pt]
+\tikzstyle{fancytitle} =[fill=redbox, text=white, rectangle]
+
+
+\newcommand{\MyLogo}{
+%\begin{textblock}{14}(117.2,0.7)
+\begin{textblock}{14}(110.8,87.5)
+  \includegraphics[width=0.8cm]{tpt}
+ \includegraphics[width=0.9cm]{logo_lip6}
+ \end{textblock}
+}
+
+\usepackage{beamerthemesplit}
+\useoutertheme[subsection=false]{smoothbars}
+\setbeamercolor{subsection in head}{parent=blue}
+%\useoutertheme{miniframes}
+
+\setbeamercolor{itemize item}{fg=redbox}
+\setbeamercolor{structure}{fg=redbox, bg=red}
+\setbeamercolor{block title}{bg=bluebox,fg=white}
+\setbeamercolor{block title alerted}{bg=redbox,fg=white}
+\setbeamercolor{block body alerted}{bg=bluebox!0,fg=black}
+\setbeamercolor{block title example}{bg=black, fg=white}
+\setbeamercolor{palette primary}{fg=black,bg=white} % changed this
+\setbeamercolor{palette secondary}{use=structure,fg=structure.fg!100!white} % changed this
+\setbeamercolor{palette tertiary}{use=structure,fg=structure.fg!100!white} % changed this
+\setbeamercolor*{palette quaternary}{fg=black,bg=white} % outline on top left
+\setbeamercolor{background canvas}{bg=white, fg=black} 
+\setbeamercolor{frametitle}{fg=colorframetitle}
+
+\setbeamercolor{structure}{fg=redbox, bg=redbox!70}
+\setbeamercolor{structure}{fg=redbox, bg=black}
+%\setbeamercolor{block title}{bg=redbox,fg=black}
+\setbeamercolor{block title}{bg=black!20,fg=redbox}
+\setbeamercolor{block title alerted}{bg=redbox,fg=black}
+\setbeamercolor{block body alerted}{bg=redbox,fg=white}
+\setbeamercolor{block title example}{bg=black!20}
+
+
+% First  frame
+\newcommand{\RectanglesOfMainSlide}{%
+\raisebox{0mm}[0pt][0pt]{%
+\begin{pgfpicture}{0mm}{0mm}{0mm}{0mm}
+\pgfsetlinewidth{5mm}
+\color{redbox}
+\pgfline{\pgfpoint{-4mm}{-12mm}}{\pgfpoint{24mm}{-12mm}}
+\color{blackbox}
+\pgfline{\pgfpoint{24mm}{-12mm}}{\pgfpoint{52mm}{-12mm}}
+\color{bluebox}
+\pgfline{\pgfpoint{52mm}{-12mm}}{\pgfpoint{80mm}{-12mm}}
+\end{pgfpicture}}}
+
+\newcommand{\makeFirstFrame}{
+\setbeamertemplate{footline}{} 
+\frame[plain]{
+\begin{columns}[c]
+\column{3cm}
+\vspace{-2cm}\\
+\includegraphics[width=2.5cm]{tpt}
+\\Institut\\ Mines-Telecom
+\includegraphics[width=2.5cm]{fig/logo_lip6.png}
+\\Paris Sorbonne University
+\column{7cm}
+\vspace{1cm}\\
+\LARGE{\textbf{\theTitle}}\\
+\vspace{0.5cm}
+\normalsize{\theAuthors}\\
+\vspace{0.5cm}
+\normalsize{\theConferenceAndPlace}\\
+\vspace{-1cm}
+\RectanglesOfMainSlide
+\end{columns}
+}
+\activateFootline
+}
+
+
+% Frames decoration
+
+\newcommand{\RectanglesBeforeTitle}{%
+\raisebox{0mm}[0pt][0pt]{%
+\begin{pgfpicture}{0mm}{0mm}{0mm}{0mm}
+\pgfsetlinewidth{5mm}
+\color{redbox}
+\pgfline{\pgfpoint{-2mm}{2.2mm}}{\pgfpoint{4mm}{2.2mm}}
+\color{blackbox}
+\pgfline{\pgfpoint{4mm}{2.2mm}}{\pgfpoint{10mm}{2.2mm}}
+\color{bluebox}
+\pgfline{\pgfpoint{10mm}{2.2mm}}{\pgfpoint{16mm}{2.2mm}}
+\end{pgfpicture}}}
+
+\setbeamertemplate{frametitle}{
+\begin{columns}[t]
+\column{16mm}
+\RectanglesBeforeTitle 
+\column{10.7cm}
+\strut\textbf{\insertframetitle}\strut
+\end{columns}
+}
+
+% Foot line
+
+\newcommand{\Ffootline}{
+\MyLogo
+\begin{tikzpicture}
+ \fill [color=white, fill=redbox] (-1, -0.05) rectangle (1, 0.30);
+\node[white, right] (note1) at (-1, 0.10) {\insertframenumber/\inserttotalframenumber};
+%\node[white, left] (note1bis) at (0.98, 0.10) {\theDate};
+\node[white, left] (note1bis) at (1.05, 0.10) {\theDate};
+% \fill [color=white, fill=blackbox] (1.05, -0.05) rectangle (4.5, 0.30);
+ \fill [color=white, fill=blackbox] (1.05, -0.05) rectangle (6.5, 0.30);
+\node[white, align=center] (note2) at (3.77, 0.12) {Institut Mines-Telecom, Paris Sorbonne Universites};
+% \fill [color=red, fill=bluebox] (4.55, -0.05) rectangle (10.75, 0.30);
+\fill [color=red, fill=bluebox] (6.55, -0.05) rectangle (10.75, 0.30);
+\node[white, align = center] (note3) at (8.15, 0.10) {\footnoteTitle};
+%\includegraphics[width=1]{fig/logo_lip6.png}
+%\node[white] (note3) at (7.5, 0.10) {\theTitle};
+\end{tikzpicture}
+%\includegraphics[width=1cm]{logo_lip6}
+}
+
+\newcommand{\activateFootline}{
+\setbeamertemplate{footline}{
+\usebeamerfont{structure}
+\Ffootline
+}
+}
+
+
+% *** END OF TPT STYLE ***
+
+
+%remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% To show the outline at the beginning of each section
+%\AtBeginSection[]{
+%   \begin{frame}
+%   \frametitle{Outline}
+%   %\begin{center}{\LARGE Outline }\end{center}
+%   \tableofcontents[currentsection,hideothersubsections]
+%   \end{frame} 
+%}
+
+%\newcommand{\LinkToMethodo}{
+%\begin{textblock}{25}(102,89)
+%  \hyperlink{METHODO}{\beamergotobutton{Back to methodology}}
+% \end{textblock}
+%}
+
+\lstset{language=C,basicstyle=\tiny,keywordstyle=\color{red}\bfseries,  commentstyle=\color{blue}\textit,stringstyle=\color{green}\ttfamily, showspaces=false,showstringspaces=false}
+
+\newcommand{\mytilde}{\raise.17ex\hbox{$\scriptstyle\mathtt{\sim}$}}
+
+\newcommand{\tikzgrid}{
+\begin{pgfonlayer}{background}
+\draw[gray!50]
+(current bounding box.south west)
+grid[step=.2] (current bounding box.north east);
+\draw[red!50]
+(current bounding box.south west)
+grid (current bounding box.north east);
+\end{pgfonlayer}
+}
+
+\newcommand*{\ExtractCoordinate}[3]{\path (#1); \pgfgetlastxy{#2}{#3};}%
+
+\newdimen\tlx
+\newdimen\tlx
+\newdimen\brx
+\newdimen\bry
+
+
+
+
+\newcommand{\footnoteTitle}{Using TTool with SoCLib}
+\newcommand{\theTitle}{\normalsize{Using TTool with SoCLib}}
+\newcommand{\theAuthors}{Daniela Genius, Ludovic Apvrille\\daniela.genius@lip6.fr\\ ludovic.apvrille@telecom-paristech.fr}
+\newcommand{\theConferenceAndPlace}{Installation Guide for the\\\textbf{SoCLib} extension\\ of \textbf{TTool/AVATAR}}
+\newcommand{\theDate}{February 2017}
+
+\graphicspath{{./fig/}}
+
+
+\definecolor{color1}{rgb}{0.87,0.00,0.21} % rouge ENST
+\definecolor{myblue}{rgb}{0.00,0.00,1.00} % blue for tables
+
+\begin{document}
+
+\makeFirstFrame
+
+
+
+%\lstset{language=C,basicstyle=\scriptsize,keywordstyle=\color{red}\bfseries,  commentstyle=\color{blue}\textit,stringstyle=\color{green}\ttfamily,labelstyle=\tiny, showspaces=false,showstringspaces=false}
+
+% To show the outline at the beginning of each section
+%\AtBeginSection[]{
+ % \begin{frame}
+ %  \MyLogo
+ %  \frametitle{Outline}
+ %  \tableofcontents[currentsection,hideothersubsections]
+  % \end{frame} 
+%}
+	
+
+\setbeamercolor{background canvas}{bg=color1} 
+
+\setbeamercolor{background canvas}{bg=white} 
+
+\section{Installation}
+\subsection{Requirements}
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Requirements for Linux and MacOSX}
+The following describes a developer installation (to obtain a release of TTool, see
+\texttt{http://ttool.telecom-paristech.fr/})
+
+\begin{enumerate}
+\item \texttt{git clone git@gitlab.enst.fr:mbe-tools/TTool.git}
+
+\item The \texttt{MPSoC} subdirectory of TTool 
+ contains MutekH sources in the \texttt{mutekh} 
+subdirectory and a SoCLib version 
+ in the \texttt{soclib} subdirectory
+\item A 64 bit Linux is preferable (successfully tested)
+\item Your system has to feature a gcc compiler and a gdb
+\begin{itemize}
+\item Linux : gcc 4.7.3 was tested with success 
+\item MacOSX : there are some difficulties with the Xcode compiler, use macports or the homebrew gcc-4.8 compiler 
+\end{itemize}
+
+\item A valid SystemC compiler to compile the SoCLib platform:
+\texttt{accellera.org/downloads/standards/systemc}
+\begin{itemize}
+\item Linux : systemc-2.2.0 was tested with success
+\item MacOSX : systemc-2.3.1 from Accellera was tested with success: \\\texttt{accellera.org/downloads/standards/systemc}
+\end{itemize}
+\end{enumerate}
+}
+
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Installation under Linux}
+Choose a directory where you wish to install TTool : \texttt{\$TTOOL\_DIR}
+
+
+If you have root privilege on your machine, it is recommended to install the auxiliary tools and compilers under \texttt{/opt}.
+
+Often, this is not the case; choose a directory, example \texttt{\$HOME/mydir}
+The crosscompiler generator script has to be adapted (see slide referring to
+ cross compiler installation).
+
+In the following, we refer to both as \texttt{\$INSTALL\_DIR}
+
+Add in your \texttt{.bashrc}
+\begin{verbatim}
+export SYSTEMC=$INSTALL_DIR/systemc-2.2.0
+\end{verbatim}
+
+\begin{verbatim}
+export PATH=$INSTALL_DIR/java/bin:$SYSTEMC/bin
+:$INSTALL_DIR/mutekh/bin:
+$TTOOL_DIR/MPSoC/soclib/utils/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALL_DIRg/mutekh/lib/
+:$SYSTEMC/lib-linux64:$LD_LIBRARY_PATH
+\end{verbatim}
+}
+
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Installation under Linux (2)}
+We recommend to use bash.
+
+Example \texttt{.bashrc} lines
+\begin{footnotesize}
+\begin{verbatim}
+export PATH=$PATH:$HOME/bin:$HOME/git/TTool/MPSoC/soclib/utils/bin
+export PATH=$PATH:/opt/gcc-cross-mipsel/4.3.3/bin/
+export PATH=$PATH:/cxtools/gcc_mips/obj/bin/
+export PS1='\u@\h \w $ '
+export PATH=$HOME/mutekh/bin:$PATH
+\end{verbatim}
+\end{footnotesize}
+}
+
+
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Installation under MacOSX}
+The differences are the following : 
+\begin{verbatim}
+export SYSTEMC=$INSTALL_DIR/systemc-2.3.1
+\end{verbatim}
+for the SystemC version 
+\begin{verbatim}
+export LD_LIBRARY_PATH=$INSTALL_DIR/mutekh/lib/:
+$SYSTEMC/lib-linux64:$LD_LIBRARY_PATH
+\end{verbatim}
+in order to use \texttt{lib-linux64}.
+}
+
+
+\subsection{}
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Add-ons}
+
+Some tools cannot be distributed by us. If you wish to
+\begin{itemize}
+\item   Make proofs of safety properties from AVATAR models, you need to install and configure UPPAAL. Here is some help : \texttt{http://ttool.telecom-paristech.fr/\\installation\_companion.html\#uppaal}
+ \item    Make proofs of security properties from AVATAR models, you need to install and configure ProVerif. Here is some help : \texttt{http://ttool.telecom-paristech.fr/\\installation\_companion.html\#proverif}
+\end{itemize}
+}
+
+\subsection{Cross Compilers}
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Generating the Crosscompilers}
+ \texttt{MPSoC/mutekh/tools/crossgen.mk} fetches and generates the crosscompilers.
+
+The crosscompiler will serve to compile your application 
+(task and main file produced by TTool)
+for the desired architecture.
+
+To generate your crosscompilers, you have to execute \texttt{./crossgen.mk} which is part of MutekH.
+
+This is done by typing \\
+ 
+\texttt{./crossgen.mk toolchain}
+
+Important : per default, the installation directory is /opt. You migght not have root privileges. In this case change the line 
+\begin{verbatim}
+PREFIX=/opt/mutekh
+\end{verbatim}
+into 
+\begin{verbatim}
+PREFIX=$INSTALL_DIR/mutekh
+\end{verbatim}
+Where \texttt{\$INSTALL\_DIR} is the directory you have chosen to install your crosscompilers
+}
+
+\subsection{Cross Compilers}
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Generating the Crosscompilers (2)}
+Available targets for crosscompiler generation:\\
+\texttt{mipsel, powerpc, arm, i686, x86\_64, nios2, sparc, avr, lm32, microblaze, avr32}\\
+
+SoCLib extension tested for \texttt{mipsel, powerpc}
+
+The script will fetch everything it requires (on some machines 
+a proxy must be set beforehand)
+
+See also \texttt{www.soclib.fr/trac/dev/wiki/CrossCompiler}
+
+\textbf{Note:} If an installation aborts, be careful to delete all files in /tmp/crossgen. 
+}
+
+\subsection{Available Processor Cores}
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Available Processor Cores}
+
+\begin{itemize}
+\item 
+  Currently the complete toolchain is only validated for PowerPC, 
+but it is easy to add other CPU as MutekH
+  allows heterogeneous processors. Validation for MIPS and Microblaze is under way.
+
+\item  The topcell can potentially be used with
+Instruction Set Simulators for the following architectures :  
+\begin{itemize}
+\item PowerPc 405
+\item Nios II
+ \item Mips 32
+\item Arm 7
+\item Sparc v8
+\item LM 32
+\item Microblaze (currently no mutekH support)
+\end{itemize}
+\item The mapping table generation and calculation of addresses in \texttt{/src/ddtranslatorSoclib/toTopcell} of other architectures might have to be extended (ongoing work, requests to \texttt{daniela.genius@lip6.fr})
+\end{itemize}
+%\textbf{For MicroBlaze, currently no mutekH support exists}
+}
+
+\subsection{TTool Code Generation}
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Directories in the TTool Arborescence}
+
+Generation of POSIX code for local workstation in directory \texttt{TTool/executablecode}. 
+
+Generation of code for MPSoC platform in directory \texttt{TTool/MPSoC}.
+
+\texttt{TTool/executablecode} and \texttt{TTool/MPSoC} both
+ contain the following subdirectories:
+\begin{itemize}
+\item \texttt{generated\_src}: generated task code for AVATAR blocks and main code spawning the POSIX threads
+\item \texttt{src}: the runtime for MPSoC platforms 
+\end{itemize}
+ \texttt{TTool/MPSoC} additionnally contains
+\begin{itemize}
+\item \texttt{generated\_topcell}: topcell and mapping information to generate the ldscript (instructions for linker).
+\end{itemize}
+}
+
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Directories in the TTool Arborescence (2)}
+
+ In  the \texttt{generated\_topcell} directory :
+\begin{itemize}
+\item \texttt{config\_noproc} 
+\item \texttt{deployinfo.h} copied to \texttt{Prog/mutekh/arch/soclib}, generated by \texttt{TTool/src/ddtranslatorSoclib/toTopcell/Deployinfo.java}
+\item \texttt{deployinfo\_map.h} copied to \texttt{Prog/mutekh/arch/soclib}, generated by \texttt{TTool/src/ddtranslatorSoclib/toTopcell/Deployinfo.java}
+\item \texttt{nbproc} contains number of CPUs, generated by \texttt{TTool/src/ddtranslatorSoclib/toTopcell/Deployinfo.java}. This info is appended to \texttt{config\_noproc}
+\item \texttt{procinfo.mk} 
+\end{itemize}
+}
+
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Directories in the TTool Arborescence (3)}
+
+Central Makefile \texttt{MPSoC/Makefile.forsoclib}
+which copies generated code from the \texttt{TTool} into the \texttt{MPSoC} arborescence as follows:
+\begin{itemize}
+\item \texttt{generated\_src} directory:
+\begin{itemize}
+\item  \texttt{*.c} and \texttt{*.h} copied to \texttt{MPSoC/mutekh/examples/avatar}
+\item \texttt{src\_soclib} to \texttt{MPSoC/mutekh/libavatar}
+\end{itemize}
+\item \texttt{generated\_topcell} directory:
+\begin{itemize}
+\item \texttt{top.cc} to  \texttt{MPSoC/soclib/soclib/platform/topcells/\\caba-vgmn-mutekh\_kernel\_tutorial/top.cc}
+\item		 \texttt{deployinfo.h} and \texttt{deployinfo\_map.h} to \texttt{MPSoC/mutekh/arch/soclib}\\
+                 they are used by \texttt{MPSoC/mutekh/arch/soclib/ldscript.cpp}, a preprocessor generating the \texttt{ldscript}
+\end{itemize}
+\end{itemize}
+}
+
+\frame[containsverbatim]{
+\MyLogo
+\frametitle{Directories in the TTool Arborescence (4)}
+The \texttt{src/ddtranslatorSoclib} directory 
+\begin{itemize}
+\item contains the code for analyzing the deployment diagrams
+\item contains subdirectories toSoclib and toTopCell generating task/main code and topcell/information for the 
+ldscript and main, respectively
+\end{itemize}
+
+Make sure that the script \texttt{TTool/ttool.exe} contains the line
+
+\begin{verbatim}
+java -Xmx1024m -Djavax.net.ssl.trustStore=ServerKeyStore 
+-Djavax.net.ssl.trustStorePassword=123456  -jar ttool.jar 
+-config config.xml -experimental -debug -avatar -uppaal 
+-launcher
+\end{verbatim}
+
+In TTool type \texttt{make all}. This should generate the class files and \texttt{TTool/bin/ttool.jar}. Then,
+\texttt{./ttool.exe} starts TTool.
+}
+
+\end{document}
