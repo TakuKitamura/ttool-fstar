@@ -1,4 +1,4 @@
-PREFIX			= [LAUNCHER]         
+PREFIX			= [$(COLOR)LAUNCHER$(RESET)]         
 
 MANIFEST		= $(LAUNCHER_DIR)/manifest.txt
 

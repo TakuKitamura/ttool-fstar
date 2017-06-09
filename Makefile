@@ -1,32 +1,41 @@
 export JAVAC  		= javac
 export JAR    		= jar
+JAVA			= java
 JAVADOC			= javadoc
 MAKE			= make -s
 TAR			= tar
 GZIP			= gzip
-PREFIX			= [BASE]             
+
+export COLOR		= $(shell tput setaf 1)
+export RESET		= $(shell tput sgr0)
+PREFIX			= [$(COLOR)BASE$(RESET)]             
 
 export TTOOL_PATH 	:= $(shell /bin/pwd)
 
 define HELP_message
-How to compile TTool:
----------------------
-make all                        builds TTool and produces the jar files in bin/
-make ttool			builds TTool (but do not produce the jar of companion software)
+Compilation targets:
+--------------------
+make all                Build TTool and the jar of companion software.
+make ttool		Build TTool only.
 
 Usual targets:
----------------
-make (help)                     prints this help
-make documentation              generates the documentation of java classes using javadoc
-make release                    to prepare a new release for the website. It produces the release.tgz and releaseWithSrc.tgz files in releases/
-make test                       tests on TTool.
-make publish_jar                places ttool.jar in perso.telecom-paristech.fr/docs/ttool.jar. Must have the right ssh key installed for this
-make clean                      removes the .class
-make ultraclean                 runs clean and removes the jar files in bin/ and the releases
+--------------
+make (help)             Print this help.
+make documentation      Generate the documentation of java classes using javadoc.
+make release            Prepare a new release for the website.
+			It produces the release.tgz and releaseWithSrc.tgz files.
+make test               Run tests on TTool.
+make publish_jar        Build TTool and upload the resulting archive.
+			!!! Must have the right ssh key installed for this !!!
+make clean              Clean the repository from compilation artifacts.
+make ultraclean         Clean the repository from binaries and compilation artifacts.
 
 Other targets:
 --------------
-make preinstall			generates a preinstall version of TTool for Linux, Windows and MacOS and publish them on perso.telecom-paristech.fr
+make preinstall		Generate a preinstall version of TTool for Linux, Windows and
+			MacOS and publish them on perso.telecom-paristech.fr.
+			!!! Must have the right ssh key installed for this !!!
+make git		Update the build number.
 
 
 Please report bugs or suggestions of improvements to:
@@ -34,7 +43,7 @@ Please report bugs or suggestions of improvements to:
 endef
 export HELP_message
 
-.PHONY: ttool clean launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler documentation help ultraclean publish_jar preinstall test
+.PHONY: ttool clean launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler documentation help ultraclean publish_jar preinstall test git
 
 help:
 	@echo "$$HELP_message"
@@ -184,6 +193,10 @@ ADVANCED_RELEASE		= $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz
 TTOOL_PREINSTALL_LINUX 		= $(TTOOL_STD_RELEASE)/ttoollinux.tgz
 TTOOL_PREINSTALL_WINDOWS 	= $(TTOOL_STD_RELEASE)/ttoolwindows.tgz
 TTOOL_PREINSTALL_MACOS 		= $(TTOOL_STD_RELEASE)/ttoolmacos.tgz
+
+BUILDER			= $(TTOOL_PATH)/builder.jar
+BUILD_INFO		= build.txt
+BUILD_TO_MODIFY		= $(TTOOL_SRC)/ui/util/DefaultText.java
 
 TTOOL_LOTOS_H		= $(patsubst $(TTOOL_DIR)/runtime/%,$(TTOOL_BIN)/%,$(wildcard $(TTOOL_DIR)/runtime/spec*))
 
@@ -397,6 +410,14 @@ publish_jar: $(TTOOL_BINARY)
 preinstall: $(TTOOL_PREINSTALL_WINDOWS) $(TTOOL_PREINSTALL_LINUX) $(TTOOL_PREINSTALL_MACOS)
 	@echo "$(PREFIX) Publishing preinstall versions"
 	scp $^ $(PROD_USERNAME)@$(PROD_ADDRESS):$(PROD_PATH)/
+
+git:
+	@echo "$(PREFIX) Updating build number"
+	@date
+	git pull
+	@$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
+	git commit -m 'update on build version: $(BUILD_INFO)' $(BUILD_INFO) $(BUILD_TO_MODIFY)
+	git push
 
 # ======================================== 
 # ==========       TESTS        ========== 

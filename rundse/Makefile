@@ -1,4 +1,4 @@
-PREFIX			= [RUNDSE]           
+PREFIX			= [$(COLOR)RUNDSE$(RESET)]           
 
 MANIFEST		= $(RUNDSE_DIR)/manifest.txt
 
