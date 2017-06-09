@@ -59,7 +59,7 @@ import java.util.Vector;
 
 public class DiagramTreeModel implements TreeModel {
     private MainGUI mgui;
-    private Vector treeModelListeners = new Vector();
+    private Vector<TreeModelListener> treeModelListeners = new Vector<>();
     
     
     public DiagramTreeModel(MainGUI _mgui) {

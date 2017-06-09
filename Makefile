@@ -54,7 +54,7 @@ FORCE:
 # ========== SUB-PROJECTS BUILD ========== 
 # ======================================== 
 export TTOOL_SRC 		= $(TTOOL_PATH)/src/main/java
-export GLOBAL_JAVA		= $(shell cd $(TTOOL_SRC); find . -name "*.java")
+export GLOBAL_JAVA		= $(shell cd $(TTOOL_SRC); find . -name "[^.]*.java")
 export TTOOL_RESOURCES		= $(TTOOL_PATH)/src/main/resources
 export TTOOL_WEBCRAWLER_SRC 	= $(TTOOL_PATH)/src/main/java/web/crawler
 export TTOOL_BIN 		= $(TTOOL_PATH)/bin

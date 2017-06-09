@@ -274,7 +274,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         try {
 
-            Vector<AvatarSimulationPendingTransaction> ll = (Vector<AvatarSimulationPendingTransaction>)(ass.getPendingTransitions().clone());
+            Vector<AvatarSimulationPendingTransaction> ll = new Vector<>(ass.getPendingTransitions());
 
             listPendingTransactions.clearSelection();
             selectedComponentForTransaction1 = null;
@@ -1391,7 +1391,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     public void updateAsynchronousChannels() {
 
         if (ass != null) {
-            lastAsyncmsgs = (Vector<AvatarSimulationAsynchronousTransaction>)(ass.getAsynchronousMessages().clone());
+            lastAsyncmsgs = new Vector<>(ass.getAsynchronousMessages());
 
             if (fifos != null) {
                 for(AvatarInteractiveSimulationFIFOData fifo: fifos) {

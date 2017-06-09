@@ -565,7 +565,7 @@ public final class GraphicLib {
         sortJTabbedPane(jtp, v, beginIndex, maxIndex);
     }
 
-    public static void moveTabFromTo(JTabbedPane jtp, Vector v, int src, int dst) {
+    public static <E> void moveTabFromTo(JTabbedPane jtp, Vector<E> v, int src, int dst) {
 
         // Get all the properties
         Component comp = jtp.getComponentAt(src);
@@ -593,7 +593,7 @@ public final class GraphicLib {
         jtp.setForegroundAt(dst, fg);
         jtp.setBackgroundAt(dst, bg);
 
-        Object o = v.elementAt(src);
+        E o = v.elementAt(src);
         v.removeElementAt(src);
         v.insertElementAt(o, dst);
     }

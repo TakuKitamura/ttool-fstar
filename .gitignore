@@ -1,9 +1,21 @@
+# IntelliJ
 /.idea
 *.iml
-/build
+
+# Vim
 *.swp
+
+# Emacs
+.#*
+
+# TTool
 *~
+
+# Gradle
 .gradle
+
+# Compilation
+/build
 /bin
 /release
 /TTool_install
