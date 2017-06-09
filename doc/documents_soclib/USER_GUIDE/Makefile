@@ -1,7 +1,7 @@
 # Top LaTeX document (without .tex extension)
-TOP		= ertss2016 slides_ertss2016
+TOP		= euser_guide.tex
 # Bibliography (if any)
-BIBLIO		= ertss2016.bib
+BIBLIO		= 
 
 # Figures directory
 FIGDIR		= fig
