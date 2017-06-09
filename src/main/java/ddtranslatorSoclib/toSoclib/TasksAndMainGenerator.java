@@ -47,37 +47,20 @@
 
 package ddtranslatorSoclib.toSoclib;
 
-import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
-
-import avatartranslator.AvatarAction;
-import avatartranslator.AvatarActionAssignment;
-import avatartranslator.AvatarActionOnSignal;
-import avatartranslator.AvatarAttribute;
-import avatartranslator.AvatarBlock;
-import avatartranslator.AvatarMethod;
-import avatartranslator.AvatarRandom;
-import avatartranslator.AvatarRelation;
-import avatartranslator.AvatarSignal;
-import avatartranslator.AvatarSpecification;
-import avatartranslator.AvatarStartState;
-import avatartranslator.AvatarState;
-import avatartranslator.AvatarStateMachine;
-import avatartranslator.AvatarStateMachineElement;
-import avatartranslator.AvatarStopState;
-import avatartranslator.AvatarTransition;
-import avatartranslator.AvatarType;
+import avatartranslator.*;
+import ddtranslatorSoclib.AvatarRAM;
 import ddtranslatorSoclib.AvatarTask;
 import ddtranslatorSoclib.AvatarddSpecification;
+import ddtranslatorSoclib.toTopCell.TopCellGenerator;
 import myutil.Conversion;
 import myutil.FileException;
 import myutil.FileUtils;
 import myutil.TraceManager;
-import ddtranslatorSoclib.toTopCell.TopCellGenerator;
-import ddtranslatorSoclib.AvatarRAM;
-import ddtranslatorSoclib.AvatarChannel;
+
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 public class TasksAndMainGenerator {
 
@@ -227,11 +210,12 @@ public class TasksAndMainGenerator {
         mainFile.appendToHCode("/* Synchronous channels */" + CR);
         mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
         mainFile.appendToMainCode("/* Synchronous channels */" + CR);
-
+ k=0;
         for(AvatarRelation ar: avspec.getRelations()) {
-	    
+	    // k=0; DG 6.6.
 	if (!ar.isAsynchronous()) {
-k= ar.nbOfSignals()-1;     
+	    //k=0;
+	    //k= ar.nbOfSignals()-1;    //DG 2.6. 
 	   		    
 	    for(i=0; i<ar.nbOfSignals() ; i++) {
 		ar.setId(i);
@@ -285,8 +269,8 @@ if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);
 		
 	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);
-				
-	k--;//DG 24.05.	    
+	k++;			
+	//k--;//DG 24.05.//DG 2.6.	    
 	    }
 	}
 	}
@@ -354,7 +338,8 @@ if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);
 		
 	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);
-	k--;	    
+	//k--;	    
+	k++;//DG 2.6.
 		    }
 		}
 	    }
