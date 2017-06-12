@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogNCSwitchNode
- * Dialog for managing NC switch properties
- * Creation: 19/11/2008
- * @version 1.0 19/11/2008
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -53,11 +45,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class JDialogNCSwitchNode
+ * Dialog for managing NC switch properties
+ * Creation: 19/11/2008
+ * @version 1.0 19/11/2008
+ * @author Ludovic APVRILLE
+ */
 public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionListener {
-    
-    private JPanel panel1;
-    private Frame frame;
-    
+
     private String switchName;
     private int schedulingPolicy;
 	private int switchingTechnique;
@@ -70,21 +66,16 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
     
     // Panel1
     private JTextField switchNameText;
-	private JComboBox schedulingPolicyBox;
-	private JComboBox switchingTechniqueBox;
+	private JComboBox<String> schedulingPolicyBox;
+	private JComboBox<String> switchingTechniqueBox;
 	private JTextField capacityText;
-	private JComboBox capacityUnitBox;
+	private JComboBox<String> capacityUnitBox;
 	private JTextField technicalLatencyText;
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+
     /** Creates new form  */
     public JDialogNCSwitchNode(Frame _f, String _title, String _switchName, int _schedulingPolicy, int _switchingTechnique, int _capacity, String _capacityUnit, int _technicalLatency) {
         super(_f, _title, true);
-        frame = _f;
-        
+
         switchName = _switchName;
         schedulingPolicy = _schedulingPolicy;
 		switchingTechnique = _switchingTechnique;
@@ -112,8 +103,8 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+        JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and capacity "));
         panel1.setPreferredSize(new Dimension(300, 200));
@@ -141,7 +132,7 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
         c1.gridwidth = 1;
         panel1.add(new JLabel("Scheduling policy:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        schedulingPolicyBox = new JComboBox();
+        schedulingPolicyBox = new JComboBox<>();
 		schedulingPolicyBox.addItem("First Come First Served");
 		schedulingPolicyBox.addItem("Static Priority");
 		schedulingPolicyBox.setSelectedIndex(schedulingPolicy);
@@ -150,7 +141,7 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
 		c1.gridwidth = 1;
         panel1.add(new JLabel("Switching technique:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        switchingTechniqueBox = new JComboBox();
+        switchingTechniqueBox = new JComboBox<>();
 		switchingTechniqueBox.addItem("Store and Forward");
 		switchingTechniqueBox.addItem("Cut Through");
 		switchingTechniqueBox.setSelectedIndex(switchingTechnique);
@@ -162,7 +153,7 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
         capacityText = new JTextField(""+capacity);
         panel1.add(capacityText, c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; 
-		capacityUnitBox = new JComboBox();
+		capacityUnitBox = new JComboBox<>();
 		capacityUnitBox.addItem("Mbs");
 		capacityUnitBox.addItem("Kbs");
 		if (capacityUnit.equals("Mbs")) {
@@ -189,11 +180,11 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
@@ -220,7 +211,7 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
     }
     
 	public boolean hasBeenCancelled() {
-		return (data == false);
+		return !data;
 	}
 	
     public boolean hasNewData() {

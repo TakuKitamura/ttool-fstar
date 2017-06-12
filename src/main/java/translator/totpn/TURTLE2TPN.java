@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,18 +34,10 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class TURTLE2TPN
- * Creation: 04/07/2006
- * @version 1.0 04/07/2006
- * @author Ludovic APVRILLE
- * @see
  */
 
 package translator.totpn;
 
-import myutil.FileException;
 import tpndescription.Place;
 import tpndescription.TPN;
 import tpndescription.Transition;
@@ -54,31 +46,25 @@ import translator.CheckingError;
 
 import java.util.LinkedList;
 
+/**
+ * Class TURTLE2TPN
+ * Creation: 04/07/2006
+ * @version 1.0 04/07/2006
+ * @author Ludovic APVRILLE
+ */
 public class TURTLE2TPN {
     
     private TPN tpn;
     private TURTLEModeling tm;
     private LinkedList<CheckingError> warnings;
-    private LinkedList tmpComponents;
-    private LinkedList entryPlaces;
-    private LinkedList exitPlaces;
+    private LinkedList<Object> tmpComponents;
+    private LinkedList<Place> entryPlaces;
+    private LinkedList<Place> exitPlaces;
     
     public TURTLE2TPN(TURTLEModeling _tm) {
         tm = _tm;
     }
-    
-    public TPN getTPN() {
-        return tpn;
-    }
-    
-    public void saveFiles(String path) throws FileException {
-        tpn.saveInFile(path);
-    }
-    
-    public void printTPN() {
-       System.out.println(tpn.toString());
-    }
-    
+
     public String toString() {
         return tpn.toString();
     }
@@ -87,12 +73,12 @@ public class TURTLE2TPN {
         return warnings;
     }
     
-    public TPN generateTPN(boolean _debug) {
-        warnings = new LinkedList<CheckingError> ();
+    public TPN generateTPN() {
+        warnings = new LinkedList<> ();
         tpn = new TPN();
-        tmpComponents = new LinkedList();
-        entryPlaces = new LinkedList();
-        exitPlaces = new LinkedList();
+        tmpComponents = new LinkedList<>();
+        entryPlaces = new LinkedList<>();
+        exitPlaces = new LinkedList<>();
         
         // Name initialization -> we reuse the names used by LOTOS specification
         MasterGateManager.reinitNameRestriction();
@@ -121,19 +107,19 @@ public class TURTLE2TPN {
         return tpn;
     }  
     
-    public void translateTClasses() {
+    private void translateTClasses() {
         for(int i=0; i<tm.classNb(); i++) {
             translateTClass(tm.getTClassAtIndex(i));
         }
     }
     
-    public void translateTClass(TClass t) {
+    private void translateTClass(TClass t) {
         addPlaces(t);
         ADStart adstart = t.getActivityDiagram().getStartState();
         translateADComponents(t, adstart,  getEntryPlace(t));    
     }
     
-    public void translateADComponents(TClass t, ADComponent adc, Place p) {
+    private void translateADComponents(TClass t, ADComponent adc, Place p) {
         Place p1;
         Transition t1;
         
@@ -179,33 +165,31 @@ public class TURTLE2TPN {
     }
     
     
-    public Place newPlace() {
+    private Place newPlace() {
         Place p = new Place();
         tpn.addPlace(p);
         return p;
     }
     
-    public Transition newEpsilonTransition() {
+    private Transition newEpsilonTransition() {
         Transition t = new Transition("epsilon");
         tpn.addTransition(t);
         return t;
     }
     
-    public Transition newTransition(String label) {
+    private Transition newTransition(String label) {
         Transition t = new Transition(label);
         tpn.addTransition(t);
         return t;
     }
     
-    public int getDelayValue(TClass t, String delay) {
+    private int getDelayValue(TClass t, String delay) {
         delay = delay.trim();
-        int value = 0;
-        
+
         // Is the delay a number value?
         try {
-            value = Integer.parseInt(delay);
-            return value;
-        } catch (NumberFormatException nfe) {
+            return Integer.parseInt(delay);
+        } catch (NumberFormatException ignored) {
         }
         
         // is it a variable? -> if so, return the initial value of this variable
@@ -213,23 +197,16 @@ public class TURTLE2TPN {
         
         if (p!= null) {
              try {
-                value = Integer.parseInt(p.getValue());
-                return value;
-            } catch (NumberFormatException nfe) {
-                p = null;
+                return Integer.parseInt(p.getValue());
+            } catch (NumberFormatException ignored) {
             }
         }
         
-        if (p == null) {
-            warnings.add(new CheckingError (CheckingError.BEHAVIOR_ERROR, "Delay (" + delay + ") is not a valid delay -> ignoring delay"));
-            return -1;
-        }
-        
-        warnings.add(new CheckingError (CheckingError.BEHAVIOR_ERROR, "Delay (" + delay + ") is set as delay("+ value + ")"));
-        return value;
+        warnings.add(new CheckingError (CheckingError.BEHAVIOR_ERROR, "Delay (" + delay + ") is not a valid delay -> ignoring delay"));
+        return -1;
     }
     
-    public void setMarking() {
+    private void setMarking() {
         // For all tclasses -> search for its initial place -> if tclass is start, then, add a token
         TClass t;
         Place p;
@@ -250,7 +227,7 @@ public class TURTLE2TPN {
     
     // Management of references between components and places
     
-    public void addPlaces(Object o) {
+    private void addPlaces(Object o) {
         Place p1 = new Place();
         Place p2 = new Place();
         tpn.addPlace(p1);
@@ -258,26 +235,25 @@ public class TURTLE2TPN {
         addComponentRef(o, p1, p2);
     }
     
-    public void addComponentRef(Object o, Place p1, Place p2) {
+    private void addComponentRef(Object o, Place p1, Place p2) {
         tmpComponents.add(o);
         entryPlaces.add(p1);
         exitPlaces.add(p2);
     }
     
-    public Place getEntryPlace(Object o) {
+    private Place getEntryPlace(Object o) {
         int index = tmpComponents.indexOf(o);
         if (index == -1) {
             return null;
         }
-        return (Place)(entryPlaces.get(index));
+        return entryPlaces.get(index);
     }
     
-    public Place getExitPlace(Object o) {
+    private Place getExitPlace(Object o) {
         int index = tmpComponents.indexOf(o);
         if (index == -1) {
             return null;
         }
-        return (Place)(exitPlaces.get(index));
+        return exitPlaces.get(index);
     }
-    
 }

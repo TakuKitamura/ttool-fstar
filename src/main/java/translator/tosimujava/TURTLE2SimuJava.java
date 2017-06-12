@@ -54,10 +54,7 @@ import translator.JKeyword;
 import translator.tojava.JOperation;
 
 import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.Vector;
-
-//import ddtranslator.*;
 
 public class TURTLE2SimuJava {
     
@@ -66,11 +63,11 @@ public class TURTLE2SimuJava {
     //private int idPar = 0;
     
     private TURTLEModeling tm;
-    private LinkedList processes;
+    private LinkedList<TJavaProcess> processes;
     private MasterGateManager mgm;
     private MainClassSimu mainClass;
     //private MainClass mainclass;
-    private Vector components;
+    private Vector<ComponentId> components;
     
     private boolean debug;
     private boolean longforint;
@@ -97,15 +94,11 @@ public class TURTLE2SimuJava {
     public TURTLE2SimuJava(TURTLEModeling _tm) {
         tm = _tm;
         longforint = false;
-        components = new Vector();
+        components = new Vector<>();
     }
     
     public void saveJavaClasses(String path) throws FileException {
-        ListIterator iterator = processes.listIterator();
-        TJavaProcess tjc;
-        
-        while(iterator.hasNext()) {
-            tjc = (TJavaProcess)(iterator.next());
+        for (TJavaProcess tjc: this.processes) {
             tjc.saveAsFileIn(path);
         }
         
@@ -121,11 +114,7 @@ public class TURTLE2SimuJava {
     }
     
     public void printJavaClasses() {
-        ListIterator iterator = processes.listIterator();
-        TJavaProcess tjp;
-        
-        while(iterator.hasNext()) {
-            tjp = (TJavaProcess)(iterator.next());
+        for (TJavaProcess tjp: this.processes) {
             System.out.println(tjp.getJavaName() + ":\n" + tjp.toString() + "\n\n");
         }
         
@@ -144,7 +133,7 @@ public class TURTLE2SimuJava {
         mgm = new MasterGateManager(tm, false);
         mgm.sort();
         
-        processes = new LinkedList();
+        processes = new LinkedList<>();
         
         // Creating classes & attributes & operations
         generateMainClass();
@@ -448,16 +437,12 @@ public class TURTLE2SimuJava {
         //addGateCodeMainClass(generateJGateCreation(javaClasses));
     }
     
-    private String generateJGateCreation(LinkedList toTakeIntoAccountJC) {
-        TJavaProcess tjp;
+    private String generateJGateCreation(LinkedList<TJavaProcess> toTakeIntoAccountJC) {
         int j;
         JSimuGate jg;
         String s = "";
         
-        ListIterator iterator = processes.listIterator();
-        
-        while(iterator.hasNext()) {
-            tjp = (TJavaProcess)(iterator.next());
+        for (TJavaProcess tjp: this.processes) {
             if (toTakeIntoAccountJC.contains(tjp)) {
                 for(j=0; j<tjp.getGateNb(); j++) {
                     jg = tjp.getGateAt(j);
@@ -482,7 +467,7 @@ public class TURTLE2SimuJava {
         //mainclass.addSynchroCode(generateJGateSynchronisation(javaClasses));
     }
     
-    private String generateJGateSynchronisation(LinkedList toTakeIntoAccountJC) {
+    private String generateJGateSynchronisation(LinkedList<TJavaProcess> toTakeIntoAccountJC) {
         // Assume that all invocation operations have been removed
         //TClass t;
         Relation r;
@@ -627,14 +612,10 @@ public class TURTLE2SimuJava {
         generateProcessStartingMainClass();
     }
     
-    private String generateProcessCreation(LinkedList toTakeIntoAccount, boolean onlyActiveClasses) {
-        TJavaProcess tjc;
+    private String generateProcessCreation(LinkedList<TJavaProcess> toTakeIntoAccount, boolean onlyActiveClasses) {
         String s = "";
         
-        ListIterator iterator = processes.listIterator();
-        
-        while(iterator.hasNext()) {
-            tjc = (TJavaProcess)(iterator.next());
+        for (TJavaProcess tjc: this.processes) {
             if (toTakeIntoAccount.contains(tjc)) {
                 if ((!onlyActiveClasses) || (onlyActiveClasses && tjc.isActive())) {
                     s += tjc.getCreationCode(tjc.getJavaName().toLowerCase()) + "\n";
@@ -667,11 +648,7 @@ public class TURTLE2SimuJava {
     
     
     private TJavaProcess foundTJProcess(String name) {
-        TJavaProcess tjp;
-        ListIterator iterator = processes.listIterator();
-        
-        while(iterator.hasNext()) {
-            tjp = (TJavaProcess)(iterator.next());
+        for (TJavaProcess tjp: this.processes) {
             if (tjp.getTURTLEName().equals(name)) {
                 return tjp;
             }
@@ -1364,7 +1341,7 @@ public class TURTLE2SimuJava {
         ComponentId cid;
         
         for(int i=0; i<components.size(); i++) {
-            cid = (ComponentId)(components.elementAt(i));
+            cid = components.elementAt(i);
             if (cid.adc == adc) {
                 return cid;
             }

@@ -49,14 +49,14 @@ package ui.window;
 import java.awt.*;
 import java.util.Vector;
 
-public class StatisticsItem implements Comparable {
+public class StatisticsItem implements Comparable<StatisticsItem> {
     private String name;
     private Integer occurence;
-    private Vector originDestination;
+    private Vector<Point> originDestination;
     
     public StatisticsItem(String _name) {
         name = _name;
-        originDestination = new Vector();
+        originDestination = new Vector<>();
         occurence = new Integer(0);
     }
     
@@ -75,7 +75,7 @@ public class StatisticsItem implements Comparable {
         StringBuffer ret = new StringBuffer();
         
         for(int i=0; i<originDestination.size(); i++) {
-            p = (Point)(originDestination.elementAt(i));
+            p = originDestination.elementAt(i);
             if (i != 0) {
                 ret.append(", ");
             }
@@ -101,13 +101,7 @@ public class StatisticsItem implements Comparable {
     
     
     // comparable interface
-    public int compareTo(Object o) {
-        if (!(o instanceof StatisticsItem)) {
-            return 0;
-        } else {
-            return getName().compareTo(((StatisticsItem)o).getName());
-        }
-        
+    public int compareTo(StatisticsItem o) {
+        return getName().compareTo(((StatisticsItem)o).getName());
     }
-    
 }

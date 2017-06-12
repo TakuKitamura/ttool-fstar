@@ -56,16 +56,16 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
-	
-    public  NCDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
+
+	public NCDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+		super(mgui, _ttb);
         /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
         addMouseMotionListener(tdmm);*/
-    }
-    
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        //System.out.println("Action");
+	}
+
+	public boolean actionOnDoubleClick(TGComponent tgc) {
+		//System.out.println("Action");
         /*if (tgc instanceof TCDTClass) {
             TCDTClass t = (TCDTClass)tgc;
             return mgui.newTClassName(tp, t.oldValue, t.getValue());
@@ -81,81 +81,81 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
             }
             return false; // because no change made on any diagram
         }*/
-        return false;
-    }
-    
-    public boolean actionOnAdd(TGComponent tgc) {
+		return false;
+	}
+
+	public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
             //System.out.println(" *** add tclass *** name=" + tgcc.getClassName());
             mgui.addTClass(tp, tgcc.getClassName());
             return true;
         }*/
-        return false;
-    }
-    
-    public boolean actionOnRemove(TGComponent tgc) {
+		return false;
+	}
+
+	public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
             mgui.removeTClass(tp, tgcc.getClassName());
             resetAllInstancesOf(tgcc);
             return true;
         }*/
-        return false;
-    }
-    
-    public boolean actionOnValueChanged(TGComponent tgc) {
+		return false;
+	}
+
+	public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             return actionOnDoubleClick(tgc);
         }*/
-        return false;
-    }
-    
-    public String getXMLHead() {
-        return "<NCDiagramPanel name=\"" + name + "\"" + sizeParam()  + displayParam() + " >";
-    }
-    
-    public String getXMLTail() {
-        return "</NCDiagramPanel>";
-    }
-    
-    public String getXMLSelectedHead() {
-        return "<NCDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    public String getXMLSelectedTail() {
-        return "</NCDiagramPanelCopy>";
-    }
-    
-    public String getXMLCloneHead() {
-        return "<NCDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    public String getXMLCloneTail() {
-        return "</NCDiagramPanelCopy>";
-    }
-	
-	 public String displayParam() {
-        String s = " attributes=\"";
+		return false;
+	}
+
+	public String getXMLHead() {
+		return "<NCDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + " >";
+	}
+
+	public String getXMLTail() {
+		return "</NCDiagramPanel>";
+	}
+
+	public String getXMLSelectedHead() {
+		return "<NCDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+	}
+
+	public String getXMLSelectedTail() {
+		return "</NCDiagramPanelCopy>";
+	}
+
+	public String getXMLCloneHead() {
+		return "<NCDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+	}
+
+	public String getXMLCloneTail() {
+		return "</NCDiagramPanelCopy>";
+	}
+
+	public String displayParam() {
+		String s = " attributes=\"";
 		s += getAttributeState();
 		s += "\"";
-        return s;
-    }
-    
-    public void loadExtraParameters(Element elt) {
-        String s;
-        //System.out.println("Extra parameter");
-        try {
-            s = elt.getAttribute("attributes");
-            //System.out.println("S=" + s);
+		return s;
+	}
+
+	public void loadExtraParameters(Element elt) {
+		String s;
+		//System.out.println("Extra parameter");
+		try {
+			s = elt.getAttribute("attributes");
+			//System.out.println("S=" + s);
 			int attr = Integer.decode(s).intValue();
 			setAttributes(attr % 3);
-        } catch (Exception e) {
-            // Model was saved in an older version of TTool
-            //System.out.println("older format");
+		} catch (Exception e) {
+			// Model was saved in an older version of TTool
+			//System.out.println("older format");
 			setAttributes(0);
-        }
-    }
+		}
+	}
     
     /*public boolean isFree(ArtifactTClassGate atg) {
         TGConnectorLinkNode tgco;
@@ -174,98 +174,79 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
         
         return true;
     }*/
-    
-    public LinkedList getListOfNodes() {
-        LinkedList ll = new LinkedList();
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof NCEqNode) {
-                ll.add(tgc);
-            }
-			
-			if (tgc instanceof NCSwitchNode) {
-				 ll.add(tgc);
+
+	public LinkedList<TGComponent> getListOfNodes() {
+		LinkedList<TGComponent> ll = new LinkedList<>();
+
+		for (TGComponent tgc : componentList) {
+			if (tgc instanceof NCEqNode) {
+				ll.add(tgc);
 			}
-			
-        }
-        
-        return ll;
-    }
-	
-	public LinkedList getListOfEqNode() {
-        LinkedList ll = new LinkedList();
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof NCEqNode) {
-                ll.add(tgc);
-            }
-        }
-        
-        return ll;
-    }
-	
-	public NCEqNode getNCENodeByName(String _name) {
-		LinkedList ll = new LinkedList();
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof NCEqNode) {
-                if (((NCEqNode)tgc).getNodeName().equals(_name)) {
-					return ((NCEqNode)tgc);
-				}
-            }
-        }
-        
-        return null;
+
+			if (tgc instanceof NCSwitchNode) {
+				ll.add(tgc);
+			}
+
+		}
+
+		return ll;
 	}
-	
-	public LinkedList getListOfSwitchNode() {
-        LinkedList ll = new LinkedList();
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof NCSwitchNode) {
-                ll.add(tgc);
-            }
-        }
-        
-        return ll;
-    }
-    
-     public LinkedList getListOfLinks() {
-        LinkedList ll = new LinkedList();
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof NCConnectorNode) {
-                ll.add(tgc);
-            }
-        }
-        
-        return ll;
-    }
-	
+
+	public LinkedList<NCEqNode> getListOfEqNode() {
+		LinkedList<NCEqNode> ll = new LinkedList<>();
+
+		for (TGComponent tgc : this.componentList) {
+			if (tgc instanceof NCEqNode) {
+				ll.add((NCEqNode) tgc);
+			}
+		}
+
+		return ll;
+	}
+
+	public NCEqNode getNCENodeByName(String _name) {
+		for (TGComponent tgc : this.componentList) {
+			if (tgc instanceof NCEqNode) {
+				if (((NCEqNode) tgc).getNodeName().equals(_name)) {
+					return ((NCEqNode) tgc);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public LinkedList<NCSwitchNode> getListOfSwitchNode() {
+		LinkedList<NCSwitchNode> ll = new LinkedList<>();
+		for (TGComponent tgc : this.componentList) {
+			if (tgc instanceof NCSwitchNode) {
+				ll.add((NCSwitchNode) tgc);
+			}
+		}
+
+		return ll;
+	}
+
+	public LinkedList<NCConnectorNode> getListOfLinks() {
+		LinkedList<NCConnectorNode> ll = new LinkedList<>();
+		for (TGComponent tgc : this.componentList) {
+			if (tgc instanceof NCConnectorNode) {
+				ll.add((NCConnectorNode) tgc);
+			}
+		}
+
+		return ll;
+	}
+
 	public ArrayList<String> getInterfaces(NCSwitchNode sw) {
 		ListIterator iterator = getListOfLinks().listIterator();
 		NCConnectorNode lk;
 		TGConnectingPoint p;
-		
+
 		ArrayList<String> list = new ArrayList<String>();
-		
-		while(iterator.hasNext()) {
-			lk = (NCConnectorNode)(iterator.next());
+
+		while (iterator.hasNext()) {
+			lk = (NCConnectorNode) (iterator.next());
 			p = lk.getTGConnectingPointP1();
 			if (sw.belongsToMe(p)) {
 				list.add(lk.getInterfaceName());
@@ -276,56 +257,56 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 				}
 			}
 		}
-		
+
 		return list;
 	}
-	
+
 	public ArrayList<NCRoute> getAllRoutesFor(NCSwitchNode sw, NCTrafficArtifact arti) {
 		ArrayList<NCRoute> list = sw.getRoutesList();
-		
+
 		ArrayList<NCRoute> ret = new ArrayList<NCRoute>();
-		
-		for(NCRoute route :list) {
+
+		for (NCRoute route : list) {
 			if (route.traffic.equals(arti.getValue())) {
 				ret.add(route);
 			}
 		}
-		
+
 		return ret;
 	}
-	
+
 	public ArrayList<NCSwitchNode> getSwitchesOfEq(NCEqNode eq) {
 		ListIterator iterator = getListOfLinks().listIterator();
 		NCConnectorNode lk;
 		TGConnectingPoint p;
-		
+
 		ArrayList<NCSwitchNode> list = new ArrayList<NCSwitchNode>();
-		
-		while(iterator.hasNext()) {
-			lk = (NCConnectorNode)(iterator.next());
+
+		while (iterator.hasNext()) {
+			lk = (NCConnectorNode) (iterator.next());
 			p = lk.getTGConnectingPointP1();
 			if (eq.belongsToMe(p)) {
-				list.add((NCSwitchNode)(getComponentToWhichBelongs(lk.getTGConnectingPointP2())));
+				list.add((NCSwitchNode) (getComponentToWhichBelongs(lk.getTGConnectingPointP2())));
 			} else {
 				p = lk.getTGConnectingPointP2();
 				if (eq.belongsToMe(p)) {
-					list.add((NCSwitchNode)(getComponentToWhichBelongs(lk.getTGConnectingPointP1())));
+					list.add((NCSwitchNode) (getComponentToWhichBelongs(lk.getTGConnectingPointP1())));
 				}
 			}
 		}
-		
+
 		return list;
 	}
-	
+
 	public ArrayList<NCConnectorNode> getConnectorOfEq(NCEqNode eq) {
 		ListIterator iterator = getListOfLinks().listIterator();
 		NCConnectorNode lk;
 		TGConnectingPoint p;
-		
+
 		ArrayList<NCConnectorNode> list = new ArrayList<NCConnectorNode>();
-		
-		while(iterator.hasNext()) {
-			lk = (NCConnectorNode)(iterator.next());
+
+		while (iterator.hasNext()) {
+			lk = (NCConnectorNode) (iterator.next());
 			p = lk.getTGConnectingPointP1();
 			if (eq.belongsToMe(p)) {
 				list.add(lk);
@@ -336,123 +317,99 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 				}
 			}
 		}
-		
+
 		return list;
 	}
-	
+
 	public ArrayList<NCTrafficArtifact> getTrafficArtifacts() {
 		ListIterator iterator = getListOfEqNode().listIterator();
 		NCEqNode eq;
-		
+
 		ArrayList<NCTrafficArtifact> list = new ArrayList<NCTrafficArtifact>();
-		
-		while(iterator.hasNext()) {
-			eq = (NCEqNode)(iterator.next());
+
+		while (iterator.hasNext()) {
+			eq = (NCEqNode) (iterator.next());
 			eq.addAllTrafficArtifacts(list);
 		}
-		
+
 		return list;
 	}
-	
+
 	public NCEqNode getNCEqNodeOf(NCTrafficArtifact arti) {
 		ListIterator iterator = getListOfEqNode().listIterator();
 		NCEqNode eq;
-		
-		while(iterator.hasNext()) {
-			eq = (NCEqNode)(iterator.next());
+
+		while (iterator.hasNext()) {
+			eq = (NCEqNode) (iterator.next());
 			if (eq.hasTraffic(arti)) {
 				return eq;
 			}
 		}
-		
+
 		return null;
 
 	}
-	
+
 	public ArrayList<String> getTraffics() {
 		ListIterator iterator = getListOfEqNode().listIterator();
 		NCEqNode eq;
-		
+
 		ArrayList<String> list = new ArrayList<String>();
-		
-		while(iterator.hasNext()) {
-			eq = (NCEqNode)(iterator.next());
+
+		while (iterator.hasNext()) {
+			eq = (NCEqNode) (iterator.next());
 			eq.addAllTraffics(list);
 		}
-		
+
 		return list;
 	}
-	
+
 	public boolean isALinkBetweenEquipment(NCConnectorNode nccn) {
 		TGComponent tgc1 = getComponentToWhichBelongs(nccn.getTGConnectingPointP1());
 		TGComponent tgc2 = getComponentToWhichBelongs(nccn.getTGConnectingPointP2());
 		if ((tgc1 instanceof NCEqNode) && (tgc2 instanceof NCEqNode)) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public NCEqNode getEquipmentByName(String name) {
-		LinkedList ll = new LinkedList();
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof NCEqNode) {
-                if (tgc.getName().equals(name)) {
-					return (NCEqNode)tgc;
+		for (TGComponent tgc : this.componentList) {
+			if (tgc instanceof NCEqNode) {
+				if (tgc.getName().equals(name)) {
+					return (NCEqNode) tgc;
 				}
-            }
-        }
-        
-        return null;
+			}
+		}
+
+		return null;
 	}
-	
+
 	public NCSwitchNode getSwitchByName(String name) {
-		LinkedList ll = new LinkedList();
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		NCSwitchNode node;
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof NCSwitchNode) {
-				node = (NCSwitchNode)tgc;
-                if (node.getNodeName().equals(name)) {
+		for (TGComponent tgc : this.componentList) {
+			if (tgc instanceof NCSwitchNode) {
+				NCSwitchNode node = (NCSwitchNode) tgc;
+				if (node.getNodeName().equals(name)) {
 					return node;
 				}
-            }
-        }
-        
-        return null;
+			}
+		}
+
+		return null;
 	}
-	
+
 	public NCConnectorNode getLinkByName(String name) {
-		LinkedList ll = new LinkedList();
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		NCConnectorNode link;
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof NCConnectorNode) {
-				link = (NCConnectorNode)tgc;
-                if (link.getInterfaceName().equals(name)) {
+
+		for (TGComponent tgc : this.componentList) {
+			if (tgc instanceof NCConnectorNode) {
+				NCConnectorNode link = (NCConnectorNode) tgc;
+				if (link.getInterfaceName().equals(name)) {
 					return link;
 				}
-            }
-        }
-        
-        return null;
-	}
-	
-	
-	
-	
-	
-	
-    
+			}
+		}
 
+		return null;
+	}
 }

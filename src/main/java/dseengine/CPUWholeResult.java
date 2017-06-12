@@ -58,16 +58,16 @@ public class CPUWholeResult  {
 	public int id;
 	public String name;
 	
-	public double minUtilization;
-	public double maxUtilization;
-	public double averageUtilization;
-	public int nbOfResults;
+	double minUtilization;
+	double maxUtilization;
+	double averageUtilization;
+	private int nbOfResults;
 	
-	public Vector<BusContentionWholeResult> contentions;
-	Hashtable contentionTable = new Hashtable();
+	private Vector<BusContentionWholeResult> contentions;
+	private Hashtable<Integer, BusContentionWholeResult> contentionTable = new Hashtable<>();
 	
-	public CPUWholeResult(CPUResult rescpu) {
-		contentionTable = new Hashtable();
+	CPUWholeResult(CPUResult rescpu) {
+		contentionTable = new Hashtable<>();
 		
 		id = rescpu.id;
 		name = rescpu.name;
@@ -79,7 +79,7 @@ public class CPUWholeResult  {
 		workOnContentions(rescpu);
 	}
 	
-	public void updateResults(CPUResult rescpu) {
+	void updateResults(CPUResult rescpu) {
 		minUtilization = Math.min(minUtilization, rescpu.utilization);
 		maxUtilization = Math.max(maxUtilization, rescpu.utilization);
 		averageUtilization = ((averageUtilization *  nbOfResults)+rescpu.utilization)/(nbOfResults + 1);
@@ -87,7 +87,7 @@ public class CPUWholeResult  {
 		workOnContentions(rescpu);
 	}
 	
-	public void workOnContentions(CPUResult rescpu) {
+	private void workOnContentions(CPUResult rescpu) {
 		Object o;
 		BusContentionWholeResult bcwr;
 		

@@ -62,11 +62,11 @@ public class TURTLE2Java {
     private int idPar = 0;
     
     private TURTLEModeling tm;
-    private LinkedList javaClasses;
+    private LinkedList<JavaClass> javaClasses;
     private MasterGateManager mgm;
-    private Vector mainclasses;
+    private Vector<MainClass> mainclasses;
     //private MainClass mainclass;
-    private Vector components;
+    private Vector<ComponentId> components;
 	private String header;
     
     private long millis;
@@ -102,17 +102,13 @@ public class TURTLE2Java {
         nanos = _nanos;
         longforint = false;
 		header = _header;
-        components = new Vector();
-        mainclasses = new Vector();
+        components = new Vector<>();
+        mainclasses = new Vector<>();
     }
     
     public void saveJavaClasses(String path) throws FileException {
-        ListIterator iterator = javaClasses.listIterator();
-        JavaClass jc;
-        
-        while(iterator.hasNext()) {
-            jc = (JavaClass)(iterator.next());
-            jc.saveAsFileIn(path);
+        for (JavaClass jc: this.javaClasses) {
+             jc.saveAsFileIn(path);
         }
         
         saveAsFileInMainClasses(path);
@@ -122,7 +118,7 @@ public class TURTLE2Java {
         String s = "";
         MainClass tmpc;
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             s += path + tmpc.getName() + ".java ";
         }
         return s;
@@ -133,17 +129,11 @@ public class TURTLE2Java {
     }
     
     public void printJavaClasses() {
-        ListIterator iterator = javaClasses.listIterator();
-        JavaClass jc;
-        
-        while(iterator.hasNext()) {
-            jc = (JavaClass)(iterator.next());
+        for (JavaClass jc: this.javaClasses) {
             System.out.println(jc.getJavaName() + ":\n" + jc.toString() + "\n\n");
         }
         
         printMainClasses();
-        //System.out.println(mainclass.getName() + ":\n" + mainclass.toString() + "\n\n");
-        
     }
     
     public void generateJava(boolean _debug) {
@@ -158,7 +148,7 @@ public class TURTLE2Java {
         mgm = new MasterGateManager(tm, false);
         mgm.sort();
         
-        javaClasses = new LinkedList();
+        javaClasses = new LinkedList<>();
         
         // Creating classes & attributes & operations
         generateConstantClass();
@@ -265,7 +255,7 @@ public class TURTLE2Java {
         Relation r;
         //TClass t1;
         
-        LinkedList tclasses = new LinkedList();
+        LinkedList<JavaClass> tclasses = new LinkedList<>();
         
         for(i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
@@ -453,16 +443,12 @@ public class TURTLE2Java {
         //addGateCodeMainClass(generateJGateCreation(javaClasses));
     }
     
-    private String generateJGateCreation(LinkedList toTakeIntoAccountJC) {
-        JavaClass jc;
+    private String generateJGateCreation(LinkedList<JavaClass> toTakeIntoAccountJC) {
         int j;
         JGate jg;
         String s = "";
         
-        ListIterator iterator = javaClasses.listIterator();
-        
-        while(iterator.hasNext()) {
-            jc = (JavaClass)(iterator.next());
+        for (JavaClass jc: this.javaClasses) {
             if (toTakeIntoAccountJC.contains(jc)) {
                 for(j=0; j<jc.getGateNb(); j++) {
                     jg = jc.getGateAt(j);
@@ -484,15 +470,14 @@ public class TURTLE2Java {
     
     private void generateJGateSynchronisation() {
         generateJGateSynchronisationMainClasses();
-        //mainclass.addSynchroCode(generateJGateSynchronisation(javaClasses));
     }
     
-    private String generateJGateSynchronisation(LinkedList toTakeIntoAccountJC) {
+    private String generateJGateSynchronisation(LinkedList<JavaClass> toTakeIntoAccountJC) {
         // Assume that all invocation operations have been removed
         //TClass t;
         Relation r;
         int i, j;
-        JavaClass jc1, jc2;
+        JavaClass jc2;
         JGate jg1, jg2;
         int id;
         //Gate g;
@@ -509,7 +494,7 @@ public class TURTLE2Java {
         for(i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
             if (r.type == Relation.SYN) {
-                jc1 = foundJClass(r.t1.getName());
+                JavaClass jc1 = foundJClass(r.t1.getName());
                 jc2 = foundJClass(r.t2.getName());
                 if ((jc1 != null) && (jc2 != null)) {
                     if (toTakeIntoAccountJC.contains(jc1) && toTakeIntoAccountJC.contains(jc2)) {
@@ -538,11 +523,9 @@ public class TURTLE2Java {
         String name, nameSearched;
         
         tmpc.addSynchroCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + "/* Parallel operators of activity diagrams */\n");
-        ListIterator iterator = javaClasses.listIterator();
         //JavaClass jc;
         
-        while(iterator.hasNext()) {
-            jc1 = (JavaClass)(iterator.next());
+        for (JavaClass jc1: this.javaClasses) {
             if (toTakeIntoAccountJC.contains(jc1)) {
                 for(i=0; i<jc1.getGateNb(); i++) {
                     jg1 = jc1.getGateAt(i);
@@ -566,22 +549,17 @@ public class TURTLE2Java {
         return s;
     }
     
-    private String generateExternalSequence(LinkedList toTakeIntoAccount, boolean onlyActiveClasses) {
-        JavaClass jc;
+    private String generateExternalSequence(LinkedList<JavaClass> toTakeIntoAccount, boolean onlyActiveClasses) {
         String s = "";
-        LinkedList ll;
-        LinkedList one;
+        LinkedList<JavaClass> ll;
+        LinkedList<JavaClass> one;
         
         s += "\n";
         s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + "/* Sequence operator */ ";
         // Sequence code
         s+= "\n";
-        
-        
-        ListIterator iterator = javaClasses.listIterator();
-        
-        while(iterator.hasNext()) {
-            jc = (JavaClass)(iterator.next());
+
+        for (JavaClass jc: this.javaClasses) {
             if (toTakeIntoAccount.contains(jc)) {
                 ll = listClassesStartingAt(jc.getJavaName());
                 System.out.println("Getting list for" + jc.getJavaName());
@@ -594,7 +572,7 @@ public class TURTLE2Java {
                     jc.addStartingSequenceCode(generateTClassStarting(ll, false, false));
                     jc.addStartingSequenceCode(translator.JKeyword.INDENT + translator.JKeyword.STOP_CODE_N);
                     if ((!onlyActiveClasses) || (onlyActiveClasses && jc.isActive())) {
-                        one = new LinkedList();
+                        one = new LinkedList<>();
                         one.add(jc);
                         s+= generateCodeStartingSeq(one);//JKeyword.INDENT + JKeyword.INDENT + jc.getJavaName().toLowerCase() + ".setStartingSequence(true)" + JKeyword.END_OP + "\n";
                     }
@@ -604,23 +582,20 @@ public class TURTLE2Java {
         return s;
     }
     
-    private String generateCodeStartingSeq(LinkedList ll) {
+    private String generateCodeStartingSeq(LinkedList<JavaClass> ll) {
         String s = "";
-        JavaClass jc;
-        ListIterator iterator = ll.listIterator();
-        
-        while(iterator.hasNext()) {
-            jc = (JavaClass)(iterator.next());
+
+        for (JavaClass jc: ll) {
             s+= translator.JKeyword.INDENT + translator.JKeyword.INDENT + jc.getJavaName().toLowerCase() + ".setStartingSequence(true)" + translator.JKeyword.END_OP + "\n";
         }
         return s;
     }
     
-    private LinkedList listClassesStartingAt(String name) {
+    private LinkedList<JavaClass> listClassesStartingAt(String name) {
         //TClass t1, t2;
         Relation r;
         JavaClass jc;
-        LinkedList ll = new LinkedList();
+        LinkedList<JavaClass> ll = new LinkedList<>();
         for(int i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
             if (r.type == Relation.SEQ) {
@@ -644,14 +619,10 @@ public class TURTLE2Java {
         //mainclass.addStartingCode(generateTClassStarting(javaClasses, true, true));
     }
     
-    private String generateTClassCreation(LinkedList toTakeIntoAccount, boolean onlyActiveClasses) {
-        JavaClass jc;
+    private String generateTClassCreation(LinkedList<JavaClass> toTakeIntoAccount, boolean onlyActiveClasses) {
         String s = "";
         
-        ListIterator iterator = javaClasses.listIterator();
-        
-        while(iterator.hasNext()) {
-            jc = (JavaClass)(iterator.next());
+        for (JavaClass jc: this.javaClasses) {
             if (toTakeIntoAccount.contains(jc)) {
                 if ((!onlyActiveClasses) || (onlyActiveClasses && jc.isActive())) {
                     s += jc.getCreationCode(jc.getJavaName().toLowerCase()) + "\n";
@@ -663,12 +634,9 @@ public class TURTLE2Java {
     }
     
     
-    private String generateTClassStarting(LinkedList toTakeIntoAccount, boolean onlyActiveClasses, boolean internal) {
-        JavaClass jc;
+    private String generateTClassStarting(LinkedList<JavaClass> toTakeIntoAccount, boolean onlyActiveClasses, boolean internal) {
         String s = "";
-        ListIterator iterator = javaClasses.listIterator();
-        while(iterator.hasNext()) {
-            jc = (JavaClass)(iterator.next());
+        for (JavaClass jc: this.javaClasses) {
             if (toTakeIntoAccount.contains(jc)) {
                 if ((!onlyActiveClasses) || (onlyActiveClasses && jc.isActive())) {
                     if (internal) {
@@ -684,11 +652,7 @@ public class TURTLE2Java {
     
     
     private JavaClass foundJClass(String name) {
-        JavaClass jc;
-        ListIterator iterator = javaClasses.listIterator();
-        
-        while(iterator.hasNext()) {
-            jc = (JavaClass)(iterator.next());
+        for (JavaClass jc: this.javaClasses) {
             if (jc.getTURTLEName().equals(name)) {
                 return jc;
             }
@@ -1401,7 +1365,7 @@ public class TURTLE2Java {
         ComponentId cid;
         
         for(int i=0; i<components.size(); i++) {
-            cid = (ComponentId)(components.elementAt(i));
+            cid = components.elementAt(i);
             if (cid.adc == adc) {
                 return cid;
             }
@@ -1463,7 +1427,7 @@ public class TURTLE2Java {
     private void generateBasicCodeMainClasses() {
         MainClass tmpc;
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             tmpc.generateBasicCode();
         }
     }
@@ -1471,7 +1435,7 @@ public class TURTLE2Java {
     private void generateOperationCodeMainClasses() {
         MainClass tmpc;
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             tmpc.generateOperationCode();
         }
     }
@@ -1479,7 +1443,7 @@ public class TURTLE2Java {
     private MainClass foundMainClassByPackageName(String packageName) {
         MainClass tmpc;
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             if (tmpc.getName().compareTo(MAIN_CLASS + packageName) == 0) {
                 return tmpc;
             }
@@ -1490,18 +1454,15 @@ public class TURTLE2Java {
     private void saveAsFileInMainClasses(String path) throws FileException {
         MainClass tmpc;
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             tmpc.saveAsFileIn(path);
         }
     }
     
-    private LinkedList listJavaClassesSamePackageName(MainClass tmpc) {
-        LinkedList ll = new LinkedList();
-        ListIterator iterator1 = javaClasses.listIterator();
-        JavaClass jc;
-        
-        while(iterator1.hasNext()) {
-            jc = (JavaClass)(iterator1.next());
+    private LinkedList<JavaClass> listJavaClassesSamePackageName(MainClass tmpc) {
+        LinkedList<JavaClass> ll = new LinkedList<>();
+
+        for (JavaClass jc: this.javaClasses) {
             if (tmpc.getName().compareTo(MAIN_CLASS+jc.getPackageName()) == 0) {
                 ll.add(jc);
             }
@@ -1511,11 +1472,10 @@ public class TURTLE2Java {
     
     private void generateJGateCreationMainClasses() {
         MainClass tmpc;
-        LinkedList ll;
-        ListIterator iterator1;
-        
+        LinkedList<JavaClass> ll;
+
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             
             // we consider all classes of the package of tmpc
             ll = listJavaClassesSamePackageName(tmpc);
@@ -1528,12 +1488,10 @@ public class TURTLE2Java {
     
     private void generateJGateSynchronisationMainClasses() {
         MainClass tmpc;
-        LinkedList ll;
-        ListIterator iterator1;
-        JavaClass jc;
-        
+        LinkedList<JavaClass> ll;
+
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             
             // we consider all classes of the package of tmpc
             ll = listJavaClassesSamePackageName(tmpc);
@@ -1547,11 +1505,10 @@ public class TURTLE2Java {
     
     private void generateTClassStartingMainClasses() {
         MainClass tmpc;
-        LinkedList ll;
-        ListIterator iterator1;
-        
+        LinkedList<JavaClass> ll;
+
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             ll = listJavaClassesSamePackageName(tmpc);
             
             if (ll.size() > 0) {
@@ -1571,7 +1528,7 @@ public class TURTLE2Java {
     private void printMainClasses() {
         MainClass tmpc;
         for(int i=0; i<tm.classNb(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             System.out.println(tmpc.getName() + ":\n" + tmpc.toString() + "\n\n");
         }
     }

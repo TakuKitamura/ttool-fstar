@@ -225,7 +225,7 @@ public void setCode(String id) {
 		
 		TGConnectingPoint p1 = start_state.getTGConnectingPointAtIndex(0);
 		TGConnectingPoint p2 = begin_state01.getTGConnectingPointAtIndex(0);
-		TGConnector conn01 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector());
+		TGConnector conn01 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector<Point>());
 		mySMD.addBuiltConnector(conn01);
 
 		
@@ -241,7 +241,7 @@ public void setCode(String id) {
 		
 		p1 = begin_state01.getTGConnectingPointAtIndex(1);
 		p2 = policy_submachine.getTGConnectingPointAtIndex(0);
-		TGConnector conn02 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector());
+		TGConnector conn02 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector<Point>());
 		mySMD.addBuiltConnector(conn02);
 
 		
@@ -254,7 +254,7 @@ public void setCode(String id) {
 		
 		p1 = policy_submachine.getTGConnectingPointAtIndex(1);
 		p2 = begin_state02.getTGConnectingPointAtIndex(0);
-		TGConnector conn03 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector());
+		TGConnector conn03 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector<Point>());
 		mySMD.addBuiltConnector(conn03);
 
 
@@ -264,7 +264,7 @@ public void setCode(String id) {
 		
 		p1 = begin_state02.getTGConnectingPointAtIndex(1);
 		p2 = stop_state.getTGConnectingPointAtIndex(0);
-		TGConnector conn04 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector());
+		TGConnector conn04 = TGComponentManager.addConnector(p1.getX(), p2.getY(), TGComponentManager.CONNECTOR_PROSMD, tdp, p1, p2, new Vector<Point>());
 		mySMD.addBuiltConnector(conn04);
 	}
 

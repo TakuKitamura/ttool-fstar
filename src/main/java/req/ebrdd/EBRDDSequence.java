@@ -50,12 +50,12 @@ import java.util.Vector;
 
 
 public class EBRDDSequence extends EBRDDComponent{
-    private Vector indexes;
+    private Vector<Integer> indexes;
     
     public EBRDDSequence(String _name, Object _referenceObject) {
 		super(_name, _referenceObject);
 		 nbNext = -1;
-         indexes = new Vector();
+         indexes = new Vector<>();
     }
     
     public void addIndex(int index) {
@@ -81,9 +81,9 @@ public class EBRDDSequence extends EBRDDComponent{
         i0 = new Integer(1000);
         index = -1;
         for(i=0; i<indexes.size(); i++) {
-          if ((((Integer)indexes.elementAt(i)).compareTo(i0))<0) {
+          if ((indexes.elementAt(i).compareTo(i0))<0) {
             index = i;
-            i0 = ((Integer)indexes.elementAt(i));
+            i0 = indexes.elementAt(i);
           }
         }
         nextsbis.add(nexts.get(index));

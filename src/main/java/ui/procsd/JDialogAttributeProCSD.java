@@ -70,7 +70,7 @@ public class JDialogAttributeProCSD extends javax.swing.JDialog implements Actio
     private String attrib; // "Attributes", "Gates", etc.
     
     // Panel1
-    private JComboBox accessBox, typeBox;
+    private JComboBox<String> accessBox, typeBox;
     private JTextField identifierText;
     private JTextField initialValue;
     private JButton addButton;
@@ -164,7 +164,7 @@ public class JDialogAttributeProCSD extends javax.swing.JDialog implements Actio
         c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
-        accessBox = new JComboBox();
+        accessBox = new JComboBox<>();
         panel1.add(accessBox, c1);
         identifierText = new JTextField();
         identifierText.setColumns(15);
@@ -182,7 +182,7 @@ public class JDialogAttributeProCSD extends javax.swing.JDialog implements Actio
         
         panel1.add(new JLabel(" : "), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeBox = new JComboBox();
+        typeBox = new JComboBox<>();
         typeBox.addActionListener(this);
         panel1.add(typeBox, c1);
         
@@ -261,7 +261,7 @@ public class JDialogAttributeProCSD extends javax.swing.JDialog implements Actio
     
     public void	actionPerformed(ActionEvent evt)  {
         if (evt.getSource() == typeBox) {
-            boolean b = (initValues.get (typeBox.getSelectedIndex())).booleanValue();
+            boolean b = initValues.get(typeBox.getSelectedIndex());
             initialValue.setEnabled(b);
             return;
         }

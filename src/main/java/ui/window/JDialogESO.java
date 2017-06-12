@@ -68,7 +68,7 @@ public class JDialogESO extends javax.swing.JDialog implements ActionListener  {
  
 	// Panel
     protected JTextField timeout, n ,m;
-	protected JComboBox ids, oncePerEvent;
+	protected JComboBox<String> ids, oncePerEvent;
     
     // Main Panel
     private JButton closeButton;
@@ -117,7 +117,7 @@ public class JDialogESO extends javax.swing.JDialog implements ActionListener  {
         c2.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Operator:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        ids = new JComboBox(EBRDDESO.ESOS);
+        ids = new JComboBox<>(EBRDDESO.ESOS);
 		/*for(int i=0; i<EBRDDESO.ESOS.length; i++) {
 			 ids.addItem(EBRDDESO.ESOS[i]);
 		}*/
@@ -134,7 +134,7 @@ public class JDialogESO extends javax.swing.JDialog implements ActionListener  {
 		c2.gridwidth = 1;
         panel2.add(new JLabel("Once Per Event:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		oncePerEvent = new JComboBox();
+		oncePerEvent = new JComboBox<>();
 		oncePerEvent.addItem("false");
 		oncePerEvent.addItem("true");
 		if (eso.getOncePerEvent()) {

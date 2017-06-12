@@ -63,7 +63,7 @@ import java.util.Vector;
 
 
 public class JDialogSignalAssociation extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    private Vector signalAssociation, localSignalAssociations;
+    private Vector<String> signalAssociation, localSignalAssociations;
     private AvatarBDBlock block1, block2;
     private LinkedList<AvatarSignal> available1, available2;
     private AvatarBDPortConnector connector;
@@ -77,11 +77,11 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
     private boolean cancelled = false;
 
     // Panel1
-    private JComboBox signalsBlock1, signalsBlock2;
+    private JComboBox<String> signalsBlock1, signalsBlock2;
     private JButton addButton;
 
     //Panel2
-    private JList listSignals;
+    private JList<String> listSignals;
     private JButton upButton;
     private JButton downButton;
     private JButton removeButton;
@@ -91,13 +91,13 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
     private JButton cancelButton;
 
     /** Creates new form  */
-    public JDialogSignalAssociation(Frame _f, AvatarBDBlock _block1, AvatarBDBlock _block2, Vector _signalAssociation, AvatarBDPortConnector _connector, String _title) {
+    public JDialogSignalAssociation(Frame _f, AvatarBDBlock _block1, AvatarBDBlock _block2, Vector<String> _signalAssociation, AvatarBDPortConnector _connector, String _title) {
         super(_f, _title, true);
         block1 = _block1;
         block2 = _block2;
         connector = _connector;
         signalAssociation = _signalAssociation;
-        localSignalAssociations = new Vector();
+        localSignalAssociations = new Vector<>();
         localSignalAssociations.addAll(signalAssociation);
 
         // Available signals
@@ -176,7 +176,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
 
-        signalsBlock1 = new JComboBox();
+        signalsBlock1 = new JComboBox<>();
         signalsBlock1.addActionListener(this);
         //signalsBlock1.setMinimumSize(new Dimension(150, 50));
         panel1.add(signalsBlock1, c1);
@@ -184,7 +184,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         panel1.add(new JLabel(" = "), c1);
 
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        signalsBlock2 = new JComboBox();
+        signalsBlock2 = new JComboBox<>();
         //signalsBlock2.setMinimumSize(new Dimension(150, 50));
         signalsBlock2.addActionListener(this);
         panel1.add(signalsBlock2, c1);
@@ -203,7 +203,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         panel1.add(addButton, c1);
 
         // 1st line panel2
-        listSignals = new JList(localSignalAssociations);
+        listSignals = new JList<>(localSignalAssociations);
         listSignals.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listSignals.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane(listSignals);
@@ -418,7 +418,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
     public void removeSignals() {
         int i = listSignals.getSelectedIndex() ;
         if (i!= -1) {
-            String s = (String)(localSignalAssociations.get(i));
+            String s = localSignalAssociations.get(i);
             localSignalAssociations.removeElementAt(i);
             listSignals.setListData(localSignalAssociations);
             String sig1 = connector.getFirstSignalOfSignalAssociation(s);
@@ -439,7 +439,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
     public void downSignals() {
         int i = listSignals.getSelectedIndex();
         if ((i!= -1) && (i != localSignalAssociations.size() - 1)) {
-            Object o = localSignalAssociations.elementAt(i);
+            String o = localSignalAssociations.elementAt(i);
             localSignalAssociations.removeElementAt(i);
             localSignalAssociations.insertElementAt(o, i+1);
             listSignals.setListData(localSignalAssociations);
@@ -450,7 +450,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
     public void upSignals() {
         int i = listSignals.getSelectedIndex();
         if (i > 0) {
-            Object o = localSignalAssociations.elementAt(i);
+            String o = localSignalAssociations.elementAt(i);
             localSignalAssociations.removeElementAt(i);
             localSignalAssociations.insertElementAt(o, i-1);
             listSignals.setListData(localSignalAssociations);

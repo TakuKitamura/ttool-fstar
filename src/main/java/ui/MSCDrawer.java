@@ -52,6 +52,7 @@ import ui.sd.SDInstance;
 import ui.sd.SequenceDiagramPanel;
 import ui.sd.TGConnectorMessageSD;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Vector;
@@ -67,8 +68,8 @@ public class MSCDrawer {
     private MSC msc;
     private int indexAnalysis;
     private AnalysisPanel ap;
-    private Vector telements;
-    private Vector gelements;
+    private Vector<Instance> telements;
+    private Vector<TGComponent> gelements;
 
     //private double radius;
     //private double centerX;
@@ -87,8 +88,8 @@ public class MSCDrawer {
     }
 
     public boolean drawFromMSC(int _analysisNb) {
-        telements = new Vector();
-        gelements = new Vector();
+        telements = new Vector<>();
+        gelements = new Vector<>();
         try {
             //makeDrawable();
             //System.out.println("design");
@@ -164,7 +165,7 @@ public class MSCDrawer {
         p1.setFree(false);
         p2.setFree(false);
 
-        TGConnector tgco = TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_INTERACTION, _iodp, p1, p2, new Vector());
+        TGConnector tgco = TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_INTERACTION, _iodp, p1, p2, new Vector<Point>());
         ap.iodp.addBuiltComponent(tgco);
 
         return tgco;
@@ -271,7 +272,7 @@ public class MSCDrawer {
                 p2 = sdi.closerFreeTGConnectingPoint(myX, myY);
 
                 if ((p1 != null) && (p2 != null)) {
-                    msg = (TGConnectorMessageSD)(TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD, sdp, p1, p2, new Vector()));
+                    msg = (TGConnectorMessageSD)(TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD, sdp, p1, p2, new Vector<Point>()));
                     msg.setValue(evt1.getActionId());
                     sdp.addBuiltComponent(msg);
                     System.out.println("added a synchronous message");

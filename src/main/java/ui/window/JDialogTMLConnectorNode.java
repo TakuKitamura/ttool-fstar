@@ -67,7 +67,7 @@ public class JDialogTMLConnectorNode extends javax.swing.JDialog implements Acti
     private TMLArchiConnectorNode connector;
     
     //protected JTextField taskName;
-	protected JComboBox priority;
+	protected JComboBox<String> priority;
 	
     // Main Panel
     private JButton closeButton;
@@ -117,7 +117,7 @@ public class JDialogTMLConnectorNode extends javax.swing.JDialog implements Acti
 		for(int i=0; i<11; i++) {
 			list.add(""+i);
 		}
-		priority = new JComboBox(list);
+		priority = new JComboBox<>(list);
 		priority.setSelectedIndex(connector.getPriority());
 		panel2.add(priority, c1);
 		

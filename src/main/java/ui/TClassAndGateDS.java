@@ -50,7 +50,7 @@ package ui;
 import translator.Gate;
 import translator.TClass;
 
-public class TClassAndGateDS implements Comparable {
+public class TClassAndGateDS implements Comparable<TClassAndGateDS> {
     
     private TClassInterface tc;
     private TAttribute gate;
@@ -98,12 +98,7 @@ public class TClassAndGateDS implements Comparable {
     }
     
     
-    public int compareTo(Object o) {
-        if (!(o instanceof TClassAndGateDS)) {
-            return 0;
-        } else {
-            return toString().compareTo(o.toString());
-        }
-        
+    public int compareTo(TClassAndGateDS o) {
+        return toString().compareTo(o.toString());
     }
 }

@@ -98,7 +98,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
     protected JButton stop;
     protected JButton close;
     
-    protected Vector toBeChecked;
+    protected Vector<Requirements> toBeChecked;
     
     /** Creates new form  */
     public JDialogTMatrixManagement(Frame f, MainGUI _mgui, String title, RequirementModeling _rm, String _cmdRTL, String _cmdDTA2DOT, String _cmdRGSTRAP, String _cmdRG2TLSA, String _fileName, String _host, String _aldebaranHost, String _bcgioPath) {
@@ -223,7 +223,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
     }
     
     public void fillCheckVector() {
-        toBeChecked = new Vector();
+        toBeChecked = new Vector<>();
         if (jtable.getSelectedRowCount() == 0) {
             // Checking all
             toBeChecked.addAll(rm.getMatrix());
@@ -293,7 +293,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
             jta.append("Checking requirements with observers\n");
             
             for(int i=0; i<toBeChecked.size(); i++) {
-                reqs = (Requirements)(toBeChecked.get(i));
+                reqs = toBeChecked.get(i);
                 jta.append("#" + i + ": Dealing with observer " + reqs.ro.getValue() + "\n");
                 
                 
@@ -471,7 +471,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
     
      public void check(Requirements reqs) {
         if (reqs != null) {
-            toBeChecked = new Vector();
+            toBeChecked = new Vector<>();
             toBeChecked.add(reqs);
             startProcess();
         }

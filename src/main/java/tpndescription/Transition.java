@@ -69,8 +69,8 @@ public class Transition {
     public Transition(String _label) {
         label = _label;
         name = generateName();
-        originPlaces = new LinkedList();
-        destinationPlaces = new LinkedList();
+        originPlaces = new LinkedList<>();
+        destinationPlaces = new LinkedList<>();
     }
     
     

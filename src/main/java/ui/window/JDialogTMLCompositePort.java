@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogTMLCompositePort
- * Dialog for managing port properties
- * Creation: 26/03/2008
- * @version 1.0 26/03/2008
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -56,10 +48,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+/**
+ * Class JDialogTMLCompositePort
+ * Dialog for managing port properties
+ * Creation: 26/03/2008
+ * @version 1.0 26/03/2008
+ * @author Ludovic APVRILLE
+ */
 public class JDialogTMLCompositePort extends JDialog implements ActionListener {
-	
-    private JPanel panel1, panel2, panel3, panel4;
-    private Frame frame;
+
+	private JPanel panel3;
+	private Frame frame;
     
     private String name;
 		private String dataFlowType = "VOID";
@@ -77,23 +76,19 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
     public boolean checkAuth;
     // Panel1
     private JTextField nameText, maxText, widthText, associatedEventJT;
-    private JComboBox typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
-    private JComboBox origin, finite, blocking, dfType;
+    private JComboBox<String> typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
+    private JComboBox<String> origin, finite, blocking, dfType;
 		private JLabel lossPercentageLabel, maxNbOfLossLabel;
 		private int portIndex;
-    private Vector origins, finites, blockings, portTypes, types1, types2, types3, types4, types5;
+    private Vector<String> origins, finites, blockings, portTypes, types1, types2, types3, types4, types5;
 		private Vector<String> types;
     
 		// Robustness
 		private JCheckBox isLossyBox, isPrexCB, isPostexCB, confCheckBox, authCheckBox;
 		private JTextField lossPercentageText, maxNbOfLossText;
-	
-	
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf, boolean _checkAuth) {
+
+	public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf, boolean _checkAuth) {
         super(f, title, true);
         frame = f;
         
@@ -129,12 +124,12 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
     
     private void myInitComponents() {
 		
-		portTypes = new Vector();
+		portTypes = new Vector<>();
 		portTypes.add("Channel");
 		portTypes.add("Event");
 		portTypes.add("Request");
 		
-        types1 = new Vector(); types2 = new Vector(); types3 = new Vector(); types4 = new Vector(); types5 = new Vector(); 
+        types1 = new Vector<>(); types2 = new Vector<>(); types3 = new Vector<>(); types4 = new Vector<>(); types5 = new Vector<>();
         types1.add(TType.getStringType(0));
         types1.add(TType.getStringType(1));
         types1.add(TType.getStringType(2));
@@ -161,29 +156,27 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 		addTypes(types4, types);
 		addTypes(types5, types);
 		
-		origins = new Vector();
+		origins = new Vector<>();
 		origins.add("Origin");
 		origins.add("Destination");
 		
-		finites = new Vector();
+		finites = new Vector<>();
 		finites.add("Finite FIFO");
 		finites.add("Infinite FIFO");
 		
-		blockings = new Vector();
+		blockings = new Vector<>();
 		blockings.add("Blocking");
 		blockings.add("Non-blocking FIFO");
     }
 	
-	private void addTypes(Vector v, Vector<String> types) {
-		for(int i=0; i<types.size(); i++) {
-			v.add(types.get(i));
-		}
+	private void addTypes(Vector<String> v, Vector<String> types) {
+		v.addAll(types);
 	}
     
     private void initComponents() {
 		int i;
 		
-				Vector<String> dataFlowTypes = new Vector<String>();
+				Vector<String> dataFlowTypes = new Vector<>();
 				dataFlowTypes.add( TMLDataFlowType.UINT_16 );
 				dataFlowTypes.add( TMLDataFlowType.UINT_32 );
 				dataFlowTypes.add( TMLDataFlowType.UINT_64 );
@@ -209,8 +202,8 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+		JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Name and type "));
         panel1.setPreferredSize(new Dimension(300, 150));
@@ -241,7 +234,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("Type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typePort = new JComboBox(portTypes);
+        typePort = new JComboBox<>(portTypes);
         typePort.setSelectedIndex(portIndex);
 				typePort.addActionListener(this);
         panel1.add(typePort, c1);
@@ -251,7 +244,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("Origin:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        origin = new JComboBox(origins);
+        origin = new JComboBox<>(origins);
 		if (isOrigin) {
 			origin.setSelectedIndex(0);
 		} else {
@@ -262,7 +255,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 		
 		
 		// parameters
-        panel2 = new JPanel();
+		JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Formal Verification & Simulation Parameters "));
         panel2.setPreferredSize(new Dimension(300, 300));
@@ -286,7 +279,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c2.anchor = GridBagConstraints.CENTER;
         panel2.add(new JLabel("Type #1"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList1 = new JComboBox(types1);
+        typeList1 = new JComboBox<>(types1);
 		//TraceManager.addDev("type1= " + type1);
 		if (type1.getType() < TType.OTHER) {
 			typeList1.setSelectedIndex(type1.getType());
@@ -294,7 +287,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 			for(i=TType.OTHER; i<types1.size(); i++) {
 				//TraceManager.addDev("Looking for:"  + type1.getTypeOther());
 				//TraceManager.addDev("Current type:"  +  types1.get(i));
-				if (((String)(types1.get(i))).compareTo(type1.getTypeOther()) == 0) {
+				if ((types1.get(i)).compareTo(type1.getTypeOther()) == 0) {
 					typeList1.setSelectedIndex(i);
 					break;
 				}
@@ -307,14 +300,14 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c2.anchor = GridBagConstraints.CENTER;
         panel2.add(new JLabel("Type #2"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList2 = new JComboBox(types2);
+        typeList2 = new JComboBox<>(types2);
         if (type2.getType() < TType.OTHER) {
 			typeList2.setSelectedIndex(type2.getType());
 		} else {
 			for(i=TType.OTHER; i<types2.size(); i++) {
 				//TraceManager.addDev("Looking for:"  + type1.getTypeOther());
 				//TraceManager.addDev("Current type:"  +  types1.get(i));
-				if (((String)(types2.get(i))).compareTo(type2.getTypeOther()) == 0) {
+				if ((types2.get(i)).compareTo(type2.getTypeOther()) == 0) {
 					typeList2.setSelectedIndex(i);
 					break;
 				}
@@ -327,14 +320,14 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c2.anchor = GridBagConstraints.CENTER;
         panel2.add(new JLabel("Type: #3"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList3 = new JComboBox(types3);
+        typeList3 = new JComboBox<>(types3);
         if (type3.getType() < TType.OTHER) {
 			typeList3.setSelectedIndex(type3.getType());
 		} else {
 			for(i=TType.OTHER; i<types3.size(); i++) {
 				//TraceManager.addDev("Looking for:"  + type1.getTypeOther());
 				//TraceManager.addDev("Current type:"  +  types1.get(i));
-				if (((String)(types3.get(i))).compareTo(type3.getTypeOther()) == 0) {
+				if ((types3.get(i)).compareTo(type3.getTypeOther()) == 0) {
 					typeList3.setSelectedIndex(i);
 					break;
 				}
@@ -347,14 +340,14 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c2.anchor = GridBagConstraints.CENTER;
         panel2.add(new JLabel("Type: #4"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList4 = new JComboBox(types4);
+        typeList4 = new JComboBox<>(types4);
         if (type4.getType() < TType.OTHER) {
 			typeList4.setSelectedIndex(type4.getType());
 		} else {
 			for(i=TType.OTHER; i<types4.size(); i++) {
 				//TraceManager.addDev("Looking for:"  + type1.getTypeOther());
 				//TraceManager.addDev("Current type:"  +  types1.get(i));
-				if (((String)(types4.get(i))).compareTo(type4.getTypeOther()) == 0) {
+				if ((types4.get(i)).compareTo(type4.getTypeOther()) == 0) {
 					typeList4.setSelectedIndex(i);
 					break;
 				}
@@ -368,14 +361,14 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c2.anchor = GridBagConstraints.CENTER;
         panel2.add(new JLabel("Type: #5"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList5 = new JComboBox(types5);
+        typeList5 = new JComboBox<>(types5);
         if (type5.getType() < TType.OTHER) {
 			typeList5.setSelectedIndex(type5.getType());
 		} else {
 			for(i=TType.OTHER; i<types5.size(); i++) {
 				//TraceManager.addDev("Looking for:"  + type1.getTypeOther());
 				//TraceManager.addDev("Current type:"  +  types1.get(i));
-				if (((String)(types5.get(i))).compareTo(type5.getTypeOther()) == 0) {
+				if ((types5.get(i)).compareTo(type5.getTypeOther()) == 0) {
 					typeList5.setSelectedIndex(i);
 					break;
 				}
@@ -384,7 +377,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         panel2.add(typeList5, c2);
 
 				// Code generation
-        panel4 = new JPanel();
+		JPanel panel4 = new JPanel();
         panel4.setLayout( gridbag4 );
         panel4.setBorder( new javax.swing.border.TitledBorder("Code generation ") );
         panel4.setPreferredSize( new Dimension(300, 300) );
@@ -401,7 +394,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c2.anchor = GridBagConstraints.CENTER;
         panel4.add(new JLabel("Dataflow type"), c2);
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-        dfType = new JComboBox( dataFlowTypes );
+        dfType = new JComboBox<>( dataFlowTypes );
 				if( dataFlowType.equals( "VOID" ) || dataFlowType.equals( "" ) )	{
 					dfType.setSelectedIndex( 0 );
 				}
@@ -439,7 +432,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c2.anchor = GridBagConstraints.CENTER;
         panel2.add(new JLabel("Blocking?"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        blocking = new JComboBox(blockings);
+        blocking = new JComboBox<>(blockings);
 		if (isBlocking) {
 			blocking.setSelectedIndex(0);
 		} else {
@@ -453,7 +446,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c2.anchor = GridBagConstraints.CENTER;
         panel2.add(new JLabel("Finite?"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        finite = new JComboBox(finites);
+        finite = new JComboBox<>(finites);
 		if (isFinite) {
 			finite.setSelectedIndex(0);
 		} else {
@@ -534,11 +527,11 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+		JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
@@ -566,8 +559,8 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
     
     public void closeDialog() {
         data = true;
-				dataFlowType = (String)dfType.getItemAt( dfType.getSelectedIndex() );
-				associatedEvent = (String)associatedEventJT.getText();
+				dataFlowType = dfType.getItemAt( dfType.getSelectedIndex() );
+				associatedEvent = associatedEventJT.getText();
 				isPrex = isPrexCB.isSelected();
 				isPostex = isPostexCB.isSelected();
 				checkConf = confCheckBox.isSelected();
@@ -742,7 +735,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 	
 	public int getLossPercentage() {
 		try {
-			return Integer.decode(lossPercentageText.getText().trim()).intValue();
+			return Integer.decode(lossPercentageText.getText().trim());
 		} catch (Exception e) {
 			return -1;
 		}
@@ -750,7 +743,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 	
 	public int getMaxNbOfLoss() {
 		try {
-			return Integer.decode(maxNbOfLossText.getText().trim()).intValue();
+			return Integer.decode(maxNbOfLossText.getText().trim());
 		} catch (Exception e) {
 			return -1;
 		}

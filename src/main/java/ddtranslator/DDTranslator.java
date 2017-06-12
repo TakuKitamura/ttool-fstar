@@ -218,7 +218,7 @@ public class DDTranslator {
         // Do the same at receiving side
         
         //System.out.println("Toto03");
-        synchros = new LinkedList();
+        synchros = new LinkedList<>();
         ad = tclass2.getActivityDiagram();
         
         for(i=0; i<ad.size(); i++) {

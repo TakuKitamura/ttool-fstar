@@ -470,7 +470,7 @@ public class DSESimulationResult  {
 	
 	public void computeResults() {
 		
-		Hashtable resultsTable = new Hashtable();
+		Hashtable<Integer, Object> resultsTable = new Hashtable<>();
 		Object o;
 		CPUWholeResult cpuwr;
 		BusWholeResult buswr;

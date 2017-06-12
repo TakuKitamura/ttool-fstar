@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogChannel
- * Dialog for managing channel properties
- * Creation: 28/10/2005
- * @version 1.0 28/20/2005
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -55,11 +47,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+/**
+ * Class JDialogChannel
+ * Dialog for managing channel properties
+ * Creation: 28/10/2005
+ * @version 1.0 28/20/2005
+ * @author Ludovic APVRILLE
+ */
 public class JDialogChannel extends javax.swing.JDialog implements ActionListener {
-    
-    private JPanel panel1;
-    private Frame frame;
-    
+
     private String name;
     private int type, size, max;
     
@@ -68,18 +64,13 @@ public class JDialogChannel extends javax.swing.JDialog implements ActionListene
     
     // Panel1
     private JTextField nameText, sizeText, maxText;
-    private JComboBox typeList;
+    private JComboBox<String> typeList;
     private Vector<String> types;
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+
     /** Creates new form  */
     public JDialogChannel(String _name, int _size, int _type, int _max, Frame f, String title) {
         super(f, title, true);
-        frame = f;
-        
+
         name = _name;
         type = _type;
         size = _size;
@@ -94,7 +85,7 @@ public class JDialogChannel extends javax.swing.JDialog implements ActionListene
     }
     
     private void myInitComponents() {
-        types = new Vector<String>();
+        types = new Vector<>();
         types.add(TMLChannelProperties.getStringChannelType(0));
         types.add(TMLChannelProperties.getStringChannelType(1));
         types.add(TMLChannelProperties.getStringChannelType(2));
@@ -111,8 +102,8 @@ public class JDialogChannel extends javax.swing.JDialog implements ActionListene
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+        JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and tclass "));
         panel1.setPreferredSize(new Dimension(300, 150));
@@ -150,7 +141,7 @@ public class JDialogChannel extends javax.swing.JDialog implements ActionListene
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList = new JComboBox(types);
+        typeList = new JComboBox<>(types);
         typeList.setSelectedIndex(type);
         typeList.addActionListener(this);
         panel1.add(typeList, c1);
@@ -174,11 +165,11 @@ public class JDialogChannel extends javax.swing.JDialog implements ActionListene
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }

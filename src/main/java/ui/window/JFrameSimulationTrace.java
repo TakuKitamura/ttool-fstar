@@ -59,7 +59,7 @@ import java.io.StringReader;
 import java.util.Vector;
 
 public	class JFrameSimulationTrace extends JFrame	implements ActionListener {
-    private Vector trace;
+    private Vector<GateSimulationTrace> trace;
     
     private JSimulationPanelInterface jsimu;
     private JScrollPane jsp;
@@ -90,7 +90,7 @@ public	class JFrameSimulationTrace extends JFrame	implements ActionListener {
     }
     
     public boolean makeTraceSimu(String simuData) {
-        trace = new Vector();
+        trace = new Vector<>();
         
         StringReader sr = new StringReader(simuData);
         BufferedReader br = new BufferedReader(sr);
@@ -155,7 +155,7 @@ public	class JFrameSimulationTrace extends JFrame	implements ActionListener {
         GateSimulationTrace gst;
         
         for(int i=0; i<trace.size(); i++) {
-            gst = (GateSimulationTrace)(trace.elementAt(i));
+            gst = trace.elementAt(i);
             if (gst.getGate() == g) {
                 return gst;
             }

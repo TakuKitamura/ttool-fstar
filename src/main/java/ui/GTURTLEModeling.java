@@ -428,7 +428,7 @@ public class GTURTLEModeling {
     public void generateTPN(File f) {
         //tm.print();
         TURTLE2TPN t2tpn = new TURTLE2TPN(tm);
-        tpn = t2tpn.generateTPN(false).toString();
+        tpn = t2tpn.generateTPN().toString();
         warnings = t2tpn.getWarnings();
 
         //  nbTPN ++;

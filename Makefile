@@ -62,7 +62,7 @@ export TTOOL_LIBS		= $(TTOOL_PATH)/libs
 export TTOOL_LIBRARIES		= $(wildcard $(TTOOL_LIBS)/*.jar)
 export TTOOL_CLASSPATH		= $(subst $(eval) ,:,$(TTOOL_LIBRARIES))
 
-export GLOBAL_CFLAGS		= -encoding "UTF8"
+export GLOBAL_CFLAGS		= -encoding "UTF8" -Xlint:unchecked -Xlint:deprecation
 
 export TTOOL_DIR		= $(TTOOL_PATH)/ttool
 export TTOOL_BINARY 		= $(TTOOL_BIN)/ttool.jar

@@ -57,13 +57,13 @@ import java.util.Collections;
 import java.util.Vector;
 
 public class StatisticsTableModel extends AbstractTableModel implements SteppedAlgorithm {
-	Vector statisticData;
+	private Vector<StatisticsItem> statisticData;
 	private int percentage;
 	private boolean go;
 
 	
 	public StatisticsTableModel() {
-		statisticData = new Vector();
+		statisticData = new Vector<>();
 		
 	}
 	
@@ -100,7 +100,7 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 
 	public Object getValueAt(int row, int column) {
 		StatisticsItem si;
-		si = (StatisticsItem)(statisticData.elementAt(Math.min(row, statisticData.size())));
+		si = statisticData.elementAt(Math.min(row, statisticData.size()));
 		if (column == 0) {
 			return si.getName();
 		} else if (column == 1) {
@@ -207,7 +207,7 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 
 		for(int i=0; i<statisticData.size(); i++) {
 			//System.out.println("i=" + i);
-			si = (StatisticsItem)(statisticData.elementAt(i));
+			si = statisticData.elementAt(i);
 			if (si.getName().compareTo(name) == 0) {
 				return si;
 			}

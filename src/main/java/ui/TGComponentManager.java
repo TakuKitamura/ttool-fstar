@@ -82,6 +82,7 @@ import ui.tmldd.*;
 import ui.tmlsd.*;
 import ui.ucd.*;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.Vector;
 
@@ -2026,7 +2027,7 @@ public class TGComponentManager {
     }
 
 
-    public final static TGConnector addConnector(int x, int y, int id, TDiagramPanel tdp, TGConnectingPoint p1, TGConnectingPoint p2, Vector listPoint) {
+    public final static TGConnector addConnector(int x, int y, int id, TDiagramPanel tdp, TGConnectingPoint p1, TGConnectingPoint p2, Vector<Point> listPoint) {
         TGConnector tgc = null;
 
         switch(id) {

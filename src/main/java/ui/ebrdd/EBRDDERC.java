@@ -212,8 +212,8 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
     }
     
     
-    public Vector getElementList() {
-        Vector v = new Vector();
+    public Vector<TGComponent> getElementList() {
+        Vector<TGComponent> v = new Vector<>();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if ((tgcomponent[i] instanceof EBRDDESO) || (tgcomponent[i] instanceof EBRDDERB)){
                 v.add(tgcomponent[i]);

@@ -252,7 +252,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	
 	  public LinkedList<TAttribute> getMyMessages()
 	  {
-		  return (LinkedList<TAttribute>) myMessages.clone ();
+		  return new LinkedList<>(myMessages);
 	  }
 	    public boolean editOndoubleClick(JFrame frame) {
 	       

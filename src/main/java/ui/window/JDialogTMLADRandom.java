@@ -68,8 +68,8 @@ public class JDialogTMLADRandom extends javax.swing.JDialog implements ActionLis
     
 	
 	// Panel2
-    protected JTextField jvariable, jminValue, jmaxValue;
-	protected JComboBox randomFunction;
+    private JTextField jvariable, jminValue, jmaxValue;
+	private JComboBox<String> randomFunction;
 	
     // Main Panel
     private JButton closeButton;
@@ -143,7 +143,7 @@ public class JDialogTMLADRandom extends javax.swing.JDialog implements ActionLis
 		c2.gridwidth = 1;
         panel2.add(new JLabel("Probability function:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        randomFunction = new JComboBox();
+        randomFunction = new JComboBox<>();
         randomFunction.addItem("Uniform");
 		randomFunction.setSelectedIndex(functionId);
         panel2.add(randomFunction, c2);

@@ -237,7 +237,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //setMinimumSize(new Dimension(1000, 1000));
         //setMaximumSize(new Dimension(1000, 1000));
         setPreferredSize(new Dimension(maxX + limit, maxY + limit));
-        componentList = new LinkedList<TGComponent> ();
+        componentList = new LinkedList<> ();
         mgui = _mgui;
         ttb = _ttb;
         mode = NORMAL;
@@ -329,7 +329,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void removeAll() {
-        this.componentList = new LinkedList<TGComponent> ();
+        this.componentList = new LinkedList<> ();
     }
 
 
@@ -557,7 +557,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
       }*/
 
     public void loadFromXML(String s) {
-        this.componentList = new LinkedList<TGComponent>();
+        this.componentList = new LinkedList<>();
 
         mode = NORMAL;
     }

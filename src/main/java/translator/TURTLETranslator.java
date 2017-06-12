@@ -59,9 +59,9 @@ public class TURTLETranslator {
 	private static int gateId;
 
 	private TURTLEModeling tm;
-	private Vector allProcesses;
-	private Vector vectorProcess;
-	private Vector vectorHLProcess;
+	private Vector<Process> allProcesses;
+	private Vector<Vector<Process>> vectorProcess;
+	private Vector<HLProcess> vectorHLProcess;
 	private int languageID;
 
 	private LinkedList<CheckingError> warning;
@@ -84,7 +84,8 @@ public class TURTLETranslator {
 
 	//private static String[] operand = {"!", "?", "+", "-", "*", "min", "max", "<=", ">=", "==", "div", "mod", "divs", "=", " "};
 
-	private Vector params, actions;
+	private Vector<Param> params;
+	private Vector<String> actions;
 
 	private int index = 0;
 
@@ -142,7 +143,7 @@ public class TURTLETranslator {
 		int i;
 
 		languageID = LOTOS;
-		warning = new LinkedList<CheckingError> ();
+		warning = new LinkedList<> ();
 
 		MasterGateManager.reinitNameRestriction();
 
@@ -150,8 +151,8 @@ public class TURTLETranslator {
 		tm.makeLOTOSName();
 		//tm.renameParametersInActions();
 
-		vectorProcess = new Vector();
-		allProcesses = new Vector();
+		vectorProcess = new Vector<>();
+		allProcesses = new Vector<>();
 		//vectorHLProcess = new Vector();
 
 		// Pre-processing: Advanced TURTLE -> BASIC TURTLE
@@ -210,19 +211,13 @@ public class TURTLETranslator {
 
 		translation.append(WHERE);
 
-		Process pr;
-		Vector p;
-
-		for(i=0; i<vectorHLProcess.size(); i++) {
-			pr = (Process)(vectorHLProcess.elementAt(i));
+		for (Process pr: this.vectorHLProcess) {
 			translation.append(pr.toString());
 			translation.append("\n\n");
 		}
 
-		for(i=0; i<vectorProcess.size(); i++) {
-			p = (Vector)(vectorProcess.elementAt(i));
-			for(int j=0; j<p.size(); j++) {
-				pr = (Process)(p.elementAt(j));
+		for (Vector<Process> p: this.vectorProcess) {
+		    for (Process pr: p) {
 				translation.append(pr.toString());
 				translation.append("\n\n");
 			}
@@ -239,15 +234,15 @@ public class TURTLETranslator {
 		int i;
 
 		languageID = RT_LOTOS;
-		warning = new LinkedList<CheckingError> ();
+		warning = new LinkedList<> ();
 
 		MasterGateManager.reinitNameRestriction();
 
 		tm.makeRTLOTOSName();
 		//tm.renameParametersInActions();
 
-		vectorProcess = new Vector();
-		allProcesses = new Vector();
+		vectorProcess = new Vector<>();
+		allProcesses = new Vector<>();
 		//vectorHLProcess = new Vector();
 
 		// Pre-processing: Advanced TURTLE -> BASIC TURTLE
@@ -303,16 +298,16 @@ public class TURTLETranslator {
 
 		//g1 = new Vector();
 		//pr1 = new Vector();
-		Vector p;
+		Vector<Process> p;
 
 		for(i=0; i<vectorHLProcess.size(); i++) {
-			pr = (Process)(vectorHLProcess.elementAt(i));
+			pr = vectorHLProcess.elementAt(i);
 			translation.append(pr.toString());
 			translation.append("\n\n");
 		}
 
 		for(i=0; i<vectorProcess.size(); i++) {
-			p = (Vector)(vectorProcess.elementAt(i));
+			p = vectorProcess.elementAt(i);
 			for(int j=0; j<p.size(); j++) {
 				pr = (Process)(p.elementAt(j));
 				translation.append(pr.toString());
@@ -325,9 +320,9 @@ public class TURTLETranslator {
 		return new String(translation);
 	}
 
-	private Vector makeHighLevel() {
-		Vector v = new Vector();
-		Vector gates;
+	private Vector<HLProcess> makeHighLevel() {
+		Vector<HLProcess> v = new Vector<>();
+		Vector<Gate> gates;
 		String s;
 		TClass t;
 		HLProcess p;
@@ -342,10 +337,10 @@ public class TURTLETranslator {
 			// external : external gates of classes
 			// param : param of tclasses.
 			pt = t.getProcess();
-			gates = (Vector)(pt.getGateList().clone());
+			gates = new Vector<>(pt.getGateList());
 			// remove internal gates
 			for(j=0; j<gates.size(); j++) {
-				g = (Gate)(gates.elementAt(j));
+				g = gates.elementAt(j);
 				if (g.isInternal()) {
 					gates.removeElementAt(j);
 					j --;
@@ -364,13 +359,13 @@ public class TURTLETranslator {
 
 	}
 
-	private void makeBodyHighLevel(Vector vhl) {
+	private void makeBodyHighLevel(Vector<HLProcess> vhl) {
 		TClass t;
 		HLProcess p;
 
 		for(int i=0; i<tm.classNb(); i++) {
 			t = tm.getTClassAtIndex(i);
-			p = (HLProcess)(vhl.elementAt(i));
+			p = vhl.elementAt(i);
 
 			if (tm.hasPremptandSequence(t)) {
 				makePremptAndSequence(t);
@@ -518,7 +513,7 @@ public class TURTLETranslator {
 			return;
 		}
 
-		Vector gates = new Vector();
+		Vector<Gate> gates = new Vector<>();
 
 		sb.append("(");
 		sb.append(t.getHLProcess().getHighLevelCallToMe(magama, languageID));
@@ -528,7 +523,7 @@ public class TURTLETranslator {
 		Relation r;
 		Gate g;
 		int k, l, index;
-		Vector v;
+		Vector<Gate> v;
 
 		for(k=0; k<tumo.relationNb(); k++) {
 			//System.out.println("Relation " + k);
@@ -553,7 +548,7 @@ public class TURTLETranslator {
 					//calculates master gates of the synchro relation
 					v = r.gatesOfT1;
 					for(l=0; l<v.size(); l++) {
-						g = (Gate)(v.elementAt(l));
+						g = v.elementAt(l);
 						//System.out.println("Looking for gate");
 						gates.add(magama.getMasterGateOf(r.t1, g));
 						//System.out.println("Got gate");
@@ -586,7 +581,7 @@ public class TURTLETranslator {
 			// translate gates
 			sb.append(" |[");
 			for(k=0; k<gates.size(); k++) {
-				g = (Gate)(gates.elementAt(k));
+				g = gates.elementAt(k);
 				if (k != 0) {
 					sb.append(", ");
 				}
@@ -643,14 +638,14 @@ public class TURTLETranslator {
 
 
 	/* note: the model MUST have been checked before*/
-	private Vector translateActivityDiagram(TClass t) {
+	private Vector<Process> translateActivityDiagram(TClass t) {
 		//System.out.println("Translating activity diagram of " + t.getName());
-		Vector v = new Vector();
+		Vector<Process> v = new Vector<>();
 		index = 0;
 		int i, j;
 		ActivityDiagram ad;
 		Param p;
-		LinkedList gfifos1=null, gfifos2=null, gfifos3=null;
+		LinkedList<Gate> gfifos1=null, gfifos2=null, gfifos3=null;
 		Gate gfifo1 = null, gfifo2 = null, gfifo3 = null;
 		int nbPara = 0;
 		Param nb = null, maxs = null;
@@ -661,8 +656,8 @@ public class TURTLETranslator {
 		String []exprs = null;
 
 
-		Vector paramss = new Vector(t.getParamList());
-		Vector gatess = new Vector(t.getGateList());
+		Vector<Param> paramss = new Vector<>(t.getParamList());
+		Vector<Gate> gatess = new Vector<>(t.getGateList());
 
 		if ((languageID == LOTOS) && (t instanceof FIFOTClass)) {
 			// Attributes must be added
@@ -688,8 +683,8 @@ public class TURTLETranslator {
 
 		if ((languageID == LOTOS) && (t instanceof FIFOInfiniteAndGetSizeTClass)) {
 			// Attributes must be added
-			paramss = new Vector();
-			gatess = new Vector();
+			paramss = new Vector<>();
+			gatess = new Vector<>();
 			gfifos1 = ((FIFOInfiniteAndGetSizeTClass)t).getGatesWrite();
 			gfifos2 = ((FIFOInfiniteAndGetSizeTClass)t).getGatesRead();
 			gfifos3 = ((FIFOInfiniteAndGetSizeTClass)t).getGatesSize();
@@ -718,8 +713,8 @@ public class TURTLETranslator {
 			System.out.println("FIFO finite + " + t.getName());
 			//t.removeAllGates();
 			//t.removeAllAttributes();
-			paramss = new Vector();
-			gatess = new Vector();
+			paramss = new Vector<>();
+			gatess = new Vector<>();
 			// Attributes must be added
 			gfifos1 = ((FIFOFiniteAndGetSizeTClass)t).getGatesWrite();
 			gfifos2 = ((FIFOFiniteAndGetSizeTClass)t).getGatesRead();
@@ -1058,12 +1053,12 @@ public class TURTLETranslator {
 			ADComponent adc1, adc2;
 			Gate g1, g2;
 
-			Vector paraList = new Vector(); // list of parallel components in the ad diagram
-			Vector listMainProcess = (Vector)(t.getGateList().clone()); // Gates of the main process
-			Vector listOtherProcess = (Vector)(t.getGateList().clone()); // Gates of subprocesses
-			Vector listAllInternalGates = new Vector(); //List of gates for synchro relation
-			Vector processPar1List = new Vector(); // List of processes "Parm"
-			Vector processPar2List = new Vector(); // List of processes "Parc"
+			Vector<ADParallel> paraList = new Vector<>(); // list of parallel components in the ad diagram
+			Vector<Gate> listMainProcess = new Vector<>(t.getGateList()); // Gates of the main process
+			Vector<Gate> listOtherProcess = new Vector<>(t.getGateList()); // Gates of subprocesses
+			Vector<Gate> listAllInternalGates = new Vector<>(); //List of gates for synchro relation
+			Vector<Process> processPar1List = new Vector<>(); // List of processes "Parm"
+			Vector<Process> processPar2List = new Vector<>(); // List of processes "Parc"
 			Process par1, par2;
 
 			// List Other Processes
@@ -1080,7 +1075,7 @@ public class TURTLETranslator {
 
 			//For each parallel, say which component leads to it and creates a gate for each of it
 			for(i=0; i<ad.size(); i++) {
-				adc1 = (ADComponent)(ad.elementAt(i));
+				adc1 = ad.elementAt(i);
 				if (adc1 instanceof ADParallel) {
 					adp = (ADParallel)adc1;
 					paraList.add(adp);
@@ -1095,7 +1090,7 @@ public class TURTLETranslator {
 					// search for all components leading to this parallel
 					cpt = 0;
 					for(j=0; j<ad.size(); j++) {
-						adc2 = (ADComponent)(ad.elementAt(j));
+						adc2 = ad.elementAt(j);
 						if (adc2.hasNextTo(adp)) {
 							//System.out.println("Leading to par: " +adc2.toString());
 							//creates a new Gate for it
@@ -1122,13 +1117,13 @@ public class TURTLETranslator {
 			translateActionStateWithParamProcess(ad);
 
 			// make parallel processes
-			Vector proc1Gate, proc2Gate;
+			Vector<Gate> proc1Gate, proc2Gate;
 			Process p1, p2;
 			for(i=0; i<paraList.size(); i++) {
-				adp = (ADParallel)(paraList.elementAt(i));
+				adp = paraList.elementAt(i);
 				// 2 proceses to make
 				// Higher process
-				proc1Gate = (Vector)(adp.getNewAllGateList());
+				proc1Gate = adp.getNewAllGateList();
 				proc1Gate.add(adp.getSpecialGate());
 				p1 = new Process(generateProcessName("parm_" + index + "_" + t.getLotosName()), proc1Gate, null, languageID);
 				processPar1List.add(p1);
@@ -1137,7 +1132,7 @@ public class TURTLETranslator {
 				allProcesses.add(p1);
 
 				// Lower process
-				proc2Gate = (Vector)(listOtherProcess.clone());
+				proc2Gate = new Vector<>(listOtherProcess);
 				proc2Gate.add(adp.getSpecialGate());
 				p2 = new Process(generateProcessName("parc_" + index + "_" + t.getLotosName()), proc2Gate, t.getParamList(), languageID);
 				index ++;
@@ -1151,7 +1146,7 @@ public class TURTLETranslator {
 			String s = "(\n";
 
 			for(i=0; i<processPar1List.size(); i++) {
-				par1 = (Process)(processPar1List.elementAt(i));
+				par1 = processPar1List.elementAt(i);
 				if (i == 0) {
 					s = s + par1.getCallToMe();
 				} else {
@@ -1162,7 +1157,7 @@ public class TURTLETranslator {
 			s = s + "\n)\n|[";
 
 			for(i=0; i<listAllInternalGates.size(); i++) {
-				g1 = (Gate)(listAllInternalGates.elementAt(i));
+				g1 = listAllInternalGates.elementAt(i);
 				if (i ==0) {
 					s = s + g1.getLotosName();
 				}else {
@@ -1173,7 +1168,7 @@ public class TURTLETranslator {
 			s = s + "]|\n(\n";
 
 			for(i=0; i<processPar2List.size(); i++) {
-				par2 = (Process)(processPar2List.elementAt(i));
+				par2 = processPar2List.elementAt(i);
 				s = s + par2.getCallToMe() + "\n|||\n";
 			}
 
@@ -1273,8 +1268,8 @@ public class TURTLETranslator {
 				Param[] paramss = new Param[params.size() + 1];
 				String[] actionss = new String[actions.size() + 1];
 				for (i=0; i<params.size(); i++) {
-					paramss[i] = (Param)(params.get(i));
-					actionss[i] = (String)(actions.get(i));
+					paramss[i] = params.get(i);
+					actionss[i] = actions.get(i);
 				}
 				paramss[i] = ad.getParam();
 				actionss[i] = modifyAction(ad.getActionValue(), languageID);
@@ -1296,8 +1291,8 @@ public class TURTLETranslator {
 			// added May 2008
 			if (ad.getNext(0) instanceof ADActionStateWithParam) {
 				if (params == null) {
-					params = new Vector();
-					actions = new Vector();
+					params = new Vector<>();
+					actions = new Vector<>();
 				}
 				params.add(ad.getParam());
 				actions.add(modifyAction(ad.getActionValue(), languageID));
@@ -1482,7 +1477,7 @@ public class TURTLETranslator {
 		return s;
 	}
 
-	private void makeJunctionProcess(Vector v, ActivityDiagram ad, TClass t, Vector gateList, Vector paramList) {
+	private void makeJunctionProcess(Vector<Process> v, ActivityDiagram ad, TClass t, Vector<Gate> gateList, Vector<Param> paramList) {
 		ADJunction adj;
 		ADComponent adc;
 		Process p;
@@ -1501,7 +1496,7 @@ public class TURTLETranslator {
 		}
 	}
 
-	private void makeActionStateWithParamProcess(Vector v, ActivityDiagram ad, TClass t, Vector gateList, Vector paramList) {
+	private void makeActionStateWithParamProcess(Vector<Process> v, ActivityDiagram ad, TClass t, Vector<Gate> gateList, Vector<Param> paramList) {
 		ADActionStateWithParam ads, adsnext;
 		ADComponent adc;
 		Process p;
@@ -1509,12 +1504,12 @@ public class TURTLETranslator {
 		Param par;
 
 		int i;
-		Vector myGates = new Vector();
+		Vector<Gate> myGates = new Vector<>();
 		boolean makeProcess;
 
 		// Gates which are hidden are tranform into public gates
 		for(i=0; i<gateList.size(); i++) {
-			g1 = (Gate)(gateList.elementAt(i));
+			g1 = gateList.elementAt(i);
 			if (g1.isInternal()) {
 				g2 = new Gate(g1.getLotosName(), g1.getType(), false);
 				g2.setLotosName(g1.getLotosName());
@@ -1526,7 +1521,7 @@ public class TURTLETranslator {
 
 		// Creating processes
 		for(i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.elementAt(i));
+			adc = ad.elementAt(i);
 			if (adc instanceof ADActionStateWithParam) {
 				makeProcess = true;
 				ads = (ADActionStateWithParam)adc;
@@ -1539,10 +1534,8 @@ public class TURTLETranslator {
 						if (!paramIsUsedIn(par, adsnext.getActionValue())) {
 								makeProcess = false;
 								//System.out.println("no");
-						} else {
-							//System.out.println("yes");
 						}
-						
+
 						// Must check also in the next ones of the next.
 						if (makeProcess == false) {
 							while(adsnext.getNext(0) instanceof ADActionStateWithParam) {
@@ -1616,10 +1609,10 @@ public class TURTLETranslator {
 
 	private void makeProcessParallelManager(Process p) {
 		String s = "";
-		Vector l = p.getGateList();
+		Vector<Gate> l = p.getGateList();
 		Gate g;
 		for(int i=0; i<l.size(); i++) {
-			g = (Gate)(l.elementAt(i));
+			g = l.elementAt(i);
 			s = s + g.getLotosName() + "; ";
 		}
 		s = s + p.getCallToMe();

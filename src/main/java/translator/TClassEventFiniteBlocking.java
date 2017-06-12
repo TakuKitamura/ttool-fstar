@@ -50,9 +50,9 @@ import java.util.ListIterator;
 
 public class TClassEventFiniteBlocking extends TClass implements TClassEventCommon, FIFOFiniteAndGetSizeTClass {
 	private int nbPara;
-	private LinkedList sendReqGates;
-	private LinkedList waitGates;
-	private LinkedList sizeGates;
+	private LinkedList<Gate> sendReqGates;
+	private LinkedList<Gate> waitGates;
+	private LinkedList<Gate> sizeGates;
 	private int counterW, counterR, counterS;
 	private int maxSamples;
 	private String eventName;
@@ -62,9 +62,9 @@ public class TClassEventFiniteBlocking extends TClass implements TClassEventComm
 		nbPara = _nbPara;
 		//System.out.println("Nb of params:" +nbPara);
 		maxSamples = _maxSamples;
-		sendReqGates = new LinkedList();
-		waitGates = new LinkedList();
-		sizeGates = new LinkedList();
+		sendReqGates = new LinkedList<>();
+		waitGates = new LinkedList<>();
+		sizeGates = new LinkedList<>();
 		eventName = _eventName;
 	}
 
@@ -92,15 +92,15 @@ public class TClassEventFiniteBlocking extends TClass implements TClassEventComm
 		return (Gate)(sizeGates.get(0));
 	}
 
-	public LinkedList getGatesWrite() {
+	public LinkedList<Gate> getGatesWrite() {
 		return sendReqGates;
 	}
 
-	public LinkedList getGatesRead() {
+	public LinkedList<Gate> getGatesRead() {
 		return waitGates;
 	}
 
-	public LinkedList getGatesSize() {
+	public LinkedList<Gate> getGatesSize() {
 		return sizeGates;
 	}
 

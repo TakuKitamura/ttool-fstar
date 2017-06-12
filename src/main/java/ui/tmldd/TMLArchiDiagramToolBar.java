@@ -58,7 +58,7 @@ import java.awt.event.ActionListener;
 
 public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener {
 
-    protected JComboBox box;
+    protected JComboBox<String> box;
     protected static String[] viewInfos = { "View all", "View architecture only", "View task mapping", "View channel mapping", "View Comm. Pattern", "View Comm. Pattern mapping", "View security mapping"};
     protected TMLArchiDiagramPanel panel;
 
@@ -178,7 +178,7 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         if (viewInfos == null) {
             TraceManager.addDev("null viewInfos");
         }
-        box = new JComboBox(viewInfos);
+        box = new JComboBox<>(viewInfos);
         this.add(box);
         box.addActionListener(this);
     }

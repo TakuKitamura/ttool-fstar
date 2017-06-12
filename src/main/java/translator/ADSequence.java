@@ -49,12 +49,12 @@ import java.util.Vector;
 
 
 public class ADSequence extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
-    private Vector sort;
+    private Vector<Integer> sort;
     
     public ADSequence() {
         nbNext = 100;
         minNbNext = 1;
-        sort = new Vector();
+        sort = new Vector<>();
     }
     
     public void addNextAtIndex(ADComponent adc, int index) {
@@ -62,17 +62,17 @@ public class ADSequence extends ADComponent implements NonBlockingADComponent, M
         // perform sorting when adding the component
         if (sort.size()  == 0) {
             next.addElement(adc);
-            sort.addElement(new Integer(index));
+            sort.addElement(index);
             return;
         }
         
         int i=0;
-        while ((i<sort.size()) &&(index > ((Integer)(sort.elementAt(i))).intValue())) {
+        while (i < sort.size() && index > sort.elementAt(i)) {
             i++;
         }
        
         next.insertElementAt(adc, i);
-        sort.insertElementAt(new Integer(index), i);
+        sort.insertElementAt(index, i);
     }
     
     public ADComponent makeSame() {

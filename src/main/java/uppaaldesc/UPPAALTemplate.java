@@ -56,13 +56,13 @@ public class UPPAALTemplate {
 	protected String parameter = "";
 	protected String declaration = "";
 	protected UPPAALLocation initLocation = null;
-	protected LinkedList locations;
-	protected LinkedList transitions;
+	protected LinkedList<UPPAALLocation> locations;
+	protected LinkedList<UPPAALTransition> transitions;
 	protected int idInstanciation = 0;
 	
     public UPPAALTemplate() {
-		locations = new LinkedList();
-		transitions = new LinkedList();
+		locations = new LinkedList<>();
+		transitions = new LinkedList<>();
     }
 	
 	public int getNbOfLocations() {
@@ -121,7 +121,7 @@ public class UPPAALTemplate {
     
 	
     public UPPAALLocation getLastLocation() {
-		return (UPPAALLocation)(locations.getLast());
+		return locations.getLast();
     }
     
     public void generateGraphicalPositions() {
@@ -134,17 +134,15 @@ public class UPPAALTemplate {
 		if (initLocation == null) {
 			return ret;
 		}
-		
-		ListIterator iterator = locations.listIterator();
-		while(iterator.hasNext()) {
-			ret.append(((UPPAALLocation)(iterator.next())).getXML());
+
+		for (UPPAALLocation location : locations) {
+			ret.append(location.getXML());
 		}
 		
 		ret.append("<init ref=\"" +initLocation.id + "\" />\n");
-		
-		iterator = transitions.listIterator();
-		while(iterator.hasNext()) {
-			ret.append(((UPPAALTransition)(iterator.next())).getXML());
+
+		for (UPPAALTransition transition : transitions) {
+			ret.append(transition.getXML());
 		}
 		return ret;
     }
@@ -175,9 +173,9 @@ public class UPPAALTemplate {
 		initLocation.idPoint.y = y / 2;
 		initLocation.namePoint.y = initLocation.idPoint.y - dec;
 		
-		ListIterator iterator = transitions.listIterator();
+		ListIterator<UPPAALTransition> iterator = transitions.listIterator();
 		while(iterator.hasNext()) {
-			((UPPAALTransition)(iterator.next())).enhanceGraphics();
+			iterator.next().enhanceGraphics();
 		}
 	}
 	
@@ -196,10 +194,10 @@ public class UPPAALTemplate {
 	public int nbOfTransitionsExitingFrom(UPPAALLocation _loc) {
 		int cpt = 0;
 		
-		ListIterator iterator = transitions.listIterator();
+		ListIterator<UPPAALTransition> iterator = transitions.listIterator();
 		UPPAALTransition tr;
 		while(iterator.hasNext()) {
-			tr = ((UPPAALTransition)(iterator.next()));
+			tr = iterator.next();
 			if (tr.sourceLoc == _loc) {
 				cpt ++;
 			}
@@ -216,14 +214,14 @@ public class UPPAALTemplate {
 		//LinkedList<UPPAALTransition> ll = new LinkedList<UPPAALTransition>();
 		
 		// First step: finding all concernened locs and transitions
-		ListIterator iterator;
+		ListIterator<UPPAALTransition> iterator;
 		UPPAALTransition tr = null, trtmp;
 		boolean found = false;
 		while(true) {
 			found = false;
 		    iterator = transitions.listIterator();
 			while((iterator.hasNext()) && (!found)) {
-				tr = ((UPPAALTransition)(iterator.next()));
+				tr = iterator.next();
 				if (tr.isAnEmptyTransition()) {
 					if (nbOfTransitionsExitingFrom(tr.sourceLoc) == 1) {
 						if ((tr.sourceLoc.isOptimizable()) && (tr.destinationLoc.isOptimizable())) {
