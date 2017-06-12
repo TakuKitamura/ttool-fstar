@@ -7840,6 +7840,8 @@ public class GTURTLEModeling {
             tgc.makePostLoading(decId);
         }
 
+	tdp.repaint();
+
         //TraceManager.addDev("Post loading of diagram " + tdp.toString() + " achieved");
     }
 
