@@ -188,7 +188,7 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
                 @Override
                 public void run() {
                     textarea.setCaretPosition(position);
-                };
+                }
             });
         }
     }

@@ -60,11 +60,7 @@ public class TImgFilter extends FileFilter {
 
         String extension = FileUtils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(FileUtils.img)){
-                    return true;
-            } else {
-                return false;
-            }
+            return extension.equals(FileUtils.img);
         }
 
         return false;

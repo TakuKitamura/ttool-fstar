@@ -136,7 +136,7 @@ public final class URLManager implements Runnable {
     public static BufferedImage getBufferedImageFromURL(String url) {
 	TraceManager.addDev("getBufferedImageFromURL with url=" + url);
         try {
-	    return (BufferedImage)(ImageIO.read(new URL(getRealURL(url))));
+	    return ImageIO.read(new URL(getRealURL(url)));
         } catch (Exception e) {
 	    TraceManager.addDev("Exception in getBufferedImageFromURL =" + e.getMessage());
             return null;

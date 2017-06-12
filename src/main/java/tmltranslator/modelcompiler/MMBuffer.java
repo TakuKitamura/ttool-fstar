@@ -169,8 +169,8 @@ public class MMBuffer extends Buffer	{
 	public static boolean closePanel( Frame frame )	{
 
 		String regex = "[0-9]+";
-		String baseAddress = (String) baseAddressTF.getText();
-		String numSamples = (String) numSamplesTF.getText();
+		String baseAddress = baseAddressTF.getText();
+		String numSamples = numSamplesTF.getText();
 
 		if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
 			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",

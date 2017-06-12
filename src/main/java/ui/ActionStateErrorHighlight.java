@@ -48,7 +48,7 @@ package ui;
 
 public interface ActionStateErrorHighlight {
 	
-	public void setStateAction(int _stateAction);
+	void setStateAction(int _stateAction);
 	
 } // Class 
 

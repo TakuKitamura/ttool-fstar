@@ -372,7 +372,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
                 while( ite.hasNext()) {
                     //if ( portstome.size() == 1 ) {
                     //TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
-                    port2 = ( TMLCPrimitivePort )(ite.next());
+                    port2 = ite.next();
                     if( !port2.isOrigin() ) {
                         String []text1 = port1.getPortName().split( "," );
                         String []text2 = port2.getPortName().split( "," );
@@ -421,7 +421,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
                 //TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
                 //}
                 if ( portstome.size() == 1 ) {
-                    port2 = ( TMLCPrimitivePort )( portstome.get(0) );
+                    port2 = portstome.get(0);
                     String []text1 = port1.getPortName().split( "," );
                     String []text2 = port2.getPortName().split( "," );
                     for ( j = 0; j < Math.min( text1.length, text2.length ); j++ ) {
@@ -623,9 +623,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         TMLCPrimitiveComponent tmp;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLCPrimitiveComponent) {
-                if (((TMLCPrimitiveComponent)tgc).getValue().equals(_name)) {
+                if (tgc.getValue().equals(_name)) {
                     return ((TMLCPrimitiveComponent)tgc);
                 }
             }
@@ -1234,7 +1234,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	      tgc = iterator.next();
 	      
 	      if (tgc instanceof TMLCPrimitiveComponent) {
-	    	  list.add(_topname + "::" + ((TMLCPrimitiveComponent)tgc).getValue());
+	    	  list.add(_topname + "::" + tgc.getValue());
 	      }
       }
 
@@ -1496,7 +1496,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
             TMLCPath path1, path2;
 
             while(iterator.hasNext()) {
-                tgc = (TGComponent)(iterator.next());
+                tgc = iterator.next();
 
                 if (tgc instanceof TMLCPortConnector) {
                     connector = (TMLCPortConnector)tgc;

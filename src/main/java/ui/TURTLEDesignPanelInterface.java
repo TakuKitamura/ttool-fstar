@@ -50,7 +50,7 @@ package ui;
 
 public interface TURTLEDesignPanelInterface {
 
-       public ActivityDiagramPanelInterface getBehaviourPanel(String name);
-       public ClassDiagramPanelInterface getStructurePanel();
-       public TDiagramPanel panelAt(int index);
+       ActivityDiagramPanelInterface getBehaviourPanel(String name);
+       ClassDiagramPanelInterface getStructurePanel();
+       TDiagramPanel panelAt(int index);
 }

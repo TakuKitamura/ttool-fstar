@@ -406,7 +406,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
             AvatarSignal as1 = available1.get (i1);
             AvatarSignal as2 = available2.get (i2);
 
-            String s = connector.makeSignalAssociation(block1, as1, block2, as2);
+            String s = AvatarBDPortConnector.makeSignalAssociation(block1, as1, block2, as2);
             localSignalAssociations.add(s);
             available1.remove (i1);
             available2.remove (i2);

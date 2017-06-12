@@ -249,11 +249,7 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
                             if (sjarValue != null){
                                 jarValue = sjarValue;
                             }
-                            if (suserCode.compareTo("true") == 0) {
-                                userCode = true;
-                            } else {
-                                userCode = false;
-                            }
+                            userCode = suserCode.compareTo("true") == 0;
                         }
                     }
                 }

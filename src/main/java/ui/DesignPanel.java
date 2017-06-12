@@ -95,11 +95,11 @@ public class DesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterfa
     }
 
     public ActivityDiagramPanelInterface getBehaviourPanel(String name) {
-           return (ActivityDiagramPanelInterface)(getActivityDiagramPanel(name));
+           return getActivityDiagramPanel(name);
     }
 
     public ClassDiagramPanelInterface getStructurePanel() {
-           return (ClassDiagramPanelInterface)tcdp;
+           return tcdp;
     }
     
     public void addTActivityDiagram(String s) {

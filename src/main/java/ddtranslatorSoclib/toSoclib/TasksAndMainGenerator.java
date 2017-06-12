@@ -866,7 +866,6 @@ if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
         if (_asme instanceof AvatarActionOnSignal) {
             AvatarActionOnSignal aaos = (AvatarActionOnSignal)_asme;
             ret += makeSignalAction(aaos, 0, false, "", "");
-           ;
             ret += executeOneRequest("__req0");
             ret += traceRequest();
         }

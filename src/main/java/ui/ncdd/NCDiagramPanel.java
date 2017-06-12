@@ -367,12 +367,9 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 	public boolean isALinkBetweenEquipment(NCConnectorNode nccn) {
 		TGComponent tgc1 = getComponentToWhichBelongs(nccn.getTGConnectingPointP1());
 		TGComponent tgc2 = getComponentToWhichBelongs(nccn.getTGConnectingPointP2());
-		if ((tgc1 instanceof NCEqNode) && (tgc2 instanceof NCEqNode)) {
-			return true;
-		}
+        return (tgc1 instanceof NCEqNode) && (tgc2 instanceof NCEqNode);
 
-		return false;
-	}
+    }
 
 	public NCEqNode getEquipmentByName(String name) {
 		for (TGComponent tgc : this.componentList) {

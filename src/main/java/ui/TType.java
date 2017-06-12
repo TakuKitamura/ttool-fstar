@@ -85,7 +85,7 @@ public class TType {
     public int getType() { return type;}
     public String getTypeOther() { return typeOther;}
 
-    public void setType(int _type) { type = _type;};
+    public void setType(int _type) { type = _type;}
 
     public void setType(String _type) {
         type = getType(_type);

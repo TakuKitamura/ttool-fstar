@@ -191,7 +191,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 //		}
 		
 		// Attributes
-		if (((TMLComponentTaskDiagramPanel)tdp).areAttributesVisible()) {
+		if (tdp.areAttributesVisible()) {
 			int index = 0;
 			int cpt = currentFontSize + 2 * textX;
 			String attr;

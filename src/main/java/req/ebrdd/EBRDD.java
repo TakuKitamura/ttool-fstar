@@ -118,7 +118,7 @@ public class EBRDD extends ArrayList<EBRDDComponent> {
         EBRDDComponent adc;
         EBRDDComponent adc1;
         for(int i=0; i<size(); i++) {
-            adc = (EBRDDComponent)(get(i));
+            adc = get(i);
             if (adc != ads) {
                 adc1 = getFirstComponentLeadingTo(adc);
                 if (adc1 == null) {

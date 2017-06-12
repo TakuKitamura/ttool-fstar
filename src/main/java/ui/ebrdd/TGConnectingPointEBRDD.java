@@ -59,11 +59,8 @@ public class TGConnectingPointEBRDD extends  TGConnectingPointWidthHeight{
 	}
 
 	public boolean isCompatibleWith(int type) {
-		if (type == TGComponentManager.CONNECTOR_EBRDD) {
-			return true;	
-		}
-		return false;
-	}
+        return type == TGComponentManager.CONNECTOR_EBRDD;
+    }
        
 }
 

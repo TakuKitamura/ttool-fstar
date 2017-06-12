@@ -351,7 +351,7 @@ public  class TGConnectorLinkNode extends TGConnector {
         }
         
         if (tdp instanceof TDeploymentDiagramPanel) {
-            return ((TDeploymentDiagramPanel)(tdp)).isFree(atg);
+            return tdp.isFree(atg);
         } else {
             return false;
         }

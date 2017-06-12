@@ -50,5 +50,5 @@ package ui;
 import java.awt.*;
 
 public interface PartOfInvariant  {
-    public void drawInvariantInformation(Graphics g);
+    void drawInvariantInformation(Graphics g);
 }

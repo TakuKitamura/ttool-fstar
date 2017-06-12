@@ -126,8 +126,8 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         dMaxWidth = defMaxWidth * oldScaleFactor;
         dMaxHeight = defMaxHeight * oldScaleFactor;
 
-        maxWidth = (int)defMaxWidth;
-        maxHeight = (int)defMaxHeight;
+        maxWidth = defMaxWidth;
+        maxHeight = defMaxHeight;
 
         dMaxWidth = dMaxWidth - maxWidth;
         dMaxHeight = dMaxHeight - maxHeight;

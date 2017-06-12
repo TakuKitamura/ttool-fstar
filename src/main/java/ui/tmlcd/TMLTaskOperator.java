@@ -334,11 +334,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Exit")) {
                                 startS = elt.getAttribute("isExit");
-                                if (startS.equals("true")) {
-                                    exit = true;
-                                } else {
-                                    exit = false;
-                                }
+                                exit = startS.equals("true");
                             }
                         }
                     }

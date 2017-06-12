@@ -189,12 +189,8 @@ public class DiagramTreeModel implements TreeModel {
 		    return (((AvatarBDDataType)node).getChildCount() == 0);
             	}
             }
-            
-             if (node instanceof InvariantSynchro) {
-             	 return false;
-             }
 
-            return true;
+            return !(node instanceof InvariantSynchro);
         }
     }
     

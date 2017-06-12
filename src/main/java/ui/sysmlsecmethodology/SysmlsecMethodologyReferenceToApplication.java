@@ -77,11 +77,8 @@ public class SysmlsecMethodologyReferenceToApplication extends SysmlsecMethodolo
     }
 
     public boolean isAValidPanelType(TURTLEPanel panel) {
-        if ((panel instanceof TMLDesignPanel) || (panel instanceof TMLComponentDesignPanel)) {
-            return true;
-        }
+        return (panel instanceof TMLDesignPanel) || (panel instanceof TMLComponentDesignPanel);
 
-        return false;
     }
 
     public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {

@@ -160,13 +160,10 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
 		if (tgc instanceof EBRDDESO) {
 			return true;
 		}
-		
-		if (tgc instanceof EBRDDERB) {
-			return true;
-		}
-		
-		return false;
-	}
+
+        return tgc instanceof EBRDDERB;
+
+    }
     
     
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -186,7 +183,7 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
         if (tgc instanceof EBRDDESO) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //System.out.println("cdRect comp swallow");
-            ((EBRDDESO)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
         }
@@ -194,7 +191,7 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
 		if (tgc instanceof EBRDDERB) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //System.out.println("cdRect comp swallow");
-            ((EBRDDERB)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
         }
@@ -225,10 +222,10 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof EBRDDESO) {
-                ((EBRDDESO)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
 			 if (tgcomponent[i] instanceof EBRDDERB) {
-                ((EBRDDERB)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
         

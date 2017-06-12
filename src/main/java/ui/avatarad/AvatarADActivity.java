@@ -284,11 +284,8 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
             return true;
         }
 
-        if (tgc instanceof AvatarADActivity) {
-            return true;
-        }
+        return tgc instanceof AvatarADActivity;
 
-        return false;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -322,15 +319,15 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
 
         //Set its coordinates
         if (tgc instanceof AvatarADBasicComponent) {
-            ((AvatarADBasicComponent)tgc).resizeWithFather();
+            tgc.resizeWithFather();
         }
 
         if (tgc instanceof AvatarADChoice) {
-            ((AvatarADChoice)tgc).resizeWithFather();
+            tgc.resizeWithFather();
         }
 
         if (tgc instanceof AvatarADActivity) {
-            ((AvatarADActivity)tgc).resizeWithFather();
+            tgc.resizeWithFather();
         }
 
         // else unknown*/
@@ -384,13 +381,13 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarADBasicComponent) {
-                ((AvatarADBasicComponent)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
             if (tgcomponent[i] instanceof AvatarADChoice) {
-                ((AvatarADChoice)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
             if (tgcomponent[i] instanceof AvatarADActivity) {
-                ((AvatarADActivity)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 

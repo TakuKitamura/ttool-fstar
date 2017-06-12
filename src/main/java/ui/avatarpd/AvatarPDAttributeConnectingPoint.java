@@ -58,10 +58,7 @@ public class AvatarPDAttributeConnectingPoint extends  TGConnectingPointWidthHei
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.APD_ATTRIBUTE_CONNECTOR) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.APD_ATTRIBUTE_CONNECTOR;
     }
     
 }

@@ -262,7 +262,7 @@ public class JDialogGenAUT extends javax.swing.JDialog implements ActionListener
                     data = processCmd(cmd1);
                     iterator = ll.listIterator();
                     while(iterator.hasNext()) {
-                        fileName = (String)(iterator.next());
+                        fileName = iterator.next();
                         jta.append("Converting " + fileName + " to " + fileName + ".dot\n");
                         data = FileUtils.loadFile(path + fileName);
                         rshc.sendFileData("spec.aut", data);

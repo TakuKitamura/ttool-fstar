@@ -205,7 +205,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
 
     public boolean alignTGComponents() {
         int dist_y = p2.getY() - p1.getY();
-        int dist_x = p2.getX() - p1.getX();;
+        int dist_x = p2.getX() - p1.getX();
         if ((dist_y < 0) ||(dist_x == 0)){
             return false;
         }
@@ -228,7 +228,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
 
     public boolean alignOrMakeSquareTGComponents() {
         int dist_y = p2.getY() - p1.getY();
-        int dist_x = p2.getX() - p1.getX();;
+        int dist_x = p2.getX() - p1.getX();
 
 
         TGComponent tgc;
@@ -633,10 +633,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
             p2y = tgcomponent[index].getY();
         }
 
-        if (Math.abs(p1x - p2x) < Math.abs(p1y - p2y)) {
-            return true;
-        }
-        return false;
+        return Math.abs(p1x - p2x) < Math.abs(p1y - p2y);
 
     }
 
@@ -698,10 +695,10 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         popupx = x;
         popupy = y;
         componentMenu.addSeparator();
-        JMenuItem addPoint = new JMenuItem("Add Point");;
+        JMenuItem addPoint = new JMenuItem("Add Point");
         addPoint.addActionListener(menuAL);
         componentMenu.add(addPoint);
-        JMenuItem align = new JMenuItem("Align");;
+        JMenuItem align = new JMenuItem("Align");
         align.addActionListener(menuAL);
         componentMenu.add(align);
         JMenuItem automatic;

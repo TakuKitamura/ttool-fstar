@@ -55,7 +55,7 @@ public class VCDVariable  {
     
     public VCDVariable(String _name) {
        name = _name;
-	   shortcut = getShortcut();;
+	   shortcut = getShortcut();
     }
 	
 	public String getName() {

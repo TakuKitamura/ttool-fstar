@@ -102,6 +102,6 @@ public class StatisticsItem implements Comparable<StatisticsItem> {
     
     // comparable interface
     public int compareTo(StatisticsItem o) {
-        return getName().compareTo(((StatisticsItem)o).getName());
+        return getName().compareTo(o.getName());
     }
 }

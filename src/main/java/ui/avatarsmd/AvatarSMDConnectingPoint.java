@@ -59,11 +59,8 @@ public class AvatarSMDConnectingPoint extends  TGConnectingPointWidthHeight{
 	}
 
 	public boolean isCompatibleWith(int type) {
-		if (type == TGComponentManager.AVATARSMD_CONNECTOR) {
-			return true;	
-		}
-		return false;
-	}
+        return type == TGComponentManager.AVATARSMD_CONNECTOR;
+    }
        
 }
 

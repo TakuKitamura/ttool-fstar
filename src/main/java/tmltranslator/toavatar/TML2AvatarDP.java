@@ -289,7 +289,7 @@ public class TML2AvatarDP {
 		    System.out.println("Missing point");
 		    return;
 		}
-		AvatarSMDConnector SMDcon = new AvatarSMDConnector((int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), true, null, smp, p1, p2, points);	
+		AvatarSMDConnector SMDcon = new AvatarSMDConnector(p1.getX(), p1.getY(), p1.getX(), p1.getY(), p1.getX(), p1.getY(), true, null, smp, p1, p2, points);
 		String action="";
 		if (t.getActions().size()==0){
 		    action="";
@@ -298,7 +298,7 @@ public class TML2AvatarDP {
 		    action=t.getActions().get(0).toString();
 		}
 		SMDcon.setTransitionInfo(t.getGuard().toString(), action);
-		smp.addComponent(SMDcon, (int) p1.getX(), (int) p1.getY(), false, true);
+		smp.addComponent(SMDcon, p1.getX(), p1.getY(), false, true);
 	    }
 	}
 

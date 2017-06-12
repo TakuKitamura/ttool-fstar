@@ -318,7 +318,7 @@ public class AvatarSimulationBlock  {
         }
         ast.clockValueWhenFinished = _clockValue;
         ast.duration = 0;
-        ast.id = ast.setID();
+        ast.id = AvatarSimulationTransaction.setID();
         if (_aspt != null) {
             ast.silent = _aspt.isSilent;
         } else {

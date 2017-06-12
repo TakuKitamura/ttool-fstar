@@ -60,10 +60,7 @@ public class BrowserControl {
     
     public static boolean underWindows() {
         String currentOS = System.getProperty("os.name");
-        if ((currentOS != null) && currentOS.startsWith(WINDOWS))
-            return true;
-        else
-            return false;
+        return (currentOS != null) && currentOS.startsWith(WINDOWS);
     }
 	
     public static void startBrowerToURL(String url) {

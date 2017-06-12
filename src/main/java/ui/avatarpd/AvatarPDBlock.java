@@ -457,13 +457,10 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		if (tgc instanceof AvatarPDAttribute) {
 			return true;
 		}
-		
-		if (tgc instanceof AvatarPDSignal) {
-			return true;
-		}
-		
-		return false;
-	}
+
+        return tgc instanceof AvatarPDSignal;
+
+    }
     
     
     public int getType() {
@@ -503,7 +500,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
         if (tgc instanceof AvatarPDBlock) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //System.out.println("cdRect comp swallow");
-            ((AvatarPDBlock)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
         }
@@ -511,7 +508,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		if (tgc instanceof AvatarPDAttribute) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //System.out.println("cdRect comp swallow");
-            ((AvatarPDAttribute)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
         }
@@ -519,7 +516,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		if (tgc instanceof AvatarPDSignal) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //System.out.println("cdRect comp swallow");
-            ((AvatarPDSignal)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
         }
@@ -582,13 +579,13 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarPDBlock) {
-                ((AvatarPDBlock)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
 			if (tgcomponent[i] instanceof AvatarPDAttribute) {
-                ((AvatarPDAttribute)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
 			if (tgcomponent[i] instanceof AvatarPDSignal) {
-                ((AvatarPDSignal)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 		

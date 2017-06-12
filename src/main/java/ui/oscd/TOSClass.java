@@ -458,7 +458,7 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
     }
     
     public ActivityDiagramPanelInterface getBehaviourDiagramPanel() {
-      return (ActivityDiagramPanelInterface)(getActivityDiagramPanel());
+      return getActivityDiagramPanel();
     }
     
     public boolean isStart() {

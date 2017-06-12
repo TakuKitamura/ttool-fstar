@@ -309,7 +309,7 @@ public class TURTLETranslator {
 		for(i=0; i<vectorProcess.size(); i++) {
 			p = vectorProcess.elementAt(i);
 			for(int j=0; j<p.size(); j++) {
-				pr = (Process)(p.elementAt(j));
+				pr = p.elementAt(j);
 				translation.append(pr.toString());
 				translation.append("\n\n");
 			}
@@ -529,7 +529,7 @@ public class TURTLETranslator {
 			//System.out.println("Relation " + k);
 			r = tumo.getRelationAtIndex(k);
 
-			if ((r.type == r.SYN) && ((r.t1 == t) || (r.t2 == t))) {
+			if ((r.type == Relation.SYN) && ((r.t1 == t) || (r.t2 == t))) {
 				if (r.t1 == t) {
 					tmp = r.t2;
 				} else {
@@ -627,7 +627,7 @@ public class TURTLETranslator {
 	private boolean alreadyProcessName(String s) {
 		Process p;
 		for(int i=0; i<allProcesses.size(); i++) {
-			p = (Process)(allProcesses.elementAt(i));
+			p = allProcesses.elementAt(i);
 			if (p.getName().equals(s)) {
 				return true;
 			}
@@ -1064,7 +1064,7 @@ public class TURTLETranslator {
 			// List Other Processes
 			// Gates which are hidden are tranform into public gates
 			for(i=0; i<t.getGateList().size(); i++) {
-				g1 = (Gate)(t.getGateList().elementAt(i));
+				g1 = t.getGateList().elementAt(i);
 				if (g1.isInternal()) {
 					g2 = new Gate(g1.getLotosName(), g1.getType(), false);
 					g2.setLotosName(g1.getLotosName());
@@ -1484,7 +1484,7 @@ public class TURTLETranslator {
 
 		// creating processes
 		for(int i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.elementAt(i));
+			adc = ad.elementAt(i);
 			if (adc instanceof ADJunction) {
 				adj = (ADJunction)adc;
 				p = new Process("p_" + index + "_" + t.getLotosName(), gateList, paramList, languageID);
@@ -1566,7 +1566,7 @@ public class TURTLETranslator {
 		ADComponent adc;
 		Process p;
 		for(int i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.elementAt(i));
+			adc = ad.elementAt(i);
 			if (adc instanceof ADJunction) {
 				adj = (ADJunction)adc;
 				p = adj.getProcess();
@@ -1584,7 +1584,7 @@ public class TURTLETranslator {
 		ADComponent adc;
 		Process p;
 		for(int i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.elementAt(i));
+			adc = ad.elementAt(i);
 			if (adc instanceof ADActionStateWithParam) {
 				ads = (ADActionStateWithParam)adc;
 				p = ads.getProcess();
@@ -1797,11 +1797,7 @@ public class TURTLETranslator {
 				}
 			} else {
 				foundNatural = false;
-				if (tmp0.matches("\\w")) {
-					identifier = true;
-				} else {
-					identifier = false;
-				}
+                identifier = tmp0.matches("\\w");
 			}
 			index0 ++;
 		}

@@ -125,7 +125,7 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
         while(iterator.hasNext()) {
             o = iterator.next();
             if (o instanceof TMLADStartState){
-                enhance(v, (TMLADStartState)o);
+                enhance(v, o);
             }
         }
         

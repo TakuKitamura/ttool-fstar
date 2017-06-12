@@ -16,13 +16,10 @@ public class TGConnectingPointPROCSDInterface extends TGConnectingPointCompositi
         if (type == TGComponentManager.CONNECTOR_ATTRIBUTE) {
             return true;
         }
-     
-        if (type == TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE) {
-            return true;
-        }
-     
-        
-        return false;
+
+        return type == TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE;
+
+
     }
 
 }

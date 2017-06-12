@@ -1354,7 +1354,7 @@ public class AVATAR2UPPAAL {
      //   int i;
 
         while(iterator.hasNext()) {
-            template = (UPPAALTemplate)(iterator.next());
+            template = iterator.next();
             if (template.getNbOfTransitions() > 0) {
                 dec += template.getName() + "__" + id + " = " + template.getName() + "();\n";
                 if (id > 0) {

@@ -72,12 +72,8 @@ public class NCRoute {
 		if (!(route.traffic.equals(traffic))) {
 			return false;
 		}
-		
-		if (!(route.outputInterface.equals(outputInterface))) {
-			return false;
-		}
-		
-		return true;
-	}
+
+        return route.outputInterface.equals(outputInterface);
+    }
     
 }

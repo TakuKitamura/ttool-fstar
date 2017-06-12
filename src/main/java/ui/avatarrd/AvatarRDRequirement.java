@@ -240,11 +240,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             }
         }
 
-        if(currentFontSize <minFontSize) {
-            displayText = false;
-        } else {
-            displayText = true;
-        }
+        displayText = currentFontSize >= minFontSize;
 
      //   int h  = g.getFontMetrics().getHeight();
 
@@ -705,11 +701,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                 if (s.equals("null")) {
                                     satisfied = false;
                                 } else {
-                                    if (s.equals("true")) {
-                                        satisfied = true;
-                                    } else {
-                                        satisfied = false;
-                                    }
+                                    satisfied = s.equals("true");
                                 }
                                 //System.out.println("Analyzing line4");
                             } else if (elt.getTagName().equals("verified")) {
@@ -718,11 +710,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                 if (s.equals("null")) {
                                     verified = false;
                                 } else {
-                                    if (s.equals("true")) {
-                                        verified = true;
-                                    } else {
-                                        verified = false;
-                                    }
+                                    verified = s.equals("true");
                                 }
                             }
                             //System.out.println("Analyzing line4");

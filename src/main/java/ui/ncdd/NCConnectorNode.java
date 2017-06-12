@@ -256,11 +256,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 								
 								has =  elt.getAttribute("hasCapacity");
 								if ((has != null) && (has.length() > 0)){
-									if (has.equals("true")) {
-										hasCapacity = true;
-									} else {
-										hasCapacity = false;
-									}
+                                    hasCapacity = has.equals("true");
 								}
 								
 								// for backward compatiblity: exception catching
@@ -272,11 +268,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 									
 									has =  elt.getAttribute("hasParameter");
 									if ((has != null) && (has.length() > 0)){
-										if (has.equals("true")) {
-											hasParameter = true;
-										} else {
-											hasParameter = false;
-										}
+                                        hasParameter = has.equals("true");
 									}
 								} catch (Exception e) {
 								}

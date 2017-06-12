@@ -190,12 +190,9 @@ public class TDDNode extends TGCWithInternalComponent implements SwallowTGCompon
     }
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof TDDArtifact) {
-			return true;
-		}
-		
-		return false;
-	}
+        return tgc instanceof TDDArtifact;
+
+    }
     
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		
@@ -203,7 +200,7 @@ public class TDDNode extends TGCWithInternalComponent implements SwallowTGCompon
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
 			
-            ((TDDArtifact)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             
 			addInternalComponent(tgc, 0);
 			return true;
@@ -231,7 +228,7 @@ public class TDDNode extends TGCWithInternalComponent implements SwallowTGCompon
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TDDArtifact) {
-                ((TDDArtifact)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
         

@@ -210,7 +210,7 @@ public class DatabaseCreation {
      * @throws IllegalAccessException
      * @throws Exception
      */
-    public void CreateDatabase() throws ClassNotFoundException, InstantiationException, IllegalAccessException, Exception {
+    public void CreateDatabase() throws Exception {
 
         /**
          * Information for creating the database

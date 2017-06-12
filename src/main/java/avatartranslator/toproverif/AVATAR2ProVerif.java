@@ -572,7 +572,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                         continue;
                     visited.add (asme);
 
-                    if (asme instanceof AvatarState && (this.stateReachability == JDialogProverifVerification.REACHABILITY_ALL || ((AvatarState) asme).isCheckable ())) {
+                    if (asme instanceof AvatarState && (this.stateReachability == JDialogProverifVerification.REACHABILITY_ALL || asme.isCheckable ())) {
                         this.spec.addDeclaration (new ProVerifQueryEv    (new ProVerifVar[] {}, "enteringState" + ATTR_DELIM + block.getName() + ATTR_DELIM + asme.getName()));
                         this.spec.addDeclaration (new ProVerifEvDecl     ("enteringState" + ATTR_DELIM + block.getName() + ATTR_DELIM + asme.getName(), new String[] {}));
                         TraceManager.addDev("|    event (enteringState" + ATTR_DELIM + block.getName() + ATTR_DELIM + asme.getName() + ")"); 
@@ -792,7 +792,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             containsPublicKey = this.nameEquivalence.get (privateK);
 
                             // Let the public key
-                            lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (AVATAR2ProVerif.translateTerm (first, null), "bitstring")}, PK_PK + "(" + privateKStr + ")"));;
+                            lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (AVATAR2ProVerif.translateTerm (first, null), "bitstring")}, PK_PK + "(" + privateKStr + ")"));
                             // Make the public key public
                             tmpInstr = new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + AVATAR2ProVerif.translateTerm (first, null) + ");");
                         } else
@@ -910,7 +910,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 }
 
                 // Let the public key
-                lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, PK_PK + "(" + privateKStr + ")"));;
+                lastInstr = lastInstr.setNextInstr (new ProVerifProcLet (new ProVerifVar[] {new ProVerifVar (str, "bitstring")}, PK_PK + "(" + privateKStr + ")"));
                 // Make the public key public
                 tmpInstr = new ProVerifProcRaw ("out (" + CH_MAINCH + ", " + str + ");");
             } else {

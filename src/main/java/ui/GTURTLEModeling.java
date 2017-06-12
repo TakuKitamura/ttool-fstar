@@ -535,7 +535,7 @@ public class GTURTLEModeling {
 
                 if( panel instanceof TMLCommunicationPatternPanel )      {
                     tmlcpPanelsList.add( (TMLCommunicationPatternPanel) panel );
-                    TraceManager.addDev( "Found TMLCommunicationPatternPanel: " + ((TMLCommunicationPatternPanel)panel).toString() );
+                    TraceManager.addDev( "Found TMLCommunicationPatternPanel: " + panel.toString() );
                 }
             }
 
@@ -1109,7 +1109,7 @@ public class GTURTLEModeling {
                     for (TMLCPrimitiveComponent pc: pcomps){
                         for (String compName: selectedCpuTasks.get(cpuName)){
                             if (pc.getValue().equals(compName)){
-                                comps.add((TMLCPrimitiveComponent) pc);
+                                comps.add(pc);
                                 break;
                             }
                         }
@@ -1362,7 +1362,7 @@ public class GTURTLEModeling {
                     TMLADReadChannel readChannel = (TMLADReadChannel) chan;
                     chanName=readChannel.getChannelName();
                     HSMChannel ch= hsmChannels.get(chanName);
-                    readChannel.securityContext = ch.securityContext;;
+                    readChannel.securityContext = ch.securityContext;
                     xpos = chan.getX()+10;
                     ypos = chan.getY();
                     fromStart = tad.findTGConnectorStartingAt(chan.getTGConnectingPointAtIndex(1));
@@ -1404,7 +1404,7 @@ public class GTURTLEModeling {
                     //Add write channel operator
                     TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     wr.setChannelName("data_"+chanName+"_"+compName);
-                    wr.securityContext = ch.securityContext;;
+                    wr.securityContext = ch.securityContext;
                     tad.addComponent(wr, xpos, ypos+yShift, false,true);
 
 
@@ -1419,7 +1419,7 @@ public class GTURTLEModeling {
                     yShift+=60;
                     TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     rd.setChannelName("retData_"+chanName+"_"+compName);
-                    rd.securityContext = ch.securityContext;;
+                    rd.securityContext = ch.securityContext;
                     tad.addComponent(rd, xpos, ypos+yShift, false,true);
 
                     fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
@@ -1509,7 +1509,7 @@ public class GTURTLEModeling {
                     }
                     TMLADReadChannel rd = new TMLADReadChannel(xc, 300, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     rd.setChannelName("data_"+chan+"_"+hsmChannels.get(chan).task);
-                    rd.securityContext = ch.securityContext;;
+                    rd.securityContext = ch.securityContext;
                     tad.addComponent(rd, xc,300,false,true);
                     //Connect choice and readchannel
                     fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
@@ -1854,7 +1854,7 @@ public class GTURTLEModeling {
                 if (tg instanceof TMLArchiCPUNode){
                     if (tg.getName().equals(cpuName)){
                         cpu=(TMLArchiCPUNode) tg;
-                        TMLArchiArtifact art = (TMLArchiArtifact) cpu.getArtifactList().get(0);
+                        TMLArchiArtifact art = cpu.getArtifactList().get(0);
                         refTask=art.getReferenceTaskName();
                         break;
 
@@ -3738,7 +3738,7 @@ public class GTURTLEModeling {
 
                             // Working on action name!
                             //g = mgm.getGateLowerCase(actionName);
-                            g = (Gate)(ht.get(actionName));
+                            g = ht.get(actionName);
 
                             if (g != null) {
                                 //actionName1 = actionName;
@@ -3888,7 +3888,7 @@ public class GTURTLEModeling {
         try {
             pointerOperation --;
             TraceManager.addDev("Decrementing pointer =" + pointerOperation);
-            loadModelingFromXML((String)(savedOperations.elementAt(pointerOperation)));
+            loadModelingFromXML(savedOperations.elementAt(pointerOperation));
 
         } catch (Exception e) {
             TraceManager.addError("Exception in backward: " + e.getMessage());
@@ -3947,12 +3947,12 @@ public class GTURTLEModeling {
 
         try {
             pointerOperation ++;
-            loadModelingFromXML((String)(savedOperations.elementAt(pointerOperation)));
+            loadModelingFromXML(savedOperations.elementAt(pointerOperation));
         } catch (Exception e) {
             TraceManager.addError("Exception in forward: " + e.getMessage());
         }
 
-        Point p = (Point)(savedPanels.elementAt(pointerOperation));
+        Point p = savedPanels.elementAt(pointerOperation);
         if (p != null) {
             TDiagramPanel tdp = mgui.selectTab(p);
             tdp.mode = TDiagramPanel.NORMAL;
@@ -4027,10 +4027,7 @@ public class GTURTLEModeling {
         listE = adpt.getCorrespondanceTGElement();
         checkingErrors = adpt.getErrors();
         warnings = adpt.getWarnings();
-        if ((checkingErrors != null) && (checkingErrors.size() >0)){
-            return false;
-        }
-        return true;
+        return !((checkingErrors != null) && (checkingErrors.size() > 0));
 
         // Modeling is built
         // Now check it !
@@ -4541,7 +4538,7 @@ public class GTURTLEModeling {
         // search for diagram panels (Design)
         for(i=0; i<panels.size(); i++) {
             if ((index == -1) || (i == index)) {
-                tp = (TURTLEPanel)(panels.elementAt(i));
+                tp = panels.elementAt(i);
                 s = tp.saveInXML(extensionToName);
                 if (s == null) {
                     return null;
@@ -4565,9 +4562,9 @@ public class GTURTLEModeling {
         Vector<TDiagramPanel> panelss;
         // search for diagram panels
         for(i=0; i<panels.size(); i++) {
-            panelss = (((TURTLEPanel)(panels.elementAt(i))).panels);
+            panelss = (panels.elementAt(i).panels);
             for(j=0; j<panelss.size(); j++) {
-                tdp = (TDiagramPanel)(panelss.elementAt(j));
+                tdp = panelss.elementAt(j);
                 tdp.removeAll();
             }
         }
@@ -6078,7 +6075,7 @@ public class GTURTLEModeling {
     // Returns null if s is not a saved TURTLE modeling of an older format
     public String upgradeSaved(String s) {
         int index1, index2, index3;
-        StringBuffer sb = new StringBuffer("");;
+        StringBuffer sb = new StringBuffer("");
         //String tmp;
 
         index1 = s.indexOf("<TClassDiagramPanel");
@@ -7559,9 +7556,9 @@ public class GTURTLEModeling {
         TURTLEPanel tp;
         // search for diagram panels
         for(i=0; i<panels.size(); i++) {
-            tp = (TURTLEPanel)(panels.elementAt(i));
+            tp = panels.elementAt(i);
             for(j=0; j<tp.panels.size(); j++) {
-                tdp = (TDiagramPanel)(tp.panels.elementAt(j));
+                tdp = tp.panels.elementAt(j);
                 id = tdp.makeLovelyIds(id);
                 //TraceManager.addDev("Lovely id =" + id);
             }
@@ -8194,7 +8191,7 @@ public class GTURTLEModeling {
 
             //TraceManager.addDev("Making connecting points " + tgcpList.size());
             for(i=0; i<tgcpList.size(); i++) {
-                p = (Point)(tgcpList.elementAt(i));
+                p = tgcpList.elementAt(i);
                 if (!tgc.setIdTGConnectingPoint(p.x, p.y)) {
                     //TraceManager.addDev("Warning: a connecting point has been removed");
                     //throw new MalformedModelingException();
@@ -8287,7 +8284,7 @@ public class GTURTLEModeling {
         //connect connectors to their real connecting point
         //TraceManager.addDev("Valid connectors ?");
         for(i=0; i<list.size(); i++) {
-            tgc = (TGComponent)(list.get(i));
+            tgc = list.get(i);
             if (tgc instanceof TGConnector) {
                 tgco = (TGConnector)tgc;
                 p1 = tgco.getTGConnectingPointP1();
@@ -8465,12 +8462,8 @@ public class GTURTLEModeling {
                         //TraceManager.addDev(" adding Connecting point !");
                     } else if (elt.getTagName().equals("AutomaticDrawing")) {
                         //TraceManager.addDev("AutomaticDrawing=" + elt.getAttribute("data"));
-                        if (elt.getAttribute("data").compareTo("true") == 0) {
-                            automaticDrawing = true;
-                            //TraceManager.addDev("set to true");
-                        } else {
-                            automaticDrawing = false;
-                        }
+                        //TraceManager.addDev("set to true");
+                        automaticDrawing = elt.getAttribute("data").compareTo("true") == 0;
                         //automaticDrawing = Boolean.getBoolean(elt.getAttribute("data"));
                     }
                 }
@@ -8511,7 +8504,7 @@ public class GTURTLEModeling {
 
             //TraceManager.addDev("Making connecting points " + myType);
             for(i=0; i<tgcpList.size(); i++) {
-                p = (Point)(tgcpList.elementAt(i));
+                p = tgcpList.elementAt(i);
                 if (!tgco.setIdTGConnectingPoint(p.x, p.y)) {
                     throw new MalformedModelingException();
                 }
@@ -9548,7 +9541,7 @@ public class GTURTLEModeling {
                 System.out.println("Missing point "+ p1 + " "+p2);
                 return;
             }
-            AvatarSMDConnector SMDcon = new AvatarSMDConnector((int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), true, null, smp, p1, p2, points);
+            AvatarSMDConnector SMDcon = new AvatarSMDConnector(p1.getX(), p1.getY(), p1.getX(), p1.getY(), p1.getX(), p1.getY(), true, null, smp, p1, p2, points);
             //System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
             ///System.out.println("FREE " +p1.isFree() + " "+ p2.isFree());
             p1.setFree(false);
@@ -9564,7 +9557,7 @@ public class GTURTLEModeling {
             for (int i=1; i<t.getActions().size(); i++){
                 SMDcon.setTransitionInfo("", t.getActions().get(i).toString().replaceAll(" ",""));
             }
-            smp.addComponent(SMDcon, (int) p1.getX(), (int) p1.getY(), false, true);
+            smp.addComponent(SMDcon, p1.getX(), p1.getY(), false, true);
         }
     }
 
@@ -9607,7 +9600,7 @@ public class GTURTLEModeling {
         TGComponent tgc;
 
         for(int i=0; i<checkingErrors.size(); i++) {
-            ce = (CheckingError)(checkingErrors.get(i));
+            ce = checkingErrors.get(i);
             if (ce != null && ce instanceof UICheckingError) {
                 tgc = ((UICheckingError) ce).getTGComponent();
                 if (tgc != null) {

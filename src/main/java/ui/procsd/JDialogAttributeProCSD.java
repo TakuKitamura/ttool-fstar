@@ -440,12 +440,12 @@ public class JDialogAttributeProCSD extends javax.swing.JDialog implements Actio
             TAttribute a = attributes.get (i);
             identifierText.setText(a.getId());
             initialValue.setText(a.getInitialValue());
-            select(accessBox, a.getStringAccess(a.getAccess()));
+            select(accessBox, TAttribute.getStringAccess(a.getAccess()));
             
             if (a.getType() == TAttribute.OTHER) {
                 select(typeBox, a.getTypeOther());
             } else {
-                select(typeBox, a.getStringType(a.getType()));
+                select(typeBox, TAttribute.getStringType(a.getType()));
             }
             removeButton.setEnabled(true);
             if (i > 0) {

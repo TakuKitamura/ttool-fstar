@@ -637,7 +637,7 @@ public class TURTLEModelingDrawer {
         dp.tcdp.addBuiltConnector(dashco);
 
         if (operator instanceof TCDCompositionOperatorWithSynchro) {
-            ((TCDCompositionOperatorWithSynchro)(operator)).structureChanged();
+            operator.structureChanged();
         }
 
         return operator;
@@ -658,8 +658,8 @@ public class TURTLEModelingDrawer {
         }
 
         for(int i=0; i<r.gatesOfT1.size(); i++) {
-            g1 = (Gate)(r.gatesOfT1.elementAt(i));
-            g2 = (Gate)(r.gatesOfT2.elementAt(i));
+            g1 = r.gatesOfT1.elementAt(i);
+            g2 = r.gatesOfT2.elementAt(i);
             ta1 = t1.getGateById(g1.getName());
             ta2 = t2.getGateById(g2.getName());
             tt = new TTwoAttributes(t1, t2, ta1, ta2);
@@ -686,7 +686,7 @@ public class TURTLEModelingDrawer {
         int i=0;
 
         while(i<ad.size()) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
 
             // Ensure that at most 3 elements lead to a junction -> if more, remove one
             if (adc instanceof ADJunction) {

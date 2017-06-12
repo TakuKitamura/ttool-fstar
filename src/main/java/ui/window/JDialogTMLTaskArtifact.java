@@ -252,7 +252,7 @@ public class JDialogTMLTaskArtifact extends javax.swing.JDialog implements Actio
     
     public void closeDialog() {
         regularClose = true;
-				operation = (String)operationsListCB.getItemAt( operationsListCB.getSelectedIndex() );
+				operation = operationsListCB.getItemAt( operationsListCB.getSelectedIndex() );
         dispose();
     }
     

@@ -143,10 +143,7 @@ public class AvatarSignal extends AvatarMethod {
         }
 
         AvatarSignal as = (AvatarSignal)o;
-        if (getId().equals(as.getId())) {
-            return true;
-        }
-        return false;
+        return getId().equals(as.getId());
 
     }
 

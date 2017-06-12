@@ -54,9 +54,9 @@ public class TMLTaskTemplate {
 	public int beginid; // Instanciation information
 	public int endid; // Instanciation information
     
-	public TMLTaskTemplate() {};
-	
-	public TMLTaskTemplate(TMLTask _task, UPPAALTemplate _template) {
+	public TMLTaskTemplate() {}
+
+    public TMLTaskTemplate(TMLTask _task, UPPAALTemplate _template) {
 		task = _task;
 		template = _template;
 	}

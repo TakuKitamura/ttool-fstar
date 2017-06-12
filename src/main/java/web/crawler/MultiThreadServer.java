@@ -106,7 +106,7 @@ public class MultiThreadServer {
         if (msg.getCmd().equals(Message.CMD_SEARCH)) {
 
             //Set cmd for the answer message to sent back to the client
-            cmd = msg.RESULT_SEARCH;
+            cmd = Message.RESULT_SEARCH;
             //System.out.println(msg.getValues().get(0));
             resultfile = database.GetCVEwithKeywords(msg.getValues());
             String resultstring = FileUtils.readFileToString(resultfile);
@@ -120,7 +120,7 @@ public class MultiThreadServer {
         }
 
         if (msg.getCmd().equals(Message.CMD_DETAIL)) {
-            cmd = msg.RESULT_DETAIL;
+            cmd = Message.RESULT_DETAIL;
             resultfile = database.GetinfofromCVE(msg.getValues().get(0));
             String resultstring = FileUtils.readFileToString(resultfile);
             ArrayList<Object> res = new ArrayList<>();
@@ -133,14 +133,14 @@ public class MultiThreadServer {
             DataVisualisation datavis = new DataVisualisation(database.getDatabase());
             datavis.OpenCloud(msg.getValues().get(0));
             //Set cmd for the answer message to sent back to the client
-            cmd = msg.RESULT_STATISTIC;
+            cmd = Message.RESULT_STATISTIC;
             answerMessage = createImageAnswer(cmd, msg);
         }
          if (msg.getCmd().equals(Message.CMD_HISTOGRAM)) {
 	     DataVisualisation datavis = new DataVisualisation(database.getDatabase());
             datavis.Histogram(msg.getValues().get(0));
             //Set cmd for the answer message to sent back to the client
-            cmd = msg.RESULT_HISTOGRAM;
+            cmd = Message.RESULT_HISTOGRAM;
             answerMessage = createImageAnswer(cmd, msg);
         }
         return answerMessage;

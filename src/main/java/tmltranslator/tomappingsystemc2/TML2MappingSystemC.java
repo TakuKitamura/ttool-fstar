@@ -682,7 +682,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         LinkedList<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
         for(HwCommunicationNode commNode: _commNodes){
             if (commNode instanceof HwBus){
-                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(_node, (HwBus)commNode)) resultList.add((HwBus)commNode);
+                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(_node, (HwBus)commNode)) resultList.add(commNode);
             }
         }
         return resultList;
@@ -692,7 +692,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         LinkedList<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
         for(HwCommunicationNode commNode: _commNodes){
             if (commNode instanceof HwBridge){
-                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add((HwBridge)commNode);
+                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add(commNode);
             }
         }
         return resultList;

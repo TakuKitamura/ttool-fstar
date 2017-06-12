@@ -74,11 +74,8 @@ public class AvatarMethodologyReferenceToDesign extends AvatarMethodologyDiagram
     }
     
     public boolean isAValidPanelType(TURTLEPanel panel) {
-    	if (panel instanceof AvatarDesignPanel) {
-    		return true;
-    	}
-    	
-    	return false;
+        return panel instanceof AvatarDesignPanel;
+
     }
     
      public void makeValidationInfos(AvatarMethodologyDiagramName dn) {

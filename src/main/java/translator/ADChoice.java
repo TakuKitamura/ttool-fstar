@@ -122,11 +122,7 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 			if (s != null) {
 				g = Conversion.replaceAllChar(s.trim(), ' ', "");
 			}
-            if ((s == null) || (s.length() < 2) || (g.equals("[]"))) {
-                return false;
-            } else {
-                return true;
-            }
+            return !((s == null) || (s.length() < 2) || (g.equals("[]")));
         }
     }
 	
@@ -340,14 +336,10 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 			g0 = g0.substring(4, g0.length()-1);
 		} else if (g1.startsWith("not(")) {
 			g1 = g1.substring(4, g1.length()-1);
-		} 
-		
-		if (g0.compareTo(g1) == 0) {
-			//System.out.println("Else guards g0=" + g0 + " g1=" + g1);
-			return true;
-		} else {
-			return false;
 		}
+
+        //System.out.println("Else guards g0=" + g0 + " g1=" + g1);
+        return g0.compareTo(g1) == 0;
 	}
     
 	

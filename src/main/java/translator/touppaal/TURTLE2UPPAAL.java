@@ -591,7 +591,7 @@ public class TURTLE2UPPAAL {
 		spec.addGlobalDeclaration("// Internal synchronizations of class " + t.getName() + "\n");
 		
 		for(i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.get(i));
+			adc = ad.get(i);
 			if (adc instanceof ADParallel) {
 				adp = (ADParallel)adc;
 				if (adp.nbGate() > 0) {

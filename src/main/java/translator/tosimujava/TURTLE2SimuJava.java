@@ -492,9 +492,9 @@ public class TURTLE2SimuJava {
                 if ((tjp1 != null) && (tjp2 != null)) {
                     if (toTakeIntoAccountJC.contains(tjp1) && toTakeIntoAccountJC.contains(tjp2)) {
                         for(j=0; j<r.gatesOfT1.size(); j++) {
-                            System.out.println("Gates 1)" + ((Gate)(r.gatesOfT1.elementAt(j))).getName() + " 2:" + ((Gate)(r.gatesOfT2.elementAt(j))).getName());
-                            jg1 = tjp1.foundJGate(((Gate)(r.gatesOfT1.elementAt(j))).getName());
-                            jg2 = tjp2.foundJGate(((Gate)(r.gatesOfT2.elementAt(j))).getName());
+                            System.out.println("Gates 1)" + r.gatesOfT1.elementAt(j).getName() + " 2:" + r.gatesOfT2.elementAt(j).getName());
+                            jg1 = tjp1.foundJGate(r.gatesOfT1.elementAt(j).getName());
+                            jg2 = tjp2.foundJGate(r.gatesOfT2.elementAt(j).getName());
                             //System.out.println("foundJGate");
                             if ((jg1 != null) && (jg2 != null)) {
                                 s += JKeyword.INDENT + JKeyword.INDENT + jg1.getJName() + ".synchroGate = " + jg2.getJName() + JKeyword.END_OP + "\n";

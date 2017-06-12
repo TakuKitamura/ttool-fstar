@@ -199,7 +199,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
 
         // Attributes
-        if (((TMLComponentTaskDiagramPanel)tdp).areAttributesVisible()) {
+        if (tdp.areAttributesVisible()) {
             int index = 0;
             int cpt = currentFontSize + 2 * textX;
             String attr;
@@ -385,11 +385,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     }
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        if (tgc instanceof TMLCPrimitivePort) {
-            return true;
-        }
+        return tgc instanceof TMLCPrimitivePort;
 
-        return false;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -404,7 +401,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         if (tgc instanceof TMLCPrimitivePort) {
             tgc.setFather(this);
             tgc.setDrawingZone(true);
-            ((TMLCPrimitivePort)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             addInternalComponent(tgc, 0);
             return true;
         }
@@ -431,7 +428,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         rescaled = true;
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLCPrimitivePort) {
-                ((TMLCPrimitivePort)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 

@@ -53,10 +53,10 @@ package ui;
  */
 
 public interface CDElement {
-	public int getX();
-	public int getY();
-	public void setCd(int x, int y);
-	public int getWidth();
-	public int getHeight();
-	public String getName();
+	int getX();
+	int getY();
+	void setCd(int x, int y);
+	int getWidth();
+	int getHeight();
+	String getName();
 }

@@ -232,10 +232,7 @@ public class TURTLEModeling {
                 cpt ++;
             }
         }
-        if (cpt > 1) {
-            return true;
-        }
-        return false;
+        return cpt > 1;
     }
     
     public TClass getTClassWithAction(String action) {
@@ -266,13 +263,9 @@ public class TURTLEModeling {
 		if (!hasOnlyRegularRelations()) {
 			return false;
 		}
-		
-		if (!hasOnlyRegularTClasses(choicesDeterministic, variableAsActions)) {
-			return false;
-		}
-		
-		return true;
-	}
+
+        return hasOnlyRegularTClasses(choicesDeterministic, variableAsActions);
+    }
 	
 	public boolean hasOnlyRegularRelations() {
 		Relation r;
@@ -302,7 +295,7 @@ public class TURTLEModeling {
 		ADChoice adchoice;
 		
 		for(int i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.get(i));
+			adc = ad.get(i);
 			
 			if ((adc instanceof ADPreempt) && (adc.getNbNext() > 1)){
 				return false;
@@ -855,7 +848,7 @@ public class TURTLEModeling {
                 // And the relation is transformed into a synchronization relation
                 r.type = Relation.SYN;
                 for(j=0; j<r.gatesOfT1.size(); j++) {
-                    g = (Gate)(r.gatesOfT1.elementAt(j));
+                    g = r.gatesOfT1.elementAt(j);
                     r.t1.getActivityDiagram().distinguishAllCallOn(g);
                 }
             }
@@ -897,7 +890,7 @@ public class TURTLEModeling {
         ADComponent adc, adc1;
         int i = 0;
         while(i<ad.size()) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             if (c.isInstance(adc)) {
                 //if (adc instanceof ADStop) {
 					//System.out.println("Found an addstop");
@@ -961,7 +954,7 @@ public class TURTLEModeling {
         }
 		
         while(i<ad.size()) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             if (adc instanceof ADParallel) {
                 if ((adc.getNbNext() == 1) && (ad.getNbComponentLeadingTo(adc) == 1)) {
                     adc1 = ad.getFirstComponentLeadingTo(adc);
@@ -983,7 +976,7 @@ public class TURTLEModeling {
         int i = 0;
         //boolean found = false;
         while(i<ad.size()) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             if (adc instanceof ADJunction) {
                 if (ad.getNbComponentLeadingTo(adc) == 1) {
                     //System.out.println("Found a junction to remove");
@@ -1006,7 +999,7 @@ public class TURTLEModeling {
         int i = 0;
         boolean found = false;
         while(i<ad.size()) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             if (adc instanceof ADSequence) {
                 if ((adc.getNbNext() == 1) && (ad.getNbComponentLeadingTo(adc) == 1)) {
                     //System.out.println("Found a sequence to remove");
@@ -1045,7 +1038,7 @@ public class TURTLEModeling {
         }
 		
         while(i<ad.size()) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
 			
 			if ((!(adc instanceof ADStart)) && (ad.getNbComponentLeadingTo(adc) == 0)) {
 				ad.remove(adc);
@@ -1261,7 +1254,7 @@ public class TURTLEModeling {
 		String namebis = p.getName() +  " ";
 		
 		for(i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.get(i));
+			adc = ad.get(i);
 			if (adc instanceof ADActionStateWithGate) {
 				adag = (ADActionStateWithGate)adc;
 				s = adag.getActionValue();
@@ -1413,7 +1406,7 @@ public class TURTLEModeling {
 		String v1, v2;
 		
 		for(i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.get(i));
+			adc = ad.get(i);
 			if (adc instanceof ADActionStateWithGate) {
 				adag = (ADActionStateWithGate)adc;
 				adag.setActionValue(putParamValueInString(adag.getActionValue(), p));
@@ -1563,7 +1556,7 @@ public class TURTLEModeling {
 		int i;
 
 		for(i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.get(i));
+			adc = ad.get(i);
 			if (adc instanceof ADActionStateWithGate) {
 				if (((ADActionStateWithGate)(adc)).getGate() == g) {
 					return 1;
@@ -1584,7 +1577,7 @@ public class TURTLEModeling {
 		
 		// Checks in activity diagram
 		for(i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.get(i));
+			adc = ad.get(i);
 			if (adc instanceof ADParallel) {
 				((ADParallel)(adc)).removeSynchroGateIfApplicable(g);
 			}
@@ -1746,7 +1739,7 @@ public class TURTLEModeling {
         Vector path;
         
         for(int i=0; i<ad.size(); i++) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             if ((adc instanceof ADChoice) ||(adc instanceof ADParallel) ||(adc instanceof ADSequence) || (adc instanceof ADPreempt)){
                 //System.out.println("Needs unrolling?");
                 path = needsUnrolling(ad, adc);
@@ -1870,7 +1863,7 @@ public class TURTLEModeling {
         
         // Add elements to the AD
         for(j=0; j<ad.size(); j++) {
-            adc = ((ADComponent)(ad.elementAt(j))).substitute;
+            adc = ad.elementAt(j).substitute;
             if (adc != null) {
                 ad.add(adc);
             }
@@ -2026,7 +2019,7 @@ public class TURTLEModeling {
         ADComponent toRemove;
         boolean oneWithoutStop;
         for(i=0; i<ad.size(); i++) {
-            adc = ((ADComponent)(ad.elementAt(i))).substitute;
+            adc = ad.elementAt(i).substitute;
             if (adc != null) {
                 list = adc.getAllNext();
                 // removed if all don't point to stop
@@ -2265,7 +2258,7 @@ public class TURTLEModeling {
         ADComponent adc;
         ADChoice adch;
         for(int i=0; i<ad.size(); i++) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             if (adc instanceof ADChoice) {
                 adch = (ADChoice)adc;
                 //System.out.println("Testing " + adch.toString() + "/" + adch.hashCode());
@@ -2578,7 +2571,7 @@ public class TURTLEModeling {
 		ADComponent adc;
 		
 		for(int i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.elementAt(i));
+			adc = ad.elementAt(i);
 			if (adc instanceof ADParallel) {
 				if (hasRecursion(adc)) {
 					System.out.println("Recursion found -> unrolling " + n + " times");
@@ -2705,7 +2698,7 @@ public class TURTLEModeling {
 		while(changeMade) {
 			changeMade = false;
 			for(i=0; i<ad.size(); i++) {
-				adc1 = (ADComponent)(ad.get(i));
+				adc1 = ad.get(i);
 				if (adc1 instanceof ADChoice) {
 					adch1 = (ADChoice) adc1;
 					if (adch1.getNbNext() > 3) {
@@ -2755,7 +2748,7 @@ public class TURTLEModeling {
 		int index;
 		
 		for(i=0; i<ad.size(); i++) {
-			adc1 = (ADComponent)(ad.get(i));
+			adc1 = ad.get(i);
 			if (adc1 instanceof ADChoice) {
 				adch1 = (ADChoice) adc1;
 				if (!adch1.isElseChoice()) {

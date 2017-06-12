@@ -419,18 +419,10 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Start")) {
                                 startS = elt.getAttribute("isStart");
-                                if (startS.equals("true")) {
-                                    start = true;
-                                } else {
-                                    start = false;
-                                }
+                                start = startS.equals("true");
                             } else if (elt.getTagName().equals("Observer")) {
                                 startS = elt.getAttribute("isObserver");
-                                if (startS.equals("true")) {
-                                    observer = true;
-                                } else {
-                                    observer = false;
-                                }
+                                observer = startS.equals("true");
                             }
                         }
                     }
@@ -447,7 +439,7 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
     }
     
     public ActivityDiagramPanelInterface getBehaviourDiagramPanel() {
-        return (ActivityDiagramPanelInterface)getActivityDiagramPanel();
+        return getActivityDiagramPanel();
     }
     
  	public int getDefaultConnector() {

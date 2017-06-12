@@ -1562,7 +1562,7 @@ public class AvatarStateMachine extends AvatarElement {
                 for (AvatarStateMachineElement asme: curAsme.getNexts ()) {
                     /* Check if it is a function call */
                     if (asme instanceof AvatarLibraryFunctionCall) {
-                        AvatarStateMachineElement replaceBy = callsTranslated.get ((AvatarLibraryFunctionCall) asme);
+                        AvatarStateMachineElement replaceBy = callsTranslated.get (asme);
                         /* Check if function call has already been translated */
                         if (replaceBy != null) {
                             /* replace by the translated function call */

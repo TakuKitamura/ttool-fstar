@@ -140,8 +140,8 @@ public class CorrespondanceTGElement {
     	for (int i=0;i<tg.size();i++)
     	{
     		
-    		TGComponent tgc = (TGComponent)tg.get(i);
-    		String tgcPanelName = (String)panelNames.get(i);
+    		TGComponent tgc = tg.get(i);
+    		String tgcPanelName = panelNames.get(i);
            
     		if (tgc.getValue()!=null)
     		if (tgc.getValue().equals(name)&& tgcPanelName.equals(panelName)) 
@@ -156,8 +156,8 @@ public class CorrespondanceTGElement {
     {
     	for (int i=0;i<tg.size();i++)
     	{
-    		TGComponent tgc = (TGComponent)tg.get(i);
-    		String tgcPanelName = (String)panelNames.get(i);
+    		TGComponent tgc = tg.get(i);
+    		String tgcPanelName = panelNames.get(i);
     		if (tgc.equals(t)&& tgcPanelName.equals(panelName)) 
     			{ Object o =data.elementAt(i);
     			  if (o instanceof ADComponent) return (ADComponent)o;
@@ -184,7 +184,7 @@ public class CorrespondanceTGElement {
     
      public TGComponent getTGAt(int index) {
         if ((index != -1) && (tg.size() > index)) {
-            return	(TGComponent)(tg.elementAt(index));
+            return tg.elementAt(index);
         }
         return null;
     }
@@ -319,7 +319,7 @@ public class CorrespondanceTGElement {
 		}
 		
 		for(int i=0; i<tg.size(); i++) {
-			tmptgc = (TGComponent)(tg.elementAt(i));
+			tmptgc = tg.elementAt(i);
 			if (tmptgc == tgc) {
 				o = data.elementAt(i);
 				list.add((ADComponent)o);

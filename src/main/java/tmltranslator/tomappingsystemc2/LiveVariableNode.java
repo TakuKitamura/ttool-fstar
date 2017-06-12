@@ -187,7 +187,7 @@ public class LiveVariableNode{
 				if(object instanceof Number){
 					result = Integer.toString(((Number)(object)).intValue());
 				}else if (object instanceof Boolean){
-					result = ((Boolean)(object)).toString();
+					result = object.toString();
 				}else{
 					throw new IllegalArgumentException("Input is neither Integer nor Boolean: '"+expression+"'");
 				}
@@ -370,7 +370,7 @@ public class LiveVariableNode{
 	}
 
 	public boolean isConstant(){
-		return (_constantStuckToFalse)? false: _isConstant;
+		return !_constantStuckToFalse && _isConstant;
 	}
 	
 	public boolean isInfected(){

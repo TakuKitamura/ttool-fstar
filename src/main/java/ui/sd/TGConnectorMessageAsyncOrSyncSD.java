@@ -145,11 +145,7 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("isAsync")) {
                                 s = elt.getAttribute("value");
-                                if (s.equals("true")) {
-                                    isAsync = true;
-                                } else {
-                                    isAsync = false;
-                                }
+                                isAsync = s.equals("true");
                             }
                         }
                     }

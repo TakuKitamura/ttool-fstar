@@ -48,24 +48,24 @@ package avatartranslator;
 import java.util.HashMap;
 
 public interface AvatarAction {
-    public boolean isAMethodCall ();
-    public boolean isAVariableSetting ();
-    public boolean isABasicVariableSetting ();
-    public String getName ();
+    boolean isAMethodCall();
+    boolean isAVariableSetting();
+    boolean isABasicVariableSetting();
+    String getName();
 
     /**
      * Returns True if the whole action contains a method call.
      *
      * @return True if the whole action contains a method call. False otherwise.
      */
-    public boolean containsAMethodCall ();
+    boolean containsAMethodCall();
 
     /**
      * Returns a full clone of the action.
      *
      * @return A clone of the action.
      */
-    public AvatarAction clone ();
+    AvatarAction clone();
 
     /**
      * Replaces attributes in this action according to the provided mapping.
@@ -73,5 +73,5 @@ public interface AvatarAction {
      * @param attributesMapping
      *      The mapping used to replace the attributes of the action. All the attributes of the block should be present as keys.
      */
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping);
+    void replaceAttributes(HashMap<AvatarAttribute, AvatarAttribute> attributesMapping);
 }

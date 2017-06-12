@@ -49,5 +49,5 @@ package ui;
 
 public interface TGAutoAdjust  {
 	// Auto adjust mode: 2 modes: 0: regular, 1: small
-    public void autoAdjust(int mode);
+    void autoAdjust(int mode);
 }

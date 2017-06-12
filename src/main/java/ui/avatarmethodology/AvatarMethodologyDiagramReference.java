@@ -160,11 +160,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
             }
         }
 
-        if(currentFontSize <minFontSize) {
-            displayText = false;
-        } else {
-            displayText = true;
-        }
+        displayText = currentFontSize >= minFontSize;
 
      //   int h  = g.getFontMetrics().getHeight();
 
@@ -515,10 +511,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
     public abstract boolean isAValidPanelType(TURTLEPanel panel);
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        if (tgc instanceof AvatarMethodologyDiagramName) {
-            return true;
-        }
-        return false;
+        return tgc instanceof AvatarMethodologyDiagramName;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {

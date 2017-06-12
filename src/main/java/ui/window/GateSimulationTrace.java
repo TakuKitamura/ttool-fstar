@@ -102,7 +102,7 @@ public class GateSimulationTrace extends Vector<TraceData> {
         int cpt = 0;
         TraceData td;
         for(int i=0; i<size(); i++) {
-            td = (TraceData)(elementAt(i));
+            td = elementAt(i);
             cpt = Math.max(td.time, cpt);
         }
         return cpt;
@@ -112,7 +112,7 @@ public class GateSimulationTrace extends Vector<TraceData> {
         int cpt = 0;
         TraceData td;
         for(int i=0; i<size(); i++) {
-            td = (TraceData)(elementAt(i));
+            td = elementAt(i);
             cpt = Math.max(td.action, cpt);
         }
         return cpt;
@@ -123,7 +123,7 @@ public class GateSimulationTrace extends Vector<TraceData> {
         int maxTime = 0;
         TraceData td;
         for(int i=0; i<size(); i++) {
-            td = (TraceData)(elementAt(i));
+            td = elementAt(i);
             if (td.action <= actionNb) {
                 maxTime = Math.max(maxTime, td.time);
             }

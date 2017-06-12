@@ -246,7 +246,7 @@ public class UPPAALTemplate {
 				// Must update other transitions
 				iterator = transitions.listIterator();
 				while(iterator.hasNext()) {
-					trtmp = ((UPPAALTransition)(iterator.next()));
+					trtmp = iterator.next();
 					if (trtmp != tr) {
 						if (trtmp.destinationLoc == tr.sourceLoc) {
 							trtmp.destinationLoc = tr.destinationLoc;

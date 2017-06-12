@@ -151,21 +151,14 @@ public class AvatarSimulationPendingTransaction  {
             if (!hasDelay) {
                 return false;
             }
-            if (myMinDuration>0) {
-                return true;
-            }
-            return false;
+            return myMinDuration > 0;
         }
 
         if ((!durationOnCurrent) && (!durationOnOther)) {
             return false;
         }
 
-        if (myMinDuration >0) {
-            return true;
-        }
-
-        return false;
+        return myMinDuration > 0;
 
     }
 

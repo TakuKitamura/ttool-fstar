@@ -263,12 +263,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
     }
 
     public boolean isInRectangle(int x1, int y1, int width, int height) {
-        if ((getX() < x1) || (getY() < y1) || ((getX() + this.width) > (x1 + width)) || ((getY() + this.height) > (y1 + height))) {
-            //TraceManager.addDev("Not in my rectangle " + this);
-            return false;
-        } else {
-            return true;
-        }
+        return !((getX() < x1) || (getY() < y1) || ((getX() + this.width) > (x1 + width)) || ((getY() + this.height) > (y1 + height)));
     }
 
     public boolean editOndoubleClick(JFrame frame) {

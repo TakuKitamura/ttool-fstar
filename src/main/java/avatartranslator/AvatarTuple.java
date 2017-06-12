@@ -144,7 +144,7 @@ public class AvatarTuple extends AvatarLeftHand {
         LinkedList<AvatarTerm> components = new LinkedList<AvatarTerm> ();
         for (AvatarTerm term: this.components)
             if (term instanceof AvatarAttribute)
-                components.add (attributesMapping.get ((AvatarAttribute) term));
+                components.add (attributesMapping.get (term));
             else {
                 components.add (term);
                 term.replaceAttributes (attributesMapping);

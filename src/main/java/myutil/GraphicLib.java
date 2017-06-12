@@ -226,11 +226,7 @@ public final class GraphicLib {
             return false;
         }
 
-        if ((y11 < y) || (y22 > y+height)) {
-            return false;
-        }
-
-        return true;
+        return !((y11 < y) || (y22 > y + height));
 
     }
 

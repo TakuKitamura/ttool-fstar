@@ -262,7 +262,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
     public void addInstancesToLastSD(UseCaseDiagramPanel _ucdp) {
         TraceManager.addDev("Adding instances to last SD");
 
-        TDiagramPanel panel = (TDiagramPanel)(panels.get(panels.size()-1));
+        TDiagramPanel panel = panels.get(panels.size()-1);
         if (!(panel instanceof ui.sd2.SequenceDiagramPanel)) {
             return;
         }

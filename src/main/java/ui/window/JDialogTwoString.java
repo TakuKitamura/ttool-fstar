@@ -194,10 +194,7 @@ public class JDialogTwoString extends javax.swing.JDialog implements ActionListe
         if (text1.getText().length() < 1) {
             return false;
         }
-        if (text2.getText().length() < 1) {
-            return false;
-        }
-        return true;
+        return text2.getText().length() >= 1;
     }
     
     public void cancelDialog() {

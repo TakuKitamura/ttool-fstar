@@ -112,7 +112,7 @@ public class UPPAALTransition {
 		
 		
 		if ((points.size() == 1) && (destinationLoc == sourceLoc)) {
-			Point p = (Point)(points.get(0));
+			Point p = points.get(0);
 			points.add(new Point(p.x+10, p.y+35));
 		}
 	}
@@ -130,12 +130,8 @@ public class UPPAALTransition {
 		if (synchronization.length() > 0) {
 			return false;
 		}
-		
-		if (assignment.length() > 0) {
-			return false;
-		}
-		
-		return true;
-	}
+
+        return assignment.length() <= 0;
+    }
 	
 }

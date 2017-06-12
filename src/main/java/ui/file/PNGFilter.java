@@ -60,11 +60,7 @@ public class PNGFilter extends FileFilter {
 
         String extension = FileUtils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(FileUtils.png)){
-                    return true;
-            } else {
-                return false;
-            }
+            return extension.equals(FileUtils.png);
         }
 
         return false;

@@ -140,7 +140,7 @@ public abstract class ADComponent implements Cloneable {
     public boolean hasNextTo(ADComponent adc) {
         ADComponent adc1;
         for(int i=0; i<next.size(); i++) {
-            adc1 = (ADComponent)(next.elementAt(i));
+            adc1 = next.elementAt(i);
             if (adc == adc1) {
                 return true;
             }
@@ -152,7 +152,7 @@ public abstract class ADComponent implements Cloneable {
         //System.out.println("Checking nexts in " + toString());
         ADComponent adc1;
         for(int i=0; i<next.size(); i++) {
-            adc1 = (ADComponent)(next.elementAt(i));
+            adc1 = next.elementAt(i);
             //System.out.println("Next = " + adc1.toString());
             if (adc1 == oldOne) {
                 //System.out.println("found relink in " + this);
@@ -194,7 +194,7 @@ public abstract class ADComponent implements Cloneable {
         } else {
             ADComponent adc1;
             for(int i=0; i<next.size(); i++) {
-                adc1 = (ADComponent)(next.elementAt(i));
+                adc1 = next.elementAt(i);
                 if (adc1 != null) {
                     v = adc1.getLastBeforeStop(v, this);
                 }

@@ -143,13 +143,9 @@ public class TADArraySetState extends TGCWithoutInternalComponent implements Bas
         }
         
         makeValue();
-        
-        if (!oldValue.equals(value)) {
-            return true;
-        }
-        
-        return false;
-        
+
+        return !oldValue.equals(value);
+
     }
 	
 	public void makeValue() {

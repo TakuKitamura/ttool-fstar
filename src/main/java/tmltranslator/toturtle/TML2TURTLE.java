@@ -236,7 +236,7 @@ public class TML2TURTLE {
         for(int i=0; i<nbClass; i++) {
             t = tm.getTClassAtIndex(i);
             //System.out.println("Create AD");
-            createADOfTClass(t, (TMLTask)(tmlmodeling.getTasks().get(i)));
+            createADOfTClass(t, tmlmodeling.getTasks().get(i));
             //System.out.println("End create AD");
         }
     }
@@ -775,7 +775,7 @@ public class TML2TURTLE {
                 //int index = tmlreq.getRequest().getOriginTasks().indexOf(task);
                 //System.out.println("task=" + task.getName() + " index=" + index);
                 //g1 = (Gate)(((TClassRequest)tcl).getGatesWrite().get(index));
-                g1 = (Gate)(((TClassRequest)tcl).getGateWrite(task.getName()));
+                g1 = ((TClassRequest)tcl).getGateWrite(task.getName());
                 //System.out.println("task=" + task.getName() + " index=" + index + "gate=" + g.getName());
                 tm.addSynchroRelation(tclass, g, tcl, g1);
 
@@ -1120,7 +1120,7 @@ public class TML2TURTLE {
             index = request.getOriginTasks().indexOf(task);
             if (index != -1) {
                 //System.out.println("task=" + task.getName() + " index=" + index);
-                g1 = (Gate)(((TClassRequest)tcl).getGatesWrite().get(index));
+                g1 = ((TClassRequest)tcl).getGatesWrite().get(index);
                 //System.out.println("task=" + task.getName() + " index=" + index + "gate=" + g.getName());
                 tm.addSynchroRelation(tclass, g, tcl, g1);
             }
@@ -1176,10 +1176,7 @@ public class TML2TURTLE {
 
     private boolean printAnalyzer(String action) {
         action = action.trim();
-        if (action.startsWith("cout") || action.startsWith("std::cout")) {
-            return true;
-        }
-        return false;
+        return action.startsWith("cout") || action.startsWith("std::cout");
 
     }
 

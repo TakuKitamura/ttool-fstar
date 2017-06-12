@@ -198,20 +198,14 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
         if (index ==0) {
             return false;
         }
-        if ((panels.elementAt(index) instanceof TMLCPPanel) ||(panels.elementAt(index) instanceof TMLSDPanel) || ((panels.elementAt(index) instanceof TMLCPPanel) & index != 0)){
-            return true;
-        }
-        return false;
+        return (panels.elementAt(index) instanceof TMLCPPanel) || (panels.elementAt(index) instanceof TMLSDPanel) || ((panels.elementAt(index) instanceof TMLCPPanel) & index != 0);
     }
 
     public boolean renameEnabled(int index) {
         if (index ==0) {
             return false;
         }
-        if ((panels.elementAt(index) instanceof TMLCPPanel) ||(panels.elementAt(index) instanceof TMLSDPanel) || ((panels.elementAt(index) instanceof TMLCPPanel) & index != 0)){
-            return true;
-        }
-        return false;
+        return (panels.elementAt(index) instanceof TMLCPPanel) || (panels.elementAt(index) instanceof TMLSDPanel) || ((panels.elementAt(index) instanceof TMLCPPanel) & index != 0);
     }
 
 

@@ -270,7 +270,7 @@ public class TML2SystemC {
         mainFunction += "\n// Exec tracings\n";
         iterator = tasks.listIterator();
         while(iterator.hasNext()) {
-            st = (SystemCTask)(iterator.next());
+            st = iterator.next();
             mainFunction += "sc_trace(tf, tb." + st.reference + ".exi, \"EX_" + st.reference + "\");\n";
         }
         

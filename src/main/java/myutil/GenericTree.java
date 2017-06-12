@@ -49,7 +49,7 @@ package myutil;
 
 public interface GenericTree {
     
-    public int getChildCount();
-    public Object getChild(int index); 
-    public int getIndexOfChild(Object child);
+    int getChildCount();
+    Object getChild(int index);
+    int getIndexOfChild(Object child);
 }

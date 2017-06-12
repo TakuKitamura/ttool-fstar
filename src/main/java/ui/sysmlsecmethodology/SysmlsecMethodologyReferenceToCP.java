@@ -74,11 +74,8 @@ public class SysmlsecMethodologyReferenceToCP extends SysmlsecMethodologyDiagram
 
 
     public boolean isAValidPanelType(TURTLEPanel panel) {
-        if (panel instanceof TMLCommunicationPatternPanel) {
-            return true;
-        }
+        return panel instanceof TMLCommunicationPatternPanel;
 
-        return false;
     }
 
     public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {

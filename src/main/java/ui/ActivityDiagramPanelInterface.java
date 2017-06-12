@@ -51,5 +51,5 @@ import java.util.List;
 
 
 public interface ActivityDiagramPanelInterface {
-  public List<TGComponent> getComponentList();
+  List<TGComponent> getComponentList();
 }

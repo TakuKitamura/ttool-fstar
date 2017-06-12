@@ -48,20 +48,20 @@ package translator;
 import java.util.LinkedList;
 
 public interface FIFOTClass  {
-    public int getNbPara();
+    int getNbPara();
 
     /**
      * Returns the first write gate
      * @return the first write gate
      */
-    public Gate getGateWrite();
+    Gate getGateWrite();
 
     /**
      * Returns the first read gate
      * @return the first read gate
      */
-    public Gate getGateRead();
-    public LinkedList<Gate> getGatesWrite();
-    public LinkedList<Gate> getGatesRead();
+    Gate getGateRead();
+    LinkedList<Gate> getGatesWrite();
+    LinkedList<Gate> getGatesRead();
     
 }

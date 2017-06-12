@@ -187,7 +187,7 @@ public class DDTranslator {
         ad = tclass1.getActivityDiagram();
         
         for(i=0; i<ad.size(); i++) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             g = null;
             if (adc instanceof ADActionStateWithGate) {
                 g = ((ADActionStateWithGate)adc).getGate();
@@ -222,7 +222,7 @@ public class DDTranslator {
         ad = tclass2.getActivityDiagram();
         
         for(i=0; i<ad.size(); i++) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             g = null;
             if (adc instanceof ADActionStateWithGate) {
                 g = ((ADActionStateWithGate)adc).getGate();

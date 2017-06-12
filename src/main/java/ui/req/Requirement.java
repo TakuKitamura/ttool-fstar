@@ -216,12 +216,8 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 				rescaled = false;
 			}
 		}
-		
-		if(currentFontSize <minFontSize) {
-			displayText = false;
-		} else {
-			displayText = true;
-		}
+
+        displayText = currentFontSize >= minFontSize;
 		
 	//	int h  = g.getFontMetrics().getHeight();
         
@@ -686,11 +682,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
                                 if (s.equals("null")) {
                                     satisfied = false;
                                 } else {
-									if (s.equals("true")) {
-										satisfied = true;
-									} else {
-										satisfied = false;
-									}
+                                    satisfied = s.equals("true");
 								}
 								//System.out.println("Analyzing line4");
 							} else if (elt.getTagName().equals("verified")) {
@@ -699,11 +691,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
                                 if (s.equals("null")) {
                                     verified = false;
                                 } else {
-									if (s.equals("true")) {
-										verified = true;
-									} else {
-										verified = false;
-									}
+                                    verified = s.equals("true");
 								}
 							}
 								//System.out.println("Analyzing line4");

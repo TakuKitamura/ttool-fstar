@@ -96,11 +96,8 @@ public class Attack {
     }
 
     public boolean isFinal() {
-	if (destinationNodes.size() == 0) {
-	    return true;
-	}
+        return destinationNodes.size() == 0;
 
-	return false;
     }
     
 }

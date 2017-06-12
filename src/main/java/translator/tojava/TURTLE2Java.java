@@ -489,7 +489,7 @@ public class TURTLE2Java {
             return "";
         }
         
-        tmpc=getMainClassOf((JavaClass)(toTakeIntoAccountJC.get(0)));
+        tmpc=getMainClassOf(toTakeIntoAccountJC.get(0));
         
         for(i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
@@ -499,9 +499,9 @@ public class TURTLE2Java {
                 if ((jc1 != null) && (jc2 != null)) {
                     if (toTakeIntoAccountJC.contains(jc1) && toTakeIntoAccountJC.contains(jc2)) {
                         for(j=0; j<r.gatesOfT1.size(); j++) {
-                            System.out.println("Gates 1)" + ((Gate)(r.gatesOfT1.elementAt(j))).getName() + " 2:" + ((Gate)(r.gatesOfT2.elementAt(j))).getName());
-                            jg1 = jc1.foundJGate(((Gate)(r.gatesOfT1.elementAt(j))).getName());
-                            jg2 = jc2.foundJGate(((Gate)(r.gatesOfT2.elementAt(j))).getName());
+                            System.out.println("Gates 1)" + r.gatesOfT1.elementAt(j).getName() + " 2:" + r.gatesOfT2.elementAt(j).getName());
+                            jg1 = jc1.foundJGate(r.gatesOfT1.elementAt(j).getName());
+                            jg2 = jc2.foundJGate(r.gatesOfT2.elementAt(j).getName());
                             //System.out.println("foundJGate");
                             if ((jg1 != null) && (jg2 != null)) {
                                 //System.out.println("master");
@@ -1382,7 +1382,7 @@ public class TURTLE2Java {
         //Gate g;
         
         for(i=0; i<ad.size(); i++) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             if (adc instanceof ADParallel) {
                 cid = new ComponentId(adc, idPar);
                 

@@ -60,13 +60,10 @@ public class DiplodocusMethodologyConnectingPoint extends  TGConnectingPointWidt
     }
     
     public boolean isCompatibleWith(int type) {
-        
-        if (type == TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR) {
-            return true;
-        }
-		
-       
-        return false;
+
+        return type == TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR;
+
+
     }
 	
 

@@ -420,11 +420,7 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 								nConfig = Integer.decode(elt.getAttribute("nConfig")).intValue();
 								nStatus = Integer.decode(elt.getAttribute("nStatus")).intValue();
 								tmp = elt.getAttribute("useLLSC");
-								if (tmp.compareTo("true") == 0) {
-									useLLSC = true;
-								} else {
-									useLLSC = false;
-								}
+                                useLLSC = tmp.compareTo("true") == 0;
 
 							}
 						}

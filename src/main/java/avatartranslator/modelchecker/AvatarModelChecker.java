@@ -1246,8 +1246,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     private synchronized void addState(SpecificationState newState) {
-	newState.id = stateID;;
-	//newState.computeHash(blockValues);
+	newState.id = stateID;
+        //newState.computeHash(blockValues);
 	states.put(newState.getHash(blockValues), newState);
 	statesByID.put(newState.id, newState);
 	stateID ++;

@@ -49,6 +49,6 @@ package ui;
 
 
 public interface ConstraintListInterface  {
-    public String[] getConstraintList();
-    public String getCurrentConstraint();
+    String[] getConstraintList();
+    String getCurrentConstraint();
 }

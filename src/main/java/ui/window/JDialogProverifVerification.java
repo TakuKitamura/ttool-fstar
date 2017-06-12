@@ -123,7 +123,8 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         {
             super(text);
         }
-    };
+    }
+
     protected MyMenuItem menuItem;
 
 
@@ -169,7 +170,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         {
             return this.message;
         }
-    };
+    }
 
     /** Creates new form  */
     public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute, AvatarDesignPanel adp) {
@@ -409,7 +410,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
             this.results = results;
             this.jlist = jlist;
         }
-    };
+    }
 
     public void run() {
         String list;

@@ -81,15 +81,15 @@ public class TClassEventFiniteBlocking extends TClass implements TClassEventComm
 	}
 
 	public Gate getGateWrite() {
-		return (Gate)(sendReqGates.get(0));
+		return sendReqGates.get(0);
 	}
 
 	public Gate getGateRead() {
-		return (Gate)(waitGates.get(0));
+		return waitGates.get(0);
 	}
 
 	public Gate getGateSize() {
-		return (Gate)(sizeGates.get(0));
+		return sizeGates.get(0);
 	}
 
 	public LinkedList<Gate> getGatesWrite() {

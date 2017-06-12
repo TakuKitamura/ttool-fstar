@@ -75,11 +75,8 @@ public class DiplodocusMethodologyDiagramReferenceToArchitecture extends Diplodo
 
 
     public boolean isAValidPanelType(TURTLEPanel panel) {
-        if (panel instanceof TMLArchiPanel) {
-            return true;
-        }
+        return panel instanceof TMLArchiPanel;
 
-        return false;
     }
 
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {

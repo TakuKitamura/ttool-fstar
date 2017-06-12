@@ -46,12 +46,12 @@
 package avatartranslator;
 
 public interface AvatarTranslator {
-    public void translateTimerOperator (AvatarTimerOperator _asme, Object _arg);
-    public void translateActionOnSignal (AvatarActionOnSignal _asme, Object _arg);
-    public void translateTransition (AvatarTransition _asme, Object _arg);
-    public void translateStartState (AvatarStartState _asme, Object _arg);
-    public void translateState (AvatarState _asme, Object _arg);
-    public void translateRandom (AvatarRandom _asme, Object _arg);
-    public void translateStopState (AvatarStopState _asme, Object _arg);
-    public void translateLibraryFunctionCall (AvatarLibraryFunctionCall _asme, Object _arg);
+    void translateTimerOperator(AvatarTimerOperator _asme, Object _arg);
+    void translateActionOnSignal(AvatarActionOnSignal _asme, Object _arg);
+    void translateTransition(AvatarTransition _asme, Object _arg);
+    void translateStartState(AvatarStartState _asme, Object _arg);
+    void translateState(AvatarState _asme, Object _arg);
+    void translateRandom(AvatarRandom _asme, Object _arg);
+    void translateStopState(AvatarStopState _asme, Object _arg);
+    void translateLibraryFunctionCall(AvatarLibraryFunctionCall _asme, Object _arg);
 }

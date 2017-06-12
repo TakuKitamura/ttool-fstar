@@ -855,11 +855,7 @@ public class TMLTextSpecification {
                 return -1;
             }
 
-            if (_split[2].toUpperCase().compareTo("NIB") == 0) {
-                blocking = true;
-            } else {
-                blocking = false;
-            }
+            blocking = _split[2].toUpperCase().compareTo("NIB") == 0;
 
             if (_split[2].toUpperCase().compareTo("INF") == 0) {
                 tmp = -1;

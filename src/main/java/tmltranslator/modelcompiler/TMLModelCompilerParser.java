@@ -95,11 +95,8 @@ public class TMLModelCompilerParser {
 	}
 
 	public boolean hasErrors()	{
-		if( errors.size() > 0 )	{
-			return true;
-		}
-		return false;
-	}
+        return errors.size() > 0;
+    }
 
 	public void check()	{
 		checkForPrexAndPostexChannels();

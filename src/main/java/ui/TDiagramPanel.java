@@ -1712,7 +1712,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         if (componentPopup != null) {
-            if (componentPopup.eventOnPopup(e)); {
+            if (componentPopup.eventOnPopup(e)) {
                 mgui.changeMade(this, CHANGE_VALUE_COMPONENT);
                 repaint();
                 return;
@@ -2743,10 +2743,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     // Assumes no internal duplicate id
     public void checkForDuplicateId() {
         for(int i=0; i<componentList.size(); i++) {
-            TGComponent tgc1 = (TGComponent)(componentList.get(i));
+            TGComponent tgc1 = componentList.get(i);
             for(int j=0; j<componentList.size(); j++)
                 if (j != i) {
-                    TGComponent tgc2 = (TGComponent)(componentList.get(j));
+                    TGComponent tgc2 = componentList.get(j);
                     tgc2 = tgc2.getIfId(tgc1.getId());
                     if (tgc2 != null) {
                         TraceManager.addDev("*** Same ID ***");
@@ -3191,7 +3191,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         //change panel name
         for (int j=0; j<this.tp.panels.size(); j++) {
-            TDiagramPanel tdp = (TDiagramPanel) (this.tp.panels.elementAt(j));
+            TDiagramPanel tdp = this.tp.panels.elementAt(j);
             if (tdp.getName().equals(oldValue))
                 tdp.setName(newValue);
         }

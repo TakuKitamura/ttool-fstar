@@ -53,6 +53,7 @@ import myutil.TableSorter;
 import tmatrix.RequirementModeling;
 import tmatrix.Requirements;
 import ui.FormatManager;
+import ui.GTURTLEModeling;
 import ui.util.IconManager;
 import ui.MainGUI;
 
@@ -465,7 +466,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
     
     public void viewRG(Requirements reqs) {
         if (reqs != null) {
-            mgui.gtm.runDOTTY(reqs.graphDot);
+            GTURTLEModeling.runDOTTY(reqs.graphDot);
         }
     }
     

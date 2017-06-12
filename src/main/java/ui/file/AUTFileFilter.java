@@ -60,11 +60,7 @@ public class AUTFileFilter extends FileFilter {
 
         String extension = FileUtils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(FileUtils.aut)){
-                    return true;
-            } else {
-                return false;
-            }
+            return extension.equals(FileUtils.aut);
         }
 
         return false;

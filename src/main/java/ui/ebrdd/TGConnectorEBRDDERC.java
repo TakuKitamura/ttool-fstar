@@ -128,11 +128,7 @@ public  class TGConnectorEBRDDERC extends TGConnector {
                             if (elt.getTagName().equals("negation")) {
                                 val = elt.getAttribute("value").trim();
 								//System.out.println("val=" + val);
-								if (val.equals("false")) {
-									negation = false;
-								} else {
-									negation = true;
-								}
+                                negation = !val.equals("false");
                             }
                         }
                     }

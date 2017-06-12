@@ -201,7 +201,7 @@ public class AvatarPDLogicalConstraint extends TGCScalableWithInternalComponent 
 //		String tmp;
 //		boolean error = false;
 		
-		JDialogConstraint dialog = new JDialogConstraint(frame, "Setting constraint attributes", (ConstraintListInterface)this);
+		JDialogConstraint dialog = new JDialogConstraint(frame, "Setting constraint attributes", this);
 	//	dialog.setSize(450, 350);
         GraphicLib.centerOnParent(dialog, 450, 350);
         dialog.setVisible( true ); // blocked until dialog has been closed

@@ -197,11 +197,8 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
 	}
 	
 	public boolean isNegated() {
-		if (value.compareTo("not") == 0) {
-			return true;
-		}
-		return false;
-	}
+        return value.compareTo("not") == 0;
+    }
 	
 	
     

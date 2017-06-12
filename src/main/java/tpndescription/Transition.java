@@ -182,7 +182,7 @@ public class Transition {
     		nbMet ++;
     	}
     	
-    	return (int)(totalX/nbMet);
+    	return totalX/nbMet;
     	
     }
     
@@ -198,7 +198,7 @@ public class Transition {
     		nbMet ++;
     	}
     	
-    	return (int)(totalY/nbMet);
+    	return totalY/nbMet;
     	
     }
     

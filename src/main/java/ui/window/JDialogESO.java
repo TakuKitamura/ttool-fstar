@@ -180,10 +180,10 @@ public class JDialogESO extends javax.swing.JDialog implements ActionListener  {
 	private void checkMode() {
 		if (timeout != null) {
 			int index = ids.getSelectedIndex();
-			oncePerEvent.setEnabled(eso.hasOncePerEvent(index));
-			timeout.setEnabled(eso.hasTimeout(index));
-			n.setEnabled(eso.hasNM(index));
-			m.setEnabled(eso.hasNM(index));
+			oncePerEvent.setEnabled(EBRDDESO.hasOncePerEvent(index));
+			timeout.setEnabled(EBRDDESO.hasTimeout(index));
+			n.setEnabled(EBRDDESO.hasNM(index));
+			m.setEnabled(EBRDDESO.hasNM(index));
 		}
 	}
 	

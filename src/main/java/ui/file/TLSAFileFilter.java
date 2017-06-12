@@ -60,11 +60,7 @@ public class TLSAFileFilter extends FileFilter {
 
         String extension = FileUtils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(FileUtils.dta)){
-                    return true;
-            } else {
-                return false;
-            }
+            return extension.equals(FileUtils.dta);
         }
 
         return false;

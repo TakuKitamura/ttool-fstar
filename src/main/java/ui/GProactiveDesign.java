@@ -92,7 +92,7 @@ public class GProactiveDesign  {
      	boolean cyclefound=false;
      	  for (int i=0;i<list.size();i++)
         {
-        	TGComponent tmp=(TGComponent)list.get(i);
+        	TGComponent tmp= list.get(i);
 //        	listElement(tmp);
           if  (!parseStructureAndFillUpLists(tmp)) cyclefound=true;
         }
@@ -151,7 +151,7 @@ public class GProactiveDesign  {
 	  Vector<ProCSDPort> portsList=comp.getPortsList();
 	  for (int k=0;k<portsList.size();k++)
 	  {
-		  ProCSDPort p =(ProCSDPort)portsList.get(k);
+		  ProCSDPort p = portsList.get(k);
 		  Port modelPort=null;
 		  if (p instanceof ProCSDInPort)
 		  {
@@ -340,7 +340,7 @@ public class GProactiveDesign  {
     	
     	for (int k=0;k<v.size();k++)
     	{
-    		ProCSDComponent proSubComp=(ProCSDComponent)v.get(k);
+    		ProCSDComponent proSubComp= v.get(k);
     		String proSubCompName=proSubComp.getValue();
     		//if (proSubComp.getThisCompDesign()!=null)
     			//proSubCompName+="_"+proSubComp.getThisCompDesign().getValue();
@@ -411,10 +411,7 @@ public class GProactiveDesign  {
     
     public boolean checkSyntax() {
 
-    	if (checkingErrors.size()>0) {
-    		return false;
-    	}
-        else return true ;
+        return checkingErrors.size() <= 0;
     }
     
    
@@ -433,13 +430,13 @@ public class GProactiveDesign  {
     	
     	for (int k=0;k<connectorsList.size();k++)
     	{
-    		TGConnectorProCSD c=(TGConnectorProCSD)connectorsList.get(k);
+    		TGConnectorProCSD c= connectorsList.get(k);
     		c.doPostLoading();
     	}
     	
     	for (int k=0;k<connectorsPortInterfacesList.size();k++)
     	{
-    		TGConnectorPortInterface c=(TGConnectorPortInterface)connectorsPortInterfacesList.get(k);
+    		TGConnectorPortInterface c= connectorsPortInterfacesList.get(k);
     		c.doPostLoading();
     	}
     	
@@ -482,7 +479,7 @@ public class GProactiveDesign  {
     	//first we consider all out ports	
     	 for (int i=0;i<portsList.size();i++)
     	 {
-    		 ProCSDPort op=(ProCSDPort)portsList.get(i);
+    		 ProCSDPort op= portsList.get(i);
     		 if (op.getType()==TGComponentManager.PROCSD_OUT_PORT)
     		 {  
     			
@@ -564,7 +561,7 @@ public class GProactiveDesign  {
          //now we consider all in ports
     	 for (int i=0;i<portsList.size();i++)
     	 {
-    		 ProCSDPort ip=(ProCSDPort)portsList.get(i);
+    		 ProCSDPort ip= portsList.get(i);
     		 if (ip.getType()==TGComponentManager.PROCSD_IN_PORT)
     		 {    myInterface=ip.getMyInterface(interfacesList);	
     		  if (myInterface!=null)
@@ -630,8 +627,7 @@ public class GProactiveDesign  {
     {
     	List<TGComponent> l=getSubComponents(comp,TGComponentManager.PROCSD_COMPONENT);
     	if (l==null) return true;
-    	if (l.size()==0) return true;
-    	else return false;	
+        return l.size() == 0;
     }
     
     
@@ -957,7 +953,7 @@ public class GProactiveDesign  {
 			
 		    for (int q=0;q<specPanel.componentList.size();q++)
 		    {
-		    	TGComponent component=(TGComponent)specPanel.componentList.get(q);
+		    	TGComponent component= specPanel.componentList.get(q);
 		    	if (!parseStructureAndFillUpListsForCompDefinition(component)) return false;
 		    }
 		    }
@@ -1023,7 +1019,7 @@ public class GProactiveDesign  {
     			
     		    for (int q=0;q<specPanel.componentList.size();q++)
     		    {
-    		    	TGComponent component=(TGComponent)specPanel.componentList.get(q);
+    		    	TGComponent component= specPanel.componentList.get(q);
     		    	if (!parseStructureAndFillUpListsForCompDefinition(component))
     		    		return false;
     		    }
@@ -1469,7 +1465,7 @@ public class GProactiveDesign  {
           
          iterator = list.listIterator();
          while(iterator.hasNext()) {
-             tgc = (TGComponent)(iterator.next());
+             tgc = iterator.next();
            
              if (tgc instanceof ProSMDGetMsg) {
                ProSMDGetMsg getMsg= (ProSMDGetMsg) tgc;
@@ -1660,7 +1656,7 @@ public class GProactiveDesign  {
          // Connecting elements
          iterator = list.listIterator();
          while(iterator.hasNext()) {
-             tgc = (TGComponent)(iterator.next());
+             tgc = iterator.next();
              if (tgc instanceof TGConnectorProSMD) {
                  TGConnectorProSMD con=(TGConnectorProSMD) tgc;
                  TGConnectingPoint p1 = con.getTGConnectingPointP1();
@@ -1671,7 +1667,7 @@ public class GProactiveDesign  {
                  TGComponent tgc2 = null;
                  
                  for(int j=0; j<list.size(); j++) {
-                     TGComponent tmp = 	(TGComponent)(list.get(j));
+                     TGComponent tmp = list.get(j);
                      if (tmp.belongsToMe(p1)) {
                          tgc1 = tmp;
                      }
@@ -1747,7 +1743,7 @@ public class GProactiveDesign  {
            TGComponent tgc;
            ProSMDStartState proStart = null;
             while(iterator.hasNext()) {
-               tgc = (TGComponent)(iterator.next());
+               tgc = iterator.next();
                  if (tgc instanceof ProSMDStartState) {
                    proStart = (ProSMDStartState) tgc;
                   return proStart;  

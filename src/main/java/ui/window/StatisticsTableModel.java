@@ -181,7 +181,7 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 					return;
 				}
 				
-				percentage = (int)(((i+1) * 100) / nb);
+				percentage = ((i+1) * 100) / nb;
 				//System.out.println("percentage = " + percentage);
 				tr = graph.getAUTTransition(i);
 

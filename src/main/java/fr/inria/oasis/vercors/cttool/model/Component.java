@@ -11,41 +11,41 @@ import java.util.Collection;
 
 public interface Component {
 
-	public String getName();
-	public void setName(String name);
+	String getName();
+	void setName(String name);
 	
 	//Sub Components related methods:
-	public Collection<Component> getSubComponents();
-	public boolean addSubComponent(Component c);
-	public boolean removeSubComponent(Component c);
-	public boolean removeSubCompoenentByName(String compName);
-	public Component getSubComponentByName(String compName);
-	public Collection<Component> getAllPrimitives();
-	public boolean isDescendant(Component comp);
+    Collection<Component> getSubComponents();
+	boolean addSubComponent(Component c);
+	boolean removeSubComponent(Component c);
+	boolean removeSubCompoenentByName(String compName);
+	Component getSubComponentByName(String compName);
+	Collection<Component> getAllPrimitives();
+	boolean isDescendant(Component comp);
 	
 	//Ports related methods	
-	public Collection<Port> getPorts();
-	public boolean addPort(Port p);
-	public boolean removePort(Port p);
-	public boolean removePortByName(String portName);
-	public Port getPortByName(String portName);
+    Collection<Port> getPorts();
+	boolean addPort(Port p);
+	boolean removePort(Port p);
+	boolean removePortByName(String portName);
+	Port getPortByName(String portName);
 	
 	//Attributes related methods
-	public Collection<Attribute> getAttributes();
-	public boolean addAttribute(Attribute a);
-	public boolean removeAttribute(Attribute a);
-	public boolean removeAttributeByName(String attributeName);
-	public Attribute getAttributeByName(String attributeName);
+    Collection<Attribute> getAttributes();
+	boolean addAttribute(Attribute a);
+	boolean removeAttribute(Attribute a);
+	boolean removeAttributeByName(String attributeName);
+	Attribute getAttributeByName(String attributeName);
 	 
-	public boolean isPrimitive();
+	boolean isPrimitive();
 	
 
-	public void setBehaviour(Behaviour b);
-	public Behaviour getBehaviour();
+	void setBehaviour(Behaviour b);
+	Behaviour getBehaviour();
 	
-	public Component getFather();
-	public void setFather(Component f);
+	Component getFather();
+	void setFather(Component f);
 
-	public String getPath();
-	public String prettyPrint();
+	String getPath();
+	String prettyPrint();
 }
