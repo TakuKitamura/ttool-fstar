@@ -105,7 +105,7 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
             TOneAttribute tt;
             String s;
             for(int i=0; i<gates.size(); i++) {
-                tt = (TOneAttribute)(gates.elementAt(i));
+                tt = gates.elementAt(i);
                 s = tt.toShortString();
                 if (i == 0) {
                     s = "{ " + s;
@@ -133,7 +133,7 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
         //System.out.println("Checking if gates are still declared");
         
         for(int i=0; i<gates.size(); i++) {
-            tt = (TOneAttribute)(gates.elementAt(i));
+            tt = gates.elementAt(i);
             if ((tt.t1.getGateById(tt.ta1.getId()) == null)) {
                 //System.out.println("Removing gate " + tt.ta1.getId();
                 gates.remove(tt);
@@ -187,7 +187,7 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
         TOneAttribute tt;
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for(int i=0; i<gates.size(); i++) {
-            tt = (TOneAttribute)(gates.elementAt(i));
+            tt = gates.elementAt(i);
             sb.append("<Watchdog t1=\"");
             sb.append(tt.t1.getId());
             sb.append("\" g1=\"");
@@ -258,7 +258,7 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
               
         try {
             for(int i=0; i<gatesTmp.size(); i++) {
-                tt = (TOneAttribute)(gatesTmp.elementAt(i));
+                tt = gatesTmp.elementAt(i);
                 if (tdp.findComponentWithId(tt.t1id) != t1) {
                     throw new MalformedModelingException();
                 }

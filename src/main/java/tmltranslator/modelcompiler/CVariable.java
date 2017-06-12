@@ -148,14 +148,10 @@ public class CVariable {
 		if (type.compareTo("INT") == 0) {
 			return true;
 		}
-		
-		if (type.compareTo("BOOL") == 0) {
-			return true;
-		}
-		
-		return false;
-		
-	}
+
+        return type.compareTo("BOOL") == 0;
+
+    }
     
     @Override public String toString() {
         return type + SPACE + name;

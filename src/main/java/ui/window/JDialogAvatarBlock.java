@@ -765,7 +765,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
             // Checks whether the same method already belongs to the list
             int index = -1;
             for(int i=0; i<methods.size(); i++) {
-                amtmp = (AvatarMethod)(methods.get(i));
+                amtmp = methods.get(i);
                 // Same id?
                 if (amtmp.equals(am)) {
                     index = i;
@@ -800,7 +800,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
             // Checks whether the same signal already belongs to the list
             int index = -1;
             for(int i=0; i<signals.size(); i++) {
-                astmp = (AvatarSignal)(signals.get(i));
+                astmp = signals.get(i);
                 // Same id?
                 if (astmp.equals(as)) {
                     index = i;
@@ -1035,7 +1035,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     public void select(JComboBox<String> jcb, String text) {
         String s;
         for(int i=0; i<jcb.getItemCount(); i++) {
-            s = (String)(jcb.getItemAt(i));
+            s = jcb.getItemAt(i);
             //System.out.println("String found: *" + s + "* *" + text + "*");
             if (s.equals(text)) {
                 jcb.setSelectedIndex(i);

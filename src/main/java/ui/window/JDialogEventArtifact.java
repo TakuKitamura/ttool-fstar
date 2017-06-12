@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogEventArtifact
- * Dialog for managing artifacts on hw nodes for events
- * Creation: 27/05/2014
- * @version 1.0 27/05/2014
- * @author Andrea ENRICI, Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -57,28 +49,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
-//import javax.swing.event.*;
-
-
+/**
+ * Class JDialogEventArtifact
+ * Dialog for managing artifacts on hw nodes for events
+ * Creation: 27/05/2014
+ * @version 1.0 27/05/2014
+ * @author Andrea ENRICI, Ludovic APVRILLE
+ */
 public class JDialogEventArtifact extends javax.swing.JDialog implements ActionListener  {
     
     private boolean regularClose;
 	private boolean emptyList = false;
-    
-    private JPanel panel2;
-    private Frame frame;
+
     private TMLArchiEventArtifact artifact;
     
-	protected JComboBox referenceCommunicationName, priority;
-	
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+	private JComboBox<String> referenceCommunicationName, priority;
+
     /** Creates new form  */
     public JDialogEventArtifact(Frame _frame, String _title, TMLArchiEventArtifact _artifact) {
         super(_frame, _title, true);
-        frame = _frame;
         artifact = _artifact;
 		
 		//System.out.println("New window");
@@ -102,7 +91,6 @@ public class JDialogEventArtifact extends javax.swing.JDialog implements ActionL
     private void initComponents() {
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
@@ -112,9 +100,9 @@ public class JDialogEventArtifact extends javax.swing.JDialog implements ActionL
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        
-        panel2 = new JPanel();
+
+
+        JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
         panel2.setPreferredSize(new Dimension(350, 250));
@@ -140,18 +128,18 @@ public class JDialogEventArtifact extends javax.swing.JDialog implements ActionL
 		
 	TraceManager.addDev("Got events");
 		
-	referenceCommunicationName = new JComboBox(list);
+	referenceCommunicationName = new JComboBox<>(list);
 	referenceCommunicationName.setSelectedIndex(index);
 	referenceCommunicationName.addActionListener(this);
         //referenceTaskName.setEditable(true);
         //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
 		panel2.add(referenceCommunicationName, c1);
 		
-		list = new Vector<String>();
+		list = new Vector<>();
 		for(int i=0; i<11; i++) {
 			list.add(""+i);
 		}
-		priority = new JComboBox(list);
+		priority = new JComboBox<>(list);
 		priority.setSelectedIndex(artifact.getPriority());
 		panel2.add(priority, c1);
 		
@@ -177,12 +165,12 @@ public class JDialogEventArtifact extends javax.swing.JDialog implements ActionL
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
@@ -210,7 +198,7 @@ public class JDialogEventArtifact extends javax.swing.JDialog implements ActionL
     }
 	
 	
-	public void selectPriority() {
+	private void selectPriority() {
 		//System.out.println("Select priority");
 		int index = ((TMLArchiDiagramPanel)artifact.getTDiagramPanel()).getMaxPriority((String)(referenceCommunicationName.getSelectedItem()));
 		priority.setSelectedIndex(index);

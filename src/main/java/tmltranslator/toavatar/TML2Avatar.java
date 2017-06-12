@@ -1579,7 +1579,7 @@ public class TML2Avatar {
 		}
 
 		
-		asm.setStartState((AvatarStartState) ss);
+		asm.setStartState(ss);
 	
 		}
 		else {

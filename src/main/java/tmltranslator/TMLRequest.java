@@ -94,7 +94,7 @@ public class TMLRequest extends TMLCommunicationElement {
 
     public TMLType getType(int i) {
         if (i<getNbOfParams()) {
-            return (TMLType)(params.elementAt(i));
+            return params.elementAt(i);
         }
         
         return null;

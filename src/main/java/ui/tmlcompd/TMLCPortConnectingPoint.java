@@ -60,10 +60,7 @@ public class TMLCPortConnectingPoint extends TGConnectingPointWidthHeight{
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.CONNECTOR_PORT_TMLC) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.CONNECTOR_PORT_TMLC;
     }
     
 }

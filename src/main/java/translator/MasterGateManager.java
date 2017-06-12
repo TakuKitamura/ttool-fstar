@@ -105,7 +105,7 @@ public class MasterGateManager {
         Gate g;
         
         for(int k=0; k<topMaster.size(); k++) {
-            mgm = (MasterGateManager)(topMaster.get(k));
+            mgm = topMaster.get(k);
             for(i=0; i<mgm.nbMasterGate(); i++) {
                 //System.out.println("i:" + i + "k:" + k);
                 g = mgm.getMasterGateAtIndex(i);
@@ -149,7 +149,7 @@ public class MasterGateManager {
 
         Iterator<MasterGateManager> ite = topMaster.listIterator();
         while(ite.hasNext()) {
-            mgm = (MasterGateManager)(ite.next());
+            mgm = ite.next();
             for(i=0; i<mgm.nbMasterGate(); i++) {
                 //System.out.println("i:" + i + "k:" + k);
                 g = mgm.getMasterGateAtIndex(i);
@@ -189,7 +189,7 @@ public class MasterGateManager {
         int i;
         
         for(int k=0; k<topMaster.size(); k++) {
-            mgm = (MasterGateManager)(topMaster.get(k));
+            mgm = topMaster.get(k);
             for(i=0; i<mgm.nbMasterGate(); i++) {
                 tmp = mgm.getMasterGateAtIndex(i);
                 if (tmp == g) {
@@ -205,7 +205,7 @@ public class MasterGateManager {
         MasterGateManager mgm;
         int cpt = 0;
         for(int k=0; k<topMaster.size(); k++) {
-            mgm = (MasterGateManager)(topMaster.get(k));
+            mgm = topMaster.get(k);
             cpt = mgm.nbMasterGate();
             if (index < cpt) {
                 return mgm.getGroupOfGates(index);
@@ -225,7 +225,7 @@ public class MasterGateManager {
         for(int k=0; k<topMaster.size(); k++) {
           //  mgm = (MasterGateManager)(topMaster.get(k));
             for(i=0; i<groups.size(); i++) {
-                gog1 = (GroupOfGates)(groups.elementAt(i));
+                gog1 = groups.elementAt(i);
                 if (gog1 == gog) {
                     return cpt;
                 }
@@ -236,7 +236,7 @@ public class MasterGateManager {
     }
     
     public GroupOfGates getGroupOfGates(int index) {
-        return (GroupOfGates)(groups.elementAt(index));
+        return groups.elementAt(index);
     }
     
     public MasterGateManager(TURTLEModeling tm, boolean startTakenIntoAccount) {
@@ -344,7 +344,7 @@ public class MasterGateManager {
         int i;
         
         for(i=0; i<groups.size(); i++) {
-            gog = (GroupOfGates)(groups.elementAt(i));
+            gog = groups.elementAt(i);
             g = gog.getGateAt(0);
             master = createNewGate(g);
             gog.setMasterGate(master);
@@ -382,7 +382,7 @@ public class MasterGateManager {
         MasterGateManager mgm;
         boolean b;
         for(int k=0; k<topMaster.size(); k++) {
-            mgm = (MasterGateManager)(topMaster.get(k));
+            mgm = topMaster.get(k);
             b = mgm.nameInUse(s);
             if (b) {
                 return true;
@@ -397,7 +397,7 @@ public class MasterGateManager {
         Gate g1, g2;
         
         for(int i=0; i<master.size(); i++) {
-            g1 = (Gate)(master.elementAt(i));
+            g1 = master.elementAt(i);
             if ((g1.getLotosName() != null) && (s != null)){
                if (g1.getLotosName().equals(s)) {
                 return true;
@@ -418,7 +418,7 @@ public class MasterGateManager {
     }
     
     public Gate getMasterGateAtIndex(int i) {
-        return (Gate)(master.elementAt(i));
+        return master.elementAt(i);
     }
     
     public int nbMasterGate() {
@@ -430,7 +430,7 @@ public class MasterGateManager {
         Gate g;
         int cpt =0;
         for(int i=0; i<master.size(); i++) {
-            g = (Gate)(master.elementAt(i));
+            g = master.elementAt(i);
             if (!g.isInternal()) {
                 cpt ++;
             }
@@ -448,7 +448,7 @@ public class MasterGateManager {
         Gate g;
         
         for(int i=0; i<groups.size(); i++) {
-            gog = (GroupOfGates)(groups.elementAt(i));
+            gog = groups.elementAt(i);
             for(int j=0; j<gog.size(); j++) {
                 g = gog.getGateAt(j);
                 t = gog.getTClassAt(j);
@@ -465,7 +465,7 @@ public class MasterGateManager {
         TClass tmp_tc;
         
         for(int i=0; i<groups.size(); i++) {
-            gog = (GroupOfGates)(groups.elementAt(i));
+            gog = groups.elementAt(i);
             tmp_tc = gog.getTClassOf(g);
             if (tmp_tc == tc) {
                 return gog;
@@ -505,7 +505,7 @@ public class MasterGateManager {
         }
         int index = groups.indexOf(gog);
         if ((index > -1) && (index < master.size())) {
-            return (Gate)(master.elementAt(index));
+            return master.elementAt(index);
         }
         return null;
     }
@@ -530,13 +530,13 @@ public class MasterGateManager {
         String s = "";
         
         for(i=0; i<master.size(); i++) {
-            gog = (GroupOfGates)(groups.elementAt(i));
+            gog = groups.elementAt(i);
             for(j=0; j<gog.size(); j++) {
                 g = gog.getGateAt(j);
                 tc = gog.getTClassAt(j);
                 s += tc.getLotosName() + "." + g.getLotosName() + " ";
             }
-            g = (Gate)(master.elementAt(i));
+            g = master.elementAt(i);
             s += "-> " + g.getLotosName() + "\n";
         }
         return s;
@@ -547,7 +547,7 @@ public class MasterGateManager {
         String s="";
         
         for(int i=0; i<master.size(); i++) {
-            g = (Gate)(master.elementAt(i));
+            g = master.elementAt(i);
             if (i!=0) {
                 s += ", ";
             }
@@ -563,7 +563,7 @@ public class MasterGateManager {
         int cpt = 0;
         
         for(int i=0; i<master.size(); i++) {
-            g = (Gate)(master.elementAt(i));
+            g = master.elementAt(i);
             if (!g.isInternal()) {
                 if (cpt > 0) {
                     s += ", ";

@@ -155,7 +155,7 @@ public class SDTimerSetting extends TGCWithoutInternalComponent implements Swall
         JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting absolute time constraints", "timer", "duration");
         jdti.setSize(350, 250);
         GraphicLib.centerOnParent(jdti);
-        jdti.show(); // blocked until dialog has been closed
+        jdti.setVisible(true); // blocked until dialog has been closed
         
         timer = array[0]; duration = array[1];
         

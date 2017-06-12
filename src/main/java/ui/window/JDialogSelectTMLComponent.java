@@ -114,7 +114,7 @@ public class JDialogSelectTMLComponent extends javax.swing.JDialog implements Ac
         TMLCCompositeComponent ccomp;
 
         for(int i=0; i<lcs.size(); i++) {
-            tgc = (TGComponent)(lcs.get(i));
+            tgc = lcs.get(i);
             if (tgc instanceof TMLCCompositeComponent) {
                 ccomp = (TMLCCompositeComponent)tgc;
                 cs.addAll(ccomp.getAllPrimitiveComponents());
@@ -137,7 +137,7 @@ public class JDialogSelectTMLComponent extends javax.swing.JDialog implements Ac
             tgc = list.get(i);
             //System.out.println(tgc);
             if (tgc instanceof TMLCPrimitiveComponent) {
-                v.addElement( (TMLCPrimitiveComponent) tgc);
+                v.addElement(tgc);
             }
         }
         return v;

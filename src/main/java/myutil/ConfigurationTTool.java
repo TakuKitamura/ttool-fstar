@@ -334,11 +334,7 @@ public class ConfigurationTTool {
             return false;
         }
 
-        if (LastWindowAttributesHeight.length() == 0) {
-            return false;
-        }
-
-        return true;
+        return LastWindowAttributesHeight.length() != 0;
     }
 
     public static void printConfiguration(boolean systemcOn) {
@@ -486,7 +482,7 @@ public class ConfigurationTTool {
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(data.getBytes());
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();;
+            DocumentBuilder db = dbf.newDocumentBuilder();
 
             // building nodes from xml String
             Document doc = db.parse(bais);

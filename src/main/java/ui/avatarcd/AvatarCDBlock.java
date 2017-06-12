@@ -302,12 +302,9 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
     }
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof AvatarCDBlock) {
-			return true;
-		}
-		
-		return false;
-	}
+        return tgc instanceof AvatarCDBlock;
+
+    }
     
     
     public int getType() {
@@ -347,7 +344,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         if (tgc instanceof AvatarCDBlock) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //System.out.println("cdRect comp swallow");
-            ((AvatarCDBlock)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
         }
@@ -410,7 +407,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarCDBlock) {
-                ((AvatarCDBlock)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 		

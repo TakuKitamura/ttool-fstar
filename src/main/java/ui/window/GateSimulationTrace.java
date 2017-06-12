@@ -53,7 +53,7 @@ import translator.GroupOfGates;
 import java.util.Vector;
 
 
-public class GateSimulationTrace extends Vector {
+public class GateSimulationTrace extends Vector<TraceData> {
     private Gate g;
     private GroupOfGates gog;
     
@@ -76,7 +76,7 @@ public class GateSimulationTrace extends Vector {
     
     public int getTime(int i) {
         if (i < size()) {
-            TraceData td = (TraceData)(elementAt(i));
+            TraceData td = this.elementAt(i);
             return td.time;
         }
         return -1;
@@ -84,7 +84,7 @@ public class GateSimulationTrace extends Vector {
     
     public int getAction(int i) {
         if (i < size()) {
-            TraceData td = (TraceData)(elementAt(i));
+            TraceData td = this.elementAt(i);
             return td.action;
         }
         return -1;
@@ -92,7 +92,7 @@ public class GateSimulationTrace extends Vector {
     
     public String getValues(int i) {
         if (i < size()) {
-            TraceData td = (TraceData)(elementAt(i));
+            TraceData td = this.elementAt(i);
             return td.values;
         }
         return "";
@@ -102,7 +102,7 @@ public class GateSimulationTrace extends Vector {
         int cpt = 0;
         TraceData td;
         for(int i=0; i<size(); i++) {
-            td = (TraceData)(elementAt(i));
+            td = elementAt(i);
             cpt = Math.max(td.time, cpt);
         }
         return cpt;
@@ -112,7 +112,7 @@ public class GateSimulationTrace extends Vector {
         int cpt = 0;
         TraceData td;
         for(int i=0; i<size(); i++) {
-            td = (TraceData)(elementAt(i));
+            td = elementAt(i);
             cpt = Math.max(td.action, cpt);
         }
         return cpt;
@@ -123,7 +123,7 @@ public class GateSimulationTrace extends Vector {
         int maxTime = 0;
         TraceData td;
         for(int i=0; i<size(); i++) {
-            td = (TraceData)(elementAt(i));
+            td = elementAt(i);
             if (td.action <= actionNb) {
                 maxTime = Math.max(maxTime, td.time);
             }

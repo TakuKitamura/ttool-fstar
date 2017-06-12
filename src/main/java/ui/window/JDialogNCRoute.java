@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogNCRoute
- * Dialog for managing route attributes 
- * Creation: 19/11/2008
- * @version 1.0 19/11/2008
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -58,41 +50,37 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
-
+/**
+ * Class JDialogNCRoute
+ * Dialog for managing route attributes
+ * Creation: 19/11/2008
+ * @version 1.0 19/11/2008
+ * @author Ludovic APVRILLE
+ */
 public class JDialogNCRoute extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
     private Vector<NCRoute> routes;
 	private ArrayList<String> inputInterfaces, traffics, outputInterfaces;
-    
-    private JPanel panel1, panel2, panel3;
-    
-    private Frame frame;
-    
+
 	protected String value;
 	
 	protected boolean hasBeenCancelled;
     
     // Panel1
-    private JComboBox inputInterfaceBox, trafficBox, outputInterfaceBox;
-    private JButton addButton;
-    
+    private JComboBox<String> inputInterfaceBox, trafficBox, outputInterfaceBox;
+
     //Panel2
-    private JList listRoute;
+    private JList<NCRoute> listRoute;
     private JButton upButton;
     private JButton downButton;
     private JButton removeButton;
 	
 	// Panel3
 	private JTextField valueText;
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+
     /** Creates new form  */
     public JDialogNCRoute(Frame _f, String _title, String _value, Vector<NCRoute> _routes, ArrayList<String> _inputInterfaces, ArrayList<String> _traffics, ArrayList<String> _outputInterfaces) {
         super(_f, _title, true);
-        frame = _f;
-		
+
 		value = _value;
 		routes = _routes;
 		inputInterfaces = _inputInterfaces;
@@ -125,18 +113,18 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+        JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Adding a route"));
         panel1.setPreferredSize(new Dimension(500, 350));
-        
-        panel2 = new JPanel();
+
+        JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Managing routes"));
         panel2.setPreferredSize(new Dimension(300, 250));
-		
-		panel3 = new JPanel();
+
+        JPanel panel3 = new JPanel();
         panel3.setLayout(gridbag3);
         panel3.setBorder(new javax.swing.border.TitledBorder("Setting route name"));
         panel3.setPreferredSize(new Dimension(300, 50));
@@ -180,7 +168,7 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
         c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
-        inputInterfaceBox = new JComboBox();
+        inputInterfaceBox = new JComboBox<>();
 		for(String s0: inputInterfaces) {
 			inputInterfaceBox.addItem(s0);
 		}
@@ -192,7 +180,7 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
 		
 		panel1.add(new JLabel(" / "), c1);
 		
-		trafficBox = new JComboBox();
+		trafficBox = new JComboBox<>();
 		for(String s1: traffics) {
 			trafficBox.addItem(s1);
 		}
@@ -202,7 +190,7 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
 		
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		
-		outputInterfaceBox = new JComboBox();
+		outputInterfaceBox = new JComboBox<>();
 		for(String s2: outputInterfaces) {
 			outputInterfaceBox.addItem(s2);
 		}
@@ -223,12 +211,12 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
         // fourth line panel2
         c1.gridheight = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
-        addButton = new JButton("Add route");
+        JButton addButton = new JButton("Add route");
         addButton.addActionListener(this);
         panel1.add(addButton, c1);
         
         // 1st line panel2
-        listRoute = new JList(routes);
+        listRoute = new JList<>(routes);
         //listAttribute.setFixedCellWidth(150);
         //listAttribute.setFixedCellHeight(20);
         listRoute.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -280,12 +268,12 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
@@ -314,7 +302,7 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
 		}
     }
 	
-	public void manageInputBox() {
+	private void manageInputBox() {
 		int index = inputInterfaceBox.getSelectedIndex();
 		int indexOther = outputInterfaceBox.getSelectedIndex();
 		
@@ -324,7 +312,7 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
 		}
 	}
 	
-	public void manageOutputBox() {
+	private void manageOutputBox() {
 		int index = inputInterfaceBox.getSelectedIndex();
 		int indexOther = outputInterfaceBox.getSelectedIndex();
 		
@@ -335,7 +323,7 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
 	}
     
     
-    public void addRoute() {
+    private void addRoute() {
         String s0 = (String)(inputInterfaceBox.getSelectedItem());
 		String s1 = (String)(trafficBox.getSelectedItem());
 		String s2 = (String)(outputInterfaceBox.getSelectedItem());
@@ -352,16 +340,15 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
 		
     }
     
-    public void removeRoute() {
+    private void removeRoute() {
         int i = listRoute.getSelectedIndex() ;
         if (i!= -1) {
-            NCRoute r = (NCRoute)(routes.elementAt(i));
             routes.removeElementAt(i);
             listRoute.setListData(routes);
         }
     }
     
-    public void downRoute() {
+    private void downRoute() {
         int i = listRoute.getSelectedIndex();
         if ((i!= -1) && (i != routes.size() - 1)) {
             NCRoute o = routes.elementAt(i);
@@ -372,7 +359,7 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
         }
     }
     
-    public void upRoute() {
+    private void upRoute() {
         int i = listRoute.getSelectedIndex();
         if (i > 0) {
             NCRoute o = routes.elementAt(i);
@@ -408,7 +395,6 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
             upButton.setEnabled(false);
             downButton.setEnabled(false);
         } else {
-            NCRoute route = routes.get(i);
             removeButton.setEnabled(true);
             if (i > 0) {
                 upButton.setEnabled(true);

@@ -126,13 +126,13 @@ public class ThreadGUIElement extends Thread {
             case 1:
                 docgen = new DocumentationGenerator((Vector)obj0, (JTabbedPane)obj1, (String)obj2, (String)obj3);
                 docgen.setFirstHeadingNumber(2);
-                sge = (StoppableGUIElement)docgen;
+                sge = docgen;
                 break;
             case 0:
             default:
 		TraceManager.addDev("Creating jframe statistics");
                 jfs = new JFrameStatistics(param0, param1, graph);
-                sge = (StoppableGUIElement)jfs;
+                sge = jfs;
             }
 	    TraceManager.addDev("Dialog creation");
             jdc = new JDialogCancel(frame, param0, param2, sge);

@@ -182,7 +182,7 @@ public class ProVerifResultTrace {
 
     public void addTraceStep(String str)
     {
-        Matcher m = this.tracePattern.matcher(str);
+        Matcher m = tracePattern.matcher(str);
         if (m.matches())
         {
             this.finalizeStep();
@@ -314,7 +314,7 @@ public class ProVerifResultTrace {
     {
         for (int i=line; i>=0; i--)
         {
-            Matcher m = this.blockNamePattern.matcher(this.proverifProcess.get(i));
+            Matcher m = blockNamePattern.matcher(this.proverifProcess.get(i));
             if (m.matches())
             {
                 return m.group(1).replaceAll("__", ".");

@@ -52,18 +52,18 @@ import java.util.ListIterator;
 
 public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSizeTClass, TClassEventCommon {
   private int nbPara;
-  private LinkedList sendReqGates;
-  private LinkedList waitGates;
-  private LinkedList sizeGates;
+  private LinkedList<Gate> sendReqGates;
+  private LinkedList<Gate> waitGates;
+  private LinkedList<Gate> sizeGates;
   private int counterW, counterR, counterS;
   private String eventName;
 
     public TClassEventInfinite(String name, String _eventName, int _nbPara) {
       super(name, true);
       nbPara = _nbPara;
-      sendReqGates = new LinkedList();
-      waitGates = new LinkedList();
-      sizeGates = new LinkedList();
+      sendReqGates = new LinkedList<>();
+      waitGates = new LinkedList<>();
+      sizeGates = new LinkedList<>();
       eventName = _eventName;
     }
     
@@ -72,26 +72,26 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
     }
 
     public Gate getGateWrite() {
-        return (Gate)(sendReqGates.get(0));
+        return sendReqGates.get(0);
     }
     
     public Gate getGateRead() {
-        return (Gate)(waitGates.get(0));
+        return waitGates.get(0);
     }
     
     public Gate getGateSize() {
-        return (Gate)(sizeGates.get(0));
+        return sizeGates.get(0);
     }
     
-    public LinkedList getGatesWrite() {
+    public LinkedList<Gate> getGatesWrite() {
         return sendReqGates;
     }
     
-    public LinkedList getGatesRead() {
+    public LinkedList<Gate> getGatesRead() {
         return waitGates;
     }
     
-    public LinkedList getGatesSize() {
+    public LinkedList<Gate> getGatesSize() {
         return sizeGates;
     }
     

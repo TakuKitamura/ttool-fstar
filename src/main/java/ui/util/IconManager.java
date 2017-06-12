@@ -375,7 +375,7 @@ public class IconManager {
     private static String icon340 = "toolbarButtonGraphics/general/Export16.gif";
     private static String icon341 = "toolbarButtonGraphics/general/Export24.gif";
 
-    private static String icon342 = "oneformalvalidation.gif";;
+    private static String icon342 = "oneformalvalidation.gif";
 
     private static String icon344 = "viewrg.gif";
 

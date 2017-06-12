@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -34,15 +34,7 @@
 
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
-
-   /**
-   * Class JDialogCryptographicConfiguration
-   * Dialog for creating cryptographic configuration for diplodocus security
-   * Creation: 15/6/2016
-   * @version 1.0 15/6/2016
-   * @author Letitia LI
-   * @see
-   */
+ */
 
 package ui.window;
 
@@ -52,11 +44,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.HashMap;
 
+/**
+ * Class JDialogCryptographicConfiguration
+ * Dialog for creating cryptographic configuration for diplodocus security
+ * Creation: 15/6/2016
+ * @version 1.0 15/6/2016
+ * @author Letitia LI
+ */
 public class JDialogCryptographicConfiguration extends javax.swing.JDialog implements ActionListener  {
 
-    private String [] labels;
     private String [] values;
 
     private int nbString;
@@ -68,14 +66,13 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
     // Panel1
     private JTextField [] texts;
     private JButton inserts[];
-    private JComboBox helps[];
+    private HashMap<Integer, JComboBox<String>> helps;
 
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
-    String[] nonces;
-    String[] keys;
-    private ArrayList<String[]> possibleValues = null;
+    private String[] nonces;
+    private String[] keys;
 
     GridBagConstraints c0 = new GridBagConstraints();
     Container c;
@@ -103,7 +100,7 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 
     private void initComponents() {
 	inserts = new JButton[nbString];
-	helps = new JComboBox[nbString];
+	helps = new HashMap<>();
 
         c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
@@ -155,10 +152,10 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
             cancelDialog();
         } else if (inserts[0] != null) {
 	    if (evt.getSource() == inserts[0]) {
-		texts[1].setText(helps[1].getSelectedItem().toString());
+		texts[1].setText(helps.get(1).getSelectedItem().toString());
 		boolean repanel = false;
-		if (helps[1].getSelectedIndex()==5 && !(panel1 instanceof advPanel)){
-		    values[1]=helps[1].getSelectedItem().toString();
+		if (helps.get(1).getSelectedIndex()==5 && !(panel1 instanceof advPanel)){
+		    values[1]=helps.get(1).getSelectedItem().toString();
 		    values[0]=texts[0].getText();
 		    values[3]=texts[3].getText();
 		    values[2]=texts[3].getText();
@@ -168,8 +165,8 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 		    c.removeAll();
 		    panel1= new advPanel(this);
 		}
-		else if ((helps[1].getSelectedIndex() >2) && !(panel1 instanceof funcPanel)){
-		    values[1]=helps[1].getSelectedItem().toString();
+		else if ((helps.get(1).getSelectedIndex() >2) && !(panel1 instanceof funcPanel)){
+		    values[1]=helps.get(1).getSelectedItem().toString();
 		    values[0]=texts[0].getText();
 		    values[3]=texts[3].getText();
 		    values[2]="";
@@ -179,8 +176,8 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 		    c.removeAll();
 		    panel1= new funcPanel(this);
 		}
-		else if ((helps[1].getSelectedIndex() <3) && !(panel1 instanceof EncryptPanel)){
-		    values[1]=helps[1].getSelectedItem().toString();
+		else if ((helps.get(1).getSelectedIndex() <3) && !(panel1 instanceof EncryptPanel)){
+		    values[1]=helps.get(1).getSelectedItem().toString();
 		    values[0]=texts[0].getText();
 		    values[3]=texts[3].getText();
 		    values[4]="";
@@ -217,13 +214,13 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 		}
 	    }
 	    if (evt.getSource() == inserts[5]) {
-		if (helps[5].getSelectedItem()!=null){
-		    texts[5].setText(helps[5].getSelectedItem().toString());
+		if (helps.get(5).getSelectedItem()!=null){
+		    texts[5].setText(helps.get(5).getSelectedItem().toString());
 		}
 	    }
 	    if (evt.getSource() == inserts[8]) {
-		if (helps[8].getSelectedItem()!=null){
-		    texts[8].setText(helps[8].getSelectedItem().toString());
+		if (helps.get(8).getSelectedItem()!=null){
+		    texts[8].setText(helps.get(8).getSelectedItem().toString());
 		}
 	    }
 	}
@@ -232,7 +229,7 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 
 
     public class EncryptPanel extends JPanel {
-	public EncryptPanel(JDialogCryptographicConfiguration j){
+	EncryptPanel(JDialogCryptographicConfiguration j){
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagLayout gridbag1 = new GridBagLayout();
 
@@ -266,9 +263,9 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 
 	c1.gridwidth=1;
 	add(new JLabel("Security Pattern"), c1);
-	helps[1]=new JComboBox(vals);
-	helps[1].setSelectedItem(values[1]);
-	add(helps[1],c1);
+	helps.put(1, new JComboBox<>(vals));
+	helps.get(1).setSelectedItem(values[1]);
+	add(helps.get(1),c1);
 	c1.gridwidth=GridBagConstraints.REMAINDER;
 	inserts[0] = new JButton("Use");
 	inserts[0].addActionListener(j);
@@ -296,11 +293,11 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 
       	c1.gridwidth = 1;
 	add(new JLabel("Nonce"),c1);
-	helps[5]=new JComboBox(nonces);
-	if (helps[5].getItemCount() > 0){
-	    helps[5].setSelectedItem(values[5]);
+	helps.put(5, new JComboBox<>(nonces));
+	if (helps.get(5).getItemCount() > 0){
+	    helps.get(5).setSelectedItem(values[5]);
 	}
-	add(helps[5],c1);
+	add(helps.get(5),c1);
 	c1.gridwidth=GridBagConstraints.REMAINDER;
 	inserts[5] = new JButton("Use");
 	inserts[5].addActionListener(j);
@@ -310,11 +307,11 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 
       	c1.gridwidth = 1;
 	add(new JLabel("Encrypted Key"),c1);
-	helps[8]=new JComboBox(keys);
-	if (helps[8].getItemCount() > 0){
-	    helps[8].setSelectedItem(values[8]);
+	helps.put(8, new JComboBox<>(keys));
+	if (helps.get(8).getItemCount() > 0){
+	    helps.get(8).setSelectedItem(values[8]);
 	}
-	add(helps[8],c1);
+	add(helps.get(8),c1);
 	c1.gridwidth=GridBagConstraints.REMAINDER;
 	inserts[8] = new JButton("Use");
 	inserts[8].addActionListener(j);
@@ -326,7 +323,7 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
     }
 
     public class funcPanel extends JPanel {
-      public funcPanel(JDialogCryptographicConfiguration j){
+      funcPanel(JDialogCryptographicConfiguration j){
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagLayout gridbag1 = new GridBagLayout();
 
@@ -361,9 +358,9 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 
 	c1.gridwidth=1;
 	add(new JLabel("Security Pattern"), c1);
-	helps[1]=new JComboBox(vals);
-	helps[1].setSelectedItem(values[1]);
-	add(helps[1],c1);
+	helps.put(1, new JComboBox<>(vals));
+	helps.get(1).setSelectedItem(values[1]);
+	add(helps.get(1),c1);
 
 	c1.gridwidth=GridBagConstraints.REMAINDER;
 	inserts[0] = new JButton("Use");
@@ -389,7 +386,7 @@ public class JDialogCryptographicConfiguration extends javax.swing.JDialog imple
 
 
 public class advPanel extends JPanel {
-      public advPanel(JDialogCryptographicConfiguration j){
+      advPanel(JDialogCryptographicConfiguration j){
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagLayout gridbag1 = new GridBagLayout();
 
@@ -425,9 +422,9 @@ public class advPanel extends JPanel {
 
 	c1.gridwidth=1;
 	add(new JLabel("Security Pattern"), c1);
-	helps[1]=new JComboBox(vals);
-	helps[1].setSelectedItem(values[1]);
-	add(helps[1],c1);
+	helps.put(1, new JComboBox<>(vals));
+	helps.get(1).setSelectedItem(values[1]);
+	add(helps.get(1),c1);
 	c1.gridwidth=GridBagConstraints.REMAINDER;
 	inserts[0] = new JButton("Use");
 	inserts[0].addActionListener(j);
@@ -471,11 +468,8 @@ public class advPanel extends JPanel {
     }
 
     public boolean hasValidString(int i) {
-	if (texts[i]!=null){
- 	   return texts[i].getText().length() > 0;
+		return texts[i] != null && texts[i].getText().length() > 0;
 	}
-	return false;
-    }
 
 
     public boolean hasBeenSet() {

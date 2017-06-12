@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogLinkNCNode
- * Dialog for managing NC links properties
- * Creation: 18/11/2008
- * @version 1.0 18/11/2008
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -53,11 +45,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class JDialogLinkNCNode
+ * Dialog for managing NC links properties
+ * Creation: 18/11/2008
+ * @version 1.0 18/11/2008
+ * @author Ludovic APVRILLE
+ */
 public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionListener {
-    
-    private JPanel panel1;
-    private Frame frame;
-    
+
     private String interfaceName;
     private int capacity;
 	private String capacityUnit;
@@ -72,17 +68,12 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
     // Panel1
     private JTextField interfaceNameText, capacityText, parameterText;
 	private JCheckBox hasCapacityBox, hasParameterBox;
-	private JComboBox capacityUnitBox;
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+	private JComboBox<String> capacityUnitBox;
+
     /** Creates new form  */
     public JDialogLinkNCNode(Frame _f, String _title, boolean _hasCapacity, int _capacity, String _capacityUnit, boolean _hasParameter, int _parameter, String _interfaceName) {
         super(_f, _title, true);
-        frame = _f;
-        
+
         interfaceName = _interfaceName;
 		hasCapacity = _hasCapacity;
         capacity = _capacity;
@@ -111,8 +102,8 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+        JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Id, capacity, parameter"));
         panel1.setPreferredSize(new Dimension(450, 450));
@@ -148,7 +139,7 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
         capacityText = new JTextField(""+capacity);
         panel1.add(capacityText, c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		capacityUnitBox = new JComboBox();
+		capacityUnitBox = new JComboBox<>();
 		capacityUnitBox.addItem("Mbs");
 		capacityUnitBox.addItem("kbs");
 		if (capacityUnit.equals("Mbs")) {
@@ -180,11 +171,11 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
@@ -202,7 +193,7 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
 		}
     }
 	
-	public void updateComponents() {
+	private void updateComponents() {
 		boolean b = hasCapacityBox.isSelected();
 		capacityText.setEnabled(b);
 		capacityUnitBox.setEnabled(b);
@@ -219,7 +210,7 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
     }
     
 	public boolean hasBeenCancelled() {
-		return (data == false);
+		return !data;
 	}
 	
     public boolean hasNewData() {

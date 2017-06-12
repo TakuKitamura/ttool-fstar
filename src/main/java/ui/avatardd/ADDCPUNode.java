@@ -379,11 +379,8 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         //TraceManager.addDev("Accept swallowed?");
-        if (tgc instanceof ADDBlockArtifact) {
-            return true;
-        }
+        return tgc instanceof ADDBlockArtifact;
 
-        return false;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -392,7 +389,7 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
         if (tgc instanceof ADDBlockArtifact) {
             tgc.setFather(this);
             tgc.setDrawingZone(true);
-            ((ADDBlockArtifact)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //TraceManager.addDev("Add swallowed!!!");
             addInternalComponent(tgc, 0);
             return true;
@@ -422,7 +419,7 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof ADDBlockArtifact) {
-                ((ADDBlockArtifact)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 

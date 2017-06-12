@@ -60,10 +60,7 @@ public class AvatarBDConnectingPoint extends  TGConnectingPointWidthHeight {
         if (type == TGComponentManager.AVATARBD_COMPOSITION_CONNECTOR) {
             return true;
         }
-		if (type == TGComponentManager.AVATARBD_PORT_CONNECTOR) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.AVATARBD_PORT_CONNECTOR;
     }
     
 }

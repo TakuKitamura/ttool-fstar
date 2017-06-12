@@ -128,11 +128,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
             float scale = (float)(f.getSize()*tdp.getZoom());
             scale = Math.min(maxFontSize, scale);
             currentFontSize = (int)scale;
-            if (scale < minFontSize) {
-                displayText = false;
-            } else {
-                displayText = true;
-            }
+            displayText = !(scale < minFontSize);
         }
 
         Color c = g.getColor();
@@ -186,7 +182,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 //        String tmp;
 //        boolean error = false;
 
-        JDialogConstraintText dialog = new JDialogConstraintText(frame, "Setting constraint attributes", (ConstraintListInterface)this, equation, "Equation");
+        JDialogConstraintText dialog = new JDialogConstraintText(frame, "Setting constraint attributes", this, equation, "Equation");
      //   dialog.setSize(450, 350);
         GraphicLib.centerOnParent(dialog, 450, 350);
         dialog.setVisible( true ); // blocked until dialog has been closed

@@ -53,6 +53,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class JDialogMultiString extends javax.swing.JDialog implements ActionListener  {
 
@@ -68,7 +69,7 @@ public class JDialogMultiString extends javax.swing.JDialog implements ActionLis
     // Panel1
     private JTextField [] texts;
     private JButton inserts[];
-    private JComboBox helps[];
+    private HashMap<Integer, JComboBox<String>> helps;
 
     // Main Panel
     private JButton closeButton;
@@ -118,7 +119,7 @@ public class JDialogMultiString extends javax.swing.JDialog implements ActionLis
 
     private void initComponents() {
 	inserts = new JButton[labels.length];
-	helps = new JComboBox[labels.length];
+	helps = new HashMap<>();
 
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
@@ -164,8 +165,8 @@ public class JDialogMultiString extends javax.swing.JDialog implements ActionLis
                 if (i < possibleValues.size()) {
                     String [] tmp = possibleValues.get(i);
                     if (tmp != null) {
-                        helps[i] = new JComboBox(tmp);
-                        panel1.add(helps[i], c1);
+                        helps.put(i, new JComboBox<>(tmp));
+                        panel1.add(helps.get(i), c1);
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 			inserts[i] = new JButton("Use");
 			inserts[i].addActionListener(this);
@@ -212,7 +213,7 @@ public class JDialogMultiString extends javax.swing.JDialog implements ActionLis
         } else if (inserts != null) {
 	    for(int i=0; i<inserts.length; i++) {
 		if (evt.getSource() == inserts[i]) {
-		    texts[i].setText(helps[i].getSelectedItem().toString());
+		    texts[i].setText(helps.get(i).getSelectedItem().toString());
 		}
 	    }
 	}

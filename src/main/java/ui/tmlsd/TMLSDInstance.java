@@ -176,11 +176,8 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 	public abstract boolean editOndoubleClick( JFrame frame );
 
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if ((tgc instanceof TMLSDActionState)) {
-			return true;
-		}
-		return false;
-	}
+        return (tgc instanceof TMLSDActionState);
+    }
 
 	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		if (!acceptSwallowedTGComponent(tgc)) {

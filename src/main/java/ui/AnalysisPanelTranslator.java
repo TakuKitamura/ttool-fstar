@@ -114,7 +114,7 @@ public class AnalysisPanelTranslator {
         Vector<HMSCNode> iodsNodes = new Vector<HMSCNode>() ;
         
         for(i=0; i<ap.panels.size(); i++) {
-            thmsc = (TDiagramPanel)(ap.panels.elementAt(i));
+            thmsc = ap.panels.elementAt(i);
             if (thmsc instanceof InteractionOverviewDiagramPanel) {
                 System.out.println("Dealing with " + thmsc.getName());
                 iodsPanels.add( (InteractionOverviewDiagramPanel) thmsc);
@@ -128,7 +128,7 @@ public class AnalysisPanelTranslator {
         
         
         for(i=0; i<ap.panels.size(); i++) {
-            thmsc = (TDiagramPanel)(ap.panels.elementAt(i));
+            thmsc = ap.panels.elementAt(i);
             listE = new CorrespondanceTGElement();
             if (thmsc instanceof InteractionOverviewDiagramPanel) {
                 System.out.println("Managing " + thmsc.getName());
@@ -157,7 +157,7 @@ public class AnalysisPanelTranslator {
                             j = iodsPanels.indexOf(thmsctmp);
                             if (j != -1) {
                                 node = new HMSCNode("n"+nodeCounter + "sequence", HMSCNode.SEQUENCE);
-                                node1 = (HMSCNode)(iodsNodes.elementAt(j));
+                                node1 = iodsNodes.elementAt(j);
                                 node.addNextNode(node1);
 								//node2 = new HMSCNode("n"+nodeCounter + "choice", HMSCNode.CHOICE);
                             } else {
@@ -194,7 +194,7 @@ public class AnalysisPanelTranslator {
                         j = iodsPanels.indexOf(thmsc);
                         if (j != -1) {
                             //System.out.println("Node = sequence instead of start");
-                            node = (HMSCNode)(iodsNodes.elementAt(j));
+                            node = iodsNodes.elementAt(j);
                         } else {
                             test = true;
                         }
@@ -236,7 +236,7 @@ public class AnalysisPanelTranslator {
                             //System.out.println("tgc=" + tgc.getName() + ": " + j);
                             tgc2 = null;
                             for(k=0; k<list.size(); k++) {
-                                tgc3 = (TGComponent)(list.get(k));
+                                tgc3 = list.get(k);
                                 if (tgc3.belongsToMe(tgco.getTGConnectingPointP2())) {
                                     tgc2 = tgc3;
                                 }
@@ -308,7 +308,7 @@ public class AnalysisPanelTranslator {
         
         if (start != null) {
             // Make a link between the start and the first choice
-            start.addNextNode((HMSCNode)(iodsNodes.elementAt(0)));
+            start.addNextNode(iodsNodes.elementAt(0));
             
             // Create HMSC
             HMSC hmsc = new HMSC("myHMSC", start);
@@ -317,7 +317,7 @@ public class AnalysisPanelTranslator {
         
         UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "No start node on Interaction Overview Diagram");
         addCheckingError(ce);
-        ce.setTDiagramPanel((TDiagramPanel)(ap.panels.elementAt(0)));
+        ce.setTDiagramPanel(ap.panels.elementAt(0));
         throw new AnalysisSyntaxException("No start node on Interaction Overview Diagram");
     }
     
@@ -468,7 +468,7 @@ public class AnalysisPanelTranslator {
                 
                 tgc1 = null; tgc2 = null;
                 for(j=0; j<list.size(); j++) {
-                    tgc3 = (TGComponent)(list.get(j));
+                    tgc3 = list.get(j);
                     if (tgc3.belongsToMe(p1)) {
                         tgc1 = tgc3;
                     }
@@ -617,14 +617,14 @@ public class AnalysisPanelTranslator {
                                 
                                 if (evts != null) {
                                     try {
-                                        min_tc = Integer.decode(((TGConnectorRelativeTimeSD)tgcort).getMinConstraint()).intValue();
+                                        min_tc = Integer.decode(tgcort.getMinConstraint()).intValue();
                                         
                                     } catch (Exception e) {
                                         throw new AnalysisSyntaxException("Relative timing constraint " + tgcort.getValue() + " has an invalid minimal value on" + sdp.getName());
                                     }
                                     
                                     try {
-                                        max_tc = Integer.decode(((TGConnectorRelativeTimeSD)tgcort).getMaxConstraint()).intValue();
+                                        max_tc = Integer.decode(tgcort.getMaxConstraint()).intValue();
                                         
                                     } catch (Exception e) {
                                         throw new AnalysisSyntaxException("Relative timing constraint " + tgcort.getValue() + " has an invalid maximal value on" + sdp.getName());
@@ -821,7 +821,7 @@ public class AnalysisPanelTranslator {
         
         // other evts
         while(iterator.hasNext()) {
-            evt = (Evt)(iterator.next());
+            evt = iterator.next();
             // in same coregion
             if ((lastEvt.y == evt.y) || (sdi.isInSameCoregion(lastEvt.y, evt.y))) {
                 //System.out.println("evt evt=" + evt.getActionId() + " and lastEvt=" + lastEvt.getActionId() + " are in the same coregion / y");

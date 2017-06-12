@@ -277,7 +277,7 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
     public void mouseMoved(MouseEvent e) {
         if (!selectedModel)  {
             int previousIndex = indexOfSelected;
-            boolean found = false;;
+            boolean found = false;
             int index = 0;
             for(NetworkModel button: listOfModels) {
                 if ((button.features[featureSelectedIndex]) && hasAtLeastOneSelectedProperty(button)) {

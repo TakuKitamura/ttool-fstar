@@ -58,10 +58,7 @@ public class ATDCompositionConnectingPoint extends  TGConnectingPointWidthHeight
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.ATD_COMPOSITION_CONNECTOR) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.ATD_COMPOSITION_CONNECTOR;
     }
     
 }

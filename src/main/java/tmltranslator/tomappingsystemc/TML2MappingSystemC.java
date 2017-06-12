@@ -214,7 +214,7 @@ public class TML2MappingSystemC {
 		declaration += "//Declaration of events" + CR;
 		Iterator<TMLEvent> evtIterato = tmlmodeling.getListIteratorEvents();
 		while(evtIterato.hasNext()) {
-			evt = (TMLEvent)(evtIterato.next());
+			evt = evtIterato.next();
 			if (evt.isInfinite()) {
 				tmp = "InfiniteFIFO_Event ";
 			} else {

@@ -53,13 +53,13 @@ import java.util.Collection;
 import java.util.Vector;
 
 
-public class VectorLRArtifactTClassGate extends Vector {
+public class VectorLRArtifactTClassGate extends Vector<ui.LRArtifactTClassGate> {
     
     public VectorLRArtifactTClassGate() {
         super();
     }
     
-    public VectorLRArtifactTClassGate(Collection c) {
+    public VectorLRArtifactTClassGate(Collection<ui.LRArtifactTClassGate> c) {
         super(c);
     }
     
@@ -71,13 +71,13 @@ public class VectorLRArtifactTClassGate extends Vector {
    }
    
    public LRArtifactTClassGate getElementAt(int i) {
-        return (LRArtifactTClassGate)(elementAt(i));
+        return elementAt(i);
    }
    
    public boolean isInList(ArtifactTClassGate arti) {
         LRArtifactTClassGate lratg;
         for(int i=0; i<size(); i++) {
-            lratg = (LRArtifactTClassGate)(elementAt(i));
+            lratg = elementAt(i);
             if (lratg.hasEquivalent(arti)) {
                 return true;
             }
@@ -89,7 +89,7 @@ public class VectorLRArtifactTClassGate extends Vector {
         String ret = "";
         LRArtifactTClassGate lratg;
         for(int i=0; i<size(); i++) {
-            lratg = (LRArtifactTClassGate)(elementAt(i));
+            lratg = elementAt(i);
             ret += lratg.toString() + "\n";
         }
         return ret;

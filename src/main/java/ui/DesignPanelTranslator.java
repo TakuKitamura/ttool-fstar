@@ -301,8 +301,8 @@ public class DesignPanelTranslator {
             ADComponent ad0, ad1;
             TGComponent tgcad;
             for(int adi=0; adi<t.getActivityDiagram().size(); adi++) {
-                ad0 = (ADComponent)(t.getActivityDiagram().get(adi));
-                ad1 = (ADComponent)(activities.get(indexTdp).get(adi));
+                ad0 = t.getActivityDiagram().get(adi);
+                ad1 = activities.get(indexTdp).get(adi);
                 tgcad = listE.getTG(ad1);
                 if (tgcad != null ){
                     //System.out.println("Adding correspondance for " + ad0);
@@ -388,7 +388,7 @@ public class DesignPanelTranslator {
         // Creation of other elements
         iterator = list.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
 
             if (tgc instanceof TADActionState) {
                 tadas = (TADActionState)tgc;
@@ -928,7 +928,7 @@ public class DesignPanelTranslator {
         // Managing Java code
         iterator = list.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof PreJavaCode) {
                 ad1 = listE.getADComponentByIndex(tgc, tdp.count);
                 if (ad1 != null) {
@@ -947,7 +947,7 @@ public class DesignPanelTranslator {
         TGConnectorBetweenElementsInterface tgcbei;
         iterator = list.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TGConnectorBetweenElementsInterface) {
                 tgcbei = (TGConnectorBetweenElementsInterface)tgc;
                 p1 = tgcbei.getTGConnectingPointP1();
@@ -956,7 +956,7 @@ public class DesignPanelTranslator {
                 // identification of connected components
                 tgc1 = null; tgc2 = null;
                 for(j=0; j<list.size(); j++) {
-                    tgc3 = 	(TGComponent)(list.get(j));
+                    tgc3 = list.get(j);
                     if (tgc3.belongsToMe(p1)) {
                         tgc1 = tgc3;
                     }

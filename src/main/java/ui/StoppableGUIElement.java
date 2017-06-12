@@ -50,12 +50,12 @@ package ui;
 
 public interface StoppableGUIElement {
 
-	   public void goElement();
-       public void stopElement();
-       public boolean hasFinished();
-       public void setFinished();
-       public boolean hasBeenStopped();
-       public int getPercentage();
-       public String getCurrentActivity();
+	   void goElement();
+       void stopElement();
+       boolean hasFinished();
+       void setFinished();
+       boolean hasBeenStopped();
+       int getPercentage();
+       String getCurrentActivity();
        
 }

@@ -228,7 +228,7 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 			List<ProCSDInterface> cmps=interfacesList;
 		 	for (int i=0;i<cmps.size();i++)
 		 		{
-		 		TGComponent tgc = (TGComponent)cmps.get(i);
+		 		TGComponent tgc = cmps.get(i);
 		 			if (tgc.getType()== TGComponentManager.PROCSD_INTERFACE)
 		 				{
 		 					if (isInterfaceConnected((ProCSDInterface)tgc,tgca)) return  (ProCSDInterface)tgc;	
@@ -494,16 +494,10 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
     //Method added by Solange
     public boolean isMandatory(ProCSDInterface it)
     {
-    	if(it.manda) //If the interface IS mandatory, by Solange
-    	{
-    		//System.out.println("Founded mandatory interface: " + it.toString());
-    		return(true);
-    	}
-    	else
-    	{
-         //System.out.println("Interface " + it.toString() + " IS NOT mandatory");
-         return(false);
-    	}
+        //If the interface IS mandatory, by Solange
+//System.out.println("Founded mandatory interface: " + it.toString());
+//System.out.println("Interface " + it.toString() + " IS NOT mandatory");
+        return it.manda;
     }
     
     //Method added by Solange
@@ -836,8 +830,7 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
                             
                             if (elt.getTagName().equals("Show")) {
 	                              int m = Integer.decode(elt.getAttribute("value")).intValue();
-	                               if (m==1) hidden=true;
-	                               else hidden=false;
+                                hidden = m == 1;
                           }
                             
                             

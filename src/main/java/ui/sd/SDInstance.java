@@ -233,11 +233,8 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
             return true;
         }
 
-        if (tgc instanceof SDTimerCancellation) {
-            return true;
-        }
+        return tgc instanceof SDTimerCancellation;
 
-        return false;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {

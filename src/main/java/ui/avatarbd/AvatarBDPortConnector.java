@@ -320,7 +320,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         AvatarSignal as1, as2;
         int index;
         for(int i=0; i<v.size(); i++) {
-            assoc = (String)(v.get(i));
+            assoc = v.get(i);
             as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
             as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
 			System.out.println(as1 + " " + as2 + " " + assoc);
@@ -455,11 +455,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                                 val5 = elt.getAttribute("lossy");
 
                                 if ((val != null) && (!(val.equals("null")))) {
-                                    if (val.trim().toLowerCase().compareTo("true") == 0) {
-                                        asynchronous = true;
-                                    } else {
-                                        asynchronous = false;
-                                    }
+                                    asynchronous = val.trim().toLowerCase().compareTo("true") == 0;
 
                                 }
 
@@ -472,31 +468,19 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                                 }
 
                                 if ((val2 != null) && (!(val2.equals("null")))) {
-                                    if (val2.trim().toLowerCase().compareTo("true") == 0) {
-                                        blockingFIFO = true;
-                                    } else {
-                                        blockingFIFO = false;
-                                    }
+                                    blockingFIFO = val2.trim().toLowerCase().compareTo("true") == 0;
 
                                 }
 
                                 if ((val3 != null) && (!(val3.equals("null")))) {
-                                    if (val3.trim().toLowerCase().compareTo("false") == 0) {
-                                        isPrivate = false;
-                                    } else {
-                                        isPrivate = true;
-                                    }
+                                    isPrivate = val3.trim().toLowerCase().compareTo("false") != 0;
 
                                 } else {
                                     isPrivate = true;
                                 }
 
                                 if ((val4 != null) && (!(val4.equals("null")))) {
-                                    if (val4.trim().toLowerCase().compareTo("true") == 0) {
-                                        isBroadcast = true;
-                                    } else {
-                                        isBroadcast = false;
-                                    }
+                                    isBroadcast = val4.trim().toLowerCase().compareTo("true") == 0;
 
                                 } else {
                                     isBroadcast = false;
@@ -504,11 +488,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                                 }
 
                                 if ((val5 != null) && (!(val5.equals("null")))) {
-                                    if (val5.trim().toLowerCase().compareTo("true") == 0) {
-                                        isLossy = true;
-                                    } else {
-                                        isLossy = false;
-                                    }
+                                    isLossy = val5.trim().toLowerCase().compareTo("true") == 0;
 
                                 } else {
                                     isLossy = false;
@@ -684,7 +664,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             int index;
             for(int i=0; i<v.size(); i++) {
 
-                assoc = (String)(v.get(i));
+                assoc = v.get(i);
                 //TraceManager.addDev("assoc=" + assoc);
                 as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
                 as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));

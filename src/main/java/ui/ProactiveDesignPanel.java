@@ -257,7 +257,7 @@ public class ProactiveDesignPanel extends TURTLEPanel {
     public ProactiveSMDPanel getSMDPanel(String name) {
         TDiagramPanel psmdp;
         for(int i=1; i<panels.size(); i++) {
-            psmdp = (TDiagramPanel)(panels.elementAt(i));
+            psmdp = panels.elementAt(i);
             if ((psmdp instanceof ProactiveSMDPanel)&&(psmdp.getName().compareTo(name) ==0)) {
                 return (ProactiveSMDPanel)psmdp;
             }
@@ -268,7 +268,7 @@ public class ProactiveDesignPanel extends TURTLEPanel {
     public void updateAllMembranes()
     {
     	 for(int i=1; i<panels.size(); i++) {
-          TDiagramPanel  psmdp = (TDiagramPanel)(panels.elementAt(i));
+          TDiagramPanel  psmdp = panels.elementAt(i);
              if ((psmdp instanceof ProactiveCSDPanel)) {
                  
             	 ProactiveCSDPanel pcsdp=(ProactiveCSDPanel)psmdp;
@@ -283,7 +283,7 @@ public class ProactiveDesignPanel extends TURTLEPanel {
     public ProActiveCompSpecificationCSDPanel getCompSpecPanel(String name) {
         TDiagramPanel psmdp;
         for(int i=1; i<panels.size(); i++) {
-            psmdp = (TDiagramPanel)(panels.elementAt(i));
+            psmdp = panels.elementAt(i);
             if ((psmdp instanceof ProActiveCompSpecificationCSDPanel)&&(psmdp.getName().compareTo(name) ==0)) {
                 return (ProActiveCompSpecificationCSDPanel)psmdp;
             }
@@ -302,7 +302,7 @@ public class ProactiveDesignPanel extends TURTLEPanel {
 	   if (index!=-1)
 	   {
 	    tabbedPane.setTitleAt(index, newName);
-         ((TDiagramPanel)(panels.elementAt(index))).setName(newName);
+         panels.elementAt(index).setName(newName);
           mgui.changeMade(null, -1);
 	   } 
  }

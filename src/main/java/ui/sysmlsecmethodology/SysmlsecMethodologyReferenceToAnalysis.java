@@ -77,11 +77,8 @@ public class SysmlsecMethodologyReferenceToAnalysis extends SysmlsecMethodologyD
         if (panel instanceof AvatarAnalysisPanel) {
             return true;
         }
-        if (panel instanceof AttackTreePanel) {
-            return true;
-        }
+        return panel instanceof AttackTreePanel;
 
-        return false;
     }
 
     public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {

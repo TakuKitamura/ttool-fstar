@@ -57,10 +57,7 @@ public class TGConnectingPointProSMD extends  TGConnectingPointWidthHeight{
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.CONNECTOR_PROSMD) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.CONNECTOR_PROSMD;
     }
     
 }

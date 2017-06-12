@@ -60,11 +60,7 @@ public class BCGFileFilter extends FileFilter {
 
         String extension = FileUtils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(FileUtils.bcg)){
-                    return true;
-            } else {
-                return false;
-            }
+            return extension.equals(FileUtils.bcg);
         }
 
         return false;

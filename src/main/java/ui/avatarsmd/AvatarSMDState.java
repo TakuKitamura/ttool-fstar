@@ -423,11 +423,8 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             return true;
         }
 
-        if (tgc instanceof AvatarSMDState) {
-            return true;
-        }
+        return tgc instanceof AvatarSMDState;
 
-        return false;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -461,11 +458,11 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
         //Set its coordinates
         if (tgc instanceof AvatarSMDBasicComponent) {
-            ((AvatarSMDBasicComponent)tgc).resizeWithFather();
+            tgc.resizeWithFather();
         }
 
         if (tgc instanceof AvatarSMDState) {
-            ((AvatarSMDState)tgc).resizeWithFather();
+            tgc.resizeWithFather();
         }
 
         // else unknown*/
@@ -519,10 +516,10 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarSMDBasicComponent) {
-                ((AvatarSMDBasicComponent)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
             if (tgcomponent[i] instanceof AvatarSMDState) {
-                ((AvatarSMDState)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 

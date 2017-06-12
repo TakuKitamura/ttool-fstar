@@ -252,7 +252,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	
 	  public LinkedList<TAttribute> getMyMessages()
 	  {
-		  return (LinkedList<TAttribute>) myMessages.clone ();
+		  return new LinkedList<>(myMessages);
 	  }
 	    public boolean editOndoubleClick(JFrame frame) {
 	       
@@ -497,14 +497,12 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	                            //Added by Solange
 	                            if (elt.getTagName().equals("Mandatory")) {
 		                              int m = Integer.decode(elt.getAttribute("value")).intValue();
-		                               if (m==1) manda=true;
-		                               else manda=false;
+                                    manda = m == 1;
 	                            }
 	                
 	                            if (elt.getTagName().equals("Show")) {
 		                              int m = Integer.decode(elt.getAttribute("value")).intValue();
-		                               if (m==1) shome=true;
-		                               else shome=false;
+                                    shome = m == 1;
 	                            }
 	                
 	                            
@@ -585,12 +583,8 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 			  return false;
 		  if (!this.manda==in.isMandatory())
 			  return false;
-		  if (!myMessages.equals(in.getMyMessages()))
-			  return false;
-		  
-		  
-		  return true;
-	  }
+          return myMessages.equals(in.getMyMessages());
+      }
 	  
 	  public TGComponent isOnOnlyMe(int x1, int y1) {
 	    if (shome==false)

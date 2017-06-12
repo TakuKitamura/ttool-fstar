@@ -70,27 +70,21 @@ public class TURTLE2UPPAAL {
 	private boolean variableAsActions = false;
 	private RelationTIFUPPAAL table;
 	
-	private Vector warnings;
-	private LinkedList tmpComponents;
-	private LinkedList tmpLocations;
+	private LinkedList<ADJunction> tmpComponents;
+	private LinkedList<LinkedList<UPPAALLocation>> tmpLocations;
 	private ArrayList<UPPAALTemplate> templatesWithMultipleProcesses;
-	private LinkedList locations;
-	private LinkedList gates;
-	private LinkedList relations; // null: not synchronize, Relation : synchronized
-	private LinkedList parallels;
-	
-	private LinkedList gatesNotSynchronized; // String
+	private LinkedList<UPPAALLocation> locations;
+
+	private LinkedList<String> gatesNotSynchronized; // String
 	private ArrayList<Gate> gatesWithInternalSynchro;
 	private int maxSentInt; // Max nb of int put on non synchronized gates
 	private int maxSentBool;
-	private LinkedList gatesSynchronized;
+	private LinkedList<String> gatesSynchronized;
 	private int idChoice;
 	private int idTemplate;
 	private int idPar;
-	private int idParProcess;
 	private ArrayList<ADParallel> paras;
 	private ArrayList<Integer> parasint;
-	//private int idTemplate;
 	private boolean multiprocess;
 	
 	private int currentX, currentY;
@@ -122,12 +116,7 @@ public class TURTLE2UPPAAL {
 		
 		//System.out.println("spec.xml generated:\n" + spec.getFullSpec());
 	}
-	
-	
-	public Vector getWarnings() {
-		return warnings;
-	}
-	
+
 	public RelationTIFUPPAAL getRelationTIFUPPAAL () {
 		return table;
 	}
@@ -147,17 +136,15 @@ public class TURTLE2UPPAAL {
 	}
 	
 	public UPPAALSpec generateUPPAAL(boolean _debug, int _nb) {
-		warnings = new Vector();
 		spec = new UPPAALSpec();
 		table = new RelationTIFUPPAAL();
 		
-		tmpComponents = new LinkedList();
-		tmpLocations = new LinkedList();
-		locations = new LinkedList();
-		gatesNotSynchronized = new LinkedList();
+		tmpComponents = new LinkedList<>();
+		tmpLocations = new LinkedList<>();
+		locations = new LinkedList<>();
+		gatesNotSynchronized = new LinkedList<>();
 		gatesWithInternalSynchro = new ArrayList<Gate>();
-		gatesSynchronized = new LinkedList();
-		parallels = new LinkedList();
+		gatesSynchronized = new LinkedList<>();
 		templatesWithMultipleProcesses = new ArrayList<UPPAALTemplate>();
 		idChoice = 0;
 		idTemplate = 0;
@@ -297,12 +284,9 @@ public class TURTLE2UPPAAL {
 			makeTaskManager(nb);
 			
 		} else {
-			ListIterator iterator = spec.getTemplates().listIterator();
-			UPPAALTemplate template1;
 			TClass t;
 			
-			while(iterator.hasNext()) {
-				template1 = (UPPAALTemplate)(iterator.next());
+			for (UPPAALTemplate template1: spec.getTemplates()) {
 				t = tm.getTClassWithName(template1.getName());
 				if (t!= null) {
 					spec.addGlobalDeclaration(makeGlobalParamDeclaration(t));
@@ -323,7 +307,6 @@ public class TURTLE2UPPAAL {
 		initXY();
 		
 		UPPAALTemplate template = new UPPAALTemplate();
-		UPPAALTemplate template1;
 		spec.addTemplate(template);
 		template.setName("TaskManager");
 		loc1 = addLocation(template);
@@ -335,10 +318,7 @@ public class TURTLE2UPPAAL {
 		
 		int cpt = 0;
 		
-		ListIterator iterator = spec.getTemplates().listIterator();
-		
-		while(iterator.hasNext()) {
-			template1 = (UPPAALTemplate)(iterator.next());
+		for (UPPAALTemplate template1: this.spec.getTemplates()) {
 			t = tm.getTClassWithName(template1.getName());
 			if (t!= null) {
 				if(!(tm.isRegularTClass(t.getActivityDiagram(), choicesDeterministic, variableAsActions))) {
@@ -429,10 +409,7 @@ public class TURTLE2UPPAAL {
 	}*/
 	
 	public void addNotSync(String s) {
-		ListIterator iterator = gatesNotSynchronized.listIterator();
-		String action;
-		while(iterator.hasNext()) {
-			action = (String)(iterator.next());
+		for (String action: this.gatesNotSynchronized) {
 			if (action.compareTo(s) ==0) {
 				return;
 			}
@@ -456,10 +433,7 @@ public class TURTLE2UPPAAL {
 		
 		spec.addGlobalDeclaration("\n//Declarations used for non synchronized gates\n");
 		
-		String action;
-		ListIterator iterator = gatesNotSynchronized.listIterator();
-		while(iterator.hasNext()) {
-			action = (String)(iterator.next());
+		for (String action : this.gatesNotSynchronized) {
 			tr = addTransition(templateNotSynchronized, loc, loc);
 			setSynchronization(tr, action+"?");
 			//addGuard(tr, action + TURTLE2UPPAAL.SYNCID + " == 0");
@@ -475,10 +449,7 @@ public class TURTLE2UPPAAL {
 		
 		spec.addGlobalDeclaration("\n//Declarations used for synchronized gates\n");
 		
-		String action;
-		ListIterator iterator = gatesSynchronized.listIterator();
-		while(iterator.hasNext()) {
-			action = (String)(iterator.next());
+		for (String action : this.gatesSynchronized) {
 			spec.addGlobalDeclaration("urgent chan " + action + ";\n");
 		}
 	}
@@ -508,9 +479,9 @@ public class TURTLE2UPPAAL {
 	
 	public void translateTClass(TClass t) {
 		isRegularTClass = tm.isRegularTClass(t.getActivityDiagram(), choicesDeterministic, variableAsActions);
-		tmpComponents = new LinkedList();
-		tmpLocations = new LinkedList();
-		locations = new LinkedList();
+		tmpComponents = new LinkedList<>();
+		tmpLocations = new LinkedList<>();
+		locations = new LinkedList<>();
 		
 		UPPAALTemplate template = newTClassTemplate(t, 0);
 		
@@ -620,7 +591,7 @@ public class TURTLE2UPPAAL {
 		spec.addGlobalDeclaration("// Internal synchronizations of class " + t.getName() + "\n");
 		
 		for(i=0; i<ad.size(); i++) {
-			adc = (ADComponent)(ad.get(i));
+			adc = ad.get(i);
 			if (adc instanceof ADParallel) {
 				adp = (ADParallel)adc;
 				if (adp.nbGate() > 0) {
@@ -671,7 +642,7 @@ public class TURTLE2UPPAAL {
 		ADParallel adp;
 		String action;
 		Gate g;
-		LinkedList ll;
+		LinkedList<UPPAALLocation> ll;
 		boolean stopJunc;
 		String name;
 		
@@ -708,9 +679,9 @@ public class TURTLE2UPPAAL {
 		} else if (elt instanceof ADJunction) {
 			stopJunc = false;
 			if ((index = tmpComponents.indexOf(elt)) != -1) {
-				ll = (LinkedList)(tmpLocations.get(index));
+				ll = tmpLocations.get(index);
 				if (ll.indexOf(end) != -1) {
-					loc = (UPPAALLocation)(locations.get(index));
+					loc = locations.get(index);
 					tr = addRTransition(template, previous, loc);
 					previous.setCommitted();
 					table.addADComponentLocation(elt, previous, loc);
@@ -725,8 +696,8 @@ public class TURTLE2UPPAAL {
 					makeElementBehavior(t, template, elt.getNext(0), loc, end, null);
 				}
 			} else {
-				tmpComponents.add(elt);
-				ll = new LinkedList();
+				tmpComponents.add((ADJunction) elt);
+				ll = new LinkedList<>();
 				ll.add(end);
 				tmpLocations.add(ll);
 				loc = addRLocation(template);
@@ -2114,11 +2085,7 @@ public class TURTLE2UPPAAL {
 	}
 	
 	public void addSynchro(String s) {
-		ListIterator iterator = gatesSynchronized.listIterator();
-		String tmp;
-		
-		while(iterator.hasNext()) {
-			tmp = (String)(iterator.next());
+		for (String tmp : this.gatesSynchronized) {
 			if (tmp.compareTo(s) == 0) {
 				return;
 			}
@@ -2339,7 +2306,7 @@ public class TURTLE2UPPAAL {
 	}
 	
 	public void makeSystem(int nb) {
-		ListIterator iterator = spec.getTemplates().listIterator();
+		ListIterator<UPPAALTemplate> iterator = spec.getTemplates().listIterator();
 		UPPAALTemplate template;
 		String system = "system ";
 		String dec = "";
@@ -2348,7 +2315,7 @@ public class TURTLE2UPPAAL {
 		TClass t;
 		
 		while(iterator.hasNext()) {
-			template = (UPPAALTemplate)(iterator.next());
+			template = iterator.next();
 			t = tm.getTClassWithName(template.getName());
 			System.out.println("temp=" + template.getName());
 			if (t != null) {

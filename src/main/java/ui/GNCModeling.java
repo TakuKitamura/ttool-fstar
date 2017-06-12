@@ -424,7 +424,7 @@ public class GNCModeling  {
 				ncle = ncs.getNCLinkedElementByName(s);
 				if (ncle instanceof NCSwitch) {
 					if (ncsw == null) {
-						ncl = ncs.getLinkWith(path.origin, (NCLinkedElement)ncle);
+						ncl = ncs.getLinkWith(path.origin, ncle);
 						if (ncl != null) {
 						path.links.add(ncl);
 						} else {
@@ -435,11 +435,11 @@ public class GNCModeling  {
 							return;
 						}
 					} else {
-						ncl = ncs.getLinkWith((NCLinkedElement)ncsw, (NCLinkedElement)ncle);
+						ncl = ncs.getLinkWith(ncsw, ncle);
 						if (ncl != null) {
 							path.links.add(ncl);
 						} else {
-							UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Unknown link between switches " + ((NCLinkedElement)ncsw).getName() + " and " + ((NCLinkedElement)ncle).getName());
+							UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Unknown link between switches " + ncsw.getName() + " and " + ncle.getName());
 							ce.setTDiagramPanel(ncdp);
 							ce.setTGComponent(null);
 							checkingErrors.add(ce);
@@ -457,7 +457,7 @@ public class GNCModeling  {
 					return;
 				}
 			}
-			ncl = ncs.getLinkWith((NCLinkedElement)ncsw, path.destination);
+			ncl = ncs.getLinkWith(ncsw, path.destination);
 			if (ncl != null) {
 				path.links.add(ncl);
 			} else {

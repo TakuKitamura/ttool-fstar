@@ -157,11 +157,7 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
             }
         }
 
-        if(currentFontSize <minFontSize) {
-            displayText = false;
-        } else {
-            displayText = true;
-        }
+        displayText = currentFontSize >= minFontSize;
 
         int h  = g.getFontMetrics().getHeight();
 

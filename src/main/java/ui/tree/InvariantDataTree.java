@@ -86,6 +86,6 @@ public class InvariantDataTree implements GenericTree {
     	if (child instanceof String) {
     		return 0;
     	}
-       return  mgui.getInvariants().indexOf((Invariant)child);
+       return  mgui.getInvariants().indexOf(child);
     }
 }

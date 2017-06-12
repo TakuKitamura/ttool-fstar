@@ -216,10 +216,7 @@ public class FileUtils {
         }
         String fileName = f.getAbsolutePath();
         //System.out.println(fileName);
-        if (fileName.endsWith("." + extension)) {
-            return true;
-        }
-        return false;
+        return fileName.endsWith("." + extension);
     }
 
     public static String loadFile(String name) throws FileException {

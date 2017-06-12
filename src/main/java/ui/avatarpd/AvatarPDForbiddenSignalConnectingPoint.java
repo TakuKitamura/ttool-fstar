@@ -58,10 +58,7 @@ public class AvatarPDForbiddenSignalConnectingPoint extends  TGConnectingPointWi
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.APD_SIGNAL_CONNECTOR) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.APD_SIGNAL_CONNECTOR;
     }
     
 }

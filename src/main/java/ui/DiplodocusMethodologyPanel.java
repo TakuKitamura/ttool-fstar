@@ -185,19 +185,11 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
     }
 
     public boolean removeEnabled(int index) {
-        if (panels.size() > 1) {
-            return true;
-        }
-        return false;
+        return panels.size() > 1;
     }
 
     public boolean renameEnabled(int index) {
-        if (panels.size() == 0) {
-            return false;
-        }
-
-
-        return true;
+        return panels.size() != 0;
     }
 
     public boolean isDiplodocusMethodologyEnabled() {

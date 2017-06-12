@@ -410,9 +410,9 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         else {
             // try to draw with "..." instead
             if (!this.isCrypto)
-                ster = this.stereotype;
+                ster = stereotype;
             else
-                ster = this.stereotypeCrypto;
+                ster = stereotypeCrypto;
 
             for (int stringLength = ster.length ()-1; stringLength >= 0; stringLength--) {
                 String abbrev = "<<" + ster.substring (0, stringLength) + "...>>";
@@ -456,7 +456,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         // Draw separator
         graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
 
-        if (! ((AvatarBDPanel) this.tdp).areAttributesVisible ())
+        if (! this.tdp.areAttributesVisible ())
             return;
 
         // Set font size

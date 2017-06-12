@@ -121,8 +121,7 @@ public class TGConnectorPortInterface extends TGConnectorAttribute{
 	               
 	                            if (elt.getTagName().equals("Show")) {
 		                              int m = Integer.decode(elt.getAttribute("value")).intValue();
-		                               if (m==1) show=true;
-		                               else show=false;
+                                    show = m == 1;
 	                            }
 	                        }
 	                    }

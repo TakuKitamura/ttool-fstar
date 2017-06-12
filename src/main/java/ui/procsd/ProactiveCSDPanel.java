@@ -135,13 +135,13 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
         Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if ((tgc instanceof SwallowTGComponent) && (tgc.isOnMe(x, y) != null)) {
                father=findSwallowTGComponent_rec(tgc,x,y);
                 
             }
         }
-        return ((SwallowTGComponent)father);
+        return father;
     
     }
   
@@ -295,7 +295,7 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
          Iterator<TGComponent> iterator = componentList.listIterator();
                      
          while(iterator.hasNext()) {
-             tgc = (TGComponent)(iterator.next());
+             tgc = iterator.next();
              if ((selected == false) || (tgc.isSelected())) {
                  s = tgc.saveInXML();
                  if (s == null) {
@@ -357,7 +357,7 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
      {
     	 for (int k=0;k<this.componentList.size();k++)
     	 {
-    		 TGComponent tgc = (TGComponent)componentList.get(k);
+    		 TGComponent tgc = componentList.get(k);
     		 if (tgc instanceof ProCSDComponent)
     		 {
     			 ((ProCSDComponent)tgc).selectComponent(value);
@@ -426,7 +426,7 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
    {
 	   	 for (int k=0;k<this.componentList.size();k++)
 	    	 {
-	    		 TGComponent tgc = (TGComponent)componentList.get(k);
+	    		 TGComponent tgc = componentList.get(k);
 	    		 if (tgc instanceof ProCSDComponent)
 	    		 {
 	    			 ((ProCSDComponent)tgc).updateMembrane();

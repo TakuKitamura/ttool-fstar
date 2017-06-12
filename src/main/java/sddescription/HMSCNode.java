@@ -95,7 +95,7 @@ public class HMSCNode extends HMSCElement {
     }
     
     public String getMSCGuard(int index) {
-        return (String)(nextMSCGuards.get(index));
+        return nextMSCGuards.get(index);
     }
     
     public int sizeNodeGuard() {
@@ -108,7 +108,7 @@ public class HMSCNode extends HMSCElement {
     }
     
     public String getNodeGuard(int index) {
-        return (String)(nextNodeGuards.get(index));
+        return nextNodeGuards.get(index);
     }
     
     public String getName() { return name; }

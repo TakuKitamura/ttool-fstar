@@ -206,7 +206,7 @@ public class TMLModeling {
 	public TMLTask findTMLTask(TMLActivityElement _elt) {
 		TMLTask tmp;
 		for(int i=0; i<tasks.size(); i++) {
-			tmp = (TMLTask)(tasks.get(i));
+			tmp = tasks.get(i);
 			if (tmp.has(_elt)) {
 				return tmp;
 			}
@@ -330,7 +330,7 @@ public class TMLModeling {
 		Iterator<TMLRequest> iterator = requests.listIterator();
 
 		while(iterator.hasNext()) {
-			request = (TMLRequest)(iterator.next());
+			request = iterator.next();
 			if (request != _request) {
 				if (request.getName().compareTo(_request.getName()) == 0) {
 					return true;
@@ -411,7 +411,7 @@ public class TMLModeling {
 		Iterator<TMLEvent> iterator = events.listIterator();
 
 		while(iterator.hasNext()) {
-			event = (TMLEvent)(iterator.next());
+			event = iterator.next();
 			if (event.getName().compareTo(_event.getName()) == 0) {
 				// must verify whether a param is different or not.
 				if (event.getNbOfParams() != _event.getNbOfParams()) {
@@ -492,7 +492,7 @@ public class TMLModeling {
 			return null;
 		}
 
-		TMLTask task = (TMLTask)(tasks.get(index));
+		TMLTask task = tasks.get(index);
 		if (task != null) {
 			return task.makeCommandIDs();
 		}
@@ -505,7 +505,7 @@ public class TMLModeling {
 			return null;
 		}
 
-		TMLTask task = (TMLTask)(tasks.get(index));
+		TMLTask task = tasks.get(index);
 		if (task != null) {
 			return task.makeVariableIDs();
 		}

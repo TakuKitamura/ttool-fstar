@@ -175,7 +175,7 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLArchiKey) {
-                ((TMLArchiKey)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 
@@ -257,7 +257,7 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
         if (tgc instanceof TMLArchiKey) {
             tgc.setFather(this);
             tgc.setDrawingZone(true);
-            ((TMLArchiKey)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             addInternalComponent(tgc, 0);
             return true;
         }

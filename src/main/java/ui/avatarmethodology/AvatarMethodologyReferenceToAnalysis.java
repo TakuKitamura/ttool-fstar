@@ -77,11 +77,8 @@ public class AvatarMethodologyReferenceToAnalysis extends AvatarMethodologyDiagr
     	if (panel instanceof AvatarAnalysisPanel) {
     		return true;
     	}
-    	if (panel instanceof AttackTreePanel) {
-    		return true;
-    	}
-    	
-    	return false;
+        return panel instanceof AttackTreePanel;
+
     }
     
     public void makeValidationInfos(AvatarMethodologyDiagramName dn) {

@@ -177,7 +177,7 @@ public class JSimulationPanelChrono extends JPanel implements JSimulationPanelIn
         x = actionToX(timeSpace * i);
         
         while (x < (axisx + spacex)) {
-            s = String.valueOf((int)(timeSpace * i));
+            s = String.valueOf(timeSpace * i);
             w = g.getFontMetrics().stringWidth(s);
             g.drawString(s, x - w/2, axisy + texty);
             g.drawLine(x, axisy + unity, x, axisy - unity);
@@ -242,7 +242,7 @@ public class JSimulationPanelChrono extends JPanel implements JSimulationPanelIn
     }
     
     private int actionToX(int action) {
-        return (int)Math.ceil((spacex + (double)(((double)axisx * (double)action) / (double)maxAction)));
+        return (int)Math.ceil((spacex + ((double)axisx * (double)action) / (double)maxAction));
     }
     
     private int xToAction(int x) {

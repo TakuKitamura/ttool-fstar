@@ -332,11 +332,7 @@ public class AvatarMethod {
         }
 
         if (checkTypes) {
-            if ((lowerid.equals(getStringType(0).toLowerCase())) || (lowerid.equals(getStringType(1).toLowerCase())) || (lowerid.equals(getStringType(2).toLowerCase())) || (lowerid.equals(getStringType(3).toLowerCase())) || (lowerid.equals(getStringType(4).toLowerCase()))) {
-                b4 = false;
-            } else {
-                b4 = true;
-            }
+            b4 = !((lowerid.equals(getStringType(0).toLowerCase())) || (lowerid.equals(getStringType(1).toLowerCase())) || (lowerid.equals(getStringType(2).toLowerCase())) || (lowerid.equals(getStringType(3).toLowerCase())) || (lowerid.equals(getStringType(4).toLowerCase())));
         } else {
             b4 = true;
         }
@@ -421,10 +417,7 @@ public class AvatarMethod {
         }
 
         AvatarMethod am = (AvatarMethod)o;
-        if (getId().equals(am.getId())) {
-            return true;
-        }
-        return false;
+        return getId().equals(am.getId());
 
     }
 

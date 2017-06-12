@@ -47,6 +47,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package myutil;
 
 public interface SteppedAlgorithm  {
-	public int getPercentage();
+	int getPercentage();
   
 }

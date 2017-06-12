@@ -86,7 +86,7 @@ public class TML2AUT {
         LinkedList<String> ll = new LinkedList<String>();
         
         while(iterator.hasNext()) {
-            aut = (Automata)(iterator.next());
+            aut = iterator.next();
             name = aut.getName() + "." + AUT_EXTENSION;
             ll.add(name);
             System.out.println("File: " + path + aut.getName() + "." + AUT_EXTENSION);
@@ -374,10 +374,10 @@ public class TML2AUT {
         st = states.listIterator();
         
         while(st.hasNext()) {
-            s1 = (State)(st.next());
+            s1 = st.next();
             tr = s1.getTransitions().listIterator();
             while(tr.hasNext()) {
-                t1 = (Transition)(tr.next());
+                t1 = tr.next();
                 s2 = t1.getNextState();
                 if (onlyImmFromState(s2)) {
                     t2 = s2.getTransition(0);
@@ -388,7 +388,7 @@ public class TML2AUT {
         
         // Remove states from which an imm starts ...
         for(int i=0; i<states.size(); i++) {
-            s1 = (State)(states.get(i));
+            s1 = states.get(i);
             if (onlyImmFromState(s1)) {
                 states.remove(i);
                 i --;
@@ -405,13 +405,9 @@ public class TML2AUT {
         if (s.nbOfTransitions() != 1) {
             return false;
         }
-        
-        if (s.getTransition(0).getValue().compareTo(IMM) != 0) {
-            return false;
-        }
-        
-        return true;
-        
+
+        return s.getTransition(0).getValue().compareTo(IMM) == 0;
+
     }
     
     private void endOfActivity(Automata aut, State currentState, State endState) {
@@ -440,11 +436,8 @@ public class TML2AUT {
     
     private boolean printAnalyzer(String action) {
         action = action.trim();
-        if (action.startsWith("cout") || action.startsWith("std::cout")) {
-            return true;
-        }
-        return false;
-        
+        return action.startsWith("cout") || action.startsWith("std::cout");
+
     }
     
     

@@ -336,7 +336,7 @@ public class ActionEvt {
         adti.setNewNext(first.getAllNext());*/
         adlat.setNewNext(first.getAllNext());
         add.addNext(adlat);
-        first.setNewNext(new Vector());
+        first.setNewNext(new Vector<ADComponent>());
         first.addNext(add);
         ad.add(add);
         ad.add(adlat);
@@ -411,7 +411,7 @@ public class ActionEvt {
         ADActionStateWithGate adsg1 = new ADActionStateWithGate(g_go);
         adsg1.setActionValue("!" + p.getName());
         adsg1.setNewNext(first.getAllNext());
-        first.setNewNext(new Vector());
+        first.setNewNext(new Vector<ADComponent>());
         first.addNext(adsg1);
         
         ADActionStateWithGate adsg2 = new ADActionStateWithGate(g_ok);

@@ -74,7 +74,7 @@ public class MultiThreadServer {
     public static Message createImageAnswer(String cmd, Message msg) {
         byte[] byteImg = Message.convertImageToByte(msg);
         Message answerMessage = new Message();
-        ArrayList<Object> content = new ArrayList();
+        ArrayList<Object> content = new ArrayList<>();
         content.add(byteImg);
 
         answerMessage.createAnswerMessage(cmd, content);
@@ -106,12 +106,12 @@ public class MultiThreadServer {
         if (msg.getCmd().equals(Message.CMD_SEARCH)) {
 
             //Set cmd for the answer message to sent back to the client
-            cmd = msg.RESULT_SEARCH;
+            cmd = Message.RESULT_SEARCH;
             //System.out.println(msg.getValues().get(0));
             resultfile = database.GetCVEwithKeywords(msg.getValues());
             String resultstring = FileUtils.readFileToString(resultfile);
             
-            ArrayList<Object> content = new ArrayList();
+            ArrayList<Object> content = new ArrayList<>();
             content.add(resultstring);
             
             answerMessage.createAnswerMessage(cmd, content);
@@ -120,10 +120,10 @@ public class MultiThreadServer {
         }
 
         if (msg.getCmd().equals(Message.CMD_DETAIL)) {
-            cmd = msg.RESULT_DETAIL;
+            cmd = Message.RESULT_DETAIL;
             resultfile = database.GetinfofromCVE(msg.getValues().get(0));
             String resultstring = FileUtils.readFileToString(resultfile);
-            ArrayList<Object> res = new ArrayList();
+            ArrayList<Object> res = new ArrayList<>();
             res.add(resultstring);
             answerMessage.createAnswerMessage(cmd, res);
             System.out.println(Message.SUC_CREATE_ANS_MESSAGE);
@@ -133,14 +133,14 @@ public class MultiThreadServer {
             DataVisualisation datavis = new DataVisualisation(database.getDatabase());
             datavis.OpenCloud(msg.getValues().get(0));
             //Set cmd for the answer message to sent back to the client
-            cmd = msg.RESULT_STATISTIC;
+            cmd = Message.RESULT_STATISTIC;
             answerMessage = createImageAnswer(cmd, msg);
         }
          if (msg.getCmd().equals(Message.CMD_HISTOGRAM)) {
 	     DataVisualisation datavis = new DataVisualisation(database.getDatabase());
             datavis.Histogram(msg.getValues().get(0));
             //Set cmd for the answer message to sent back to the client
-            cmd = msg.RESULT_HISTOGRAM;
+            cmd = Message.RESULT_HISTOGRAM;
             answerMessage = createImageAnswer(cmd, msg);
         }
         return answerMessage;

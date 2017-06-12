@@ -237,11 +237,7 @@ public class TMLChannel extends TMLCommunicationElement {
             return false;
         }
 
-        if ((destinationTasks.size() == 1) && (originTasks.size() >= 1)) {
-            return false;
-        }
-
-        return true;
+        return !((destinationTasks.size() == 1) && (originTasks.size() >= 1));
     }
 
     public boolean isAForkChannel() {

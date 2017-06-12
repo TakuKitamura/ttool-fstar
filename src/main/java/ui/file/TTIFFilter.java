@@ -60,11 +60,7 @@ public class TTIFFilter extends FileFilter {
 
         String extension = FileUtils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(FileUtils.tif)){
-                    return true;
-            } else {
-                return false;
-            }
+            return extension.equals(FileUtils.tif);
         }
 
         return false;

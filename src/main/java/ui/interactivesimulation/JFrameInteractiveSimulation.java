@@ -1990,7 +1990,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 
     public void setAll() {
-        boolean b = false;;
+        boolean b = false;
         if (busyMode == 1) {
             b = true;
         }
@@ -2021,11 +2021,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         actions[InteractiveSimulationActions.ACT_RUN_UNTIL_MEMORY_ACCESS].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS].setEnabled(b);
 
-        if((busyMode == 0) || (busyMode == 2)) {
-            b = false;
-        } else {
-            b = true;
-        }
+        b = !((busyMode == 0) || (busyMode == 2));
 
         actions[InteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
@@ -2569,7 +2565,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 valueTable.remove(i);
                 valueTable.put(i, _value);
                 //System.out.println("Searching for old row");
-                row = (Integer)(rowTable.get(i)).intValue();
+                row = (rowTable.get(i)).intValue();
                 tvtm.fireTableCellUpdated(row, 4);
             } catch (Exception e) {
                 TraceManager.addDev("Exception updateVariableState: " + e.getMessage() + " idvar=" + _idvar + " val=" + _value);
@@ -2634,7 +2630,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 }
                 valueTable.put(i, info);
                 //System.out.println("Searching for old row");
-                row = (Integer)(rowTable.get(i)).intValue();
+                row = (rowTable.get(i)).intValue();
                 cputm.fireTableCellUpdated(row, 2);
                 if (_usedEnergy == null) {
                     mgui.addLoadInfo(i, getDouble(_utilization).doubleValue(), -1);
@@ -2733,7 +2729,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     public void stateChanged(ChangeEvent e) {
         JSlider source = (JSlider)e.getSource();
         //if (!source.getValueIsAdjusting()) {
-        int val = (int)source.getValue();
+        int val = source.getValue();
         if (source == minimalCommandCoverage) {
             labelMinimalCommandCoverage.setText("" + val+ "%");
         } else {
@@ -2843,10 +2839,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         } catch (Exception e) {
             return false;
         }
-        if (val > -1) {
-            return true;
-        }
-        return false;
+        return val > -1;
     }
 
     public Integer getInteger(String s) {

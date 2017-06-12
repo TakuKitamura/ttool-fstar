@@ -1298,7 +1298,7 @@ public class AvatarDesignPanelTranslator {
             astate.setCheckable ();
 
         // Executable code
-        astate.addEntryCode(((AvatarSMDState)(tgc)).getEntryCode());
+        astate.addEntryCode(tgc.getEntryCode());
 
         this.listE.addCor (astate, tgc);
         astate.addReferenceObject (tgc);
@@ -1415,7 +1415,7 @@ public class AvatarDesignPanelTranslator {
 
         int size = checkingErrors.size();
 
-        TDiagramPanel tdp = (TDiagramPanel) asmdp;
+        TDiagramPanel tdp = asmdp;
 
         // search for start state
         AvatarSMDStartState tss = null;

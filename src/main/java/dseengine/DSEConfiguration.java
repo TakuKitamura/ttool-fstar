@@ -1344,7 +1344,7 @@ public class DSEConfiguration implements Runnable  {
 		
 		for(TMLMapping tmla: mappings) {
 			TraceManager.addDev("Handling mapping #" + cpt);
-			progression = (int)(cpt * 100 / (mappings.size()));
+			progression = cpt * 100 / (mappings.size());
 			
 			cpt ++;
 			

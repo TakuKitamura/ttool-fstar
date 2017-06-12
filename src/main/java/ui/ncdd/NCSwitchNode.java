@@ -266,11 +266,8 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
     }
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof NCRouteArtifact) {
-			return true;
-		}
-		
-		return false;
+        return tgc instanceof NCRouteArtifact;
+
     }
     
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -278,7 +275,7 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 			 //Set its coordinates
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
-            ((NCRouteArtifact)tgc).resizeWithFather();
+            tgc.resizeWithFather();
 			//add it
 			addInternalComponent(tgc, 0);
 			return true;
@@ -320,7 +317,7 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof NCRouteArtifact) {
-                ((NCRouteArtifact)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
         

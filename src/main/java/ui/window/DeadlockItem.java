@@ -49,16 +49,16 @@ package ui.window;
 
 import java.util.Vector;
 
-public class DeadlockItem implements Comparable {
+public class DeadlockItem implements Comparable<DeadlockItem> {
     private String name;
-    private Vector origin;
-    private Vector action;
+    private Vector<String> origin;
+    private Vector<String> action;
     private String path;
     
     public DeadlockItem(String _name) {
         name = _name;
-        origin = new Vector();
-        action = new Vector();
+        origin = new Vector<>();
+        action = new Vector<>();
     }
     
     //observers
@@ -71,8 +71,8 @@ public class DeadlockItem implements Comparable {
         StringBuffer ret = new StringBuffer();
         
         for(int i=0; i<origin.size(); i++) {
-            s1 = (String)(origin.elementAt(i));
-            s2 = (String)(action.elementAt(i));
+            s1 = origin.elementAt(i);
+            s2 = action.elementAt(i);
             if (i != 0) {
                 ret.append(", ");
             }
@@ -103,13 +103,7 @@ public class DeadlockItem implements Comparable {
     }
     
     // comparable interface
-    public int compareTo(Object o) {
-        if (!(o instanceof DeadlockItem)) {
-            return 0;
-        } else {
-            return getName().compareTo(((DeadlockItem)o).getName());
-        }
-        
+    public int compareTo(DeadlockItem o) {
+        return getName().compareTo(o.getName());
     }
-    
 }

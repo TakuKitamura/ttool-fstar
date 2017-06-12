@@ -76,7 +76,7 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
             //System.out.println("Internal component");
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //System.out.println("cdRect comp swallow");
-            ((TMLArchiCommunicationArtifact)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
             //add it
@@ -87,7 +87,7 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
             if( tgc instanceof TMLArchiEventArtifact )  {
                 tgc.setFather( this );
                 tgc.setDrawingZone( true );
-                ( (TMLArchiEventArtifact)tgc ).resizeWithFather();
+                tgc.resizeWithFather();
                 addInternalComponent( tgc, 0 );
                 return true;
             }
@@ -135,11 +135,11 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
 
         for( int i = 0; i < nbInternalTGComponent; i++ )        {
             if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact ) {
-                ( (TMLArchiCommunicationArtifact)tgcomponent[i] ).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
             else        {
                 if( tgcomponent[i] instanceof TMLArchiEventArtifact )   {
-                    ( (TMLArchiEventArtifact)tgcomponent[i] ).resizeWithFather();
+                    tgcomponent[i].resizeWithFather();
                 }
             }
         }

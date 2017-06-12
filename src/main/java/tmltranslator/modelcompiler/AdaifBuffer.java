@@ -168,7 +168,7 @@ public class AdaifBuffer extends Buffer	{
 
 	public static boolean closePanel( Frame frame )	{
 
-		String baseAddress = (String) baseAddressTF.getText();
+		String baseAddress = baseAddressTF.getText();
 		if( baseAddress.length() <= 2 && baseAddress.length() > 0 )	{
 			JOptionPane.showMessageDialog( frame, "Please enter a valid base address", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
@@ -182,7 +182,7 @@ public class AdaifBuffer extends Buffer	{
 			}
 		}
 		String regex = "[0-9]+";
-		String numSamples = (String) numSamplesTF.getText();
+		String numSamples = numSamplesTF.getText();
 		if( ( numSamples.length() > 0 ) && !numSamples.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The number of samples must be expressed as a natural", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );

@@ -153,7 +153,7 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
         while(iterator.hasNext()) {
             o = iterator.next();
             if (o instanceof TADStartState){
-                enhance(v, (TADStartState)o);
+                enhance(v, o);
             }
         }
         

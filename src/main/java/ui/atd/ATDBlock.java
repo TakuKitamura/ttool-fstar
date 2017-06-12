@@ -271,18 +271,15 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
     }
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        if (tgc instanceof ATDAttack) {
-            return true;
-        }
+        return tgc instanceof ATDAttack;
 
-        return false;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         if (tgc instanceof ATDAttack) {
             tgc.setFather(this);
             tgc.setDrawingZone(true);
-            ((ATDAttack)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             addInternalComponent(tgc, 0);
             return true;
         }
@@ -290,7 +287,7 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
         if (tgc instanceof ATDConstraint) {
             tgc.setFather(this);
             tgc.setDrawingZone(true);
-            ((ATDConstraint)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             addInternalComponent(tgc, 0);
             return true;
         }
@@ -303,11 +300,11 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
     }
 
 
-    public Vector getAttackList() {
-        Vector v = new Vector();
+    public Vector<ATDAttack> getAttackList() {
+        Vector<ATDAttack> v = new Vector<>();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof ATDAttack) {
-                v.add(tgcomponent[i]);
+                v.add((ATDAttack) tgcomponent[i]);
             }
         }
         return v;
@@ -316,7 +313,7 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof ATDAttack) {
-                ((ATDAttack)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 

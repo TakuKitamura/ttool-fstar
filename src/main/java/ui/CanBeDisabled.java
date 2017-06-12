@@ -48,6 +48,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui;
 
 public interface CanBeDisabled  {
-    public boolean isEnabled();
-    public void setEnabled(boolean _enabled);
+    boolean isEnabled();
+    void setEnabled(boolean _enabled);
 }

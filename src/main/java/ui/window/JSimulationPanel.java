@@ -175,7 +175,7 @@ public class JSimulationPanel extends JPanel implements JSimulationPanelInterfac
         x = timeToX(timeSpace * i);
         
         while (x < (axisx + spacex)) {
-            s = String.valueOf((int)(timeSpace * i));
+            s = String.valueOf(timeSpace * i);
             w = g.getFontMetrics().stringWidth(s);
             g.drawString(s, x - w/2, axisy + texty);
             g.drawLine(x, axisy + unity, x, axisy - unity);
@@ -240,7 +240,7 @@ public class JSimulationPanel extends JPanel implements JSimulationPanelInterfac
     }
     
     private int timeToX(int time) {
-        return (int)Math.ceil((spacex + (double)(((double)axisx * (double)time) / (double)maxTime)));
+        return (int)Math.ceil((spacex + ((double)axisx * (double)time) / (double)maxTime));
     }
     
     private int xToTime(int x) {

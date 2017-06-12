@@ -99,12 +99,12 @@ public class AvatarActionAssignment implements AvatarAction {
     @Override
     public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
         if (this.leftHand instanceof AvatarAttribute)
-            this.leftHand = attributesMapping.get ((AvatarAttribute) this.leftHand);
+            this.leftHand = attributesMapping.get (this.leftHand);
         else
             this.leftHand.replaceAttributes (attributesMapping);
 
         if (this.rightHand instanceof AvatarAttribute)
-            this.rightHand = attributesMapping.get ((AvatarAttribute) this.rightHand);
+            this.rightHand = attributesMapping.get (this.rightHand);
         else
             this.rightHand.replaceAttributes (attributesMapping);
     }

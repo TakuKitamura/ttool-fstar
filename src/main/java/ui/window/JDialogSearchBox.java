@@ -812,16 +812,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                         } catch (MalformedConfigurationException e) {
                             e.printStackTrace();
                         }
-                    } else if (i == joptionpane.CLOSED_OPTION) {
+                    } else if (i == JOptionPane.CLOSED_OPTION) {
                     }
                 }
 
                 public boolean isAddressDBFormatted() {
-                    if (jTextaddressDB.getText().contains(":")
-                        && jTextaddressDB.getText().split(":").length == 2
-                        && isNum(jTextaddressDB.getText().split(":")[1]))
-                        return true;
-                    return false;
+                    return jTextaddressDB.getText().contains(":")
+                            && jTextaddressDB.getText().split(":").length == 2
+                            && isNum(jTextaddressDB.getText().split(":")[1]);
                 }
             }
 
@@ -846,7 +844,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                 @Override
                                 public void run() {
                                     doHistogram();
-                                    ;
                                 }
                             });
                         t.start();

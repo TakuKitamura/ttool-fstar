@@ -106,7 +106,7 @@ public class AttackTreePanelTranslator {
     }
 
     public void translate(AttackTreeDiagramPanel atdp) {
-        LinkedList<TGComponent> allComponents = (LinkedList<TGComponent>)(atdp.getAllComponentList());
+        LinkedList<TGComponent> allComponents = atdp.getAllComponentList();
 
         int nodeID = 0;
         TGComponent father;
@@ -326,7 +326,7 @@ public class AttackTreePanelTranslator {
 
         _as.addRelation(ar);
         for(Attack attack: at.getAttacks()) {
-            avatartranslator.AvatarSignal makeAttack = new avatartranslator.AvatarSignal("make__" + attack.getName(), AvatarSignal.OUT, (Object)(listE.getTG(attack)));
+            avatartranslator.AvatarSignal makeAttack = new avatartranslator.AvatarSignal("make__" + attack.getName(), AvatarSignal.OUT, listE.getTG(attack));
             _main.addSignal(makeAttack);
             avatartranslator.AvatarSignal stopMakeAttack = new avatartranslator.AvatarSignal("makeStop__" + attack.getName(), AvatarSignal.IN, listE.getTG(attack));
             _main.addSignal(stopMakeAttack);
@@ -339,7 +339,7 @@ public class AttackTreePanelTranslator {
 
             // If attack is not leaf: add the intermediate action to activate the intermediate leaf
             if (!attack.isLeaf()) {
-                avatartranslator.AvatarSignal nodeDone = new avatartranslator.AvatarSignal("nodeDone__" + attack.getName(), AvatarSignal.OUT, (Object)(listE.getTG(attack)));
+                avatartranslator.AvatarSignal nodeDone = new avatartranslator.AvatarSignal("nodeDone__" + attack.getName(), AvatarSignal.OUT, listE.getTG(attack));
                 _main.addSignal(nodeDone);
                 avatartranslator.AvatarSignal activateAttack = new avatartranslator.AvatarSignal("activate__" + attack.getName(), AvatarSignal.IN, listE.getTG(attack));
                 _main.addSignal(activateAttack);

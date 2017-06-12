@@ -417,11 +417,8 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     }
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        if (tgc instanceof TMLArchiArtifact) {
-            return true;
-        }
+        return tgc instanceof TMLArchiArtifact;
 
-        return false;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -430,7 +427,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         if (tgc instanceof TMLArchiArtifact) {
             tgc.setFather(this);
             tgc.setDrawingZone(true);
-            ((TMLArchiArtifact)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             addInternalComponent(tgc, 0);
             return true;
         }
@@ -457,7 +454,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLArchiArtifact) {
-                ((TMLArchiArtifact)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 

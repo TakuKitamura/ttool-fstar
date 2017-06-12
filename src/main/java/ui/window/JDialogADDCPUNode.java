@@ -67,7 +67,7 @@ public class JDialogADDCPUNode extends javax.swing.JDialog implements ActionList
 	private Frame frame;
 	private ADDCPUNode node;
 
-        protected JComboBox tracemode;
+        protected JComboBox<String> tracemode;
         private static int  selectedTracemode = 0;
 	
 	
@@ -188,7 +188,7 @@ public class JDialogADDCPUNode extends javax.swing.JDialog implements ActionList
 		panel2.add(new JLabel("Monitored:"), c2);
 		//c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 		//monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
-		tracemode = new JComboBox(tracemodeTab);
+		tracemode = new JComboBox<>(tracemodeTab);
 		tracemode.setSelectedIndex(selectedTracemode);
 		tracemode.addActionListener(this);
 		panel2.add(tracemode, c2);

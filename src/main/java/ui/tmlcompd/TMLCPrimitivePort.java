@@ -387,7 +387,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
         int lockwidth=(int) (9*tdp.getZoom());
         int lockheight=(int) (7*tdp.getZoom());
-        int yoffset = (int) (3*lockheight);
+        int yoffset = 3*lockheight;
 
         int ovalwidth=(int) (6*tdp.getZoom());
         int ovalheight=(int) (9*tdp.getZoom());

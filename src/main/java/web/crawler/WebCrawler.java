@@ -171,7 +171,7 @@ public class WebCrawler {
 
     }
 
-    public void start() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException, AWTException, Exception {
+    public void start() throws Exception {
 
         if (pathToFiles == null) {
             pathToFiles = "";

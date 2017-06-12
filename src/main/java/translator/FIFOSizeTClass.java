@@ -48,12 +48,12 @@ package translator;
 import java.util.LinkedList;
 
 public interface FIFOSizeTClass  {
-    public int getNbPara();
-    public Gate getGateWrite(); // Returns the first write gate
-    public Gate getGateRead();  // Returns the first read gate
-    public LinkedList getGatesWrite();
-    public LinkedList getGatesRead();
-    public LinkedList getGatesSize();
-    public Gate getGateSize(); // Returns the first size gate
+    int getNbPara();
+    Gate getGateWrite(); // Returns the first write gate
+    Gate getGateRead();  // Returns the first read gate
+    LinkedList getGatesWrite();
+    LinkedList getGatesRead();
+    LinkedList getGatesSize();
+    Gate getGateSize(); // Returns the first size gate
 
 }

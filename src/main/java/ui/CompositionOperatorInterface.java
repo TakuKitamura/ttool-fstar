@@ -49,6 +49,6 @@ package ui;
 
 
 public interface CompositionOperatorInterface {
-  public int getNbConnectingPoint();
-  public TGConnectingPoint tgconnectingPointAtIndex(int index);
+  int getNbConnectingPoint();
+  TGConnectingPoint tgconnectingPointAtIndex(int index);
 }

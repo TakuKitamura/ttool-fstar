@@ -50,5 +50,5 @@ package ui;
 
 
 public interface SpecificActionAfterAdd  {
-    public void specificActionAfterAdd();
+    void specificActionAfterAdd();
 }

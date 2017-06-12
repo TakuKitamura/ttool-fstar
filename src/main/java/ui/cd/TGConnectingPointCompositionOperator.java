@@ -58,10 +58,7 @@ public class TGConnectingPointCompositionOperator extends  TGConnectingPoint{
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.CONNECTOR_ATTRIBUTE) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.CONNECTOR_ATTRIBUTE;
     }
     
 }

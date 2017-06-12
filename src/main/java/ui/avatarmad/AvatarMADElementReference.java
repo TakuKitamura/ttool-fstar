@@ -166,12 +166,8 @@ public class AvatarMADElementReference extends TGCScalableWithInternalComponent 
 				rescaled = false;
 			}
 		}
-		
-		if(currentFontSize <minFontSize) {
-			displayText = false;
-		} else {
-			displayText = true;
-		}
+
+        displayText = currentFontSize >= minFontSize;
 		
 		int h  = g.getFontMetrics().getHeight();
         

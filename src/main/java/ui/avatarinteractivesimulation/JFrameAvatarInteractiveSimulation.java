@@ -1136,11 +1136,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             return true;
         }
 
-        if (busyMode == AvatarSpecificationSimulation.GATHER) {
-            return true;
-        }
+        return busyMode == AvatarSpecificationSimulation.GATHER;
 
-        return false;
     }
 
 
@@ -1850,7 +1847,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         //TraceManager.addDev("Selected index = " +  index);
         if (index > -1) {
             try {
-                AvatarSimulationPendingTransaction aspt = (AvatarSimulationPendingTransaction)(listPendingTransactions.getSelectedValue());
+                AvatarSimulationPendingTransaction aspt = listPendingTransactions.getSelectedValue();
                 selectedComponentForTransaction1 = (TGComponent)(aspt.elementToExecute.getReferenceObject());
 		selectedComponentForTransaction2 = null;
                 if ((selectedComponentForTransaction1 == null) && (aspt.linkedTransaction != null)) {

@@ -70,11 +70,7 @@ public abstract class AttackNode {
 	    return false;
 	}
 
-	if (inputAttacks.size() < 1) {
-	    return false;
-	}
-
-	return true;
+        return inputAttacks.size() >= 1;
 
     }
 

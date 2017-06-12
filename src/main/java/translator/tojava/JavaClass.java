@@ -66,9 +66,9 @@ public class JavaClass {
     private String path = "";
     private String packageName;
     
-    private Vector attributes;
-    private Vector gates;
-    private Vector operations;
+    private Vector<JAttribute> attributes;
+    private Vector<JGate> gates;
+    private Vector<JOperation> operations;
     
     private int operationId;
     
@@ -77,9 +77,9 @@ public class JavaClass {
     public final static String JAVA_EXTENSION = "java";
     
     public JavaClass(String _TURTLEName, boolean _active) {
-        attributes = new Vector();
-        gates = new Vector();
-        operations = new Vector();
+        attributes = new Vector<>();
+        gates = new Vector<>();
+        operations = new Vector<>();
         TURTLEName = _TURTLEName;
         active = _active;
         generateJavaName();
@@ -172,7 +172,7 @@ public class JavaClass {
     }
     
     public JAttribute getAttributeAt(int index) {
-        return (JAttribute)(attributes.elementAt(index));
+        return attributes.elementAt(index);
     }
     
     public void addGate(JGate jg) {
@@ -184,7 +184,7 @@ public class JavaClass {
     }
     
     public JGate getGateAt(int index) {
-        return (JGate)(gates.elementAt(index));
+        return gates.elementAt(index);
     }
     
     public JGate foundJGate(String name) {
@@ -207,7 +207,7 @@ public class JavaClass {
     }
     
     public JOperation getOperationAt(int index) {
-        return (JOperation)(operations.elementAt(index));
+        return operations.elementAt(index);
     }
     
     public void generateAttributeDeclaration() {

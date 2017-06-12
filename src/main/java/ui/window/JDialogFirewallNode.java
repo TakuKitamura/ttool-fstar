@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogFirewallNode
- * Dialog for managing attributes of Firewall nodes
- * Creation: 17/10/2007
- * @version 1.0 17/10/2007
- * @author Letitia Li
- * @see
  */
 
 package ui.window;
@@ -58,36 +50,33 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
-//import javax.swing.event.*;
-//import java.util.*;
-
-
+/**
+ * Class JDialogFirewallNode
+ * Dialog for managing attributes of Firewall nodes
+ * Creation: 17/10/2007
+ * @version 1.0 17/10/2007
+ * @author Letitia Li
+ */
 public class JDialogFirewallNode extends javax.swing.JDialog implements ActionListener,ListSelectionListener  {
     
     private boolean regularClose;
-    
-    private JPanel panel2;
-    private Frame frame;
+
     private TMLArchiFirewallNode node;
     
 	
     // Panel1
     protected JTextField nodeName;
-    private Vector rules= new Vector();
+    private Vector<String> rules= new Vector<>();
 	// Panel2
     protected JTextField latency;
-    private JList listRules;    
+    private JList<String> listRules;
     private JButton addButton,removeButton;
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    private JComboBox task1;
-    private JComboBox task2;
+
+    private JComboBox<String> task1;
+    private JComboBox<String> task2;
     /** Creates new form  */
     public JDialogFirewallNode(Frame _frame, String _title, TMLArchiFirewallNode _node) {
         super(_frame, _title, true);
-        frame = _frame;
         node = _node;
         
         initComponents();
@@ -101,19 +90,17 @@ public class JDialogFirewallNode extends javax.swing.JDialog implements ActionLi
     private void initComponents() {
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        
-        panel2 = new JPanel();
+
+
+        JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Firewall attributes"));
         panel2.setPreferredSize(new Dimension(500, 500));
@@ -141,12 +128,12 @@ public class JDialogFirewallNode extends javax.swing.JDialog implements ActionLi
         c2.weightx = 1.0;
         c2.fill = GridBagConstraints.HORIZONTAL;
 	for (String s: node.getRules()){
-	    rules.add(s);
-	}
+        rules.add(s);
+    }
 	JLabel rulesLabel = new JLabel("Blocking Rules");
 	panel2.add(rulesLabel, c2);
 
-	listRules = new JList<String>(rules);
+	listRules = new JList<>(rules);
         listRules.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listRules.addListSelectionListener(this);
 	JScrollPane scrollPane = new JScrollPane(listRules);
@@ -161,13 +148,13 @@ public class JDialogFirewallNode extends javax.swing.JDialog implements ActionLi
 	c2.gridwidth=1;
         c2.weighty = 1.0;
         c2.weightx = 1.0;
-	task1 = new JComboBox();
+	task1 = new JComboBox<>();
 	for (String task: node.getTDiagramPanel().getMGUI().getTMLTasks()){
 	    task1.addItem(task);
 	}
 	task1.addItem("*");
 	
-	task2= new JComboBox();
+	task2= new JComboBox<>();
 	for (String task: node.getTDiagramPanel().getMGUI().getTMLTasks()){
 	    task2.addItem(task);
 	}
@@ -194,12 +181,12 @@ public class JDialogFirewallNode extends javax.swing.JDialog implements ActionLi
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
@@ -234,14 +221,14 @@ public class JDialogFirewallNode extends javax.swing.JDialog implements ActionLi
         }
     }
 
-     public void removeRule() {
+     private void removeRule() {
         int i = listRules.getSelectedIndex() ;
         if (i!= -1) {
             rules.removeElementAt(i);
             listRules.setListData(rules);
         }
     }
-    public void addRule(){
+    private void addRule(){
 	String s = task1.getSelectedItem().toString();
 	s+= "->";
 	s+= task2.getSelectedItem().toString();
@@ -269,10 +256,6 @@ public class JDialogFirewallNode extends javax.swing.JDialog implements ActionLi
         return latency.getText();
     }
     public ArrayList<String> getRules(){
-	ArrayList<String> r = new ArrayList<String>();
-	for (int i=0; i<rules.size(); i++){
-	    r.add((String) rules.get(i));
-	}
-	return r;
+        return new ArrayList<>(rules);
     }
 }
