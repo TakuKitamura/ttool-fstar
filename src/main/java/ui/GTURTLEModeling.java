@@ -175,7 +175,7 @@ public class GTURTLEModeling {
     private TML2Avatar t2a;
     private RequirementModeling rm;
     private NCStructure ncs;
-    private MainGUI mgui;
+    private final MainGUI mgui;
     private CorrespondanceTGElement listE;
     private String rtlotos;
 
@@ -7839,8 +7839,12 @@ public class GTURTLEModeling {
             //TraceManager.addDev(tgc.getValue());
             tgc.makePostLoading(decId);
         }
+	/*SwingUtilities.invokeAndWait(new Runnable() {
+            public void run() {
+                mgui.repaintAll();
+            }
+	    });*/
 
-	tdp.repaint();
 
         //TraceManager.addDev("Post loading of diagram " + tdp.toString() + " achieved");
     }

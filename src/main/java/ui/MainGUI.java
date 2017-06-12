@@ -2283,6 +2283,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             gtm.enableUndo(true);
             gtm.saveOperation(getCurrentSelectedPoint());
             dtree.forceUpdate();
+	    getCurrentTDiagramPanel().repaint();
         }
     }
 
