@@ -56,6 +56,7 @@ import ui.avatarbd.AvatarBDPortConnector;
 import ui.avatarbd.AvatarBDPragma;
 import ui.avatarsmd.*;
 
+import java.awt.*;
 import java.util.*;
 
 //import translator.*;
@@ -284,7 +285,7 @@ public class TML2AvatarDP {
 	    for (AvatarTransition t: tranSourceMap.keySet()){
 		TGConnectingPoint p1 = tranSourceMap.get(t);
 		TGConnectingPoint p2 = locMap.get(tranDestMap.get(t));
-		Vector points = new Vector();
+		Vector<Point> points = new Vector<>();
 		if (p1==null || p2 ==null){
 		    System.out.println("Missing point");
 		    return;
@@ -308,7 +309,7 @@ public class TML2AvatarDP {
 	
 	for (String bl1: originDestMap.keySet()){
 	    for (String bl2:originDestMap.get(bl1)){ 
-		Vector points=new Vector();
+		Vector<Point> points=new Vector<>();
 
 		//Add Relations to connector
 		for (AvatarRelation ar:avspec.getRelations()){

@@ -54,6 +54,7 @@ import javax.xml.transform.TransformerException;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -109,7 +110,7 @@ public class MultiThreadServer {
             cmd = Message.RESULT_SEARCH;
             //System.out.println(msg.getValues().get(0));
             resultfile = database.GetCVEwithKeywords(msg.getValues());
-            String resultstring = FileUtils.readFileToString(resultfile);
+            String resultstring = FileUtils.readFileToString(resultfile, StandardCharsets.UTF_8);
             
             ArrayList<Object> content = new ArrayList<>();
             content.add(resultstring);
@@ -122,7 +123,7 @@ public class MultiThreadServer {
         if (msg.getCmd().equals(Message.CMD_DETAIL)) {
             cmd = Message.RESULT_DETAIL;
             resultfile = database.GetinfofromCVE(msg.getValues().get(0));
-            String resultstring = FileUtils.readFileToString(resultfile);
+            String resultstring = FileUtils.readFileToString(resultfile, StandardCharsets.UTF_8);
             ArrayList<Object> res = new ArrayList<>();
             res.add(resultstring);
             answerMessage.createAnswerMessage(cmd, res);

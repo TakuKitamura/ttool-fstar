@@ -52,3 +52,12 @@ subprojects {
         delete "${rootProject.absPath}/bin"
     }
 }
+
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.encoding = 'UTF-8'
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Xlint:cast" << "-Xlint:divzero" << "-Xlint:empty" << "-Xlint:finally" << "-Xlint:fallthrough"
+        }
+    }
+}
