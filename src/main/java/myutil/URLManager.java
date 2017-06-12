@@ -63,6 +63,7 @@ public final class URLManager implements Runnable {
     private CallbackLoaderInterface callback;
     
     public URLManager() {
+	busy = false;
     }
 
     public synchronized boolean downloadFile(String _path, String _url, CallbackLoaderInterface _callback) {
@@ -94,6 +95,7 @@ public final class URLManager implements Runnable {
 		callback.loadFailed();
 	    }
 	}
+	busy = false;
     }
 
     public static String getRealURL(String url) {
