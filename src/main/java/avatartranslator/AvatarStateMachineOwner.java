@@ -54,7 +54,7 @@ public interface AvatarStateMachineOwner {
     /**
      * Look for an attribute in the list of local attributes, parameters and return values.
      *
-     * @param name
+     * @param attributeName
      *      The name of the attribute to look for.
      *
      * @return The corresponding attribute if found, null otherwise.

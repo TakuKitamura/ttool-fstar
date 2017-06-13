@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
 ludovic.apvrille AT enst.fr
 
@@ -34,15 +34,8 @@ same conditions as regards security.
 
 The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
+*/
 
-/**
- * Class TGCWithOneLineText
- * Graphical component with a line of text and which  contains one or more internal components
- * Creation: 22/12/2003
- * @version 1.0 22/12/2003
- * @author Ludovic APVRILLE
- * @see
- */
 
 package ui;
 
@@ -51,16 +44,13 @@ import ui.util.IconManager;
 import javax.swing.*;
 import java.awt.*;
 
-//import java.awt.geom.*;
-
-
 /**
- * Class
- *
+ * Class TGCWithOneLineText
+ * Graphical component with a line of text and which  contains one or more internal components
+ * Creation: 22/12/2003
+ * @version 1.0 22/12/2003
  * @author Ludovic APVRILLE
- * @see
  */
-
 public abstract class TGCWithOneLineText extends TGCWithInternalComponent{
     protected int textx, texty;
     //private int widthText;

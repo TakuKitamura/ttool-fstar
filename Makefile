@@ -156,7 +156,7 @@ $(JTTOOL_BINARY): FORCE
 TTOOL_DOC			= $(TTOOL_PATH)/doc
 export TTOOL_DOC_HTML 		= $(TTOOL_DOC)/html
 
-DOCFLAGS			= $(GLOBAL_CFLAGS) -quiet -J-Xmx256m -classpath $(TTOOL_CLASSPATH) -d $(TTOOL_DOC_HTML)
+DOCFLAGS			= -encoding "UTF8" -quiet -J-Xmx256m -classpath $(TTOOL_CLASSPATH) -d $(TTOOL_DOC_HTML)
 
 documentation: $(patsubst %,$(TTOOL_SRC)/%,$(GLOBAL_JAVA))
 	@echo "$(PREFIX) Generating Javadoc"

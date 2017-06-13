@@ -34,17 +34,8 @@
 
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
-
-   /**
-   * Class DatabaseCreation
-   * All the function necessary for the creation of the database, creation
-   * of tables in the database and the storage of this databse
-   * Management of Avatar block panels
-   * Creation: 2015
-   * @version 2.0 25/03/2016
-   * @author  Marie FORRAT, Angeliki AKTYPI, Ludovic APVRILLE
-   * @see MainGUI
    */
+
 
 package web.crawler;
 
@@ -58,10 +49,15 @@ import java.net.InetAddress;
 import java.sql.*;
 
 /**
- * All the function necessary for the creation of the database, creation of tables in the database and the storage of this databse
- * @author Marie FORRAT, Angeliki AKTYPI, Ludovic Apvrille
- */
-
+* Class DatabaseCreation
+* All the function necessary for the creation of the database, creation
+* of tables in the database and the storage of this databse
+* Management of Avatar block panels
+* Creation: 2015
+* @version 2.0 25/03/2016
+* @author  Marie FORRAT, Angeliki AKTYPI, Ludovic APVRILLE
+* @see ui.MainGUI
+*/
 public class DatabaseCreation {
 
     /* Global variables */
@@ -157,7 +153,6 @@ public class DatabaseCreation {
 
     /**
      *
-     * @return
      */
     public java.sql.Statement getstmt() {
         return stmt;

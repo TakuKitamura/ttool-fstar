@@ -70,7 +70,6 @@ public class MultiThreadServer {
      *
      * @param cmd
      * @param msg
-     * @return
      */
     public static Message createImageAnswer(String cmd, Message msg) {
         byte[] byteImg = Message.convertImageToByte(msg);
@@ -87,7 +86,6 @@ public class MultiThreadServer {
      *
      * @param msg
      * @param database
-     * @return
      * @throws IOException
      * @throws SQLException
      * @throws AWTException

@@ -895,7 +895,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     /**
      *
      * @param msg
-     * @return
      */
     public Message sendMessage(Message msg) {
         Client cl = new Client();
@@ -1461,7 +1460,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      *
-     * @param input: a string without space and words are seperated by uper character.
+     * @param input a string without space and words are seperated by uper character.
      * @return a splited, then concaternated with space.
      */
     public String splitAndConcat(String input){
@@ -1491,7 +1490,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     /**
      * Check a string if it contains only number.
      * @param str
-     * @return
      */
     public boolean isNum(String str){
         try{
@@ -1585,7 +1583,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     /**
      * Check the printable character.
      * @param c
-     * @return
      */
     public boolean isPrintableChar( char c ) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of( c );
@@ -1598,7 +1595,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     /**
      * Check the printable string
      * @param s
-     * @return
      */
     public boolean isPrintableString(String s){
         if (s==null)

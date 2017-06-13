@@ -1,6 +1,6 @@
 package myutil.externalSearch;
 
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
  ludovic.apvrille AT enst.fr
 
@@ -36,6 +36,7 @@ package myutil.externalSearch;
 
  The fact that you are presently reading this means that you have had
  knowledge of the CeCILL license and that you accept its terms.
+ */
 
  /**
  * JDialogSearchBox
@@ -43,7 +44,6 @@ package myutil.externalSearch;
  * Creation: 12/03/2015
  * @version 1.0 11/03/2015
  * @author Huy TRUONG
- * @see
  */
 public class Record {
     private String summary;

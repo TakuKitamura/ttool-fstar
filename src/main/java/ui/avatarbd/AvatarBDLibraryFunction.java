@@ -165,7 +165,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
      *      Indicates whether the position is considered as relative to this father's component.
      * @param father
      *      The father component in the diagram.
-     * @param tdb
+     * @param tdp
      *      The diagram panel.
      */
     public AvatarBDLibraryFunction (
@@ -787,7 +787,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
      *      Unused.
      * @param decY
      *      Unused.
-     * @param decID
+     * @param decId
      *      Unused.
      *
      * @throws MalformedModelingExpresion When the provided XML is corrupted.
