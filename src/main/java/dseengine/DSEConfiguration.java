@@ -54,6 +54,7 @@ import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import ui.GTMLModeling;
 import ui.MainGUI;
+import ui.TGComponent;
 import ui.TMLArchiPanel;
 import ui.TMLComponentDesignPanel;
 import ui.tmldd.*;
@@ -110,8 +111,8 @@ public class DSEConfiguration implements Runnable  {
 	public TMLComponentDesignPanel tmlcdp;
 	public TMLArchiPanel tmlap;
 	
-	private TMLMapping tmap;
-	private TMLModeling tmlm;
+	private TMLMapping<TGComponent> tmap;
+	private TMLModeling<TGComponent> tmlm;
 	
 //	private TMLModeling stmlm;
 	
@@ -142,9 +143,9 @@ public class DSEConfiguration implements Runnable  {
 	private int minNbOfCoresPerCPU = 1;
 	private int maxNbOfCoresPerCPU = 2;
 	private int nbOfSimulationsPerMapping = 1;
-	private TMLModeling taskModel = null;
+	private TMLModeling<TGComponent> taskModel = null;
 //	private TMLModeling secModel = null;
-	private Vector<TMLMapping> mappings;
+	private Vector<TMLMapping<TGComponent>> mappings;
 	private DSEMappingSimulationResults dsemapresults;
 	List<Integer[]> latencyIds =new ArrayList<Integer[]>();
 	public MainGUI mainGUI;
@@ -464,7 +465,7 @@ public class DSEConfiguration implements Runnable  {
 		boolean ret = false;
 		//System.out.println("load");
 		String inputData = FileUtils.loadFileData(mappingFile);
-		TMLMappingTextSpecification spec = new TMLMappingTextSpecification("LoadedSpecification");
+		TMLMappingTextSpecification<TGComponent> spec = new TMLMappingTextSpecification<>("LoadedSpecification");
 		ret = spec.makeTMLMapping(inputData, modelPath);
 		TraceManager.addDev("load ended");
 		List<TMLError> warnings;
@@ -516,7 +517,7 @@ public class DSEConfiguration implements Runnable  {
 		boolean ret = false;
 		//System.out.println("load");
 		String inputData = FileUtils.loadFileData(taskModelFile);
-		TMLTextSpecification tmlts = new TMLTextSpecification("LoadedTaskModel");
+		TMLTextSpecification<TGComponent> tmlts = new TMLTextSpecification<>("LoadedTaskModel");
 		ret = tmlts.makeTMLModeling(inputData);
 		TraceManager.addDev("Load of task model done");
 		List<TMLError> warnings;
@@ -714,7 +715,7 @@ public class DSEConfiguration implements Runnable  {
 	public int generateSecMapping(){
 		return 0;
 	}
-	public int generateAndCompileMappingCode(TMLMapping _tmlmap, boolean _debug, boolean _optimize) {
+	public int generateAndCompileMappingCode(TMLMapping<TGComponent> _tmlmap, boolean _debug, boolean _optimize) {
 		
 		// Generating code
 		TraceManager.addDev("\n\n\n**** Generating simulation code from mapping...");
@@ -1342,7 +1343,7 @@ public class DSEConfiguration implements Runnable  {
 			}
 		}
 		
-		for(TMLMapping tmla: mappings) {
+		for(TMLMapping<TGComponent> tmla: mappings) {
 			TraceManager.addDev("Handling mapping #" + cpt);
 			progression = cpt * 100 / (mappings.size());
 			
@@ -1393,7 +1394,7 @@ public class DSEConfiguration implements Runnable  {
 			 System.out.println("tmlcdp " + tmlcdp);
 		     //
 		     //Repeat for secured mapping
-		     TMLMapping secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false,false);
+		     TMLMapping<TGComponent> secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false,false);
 
 		     //Run simulations on this mapping
 		     if (generateAndCompileMappingCode(secMapping, _debug, _optimize)  >= 0) {
@@ -1433,7 +1434,7 @@ public class DSEConfiguration implements Runnable  {
 		}	
 		return 0;
 	}
-    public TMLArchiPanel drawMapping(TMLMapping map, String name){
+    public TMLArchiPanel drawMapping(TMLMapping<TGComponent> map, String name){
 	//Map<HwNode, TGConnectingPoint> connectMap; 
 	Map<HwNode, TMLArchiNode> objMap = new HashMap<HwNode, TMLArchiNode>();
 	/*int index =*/ mainGUI.createTMLArchitecture(name);
@@ -1480,7 +1481,7 @@ public class DSEConfiguration implements Runnable  {
 	    TMLArchiConnectorNode conn = new TMLArchiConnectorNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap, n1.getTGConnectingPointAtIndex(0), n2.getTGConnectingPointAtIndex(0), new Vector<Point>());
 	    ap.addComponent(conn,x,y,false,true);
 	}
-	for (TMLTask task:map.getTMLModeling().getTasks()){
+	for (TMLTask task: map.getTMLModeling().getTasks()){
 	   HwNode node = map.getHwNodeOf(task);
 	   TMLArchiArtifact art = new TMLArchiArtifact(objMap.get(node).getX(), objMap.get(node).getY(), ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, objMap.get(node), ap);
 	   ap.addComponent(art,objMap.get(node).getX(),objMap.get(node).getY(),true,true);
@@ -1597,7 +1598,7 @@ public class DSEConfiguration implements Runnable  {
 		return 0;
 	}
 	
-	public Vector<TMLMapping> generateAllMappings(TMLModeling _tmlm) {
+	public Vector<TMLMapping<TGComponent>> generateAllMappings(TMLModeling<TGComponent> _tmlm) {
 		TraceManager.addDev("Generate all mappings");
 		if (_tmlm == null) {
 			TraceManager.addDev("Null mapping");
@@ -1619,7 +1620,7 @@ public class DSEConfiguration implements Runnable  {
 			max = min + 1;
 		}
 		
-		Vector<TMLMapping> maps = new  Vector<TMLMapping>();
+		Vector<TMLMapping<TGComponent>> maps = new  Vector<>();
 		
 		for(int cpt=min; cpt<=max; cpt++) {
 			dseID = 0;
@@ -1634,8 +1635,8 @@ public class DSEConfiguration implements Runnable  {
 		
 		return maps;
 	}
-	private void addMemories(Vector<TMLMapping> maps){
-		for (TMLMapping map: maps){
+	private void addMemories(Vector<TMLMapping<TGComponent>> maps){
+		for (TMLMapping<TGComponent> map: maps){
 			TMLArchitecture arch = map.getArch();
 			List<HwNode> nodes =  arch.getCPUs();
 			for (HwNode node:nodes){
@@ -1656,7 +1657,7 @@ public class DSEConfiguration implements Runnable  {
 			}
 		}
 	}
-	private void generateMappings(TMLModeling _tmlm, Vector<TMLMapping> maps, int nbOfCPUs) {
+	private void generateMappings(TMLModeling<TGComponent> _tmlm, Vector<TMLMapping<TGComponent>> maps, int nbOfCPUs) {
 		List<TMLTask> tasks = _tmlm.getTasks();
 		CPUWithTasks cpus_tasks[] = new CPUWithTasks[nbOfCPUs];
 		
@@ -1687,7 +1688,7 @@ public class DSEConfiguration implements Runnable  {
 		TraceManager.addDev("Nb of computed mappings:" + maps.size());
 	}
 	
-	private void computeMappings(Vector<TMLTask> remainingTasks, CPUWithTasks[] cpus_tasks,  Vector<TMLMapping> maps, TMLModeling _tmlm) {
+	private void computeMappings(Vector<TMLTask> remainingTasks, CPUWithTasks[] cpus_tasks,  Vector<TMLMapping<TGComponent>> maps, TMLModeling<TGComponent> _tmlm) {
 		if (remainingTasks.size() == 0) {
 			// Can generate the mapping from cpus_tasks
 			makeMapping(cpus_tasks, maps, _tmlm);
@@ -1740,9 +1741,9 @@ public class DSEConfiguration implements Runnable  {
 		
 	}
 	
-	private void makeMapping(CPUWithTasks[] cpus_tasks,  Vector<TMLMapping> maps, TMLModeling _tmlm) {
+	private void makeMapping(CPUWithTasks[] cpus_tasks,  Vector<TMLMapping<TGComponent>> maps, TMLModeling<TGComponent> _tmlm) {
 		TMLArchitecture tmla = new TMLArchitecture();
-		TMLMapping tmap = new TMLMapping(_tmlm, tmla, true);
+		TMLMapping<TGComponent> tmap = new TMLMapping<>(_tmlm, tmla, true);
 		DIPLOElement.setGeneralID(_tmlm.computeMaxID() + 1);
 		
 		HwCPU cpu;
@@ -1774,7 +1775,7 @@ public class DSEConfiguration implements Runnable  {
 		_dseresults.computeGrades(tapValues);
 	}
 
-	private void computeCoresOfMappings(Vector<TMLMapping> maps) {
+	private void computeCoresOfMappings(Vector<TMLMapping<TGComponent>> maps) {
 	}
 	
 	public void resetProgression() {

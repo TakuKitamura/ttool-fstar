@@ -67,13 +67,13 @@ public class TML2TURTLE {
 
     private static String nameRequest = "Request__";
 
-    private TMLModeling tmlmodeling;
+    private TMLModeling<?> tmlmodeling;
     private TURTLEModeling tm;
     private Vector<CheckingError> checkingErrors;
 
     private int nbClass;
 
-    public TML2TURTLE(TMLModeling _tmlmodeling) {
+    public TML2TURTLE(TMLModeling<?> _tmlmodeling) {
         //System.out.println("New TURTLE modeling");
         tmlmodeling = _tmlmodeling;
     }

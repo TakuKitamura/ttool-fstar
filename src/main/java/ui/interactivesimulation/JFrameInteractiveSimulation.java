@@ -217,7 +217,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     public MouseHandler mouseHandler;
     public KeyListener keyHandler;
 
-    private TMLMapping tmap;
+    private TMLMapping<TGComponent> tmap;
     private int hashCode;
     private boolean hashOK = true;
 
@@ -232,7 +232,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private Map<String, List<String>> transTimes = new HashMap<String, List<String>>();
     private Vector<SimulationLatency> latencies = new Vector<SimulationLatency>();
     
-    public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap, List<Point> _points) {
+    public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping<TGComponent> _tmap, List<Point> _points) {
         super(_title);
 
         // f = _f;

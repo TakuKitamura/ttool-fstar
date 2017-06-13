@@ -168,9 +168,9 @@ public class GTURTLEModeling {
     private boolean optimizeAvatar;
     private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
 
-    private TMLModeling tmlm;
-    private TMLMapping artificialtmap;
-    private TMLMapping tmap;
+    private TMLModeling<TGComponent> tmlm;
+    private TMLMapping<TGComponent> artificialtmap;
+    private TMLMapping<TGComponent> tmap;
     private TMLCP tmlcp;
     private TML2Avatar t2a;
     private RequirementModeling rm;
@@ -496,7 +496,7 @@ public class GTURTLEModeling {
         //This branch is activated if doing the syntax check from the architecture panel.
         //It generates the text TML for the architecture and the application + mapping information
         if (tmap != null) {
-            TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
+            TMLMappingTextSpecification<TGComponent> spec = new TMLMappingTextSpecification<>( _title );
             spec.toTextFormat( tmap );    //TMLMapping
             try {
                 //TraceManager.addDev( "*** " + ConfigurationTTool.TMLCodeDirectory + File.separator );
@@ -554,7 +554,7 @@ public class GTURTLEModeling {
             //This branch is activated if doing the syntax check from the application panel.
             //It only generates the application TML text
             if( tmap == null ) {
-                TMLTextSpecification spec = new TMLTextSpecification( _title );
+                TMLTextSpecification<TGComponent> spec = new TMLTextSpecification<>( _title );
                 spec.toTextFormat( tmlm );        //TMLModeling
                 try {
                     spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml" );
@@ -660,7 +660,7 @@ public class GTURTLEModeling {
         return overhead;
     }
 
-    public boolean channelAllowed(TMLMapping map, TMLChannel chan){
+    public boolean channelAllowed(TMLMapping<TGComponent> map, TMLChannel chan){
         TMLTask orig = chan.getOriginTask();
         TMLTask dest = chan.getDestinationTask();
         List<HwNode> path = getPath(map,orig, dest);
@@ -680,7 +680,7 @@ public class GTURTLEModeling {
         return true;
     }
 
-    public List<HwNode> getPath(TMLMapping map, TMLTask t1, TMLTask t2){
+    public List<HwNode> getPath(TMLMapping<TGComponent> map, TMLTask t1, TMLTask t2){
         HwNode node1 = map.getHwNodeOf(t1);
         HwNode node2 = map.getHwNodeOf(t2);
         List<HwNode> path = new ArrayList<HwNode>();
@@ -732,10 +732,10 @@ public class GTURTLEModeling {
         }
         return path;
     }
-    public TMLMapping drawFirewall(TMLMapping map){
+    public TMLMapping<TGComponent> drawFirewall(TMLMapping<TGComponent> map){
         System.out.println("DRAWING FIREWALL");
         TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
-        TMLModeling tmlm = map.getTMLModeling();
+        TMLModeling<TGComponent> tmlm = map.getTMLModeling();
         TMLActivityDiagramPanel firewallADP = null;
         TMLComponentTaskDiagramPanel tcdp = tmlcdp.tmlctdp;
         if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
@@ -1927,7 +1927,7 @@ public class GTURTLEModeling {
 
     }
 
-    public TMLMapping autoSecure(MainGUI gui, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
         //TODO add more options
         //
         if (tmap==null){
@@ -1938,14 +1938,14 @@ public class GTURTLEModeling {
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
         return autoSecure(gui, "enc", tmap,newarch,autoConf,autoWeakAuth, autoStrongAuth);
     }
-    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch){
         return autoSecure(gui,name,map,newarch,"100","0","100",true,false,false);
     }
-    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
         return autoSecure(gui,name,map,newarch,"100","0","100",autoConf,autoWeakAuth, autoStrongAuth);
     }
 
-    public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String encComp, String overhead, String decComp){
         if (tmap==null){
             return null;
         }
@@ -1955,7 +1955,7 @@ public class GTURTLEModeling {
         return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,true,false,false);
     }
 
-    public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
         if (tmap==null){
             return null;
         }
@@ -1964,11 +1964,11 @@ public class GTURTLEModeling {
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
         return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,autoConf,autoWeakAuth, autoStrongAuth);
     }
-    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp){
         return autoSecure(gui,name, tmap,newarch,encComp, overhead,decComp,true,false, false);
     }
 
-    public void proverifAnalysis(TMLMapping map,  ArrayList<String> nonAuthChans, ArrayList<String> nonSecChans){
+    public void proverifAnalysis(TMLMapping<TGComponent> map,  ArrayList<String> nonAuthChans, ArrayList<String> nonSecChans){
         if (map==null){
             TraceManager.addDev("No mapping");
             return;
@@ -2025,7 +2025,7 @@ public class GTURTLEModeling {
         }
     }
 
-    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
         HashMap<TMLTask, java.util.List<TMLTask>> toSecure = new HashMap<TMLTask, java.util.List<TMLTask>>();
         HashMap<TMLTask, java.util.List<TMLTask>> toSecureRev = new HashMap<TMLTask, java.util.List<TMLTask>>();
         HashMap<TMLTask, java.util.List<String>> secOutChannels = new HashMap<TMLTask, java.util.List<String>>();
@@ -2042,7 +2042,7 @@ public class GTURTLEModeling {
 
         proverifAnalysis(map, nonAuthChans, nonSecChans);
 
-        TMLModeling tmlmodel = map.getTMLModeling();
+        TMLModeling<TGComponent> tmlmodel = map.getTMLModeling();
         java.util.List<TMLChannel> channels = tmlmodel.getChannels();
         for (TMLChannel channel: channels){
             for (TMLCPrimitivePort p: channel.ports){
@@ -2603,7 +2603,7 @@ public class GTURTLEModeling {
             }
         }
         GTMLModeling gtm = new GTMLModeling(t, false);
-        TMLModeling newmodel = gtm.translateToTMLModeling(false,false);
+        TMLModeling<TGComponent> newmodel = gtm.translateToTMLModeling(false,false);
         for (TMLTask task:newmodel.getTasks()){
             task.setName(tabName+"_"+name+"__"+task.getName());
         }
@@ -2623,7 +2623,7 @@ public class GTURTLEModeling {
         map.setTMLModeling(newmodel);
         return map;
     }
-    public boolean securePath(TMLMapping map, TMLTask t1, TMLTask t2){
+    public boolean securePath(TMLMapping<TGComponent> map, TMLTask t1, TMLTask t2){
         //Check if a path between two tasks is secure
         boolean secure=true;
         java.util.List<HwLink> links = map.getTMLArchitecture().getHwLinks();
@@ -2698,7 +2698,7 @@ public class GTURTLEModeling {
         }
         java.util.List<HwLink> links = tmap.getArch().getHwLinks();
         //Find all Security Patterns, if they don't have an associated memory at encrypt and decrypt, map them
-        TMLModeling tmlm = tmap.getTMLModeling();
+        TMLModeling<TGComponent> tmlm = tmap.getTMLModeling();
         if (tmlm.securityTaskMap ==null){
             return;
         }
@@ -3474,17 +3474,17 @@ public class GTURTLEModeling {
         return tmState;
     }
 
-    public TMLModeling getTMLModeling() {
+    public TMLModeling<TGComponent> getTMLModeling() {
         return tmlm;
     }
     public TML2Avatar getTML2Avatar(){
         return t2a;
     }
-    public TMLMapping getArtificialTMLMapping() {
+    public TMLMapping<TGComponent> getArtificialTMLMapping() {
         return artificialtmap;
     }
 
-    public TMLMapping getTMLMapping() {
+    public TMLMapping<TGComponent> getTMLMapping() {
         return tmap;
     }
 

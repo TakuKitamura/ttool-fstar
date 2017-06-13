@@ -62,8 +62,8 @@ public class TMLModelCompilerParser {
 	public TMLActivityElement element;
 	private List<TMLModelCompilerError> errors;
 	//	private ArrayList<TMLTask> mappedTasks;
-	private TMLMapping tmap;
-	private TMLModeling tmlm;
+	private TMLMapping<?> tmap;
+	private TMLModeling<?> tmlm;
 		//private TMLArchitecture tmla;
 	private List<TMLCPLib> mappedCPLibs;
 
@@ -75,7 +75,7 @@ public class TMLModelCompilerParser {
     public String message;
 	public TMLTask task;
     
-    public TMLModelCompilerParser( TMLMapping _tmap, TMLModeling _tmlm, TMLArchitecture _tmla ) {
+    public TMLModelCompilerParser( TMLMapping<?> _tmap, TMLModeling<?> _tmlm, TMLArchitecture _tmla ) {
 			//mappedTasks = _mappedTasks;
 			errors = new ArrayList<TMLModelCompilerError>();
 			tmap = _tmap;

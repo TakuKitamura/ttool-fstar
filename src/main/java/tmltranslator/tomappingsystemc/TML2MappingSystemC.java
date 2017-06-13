@@ -68,8 +68,8 @@ public class TML2MappingSystemC {
 	
 	private final static int MAX_EVENT = 1024;
 
-	private TMLModeling tmlmodeling;
-	private TMLMapping tmlmapping;
+	private TMLModeling<?> tmlmodeling;
+	private TMLMapping<?> tmlmapping;
     
     private boolean debug;
     
@@ -78,7 +78,7 @@ public class TML2MappingSystemC {
 	
 	private ArrayList<MappedSystemCTask> tasks;
     
-	public TML2MappingSystemC(TMLModeling _tmlm) {
+	public TML2MappingSystemC(TMLModeling<?> _tmlm) {
 		tmlmodeling = _tmlm;
 		TMLArchitecture tmla = new TMLArchitecture();
 		HwCPU cpu = new HwCPU("cpu0");
@@ -90,7 +90,7 @@ public class TML2MappingSystemC {
 		cpu.execiTime = 1;
 		tmla.addHwNode(cpu);
 		
-		tmlmapping = new TMLMapping(tmlmodeling, tmla, false);
+		tmlmapping = new TMLMapping<>(tmlmodeling, tmla, false);
 		
 		Iterator<TMLTask> iterator = _tmlm.getTasks().listIterator();
         TMLTask t;
@@ -100,7 +100,7 @@ public class TML2MappingSystemC {
 		}
     }
 	
-    public TML2MappingSystemC(TMLMapping _tmlmapping) {
+    public TML2MappingSystemC(TMLMapping<?> _tmlmapping) {
         tmlmapping = _tmlmapping;
     }
     

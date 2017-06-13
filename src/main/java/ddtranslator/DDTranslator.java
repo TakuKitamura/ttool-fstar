@@ -51,6 +51,7 @@ import ui.*;
 import ui.cd.TCDTClass;
 import ui.dd.TDDNode;
 import ui.dd.TGConnectorLinkNode;
+import ui.CorrespondanceTGElement;
 
 import java.util.Iterator;
 import java.util.LinkedList;

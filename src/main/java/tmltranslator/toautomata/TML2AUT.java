@@ -62,7 +62,7 @@ public class TML2AUT {
     
     //private static int gateId;
     
-    private TMLModeling tmlmodeling;
+    private TMLModeling<?> tmlmodeling;
     private LinkedList<Automata> automatas;
     
     //private boolean debug;
@@ -72,7 +72,7 @@ public class TML2AUT {
     public static String IMM = "imm__";
     
     
-    public TML2AUT(TMLModeling _tmlmodeling) {
+    public TML2AUT(TMLModeling<?> _tmlmodeling) {
         tmlmodeling = _tmlmodeling;
     }
     

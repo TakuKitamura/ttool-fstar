@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Prod" pattern="src[shared]:*..*" />
+</component>

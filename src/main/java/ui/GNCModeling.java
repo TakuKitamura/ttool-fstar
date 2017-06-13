@@ -51,7 +51,6 @@ import myutil.TreeCell;
 import nc.*;
 import translator.CheckingError;
 import ui.ncdd.*;
-import ui.UICheckingError;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

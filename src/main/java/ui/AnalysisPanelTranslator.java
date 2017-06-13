@@ -52,7 +52,6 @@ import sddescription.*;
 import translator.CheckingError;
 import ui.iod.*;
 import ui.sd.*;
-import ui.UICheckingError;
 
 import java.util.Iterator;
 import java.util.LinkedList;

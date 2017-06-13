@@ -81,7 +81,7 @@ public class GTMLModeling  {
     private TMLDesignPanel tmldp;
     private TMLComponentDesignPanel tmlcdp;
     private TMLArchiPanel tmlap;
-    private TMLModeling tmlm;
+    private TMLModeling<TGComponent> tmlm;
     private List<CheckingError> checkingErrors, warnings;
     private List<? extends TGComponent> tasksToTakeIntoAccount;
     private List<? extends TGComponent> componentsToTakeIntoAccount;
@@ -93,7 +93,7 @@ public class GTMLModeling  {
     //private ArrayList<HwNode> nodesToTakeIntoAccount;
     private List<TGComponent> nodesToTakeIntoAccount;
 
-    private TMLMapping map;
+    private TMLMapping<TGComponent> map;
     private TMLArchitecture archi;
 
     //Attributes specific to Communication Patterns
@@ -142,7 +142,7 @@ public class GTMLModeling  {
         }
     }
 
-    public TMLModeling translateToTMLModeling(boolean _resetID) {
+    public TMLModeling<TGComponent> translateToTMLModeling(boolean _resetID) {
         return translateToTMLModeling(false, _resetID);
     }
 
@@ -150,8 +150,8 @@ public class GTMLModeling  {
         putPrefixName = _b;
     }
 
-    public TMLModeling translateToTMLModeling(boolean onlyTakenIntoAccount, boolean _resetID) {
-        tmlm = new TMLModeling(_resetID);
+    public TMLModeling<TGComponent> translateToTMLModeling(boolean onlyTakenIntoAccount, boolean _resetID) {
+        tmlm = new TMLModeling<>(_resetID);
         checkingErrors = new LinkedList<CheckingError> ();
         warnings = new LinkedList<CheckingError> ();
 
@@ -2338,11 +2338,11 @@ public class GTMLModeling  {
         }
     }
 
-    public TMLMapping translateToTMLMapping() {
+    public TMLMapping<TGComponent> translateToTMLMapping() {
 
-        tmlm = new TMLModeling(true);
+        tmlm = new TMLModeling<>(true);
         archi = new TMLArchitecture();  //filled by makeArchitecture
-        map = new TMLMapping(tmlm, archi, false);
+        map = new TMLMapping<>(tmlm, archi, false);
         map.tmlap = tmlap;
         checkingErrors = new LinkedList<CheckingError> ();
         warnings = new LinkedList<CheckingError> ();
@@ -3203,7 +3203,7 @@ public class GTMLModeling  {
         TraceManager.addDev("Nb of panels regular:" + panels.size() + " components" + cpanels.size());
 
         // For each panel, construct a TMLModeling
-        TMLModeling tmpm;
+        TMLModeling<TGComponent> tmpm;
         GTMLModeling gtml;
         String s;
         index = 0;

@@ -62,7 +62,7 @@ public class TML2AUTviaLOTOS {
     
     //private static int gateId;
     
-    private TMLModeling tmlmodeling;
+    private TMLModeling<?> tmlmodeling;
     private TURTLEModeling tm;
     private List<Automata> automatas;
     private List<String> specs; /* name, then spec, then name, then spec. All specs are in LOTOS !*/
@@ -74,7 +74,7 @@ public class TML2AUTviaLOTOS {
     public static String IMM = "imm__";
     
     
-    public TML2AUTviaLOTOS(TMLModeling _tmlmodeling, TURTLEModeling _tm) {
+    public TML2AUTviaLOTOS(TMLModeling<?> _tmlmodeling, TURTLEModeling _tm) {
         tmlmodeling = _tmlmodeling;
         tm = _tm;
         if (_tm == null) {

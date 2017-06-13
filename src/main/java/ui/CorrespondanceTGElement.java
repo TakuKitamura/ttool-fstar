@@ -62,12 +62,13 @@ import tmltranslator.TMLActivityElement;
 import translator.ADComponent;
 import translator.TClass;
 import ui.cd.TCDTClass;
+import ui.util.CorrespondanceElement;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class CorrespondanceTGElement {
+public class CorrespondanceTGElement implements CorrespondanceElement<TGComponent> {
     private Vector<TGComponent> tg; //tgelement
     private Vector<String> names; //prename
     private Vector<Object> data; // turtle modeling elements
@@ -75,7 +76,7 @@ public class CorrespondanceTGElement {
                                //It is more natural than using indexes and easyer to use in a recursive context  
     
     public CorrespondanceTGElement() {
-        tg = new Vector<TGComponent>();
+        tg = new Vector<>();
         data = new Vector<Object>();
         names = new Vector<String>();
         panelNames=new Vector<String>();
@@ -92,7 +93,8 @@ public class CorrespondanceTGElement {
            data.addAll(ce.getData());
            panelNames.addAll(ce.getPanelNames());
     }
-    
+
+    @Override
     public void addCor(Object o, TGComponent tgc) {
         addCor(o, tgc, "");
         }
@@ -131,7 +133,7 @@ public class CorrespondanceTGElement {
     
     
     /*
-     * Returns the ADComponent coresponding to the first TGComponent founded named "name" 
+     * Returns the ADComponent coresponding to the first TGComponent founded named "name"
      *  @author Emil Salageanu
      */
     public ADComponent getADComponentByName(String name, String panelName)
@@ -474,7 +476,8 @@ public class CorrespondanceTGElement {
         return null;
     }
 	
-	public void useDIPLOIDs() {
+	@Override
+    public void useDIPLOIDs() {
 		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
 		Object o0, o1;
 		DIPLOElement de;

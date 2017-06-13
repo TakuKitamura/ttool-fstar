@@ -58,8 +58,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TML2Avatar {
-	private TMLMapping tmlmap;
-	private TMLModeling tmlmodel;
+	private TMLMapping<?> tmlmap;
+	private TMLModeling<?> tmlmodel;
 
 	private Map<SecurityPattern, List<AvatarAttribute>> symKeys = new HashMap<SecurityPattern, List<AvatarAttribute>>();
 	private Map<SecurityPattern, List<AvatarAttribute>> pubKeys = new HashMap<SecurityPattern, List<AvatarAttribute>>();
@@ -90,7 +90,7 @@ public class TML2Avatar {
 	List<String> allStates;
 	boolean mc = false;
 	boolean security=false;
-	public TML2Avatar(TMLMapping tmlmap, boolean modelcheck, boolean sec) {
+	public TML2Avatar(TMLMapping<?> tmlmap, boolean modelcheck, boolean sec) {
 		this.tmlmap = tmlmap;
 	this.tmlmodel = tmlmap.getTMLModeling();
 	allStates = new ArrayList<String>();

@@ -51,8 +51,6 @@ import compiler.tmlparser.TMLExprParser;
 import compiler.tmlparser.TokenMgrError;
 import myutil.TraceManager;
 import translator.*;
-import ui.CorrespondanceTGElement;
-import ui.TGComponent;
 
 import java.io.StringReader;
 import java.util.ArrayList;
