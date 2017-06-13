@@ -70,6 +70,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     protected int popupx, popupy; //used when popupmenu is activated
 
     protected int DIST_Y = 20;
+    protected int DIST_X = 20;
 
     protected boolean automaticDrawing = true; // Used when user select to enhance the diagram automatically
 
@@ -345,35 +346,60 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
             TraceManager.addDev("Making square ...");
             int minXX = 500000, maxXX = 0, resX = 0;
             // search for the min x and maxX
-            for (i=0; i<=points.length; i++) {
+	    int averageX = 0;
+            for (i=0; i<points.length; i++) {
                 minXX = Math.min(minXX, points[i].getX());
                 maxXX = Math.max(maxXX, points[i].getX());
+		if ((i != 0) && (i != points.length-1))
+		    averageX += points[i].getX();
             }
+	    averageX = averageX / (points.length-2);
 
+	    TraceManager.addDev("averageX = " + averageX + " minXX= " + minXX + " maxXX =" +  maxXX);
+	    
             resX = 0;
             //System.out.println("p1.x = " + p1.getX() + " p2.x = " + p2.getX() + " minXX=" + minXX + "maxXX=" + maxXX);
             if (!((minXX >= 500000) ||(points.length == 0))){
  
                 //System.out.println("p1.x = " + p1.getX() + " p2.x = " + p2.getX() + " minXX=" + minXX + "maxXX=" + maxXX);
-                if (p1.getX() < p2.getX()) {
-                    if (minXX < p1.getX()) {
+
+		if ((Math.abs(averageX - maxXX)) < (Math.abs(averageX - minXX))) {
+		    resX = maxXX;
+		} else {
+		    resX = minXX;
+		}
+
+		TraceManager.addDev("Using resX = " + resX);
+		
+		/*if (resX < p2.getX()) {
+		    resX = minXX;
+		} else {
+		    resX = maxXX;
+		}
+
+		if (p1.getX() > resX && p2.getX() < p1.getX()) {
+		    resX = maxXX;
+		    }*/
+		
+                /*if (p1.getX() < p2.getX()) {
+		  if (minXX < p1.getX()) {
                         //System.out.println("min1");
                         resX = minXX;
                     } else {
-                        if (maxXX > (p2.getX() + DIST_Y)) {
+                        if (maxXX > (p2.getX() + DIST_X)) {
                             resX = maxXX;
                         }
                     }
                 } else {
-                    if (maxXX > p1.getX()) {
+                    if (maxXX > p1.getX() + DIST_X) {
                         resX = maxXX;
                     } else {
-                        if (minXX < (p1.getX() - DIST_Y)) {
+                        if (minXX < (p1.getX() - DIST_X)) {
                             resX = minXX;
                         }
                     }
-                }
-            }
+		    }*/
+	    }
             if (resX == 0) {
                 //System.out.println("setting resX");
                 resX = (p2.getX() + p1.getX()) / 2;
@@ -386,6 +412,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
             for(i=0; i<points.length/4; i++) {
                 points[i].setCd(p1.getX(), p1.getY() + DIST_Y);
             }
+
             for(i=(points.length/4); i<points.length/2; i++) {
                 points[i].setCd(resX, p1.getY() + DIST_Y);
             }
@@ -393,7 +420,11 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
                 points[i].setCd(resX, p2.getY() - DIST_Y);
             }
             for(i=(3*points.length/4); i<points.length; i++) {
-                points[i].setCd(p2.getX(),  p2.getY() - DIST_Y);
+		if (resX > p2.getX()) {
+		    points[i].setCd(p2.getX()+DIST_X,  p2.getY() - DIST_Y);
+		} else {
+		     points[i].setCd(p2.getX()-DIST_X,  p2.getY() - DIST_Y);
+		}
             }
             //}
         }
@@ -429,7 +460,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
             }
 
 	    TGCPointOfConnector []points = listOfPointsToArray();
-            for(int i=0; i<points.length; i++) {
+            for(int i=0; i<points.length-1; i++) {
                 p3 = points[i];
                 p4 = points[i+1];
 
