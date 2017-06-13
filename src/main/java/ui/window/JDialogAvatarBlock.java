@@ -215,12 +215,14 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Adding " + attrib + "s"));
-        panel1.setPreferredSize(new Dimension(300, 250));
+        panel1.setPreferredSize(new Dimension(300, 450));
+	panel1.setMinimumSize(new Dimension(300, 200));
 
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Managing " + attrib + "s"));
-        panel2.setPreferredSize(new Dimension(300, 250));
+        panel2.setPreferredSize(new Dimension(300, 450));
+	panel1.setMinimumSize(new Dimension(300, 200));
 
         // first line panel1
         c1.gridwidth = 1;
@@ -293,7 +295,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         listAttribute.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listAttribute.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane(listAttribute);
-        scrollPane.setSize(300, 250);
+        scrollPane.setSize(300, 450);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         c2.fill = GridBagConstraints.BOTH;
         c2.gridheight = 5;
@@ -327,12 +329,12 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         panel3 = new JPanel();
         panel3.setLayout(gridbag3);
         panel3.setBorder(new javax.swing.border.TitledBorder("Adding methods"));
-        panel3.setPreferredSize(new Dimension(300, 250));
+        panel3.setPreferredSize(new Dimension(300, 450));
 
         panel4 = new JPanel();
         panel4.setLayout(gridbag2);
         panel4.setBorder(new javax.swing.border.TitledBorder("Managing methods"));
-        panel4.setPreferredSize(new Dimension(300, 250));
+        panel4.setPreferredSize(new Dimension(300, 450));
 
         // first line panel3
         c3.gridwidth = 1;
@@ -386,7 +388,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         listMethod.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listMethod.addListSelectionListener(this);
         scrollPane = new JScrollPane(listMethod);
-        scrollPane.setSize(300, 250);
+        scrollPane.setSize(300, 450);
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
         c4.fill = GridBagConstraints.BOTH;
         c4.gridheight = 5;
@@ -420,12 +422,12 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         panel5 = new JPanel();
         panel5.setLayout(gridbag5);
         panel5.setBorder(new javax.swing.border.TitledBorder("Adding signals"));
-        panel5.setPreferredSize(new Dimension(300, 250));
+        panel5.setPreferredSize(new Dimension(300, 550));
 
         panel6 = new JPanel();
         panel6.setLayout(gridbag6);
         panel6.setBorder(new javax.swing.border.TitledBorder("Managing signals"));
-        panel6.setPreferredSize(new Dimension(300, 250));
+        panel6.setPreferredSize(new Dimension(300, 550));
 
         // first line panel5
         c5.gridwidth = 1;
@@ -476,7 +478,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         listSignal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listSignal.addListSelectionListener(this);
         scrollPane = new JScrollPane(listSignal);
-        scrollPane.setSize(300, 250);
+        scrollPane.setSize(300, 450);
         c6.gridwidth = GridBagConstraints.REMAINDER; //end row
         c6.fill = GridBagConstraints.BOTH;
         c6.gridheight = 5;

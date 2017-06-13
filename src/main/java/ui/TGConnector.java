@@ -343,7 +343,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
             //System.out.println("Algo2");
             // Algorithm 2: more complex
             // we need at least 4 points
-            TraceManager.addDev("Making square ...");
+            //TraceManager.addDev("Making square ...");
             int minXX = 500000, maxXX = 0, resX = 0;
             // search for the min x and maxX
 	    int averageX = 0;
@@ -353,9 +353,8 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
 		if ((i != 0) && (i != points.length-1))
 		    averageX += points[i].getX();
             }
-	    averageX = averageX / (points.length-2);
-
-	    TraceManager.addDev("averageX = " + averageX + " minXX= " + minXX + " maxXX =" +  maxXX);
+	    
+	    //TraceManager.addDev("averageX = " + averageX + " minXX= " + minXX + " maxXX =" +  maxXX);
 	    
             resX = 0;
             //System.out.println("p1.x = " + p1.getX() + " p2.x = " + p2.getX() + " minXX=" + minXX + "maxXX=" + maxXX);
@@ -363,13 +362,18 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
  
                 //System.out.println("p1.x = " + p1.getX() + " p2.x = " + p2.getX() + " minXX=" + minXX + "maxXX=" + maxXX);
 
-		if ((Math.abs(averageX - maxXX)) < (Math.abs(averageX - minXX))) {
-		    resX = maxXX;
+		if (averageX >0) {
+		    averageX = averageX / (points.length-2);
+		    if ((Math.abs(averageX - maxXX)) < (Math.abs(averageX - minXX))) {
+			resX = maxXX;
+		    } else {
+			resX = minXX;
+		    }
 		} else {
-		    resX = minXX;
+		    resX = p1.getX() + p2.getX() / 2;
 		}
 
-		TraceManager.addDev("Using resX = " + resX);
+		//TraceManager.addDev("Using resX = " + resX);
 		
 		/*if (resX < p2.getX()) {
 		    resX = minXX;
