@@ -130,7 +130,6 @@ Finally, the document explains how to have the generated code to connect with an
 
 \section{Configuration}\label{sec:conf}
 \subsection{TTool configuration}
-\label{sec:conf}
 At first, if not already configured\footnote{TTool should be provided with the configuration already done}, you must open the configuration file of TTool. The default file is located in:
 \begin{verbatim}
 TTool/bin/config.xml
@@ -255,7 +254,7 @@ Once the generated code has been successfully compiled and linked, the execution
 Select the second option. An execution trace should be displayed in the console of the dialog window.
 
 \subsection{Backtracing}
-After you have started the program, switch to the "Results" tab. You should see a window similar to the one display in Figure \ref{fig:resultshelloWorld}. There are two options:
+After you have started the program, switch to the "Results" tab. You should see a window similar to the one display in Figure \ref{fig:resultshelloworld}. There are two options:
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.9\textwidth]{figures/resultshelloworld}
@@ -330,7 +329,7 @@ Hello world from generated code
 \end{lstlisting}
 
 \newpage
-\section{Advanced model enhancement with user code}\label{sec:custom}
+\section{Advanced model enhancement with user code}\label{sec:advanced}
 To follow this section, you have to use another TTool model called "MicroWaveOven\_SafetySecurity\_fullMethodo.xml", available on the network repository of TTool (File, Open from TTool repository).\\
 This section explains how a code generated from TTool can be linked with an external software, e.g. to animate a graphical user interface. The provided example relies on datagrams and socket to echange information between the microwave software (fully generated from TTool) and its graphical user interface (programmed "by hand"). We will now call these two software MS and GUI, respectively
 
@@ -361,6 +360,6 @@ Open the model in TTool, and double-click on a block methods, then select the "P
 \subsubsection{Local code}
 
 \newpage
-\section{Customizing the code generation}\label{sec:custom}
+\section{Customizing the code generator}\label{sec:customgenerator}
 We are currently working on a plug-in facility in order to be able to customize the AVATAR-to-C code generator. Send us an email to be informed about this functionnality, or stay connected to \url{https://twitter.com/TTool_UML_SysML}
 \end{document}
