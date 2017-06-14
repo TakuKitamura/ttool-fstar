@@ -19,6 +19,12 @@
 \usepackage[a4paper,bindingoffset=0.2in,headsep=0.5cm,left=1in,right=1in,bottom=3cm,top=2cm,headheight=2cm]{geometry}
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage[most]{tcolorbox}
+
+\lstset{language=C,basicstyle=\scriptsize\ttfamily,keywordstyle=\bfseries, commentstyle=\textit,stringstyle=\ttfamily, showspaces=false,showstringspaces=false, frame=single,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
 
 \everymath{\displaystyle}
 \pagestyle{fancy}
@@ -120,7 +126,9 @@ Editor} & \textbf{Year}
 This document describes the code generation principle for AVATAR design diagrams implemented in TTool. It describes how to configure TTool for generating code, how to generate the code, how to compile it, how to execute it.
 Finally, the document explains how to have the generated code to connect with an external graphical interface.
 
-\section{Configuration}
+\newpage
+
+\section{Configuration}\label{sec:conf}
 \subsection{TTool configuration}
 \label{sec:conf}
 At first, if not already configured\footnote{TTool should be provided with the configuration already done}, you must open the configuration file of TTool. The default file is located in:
@@ -150,7 +158,8 @@ Open your configuration file, and set the following lines accordingly with your 
 \subsection{External tools}
 The previous configuration assumes that a \textbf{c compiler}, referenced by the provided Makefile (default = "gcc") is installed on your machine, as well as the \textbf{POSIX-1 librairies}. Also, a Mafile utility must be installed (e.g., "gnu make").
 
-\section{A first example}
+\newpage
+\section{A first example}\lable{sec:example}
 This very first example explains how to generate the code from an AVATAR design model, and how to introduce your own basic C directive in the code generation process.
 
 \subsection{Getting the example}
@@ -164,7 +173,7 @@ This models contains a design diagram composed of one MainBlock. This later regu
 \centering
 \includegraphics[scale=0.65]{figures/bdhelloworld.pdf}
 \hspace{1cm}
-\includegraphics[Width]{figures/smdhelloworld.pdf}
+\includegraphics[scale=0.65]{figures/smdhelloworld.pdf}
 \caption{Hello world model} \label{fig:printhelloworld}
 \end{figure*}
 
@@ -177,13 +186,181 @@ You may then check the syntax of the diagram, and select the "interactive simula
 \end{figure*}
 
 \subsection{Generating executable code}
-To generate executable code,
+To generate executable code, first check thye syntax of one of the model diagram, and then click on the "code generation" icon representing a gear. The following window should open (see Figure \ref{fig:codegenhelloworld}).
 
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/codegenhelloworld}
+\caption{Generating C/POSIX code for the Hello world model} \label{fig:codegenhelloworld}
+\end{figure*}
 
+\begin{itemize}
+\item You can add debugging information to the generating code ("Put debug infromation \ldots") if you wish the generated code to print information in the default output when executing. Typical debugging infrmation are: state entering/exiting, send / receive of signals.
+\item Tracing capabilities enable to draw a sequence diagram representing the execution of the code.
+\item User defined code can be included (or not). \textbf{Uncheck this option first}.
+\item The time unit manipulated by TTool can be set to seconds, milliseconds or microseconds. For example, if "sec" is sele'cted, it means that  "after(2)" means a waiting of two seconds. Default is "sec", keep it like this for the incoming tutorial.
+\end{itemize}
 
+\subsection{Compiling the generated code}
+Once the code has been generated, the dialog window should automatically switch to the "Compile" tab (see Figure \ref{fig:compilehelloworld}). There, you should notice two alternative possibilities:
+\begin{itemize}
+\item Compile the code for your localhost (\textbf{You should select this option}).
+\item Compile the code for the SoCLib platform. This option is not addressed in this document.
+\end{itemize}
+If the compilation fails, it is probably due to a bad installation of a C compiler. You could also edit the Makefile you have selected (see section \ref{sec:conf}) to adapt it to your localhost particularities.  Note that the compilation process also compiles the Avatar runtime C sources, and links all object files together.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/compilehelloworld}
+\caption{Compiling the Hello world model generated C code} \label{fig:compilehelloworld}
+\end{figure}
 
+You may obvisouly try to compile the code from a terminal. e.g.:
+\begin{lstlisting}
+$ cd TTool/executablecode
+$ make
+echo Making directories
+Making directories
+mkdir -p ./lib
+mkdir -p ./lib/generated_src/
+mkdir -p ./lib/src/ 
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/generated_src/main.o -c generated_src/main.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/generated_src/MainBlock.o -c generated_src/MainBlock.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/request.o -c src/request.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/message.o -c src/message.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/myerrors.o -c src/myerrors.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/debug.o -c src/debug.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/syncchannel.o -c src/syncchannel.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/asyncchannel.o -c src/asyncchannel.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/request_manager.o -c src/request_manager.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/random.o -c src/random.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/mytimelib.o -c src/mytimelib.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/tracemanager.o -c src/tracemanager.c
+/usr/bin/gcc -O1 -pthread -ldl -lrt -Wall  -I. -I. -Isrc/  -Igenerated_src/ -L. -L..  -o run.x lib/generated_src/main.o lib/generated_src/MainBlock.o lib/src/request.o lib/src/message.o lib/src/myerrors.o lib/src/debug.o lib/src/syncchannel.o lib/src/asyncchannel.o lib/src/request_manager.o lib/src/random.o lib/src/mytimelib.o lib/src/tracemanager.o -lm  2>&1 | c++filt
+\end{lstlisting}
 
+\subsection{Executing the generated code}
+Once the generated code has been successfully compiled and linked, the execution tab is selected (see Figure \ref{fig:executehelloworld}). There are three possible options to execute the compiled program:
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/executehelloworld}
+\caption{Executing the Hello world program} \label{fig:executehelloworld}
+\end{figure}
 
+\begin{itemize}
+\item Running the program ("Run code")
+\item Running the program and activating the backtracing
+\item Running the program in the SoCLib environment (no covered in this document).
+\end{itemize}
+Select the second option. An execution trace should be displayed in the console of the dialog window.
 
+\subsection{Backtracing}
+After you have started the program, switch to the "Results" tab. You should see a window similar to the one display in Figure \ref{fig:resultshelloWorld}. There are two options:
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/resultshelloworld}
+\caption{Backtracing dialog window} \label{fig:resultshelloworld}
+\end{figure}
+\begin{itemize}
+\item Displaying the execution trace of the localhost program
+\item Displaying the execution trace of the SoCLib program (option is not covered in this manual)
+\end{itemize}
+Select the first option, and click on the "show simulation trace" button. A new window should open, displaying the execution of the model under the form of a UML Sequence Diagram (see Figure \ref{fig:backtracinghelloworld})
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/backtracinghelloworld}
+\caption{Executing the Hello world program} \label{fig:backtracinghelloworld}
+\end{figure}
+
+\newpage
+\section{Enhancing model with user code}\label{sec:custom}
+
+\subsection{Principle}
+A user of TTool can provide its own C code within an AVATAR design diagram. Note that when a model is enhanced with custom C code, the C code generated from the enhanced model may not compiled because of the user included C code.\\
+Basically, there are two types of custom code (see Figure \ref{fig:customhelloworld}). To open thiw window, simply double-click in the attributes/methods/signal/code part of a given block)
+\begin{itemize}
+\item The code global to the model
+\item The code local to a given block. This code is itself split into two sub parts:
+\begin{itemize}
+\item The code global to the block.
+\item The code implementing a method of the block.
+\end{itemize}
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/customhelloworld}
+\caption{Executing the Hello world program} \label{fig:customhelloworld}
+\end{figure}
+
+\subsection{Global code}
+The global code typically contains the declaration of global variables. Also, one specific method can be used to execute code before the application starts. The function is as follows: 
+\begin{verbatim}
+void __user_init(){...}
+\end{verbatim}
+For instance, the global code of the HelloWorld example is as follows:
+\begin{lstlisting}
+void __user_init() {
+  printf("Initialializing\n");
+}
+\end{lstlisting}
+
+\subsection{Block code}
+The block code typically contains variables that are not declared as block attributes. Block attributes can indeed be directly used in the custom code. The block code can also provide an implementation for the block methods. For a method called "method" of the block "block", the function must be declared as "\_userImplemented\_block\_method" and \textbf{you must ensure to check the "Implementation provided by the user" option} in the method definition window (see Figure \ref{fig:methodhelloworld}). For instance, the following code correesponds to the block code of "MainBlock". It implements the method "printHelloWorld" referenced in the model (see Figure {fig:printhelloworld}).
+\begin{lstlisting}
+void _userImplemented_MainBlock__printHelloWorld() {
+  printf("Hello world from generated code\n");
+}
+\end{lstlisting}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/methodhelloworld}
+\caption{Selecting a method for which the user provides an implementation}\label{fig:methodhelloworld}
+\end{figure}
+
+\subsection{Code generation and execution with custom code}
+Be sure to \textbf{check the "Include user code" option} on the code generation tab of the code generation window. You may also unckeck the "Put tracing capabilities in generated code" since we won't use this in this example. Then, follow the usual stages : compile, and then execute the program. You should now see the effect of the printf command in the console. It should like this:
+\begin{lstlisting}
+Initializing...
+Hello world from generated code
+Hello world from generated code
+Hello world from generated code
+\end{lstlisting}
+
+\newpage
+\section{Advanced model enhancement with user code}\label{sec:custom}
+To follow this section, you have to use another TTool model called "MicroWaveOven\_SafetySecurity\_fullMethodo.xml", available on the network repository of TTool (File, Open from TTool repository).\\
+This section explains how a code generated from TTool can be linked with an external software, e.g. to animate a graphical user interface. The provided example relies on datagrams and socket to echange information between the microwave software (fully generated from TTool) and its graphical user interface (programmed "by hand"). We will now call these two software MS and GUI, respectively
+
+\subsection{GUI}
+The TTool distribution includes an external software which represents a graphical user interface of a microwave system. The source code (in Java) of this software is located in "TTool/executablecode/example":
+\begin{lstlisting}
+$cd TTool/executablecode/example
+$ ls
+DatagramServer.java  Feeder.java  MainMicrowave.java  MicrowavePanel.java  README
+\end{lstlisting}
+This directory contains the java sources as well as a README file. We first have to compile the java source code, and then to execute the GUI, as follows:
+\begin{lstlisting}
+$javac *.java
+$java MainMicrowave
+\end{lstlisting}
+A window similar to the one of Figure \ref{fig:gui1} should open. This window is not yet animated. To do so, we need to build the MS.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/gui1}
+\caption{Window of the Graphical User Interface} \label{fig:gui1}
+\end{figure}
+
+\subsection{Microwave Software (MS)}
+Open the model in TTool, and double-click on a block methods, then select the "Prototyping" tab. You see be able to see the global and local code.
+\subsubsection{Global code}
+
+\subsubsection{Local code}
+
+\newpage
+\section{Customizing the code generation}\label{sec:custom}
+We are currently working on a plug-in facility in order to be able to customize the AVATAR-to-C code generator. Send us an email to be informed about this functionnality, or stay connected to \url{https://twitter.com/TTool_UML_SysML}
 \end{document}
