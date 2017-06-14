@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -35,12 +35,6 @@
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
 
-   /**
-   * Class AvatarSimpleGuard
-   * Creation: 25/09/2015
-   * @version 1.0 25/09/2015
-   * @author Florian LUGOU
-   * @see
    */
 
 
@@ -49,6 +43,9 @@ package avatartranslator;
 /**
  * An AvatarSimpleGuard is an {@link AvatarGuard} that is of the form:
  * {@link AvatarTerm} binaryOp {@link AvatarTerm} or simply {@link AvatarTerm}, or else
+ * Creation: 25/09/2015
+ * @version 1.0 25/09/2015
+ * @author Florian LUGOU
  */
 public abstract class AvatarSimpleGuard extends AvatarComposedGuard {
 }

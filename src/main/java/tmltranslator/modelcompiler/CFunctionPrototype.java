@@ -1,4 +1,6 @@
-/**Copyright or (C)
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+
+   ludovic.apvrille AT enst.fr
 
    This software is a computer program whose purpose is to allow the
    edition of TURTLE analysis, design and deployment diagrams, to
@@ -32,6 +34,7 @@
 
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
+   */
 
    /**
    * Class CFunctionPrototype: an Abstract Data Type for the prototype of a C function

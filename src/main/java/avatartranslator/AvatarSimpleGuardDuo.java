@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -34,13 +34,6 @@
 
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
-
-   /**
-   * Class AvatarSimpleGuardDuo
-   * Creation: 25/09/2015
-   * @version 1.0 25/09/2015
-   * @author Florian LUGOU
-   * @see
    */
 
 
@@ -51,6 +44,9 @@ import java.util.HashMap;
 /**
  * An AvatarSimpleGuardDuo is an {@link AvatarSimpleGuard} that is of the form:
  * {@link AvatarTerm} binaryOp {@link AvatarTerm}
+ * Creation: 25/09/2015
+ * @version 1.0 25/09/2015
+ * @author Florian LUGOU
  */
 public class AvatarSimpleGuardDuo extends AvatarSimpleGuard {
     AvatarTerm termA;

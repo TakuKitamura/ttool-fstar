@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -35,12 +35,6 @@
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
 
-   /**
-   * Class AvatarConstantGuard
-   * Creation: 22/03/2016
-   * @version 1.0 22/03/2016
-   * @author Florian LUGOU
-   * @see
    */
 
 
@@ -51,6 +45,9 @@ import java.util.HashMap;
 /**
  * An AvatarConstantGuard is an {@link AvatarSimpleGuard} that is of the form:
  * {@link AvatarConstant}
+ * Creation: 22/03/2016
+ * @version 1.0 22/03/2016
+ * @author Florian LUGOU
  */
 public class AvatarConstantGuard extends AvatarSimpleGuard {
     AvatarConstant constant;

@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -35,12 +35,6 @@
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
 
-   /**
-   * Class AvatarGuardElse
-   * Creation: 25/09/2015
-   * @version 1.0 25/09/2015
-   * @author Florian LUGOU
-   * @see
    */
 
 
@@ -51,6 +45,9 @@ import java.util.HashMap;
 /**
  * An AvatarGuardElse is an {@link AvatarGuard} that is of the form:
  * else
+ * Creation: 25/09/2015
+ * @version 1.0 25/09/2015
+ * @author Florian LUGOU
  */
 public class AvatarGuardElse extends AvatarGuard {
     public AvatarGuardElse () {

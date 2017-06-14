@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -37,9 +37,6 @@
 
    /**
    * Class AvatarSimpleGuardMono
-   * Creation: 25/09/2015
-   * @version 1.0 25/09/2015
-   * @author Florian LUGOU
    * @see
    */
 
@@ -51,6 +48,9 @@ import java.util.HashMap;
 /**
  * An AvatarSimpleGuardMono is an {@link AvatarSimpleGuard} that is of the form:
  * {@link AvatarTerm}
+ * Creation: 25/09/2015
+ * @version 1.0 25/09/2015
+ * @author Florian LUGOU
  */
 public class AvatarSimpleGuardMono extends AvatarSimpleGuard {
     AvatarTerm term;

@@ -67,8 +67,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
-public class ProCSDComponent extends TGCWithInternalComponent implements
-		SwallowTGComponent, SwallowedTGComponent, ActionListener {
+public class ProCSDComponent extends TGCWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, ActionListener {
 
 	private int textY2 = 30;
 

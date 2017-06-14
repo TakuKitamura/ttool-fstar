@@ -38,15 +38,11 @@ knowledge of the CeCILL license and that you accept its terms.
 /**
  * Class TGConnectorProSMD
  * Basic connector with a full arrow at the end. Used in ProActive composite structure diagrams.
+ * We have limited the possibilities of a Connector 
  * Creation: 20/07/2006
  * @version 1.0 20/07/2006
  * @author Emil Salageanu, Ludovic APVRILLE
  * @see
- */
-
-/**
- * We have limited the possibilities of a Connector 
- * 
  */
 
 package ui.procsd;

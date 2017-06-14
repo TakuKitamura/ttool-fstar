@@ -35,13 +35,6 @@
  The fact that you are presently reading this means that you have had
  knowledge of the CeCILL license and that you accept its terms.
 
- /**
- * JDialogSearchBox
- * unity message for client and server.
- * Creation: 22/03/2015
- * @version 1.0 11/03/2015
- * @author Dan VO
- * @see
  */
 package myutil.externalSearch;
 
@@ -55,7 +48,10 @@ import java.util.ArrayList;
 //Message format
 
 /**
- CMD Options Values
+ * JDialogSearchBox
+ * unity message for client and server
+ *
+ * CMD Options Values
  *  CMD : A string of command, for example : search, detail, stats
  * search : search with keywords
  * detail : clients send CVE-ID and get back all information
@@ -65,6 +61,10 @@ import java.util.ArrayList;
  *      "Values" contains values respectively
  * RequestMessage
  * AnswerMessage
+ *
+ * Creation: 22/03/2015
+ * @version 1.0 11/03/2015
+ * @author Dan VO
  */
 
 

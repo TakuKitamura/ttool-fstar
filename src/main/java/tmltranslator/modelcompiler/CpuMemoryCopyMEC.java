@@ -4,7 +4,6 @@
    andrea.enrici AT enstr.fr
 
    This software is a computer program whose purpose is to allow the
-		cleanup_code = TAB + "embb_memcpy_ctx_cleanup(&" + ctxName + ");";
    edition of TURTLE analysis, design and deployment diagrams, to
    allow the generation of RT-LOTOS or Java code from this diagram,
    and at last to allow the analysis of formal validation traces

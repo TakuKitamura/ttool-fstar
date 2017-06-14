@@ -53,7 +53,8 @@ import ui.util.IconManager;
 import java.awt.*;
 import java.awt.geom.Line2D;
 
-public class TMLADDelay extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {    private int lineLength = 5;
+public class TMLADDelay extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+    private int lineLength = 5;
     private int textX, textY;
     private int ilength = 10;
     private int lineLength1 = 2;
