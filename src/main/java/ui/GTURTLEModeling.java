@@ -9107,6 +9107,14 @@ public class GTURTLEModeling {
         if (asme instanceof AvatarTransition){
             //
         }
+		if (asme instanceof AvatarRandom){
+			AvatarSMDRandom smdr = new AvatarSMDRandom(x, y, x, x*2, y, y*2, false, null, smp);
+			smdr.setVariable(((AvatarRandom)asme).getVariable());
+			smp.addComponent(smdr, x, y, false, true);
+			tgcomp=smdr;
+			SMDMap.put(asme, smdr);
+			locMap.put(asme, smdr);
+		}
         if (asme instanceof AvatarActionOnSignal){
             avatartranslator.AvatarSignal sig = ((AvatarActionOnSignal) asme).getSignal();
             if (sig.isIn()){

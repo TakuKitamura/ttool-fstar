@@ -99,6 +99,9 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
         valueRandom = variable + " = RANDOM" + functionId + "[" + minValue + ", " + maxValue + "]";
     }
 
+	public void setVariable(String v){
+		variable=v;
+	}
     public void internalDrawing(Graphics g) {
 
         if (valueRandom.length() == 0) {
