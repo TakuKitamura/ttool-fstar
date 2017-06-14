@@ -631,7 +631,11 @@ public final class GraphicLib {
 
     public static JTabbedPane createTabbedPane() {
         final JTabbedPane pane = new JTabbedPane( JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT );
+        return pane;
+    }
 
+    public static JTabbedPane createTabbedPaneRegular() {
+        final JTabbedPane pane = new JTabbedPane( JTabbedPane.TOP);
         return pane;
     }
 }

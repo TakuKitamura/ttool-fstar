@@ -398,7 +398,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         commands.setBorder(new javax.swing.border.TitledBorder("Commands"));
 
         // Issue #41 Ordering of tabbed panes 
-        commandTab = GraphicLib.createTabbedPane();//new JTabbedPane();
+        commandTab = GraphicLib.createTabbedPaneRegular();//new JTabbedPane();
         commands.add(commandTab, BorderLayout.CENTER);
 
 
@@ -422,7 +422,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         c01.fill = GridBagConstraints.BOTH;
         c01.gridheight = 1;
 
-        jp02.add(new JLabel("Command parameter: "), c01);
+        jp02.add(new JLabel("Nb of steps: "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         paramMainCommand = new JTextField("1", 30);
         jp02.add(paramMainCommand, c01);
@@ -514,7 +514,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         //c02.gridwidth = GridBagConstraints.REMAINDER; //end row
 
         // Issue #41 Ordering of tabbed panes 
-        infoTab = GraphicLib.createTabbedPane();// new JTabbedPane();
+        infoTab = GraphicLib.createTabbedPaneRegular();// new JTabbedPane();
         infoTab.setPreferredSize(new Dimension(300, 200));
         infos.add(infoTab, BorderLayout.CENTER);
 

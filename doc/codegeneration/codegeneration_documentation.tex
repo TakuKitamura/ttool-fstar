@@ -153,10 +153,10 @@ The previous configuration assumes that a \textbf{c compiler}, referenced by the
 \section{A first example}
 This very first example explains how to generate the code from an AVATAR design model, and how to introduce your own basic C directive in the code generation process.
 
-\section{Getting the example}
+\subsection{Getting the example}
 Be sure to get the latest version of TTool including the remote loading of models (June 2017 and after). Do: File, Open from TTool repository, and select "HelloWorldCodeGeneration.xml".
 
-\section{Understanding the model}
+\subsection{Understanding the model}
 This models contains a design diagram composed of one MainBlock. This later regularly executes the "printHelloWorld" method (see Figure \ref{fig:printhelloworld}).
 
 
@@ -164,13 +164,19 @@ This models contains a design diagram composed of one MainBlock. This later regu
 \centering
 \includegraphics[scale=0.65]{figures/bdhelloworld.pdf}
 \hspace{1cm}
-\includegraphics[scale=0.65]{figures/smdhelloworld.pdf}
+\includegraphics[Width]{figures/smdhelloworld.pdf}
 \caption{Hello world model} \label{fig:printhelloworld}
 \end{figure*}
 
 You may then check the syntax of the diagram, and select the "interactive simulation icon". From the window that opens, make a step by step simulation, and observe the behaviour of the system. This behaviour is simulated, that is, there is no executable code that is generated to execute the system.
 
-\section{Generating executable code}
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{figures/simulationhelloworld}
+\caption{Functional simulation of the Hello world model} \label{fig:simuhelloworld}
+\end{figure*}
+
+\subsection{Generating executable code}
 To generate executable code,
 
 
