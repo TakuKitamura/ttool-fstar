@@ -809,9 +809,9 @@ public class TML2Avatar {
 					}
 					tran.addAction(ae.securityPattern.key+" = sdecrypt(encryptedKey_"+ae.securityPattern.key+", key_"+ae.securityPattern.name+")");
 				}
-				elementList.add(as);
-					elementList.add(tran);
-				as.addNext(tran);
+			//	elementList.add(as);
+				//	elementList.add(tran);
+			//	as.addNext(tran);
 				if (!ae.securityPattern.nonce.isEmpty()){
 					block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
 					AvatarMethod get2 = new AvatarMethod("get2",ae);
@@ -866,9 +866,9 @@ public class TML2Avatar {
 					}
 					tran.addAction("key_"+ae.securityPattern.key+" = adecrypt(encryptedKey_"+ae.securityPattern.key+", privKey_"+ae.securityPattern.name+")");
 				}
-				elementList.add(as);
-					elementList.add(tran);
-				as.addNext(tran);
+				//elementList.add(as);
+				//	elementList.add(tran);
+				//as.addNext(tran);
 				if (!ae.securityPattern.nonce.isEmpty()){
 				block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
 				AvatarMethod get2 = new AvatarMethod("get2",ae);
@@ -934,10 +934,10 @@ public class TML2Avatar {
 					block.addAttribute(new AvatarAttribute("testnonce_"+ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
 					tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
 				}
-				elementList.add(as);
-				elementList.add(tran);
+				//elementList.add(as);
+				//elementList.add(tran);
 
-				as.addNext(tran);
+				//as.addNext(tran);
 				AvatarState guardState = new AvatarState(ae.getName().replaceAll(" ","")+"_guarded", ae.getReferenceObject());
 				tran.addNext(guardState);
 
@@ -978,9 +978,7 @@ public class TML2Avatar {
 			}
 		}
 		else {
-			as.addNext(tran);
-			elementList.add(as);
-			elementList.add(tran);
+			//
 		}
 	}
 	else if (ae instanceof TMLActivityElementWithIntervalAction){
