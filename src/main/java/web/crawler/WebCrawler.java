@@ -78,18 +78,6 @@ public class WebCrawler {
 
     private String pathToFiles;
 
-    /**
-     * main program
-     * @param args the command line arguments
-     * @throws java.lang.ClassNotFoundException
-     * @throws java.lang.InstantiationException
-     * @throws java.lang.IllegalAccessException
-     * @throws java.sql.SQLException
-     * @throws java.io.IOException
-     * @throws java.awt.AWTException
-     *
-     */
-
     public WebCrawler(String _pathToFiles) {
         pathToFiles = _pathToFiles + java.io.File.separator;
     }
@@ -171,7 +159,7 @@ public class WebCrawler {
 
     }
 
-    public void start() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, IOException, AWTException, Exception {
+    public void start() throws Exception {
 
         if (pathToFiles == null) {
             pathToFiles = "";

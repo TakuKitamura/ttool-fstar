@@ -51,16 +51,16 @@ import java.util.ListIterator;
 public class TClassRequest extends TClass implements FIFOTClass{
     
     private int nbPara;
-    private LinkedList sendReqGates;
-    private LinkedList waitGates;
+    private LinkedList<Gate> sendReqGates;
+    private LinkedList<Gate> waitGates;
     private int counterW, counterR;
     private String requestName;
     
     public TClassRequest(String name, String _requestName, int _nbPara) {
       super(name, true);
       nbPara = _nbPara;
-      sendReqGates = new LinkedList();
-      waitGates = new LinkedList();
+      sendReqGates = new LinkedList<>();
+      waitGates = new LinkedList<>();
       requestName = _requestName;
     }
     
@@ -69,14 +69,14 @@ public class TClassRequest extends TClass implements FIFOTClass{
     }
 
     public Gate getGateWrite() {
-        return (Gate)(sendReqGates.get(0));
+        return sendReqGates.get(0);
     }
     
     public Gate getGateRead() {
-        return (Gate)(waitGates.get(0));
+        return waitGates.get(0);
     }
     
-    public LinkedList getGatesWrite() {
+    public LinkedList<Gate> getGatesWrite() {
         return sendReqGates;
     }
 	
@@ -85,7 +85,7 @@ public class TClassRequest extends TClass implements FIFOTClass{
 		endingName = "__" + endingName;
 		
 		for(int i=0; i<sendReqGates.size(); i++) {
-			g = (Gate)(sendReqGates.get(i));
+			g = sendReqGates.get(i);
 			if (g.getName().endsWith(endingName)) {
 				return g;
 			}
@@ -94,7 +94,7 @@ public class TClassRequest extends TClass implements FIFOTClass{
 		return null;
 	}
     
-    public LinkedList getGatesRead() {
+    public LinkedList<Gate> getGatesRead() {
         return waitGates;
     }
     

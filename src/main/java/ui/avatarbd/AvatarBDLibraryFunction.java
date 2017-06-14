@@ -165,7 +165,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
      *      Indicates whether the position is considered as relative to this father's component.
      * @param father
      *      The father component in the diagram.
-     * @param tdb
+     * @param tdp
      *      The diagram panel.
      */
     public AvatarBDLibraryFunction (
@@ -410,9 +410,9 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         else {
             // try to draw with "..." instead
             if (!this.isCrypto)
-                ster = this.stereotype;
+                ster = stereotype;
             else
-                ster = this.stereotypeCrypto;
+                ster = stereotypeCrypto;
 
             for (int stringLength = ster.length ()-1; stringLength >= 0; stringLength--) {
                 String abbrev = "<<" + ster.substring (0, stringLength) + "...>>";
@@ -456,7 +456,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         // Draw separator
         graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
 
-        if (! ((AvatarBDPanel) this.tdp).areAttributesVisible ())
+        if (! this.tdp.areAttributesVisible ())
             return;
 
         // Set font size
@@ -787,7 +787,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
      *      Unused.
      * @param decY
      *      Unused.
-     * @param decID
+     * @param decId
      *      Unused.
      *
      * @throws MalformedModelingExpresion When the provided XML is corrupted.

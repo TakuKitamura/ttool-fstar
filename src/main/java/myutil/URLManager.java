@@ -63,6 +63,7 @@ public final class URLManager implements Runnable {
     private CallbackLoaderInterface callback;
     
     public URLManager() {
+	busy = false;
     }
 
     public synchronized boolean downloadFile(String _path, String _url, CallbackLoaderInterface _callback) {
@@ -94,6 +95,7 @@ public final class URLManager implements Runnable {
 		callback.loadFailed();
 	    }
 	}
+	busy = false;
     }
 
     public static String getRealURL(String url) {
@@ -136,7 +138,7 @@ public final class URLManager implements Runnable {
     public static BufferedImage getBufferedImageFromURL(String url) {
 	TraceManager.addDev("getBufferedImageFromURL with url=" + url);
         try {
-	    return (BufferedImage)(ImageIO.read(new URL(getRealURL(url))));
+	    return ImageIO.read(new URL(getRealURL(url)));
         } catch (Exception e) {
 	    TraceManager.addDev("Exception in getBufferedImageFromURL =" + e.getMessage());
             return null;

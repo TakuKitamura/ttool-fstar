@@ -73,11 +73,8 @@ public class DiplodocusMethodologyDiagramReferenceToRequirement extends Diplodoc
     }
     
     public boolean isAValidPanelType(TURTLEPanel panel) {
-    	if (panel instanceof AvatarRequirementPanel) {
-    		return true;
-    	}
-    	
-    	return false;
+        return panel instanceof AvatarRequirementPanel;
+
     }
     
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {

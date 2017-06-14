@@ -534,11 +534,11 @@ public class TMLCPTextSpecification {
     private String parseSequence( TMLCPElement element )        {
 
         if( element instanceof TMLCPRefSD )     {
-            String sb = ( removeHashKey( ((TMLCPRefSD) element).getName() ) + SEQUENCE_OP + SP );
+            String sb = ( removeHashKey( element.getName() ) + SEQUENCE_OP + SP );
             return sb;
         }
         if( element instanceof TMLCPRefAD )     {
-            String sb = ( removeHashKey( ((TMLCPRefAD) element).getName() ) + SEQUENCE_OP + SP );
+            String sb = ( removeHashKey( element.getName() ) + SEQUENCE_OP + SP );
             return sb;
         }
         return "";
@@ -618,7 +618,7 @@ public class TMLCPTextSpecification {
                 }
                 else    {       //it is a simple sequence with no nested junctions, use element
                     if( isAJunction( element ) )        {
-                        String s = ( (TMLCPRefAD) element ).getName();
+                        String s = element.getName();
                         sb = removeTrailingSymbol( sb );
                         if( s.equals( ad.getName() ) )  {
                             sb.append( SP + s + ";" + SP + "><" );      // it is a reference to the same junction-choice block
@@ -647,7 +647,7 @@ public class TMLCPTextSpecification {
     private boolean isAJunction( TMLCPElement element ) {
 
         if( element instanceof TMLCPRefAD )     {
-            String s = ( (TMLCPRefAD) element ).getName();
+            String s = element.getName();
             if( s.length() >= 9 )       {
                 if( s.substring( 0,8 ).equals( "junction" ) )   {       //it is a reference to a junction diagram
                     return true;

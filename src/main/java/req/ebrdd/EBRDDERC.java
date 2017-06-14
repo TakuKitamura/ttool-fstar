@@ -112,7 +112,7 @@ public class EBRDDERC extends EBRDDComponent {
 		
 		for (ERCElement elt: treeElements) {
 			if (elt instanceof ERB) {
-				cpt = nbOfESOLeadingTo((ERB)elt);
+				cpt = nbOfESOLeadingTo(elt);
 				if (cpt != 1) {
 					// The ERB is the son of several ESOs or
 					// The ERB is not attached to an ESO

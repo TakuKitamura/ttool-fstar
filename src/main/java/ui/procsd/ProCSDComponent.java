@@ -257,12 +257,9 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 	}
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof ProCSDComponent) {
-			return true;
-		}
-		
-		return false;
-	}
+        return tgc instanceof ProCSDComponent;
+
+    }
 		
 	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		
@@ -270,7 +267,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 			// Set its coordinates
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
-			((ProCSDComponent) tgc).resizeWithFather();
+			tgc.resizeWithFather();
 			addInternalComponent(tgc, 0);
 			return true;
 		}
@@ -1060,7 +1057,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		Vector<ProCSDPort> v=this.getPortsList();
 		  for (int i=0;i<v.size();i++)
 		  {
-			  ProCSDPort port=(ProCSDPort)v.get(i);
+			  ProCSDPort port= v.get(i);
 			  out+=port.prettyPrint()+"\n";
 		  }		
 		out+="<-----Ports List \n";
@@ -1145,7 +1142,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		   return null;
 		   else
 		    { 	ProCSDComponent compDesign=null;
-				compDesign = (ProCSDComponent)(this.getMyDesignPanel().getProCSDComponent());
+				compDesign = this.getMyDesignPanel().getProCSDComponent();
 	            return compDesign;		
 	    	}
 		}

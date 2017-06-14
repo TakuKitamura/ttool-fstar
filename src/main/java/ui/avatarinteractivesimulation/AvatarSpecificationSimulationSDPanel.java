@@ -296,7 +296,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
                     for(AvatarSimulationTransaction astr: allTransactions) {
                         if (astr == astEnd) break;
                         if ((astr.asb == block) && (astr.executedElement instanceof AvatarState)){
-                            tmp = ((AvatarState)(astr.executedElement)).getName();
+                            tmp = astr.executedElement.getName();
                         }
                     }
                     ArrayList<StateYCd> states = null;
@@ -350,7 +350,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
                 transactionsOfPoints.clear();
 
                 if (ast.executedElement instanceof AvatarState) {
-                    if ((showHiddenStates) || (!((AvatarState)ast.executedElement).isHidden())) {
+                    if ((showHiddenStates) || (!ast.executedElement.isHidden())) {
                         newCurrentY = drawState(g, ast, (AvatarState)(ast.executedElement), xOfBlock, currentY);
                         ArrayList<StateYCd> states = null;
                         if (statesMap.containsKey(ast.asb)) {
@@ -360,7 +360,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
                             statesMap.put(ast.asb, states);
                         }
                         StateYCd ycd = new StateYCd();
-                        ycd.stateName = ((AvatarState)(ast.executedElement)).getName();
+                        ycd.stateName = ast.executedElement.getName();
                         ycd.y = currentY + verticalLink;
                         states.add(ycd);
                     }

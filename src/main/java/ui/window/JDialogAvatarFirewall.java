@@ -75,17 +75,17 @@ public class JDialogAvatarFirewall extends javax.swing.JDialog implements Action
 	
     // Panel1
     protected JTextField nodeName;
-    private Vector rules= new Vector();
+    private Vector<String> rules= new Vector<>();
 	// Panel2
     protected JTextField latency;
-    private JList listRules;    
+    private JList<String> listRules;
     private JButton addButton,removeButton;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
-    private JComboBox task1;
-    private JComboBox task2;
+    private JComboBox<String> task1;
+    private JComboBox<String> task2;
     /** Creates new form  */
     public JDialogAvatarFirewall(Frame _frame, String _title, AvatarBDFirewall _node) {
         super(_frame, _title, true);
@@ -142,13 +142,11 @@ public class JDialogAvatarFirewall extends javax.swing.JDialog implements Action
         c2.weighty = 1.0;
         c2.weightx = 1.0;
         c2.fill = GridBagConstraints.HORIZONTAL;
-	for (String s: node.getRules()){
-	    rules.add(s);
-	}
+        rules.addAll(node.getRules());
 	JLabel rulesLabel = new JLabel("Blocking Rules");
 	panel2.add(rulesLabel, c2);
 
-	listRules = new JList<String>(rules);
+	listRules = new JList<>(rules);
         listRules.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listRules.addListSelectionListener(this);
 	JScrollPane scrollPane = new JScrollPane(listRules);
@@ -163,7 +161,7 @@ public class JDialogAvatarFirewall extends javax.swing.JDialog implements Action
 	c2.gridwidth=1;
         c2.weighty = 1.0;
         c2.weightx = 1.0;
-	task1 = new JComboBox();
+	task1 = new JComboBox<>();
 	if (node.getTDiagramPanel() instanceof AvatarBDPanel){
 		AvatarBDPanel abdp = (AvatarBDPanel) node.getTDiagramPanel();
 		for (AvatarBDBlock block: abdp.getFullBlockList()){
@@ -171,7 +169,7 @@ public class JDialogAvatarFirewall extends javax.swing.JDialog implements Action
 		}
 		task1.addItem("*");
 	
-		task2= new JComboBox();
+		task2= new JComboBox<>();
 		for (AvatarBDBlock block: abdp.getFullBlockList()){
 		    task2.addItem(block.getName());
 		}
@@ -275,7 +273,7 @@ public class JDialogAvatarFirewall extends javax.swing.JDialog implements Action
     public ArrayList<String> getRules(){
 	ArrayList<String> r = new ArrayList<String>();
 	for (int i=0; i<rules.size(); i++){
-	    r.add((String) rules.get(i));
+	    r.add(rules.get(i));
 	}
 	return r;
     }

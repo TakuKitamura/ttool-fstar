@@ -68,8 +68,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
     private static final String SPACE = " ";
     
-    private TMLModeling tmlmodeling;
-    private TMLMapping tmlmapping;
+    private TMLModeling<?> tmlmodeling;
+    private TMLMapping<?> tmlmapping;
 
     private boolean debug;
     private boolean optimize;
@@ -83,7 +83,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     
     private final NamesGenerationHelper namesGen;
 
-    DiploSimulatorCodeGenerator(TMLModeling _tmlm) {
+    DiploSimulatorCodeGenerator(TMLModeling<?> _tmlm) {
     	this( _tmlm.getDefaultMapping() );
     	
     	tmlmodeling = _tmlm;
@@ -92,7 +92,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 //        tepeTranslator = new  SystemCTEPE(new ArrayList<TEPE>(), this);
     }
 
-    DiploSimulatorCodeGenerator(TMLMapping _tmlmapping) {
+    DiploSimulatorCodeGenerator(TMLMapping<?> _tmlmapping) {
 //        tmlmapping = _tmlmapping;
 //	tmlmapping.handleCPs();
 //	tmlmapping.removeForksAndJoins();
@@ -101,7 +101,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     	this( _tmlmapping, null, new ArrayList<TEPE>() );
     }
 
-    DiploSimulatorCodeGenerator(TMLModeling _tmlm, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
+    DiploSimulatorCodeGenerator(TMLModeling<?> _tmlm, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
     	this( _tmlm.getDefaultMapping(), _ebrdds, _tepes );
         
     	tmlmodeling = _tmlm;
@@ -109,7 +109,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 //        tepeTranslator = new  SystemCTEPE(_tepes, this);
     }
 
-    DiploSimulatorCodeGenerator(TMLMapping _tmlmapping, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
+    DiploSimulatorCodeGenerator(TMLMapping<?> _tmlmapping, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
         tmlmapping = _tmlmapping;
 
         if ( tmlmapping == null ) {
@@ -828,7 +828,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         List<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
         for(HwCommunicationNode commNode: _commNodes){
             if (commNode instanceof HwBus){
-                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(_node, (HwBus)commNode)) resultList.add((HwBus)commNode);
+                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(_node, (HwBus)commNode)) resultList.add(commNode);
             }
         }
         return resultList;
@@ -838,7 +838,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         List<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
         for(HwCommunicationNode commNode: _commNodes){
             if (commNode instanceof HwBridge){
-                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add((HwBridge)commNode);
+                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add(commNode);
             }
         }
         return resultList;

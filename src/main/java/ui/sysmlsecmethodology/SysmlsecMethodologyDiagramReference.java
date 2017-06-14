@@ -166,11 +166,7 @@ public abstract class SysmlsecMethodologyDiagramReference extends TGCScalableWit
             }
         }
 
-        if(currentFontSize <minFontSize) {
-            displayText = false;
-        } else {
-            displayText = true;
-        }
+        displayText = currentFontSize >= minFontSize;
 
      //   int h  = g.getFontMetrics().getHeight();
 
@@ -521,10 +517,7 @@ public abstract class SysmlsecMethodologyDiagramReference extends TGCScalableWit
     public abstract boolean isAValidPanelType(TURTLEPanel panel);
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        if (tgc instanceof SysmlsecMethodologyDiagramName) {
-            return true;
-        }
-        return false;
+        return tgc instanceof SysmlsecMethodologyDiagramName;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {

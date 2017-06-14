@@ -315,11 +315,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
         if (internalComment == null) {
             return false;
         }
-        if (this instanceof EmbeddedComment) {
-            return true;
-        }
+        return this instanceof EmbeddedComment;
 
-        return false;
     }
 
     public int getMyDepth() {
@@ -614,10 +611,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     // drawing operations
 
     public boolean mustBeRepainted() {
-        if ((repaint == true) || internalComponentMustBeRepainted()) {
-            return true;
-        }
-        return false;
+        return (repaint == true) || internalComponentMustBeRepainted();
     }
 
     public boolean internalComponentMustBeRepainted() {
@@ -1456,12 +1450,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public boolean isInRectangle(int x1, int y1, int width, int height) {
-        if ((getX() < x1) || (getY() < y1) || ((getX() + this.width) > (x1 + width)) || ((getY() + this.height) > (y1 + height))) {
-            //System.out.println("Not in my rectangle " + this);
-            return false;
-        } else {
-            return true;
-        }
+        return !((getX() < x1) || (getY() < y1) || ((getX() + this.width) > (x1 + width)) || ((getY() + this.height) > (y1 + height)));
     }
 
     public final void drawInternalComponents(Graphics g) {

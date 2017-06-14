@@ -260,17 +260,11 @@ public class AnalysisPanel extends TURTLEPanel {
     }
 
     public boolean removeEnabled(int index) {
-        if ((panels.elementAt(index) instanceof ui.sd.SequenceDiagramPanel) ||(panels.elementAt(index) instanceof ui.sd2.SequenceDiagramPanel) ||(panels.elementAt(index) instanceof UseCaseDiagramPanel)  ||(panels.elementAt(index) instanceof AvatarCDPanel)||(panels.elementAt(index) instanceof AvatarADPanel) || ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0)){
-            return true;
-        }
-        return false;
+        return (panels.elementAt(index) instanceof ui.sd.SequenceDiagramPanel) || (panels.elementAt(index) instanceof ui.sd2.SequenceDiagramPanel) || (panels.elementAt(index) instanceof UseCaseDiagramPanel) || (panels.elementAt(index) instanceof AvatarCDPanel) || (panels.elementAt(index) instanceof AvatarADPanel) || ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0);
     }
 
     public boolean renameEnabled(int index) {
-        if ((panels.elementAt(index) instanceof ui.sd.SequenceDiagramPanel) ||(panels.elementAt(index) instanceof ui.sd2.SequenceDiagramPanel) ||(panels.elementAt(index) instanceof UseCaseDiagramPanel) ||(panels.elementAt(index) instanceof AvatarCDPanel)||(panels.elementAt(index) instanceof AvatarADPanel)|| ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0)){
-            return true;
-        }
-        return false;
+        return (panels.elementAt(index) instanceof ui.sd.SequenceDiagramPanel) || (panels.elementAt(index) instanceof ui.sd2.SequenceDiagramPanel) || (panels.elementAt(index) instanceof UseCaseDiagramPanel) || (panels.elementAt(index) instanceof AvatarCDPanel) || (panels.elementAt(index) instanceof AvatarADPanel) || ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0);
     }
 
     public boolean isUCDEnabled() {
@@ -293,7 +287,7 @@ public class AnalysisPanel extends TURTLEPanel {
     public void addInstancesToLastSD(UseCaseDiagramPanel _ucdp) {
         TraceManager.addDev("Adding instances to last SD");
 
-        TDiagramPanel panel = (TDiagramPanel)(panels.get(panels.size()-1));
+        TDiagramPanel panel = panels.get(panels.size()-1);
         if (!(panel instanceof ui.sd2.SequenceDiagramPanel)) {
             return;
         }

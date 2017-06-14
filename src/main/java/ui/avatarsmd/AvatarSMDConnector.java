@@ -59,7 +59,7 @@ public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints 
     protected int arrowLength = 10;
     //protected AvatarSMDTransitionInfo myTransitionInfo;
 
-    public AvatarSMDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public AvatarSMDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
         //nbInternalTGComponent = 1;
@@ -107,6 +107,7 @@ public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints 
        drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
        }
        }*/
+
 
     public void setTransitionInfo(String guard, String action){
 	AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);

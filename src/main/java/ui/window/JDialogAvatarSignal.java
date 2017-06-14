@@ -197,7 +197,7 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
 
     public void selectSignal() {
         int index = listSignals.getSelectedIndex();
-        signal.setText(((AvatarSignal)realSignals.get(index)).getUseDescription());
+        signal.setText(realSignals.get(index).getUseDescription());
     }
 
     public void closeDialog() {

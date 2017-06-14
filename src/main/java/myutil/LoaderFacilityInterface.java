@@ -47,6 +47,6 @@ package myutil;
 
 public interface LoaderFacilityInterface {
 
-    public void load(int index);
+    void load(int index);
 
 }

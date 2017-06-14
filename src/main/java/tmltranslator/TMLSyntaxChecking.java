@@ -76,15 +76,15 @@ public class TMLSyntaxChecking {
 
     private ArrayList<TMLError> errors;
     private ArrayList<TMLError> warnings;
-    private TMLModeling tmlm;
-    private TMLMapping mapping;
+    private TMLModeling<?> tmlm;
+    private TMLMapping<?> mapping;
 
 
-    public TMLSyntaxChecking(TMLModeling _tmlm) {
+    public TMLSyntaxChecking(TMLModeling<?> _tmlm) {
         tmlm = _tmlm;
     }
 
-    public TMLSyntaxChecking(TMLMapping _mapping) {
+    public TMLSyntaxChecking(TMLMapping<?> _mapping) {
         mapping = _mapping;
         tmlm = mapping.getTMLModeling();
     }

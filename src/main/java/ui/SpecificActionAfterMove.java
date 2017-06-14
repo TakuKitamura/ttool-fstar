@@ -50,5 +50,5 @@ package ui;
 
 
 public interface SpecificActionAfterMove  {
-    public void specificActionAfterMove();
+    void specificActionAfterMove();
 }

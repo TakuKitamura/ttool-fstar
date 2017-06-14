@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogRequirementTable
- * Dialog for setting requirement tables
- * Creation: 19/02/2009
- * @version 1.0 19/02/2009
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -52,45 +44,41 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.util.ArrayList;
 
+/**
+ * Class JDialogRequirementTable
+ * Dialog for setting requirement tables
+ * Creation: 19/02/2009
+ * @version 1.0 19/02/2009
+ * @author Ludovic APVRILLE
+ */
 public class JDialogRequirementTable extends javax.swing.JDialog implements ActionListener {
-    
-    private JPanel panel1;
-    private Frame frame;
-    
-    private String name;
-    public static String[] items = {"none", "ID", "Name", "Type", "Description", "Kind", "Criticality", "Violated action", "Targetted attacks", "Satisfied", "Reference elements"};
-    public static String[] sizes = {"0", "50", "100", "150", "200", "250", "300", "350", "400", "450", "500"};
+
+    static String[] items = {"none", "ID", "Name", "Type", "Description", "Kind", "Criticality", "Violated action", "Targetted attacks", "Satisfied", "Reference elements"};
+    private static String[] sizes = {"0", "50", "100", "150", "200", "250", "300", "350", "400", "450", "500"};
    
 	private int nbColumn = 10;
     private static int[] selectedItems = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	private static int[] selectedSizes = {1, 3, 2, 6, 2, 2, 2, 2, 1, 2};
 	
     // Panel1
-    private JTextField nameText;
-    private JComboBox[] itemBoxes, sizeBoxes;
-    private Vector types1, types2, types3;
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-	
-	private boolean data = false;
+    private ArrayList<JComboBox<String>> itemBoxes, sizeBoxes;
+
+    private boolean data = false;
     
     /** Creates new form  */
     public JDialogRequirementTable(JFrame f, String title) {
         super(f, title, true);
-        frame = f;
-        
+
         myInitComponents();
         initComponents();
         pack();
     }
     
     private void myInitComponents() {
-        itemBoxes = new JComboBox[nbColumn];
-		sizeBoxes = new JComboBox[nbColumn];
+        itemBoxes = new ArrayList<>();
+		sizeBoxes = new ArrayList<>();
     }
     
     private void initComponents() {
@@ -106,8 +94,8 @@ public class JDialogRequirementTable extends javax.swing.JDialog implements Acti
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+        JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Setting columns parameters "));
         panel1.setPreferredSize(new Dimension(500, 300));
@@ -127,16 +115,16 @@ public class JDialogRequirementTable extends javax.swing.JDialog implements Acti
 			label = new JLabel("element:");
 			label.setHorizontalTextPosition(JLabel.RIGHT);
 			panel1.add(label, c1);
-			itemBoxes[i] = new JComboBox(items);
-			itemBoxes[i].setSelectedIndex(selectedItems[i]);
-			panel1.add(itemBoxes[i], c1);
+			itemBoxes.add(new JComboBox<>(items));
+			itemBoxes.get(i).setSelectedIndex(selectedItems[i]);
+			panel1.add(itemBoxes.get(i), c1);
 			label = new JLabel("  size:");
 			label.setHorizontalTextPosition(JLabel.RIGHT);
 			panel1.add(label, c1);
 			c1.gridwidth = GridBagConstraints.REMAINDER;
-			sizeBoxes[i] = new JComboBox(sizes);
-			sizeBoxes[i].setSelectedIndex(selectedSizes[i]);
-			panel1.add(sizeBoxes[i], c1);
+			sizeBoxes.add(new JComboBox<>(sizes));
+			sizeBoxes.get(i).setSelectedIndex(selectedSizes[i]);
+			panel1.add(sizeBoxes.get(i), c1);
 		}
         
         // main panel;
@@ -150,11 +138,11 @@ public class JDialogRequirementTable extends javax.swing.JDialog implements Acti
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
@@ -183,8 +171,8 @@ public class JDialogRequirementTable extends javax.swing.JDialog implements Acti
 	
 	private void  updateStaticValues() {
 		for(int i=0; i<nbColumn; i++) {
-			selectedItems[i] = itemBoxes[i].getSelectedIndex();
-			selectedSizes[i] = sizeBoxes[i].getSelectedIndex();
+			selectedItems[i] = itemBoxes.get(i).getSelectedIndex();
+			selectedSizes[i] = sizeBoxes.get(i).getSelectedIndex();
 		}
 	}
 	
@@ -201,7 +189,7 @@ public class JDialogRequirementTable extends javax.swing.JDialog implements Acti
 		Point p;
 		
 		for(i=0; i<nbColumn; i++) {
-			if (itemBoxes[i].getSelectedIndex() > 0) {
+			if (itemBoxes.get(i).getSelectedIndex() > 0) {
 				nbRealColumn ++;
 			}
 		}
@@ -214,10 +202,10 @@ public class JDialogRequirementTable extends javax.swing.JDialog implements Acti
 		
 		cpt = 0;
 		for(i=0; i<nbColumn; i++) {
-			if (itemBoxes[i].getSelectedIndex() > 0) {
+			if (itemBoxes.get(i).getSelectedIndex() > 0) {
 				p = new Point();
-				p.x = itemBoxes[i].getSelectedIndex();
-				p.y = sizeBoxes[i].getSelectedIndex();
+				p.x = itemBoxes.get(i).getSelectedIndex();
+				p.y = sizeBoxes.get(i).getSelectedIndex();
 				pts[cpt] = p;
 				cpt ++;
 			}

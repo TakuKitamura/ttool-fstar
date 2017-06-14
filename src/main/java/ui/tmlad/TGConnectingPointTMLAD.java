@@ -59,11 +59,8 @@ public class TGConnectingPointTMLAD extends  TGConnectingPointWidthHeight{
 	}
 
 	public boolean isCompatibleWith(int type) {
-		if (type == TGComponentManager.CONNECTOR_TMLAD) {
-			return true;	
-		}
-		return false;
-	}
+        return type == TGComponentManager.CONNECTOR_TMLAD;
+    }
        
 }
 

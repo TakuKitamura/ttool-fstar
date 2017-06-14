@@ -142,9 +142,12 @@ public class TAttribute {
               (otherType != OTHER || this.typeOther.equals (ta.getTypeOther ()));
     }
     
-    public void setAccess(int _access) { access = _access;};
-    public void setType(int _type) { type = _type;};
-    public void setInitialValue(String _initialValue) { initialValue = _initialValue;};
+    public void setAccess(int _access) { access = _access;}
+
+    public void setType(int _type) { type = _type;}
+
+    public void setInitialValue(String _initialValue) { initialValue = _initialValue;}
+
     public void setTypeOther(String _typeOther) {typeOther = _typeOther;}
     
     public boolean isSet() {
@@ -180,12 +183,8 @@ public class TAttribute {
         } else {
             b5 = true;
         }
-        
-        if ((lowerid.equals(getStringType(0).toLowerCase())) || (lowerid.equals(getStringType(1).toLowerCase())) || (lowerid.equals(getStringType(2).toLowerCase())) || (lowerid.equals(getStringType(3).toLowerCase())) || (lowerid.equals(getStringType(4).toLowerCase()))) {
-            b4 = false;
-        } else {
-            b4 = true;
-        }
+
+        b4 = !((lowerid.equals(getStringType(0).toLowerCase())) || (lowerid.equals(getStringType(1).toLowerCase())) || (lowerid.equals(getStringType(2).toLowerCase())) || (lowerid.equals(getStringType(3).toLowerCase())) || (lowerid.equals(getStringType(4).toLowerCase())));
 		
 		if (checkTMLKeyword) {
             b6 = TMLTextSpecification.checkKeywords(lowerid);
@@ -228,11 +227,8 @@ public class TAttribute {
 				} catch (Exception e) {
 					return false;
 				}
-				if (val > 0) {
-					return true;
-				}
-				return false;
-			case INTEGER:
+                return val > 0;
+            case INTEGER:
 				return value.matches("\\d*");
 			case TIMER:
 				return ((value == null) ||(value.equals("")));
@@ -428,11 +424,8 @@ public class TAttribute {
         }
         
         TAttribute a = (TAttribute)o;
-        if (getId().equals(a.getId())) {
-            return true;
-        }
-        return false;
-        
+        return getId().equals(a.getId());
+
     }
     
     // comparison on all fields

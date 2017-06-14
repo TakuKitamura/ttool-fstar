@@ -4,17 +4,17 @@ import java.util.Collection;
 
 public interface Interface {
 
-	public Collection<Message> getMessages();
+	Collection<Message> getMessages();
 	
-	public String getName() ;
+	String getName() ;
 
-	public void setName(String name);
+	void setName(String name);
 
-	public void addMessage(Message m);
-	public void removeMessage(Message m);
-	public void removeMessage(String messageName);
-	public Message getMessageByName(String messageName);
+	void addMessage(Message m);
+	void removeMessage(Message m);
+	void removeMessage(String messageName);
+	Message getMessageByName(String messageName);
 
-	public boolean isMandatory();
-	public void setMandatory(boolean isMandatory);
+	boolean isMandatory();
+	void setMandatory(boolean isMandatory);
 }

@@ -982,11 +982,7 @@ public class AvatarSpecificationSimulation  {
         if (_aspt.elementToExecute instanceof AvatarActionOnSignal) {
             AvatarSignal sig = ((AvatarActionOnSignal)(_aspt.elementToExecute)).getSignal();
             AvatarRelation rel = avspec.getAvatarRelationWithSignal(sig);
-            if (sig.isOut()) {
-                _aspt.isSending = true;
-            } else {
-                _aspt.isSending = false;
-            }
+            _aspt.isSending = sig.isOut();
             if (rel.isAsynchronous()) {
                 _aspt.isSynchronous = false;
                 if (sig.isOut()) {

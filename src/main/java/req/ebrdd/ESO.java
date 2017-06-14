@@ -57,13 +57,13 @@ public class ESO extends ERCElement {
 	protected boolean oncePerEvent;
 	protected int n, m;
 	
-	private Vector indexes;
+	private Vector<Integer> indexes;
 	
     
     public ESO(String _name, Object _referenceObject) {
 		super(_name, _referenceObject);
         sons = new ArrayList<ERCElement>();
-		indexes = new Vector();
+		indexes = new Vector<>();
     }
 	
 	public void addSon(ERCElement ercelt) {
@@ -93,9 +93,9 @@ public class ESO extends ERCElement {
 			i0 = new Integer(1000);
 			index = -1;
 			for(i=0; i<indexes.size(); i++) {
-				if ((((Integer)indexes.elementAt(i)).compareTo(i0))<0) {
+				if ((indexes.elementAt(i).compareTo(i0))<0) {
 					index = i;
-					i0 = ((Integer)indexes.elementAt(i));
+					i0 = indexes.elementAt(i);
 				}
 			}
 			nextsbis.add(sons.get(index));

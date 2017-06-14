@@ -62,7 +62,7 @@ public class JDialogTOSClass extends javax.swing.JDialog implements ActionListen
     
     //components
     protected JTextField name, period, deadline;
-    protected JComboBox stereotypes;
+    protected JComboBox<String> stereotypes;
 
     protected JButton ok;
     protected JButton cancel;
@@ -118,7 +118,7 @@ public class JDialogTOSClass extends javax.swing.JDialog implements ActionListen
         name = new JTextField(tos.getClassName());
         period = new JTextField(""+tos.getPeriod());
         deadline = new JTextField(""+tos.getDeadline());
-        stereotypes = new JComboBox(TOSClass.stereotypes);
+        stereotypes = new JComboBox<>(TOSClass.stereotypes);
         stereotypes.addActionListener(this);
         stereotypes.setSelectedIndex(tos.getStereotype());
 

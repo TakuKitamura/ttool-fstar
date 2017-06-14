@@ -47,6 +47,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package myutil;
 
 public interface ExternalCall  {
-	public void computeFunction(int id);
+	void computeFunction(int id);
   
 }

@@ -60,11 +60,8 @@ public class AvatarCDConnectingPoint extends  TGConnectingPointWidthHeight {
     public boolean isCompatibleWith(int type) {
         if (type == TGComponentManager.ACD_COMPOSITION_CONNECTOR) {
             return true;
-        }           
-		if (type == TGComponentManager.ACD_ASSOCIATION_CONNECTOR) {
-            return true;
         }
-        return false;
+        return type == TGComponentManager.ACD_ASSOCIATION_CONNECTOR;
     }
     
 }

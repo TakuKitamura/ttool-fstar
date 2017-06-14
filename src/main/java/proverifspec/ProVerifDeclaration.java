@@ -46,5 +46,5 @@
 package proverifspec;
 
 public interface ProVerifDeclaration {
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea);
+    void translate(ProVerifSyntaxer _syntaxer, int _alinea);
 }

@@ -139,7 +139,6 @@ public class Message implements Serializable {
 
     /**
      *
-     * @return
      */
         public String getCmd() {
         return cmd;
@@ -148,7 +147,6 @@ public class Message implements Serializable {
 
     /**
      *
-     * @return
      */
         public ArrayList<Object> getContent() {
         return content;
@@ -161,7 +159,6 @@ public class Message implements Serializable {
 
     /**
      *
-     * @return
      */
     public ArrayList<String> getOptions() {
         return options;
@@ -171,7 +168,6 @@ public class Message implements Serializable {
 
     /**
      *
-     * @return
      */
         public ArrayList<String> getValues() {
         return values;
@@ -295,7 +291,6 @@ public class Message implements Serializable {
     /**
      *
      * @param msg
-     * @return
      */
     public ArrayList<Object> parseMessage(Message msg)
     {
@@ -305,7 +300,6 @@ public class Message implements Serializable {
    
     /**
      *
-     * @return
      */
     public static byte[] convertImageToByte(Message msg) {
     

@@ -165,13 +165,9 @@ public class TMLChannelProperties extends TGCWithoutInternalComponent {
         }
         
         makeValue();
-        
-        if (!oldValue.equals(value)) {
-            return true;
-        }
-        
-        return false;
-        
+
+        return !oldValue.equals(value);
+
     }
     
     protected String translateExtraParam() {

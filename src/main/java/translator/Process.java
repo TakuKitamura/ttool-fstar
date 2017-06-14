@@ -49,8 +49,8 @@ import java.util.Vector;
 
 public class Process {
     protected String name;
-    protected Vector gateList;
-    protected Vector paramList;
+    protected Vector<Gate> gateList;
+    protected Vector<Param> paramList;
     protected String body;
     protected int languageID;
     
@@ -70,7 +70,7 @@ public class Process {
     protected static final String HIDE_END = " in\n(";
     protected static final String HIDE_END_PROC = "\n)";
     
-    public Process(String _name, Vector _gateList, Vector _paramList, int _languageID) {
+    public Process(String _name, Vector<Gate> _gateList, Vector<Param> _paramList, int _languageID) {
         name = _name;
         gateList = _gateList;
         paramList = _paramList;
@@ -89,11 +89,11 @@ public class Process {
         body = s;
     }
     
-    public void setGateList(Vector v) {
+    public void setGateList(Vector<Gate> v) {
         gateList = v;
     }
     
-    public Vector getGateList() {
+    public Vector<Gate> getGateList() {
         return gateList;
     }
     
@@ -101,7 +101,7 @@ public class Process {
         gateList.addElement(g);
     }
     
-    public Vector getParamList() {
+    public Vector<Param> getParamList() {
         return paramList;
     }
     
@@ -181,7 +181,7 @@ public class Process {
         
         Gate g;
         for(int i=0; i<gateList.size(); i++) {
-            g = (Gate)(gateList.elementAt(i));
+            g = gateList.elementAt(i);
             if (!g.isInternal()) {
                 return true;
             }
@@ -196,7 +196,7 @@ public class Process {
         
         Gate g;
         for(int i=0; i<gateList.size(); i++) {
-            g = (Gate)(gateList.elementAt(i));
+            g = gateList.elementAt(i);
             if (g.isInternal()) {
                 return true;
             }
@@ -214,7 +214,7 @@ public class Process {
         Gate g;
         
         for(int i=0; i<gateList.size(); i++) {
-            g = (Gate)(gateList.elementAt(i));
+            g = gateList.elementAt(i);
             if (!g.isInternal()) {
                 if (!find) {
                     find = true;
@@ -233,7 +233,7 @@ public class Process {
         Gate g;
         
         for(int i=0; i<gateList.size(); i++) {
-            g = (Gate)(gateList.elementAt(i));
+            g = gateList.elementAt(i);
             if (g.isInternal()) {
                 if (!find) {
                     find = true;
@@ -252,7 +252,7 @@ public class Process {
         Param par;
         
         for(int i=0; i<paramList.size(); i++) {
-            par = (Param)(paramList.elementAt(i));
+            par = paramList.elementAt(i);
             if (!find) {
                 find = true;
                 s = s + par.getLotosTranslation();
@@ -269,7 +269,7 @@ public class Process {
         Param par;
         
         for(int i=0; i<paramList.size(); i++) {
-            par = (Param)(paramList.elementAt(i));
+            par = paramList.elementAt(i);
             if (!find) {
                 find = true;
                 s = s + par.getLotosName();
@@ -286,7 +286,7 @@ public class Process {
         Param par;
         
         for(int i=0; i<paramList.size(); i++) {
-            par = (Param)(paramList.elementAt(i));
+            par = paramList.elementAt(i);
             if (!find) {
                 find = true;
                 if (par == p) {
@@ -312,7 +312,7 @@ public class Process {
         int j;
         
         for(int i=0; i<paramList.size(); i++) {
-            par = (Param)(paramList.elementAt(i));
+            par = paramList.elementAt(i);
             find = false;
             for(j=0; j<p.length; j++) {
                 if (p[j] == par) {
@@ -343,7 +343,7 @@ public class Process {
         Param par;
         
         for(int i=0; i<paramList.size(); i++) {
-            par = (Param)(paramList.elementAt(i));
+            par = paramList.elementAt(i);
             if (!find) {
                 find = true;
                 s = s + TURTLETranslator.modifyAction(par.getValue(), languageID); //"0";

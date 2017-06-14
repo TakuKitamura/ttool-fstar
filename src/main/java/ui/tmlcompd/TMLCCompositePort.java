@@ -184,6 +184,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 					px[1] = x +width/2;
 					py[0] = y;
 					py[1] = y + height;
+					break;
 				case GraphicLib.EAST:
 				case GraphicLib.WEST:
 				default:

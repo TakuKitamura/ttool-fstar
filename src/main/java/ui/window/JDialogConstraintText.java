@@ -65,7 +65,7 @@ public class JDialogConstraintText extends javax.swing.JDialog implements Action
     private Frame frame;
 
     //protected JTextField taskName;
-    protected JComboBox stereotype;
+    protected JComboBox<String> stereotype;
     protected JTextField textEdition;
 
 
@@ -117,7 +117,7 @@ public class JDialogConstraintText extends javax.swing.JDialog implements Action
         c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        stereotype = new JComboBox(constraint.getConstraintList());
+        stereotype = new JComboBox<>(constraint.getConstraintList());
         for(int i = 0; i<constraint.getConstraintList().length; i++) {
             if (constraint.getCurrentConstraint().compareTo(constraint.getConstraintList()[i]) == 0) {
                 stereotype.setSelectedIndex(i);

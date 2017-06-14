@@ -98,7 +98,7 @@ public abstract class TMLActivityElementEvent extends TMLActivityElement {
 
     public String getParam(int _index) {
         if (_index < getNbOfParams()) {
-            return (String)(datas.elementAt(_index));
+            return datas.elementAt(_index);
         } else {
             return null;
         }

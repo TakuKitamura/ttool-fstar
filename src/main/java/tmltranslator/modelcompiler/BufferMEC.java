@@ -53,13 +53,13 @@ import java.util.ArrayList;
 
 public interface BufferMEC	{
 
-	public ArrayList<String> getBufferParameters();
+	ArrayList<String> getBufferParameters();
 
-	public boolean closePanel( Frame frame );
+	boolean closePanel(Frame frame);
 
-	public ArrayList<JPanel> makePanel( GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters );
+	ArrayList<JPanel> makePanel(GridBagConstraints c1, GridBagConstraints c2, ArrayList<String> bufferParameters);
 
-	public ArrayList<String> buildBufferParameters( Element elt );
+	ArrayList<String> buildBufferParameters(Element elt);
 
-	public String appendBufferParameters( ArrayList<String> buffer );
+	String appendBufferParameters(ArrayList<String> buffer);
 }

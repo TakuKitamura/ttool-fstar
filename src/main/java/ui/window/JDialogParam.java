@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogParam
- * Dialog for managing channel properties
- * Creation: 03/11/2005
- * @version 1.0 03/11/2005
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -55,11 +47,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+/**
+ * Class JDialogParam
+ * Dialog for managing channel properties
+ * Creation: 03/11/2005
+ * @version 1.0 03/11/2005
+ * @author Ludovic APVRILLE
+ */
 public class JDialogParam extends javax.swing.JDialog implements ActionListener {
-    
-    private JPanel panel1;
-    private Frame frame;
-    
+
     private String name;
     private int type1, type2, type3;
     
@@ -68,18 +64,13 @@ public class JDialogParam extends javax.swing.JDialog implements ActionListener 
     
     // Panel1
     private JTextField nameText;
-    private JComboBox typeList1, typeList2, typeList3;
-    private Vector types1, types2, types3;
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+    private JComboBox<String> typeList1, typeList2, typeList3;
+    private Vector<String> types1, types2, types3;
+
     /** Creates new form  */
     public JDialogParam(String _name, int _type1, int _type2, int _type3, Frame f, String title) {
         super(f, title, true);
-        frame = f;
-        
+
         name = _name;
         type1 = _type1; type2 = _type2; type3 = _type3;
         
@@ -91,7 +82,7 @@ public class JDialogParam extends javax.swing.JDialog implements ActionListener 
     }
     
     private void myInitComponents() {
-        types1 = new Vector(); types2 = new Vector(); types3 = new Vector();
+        types1 = new Vector<>(); types2 = new Vector<>(); types3 = new Vector<>();
         types1.add(TType.getStringType(0));
         types1.add(TType.getStringType(1));
         types1.add(TType.getStringType(2));
@@ -114,8 +105,8 @@ public class JDialogParam extends javax.swing.JDialog implements ActionListener 
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+        JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Setting parameters "));
         panel1.setPreferredSize(new Dimension(300, 150));
@@ -146,7 +137,7 @@ public class JDialogParam extends javax.swing.JDialog implements ActionListener 
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList1 = new JComboBox(types1);
+        typeList1 = new JComboBox<>(types1);
         typeList1.setSelectedIndex(type1);
         panel1.add(typeList1, c1);
         
@@ -155,7 +146,7 @@ public class JDialogParam extends javax.swing.JDialog implements ActionListener 
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList2 = new JComboBox(types2);
+        typeList2 = new JComboBox<>(types2);
         typeList2.setSelectedIndex(type2);
         panel1.add(typeList2, c1);
         
@@ -164,7 +155,7 @@ public class JDialogParam extends javax.swing.JDialog implements ActionListener 
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList3 = new JComboBox(types3);
+        typeList3 = new JComboBox<>(types3);
         typeList3.setSelectedIndex(type3);
         panel1.add(typeList3, c1);
         
@@ -179,11 +170,11 @@ public class JDialogParam extends javax.swing.JDialog implements ActionListener 
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }

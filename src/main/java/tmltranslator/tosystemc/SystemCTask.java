@@ -103,7 +103,7 @@ public class SystemCTask {
             requestcode += "wait(SC_ZERO_TIME);\n";
             // reading requests parameters
             for(i=0; i<task.getRequest().getNbOfParams(); i++) {
-                requestcode += "arg" + (i+1) + "_req = task__" + ((TMLTask)(task.getRequest().getOriginTasks()).get(0)).getName() + ".rq" + (i+1) + ".read();\n";
+                requestcode += "arg" + (i+1) + "_req = task__" + (task.getRequest().getOriginTasks()).get(0).getName() + ".rq" + (i+1) + ".read();\n";
             }
             requestcode += "\n";
             

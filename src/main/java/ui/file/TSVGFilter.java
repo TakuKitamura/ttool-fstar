@@ -60,11 +60,7 @@ public class TSVGFilter extends FileFilter {
 
         String extension = FileUtils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(FileUtils.svg)){
-                    return true;
-            } else {
-                return false;
-            }
+            return extension.equals(FileUtils.svg);
         }
 
         return false;

@@ -213,11 +213,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
                                 }
                             }
 
-                            if (cde[0] == tgco.getTGConnectingPointP2()) {
-                                isOut = false;
-                            } else {
-                                isOut = true;
-                            }
+                            isOut = cde[0] != tgco.getTGConnectingPointP2();
 
                             // moving connector head
                             tdp.setMovingHead(e.getX(), e.getY(), cde[1].getX(), cde[1].getY());

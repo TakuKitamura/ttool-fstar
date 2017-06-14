@@ -111,11 +111,8 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         //TraceManager.addDev("Accept swallowed?");
-        if (tgc instanceof ADDBlockArtifact) {
-            return true;
-        }
+        return tgc instanceof ADDBlockArtifact;
 
-        return false;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -124,7 +121,7 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
         if (tgc instanceof ADDChannelArtifact) {
             tgc.setFather(this);
             tgc.setDrawingZone(true);
-            ((ADDChannelArtifact)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //TraceManager.addDev("Add swallowed!!!");
             addInternalComponent(tgc, 0);
             return true;
@@ -153,7 +150,7 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof ADDChannelArtifact) {
-                ((ADDChannelArtifact)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 

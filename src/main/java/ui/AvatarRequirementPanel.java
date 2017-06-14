@@ -173,10 +173,7 @@ public class AvatarRequirementPanel extends TURTLEPanel {
     }
 
     public boolean removeEnabled(int index) {
-        if (panels.size() > 1) {
-            return true;
-        }
-        return false;
+        return panels.size() > 1;
     }
 
     public boolean renameEnabled(int index) {
@@ -187,11 +184,8 @@ public class AvatarRequirementPanel extends TURTLEPanel {
             return true;
         }
 
-        if ((panels.elementAt(index) instanceof AvatarPDPanel)){
-            return true;
-        }
+        return (panels.elementAt(index) instanceof AvatarPDPanel);
 
-        return false;
     }
 
     public boolean isAvatarRDEnabled() {

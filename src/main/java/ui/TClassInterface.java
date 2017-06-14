@@ -51,15 +51,15 @@ import java.util.List;
 
 
 public interface TClassInterface  {
-    public String getClassName();
-    public String getValue();
-    public int getId();
-    public boolean isStart();
-    public List<TAttribute> getAttributes();
-    public List<TAttribute> getGates();
+    String getClassName();
+    String getValue();
+    int getId();
+    boolean isStart();
+    List<TAttribute> getAttributes();
+    List<TAttribute> getGates();
     //public TActivityDiagramPanel getActivityDiagramPanel();
-    public ActivityDiagramPanelInterface getBehaviourDiagramPanel();
+    ActivityDiagramPanelInterface getBehaviourDiagramPanel();
     
-    public TAttribute getGateById(String name);
+    TAttribute getGateById(String name);
 
 }

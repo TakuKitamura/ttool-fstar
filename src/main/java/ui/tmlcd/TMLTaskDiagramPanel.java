@@ -177,10 +177,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
     }
     
     public boolean isConnectedToTasks(TMLCompositionOperator co) {
-        if ((getTask1ToWhichIamConnected(co) != null) && (getTask2ToWhichIamConnected(co) != null)) {
-            return true;
-        }
-        return false;
+        return (getTask1ToWhichIamConnected(co) != null) && (getTask2ToWhichIamConnected(co) != null);
     }
     
     public TMLTaskInterface getTask1ToWhichIamConnected(TMLCompositionOperator co) {

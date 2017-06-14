@@ -58,10 +58,7 @@ public class ATDAttackConnectingPoint extends  TGConnectingPointWidthHeight {
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.ATD_ATTACK_CONNECTOR) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.ATD_ATTACK_CONNECTOR;
     }
     
 }

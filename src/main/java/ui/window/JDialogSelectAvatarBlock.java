@@ -1,48 +1,40 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
-
-   ludovic.apvrille AT enst.fr
-
-   This software is a computer program whose purpose is to allow the
-   edition of TURTLE analysis, design and deployment diagrams, to
-   allow the generation of RT-LOTOS or Java code from this diagram,
-   and at last to allow the analysis of formal validation traces
-   obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
-   from INRIA Rhone-Alpes.
-
-   This software is governed by the CeCILL  license under French law and
-   abiding by the rules of distribution of free software.  You can  use,
-   modify and/ or redistribute the software under the terms of the CeCILL
-   license as circulated by CEA, CNRS and INRIA at the following URL
-   "http://www.cecill.info".
-
-   As a counterpart to the access to the source code and  rights to copy,
-   modify and redistribute granted by the license, users are provided only
-   with a limited warranty  and the software's author,  the holder of the
-   economic rights,  and the successive licensors  have only  limited
-   liability.
-
-   In this respect, the user's attention is drawn to the risks associated
-   with loading,  using,  modifying and/or developing or reproducing the
-   software by the user in light of its specific status of free software,
-   that may mean  that it is complicated to manipulate,  and  that  also
-   therefore means  that it is reserved for developers  and  experienced
-   professionals having in-depth computer knowledge. Users are therefore
-   encouraged to load and test the software's suitability as regards their
-   requirements in conditions enabling the security of their systems and/or
-   data to be ensured and,  more generally, to use and operate it in the
-   same conditions as regards security.
-
-   The fact that you are presently reading this means that you have had
-   knowledge of the CeCILL license and that you accept its terms.
-
-   /**
-   * Class JDialogSelectAvatarBlock
-   * Dialog for managing blocks to be validated
-   * Creation: 18/05/2010
-   * @version 1.0 18/05/2010
-   * @author Ludovic APVRILLE
-   * @see
-   */
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ *
+ * ludovic.apvrille AT enst.fr
+ *
+ * This software is a computer program whose purpose is to allow the
+ * edition of TURTLE analysis, design and deployment diagrams, to
+ * allow the generation of RT-LOTOS or Java code from this diagram,
+ * and at last to allow the analysis of formal validation traces
+ * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+ * from INRIA Rhone-Alpes.
+ *
+ * This software is governed by the CeCILL  license under French law and
+ * abiding by the rules of distribution of free software.  You can  use,
+ * modify and/ or redistribute the software under the terms of the CeCILL
+ * license as circulated by CEA, CNRS and INRIA at the following URL
+ * "http://www.cecill.info".
+ *
+ * As a counterpart to the access to the source code and  rights to copy,
+ * modify and redistribute granted by the license, users are provided only
+ * with a limited warranty  and the software's author,  the holder of the
+ * economic rights,  and the successive licensors  have only  limited
+ * liability.
+ *
+ * In this respect, the user's attention is drawn to the risks associated
+ * with loading,  using,  modifying and/or developing or reproducing the
+ * software by the user in light of its specific status of free software,
+ * that may mean  that it is complicated to manipulate,  and  that  also
+ * therefore means  that it is reserved for developers  and  experienced
+ * professionals having in-depth computer knowledge. Users are therefore
+ * encouraged to load and test the software's suitability as regards their
+ * requirements in conditions enabling the security of their systems and/or
+ * data to be ensured and,  more generally, to use and operate it in the
+ * same conditions as regards security.
+ *
+ * The fact that you are presently reading this means that you have had
+ * knowledge of the CeCILL license and that you accept its terms.
+ */
 
 package ui.window;
 
@@ -58,15 +50,19 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-
+/**
+ * Class JDialogSelectAvatarBlock
+ * Dialog for managing blocks to be validated
+ * Creation: 18/05/2010
+ * @version 1.0 18/05/2010
+ * @author Ludovic APVRILLE
+ */
 public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
     public LinkedList<AvatarBDStateMachineOwner> validated, ignored;
     private boolean optimized = true;
 
     private LinkedList<AvatarBDStateMachineOwner> val, ign, back;
 
-    //subpanels
-    private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
     private JList<AvatarBDStateMachineOwner> listIgnored;
     private JList<AvatarBDStateMachineOwner> listValidated;
     private JButton allValidated;
@@ -77,7 +73,6 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
 
     // Main Panel
     private JButton closeButton;
-    private JButton cancelButton;
 
     private boolean hasBeenCancelled = false;
 
@@ -91,8 +86,8 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
         optimized = _optimized;
 
         if ((validated == null) || (ignored == null)) {
-            val = (LinkedList<AvatarBDStateMachineOwner>) componentList.clone ();
-            ign = new LinkedList<AvatarBDStateMachineOwner> ();
+            val = new LinkedList<>(componentList);
+            ign = new LinkedList<> ();
         } else {
             val = validated;
             ign = ignored;
@@ -116,7 +111,7 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
         }
     }
 
-    public void addNewTask(LinkedList<AvatarBDStateMachineOwner> added, LinkedList<AvatarBDStateMachineOwner> source, LinkedList<AvatarBDStateMachineOwner> notSource) {
+    private void addNewTask(LinkedList<AvatarBDStateMachineOwner> added, LinkedList<AvatarBDStateMachineOwner> source, LinkedList<AvatarBDStateMachineOwner> notSource) {
         for (AvatarBDStateMachineOwner tgc: source)
             if (!added.contains(tgc) && !notSource.contains(tgc))
                 added.add (tgc);
@@ -144,10 +139,10 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
         c2.gridheight = 1;
 
         // ignored list
-        panel1 = new JPanel();
+        JPanel panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         panel1.setBorder(new javax.swing.border.TitledBorder("Blocks ignored"));
-        listIgnored = new JList<AvatarBDStateMachineOwner> (ign.toArray (new AvatarBDStateMachineOwner [0]));
+        listIgnored = new JList<> (ign.toArray (new AvatarBDStateMachineOwner [0]));
         //listIgnored.setPreferredSize(new Dimension(200, 250));
         listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listIgnored.addListSelectionListener(this);
@@ -158,7 +153,7 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
 
         
         // central buttons
-        panel3 = new JPanel();
+        JPanel panel3 = new JPanel();
         panel3.setLayout(gridbag1);
 
         c1.weighty = 1.0;
@@ -197,10 +192,10 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
 
 
 	// validated list
-        panel2 = new JPanel();
+        JPanel panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         panel2.setBorder(new javax.swing.border.TitledBorder("Blocks taken into account"));
-        listValidated = new JList<AvatarBDStateMachineOwner> (val.toArray (new AvatarBDStateMachineOwner [0]));
+        listValidated = new JList<> (val.toArray (new AvatarBDStateMachineOwner [0]));
         //listValidated.setPreferredSize(new Dimension(200, 250));
         listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listValidated.addListSelectionListener(this);
@@ -212,17 +207,17 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
 
 
         // main panel;
-        panel6 = new JPanel();
+        JPanel panel6 = new JPanel();
         panel6.setLayout(new BorderLayout());
 
-        panel5 = new JPanel();
+        JPanel panel5 = new JPanel();
         panel5.setLayout(new FlowLayout());
 
         optimize = new JCheckBox("Optimize specification");
         optimize.setSelected(optimized);
         panel5.add(optimize);
 
-        panel4 = new JPanel();
+        JPanel panel4 = new JPanel();
         panel4.setLayout(new FlowLayout());
 
         closeButton = new JButton("Start Syntax Analysis", IconManager.imgic37);
@@ -230,7 +225,7 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
         closeButton.addActionListener(this);
         closeButton.setPreferredSize(new Dimension(200, 30));
 
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         cancelButton.setPreferredSize(new Dimension(200, 30));
         panel4.add(cancelButton);
@@ -247,18 +242,25 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
         String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-        if (command.equals("Start Syntax Analysis"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        } else if (command.equals("addOneIgnored")) {
-            addOneIgnored();
-        } else if (command.equals("addOneValidated")) {
-            addOneValidated();
-        } else if (command.equals("allValidated")) {
-            allValidated();
-        } else if (command.equals("allIgnored")) {
-            allIgnored();
+        switch (command) {
+            case "Start Syntax Analysis":
+                closeDialog();
+                break;
+            case "Cancel":
+                cancelDialog();
+                break;
+            case "addOneIgnored":
+                addOneIgnored();
+                break;
+            case "addOneValidated":
+                addOneValidated();
+                break;
+            case "allValidated":
+                allValidated();
+                break;
+            case "allIgnored":
+                allIgnored();
+                break;
         }
     }
 
@@ -303,8 +305,7 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
 
     public void closeDialog() {
         back.clear ();
-        for (AvatarBDStateMachineOwner o: val)
-            back.add (o);
+        back.addAll(val);
 
         validated = val;
         ignored = ign;

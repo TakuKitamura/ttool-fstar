@@ -60,13 +60,10 @@ public class AvatarMethodologyConnectingPoint extends  TGConnectingPointWidthHei
     }
     
     public boolean isCompatibleWith(int type) {
-        
-        if (type == TGComponentManager.AVATARMETHODOLOGY_CONNECTOR) {
-            return true;
-        }
-		
-       
-        return false;
+
+        return type == TGComponentManager.AVATARMETHODOLOGY_CONNECTOR;
+
+
     }
 	
 

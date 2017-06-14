@@ -66,7 +66,7 @@ public class Plugin {
     }
 
     public Method getMethod(String _className, String _methodName) {
-        Class c = listOfClasses.get(_className);
+        Class<?> c = listOfClasses.get(_className);
 
         try {
             if (c == null) {
@@ -82,8 +82,7 @@ public class Plugin {
                 listOfClasses.put(_className, c);
             }
 
-            Method method = c.getMethod(_methodName);
-	    return method;
+            return c.getMethod(_methodName);
         } catch (Exception e) {
 	    TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
 	    return null;

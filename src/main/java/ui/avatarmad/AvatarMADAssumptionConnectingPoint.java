@@ -63,14 +63,11 @@ public class AvatarMADAssumptionConnectingPoint extends  TGConnectingPointWidthH
         if (type == TGComponentManager.AVATARMAD_COMPOSITION_CONNECTOR) {
             return true;
         }
-		
-		
-		if (type == TGComponentManager.AVATARMAD_VERSIONING_CONNECTOR) {
-            return true;
-        }
-		
-		
-        return false;
+
+
+        return type == TGComponentManager.AVATARMAD_VERSIONING_CONNECTOR;
+
+
     }
 	
 }

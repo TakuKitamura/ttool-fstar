@@ -64,7 +64,7 @@ public class MappedSystemCTask {
     private List<TMLChannel> channels;
     private List<TMLEvent> events;
     private List<TMLRequest> requests;
-    private TMLMapping tmlmapping;
+    private TMLMapping<?> tmlmapping;
     private int commentNum;
     private boolean debug;
    // private boolean optimize;
@@ -82,7 +82,7 @@ public class MappedSystemCTask {
 //    private final static String EF = "}";
 
 
-    public MappedSystemCTask(TMLTask _task, List<TMLChannel> _channels, List<TMLEvent> _events, List<TMLRequest> _requests, TMLMapping _tmlmapping, Set<Integer> _depChannels) {
+    public MappedSystemCTask(TMLTask _task, List<TMLChannel> _channels, List<TMLEvent> _events, List<TMLRequest> _requests, TMLMapping<?> _tmlmapping, Set<Integer> _depChannels) {
         task = _task;
         channels = _channels;
         events = _events;

@@ -50,9 +50,9 @@ package ui;
 import java.util.List;
 
 public interface ClassDiagramPanelInterface {
-  public List<TGComponent> getComponentList();
-  public TClassSynchroInterface getTClass1ToWhichIamConnected(CompositionOperatorInterface coi);
-  public TClassSynchroInterface getTClass2ToWhichIamConnected(CompositionOperatorInterface coi);
-  public TGConnector getTGConnectorAssociationOf(CompositionOperatorInterface coi);
+  List<TGComponent> getComponentList();
+  TClassSynchroInterface getTClass1ToWhichIamConnected(CompositionOperatorInterface coi);
+  TClassSynchroInterface getTClass2ToWhichIamConnected(CompositionOperatorInterface coi);
+  TGConnector getTGConnectorAssociationOf(CompositionOperatorInterface coi);
 
 }

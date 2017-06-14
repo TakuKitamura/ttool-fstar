@@ -169,10 +169,7 @@ public class RequirementPanel extends TURTLEPanel {
     }
 
     public boolean removeEnabled(int index) {
-        if (panels.size() > 1) {
-            return true;
-        }
-        return false;
+        return panels.size() > 1;
     }
 
     public boolean renameEnabled(int index) {
@@ -183,12 +180,9 @@ public class RequirementPanel extends TURTLEPanel {
             return true;
         }
 
-        if ((panels.elementAt(index) instanceof EBRDDPanel)){
-            return true;
-        }
+        return (panels.elementAt(index) instanceof EBRDDPanel);
 
 
-        return false;
     }
 
     public boolean isReqEnabled() {

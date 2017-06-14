@@ -88,7 +88,7 @@ public class GroupOfGates extends SortedVector<TClassGate> implements Comparable
     public TClass getTClassOf(Gate g) {
         TClassGate tg;
         for (int i=0; i<size(); i++) {
-            tg = (TClassGate)(elementAt(i));
+            tg = elementAt(i);
             if (tg.getGate() == g) {
                 return tg.getTClass();
             }

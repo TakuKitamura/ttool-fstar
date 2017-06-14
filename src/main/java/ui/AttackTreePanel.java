@@ -137,21 +137,15 @@ public class AttackTreePanel extends TURTLEPanel {
     }
 
     public boolean removeEnabled(int index) {
-        if (panels.size() > 1) {
-            return true;
-        }
-        return false;
+        return panels.size() > 1;
     }
 
     public boolean renameEnabled(int index) {
         if (panels.size() == 0) {
             return false;
         }
-        if ((panels.elementAt(index) instanceof AttackTreeDiagramPanel)){
-            return true;
-        }
+        return (panels.elementAt(index) instanceof AttackTreeDiagramPanel);
 
-        return false;
     }
 
     public boolean isATDEnabled() {
@@ -163,7 +157,7 @@ public class AttackTreePanel extends TURTLEPanel {
         TGComponent tgc;
 
         for(int i=0; i<panels.size(); i++) {
-            Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+            Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
            
             while(iterator.hasNext()) {
                 tgc = iterator.next();

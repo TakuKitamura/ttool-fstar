@@ -331,18 +331,11 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public boolean hasDelay() {
-        if (minDelay.trim().length() == 0) {
-            return false;
-        }
-
-        return true;
+        return minDelay.trim().length() != 0;
     }
 
     public boolean hasCompute() {
-        if (minCompute.trim().length() ==0) {
-            return false;
-        }
-        return true;
+        return minCompute.trim().length() != 0;
     }
 
     public boolean hasActions() {

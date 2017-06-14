@@ -69,7 +69,7 @@ public class JDialogArchiKey extends javax.swing.JDialog implements ActionListen
     private Frame frame;
     private TMLArchiKey artifact;
     
-	protected JComboBox referenceCommunicationName;
+	protected JComboBox<String> referenceCommunicationName;
 	
     // Main Panel
     private JButton closeButton;
@@ -139,7 +139,7 @@ public class JDialogArchiKey extends javax.swing.JDialog implements ActionListen
 		*/
 		TraceManager.addDev("Got keyss");
 		
-        referenceCommunicationName = new JComboBox(list.toArray(new String[list.size()]));
+        referenceCommunicationName = new JComboBox<>(list.toArray(new String[list.size()]));
 	if (referenceCommunicationName.getItemCount() >index){
 		referenceCommunicationName.setSelectedIndex(index);
 		referenceCommunicationName.addActionListener(this);

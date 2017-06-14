@@ -66,7 +66,7 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
 
     public TGConnectorMessageAsyncOrSyncSD( int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
                                             TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
-                                            Vector _listPoint ) {
+                                            Vector<Point> _listPoint ) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic504;
     }
@@ -145,11 +145,7 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("isAsync")) {
                                 s = elt.getAttribute("value");
-                                if (s.equals("true")) {
-                                    isAsync = true;
-                                } else {
-                                    isAsync = false;
-                                }
+                                isAsync = s.equals("true");
                             }
                         }
                     }

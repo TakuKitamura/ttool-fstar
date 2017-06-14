@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogBUSNode
- * Dialog for managing attributes of bus nodes
- * Creation: 31/10/2007
- * @version 1.0 31/10/2007
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -54,16 +46,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-//import javax.swing.event.*;
-//import java.util.*;
-
-
+/**
+ * Class JDialogBUSNode
+ * Dialog for managing attributes of bus nodes
+ * Creation: 31/10/2007
+ * @version 1.0 31/10/2007
+ * @author Ludovic APVRILLE
+ */
 public class JDialogBUSNode extends javax.swing.JDialog implements ActionListener  {
 
     private boolean regularClose;
 
-    private JPanel panel2;
-    private Frame frame;
     private TMLArchiBUSNode node;
 
 
@@ -72,18 +65,13 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
 
     // Panel2
     protected JTextField byteDataSize, pipelineSize, clockRatio;
-    protected JComboBox arbitrationPolicy, privacy;
+    private JComboBox<String> arbitrationPolicy, privacy;
     protected JTextField sliceTime;
 
-
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
 
     /** Creates new form  */
     public JDialogBUSNode(Frame _frame, String _title, TMLArchiBUSNode _node) {
         super(_frame, _title, true);
-        frame = _frame;
         node = _node;
 
         initComponents();
@@ -97,7 +85,6 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
     private void initComponents() {
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
@@ -109,7 +96,7 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 
-        panel2 = new JPanel();
+        JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("BUS attributes"));
         panel2.setPreferredSize(new Dimension(400, 200));
@@ -134,7 +121,7 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
         panel2.add(new JLabel("Arbitration policy:"), c2);
 
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        arbitrationPolicy = new JComboBox();
+        arbitrationPolicy = new JComboBox<>();
         arbitrationPolicy.addItem("Round Robin");
         arbitrationPolicy.addItem("Priority Based");
         arbitrationPolicy.addItem("CAN");
@@ -169,7 +156,7 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
         c2.gridwidth = 1;
         panel2.add(new JLabel("Bus Privacy:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        privacy = new JComboBox();
+        privacy = new JComboBox<>();
         privacy.addItem("Public");
         privacy.addItem("Private");
         privacy.setSelectedIndex(node.getPrivacy());
@@ -185,12 +172,12 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }

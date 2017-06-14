@@ -243,7 +243,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
                 }
                 g.setFont(f);
                 w  = g.getFontMetrics().stringWidth(value);
-                h = cumulated + (int)currentFontSize + (int)(textY1 * tdp.getZoom());
+                h = cumulated + currentFontSize + (int)(textY1 * tdp.getZoom());
                 if ((w < (2*textX + width)) && (h < height)) {
                     //TraceManager.addDev("Drawing value=" + value);
                     g.drawString(value, x + (width - w)/2, y + h);
@@ -409,11 +409,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
                                 description = sdescription;
                             }
                             if (isRoot != null) {
-                                if (isRoot.toUpperCase().compareTo("TRUE") == 0) {
-                                    isRootAttack = true;
-                                } else {
-                                    isRootAttack = false;
-                                }
+                                isRootAttack = isRoot.toUpperCase().compareTo("TRUE") == 0;
                             }
                         }
                     }

@@ -52,6 +52,8 @@ public class TMLCheckingError extends CheckingError {
 
     private TMLTask tmlt;
 
+    private TMLActivityElement tmlae;
+
     public TMLCheckingError(int _type, String _message) {
         super(_type, _message);
     }
@@ -62,6 +64,14 @@ public class TMLCheckingError extends CheckingError {
 
     public TMLTask getTMLTask() {
         return tmlt;
+    }
+
+    public void setTMLActivityElement(TMLActivityElement tmlae) {
+        this.tmlae = tmlae;
+    }
+
+    public TMLActivityElement getTMLActivityElement() {
+        return tmlae;
     }
 
     @Override

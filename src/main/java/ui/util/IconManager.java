@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -34,14 +34,8 @@
 
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
-
-   /**
-   * Class IconManager
-   * Creation: 15/12/2003
-   * @version 1.1 15/12/2003
-   * @author Ludovic APVRILLE
-   * @see
    */
+
 
 package ui.util;
 
@@ -50,11 +44,11 @@ import java.awt.*;
 import java.net.URL;
 
 /**
- * Class
- *
- * @author Ludovic APVRILLE
- * @see
- */
+* Class IconManager
+* Creation: 15/12/2003
+* @version 1.1 15/12/2003
+* @author Ludovic APVRILLE
+*/
 public class IconManager {
 
     public static ImageIcon imgic8, imgic9;
@@ -375,7 +369,7 @@ public class IconManager {
     private static String icon340 = "toolbarButtonGraphics/general/Export16.gif";
     private static String icon341 = "toolbarButtonGraphics/general/Export24.gif";
 
-    private static String icon342 = "oneformalvalidation.gif";;
+    private static String icon342 = "oneformalvalidation.gif";
 
     private static String icon344 = "viewrg.gif";
 

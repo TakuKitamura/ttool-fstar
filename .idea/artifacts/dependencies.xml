@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact name="dependencies">
+    <output-path>$PROJECT_DIR$/bin</output-path>
+    <root id="root">
+      <element id="dir-copy" path="$PROJECT_DIR$/ttool/runtime" />
+    </root>
+  </artifact>
+</component>

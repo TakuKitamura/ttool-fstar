@@ -79,7 +79,7 @@ public class AvatarSimpleGuardMono extends AvatarSimpleGuard {
         }
         if (this.term instanceof AvatarAttribute)
         {
-            this.term = attributesMapping.get(((AvatarAttribute) this.term));    
+            this.term = attributesMapping.get(this.term);
         }
         else
         {

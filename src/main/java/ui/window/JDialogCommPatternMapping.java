@@ -979,12 +979,8 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 			//TraceManager.addDev( "ArchUnit: " + archUnitName + " exists" );
 			return true;
 		}
-		if( makeListOfMappableArchUnits( TRANSFER ).contains( archUnitName ) )	{
-			//TraceManager.addDev( "ArchUnit: " + archUnitName + " exists" );
-			return true;
-		}
-		return false;
-	}
+        return makeListOfMappableArchUnits(TRANSFER).contains(archUnitName);
+    }
 //	
 //	@Override
 //	public void	actionPerformed( ActionEvent evt )  {
@@ -1459,8 +1455,8 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 		cancelled = false;
 		name = nameOfCP.getText();
 		cpMEC = (String)cpMECsCB.getSelectedItem();
-		transferType1 = Arrays.asList( CPMEC.TRANSFER_TYPES ).indexOf( (String)transferTypeCB1.getSelectedItem() );
-		transferType2 = Arrays.asList( CPMEC.TRANSFER_TYPES ).indexOf( (String)transferTypeCB2.getSelectedItem() );
+		transferType1 = Arrays.asList( CPMEC.TRANSFER_TYPES ).indexOf(transferTypeCB1.getSelectedItem());
+		transferType2 = Arrays.asList( CPMEC.TRANSFER_TYPES ).indexOf(transferTypeCB2.getSelectedItem());
 		
 		dispose();
 	}
@@ -1671,7 +1667,7 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 		for( int k = 0; k < componentList.size(); k++ )	{
 			if( componentList.get(k) instanceof TMLArchiNode )	{
 				if( ( (TMLArchiNode) componentList.get(k) ).getComponentType() == instanceType )	{
-					list.add( ( (TMLArchiNode) componentList.get(k) ).getName() );
+					list.add( componentList.get(k).getName() );
 				}
 			}
 		}

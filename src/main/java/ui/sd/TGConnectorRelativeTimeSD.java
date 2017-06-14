@@ -65,7 +65,7 @@ public  class TGConnectorRelativeTimeSD extends TGConnector {
     private String maxConstraint = "0";
     private int widthValue, heightValue;
     
-    public TGConnectorRelativeTimeSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public TGConnectorRelativeTimeSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic510;
         name = "relative time constraint";
@@ -125,7 +125,7 @@ public  class TGConnectorRelativeTimeSD extends TGConnector {
         JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting relative time constraints");
         jdti.setSize(350, 250);
         GraphicLib.centerOnParent(jdti);
-        jdti.show(); // blocked until dialog has been closed
+        jdti.setVisible(true); // blocked until dialog has been closed
         
         minConstraint = array[0]; maxConstraint = array[1];
         

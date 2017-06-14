@@ -48,6 +48,6 @@
 package ui;
 
 public interface TGConnectorBetweenElementsInterface {
-  public TGConnectingPoint getTGConnectingPointP1();
-  public TGConnectingPoint getTGConnectingPointP2();
+  TGConnectingPoint getTGConnectingPointP1();
+  TGConnectingPoint getTGConnectingPointP2();
 }

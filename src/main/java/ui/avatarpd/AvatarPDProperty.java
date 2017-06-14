@@ -337,11 +337,7 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
                             if (elt.getTagName().equals("not")) {
                                 //System.out.println("Analyzing line1");
                                 s = elt.getAttribute("data");
-                                if (s.equals("true")) {
-                                    not = true;
-                                } else {
-                                    not = false;
-                                }
+                                not = s.equals("true");
                             }
                             //System.out.println("Analyzing line4");
                         }

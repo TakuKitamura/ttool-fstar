@@ -376,7 +376,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
             //System.out.println("Internal component");
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //System.out.println("cdRect comp swallow");
-            ((TMLArchiCommunicationArtifact)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
             //add it
@@ -387,7 +387,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
             if( tgc instanceof TMLArchiPortArtifact )   {
                 tgc.setFather( this );
                 tgc.setDrawingZone( true );
-                ( (TMLArchiPortArtifact)tgc ).resizeWithFather();
+                tgc.resizeWithFather();
                 addInternalComponent( tgc, 0 );
                 return true;
             }
@@ -399,11 +399,11 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     public void hasBeenResized() {
         for( int i = 0; i < nbInternalTGComponent; i++ )        {
             if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact ) {
-                ( (TMLArchiCommunicationArtifact)tgcomponent[i] ).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
             else        {
                 if( tgcomponent[i] instanceof TMLArchiPortArtifact )    {
-                    ( (TMLArchiPortArtifact)tgcomponent[i] ).resizeWithFather();
+                    tgcomponent[i].resizeWithFather();
                 }
             }
         }

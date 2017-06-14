@@ -75,11 +75,8 @@ public class SysmlsecMethodologyReferenceToRequirement extends SysmlsecMethodolo
     }
 
     public boolean isAValidPanelType(TURTLEPanel panel) {
-        if (panel instanceof AvatarRequirementPanel) {
-            return true;
-        }
+        return panel instanceof AvatarRequirementPanel;
 
-        return false;
     }
 
     public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {

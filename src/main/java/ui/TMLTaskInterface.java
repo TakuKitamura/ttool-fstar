@@ -51,6 +51,6 @@ package ui;
 import ui.tmlad.TMLActivityDiagramPanel;
 
 public interface TMLTaskInterface  {
-    public String getTaskName();
-    public TMLActivityDiagramPanel getTMLActivityDiagramPanel();
+    String getTaskName();
+    TMLActivityDiagramPanel getTMLActivityDiagramPanel();
 }

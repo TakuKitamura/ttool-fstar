@@ -979,7 +979,7 @@ public class AVATAR2CPOSIX {
                 ret +=  actModified + ";" + CR;
             } else {
 		TraceManager.addDev("Else");
-                String actModified = modifyMethodName (_block, (AvatarTerm) ((AvatarActionAssignment) act).getLeftHand ())
+                String actModified = modifyMethodName (_block, ((AvatarActionAssignment) act).getLeftHand ())
                     + " = " + modifyMethodName (_block, ((AvatarActionAssignment) act).getRightHand ());
                 AvatarLeftHand leftHand = ((AvatarActionAssignment) act).getLeftHand ();
                 ret += actModified + ";" + CR;

@@ -70,14 +70,10 @@ public class TGConnectingPointProCSD extends  TGConnectingPointWidthHeight{
         if ((type == TGComponentManager.CONNECTOR_ATTRIBUTE)){
             return true;
         }
-      
-        if ((type == TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE)){
-            return true;
-        }
-      
 
-      
-        return false;
+        return (type == TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE);
+
+
     }
     
     public TGComponent getMyOwnerComponent()

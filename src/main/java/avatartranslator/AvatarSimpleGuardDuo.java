@@ -88,7 +88,7 @@ public class AvatarSimpleGuardDuo extends AvatarSimpleGuard {
     public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
         if (this.termA instanceof AvatarAttribute)
         {
-            this.termA = attributesMapping.get((AvatarAttribute) this.termA);
+            this.termA = attributesMapping.get(this.termA);
         }
         else
         {
@@ -96,7 +96,7 @@ public class AvatarSimpleGuardDuo extends AvatarSimpleGuard {
         }
         if (this.termB instanceof AvatarAttribute)
         {
-            this.termB = attributesMapping.get((AvatarAttribute) this.termB);
+            this.termB = attributesMapping.get(this.termB);
         }
         else
         {

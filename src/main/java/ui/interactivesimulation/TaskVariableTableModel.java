@@ -48,19 +48,20 @@ package ui.interactivesimulation;
 
 import tmltranslator.TMLModeling;
 import tmltranslator.TMLTask;
+import ui.TGComponent;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Hashtable;
 
 public class TaskVariableTableModel extends AbstractTableModel {
-    private TMLModeling tmlm;
+    private TMLModeling<TGComponent> tmlm;
     private Hashtable <Integer, String> valueTable;
     private Hashtable <Integer, Integer> rowTable;
 
     private int nbOfRows;
 
     //private String [] names;
-    public TaskVariableTableModel(TMLModeling _tmlm, Hashtable<Integer, String> _valueTable, Hashtable <Integer, Integer> _rowTable) {
+    public TaskVariableTableModel(TMLModeling<TGComponent> _tmlm, Hashtable<Integer, String> _valueTable, Hashtable <Integer, Integer> _rowTable) {
         tmlm = _tmlm;
         valueTable = _valueTable;
         rowTable = _rowTable;

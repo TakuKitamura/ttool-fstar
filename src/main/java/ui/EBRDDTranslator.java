@@ -157,7 +157,7 @@ public class EBRDDTranslator {
 		iterator = list.listIterator();
 		while(iterator.hasNext()) {
 			cpt++;
-			tgc = (TGComponent)(iterator.next());
+			tgc = iterator.next();
 			
 			// Variables
 			if (tgc instanceof EBRDDAttributeBox) {
@@ -236,7 +236,7 @@ public class EBRDDTranslator {
 		
 		iterator = list.listIterator();
 		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
+			tgc = iterator.next();
 			
 			if (tgc instanceof ui.ebrdd.EBRDDERC) {
 				erc = (req.ebrdd.EBRDDERC)(listE.getEBRDDGeneralComponent(tgc));
@@ -283,7 +283,7 @@ public class EBRDDTranslator {
         
         iterator = list.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TGConnector) {
                 //tgco = (TGConnectorEBRDD)tgc;
 				tgco = (TGConnector)tgc;
@@ -293,7 +293,7 @@ public class EBRDDTranslator {
                 // Identification of connected components
                 tgc1 = null; tgc2 = null;
                 for(j=0; j<list.size(); j++) {
-                    tgc3 = 	(TGComponent)(list.get(j));
+                    tgc3 = list.get(j);
                     tgc1tmp = tgc3.belongsToMeOrSon(p1);
 					tgc2tmp = tgc3.belongsToMeOrSon(p2);
 					if (tgc1tmp != null) {
@@ -344,7 +344,7 @@ public class EBRDDTranslator {
 								index = tgc1.indexOf(p1) - 1;
 								((req.ebrdd.ESO)ebg1).addIndex(index);
 								((req.ebrdd.ESO)ebg1).addSon((ERCElement)ebg2);
-								((ERCElement)ebg2).setNegated(((TGConnectorEBRDDERC)tgco).getNegation());
+								((ERCElement)ebg2).setNegated(tgco.getNegation());
 								System.out.println("ESO: Adding son: " + ebg2);
 							}
 						}
@@ -368,7 +368,7 @@ public class EBRDDTranslator {
 		// Check validity of ERC (no cycles, etc.)
         iterator = list.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
 			if (tgc instanceof ui.ebrdd.EBRDDChoice) {
                 ch = (req.ebrdd.EBRDDChoice)(listE.getEBRDDGeneralComponent(tgc));
                 ch.orderGuards();

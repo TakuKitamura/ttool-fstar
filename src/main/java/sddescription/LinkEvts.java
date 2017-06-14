@@ -82,11 +82,8 @@ public class LinkEvts {
 		if ((type1 == Evt.SEND_SYNC) && (type2 == Evt.RECV_SYNC)) {
 			return true;
 		}
-		
-		if ((type1 == Evt.SEND_MSG) && (type2 == Evt.RECV_MSG)) {
-			return true;
-		}
-		
-		return false;
-	}
+
+        return (type1 == Evt.SEND_MSG) && (type2 == Evt.RECV_MSG);
+
+    }
 }

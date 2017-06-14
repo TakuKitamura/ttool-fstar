@@ -282,9 +282,9 @@ public class MapperBuffer extends Buffer	{
 	public static boolean closePanel( Frame frame )	{
 
 		//check DI
-		numSamplesDataIn = (String)numSamplesDataIn_TF.getText();
-		baseAddressDataIn = (String)baseAddressDataIn_TF.getText();
-		bitsPerSymbolDataIn = (String)bitsPerSymbolDataIn_TF.getText();
+		numSamplesDataIn = numSamplesDataIn_TF.getText();
+		baseAddressDataIn = baseAddressDataIn_TF.getText();
+		bitsPerSymbolDataIn = bitsPerSymbolDataIn_TF.getText();
 		symmetricalValueDataIn = (String)symmetricalValueDataIn_CB.getSelectedItem();
 		String regex = "[0-9]+";
 
@@ -316,7 +316,7 @@ public class MapperBuffer extends Buffer	{
 		}
 
 		//check DO
-		baseAddressDataOut = (String)baseAddressDataOut_TF.getText();
+		baseAddressDataOut = baseAddressDataOut_TF.getText();
 		if( baseAddressDataOut.length() <= 2 && baseAddressDataOut.length() > 0 )	{
 			JOptionPane.showMessageDialog( frame, "Please enter a valid base address for the output buffer", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );
@@ -331,7 +331,7 @@ public class MapperBuffer extends Buffer	{
 		}
 
 		//check LUT table
-		baseAddressLUT = (String) baseAddressLUT_TF.getText();
+		baseAddressLUT = baseAddressLUT_TF.getText();
 		if( baseAddressLUT.length() <= 2 && baseAddressLUT.length() > 0 )	{
 			JOptionPane.showMessageDialog( frame, "Please enter a valid LUT base address", "Badly formatted parameter",
 																			JOptionPane.INFORMATION_MESSAGE );

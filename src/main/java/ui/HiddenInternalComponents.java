@@ -51,6 +51,6 @@ package ui;
 
 
 public interface HiddenInternalComponents  {
-	public void setInternalsHidden(boolean hide);
-	public boolean areInternalsHidden();
+	void setInternalsHidden(boolean hide);
+	boolean areInternalsHidden();
 }

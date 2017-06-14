@@ -79,7 +79,7 @@ public  class TGConnectorLinkNode extends TGConnector {
     public final int TCP = 2;
     public final int RMI = 3;
     
-    public TGConnectorLinkNode(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public TGConnectorLinkNode(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
         value = "{info}";
@@ -107,8 +107,8 @@ public  class TGConnectorLinkNode extends TGConnector {
         VectorLRArtifactTClassGate oldlist = new VectorLRArtifactTClassGate(list);
         
         updateListGateNode();
-        Vector llist = leftListNotUsed();
-        Vector rlist = rightListNotUsed();
+        Vector<ArtifactTClassGate> llist = leftListNotUsed();
+        Vector<ArtifactTClassGate> rlist = rightListNotUsed();
         //System.out.println("Vector size: l=" + llist.size() + " r=" + rlist.size());
         //Vector v = tdp.getAllNotSelectedGatesFromNode(list);
         
@@ -351,7 +351,7 @@ public  class TGConnectorLinkNode extends TGConnector {
         }
         
         if (tdp instanceof TDeploymentDiagramPanel) {
-            return ((TDeploymentDiagramPanel)(tdp)).isFree(atg);
+            return tdp.isFree(atg);
         } else {
             return false;
         }
@@ -382,9 +382,9 @@ public  class TGConnectorLinkNode extends TGConnector {
     }
     
     // left means origin of the link
-    public Vector leftListNotUsed() {
+    public Vector<ArtifactTClassGate> leftListNotUsed() {
         if (p1 == null){
-            return new Vector();
+            return new Vector<>();
         }
         
         TGComponent tgc = tdp.getTopComponentToWhichBelongs(p1);
@@ -392,9 +392,9 @@ public  class TGConnectorLinkNode extends TGConnector {
         return listNotUsed(tgc);
     }
     
-    public Vector rightListNotUsed() {
+    public Vector<ArtifactTClassGate> rightListNotUsed() {
         if (p2 == null){
-            return new Vector();
+            return new Vector<>();
         }
         
         TGComponent tgc = tdp.getTopComponentToWhichBelongs(p2);
@@ -402,9 +402,9 @@ public  class TGConnectorLinkNode extends TGConnector {
         return listNotUsed(tgc);
     }
     
-    public Vector listNotUsed(TGComponent tgc) {
+    private Vector<ArtifactTClassGate> listNotUsed(TGComponent tgc) {
         //System.out.println("List not used, component=" + tgc.getName());
-        Vector v = new Vector();
+        Vector<ArtifactTClassGate> v = new Vector<>();
         if (tgc == null) {
             return v;
         }

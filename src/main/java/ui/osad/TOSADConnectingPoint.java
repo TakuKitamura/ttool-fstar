@@ -59,11 +59,8 @@ public class TOSADConnectingPoint extends  TGConnectingPointWidthHeight{
 	}
 
 	public boolean isCompatibleWith(int type) {
-		if (type == TGComponentManager.TOSAD_CONNECTOR) {
-			return true;	
-		}
-		return false;
-	}
+        return type == TGComponentManager.TOSAD_CONNECTOR;
+    }
        
 }
 

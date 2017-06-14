@@ -235,11 +235,7 @@ public class TGCTimeDelay extends TGCWithoutInternalComponent{
                                 minDelay = elt.getAttribute("minDelay");
                                 maxDelay = elt.getAttribute("maxDelay");
 								if (elt.getAttribute("hasMaxDelay") != null) {
-									if (elt.getAttribute("hasMaxDelay").compareTo("true") == 0) {
-										hasMaxDelay = true;
-									} else {
-										hasMaxDelay = false;
-									}
+                                    hasMaxDelay = elt.getAttribute("hasMaxDelay").compareTo("true") == 0;
 								}
 								unit = elt.getAttribute("unit");
                             }

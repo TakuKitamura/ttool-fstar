@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogNCTraffic
- * Dialog for managing NC links properties
- * Creation: 19/11/2008
- * @version 1.0 19/11/2008
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -53,29 +45,28 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class JDialogNCTraffic
+ * Dialog for managing NC links properties
+ * Creation: 19/11/2008
+ * @version 1.0 19/11/2008
+ * @author Ludovic APVRILLE
+ */
 public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListener {
-    
-    private JPanel panel1;
-    private Frame frame;
-    
-	protected String value, periodUnit, deadlineUnit;
-    protected int periodicType, period, deadline, minPacketSize, maxPacketSize, priority;
+
+    private String value, periodUnit, deadlineUnit;
+    private int periodicType, period, deadline, minPacketSize, maxPacketSize, priority;
 	
 	private boolean data;
     
     // Panel1
     private JTextField valueText, periodText, deadlineText, minPacketSizeText, maxPacketSizeText;
-	private JComboBox periodicTypeBox, priorityBox, periodUnitBox, deadlineUnitBox;
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+	private JComboBox<String> periodicTypeBox, priorityBox, periodUnitBox, deadlineUnitBox;
+
     /** Creates new form  */
     public JDialogNCTraffic(Frame _f, String _title, String _value, int _periodicType, int _period, String _periodUnit, int _deadline, String _deadlineUnit, int _minPacketSize, int _maxPacketSize, int _priority) {
         super(_f, _title, true);
-        frame = _f;
-        
+
 		value = _value;
         periodicType = _periodicType;
 		period = _period;
@@ -106,8 +97,8 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+        JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and capacity "));
         panel1.setPreferredSize(new Dimension(400, 400));
@@ -138,7 +129,7 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
 		c1.gridwidth = 1;
         panel1.add(new JLabel("Periodicity:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        periodicTypeBox = new JComboBox();
+        periodicTypeBox = new JComboBox<>();
 		periodicTypeBox.addItem("periodic");
 		periodicTypeBox.addItem("aperiodic");
 		periodicTypeBox.setSelectedItem(periodicType);
@@ -149,7 +140,7 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
         periodText = new JTextField(""+period, 10);
         panel1.add(periodText, c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		periodUnitBox = new JComboBox();
+		periodUnitBox = new JComboBox<>();
 		//deadlineUnitBox.addItem("s");
 		periodUnitBox.addItem("ms");
 		periodUnitBox.addItem("us");
@@ -169,7 +160,7 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
         deadlineText = new JTextField(""+deadline, 10);
         panel1.add(deadlineText, c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		deadlineUnitBox = new JComboBox();
+		deadlineUnitBox = new JComboBox<>();
 		//deadlineUnitBox.addItem("s");
 		deadlineUnitBox.addItem("ms");
 		deadlineUnitBox.addItem("us");
@@ -198,7 +189,7 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
 		c1.gridwidth = 1;
         panel1.add(new JLabel("Priority:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        priorityBox = new JComboBox();
+        priorityBox = new JComboBox<>();
 		priorityBox.addItem("0");
 		priorityBox.addItem("1");
 		priorityBox.addItem("2");
@@ -217,11 +208,11 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
@@ -248,7 +239,7 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
     }
     
 	public boolean hasBeenCancelled() {
-		return (data == false);
+		return !data;
 	}
 	
     public boolean hasNewData() {
@@ -265,7 +256,7 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
 	
 	public int getPeriod() {
 		try {
-			return Integer.decode(periodText.getText()).intValue();
+			return Integer.decode(periodText.getText());
 		} catch (Exception e) {
 			return period;
 		}
@@ -277,7 +268,7 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
     
     public int getDeadline() {
 		try {
-			return Integer.decode(deadlineText.getText()).intValue();
+			return Integer.decode(deadlineText.getText());
 		} catch (Exception e) {
 			return deadline;
 		}
@@ -289,7 +280,7 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
 	
 	public int getMinPacketSize() {
 		try {
-			return Integer.decode(minPacketSizeText.getText()).intValue();
+			return Integer.decode(minPacketSizeText.getText());
 		} catch (Exception e) {
 			return minPacketSize;
 		}
@@ -297,7 +288,7 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
 	
 	public int getMaxPacketSize() {
 		try {
-			return Integer.decode(maxPacketSizeText.getText()).intValue();
+			return Integer.decode(maxPacketSizeText.getText());
 		} catch (Exception e) {
 			return maxPacketSize;
 		}

@@ -62,7 +62,7 @@ export TTOOL_LIBS		= $(TTOOL_PATH)/libs
 export TTOOL_LIBRARIES		= $(wildcard $(TTOOL_LIBS)/*.jar)
 export TTOOL_CLASSPATH		= $(subst $(eval) ,:,$(TTOOL_LIBRARIES))
 
-export GLOBAL_CFLAGS		= -encoding "UTF8"
+export GLOBAL_CFLAGS		= -encoding "UTF8" -Xlint:unchecked -Xlint:deprecation -Xlint:cast -Xlint:divzero -Xlint:empty -Xlint:finally -Xlint:fallthrough
 
 export TTOOL_DIR		= $(TTOOL_PATH)/ttool
 export TTOOL_BINARY 		= $(TTOOL_BIN)/ttool.jar
@@ -156,7 +156,7 @@ $(JTTOOL_BINARY): FORCE
 TTOOL_DOC			= $(TTOOL_PATH)/doc
 export TTOOL_DOC_HTML 		= $(TTOOL_DOC)/html
 
-DOCFLAGS			= $(GLOBAL_CFLAGS) -quiet -J-Xmx256m -classpath $(TTOOL_CLASSPATH) -d $(TTOOL_DOC_HTML)
+DOCFLAGS			= -encoding "UTF8" -quiet -J-Xmx256m -classpath $(TTOOL_CLASSPATH) -d $(TTOOL_DOC_HTML)
 
 documentation: $(patsubst %,$(TTOOL_SRC)/%,$(GLOBAL_JAVA))
 	@echo "$(PREFIX) Generating Javadoc"

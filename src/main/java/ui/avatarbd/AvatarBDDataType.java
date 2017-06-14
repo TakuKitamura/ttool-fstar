@@ -217,7 +217,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
 
         int cpt = h;
         // Attributes
-        if (((AvatarBDPanel)tdp).areAttributesVisible()) {
+        if (tdp.areAttributesVisible()) {
           //  limitAttr = -1;
             int index = 0;
             String attr;

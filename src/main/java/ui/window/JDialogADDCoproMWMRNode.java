@@ -82,7 +82,7 @@ public class JDialogADDCoproMWMRNode extends javax.swing.JDialog implements Acti
 		private JTextField nStatus; // nb of status registers
 		
 		private String[] choices = { "false", "true"};
-		private JComboBox useLLSC;
+		private JComboBox<String> useLLSC;
 		
 		
 		// Main Panel
@@ -174,7 +174,7 @@ public class JDialogADDCoproMWMRNode extends javax.swing.JDialog implements Acti
 				//Create the combo box, select item at index 4.
 				//Indices start at 0, so 4 specifies the pig.
 				
-				useLLSC = new JComboBox(choices);
+				useLLSC = new JComboBox<>(choices);
 				useLLSC.setSelectedIndex((node.getUseLLSC()) ? 1 : 0);
 				c2.gridwidth = 1; panel2.add(new JLabel("use LLSC:"), c2);
 				c2.gridwidth = GridBagConstraints.REMAINDER;

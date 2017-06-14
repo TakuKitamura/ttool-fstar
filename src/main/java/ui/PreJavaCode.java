@@ -48,5 +48,5 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui;
 
 public interface PreJavaCode  {
-    public void setPreJavaCode(String code);
+    void setPreJavaCode(String code);
 }

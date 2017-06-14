@@ -181,7 +181,7 @@ public class TClass {
     public Gate getGateByName(String s) {
         Gate g;
         for(int i=0; i<gateList.size(); i++) {
-            g = (Gate)(gateList.elementAt(i));
+            g = gateList.elementAt(i);
             if (g.getName().equals(s)) {
                 return g;
             }
@@ -246,7 +246,7 @@ public class TClass {
         Param p;
         
         for(int i=0; i<paramList.size(); i++) {
-            p = (Param)(paramList.elementAt(i));
+            p = paramList.elementAt(i);
             if (p.getName().compareTo(name) ==0) {
                 return true;
             }
@@ -288,7 +288,7 @@ public class TClass {
     }
 	
 	public Gate getGate(int index) {
-		return (Gate)(gateList.get(index));
+		return gateList.get(index);
 	}
     
     public Vector<Param> getParamList() {
@@ -300,7 +300,7 @@ public class TClass {
     }
 	
 	public Param getParam(int index) {
-		return (Param)(paramList.get(index));
+		return paramList.get(index);
 	}
 	
 	public void removeParam(int index) {
@@ -538,7 +538,7 @@ public class TClass {
         Param p;
         
         for(int i=0; i<paramList.size(); i++) {
-            p = (Param)(paramList.elementAt(i));
+            p = paramList.elementAt(i);
             System.out.println("Param #" + i + "= |" + p.getName() + "|");
            
         }
@@ -549,7 +549,7 @@ public class TClass {
         Param p;
         
         for(int i=0; i<paramList.size(); i++) {
-            p = (Param)(paramList.elementAt(i));
+            p = paramList.elementAt(i);
             System.out.println("Param #" + i + "= |" + p.getName() + "=" + p.getValue() + "|");
            
         }
@@ -560,7 +560,7 @@ public class TClass {
         Gate g;
         
         for(int i=0; i<gateList.size(); i++) {
-            g = (Gate)(gateList.elementAt(i));
+            g = gateList.elementAt(i);
             System.out.println("Gate #" + i + "= |" + g.getName() + "|");
            
         }
@@ -584,7 +584,7 @@ public class TClass {
         int cpt = 0;
         
         for(int i=0; i<ad.size(); i++) {
-            adc = (ADComponent)(ad.get(i));
+            adc = ad.get(i);
             if (adc instanceof ADActionStateWithGate) {
                 adg0 = (ADActionStateWithGate)adc;
                 if (adg0.getGate() == g0) {
@@ -611,7 +611,7 @@ public class TClass {
       ADTLO adtlo;
 
       for(int i=0; i<ad.size(); i++) {
-        adc = (ADComponent)(ad.get(i));
+        adc = ad.get(i);
         if (adc instanceof ADActionStateWithGate) {
           adag = (ADActionStateWithGate)adc;
           if (adag.getGate() == g) {

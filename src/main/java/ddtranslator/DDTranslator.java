@@ -51,6 +51,7 @@ import ui.*;
 import ui.cd.TCDTClass;
 import ui.dd.TDDNode;
 import ui.dd.TGConnectorLinkNode;
+import ui.CorrespondanceTGElement;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -187,7 +188,7 @@ public class DDTranslator {
         ad = tclass1.getActivityDiagram();
         
         for(i=0; i<ad.size(); i++) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             g = null;
             if (adc instanceof ADActionStateWithGate) {
                 g = ((ADActionStateWithGate)adc).getGate();
@@ -218,11 +219,11 @@ public class DDTranslator {
         // Do the same at receiving side
         
         //System.out.println("Toto03");
-        synchros = new LinkedList();
+        synchros = new LinkedList<>();
         ad = tclass2.getActivityDiagram();
         
         for(i=0; i<ad.size(); i++) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             g = null;
             if (adc instanceof ADActionStateWithGate) {
                 g = ((ADActionStateWithGate)adc).getGate();

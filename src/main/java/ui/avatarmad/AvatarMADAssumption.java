@@ -212,11 +212,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
             }
         }
 
-        if(currentFontSize <minFontSize) {
-            displayText = false;
-        } else {
-            displayText = true;
-        }
+        displayText = currentFontSize >= minFontSize;
 
         int h  = g.getFontMetrics().getHeight();
 
@@ -345,7 +341,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         JDialogAssumption jda = new JDialogAssumption(tdp.getGUI().getFrame(), "Setting attributes of Assumption " + getAssumptionName(), getAssumptionName(), text, type, durability, source, status, limitation);
      //   jda.setSize(750, 550);
         GraphicLib.centerOnParent(jda, 750, 550 );
-        jda.show();
+        jda.setVisible(true);
 
         if (!jda.isRegularClose()) {
             return false;

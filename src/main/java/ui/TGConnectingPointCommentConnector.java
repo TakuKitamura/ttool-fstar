@@ -57,10 +57,7 @@ public class TGConnectingPointCommentConnector extends  TGConnectingPointTwoFath
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.CONNECTOR_COMMENT) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.CONNECTOR_COMMENT;
     }
 }
 

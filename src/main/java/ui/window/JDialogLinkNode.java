@@ -404,8 +404,8 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
         LRArtifactTClassGate lratg;
         
         if ((i1 > -1) && (i2 > -1)) {
-            ArtifactTClassGate atg1 = (ArtifactTClassGate)(lothers.elementAt(i1));
-            ArtifactTClassGate atg2 = (ArtifactTClassGate)(rothers.elementAt(i2));
+            ArtifactTClassGate atg1 = lothers.elementAt(i1);
+            ArtifactTClassGate atg2 = rothers.elementAt(i2);
             
             lratg = new LRArtifactTClassGate(atg1, atg2);
             associations.add(lratg);
@@ -419,7 +419,7 @@ public class JDialogLinkNode extends javax.swing.JDialog implements ActionListen
     public void removeSynchro() {
         int i = listGates.getSelectedIndex() ;
         if (i!= -1) {
-            LRArtifactTClassGate lratg = (LRArtifactTClassGate)(associations.elementAt(i));
+            LRArtifactTClassGate lratg = associations.elementAt(i);
             lothers.add(lratg.left);
             rothers.add(lratg.right);
             makeComboBoxes();

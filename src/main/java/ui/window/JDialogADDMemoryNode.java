@@ -68,7 +68,7 @@ public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionL
     private Frame frame;
     private ADDMemoryNode node;
     
-    protected JComboBox tracemode;
+    protected JComboBox<String> tracemode;
     private static int  selectedTracemode = 0;
 	
     // Panel1
@@ -159,7 +159,7 @@ public class JDialogADDMemoryNode extends javax.swing.JDialog implements ActionL
         panel2.add(new JLabel("Monitored:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
-	tracemode = new JComboBox(tracemodeTab);
+	tracemode = new JComboBox<>(tracemodeTab);
         tracemode.setSelectedIndex(selectedTracemode);
         tracemode.addActionListener(this);
         panel2.add(tracemode, c2);

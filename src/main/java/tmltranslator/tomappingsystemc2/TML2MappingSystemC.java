@@ -66,8 +66,8 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
   //  private final static String EF = "}";
     //private final static int MAX_EVENT = 1024;
 
-    private TMLModeling tmlmodeling;
-    private TMLMapping tmlmapping;
+    private TMLModeling<?> tmlmodeling;
+    private TMLMapping<?> tmlmapping;
 
     private boolean debug;
     private boolean optimize;
@@ -79,14 +79,14 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
     SystemCTEPE tepeTranslator;
     //private ArrayList<SystemCEBRDD> systemCebrdds = new ArrayList<SystemCEBRDD>();
 
-    public TML2MappingSystemC(TMLModeling _tmlm) {
+    public TML2MappingSystemC(TMLModeling<?> _tmlm) {
         tmlmodeling = _tmlm;
 	tmlmodeling.removeForksAndJoins();
         tmlmapping = tmlmodeling.getDefaultMapping();
         tepeTranslator = new  SystemCTEPE(new ArrayList<TEPE>(), this);
     }
 
-    public TML2MappingSystemC(TMLMapping _tmlmapping) {
+    public TML2MappingSystemC(TMLMapping<?> _tmlmapping) {
         tmlmapping = _tmlmapping;
 	tmlmapping.handleCPs();
 	tmlmapping.removeForksAndJoins();
@@ -94,7 +94,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         tepeTranslator = new  SystemCTEPE(new ArrayList<TEPE>(), this);
     }
 
-    public TML2MappingSystemC(TMLModeling _tmlm, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
+    public TML2MappingSystemC(TMLModeling<?> _tmlm, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
         tmlmodeling = _tmlm;
         //ebrdds = _ebrdds;
         tmlmapping = tmlmodeling.getDefaultMapping();
@@ -102,7 +102,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         //tepeTranslator.generateTEPEs();
     }
 
-    public TML2MappingSystemC(TMLMapping _tmlmapping, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
+    public TML2MappingSystemC(TMLMapping<?> _tmlmapping, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
         tmlmapping = _tmlmapping;
 	tmlmapping.handleCPs();
 	tmlmapping.removeForksAndJoins();
@@ -682,7 +682,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         LinkedList<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
         for(HwCommunicationNode commNode: _commNodes){
             if (commNode instanceof HwBus){
-                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(_node, (HwBus)commNode)) resultList.add((HwBus)commNode);
+                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(_node, (HwBus)commNode)) resultList.add(commNode);
             }
         }
         return resultList;
@@ -692,7 +692,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         LinkedList<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
         for(HwCommunicationNode commNode: _commNodes){
             if (commNode instanceof HwBridge){
-                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add((HwBridge)commNode);
+                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add(commNode);
             }
         }
         return resultList;

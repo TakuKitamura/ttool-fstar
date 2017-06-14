@@ -86,7 +86,7 @@ public class TMLType {
 
     public String getTypeOther() { return typeOther;}
 
-    public void setType(int _type) { type = _type;};
+    public void setType(int _type) { type = _type;}
 
 
     public static int getType(String s) {
@@ -136,11 +136,7 @@ public class TMLType {
             return true;
         }
 
-        if (type.compareTo("BOOL") == 0) {
-            return true;
-        }
-
-        return false;
+        return type.compareTo("BOOL") == 0;
 
     }
 

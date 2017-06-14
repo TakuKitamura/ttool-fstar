@@ -79,7 +79,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
 	}
 	
 	public ADComponent getADComponent(int index) {
-		return (ADComponent)(get(index));
+		return get(index);
 	}
     
     
@@ -91,7 +91,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         ADComponent ad;
         int nb = 0;
         for (int i=0; i<size(); i++) {
-            ad = (ADComponent)(elementAt(i));
+            ad = elementAt(i);
             if (ad instanceof ADParallel) {
                 nb ++;
             }
@@ -105,7 +105,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         int nb;
         
         for(int i=0; i<size(); i++) {
-            ad = (ADComponent)(elementAt(i));
+            ad = elementAt(i);
             if (ad instanceof ADParallel) {
                 par = (ADParallel)ad;
                 nb = getNbComponentLeadingTo(par);
@@ -123,7 +123,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         int nb = 0;
         int nb1;
         for (int i=0; i<size(); i++) {
-            ad = (ADComponent)(elementAt(i));
+            ad = elementAt(i);
             if (ad instanceof ADParallel) {
                 nb1 = getNbComponentLeadingTo(ad);
                 if (nb1 > 1) {
@@ -140,7 +140,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         int nb = 0;
         
         for (i=0; i<size(); i++) {
-            ad1 = (ADComponent)(elementAt(i));
+            ad1 = elementAt(i);
             for(j=0; j<ad1.getNbNext(); j++) {
                 if (ad1.getNext(j) == ad) {
                     nb ++;
@@ -155,7 +155,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         int i, j;
         
         for (i=0; i<size(); i++) {
-            ad1 = (ADComponent)(elementAt(i));
+            ad1 = elementAt(i);
             for(j=0; j<ad1.getNbNext(); j++) {
                 if (ad1.getNext(j) == ad) {
                     return ad1;
@@ -171,7 +171,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         int index = 0;
         
         for (i=0; i<size(); i++) {
-            ad1 = (ADComponent)(elementAt(i));
+            ad1 = elementAt(i);
             for(j=0; j<ad1.getNbNext(); j++) {
                 if (ad1.getNext(j) == adc) {
                     if (ad1 == adlast) {
@@ -192,7 +192,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         
         ADComponent ad;
         for (int i=0; i<size(); i++) {
-            ad = (ADComponent)(elementAt(i));
+            ad = elementAt(i);
             ad.setSelected(b);
         }
     }
@@ -208,7 +208,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         String s, s1;
         int sizeBegin = size();
         for(int i=0; i<sizeBegin; i++) {
-            adc = (ADComponent)(elementAt(i));
+            adc = elementAt(i);
             if (adc instanceof ADActionStateWithGate) {
                 adg = (ADActionStateWithGate)adc;
                 g1 = adg.getGate();
@@ -250,7 +250,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         int i = 0, j;
         
         while ((found == false) && (i<size())) {
-            adc = (ADComponent)(elementAt(i));
+            adc = elementAt(i);
             //System.out.println("i=" + i);
             i++;
             if (adc instanceof ADActionStateWithMultipleParam) {
@@ -294,7 +294,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
                 
                 // all components pointing to admp should now point to adsp[0]
                 for(j=0; j<size(); j++) {
-                    adc1 = (ADComponent)(elementAt(j));
+                    adc1 = elementAt(j);
                     adc1.updateNext(admp, adsp[0]);
                 }
             }
@@ -321,7 +321,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
     public void printToStringBuffer(StringBuffer sb) {
         ADComponent adc;
         for(int i=0; i<size(); i++) {
-            adc = (ADComponent)(elementAt(i));
+            adc = elementAt(i);
             sb.append(adc.toString() + "/" + adc.hashCode() + " ");
             //System.out.println("appending i main=" + i + " component" + adc.toString());
             sb.append(printNextsToStringBuffer(adc));
@@ -339,7 +339,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         }
         
         for(int i=0; i<v.size(); i++) {
-            adcbis = (ADComponent)(v.elementAt(i));
+            adcbis = v.elementAt(i);
             //System.out.println("appending i=" + i + " component" + adcbis.toString());
             if (adcbis != null) {
                 s = s + adcbis.toString() + "/" + adcbis.hashCode() + " ";
@@ -362,7 +362,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         ADComponent adc;
         ADComponent adc1;
         for(int i=0; i<size(); i++) {
-            adc = (ADComponent)(elementAt(i));
+            adc = elementAt(i);
             if (adc != ads) {
                 adc1 = getFirstComponentLeadingTo(adc);
                 if (adc1 == null) {
@@ -377,7 +377,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
     public void addAllBlockingFrom(ActivityDiagram ad) {
         ADComponent adc;
         for(int i=0; i<ad.size(); i++) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             if (!(adc instanceof NonBlockingADComponent)) {
                 add(adc);
             }
@@ -395,7 +395,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
     public void setAllSubstituteToNull() {
         ADComponent adc;
         for(int i=0; i<size(); i++) {
-            adc = (ADComponent)(elementAt(i));
+            adc = elementAt(i);
             adc.substitute = null;
         }
     }
@@ -407,12 +407,12 @@ public class ActivityDiagram extends Vector<ADComponent>{
         Vector<ADComponent> junctions = new Vector<ADComponent>();
         ADJunction adj1, adj2;
         for(i=0; i<size(); i++) {
-            adc = (ADComponent)(elementAt(i));
+            adc = elementAt(i);
             if (!(adc instanceof MultiIncomingElt)) {
                 //nb elt leading to adc ?
                 cpt = 0;
                 for(j=0; j<size(); j++) {
-                    list = ((ADComponent)(elementAt(j))).getAllNext();
+                    list = elementAt(j).getAllNext();
                     if (list.contains(adc)) {
                         cpt ++;
                     }
@@ -422,7 +422,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
                     index1 = 0;
                     adj1 = null;
                     for(j=0; j<size(); j++) {
-                        adc2 = (ADComponent)(elementAt(j));
+                        adc2 = elementAt(j);
                         list = adc2.getAllNext();
                         index2 = list.indexOf(adc);
                         if (list.contains(adc)) {
@@ -510,7 +510,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
       while(changeMade) {
         changeMade = false;
         for(int i=0; i<size(); i++) {
-          adc = (ADComponent)(elementAt(i));
+          adc = elementAt(i);
           if (adc instanceof ADChoice) {
              if (!(((ADChoice)(adc)).isSpecialChoice(variableAsActions))) {
                if (makeSpecialChoice((ADChoice)(adc), variableAsActions)) {
@@ -633,7 +633,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
       int nb = 0;
       ADComponent adc;
       for(int i=0; i<size(); i++) {
-        adc = (ADComponent)(elementAt(i));
+        adc = elementAt(i);
         if (adc instanceof ADJunction) {
           nb++;
         }
@@ -645,7 +645,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
       int nb = 0;
       ADComponent adc;
       for(int i=0; i<size(); i++) {
-        adc = (ADComponent)(elementAt(i));
+        adc = elementAt(i);
         if (adc instanceof ADSequence) {
           nb++;
         }
@@ -657,7 +657,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
 	  int nb = 0;
       ADComponent adc;
       for(int i=0; i<size(); i++) {
-        adc = (ADComponent)(elementAt(i));
+        adc = elementAt(i);
         if (adc instanceof ADChoice) {
           nb = Math.max(nb, ((ADChoice)adc).getNbGuard());
         }
@@ -671,7 +671,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
       ADComponent adc;
 	  ADChoice adch;
       for(int i=0; i<size(); i++) {
-        adc = (ADComponent)(elementAt(i));
+        adc = elementAt(i);
         if (adc instanceof ADChoice) {
 			adch = (ADChoice)adc;
 			if (adch.isSpecialChoice(variableAsActions) && (!adch.isSpecialChoiceAction(variableAsActions))) {
@@ -693,7 +693,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
 		ActivityDiagram ad = new ActivityDiagram();
 		ad.remove(0);
 		for(i=0; i<size(); i++) {
-			ad.add(((ADComponent)get(i)).makeSame());
+			ad.add(get(i).makeSame());
 			if (get(i) instanceof ADStart) {
 				ad.setRawStartState((ADStart)(ad.get(i)));
 			}
@@ -702,16 +702,16 @@ public class ActivityDiagram extends Vector<ADComponent>{
 		
 		// Must link components
 		for(i=0; i<ad.size(); i++) {
-			ad1 = (ADComponent)(ad.get(i));
+			ad1 = ad.get(i);
 			//System.out.println("Nb opf next of " + ad1 + " = " + ad1.getNbNext());
-			ad2 = (ADComponent)(get(i));
+			ad2 = get(i);
 			
 			for(j=0; j<ad2.getNbNext(); j++) {
 				ad3 = ad2.getNext(j);
 				index = indexOf(ad3);
 				if (index > -1) {
 					//System.out.println("Linking i,j" + i + "," + j);
-					ad4 = (ADComponent)(ad.get(index));
+					ad4 = ad.get(index);
 					ad1.addNext(ad4);
 					//System.out.println("Next of " + ad1 + " = " + ad4);
 				} else {
@@ -722,7 +722,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
 		
 		// Must modify gates, guards of choice, params
 		for(i=0; i<ad.size(); i++) {
-			ad1 = (ADComponent)(ad.get(i));
+			ad1 = ad.get(i);
 			
 			if (ad1 instanceof ADActionStateWithGate) {
 				g = ((ADActionStateWithGate)(ad1)).getGate();

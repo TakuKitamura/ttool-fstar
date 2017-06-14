@@ -55,15 +55,15 @@ import java.util.LinkedList;
  */
 public interface AvatarBDStateMachineOwner {
 
-    public LinkedList<TAttribute> getAttributeList ();
-    public LinkedList<String> getAllTimerList ();
-    public TAttribute getAttributeByName (String _name);
-    public LinkedList<AvatarSignal> getSignalList ();
-    public LinkedList<AvatarSignal> getAllSignalList ();
-    public AvatarSignal getSignalNameBySignalDef (String _id);
-    public LinkedList<AvatarMethod> getMethodList ();
-    public LinkedList<AvatarMethod> getAllMethodList ();
+    LinkedList<TAttribute> getAttributeList();
+    LinkedList<String> getAllTimerList();
+    TAttribute getAttributeByName(String _name);
+    LinkedList<AvatarSignal> getSignalList();
+    LinkedList<AvatarSignal> getAllSignalList();
+    AvatarSignal getSignalNameBySignalDef(String _id);
+    LinkedList<AvatarMethod> getMethodList();
+    LinkedList<AvatarMethod> getAllMethodList();
 
-    public String getOwnerName ();
-    public AvatarSMDPanel getAvatarSMDPanel ();
+    String getOwnerName();
+    AvatarSMDPanel getAvatarSMDPanel();
 }

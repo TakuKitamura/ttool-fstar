@@ -48,6 +48,6 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui;
 
 public interface AllowedBreakpoint  {
-    public void setBreakpoint(boolean b); 
-	public boolean getBreakpoint();
+    void setBreakpoint(boolean b);
+	boolean getBreakpoint();
 }

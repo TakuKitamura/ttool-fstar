@@ -67,8 +67,8 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
 
     //subpanels
     private JPanel panel1, panel2, panel3, panel6;
-    private JList listIgnored;
-    private JList listSelected;
+    private JList<String> listIgnored;
+    private JList<String> listSelected;
     private JButton allSelected;
     private JButton addOneSelected;
     private JButton addOneIgnored;
@@ -108,7 +108,7 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         panel1.setBorder(new javax.swing.border.TitledBorder("Non selected diagrams"));
-        listIgnored = new JList(ignored);
+        listIgnored = new JList<>(ignored);
         //listIgnored.setPreferredSize(new Dimension(200, 250));
         listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listIgnored.addListSelectionListener(this);
@@ -121,7 +121,7 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
         panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         panel2.setBorder(new javax.swing.border.TitledBorder("Selected diagrams"));
-        listSelected = new JList(selected);
+        listSelected = new JList<>(selected);
         //listValidated.setPreferredSize(new Dimension(200, 250));
         listSelected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listSelected.addListSelectionListener(this);
@@ -211,11 +211,11 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
 
     private void addOneIgnored() {
         int [] list = listSelected.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        Vector<String> v = new Vector<>();
+        String o;
         for (int i=0; i<list.length; i++){
             o = selected.elementAt(list[i]);
-            ignored.addElement((String)o);
+            ignored.addElement(o);
             v.addElement(o);
         }
 
@@ -227,12 +227,12 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
 
     private void addOneSelected() {
         int [] list = listIgnored.getSelectedIndices();
-        Vector v = new Vector();
-        Object o;
+        Vector<String> v = new Vector<>();
+        String o;
         for (int i=0; i<list.length; i++){
             o = ignored
                 .elementAt(list[i]);
-            selected.addElement((String)o);
+            selected.addElement(o);
             v.addElement(o);
         }
 

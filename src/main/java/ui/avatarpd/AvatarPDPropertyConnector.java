@@ -68,7 +68,7 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
 	// value is set to "not" when the property is negated. 
 	// Otherwise, it is set to "reg"
     
-    public AvatarPDPropertyConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public AvatarPDPropertyConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
         value = "reg";
@@ -197,11 +197,8 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
 	}
 	
 	public boolean isNegated() {
-		if (value.compareTo("not") == 0) {
-			return true;
-		}
-		return false;
-	}
+        return value.compareTo("not") == 0;
+    }
 	
 	
     

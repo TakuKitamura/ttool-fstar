@@ -69,7 +69,7 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
     private Frame frame;
     private TMLArchiCommunicationArtifact artifact;
     
-	protected JComboBox referenceCommunicationName, priority;
+	protected JComboBox<String> referenceCommunicationName, priority;
 	
     // Main Panel
     private JButton closeButton;
@@ -140,7 +140,7 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
 		
 		TraceManager.addDev("Got communications");
 		
-        referenceCommunicationName = new JComboBox(list);
+        referenceCommunicationName = new JComboBox<>(list);
 		referenceCommunicationName.setSelectedIndex(index);
 		referenceCommunicationName.addActionListener(this);
         //referenceTaskName.setEditable(true);
@@ -151,7 +151,7 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
 		for(int i=0; i<11; i++) {
 			list.add(""+i);
 		}
-		priority = new JComboBox(list);
+		priority = new JComboBox<>(list);
 		priority.setSelectedIndex(artifact.getPriority());
 		panel2.add(priority, c1);
 		

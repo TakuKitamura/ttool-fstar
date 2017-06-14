@@ -123,7 +123,8 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         {
             super(text);
         }
-    };
+    }
+
     protected MyMenuItem menuItem;
 
 
@@ -169,7 +170,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         {
             return this.message;
         }
-    };
+    }
 
     /** Creates new form  */
     public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute, AvatarDesignPanel adp) {
@@ -409,7 +410,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
             this.results = results;
             this.jlist = jlist;
         }
-    };
+    }
 
     public void run() {
         String list;
@@ -590,14 +591,17 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     {
         if (e.isPopupTrigger() && e.getComponent() instanceof JList)
         {
-            JList<AvatarPragma> curList = (JList<AvatarPragma>) e.getComponent();
+            JList curList = (JList) e.getComponent();
             int row = curList.locationToIndex(e.getPoint());
             curList.clearSelection();
             curList.setSelectedIndex(row);
-            this.menuItem.pragma = curList.getModel().getElementAt(row);
-            this.menuItem.result = this.results.get(this.menuItem.pragma);
-            this.menuItem.setEnabled(this.adp != null && this.menuItem.result.getTrace() != null);
-            popup.show(e.getComponent(), e.getX(), e.getY());
+            Object o = curList.getModel().getElementAt(row);
+            if (o instanceof AvatarPragma) {
+                this.menuItem.pragma = (AvatarPragma) o;
+                this.menuItem.result = this.results.get(this.menuItem.pragma);
+                this.menuItem.setEnabled(this.adp != null && this.menuItem.result.getTrace() != null);
+                popup.show(e.getComponent(), e.getX(), e.getY());
+            }
         }
     }
 

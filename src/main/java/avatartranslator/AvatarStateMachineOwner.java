@@ -46,23 +46,23 @@ import java.util.LinkedList;
  * @author Florian LUGOU
  */
 public interface AvatarStateMachineOwner {
-    public String getName ();
-    public AvatarStateMachine getStateMachine ();
-    public AvatarSignal getAvatarSignalWithName (String signalName);
-    public AvatarMethod getAvatarMethodWithName (String methodName);
+    String getName();
+    AvatarStateMachine getStateMachine();
+    AvatarSignal getAvatarSignalWithName(String signalName);
+    AvatarMethod getAvatarMethodWithName(String methodName);
 
     /**
      * Look for an attribute in the list of local attributes, parameters and return values.
      *
-     * @param name
+     * @param attributeName
      *      The name of the attribute to look for.
      *
      * @return The corresponding attribute if found, null otherwise.
      */
-    public AvatarAttribute getAvatarAttributeWithName (String attributeName);
+    AvatarAttribute getAvatarAttributeWithName(String attributeName);
 
-    public AvatarSpecification getAvatarSpecification ();
-    public LinkedList<AvatarAttribute> getAttributes ();
-    public void addAttribute (AvatarAttribute attribute);
-    public AvatarStateMachineOwner advancedClone(AvatarSpecification avspec);
+    AvatarSpecification getAvatarSpecification();
+    LinkedList<AvatarAttribute> getAttributes();
+    void addAttribute(AvatarAttribute attribute);
+    AvatarStateMachineOwner advancedClone(AvatarSpecification avspec);
 }

@@ -195,14 +195,8 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 				
 			}
 			currentFontSize = maxCurrentFontSize;
-			
-			if(currentFontSize <minFontSize) {
-				displayText = false;
-			} else {
-				displayText = true;
-				//f = f.deriveFont((float)currentFontSize);
-				//g.setFont(f);
-			}
+
+            displayText = currentFontSize >= minFontSize;
 			
 		}
 		
@@ -690,8 +684,8 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		}
 		for (int i=0; i<nbConnectingPoint; i++) {
 			if (connectingPoint[i] == tp) {
-				if (((int)(i/5)) < ports.size()) {
-					return ports.get((int)(i/5));
+				if (i/5 < ports.size()) {
+					return ports.get(i/5);
 				}
 			}
 		}
@@ -785,12 +779,9 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
     }*/
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof TMLCRemotePortCompositeComponent) {
-			return true;
-		}
-		
-		return false;
-	}
+        return tgc instanceof TMLCRemotePortCompositeComponent;
+
+    }
 	
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		if (!acceptSwallowedTGComponent(tgc)) {

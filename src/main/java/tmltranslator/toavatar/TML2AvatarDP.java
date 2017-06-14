@@ -56,6 +56,7 @@ import ui.avatarbd.AvatarBDPortConnector;
 import ui.avatarbd.AvatarBDPragma;
 import ui.avatarsmd.*;
 
+import java.awt.*;
 import java.util.*;
 
 //import translator.*;
@@ -284,12 +285,12 @@ public class TML2AvatarDP {
 	    for (AvatarTransition t: tranSourceMap.keySet()){
 		TGConnectingPoint p1 = tranSourceMap.get(t);
 		TGConnectingPoint p2 = locMap.get(tranDestMap.get(t));
-		Vector points = new Vector();
+		Vector<Point> points = new Vector<>();
 		if (p1==null || p2 ==null){
 		    System.out.println("Missing point");
 		    return;
 		}
-		AvatarSMDConnector SMDcon = new AvatarSMDConnector((int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), true, null, smp, p1, p2, points);	
+		AvatarSMDConnector SMDcon = new AvatarSMDConnector(p1.getX(), p1.getY(), p1.getX(), p1.getY(), p1.getX(), p1.getY(), true, null, smp, p1, p2, points);
 		String action="";
 		if (t.getActions().size()==0){
 		    action="";
@@ -298,7 +299,7 @@ public class TML2AvatarDP {
 		    action=t.getActions().get(0).toString();
 		}
 		SMDcon.setTransitionInfo(t.getGuard().toString(), action);
-		smp.addComponent(SMDcon, (int) p1.getX(), (int) p1.getY(), false, true);
+		smp.addComponent(SMDcon, p1.getX(), p1.getY(), false, true);
 	    }
 	}
 
@@ -308,7 +309,7 @@ public class TML2AvatarDP {
 	
 	for (String bl1: originDestMap.keySet()){
 	    for (String bl2:originDestMap.get(bl1)){ 
-		Vector points=new Vector();
+		Vector<Point> points=new Vector<>();
 
 		//Add Relations to connector
 		for (AvatarRelation ar:avspec.getRelations()){

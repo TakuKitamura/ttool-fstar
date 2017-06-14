@@ -229,7 +229,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
                 if (go == false) {
                     return false;
                 }
-                tdp = (TDiagramPanel)(tp.panels.elementAt(j));
+                tdp = tp.panels.elementAt(j);
 
                 tmp = tp.tabbedPane.getTitleAt(j);
 
@@ -355,7 +355,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
     }
 
     public int getPercentage() {
-        return (int)((cpt*100) / total);
+        return (cpt*100) / total;
     }
 
     public  String getDocumentationHeader(String _projectName) {

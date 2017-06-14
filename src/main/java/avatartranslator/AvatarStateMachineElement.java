@@ -323,8 +323,8 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
                 gg1 = new AvatarSimpleGuardDuo (gg1.getTermA (), gg1.getTermB (), gg2.getBinaryOp ());
 
                 String s1, s2;
-                s1 = this.myTrim (gg1.getRealGuard (this).toString ());
-                s2 = this.myTrim (gg2.getRealGuard (this).toString ());
+                s1 = myTrim (gg1.getRealGuard (this).toString ());
+                s2 = myTrim (gg2.getRealGuard (this).toString ());
 
                 return s1.equals (s2);
             }
@@ -333,8 +333,8 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
         }
 
         String s1, s2;
-        s1 = this.myTrim (g1.getRealGuard (this).toString ());
-        s2 = this.myTrim (((AvatarComposedGuard) g2).getOpposite ().toString ());
+        s1 = myTrim (g1.getRealGuard (this).toString ());
+        s2 = myTrim (((AvatarComposedGuard) g2).getOpposite ().toString ());
 
         return s1.equals (s2);
     }

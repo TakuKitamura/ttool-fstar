@@ -407,7 +407,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
             //TraceManager.addDev("Exploring elt (0):" + elt.getName());
             if (elt instanceof TMLCPJunction) {
                 // Must replace the junction by a ref to an AD
-                TMLCPActivityDiagram toAD = refs.get((TMLCPJunction)elt);
+                TMLCPActivityDiagram toAD = refs.get(elt);
                 TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName(), elt.getReferenceObject());
                 newDiag.addTMLCPElement(ref);
                 originInNew.setNextElement(ref);

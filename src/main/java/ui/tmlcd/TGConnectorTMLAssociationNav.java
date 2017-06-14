@@ -60,8 +60,8 @@ public  class TGConnectorTMLAssociationNav extends TGConnector {
     protected int arrowLength = 15;
     protected TGConnectingPointGroup tg;
     
-    public TGConnectorTMLAssociationNav(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    public TGConnectorTMLAssociationNav(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+        super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         
         nbConnectingPoint = nbInternalTGComponent + 1;
         //Connecting points have cd relatives to 2 component

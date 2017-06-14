@@ -34,12 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class IconManager
- * Creation: 15/12/2003
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui;
@@ -49,10 +43,9 @@ import myutil.GraphicLib;
 import java.awt.*;
 
 /**
- * Class
- *
+ * Class IconManager
+ * Creation: 15/12/2003
  * @author Ludovic APVRILLE
- * @see
  */
 public class ColorManager {
 

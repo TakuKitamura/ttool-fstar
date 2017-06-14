@@ -52,8 +52,8 @@ public interface CheckableInvariant  {
 	//public static final int NON_REACHABLE;
 	
 	
-    public void setCheckableInvariant(boolean b); 
-	public boolean getCheckableInvariant();
+    void setCheckableInvariant(boolean b);
+	boolean getCheckableInvariant();
 	
 	//public void setReachability();
 }
