@@ -47,7 +47,10 @@
 
 package ddtranslatorSoclib.toTopCell;
 
+import avatartranslator.AvatarRelation;
+import avatartranslator.AvatarSpecification;
 import ddtranslatorSoclib.*;
+import ddtranslatorSoclib.toSoclib.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -60,6 +63,8 @@ public class TopCellGenerator
 	public static AvatarddSpecification avatardd;
 	// ---------------------------------------------------
 
+        public static AvatarSpecification avspec;
+
 	public String VCIparameters;
 	public String config;
 	public String mainFile;
@@ -67,6 +72,7 @@ public class TopCellGenerator
 	public String top;
         public String deployinfo;
         public String deployinfo_map; 
+        public String deployinfo_ram;
         public String platform_desc;
         public String procinfo; 
         public String nbproc;
@@ -85,9 +91,10 @@ public class TopCellGenerator
 
         private final static String GENERATED_PATH = "generated_topcell" + File.separator;      
 	 private boolean tracing;
-    public TopCellGenerator(AvatarddSpecification dd, boolean _tracing){
+    public TopCellGenerator(AvatarddSpecification dd, boolean _tracing, AvatarSpecification _avspec){
 		avatardd = dd;
-		tracing=_tracing;
+		tracing =_tracing;
+		avspec =_avspec;
 	}
 
 	public String generateTopCell() {
@@ -207,7 +214,7 @@ public class TopCellGenerator
 			fw.close();
 		} catch (IOException ex) {
 		}
-		saveFileDeploy(path);	
+		saveFileDeploy(path);
 		saveFilePlatform(path);
 		saveFileProcinfo(path);
 		saveFileNBproc(path);
@@ -228,7 +235,14 @@ public class TopCellGenerator
 			fw_map.write(deployinfo_map);
 			fw_map.close();
 
+			//ajout CD 9.6
+ System.err.println(path + GENERATED_PATH + "deployinfo_ram.h");
+		    FileWriter fw_ram = new FileWriter(path + GENERATED_PATH + "/deployinfo_ram.h");
+		    deployinfo_ram = TasksAndMainGenerator.getDeployInfoRam();  
+		    fw_ram.write(deployinfo_ram);
+		    fw_ram.close();
 		} catch (IOException ex) {
+		    ex.printStackTrace();
 		}
 	}
 

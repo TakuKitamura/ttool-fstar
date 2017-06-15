@@ -1290,11 +1290,29 @@ public class TasksAndMainGenerator {
                     //ret += "sprintf(__value, \"%d\", " + var + ");" + CR;
                     ret += traceVariableModification(_block.getName(), var, type);
                 }
-
             }
         }
 
         return ret;
     }
+  public static String getDeployInfoRam() {
+        int i=0;
+    int j;
+    String deployinfo_ram = CR;
+    try{
+    for(AvatarRelation ar: avspec.getRelations()){
+        for (j=0; j<ar.nbOfSignals();j++){
+        deployinfo_ram += "DEPLOY_RAM" + i + "_NAME (RWAL) : ORIGIN = DEPLOY_RAM" + i + "_ADDR, LENGTH = DEPLOY_RAM" + i + "_SIZE" + CR;
+        deployinfo_ram += "CACHED_RAM" + i + "_NAME (RWAL) : ORIGIN = CACHED_RAM" + i + "_ADDR, LENGTH = CACHED_RAM" + i + "_SIZE" + CR;
+        i++;
+        }
+    }
+    }catch (Exception e){
+        e.printStackTrace();
+    }
+    return deployinfo_ram;
+    }
+
+
 
 }
