@@ -26,7 +26,7 @@ int sync_read( struct mwmr_s *fifo, void *_ptr, int lensw ){
   debugInt("read debug  fifo wptr address\n", &(fifo->status->rptr));
   debugInt("read debug  fifo lock \n", fifo->status->lock);
   i=mwmr_try_read(fifo,_ptr,lensw);
-  debugInt("debug i \n", i);
+  //debugInt("debug i \n", i);
   //mwmr_read(fifo,_ptr,lensw);
   return i;
   //return lensw;
@@ -45,7 +45,7 @@ int sync_write( struct mwmr_s *fifo, void *_ptr, int lensw ){
   debugInt("debug  fifo lock \n", fifo->status->lock);
   i=mwmr_try_write(fifo,_ptr,lensw);
   //mwmr_write(fifo,_ptr,lensw);
-  debugInt("debug i \n", i);
+  //debugInt("debug i \n", i);
   return i;
   //return lensw;
 }

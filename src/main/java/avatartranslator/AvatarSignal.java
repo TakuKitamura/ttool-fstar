@@ -122,7 +122,17 @@ public class AvatarSignal extends AvatarMethod {
         return cpt;
 	}
 
-
+    //DG 13.06.
+    /* public int getCumulSizeParams(){
+        int cumul = 0;
+	
+        for(AvatarAttribute attribute: parameters) { 
+	    AvatarType type = attribute.getType();
+	    cumul += 4;  //hack          
+        }
+        return cumul;
+	}*/
+    //fin DG 
     public AvatarSignal advancedClone(AvatarStateMachineOwner _block) {
 	AvatarSignal as = new AvatarSignal(getName(), getInOut(), getReferenceObject());
 	setAdvancedClone(as, _block);
