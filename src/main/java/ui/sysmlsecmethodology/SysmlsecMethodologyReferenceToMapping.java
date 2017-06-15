@@ -78,11 +78,8 @@ public class SysmlsecMethodologyReferenceToMapping extends SysmlsecMethodologyDi
     }
 
     public boolean isAValidPanelType(TURTLEPanel panel) {
-        if (panel instanceof TMLArchiPanel) {
-            return true;
-        }
+        return panel instanceof TMLArchiPanel;
 
-        return false;
     }
 
     public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {

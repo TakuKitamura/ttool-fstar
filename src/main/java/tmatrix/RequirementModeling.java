@@ -148,7 +148,7 @@ public class RequirementModeling {
         //int sizee;
         
         while(iterator.hasNext()) {
-            reqs = (Requirements)(iterator.next());
+            reqs = iterator.next();
             
             // Locate diagram
             tp = mgui.getTURTLEPanel(reqs.diagramName);
@@ -179,7 +179,7 @@ public class RequirementModeling {
         //CheckingError ce;
         
         while(iterator.hasNext()) {
-            reqs = (Requirements)(iterator.next());
+            reqs = iterator.next();
             if (reqs.tm != null) {
                 System.out.println("Generating a formal specification for " + reqs.ro.getValue());
                 TURTLETranslator tt = new TURTLETranslator(reqs.tm);
@@ -210,7 +210,7 @@ public class RequirementModeling {
     }
     
     public Requirements getRequirements(int index) {
-        return (Requirements)(matrix.get(index));
+        return matrix.get(index);
     }
     
     public String toString() {

@@ -144,17 +144,11 @@ public class Evt {
     }
     
     public boolean isSendingEvt() {
-        if ((type == SEND_SYNC) || (type == SEND_MSG)) {
-            return true;
-        }
-        return false;
+        return (type == SEND_SYNC) || (type == SEND_MSG);
     }
     
     public boolean isReceivingEvt() {
-        if ((type == RECV_SYNC) || (type == RECV_MSG)) {
-            return true;
-        }
-        return false;
+        return (type == RECV_SYNC) || (type == RECV_MSG);
     }
     
     public String toString() {

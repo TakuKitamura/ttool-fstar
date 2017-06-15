@@ -49,6 +49,7 @@ import myutil.FileException;
 import myutil.FileUtils;
 import translator.tojava.JAttribute;
 import translator.JKeyword;
+import translator.tojava.JGate;
 import translator.tojava.JOperation;
 import translator.tojava.TURTLE2Java;
 
@@ -67,9 +68,9 @@ public class TJavaProcess {
     private String path = "";
     //private String packageName;
     
-    private Vector attributes;
-    private Vector gates;
-    private Vector operations;
+    private Vector<JAttribute> attributes;
+    private Vector<JSimuGate> gates;
+    private Vector<JOperation> operations;
     
     //private int operationId;
     
@@ -78,9 +79,9 @@ public class TJavaProcess {
     public final static String JAVA_EXTENSION = "java";
     
     public TJavaProcess(String _TURTLEName, boolean _active) {
-        attributes = new Vector();
-        gates = new Vector();
-        operations = new Vector();
+        attributes = new Vector<>();
+        gates = new Vector<>();
+        operations = new Vector<>();
         TURTLEName = _TURTLEName;
         active = _active;
         generateJavaName();
@@ -161,7 +162,7 @@ public class TJavaProcess {
     }
     
     public JAttribute getAttributeAt(int index) {
-        return (JAttribute)(attributes.elementAt(index));
+        return attributes.elementAt(index);
     }
     
     public void addGate(JSimuGate jg) {
@@ -173,7 +174,7 @@ public class TJavaProcess {
     }
     
     public JSimuGate getGateAt(int index) {
-        return (JSimuGate)(gates.elementAt(index));
+        return gates.elementAt(index);
     }
     
     public JSimuGate foundJGate(String name) {
@@ -196,7 +197,7 @@ public class TJavaProcess {
     }
     
     public JOperation getOperationAt(int index) {
-        return (JOperation)(operations.elementAt(index));
+        return operations.elementAt(index);
     }
     
     public void generateAttributeDeclaration() {

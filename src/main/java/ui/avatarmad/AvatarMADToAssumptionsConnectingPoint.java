@@ -67,11 +67,8 @@ public class AvatarMADToAssumptionsConnectingPoint extends  TGConnectingPointWid
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.AVATARMAD_IMPACT_CONNECTOR) {
-            return true;
-        }
-		
-        return false;
+        return type == TGComponentManager.AVATARMAD_IMPACT_CONNECTOR;
+
     }
 	
 

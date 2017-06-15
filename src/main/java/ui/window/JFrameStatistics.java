@@ -703,8 +703,8 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         }
 
         ThreadGUIElement t = new ThreadGUIElement(this, idFunc, info, "Computing, please wait", "");
-        t.setExternalCall((ExternalCall)this);
-        t.setStoppableGUIElement((StoppableGUIElement)this);
+        t.setExternalCall(this);
+        t.setStoppableGUIElement(this);
         t.go();
     }
 

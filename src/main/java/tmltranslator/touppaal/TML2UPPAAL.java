@@ -60,7 +60,7 @@ public class TML2UPPAAL {
 
     //private static int gateId;
 
-    private TMLModeling tmlmodeling;
+    private TMLModeling<?> tmlmodeling;
     private UPPAALSpec spec;
     private RelationTMLUPPAAL rtu;
     private UPPAALTemplate lossTemplate;
@@ -86,7 +86,7 @@ public class TML2UPPAAL {
     public static final int DEFAULT_INFINITE_FIFO_SIZE = 8;
 
 
-    public TML2UPPAAL(TMLModeling _tmlmodeling) {
+    public TML2UPPAAL(TMLModeling<?> _tmlmodeling) {
         tmlmodeling = _tmlmodeling;
         TraceManager.addDev("TML2UPPAAL");
     }

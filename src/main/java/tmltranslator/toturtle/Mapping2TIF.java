@@ -49,8 +49,6 @@ import myutil.TraceManager;
 import tmltranslator.*;
 import translator.*;
 import translator.CheckingError;
-import ui.TGComponent;
-import ui.UICheckingError;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -70,8 +68,8 @@ public class Mapping2TIF {
 //    private static String nameRequest = "Request__";
 
 
-    private TMLMapping tmlmapping;
-    private TMLModeling tmlmodeling;
+    private TMLMapping<?> tmlmapping;
+    private TMLModeling<?> tmlmodeling;
     private TMLArchitecture tmlarchitecture;
 
     private TURTLEModeling tm;
@@ -113,7 +111,7 @@ public class Mapping2TIF {
     private ADJunction beforeCommManager;
     private ADJunction afterCommManager;
 
-    public Mapping2TIF(TMLMapping _tmlmapping) {
+    public Mapping2TIF(TMLMapping<?> _tmlmapping) {
         tmlmapping = _tmlmapping;
         tmlmodeling = tmlmapping.getTMLModeling();
         tmlarchitecture = tmlmapping.getTMLArchitecture();
@@ -3246,18 +3244,18 @@ public class Mapping2TIF {
 
             if (((param1 = paramAnalyzer(action1, tcpu)) == null)) {
                 TraceManager.addDev("Param Error");
-                UICheckingError error = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Parameter undeclared in loop " + action1);
+                TMLCheckingError error = new TMLCheckingError(CheckingError.BEHAVIOR_ERROR, "Parameter undeclared in loop " + action1);
                 error.setTClass(tcpu);
-                error.setTGComponent((TGComponent)(element.getReferenceObject()));
-                checkingErrors.add(error);
+                error.setTMLActivityElement(element);
+                this.checkingErrors.add(error);
                 return makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(0));
             }
 
             if (((param3 = paramAnalyzer(action3, tcpu)) == null)) {
-                UICheckingError error = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Parameter undeclared in loop" + action3);
+                TMLCheckingError error = new TMLCheckingError(CheckingError.BEHAVIOR_ERROR, "Parameter undeclared in loop" + action3);
                 error.setTClass(tcpu);
-                error.setTGComponent((TGComponent)(element.getReferenceObject()));
-                checkingErrors.add(error);
+                error.setTMLActivityElement(element);
+                this.checkingErrors.add(error);
                 return makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(0));
             }
 

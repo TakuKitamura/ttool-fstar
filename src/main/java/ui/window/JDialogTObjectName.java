@@ -58,14 +58,14 @@ import java.util.Vector;
 
 public class JDialogTObjectName extends javax.swing.JDialog implements ActionListener {
         TCDTObject to;
-        Vector tclasses;
+        Vector<TCDTClass> tclasses;
 	
 	private JPanel panel1;
 	private Frame frame;
 	
 	// Panel1
 	private JTextField identifierText;
-        private JComboBox tclassList;
+    private JComboBox<TCDTClass> tclassList;
 
 	// Main Panel
 	private JButton closeButton;
@@ -78,8 +78,7 @@ public class JDialogTObjectName extends javax.swing.JDialog implements ActionLis
         frame = f;
         
         tclasses = to.getTDiagramPanel().getTClasses();
-        tclasses.add(0, "No TClass");
-	   
+
 	initComponents ();
         myInitComponents();
         pack ();
@@ -92,7 +91,7 @@ public class JDialogTObjectName extends javax.swing.JDialog implements ActionLis
         if (t != null) {
             TCDTClass t1;
             for(int i=1; i < tclasses.size(); i++) {
-                t1 = (TCDTClass)(tclasses.elementAt(i));
+                t1 = tclasses.elementAt(i);
                 if (t1 == t) {
                      tclassList.setSelectedIndex(i);
                      break;
@@ -150,7 +149,7 @@ public class JDialogTObjectName extends javax.swing.JDialog implements ActionLis
         panel1.add(new JLabel(" :: "), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         
-        tclassList = new JComboBox(tclasses);
+        tclassList = new JComboBox<>(tclasses);
         panel1.add(tclassList, c1);
         
     
@@ -193,7 +192,7 @@ public class JDialogTObjectName extends javax.swing.JDialog implements ActionLis
                 if (selected == 0) {
                     to.setMasterTClass(null);
                 } else {
-                    to.setMasterTClass((TCDTClass)(tclasses.elementAt(selected)));
+                    to.setMasterTClass(tclasses.elementAt(selected));
                 }
 		dispose();
 	}

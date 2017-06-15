@@ -344,11 +344,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         String params = _s.substring(index0+1, index1).trim();
         //TraceManager.addDev("params=" + params);
         if (params.length() == 0) {
-            if (am.getListOfAttributes().size() == 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return am.getListOfAttributes().size() == 0;
         }
         //TraceManager.addDev("params=" + params);
         String [] actions = params.split(",");

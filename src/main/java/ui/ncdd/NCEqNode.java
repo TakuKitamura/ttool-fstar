@@ -229,11 +229,8 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
     }
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof NCTrafficArtifact) {
-			return true;
-		}
-		
-		return false;
+        return tgc instanceof NCTrafficArtifact;
+
     }
     
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -242,7 +239,7 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
 			//Set its coordinates
 			  tgc.setFather(this);
 			  tgc.setDrawingZone(true);
-            ((NCTrafficArtifact)tgc).resizeWithFather();
+            tgc.resizeWithFather();
 			 addInternalComponent(tgc, 0);
 			return true;
            
@@ -291,7 +288,7 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof NCTrafficArtifact) {
-                ((NCTrafficArtifact)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
         

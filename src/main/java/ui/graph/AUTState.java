@@ -63,7 +63,7 @@ public class AUTState implements Comparable<AUTState> {
     }
 
     public int compareTo( AUTState _s ) {
-	return ((int)id) - (int)(_s.id);
+	return id - _s.id;
     }
 
     public void addInTransition(AUTTransition tr) {

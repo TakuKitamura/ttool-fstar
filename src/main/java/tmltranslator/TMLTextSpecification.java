@@ -57,7 +57,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class TMLTextSpecification {
+public class TMLTextSpecification<E> {
     public final static String CR = "\n";
     public final static String SP = " ";
     public final static String CR2 = "\n\n";
@@ -67,7 +67,7 @@ public class TMLTextSpecification {
     private String spec;
     private String title;
 
-    private TMLModeling tmlm;
+    private TMLModeling<E> tmlm;
     private ArrayList<TMLTXTError> errors;
     private ArrayList<TMLTXTError> warnings;
 
@@ -107,7 +107,7 @@ public class TMLTextSpecification {
         FileUtils.saveFile(path + filename, spec);
     }
 
-    public TMLModeling getTMLModeling() {
+    public TMLModeling<E> getTMLModeling() {
         return tmlm;
     }
 
@@ -180,7 +180,7 @@ public class TMLTextSpecification {
         return spec;
     }
 
-    public String toTextFormat(TMLModeling tmlm) {
+    public String toTextFormat(TMLModeling<E> tmlm) {
 	tmlm.removeForksAndJoins();
         tmlm.sortByName();
         spec = makeDeclarations(tmlm);
@@ -189,7 +189,7 @@ public class TMLTextSpecification {
         return spec;
     }
 
-    public String makeDeclarations(TMLModeling tmlm) {
+    public String makeDeclarations(TMLModeling<E> tmlm) {
         int i;
         String sb = "";
         sb += "// TML Application - FORMAT 0.1" + CR;
@@ -283,7 +283,7 @@ public class TMLTextSpecification {
 
     }
 
-    public String makeTasks(TMLModeling tmlm) {
+    public String makeTasks(TMLModeling<E> tmlm) {
         String sb = "";
         for(TMLTask task: tmlm.getTasks()) {
             sb += "TASK" + SP + task.getName() + CR;
@@ -519,7 +519,7 @@ public class TMLTextSpecification {
 
     public boolean makeTMLModeling(String _spec) {
         spec = _spec;
-        tmlm = new TMLModeling();
+        tmlm = new TMLModeling<>();
         errors = new ArrayList<TMLTXTError>();
         warnings = new ArrayList<TMLTXTError>();
 
@@ -855,11 +855,7 @@ public class TMLTextSpecification {
                 return -1;
             }
 
-            if (_split[2].toUpperCase().compareTo("NIB") == 0) {
-                blocking = true;
-            } else {
-                blocking = false;
-            }
+            blocking = _split[2].toUpperCase().compareTo("NIB") == 0;
 
             if (_split[2].toUpperCase().compareTo("INF") == 0) {
                 tmp = -1;

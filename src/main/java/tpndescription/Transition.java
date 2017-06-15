@@ -69,8 +69,8 @@ public class Transition {
     public Transition(String _label) {
         label = _label;
         name = generateName();
-        originPlaces = new LinkedList();
-        destinationPlaces = new LinkedList();
+        originPlaces = new LinkedList<>();
+        destinationPlaces = new LinkedList<>();
     }
     
     
@@ -182,7 +182,7 @@ public class Transition {
     		nbMet ++;
     	}
     	
-    	return (int)(totalX/nbMet);
+    	return totalX/nbMet;
     	
     }
     
@@ -198,7 +198,7 @@ public class Transition {
     		nbMet ++;
     	}
     	
-    	return (int)(totalY/nbMet);
+    	return totalY/nbMet;
     	
     }
     

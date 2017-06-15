@@ -51,16 +51,16 @@ import java.util.Vector;
 
 public class ADParallel extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
     protected String valueGate;
-    protected Vector synchroGate;
-    protected Vector gateList;
-    protected Vector component;
+    protected Vector<Gate> synchroGate;
+    protected Vector<Gate> gateList;
+    protected Vector<ADComponent> component;
     protected Gate specialGate;
     protected boolean isMulti;
     
     public ADParallel() {
         nbNext = 100;
-        gateList = new Vector();
-        component = new Vector();
+        gateList = new Vector<>();
+        component = new Vector<>();
         valueGate = "[]";
     }
     
@@ -75,7 +75,7 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
             Gate g;
             StringBuffer sb = new StringBuffer("[");
             for(int i=0; i<synchroGate.size(); i++) {
-                g = (Gate)(synchroGate.elementAt(i));
+                g = synchroGate.elementAt(i);
                 if (i > 0) {
                     sb.append(",");
                 }
@@ -93,7 +93,7 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
             Gate g;
             StringBuffer sb = new StringBuffer("[");
             for(int i=0; i<synchroGate.size(); i++) {
-                g = (Gate)(synchroGate.elementAt(i));
+                g = synchroGate.elementAt(i);
                 if (i > 0) {
                     sb.append(",");
                 }
@@ -120,8 +120,8 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
         return specialGate;
     }
     
-    public Vector getNewAllGateList() {
-        Vector v = new Vector();
+    public Vector<Gate> getNewAllGateList() {
+        Vector<Gate> v = new Vector<>();
         int i;
         
         for(i=0; i<gateList.size(); i++) {
@@ -135,7 +135,7 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
         //System.out.println("Action on parallel");
         int index = component.indexOf(ad);
         if ((index >= 0) && (index < gateList.size())){
-            Gate g = (Gate)(gateList.elementAt(index));
+            Gate g = gateList.elementAt(index);
             return g.getName() + ";";
         }
         //System.out.println("No action on parallel " +index);
@@ -160,7 +160,7 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
     
     public Gate getGate(int index) {
         if (index < synchroGate.size()) {
-            return (Gate)(synchroGate.elementAt(index));
+            return synchroGate.elementAt(index);
         }
         return null;
     }
@@ -178,8 +178,8 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
         if (valueGate == null) {
             valueGate = "[]";
         }
-        String s = new String(valueGate);
-        Vector gates = new Vector();
+        String s = valueGate;
+        Vector<Gate> gates = new Vector<>();
         
         // remove spaces
         s = Conversion.replaceAllChar(s, ' ', "");

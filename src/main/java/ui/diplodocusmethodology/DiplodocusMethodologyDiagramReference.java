@@ -160,11 +160,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
             }
         }
 
-        if(currentFontSize <minFontSize) {
-            displayText = false;
-        } else {
-            displayText = true;
-        }
+        displayText = currentFontSize >= minFontSize;
 
      //   int h  = g.getFontMetrics().getHeight();
 
@@ -514,10 +510,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
     public abstract boolean isAValidPanelType(TURTLEPanel panel);
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        if (tgc instanceof DiplodocusMethodologyDiagramName) {
-            return true;
-        }
-        return false;
+        return tgc instanceof DiplodocusMethodologyDiagramName;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {

@@ -234,8 +234,8 @@ public class SDTranslator {
         // Building AD -> Traversing the graph of nodes
         
         for(i=0; i<nodes.size(); i++) {
-            node = (HMSCNode)(nodes.get(i));
-            adcomp = (ADComponent)(adcomponents.get(i));
+            node = nodes.get(i);
+            adcomp = adcomponents.get(i);
             while(adcomp.realNbOfNext() != 0) {
                 adcomp = adcomp.getNext(0);
             }
@@ -258,10 +258,10 @@ public class SDTranslator {
         String guard;
         
         while(iterator.hasNext()) {
-            node = (HMSCNode)(iterator.next());
+            node = iterator.next();
             //System.out.println("node (node to node)= " + node.getName());
             index = nodes.indexOf(node);
-            adc1 = (ADComponent)(adcomponents.get(index));
+            adc1 = adcomponents.get(index);
             adc.addNext(adc1);
             if (adc instanceof ADChoice) {
                 //System.out.println("Node guard with i=" + i + " and size=" + n.sizeNodeGuard() + " on " + n.getName());
@@ -319,7 +319,7 @@ public class SDTranslator {
         if (index == -1) {
             throw new SDTranslationException("Component has no next component (missing termination?)");
         }
-        last.addNext((ADComponent)(adcomponents.get(index)));
+        last.addNext(adcomponents.get(index));
         
         // Setting the first bar
         first = new ADParallel();

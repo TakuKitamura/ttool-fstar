@@ -59,10 +59,7 @@ public class TGConnectingPointTMLTask extends  TGConnectingPointWidthHeight{
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.CONNECTOR_TML_ASSOCIATION_NAV) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.CONNECTOR_TML_ASSOCIATION_NAV;
     }
 } // Class
 

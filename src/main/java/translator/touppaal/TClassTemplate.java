@@ -55,9 +55,9 @@ public class TClassTemplate {
 	public int beginid; // Instanciation information
 	public int endid; // Instanciation information
     
-	public TClassTemplate() {};
-	
-	public TClassTemplate(TClass _t, UPPAALTemplate _template) {
+	public TClassTemplate() {}
+
+    public TClassTemplate(TClass _t, UPPAALTemplate _template) {
 		tclass = _t;
 		template = _template;
 	}

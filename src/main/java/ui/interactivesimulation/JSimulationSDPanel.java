@@ -258,7 +258,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		}
 
                 for (GenericTransaction gt: this.transactions) {
-                    if (gt.type == gt.SYNCHRO) {
+                    if (gt.type == GenericTransaction.SYNCHRO) {
 		        String messageName = gt.name + "(" + gt.params + ")";
                         w = g.getFontMetrics().stringWidth(messageName);
                         if (w+this.minSpaceBetweenLifeLines > this.spaceBetweenLifeLines)
@@ -312,17 +312,17 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			//asyncMsgs.clear();
 			
 			
-			if (gt.type == gt.STATE_ENTERING) {
+			if (gt.type == GenericTransaction.STATE_ENTERING) {
 				newCurrentY = drawState(g, gt, xOfBlock, currentY); 
-			}  else if (gt.type == gt.FUNCTION_CALL) {
+			}  else if (gt.type == GenericTransaction.FUNCTION_CALL) {
 				newCurrentY = drawFunctionCall(g, gt, xOfBlock, currentY); 
-			} else if (gt.type == gt.SEND_SYNCHRO) {
+			} else if (gt.type == GenericTransaction.SEND_SYNCHRO) {
 				//newCurrentY = drawSendSynchro(g, gt, xOfBlock, currentY); 
-			} else if (gt.type == gt.SYNCHRO) {
+			} else if (gt.type == GenericTransaction.SYNCHRO) {
 				newCurrentY = drawSendSynchro(g, gt, xOfBlock, currentY); 
-			} else if (gt.type == gt.SEND_ASYNCHRO) {
+			} else if (gt.type == GenericTransaction.SEND_ASYNCHRO) {
 				newCurrentY = drawSendAsynchro(g, gt, xOfBlock, currentY); 
-			} else if (gt.type == gt.RECEIVE_ASYNCHRO) {
+			} else if (gt.type == GenericTransaction.RECEIVE_ASYNCHRO) {
 				newCurrentY = drawReceiveAsynchro(g, gt, xOfBlock, currentY); 
 			} 
 			

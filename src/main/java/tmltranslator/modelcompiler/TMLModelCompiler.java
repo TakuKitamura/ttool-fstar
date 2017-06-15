@@ -79,9 +79,9 @@ public class TMLModelCompiler	{
 	private String SC = ";";
 //	private String COLON = ",";
 
-	private TMLMapping tmap;
+	private TMLMapping<?> tmap;
 //	private TMLCP tmlcp;
-	private TMLModeling tmlm;
+	private TMLModeling<?> tmlm;
 	private TMLArchitecture tmla;
 	private String applicationName;
 	private StringBuffer mainFileString;
@@ -110,7 +110,7 @@ public class TMLModelCompiler	{
 
 	public JFrame frame; //Main Frame
 
-	public TMLModelCompiler( String _title, String _applicationName, JFrame _frame, List<TMLCommunicationPatternPanel> _tmlcpps, TMLMapping _tmap )	{
+	public TMLModelCompiler( String _title, String _applicationName, JFrame _frame, List<TMLCommunicationPatternPanel> _tmlcpps, TMLMapping<?> _tmap )	{
 		title = _title;
 		applicationName = _applicationName;
 		frame = _frame;

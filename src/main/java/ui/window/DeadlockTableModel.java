@@ -56,11 +56,11 @@ import java.util.Collections;
 import java.util.Vector;
 
 public class DeadlockTableModel extends AbstractTableModel {
-    Vector deadlockData;
-    int maxTransitions;
+    private Vector<DeadlockItem> deadlockData;
+    private int maxTransitions;
 
     public DeadlockTableModel(AUTGraph _graph, int _maxTransitions) {
-        deadlockData = new Vector();
+        deadlockData = new Vector<>();
         maxTransitions = _maxTransitions;
         makeDeadlockData(_graph);
     }
@@ -76,7 +76,7 @@ public class DeadlockTableModel extends AbstractTableModel {
 
     public Object getValueAt(int row, int column) {
         DeadlockItem di;
-        di = (DeadlockItem)(deadlockData.elementAt(Math.min(row, deadlockData.size())));
+        di = deadlockData.elementAt(Math.min(row, deadlockData.size()));
         if (column == 0) {
             return di.getName();
         } else if (column == 1) {

@@ -354,6 +354,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 mgui.selectTab(ce.getTClass().getName());
             } else if(ce.getRelation() != null) {
                 mgui.selectTab("Class diagram");
+            } else if (ce instanceof TMLCheckingError && ((TMLCheckingError) ce).getTMLActivityElement() != null) {
+                TGComponent tgc = (TGComponent) ((TMLCheckingError) ce).getTMLActivityElement().getReferenceObject();
+                tgc.getTDiagramPanel().highlightTGComponent(tgc);
+                mgui.selectTDiagramPanel(tgc.getTDiagramPanel());
             } else if (ce instanceof TMLCheckingError && ((TMLCheckingError) ce).getTMLTask() != null) {
                 mgui.selectTab(((TMLCheckingError) ce).getTMLTask().getName());
             }

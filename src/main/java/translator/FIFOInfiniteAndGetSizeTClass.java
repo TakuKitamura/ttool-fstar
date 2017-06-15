@@ -48,12 +48,28 @@ package translator;
 import java.util.LinkedList;
 
 public interface FIFOInfiniteAndGetSizeTClass  {
-    public int getNbPara();
-    public Gate getGateWrite(); // Returns the first write gate
-    public Gate getGateRead();  // Returns the first read gate
-    public LinkedList getGatesWrite();
-    public LinkedList getGatesRead();
-    public LinkedList getGatesSize();
-    public Gate getGateSize(); // Returns the first size gate
+    int getNbPara();
+
+    /**
+     * Returns the first write gate
+     * @return the first write gate
+     */
+    Gate getGateWrite();
+
+    /**
+     * Returns the first read gate
+     * @return the first read gate
+     */
+    Gate getGateRead();
+
+    /**
+     * Returns the first size gate
+     * @return the first size gate
+     */
+    Gate getGateSize();
+
+    LinkedList<Gate> getGatesWrite();
+    LinkedList<Gate> getGatesRead();
+    LinkedList<Gate> getGatesSize();
 
 }

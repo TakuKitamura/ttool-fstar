@@ -73,7 +73,7 @@ public class TMLActivityElement extends TMLElement{
     
     public TMLActivityElement getNextElement(int _i) {
         if (_i < getNbNext() ) {
-            return (TMLActivityElement)(nexts.elementAt(_i));
+            return nexts.elementAt(_i);
         } else {
             return null;
         }

@@ -79,7 +79,7 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     
     
     //Panel2
-    private JComboBox kindBox, criticalityBox;
+    private JComboBox<String> kindBox, criticalityBox;
     private JTextField idBox, violatedActionBox, attackTreeNodeBox, referenceElementsBox;
     
     // Main Panel
@@ -188,7 +188,7 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
 		c2.gridwidth = 1;
         panel2.add(new JLabel("Type:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        kindBox = new JComboBox();
+        kindBox = new JComboBox<>();
 		
 		for(i=0; i<kinds.length; i++) {
 			kindBox.addItem(kinds[i]);
@@ -224,7 +224,7 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
         panel2.add(new JLabel("Risk:"), c2);
         
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        criticalityBox = new JComboBox();
+        criticalityBox = new JComboBox<>();
         criticalityBox.addItem("Low");
         criticalityBox.addItem("Medium");
         criticalityBox.addItem("High");
@@ -344,11 +344,11 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     }
     
     public String getKind() {
-        return (String)(kindBox.getSelectedItem());
+        return kindBox.getModel().getElementAt(kindBox.getSelectedIndex());
     }
     
     public String getCriticality() {
-        return (String)(criticalityBox.getSelectedItem());
+        return criticalityBox.getModel().getElementAt(criticalityBox.getSelectedIndex());
     }
     
     public String getViolatedAction() {

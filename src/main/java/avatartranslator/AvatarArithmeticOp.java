@@ -114,12 +114,12 @@ public class AvatarArithmeticOp extends AvatarTerm {
     @Override
     public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
         if (this.term1 instanceof AvatarAttribute)
-            this.term1 = attributesMapping.get ((AvatarAttribute) this.term1);
+            this.term1 = attributesMapping.get (this.term1);
         else
             this.term1.replaceAttributes (attributesMapping);
 
         if (this.term2 instanceof AvatarAttribute)
-            this.term2 = attributesMapping.get ((AvatarAttribute) this.term2);
+            this.term2 = attributesMapping.get (this.term2);
         else
             this.term2.replaceAttributes (attributesMapping);
     }

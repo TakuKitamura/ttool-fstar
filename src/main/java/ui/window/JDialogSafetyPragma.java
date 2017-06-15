@@ -134,9 +134,9 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
 				}
 			}
 		}
-	    Object[] data = new Object[matches.size()];
+	    String[] data = new String[matches.size()];
             data = matches.toArray(data);
-            JList list = new JList(data);
+            JList<String> list = new JList<>(data);
             list.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
             list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             list.setSelectedIndex(0);
@@ -188,7 +188,7 @@ public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionLi
                 @Override
                 public void run() {
                     textarea.setCaretPosition(position);
-                };
+                }
             });
         }
     }

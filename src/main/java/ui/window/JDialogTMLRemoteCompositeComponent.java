@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogTMLRemoteCompositeComponent
- * Dialog for managing remote components
- * Creation: 12/06/2008
- * @version 1.0 12/06/2008
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -56,29 +48,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
-//import javax.swing.event.*;
-
-
+/**
+ * Class JDialogTMLRemoteCompositeComponent
+ * Dialog for managing remote components
+ * Creation: 12/06/2008
+ * @version 1.0 12/06/2008
+ * @author Ludovic APVRILLE
+ */
 public class JDialogTMLRemoteCompositeComponent extends javax.swing.JDialog implements ActionListener  {
     
     private boolean regularClose;
 	private boolean emptyList = false;
-    
-    private JPanel panel2;
-    private Frame frame;
+
     private TMLCRemoteCompositeComponent artifact;
     
-    //protected JTextField taskName;
-	protected JComboBox referenceComponentName;
-	
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+	private JComboBox<String> referenceComponentName;
+
     /** Creates new form  */
     public JDialogTMLRemoteCompositeComponent(Frame _frame, String _title, TMLCRemoteCompositeComponent _artifact) {
         super(_frame, _title, true);
-        frame = _frame;
         artifact = _artifact;
         
         initComponents();
@@ -92,7 +80,6 @@ public class JDialogTMLRemoteCompositeComponent extends javax.swing.JDialog impl
     private void initComponents() {
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
@@ -102,9 +89,9 @@ public class JDialogTMLRemoteCompositeComponent extends javax.swing.JDialog impl
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        
-        panel2 = new JPanel();
+
+
+        JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
         panel2.setPreferredSize(new Dimension(350, 250));
@@ -124,13 +111,13 @@ public class JDialogTMLRemoteCompositeComponent extends javax.swing.JDialog impl
 		} else {
 			index = indexOf(list, artifact.getValue());
 		}
-        referenceComponentName = new JComboBox(list);
+        referenceComponentName = new JComboBox<>(list);
 		referenceComponentName.setSelectedIndex(index);
         //referenceTaskName.setEditable(true);
         //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
 		panel2.add(referenceComponentName, c1);
 		
-		list = new Vector<String>();
+		list = new Vector<>();
 		for(int i=0; i<11; i++) {
 			list.add(""+i);
 		}
@@ -157,12 +144,12 @@ public class JDialogTMLRemoteCompositeComponent extends javax.swing.JDialog impl
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
@@ -202,8 +189,7 @@ public class JDialogTMLRemoteCompositeComponent extends javax.swing.JDialog impl
 		if (emptyList) {
 			return null;
 		}
-		String tmp = (String)(referenceComponentName.getSelectedItem());
-        return tmp;
+        return (String)(referenceComponentName.getSelectedItem());
     }
     
     public String getComponentName() {

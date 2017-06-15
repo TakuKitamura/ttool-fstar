@@ -139,11 +139,7 @@ public class TMLCPath  {
             return true;
         }
 
-        if (joins.contains(tgc)) {
-            return true;
-        }
-
-        return false;
+        return joins.contains(tgc);
 
     }
 

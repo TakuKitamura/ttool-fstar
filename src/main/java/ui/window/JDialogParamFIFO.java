@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogParamFIFO
- * Dialog for managing channel properties
- * Creation: 02/11/2006
- * @version 1.0 02/11/2006
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -55,11 +47,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+/**
+ * Class JDialogParamFIFO
+ * Dialog for managing channel properties
+ * Creation: 02/11/2006
+ * @version 1.0 02/11/2006
+ * @author Ludovic APVRILLE
+ */
 public class JDialogParamFIFO extends javax.swing.JDialog implements ActionListener {
-    
-    private JPanel panel1, panel2;
-    private Frame frame;
-    
+
     private String name;
     private int type1, type2, type3;
     private boolean isFinite, isBlocking;
@@ -71,19 +67,14 @@ public class JDialogParamFIFO extends javax.swing.JDialog implements ActionListe
     
     // Panel1
     private JTextField nameText, maxText;
-    private JComboBox typeList1, typeList2, typeList3;
+    private JComboBox<String> typeList1, typeList2, typeList3;
     private JCheckBox finite, blocking;
-    private Vector types1, types2, types3;
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+    private Vector<String> types1, types2, types3;
+
     /** Creates new form  */
     public JDialogParamFIFO(String _name, int _type1, int _type2, int _type3, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, Frame f, String title) {
         super(f, title, true);
-        frame = f;
-        
+
         name = _name;
         type1 = _type1; type2 = _type2; type3 = _type3;
         
@@ -100,7 +91,7 @@ public class JDialogParamFIFO extends javax.swing.JDialog implements ActionListe
     }
     
     private void myInitComponents() {
-        types1 = new Vector(); types2 = new Vector(); types3 = new Vector();
+        types1 = new Vector<>(); types2 = new Vector<>(); types3 = new Vector<>();
         types1.add(TType.getStringType(0));
         types1.add(TType.getStringType(1));
         types1.add(TType.getStringType(2));
@@ -125,8 +116,8 @@ public class JDialogParamFIFO extends javax.swing.JDialog implements ActionListe
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+        JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Setting parameters "));
         panel1.setPreferredSize(new Dimension(300, 150));
@@ -157,7 +148,7 @@ public class JDialogParamFIFO extends javax.swing.JDialog implements ActionListe
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList1 = new JComboBox(types1);
+        typeList1 = new JComboBox<>(types1);
         typeList1.setSelectedIndex(type1);
         panel1.add(typeList1, c1);
         
@@ -166,7 +157,7 @@ public class JDialogParamFIFO extends javax.swing.JDialog implements ActionListe
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList2 = new JComboBox(types2);
+        typeList2 = new JComboBox<>(types2);
         typeList2.setSelectedIndex(type2);
         panel1.add(typeList2, c1);
         
@@ -175,12 +166,12 @@ public class JDialogParamFIFO extends javax.swing.JDialog implements ActionListe
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList3 = new JComboBox(types3);
+        typeList3 = new JComboBox<>(types3);
         typeList3.setSelectedIndex(type3);
         panel1.add(typeList3, c1);
 
         // FIFO parameters
-        panel2 = new JPanel();
+        JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Setting FIFO parameters "));
         panel2.setPreferredSize(new Dimension(300, 100));
@@ -229,11 +220,11 @@ public class JDialogParamFIFO extends javax.swing.JDialog implements ActionListe
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }

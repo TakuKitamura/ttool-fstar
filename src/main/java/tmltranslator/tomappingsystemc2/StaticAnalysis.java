@@ -468,7 +468,7 @@ public class StaticAnalysis{
 
 		} else if (iCurrElem instanceof TMLSequence){
 			((TMLSequence)iCurrElem).sortNexts();
-			for(int i=((TMLSequence)iCurrElem).getNbNext()-1; i>=0; i--){
+			for(int i = iCurrElem.getNbNext()-1; i>=0; i--){
 				iReturnNode = buildLiveAnalysisTree(iCurrElem.getNextElement(i), iReturnNode, iSuperiorNode);
 			}
 			return iReturnNode;

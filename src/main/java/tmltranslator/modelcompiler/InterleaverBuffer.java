@@ -354,9 +354,9 @@ public class InterleaverBuffer extends Buffer	{
 	public static boolean closePanel( Frame frame )	{
 
 		String regex = "[0-9]+";
-		width = (String)width_TF.getText();
-		bitInOffset = (String)bitInOffset_TF.getText();
-		inputOffset = (String)inputOffset_TF.getText();
+		width = width_TF.getText();
+		bitInOffset = bitInOffset_TF.getText();
+		inputOffset = inputOffset_TF.getText();
 		packedBinaryIn = (String)packedBinaryIn_CB.getSelectedItem();
 
 		if( ( width.length() > 0 ) && !width.matches( regex ) )	{
@@ -377,8 +377,8 @@ public class InterleaverBuffer extends Buffer	{
 
 		//check DO
 		packedBinaryOut = (String)packedBinaryOut_CB.getSelectedItem();
-		bitOutOffset = 	(String)bitOutOffset_TF.getText();
-		outputOffset = (String)outputOffset_TF.getText();
+		bitOutOffset = bitOutOffset_TF.getText();
+		outputOffset = outputOffset_TF.getText();
 
 		if( ( bitOutOffset.length() > 0 ) && !bitOutOffset.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The bit output offset must be expressed as a natural", "Badly formatted parameter",
@@ -393,8 +393,8 @@ public class InterleaverBuffer extends Buffer	{
 		}
 
 		//check Permutation table
-		offsetPerm = (String) offsetPerm_TF.getText();
-		lengthPerm = (String) lengthPerm_TF.getText();
+		offsetPerm = offsetPerm_TF.getText();
+		lengthPerm = lengthPerm_TF.getText();
 		//check first entry offset
 		if( (offsetPerm.length() > 0) && !offsetPerm.matches( regex ) )	{
 			JOptionPane.showMessageDialog( frame, "The offset must be expressed as a natural", "Badly formatted parameter",

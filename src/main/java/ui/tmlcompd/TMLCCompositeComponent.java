@@ -154,14 +154,8 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 				
 			}
 			currentFontSize = maxCurrentFontSize;
-			
-			if(currentFontSize <minFontSize) {
-				displayText = false;
-			} else {
-				displayText = true;
-				//f = f.deriveFont((float)currentFontSize);
-				//g.setFont(f);
-			}
+
+            displayText = currentFontSize >= minFontSize;
 			
 		}
 		
@@ -263,13 +257,10 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 		if (tgc instanceof TMLCRemoteCompositeComponent) {
             return true;
         }
-		
-		 if (tgc instanceof TMLCCompositePort) {
-			 return true;
-		 }
-		 
-		 return false;
-	}
+
+        return tgc instanceof TMLCCompositePort;
+
+    }
     
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		boolean swallowed = false;
@@ -304,23 +295,23 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
         
         //Set its coordinates
         if (tgc instanceof TMLCCompositeComponent) {
-            ((TMLCCompositeComponent)tgc).resizeWithFather();
+            tgc.resizeWithFather();
         }
 		
 		if (tgc instanceof TMLCRecordComponent) {
-            ((TMLCRecordComponent)tgc).resizeWithFather();
+            tgc.resizeWithFather();
         }
 		
 		if (tgc instanceof TMLCPrimitiveComponent) {
-            ((TMLCPrimitiveComponent)tgc).resizeWithFather();
+            tgc.resizeWithFather();
         }
 		
 		if (tgc instanceof TMLCRemoteCompositeComponent) {
-            ((TMLCRemoteCompositeComponent)tgc).resizeWithFather();
+            tgc.resizeWithFather();
         }
 		
 		 if (tgc instanceof TMLCCompositePort) {
-			 ((TMLCCompositePort)tgc).resizeWithFather();
+			 tgc.resizeWithFather();
 			 compositePortNb ++;
 		 }
         
@@ -366,19 +357,19 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 		rescaled = true;
         for(int i=0; i<nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
-				((TMLCCompositeComponent)tgcomponent[i]).resizeWithFather();
+				tgcomponent[i].resizeWithFather();
 			}
 			if (tgcomponent[i] instanceof TMLCPrimitiveComponent) {
-				((TMLCPrimitiveComponent)tgcomponent[i]).resizeWithFather();
+				tgcomponent[i].resizeWithFather();
 			}
 			if (tgcomponent[i] instanceof TMLCRecordComponent) {
-				((TMLCRecordComponent)tgcomponent[i]).resizeWithFather();
+				tgcomponent[i].resizeWithFather();
 			}
 			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
-				((TMLCRemoteCompositeComponent)tgcomponent[i]).resizeWithFather();
+				tgcomponent[i].resizeWithFather();
 			}
 			if (tgcomponent[i] instanceof TMLCCompositePort) {
-				((TMLCCompositePort)tgcomponent[i]).resizeWithFather();
+				tgcomponent[i].resizeWithFather();
 			}
         }
 		

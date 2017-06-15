@@ -59,7 +59,7 @@ public class TML2SystemC {
     
     //private static int gateId;
 
-    private TMLModeling tmlmodeling;
+    private TMLModeling<?> tmlmodeling;
     private List<SystemCTask> tasks;
     
   //  private boolean debug;
@@ -76,7 +76,7 @@ public class TML2SystemC {
     private String endClass, mainFunction;
 
     
-    public TML2SystemC(TMLModeling _tmlmodeling) {
+    public TML2SystemC(TMLModeling<?> _tmlmodeling) {
         tmlmodeling = _tmlmodeling;
     }
     
@@ -270,7 +270,7 @@ public class TML2SystemC {
         mainFunction += "\n// Exec tracings\n";
         iterator = tasks.listIterator();
         while(iterator.hasNext()) {
-            st = (SystemCTask)(iterator.next());
+            st = iterator.next();
             mainFunction += "sc_trace(tf, tb." + st.reference + ".exi, \"EX_" + st.reference + "\");\n";
         }
         

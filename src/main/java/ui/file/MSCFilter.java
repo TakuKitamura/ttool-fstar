@@ -60,11 +60,7 @@ public class MSCFilter extends FileFilter {
 
         String extension = FileUtils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(FileUtils.xml)){
-                    return true;
-            } else {
-                return false;
-            }
+            return extension.equals(FileUtils.xml);
         }
 
         return false;

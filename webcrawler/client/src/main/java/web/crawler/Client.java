@@ -87,7 +87,7 @@ public class Client {
         else if (cmd.equals(Message.RESULT_SEARCH)) {
             //show GUI for search
             //Call Huy's function
-            ArrayList<Object> res = new ArrayList();
+            ArrayList<Object> res = new ArrayList<>();
             res = answerMsg.getContent();
             System.out.println("\n"+res);
 
@@ -96,7 +96,7 @@ public class Client {
         else if (cmd.equals(Message.RESULT_DETAIL)) {
             //show GUI for detail of a specific record
             //Call Huy's function
-            ArrayList<Object> res = new ArrayList();
+            ArrayList<Object> res = new ArrayList<>();
             res = answerMsg.getContent();
             System.out.println("\n"+res);
 
@@ -107,7 +107,7 @@ public class Client {
             //Show picture-Use a function to convert binary to image
             //Message.convertByteToImage(answerMsg.getImageByte());
 
-            ArrayList<Object> resultContent = new ArrayList();
+            ArrayList<Object> resultContent = new ArrayList<>();
             resultContent = answerMsg.getContent();
             byte[] imgByte = (byte[]) resultContent.get(0);
             Message.convertByteToImage(imgByte,answerMsg);
@@ -120,7 +120,7 @@ public class Client {
             //Show picture-Use a function to convert binary to image
             //Message.convertByteToImage(answerMsg.getImageByte());
 
-            ArrayList<Object> resultContent = new ArrayList();
+            ArrayList<Object> resultContent = new ArrayList<>();
             resultContent = answerMsg.getContent();
             byte[] imgByte = (byte[]) resultContent.get(0);
             Message.convertByteToImage(imgByte,answerMsg);
@@ -155,8 +155,8 @@ public class Client {
 
             //Create a temporary data to tests
             String cmd;
-            ArrayList<String> options = new ArrayList();
-            ArrayList<String> values = new ArrayList();
+            ArrayList<String> options = new ArrayList<>();
+            ArrayList<String> values = new ArrayList<>();
 
             //  open up standard input
             BufferedReader br;

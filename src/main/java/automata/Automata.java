@@ -79,7 +79,7 @@ public class Automata {
     }
     
     public State getState(int index) {
-        return (State)(states.get(index));
+        return states.get(index);
     }
     
     public void addState(State s) {

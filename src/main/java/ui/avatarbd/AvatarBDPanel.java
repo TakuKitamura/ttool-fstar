@@ -311,11 +311,7 @@ public class AvatarBDPanel extends TDiagramPanel {
                     s = ((Element)n).getAttribute("value");
                     //TraceManager.addDev("Found value=" + s);
                     if (s != null) {
-                        if (s.compareTo("true") == 0) {
-                            optimized = true;
-                        } else {
-                            optimized = false;
-                        }
+                        optimized = s.compareTo("true") == 0;
                     }
                 }
             }

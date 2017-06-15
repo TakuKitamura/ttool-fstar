@@ -59,10 +59,7 @@ public class TGConnectingPointTOSCompositionOperator extends  TGConnectingPoint{
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.TOS_CONNECTOR_ATTRIBUTE) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.TOS_CONNECTOR_ATTRIBUTE;
     }
     
 }

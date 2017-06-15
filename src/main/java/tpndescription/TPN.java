@@ -181,7 +181,7 @@ public class TPN {
         String tpn = "net generatedWithTTool\n\n";
         ListIterator iterator = transitions.listIterator();
         while(iterator.hasNext()) {
-            tpn += "transition " + ((Transition)(iterator.next())).toString() + "\n";
+            tpn += "transition " + iterator.next().toString() + "\n";
         }
         tpn +=" Nb of places: " + places.size() + "\n";
         for(Place p: places) {

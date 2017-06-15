@@ -125,9 +125,6 @@ public class TMLSDAttribute extends DIPLOElement {
 			if( !this.name.equals( mt.name ) )	{
 				return false;
 			}
-			if( !this.type.equals( mt.type ) )	{
-				return false;
-			}
-			return true;
-		}
+            return this.type.equals(mt.type);
+        }
 }	//End of class

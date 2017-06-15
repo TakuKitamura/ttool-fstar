@@ -171,11 +171,8 @@ public class TMLEvent extends TMLCommunicationElement {
             return false;
         }
 
-        if (isBlocking()) {
-            return true;
-        }
+        return isBlocking();
 
-        return false;
     }
 
     public boolean isBlockingAtDestination() {
@@ -184,7 +181,7 @@ public class TMLEvent extends TMLCommunicationElement {
 
     public TMLType getType(int i) {
         if (i<getNbOfParams()) {
-            return (TMLType)(params.elementAt(i));
+            return params.elementAt(i);
         } else {
             return null;
         }

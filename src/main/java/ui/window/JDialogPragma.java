@@ -62,14 +62,13 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
     protected String text;
     
     //components
-    protected JTextArea textarea;
+    private JTextArea textarea;
     protected JButton close;
     protected JButton cancel;
-    protected JMenuBar menuBar;
     protected JMenu help;
-    protected JPopupMenu helpPopup;
-	public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
-	public HashMap<String, java.util.List<String>> blockStateMap = new HashMap<String, java.util.List<String>>();
+    private JPopupMenu helpPopup;
+	public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<>();
+	public HashMap<String, java.util.List<String>> blockStateMap = new HashMap<>();
     /** Creates new form  */
     public JDialogPragma(Frame f, String title, String _text) {
         super(f, title, true);
@@ -109,7 +108,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         }
 
 		private JList createSuggestionList(final int position, final String subWord, String header) {
-			ArrayList<String> matches = new ArrayList<String>();
+			ArrayList<String> matches = new ArrayList<>();
 	    	if (subWord.startsWith("#")){
 	    	    for (String p: pragma) {
         	  	    if (p.startsWith(subWord)){
@@ -163,9 +162,9 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
 				
 				}
 			}
-		    Object[] data = new Object[matches.size()];
+		    String[] data = new String[matches.size()];
             data = matches.toArray(data);
-            JList list = new JList(data);
+            JList<String> list = new JList<>(data);
             list.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
             list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             list.setSelectedIndex(0);
@@ -216,7 +215,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
                 @Override
                 public void run() {
                     textarea.setCaretPosition(position);
-                };
+                }
             });
         }
     }
@@ -258,7 +257,7 @@ public class JDialogPragma extends javax.swing.JDialog implements ActionListener
         if (subWord.length() < 1) {
             return;
         }
-		String header="";
+		String header;
 		//Find the most recent pragma name
 		start=Math.max(0,position-1);
 		while (start>0){

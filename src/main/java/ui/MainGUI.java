@@ -985,7 +985,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if ( tp instanceof TMLArchiPanel) {
                 panelsList.add( (TMLArchiPanel) (tp) );
             }
@@ -998,7 +998,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         Vector<String> list = new Vector<String>();
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLDesignPanel) {
                 list.addAll(((TMLDesignPanel)tp).getAllTMLTaskNames(mainTabbedPane.getTitleAt(i)));
             }
@@ -1010,7 +1010,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         Vector<String> list = new Vector<String>();
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLDesignPanel) {
                 list.addAll(((TMLDesignPanel)tp).getAllTMLTaskNames(mainTabbedPane.getTitleAt(i)));
             }
@@ -1041,7 +1041,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         ArrayList<TMLCommunicationPatternPanel> list = new ArrayList<TMLCommunicationPatternPanel>();
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if( tp instanceof TMLCommunicationPatternPanel )    {
                 list.add( (TMLCommunicationPatternPanel) tp );
             }
@@ -1053,7 +1053,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLComponentDesignPanel) {
                 ((TMLComponentDesignPanel)tp).tmlctdp.delayedLoad();
                 //((TMLComponentDesignPanel)tp).tmlctdp.updatePorts();
@@ -1065,7 +1065,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLComponentDesignPanel) {
                 //((TMLComponentDesignPanel)tp).tmlctdp.delayedLoad();
                 ((TMLComponentDesignPanel)tp).tmlctdp.updatePorts();
@@ -1078,7 +1078,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         Vector<String> list = new Vector<String>();
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLDesignPanel) {
                 list.addAll(((TMLDesignPanel)tp).getAllTMLCommunicationNames(mainTabbedPane.getTitleAt(i)));
             } else if (tp instanceof TMLComponentDesignPanel) {
@@ -1093,7 +1093,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         Vector<String> list = new Vector<String>();
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             /*if (tp instanceof TMLDesignPanel) {
               list.addAll(((TMLDesignPanel)tp).getAllTMLChannelNames( mainTabbedPane.getTitleAt(i)) );
               } else*/
@@ -1109,7 +1109,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         Vector<String> list = new Vector<String>();
 
         for( int i = 0; i < tabs.size(); i++ ) {
-            tp = ( TURTLEPanel )( tabs.elementAt(i) );
+            tp = tabs.elementAt(i);
             if ( tp instanceof TMLDesignPanel ) {
                 list.addAll( ( (TMLDesignPanel)tp ).getAllTMLEventNames( mainTabbedPane.getTitleAt(i) ) );
             } else if ( tp instanceof TMLComponentDesignPanel ) {
@@ -1125,7 +1125,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         boolean b;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLDesignPanel) {
                 b = (mainTabbedPane.getTitleAt(i).compareTo(ref) == 0);
                 list.addAll(((TMLDesignPanel)tp).getAllNonMappedTMLTaskNames(mainTabbedPane.getTitleAt(i), tadp, b, name));
@@ -1145,7 +1145,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         boolean b;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof AvatarDesignPanel) {
                 b = (mainTabbedPane.getTitleAt(i).compareTo(ref) == 0);
                 list.addAll(((AvatarDesignPanel)tp).getAllNonMappedAvatarBlockNames(mainTabbedPane.getTitleAt(i), tadp, b, name));
@@ -1161,7 +1161,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         boolean b;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof AvatarDesignPanel) {
                 b = (mainTabbedPane.getTitleAt(i).compareTo(ref) == 0);
                 list.addAll(((AvatarDesignPanel)tp).getAllNonMappedAvatarChannelNames(mainTabbedPane.getTitleAt(i), tadp, b, name));
@@ -1177,7 +1177,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         // boolean b;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLComponentDesignPanel)  {
                 if (((TMLComponentDesignPanel)tp).tmlctdp != tcdp) {
                     list.addAll(((TMLComponentDesignPanel)tp).getAllCompositeComponent(mainTabbedPane.getTitleAt(i)));
@@ -1468,7 +1468,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public String getTitleOf(TDiagramPanel _tdp) {
         TURTLEPanel panel;
         for(int i=0; i<tabs.size(); i++) {
-            panel = (TURTLEPanel)(tabs.get(i));
+            panel = tabs.get(i);
             if (panel.hasTDiagramPanel(_tdp)) {
                 return getTitleAt(panel);
             }
@@ -1491,7 +1491,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public TURTLEPanel getTURTLEPanel(String s) {
         for(int i=0; i<mainTabbedPane.getTabCount(); i++) {
             if (mainTabbedPane.getTitleAt(i).compareTo(s) == 0) {
-                return (TURTLEPanel)(tabs.elementAt(i));
+                return tabs.elementAt(i);
             }
         }
         return null;
@@ -1618,7 +1618,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newDesign() {
         //TraceManager.addDev("NEW DESIGN");
         addDesignPanel("Design", -1);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();
@@ -1627,7 +1627,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newDeployment() {
         //TraceManager.addDev("NEW DESIGN");
         addDeploymentPanel("Deployment", -1);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();
@@ -1636,7 +1636,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newAnalysis() {
         //TraceManager.addDev("NEW ANALYSIS");
         addAnalysisPanel("Analysis", 0);
-        ((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(0).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
         //paneAction(null);
         //frame.repaint();
@@ -1655,7 +1655,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newCommunicationPattern() {
         //TraceManager.addDev("NEW ANALYSIS");
         //addCommunicationPatternPanel("CP", 0);
-        ((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(0).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
         //paneAction(null);
         //frame.repaint();
@@ -1664,7 +1664,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newTMLDesign() {
         //TraceManager.addDev("NEW DESIGN");
         addTMLDesignPanel("DIPLODOCUS_Design", -1);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();
@@ -1673,7 +1673,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newDiplodocusMethodology() {
         //TraceManager.addDev("NEW DESIGN");
         addDiplodocusMethodologyPanel("DIPLODOCUS_Methodology", -1, true);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();
@@ -1682,7 +1682,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newAvatarMethodology() {
         //TraceManager.addDev("NEW DESIGN");
         addAvatarMethodologyPanel("AVATAR_Methodology", -1, true);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();
@@ -1691,7 +1691,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newSysmlsecMethodology() {
         //TraceManager.addDev("NEW DESIGN");
         addSysmlsecMethodologyPanel("SysMLSec_Methodology", -1, true);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();
@@ -1700,7 +1700,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newTMLComponentDesign() {
         //TraceManager.addDev("NEW DESIGN");
         addTMLComponentDesignPanel("DIPLODOCUS_C_Design", -1);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();
@@ -1709,7 +1709,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newTMLCP() {
         //TraceManager.addDev("NEW ANALYSIS");
         addTMLCPPanel("CP", 0);
-        ((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(0).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
         //paneAction(null);
         //frame.repaint();
@@ -1718,7 +1718,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newTMLArchi() {
         //TraceManager.addDev("NEW DIPLO Architecture");
         addTMLArchiPanel("Architecture", -1);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();
@@ -1727,7 +1727,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newADD() {
         //TraceManager.addDev("NEW Avatar deployment");
         addADDPanel("Deployment", -1);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();
@@ -1736,21 +1736,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newTURTLEOSDesign() {
         //TraceManager.addDev("NEW DESIGN");
         addTURTLEOSDesignPanel("TURTLE-OS Design", -1);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
     }
 
     public void newNCDesign() {
         //TraceManager.addDev("NEW NC DESIGN");
         addNCDesignPanel("NC Design", -1);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
     }
 
     public void newAvatarBD() {
         //TraceManager.addDev("NEW AVATAR BD");
         addAvatarDesignPanel("Design", -1);
-        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
     }
 
@@ -2283,6 +2283,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             gtm.enableUndo(true);
             gtm.saveOperation(getCurrentSelectedPoint());
             dtree.forceUpdate();
+	    getCurrentTDiagramPanel().repaint();
         }
     }
 
@@ -3559,7 +3560,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         Vector<String> list = new Vector<String>();
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLComponentDesignPanel) {
                 for (String s: ((TMLComponentDesignPanel)tp).getAllCryptoConfig()){
                     list.add(mainTabbedPane.getTitleAt(i)+"::"+s);
@@ -3594,7 +3595,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         ArrayList<String> list = new ArrayList<String>();
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLComponentDesignPanel) {
                 for (String s:((TMLComponentDesignPanel)tp).getAllKeys()){
                     list.add(s);
@@ -3855,7 +3856,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         menu.removeAll();
         String s;
         for(int i=0; i<v.size(); i++) {
-            s = (String)(v.elementAt(i));
+            s = v.elementAt(i);
             jmenubarturtle.addMenuItem(menu, s, this);
         }
 
@@ -4174,7 +4175,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         if (tabs != null) {
             for(int i=0; i<tabs.size(); i++) {
-                tp = (TURTLEPanel)(tabs.elementAt(i));
+                tp = tabs.elementAt(i);
                 if (tp instanceof TMLDesignPanel) {
                     ((TMLDesignPanel)tp).getListOfBreakPoints(points);
                 }
@@ -4976,7 +4977,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         //boolean actions;
         for(int i=0; i<tp.panels.size(); i++) {
-            tdp1 = (TDiagramPanel)(tp.panels.elementAt(i));
+            tdp1 = tp.panels.elementAt(i);
             tdp1.repaint();
             image = tdp1.performMinimalCapture();
             if (i < 10) {
@@ -5031,9 +5032,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         //boolean actions;
         for(int j=0; j<tabs.size(); j++) {
-            tp = (TURTLEPanel)(tabs.get(j));
+            tp = tabs.get(j);
             for(int i=0; i<tp.panels.size(); i++) {
-                tdp1 = (TDiagramPanel)(tp.panels.elementAt(i));
+                tdp1 = tp.panels.elementAt(i);
                 tdp1.repaint();
 
                 tdp1.performMinimalCapture();
@@ -5254,7 +5255,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TMLActivityDiagramPanel tmladp;
         //TraceManager.addDev("global search for: " + name);
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLComponentDesignPanel) {
                 if (tp.hasTDiagramPanel(_tdp)) {
                     tmladp = ((TMLComponentDesignPanel)tp).getTMLActivityDiagramPanel(name);
@@ -5273,7 +5274,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public TURTLEPanel getTURTLEPanelOfTDiagramPanel(TDiagramPanel _tdp) {
         TURTLEPanel tp;
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLComponentDesignPanel) {
                 if (tp.hasTDiagramPanel(_tdp)) {
                     return tp;
@@ -5289,7 +5290,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         ArrayList<EBRDDPanel> al = new ArrayList<EBRDDPanel>();
         //TraceManager.addDev("global search for: " + name);
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof RequirementPanel) {
                 ((RequirementPanel)tp).addAllEBRDDPanels(al);
             }
@@ -5303,7 +5304,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         ArrayList<AvatarPDPanel> al = new ArrayList<AvatarPDPanel>();
         //TraceManager.addDev("global search for: " + name);
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof AvatarRequirementPanel) {
                 ((AvatarRequirementPanel)tp).addAllAvatarPDPanels(al);
             }
@@ -5317,7 +5318,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         List<TGComponent> ll = new LinkedList<TGComponent>();
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
 
             if (tp instanceof TMLComponentDesignPanel) {
                 ll.addAll(((TMLComponentDesignPanel)tp).tmlctdp.getComponentList());
@@ -5421,7 +5422,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i=0; i<tabs.size();i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp.panels.contains(tdp)) {
                 return i;
             }
@@ -5445,7 +5446,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         ArrayList<TMLComponentTaskDiagramPanel> foundPanels = new ArrayList<TMLComponentTaskDiagramPanel>();
 
         for(int i=0; i<tabs.size();i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLComponentDesignPanel) {
                 ((TMLComponentDesignPanel)tp).tmlctdp.getPanelsUsingAComponent(tmlcc, foundPanels);
             }
@@ -5458,7 +5459,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i=0; i<tabs.size();i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLComponentDesignPanel) {
                 ((TMLComponentDesignPanel)tp).tmlctdp.updateReferenceToTMLCCompositeComponent(tmlcc);
             }
@@ -5486,7 +5487,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public AvatarSMDPanel getAvatarSMDPanel(int indexDesign, String name) {
 
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         if (tp == null) {
             TraceManager.addDev("null TP");
             return null;
@@ -5499,7 +5500,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public TActivityDiagramPanel getActivityDiagramPanel(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         if (tp == null) {
             return null;
         }
@@ -5510,7 +5511,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public TURTLEOSActivityDiagramPanel getTURTLEOSActivityDiagramPanel(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         if (tp == null) {
             return null;
         }
@@ -5521,7 +5522,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public TMLActivityDiagramPanel getTMLActivityDiagramPanel(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         if (tp == null) {
             return null;
         }
@@ -5535,7 +5536,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public ProactiveSMDPanel getSMDPanel(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         if (tp == null) {
             return null;
         }
@@ -5550,7 +5551,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         int cpt = 0;
 
         for(int i = 0; i<getCurrentJTabbedPane().getTabCount(); i++) {
-            tdp = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(i));
+            tdp = getCurrentTURTLEPanel().panels.elementAt(i);
             if (tdp instanceof TActivityDiagramPanel) {
                 cpt ++;
             }
@@ -5559,58 +5560,58 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void setAvatarBDName(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
     public void setClassDiagramName(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
     public void setDiplodocusMethodologyDiagramName(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
     public void setAvatarMethodologyDiagramName(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
     public void setSysmlsecMethodologyDiagramName(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
     public void setTMLTaskDiagramName(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
     public void setTMLComponentTaskDiagramName(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
     public void setTMLArchitectureDiagramName(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
     public void setAADName(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
     public void setProacticeCSDName(int indexDesign, String name) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
     }
 
     public TDiagramPanel getMainTDiagramPanel(int indexPanel) {
         if (tabs.size() > indexPanel) {
-            TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexPanel));
+            TURTLEPanel tp = tabs.elementAt(indexPanel);
             return tp.tdp;
         } else {
             return null;
@@ -5620,7 +5621,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     // TMLCP
     public boolean isTMLCPSDCreated(int index, String s) {
-        return isTMLCPSDCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
+        return isTMLCPSDCreated(tabs.elementAt(index), s);
     }
 
     public boolean isTMLCPSDCreated(TURTLEPanel tp, String s) {
@@ -5632,7 +5633,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean isTMLCPCreated(int index, String s) {
-        return isTMLCPCreated(((TURTLEPanel) (tabs.elementAt(index))), s);
+        return isTMLCPCreated(tabs.elementAt(index), s);
     }
 
     public boolean isTMLCPCreated(TURTLEPanel tp, String s) {
@@ -5649,15 +5650,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // IOD, SD
 
     public boolean isSDCreated(int index, String s) {
-        return isSDCreated(((TURTLEPanel) (tabs.elementAt(index))), s);
+        return isSDCreated(tabs.elementAt(index), s);
     }
 
     public boolean isIODCreated(int index, String s) {
-        return isIODCreated(((TURTLEPanel) (tabs.elementAt(index))), s);
+        return isIODCreated(tabs.elementAt(index), s);
     }
 
     public boolean isProActiveSMDCreated(int index, String s) {
-        return isProActiveSMDCreated(((TURTLEPanel) (tabs.elementAt(index))), s);
+        return isProActiveSMDCreated(tabs.elementAt(index), s);
     }
 
     public boolean isSDCreated(TURTLEPanel tp, String s) {
@@ -5669,7 +5670,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean isSDZVCreated(int index, String s) {
-        return isSDZVCreated(((TURTLEPanel) (tabs.elementAt(index))), s);
+        return isSDZVCreated(tabs.elementAt(index), s);
     }
 
     public boolean isSDZVCreated(TURTLEPanel tp, String s) {
@@ -5768,7 +5769,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
     public boolean createTMLCPSequenceDiagram(int index, String s) {
-        return createTMLCPSequenceDiagram((TURTLEPanel) (tabs.elementAt(index)), s);
+        return createTMLCPSequenceDiagram(tabs.elementAt(index), s);
     }
 
     public boolean createTMLCPSequenceDiagram(TURTLEPanel tp, String s) {
@@ -5802,7 +5803,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createTMLCPDiagram(int index, String s) {
-        return createTMLCPDiagram((TURTLEPanel) (tabs.elementAt(index)), s);
+        return createTMLCPDiagram(tabs.elementAt(index), s);
     }
 
     public boolean createTMLCPDiagram(TURTLEPanel tp, String s) {
@@ -5824,21 +5825,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public ui.sd.SequenceDiagramPanel getSequenceDiagramPanel(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getSequenceDiagramPanel(tp, s);
     }
 
 
     public ui.sd2.SequenceDiagramPanel getSequenceDiagramPanelZV(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getSequenceDiagramPanelZV(tp, s);
     }
 
 
     public AttackTreeDiagramPanel getAttackTreeDiagramPanel(int index, int indexTab, String s) {
         //TraceManager.addDev("Searching for " + s);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getAttackTreeDiagramPanel(tp, indexTab, s);
     }
 
@@ -5859,7 +5860,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public TMLCPPanel getTMLCPDiagramPanel(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getTMLCPDiagramPanel(tp, s);
     }
 
@@ -5875,7 +5876,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public TMLSDPanel getTMLCPSDDiagramPanel(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getTMLCPSDDiagramPanel(tp, s);
     }
 
@@ -5891,7 +5892,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public InteractionOverviewDiagramPanel getIODiagramPanel(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getIODiagramPanel(tp, s);
     }
 
@@ -5927,7 +5928,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public UseCaseDiagramPanel getUseCaseDiagramPanel(int index, int indexTab, String s) {
         //TraceManager.addDev("Searching for " + s + " at index =" + index);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getUseCaseDiagramPanel(tp, indexTab, s);
     }
 
@@ -5939,7 +5940,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createSequenceDiagram(int index, String s) {
-        return createSequenceDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createSequenceDiagram(tabs.elementAt(index), s);
     }
 
     public boolean createSequenceDiagram(TURTLEPanel tp, String s) {
@@ -5960,7 +5961,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return true;
     }
     public boolean createSequenceDiagramZV(int index, String s) {
-        return createSequenceDiagramZV((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createSequenceDiagramZV(tabs.elementAt(index), s);
     }
 
     public boolean createSequenceDiagramZV(TURTLEPanel tp, String s) {
@@ -6039,7 +6040,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
     public boolean createIODiagram(int index, String s) {
-        return createIODiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createIODiagram(tabs.elementAt(index), s);
     }
 
     public boolean createIODiagram(TURTLEPanel tp, String s) {
@@ -6057,7 +6058,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createUseCaseDiagram(int index, String s) {
-        return createUseCaseDiagram((TURTLEPanel) (tabs.elementAt(index)), s);
+        return createUseCaseDiagram(tabs.elementAt(index), s);
     }
 
     public boolean createUniqueUseCaseDiagram(TURTLEPanel tp, String s) {
@@ -6096,7 +6097,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createAvatarCD(int index, String s) {
-        return createAvatarCD((TURTLEPanel) (tabs.elementAt(index)), s);
+        return createAvatarCD(tabs.elementAt(index), s);
     }
 
     public boolean createUniqueAvatarCD(TURTLEPanel tp, String s) {
@@ -6132,7 +6133,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createAvatarAD(int index, String s) {
-        return createAvatarAD((TURTLEPanel) (tabs.elementAt(index)), s);
+        return createAvatarAD(tabs.elementAt(index), s);
     }
 
     public boolean createUniqueAvatarAD(TURTLEPanel tp, String s) {
@@ -6167,7 +6168,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     //Changed by Solange from public boolean...
     public String createProActiveSMD(int index, String s) {
         //Adde by Solange String name at  the beginning
-        String name=createProActiveSMD((TURTLEPanel)(tabs.elementAt(index)), s);
+        String name=createProActiveSMD(tabs.elementAt(index), s);
         return(name); //changed from return true
     }
 
@@ -6211,7 +6212,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createAvatarRD(int index, String s) {
-        return createAvatarRD((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createAvatarRD(tabs.elementAt(index), s);
     }
 
     public boolean createAvatarRD(TURTLEPanel tp, String s) {
@@ -6225,7 +6226,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createAvatarMAD(int index, String s) {
-        return createAvatarMAD((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createAvatarMAD(tabs.elementAt(index), s);
     }
 
     public boolean createAvatarMAD(TURTLEPanel tp, String s) {
@@ -6239,7 +6240,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createAvatarPD(int index, String s) {
-        return createAvatarPD((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createAvatarPD(tabs.elementAt(index), s);
     }
 
     public boolean createAvatarPD(TURTLEPanel tp, String s) {
@@ -6253,7 +6254,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createADDDiagram(int index, String s) {
-        return createADDDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createADDDiagram(tabs.elementAt(index), s);
     }
 
     public boolean createADDDiagram(TURTLEPanel tp, String s) {
@@ -6268,7 +6269,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
     public boolean isRequirementCreated(int index, String s) {
-        return isRequirementCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
+        return isRequirementCreated(tabs.elementAt(index), s);
     }
 
     public boolean isRequirementCreated(TURTLEPanel tp, String s) {
@@ -6280,7 +6281,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createRequirementDiagram(int index, String s) {
-        return createRequirementDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createRequirementDiagram(tabs.elementAt(index), s);
     }
 
     public boolean createRequirementDiagram(TURTLEPanel tp, String s) {
@@ -6294,7 +6295,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createAttackTreeDiagram(int index, String s) {
-        return createAttackTreeDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createAttackTreeDiagram(tabs.elementAt(index), s);
     }
 
     public boolean createAttackTreeDiagram(TURTLEPanel tp, String s) {
@@ -6308,7 +6309,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public boolean createEBRDD(int index, String s) {
-        return createEBRDD((TURTLEPanel)(tabs.elementAt(index)), s);
+        return createEBRDD(tabs.elementAt(index), s);
     }
 
     public boolean createEBRDD(TURTLEPanel tp, String s) {
@@ -6355,7 +6356,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
     public AvatarRDPanel getAvatarRDPanel(int index, int indexTab, String s) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getAvatarRDPanel(tp, indexTab, s);
     }
 
@@ -6367,7 +6368,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public AvatarMADPanel getAvatarMADPanel(int index, int indexTab, String s) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getAvatarMADPanel(tp, indexTab, s);
     }
 
@@ -6379,17 +6380,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public AvatarPDPanel getAvatarPDPanel(int index, int indexTab, String s) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getAvatarPDPanel(tp, indexTab, s);
     }
 
     public ADDDiagramPanel getAvatarADDPanel(int index, int indexTab, String s) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getAvatarADDPanel(tp, indexTab, s);
     }
 
     public ADDDiagramPanel getAvatarADDPanelByIndex(int index, int indexTab) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getAvatarADDPanelByIndex(tp, indexTab);
     }
 
@@ -6420,7 +6421,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public AvatarCDPanel getAvatarCDPanel(int index, int indexTab, String s) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getAvatarCDPanel(tp, indexTab, s);
     }
 
@@ -6433,7 +6434,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public AvatarADPanel getAvatarADPanel(int index, int indexTab, String s) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getAvatarADPanel(tp, indexTab, s);
     }
 
@@ -6447,7 +6448,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public RequirementDiagramPanel getRequirementDiagramPanel(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getRequirementDiagramPanel(tp, s);
     }
 
@@ -6462,7 +6463,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public RequirementDiagramPanel getRequirementDiagramPanel(int index, int indexTab, String s) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getRequirementDiagramPanel(tp, indexTab, s);
     }
 
@@ -6476,7 +6477,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public EBRDDPanel getEBRDDPanel(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getEBRDDPanel(tp, s);
     }
 
@@ -6491,7 +6492,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public EBRDDPanel getEBRDDPanel(int index, int indexTab, String s) {
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        TURTLEPanel tp = tabs.elementAt(index);
         return getEBRDDPanel(tp, indexTab, s);
     }
 
@@ -6540,7 +6541,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public JTabbedPane getCurrentJTabbedPane() {
-        return ((TURTLEPanel)(tabs.elementAt(mainTabbedPane.getSelectedIndex()))).tabbedPane;
+        return tabs.elementAt(mainTabbedPane.getSelectedIndex()).tabbedPane;
     }
 
     public int getCurrentSelectedIndex() {
@@ -6550,21 +6551,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public TDiagramPanel getCurrentTDiagramPanel() {
         try {
-            TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(mainTabbedPane.getSelectedIndex()));
-            return (TDiagramPanel)(tp.panels.elementAt(tp.tabbedPane.getSelectedIndex()));
+            TURTLEPanel tp = tabs.elementAt(mainTabbedPane.getSelectedIndex());
+            return tp.panels.elementAt(tp.tabbedPane.getSelectedIndex());
         } catch (Exception e) {
             return null;
         }
     }
 
     public TDiagramPanel getCurrentMainTDiagramPanel() {
-        return ((TURTLEPanel)(tabs.elementAt(mainTabbedPane.getSelectedIndex()))).tdp;
+        return tabs.elementAt(mainTabbedPane.getSelectedIndex()).tdp;
     }
 
     public void selectDummyTab (int index) {
         if (this.tabs.size () < index+1)
             return;
-        this.dummySelectedTab = (TURTLEPanel) this.tabs.elementAt (index);
+        this.dummySelectedTab = this.tabs.elementAt (index);
     }
 
     public void forgetDummyTab () {
@@ -6578,7 +6579,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (tabs.size() == 0) {
             return null;
         } else {
-            return (TURTLEPanel)(tabs.elementAt(mainTabbedPane.getSelectedIndex()));
+            return tabs.elementAt(mainTabbedPane.getSelectedIndex());
         }
     }
 
@@ -6587,9 +6588,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         int i, j;
         TURTLEPanel tp;
         for(i = 0; i<mainTabbedPane.getTabCount(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             for(j=0; j<tp.tabbedPane.getTabCount(); j++) {
-                ((TDiagramPanel)(tp.panels.elementAt(j))).count = 0;
+                tp.panels.elementAt(j).count = 0;
             }
         }
     }
@@ -6619,7 +6620,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //TraceManager.addDev("Pane design action size=" + tabs.size());
         try {
 
-            TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
+            TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
             //TraceManager.addDev("Pane design action 1");
             if (activetdp != null) {
                 activetdp.activateActions(false);
@@ -6646,7 +6647,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //TraceManager.addDev("Pane design action size=" + tabs.size());
         try {
 
-            TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
+            TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
             //TraceManager.addDev("Pane design action 1");
             if (activetdp != null) {
                 activetdp.activateActions(false);
@@ -6673,7 +6674,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //TraceManager.addDev("Pane design action size=" + tabs.size());
         try {
 
-            TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
+            TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
             //TraceManager.addDev("Pane design action 1");
             if (activetdp != null) {
 
@@ -6701,7 +6702,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //TraceManager.addDev("Pane design action size=" + tabs.size());
         try {
 
-            TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
+            TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
             //TraceManager.addDev("Pane design action 1");
             if (activetdp != null) {
 
@@ -6729,7 +6730,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //TraceManager.addDev("Pane analysis action size=" + tabs.size());
         try {
 
-            TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
+            TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
             //TraceManager.addDev("Pane analysis action 1 on " + tdp1.getName());
             if (activetdp != null) {
                 activetdp.activateActions(false);
@@ -6756,7 +6757,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //TraceManager.addDev("Pane design action size=" + tabs.size());
         try {
 
-            TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
+            TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
             //TraceManager.addDev("Pane design action 1");
             if (activetdp != null) {
                 activetdp.activateActions(false);
@@ -6782,7 +6783,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void paneRequirementAction(ChangeEvent e) {
         try {
 
-            TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
+            TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
             //TraceManager.addDev("Pane design action 1");
             if (activetdp != null) {
                 activetdp.activateActions(false);
@@ -6960,7 +6961,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 TDiagramPanel tdp;
                 //change panel name
                 for(int j=0; j<tp.panels.size(); j++) {
-                    tdp = (TDiagramPanel)(tp.panels.elementAt(j));
+                    tdp = tp.panels.elementAt(j);
                     if (tdp.getName().equals(old)) {
                         tdp.setName(niou);
                     }
@@ -6990,7 +6991,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 TDiagramPanel tdp;
                 //change panel name
                 for(int j=0; j<tp.panels.size(); j++) {
-                    tdp = (TDiagramPanel)(tp.panels.elementAt(j));
+                    tdp = tp.panels.elementAt(j);
                     if (tdp.getName().equals(old)) {
                         tdp.setName(niou);
                     }
@@ -7023,7 +7024,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 TDiagramPanel tdp;
                 //change panel name
                 for(int j=0; j<tp.panels.size(); j++) {
-                    tdp = (TDiagramPanel)(tp.panels.elementAt(j));
+                    tdp = tp.panels.elementAt(j);
                     if (tdp.getName().equals(old)) {
                         tdp.setName(niou);
                         //TraceManager.addDev("Renamed to " + niou);
@@ -7064,7 +7065,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 TDiagramPanel tdp;
                 //change panel name
                 for(int j=0; j<tp.panels.size(); j++) {
-                    tdp = (TDiagramPanel)(tp.panels.elementAt(j));
+                    tdp = tp.panels.elementAt(j);
                     if (tdp.getName().equals(old)) {
                         tdp.setName(niou);
                     }
@@ -7166,7 +7167,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     mainTabbedPane.setTitleAt(index, s);
                     changeMade(getCurrentTDiagramPanel(), /*((TURTLEPanel)(tabs.elementAt(index))).tdp*/TDiagramPanel.MOVE_COMPONENT);
 
-                    TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+                    TURTLEPanel tp = tabs.elementAt(index);
                     if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
                         renameMapping(oldName, s);
                     }
@@ -7183,7 +7184,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i = 0; i<mainTabbedPane.getTabCount(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof TMLArchiPanel) {
                 ((TMLArchiPanel)tp).renameMapping(oldName, newName);
             }
@@ -7195,7 +7196,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i = 0; i<mainTabbedPane.getTabCount(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (tp instanceof ADDPanel) {
                 ((ADDPanel)tp).renameDeployment(oldName, newName);
             }
@@ -7268,9 +7269,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public TDiagramPanel selectTab(Point p) {
         mainTabbedPane.setSelectedIndex(p.x);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(p.x));
+        TURTLEPanel tp = tabs.elementAt(p.x);
         tp.tabbedPane.setSelectedIndex(p.y);
-        return (TDiagramPanel)(tp.panels.elementAt(p.y));
+        return tp.panels.elementAt(p.y);
 
     }
 
@@ -7294,7 +7295,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             index = tp.panels.indexOf(tdp);
             if (index > -1) {
                 p.x = i;
@@ -7311,7 +7312,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public DesignPanel getDesignPanel(String name) {
         int index = mainTabbedPane.indexOfTab(name);
         try {
-            TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+            TURTLEPanel tp = tabs.elementAt(index);
 
             if (tp instanceof DesignPanel) {
                 return (DesignPanel)tp;
@@ -7419,7 +7420,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             if (getTabName(tp).compareTo(id) == 0) {
                 selectTab(tp);
                 return true;
@@ -7439,7 +7440,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             index = tp.panels.indexOf(tdp);
             if (index > -1) {
                 selectTab(tp);
@@ -7479,7 +7480,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp;
 
         for(int i=0; i<tabs.size(); i++) {
-            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp = tabs.elementAt(i);
             tp.resetAllDIPLOIDs();
         }
     }

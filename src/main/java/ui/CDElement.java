@@ -34,29 +34,21 @@ same conditions as regards security.
 
 The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
+*/
 
-/**
- * Class CDElement
- * Creation : 22/12/2003
- * @author Ludovic APVRILLE
- * @see 
- */
  
 package ui;
 
-
 /**
  * Interface CDElement
- * 
+ * Creation : 22/12/2003
  * @author Ludovic APVRILLE
- * @see 
  */
-
 public interface CDElement {
-	public int getX();
-	public int getY();
-	public void setCd(int x, int y);
-	public int getWidth();
-	public int getHeight();
-	public String getName();
+	int getX();
+	int getY();
+	void setCd(int x, int y);
+	int getWidth();
+	int getHeight();
+	String getName();
 }

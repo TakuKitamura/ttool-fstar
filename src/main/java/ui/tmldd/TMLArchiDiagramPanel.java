@@ -341,7 +341,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
        // int i;
 
         while(iterator.hasNext()) {
-            node = (TMLArchiNode)(iterator.next());
+            node = iterator.next();
 
 
             // Channel, request mapping
@@ -375,7 +375,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
         int prio = 0;
 
         while(iterator.hasNext()) {
-            node = (TMLArchiNode)(iterator.next());
+            node = iterator.next();
             //Channel, request mapping
             if( node instanceof TMLArchiCommunicationNode ) {
                 ChannelList = ( (TMLArchiCommunicationNode)node ).getChannelArtifactList();

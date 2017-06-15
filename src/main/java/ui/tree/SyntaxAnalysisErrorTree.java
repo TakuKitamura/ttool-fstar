@@ -95,7 +95,7 @@ public class SyntaxAnalysisErrorTree implements GenericTree {
             return 0;
         }
         if (child instanceof CheckingError)
-            return mgui.getCheckingErrors().indexOf((CheckingError) child);
+            return mgui.getCheckingErrors().indexOf(child);
         return -1;
     }
     

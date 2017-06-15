@@ -73,11 +73,8 @@ public class AvatarMethodologyReferenceToAssumptions extends AvatarMethodologyDi
     }
     
     public boolean isAValidPanelType(TURTLEPanel panel) {
-    	if (panel instanceof AvatarMADsPanel) {
-    		return true;
-    	}
-    	
-    	return false;
+        return panel instanceof AvatarMADsPanel;
+
     }
     
     public void makeValidationInfos(AvatarMethodologyDiagramName dn) {

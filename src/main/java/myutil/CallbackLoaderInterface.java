@@ -47,7 +47,7 @@ package myutil;
 
 public interface CallbackLoaderInterface {
 
-    public void loadDone();
-    public void loadFailed();
+    void loadDone();
+    void loadFailed();
 
 }

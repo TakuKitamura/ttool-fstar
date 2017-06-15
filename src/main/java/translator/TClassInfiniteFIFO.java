@@ -72,9 +72,9 @@ public class TClassInfiniteFIFO extends TClassBuffer implements FIFOInfiniteAndG
         return getGateByName(getParamSizeAt(0));
     }
 	
-	public LinkedList getGates(ArrayList<String> list) {
+	public LinkedList<Gate> getGates(ArrayList<String> list) {
 		Gate g;
-		LinkedList ll = new LinkedList();
+		LinkedList<Gate> ll = new LinkedList<>();
 		
 		for(String m: list) {
 			g = getGateByName(m);
@@ -85,15 +85,15 @@ public class TClassInfiniteFIFO extends TClassBuffer implements FIFOInfiniteAndG
         return ll;
 	}
     
-    public LinkedList getGatesWrite() {
+    public LinkedList<Gate> getGatesWrite() {
 		return getGates(paramInForExchange);	
     }
     
-    public LinkedList getGatesRead() {
+    public LinkedList<Gate> getGatesRead() {
         return getGates(paramOutForExchange);	
     }
     
-    public LinkedList getGatesSize() {
+    public LinkedList<Gate> getGatesSize() {
         return getGates(paramSizeForExchange);	
     }
     

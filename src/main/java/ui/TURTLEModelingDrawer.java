@@ -51,6 +51,7 @@ import ui.ad.*;
 import ui.cd.TCDCompositionOperatorWithSynchro;
 import ui.cd.TCDTClass;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.Vector;
 
@@ -59,8 +60,8 @@ public class TURTLEModelingDrawer {
     private TURTLEModeling tm;
     private int indexDesign;
     private DesignPanel dp;
-    private Vector telements;
-    private Vector gelements;
+    private Vector<Object> telements;
+    private Vector<TGComponent> gelements;
 
     private double radius;
     private double centerX;
@@ -77,8 +78,8 @@ public class TURTLEModelingDrawer {
     }
 
     public boolean draw(int designNb) {
-        telements = new Vector();
-        gelements = new Vector();
+        telements = new Vector<>();
+        gelements = new Vector<>();
         try {
             makeDrawable();
             //System.out.println("design");
@@ -232,7 +233,7 @@ public class TURTLEModelingDrawer {
         // Check if component has already been computed
         if (telements.contains(adc)) {
             int index = telements.indexOf(adc);
-            TGComponent tgcc = (TGComponent)(gelements.elementAt(index));
+            TGComponent tgcc = gelements.elementAt(index);
             // make link if required
             if (!(tgcc instanceof TADStartState)) {
                 TGConnector tgco = connectAD(tgcc, previous, tadp, false, indexNext, totalNext);
@@ -498,7 +499,7 @@ public class TURTLEModelingDrawer {
         p1.setFree(false);
         p2.setFree(false);
 
-        TGConnector tgco = TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_AD_DIAGRAM, tadp, p1, p2, new Vector());
+        TGConnector tgco = TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_AD_DIAGRAM, tadp, p1, p2, new Vector<Point>());
 
         if (makeSquare) {
             tgco.makeSquareWithoutMovingTGComponents();
@@ -553,9 +554,9 @@ public class TURTLEModelingDrawer {
             p1.setFree(false);
             p2.setFree(false);
             if ((r.type == Relation.PRE) || (r.type == Relation.SEQ) ||(r.type == Relation.INV)) {
-                return TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_ASSOCIATION_NAVIGATION, dp.tcdp, p1, p2, new Vector());
+                return TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_ASSOCIATION_NAVIGATION, dp.tcdp, p1, p2, new Vector<Point>());
             } else {
-                return TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_ASSOCIATION, dp.tcdp, p1, p2, new Vector());
+                return TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_ASSOCIATION, dp.tcdp, p1, p2, new Vector<Point>());
             }
         }
 
@@ -631,12 +632,12 @@ public class TURTLEModelingDrawer {
         // Connects the connector to the operator
         pt.setFree(false);
         pop.setFree(false);
-        TGConnector dashco = TGComponentManager.addConnector(pt.x, pt.y, TGComponentManager.CONNECTOR_ATTRIBUTE, dp.tcdp, pt, pop, new Vector());
+        TGConnector dashco = TGComponentManager.addConnector(pt.x, pt.y, TGComponentManager.CONNECTOR_ATTRIBUTE, dp.tcdp, pt, pop, new Vector<Point>());
         //dashco.makeSquareWithoutMovingTGComponents();
         dp.tcdp.addBuiltConnector(dashco);
 
         if (operator instanceof TCDCompositionOperatorWithSynchro) {
-            ((TCDCompositionOperatorWithSynchro)(operator)).structureChanged();
+            operator.structureChanged();
         }
 
         return operator;
@@ -657,8 +658,8 @@ public class TURTLEModelingDrawer {
         }
 
         for(int i=0; i<r.gatesOfT1.size(); i++) {
-            g1 = (Gate)(r.gatesOfT1.elementAt(i));
-            g2 = (Gate)(r.gatesOfT2.elementAt(i));
+            g1 = r.gatesOfT1.elementAt(i);
+            g2 = r.gatesOfT2.elementAt(i);
             ta1 = t1.getGateById(g1.getName());
             ta2 = t2.getGateById(g2.getName());
             tt = new TTwoAttributes(t1, t2, ta1, ta2);
@@ -685,7 +686,7 @@ public class TURTLEModelingDrawer {
         int i=0;
 
         while(i<ad.size()) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
 
             // Ensure that at most 3 elements lead to a junction -> if more, remove one
             if (adc instanceof ADJunction) {

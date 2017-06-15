@@ -135,7 +135,7 @@ public class AvatarSignal extends AvatarMethod {
     //fin DG 
     public AvatarSignal advancedClone(AvatarStateMachineOwner _block) {
 	AvatarSignal as = new AvatarSignal(getName(), getInOut(), getReferenceObject());
-	setAdvancedClone((AvatarMethod)as, _block);
+	setAdvancedClone(as, _block);
 	return as;
     }
 
@@ -145,6 +145,6 @@ public class AvatarSignal extends AvatarMethod {
 	    return false;
 	}
 
-	return super.isCompatibleWith((AvatarMethod)_as);
+	return super.isCompatibleWith(_as);
     }
 }

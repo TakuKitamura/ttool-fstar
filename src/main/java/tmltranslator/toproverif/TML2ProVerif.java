@@ -98,14 +98,14 @@ public class TML2ProVerif {
     private final static Integer channelPrivate = 1;
     private final static Integer channelUnreachable = 2;
     private ProVerifSpec spec;
-    private TMLMapping tmlmap;
-    private TMLModeling tmlmodel;
+    private TMLMapping<?> tmlmap;
+    private TMLModeling<?> tmlmodel;
    // private boolean stateReachability;
 
    // private Vector warnings;
     public Map<String, Integer> channelMap = new HashMap<String,Integer>();
 
-    public TML2ProVerif(TMLMapping _tmlmap) {
+    public TML2ProVerif(TMLMapping<?> _tmlmap) {
         this.tmlmap = _tmlmap;
         this.spec = null;
         this.tmlmodel= tmlmap.getTMLModeling();
@@ -247,7 +247,7 @@ public class TML2ProVerif {
 //        return this.warnings;
 //    }
 
-    public TMLMapping getMapping () {
+    public TMLMapping<?> getMapping () {
         return this.tmlmap;
     }
 

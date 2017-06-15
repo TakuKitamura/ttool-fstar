@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
    ludovic.apvrille AT telecom-paritech.fr
    andrea.enrici AT telecom-paristech.fr
@@ -35,18 +35,15 @@
 
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
-
-   /**
-   * Class TIFTranslator
-   * Linecommand application for translating TIF to other languages
-   * Creation: 29/06/2007
-   * @version 1.1 30/05/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
-   * @see
    */
 
 import myutil.FileUtils;
-import tmltranslator.*;
+import tmltranslator.TMLError;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLMappingTextSpecification;
+import tmltranslator.TMLModeling;
+import tmltranslator.TMLSyntaxChecking;
+import tmltranslator.TMLTextSpecification;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.toturtle.Mapping2TIF;
@@ -59,6 +56,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
+/**
+ * Class TIFTranslator
+ * Linecommand application for translating TIF to other languages
+ * Creation: 29/06/2007
+ * @version 1.1 30/05/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
+ */
 public class TMLTranslator  {
     // 0 -> LOTOS
     // 1 -> UPPAAL
@@ -67,19 +71,18 @@ public class TMLTranslator  {
     // 4 -> TML
     // 5 -> Systemc3
 
-    public static int conversionType;
-    public static File inputFile;
-    public static File outputFile;
-    public static String outputFileName;
-    public static String inputData;
-    public static String outputData;
-    public static TMLModeling tmlm;
-    public static TMLMapping tmap;
-    public static boolean debug = false;
-    public static boolean optimize = false;
+    private static int conversionType;
+    private static File outputFile;
+    private static String outputFileName;
+    private static String inputData;
+    private static String outputData;
+    private static TMLModeling<Object> tmlm;
+    private static TMLMapping<Object> tmap;
+    private static boolean debug = false;
+    private static boolean optimize = false;
 
 
-    public static void printCopyright() {
+    private static void printCopyright() {
         System.out.println("TMLTranslator: (C) GET/ENST, Ludovic APVRILLE, Andrea ENRICI\n{ludovic.apvrille, andrea.enrici}@telecom-paristech.fr");
         System.out.println("TMLTranslator is released under a CECILL License. See http://www.cecill.info/index.en.html");
         System.out.println("For more information on TURTLE related technologies, please consult http://ttool.telecom-paristech.fr/");
@@ -87,7 +90,7 @@ public class TMLTranslator  {
         System.out.println("Enjoy!!!\n");
     }
 
-    public static void printUsage() {
+    private static void printUsage() {
         System.out.println("TMLTranlator: usage");
         System.out.println("TMLTranlator <options> <language> <inputfile> [<outputfile> or <outputdirectory>]");
         System.out.println("<options> are optional. There might be : -debug or -optimize");
@@ -98,35 +101,20 @@ public class TMLTranslator  {
         System.out.println("<outputfile> or <outputdirectory> should be writeable");
     }
 
-    public static boolean checkArgs(String [] args) {
+    private static boolean checkArgs(String [] args) {
         return !(args.length < 3);
     }
 
-    public static boolean hasDebug(String [] args) {
-        if (args[0].equals("-debug")) {
-            return true;
-        }
-
-        if (args[1].equals("-debug")) {
-            return true;
-        }
-
-        return false;
+    private static boolean hasDebug(String [] args) {
+        return args[0].equals("-debug") || args[1].equals("-debug");
     }
 
-    public static boolean hasOptimize(String [] args) {
-        if (args[0].equals("-optimize")) {
-            return true;
-        }
+    private static boolean hasOptimize(String[] args) {
+        return args[0].equals("-optimize") || args[1].equals("-optimize");
 
-        if (args[1].equals("-optimize")) {
-            return true;
-        }
-
-        return false;
     }
 
-    public static boolean analyseArgs(String [] args) {
+    private static boolean analyseArgs(String[] args) {
         System.out.println("Converting to " + args[0]);
 
         if (args[0].toUpperCase().equals("LOTOS")) {
@@ -145,9 +133,9 @@ public class TMLTranslator  {
         return true;
     }
 
-    public static boolean prepareFiles(String args[]) {
+    private static boolean prepareFiles(String args[]) {
 
-        inputFile = new File(args[1]);
+        File inputFile = new File(args[1]);
         outputFile = new File(args[2]);
         outputFileName = args[2];
         try {
@@ -172,16 +160,16 @@ public class TMLTranslator  {
         return true;
     }
 
-    public static boolean checkSyntax(TMLSyntaxChecking syntax) {
+    private static boolean checkSyntax(TMLSyntaxChecking syntax) {
         System.out.println("Syntax checking phase");
         syntax.checkSyntax();
         return (syntax.hasErrors() == 0);
     }
 
-    public static boolean loadMapping(String title, String path) {
-        boolean ret = false;
+    private static boolean loadMapping(String title, String path) {
+        boolean ret;
         //System.out.println("load");
-        TMLMappingTextSpecification spec = new TMLMappingTextSpecification(title);
+        TMLMappingTextSpecification<Object> spec = new TMLMappingTextSpecification<>(title);
         ret = spec.makeTMLMapping(inputData, path);
         System.out.println("load ended");
         List<TMLError> warnings;
@@ -224,11 +212,11 @@ public class TMLTranslator  {
         return ret;
     }
 
-    public static boolean loadTML(String title) {
-        boolean ret = false;
+    private static boolean loadTML(String title) {
+        boolean ret;
         List<TMLError> warnings;
         //System.out.println("load");
-        TMLTextSpecification spec = new TMLTextSpecification(title, true);
+        TMLTextSpecification<Object> spec = new TMLTextSpecification<>(title, true);
         ret = spec.makeTMLModeling(inputData);
         //System.out.println("load ended");
         tmlm = spec.getTMLModeling();
@@ -261,7 +249,7 @@ public class TMLTranslator  {
         return ret;
     }
 
-    public static boolean convertToLOTOSFromMapping() {
+    private static boolean convertToLOTOSFromMapping() {
         Mapping2TIF m2tif = new Mapping2TIF(tmap);
         m2tif.setShowSampleChannels(false);
         m2tif.setShowChannels(true);
@@ -296,7 +284,7 @@ public class TMLTranslator  {
         return true;
     }
 
-    public static boolean convertToLOTOS() {
+    private static boolean convertToLOTOS() {
         TML2TURTLE totif = new TML2TURTLE(tmlm);
         TURTLEModeling tm = totif.generateTURTLEModeling();
         TURTLETranslator tt = new TURTLETranslator(tm);
@@ -312,7 +300,7 @@ public class TMLTranslator  {
         return true;
     }
 
-    public static boolean convertToUPPAAL() {
+    private static boolean convertToUPPAAL() {
         TML2UPPAAL toup = new TML2UPPAAL(tmlm);
         toup.generateUPPAAL(debug);
         try {
@@ -324,7 +312,7 @@ public class TMLTranslator  {
         return true;
     }
 
-    public static boolean convertToSystemC() {
+    private static boolean convertToSystemC() {
         tmltranslator.tomappingsystemc.TML2MappingSystemC map;
         if (tmap == null) {
             map = new tmltranslator.tomappingsystemc.TML2MappingSystemC(tmlm);
@@ -342,7 +330,7 @@ public class TMLTranslator  {
         return true;
     }
 
-    public static boolean convertToSystemC2() {
+    private static boolean convertToSystemC2() {
         //System.out.println("Converting to SystemC2 ... yo!");
         final IDiploSimulatorCodeGenerator map;
 //        tmltranslator.tomappingsystemc2.TML2MappingSystemC map;
@@ -390,10 +378,10 @@ public class TMLTranslator  {
         return true;
 	}*/
 
-    public static boolean convertToTML() {
+    private static boolean convertToTML() {
 
         if (tmap == null) {
-            TMLTextSpecification tspec = new TMLTextSpecification("spec");
+            TMLTextSpecification<Object> tspec = new TMLTextSpecification<>("spec");
             tspec.toTextFormat(tmlm);
             try {
                 tspec.saveFile(outputFileName, "spec");
@@ -402,7 +390,7 @@ public class TMLTranslator  {
                 return false;
             }
         } else {
-            TMLMappingTextSpecification mapspec = new TMLMappingTextSpecification("spec");
+            TMLMappingTextSpecification<Object> mapspec = new TMLMappingTextSpecification<>("spec");
             mapspec.toTextFormat(tmap);
             try {
                 mapspec.saveFile(outputFileName, "spec");
@@ -414,7 +402,7 @@ public class TMLTranslator  {
         return true;
     }
 
-    public static boolean saveData() {
+    private static boolean saveData() {
         try {
             FileOutputStream fos = new FileOutputStream(outputFile);
             fos.write(outputData.getBytes());
@@ -449,9 +437,7 @@ public class TMLTranslator  {
         if (nbOfOptions > 0) {
             debug = true;
             tmp = new String[args.length - nbOfOptions];
-            for(int i=nbOfOptions; i<args.length; i++) {
-                tmp[i-nbOfOptions] = args[i];
-            }
+            System.arraycopy(args, nbOfOptions, tmp, 0, args.length - nbOfOptions);
             args = tmp;
         }
 
@@ -525,11 +511,11 @@ public class TMLTranslator  {
 
         System.out.println("Conversion done");
 
-        /*if (!saveData()) {
+        if (!saveData()) {
           return;
-          }*/
+        }
 
-        //System.out.println("Specification written in " + outputFile.getName() + ": " + outputData.length() + " bytes");
+        System.out.println("Specification written in " + outputFile.getName() + ": " + outputData.length() + " bytes");
 
     }
 

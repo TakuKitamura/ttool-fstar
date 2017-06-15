@@ -57,9 +57,6 @@ public class TGConnectingPointActorUCD extends  TGConnectingPointWidthHeight{
 	}
     
     public boolean isCompatibleWith(int type) {
-        if ((type == TGComponentManager.CONNECTOR_ACTOR_UCD) || (type == TGComponentManager.CONNECTOR_SPECIA_UCD)){
-            return true;
-        }
-        return false;
-    }   
+        return (type == TGComponentManager.CONNECTOR_ACTOR_UCD) || (type == TGComponentManager.CONNECTOR_SPECIA_UCD);
+    }
 }

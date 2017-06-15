@@ -60,7 +60,7 @@ import ui.util.IconManager;
 
 public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable, LoaderFacilityInterface, CallbackLoaderInterface  {
 
-    public final static String [] FEATURES = {"all",  "diplodocus", "avatar", "sysml-sec", "assumptions", "requirements", "attacktrees", "properties", "partitioning", "analysis", "design", "prototyping", "securityprotocol"};
+    public final static String [] FEATURES = {"all",  "diplodocus", "avatar", "sysml-sec", "assumptions", "requirements", "attacktrees", "properties", "partitioning", "analysis", "design", "prototyping", "securityprotocol", "codegeneration"};
 
     public final static String [] PROPS = {"safety", "security", "performance"};
 
@@ -356,7 +356,16 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     public void loadDone() {
         jta.append("Model transfered, opening it in TTool\n");
         this.dispose();
-        mgui.openProjectFromFile(new File(filePath));
+	SwingUtilities.invokeLater(new Runnable() {
+		public void run() {
+		    mgui.openProjectFromFile(new File(filePath));
+		    // Here, we can safely update the GUI
+		    // because we'll be called from the
+		    // event dispatch thread
+		    //statusLabel.setText("Query: " + queryNo);
+		}
+	    });
+        //mgui.openProjectFromFile(new File(filePath));
     }
 
     public void loadFailed() {

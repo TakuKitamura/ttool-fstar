@@ -58,10 +58,7 @@ public class NCNodeConnectingPoint extends  TGConnectingPointWidthHeight{
     }
     
     public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.CONNECTOR_NODE_NC) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.CONNECTOR_NODE_NC;
     }
     
 }

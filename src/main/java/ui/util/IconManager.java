@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -34,14 +34,8 @@
 
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
-
-   /**
-   * Class IconManager
-   * Creation: 15/12/2003
-   * @version 1.1 15/12/2003
-   * @author Ludovic APVRILLE
-   * @see
    */
+
 
 package ui.util;
 
@@ -50,11 +44,11 @@ import java.awt.*;
 import java.net.URL;
 
 /**
- * Class
- *
- * @author Ludovic APVRILLE
- * @see
- */
+* Class IconManager
+* Creation: 15/12/2003
+* @version 1.1 15/12/2003
+* @author Ludovic APVRILLE
+*/
 public class IconManager {
 
     public static ImageIcon imgic8, imgic9;
@@ -128,6 +122,7 @@ public class IconManager {
     public static ImageIcon imgic1300, imgic1302, imgic1304, imgic1306, imgic1308;
     public static ImageIcon imgic1310, imgic1312, imgic1314, imgic1316, imgic1318;
     public static ImageIcon imgic1320, imgic1322, imgic1324, imgic1326, imgic1328;
+    public static ImageIcon imgic1330;
 
 
     // SMD diagram
@@ -375,7 +370,7 @@ public class IconManager {
     private static String icon340 = "toolbarButtonGraphics/general/Export16.gif";
     private static String icon341 = "toolbarButtonGraphics/general/Export24.gif";
 
-    private static String icon342 = "oneformalvalidation.gif";;
+    private static String icon342 = "oneformalvalidation.gif";
 
     private static String icon344 = "viewrg.gif";
 
@@ -511,6 +506,7 @@ public class IconManager {
     private static String icon1324 = "steptochan.gif";
     private static String icon1326 = "runexplo.gif";
     private static String icon1328 = "savesvg24.gif";
+    private static String icon1330 = "stepforwardx24.gif";
 
     // SMD diagrams
     private static String icon2000 = "prosmdsendmsg.gif";
@@ -928,6 +924,7 @@ public class IconManager {
         imgic1324 = getIcon(icon1324);
         imgic1326 = getIcon(icon1326);
         imgic1328 = getIcon(icon1328);
+	imgic1330 = getIcon(icon1330);
 
         imgic2000 = getIcon(icon2000);
         imgic2002 = getIcon(icon2002);

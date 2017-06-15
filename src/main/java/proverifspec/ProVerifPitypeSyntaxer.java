@@ -48,12 +48,12 @@ package proverifspec;
 public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
 
     protected void translateConst (ProVerifConst _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "const " + _node.name + ": " + _node.type + " [data].";
     }
 
     protected void translateFunc (ProVerifFunc _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "fun " + _node.name + " (";
         boolean first = true;
         for (String type: _node.types) {
@@ -72,7 +72,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     private void translateReducAux (ProVerifReduc _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "reduc ";
         if (_node.vars.length > 0) {
             this.fullSpec += "forall ";
@@ -90,7 +90,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
 
         ProVerifReduc otherwise = _node.otherwise;
         while (otherwise != null) {
-            this.fullSpec += "\n" + this.printAlinea (_alinea);
+            this.fullSpec += "\n" + printAlinea (_alinea);
             this.fullSpec += "      otherwise ";
             if (otherwise.vars.length > 0) {
                 this.fullSpec += "forall ";
@@ -118,7 +118,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     protected void translateEquation (ProVerifEquation _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "equation ";
         if (_node.vars.length > 0) {
             this.fullSpec += "forall ";
@@ -136,7 +136,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     protected void translateVar (ProVerifVar _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "free " + _node.name + ": " + _node.type;
         if (_node.priv)
             this.fullSpec += " [private]";
@@ -144,7 +144,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     protected void translateQueryAtt (ProVerifQueryAtt _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "query attacker(";
         if (_node.isNew)
            this.fullSpec += "new ";
@@ -152,7 +152,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     protected void translateQueryEv (ProVerifQueryEv _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "query ";
         if (_node.vars.length > 0) {
             boolean first = true;
@@ -169,7 +169,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     protected void translateQueryEvinj (ProVerifQueryEvinj _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "query ";
         if (_node.vars.length > 0) {
             boolean first = true;
@@ -186,7 +186,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     protected void translateEvDecl (ProVerifEvDecl _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "event " + _node.name + "(";
         boolean first = true;
         for (String arg: _node.args) {
@@ -200,7 +200,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     protected void translateProcess (ProVerifProcess _node, int _alinea) {
-        this.fullSpec += "\n\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n\n" + printAlinea (_alinea);
         this.fullSpec += "let " + _node.name;
         if (_node.args.length > 0) {
             boolean first = true;
@@ -223,17 +223,17 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     protected void translateProcNew (ProVerifProcNew _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "new " + _node.name + ": " + _node.type + ";";
         if (_node.next == null) {
-            this.fullSpec += "\n" + this.printAlinea (_alinea);
+            this.fullSpec += "\n" + printAlinea (_alinea);
             this.fullSpec += "0";
         } else
             this.translate (_node.next, _alinea);
     }
 
     protected void translateProcIn (ProVerifProcIn _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "in (" + _node.channel + ", ";
 	if (_node.vars.length>1){
 	    this.fullSpec += "(";
@@ -257,7 +257,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     protected void translateProcCall (ProVerifProcCall _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += _node.name;
         if (_node.args.length > 0) {
             boolean first = true;
@@ -279,7 +279,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
     }
 
     protected void translateProcLet (ProVerifProcLet _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "let ";
         boolean first = true;
         if (_node.vars.length > 1)
@@ -301,7 +301,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
         if (_node.next != null)
             this.translate (_node.next, _alinea);
         else {
-            this.fullSpec += "\n" + this.printAlinea (_alinea);
+            this.fullSpec += "\n" + printAlinea (_alinea);
             this.fullSpec += "0";
         }
     }

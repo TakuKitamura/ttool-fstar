@@ -92,8 +92,8 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
         editable = true;
         removable = true;
         
-        value = tdp.findNodeName("T");;
-        
+        value = tdp.findNodeName("T");
+
         //makeFullValue();
         
         myImageIcon = IconManager.imgic702;

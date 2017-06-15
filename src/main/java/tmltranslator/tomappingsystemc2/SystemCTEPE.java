@@ -216,7 +216,7 @@ public class SystemCTEPE {
 	
 	private void replaceTokenInList(LinkedList<String> iList, String iReplace, String iAdd){
 		iReplace = iReplace.trim();
-		ListIterator itr = iList.listIterator();
+		ListIterator<String> itr = iList.listIterator();
 		LinkedList<String> addTokenList= new LinkedList<String>();
 		parseExprToTokenList(iAdd,addTokenList);
 		boolean aFound;
@@ -227,7 +227,7 @@ public class SystemCTEPE {
 		do{
 			aFound=false;
 			while(!aFound && itr.hasNext()){
-				aFound = ((String)itr.next()).equals(iReplace);
+				aFound = itr.next().equals(iReplace);
 			}
 			if (aFound){
 				TraceManager.addDev("Pattern found\n");

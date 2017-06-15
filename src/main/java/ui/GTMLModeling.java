@@ -81,7 +81,7 @@ public class GTMLModeling  {
     private TMLDesignPanel tmldp;
     private TMLComponentDesignPanel tmlcdp;
     private TMLArchiPanel tmlap;
-    private TMLModeling tmlm;
+    private TMLModeling<TGComponent> tmlm;
     private List<CheckingError> checkingErrors, warnings;
     private List<? extends TGComponent> tasksToTakeIntoAccount;
     private List<? extends TGComponent> componentsToTakeIntoAccount;
@@ -93,7 +93,7 @@ public class GTMLModeling  {
     //private ArrayList<HwNode> nodesToTakeIntoAccount;
     private List<TGComponent> nodesToTakeIntoAccount;
 
-    private TMLMapping map;
+    private TMLMapping<TGComponent> map;
     private TMLArchitecture archi;
 
     //Attributes specific to Communication Patterns
@@ -142,7 +142,7 @@ public class GTMLModeling  {
         }
     }
 
-    public TMLModeling translateToTMLModeling(boolean _resetID) {
+    public TMLModeling<TGComponent> translateToTMLModeling(boolean _resetID) {
         return translateToTMLModeling(false, _resetID);
     }
 
@@ -150,8 +150,8 @@ public class GTMLModeling  {
         putPrefixName = _b;
     }
 
-    public TMLModeling translateToTMLModeling(boolean onlyTakenIntoAccount, boolean _resetID) {
-        tmlm = new TMLModeling(_resetID);
+    public TMLModeling<TGComponent> translateToTMLModeling(boolean onlyTakenIntoAccount, boolean _resetID) {
+        tmlm = new TMLModeling<>(_resetID);
         checkingErrors = new LinkedList<CheckingError> ();
         warnings = new LinkedList<CheckingError> ();
 
@@ -492,7 +492,7 @@ public class GTMLModeling  {
         String name;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLEventOperator) {
                 tmleo = (TMLEventOperator)tgc;
                 //TraceManager.addDev("Found event: " + tmleo.getEventName());
@@ -709,14 +709,14 @@ public class GTMLModeling  {
                 //TraceManager.addDev("Ports size:" + ports.size());
                 li = ports.listIterator();
                 while(li.hasNext()) {
-                    port1 = (TMLCPrimitivePort)(li.next());
+                    port1 = li.next();
                     if (!(alreadyConsidered.contains(port1))) {
                         portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                         TraceManager.addDev("******** Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 
                         Iterator<TMLCPrimitivePort> ite = portstome.listIterator();
                         while(ite.hasNext()) {
-                            TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
+                            TraceManager.addDev("port=" + ite.next().getPortName());
                         }
 
                         if (portstome.size() < 1) {
@@ -729,7 +729,7 @@ public class GTMLModeling  {
                         }
 
                         if (portstome.size() == 1) {
-                            port2 = (TMLCPrimitivePort)(portstome.get(0));
+                            port2 = portstome.get(0);
                             alreadyConsidered.add(port1);
                             alreadyConsidered.add(port2);
 
@@ -826,7 +826,7 @@ public class GTMLModeling  {
                                 throw new MalformedTMLDesignException(msg);
                             }
                             for(j=0; j<portstome.size(); j++) {
-                                port = (TMLCPrimitivePort)(portstome.get(j));
+                                port = portstome.get(j);
                                 if (port.getPortName().indexOf(",") != -1) {
                                     String msg = "Multiple definition of channels with more than one output port is not allowed: " + port.getPortName();
                                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
@@ -840,24 +840,24 @@ public class GTMLModeling  {
                             // Name of port
                             name = makeName(port1, port1.getPortName());
                             for(j=0; j<portstome.size(); j++) {
-                                name += "__" + ((TMLCPrimitivePort)(portstome.get(j))).getPortName();
+                                name += "__" + portstome.get(j).getPortName();
                             }
 
                             // Correspondance table
                             alreadyConsidered.add(port1);
                             addToTable(makeName(port1, port1.getFather().getValue()) + "/" + port1.getPortName(), name);
                             for(j=0; j<portstome.size(); j++) {
-                                port = (TMLCPrimitivePort)(portstome.get(j));
+                                port = portstome.get(j);
                                 alreadyConsidered.add(port);
                                 addToTable(makeName(port, port.getFather().getValue()) + "/" + port.getPortName(), name);
                             }
 
                             // Channel attributes
-                            port = (TMLCPrimitivePort)(portstome.get(0));
+                            port = portstome.get(0);
                             channel = new TMLChannel(name, port1);
                             channel.ports.add(port1);
                             for(j=0; j<portstome.size(); j++) {
-                                TMLCPrimitivePort p = (TMLCPrimitivePort)(portstome.get(j));
+                                TMLCPrimitivePort p = portstome.get(j);
                                 channel.ports.add(p);
                             }
                             channel.setSize(port1.getSize());
@@ -896,7 +896,7 @@ public class GTMLModeling  {
                                 tmlport.setAssociatedEvent( port1.getAssociatedEvent() );
                                 channel.addTaskPort(tt1, tmlport, true);
                                 for(j=0; j<portstome.size(); j++) {
-                                    port = (TMLCPrimitivePort)(portstome.get(j));
+                                    port = portstome.get(j);
                                     tmlport = new TMLPort(port.getPortName(), port);
                                     tmlport.setPrex( port.isPrex() );
                                     tmlport.setPostex( port.isPostex() );
@@ -941,7 +941,7 @@ public class GTMLModeling  {
         TraceManager.addDev("*** Adding Events ***");
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLCPrimitiveComponent) {
                 tmlc = (TMLCPrimitiveComponent)tgc;
                 TraceManager.addDev("Component:" + tmlc.getValue());
@@ -949,7 +949,7 @@ public class GTMLModeling  {
                 TraceManager.addDev("Ports size:" + ports.size());
                 li = ports.listIterator();
                 while(li.hasNext()) {
-                    port1 = (TMLCPrimitivePort)(li.next());
+                    port1 = li.next();
                     if (!(alreadyConsidered.contains(port1))) {
                         portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                         TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
@@ -968,13 +968,13 @@ public class GTMLModeling  {
                         }
 
                         if (portstome.size() == 1) {
-			    port2 = (TMLCPrimitivePort)(portstome.get(0));
+			    port2 = portstome.get(0);
 			    alreadyConsidered.add(port1);
                             alreadyConsidered.add(port2);
 
 			    // Useless loop. Loop because the algo evolves all the time ;-)
                             for (int kk=0; kk<portstome.size(); kk++) {
-                                port2 = (TMLCPrimitivePort)(portstome.get(kk));
+                                port2 = portstome.get(kk);
 
                                 String []text1 = port1.getPortName().split(",");
                                 String []text2 = port2.getPortName().split(",");
@@ -1025,7 +1025,7 @@ public class GTMLModeling  {
                                                     throw new MalformedTMLDesignException(msg);
                                                 } else {
                                                     for(int k=0; k<record.getAttributes().size(); k++) {
-                                                        ta = (TAttribute)(record.getAttributes().get(k));
+                                                        ta = record.getAttributes().get(k);
                                                         if (ta.getType() == TAttribute.NATURAL) {
                                                             tmlt = new TMLType(TMLType.NATURAL);
                                                         } else if (ta.getType() == TAttribute.BOOLEAN) {
@@ -1086,7 +1086,7 @@ public class GTMLModeling  {
                                 throw new MalformedTMLDesignException(msg);
                             }
                             for(j=0; j<portstome.size(); j++) {
-                                port = (TMLCPrimitivePort)(portstome.get(j));
+                                port = portstome.get(j);
                                 if (port.getPortName().indexOf(",") != -1) {
                                     String msg = "Multiple definition of events with more than one output port is not allowed: " + port.getPortName();
                                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
@@ -1099,20 +1099,20 @@ public class GTMLModeling  {
                             // Name of port
                             name = makeName(port1, port1.getPortName());
                             for(j=0; j<portstome.size(); j++) {
-                                name += "__" + ((TMLCPrimitivePort)(portstome.get(j))).getPortName();
+                                name += "__" + portstome.get(j).getPortName();
                             }
 
                             // Correspondance table
                             alreadyConsidered.add(port1);
                             addToTable(makeName(port1, port1.getFather().getValue()) + "/" + port1.getPortName(), name);
                             for(j=0; j<portstome.size(); j++) {
-                                port = (TMLCPrimitivePort)(portstome.get(j));
+                                port = portstome.get(j);
                                 alreadyConsidered.add(port);
                                 addToTable(makeName(port, port.getFather().getValue()) + "/" + port.getPortName(), name);
                             }
 
                             // Channel attributes
-                            port = (TMLCPrimitivePort)(portstome.get(0));
+                            port = portstome.get(0);
                             if (port.isFinite()) {
                                 event = new TMLEvent(name, port1, port1.getMax(), port1.isBlocking());
                             } else {
@@ -1120,7 +1120,7 @@ public class GTMLModeling  {
                             }
                             event.ports.add(port1);
                             for(j=0; j<portstome.size(); j++) {
-                                TMLCPrimitivePort p = (TMLCPrimitivePort)(portstome.get(j));
+                                TMLCPrimitivePort p = portstome.get(j);
                                 event.ports.add(p);
                             }
                             for(i=0; i<port1.getNbMaxAttribute(); i++) {
@@ -1139,7 +1139,7 @@ public class GTMLModeling  {
                                             throw new MalformedTMLDesignException(msg);
                                         } else {
                                             for(int k=0; k<record.getAttributes().size(); k++) {
-                                                ta = (TAttribute)(record.getAttributes().get(k));
+                                                ta = record.getAttributes().get(k);
                                                 if (ta.getType() == TAttribute.NATURAL) {
                                                     tmlt = new TMLType(TMLType.NATURAL);
                                                 } else if (ta.getType() == TAttribute.BOOLEAN) {
@@ -1175,7 +1175,7 @@ public class GTMLModeling  {
                                 tmlport.setAssociatedEvent( port1.getAssociatedEvent() );
                                 event.addTaskPort(tt1, tmlport, true);
                                 for(j=0; j<portstome.size(); j++) {
-                                    port = (TMLCPrimitivePort)(portstome.get(j));
+                                    port = portstome.get(j);
                                     tmlport = new TMLPort(port.getPortName(), port);
                                     tmlport.setPrex( port.isPrex() );
                                     tmlport.setPostex( port.isPostex() );
@@ -1257,7 +1257,7 @@ public class GTMLModeling  {
                     }
 
                     for(i=0; i<portstome.size(); i++) {
-                        port3 = (TMLCPrimitivePort)(portstome.get(i));
+                        port3 = portstome.get(i);
                         if (!port3.isOrigin()) {
                             String msg = "port " + port1.getPortName() + " is not correctly connected to port " + port3.getName();
                             UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
@@ -1298,7 +1298,7 @@ public class GTMLModeling  {
                                     throw new MalformedTMLDesignException(msg);
                                 } else {
                                     for(int k=0; k<record.getAttributes().size(); k++) {
-                                        ta = (TAttribute)(record.getAttributes().get(k));
+                                        ta = record.getAttributes().get(k);
                                         if (ta.getType() == TAttribute.NATURAL) {
                                             tmlt = new TMLType(TMLType.NATURAL);
                                         } else if (ta.getType() == TAttribute.BOOLEAN) {
@@ -1500,7 +1500,7 @@ public class GTMLModeling  {
         iterator = tmlm.getTasks().listIterator();
 
         while(iterator.hasNext()) {
-            tmltask = (TMLTask)(iterator.next());
+            tmltask = iterator.next();
             generateTaskActivityDiagrams(tmltask);
         }
         TraceManager.addDev( "errors: " + checkingErrors.size() );
@@ -1619,7 +1619,7 @@ public class GTMLModeling  {
 
         iterator = list.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc.getCheckLatency()){
                 String name = tmltask.getName() + ":" +  tgc.getName();
                 name = name.replaceAll(" ","");
@@ -2181,7 +2181,7 @@ public class GTMLModeling  {
 
         iterator = list.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TGConnectorTMLAD) {
                 tgco = (TGConnectorTMLAD)tgc;
                 p1 = tgco.getTGConnectingPointP1();
@@ -2190,7 +2190,7 @@ public class GTMLModeling  {
                 // Identification of connected components
                 tgc1 = null; tgc2 = null;
                 for(j=0; j<list.size(); j++) {
-                    tgc3 =      (TGComponent)(list.get(j));
+                    tgc3 = list.get(j);
                     if (tgc3.belongsToMe(p1)) {
                         tgc1 = tgc3;
                     }
@@ -2250,7 +2250,7 @@ public class GTMLModeling  {
         // Check TML select evts
         iterator = list.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
 
             if ((tgc instanceof TMLADForLoop) || (tgc instanceof TMLADForStaticLoop)) {
                 ae1 = activity.findReferenceElement(tgc);
@@ -2338,11 +2338,11 @@ public class GTMLModeling  {
         }
     }
 
-    public TMLMapping translateToTMLMapping() {
+    public TMLMapping<TGComponent> translateToTMLMapping() {
 
-        tmlm = new TMLModeling(true);
+        tmlm = new TMLModeling<>(true);
         archi = new TMLArchitecture();  //filled by makeArchitecture
-        map = new TMLMapping(tmlm, archi, false);
+        map = new TMLMapping<>(tmlm, archi, false);
         map.tmlap = tmlap;
         checkingErrors = new LinkedList<CheckingError> ();
         warnings = new LinkedList<CheckingError> ();
@@ -2706,7 +2706,7 @@ public class GTMLModeling  {
 
         iterator = tmlap.tmlap.getComponentList().listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLArchiConnectorNode) {
                 connector = (TMLArchiConnectorNode)tgc;
                 tgc1 = null; tgc2 = null;
@@ -2852,7 +2852,7 @@ public class GTMLModeling  {
             String compID;
 
             for( k = 0; k < components.size(); k++ )        {
-                component = (TGComponent) components.get(k);
+                component = components.get(k);
                 compID = component.getName() + "_#" + AD.getSize();
                 if( component instanceof ui.tmlcp.TMLCPStartState )     {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() );
@@ -2918,7 +2918,7 @@ public class GTMLModeling  {
 
                 // Handling connectors
             for( k = 0; k < components.size(); k++ )        {
-                component = (TGComponent) components.get(k);
+                component = components.get(k);
                 //compID = component.getName() + "__" + elements.size();
                 if( component instanceof ui.tmlcp.TGConnectorTMLCP)     {
                     //TraceManager.addDev( k + " " + ((ui.TGConnector)component).getTGConnectingPointP1().getFather().getName() + "\t" +
@@ -2990,10 +2990,10 @@ public class GTMLModeling  {
             int j;
             TGComponent elem;
             for(j = 0; j < elemList.size(); j++ )  {
-                elem = (TGComponent) elemList.get(j);
+                elem = elemList.get(j);
                 //include the package name of the class to avoid confusion with the graphical TMLSDInstance
                 if( elem instanceof TMLSDStorageInstance )      {
-                    instance = new tmltranslator.tmlcp.TMLSDInstance( ((TMLSDStorageInstance)elem).getName(), elem, "STORAGE" );
+                    instance = new tmltranslator.tmlcp.TMLSDInstance( elem.getName(), elem, "STORAGE" );
                     TMLSDStorageInstance storage = (TMLSDStorageInstance) elemList.get(j);
                     attributes = storage.getAttributes();
                     for( index1 = 0; index1 < attributes.size(); index1++ )     {       // an attribute is a variable declaration
@@ -3076,7 +3076,7 @@ public class GTMLModeling  {
 
             }   //End of for over internal elements
             for(j = 0; j < elemList.size(); j++ )  {
-                elem = (TGComponent) elemList.get(j);
+                elem = elemList.get(j);
                 if( elem instanceof TGConnectorMessageTMLSD )   {
                     //TraceManager.addDev("Analyzing message:" + elem);
                     connector = (TGConnectorMessageTMLSD) elemList.get(j);
@@ -3140,7 +3140,7 @@ public class GTMLModeling  {
                     namePanel = artifact.getReferenceTaskName();
 
                     try {
-                        tup = (TURTLEPanel)(tmlap.getMainGUI().getTURTLEPanel(namePanel));
+                        tup = tmlap.getMainGUI().getTURTLEPanel(namePanel);
 
                         // Regular design panel
                         if (tup instanceof TMLDesignPanel) {
@@ -3203,7 +3203,7 @@ public class GTMLModeling  {
         TraceManager.addDev("Nb of panels regular:" + panels.size() + " components" + cpanels.size());
 
         // For each panel, construct a TMLModeling
-        TMLModeling tmpm;
+        TMLModeling<TGComponent> tmpm;
         GTMLModeling gtml;
         String s;
         index = 0;
@@ -3284,7 +3284,7 @@ public class GTMLModeling  {
         TMLTask ttask;
         while(iterator.hasNext()) {
             //TraceManager.addDev("next");
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLArchiNode) {
                 artifacts = ((TMLArchiNode)(tgc)).getAllTMLArchiArtifacts();
                 for(TMLArchiArtifact artifact:artifacts) {
@@ -3384,7 +3384,7 @@ public class GTMLModeling  {
         TMLArchiCPNode cp;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             //TraceManager.addDev("---------------- tgc=" + tgc);
             if (tgc instanceof TMLArchiCPNode) {
                 cp = (TMLArchiCPNode)tgc;
@@ -3424,7 +3424,7 @@ public class GTMLModeling  {
         String s;
 
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             //if( tgc instanceof TMLArchiCPNode )       {
 
             node = archi.getHwNodeByName( tgc.getName() );
@@ -3445,7 +3445,7 @@ public class GTMLModeling  {
                         if( operationType != -1 )       {
                             task.addOperationType( operationType );
                         }
-                        ((HwExecutionNode)node).addMECToHwExecutionNode( mec );
+                        node.addMECToHwExecutionNode( mec );
                         map.addTaskToHwExecutionNode(task, (HwExecutionNode)node);
                     } else {
                         TraceManager.addDev("Null task");
@@ -3485,7 +3485,7 @@ public class GTMLModeling  {
                             ((TMLChannel)(elt)).setPriority(artifact.getPriority());
                         }
                         if(elt != null) {
-                            TraceManager.addDev( "Adding communication " + s + " to Hardware Communication Node " + ((HwCommunicationNode)node).getName() );
+                            TraceManager.addDev( "Adding communication " + s + " to Hardware Communication Node " + node.getName() );
                             map.addCommToHwCommNode(elt, (HwCommunicationNode)node);
                         } else {
                             TraceManager.addDev("Null mapping: no element named: " + s );

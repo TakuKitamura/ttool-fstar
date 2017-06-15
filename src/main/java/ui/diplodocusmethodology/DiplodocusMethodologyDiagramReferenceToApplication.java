@@ -77,11 +77,8 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
     }
 
     public boolean isAValidPanelType(TURTLEPanel panel) {
-        if ((panel instanceof TMLDesignPanel) || (panel instanceof TMLComponentDesignPanel)) {
-            return true;
-        }
+        return (panel instanceof TMLDesignPanel) || (panel instanceof TMLComponentDesignPanel);
 
-        return false;
     }
 
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {

@@ -374,6 +374,7 @@ public class AVATAR2CPOSIX {
                     cpt ++;
                 }
                 ret+= ");" + CR;
+		//TraceManager.addDev("Adding a call to the method");
 
             } else {
 
@@ -795,7 +796,7 @@ public class AVATAR2CPOSIX {
         mainFile.appendToMainCode("initMessages();" + CR);
 
 
-        if (avspec.hasApplicationCode()) {
+        if (avspec.hasApplicationCode()&& includeUserCode) {
             mainFile.appendToMainCode("/* User initialization */" + CR);
             mainFile.appendToMainCode("__user_init();" + CR);
         }
@@ -979,7 +980,7 @@ public class AVATAR2CPOSIX {
                 ret +=  actModified + ";" + CR;
             } else {
 		TraceManager.addDev("Else");
-                String actModified = modifyMethodName (_block, (AvatarTerm) ((AvatarActionAssignment) act).getLeftHand ())
+                String actModified = modifyMethodName (_block, ((AvatarActionAssignment) act).getLeftHand ())
                     + " = " + modifyMethodName (_block, ((AvatarActionAssignment) act).getRightHand ());
                 AvatarLeftHand leftHand = ((AvatarActionAssignment) act).getLeftHand ();
                 ret += actModified + ";" + CR;

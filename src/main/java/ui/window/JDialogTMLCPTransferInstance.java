@@ -128,7 +128,7 @@ public class JDialogTMLCPTransferInstance extends JDialogTMLSDInstance implement
         c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
-        accessBox = new JComboBox();
+        accessBox = new JComboBox<>();
         panel1.add(accessBox, c1);
         identifierText = new JTextField();
         identifierText.setColumns(15);
@@ -146,7 +146,7 @@ public class JDialogTMLCPTransferInstance extends JDialogTMLSDInstance implement
         
         panel1.add(new JLabel(" : "), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeBox = new JComboBox();
+        typeBox = new JComboBox<>();
         typeBox.addActionListener(this);
         panel1.add(typeBox, c1);
         

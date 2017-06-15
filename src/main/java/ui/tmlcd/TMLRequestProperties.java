@@ -141,12 +141,9 @@ public class TMLRequestProperties extends TGCWithoutInternalComponent {
         }
         
         makeValue();
-        
-        if (!oldValue.equals(valueOCL)) {
-            return true;
-        }
-        
-        return false;
+
+        return !oldValue.equals(valueOCL);
+
     }
     
     protected String translateExtraParam() {

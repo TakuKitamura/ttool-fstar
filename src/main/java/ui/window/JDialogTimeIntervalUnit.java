@@ -62,7 +62,7 @@ public class JDialogTimeIntervalUnit extends javax.swing.JDialog implements Acti
     
     // Panel1
     private JTextField text1, text2;
-	private JComboBox unit;
+	private JComboBox<String> unit;
     
     // Main Panel
     private JButton closeButton;
@@ -161,7 +161,7 @@ public class JDialogTimeIntervalUnit extends javax.swing.JDialog implements Acti
 		c1.gridwidth = 1;
 		panel1.add(new JLabel(" unit = "), c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		unit = new JComboBox();
+		unit = new JComboBox<>();
 		unit.addItem("ns");
 		unit.addItem("us");
 		unit.addItem("ms");

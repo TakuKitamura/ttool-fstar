@@ -50,7 +50,11 @@ package ui.avatarsmd;
 
 import ui.*;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
+
+import myutil.*;
 
 //import org.w3c.dom.*;
 //import org.xml.sax.*;
@@ -116,7 +120,7 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
     }
     
     public void enhance() {
-        //System.out.println("enhance");
+        //TraceManager.addDev("Enhance");
         Vector<TGComponent> v = new Vector<>();
         Object o;
         Iterator iterator = componentList.listIterator();
@@ -137,7 +141,7 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
         TGConnector tgcon;
         int i;
         
-        //System.out.println("Enhancing: " + tgc);
+        TraceManager.addDev("Enhancing: " + tgc);
         
         if (tgc == null) {
             return;
@@ -225,7 +229,7 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 		
 		//TraceManager.addDev("Autoconnect");
 		
-		Vector listPoint = new Vector();
+		Vector<Point> listPoint = new Vector<>();
 		
 		Vector v = new Vector();
 		

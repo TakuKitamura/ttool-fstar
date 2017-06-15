@@ -61,8 +61,8 @@ public class SystemCEBRDD {
 	private String ETclasses;
 	//, ETdeclare, ETInit;
 	private boolean debug;
-	TMLModeling tmlmodeling;
-	TMLMapping tmlmapping;
+	TMLModeling<?> tmlmodeling;
+	TMLMapping<?> tmlmapping;
 	
 	private final static String [] events = {"transexecuted", "cmdentered", "cmdstarted", "cmdexecuted", "cmdfinished", "taskstarted", "taskfinished", "readtrans", "writetrans", "simstarted", "simfinished"};
 	private final static String DOTH = ".h";
@@ -75,7 +75,7 @@ public class SystemCEBRDD {
 	private final static String EF = "}";
 	
 	
-	public SystemCEBRDD(EBRDD _ebrdd, TMLModeling _tmlmodeling, TMLMapping _tmlmapping) {
+	public SystemCEBRDD(EBRDD _ebrdd, TMLModeling<?> _tmlmodeling, TMLMapping<?> _tmlmapping) {
         	ebrdd = _ebrdd;
         	reference = ebrdd.getName();
 		cppcode = "";

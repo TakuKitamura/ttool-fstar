@@ -173,11 +173,7 @@ public class SimulationCommand {
             return false;
         }
 
-        if (alias.equals(userCommand)) {
-            return false;
-        }
-
-        return true;
+        return !alias.equals(userCommand);
     }
 
     public String translateCommand(String cmds[]) {

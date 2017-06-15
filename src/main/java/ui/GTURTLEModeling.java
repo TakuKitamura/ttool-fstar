@@ -168,14 +168,14 @@ public class GTURTLEModeling {
     private boolean optimizeAvatar;
     private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
 
-    private TMLModeling tmlm;
-    private TMLMapping artificialtmap;
-    private TMLMapping tmap;
+    private TMLModeling<TGComponent> tmlm;
+    private TMLMapping<TGComponent> artificialtmap;
+    private TMLMapping<TGComponent> tmap;
     private TMLCP tmlcp;
     private TML2Avatar t2a;
     private RequirementModeling rm;
     private NCStructure ncs;
-    private MainGUI mgui;
+    private final MainGUI mgui;
     private CorrespondanceTGElement listE;
     private String rtlotos;
 
@@ -428,7 +428,7 @@ public class GTURTLEModeling {
     public void generateTPN(File f) {
         //tm.print();
         TURTLE2TPN t2tpn = new TURTLE2TPN(tm);
-        tpn = t2tpn.generateTPN(false).toString();
+        tpn = t2tpn.generateTPN().toString();
         warnings = t2tpn.getWarnings();
 
         //  nbTPN ++;
@@ -496,7 +496,7 @@ public class GTURTLEModeling {
         //This branch is activated if doing the syntax check from the architecture panel.
         //It generates the text TML for the architecture and the application + mapping information
         if (tmap != null) {
-            TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
+            TMLMappingTextSpecification<TGComponent> spec = new TMLMappingTextSpecification<>( _title );
             spec.toTextFormat( tmap );    //TMLMapping
             try {
                 //TraceManager.addDev( "*** " + ConfigurationTTool.TMLCodeDirectory + File.separator );
@@ -535,7 +535,7 @@ public class GTURTLEModeling {
 
                 if( panel instanceof TMLCommunicationPatternPanel )      {
                     tmlcpPanelsList.add( (TMLCommunicationPatternPanel) panel );
-                    TraceManager.addDev( "Found TMLCommunicationPatternPanel: " + ((TMLCommunicationPatternPanel)panel).toString() );
+                    TraceManager.addDev( "Found TMLCommunicationPatternPanel: " + panel.toString() );
                 }
             }
 
@@ -554,7 +554,7 @@ public class GTURTLEModeling {
             //This branch is activated if doing the syntax check from the application panel.
             //It only generates the application TML text
             if( tmap == null ) {
-                TMLTextSpecification spec = new TMLTextSpecification( _title );
+                TMLTextSpecification<TGComponent> spec = new TMLTextSpecification<>( _title );
                 spec.toTextFormat( tmlm );        //TMLModeling
                 try {
                     spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml" );
@@ -660,7 +660,7 @@ public class GTURTLEModeling {
         return overhead;
     }
 
-    public boolean channelAllowed(TMLMapping map, TMLChannel chan){
+    public boolean channelAllowed(TMLMapping<TGComponent> map, TMLChannel chan){
         TMLTask orig = chan.getOriginTask();
         TMLTask dest = chan.getDestinationTask();
         List<HwNode> path = getPath(map,orig, dest);
@@ -680,7 +680,7 @@ public class GTURTLEModeling {
         return true;
     }
 
-    public List<HwNode> getPath(TMLMapping map, TMLTask t1, TMLTask t2){
+    public List<HwNode> getPath(TMLMapping<TGComponent> map, TMLTask t1, TMLTask t2){
         HwNode node1 = map.getHwNodeOf(t1);
         HwNode node2 = map.getHwNodeOf(t2);
         List<HwNode> path = new ArrayList<HwNode>();
@@ -732,10 +732,10 @@ public class GTURTLEModeling {
         }
         return path;
     }
-    public TMLMapping drawFirewall(TMLMapping map){
+    public TMLMapping<TGComponent> drawFirewall(TMLMapping<TGComponent> map){
         System.out.println("DRAWING FIREWALL");
         TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
-        TMLModeling tmlm = map.getTMLModeling();
+        TMLModeling<TGComponent> tmlm = map.getTMLModeling();
         TMLActivityDiagramPanel firewallADP = null;
         TMLComponentTaskDiagramPanel tcdp = tmlcdp.tmlctdp;
         if (TraceManager.devPolicy == TraceManager.TO_CONSOLE){
@@ -1109,7 +1109,7 @@ public class GTURTLEModeling {
                     for (TMLCPrimitiveComponent pc: pcomps){
                         for (String compName: selectedCpuTasks.get(cpuName)){
                             if (pc.getValue().equals(compName)){
-                                comps.add((TMLCPrimitiveComponent) pc);
+                                comps.add(pc);
                                 break;
                             }
                         }
@@ -1362,7 +1362,7 @@ public class GTURTLEModeling {
                     TMLADReadChannel readChannel = (TMLADReadChannel) chan;
                     chanName=readChannel.getChannelName();
                     HSMChannel ch= hsmChannels.get(chanName);
-                    readChannel.securityContext = ch.securityContext;;
+                    readChannel.securityContext = ch.securityContext;
                     xpos = chan.getX()+10;
                     ypos = chan.getY();
                     fromStart = tad.findTGConnectorStartingAt(chan.getTGConnectingPointAtIndex(1));
@@ -1404,7 +1404,7 @@ public class GTURTLEModeling {
                     //Add write channel operator
                     TMLADWriteChannel wr = new TMLADWriteChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     wr.setChannelName("data_"+chanName+"_"+compName);
-                    wr.securityContext = ch.securityContext;;
+                    wr.securityContext = ch.securityContext;
                     tad.addComponent(wr, xpos, ypos+yShift, false,true);
 
 
@@ -1419,7 +1419,7 @@ public class GTURTLEModeling {
                     yShift+=60;
                     TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos+yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     rd.setChannelName("retData_"+chanName+"_"+compName);
-                    rd.securityContext = ch.securityContext;;
+                    rd.securityContext = ch.securityContext;
                     tad.addComponent(rd, xpos, ypos+yShift, false,true);
 
                     fromStart=new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
@@ -1509,7 +1509,7 @@ public class GTURTLEModeling {
                     }
                     TMLADReadChannel rd = new TMLADReadChannel(xc, 300, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     rd.setChannelName("data_"+chan+"_"+hsmChannels.get(chan).task);
-                    rd.securityContext = ch.securityContext;;
+                    rd.securityContext = ch.securityContext;
                     tad.addComponent(rd, xc,300,false,true);
                     //Connect choice and readchannel
                     fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
@@ -1854,7 +1854,7 @@ public class GTURTLEModeling {
                 if (tg instanceof TMLArchiCPUNode){
                     if (tg.getName().equals(cpuName)){
                         cpu=(TMLArchiCPUNode) tg;
-                        TMLArchiArtifact art = (TMLArchiArtifact) cpu.getArtifactList().get(0);
+                        TMLArchiArtifact art = cpu.getArtifactList().get(0);
                         refTask=art.getReferenceTaskName();
                         break;
 
@@ -1927,7 +1927,7 @@ public class GTURTLEModeling {
 
     }
 
-    public TMLMapping autoSecure(MainGUI gui, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
         //TODO add more options
         //
         if (tmap==null){
@@ -1938,14 +1938,14 @@ public class GTURTLEModeling {
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
         return autoSecure(gui, "enc", tmap,newarch,autoConf,autoWeakAuth, autoStrongAuth);
     }
-    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch){
         return autoSecure(gui,name,map,newarch,"100","0","100",true,false,false);
     }
-    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
         return autoSecure(gui,name,map,newarch,"100","0","100",autoConf,autoWeakAuth, autoStrongAuth);
     }
 
-    public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String encComp, String overhead, String decComp){
         if (tmap==null){
             return null;
         }
@@ -1955,7 +1955,7 @@ public class GTURTLEModeling {
         return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,true,false,false);
     }
 
-    public TMLMapping autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
         if (tmap==null){
             return null;
         }
@@ -1964,11 +1964,11 @@ public class GTURTLEModeling {
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
         return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,autoConf,autoWeakAuth, autoStrongAuth);
     }
-    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp){
         return autoSecure(gui,name, tmap,newarch,encComp, overhead,decComp,true,false, false);
     }
 
-    public void proverifAnalysis(TMLMapping map,  ArrayList<String> nonAuthChans, ArrayList<String> nonSecChans){
+    public void proverifAnalysis(TMLMapping<TGComponent> map,  ArrayList<String> nonAuthChans, ArrayList<String> nonSecChans){
         if (map==null){
             TraceManager.addDev("No mapping");
             return;
@@ -2025,7 +2025,7 @@ public class GTURTLEModeling {
         }
     }
 
-    public TMLMapping autoSecure(MainGUI gui, String name, TMLMapping map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
         HashMap<TMLTask, java.util.List<TMLTask>> toSecure = new HashMap<TMLTask, java.util.List<TMLTask>>();
         HashMap<TMLTask, java.util.List<TMLTask>> toSecureRev = new HashMap<TMLTask, java.util.List<TMLTask>>();
         HashMap<TMLTask, java.util.List<String>> secOutChannels = new HashMap<TMLTask, java.util.List<String>>();
@@ -2042,7 +2042,7 @@ public class GTURTLEModeling {
 
         proverifAnalysis(map, nonAuthChans, nonSecChans);
 
-        TMLModeling tmlmodel = map.getTMLModeling();
+        TMLModeling<TGComponent> tmlmodel = map.getTMLModeling();
         java.util.List<TMLChannel> channels = tmlmodel.getChannels();
         for (TMLChannel channel: channels){
             for (TMLCPrimitivePort p: channel.ports){
@@ -2603,7 +2603,7 @@ public class GTURTLEModeling {
             }
         }
         GTMLModeling gtm = new GTMLModeling(t, false);
-        TMLModeling newmodel = gtm.translateToTMLModeling(false,false);
+        TMLModeling<TGComponent> newmodel = gtm.translateToTMLModeling(false,false);
         for (TMLTask task:newmodel.getTasks()){
             task.setName(tabName+"_"+name+"__"+task.getName());
         }
@@ -2623,7 +2623,7 @@ public class GTURTLEModeling {
         map.setTMLModeling(newmodel);
         return map;
     }
-    public boolean securePath(TMLMapping map, TMLTask t1, TMLTask t2){
+    public boolean securePath(TMLMapping<TGComponent> map, TMLTask t1, TMLTask t2){
         //Check if a path between two tasks is secure
         boolean secure=true;
         java.util.List<HwLink> links = map.getTMLArchitecture().getHwLinks();
@@ -2698,7 +2698,7 @@ public class GTURTLEModeling {
         }
         java.util.List<HwLink> links = tmap.getArch().getHwLinks();
         //Find all Security Patterns, if they don't have an associated memory at encrypt and decrypt, map them
-        TMLModeling tmlm = tmap.getTMLModeling();
+        TMLModeling<TGComponent> tmlm = tmap.getTMLModeling();
         if (tmlm.securityTaskMap ==null){
             return;
         }
@@ -3474,17 +3474,17 @@ public class GTURTLEModeling {
         return tmState;
     }
 
-    public TMLModeling getTMLModeling() {
+    public TMLModeling<TGComponent> getTMLModeling() {
         return tmlm;
     }
     public TML2Avatar getTML2Avatar(){
         return t2a;
     }
-    public TMLMapping getArtificialTMLMapping() {
+    public TMLMapping<TGComponent> getArtificialTMLMapping() {
         return artificialtmap;
     }
 
-    public TMLMapping getTMLMapping() {
+    public TMLMapping<TGComponent> getTMLMapping() {
         return tmap;
     }
 
@@ -3738,7 +3738,7 @@ public class GTURTLEModeling {
 
                             // Working on action name!
                             //g = mgm.getGateLowerCase(actionName);
-                            g = (Gate)(ht.get(actionName));
+                            g = ht.get(actionName);
 
                             if (g != null) {
                                 //actionName1 = actionName;
@@ -3888,7 +3888,7 @@ public class GTURTLEModeling {
         try {
             pointerOperation --;
             TraceManager.addDev("Decrementing pointer =" + pointerOperation);
-            loadModelingFromXML((String)(savedOperations.elementAt(pointerOperation)));
+            loadModelingFromXML(savedOperations.elementAt(pointerOperation));
 
         } catch (Exception e) {
             TraceManager.addError("Exception in backward: " + e.getMessage());
@@ -3947,12 +3947,12 @@ public class GTURTLEModeling {
 
         try {
             pointerOperation ++;
-            loadModelingFromXML((String)(savedOperations.elementAt(pointerOperation)));
+            loadModelingFromXML(savedOperations.elementAt(pointerOperation));
         } catch (Exception e) {
             TraceManager.addError("Exception in forward: " + e.getMessage());
         }
 
-        Point p = (Point)(savedPanels.elementAt(pointerOperation));
+        Point p = savedPanels.elementAt(pointerOperation);
         if (p != null) {
             TDiagramPanel tdp = mgui.selectTab(p);
             tdp.mode = TDiagramPanel.NORMAL;
@@ -4027,10 +4027,7 @@ public class GTURTLEModeling {
         listE = adpt.getCorrespondanceTGElement();
         checkingErrors = adpt.getErrors();
         warnings = adpt.getWarnings();
-        if ((checkingErrors != null) && (checkingErrors.size() >0)){
-            return false;
-        }
-        return true;
+        return !((checkingErrors != null) && (checkingErrors.size() > 0));
 
         // Modeling is built
         // Now check it !
@@ -4541,7 +4538,7 @@ public class GTURTLEModeling {
         // search for diagram panels (Design)
         for(i=0; i<panels.size(); i++) {
             if ((index == -1) || (i == index)) {
-                tp = (TURTLEPanel)(panels.elementAt(i));
+                tp = panels.elementAt(i);
                 s = tp.saveInXML(extensionToName);
                 if (s == null) {
                     return null;
@@ -4565,9 +4562,9 @@ public class GTURTLEModeling {
         Vector<TDiagramPanel> panelss;
         // search for diagram panels
         for(i=0; i<panels.size(); i++) {
-            panelss = (((TURTLEPanel)(panels.elementAt(i))).panels);
+            panelss = (panels.elementAt(i).panels);
             for(j=0; j<panelss.size(); j++) {
-                tdp = (TDiagramPanel)(panelss.elementAt(j));
+                tdp = panelss.elementAt(j);
                 tdp.removeAll();
             }
         }
@@ -6078,7 +6075,7 @@ public class GTURTLEModeling {
     // Returns null if s is not a saved TURTLE modeling of an older format
     public String upgradeSaved(String s) {
         int index1, index2, index3;
-        StringBuffer sb = new StringBuffer("");;
+        StringBuffer sb = new StringBuffer("");
         //String tmp;
 
         index1 = s.indexOf("<TClassDiagramPanel");
@@ -7559,9 +7556,9 @@ public class GTURTLEModeling {
         TURTLEPanel tp;
         // search for diagram panels
         for(i=0; i<panels.size(); i++) {
-            tp = (TURTLEPanel)(panels.elementAt(i));
+            tp = panels.elementAt(i);
             for(j=0; j<tp.panels.size(); j++) {
-                tdp = (TDiagramPanel)(tp.panels.elementAt(j));
+                tdp = tp.panels.elementAt(j);
                 id = tdp.makeLovelyIds(id);
                 //TraceManager.addDev("Lovely id =" + id);
             }
@@ -7839,6 +7836,12 @@ public class GTURTLEModeling {
             //TraceManager.addDev(tgc.getValue());
             tgc.makePostLoading(decId);
         }
+	/*SwingUtilities.invokeAndWait(new Runnable() {
+            public void run() {
+                mgui.repaintAll();
+            }
+	    });*/
+
 
         //TraceManager.addDev("Post loading of diagram " + tdp.toString() + " achieved");
     }
@@ -8188,7 +8191,7 @@ public class GTURTLEModeling {
 
             //TraceManager.addDev("Making connecting points " + tgcpList.size());
             for(i=0; i<tgcpList.size(); i++) {
-                p = (Point)(tgcpList.elementAt(i));
+                p = tgcpList.elementAt(i);
                 if (!tgc.setIdTGConnectingPoint(p.x, p.y)) {
                     //TraceManager.addDev("Warning: a connecting point has been removed");
                     //throw new MalformedModelingException();
@@ -8281,7 +8284,7 @@ public class GTURTLEModeling {
         //connect connectors to their real connecting point
         //TraceManager.addDev("Valid connectors ?");
         for(i=0; i<list.size(); i++) {
-            tgc = (TGComponent)(list.get(i));
+            tgc = list.get(i);
             if (tgc instanceof TGConnector) {
                 tgco = (TGConnector)tgc;
                 p1 = tgco.getTGConnectingPointP1();
@@ -8459,12 +8462,8 @@ public class GTURTLEModeling {
                         //TraceManager.addDev(" adding Connecting point !");
                     } else if (elt.getTagName().equals("AutomaticDrawing")) {
                         //TraceManager.addDev("AutomaticDrawing=" + elt.getAttribute("data"));
-                        if (elt.getAttribute("data").compareTo("true") == 0) {
-                            automaticDrawing = true;
-                            //TraceManager.addDev("set to true");
-                        } else {
-                            automaticDrawing = false;
-                        }
+                        //TraceManager.addDev("set to true");
+                        automaticDrawing = elt.getAttribute("data").compareTo("true") == 0;
                         //automaticDrawing = Boolean.getBoolean(elt.getAttribute("data"));
                     }
                 }
@@ -8505,7 +8504,7 @@ public class GTURTLEModeling {
 
             //TraceManager.addDev("Making connecting points " + myType);
             for(i=0; i<tgcpList.size(); i++) {
-                p = (Point)(tgcpList.elementAt(i));
+                p = tgcpList.elementAt(i);
                 if (!tgco.setIdTGConnectingPoint(p.x, p.y)) {
                     throw new MalformedModelingException();
                 }
@@ -9107,6 +9106,14 @@ public class GTURTLEModeling {
         if (asme instanceof AvatarTransition){
             //
         }
+		if (asme instanceof AvatarRandom){
+			AvatarSMDRandom smdr = new AvatarSMDRandom(x, y, x, x*2, y, y*2, false, null, smp);
+			smdr.setVariable(((AvatarRandom)asme).getVariable());
+			smp.addComponent(smdr, x, y, false, true);
+			tgcomp=smdr;
+			SMDMap.put(asme, smdr);
+			locMap.put(asme, smdr);
+		}
         if (asme instanceof AvatarActionOnSignal){
             avatartranslator.AvatarSignal sig = ((AvatarActionOnSignal) asme).getSignal();
             if (sig.isIn()){
@@ -9542,7 +9549,7 @@ public class GTURTLEModeling {
                 System.out.println("Missing point "+ p1 + " "+p2);
                 return;
             }
-            AvatarSMDConnector SMDcon = new AvatarSMDConnector((int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), (int) p1.getX(), (int) p1.getY(), true, null, smp, p1, p2, points);
+            AvatarSMDConnector SMDcon = new AvatarSMDConnector(p1.getX(), p1.getY(), p1.getX(), p1.getY(), p1.getX(), p1.getY(), true, null, smp, p1, p2, points);
             //System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
             ///System.out.println("FREE " +p1.isFree() + " "+ p2.isFree());
             p1.setFree(false);
@@ -9558,7 +9565,7 @@ public class GTURTLEModeling {
             for (int i=1; i<t.getActions().size(); i++){
                 SMDcon.setTransitionInfo("", t.getActions().get(i).toString().replaceAll(" ",""));
             }
-            smp.addComponent(SMDcon, (int) p1.getX(), (int) p1.getY(), false, true);
+            smp.addComponent(SMDcon, p1.getX(), p1.getY(), false, true);
         }
     }
 
@@ -9601,7 +9608,7 @@ public class GTURTLEModeling {
         TGComponent tgc;
 
         for(int i=0; i<checkingErrors.size(); i++) {
-            ce = (CheckingError)(checkingErrors.get(i));
+            ce = checkingErrors.get(i);
             if (ce != null && ce instanceof UICheckingError) {
                 tgc = ((UICheckingError) ce).getTGComponent();
                 if (tgc != null) {

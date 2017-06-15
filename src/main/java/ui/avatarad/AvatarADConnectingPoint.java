@@ -58,10 +58,7 @@ public class AvatarADConnectingPoint extends  TGConnectingPointWidthHeight {
     }
     
     public boolean isCompatibleWith(int type) {
-		if (type == TGComponentManager.AAD_ASSOCIATION_CONNECTOR) {
-            return true;
-        }
-        return false;
+        return type == TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
     }
     
 }

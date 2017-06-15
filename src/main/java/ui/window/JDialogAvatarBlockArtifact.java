@@ -69,7 +69,7 @@ public class JDialogAvatarBlockArtifact extends javax.swing.JDialog implements A
     private ADDBlockArtifact artifact;
     
     //protected JTextField taskName;
-	protected JComboBox referenceTaskName;
+	protected JComboBox<String> referenceTaskName;
 	
     // Main Panel
     private JButton closeButton;
@@ -124,7 +124,7 @@ public class JDialogAvatarBlockArtifact extends javax.swing.JDialog implements A
 		} else {
 			index = indexOf(list, artifact.getValue());
 		}
-        referenceTaskName = new JComboBox(list);
+        referenceTaskName = new JComboBox<>(list);
 		referenceTaskName.setSelectedIndex(index);
         //referenceTaskName.setEditable(true);
         //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));

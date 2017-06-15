@@ -85,8 +85,8 @@ public class TMLSDType {
     
     public void setType( int _type ) {
 			type = _type;
-		};
-    
+		}
+
     public static int getType( String s ) {
 			s = s.toUpperCase();
   	      if ( s.equals("NATURAL") ) {
@@ -122,11 +122,8 @@ public class TMLSDType {
 			if (type.compareTo("INT") == 0) {
 				return true;
 			}
-			if (type.compareTo("ARCH") == 0) {
-				return true;
-			}
-			return false;
-		}
+            return type.compareTo("ARCH") == 0;
+        }
     
     public static String getStringType( int type ) {
         switch(type) {
@@ -156,9 +153,6 @@ public class TMLSDType {
 		 	if( this.type != mt.type )  {
 				return false;
 			}
-			if( !this.typeOther.equals( mt.typeOther ) )  {
-				return false;
-			}
-			return true;
-		}
+            return this.typeOther.equals(mt.typeOther);
+        }
 }	//End of class

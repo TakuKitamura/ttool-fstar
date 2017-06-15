@@ -1006,11 +1006,11 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
                 TAttribute a = (TAttribute) (this.attributes.get(selectedTab).get (i));
                 textField.setText (a.getId ());
                 initialValue.setText(a.getInitialValue());
-                this.select (accessBox, a.getStringAccess(a.getAccess()));
+                this.select (accessBox, TAttribute.getStringAccess(a.getAccess()));
                 if (a.getType() == TAttribute.OTHER)
                     this.select (typeBox, a.getTypeOther());
                 else
-                    this.select (typeBox, a.getStringAvatarType(a.getType()));
+                    this.select (typeBox, TAttribute.getStringAvatarType(a.getType()));
             }
         }
     }

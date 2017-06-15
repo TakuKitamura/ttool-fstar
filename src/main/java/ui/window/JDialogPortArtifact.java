@@ -184,7 +184,7 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		Vector<String> memoryList = new Vector<String>();
 		for( int k = 0; k < componentList.size(); k++ )	{
 			if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
-				memoryList.add( ( (TMLArchiMemoryNode) componentList.get(k) ).getName() );
+				memoryList.add( componentList.get(k).getName() );
 			}
 		}
         if( memoryList.size() == 0 )    { // In case there are no memories in the design
@@ -316,8 +316,8 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     public void closeDialog() {
 
         regularClose = true;
-        mappedMemory = (String) memoryCB.getItemAt( memoryCB.getSelectedIndex() );
-        HALUnitName = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
+        mappedMemory = memoryCB.getItemAt( memoryCB.getSelectedIndex() );
+        HALUnitName = getBufferTypeFromSelectedMemory(memoryCB.getItemAt( memoryCB.getSelectedIndex() ));
         switch ( HALUnitName )	{
 					case "FEP_BUFFER":
 						if( !FepBuffer.closePanel( frame ) )	{

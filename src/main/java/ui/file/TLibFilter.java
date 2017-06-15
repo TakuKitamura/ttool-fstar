@@ -60,11 +60,7 @@ public class TLibFilter extends FileFilter {
 
         String extension = FileUtils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(FileUtils.lib)){
-                    return true;
-            } else {
-                return false;
-            }
+            return extension.equals(FileUtils.lib);
         }
 
         return false;

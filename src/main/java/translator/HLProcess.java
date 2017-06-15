@@ -51,7 +51,7 @@ public class HLProcess extends Process {
     private TClass tc;
     
     
-    public HLProcess(String _name, Vector _gateList, Vector _paramList, TClass _tc, int _languageID) {
+    public HLProcess(String _name, Vector<Gate> _gateList, Vector<Param> _paramList, TClass _tc, int _languageID) {
         super(_name, _gateList, _paramList, _languageID);
         tc = _tc;
     }
@@ -81,7 +81,7 @@ public class HLProcess extends Process {
         Gate g;
         
         for(int i=0; i<gateList.size(); i++) {
-            g = (Gate)(gateList.elementAt(i));
+            g = gateList.elementAt(i);
             if (!g.isInternal()) {
                 //System.out.println("My TC: " + tc.getLotosName() +  " g:" +g.getLotosName());
                 g = mgm.getMasterGateOf(tc, g);

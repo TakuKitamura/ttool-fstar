@@ -87,7 +87,7 @@ public class TMLSDEvent implements Comparable<TMLSDEvent>  {
 
     @Override public int compareTo( TMLSDEvent _event ) {
 	//TraceManager.addDev("Comparing events");
-        int compareValue = ((TMLSDEvent) _event).getYCoord();
+        int compareValue = _event.getYCoord();
         return this.yCoord - compareValue;      //sort in ascending order
     }
 

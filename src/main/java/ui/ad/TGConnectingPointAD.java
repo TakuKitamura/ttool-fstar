@@ -57,11 +57,8 @@ public class TGConnectingPointAD extends  TGConnectingPointWidthHeight{
 	}
 
 	public boolean isCompatibleWith(int type) {
-		if (type == TGComponentManager.CONNECTOR_AD_DIAGRAM) {
-			return true;	
-		}
-		return false;
-	}
+        return type == TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    }
        
 }
 

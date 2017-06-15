@@ -302,11 +302,11 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
             TAttribute a = attributes.get(i);
             identifierText.setText(a.getId());
             initialValue.setText(a.getInitialValue());
-            select(accessBox, a.getStringAccess(a.getAccess()));
+            select(accessBox, TAttribute.getStringAccess(a.getAccess()));
             if (a.getType() == TAttribute.OTHER) {
                 select(typeBox, a.getTypeOther());
             } else {
-                select(typeBox, a.getStringAvatarType(a.getType()));
+                select(typeBox, TAttribute.getStringAvatarType(a.getType()));
             }
             removeButton.setEnabled(true);
             if (i > 0) {

@@ -62,7 +62,7 @@ export TTOOL_LIBS		= $(TTOOL_PATH)/libs
 export TTOOL_LIBRARIES		= $(wildcard $(TTOOL_LIBS)/*.jar)
 export TTOOL_CLASSPATH		= $(subst $(eval) ,:,$(TTOOL_LIBRARIES))
 
-export GLOBAL_CFLAGS		= -encoding "UTF8"
+export GLOBAL_CFLAGS		= -encoding "UTF8" -Xlint:unchecked -Xlint:deprecation -Xlint:cast -Xlint:divzero -Xlint:empty -Xlint:finally -Xlint:fallthrough
 
 export TTOOL_DIR		= $(TTOOL_PATH)/ttool
 export TTOOL_BINARY 		= $(TTOOL_BIN)/ttool.jar
@@ -156,7 +156,7 @@ $(JTTOOL_BINARY): FORCE
 TTOOL_DOC			= $(TTOOL_PATH)/doc
 export TTOOL_DOC_HTML 		= $(TTOOL_DOC)/html
 
-DOCFLAGS			= $(GLOBAL_CFLAGS) -quiet -J-Xmx256m -classpath $(TTOOL_CLASSPATH) -d $(TTOOL_DOC_HTML)
+DOCFLAGS			= -encoding "UTF8" -quiet -J-Xmx256m -classpath $(TTOOL_CLASSPATH) -d $(TTOOL_DOC_HTML)
 
 documentation: $(patsubst %,$(TTOOL_SRC)/%,$(GLOBAL_JAVA))
 	@echo "$(PREFIX) Generating Javadoc"
@@ -170,6 +170,9 @@ TTOOL_PRIVATE 			?= $(TTOOL_PATH)/../TTool-Private
 PROD_USERNAME			= apvrille
 PROD_ADDRESS			= ssh.enst.fr
 PROD_PATH			= public_html/docs
+
+TTOOL_DOC_AVATARCODEGENERATION_DIR 	= $(TTOOL_DOC)/codegeneration
+TTOOL_DOC_AVATARCODEGENERATION_CMD 	= make
 
 TTOOL_DOC_SOCLIB_USERGUIDE_DIR 	= $(TTOOL_DOC)/documents_soclib/USER_GUIDE
 TTOOL_DOC_SOCLIB_USERGUIDE_CMD 	= make user_guide
@@ -241,6 +244,10 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 #NC
 	@mkdir -p $(TTOOL_TARGET)/nc
 	@cp $(TTOOL_DOC)/README_nc $(TTOOL_TARGET)/nc
+
+#DOC
+@cd	 $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/&&$(TTOOL_DOC_AVATARCODEGENERATION_CMD)
+	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pf  $(TTOOL_TARGET)/doc/avatarcodegeneration_documentation.pdf
 
 	@cd $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR)/&&$(TTOOL_DOC_SOCLIB_USERGUIDE_CMD)
 	@cp $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR)/build/user_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_user_guide.pdf

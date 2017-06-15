@@ -48,6 +48,7 @@ package ui.sd2;
 
 import ui.*;
 
+import java.awt.*;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -373,7 +374,7 @@ public class SequenceDiagramPanel extends TDiagramPanel {
 	TGConnectingPoint p1 = oldOne.getTGConnectingPointP1();
 	TGConnectingPoint p2 = oldOne.getTGConnectingPointP2();
 
-	Vector listPoint = oldOne.getListOfPoints();
+	Vector<Point> listPoint = oldOne.getListOfPoints();
 	removeComponent(oldOne);
 	TGConnector newOne = TGComponentManager.addConnector(x1, y1, TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD, this, p1, p2, listPoint);
 	addBuiltConnector(newOne);
@@ -387,7 +388,7 @@ public class SequenceDiagramPanel extends TDiagramPanel {
 	TGConnectingPoint p1 = oldOne.getTGConnectingPointP1();
 	TGConnectingPoint p2 = oldOne.getTGConnectingPointP2();
 
-	Vector listPoint = oldOne.getListOfPoints();
+	Vector<Point> listPoint = oldOne.getListOfPoints();
 	removeComponent(oldOne);
 	TGConnector newOne = TGComponentManager.addConnector(x1, y1, TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD, this, p1, p2, listPoint);
 	addBuiltConnector(newOne);

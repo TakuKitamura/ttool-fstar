@@ -50,11 +50,11 @@ import myutil.Conversion;
 import java.util.Vector;
 
 public class ADChoice extends ADComponent implements NonBlockingADComponent {
-    protected Vector guard; // String
+    protected Vector<String> guard; // String
     
     public ADChoice() {
         nbNext = 100000;
-        guard = new Vector();
+        guard = new Vector<>();
     }
     
     public void addGuard(String s) {
@@ -104,7 +104,7 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
     
     public String getGuard(int i) {
         if (i<guard.size()) {
-            return (String)(guard.elementAt(i));
+            return guard.elementAt(i);
         }
         return null;
     }
@@ -117,16 +117,12 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
         if (i>=guard.size()) {
             return false;
         } else {
-            String s = (String)(guard.elementAt(i));
+            String s = guard.elementAt(i);
 			String g = "";
 			if (s != null) {
 				g = Conversion.replaceAllChar(s.trim(), ' ', "");
 			}
-            if ((s == null) || (s.length() < 2) || (g.equals("[]"))) {
-                return false;
-            } else {
-                return true;
-            }
+            return !((s == null) || (s.length() < 2) || (g.equals("[]")));
         }
     }
 	
@@ -340,14 +336,10 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 			g0 = g0.substring(4, g0.length()-1);
 		} else if (g1.startsWith("not(")) {
 			g1 = g1.substring(4, g1.length()-1);
-		} 
-		
-		if (g0.compareTo(g1) == 0) {
-			//System.out.println("Else guards g0=" + g0 + " g1=" + g1);
-			return true;
-		} else {
-			return false;
 		}
+
+        //System.out.println("Else guards g0=" + g0 + " g1=" + g1);
+        return g0.compareTo(g1) == 0;
 	}
     
 	

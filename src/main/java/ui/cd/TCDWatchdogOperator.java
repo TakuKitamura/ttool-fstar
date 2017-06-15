@@ -90,7 +90,7 @@ public class TCDWatchdogOperator extends TCDCompositionOperatorWithSynchro {
     
     public void structureChanged() {
         if (tdp instanceof TClassDiagramPanel) {
-            t1 = ((TClassDiagramPanel)tdp).getTClass1ToWhichIamConnected(this);
+            t1 = tdp.getTClass1ToWhichIamConnected(this);
             if (t1 != oldt1){
                 oldt1 = t1;
                 ((TCDWatchdogGateList)tgcomponent[0]).setTClass(t1);

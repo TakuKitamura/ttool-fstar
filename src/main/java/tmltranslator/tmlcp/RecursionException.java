@@ -43,7 +43,7 @@ knowledge of the CeCILL license and that you accept its terms.
  * @see
  */
 
-package tmltranslator.tmlcp;;
+package tmltranslator.tmlcp;
 
 public class RecursionException extends Exception
 {

@@ -54,14 +54,13 @@ import proverifspec.ProVerifOutputAnalyzer;
 import proverifspec.ProVerifQueryAuthResult;
 import proverifspec.ProVerifQueryResult;
 import ui.TAttribute;
-import ui.TGComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLCPrimitivePort;
 
 import java.util.*;
 
 
-public class TMLModeling {
+public class TMLModeling<E> {
 	public final String SEP1 = "_S_";
 
 	private List<TMLTask> tasks;
@@ -76,7 +75,7 @@ public class TMLModeling {
 	public Map<String, List<String>> secChannelMap = new HashMap<String, List<String>>();
 	public Map<SecurityPattern, List<TMLTask>> securityTaskMap = new HashMap<SecurityPattern, List<TMLTask>>();
 	private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
-	private Map<TGComponent, String> checkedActivities = new HashMap<TGComponent, String>();
+	private Map<E, String> checkedActivities = new HashMap<>();
 	private int hashCode;
 	private boolean hashCodeComputed = false;
 
@@ -97,11 +96,11 @@ public class TMLModeling {
 		}
 	}
 
-	public void addCheckedActivity(TGComponent tgc, String s){
+	public void addCheckedActivity(E tgc, String s){
 		checkedActivities.put(tgc,s);
 	}
 
-	public Map<TGComponent, String> getCheckedComps(){
+	public Map<E, String> getCheckedComps(){
 		return checkedActivities;
 	}
 	
@@ -114,9 +113,9 @@ public class TMLModeling {
 		return null;
 	}
 	
-	public TMLMapping getDefaultMapping() {
-		TMLMapping tmlmapping;
-		tmlmapping = new TMLMapping(this, new TMLArchitecture(), false);
+	public TMLMapping<E> getDefaultMapping() {
+		TMLMapping<E> tmlmapping;
+		tmlmapping = new TMLMapping<>(this, new TMLArchitecture(), false);
 		tmlmapping.makeMinimumMapping();
 		return tmlmapping;
 
@@ -206,7 +205,7 @@ public class TMLModeling {
 	public TMLTask findTMLTask(TMLActivityElement _elt) {
 		TMLTask tmp;
 		for(int i=0; i<tasks.size(); i++) {
-			tmp = (TMLTask)(tasks.get(i));
+			tmp = tasks.get(i);
 			if (tmp.has(_elt)) {
 				return tmp;
 			}
@@ -215,7 +214,7 @@ public class TMLModeling {
 	}
 
 	private void computeHashCode() {
-		TMLTextSpecification tmltxt = new TMLTextSpecification("spec.tml");
+		TMLTextSpecification<E> tmltxt = new TMLTextSpecification<>("spec.tml");
 		String s = tmltxt.toTextFormat(this);
 
 		int index = s.indexOf("// Channels");
@@ -330,7 +329,7 @@ public class TMLModeling {
 		Iterator<TMLRequest> iterator = requests.listIterator();
 
 		while(iterator.hasNext()) {
-			request = (TMLRequest)(iterator.next());
+			request = iterator.next();
 			if (request != _request) {
 				if (request.getName().compareTo(_request.getName()) == 0) {
 					return true;
@@ -411,7 +410,7 @@ public class TMLModeling {
 		Iterator<TMLEvent> iterator = events.listIterator();
 
 		while(iterator.hasNext()) {
-			event = (TMLEvent)(iterator.next());
+			event = iterator.next();
 			if (event.getName().compareTo(_event.getName()) == 0) {
 				// must verify whether a param is different or not.
 				if (event.getNbOfParams() != _event.getNbOfParams()) {
@@ -492,7 +491,7 @@ public class TMLModeling {
 			return null;
 		}
 
-		TMLTask task = (TMLTask)(tasks.get(index));
+		TMLTask task = tasks.get(index);
 		if (task != null) {
 			return task.makeCommandIDs();
 		}
@@ -505,7 +504,7 @@ public class TMLModeling {
 			return null;
 		}
 
-		TMLTask task = (TMLTask)(tasks.get(index));
+		TMLTask task = tasks.get(index);
 		if (task != null) {
 			return task.makeVariableIDs();
 		}
@@ -1262,7 +1261,7 @@ public class TMLModeling {
 		}
 	}
 
-	public void mergeWith(TMLModeling tmlm) {
+	public void mergeWith(TMLModeling<E> tmlm) {
 		channels.addAll(tmlm.getChannels());
 		events.addAll(tmlm.getEvents());
 		requests.addAll(tmlm.getRequests());
@@ -1273,7 +1272,7 @@ public class TMLModeling {
 	}
 
 	// Elements with same names are not duplicated
-	public void advancedMergeWith(TMLModeling tmlm) {
+	public void advancedMergeWith(TMLModeling<E> tmlm) {
 		TraceManager.addDev("**************** Advanced merge!");
 		for(TMLChannel ch: tmlm.getChannels()) {
 			if (!(hasSameChannelName(ch))) {
@@ -1309,7 +1308,7 @@ public class TMLModeling {
 		}
 		securityTaskMap.putAll(tmlm.securityTaskMap);
 
-		for (TGComponent tgc: tmlm.getCheckedComps().keySet()){
+		for (E tgc: tmlm.getCheckedComps().keySet()){
 			if (!checkedActivities.containsKey(tgc)){
 				checkedActivities.put(tgc, tmlm.getCheckedComps().get(tgc));
 			}

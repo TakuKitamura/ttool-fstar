@@ -79,7 +79,7 @@ public class TMLCPConnector extends TMLCPElement implements Comparable<TMLCPConn
 
     public int compareTo( TMLCPConnector _connector )   {
 
-        int compareValue = ((TMLCPConnector) _connector).getYCoord();
+        int compareValue = _connector.getYCoord();
         //sort in ascending order
         return this.yCoord - compareValue;
     }

@@ -48,22 +48,22 @@ package tmltranslator;
 
 import myutil.TraceManager;
 import tmltranslator.toproverif.TML2ProVerif;
-import ui.CorrespondanceTGElement;
 import ui.TMLArchiPanel;
 import ui.TMLComponentDesignPanel;
+import ui.util.CorrespondanceElement;
 
 import java.util.*;
 
-public class TMLMapping {
+public class TMLMapping<E> {
 
-    private TMLModeling tmlm;
+    private TMLModeling<E> tmlm;
     private TMLArchitecture tmla;
  //   private TMLCP tmlcp;
     private List<HwExecutionNode> onnodes;
     private List<TMLTask> mappedtasks;
     private List<HwCommunicationNode> oncommnodes;
     public List<TMLElement> mappedcommelts;
-	public CorrespondanceTGElement listE;
+	public CorrespondanceElement<E> listE;
     public boolean firewall = false;
     //private List<TMLCP> mappedCPs;
    // private List<TMLElement> commEltsMappedOnCPs;
@@ -77,7 +77,7 @@ public class TMLMapping {
     private boolean hashCodeComputed = false;
     private TMLComponentDesignPanel tmldp;
     public TMLArchiPanel tmlap;
-    public TMLMapping(TMLModeling _tmlm, TMLArchitecture _tmla, boolean reset) {
+    public TMLMapping(TMLModeling<E> _tmlm, TMLArchitecture _tmla, boolean reset) {
 
         tmlm = _tmlm;
         tmla = _tmla;
@@ -395,10 +395,10 @@ public class TMLMapping {
         }
     }
 
-    public TMLModeling getTMLModeling() {
+    public TMLModeling<E> getTMLModeling() {
         return tmlm;
     }
-    public void setTMLModeling(TMLModeling _tmlm){
+    public void setTMLModeling(TMLModeling<E> _tmlm){
 	tmlm=_tmlm;
     }
     public TMLArchitecture getTMLArchitecture() {
@@ -407,7 +407,7 @@ public class TMLMapping {
 
     private void computeHashCode() {
         hashCode = tmlm.getHashCode() + tmla.getHashCode();
-        TMLMappingTextSpecification tmaptxt = new TMLMappingTextSpecification("spec.tmap");
+        TMLMappingTextSpecification<E> tmaptxt = new TMLMappingTextSpecification<>("spec.tmap");
         hashCode += tmaptxt.toTextFormat(this).hashCode();
     }
 
@@ -1475,4 +1475,4 @@ public class TMLMapping {
     public TMLComponentDesignPanel getTMLCDesignPanel(){
     	return tmldp;
     }
-}       //End of class
+}

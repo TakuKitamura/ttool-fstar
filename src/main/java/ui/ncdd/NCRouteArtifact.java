@@ -148,7 +148,7 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 
 		ArrayList<String> inputInterfaces = ((NCDiagramPanel)tdp).getInterfaces((NCSwitchNode)(getFather()));
 		ArrayList<String> traffics = ((NCDiagramPanel)tdp).getTraffics();
-		ArrayList<String> outputInterfaces = (ArrayList<String>)(inputInterfaces.clone());
+		ArrayList<String> outputInterfaces = new ArrayList<>(inputInterfaces);
 
 		JDialogNCRoute dialog = new JDialogNCRoute(frame, "Setting route attributes", value, vroutes, inputInterfaces, traffics, outputInterfaces);
 		//	dialog.setSize(900, 500);

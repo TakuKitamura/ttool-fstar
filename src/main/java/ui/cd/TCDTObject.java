@@ -156,7 +156,7 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
             valueg = firstName + TOBJECT_G_SEPARATOR + DEFAULT_TCLASS;
         } else {
             value = firstName + TOBJECT_REAL_SEPARATOR + masterTClass.getValue();
-            valueg = firstName + TOBJECT_G_SEPARATOR + masterTClass.getValue();;
+            valueg = firstName + TOBJECT_G_SEPARATOR + masterTClass.getValue();
         }
     }
     
@@ -545,19 +545,11 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Start")) {
                                 startS = elt.getAttribute("isStart");
-                                if (startS.equals("true")) {
-                                    start = true;
-                                } else {
-                                    start = false;
-                                }
+                                start = startS.equals("true");
                             }
                              if (elt.getTagName().equals("Observer")) {
                                 startS = elt.getAttribute("isObserver");
-                                if (startS.equals("true")) {
-                                    observer = true;
-                                } else {
-                                    observer = false;
-                                }
+                                 observer = startS.equals("true");
                             }
                             if (elt.getTagName().equals("MasterTClass")) {
                                 startS = elt.getAttribute("name");
@@ -681,7 +673,7 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
     }
     
     public ActivityDiagramPanelInterface getBehaviourDiagramPanel() {
-        return (ActivityDiagramPanelInterface)getActivityDiagramPanel();
+        return getActivityDiagramPanel();
     }
     
  	public int getDefaultConnector() {

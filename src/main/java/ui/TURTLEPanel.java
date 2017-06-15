@@ -75,7 +75,7 @@ public abstract class TURTLEPanel implements GenericTree {
     public abstract String saveTailInXml();
 
     public TDiagramPanel panelAt(int index) {
-        return (TDiagramPanel)(panels.elementAt(index));
+        return panels.elementAt(index);
     }
 
     public boolean hasTDiagramPanel(TDiagramPanel _tdp) {
@@ -110,7 +110,7 @@ public abstract class TURTLEPanel implements GenericTree {
         sb.append(saveHeaderInXml(extensionToName));
         StringBuffer s;
         for(int i=0; i<panels.size(); i++) {
-            tdp = (TDiagramPanel)(panels.elementAt(i));
+            tdp = panels.elementAt(i);
             s = tdp.saveInXML();
             if (s == null) {
                 //System.out.println("Null diagram");
@@ -130,7 +130,7 @@ public abstract class TURTLEPanel implements GenericTree {
         sb.append(saveHeaderInXml(null));
         StringBuffer s;
 
-        tdp = (TDiagramPanel)(panels.elementAt(indexOfDiagram));
+        tdp = panels.elementAt(indexOfDiagram);
         s = tdp.saveInXML();
         if (s == null) {
             //System.out.println("Null diagram");
@@ -260,7 +260,7 @@ public abstract class TURTLEPanel implements GenericTree {
             // name already in use?
             if (!nameInUse(s)) {
                 tabbedPane.setTitleAt(index, s);
-                ((TDiagramPanel)(panels.elementAt(index))).setName(s);
+                panels.elementAt(index).setName(s);
                 mgui.changeMade(null, -1);
             }
         }

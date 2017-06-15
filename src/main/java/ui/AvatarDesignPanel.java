@@ -235,7 +235,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         TGComponent tgc;
 
         for(int i=0; i<panels.size(); i++) {
-            Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+            Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
             while(iterator.hasNext()) {
                 tgc = iterator.next();
                 tgc.setAVATARMet(0);
@@ -255,9 +255,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
         LinkedList<TGComponent> list = new LinkedList<TGComponent>();
 
         for(int i=0; i<panels.size(); i++) {
-            tdp = (TDiagramPanel)(panels.get(i));
+            tdp = panels.get(i);
             if (tdp instanceof AvatarSMDPanel) {
-                Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
                 while(iterator.hasNext()) {
                     tgc = iterator.next();
                     tgc.getAllCheckableInvariant(list);
@@ -272,9 +272,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
     public TGComponent hasCheckableMasterMutex() {
         TGComponent tgc, tgctmp;
         for(int i=0; i<panels.size(); i++) {
-            tdp = (TDiagramPanel)(panels.get(i));
+            tdp = panels.get(i);
             if (tdp instanceof AvatarSMDPanel) {
-                Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
                 while(iterator.hasNext()) {
                     tgc = iterator.next();
                     tgctmp = tgc.hasCheckableMasterMutex();
@@ -292,9 +292,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
     public void removeAllMutualExclusionWithMasterMutex() {
         TGComponent tgc;
         for(int i=0; i<panels.size(); i++) {
-            tdp = (TDiagramPanel)(panels.get(i));
+            tdp = panels.get(i);
             if (tdp instanceof AvatarSMDPanel) {
-                Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
                 while(iterator.hasNext()) {
                     tgc = iterator.next();
                     tgc.removeAllMutualExclusionWithMasterMutex();
@@ -306,9 +306,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
     public void reinitMutualExclusionStates() {
         TGComponent tgc;
         for(int i=0; i<panels.size(); i++) {
-            tdp = (TDiagramPanel)(panels.get(i));
+            tdp = panels.get(i);
             if (tdp instanceof AvatarSMDPanel) {
-                Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
                 while(iterator.hasNext()) {
                     tgc = iterator.next();
                     if (tgc instanceof AvatarSMDState) {
@@ -365,7 +365,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         }
         // Reset reachable states
         for(int i=0; i<panels.size(); i++) {
-            tdp = (TDiagramPanel)(panels.get(i));
+            tdp = panels.get(i);
             if (tdp instanceof AvatarSMDPanel) {
                 ((AvatarSMDPanel)tdp).resetStateSecurityInfo();
             }
@@ -453,9 +453,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
             if (result.isProved())
             {
                 for(int i=0; i<panels.size(); i++) {
-                    tdp = (TDiagramPanel)(panels.get(i));
+                    tdp = panels.get(i);
                     if ((tdp instanceof AvatarSMDPanel) && (tdp.getName().compareTo(pragma.getBlock().getName()) == 0)) {
-                        Iterator<TGComponent> iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+                        Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
                         while(iterator.hasNext()) {
                             TGComponent tgc = iterator.next();
                             if (tgc instanceof AvatarSMDState) {

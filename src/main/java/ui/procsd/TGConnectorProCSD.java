@@ -64,8 +64,8 @@ import java.util.Vector;
 public  class TGConnectorProCSD extends TGConnectorAssociationProCSD {
     protected int arrowLength = 10;
     
-    public TGConnectorProCSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, new Vector(0));
+    public TGConnectorProCSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, new Vector<Point>(0));
        // System.out.println("constructor"); 
       //  System.out.println("list points "+_listPoint.toString());
         myImageIcon = IconManager.imgic2110;

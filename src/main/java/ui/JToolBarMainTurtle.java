@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -34,14 +34,8 @@
 
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
-
-   /**
-   * Class JToolBarMainTurtle
-   * Main toolbar of the ttool main window
-   * Creation: 09/12/2003
-   * @author Ludovic APVRILLE
-   * @see
    */
+
 
 package ui;
 
@@ -55,10 +49,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class        *
- * @author Ludovic APVRILLE
- * @see */
-
+* Class JToolBarMainTurtle
+* Main toolbar of the ttool main window
+* Creation: 09/12/2003
+* @author Ludovic APVRILLE
+*/
 public  class JToolBarMainTurtle extends JToolBar implements ActionListener     {
     // Avatar
     JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarFVStaticAnalysis, avatarCodeGeneration, avatarMC;

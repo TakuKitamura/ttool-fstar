@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -34,15 +34,8 @@
 
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
-
-   /**
-   * Class AvatarStateMachine
-   * State machine, with composite states
-   * Creation: 20/05/2010
-   * @version 1.0 20/05/2010
-   * @author Ludovic APVRILLE
-   * @see
    */
+
 
 
 package avatartranslator;
@@ -51,6 +44,13 @@ import myutil.TraceManager;
 
 import java.util.*;
 
+/**
+* Class AvatarStateMachine
+* State machine, with composite states
+* Creation: 20/05/2010
+* @version 1.0 20/05/2010
+* @author Ludovic APVRILLE
+*/
 public class AvatarStateMachine extends AvatarElement {
     // to be used by code generator for fast access to states
     public AvatarStateElement [] allStates;
@@ -1518,8 +1518,8 @@ public class AvatarStateMachine extends AvatarElement {
     /**
      * Removes all function calls by inlining them.
      *
-     * @param avspec
-     *      The specification used to query library functions.
+     * @param block
+     *      The block from which library function calls should be removed.
      */
     public void removeLibraryFunctionCalls (AvatarBlock block) {
         /* Perform BFS for AvatarLibraryFunctionCall elements. When one is found, replace it by the state machine and fix the links */
@@ -1562,7 +1562,7 @@ public class AvatarStateMachine extends AvatarElement {
                 for (AvatarStateMachineElement asme: curAsme.getNexts ()) {
                     /* Check if it is a function call */
                     if (asme instanceof AvatarLibraryFunctionCall) {
-                        AvatarStateMachineElement replaceBy = callsTranslated.get ((AvatarLibraryFunctionCall) asme);
+                        AvatarStateMachineElement replaceBy = callsTranslated.get (asme);
                         /* Check if function call has already been translated */
                         if (replaceBy != null) {
                             /* replace by the translated function call */
@@ -1594,7 +1594,7 @@ public class AvatarStateMachine extends AvatarElement {
      * @param block
      *      The block containing the state machine
      */
-    public void removeEmptyTransitions (AvatarBlock _block, boolean _canOptimize) {
+    public void removeEmptyTransitions (AvatarBlock block, boolean _canOptimize) {
 
 	TraceManager.addDev("Remove empty transitions with optimize=" + _canOptimize);
 
@@ -1645,7 +1645,7 @@ public class AvatarStateMachine extends AvatarElement {
                 foundState2.addReferenceObjectFrom(foundState1);
 
             }
-            removeEmptyTransitions(_block, _canOptimize);
+            removeEmptyTransitions(block, _canOptimize);
         }
     }
 

@@ -57,18 +57,18 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TMLMappingTextSpecification {
+public class TMLMappingTextSpecification<E> {
     public final static String CR = "\n";
     public final static String SP = " ";
     public final static String CR2 = "\n\n";
     public final static String SC = ";";
 
-    private TMLTextSpecification tmlmtxt;
+    private TMLTextSpecification<E> tmlmtxt;
     private TMLArchiTextSpecification tmlatxt;
     private String spec;
     private String title;
 
-    private TMLMapping tmlmap;
+    private TMLMapping<E> tmlmap;
     private ArrayList<TMLTXTError> errors;
     private ArrayList<TMLTXTError> warnings;
 
@@ -97,7 +97,7 @@ public class TMLMappingTextSpecification {
         FileUtils.saveFile(path + filename + ".tmap", indent(header + spec));
     }
 
-    public TMLMapping getTMLMapping() {
+    public TMLMapping<E> getTMLMapping() {
         return tmlmap;
     }
 
@@ -165,7 +165,7 @@ public class TMLMappingTextSpecification {
         return spec;
     }
 
-    public String toTextFormat(TMLMapping _tmlmap) {
+    public String toTextFormat(TMLMapping<E> _tmlmap) {
         tmlmap = _tmlmap;
 	tmlmap.handleCPs();
         makeTML(tmlmap);
@@ -175,17 +175,17 @@ public class TMLMappingTextSpecification {
         //indent();
     }
 
-    public void makeTML(TMLMapping tmlmap) {
-        tmlmtxt = new TMLTextSpecification(title);
+    public void makeTML(TMLMapping<E> tmlmap) {
+        tmlmtxt = new TMLTextSpecification<>(title);
         tmlmtxt.toTextFormat(tmlmap.getTMLModeling());
     }
 
-    public void makeArchi(TMLMapping tmlmap) {
+    public void makeArchi(TMLMapping<E> tmlmap) {
         tmlatxt = new TMLArchiTextSpecification(/*title*/);
         tmlatxt.toTextFormat(tmlmap.getTMLArchitecture());
     }
 
-    public void makeMapping(TMLMapping tmlmap) {
+    public void makeMapping(TMLMapping<E> tmlmap) {
         spec = CR;
         spec +="TMLMAPPING" + CR;
         spec += makeMappingNodes(tmlmap);
@@ -193,7 +193,7 @@ public class TMLMappingTextSpecification {
         spec += "ENDTMLMAPPING" + CR;
     }
 
-    public String makeMappingNodes(TMLMapping tmlmap) {
+    public String makeMappingNodes(TMLMapping<E> tmlmap) {
         String tmp = "";
         List<HwExecutionNode> nodes = tmlmap.getNodes();
         List<TMLTask> tasks = tmlmap.getMappedTasks();
@@ -213,7 +213,7 @@ public class TMLMappingTextSpecification {
         return tmp;
     }
 
-    public String makeMappingCommunicationNodes(TMLMapping tmlmap) {
+    public String makeMappingCommunicationNodes(TMLMapping<E> tmlmap) {
         String tmp = "";
         List<HwCommunicationNode> nodes = tmlmap.getCommunicationNodes();
         List<TMLElement> elts = tmlmap.getMappedCommunicationElement();
@@ -389,7 +389,7 @@ public class TMLMappingTextSpecification {
 
         //System.out.println(spec);
 
-        TMLModeling tmlm = makeTMLModeling();
+        TMLModeling<E> tmlm = makeTMLModeling();
         //System.out.println("TML modeling:" + tmlm);
 
         TMLArchitecture tarchi = makeArchitectureModeling();
@@ -398,7 +398,7 @@ public class TMLMappingTextSpecification {
             return false;
         }
 
-        tmlmap = new TMLMapping(tmlm, tarchi, false);
+        tmlmap = new TMLMapping<>(tmlm, tarchi, false);
 
         TraceManager.addDev("Compiling mapping...");
 
@@ -408,8 +408,8 @@ public class TMLMappingTextSpecification {
     }
 
 
-    public TMLModeling makeTMLModeling() {
-        TMLTextSpecification t = new TMLTextSpecification("from file");
+    public TMLModeling<E> makeTMLModeling() {
+        TMLTextSpecification<E> t = new TMLTextSpecification<>("from file");
 
         // Import errors and warnings
 

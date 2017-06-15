@@ -60,11 +60,7 @@ public class RTLFileFilter extends FileFilter {
 
         String extension = FileUtils.getExtension(f);
         if (extension != null) {
-            if (extension.equals(FileUtils.rtl)){
-                    return true;
-            } else {
-                return false;
-            }
+            return extension.equals(FileUtils.rtl);
         }
 
         return false;

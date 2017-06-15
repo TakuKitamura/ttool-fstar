@@ -51,8 +51,6 @@ import compiler.tmlparser.TMLExprParser;
 import compiler.tmlparser.TokenMgrError;
 import myutil.TraceManager;
 import translator.*;
-import ui.CorrespondanceTGElement;
-import ui.TGComponent;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -219,7 +217,7 @@ public class TURTLEModelChecker {
             //search for each next
             ADComponent ad1;
             for(int i=0; i<ad.realNbOfNext(); i++) {
-                ad1 = (ADComponent)(ad.getNext(i));
+                ad1 = ad.getNext(i);
                 analyzeAccessibility(t, ad1, errors, warnings);
             }
         }
@@ -240,7 +238,7 @@ public class TURTLEModelChecker {
         }
         
         for(int i=0; i<ad.size(); i++) {
-            ad1 = (ADComponent)(ad.elementAt(i));
+            ad1 = ad.elementAt(i);
             if (ad1 instanceof ADParallel) {
                 adp = (ADParallel) ad1;
                 boolean b = adp.isAValidMotif(t);
@@ -266,7 +264,7 @@ public class TURTLEModelChecker {
         ADParallel adp;
         
         for(int i=0; i<ad.size(); i++) {
-            ad1 = (ADComponent)(ad.elementAt(i));
+            ad1 = ad.elementAt(i);
             if (ad1 instanceof ADParallel) {
                 adp = (ADParallel) ad1;
                 if (ad.hasRecursivePath(adp)) {
@@ -293,7 +291,7 @@ public class TURTLEModelChecker {
         }
         
         for(int i=0; i<ad.size(); i++) {
-            ad1 = (ADComponent)(ad.elementAt(i));
+            ad1 = ad.elementAt(i);
             if (ad1 instanceof ADParallel) {
                 adp = (ADParallel) ad1;
                 if (adp.nbGate() > 0) {
@@ -324,7 +322,7 @@ public class TURTLEModelChecker {
         }
 
         for(i=0; i<ad.size(); i++) {
-            ad1 = (ADComponent)(ad.elementAt(i));
+            ad1 = ad.elementAt(i);
             if (ad1 instanceof ADParallel) {
                 adp = (ADParallel) ad1;
                 boolean b = adp.isAValidMotif(t);
@@ -360,7 +358,7 @@ public class TURTLEModelChecker {
         }
 
         for(i=0; i<ad.size(); i++) {
-            ad1 = (ADComponent)(ad.elementAt(i));
+            ad1 = ad.elementAt(i);
             if (ad1 instanceof ADParallel) {
                 adp = (ADParallel) ad1;
                 boolean b = adp.isAValidMotif(t);
@@ -397,7 +395,7 @@ public class TURTLEModelChecker {
 		}
 		
 		for(int i=0; i<ad.size(); i++) {
-            ad1 = (ADComponent)(ad.elementAt(i));
+            ad1 = ad.elementAt(i);
 			
 			if (ad1 instanceof ADActionStateWithGate) {
 				g = ((ADActionStateWithGate)ad1).getGate();

@@ -335,7 +335,7 @@ public class JDialogSMDLibraryFunctionCall extends javax.swing.JDialog implement
         for (Object inner1: availAttr)
             l[i++] = inner1;
 
-        DefaultComboBoxModel model = new DefaultComboBoxModel (l);
+        DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<>(l);
         this.parametersComboBox.setModel (model);
 
         if (this.listParameters.getSelectedIndex () < 0)
@@ -363,7 +363,7 @@ public class JDialogSMDLibraryFunctionCall extends javax.swing.JDialog implement
         for (Object inner1: availSignals)
             l[i++] = inner1;
 
-        DefaultComboBoxModel model = new DefaultComboBoxModel (l);
+        DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<>(l);
         this.signalsComboBox.setModel (model);
 
         if (this.listSignals.getSelectedIndex () < 0)
@@ -391,7 +391,7 @@ public class JDialogSMDLibraryFunctionCall extends javax.swing.JDialog implement
         for (Object inner1: availAttr)
             l[i++] = inner1;
 
-        DefaultComboBoxModel model = new DefaultComboBoxModel (l);
+        DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<>(l);
         this.returnAttributesComboBox.setModel (model);
 
         if (this.listReturnAttributes.getSelectedIndex () < 0)
@@ -532,18 +532,22 @@ public class JDialogSMDLibraryFunctionCall extends javax.swing.JDialog implement
     }
 
     public void valueChanged (ListSelectionEvent e) {
-        JList<AttrSigWrapper> src = (JList<AttrSigWrapper>) e.getSource ();
+        if (!(e.getSource() instanceof JList))
+            return;
+
+        JList src = (JList) e.getSource ();
         if (src.getSelectedIndex () < 0)
             src.setSelectedIndex (0);
 
-        Object o = src.getSelectedValue ().inner1;
-        Object o2 = src.getSelectedValue ().inner2;
-
-        if (src == this.listParameters)
-            this.fillParametersComboBox ((TAttribute) o);
-        else if (src == this.listSignals)
-            this.fillSignalsComboBox ((AvatarSignal) o);
-        else
-            this.fillReturnAttributesComboBox ((TAttribute) o);
+        Object o = src.getSelectedValue ();
+        if (o instanceof AttrSigWrapper) {
+            o = ((AttrSigWrapper) o).inner1;
+            if (src == this.listParameters)
+                this.fillParametersComboBox ((TAttribute) o);
+            else if (src == this.listSignals)
+                this.fillSignalsComboBox ((AvatarSignal) o);
+            else
+                this.fillReturnAttributesComboBox ((TAttribute) o);
+        }
     }
 }

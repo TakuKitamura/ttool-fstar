@@ -71,11 +71,8 @@ public class AvatarMADToOthersConnectingPoint extends  TGConnectingPointWidthHei
             return true;
         }
 
-	if (type == TGComponentManager.AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR) {
-            return true;
-        }
-		
-        return false;
+        return type == TGComponentManager.AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR;
+
     }
 	
 

@@ -86,6 +86,6 @@ public class GraphTree implements GenericTree {
     	if (child instanceof String) {
     		return 0;
     	}
-       return  mgui.getRGs().indexOf((RG)child);
+       return  mgui.getRGs().indexOf(child);
     }
 }

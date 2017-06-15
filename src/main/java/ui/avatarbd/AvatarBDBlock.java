@@ -304,7 +304,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         // Draw separator
         graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
 
-        if (! ((AvatarBDPanel) this.tdp).areAttributesVisible ())
+        if (! this.tdp.areAttributesVisible ())
             return;
 
         // Set font size
@@ -627,7 +627,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         JDialogAvatarBlock jdab = new JDialogAvatarBlock(this.myAttributes, this.myMethods, this.mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab, globalCode, true, mainCode);
         setJDialogOptions(jdab);
 //        jdab.setSize(650, 575);
-        GraphicLib.centerOnParent(jdab, 650, 575);
+        GraphicLib.centerOnParent(jdab, 750, 775);
         jdab.setVisible(true); // blocked until dialog has been closed
         //makeValue();
         //if (oldValue.equals(value)) {
@@ -671,11 +671,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        if (tgc instanceof AvatarBDBlock || tgc instanceof AvatarBDLibraryFunction) {
-            return true;
-        }
+        return tgc instanceof AvatarBDBlock || tgc instanceof AvatarBDLibraryFunction;
 
-        return false;
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -711,13 +708,13 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         if (tgc instanceof AvatarBDBlock) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //System.out.println("cdRect comp swallow");
-            ((AvatarBDBlock)tgc).resizeWithFather();
+            tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
         }
 
         else if (tgc instanceof AvatarBDLibraryFunction)
-            ((AvatarBDLibraryFunction) tgc).resizeWithFather ();
+            tgc.resizeWithFather ();
 
         // else unknown*/
 
@@ -993,10 +990,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarBDBlock) {
-                ((AvatarBDBlock)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
             else if (tgcomponent[i] instanceof AvatarBDLibraryFunction) {
-                ((AvatarBDLibraryFunction)tgcomponent[i]).resizeWithFather();
+                tgcomponent[i].resizeWithFather();
             }
         }
 

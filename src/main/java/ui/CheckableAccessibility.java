@@ -52,8 +52,8 @@ public interface CheckableAccessibility  {
 	//public static final int NON_REACHABLE;
 	
 	
-    public void setCheckableAccessibility(boolean b); 
-	public boolean getCheckableAccessibility();
+    void setCheckableAccessibility(boolean b);
+	boolean getCheckableAccessibility();
 	
 	//public void setReachability();
 }

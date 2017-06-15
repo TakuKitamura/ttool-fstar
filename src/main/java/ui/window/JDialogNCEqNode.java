@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogNCEqNode
- * Dialog for managing NC equipments properties
- * Creation: 20/10/2009
- * @version 1.0 20/10/2009
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -53,11 +45,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class JDialogNCEqNode
+ * Dialog for managing NC equipments properties
+ * Creation: 20/10/2009
+ * @version 1.0 20/10/2009
+ * @author Ludovic APVRILLE
+ */
 public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListener {
-    
-    private JPanel panel1;
-    private Frame frame;
-    
+
     private String eqName;
     private int schedulingPolicy;
 	private int type;
@@ -67,18 +63,13 @@ public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListen
     
     // Panel1
     private JTextField eqNameText;
-	private JComboBox schedulingPolicyBox;
-	private JComboBox typeBox;
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+	private JComboBox<String> schedulingPolicyBox;
+	private JComboBox<String> typeBox;
+
     /** Creates new form  */
     public JDialogNCEqNode(Frame _f, String _title, String _eqName, int _schedulingPolicy, int _type) {
         super(_f, _title, true);
-        frame = _f;
-        
+
         eqName = _eqName;
         schedulingPolicy = _schedulingPolicy;
 		type = _type;
@@ -103,8 +94,8 @@ public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListen
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+        JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and capacity "));
         panel1.setPreferredSize(new Dimension(300, 200));
@@ -132,7 +123,7 @@ public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListen
         c1.gridwidth = 1;
         panel1.add(new JLabel("Scheduling policy:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        schedulingPolicyBox = new JComboBox();
+        schedulingPolicyBox = new JComboBox<>();
 		schedulingPolicyBox.addItem("First Come First Served");
 		schedulingPolicyBox.addItem("Static Priority");
 		schedulingPolicyBox.setSelectedIndex(schedulingPolicy);
@@ -141,7 +132,7 @@ public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListen
 		c1.gridwidth = 1;
         panel1.add(new JLabel("Type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeBox = new JComboBox();
+        typeBox = new JComboBox<>();
 		typeBox.addItem("Standard");
 		typeBox.addItem("Client/server (not supported yet)");
 		typeBox.setSelectedIndex(type);
@@ -158,11 +149,11 @@ public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListen
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
@@ -189,7 +180,7 @@ public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListen
     }
     
 	public boolean hasBeenCancelled() {
-		return (data == false);
+		return (!data);
 	}
 	
     public boolean hasNewData() {

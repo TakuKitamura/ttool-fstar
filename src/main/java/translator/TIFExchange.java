@@ -177,13 +177,13 @@ public class TIFExchange {
 		
 		// Params
 		for(i=0; i<t.paramNb(); i++) {
-			p = (Param)(t.getParamList().get(i));
+			p = t.getParamList().get(i);
 			sb.append(saveParamInXMLTIF(p));
 		}
 		
 		// Gates
 		for(i=0; i<t.gateNb(); i++) {
-			g = (Gate)(t.getGateList().get(i));
+			g = t.getGateList().get(i);
 			sb.append(saveGateInXMLTIF(g));
 		}
 		
@@ -249,8 +249,8 @@ public class TIFExchange {
 		
 		if (r.hasGate()) {
 			for(i=0; i<Math.min(r.gatesOfT1.size(), r.gatesOfT1.size()); i++) {
-				sb.append("<gates name1=\"" + ((Gate)(r.gatesOfT1.get(i))).getName() +"\" ");
-				sb.append("name2=\"" + ((Gate)(r.gatesOfT2.get(i))).getName() +"\" />" + XML_TIF_NL);
+				sb.append("<gates name1=\"" + r.gatesOfT1.get(i).getName() +"\" ");
+				sb.append("name2=\"" + r.gatesOfT2.get(i).getName() +"\" />" + XML_TIF_NL);
 			}
 		}
 	
@@ -372,10 +372,7 @@ public class TIFExchange {
 						name = elt.getAttribute("data");
 					} else if (elt.getTagName().compareTo("active") == 0) { 
 						tmp = elt.getAttribute("data");
-						active = false;
-						if (tmp.compareTo("true") == 0) {
-							active = true;
-						} 
+                        active = tmp.compareTo("true") == 0;
 					} else if (elt.getTagName().compareTo("type") == 0) { 
 						classname = elt.getAttribute("data");
 						
@@ -399,12 +396,8 @@ public class TIFExchange {
 						gdestportjava = elt.getAttribute("destportjava");
 						gdesthostjava = elt.getAttribute("desthostjava");
 						glocalhostjava = elt.getAttribute("localhostjava");
-						
-						if (ginternal.compareTo("true") == 0) {
-							gbinternal = true;
-						} else {
-							gbinternal = false;
-						}
+
+                        gbinternal = ginternal.compareTo("true") == 0;
 						
 						gitype = Integer.decode(gtype).intValue();
 						g = new Gate(gname, gitype, gbinternal);

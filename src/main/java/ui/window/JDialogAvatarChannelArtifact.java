@@ -69,7 +69,7 @@ public class JDialogAvatarChannelArtifact extends javax.swing.JDialog implements
     private ADDChannelArtifact artifact;
 
     //protected JTextField taskName;
-    protected JComboBox referenceDiagram;
+    protected JComboBox<String> referenceDiagram;
 
     // Main Panel
     private JButton closeButton;
@@ -124,7 +124,7 @@ public class JDialogAvatarChannelArtifact extends javax.swing.JDialog implements
         } else {
             index = indexOf(list, artifact.getValue());
         }
-        referenceDiagram = new JComboBox(list);
+        referenceDiagram = new JComboBox<>(list);
         referenceDiagram.setSelectedIndex(index);
         //referenceTaskName.setEditable(true);
         //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));

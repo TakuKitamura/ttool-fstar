@@ -63,8 +63,8 @@ public class Relation {
     private String name;
     public TClass t1;
     public TClass t2;
-    public Vector gatesOfT1;
-    public Vector gatesOfT2;
+    public Vector<Gate> gatesOfT1;
+    public Vector<Gate> gatesOfT2;
     public boolean navigation;
     
     public Relation(int type, TClass t1, TClass t2, boolean navigation) {
@@ -93,8 +93,8 @@ public class Relation {
             default:
                 name = "Unknown";
         }
-        gatesOfT1 = new Vector();
-        gatesOfT2 = new Vector();
+        gatesOfT1 = new Vector<>();
+        gatesOfT2 = new Vector<>();
     }
     
     public static boolean hasNavigation(int type) {
@@ -185,12 +185,12 @@ public class Relation {
                 index = gatesOfT1.indexOf(g);
                 if (index == -1)
                     return null;
-                return (Gate)(gatesOfT2.elementAt(index));
+                return gatesOfT2.elementAt(index);
             } else {
                 index = gatesOfT2.indexOf(g);
                 if (index == -1)
                     return null;
-                return (Gate)(gatesOfT1.elementAt(index));
+                return gatesOfT1.elementAt(index);
             }
         }
         

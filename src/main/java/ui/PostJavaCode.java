@@ -48,5 +48,5 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui;
 
 public interface PostJavaCode  {
-    public void setPostJavaCode(String code);
+    void setPostJavaCode(String code);
 }

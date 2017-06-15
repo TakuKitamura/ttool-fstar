@@ -74,11 +74,8 @@ public class SysmlsecMethodologyReferenceToAttack extends SysmlsecMethodologyDia
     }
 
     public boolean isAValidPanelType(TURTLEPanel panel) {
-        if (panel instanceof AttackTreePanel) {
-            return true;
-        }
+        return panel instanceof AttackTreePanel;
 
-        return false;
     }
 
     public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {

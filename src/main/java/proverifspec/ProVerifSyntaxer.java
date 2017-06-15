@@ -76,7 +76,7 @@ public abstract class ProVerifSyntaxer {
             this.translate (decl, _alinea);
 
         this.fullSpec += "\n\n";
-        this.fullSpec += this.printAlinea (_alinea);
+        this.fullSpec += printAlinea (_alinea);
         this.fullSpec += "process";
         this.translate (_node.mainProcess.next, _alinea+1);
     }
@@ -86,7 +86,7 @@ public abstract class ProVerifSyntaxer {
             return;
 
         this.fullSpec += "\n\n";
-        this.fullSpec += this.printAlinea (_alinea);
+        this.fullSpec += printAlinea (_alinea);
         this.fullSpec += "(* ";
 
         boolean first = true;
@@ -95,7 +95,7 @@ public abstract class ProVerifSyntaxer {
                 first = false;
             else {
                 this.fullSpec += "\n";
-                this.fullSpec += this.printAlinea (_alinea);
+                this.fullSpec += printAlinea (_alinea);
                 this.fullSpec += " * ";
             }
             this.fullSpec += l;
@@ -106,17 +106,17 @@ public abstract class ProVerifSyntaxer {
 
     protected void translateProperty (ProVerifProperty _node, int _alinea) {
         this.fullSpec += "\n";
-        this.fullSpec += this.printAlinea (_alinea);
+        this.fullSpec += printAlinea (_alinea);
         this.fullSpec += "set " + _node.prop + ".";
     }
 
     protected void translateSecrecyAssum (ProVerifSecrecyAssum _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "not " + _node.name + ".";
     }
 
     protected void translateProcRaw (ProVerifProcRaw _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += _node.raw;
         if (_node.next != null) {
             if (_node.nextOptional)
@@ -126,7 +126,7 @@ public abstract class ProVerifSyntaxer {
     }
 
     protected void translateProcITE (ProVerifProcITE _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += "if " + _node.cond + " then";
         if (_node.next != null) {
             if (_node.elseInstr.next != null)
@@ -138,14 +138,14 @@ public abstract class ProVerifSyntaxer {
         else
             this.fullSpec += " 0";
         if (_node.elseInstr.next != null) {
-            this.fullSpec += "\n" + this.printAlinea (_alinea);
+            this.fullSpec += "\n" + printAlinea (_alinea);
             this.fullSpec += "else";
             this.translate (_node.elseInstr.next, _alinea+1);
         }
     }
 
     protected void translateProcRawGlobing (ProVerifProcRawGlobing _node, int _alinea) {
-        this.fullSpec += "\n" + this.printAlinea (_alinea);
+        this.fullSpec += "\n" + printAlinea (_alinea);
         this.fullSpec += _node.before;
         if (_node.intraInstr.next != null)
             this.translate (_node.intraInstr.next, _alinea+1);
@@ -163,20 +163,20 @@ public abstract class ProVerifSyntaxer {
         if (_node.instrs.size () == 1)
             this.translate (_node.instrs.get (0), _alinea);
         else if (_node.instrs.size () > 1) {
-            this.fullSpec += "\n" + this.printAlinea (_alinea);
+            this.fullSpec += "\n" + printAlinea (_alinea);
             this.fullSpec += "((";
             boolean first = true;
             for (ProVerifProcInstr instr: _node.instrs) {
                 if (first)
                     first = false;
                 else {
-                    this.fullSpec += "\n" + this.printAlinea (_alinea);
+                    this.fullSpec += "\n" + printAlinea (_alinea);
                     this.fullSpec += ") | (";
                 }
 
                 this.translate (instr, _alinea+1);
             }
-            this.fullSpec += "\n" + this.printAlinea (_alinea);
+            this.fullSpec += "\n" + printAlinea (_alinea);
             this.fullSpec += "))";
         }
 

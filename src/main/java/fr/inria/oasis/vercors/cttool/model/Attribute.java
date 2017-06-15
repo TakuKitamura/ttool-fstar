@@ -10,28 +10,28 @@ public interface Attribute {
 	
 	
 //	access
-    public final static int PRIVATE = 0;
-    public final static int PROTECTED = 1;
-    public final static int PUBLIC = 2;
+int PRIVATE = 0;
+    int PROTECTED = 1;
+    int PUBLIC = 2;
 	
     
 //  type
-    public final static int NATURAL = 0;
-    public final static int BOOLEAN = 4;
-    public final static int OTHER = 5;
+int NATURAL = 0;
+    int BOOLEAN = 4;
+    int OTHER = 5;
     
     
     
-	public String getName();
-	public void setName(String name);
+	String getName();
+	void setName(String name);
 	
-	public int getAccess();
-	public void setAccess(int access);
+	int getAccess();
+	void setAccess(int access);
 	
-	public int getType();
-	public void setType(int type);
+	int getType();
+	void setType(int type);
 	
-	public String getInitialValue();
-	public void setInitialValue(String o);
+	String getInitialValue();
+	void setInitialValue(String o);
 	
 }

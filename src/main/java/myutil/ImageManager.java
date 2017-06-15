@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
    ludovic.apvrille AT enst.fr
 
@@ -34,14 +34,8 @@
 
    The fact that you are presently reading this means that you have had
    knowledge of the CeCILL license and that you accept its terms.
-
-   /**
-   * Class ImageManager
-   * Creation: 31/05/2017
-   * @version 1.1 31/05/2017
-   * @author Ludovic APVRILLE
-   * @see
    */
+
 
 package myutil;
 
@@ -49,11 +43,17 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 
+/**
+* Class ImageManager
+* Creation: 31/05/2017
+* @version 1.1 31/05/2017
+* @author Ludovic APVRILLE
+*/
 public final class ImageManager {
 
     /**
      * Resizes an image using a Graphics2D object backed by a BufferedImage.
-     * @param srcImg - source image to scale
+     * @param src - source image to scale
      * @param w - desired width
      * @param h - desired height
      * @return - the new resized image

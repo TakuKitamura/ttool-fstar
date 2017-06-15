@@ -1,4 +1,4 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -34,14 +34,6 @@
  *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogAssumption
- * Dialog for managing attributes of assummptions
- * Creation: 04/09/2013
- * @version 1.0 04/09/2013
- * @author Ludovic APVRILLE
- * @see
  */
 
 package ui.window;
@@ -54,38 +46,34 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-//import javax.swing.event.*;
-//import java.util.*;
-
-
+/**
+ * Class JDialogAssumption
+ * Dialog for managing attributes of assummptions
+ * Creation: 04/09/2013
+ * @version 1.0 04/09/2013
+ * @author Ludovic APVRILLE
+ */
 public class JDialogAssumption extends javax.swing.JDialog implements ActionListener  {
     
 	
     private boolean regularClose;
-    
-    private JPanel panel1, panel2;
-    private Frame frame;
+
     private String name;
     private int type, durability, source, status, limitation;
     private String text;
     
     // Panel1
-    private JComboBox typeBox;
+    private JComboBox<String> typeBox;
     private JTextField nameField;
     protected JTextArea jta;
     
     //Panel2
-    private JComboBox durabilityBox, sourceBox, statusBox, limitationBox;
-    
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
+    private JComboBox<String> durabilityBox, sourceBox, statusBox, limitationBox;
+
+
     /** Creates new form  */
     public JDialogAssumption(Frame _frame, String _title, String _name, String _text, int _type, int _durability, int _source, int _status, int _limitation) {
         super(_frame, _title, true);
-        frame = _frame;
 		name = _name;
         text = _text;
         type = _type;
@@ -104,8 +92,6 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
     }
     
     private void initComponents() {
-		int i;
-		
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
@@ -118,15 +104,15 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
+
+        JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
        
         panel1.setBorder(new javax.swing.border.TitledBorder("Main attributes"));
        
         panel1.setPreferredSize(new Dimension(300, 450));
-        
-        panel2 = new JPanel();
+
+        JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Other attributes:"));
         panel2.setPreferredSize(new Dimension(300, 450));
@@ -141,7 +127,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         JLabel label = new JLabel("Type:");
         panel1.add(label, c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeBox = new JComboBox(AvatarMADAssumption.ASSUMPTION_TYPE_STR);
+        typeBox = new JComboBox<>(AvatarMADAssumption.ASSUMPTION_TYPE_STR);
         typeBox.setSelectedIndex(type);
         panel1.add(typeBox, c1);
         
@@ -179,7 +165,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         label = new JLabel("Durability:");
         panel2.add(label, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        durabilityBox = new JComboBox(AvatarMADAssumption.DURABILITY_TYPE);
+        durabilityBox = new JComboBox<>(AvatarMADAssumption.DURABILITY_TYPE);
         durabilityBox.setSelectedIndex(durability);
         panel2.add(durabilityBox, c2);
         
@@ -187,7 +173,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         label = new JLabel("Source:");
         panel2.add(label, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        sourceBox = new JComboBox(AvatarMADAssumption.SOURCE_TYPE);
+        sourceBox = new JComboBox<>(AvatarMADAssumption.SOURCE_TYPE);
         sourceBox.setSelectedIndex(source);
         panel2.add(sourceBox, c2);
         
@@ -195,7 +181,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         label = new JLabel("Status:");
         panel2.add(label, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        statusBox = new JComboBox(AvatarMADAssumption.STATUS_TYPE);
+        statusBox = new JComboBox<>(AvatarMADAssumption.STATUS_TYPE);
         statusBox.setSelectedIndex(status);
         panel2.add(statusBox, c2);
         
@@ -203,7 +189,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         label = new JLabel("Scope:");
         panel2.add(label, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        limitationBox = new JComboBox(AvatarMADAssumption.LIMITATION_TYPE);
+        limitationBox = new JComboBox<>(AvatarMADAssumption.LIMITATION_TYPE);
         limitationBox.setSelectedIndex(limitation);
         panel2.add(limitationBox, c2);
 		
@@ -221,12 +207,12 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }

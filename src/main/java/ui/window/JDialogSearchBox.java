@@ -812,16 +812,14 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                         } catch (MalformedConfigurationException e) {
                             e.printStackTrace();
                         }
-                    } else if (i == joptionpane.CLOSED_OPTION) {
+                    } else if (i == JOptionPane.CLOSED_OPTION) {
                     }
                 }
 
                 public boolean isAddressDBFormatted() {
-                    if (jTextaddressDB.getText().contains(":")
-                        && jTextaddressDB.getText().split(":").length == 2
-                        && isNum(jTextaddressDB.getText().split(":")[1]))
-                        return true;
-                    return false;
+                    return jTextaddressDB.getText().contains(":")
+                            && jTextaddressDB.getText().split(":").length == 2
+                            && isNum(jTextaddressDB.getText().split(":")[1]);
                 }
             }
 
@@ -846,7 +844,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                                 @Override
                                 public void run() {
                                     doHistogram();
-                                    ;
                                 }
                             });
                         t.start();
@@ -898,7 +895,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     /**
      *
      * @param msg
-     * @return
      */
     public Message sendMessage(Message msg) {
         Client cl = new Client();
@@ -1464,7 +1460,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      *
-     * @param input: a string without space and words are seperated by uper character.
+     * @param input a string without space and words are seperated by uper character.
      * @return a splited, then concaternated with space.
      */
     public String splitAndConcat(String input){
@@ -1494,7 +1490,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     /**
      * Check a string if it contains only number.
      * @param str
-     * @return
      */
     public boolean isNum(String str){
         try{
@@ -1588,7 +1583,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     /**
      * Check the printable character.
      * @param c
-     * @return
      */
     public boolean isPrintableChar( char c ) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of( c );
@@ -1601,7 +1595,6 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     /**
      * Check the printable string
      * @param s
-     * @return
      */
     public boolean isPrintableString(String s){
         if (s==null)

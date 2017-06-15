@@ -851,7 +851,7 @@ public class DSEMappingSimulationResults  {
 		// If min = max, no difference between mappings -> no grade to give
 		System.out.println("mind= " + mind + " maxd= " + maxd);
 		if (mind != maxd) {
-			a = 100 / ((double)mind - (double)maxd);b = - a * maxd;
+			a = 100 / (mind - maxd);b = - a * maxd;
 			for(i=0; i<cumulativeGrades.length; i++) {
 				valued = getDoubleResultValueByID(ID, i);
 				y = (int)(a * valued + b);
@@ -1186,7 +1186,7 @@ public class DSEMappingSimulationResults  {
 		} else if (value == maxd) {
 			return "red";
 		} else {
-			int index = (int)((4 * (value - maxd) / ((double)(maxd) - (double)(mind))) + 5);
+			int index = (int)((4 * (value - maxd) / (maxd - mind)) + 5);
 			return getColor(index);
 		}
 	}

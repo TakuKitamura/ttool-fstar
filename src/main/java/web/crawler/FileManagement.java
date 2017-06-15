@@ -81,7 +81,7 @@ public class FileManagement {
      * After extracting the xml file delete the zipped one.
      * @param filename name of the file on the website
      */
-    public static void downloadFile(String filename, String destinationPath) throws MalformedURLException, IOException {
+    public static void downloadFile(String filename, String destinationPath) throws IOException {
 
         File file = new File(destinationPath + filename);
 
@@ -202,7 +202,7 @@ public class FileManagement {
      * @throws IOException
      */
     public static File StoreResultsInFile(ResultSet rs)
-            throws TransformerConfigurationException, TransformerException, IOException {
+            throws TransformerException, IOException {
 
         Document doc = null;
         try {
@@ -298,7 +298,7 @@ public class FileManagement {
             File fXmlFile = new File(destinationPath + filename);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = (Document) dBuilder.parse(fXmlFile);
+            Document doc = dBuilder.parse(fXmlFile);
 
             doc.getDocumentElement().normalize();
 

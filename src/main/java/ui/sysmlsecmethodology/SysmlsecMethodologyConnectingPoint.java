@@ -61,12 +61,9 @@ public class SysmlsecMethodologyConnectingPoint extends  TGConnectingPointWidthH
 
     public boolean isCompatibleWith(int type) {
 
-        if (type == TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR) {
-            return true;
-        }
+        return type == TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR;
 
 
-        return false;
     }
 
 
