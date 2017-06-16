@@ -37,16 +37,20 @@
  */
 
 
+
+
+
+
+
+package translator;
+ 
+
 /**
  * Class ADEmpty
  * Creation: 02/12/2005
  * @version 1.0 02/12/2005
  * @author Ludovic APVRILLE
  */
-
-package translator;
- 
-
 public class ADEmpty extends ADComponent {
 	public String id;
 	

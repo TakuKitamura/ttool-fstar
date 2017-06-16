@@ -37,16 +37,20 @@
  */
 
 
+
+
+
+
+
+package translator;
+ 
+
 /**
  * Class TClassChannelBRBW
  * Creation: 26/10/2006
  * @version 1.0 26/10/2006
  * @author Ludovic APVRILLE
  */
-
-package translator;
- 
-
 public class TClassChannelBRBW extends TClass {
   protected String channelName;
     

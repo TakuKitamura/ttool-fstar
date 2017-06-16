@@ -37,15 +37,19 @@
  */
 
 
+
+
+
+
+
+package translator;
+
 /**
  * Class Param
  * Creation: 11/12/2003
  * @version 1.1 11/12/2003
  * @author Ludovic APVRILLE
  */
-
-package translator;
-
 public class Param {
     private String name;
     private String lotosName;

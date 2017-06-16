@@ -37,12 +37,10 @@
  */
 
 
-/**
-* Class ADChoice
-* Creation: 11/12/2003
-* @version 1.0 11/12/2003
-* @author Ludovic APVRILLE
- */
+
+
+
+
 
 package translator;
 
@@ -50,6 +48,12 @@ import myutil.Conversion;
 
 import java.util.Vector;
 
+/**
+* Class ADChoice
+* Creation: 11/12/2003
+* @version 1.0 11/12/2003
+* @author Ludovic APVRILLE
+ */
 public class ADChoice extends ADComponent implements NonBlockingADComponent {
     protected Vector<String> guard; // String
     

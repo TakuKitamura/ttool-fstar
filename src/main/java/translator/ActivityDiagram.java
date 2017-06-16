@@ -37,12 +37,10 @@
  */
 
 
-/**
- * Class ActivityDiagram
- * Creation: 10/12/2003
- * @version 1.0 10/12/2003
- * @author Ludovic APVRILLE
- */
+
+
+
+
 
 package translator;
 
@@ -52,6 +50,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * Class ActivityDiagram
+ * Creation: 10/12/2003
+ * @version 1.0 10/12/2003
+ * @author Ludovic APVRILLE
+ */
 public class ActivityDiagram extends Vector<ADComponent>{
     
     protected ADStart ads;

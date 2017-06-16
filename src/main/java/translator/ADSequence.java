@@ -37,18 +37,22 @@
  */
 
 
-/**
- * Class ADSequence
- * Creation: 25/06/2004
- * @version 1.0 25/06/2004
- * @author Ludovic APVRILLE
- */
+
+
+
+
 
 package translator;
 
 import java.util.Vector;
 
 
+/**
+ * Class ADSequence
+ * Creation: 25/06/2004
+ * @version 1.0 25/06/2004
+ * @author Ludovic APVRILLE
+ */
 public class ADSequence extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
     private Vector<Integer> sort;
     

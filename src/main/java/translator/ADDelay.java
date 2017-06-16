@@ -37,17 +37,21 @@
  */
 
 
+
+
+
+
+
+package translator;
+
+
+
 /**
  * Class ADDelay
  * Creation: 10/12/2003
  * @version 1.0 10/12/2003
  * @author Ludovic APVRILLE
  */
-
-package translator;
-
-
-
 public class ADDelay extends ADComponent {
     protected String value;
     

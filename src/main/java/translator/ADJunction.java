@@ -37,16 +37,20 @@
  */
 
 
+
+
+
+
+
+package translator;
+
+
 /**
  * Class ADJunction
  * Creation: 10/12/2003
  * @version 1.0 11/12/2003
  * @author Ludovic APVRILLE
  */
-
-package translator;
-
-
 public class ADJunction extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
     Process p; // for RT-LOTOS code generation
     

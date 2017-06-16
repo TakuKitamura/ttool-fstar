@@ -37,17 +37,21 @@
  */
 
 
+
+
+
+
+
+package translator;
+ 
+
+
 /**
  * Class ADTimeCapture
  * Creation: 23/07/2009
  * @version 1.0 23/07/2009
  * @author Ludovic APVRILLE
  */
-
-package translator;
- 
-
-
 public class ADTimeCapture extends ADComponent {
 	protected Param p;
 	Process proc;

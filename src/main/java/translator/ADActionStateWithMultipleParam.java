@@ -37,17 +37,21 @@
  */
 
 
+
+
+
+
+
+package translator;
+
+
+
 /**
  * Class ADActionStateWithMultipleParam
  * Creation: 11/08/2004
  * @version 1.0 11/08/2004
  * @author Ludovic APVRILLE
  */
-
-package translator;
-
-
-
 public class ADActionStateWithMultipleParam extends ADActionState {
     
     public ADActionStateWithMultipleParam() {

@@ -37,17 +37,21 @@
  */
 
 
+
+
+
+
+
+package translator;
+ 
+
+
 /**
  * Class ADActionStateWithParam
  * Creation: 29/12/2003
  * @version 1.0 29/12/2003
  * @author Ludovic APVRILLE
  */
-
-package translator;
- 
-
-
 public class ADActionStateWithParam extends ADActionState {
 	protected Param p;
 	Process proc;

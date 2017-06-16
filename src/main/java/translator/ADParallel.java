@@ -37,12 +37,10 @@
  */
 
 
-/**
- * Class ADParallel
- * Creation: 11/12/2003
- * @version 1.0 11/12/2003
- * @author Ludovic APVRILLE
- */
+
+
+
+
 
 package translator;
 
@@ -50,6 +48,12 @@ import myutil.Conversion;
 
 import java.util.Vector;
 
+/**
+ * Class ADParallel
+ * Creation: 11/12/2003
+ * @version 1.0 11/12/2003
+ * @author Ludovic APVRILLE
+ */
 public class ADParallel extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
     protected String valueGate;
     protected Vector<Gate> synchroGate;

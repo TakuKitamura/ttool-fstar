@@ -37,17 +37,21 @@
  */
 
 
+
+
+
+
+
+package translator;
+
+import java.util.Vector;
+
 /**
  * Class ADComponent
  * Creation: 10/12/2003
  * @version 1.0 10/12/2003
  * @author Ludovic APVRILLE
  */
-
-package translator;
-
-import java.util.Vector;
-
 public abstract class ADComponent implements Cloneable {
     protected boolean selected = false;
     protected int nbNext;

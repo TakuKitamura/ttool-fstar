@@ -37,17 +37,21 @@
  */
 
 
+
+
+
+
+
+package translator;
+
+
+
 /**
  * Class ADTLO
  * Creation: 10/12/2003
  * @version 1.0 10/12/2003
  * @author Ludovic APVRILLE
  */
-
-package translator;
-
-
-
 public class ADTLO extends ADComponent {
     protected String action;
     protected String latency;

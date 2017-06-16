@@ -37,17 +37,21 @@
  */
 
 
+
+
+
+
+
+package translator;
+
+
+
 /**
  * Class TIFTreeNode
  * Creation: 20/02/2008
  * @version 1.0 20/02/2008
  * @author Ludovic APVRILLE
  */
-
-package translator;
-
-
-
 public class TIFTreeNode  {
     
 	public final static int Variable = 0;

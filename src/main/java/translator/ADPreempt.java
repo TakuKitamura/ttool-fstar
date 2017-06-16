@@ -37,18 +37,22 @@
  */
 
 
-/**
- * Class ADPreempt
- * Creation: 25/06/2004
- * @version 1.0 25/06/2004
- * @author Ludovic APVRILLE
- */
+
+
+
+
 
 package translator;
 
 import java.util.Vector;
 
 
+/**
+ * Class ADPreempt
+ * Creation: 25/06/2004
+ * @version 1.0 25/06/2004
+ * @author Ludovic APVRILLE
+ */
 public class ADPreempt extends ADComponent implements NonBlockingADComponent {
     private Vector<Integer> sort;
     

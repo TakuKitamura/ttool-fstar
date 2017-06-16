@@ -37,17 +37,21 @@
  */
 
 
+
+
+
+
+
+package translator;
+
+
+
 /**
  * Class ADTimeInterval
  * Creation: 10/02/2004
  * @version 1.0 10/02/2004
  * @author Ludovic APVRILLE
  */
-
-package translator;
-
-
-
 public class ADTimeInterval extends ADComponent  {
     protected String minValue;
     protected String maxValue;
