@@ -57,7 +57,7 @@ import javax.swing.*;
    * Creation: 02/06/2014
    * @version 1.2 03/06/2015
    * @author Ludovic APVRILLE, Andrea ENRICI
-   * @see TClassDiagramPanel
+   * @see ui.cd.TClassDiagramPanel
  */
 public class TMLCPToolBar extends TToolBar {
 

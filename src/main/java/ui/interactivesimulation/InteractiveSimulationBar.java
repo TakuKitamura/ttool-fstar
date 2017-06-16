@@ -50,7 +50,7 @@ import javax.swing.*;
  * Creation: 26/05/2009
  * @version 1.0 26/05/2009
  * @author Ludovic APVRILLE
- * @see TGComponent
+ * @see ui.TGComponent
  */
 public abstract class InteractiveSimulationBar extends JToolBar {
     protected JFrameInteractiveSimulation jfis;

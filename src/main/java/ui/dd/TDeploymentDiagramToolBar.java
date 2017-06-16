@@ -56,7 +56,7 @@ import javax.swing.*;
  * Creation: 21/08/2003
  * @version 1.0 21/08/2003
  * @author Ludovic APVRILLE
- * @see TClassDiagramPanel
+ * @see ui.cd.TClassDiagramPanel
  */
 public class TDeploymentDiagramToolBar extends TToolBar {
     

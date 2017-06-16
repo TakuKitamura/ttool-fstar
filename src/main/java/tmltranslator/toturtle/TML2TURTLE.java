@@ -57,7 +57,6 @@ import java.util.Vector;
  * Creation: 01/12/2005
  * @version 1.0 01/12/2005
  * @author Ludovic APVRILLE
- * @see
  */
 public class TML2TURTLE {
 

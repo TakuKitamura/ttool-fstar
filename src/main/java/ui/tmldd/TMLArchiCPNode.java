@@ -66,7 +66,6 @@ import java.util.Vector;
    * Creation: 20/02/2013
    * @version 1.0 20/02/2013
    * @author Ludovic APVRILLE
-   * @see
    */
 public class TMLArchiCPNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiCPInterface {
     private int textY1 = 15;

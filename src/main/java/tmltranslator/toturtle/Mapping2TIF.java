@@ -58,7 +58,6 @@ import java.util.List;
  * Creation: 14/01/2008
  * @version 1.0 14/01/2008
  * @author Ludovic APVRILLE
- * @see
  */
 public class Mapping2TIF {
 

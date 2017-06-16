@@ -50,7 +50,7 @@ import javax.swing.*;
  * Creation: 21/01/2011
  * @version 1.0 21/01/2011
  * @author Ludovic APVRILLE
- * @see TGComponent
+ * @see ui.TGComponent
  */
 public abstract class AvatarInteractiveSimulationBar extends JToolBar {
     protected JFrameAvatarInteractiveSimulation jfais;

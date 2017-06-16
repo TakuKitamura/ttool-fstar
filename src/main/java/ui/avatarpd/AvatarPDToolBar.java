@@ -57,7 +57,7 @@ import javax.swing.*;
  * Creation: 22/04/2010
  * @version 1.0 22/04/2010
  * @author Ludovic APVRILLE
- * @see TClassDiagramPanel
+ * @see ui.cd.TClassDiagramPanel
  */
 public class AvatarPDToolBar extends TToolBar {
     

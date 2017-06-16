@@ -4,7 +4,7 @@ PDFLATEX	= pdflatex $(LATEXFLAGS)
 BIBTEX		= bibtex
 FIG2DEV		= fig2dev
 RUBBER		?= $(shell which rubber 2> /dev/null)
-RUBBERFLAGS	= --pdf --short --warn refs --warn misc
+RUBBERFLAGS	= --pdf --short --warn refs --warn misc -q
 
 # Files and directories
 FIGDIR		= figures

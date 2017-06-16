@@ -51,7 +51,6 @@ import java.util.HashSet;
  * Creation: 11/10/2016
  * @version 1.0 11/10/2016
  * @author Andrea ENRICI
- * @see
  */
 public class CVariable {
     

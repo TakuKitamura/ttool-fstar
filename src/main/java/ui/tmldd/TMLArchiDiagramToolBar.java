@@ -57,7 +57,7 @@ import java.awt.event.ActionListener;
    * Creation: 18/09/2007
    * @version 1.0 18/09/2007
    * @author Ludovic APVRILLE
-   * @see TClassDiagramPanel
+   * @see ui.cd.TClassDiagramPanel
  */
 public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener {
 

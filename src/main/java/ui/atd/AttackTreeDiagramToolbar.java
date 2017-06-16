@@ -56,7 +56,7 @@ import javax.swing.*;
    * Creation: 03/11/2009
    * @version 1.0 03/11/2009
    * @author Ludovic APVRILLE
-   * @see TClassDiagramPanel
+   * @see ui.cd.TClassDiagramPanel
  */
 public class AttackTreeDiagramToolbar extends TToolBar {
 

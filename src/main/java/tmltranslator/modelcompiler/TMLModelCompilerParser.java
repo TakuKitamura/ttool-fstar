@@ -56,7 +56,6 @@ import java.util.Set;
  * Parse models before compiling them into control code
  * Creation: 20/03/2015
  * @version 1.0 20/03/2015
- * @modified 09/09/2016
  * @author Andrea ENRICI
  */
 public class TMLModelCompilerParser {

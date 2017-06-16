@@ -56,7 +56,7 @@ import javax.swing.*;
  * Creation: 16/05/2006
  * @version 1.0 16/05/2006
  * @author Ludovic APVRILLE
- * @see TClassDiagramPanel
+ * @see ui.cd.TClassDiagramPanel
  */
 public class RequirementDiagramToolBar extends TToolBar {
     

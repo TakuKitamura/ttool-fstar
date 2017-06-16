@@ -65,7 +65,7 @@ import static web.crawler.FileManagement.StoreResultsInFile;
    * Creation: 2015
    * @version 2.0 25/03/2016
    * @author  Marie FORRAT, Angeliki AKTYPI, Ludovic APVRILLE
-   * @see MainGUI
+   * @see ui.MainGUI
  */
 public class DatabaseQuery {
     

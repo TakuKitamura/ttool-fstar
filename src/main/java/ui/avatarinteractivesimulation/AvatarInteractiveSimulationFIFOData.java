@@ -50,7 +50,7 @@ import avatartranslator.AvatarRelation;
  * Creation: 06/12/2013
  * @version 1.0 06/12/2013
  * @author Ludovic APVRILLE
- * @see TGComponent
+ * @see ui.TGComponent
  */
 public  class AvatarInteractiveSimulationFIFOData  {
    public AvatarRelation fifo;

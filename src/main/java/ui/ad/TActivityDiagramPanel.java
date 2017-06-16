@@ -54,7 +54,6 @@ import java.util.Vector;
  * Creation: 12/12/2003
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
- * @see
  */
 public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiagramPanelInterface {
     

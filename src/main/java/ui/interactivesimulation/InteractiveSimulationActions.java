@@ -55,7 +55,7 @@ import java.awt.event.ActionListener;
    * Creation: 26/05/2009
    * @version 1.0 26/05/2009
    * @author Ludovic APVRILLE
-   * @see TGComponent
+   * @see ui.TGComponent
  */
 public class InteractiveSimulationActions extends AbstractAction {
     // Actions

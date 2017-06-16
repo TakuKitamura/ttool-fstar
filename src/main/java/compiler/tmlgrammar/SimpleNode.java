@@ -53,7 +53,6 @@ import java.util.ArrayList;
  * Creation: 04/06/2008
  * @version 1.0 04/06/2008
  * @author Ludovic APVRILLE
- * @see
  */
 public class SimpleNode implements Node {
 	protected Node parent;

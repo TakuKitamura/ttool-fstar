@@ -47,7 +47,6 @@ package tmltranslator.modelcompiler;
    * Class TMLModelCompilerMakefile
    * Creation: 09/02/2014
    * @version 1.0 09/02/2014
-   * @modified 09/09/2016
    * @author Andrea ENRICI
  */
 public class TMLModelCompilerMakefile	{

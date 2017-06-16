@@ -75,7 +75,6 @@ import java.util.List;
 * Creation: 28/06/2011
 * @version 1.0 28/06/2011
 * @author Ludovic APVRILLE
-* @see
 */
 public class DSEConfiguration implements Runnable  {
 	

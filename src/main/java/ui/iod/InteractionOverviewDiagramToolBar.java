@@ -56,7 +56,7 @@ import javax.swing.*;
  * Creation: 29/09/2004
  * @version 1.0 29/09/2004
  * @author Ludovic APVRILLE
- * @see TClassDiagramPanel
+ * @see ui.cd.TClassDiagramPanel
  */
 public class InteractionOverviewDiagramToolBar extends TToolBar {
     

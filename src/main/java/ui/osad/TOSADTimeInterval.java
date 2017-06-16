@@ -54,7 +54,6 @@ import java.awt.*;
  * Creation: 06/10/2006
  * @version 1.0 06/10/2006
  * @author Ludovic APVRILLE
- * @see
  */
 public class TOSADTimeInterval extends TGCWithInternalComponent {
     private int lineLength = 5;

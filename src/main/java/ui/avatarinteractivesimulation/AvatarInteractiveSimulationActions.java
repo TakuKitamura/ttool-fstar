@@ -55,7 +55,7 @@ import java.awt.event.ActionListener;
    * Creation: 21/01/2011
    * @version 1.0 21/01/2011
    * @author Ludovic APVRILLE
-   * @see TGComponent
+   * @see ui.TGComponent
  */
 public class AvatarInteractiveSimulationActions extends AbstractAction {
     // Actions
