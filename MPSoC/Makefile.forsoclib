@@ -16,6 +16,9 @@ export PATH
 updateruntime:
 	cp mutekh/libmwmr/*.c mutekh/examples/avatar
 	cp mutekh/libmwmr/include/mwmr/mwmr.h mutekh/examples/avatar
+	cp src/*.c ~/Prog/mutekh/libavatar/
+	cp src/*.h ~/Prog/mutekh/libavatar/include/  
+
 	
 updategeneratedcode:
 	cp src/defs.h mutekh/examples/avatar

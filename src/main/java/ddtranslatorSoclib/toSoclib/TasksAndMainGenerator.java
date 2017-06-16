@@ -1,27 +1,26 @@
-
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- *
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ * 
  * ludovic.apvrille AT enst.fr
- *
+ * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- *
+ * 
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- *
+ * 
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- *
+ * 
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -32,18 +31,13 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- *
+ * 
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class AVATAR2CSOCLIB
- * Creation: 01/07/2014
- * @version 1.0 01/07/2014 
- * @version 2.0 07/07/2015
- * @author Ludovic APVRILLE, Raja GATGOUT, Julien HENON, Daniela GENIUS
- * @see
  */
+
+
+
 
 package ddtranslatorSoclib.toSoclib;
 
@@ -62,6 +56,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * Class AVATAR2CSOCLIB
+ * Creation: 01/07/2014
+ * @version 1.0 01/07/2014 
+ * @version 2.0 07/07/2015
+ * @author Ludovic APVRILLE, Raja GATGOUT, Julien HENON, Daniela GENIUS
+ */
 public class TasksAndMainGenerator {
 
     private final static int USEC = 0;
@@ -201,7 +202,7 @@ public class TasksAndMainGenerator {
     	mainFile.appendToMainCode("pthread_attr_t *attr_t = malloc(sizeof(pthread_attr_t));" +CR);
     	mainFile.appendToMainCode("pthread_attr_init(attr_t);" + CR );
     	mainFile.appendToMainCode("pthread_mutex_init(&__mainMutex, NULL);" +CR2);       
-	 	    
+	mainFile.appendToMainCode("int sizeParams;" +CR2);   //DG 13.06.
     }
   
     public void makeSynchronousChannels() {
@@ -212,10 +213,9 @@ public class TasksAndMainGenerator {
         mainFile.appendToMainCode("/* Synchronous channels */" + CR);
  k=0;
         for(AvatarRelation ar: avspec.getRelations()) {
-	    // k=0; DG 6.6.
+	  
 	if (!ar.isAsynchronous()) {
-	    //k=0;
-	    //k= ar.nbOfSignals()-1;    //DG 2.6. 
+	   
 	   		    
 	    for(i=0; i<ar.nbOfSignals() ; i++) {
 		ar.setId(i);
@@ -231,14 +231,44 @@ public class TasksAndMainGenerator {
 	
 
 	AvatarSignal sig = ar.getSignal1(i);
-        int nbParams= sig.getNbParams();	
+        int nbParams= sig.getNbParams();
+	// int nbOfMaxParams = _block.getMaxNbOfParams();
+	//DG 13.06. variant dans le code C
+
+	//ainsi on declare les attributs au debut d'une tache:
+
+	//s += makeAttributesDeclaration(_block, _taskFile);
+	//fonction dans tasksAndMainGenerator
+
+	/*mainFile.appendToMainCode("sizeParams = sizeof(" );
+	int cpt = 0;
 	
+	for(AvatarAttribute attribute: parameters) {
+	    String param_type = getCTypeOf(attribute);//Attention sizeof(bool)=sizeof(int)
+	    mainFile.appendToMainCode(attribute.getName() + "sizeof("+ret);
+	}
+	mainFile.appendToMainCode(");"+ CR);*/
+	int sizeParams = 0;
+	// DG 13.06. variant calcule mais risque que cela ne cqpte pqs les data types
+	//for(AvatarAttribute attribute: parameters) {
+	//    sizeParams+=4;//soit int soit bool?
+	//}
+
+	//ici variant calcule
 	if (nbParams>0)
 	    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
-	else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
+	    //mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ sizeParams +";" + CR);
+	//mainFile.appendToMainCode(getChannelName(ar, i) + ".width = sizeParams;" + CR);
 
-         mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 100;" + CR);
-	//mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+((nbParams*4)+4)+";" + CR);
+	//int sizeParams= sig.getCumulSizeParams();
+	//DG 13.06. Attention paramaters have not all size 4!!
+	//if (nbParams>0)
+	    //mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4) +";" + CR);
+	    //mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ sizeParams +";" + CR);
+	//else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
+	else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);//DG 13.06.
+	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 100;" + CR);
+	
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = " +getChannelName(ar, i)+".depth;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR2);
@@ -247,31 +277,31 @@ public class TasksAndMainGenerator {
 	mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);		
 	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
 	
-if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
+	if(sig.isIn()){
 	    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_send = 0;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_receive = 1;" + CR);
-	    }
+	}
 
 	if(sig.isOut()){
 	    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_send = 1;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_receive = 0;" + CR);
-	    }
+	}
 
 	/* init because mutekh initializer does not work for this */		
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
 
-			mainFile.appendToMainCode(getChannelName(ar, i)+".status->lock=0;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".status->wptr =0;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i)+".status->lock=0;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
+	mainFile.appendToMainCode(getChannelName(ar, i) + ".status->wptr =0;" + CR);
 				     		
-		mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+k+";" + CR); 
+	mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+k+";" + CR); 
 	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+k+";" + CR); 		
 	       
 	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);
 		
 	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);
 	k++;			
-	//k--;//DG 24.05.//DG 2.6.	    
-	    }
+	
+	}
 	}
 	}
     }
@@ -284,12 +314,11 @@ if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
 	    mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
             int j=0;
 	    for(AvatarRelation ar: avspec.getRelations()) {
-		//ar.setId(j); j++;//DG
-   //DG 24.05.2017 pas reinitialiser k car 0 to n syncchannels n+1 to m asyncchannels
+	
 		if (ar.isAsynchronous()) {
 		    for(int i=0; i<ar.nbOfSignals() ; i++) {
 
-			ar.setId(i);//DG 15.05.2017
+			ar.setId(i);
 			mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i) + ";" + CR);
 
 			mainFile.appendToBeforeMainCode("asyncchannel __" +getChannelName(ar, i) + ";" + CR);
@@ -299,15 +328,26 @@ if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
 
-			//DG 27.03. width = nbParams
-			//	mainFile.appendToMainCode(getChannelName(ar, i) + ".width = 1;" + CR);
+		
 			AvatarSignal sig = ar.getSignal1(0);
 			int nbParams= sig.getNbParams();
+			//int sizeParams= sig.getCumulSizeParams();
+			//DG 13.06. Attention paramaters have not all size 4!!
+
+			//mainFile.appendToMainCode("sizeParams = sizeof(" );
+			//int cpt = 0;
+			//for(AvatarAttribute attribute: parameters) {
+			//    mainFile.appendToMainCode(attribute.getName() + "sizeof(");
+			//}
+			//mainFile.appendToMainCode(");"+ CR);
+		
 			if (nbParams>0)
 			    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
+			    //mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ sizeParams +";" + CR);
+			    //mainFile.appendToMainCode(getChannelName(ar, i) + ".width = sizeParams;" + CR);
 			else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
 
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+";" + CR);//DG 27.03.
+			mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+";" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = "+getChannelName(ar, i)+".depth;" + CR); 
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR);
@@ -323,23 +363,17 @@ if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
 			
 			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
 				
-	/* force init because mutekh initializer does not work her */		
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
-
-	mainFile.appendToMainCode(getChannelName(ar, i) +".status->lock=0;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i)+".status->wptr=0;" + CR);
-	    	    
-	
-	mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+k+";" + CR); 
-	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+k+";" + CR); 		
-	       
-	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);
-		
-	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);
-	//k--;	    
-	k++;//DG 2.6.
+			/* force init because mutekh initializer does not work her */		
+			mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
+			mainFile.appendToMainCode(getChannelName(ar, i) +".status->lock=0;" + CR);
+			mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
+			mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
+			mainFile.appendToMainCode(getChannelName(ar, i)+".status->wptr=0;" + CR);	    	    	
+			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+k+";" + CR); 
+			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+k+";" + CR); 			       
+			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);		
+			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);	 
+			k++;
 		    }
 		}
 	    }
@@ -942,7 +976,7 @@ if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
 
 		    } else {
 
-			ret += "debug2Msg(__myname, \"-> (=====) test "+getChannelName(ar, as) + "\");" + CR;//DG 18.05.
+			ret += "debug2Msg(__myname, \"-> (=====) test "+getChannelName(ar, as) + "\");" + CR;
 
 			ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
@@ -1256,11 +1290,29 @@ if(sig.isIn()){//DG 19.05. sig est deja declare (sig1 du block :-)
                     //ret += "sprintf(__value, \"%d\", " + var + ");" + CR;
                     ret += traceVariableModification(_block.getName(), var, type);
                 }
-
             }
         }
 
         return ret;
     }
+  public static String getDeployInfoRam() {
+        int i=0;
+    int j;
+    String deployinfo_ram = CR;
+    try{
+    for(AvatarRelation ar: avspec.getRelations()){
+        for (j=0; j<ar.nbOfSignals();j++){
+        deployinfo_ram += "DEPLOY_RAM" + i + "_NAME (RWAL) : ORIGIN = DEPLOY_RAM" + i + "_ADDR, LENGTH = DEPLOY_RAM" + i + "_SIZE" + CR;
+        deployinfo_ram += "CACHED_RAM" + i + "_NAME (RWAL) : ORIGIN = CACHED_RAM" + i + "_ADDR, LENGTH = CACHED_RAM" + i + "_SIZE" + CR;
+        i++;
+        }
+    }
+    }catch (Exception e){
+        e.printStackTrace();
+    }
+    return deployinfo_ram;
+    }
+
+
 
 }
