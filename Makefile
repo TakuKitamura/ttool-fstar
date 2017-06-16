@@ -241,15 +241,6 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 #NC
 	@mkdir -p $(TTOOL_TARGET)/nc
 	@cp $(TTOOL_DOC)/README_nc $(TTOOL_TARGET)/nc
-
-#DOC
-	@$(MAKE) -C $(TTOOL_DOC_AVATARCODEGENERATION_DIR) codegeneration_documentation
-	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pdf  $(TTOOL_TARGET)/doc/avatarcodegeneration_documentation.pdf
-	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR) user_guide
-	@cp $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR)/build/user_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_user_guide.pdf
-	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR) installation_guide
-	@cp $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR)/build/installation_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_installation_guide.pdf
-
 # Figures
 	@cp $(TTOOL_FIGURES)/Makefile $(TTOOL_TARGET)/figures
 	@cp $(TTOOL_FIGURES)/mli.mk $(TTOOL_TARGET)/figures
@@ -398,6 +389,13 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@cp $(TTOOL_MPSOC)/generated_src/README $(TTOOL_TARGET)/MPSoC/generated_src/
 	@cp $(TTOOL_MPSOC)/generated_topcell/nbproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
 	@cp $(TTOOL_MPSOC)/generated_topcell/config_noproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
+#DOC
+	@$(MAKE) -C $(TTOOL_DOC_AVATARCODEGENERATION_DIR) codegeneration_documentation
+	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pdf  $(TTOOL_TARGET)/doc/avatarcodegeneration_documentation.pdf
+	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR) user_guide
+	@cp $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR)/build/user_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_user_guide.pdf
+	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR) installation_guide
+	@cp $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR)/build/installation_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_installation_guide.pdf
 # Basic bin
 	@mkdir -p $(TTOOL_TARGET)/bin
 	@cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
@@ -443,6 +441,9 @@ clean:
 	@$(MAKE) -C $(WEBCRAWLER_CLIENT_DIR) -e clean
 	@$(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e clean
 	@$(MAKE) -C $(JTTOOL_DIR) -e clean
+	@$(MAKE) -C $(TTOOL_DOC_AVATARCODEGENERATION_DIR) clean
+	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR) clean
+	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR) clean
 	@rm -rf $(TTOOL_TARGET_RELEASE)
 	@rm -f $(TTOOL_STD_RELEASE)/*.tar
 
