@@ -30,6 +30,7 @@ compilesoclib:
 	cp generated_topcell/top.cc  soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/
 	cp generated_topcell/deployinfo.h  mutekh/arch/soclib/
 	cp generated_topcell/deployinfo_map.h  mutekh/arch/soclib/
+	cp generated_topcell/deployinfo_ram.h  mutekh/arch/soclib/
 	cp generated_topcell/platform_desc  soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/platform_desc
 	cat generated_topcell/config_noproc generated_topcell/nbproc > generated_topcell/config 
 	cp generated_topcell/config  mutekh/examples/avatar/

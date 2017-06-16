@@ -154,8 +154,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 						   String _pathCompileMPSoC, 
 						   String _pathExecuteMPSoC) {
 
-        super(title);
-
+        super(title);;
         f = _f;
         mgui = _mgui;
 
@@ -613,7 +612,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 		    gene.includeUserCode(putUserCode.isSelected());
 		    gene.setTimeUnit(selectedUnit);
 		    gene.generateSoclib(debugmode.isSelected(), tracemode.isSelected());
-		      
+
 		    if ( avddspec == null) {
 			jta.append("Error: No AVATAR Deployment specification\n");
 		    } else {

@@ -1295,24 +1295,62 @@ public class TasksAndMainGenerator {
 
         return ret;
     }
-  public static String getDeployInfoRam() {
+
+    //Ajout CD 16.6
+    //Les deux méthodes suivantes on été déplacé de /toTopCell/Deployinfo.java pour éviter un bug causé par AvatarRelation et AvatarSpecification.
+    //Lors de la première génération de code, une erreur peut être affichée mais la génération de code fonctionne correctement. l'erreur ne s'affiche plus par la suite.
+
+    public static String getDeployInfoRam() {
         int i=0;
-    int j;
-    String deployinfo_ram = CR;
-    try{
-    for(AvatarRelation ar: avspec.getRelations()){
-        for (j=0; j<ar.nbOfSignals();j++){
-        deployinfo_ram += "DEPLOY_RAM" + i + "_NAME (RWAL) : ORIGIN = DEPLOY_RAM" + i + "_ADDR, LENGTH = DEPLOY_RAM" + i + "_SIZE" + CR;
-        deployinfo_ram += "CACHED_RAM" + i + "_NAME (RWAL) : ORIGIN = CACHED_RAM" + i + "_ADDR, LENGTH = CACHED_RAM" + i + "_SIZE" + CR;
-        i++;
-        }
+	int j;
+	String deployinfo_ram = CR;
+	try{
+	    for(AvatarRelation ar: avspec.getRelations()){
+		for (j=0; j<ar.nbOfSignals();j++){
+		    deployinfo_ram += "DEPLOY_RAM" + i + "_NAME (RWAL) : ORIGIN = DEPLOY_RAM" + i + "_ADDR, LENGTH = DEPLOY_RAM" + i + "_SIZE" + CR;
+		    deployinfo_ram += "CACHED_RAM" + i + "_NAME (RWAL) : ORIGIN = CACHED_RAM" + i + "_ADDR, LENGTH = CACHED_RAM" + i + "_SIZE" + CR;
+		    i++;
+		}
     }
-    }catch (Exception e){
-        e.printStackTrace();
-    }
-    return deployinfo_ram;
+	}catch (Exception e){
+	    e.printStackTrace();
+	}
+	return deployinfo_ram;
     }
 
-
+    public static String getDeployInfoMap() {
+	int i=0;       
+        String deployinfo_map = CR;
+	int j;
+	
+	deployinfo_map += "#define MAP_A\\" + CR;
+	try{		
+	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
+		if (!(ram.getChannels().isEmpty())){
+		    for(AvatarRelation ar: avspec.getRelations()){
+			for (j=0;j<ar.nbOfSignals();j++) {
+			    deployinfo_map = deployinfo_map + "\n .channel"+i+" : { \\" + CR;
+			    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;	
+			deployinfo_map = deployinfo_map + "} > uram"+ram.getNo_ram()+"\\"+ CR;	
+			i++;
+			}
+		    }
+		    i=0;
+		    for(AvatarRelation ar: avspec.getRelations()){  //CD 15.06 dynamic to signal number
+			for (j=0;j<ar.nbOfSignals();j++) {
+			    deployinfo_map = deployinfo_map + "\n .lock"+i+" : { \\" + CR;
+			    deployinfo_map = deployinfo_map + "*(section_lock"+i+ ")\\"+ CR;		   
+			deployinfo_map = deployinfo_map + "} > uram0\\"+ CR;//DG 27.06. no ramlocks
+			i++;
+			}
+		    }
+		}	    
+	    }
+	}catch (Exception e){
+	    e.printStackTrace();
+	}
+	return deployinfo_map;	
+	}
+    //fin ajout CD
 
 }
