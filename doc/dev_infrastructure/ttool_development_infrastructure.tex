@@ -19,6 +19,12 @@
 \usepackage[a4paper,bindingoffset=0.2in,headsep=0.5cm,left=1in,right=1in,bottom=3cm,top=2cm,headheight=2cm]{geometry}
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage{color}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
 
 \everymath{\displaystyle}
 \pagestyle{fancy}
@@ -191,20 +197,21 @@ Also, don't forget to insert your name at the top of the file in the authors lis
 The main Makefile can be used to compile the source files of TTool, and to generate the jar libraries in bin/.
 To compile TTool, do as follows, from the top directory of TTool:
 \begin{verbatim}
-$ make all
-\end{verbatim}
-or:
-\begin{verbatim}
-$ make
+$ make ttool
 \end{verbatim}
 
 Other compilation targets can be obtained with:
 \begin{verbatim}
 $ make help
 \end{verbatim}
-In particular, to compile the sources without generating the \textit{jar} files can be done with the \textit{ttool} target:
+or:
+\begin{verbatim}
+$ make
+\end{verbatim}
+In particular, compiling the sources of all subprojects can be done with the
+\textit{all} target:
   \begin{verbatim}
-$ make ttool
+$ make all
 \end{verbatim}
 
 
@@ -458,19 +465,63 @@ triggered from the \textit{Debug As} button. By default, the program execution
 will automatically stop at the first instruction of the program. This behavior
 can be changed by editing the debug launch configuration.
 
+\section{Development with IntelliJ}
 
-\section{Coding Instructions}
-Here are gather all tricks on how TTool source codes are organized, and what function is coded where, and also how to extend TTool, e.g. adding a new diagram.
+TODO
 
-\subsection{General rules}
+\section{Coding Information}
+Here are gathered all tricks on how TTool source codes are organized, and what function is coded where, and also how to extend TTool, e.g. adding a new diagram.
+
+\subsection{Coding Instructions}
+
+\subsubsection{Style instructions}
 
 \begin{itemize}
 \item Indentations should use 4 spaces for each indentation level.
-\item Do ensure your file is correctly indented before committing/pushing it
+\item Opening brackets should be at the end of the line it relates to with one
+    space before the bracket.
+\item There should be 1 space between an \texttt{if}, \texttt{for},
+    \texttt{switch}, etc. and the following opening parentheses, but none
+        between a function name and the following parentheses.
 \end{itemize}
 
+Here is an example code with correct formatting:
 
-\subsection{How to output debug information}
+\begin{lstlisting}[showspaces=true, language=java, commentstyle=\color{pgreen},
+keywordstyle=\color{pblue}, stringstyle=\color{pred}, basicstyle=\ttfamily]
+public class Foo {
+    public int[] X = new int[]{1, 3, 5, 7, 9, 11};
+
+    public void foo(boolean a, int x, int y, int z) {
+        for (int i = 0; i < 5; i++) {
+            try {
+                if (x > 0) {
+                    int someVariable = a ? x : y;
+                    int anotherVariable = a ? x : y;
+                } else {
+                    for (int i = 0; i < 5; i++) doSomething(i);
+                }
+                switch (a) {
+                    case 0:
+                        doCase0();
+                        break;
+                    default:
+                        doDefault();
+                }
+            } catch (Exception e) {
+                processException(e.getMessage(), x + y, z, a);
+            }
+        }
+    }
+}
+\end{lstlisting}
+
+Do ensure your file is correctly indented before committing/pushing it.
+Preferably, configure your code editor so that these guidelines are
+automatically enforced.
+
+
+\subsubsection{How to output debug information}
 Do as follows:
 \begin{lstlisting}
 TraceManager.addDev("blah blah blah");
@@ -486,9 +537,83 @@ System.out.println("blah blah blah");
 \end{lstlisting}
 or similar ways of doing.
 
+\subsubsection{Warnings}
+TTool is compiled with the following Xlint warning flags:
+\begin{itemize}
+    \item unchecked
+    \item deprecation
+    \item cast
+    \item divzero
+    \item empty
+    \item finally
+    \item fallthrough
+\end{itemize}
+Before committing your changes, make sure that your code does not generate any
+warning.
+
+\subsubsection{Documentation}
+Whenever it is possible, add a javadoc comment before any function, class or
+field declaration. This helps future developers to quickly understand the
+purpose of the related code. Note that to be valid, javadoc comments must be
+placed right before the declaration and should be correctly formatted. To check
+that it really is, generate the javadoc:
+\begin{verbatim}
+make documentation
+\end{verbatim}
+and make sure no warning is printed.
+
 \subsection{Code organization}
-Sources of "TTool" are located in "src/"\\
-Basically, all graphical-related elements are put in "ui". All other subdirectories of "src" are used to code generic functions ("myutil") or non graphical languages and model transformation. for example, in "avatartranslator/" you find all classes related to the internal avatar language, and all transformations from the internal avatar to other languages (e.g. to UPPAAL) are in subdirectories of "avatartranslator/touppaal"
+The TTool repository actually hosts the source code of different standalone
+projects. Here is a description of these sub-projects:
+\begin{itemize}
+    \item \textbf{ttool}. This is the main project: the TTool application with a
+        graphical user interface.
+    \item \textbf{graphminimize}. TODO
+    \item \textbf{graphshow}. TODO
+    \item \textbf{launcher}. TODO
+    \item \textbf{rundse}. TODO
+    \item \textbf{simulationcontrol} or remotesimulator. TODO
+    \item \textbf{tiftranslator}. TODO
+    \item \textbf{tmltranslator}. TODO
+    \item \textbf{webcrawler}. TODO
+        \begin{itemize}
+            \item \textbf{client}. TODO
+            \item \textbf{server}. TODO
+        \end{itemize}
+    \item \textbf{jttool}. TODO \textit{(Development of this project has been
+        dropped)}
+\end{itemize}
+
+For each of these sub-projects, there exists a folder in the TTool repository
+that contains the sources, tests, resources and runtime dependencies associated
+with it. Each of the sub-projects conforms to the
+\href{https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html}
+{Maven Directory Layout} and the root directory itself contains an \texttt{src}
+folder which contains the source code shared by multiple sub-projects and
+follow the same directory layout. This means that for instance, source code
+specific to the \textit{ttool} sub-project should be located under
+\texttt{ttool/src/main/java}, test classes related to the \textit{rundse}
+sub-projects would be under \texttt{rundse/src/test/java} and resources (such as
+images) needed by shared source code would be under \texttt{src/main/resources}.
+Preferably, source code that would only be needed by a particular sub-project
+should not be under \texttt{src/main/java} but under
+\texttt{<project>/src/main/java}. In particular, \texttt{main} methods should
+not appear in the shared source code directory (\texttt{src/main/java}).
+
+If we focus on the shared sources, we see different packages. Basically, all
+graphical-related elements are put in "ui". All other subdirectories of
+\texttt{src/main/java}
+are used to code generic functions (\texttt{myutil}") or non graphical languages and
+model transformation. For example, in \texttt{avatartranslator/} you find all classes
+related to the internal avatar language, and all transformations from the
+internal avatar to other languages (e.g. to UPPAAL) are in subdirectories like
+\texttt{avatartranslator/touppaal}. \textbf{Note}: please strive to provide
+autonomous packages that depend on as few other packages as possible. This
+enables to reuse code without including unrelated classes. In particular,
+non-\texttt{ui} packages should not import \texttt{ui} classes so that a CLI
+application that uses features provided by the package need not import the
+graphical \texttt{ui} package.
+
 \subsubsection{User Interface directories}
 Main classes are located directly in "src/ui". Subdirectories of "ui/" are mostly used for diagrams (one diagram per subdirectory, e.g. avatarbd for the Avatar Block Diagram). Other subdirectories are explained in the following table.
 \begin{tabular}{l|c}
@@ -520,13 +645,13 @@ It is planned to develop more and more tests for TTool in order to improve the
 product quality. Test architectures are defined for each languages used to
 develop TTool; Java and C++.
 
-The testing code of TTool is located under the \textit{test} directory of the TTool
-repository. A structure where a subdirectory is created for each
+The testing code of TTool is located under the \textit{tests} directory of the TTool
+repository and under \texttt{src/test/java} in any sub-project directory. A structure where a subdirectory is created for each
 component of TTool to be tested (e.g.: Avatar, Diplodocus, shared utility
 functions, etc.) is recommended. Each subdirectory can be further subdivided for
 the different subcomponents of the component. For example, the Diplodocus component can be
 further divided into its simulator and GUI components, which are not tested
-under the same test environement and framework due to the different languages
+under the same test environment and framework due to the different languages
 used to develop these components.
 
 A recommended practice consists of naming the folders containing the classes
@@ -557,7 +682,7 @@ given class to be tested and will include annotated methods for the selected
 methods of the class to be tested.
 
 See folder $test/fr.tpt.ttool.tests.util$ of the TTool source code repository
-for an examp;e test class $TestRshClient$ providing test cases for the TTool
+for an example test class $TestRshClient$ providing test cases for the TTool
 utility class $RshClient$ used for client-server remote communications.
 
 \subsubsection{Executing the Tests}
@@ -567,9 +692,9 @@ utility class $RshClient$ used for client-server remote communications.
 A JUnit test class can be executed automatically by passing
 it to a JUnit test runner service that will take care of calling the appropriate
 methods in the appropriate order to execute the tests, and return a test result
-object that can be inspected to determine the succes or failure of the test
+object that can be inspected to determine the success or failure of the test
 cases and provide more details in case of failure. An example code snippet is
-showned below:
+shown below:
 
 \begin{verbatim}
 import org.junit.runner.JUnitCore;
@@ -597,6 +722,20 @@ public class TToolUtilTestsRunner  {
     }
 }
 \end{verbatim}
+
+It is also possible to let gradle run the tests by invoking it:
+\begin{verbatim}
+gradle test
+\end{verbatim}
+or
+\begin{verbatim}
+gradle :ttool:test
+\end{verbatim}
+
+for a specific sub-project.
+
+A report is then generated under
+\texttt{<project>/build/reports/tests/test/index.html}.
 
 \textbf{\emph{Within the Eclipse IDE}}
 
@@ -629,7 +768,7 @@ TODO
 
 \subsection{Compiling and Packaging}
 
-First obtain the TTool repository from the Gitlab server as explaines in section
+First obtain the TTool repository from the Gitlab server as explained in section
 \ref{sec:scm}. From a Linux shell, CD to the root TTool directory and execute
 \emph{make all} to compile the code. If the compilation fails with the following error:
 ``unmappable character for encoding ASCII'', you need to do:
@@ -637,6 +776,31 @@ First obtain the TTool repository from the Gitlab server as explaines in section
 \emph{export JAVA\_TOOL\_OPTIONS=-Dfile.encoding=UTF8} \\
 
 For generating a release, execute \emph{make release}.
+
+\subsection{Gradle}
+The TTool project has been configured so that it can be built with the
+\href{https://gradle.org/}{Gradle Build Tool}. To this end, a
+\texttt{build.gradle} file
+is present in the root folder and each sub-project directory. Each
+\texttt{build.gradle} file describes how to compile and package the related
+sub-project and the \texttt{build.gradle} in the root folder describes shared
+configuration. They should be modified when the compilation for a project
+changes. In particular:
+\begin{itemize}
+    \item If a .jar library should be added to the classpath
+    \item If a source folder should be added to the sourcepath
+    \item If a javac flag should be added or removed
+\end{itemize}
+
+In order to build all projects, run:
+\begin{verbatim}
+gradle build
+\end{verbatim}
+or 
+\begin{verbatim}
+gradle :ttool:build
+\end{verbatim}
+if you only want to build TTool.
 
 \subsection{Automated Tests}
 TODO
