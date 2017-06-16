@@ -243,9 +243,8 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_DOC)/README_nc $(TTOOL_TARGET)/nc
 
 #DOC
-	@$(MAKE) -C $(TTOOL_DOC_AVATARCODEGENERATION_DIR)
-	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pf  $(TTOOL_TARGET)/doc/avatarcodegeneration_documentation.pdf
-
+	@$(MAKE) -C $(TTOOL_DOC_AVATARCODEGENERATION_DIR) codegeneration_documentation
+	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pdf  $(TTOOL_TARGET)/doc/avatarcodegeneration_documentation.pdf
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR) user_guide
 	@cp $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR)/build/user_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_user_guide.pdf
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR) installation_guide
