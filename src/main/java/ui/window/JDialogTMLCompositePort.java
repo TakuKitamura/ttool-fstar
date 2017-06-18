@@ -61,15 +61,15 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 	private Frame frame;
     
     private String name;
-		private String dataFlowType = "VOID";
-		private String associatedEvent = "VOID";
+	private String dataFlowType = "VOID";
+	private String associatedEvent = "VOID";
     private TType type1, type2, type3, type4, type5;
     private boolean isFinite, isBlocking, isOrigin;
     private String maxInFIFO, widthSamples;
 	
-		private boolean isLossy, isPrex, isPostex;
-		private int lossPercentage;
-		private int maxNbOfLoss; //-1 means no max
+	private boolean isLossy, isPrex, isPostex;
+	private int lossPercentage;
+	private int maxNbOfLoss; //-1 means no max
 
     public boolean data;
     public boolean checkConf;
@@ -77,18 +77,19 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
     // Panel1
     private JTextField nameText, maxText, widthText, associatedEventJT;
     private JComboBox<String> typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
-    private JComboBox<String> origin, finite, blocking, dfType;
-		private JLabel lossPercentageLabel, maxNbOfLossLabel;
-		private int portIndex;
+    private JComboBox<String> origin, finite, blocking, dfType, refReq;
+	private JLabel lossPercentageLabel, maxNbOfLossLabel;
+	private int portIndex;
     private Vector<String> origins, finites, blockings, portTypes, types1, types2, types3, types4, types5;
-		private Vector<String> types;
-    
-		// Robustness
-		private JCheckBox isLossyBox, isPrexCB, isPostexCB, confCheckBox, authCheckBox;
-		private JTextField lossPercentageText, maxNbOfLossText;
+	private Vector<String> types;
+    private Vector<String> refs;
+	
+	// Robustness
+	private JCheckBox isLossyBox, isPrexCB, isPostexCB, confCheckBox, authCheckBox;
+	private JTextField lossPercentageText, maxNbOfLossText;
 
 
-	public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf, boolean _checkAuth) {
+	public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf, boolean _checkAuth, String referenceReq, Vector<String> _refs) {
         super(f, title, true);
         frame = f;
         
@@ -100,25 +101,27 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         
         data = false;
         
-	dataFlowType = _dataFlowType;
-	associatedEvent = _associatedEvent;
+		dataFlowType = _dataFlowType;
+		associatedEvent = _associatedEvent;
         maxInFIFO = _maxInFIFO;
-	widthSamples = _widthSamples;
-	isOrigin = _isOrigin;
+		widthSamples = _widthSamples;
+		isOrigin = _isOrigin;
         isFinite = _isFinite;
         isBlocking = _isBlocking;
 				
-	isPrex = _isPrex;
-	isPostex = _isPostex;
-	isLossy = _isLossy;
-	lossPercentage = _lossPercentage;
-	maxNbOfLoss = _maxNbOfLoss;
-	checkConf = _checkConf;
-	checkAuth = _checkAuth;
+		isPrex = _isPrex;
+		isPostex = _isPostex;
+		isLossy = _isLossy;
+		lossPercentage = _lossPercentage;
+		maxNbOfLoss = _maxNbOfLoss;
+		checkConf = _checkConf;
+		checkAuth = _checkAuth;
+		refs=_refs;
 
         myInitComponents();
         initComponents();
         checkMode();
+	
         pack();
     }
     
@@ -176,15 +179,15 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
     private void initComponents() {
 		int i;
 		
-				Vector<String> dataFlowTypes = new Vector<>();
-				dataFlowTypes.add( TMLDataFlowType.UINT_16 );
-				dataFlowTypes.add( TMLDataFlowType.UINT_32 );
-				dataFlowTypes.add( TMLDataFlowType.UINT_64 );
-				dataFlowTypes.add( TMLDataFlowType.INT_16 );
-				dataFlowTypes.add( TMLDataFlowType.INT_32 );
-				dataFlowTypes.add( TMLDataFlowType.INT_64 );
-				dataFlowTypes.add( TMLDataFlowType.CPX_32 );
-				dataFlowTypes.add( TMLDataFlowType.CPX_64 );
+		Vector<String> dataFlowTypes = new Vector<>();
+		dataFlowTypes.add( TMLDataFlowType.UINT_16 );
+		dataFlowTypes.add( TMLDataFlowType.UINT_32 );
+		dataFlowTypes.add( TMLDataFlowType.UINT_64 );
+		dataFlowTypes.add( TMLDataFlowType.INT_16 );
+		dataFlowTypes.add( TMLDataFlowType.INT_32 );
+		dataFlowTypes.add( TMLDataFlowType.INT_64 );
+		dataFlowTypes.add( TMLDataFlowType.CPX_32 );
+		dataFlowTypes.add( TMLDataFlowType.CPX_64 );
 
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
@@ -193,10 +196,10 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c2 = new GridBagConstraints();
-				GridBagLayout gridbag3 = new GridBagLayout();
+		GridBagLayout gridbag3 = new GridBagLayout();
         GridBagConstraints c3 = new GridBagConstraints();
         GridBagConstraints c4 = new GridBagConstraints();
-				GridBagLayout gridbag4 = new GridBagLayout();
+		GridBagLayout gridbag4 = new GridBagLayout();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -267,13 +270,27 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         c2.fill = GridBagConstraints.BOTH;
         c2.gridheight = 3;
         panel2.add(new JLabel(" "), c2);
-		
-	confCheckBox = new JCheckBox("Check Confidentiality");
-	panel2.add(confCheckBox, c2);
-	confCheckBox.setSelected(checkConf);
-	authCheckBox = new JCheckBox("Check Authenticity");
-	panel2.add(authCheckBox,c2);
-	authCheckBox.setSelected(checkAuth);
+	
+		//Security Properties to check	
+		confCheckBox = new JCheckBox("Check Confidentiality");
+		panel2.add(confCheckBox, c2);
+		confCheckBox.addActionListener(this);
+		confCheckBox.setSelected(checkConf);
+		authCheckBox = new JCheckBox("Check Authenticity");
+		authCheckBox.addActionListener(this);
+		panel2.add(authCheckBox,c2);
+		authCheckBox.setSelected(checkAuth);
+
+
+		//If related to security requirement, allow reference to the requirement
+		c2.gridwidth = 1;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.anchor = GridBagConstraints.CENTER;
+		panel2.add(new JLabel("Reference Requirement"),c2);
+		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+		refReq = new JComboBox<>(refs);
+		panel2.add(refReq,c2);
+
         c2.gridwidth = 1;
         c2.fill = GridBagConstraints.HORIZONTAL;
         c2.anchor = GridBagConstraints.CENTER;
@@ -381,7 +398,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         panel4.setLayout( gridbag4 );
         panel4.setBorder( new javax.swing.border.TitledBorder("Code generation ") );
         panel4.setPreferredSize( new Dimension(300, 300) );
-				c4.gridwidth = 1;
+		c4.gridwidth = 1;
         c4.gridheight = 1;
         c4.weighty = 1.0;
         c4.weightx = 1.0;
@@ -395,36 +412,36 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         panel4.add(new JLabel("Dataflow type"), c2);
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
         dfType = new JComboBox<>( dataFlowTypes );
-				if( dataFlowType.equals( "VOID" ) || dataFlowType.equals( "" ) )	{
-					dfType.setSelectedIndex( 0 );
-				}
-				else	{
-					dfType.setSelectedIndex( dataFlowTypes.indexOf( dataFlowType ) );
-				}
-				dfType.addActionListener(this);
+		if( dataFlowType.equals( "VOID" ) || dataFlowType.equals( "" ) )	{
+			dfType.setSelectedIndex( 0 );
+		}
+		else	{
+			dfType.setSelectedIndex( dataFlowTypes.indexOf( dataFlowType ) );
+		}
+		dfType.addActionListener(this);
         panel4.add( dfType, c4);
         
         c4.gridwidth = 1;
-				if( associatedEvent.equals( "VOID" ) || associatedEvent.equals( "" ) )	{
+		if( associatedEvent.equals( "VOID" ) || associatedEvent.equals( "" ) )	{
         	associatedEventJT = new JTextField( "", 15 );
-				}
-				else	{
+		}
+		else	{
         	associatedEventJT = new JTextField( associatedEvent, 15 );
-				}
+		}
         panel4.add( new JLabel("Associate to event"), c4 );
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
         panel4.add( associatedEventJT, c4 );
 
         c4.gridwidth = 1;
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-				isPrexCB = new JCheckBox("Prex");
-				isPrexCB.setSelected( isPrex );
+		isPrexCB = new JCheckBox("Prex");
+		isPrexCB.setSelected( isPrex );
         panel4.add( isPrexCB, c4 );
 
         c4.gridwidth = 1;
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-				isPostexCB = new JCheckBox("Postex");
-				isPostexCB.setSelected( isPostex );
+		isPostexCB = new JCheckBox("Postex");
+		isPostexCB.setSelected( isPostex );
         panel4.add( isPostexCB, c4 );
 
         c2.gridwidth = 1;
@@ -540,7 +557,12 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         String command = evt.getActionCommand();
         
 		checkMode();
-		
+		if (confCheckBox.isSelected() || authCheckBox.isSelected()){
+			refReq.setEnabled(true);
+		}
+		else {
+			refReq.setEnabled(false);
+		}
         /*if (evt.getSource() == finite) {
 			if (finite.getSelectedIndex() == 1) {
 				blocking.setSelectedIndex(1);

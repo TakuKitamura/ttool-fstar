@@ -3605,6 +3605,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return list;
     }
 
+	public ArrayList<TGComponent> getAllRequirements(){
+		TURTLEPanel tp;
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+
+        for(int i=0; i<tabs.size(); i++) {
+            tp = tabs.elementAt(i);
+            if (tp instanceof RequirementPanel) {
+                for (TGComponent s:((RequirementPanel)tp).getAllRequirements()){
+                    list.add(s);
+                }
+            }
+        }
+        return list;
+
+	}
     public String[] getAllOutRequests() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {return null;}
@@ -3907,12 +3922,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void avatarProVerifVerification() {
+		boolean limit=true;
         TraceManager.addDev("Avatar proverif fv");
         TURTLEPanel tp = this.getCurrentTURTLEPanel();
         AvatarDesignPanel adp = null;
-        if (tp instanceof AvatarDesignPanel)
+        if (tp instanceof AvatarDesignPanel){
             adp = (AvatarDesignPanel) tp;
-        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp);
+			limit=false;
+		}
+        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp,limit);
         // jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);

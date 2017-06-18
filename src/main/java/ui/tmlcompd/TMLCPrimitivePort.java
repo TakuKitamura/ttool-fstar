@@ -54,6 +54,7 @@ import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogTMLCompositePort;
+import ui.req.Requirement;
 
 import javax.swing.*;
 import java.awt.*;
@@ -105,6 +106,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected String conflictMessage;
     protected String dataFlowType = "VOID";
     protected String associatedEvent = "VOID";
+	public String referenceReq;
     public int verification;
     public TMLCPrimitivePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -540,7 +542,15 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             TMLCPrimitiveComponent tgc = (TMLCPrimitiveComponent)(getFather());
             otherTypes = tgc.getAllRecords();
         }
-        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth);
+		Vector<String> refs = new Vector<String>();
+		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
+			System.out.println("req " + req);
+			if (req instanceof Requirement){	
+				refs.add(req.getName());
+			}
+		}
+	
+        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth, referenceReq, refs);
         // jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda, 350, 700 );
         // jda.show(); // blocked until dialog has been closed

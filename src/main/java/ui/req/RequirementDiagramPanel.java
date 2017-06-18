@@ -49,6 +49,8 @@ package ui.req;
 import ui.*;
 
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.LinkedList;
 import java.util.Vector;
 
@@ -75,6 +77,7 @@ public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAtt
         }*/
         return false;
     }
+
     
     public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {

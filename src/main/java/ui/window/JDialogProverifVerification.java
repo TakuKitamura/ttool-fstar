@@ -148,7 +148,7 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     private JList<AvatarPragma> nonSatisfiedAuthList;
     private JList<AvatarPragma> nonProvedList;
     private Map<AvatarPragma, ProVerifQueryResult> results;
-
+	private boolean limit;
     private Thread t;
     private boolean go = false;
     private boolean hasError = false;
@@ -173,13 +173,13 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
     }
 
     /** Creates new form  */
-    public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute, AvatarDesignPanel adp) {
+    public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute, AvatarDesignPanel adp, boolean lim) {
         super(f, title, Dialog.ModalityType.DOCUMENT_MODAL);
 
         mgui = _mgui;
         this.adp = adp;
         this.pvoa = null;
-
+		this.limit=lim;
         if (pathCode == null) {
             pathCode = _pathCode;
         }
@@ -276,10 +276,11 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
         typedLanguage.setSelected(true);
         addComponent(jp01, typedLanguage, 0, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        addComponent(jp01, new JLabel("Limit on loop iterations:"), 0, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        loopLimit = new JTextField("1", 3);
-        addComponent(jp01, loopLimit, 1, 5, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-
+   	    loopLimit = new JTextField("1", 3);
+		if (limit){
+	        addComponent(jp01, new JLabel("Limit on loop iterations:"), 0, 5, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+    	    addComponent(jp01, loopLimit, 1, 5, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+		}
         c.add(jp01, BorderLayout.NORTH);
 
 

@@ -123,6 +123,21 @@ public class RequirementPanel extends TURTLEPanel {
         return true;
     }
 
+	public ArrayList<TGComponent> getAllRequirements(){
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+		TDiagramPanel tp;
+        for(int i=0; i<panels.size(); i++) {
+			tp = panels.get(i);
+            if (tp instanceof RequirementDiagramPanel) {
+                for (TGComponent s:((RequirementDiagramPanel)tp).getAllRequirements()){
+                    list.add(s);
+                }
+            }
+        }
+        return list;
+
+	}
+
     public boolean addEBRDD(String s) {
         EBRDDToolBar toolBarEBRDD = new EBRDDToolBar(mgui);
         toolbars.add(toolBarEBRDD);
