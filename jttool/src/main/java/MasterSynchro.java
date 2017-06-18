@@ -1,26 +1,26 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- *
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ * 
  * ludovic.apvrille AT enst.fr
- *
+ * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- *
+ * 
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- *
+ * 
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- *
+ * 
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,34 +31,36 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- *
+ * 
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * /**
+ */
+
+
+
+
+package jttool;
+
+import java.util.*;
+
+
+/**
  * Class MasterSynchro
  * To be used with the TTool Java code generator
  * For more information on TTool, see http://labsoc.comelec.enst.fr/turtle
  * Creation: 01/02/2006
  * @version 1.3 06/03/2006
  * @author Ludovic APVRILLE
- * @see
  */
-
-package jttool;
-
-import java.util.*;
-
 public class MasterSynchro {
     
     public static MasterSynchro master = new MasterSynchro();
-    private LinkedList requested;
+    private LinkedList<SynchroSchemes> requested;
     private long time;
     
     
     public MasterSynchro() {
-        requested = new LinkedList();
+        requested = new LinkedList<>();
     }
     
     public  SynchroSchemes synchro(SynchroSchemes synchros[], JTToolThread jttt) throws PreemptionException {
@@ -173,8 +175,7 @@ public class MasterSynchro {
     }
     
     public void updateSynchros(SynchroSchemes[] synchros) {
-        ListIterator iterator;
-        SynchroSchemes sss0, sss1;
+        SynchroSchemes sss0;
         JMasterGate jmg;
 	JGate jgate;
         
@@ -209,9 +210,7 @@ public class MasterSynchro {
                     return;
                 } else {
                     //System.out.println("Synchronized gate");
-                    iterator = requested.listIterator();
-                    while(iterator.hasNext()) {
-                        sss1 = (SynchroSchemes)(iterator.next());
+                    for (SynchroSchemes sss1: this.requested) {
                         if (synchroPossible(sss0, sss1)) {
                             makeSynchro(sss0, sss1);
                             return;
@@ -251,13 +250,10 @@ public class MasterSynchro {
     }
     
     public void removeAllGroup(JGroupSynchro group) {
-        SynchroSchemes sss;
-        ListIterator iterator = requested.listIterator();
-        LinkedList ll = new LinkedList();
+        LinkedList<SynchroSchemes> ll = new LinkedList<>();
         
         
-        while(iterator.hasNext()) {
-            sss = (SynchroSchemes)(iterator.next());
+        for (SynchroSchemes sss: this.requested) {
             if (sss.group != group) {
                 ll.add(sss);
             }
@@ -267,26 +263,15 @@ public class MasterSynchro {
     }
 
     public void printRequested() {
-	SynchroSchemes sss;
-        ListIterator iterator = requested.listIterator();
-        LinkedList ll = new LinkedList();
-        
         System.out.print("Requested = ");
-        while(iterator.hasNext()) {
-            sss = (SynchroSchemes)(iterator.next());
+        for (SynchroSchemes sss: this.requested) {
             System.out.print(sss.jgate.getName() + " ");
         }
 	System.out.println(" ");
     }
     
     public void setSynchroDoneForGroup(SynchroSchemes sss0, SynchroSchemes sss1) {
-	SynchroSchemes sss;
-	ListIterator iterator = requested.listIterator();
-	LinkedList ll = new LinkedList();
-	
-	
-	while(iterator.hasNext()) {
-	    sss = (SynchroSchemes)(iterator.next());
+        for (SynchroSchemes sss: this.requested) {
 	    if ((sss.group == sss0.group) ||(sss.group == sss1.group)) {
 		sss.synchroDone = true;
 	    }

@@ -34,8 +34,11 @@
 \sloppy 
 
 \begin{center}
-\Large Telecom ParisTech \\
-\Large TTool \\
+
+\includegraphics[width=0.2\textwidth]{figures/logotpt}
+\vspace{10 pt}\\
+\Huge TTool \\
+\vspace{10 pt}
 \Large \url{ttool.telecom-paristech.fr}
 \vspace{20 pt}\\
 \underline{\Large Code generation from Avatar Design Diagrams in TTool}
@@ -130,7 +133,7 @@ Finally, the document explains how to have the generated code to connect with an
 
 \section{Configuration}\label{sec:conf}
 \subsection{TTool configuration}
-At first, if not already configured\footnote{TTool should be provided with the configuration already done}, you must open the configuration file of TTool. The default file is located in:
+At first, if not already configured\footnote{TTool comes already configured}, you must open the configuration file of TTool. The default file is located in:
 \begin{verbatim}
 TTool/bin/config.xml
 \end{verbatim}
@@ -140,7 +143,7 @@ Open your configuration file, and set the following lines accordingly with your 
 \begin{verbatim}
 <AVATARExecutableCodeDirectory data="../executablecode/" />
 \end{verbatim}
-\item Host to connect to perform the code compilation and execution. Default value is "localhost".
+\item Host that is intended to perform the code compilation and execution. Default value is "localhost".
 \begin{verbatim}
 <AVATARExecutableCodeHost data="localhost"/>
 \end{verbatim}
@@ -155,11 +158,11 @@ Open your configuration file, and set the following lines accordingly with your 
 \end{itemize}
 
 \subsection{External tools}
-The previous configuration assumes that a \textbf{c compiler}, referenced by the provided Makefile (default = "gcc") is installed on your machine, as well as the \textbf{POSIX-1 librairies}. Also, a Mafile utility must be installed (e.g., "gnu make").
+The previous configuration assumes that a \textbf{C compiler}, referenced by the provided Makefile (default = "gcc"\footnote{\url{https://gcc.gnu.org/}}) is installed on your machine, as well as the \textbf{POSIX-1 librairies}. Also, a Mafile utility must be installed (e.g., "GNU make"\footnote{\url{https://www.gnu.org/software/make/}}).
 
 \newpage
 \section{A first example}\label{sec:example}
-This very first example explains how to generate the code from an AVATAR design model, and how to introduce your own basic C directive in the code generation process.
+This very first example explains how to generate the code from an AVATAR design model, and how to introduce your own basic C functions in the code generation process.
 
 \subsection{Getting the example}
 Be sure to get the latest version of TTool including the remote loading of models (June 2017 and after). Do: File, Open from TTool repository, and select "HelloWorldCodeGeneration.xml".
@@ -176,7 +179,7 @@ This models contains a design diagram composed of one MainBlock. This later regu
 \caption{Hello world model} \label{fig:printhelloworld}
 \end{figure*}
 
-You may then check the syntax of the diagram, and select the "interactive simulation icon". From the window that opens, make a step by step simulation, and observe the behaviour of the system. This behaviour is simulated, that is, there is no executable code that is generated to execute the system.
+You may then check the syntax of the diagram, and select the "interactive simulation icon". From the window that opens, make a step-by-step simulation, and observe the behaviour of the system. This behaviour is simulated, that is, there is no executable code that is generated to simulate the model.
 
 \begin{figure*}[htbp]
 \centering
@@ -185,7 +188,7 @@ You may then check the syntax of the diagram, and select the "interactive simula
 \end{figure*}
 
 \subsection{Generating executable code}
-To generate executable code, first check thye syntax of one of the model diagram, and then click on the "code generation" icon representing a gear. The following window should open (see Figure \ref{fig:codegenhelloworld}).
+To generate executable code, click on the "check syntax" icon, and then click on the "code generation" icon representing a gear. The following window should open (see Figure \ref{fig:codegenhelloworld}).
 
 \begin{figure*}[htbp]
 \centering
@@ -194,10 +197,10 @@ To generate executable code, first check thye syntax of one of the model diagram
 \end{figure*}
 
 \begin{itemize}
-\item You can add debugging information to the generating code ("Put debug infromation \ldots") if you wish the generated code to print information in the default output when executing. Typical debugging infrmation are: state entering/exiting, send / receive of signals.
+\item You can add debugging information to the generating code ("Put debug information \ldots") if you wish the generated code to print information in the default output when executing. Typical debugging information is: state entering/exiting and send / receive of signals.
 \item Tracing capabilities enable to draw a sequence diagram representing the execution of the code.
 \item User defined code can be included (or not). \textbf{Uncheck this option first}.
-\item The time unit manipulated by TTool can be set to seconds, milliseconds or microseconds. For example, if "sec" is sele'cted, it means that  "after(2)" means a waiting of two seconds. Default is "sec", keep it like this for the incoming tutorial.
+\item The time unit manipulated by TTool can be set to seconds, milliseconds or microseconds. For example, if "sec" is selected, it means that  "after(2)" will be transformed as a waiting of two seconds. Default is "sec", keep it like this for the incoming tutorial.
 \end{itemize}
 
 \subsection{Compiling the generated code}
@@ -206,7 +209,7 @@ Once the code has been generated, the dialog window should automatically switch 
 \item Compile the code for your localhost (\textbf{You should select this option}).
 \item Compile the code for the SoCLib platform. This option is not addressed in this document.
 \end{itemize}
-If the compilation fails, it is probably due to a bad installation of a C compiler. You could also edit the Makefile you have selected (see section \ref{sec:conf}) to adapt it to your localhost particularities.  Note that the compilation process also compiles the Avatar runtime C sources, and links all object files together.
+If the compilation fails, it is probably due to a bad installation of a C compiler. You could also edit the Makefile you have selected (see section \ref{sec:conf}) to adapt it to your localhost particularities.  Note that the compilation process also compiles the Avatar runtime C sources\footnote{These sources are located in TTool/executablecode/src}, and links all resulting object files together.
 
 \begin{figure}[htbp]
 \centering
@@ -276,14 +279,14 @@ Select the first option, and click on the "show simulation trace" button. A new 
 \section{Enhancing model with user code}\label{sec:custom}
 
 \subsection{Principle}
-A user of TTool can provide its own C code within an AVATAR design diagram. Note that when a model is enhanced with custom C code, the C code generated from the enhanced model may not compiled because of the user included C code.\\
-Basically, there are two types of custom code (see Figure \ref{fig:customhelloworld}). To open thiw window, simply double-click in the attributes/methods/signal/code part of a given block)
+A user of TTool can provide its own C code within an AVATAR design diagram. When a model is enhanced with custom C code, the custom C code may prevent the compilation process to succeed: if the compilation fails, you need to reconsider the code you have inserted according to the errors provided by the compiler.\\
+Basically, there are two types of custom code as show in the "prototyping" window (see Figure \ref{fig:customhelloworld}). To open this window, simply double-click in the attributes/methods/signal/code part of a given block.
 \begin{itemize}
-\item The code global to the model
-\item The code local to a given block. This code is itself split into two sub parts:
+\item \textbf{The global code of the model}
+\item \textbf{The local code of a given block}. This code is itself split into two sub parts:
 \begin{itemize}
-\item The code global to the block.
-\item The code implementing a method of the block.
+\item The global code of the block.
+\item The code implementing methods of the block.
 \end{itemize}
 \end{itemize}
 
@@ -294,9 +297,9 @@ Basically, there are two types of custom code (see Figure \ref{fig:customhellowo
 \end{figure}
 
 \subsection{Global code}
-The global code typically contains the declaration of global variables. Also, one specific method can be used to execute code before the application starts. The function is as follows: 
+The global code typically contains the declaration of global variables. Also, one specific method can be used to execute code when the application starts. The function prototype is: 
 \begin{verbatim}
-void __user_init(){...}
+void __user_init()
 \end{verbatim}
 For instance, the global code of the HelloWorld example is as follows:
 \begin{lstlisting}
@@ -306,7 +309,7 @@ void __user_init() {
 \end{lstlisting}
 
 \subsection{Block code}
-The block code typically contains variables that are not declared as block attributes. Block attributes can indeed be directly used in the custom code. The block code can also provide an implementation for the block methods. For a method called "method" of the block "block", the function must be declared as "\_userImplemented\_block\_method" and \textbf{you must ensure to check the "Implementation provided by the user" option} in the method definition window (see Figure \ref{fig:methodhelloworld}). For instance, the following code correesponds to the block code of "MainBlock". It implements the method "printHelloWorld" referenced in the model (see Figure {fig:printhelloworld}).
+The block code typically contains variables that are not declared as block attributes. Block attributes can indeed be directly used in the custom code. The block code can also provide an implementation for the block methods. For a method called "method" of the block "block", the function must be declared as "\_userImplemented\_block\_method" and \textbf{you must ensure to check the "Implementation provided by the user" option} in the method definition window (see Figure \ref{fig:methodhelloworld}). For instance, the following code correesponds to the block code of "MainBlock". It implements the method \textit{printHelloWorld()} referenced in the model (see Figure \ref{fig:printhelloworld}).
 \begin{lstlisting}
 void _userImplemented_MainBlock__printHelloWorld() {
   printf("Hello world from generated code\n");
@@ -320,7 +323,8 @@ void _userImplemented_MainBlock__printHelloWorld() {
 \end{figure}
 
 \subsection{Code generation and execution with custom code}
-Be sure to \textbf{check the "Include user code" option} on the code generation tab of the code generation window. You may also unckeck the "Put tracing capabilities in generated code" since we won't use this in this example. Then, follow the usual stages : compile, and then execute the program. You should now see the effect of the printf command in the console. It should like this:
+
+Be sure to \textbf{check the "Include user code" option} on the code generation tab of the code generation window. You may also uncheck the "Put tracing capabilities in generated code" since we won't use this in this example. Then, follow the usual stages: compile, and then execute the program. You should now see the effect of the printf command in the console. It should like this:
 \begin{lstlisting}
 Initializing...
 Hello world from generated code
@@ -331,7 +335,7 @@ Hello world from generated code
 \newpage
 \section{Advanced model enhancement with user code}\label{sec:advanced}
 To follow this section, you have to use another TTool model called "MicroWaveOven\_SafetySecurity\_fullMethodo.xml", available on the network repository of TTool (File, Open from TTool repository).\\
-This section explains how a code generated from TTool can be linked with an external software, e.g. to animate a graphical user interface. The provided example relies on datagrams and socket to echange information between the microwave software (fully generated from TTool) and its graphical user interface (programmed "by hand"). We will now call these two software MS and GUI, respectively
+This section explains how a code generated from TTool can be linked with an external software, e.g. to animate a graphical user interface. The provided example relies on datagrams and sockets to echange information between the Microwave Software (fully generated from TTool) and its graphical user interface (programmed "by hand"). We will now call these two software MS and GUI, respectively
 
 \subsection{GUI}
 The TTool distribution includes an external software which represents a graphical user interface of a microwave system. The source code (in Java) of this software is located in "TTool/executablecode/example":
@@ -340,7 +344,7 @@ $cd TTool/executablecode/example
 $ ls
 DatagramServer.java  Feeder.java  MainMicrowave.java  MicrowavePanel.java  README
 \end{lstlisting}
-This directory contains the java sources as well as a README file. We first have to compile the java source code, and then to execute the GUI, as follows:
+This directory contains the java sources as well as a README file. First compile the java source code, and then execute the GUI, as follows:
 \begin{lstlisting}
 $javac *.java
 $java MainMicrowave
@@ -354,12 +358,118 @@ A window similar to the one of Figure \ref{fig:gui1} should open. This window is
 \end{figure}
 
 \subsection{Microwave Software (MS)}
-Open the model in TTool, and double-click on a block methods, then select the "Prototyping" tab. You see be able to see the global and local code.
+Open the model in TTool, then double-click on a block method, and finally select the "Prototyping" tab. You can now review the global and local code.
 \subsubsection{Global code}
+The goal of the global code is to setup the communication infrastructure to the GUI. To do so, the global code is as follows.
+\begin{itemize}
+\item It declares headers.
+\begin{lstlisting}
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <strings.h>
+#include <errno.h>
+\end{lstlisting}
+
+\item It defines the global constants and variables, including the hostname to use, and the port.
+\begin{lstlisting}
+const char* hostname="localhost";
+const char* portname="8374";
+int fd;
+struct addrinfo* res;
+\end{lstlisting}
+
+\item It defines a function to send a datagram.
+\begin{lstlisting}
+void sendDatagram(char * data, int size) {
+  if (sendto(fd,data,size, 0, res->ai_addr,res->ai_addrlen)==-1) {
+        printf("Error when sending datagram");
+        exit(-1);
+    }
+}
+\end{lstlisting}
+\item It defines the user initialization function. This function puts in an "addinfo struct" information for sending the datagram. Then, it gets the target IP address. Following this, it creates a reference to the right socket. Finally, it tries to send a test packet ("salut"). Whenever a failure is encountered, the application exits. When the C code is generated from the model, all the global code is integrated into a file called "main.c".
+\begin{lstlisting}
+void __user_init() { 
+  const char* content = "salut";
+  struct addrinfo hints;
+
+  memset(&hints,0,sizeof(hints));
+  hints.ai_family=AF_UNSPEC;
+  hints.ai_socktype=SOCK_DGRAM;
+  hints.ai_protocol=0;
+  hints.ai_flags=AI_ADDRCONFIG;
+ 
+  int err=getaddrinfo(hostname,portname,&hints,&res);
+  if (err!=0) {
+    printf("failed to resolve remote socket address (err=%d)",err);
+    exit(-1);
+  }
+  fd=socket(res->ai_family,res->ai_socktype,res->ai_protocol);
+  if (fd==-1) {
+    printf("%s",strerror(errno));
+    exit(-1);
+  }
+  if (sendto(fd,content,sizeof(content),0,
+      res->ai_addr,res->ai_addrlen)==-1) {
+    printf("%s",strerror(errno));
+    exit(-1);
+  }
+
+}
+\end{lstlisting}
+\end{itemize}
+Note: the network code of the GUI application is located in \textit{DatagramServer.java}.
 
 \subsubsection{Local code}
+The local code associates the call to a method of a block to the sending (or receiving) of a datagram packet. Let's take the example of the "Door" block. The GUI should be informed about door opening or closing operations. In the model, each time the door is closed, the \textit{openM()} method is closed. Also, each time the door is closed, the \textit{closeM() }method is called (see Figure \ref{fig:door}).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{figures/door}
+\caption{State Machine Diagram of the Door block} \label{fig:door}
+\end{figure}
+
+In the local code, we first need to state that a \textit{sendDatagram()} function is externally defined.
+ \begin{lstlisting}
+extern void sendDatagram(char *data, int size);
+\end{lstlisting}
+Then, we need to define the user defined C code for both \textit{openM()} and \textit{closeM()}.  We also define constant strings in order to uniquely identifiydatagram packets sent to the GUI. In the code, "10" corresponds to the length of the datagram. 
+
+\begin{lstlisting}
+const char* openD = "Open Door";
+const char* closeD = "Close Door";
+
+void _userImplemented_Door__openM() {
+  sendDatagram(openD, 10);
+}
+
+void _userImplemented_Door__closeM() {
+   sendDatagram(closeD, 10);
+}
+\end{lstlisting}
+
+The corresponding packets are also defined in the GUI application e.g. see \textit{MainMicrowave.java}. 
+
+\subsection{GUI animation}
+Generate the C code from TTool (be sure to check the "Include user code" option). Start the GUI from a terminal, and then, start the MS application from TTool (you can also start MS from a terminal). You should see the animations of the GUI while the generated application executes. For example, Figure \ref{fig:animopen} shows the microwave when the door opened, and Figure \ref{fig:animcooking} shows the microwave in heating mode.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/animopen}
+\caption{GUI when the door is opened} \label{fig:animopen}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/animcooking}
+\caption{GUI when the microwave is cooking} \label{fig:animcooking}
+\end{figure}
+
 
 \newpage
 \section{Customizing the code generator}\label{sec:customgenerator}
-We are currently working on a plug-in facility in order to be able to customize the AVATAR-to-C code generator. Send us an email to be informed about this functionnality, or stay connected to \url{https://twitter.com/TTool_UML_SysML}
+We are currently working on a plug-in facility in order to be able to customize the AVATAR-to-C code generator. Send us an email to be informed about updates, or stay connected to \url{https://twitter.com/TTool_UML_SysML}
 \end{document}

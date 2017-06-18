@@ -1,3 +1,7 @@
 /tmp/
 /ttool_development_infrastructure.synctex.gz
 /ttool_development_infrastructure.pdf
+/*.aux
+/*.log
+/*.out
+/*.toc

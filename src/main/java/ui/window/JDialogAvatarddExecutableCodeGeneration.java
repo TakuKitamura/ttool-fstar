@@ -1,26 +1,26 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- *
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ * 
  * ludovic.apvrille AT enst.fr
- *
+ * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- *
+ * 
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- *
+ * 
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- *
+ * 
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,26 +31,21 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- *
+ * 
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogAvatarddExecutableCodeGeneration
- * Dialog for managing the generation and compilation of AVATAR executable code
- * Creation: june 2014
- * @version 1.1
- * @author Ludovic APVRILLE
- * @version 2.0 (march 2016)
- * @author (adapted to code generation from deployment diagrams) Julien Henon, Daniela GENIUS 2015-2016
- * @see
  */
+
+
+
 
 package ui.window;
 
+import avatartranslator.AvatarRelation;
 import avatartranslator.AvatarSpecification;
 import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
+import ddtranslatorSoclib.toTopCell.Deployinfo;
 import ddtranslatorSoclib.toTopCell.TopCellGenerator;
 import launcher.LauncherException;
 import launcher.RshClient;
@@ -70,6 +65,15 @@ import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
 
+/**
+ * Class JDialogAvatarddExecutableCodeGeneration
+ * Dialog for managing the generation and compilation of AVATAR executable code
+ * Creation: june 2014
+ * @version 1.1
+ * @author Ludovic APVRILLE
+ * @version 2.0 (march 2016)
+ * @author (adapted to code generation from deployment diagrams) Julien Henon, Daniela GENIUS 2015-2016
+ */
 public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
 
     private static String[] unitTab = {"usec", "msec", "sec"};
@@ -150,8 +154,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 						   String _pathCompileMPSoC, 
 						   String _pathExecuteMPSoC) {
 
-        super(title);
-
+        super(title);;
         f = _f;
         mgui = _mgui;
 
@@ -532,6 +535,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 		ADDDiagramPanel deploymentDiagramPanel = mgui.getFirstAvatarDeploymentPanelFound();
 		AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
 		AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
+		AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
 
 		// Generating code
 		if ( avddspec == null) {
@@ -539,7 +543,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 		} else {
 		    System.err.println("**AVATAR TOPCELL found");
 
-		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec, tracemode.isSelected());
+		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec, tracemode.isSelected(),avspec);
 		    testGo();
 		    jta.append("Generation of TopCell executable code: done\n");
 		   
@@ -555,6 +559,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 		    } catch (Exception e) {
 			jta.append("Could not generate files\n"); 
 			System.err.println("Could not generate MPSoC files\n");
+			e.printStackTrace();
 		    }
 		}
 						     
@@ -596,7 +601,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
 		selectedUnit = units.getSelectedIndex();
 		//System.out.println("Selected item=" + selectedItem);
-		AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
+		//AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
 
 		// Generating code
 		if (avspec == null) {
@@ -607,14 +612,14 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 		    gene.includeUserCode(putUserCode.isSelected());
 		    gene.setTimeUnit(selectedUnit);
 		    gene.generateSoclib(debugmode.isSelected(), tracemode.isSelected());
-		      
+
 		    if ( avddspec == null) {
 			jta.append("Error: No AVATAR Deployment specification\n");
 		    } else {
 			System.err.println("AVATAR TOPCELL found");
 		    }
 
-		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec, tracemode.isSelected());
+		    TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec, tracemode.isSelected(),avspec);
 		    testGo();
 		    jta.append("Generation of TopCell executable code: done\n");
 

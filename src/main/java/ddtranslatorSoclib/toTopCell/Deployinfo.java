@@ -72,18 +72,56 @@
 
 package ddtranslatorSoclib.toTopCell;
 
-import avatartranslator.AvatarSpecification;
-import ddtranslatorSoclib.AvatarCPU;
-import ddtranslatorSoclib.AvatarRAM;
+//base
+// import avatartranslator.AvatarSpecification;
+// import avatartranslator.AvatarRelation;
+// import avatartranslator.AvatarSignal;
+// import ddtranslatorSoclib.AvatarCPU;
+// import ddtranslatorSoclib.AvatarRAM;
+
+import ddtranslatorSoclib.*;
+import ddtranslatorSoclib.toSoclib.*;
+
+//added
+import avatartranslator.*;
+//import ddtranslatorSoclib.AvatarRAM;
+//import ddtranslatorSoclib.AvatarTask;
+//import ddtranslatorSoclib.AvatarddSpecification;
+//import ddtranslatorSoclib.toTopCell.TopCellGenerator;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.TraceManager;
+
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
+//
 
 public class Deployinfo {
 
     private final static String CR = "\n";
     private final static String CR2 = "\n\n";
+  
+    //public static AvatarRelation ar;
+    public static AvatarSpecification avspec;//DG 15.05.2017    
+    //added
+    public static AvatarddSpecification avddspec;
+    private Vector<?> warnings;
 
-    public static AvatarSpecification avspec;//DG 15.05.2017
-
+    private MainFileSoclib mainFile;
+    private Vector<TaskFileSoclib> taskFiles;
+    private String makefile_src;
+    private String makefile_SocLib;
+    //
     /* for the moment, this is specific to PowerPC */
+
+    public Deployinfo(AvatarddSpecification _avddspec, AvatarSpecification _avspec) {
+        avspec = _avspec;
+        avddspec = _avddspec;
+        taskFiles = new Vector<TaskFileSoclib>();
+    }
 
     public static String getDeployInfo() {
           
@@ -112,17 +150,17 @@ public class Deployinfo {
 
 	int i=0;
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
-
+	    
 	    /* data memory always starts at 0x10000000 */
 	    int address_start = 268435456;
 	    String string_adress_start = Integer.toHexString(i*268435456);
-		  
+	    
 	    /* segment size is either given by the user or a default value is calculated */
 	    if(ram.getDataSize()==0){
-	
+		
 		if((nb_clusters<16)||(TopCellGenerator.avatardd.getAllRAM().size()<16)){
 		    size = 268435456; 
-		    	   
+		    
 		}
 		else {//smaller segments
 		    size =  134217728;
@@ -134,43 +172,26 @@ public class Deployinfo {
 	    ram.setDataSize(size);
 	    //ram.setDataSize(0);
 	    size = ram.getDataSize(); // this is the hardware RAM size 
-
-	    System.out.println("***hardware RAM size"+size);
-
-	    String string_size_half = (Integer.toHexString(size/2)); //segments on this are half uram, half cram
-
-	    deployinfo += "#define CACHED_RAM" + ram.getNo_ram()  + "_NAME cram" + ram.getNo_ram() + CR;	    
-  
-	    //  deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*size) + CR; 
-deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*CLUSTER_SIZE) + CR; 
-
-// 31.08. simplifie
-
-	    //deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_ADDR 0x" + (ram.getNo_ram()+1)+ "0000000" + CR; 
-
-	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ string_size_half + CR; 
-
-	    deployinfo += "#define DEPLOY_RAM" + ram.getNo_ram()  + "_NAME uram" + ram.getNo_ram() + CR;
-	   	    
-	    int cacheability_bit= 2097152; //0x00200000
-
-	    // deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*size+size/2) + CR; 
-
-	    //deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*size+size/2+cacheability_bit) + CR; 
-
-deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*CLUSTER_SIZE+size/2+cacheability_bit) + CR; 
-
-// 31.08. simplifie
-
-//deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x"+  (ram.getNo_ram()+1)+ "0200000" + CR; 
-
-	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ (string_size_half) + CR;
 	    
+	    System.out.println("***hardware RAM size"+size);
+	    
+	    String string_size_half = (Integer.toHexString(size/2)); //segments on this are half uram, half cram
+	    
+	    deployinfo += "#define CACHED_RAM" + ram.getNo_ram()  + "_NAME cram" + ram.getNo_ram() + CR;	    
+	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*CLUSTER_SIZE) + CR; 
+	    // 31.08. simplifie
+	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ string_size_half + CR; 
+	    deployinfo += "#define DEPLOY_RAM" + ram.getNo_ram()  + "_NAME uram" + ram.getNo_ram() + CR; 	    
+	    int cacheability_bit= 2097152; //0x00200000 
+	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*CLUSTER_SIZE+size/2+cacheability_bit) + CR; 
+	    // 31.08. simplifie
+	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ (string_size_half) + CR;
+
 	    i++;
 	}
 	return deployinfo;	
     }
-
+    
     /*   public static String getDeployInfoMap() {
 	int i=0;       
         String deployinfo_map = CR;
@@ -216,37 +237,67 @@ System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
 	return deployinfo_map;	
 	}*/
 
-    public static String getDeployInfoMap() {
-	int i=0;       
-        String deployinfo_map = CR;
+    // public static String getDeployInfoMap() {
+    // 	int i=0;       
+    //     String deployinfo_map = CR;
 
-	deployinfo_map += "#define MAP_A\\" + CR;		
-	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
-	    if (!(ram.getChannels().isEmpty())){	
-		//for (AvatarChannel channel : ram.getChannels()) {
-		for (i=0;i<30;i++) {
-		    deployinfo_map = deployinfo_map +"\n .channel"+i+" : { \\" + CR;
-		    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;
-		   
-		    deployinfo_map=deployinfo_map+ "} > uram"+ram.getNo_ram()+"\\"+ CR;	
-		    //i++;
-		}
+    // 	deployinfo_map += "#define MAP_A\\" + CR;
+    // 	try{		
+    // 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
+    // 	    if (!(ram.getChannels().isEmpty())){	
+    // 		    for (i=0;i<30;i++) {
+    // 			deployinfo_map = deployinfo_map +"\n .channel"+i+" : { \\" + CR;
+    // 			deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;
+			
+    // 			deployinfo_map=deployinfo_map+ "} > uram"+ram.getNo_ram()+"\\"+ CR;	
+    // 			//i++;
+    // 		    }
 		
-		i=0;
-		//for (AvatarChannel channel : ram.getChannels()) {
-		for (i=0;i<30;i++) {
-		    deployinfo_map = deployinfo_map +"\n .lock"+i+" : { \\" + CR;
-		    deployinfo_map = deployinfo_map + "*(section_lock"+i+ ")\\"+ CR;		   
-		    //  if(use_vcilocks) deployinfo_map=deployinfo_map+ "} > vci_locks\\"+ CR;
-		    deployinfo_map=deployinfo_map+ "} > uram0\\"+ CR;//DG 27.06. no ramlocks
-		    //i++;
-		}
+    // 		    i=0;
+    // 		    //for (AvatarChannel channel : ram.getChannels()) {
+    // 		    for (i=0;i<30;i++) {
+    // 			deployinfo_map = deployinfo_map +"\n .lock"+i+" : { \\" + CR;
+    // 			deployinfo_map = deployinfo_map + "*(section_lock"+i+ ")\\"+ CR;		   
+    // 			//  if(use_vcilocks) deployinfo_map=deployinfo_map+ "} > vci_locks\\"+ CR;
+    // 			deployinfo_map=deployinfo_map+ "} > uram0\\"+ CR;//DG 27.06. no ramlocks
+    // 			//i++;
+    // 		    }
+    // 	    }	    
+    // 	}
+    // 	}catch (Exception e){
+    // 	    e.printStackTrace();
+    // 	}
+    // 	return deployinfo_map;	
+    // 	}
+    //Déplacé dans TasksAndMainGenerator
 
-	    }	    
-	}
-	return deployinfo_map;	
-	}
+    //ajout C.D.
+    // public static String getDeployInfoRam() {
+    //     int i=0;
+    // 	String deployinfo_ram = CR;
+    // 	int k=3;
+    // 	if(avspec.getRelations()== null){
+    // 	    System.out.println("avspec est null");
+    // 	}
+    // 	//int k=lar.size();
+    // 	//int k = lar.nbOfSignals();
+    //    	//if(ar !=null){
+    // 	try{
+    // 	for(AvatarRelation ar: avspec.getRelations()){
+    // 	    for (i=0; i<k;i++){
+    // 		deployinfo_ram += "DEPLOY_RAM" + i + "_NAME (RWAL) : ORIGIN = DEPLOY_RAM" + i + "_ADDR, LENGTH = DEPLOY_RAM" + i + "_SIZE" + CR;
+    // 		deployinfo_ram += "CACHED_RAM" + i + "_NAME (RWAL) : ORIGIN = CACHED_RAM" + i + "_ADDR, LENGTH = CACHED_RAM" + i + "_SIZE" + CR;
+    // 		//  }
+    // 		//  }
+    // 	    }
+    // 	}
+    // 	}catch (Exception e){
+    // 	    e.printStackTrace();
+    // 	}
+    // 	return deployinfo_ram;
+    // }
 
+    //fin ajout C.D.
 
 
 
