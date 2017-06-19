@@ -83,6 +83,7 @@ import java.util.Collections;
  * @version 1.0 19/02/2017
  * @author Ludovic APVRILLE
  */
+
 public class JDialogProverifVerification extends javax.swing.JDialog implements ActionListener, ListSelectionListener, MouseListener, Runnable, MasterProcessInterface, ProVerifOutputListener {
 
     private static final Insets insets = new Insets(0, 0, 0, 0);

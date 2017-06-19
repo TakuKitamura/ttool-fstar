@@ -59,6 +59,7 @@ import java.util.Vector;
  * @version 1.0 26/03/2008
  * @author Ludovic APVRILLE
  */
+
 public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 
 	private JPanel panel3;

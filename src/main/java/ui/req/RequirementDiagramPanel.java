@@ -39,6 +39,7 @@
 
 
 
+
 package ui.req;
 
 import ui.*;
@@ -56,6 +57,7 @@ import java.util.Vector;
  * @version 1.0 15/05/2006
  * @author Ludovic APVRILLE
  */
+
 public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
     
 	public Vector<Requirement> validated, ignored;
@@ -218,6 +220,7 @@ public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAtt
     }
     
 }
+
 
 
 

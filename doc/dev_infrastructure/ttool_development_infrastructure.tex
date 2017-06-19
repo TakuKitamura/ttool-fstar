@@ -792,6 +792,11 @@ changes. In particular:
     \item If a javac flag should be added or removed
 \end{itemize}
 
+There is another gradle configuration file in the root folder of TTool:
+\texttt{settings.gradle}. The purpose of this file is to list the sub-projects
+of TTool. It should thus be modified when a new sub-project is created or if you
+want a sub-project not to be compiled when calling \texttt{gradle build}.
+
 In order to build all projects, run:
 \begin{verbatim}
 gradle build
