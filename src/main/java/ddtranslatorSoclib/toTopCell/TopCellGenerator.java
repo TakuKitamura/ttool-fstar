@@ -132,8 +132,10 @@ public class TopCellGenerator
       // of memory accesses other than channel    
          
       for  (AvatarConnector connector : avatardd.getConnectors()){
-     AvatarConnectingPoint my_p1= (AvatarConnectingPoint)connector.get_p1(); 
-     AvatarConnectingPoint my_p2= (AvatarConnectingPoint)connector.get_p2(); 
+	  //  AvatarConnectingPoint my_p1= (AvatarConnectingPoint)connector.get_p1(); 
+	  //AvatarConnectingPoint my_p2= (AvatarConnectingPoint)connector.get_p2(); 
+	  AvatarConnectingPoint my_p1= connector.get_p1(); 
+	  AvatarConnectingPoint my_p2= connector.get_p2(); 
     
       //If a spy glass symbol is found, and component itself not yet marked 
       
