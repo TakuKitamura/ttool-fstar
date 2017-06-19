@@ -50,14 +50,12 @@ package ui.interactivesimulation;
  */
 public class GenericTransaction  {
 
-    public final static int NOT_DEFINED = 0;
-    public final static int FUNCTION_CALL = 1;
-    public final static int STATE_ENTERING = 2;
-    public final static int VAR_MODIFICATION = 3;
-    public final static int SEND_SYNCHRO = 4;
-    public final static int SYNCHRO = 5;
-    public final static int SEND_ASYNCHRO = 6;
-    public final static int RECEIVE_ASYNCHRO = 7;
+    final static int FUNCTION_CALL = 1;
+    final static int STATE_ENTERING = 2;
+    final static int SEND_SYNCHRO = 4;
+    final static int SYNCHRO = 5;
+    final static int SEND_ASYNCHRO = 6;
+    final static int RECEIVE_ASYNCHRO = 7;
 
     public int ID;
     public int type;
