@@ -49,7 +49,7 @@ import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogTMLCompositePort;
-import ui.req.Requirement;
+import ui.avatarrd.AvatarRDRequirement;
 
 import javax.swing.*;
 import java.awt.*;
@@ -546,9 +546,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         }
 		Vector<String> refs = new Vector<String>();
 		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
-			System.out.println("req " + req);
-			if (req instanceof Requirement){	
-				refs.add(req.getName());
+			//System.out.println("req " + req);
+			if (req instanceof AvatarRDRequirement){	
+				refs.add(((AvatarRDRequirement) req).getID()+ ":" + ((AvatarRDRequirement) req).getText());
 			}
 		}
 	

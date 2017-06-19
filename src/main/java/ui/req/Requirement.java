@@ -116,7 +116,6 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     
     public Requirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        System.out.println(name);
 		initScaling(200, 120);
 		oldScaleFactor = tdp.getZoom();
 		dlineHeight = lineHeight * oldScaleFactor;

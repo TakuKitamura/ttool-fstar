@@ -3613,8 +3613,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         for(int i=0; i<tabs.size(); i++) {
             tp = tabs.elementAt(i);
-            if (tp instanceof RequirementPanel) {
-                for (TGComponent s:((RequirementPanel)tp).getAllRequirements()){
+            if (tp instanceof AvatarRequirementPanel) {
+                for (TGComponent s:((AvatarRequirementPanel)tp).getAllRequirements()){
                     list.add(s);
                 }
             }

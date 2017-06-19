@@ -171,6 +171,21 @@ public class AvatarRequirementPanel extends TURTLEPanel {
         return mgui.getTitleAt(this) + " (SysML Requirement and Parametric Diagrams)";
     }
 
+
+	public ArrayList<TGComponent> getAllRequirements(){
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+		TDiagramPanel tp;
+        for(int i=0; i<panels.size(); i++) {
+			tp = panels.get(i);
+            if (tp instanceof AvatarRDPanel) {
+                for (TGComponent s:((AvatarRDPanel)tp).getAllRequirements()){
+                    list.add(s);
+                }
+            }
+        }
+        return list;
+
+	}
     public boolean canFirstDiagramBeMoved() {
         return true;
     }
