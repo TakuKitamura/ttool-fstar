@@ -91,7 +91,7 @@ public class MainMicrowave extends JFrame implements Feeder, MouseListener {
         if ((x>630)&&(x<720)&&(y>335)&&(y<365)) {
             System.out.println("Mouse clicked on start");
             if (ds != null) {
-                ds.sendDatagramTo("START", 8375);
+                ds.sendDatagramTo("START");
             }
             System.out.println("Action on start sent");
         }
@@ -105,9 +105,5 @@ public class MainMicrowave extends JFrame implements Feeder, MouseListener {
     public static void main(String[] args) {
         MainMicrowave mmw = new MainMicrowave();
     }
-
-
-
-
 
 }
