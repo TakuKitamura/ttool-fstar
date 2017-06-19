@@ -379,7 +379,53 @@ const char* hostname="localhost";
 const char* portname="8374";
 int fd;
 struct addrinfo* res;
+#define MAX_DGRAM_SIZE  549
 \end{lstlisting}
+
+\item It defines the global constants and variables used to be able to interact from the GUI to MS, and the functions to send datagrams to the MS. For example, when you click on the "start" button, a datagram is sent from GUI to MS. This part is explained in more details in section {\ref{sec:GUIActions}}
+\begin{lstlisting}
+pthread_t thread__Datagram;
+
+// Handling start datagrams
+int start = 0;
+pthread_mutex_t startMutex ;
+pthread_cond_t  noStart;
+
+
+
+void startDatagram() {
+  pthread_mutex_lock(&startMutex);
+  start = 1;
+  pthread_cond_signal(&noStart);
+  pthread_mutex_unlock(&startMutex);
+}
+
+// Assumes fd is valid
+void* receiveDatagram(void *arg) {
+  printf("Thread receive datagram started\n");
+
+  char buffer[MAX_DGRAM_SIZE];
+  struct sockaddr_storage src_addr;
+  socklen_t src_addr_len=sizeof(src_addr);
+
+  while(1) {
+    printf("Waiting for datagram packet\n");
+    ssize_t count=recvfrom(fd,buffer,sizeof(buffer),0,(struct sockaddr*)&src_addr,&src_addr_len);
+    if (count==-1) {
+      perror("recv failed");
+    } else if (count==sizeof(buffer)) {
+      perror("datagram too large for buffer: truncated");
+    } else {
+      //printf("Datagram size: %d.\n", (int)(count));
+      if (strncmp(buffer, "START", 5) == 0) {
+	//printf("+++++++++++++++++++++++ START\n");
+	startDatagram();
+      }
+    }
+  }
+}
+\end{lstlisting}
+
 
 \item It defines a function to send a datagram.
 \begin{lstlisting}
@@ -418,6 +464,8 @@ void __user_init() {
     exit(-1);
   }
 
+  // Start a thread to receive datagrams
+  pthread_create(&thread__Datagram, NULL, receiveDatagram, NULL);
 }
 \end{lstlisting}
 \end{itemize}
@@ -456,6 +504,8 @@ The corresponding packets are also defined in the GUI application e.g. see \text
 \subsection{GUI animation}
 Generate the C code from TTool (be sure to check the "Include user code" option). Start the GUI from a terminal, and then, start the MS application from TTool (you can also start MS from a terminal). You should see the animations of the GUI while the generated application executes. For example, Figure \ref{fig:animopen} shows the microwave when the door opened, and Figure \ref{fig:animcooking} shows the microwave in heating mode.
 
+
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.5\textwidth]{figures/animopen}
@@ -467,6 +517,79 @@ Generate the C code from TTool (be sure to check the "Include user code" option)
 \includegraphics[width=0.5\textwidth]{figures/animcooking}
 \caption{GUI when the microwave is cooking} \label{fig:animcooking}
 \end{figure}
+
+\subsection{GUI actions}\label{sec:GUIActions}
+\subsubsection{GUI side}
+The GUI contains a "start" button.  When the user clicks on this button, the GUI sends a "START" datagram packet to the MS. The GUI is indeed programmed as follows:
+\begin{itemize}
+\item In MainMicrowave.java:
+\begin{lstlisting}
+public void mouseClicked(MouseEvent e){
+        int x = e.getX();
+        int y = e.getY();
+
+        System.out.println("Mouse clicked!!!");
+
+        // START?
+        if ((x>630)&&(x<720)&&(y>335)&&(y<365)) {
+            System.out.println("Mouse clicked on start");
+            if (ds != null) {
+                ds.sendDatagramTo("START");
+            }
+            System.out.println("Action on start sent");
+        }
+}
+\end{lstlisting}
+\textit{ds.sendDatagram(..)} calls a DatagramServer object that sends a datagram to the destination from which it got its first packet.
+\end{itemize}
+\subsubsection{MS side}
+On MS side, the global code starts in  \textit{user\_init()} a thread that handles datagram receiving :
+\begin{lstlisting}
+pthread_create(&thread__Datagram, NULL, receiveDatagram, NULL);
+\end{lstlisting}
+\textit{receiveDatagram()} waits for datagram packets. When it gets a packet, it checks if it contains the "START" string. If so, it calls \textit{startDatagram()}.  This function works as follows:
+\begin{enumerate}
+\item A lock is put on a mutex ("startMutex")
+\item The "start" variable is set to 1
+\item A call is made on the condition variable "noStart"
+\item The mutex is unlock
+\end{enumerate}
+The \textit{ControlPanel} block defines a \textit{start()} method called before it sends the "startButton" signal, see Figure \ref{fig:controlpanel}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.25\textwidth]{figures/controlpanel}
+\caption{Window of the Graphical User Interface} \label{fig:controlpanel}
+\end{figure}
+
+Thus, when calling start(), the MS wants to wait for the "START" datagram. To do so, the \textit{ControlPanel} block implements "start()" as follows. First, it refers to externally defined elements: the start variable ("start"), the mutex (startMutex) and the condition variable ("startMutex").
+\begin{lstlisting}
+extern int start;
+extern pthread_mutex_t startMutex ;
+extern pthread_cond_t  noStart;
+\end{lstlisting}
+The method itself works as follows:
+\begin{enumerate}
+\item It puts a lock on the mutex.
+\item It waits untils "start" is equal to at least 1. Meanwhile, it waits on the "noStart" condition variable.
+\item When "start" is finally equal to 1 or more, it sets "start" to 0.
+\item It unlocks the mutex
+\end{enumerate}
+
+Then , the execution of the \textit{ControlPanel} block can continue with the sending of the "startButton" signal. Note that  this is thanks to the mutex facility that the datagram receinving facility and the \textit{ControlPanel} block cannot modify "start" at the same time.\\
+
+\begin{lstlisting}
+void _userImplemented_ControlPanel__start() {
+  pthread_mutex_lock(&startMutex);
+  printf("Waiting for next start");
+  while(start < 1) {
+    pthread_cond_wait(&noStart, &startMutex);
+  }
+  start = 0;
+  pthread_mutex_unlock(&startMutex);
+  printf("****** MW can start cooking\n");
+}
+\end{lstlisting}
 
 
 \newpage
