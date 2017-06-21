@@ -377,8 +377,8 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@cp $(TTOOL_EXECUTABLECODE)/src/*.c $(TTOOL_TARGET)/executablecode/src/
 	@cp $(TTOOL_EXECUTABLECODE)/src/*.h $(TTOOL_TARGET)/executablecode/src/
 	@cp $(TTOOL_EXECUTABLECODE)/generated_src/README $(TTOOL_TARGET)/executablecode/generated_src/
-	@cp $(TTOOL_EXECUTABLECODE)/generated_src/example/*.java $(TTOOL_TARGET)/executablecode/example/
-	@cp $(TTOOL_EXECUTABLECODE)/generated_src/example/README $(TTOOL_TARGET)/executablecode/example/
+	@cp $(TTOOL_EXECUTABLECODE)/example/*.java $(TTOOL_TARGET)/executablecode/example/
+	@cp $(TTOOL_EXECUTABLECODE)/example/README $(TTOOL_TARGET)/executablecode/example/
 # MPSOC
 	@mkdir -p $(TTOOL_TARGET)/MPSoC
 	@mkdir -p $(TTOOL_TARGET)/MPSoC/generated_topcell
