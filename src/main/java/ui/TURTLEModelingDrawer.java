@@ -122,7 +122,7 @@ public class TURTLEModelingDrawer {
     }
 
     private void drawTClasses() throws MalformedTURTLEModelingException {
-        TClass t;
+      //  TClass t;
         int total = tm.classNb();
         radius = 200 + 30 * total;
         centerX = radius + 50;
@@ -175,13 +175,13 @@ public class TURTLEModelingDrawer {
     }
 
     public void addAttributes(TClass t, TCDTClass tcd) throws MalformedTURTLEModelingException {
-        Vector params = t.getParamList();
-        LinkedList<TAttribute> attributes = new LinkedList<TAttribute> ();
+        Vector<Param> params = t.getParamList();
+        java.util.List<TAttribute> attributes = new LinkedList<TAttribute> ();
         Param p;
         TAttribute ta;
 
         for(int i=0; i<params.size(); i++) {
-            p = (Param)(params.elementAt(i));
+            p = params.elementAt(i);
             ta = null;
             if (p.getType().compareTo(Param.NAT) ==0) {
                 ta = new TAttribute(TAttribute.PRIVATE, p.getName(), p.getValue(), TAttribute.NATURAL);
@@ -201,13 +201,13 @@ public class TURTLEModelingDrawer {
     }
 
     public void addGates(TClass t, TCDTClass tcd) throws MalformedTURTLEModelingException {
-        Vector tmgates = t.getGateList();
-        LinkedList<TAttribute> gates = new LinkedList<TAttribute> ();
+        Vector<Gate> tmgates = t.getGateList();
+        java.util.List<TAttribute> gates = new LinkedList<TAttribute> ();
         Gate g;
         TAttribute ta;
 
         for(int i=0; i<tmgates.size(); i++) {
-            g = (Gate)(tmgates.elementAt(i));
+            g = tmgates.elementAt(i);
             ta = new TAttribute(TAttribute.PUBLIC, g.getName(), "", g.getType()+1);
             gates.add(ta);
         }
@@ -265,7 +265,7 @@ public class TURTLEModelingDrawer {
         }
 
         // Managing nexts of this component
-        ADComponent nextAdc;
+       // ADComponent nextAdc;
         for(int i=0; i<adc.getNbNext(); i++) {
             makeADOf(adc.getNext(i), tadp, tgc, i, adc.getNbNext());
         }
