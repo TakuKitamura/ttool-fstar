@@ -380,7 +380,9 @@ public abstract class SysmlsecMethodologyDiagramReference extends TGCScalableWit
        // String s = e.getActionCommand();
 
         if (e.getSource() == diagramReference) {
-            addDiagramReference(null);
+        	// DB: Issue #53: Pass the frame on which the dialog should be centered
+            addDiagramReference( getTDiagramPanel().getMGUI().frame );
+//        	addDiagramReference(null);
         }
 
         return true;
@@ -475,12 +477,13 @@ public abstract class SysmlsecMethodologyDiagramReference extends TGCScalableWit
         // Get from mgui the list of all diagrams with type depends from the subclass
         // If diagrams have the same name -> we do not see the difference
 
-        TURTLEPanel tp;
-        Vector tabs = getTDiagramPanel().getMGUI().getTabs();
-        for(Object o: tabs) {
-            tp = (TURTLEPanel)o;
-            if (isAValidPanelType(tp)) {
-                ignored.add(getTDiagramPanel().getMGUI().getTitleAt(tp));
+       // TURTLEPanel tp;
+        Vector<TURTLEPanel> tabs = getTDiagramPanel().getMGUI().getTabs();
+        
+        for( final TURTLEPanel panel : tabs) {
+          //  tp = (TURTLEPanel)o;
+            if (isAValidPanelType( panel )) {
+                ignored.add(getTDiagramPanel().getMGUI().getTitleAt( panel ));
             }
         }
 

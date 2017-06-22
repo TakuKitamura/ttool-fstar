@@ -63,7 +63,7 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
 
 
 
-    private static boolean overideSyntaxChecking = false;
+   // private static boolean overideSyntaxChecking = false;
 
     private Vector<String> ignored, selected;
 
