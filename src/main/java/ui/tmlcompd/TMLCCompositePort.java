@@ -56,7 +56,7 @@ import java.awt.*;
  */
 public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedTGComponent, WithAttributes {
 	//private Color myColor, portColor;
-	private int orientation;
+	//private int orientation;
 	private int oldx, oldy;
 	private int halfwidth = 13;
 	private int currentOrientation = GraphicLib.NORTH;
