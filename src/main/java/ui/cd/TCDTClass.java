@@ -311,7 +311,7 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
         ((TGCAttributeBox)(tgcomponent[1])).checkMySize();
     }
     
-    public void setAttributes(LinkedList<TAttribute> attributes) {
+    public void setAttributes(java.util.List<TAttribute> attributes) {
         ((TGCAttributeBox)(tgcomponent[0])).setAttributeList(attributes);
     }
     
