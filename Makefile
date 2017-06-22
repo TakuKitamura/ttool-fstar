@@ -370,12 +370,15 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@mkdir -p $(TTOOL_TARGET)/TToolexecutablecode
 	@mkdir -p $(TTOOL_TARGET)/executablecode/src
 	@mkdir -p $(TTOOL_TARGET)/executablecode/generated_src
+	@mkdir -p $(TTOOL_TARGET)/executablecode/example
 	@cp $(TTOOL_EXECUTABLECODE)/Makefile $(TTOOL_TARGET)/executablecode/
 	@cp $(TTOOL_EXECUTABLECODE)/Makefile.defs $(TTOOL_TARGET)/executablecode/
 	@cp $(TTOOL_EXECUTABLECODE)/Makefile.forsoclib $(TTOOL_TARGET)/executablecode/
 	@cp $(TTOOL_EXECUTABLECODE)/src/*.c $(TTOOL_TARGET)/executablecode/src/
 	@cp $(TTOOL_EXECUTABLECODE)/src/*.h $(TTOOL_TARGET)/executablecode/src/
 	@cp $(TTOOL_EXECUTABLECODE)/generated_src/README $(TTOOL_TARGET)/executablecode/generated_src/
+	@cp $(TTOOL_EXECUTABLECODE)/example/*.java $(TTOOL_TARGET)/executablecode/example/
+	@cp $(TTOOL_EXECUTABLECODE)/example/README $(TTOOL_TARGET)/executablecode/example/
 # MPSOC
 	@mkdir -p $(TTOOL_TARGET)/MPSoC
 	@mkdir -p $(TTOOL_TARGET)/MPSoC/generated_topcell
