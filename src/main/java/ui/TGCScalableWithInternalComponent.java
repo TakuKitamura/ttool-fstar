@@ -74,7 +74,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         dwidth = dwidth - width;
         height = (int)(dheight);
         dheight = dheight - height;
-	minWidth = (int)(dMinWidth);
+        minWidth = (int)(dMinWidth);
         minHeight = (int)(dMinHeight);
         maxWidth = (int)(dMaxWidth);
         maxHeight = (int)(dMaxHeight);
@@ -82,7 +82,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
 	//TraceManager.addDev("tgc= " + this + " minHeight=" + minHeight);
 	//TraceManager.addDev("tgc= " + this + " maxHeight=" + maxHeight + " height=  " + height);
 
-	dMinWidth = dMinWidth - minWidth;
+        dMinWidth = dMinWidth - minWidth;
         dMinHeight = dMinHeight - minHeight;
         dMaxWidth = dMaxWidth - maxWidth;
         dMaxHeight = dMaxHeight - maxHeight;
@@ -99,7 +99,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
 
         }
 
-	setMoveCd(x, y);
+        setMoveCd(x, y);
 
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof ScalableTGComponent) {
@@ -107,8 +107,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
             }
         }
 
-	hasBeenResized();
-	
+        hasBeenResized();
     }
 
     public void initScaling(int w, int h) {
