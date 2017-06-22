@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
-
-//import java.awt.*;
 
 /**
    * Class TGCScalableWithInternalComponent
@@ -65,7 +60,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         dheight = (height + dheight) / oldScaleFactor * scaleFactor;
         dx = (dx + x) / oldScaleFactor * scaleFactor;
         dy = (dy + y) / oldScaleFactor * scaleFactor;
-	dMinWidth = (minWidth + dMinWidth) / oldScaleFactor * scaleFactor;
+        dMinWidth = (minWidth + dMinWidth) / oldScaleFactor * scaleFactor;
         dMinHeight = (minHeight + dMinHeight) / oldScaleFactor * scaleFactor;
         dMaxWidth = (maxWidth + dMaxWidth) / oldScaleFactor * scaleFactor;
         dMaxHeight = (maxHeight + dMaxHeight) / oldScaleFactor * scaleFactor;
