@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/libs/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="/libs/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="/libs/derby.jar"/>
+	<classpathentry kind="lib" path="/libs/derbynet.jar"/>
+	<classpathentry kind="lib" path="/libs/JavaPlot.jar"/>
+	<classpathentry kind="lib" path="/libs/jsoup-1.8.1.jar"/>
+	<classpathentry kind="lib" path="/libs/opencloud.jar"/>
+	<classpathentry kind="lib" path="/libs/gs-core-1.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
