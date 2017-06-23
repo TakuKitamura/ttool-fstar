@@ -72,22 +72,10 @@
 
 package ddtranslatorSoclib.toTopCell;
 
-//base
-// import avatartranslator.AvatarSpecification;
-// import avatartranslator.AvatarRelation;
-// import avatartranslator.AvatarSignal;
-// import ddtranslatorSoclib.AvatarCPU;
-// import ddtranslatorSoclib.AvatarRAM;
-
 import ddtranslatorSoclib.*;
 import ddtranslatorSoclib.toSoclib.*;
 
-//added
 import avatartranslator.*;
-//import ddtranslatorSoclib.AvatarRAM;
-//import ddtranslatorSoclib.AvatarTask;
-//import ddtranslatorSoclib.AvatarddSpecification;
-//import ddtranslatorSoclib.toTopCell.TopCellGenerator;
 import myutil.Conversion;
 import myutil.FileException;
 import myutil.FileUtils;
@@ -97,16 +85,13 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
-//
 
 public class Deployinfo {
 
     private final static String CR = "\n";
     private final static String CR2 = "\n\n";
   
-    //public static AvatarRelation ar;
     public static AvatarSpecification avspec;//DG 15.05.2017    
-    //added
     public static AvatarddSpecification avddspec;
     private Vector<?> warnings;
 
@@ -237,65 +222,64 @@ System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
 	return deployinfo_map;	
 	}*/
 
-    // public static String getDeployInfoMap() {
-    // 	int i=0;       
-    //     String deployinfo_map = CR;
-
-    // 	deployinfo_map += "#define MAP_A\\" + CR;
-    // 	try{		
-    // 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
-    // 	    if (!(ram.getChannels().isEmpty())){	
-    // 		    for (i=0;i<30;i++) {
-    // 			deployinfo_map = deployinfo_map +"\n .channel"+i+" : { \\" + CR;
-    // 			deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")\\"+ CR;
-			
-    // 			deployinfo_map=deployinfo_map+ "} > uram"+ram.getNo_ram()+"\\"+ CR;	
-    // 			//i++;
-    // 		    }
-		
-    // 		    i=0;
-    // 		    //for (AvatarChannel channel : ram.getChannels()) {
-    // 		    for (i=0;i<30;i++) {
-    // 			deployinfo_map = deployinfo_map +"\n .lock"+i+" : { \\" + CR;
-    // 			deployinfo_map = deployinfo_map + "*(section_lock"+i+ ")\\"+ CR;		   
-    // 			//  if(use_vcilocks) deployinfo_map=deployinfo_map+ "} > vci_locks\\"+ CR;
-    // 			deployinfo_map=deployinfo_map+ "} > uram0\\"+ CR;//DG 27.06. no ramlocks
-    // 			//i++;
-    // 		    }
-    // 	    }	    
-    // 	}
-    // 	}catch (Exception e){
-    // 	    e.printStackTrace();
-    // 	}
-    // 	return deployinfo_map;	
-    // 	}
-    //Déplacé dans TasksAndMainGenerator
+    public static String getDeployInfoMap(AvatarSpecification _avspec) {
+	avspec = _avspec;
+	int i=0;       
+        String deployinfo_map = CR;
+	int j;
+	
+	deployinfo_map += "#define MAP_A\\" + CR;
+	try{		
+	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
+		if (/*!*/(ram.getChannels().isEmpty())){ //"!" removed because it returned the wrong results. Logic is now incorrect but results are correct (needs further investigating) CD 20.6
+		    for(AvatarRelation ar: avspec.getRelations()){
+			for (j=0;j<ar.nbOfSignals();j++) {
+			    deployinfo_map = deployinfo_map + "\n .channel"+i+" : {";
+			    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")";	
+			    deployinfo_map = deployinfo_map + "} > uram" + ram.getNo_ram() + CR;	//ram n° was incorrect (see above) 
+			i++;
+			}
+		    }
+		    i=0;
+		    for(AvatarRelation ar: avspec.getRelations()){ 
+			for (j=0;j<ar.nbOfSignals();j++) { //CD 15.06 dynamic to signal number
+			    deployinfo_map = deployinfo_map + "\n .lock"+i+" : { " ;
+			    deployinfo_map = deployinfo_map + "*(section_lock" + i + ")";		   
+			deployinfo_map = deployinfo_map + "} > uram" + ram.getNo_ram() + CR;
+			i++;
+			}
+		    }
+		}	    
+	    }
+	}catch (Exception e){
+	    e.printStackTrace();
+	}
+	return deployinfo_map;	
+	}
 
     //ajout C.D.
-    // public static String getDeployInfoRam() {
-    //     int i=0;
-    // 	String deployinfo_ram = CR;
-    // 	int k=3;
-    // 	if(avspec.getRelations()== null){
-    // 	    System.out.println("avspec est null");
-    // 	}
-    // 	//int k=lar.size();
-    // 	//int k = lar.nbOfSignals();
-    //    	//if(ar !=null){
-    // 	try{
-    // 	for(AvatarRelation ar: avspec.getRelations()){
-    // 	    for (i=0; i<k;i++){
-    // 		deployinfo_ram += "DEPLOY_RAM" + i + "_NAME (RWAL) : ORIGIN = DEPLOY_RAM" + i + "_ADDR, LENGTH = DEPLOY_RAM" + i + "_SIZE" + CR;
-    // 		deployinfo_ram += "CACHED_RAM" + i + "_NAME (RWAL) : ORIGIN = CACHED_RAM" + i + "_ADDR, LENGTH = CACHED_RAM" + i + "_SIZE" + CR;
-    // 		//  }
-    // 		//  }
-    // 	    }
-    // 	}
-    // 	}catch (Exception e){
-    // 	    e.printStackTrace();
-    // 	}
-    // 	return deployinfo_ram;
-    // }
+    public static String getDeployInfoRam(AvatarSpecification _avspec) {
+	avspec =_avspec;
+        int i=0;
+	int j;
+	String deployinfo_ram = CR;
+	try{
+	    for(AvatarRelation ar: avspec.getRelations()){
+		for (j=0; j<ar.nbOfSignals();j++){
+		    deployinfo_ram += "#if defined(DEPLOY_RAM" + i + "_NAME)" + CR;
+		    deployinfo_ram += "\tDEPLOY_RAM" + i + "_NAME (RWAL) : ORIGIN = DEPLOY_RAM" + i + "_ADDR, LENGTH = DEPLOY_RAM" + i + "_SIZE" + CR;
+		    deployinfo_ram += "#endif" +CR;
+		    deployinfo_ram += "#if defined(CACHED_RAM" + i + "_NAME)" + CR;
+		    deployinfo_ram += "\tCACHED_RAM" + i + "_NAME (RWAL) : ORIGIN = CACHED_RAM" + i + "_ADDR, LENGTH = CACHED_RAM" + i + "_SIZE" + CR;
+		    deployinfo_ram += "#endif" +CR;
+		    i++;
+		}
+	    }
+	}catch (Exception e){
+	    e.printStackTrace();
+	}
+	return deployinfo_ram;
+    }
 
     //fin ajout C.D.
 
