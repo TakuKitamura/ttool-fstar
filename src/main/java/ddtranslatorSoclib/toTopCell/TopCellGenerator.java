@@ -182,7 +182,7 @@ public class TopCellGenerator
 		config +				
 		Code.getCode() +
 		MappingTable.getMappingTable() +
-		Loader.getLoader() +
+		Loader.getLoader(avspec) + //DG 23.06.
 		Declaration.getDeclarations() +	
 		Signal.getSignal() +
 		NetList.getNetlist(icn,tracing) +

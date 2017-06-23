@@ -44,22 +44,25 @@
 
 
 package ddtranslatorSoclib.toTopCell;
-
+import avatartranslator.AvatarRelation;//DG 23.06.
+import avatartranslator.AvatarSpecification;//DG 23.06.
 import ddtranslatorSoclib.AvatarChannel;
 
 public class Loader {
-
+public static AvatarSpecification avspec;
 	static private String loader;
 	private final static String NAME_CLK = "signal_clk";
 
     private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
-    public Loader(){
+    public Loader(AvatarSpecification _avspec){
+	
+		avspec =_avspec;
     }
 
-	public static String  getLoader() {
-
+	public static String  getLoader(AvatarSpecification _avspec) {//DG 23.06.
+	    avspec =_avspec;//DG 23.06.
 	    int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();		
 	    //nb_clusters=2;
 
@@ -92,10 +95,19 @@ public class Loader {
       // We generated so far until arriving at first channel segment, if any
 		//current hypothesis : one segment per channel
 		int j=0;
-		for (AvatarChannel channel : TopCellGenerator.avatardd.getAllMappedChannels()) {    			  
-			loader = loader + ".channel" + j + ";";
-			j++;
+		//for (AvatarChannel channel : TopCellGenerator.avatardd.getAllMappedChannels()) {    	
+		//DG 23.06. per signal!!hack pour l'instant
+		int i=0;
+		//for (i=0;i<30;i++){ 
+
+		for(AvatarRelation ar: avspec.getRelations()) {
+
+       		for(i=0; i<ar.nbOfSignals() ; i++) {
+
+			loader = loader + ".channel" + i + ";";
+			i++;
 		}
+}
 		// We resume the generation of the fixed code
 		loader = loader + ".cpudata;.contextdata\");" + CR ;
 		loader = loader + "      } else {" + CR ;
