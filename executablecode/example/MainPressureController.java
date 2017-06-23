@@ -10,8 +10,18 @@ import java.util.*;
 
 public class MainPressureController extends JFrame implements Feeder, MouseListener {
 
+    static final int PRESSURE_MIN = 1;
+    static final int PRESSURE_MAX = 30;
+    static final int PRESSURE_INIT = 15;    //initial pressure
+
+    static final String ALARM_ON = "ALARM ON";
+    static final String ALARM_OFF = "alarm off";
+
     private PressureControllerPanel mp;
     private DatagramServer ds;
+
+    private JSlider pressureValue;
+    private JLabel alarm;
 
     public MainPressureController() {
         super("Pressure Controller demonstration");
@@ -26,10 +36,28 @@ public class MainPressureController extends JFrame implements Feeder, MouseListe
 
     public void initComponents() {
         setLayout(new BorderLayout());
-        mp = new PressureControllerPanel();
-        mp.addMouseListener(this);
-        mp.setPreferredSize(new Dimension(800,600));
-        add(mp, BorderLayout.CENTER);
+	pressureValue = new JSlider(JSlider.HORIZONTAL, PRESSURE_MIN, PRESSURE_MAX, PRESSURE_INIT);
+	pressureValue..addChangeListener(this);
+
+	//Turn on labels at major tick marks.
+	pressure.setMajorTickSpacing(5);
+	pressure.setMinorTickSpacing(1);
+	pressure.setPaintTicks(true);
+	pressure.setPaintLabels(true);
+
+	Font font = new Font("Serif", Font.ITALIC, 15);
+	pressure.setFont(font);
+	
+	add(pressure, BorderLayout.NORTH);
+
+	alarm = new JLabel(ALARM_OFF);
+	add(alarm, BorderLayout.SOUTH);
+
+
+        //mp = new PressureControllerPanel();
+        //mp.addMouseListener(this);
+	// mp.setPreferredSize(new Dimension(800,600));
+        //add(mp, BorderLayout.CENTER);
         mp.revalidate();
     }
 

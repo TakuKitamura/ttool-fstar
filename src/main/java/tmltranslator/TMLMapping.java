@@ -1,27 +1,28 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
- * 
+ *
  * ludovic.apvrille AT telecom-paristech.fr
  * andrea.enrici AT telecom-paristech.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
+
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -32,7 +33,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -51,25 +52,25 @@ import ui.util.CorrespondanceElement;
 import java.util.*;
 
 /**
-   * Class TMLMapping
-   * Creation: 05/09/2007
-   * @version 1.1 10/06/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLMapping
+ * Creation: 05/09/2007
+ * @version 1.1 10/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
 public class TMLMapping<E> {
 
     private TMLModeling<E> tmlm;
     private TMLArchitecture tmla;
- //   private TMLCP tmlcp;
+    //   private TMLCP tmlcp;
     private List<HwExecutionNode> onnodes;
     private List<TMLTask> mappedtasks;
     private List<HwCommunicationNode> oncommnodes;
     public List<TMLElement> mappedcommelts;
-	public CorrespondanceElement<E> listE;
+    public CorrespondanceElement<E> listE;
     public boolean firewall = false;
     //private List<TMLCP> mappedCPs;
-   // private List<TMLElement> commEltsMappedOnCPs;
-    public Map<SecurityPattern, List<HwMemory>> mappedSecurity= new HashMap<SecurityPattern, List<HwMemory>>(); 
+    // private List<TMLElement> commEltsMappedOnCPs;
+    public Map<SecurityPattern, List<HwMemory>> mappedSecurity= new HashMap<SecurityPattern, List<HwMemory>>();
     private List<TMLCPLib> mappedCPLibs;
 
     private List<String[]> pragmas= new ArrayList<String[]>();
@@ -89,52 +90,52 @@ public class TMLMapping<E> {
             DIPLOElement.resetID();
         }
     }
-//
-//    public TMLMapping( TMLModeling _tmlm, TMLArchitecture _tmla, TMLCP _tmlcp, boolean reset ) {
-//
-//        tmlm = _tmlm;
-//        tmla = _tmla;
-//      //  tmlcp = _tmlcp;
-//        init();
-//
-//        if( reset ) {
-//            DIPLOElement.resetID();
-//        }
-//    }
+    //
+    //    public TMLMapping( TMLModeling _tmlm, TMLArchitecture _tmla, TMLCP _tmlcp, boolean reset ) {
+    //
+    //        tmlm = _tmlm;
+    //        tmla = _tmla;
+    //      //  tmlcp = _tmlcp;
+    //        init();
+    //
+    //        if( reset ) {
+    //            DIPLOElement.resetID();
+    //        }
+    //    }
 
     public TMLArchitecture getArch(){
-    	return tmla;
+        return tmla;
     }
-    
+
     public void translate2ProVerif(){
-    	/*TML2ProVerif spec =*/ new TML2ProVerif(this);
+        /*TML2ProVerif spec =*/ new TML2ProVerif(this);
     }
 
     public List<HwMemory> getMappedMemory(SecurityPattern sp){
-    	return mappedSecurity.get(sp);
+        return mappedSecurity.get(sp);
     }
 
     public List<SecurityPattern> getMappedPatterns(HwMemory mem){
-		List<SecurityPattern> l = new ArrayList<SecurityPattern>();
-		for (SecurityPattern sp: mappedSecurity.keySet()){
-		    if (mappedSecurity.get(sp).contains(mem)){
-				l.add(sp);
-	    	}
-		}
-		return l;
+        List<SecurityPattern> l = new ArrayList<SecurityPattern>();
+        for (SecurityPattern sp: mappedSecurity.keySet()){
+            if (mappedSecurity.get(sp).contains(mem)){
+                l.add(sp);
+            }
+        }
+        return l;
     }
-		
-	public SecurityPattern getSecurityPatternByName(String name){
-		for (SecurityPattern sp: tmlm.secPatterns){
-			if (sp.name.equals(name)){
-				return sp;
-			}
-		}
-		return null;
-	}
+
+    public SecurityPattern getSecurityPatternByName(String name){
+        for (SecurityPattern sp: tmlm.secPatterns){
+            if (sp.name.equals(name)){
+                return sp;
+            }
+        }
+        return null;
+    }
     public void makeMinimumMapping() {
         HwCPU cpu;
-     //   HwMemory mem;
+        //   HwMemory mem;
         HwBus bus;
         HwLink link0;//, link1;
         TMLTask t;
@@ -179,7 +180,7 @@ public class TMLMapping<E> {
 
             // Add all channels on that bus
             Iterator<TMLChannel> channelIt = tmlm.getChannels().iterator();
-            
+
             while( channelIt.hasNext() ) {
                 ch = channelIt.next();
                 addCommToHwCommNode(ch, bus);
@@ -237,33 +238,33 @@ public class TMLMapping<E> {
     }
 
     // If only one memory -> map all channels on it;
-//    private void mapAllChannelsOnMemory() {
-//        // Check if only one bus
-//        if (getNbOfMemories() != 1) {
-//            return;
-//        }
-//
-//        HwMemory mem = tmla.getFirstMemory();
-//
-//        int index;
-//        boolean mapped;
-//        for(TMLChannel cha: tmlm.getChannels()) {
-//            index = 0;
-//            mapped = false;
-//            for(TMLElement el: mappedcommelts) {
-//                if (el == cha) {
-//                    if (oncommnodes.get(index) instanceof HwMemory) {
-//                        mapped = true;
-//                        break;
-//                    }
-//                }
-//                index ++;
-//            }
-//            if (!mapped) {
-//                addCommToHwCommNode(cha, mem);
-//            }
-//        }
-//    }
+    //    private void mapAllChannelsOnMemory() {
+    //        // Check if only one bus
+    //        if (getNbOfMemories() != 1) {
+    //            return;
+    //        }
+    //
+    //        HwMemory mem = tmla.getFirstMemory();
+    //
+    //        int index;
+    //        boolean mapped;
+    //        for(TMLChannel cha: tmlm.getChannels()) {
+    //            index = 0;
+    //            mapped = false;
+    //            for(TMLElement el: mappedcommelts) {
+    //                if (el == cha) {
+    //                    if (oncommnodes.get(index) instanceof HwMemory) {
+    //                        mapped = true;
+    //                        break;
+    //                    }
+    //                }
+    //                index ++;
+    //            }
+    //            if (!mapped) {
+    //                addCommToHwCommNode(cha, mem);
+    //            }
+    //        }
+    //    }
 
     public int getNbOfBusses() {
         if (tmla == null) {
@@ -284,8 +285,8 @@ public class TMLMapping<E> {
         onnodes = new ArrayList<HwExecutionNode>();
         oncommnodes = new ArrayList<HwCommunicationNode>();
         mappedcommelts = new ArrayList<TMLElement>();
-//        mappedCPs = new ArrayList<TMLCP>();
-//        commEltsMappedOnCPs = new ArrayList<TMLElement>();
+        //        mappedCPs = new ArrayList<TMLCP>();
+        //        commEltsMappedOnCPs = new ArrayList<TMLElement>();
         mappedCPLibs = new ArrayList<TMLCPLib>();
     }
 
@@ -322,11 +323,11 @@ public class TMLMapping<E> {
     }
 
     public void addPragma(String[] s){
-    	pragmas.add(s);
+        pragmas.add(s);
     }
 
     public List<String[]> getPragmas(){
-    	return pragmas;
+        return pragmas;
     }
 
     public String[] getCPUandHwAIDs() {
@@ -401,7 +402,7 @@ public class TMLMapping<E> {
         return tmlm;
     }
     public void setTMLModeling(TMLModeling<E> _tmlm){
-	tmlm=_tmlm;
+        tmlm=_tmlm;
     }
     public TMLArchitecture getTMLArchitecture() {
         return tmla;
@@ -484,11 +485,11 @@ public class TMLMapping<E> {
     }
 
     public void removeTask(TMLTask _task){
-	int index = mappedtasks.indexOf(_task);
-	if (index >-1){
-	    onnodes.remove(index);
-	    mappedtasks.remove(index);
-	}
+        int index = mappedtasks.indexOf(_task);
+        if (index >-1){
+            onnodes.remove(index);
+            mappedtasks.remove(index);
+        }
     }
     public boolean isAUsedHwNode(HwNode _node) {
         return (onnodes.contains(_node));
@@ -515,15 +516,15 @@ public class TMLMapping<E> {
     public boolean oneTaskMappedOn(TMLRequest _request, HwNode _node) {
         TMLTask task;
         Iterator<TMLTask> iterator = _request.getOriginTasks().listIterator();
-       
+
         while (iterator.hasNext()) {
             task = iterator.next();
-            
+
             if (isTaskMappedOn(task, _node)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -593,17 +594,17 @@ public class TMLMapping<E> {
         }
     }
 
-	public HashSet<String> getMappedTasks(HwNode node){
-		HashSet<String> tasks = new HashSet<String>();
-		int i=0;
-		for(HwExecutionNode ex: onnodes) {
-			if (ex == node) {
-               	tasks.add(mappedtasks.get(i).getName().split("__")[mappedtasks.get(i).getName().split("__").length-1]);
-			}
-			i++;
-		}
-		return tasks;
-	}
+    public HashSet<String> getMappedTasks(HwNode node){
+        HashSet<String> tasks = new HashSet<String>();
+        int i=0;
+        for(HwExecutionNode ex: onnodes) {
+            if (ex == node) {
+                tasks.add(mappedtasks.get(i).getName().split("__")[mappedtasks.get(i).getName().split("__").length-1]);
+            }
+            i++;
+        }
+        return tasks;
+    }
 
     public ArrayList<String> getSummaryTaskMapping() {
         StringBuffer sb = new StringBuffer("");
@@ -686,21 +687,21 @@ public class TMLMapping<E> {
 
 
     public void removeForksAndJoins() {
-	TraceManager.addDev("\n\nRemove fork and join in MAPPING. Current nb of tasks:" + tmlm.getTasks().size());
+        TraceManager.addDev("\n\nRemove fork and join in MAPPING. Current nb of tasks:" + tmlm.getTasks().size());
         if (tmlm != null) {
             tmlm.removeForksAndJoins();
         }
 
         TMLChannel chan;
 
-	TraceManager.addDev("Number of tasks after remove fork/join: " + tmlm.getTasks().size());
-	
-	
+        TraceManager.addDev("Number of tasks after remove fork/join: " + tmlm.getTasks().size());
+
+
         // We map the forked tasks to their origin node, and the join ones to their destination node
         for(TMLTask task: tmlm.getTasks()) {
             if (task.getName().startsWith("FORKTASK_")) {
                 if (!isTaskMapped(task)) {
-		    TraceManager.addDev("\n\nFORKTASK is NOT mapped: " + task.getName());
+                    TraceManager.addDev("\n\nFORKTASK is NOT mapped: " + task.getName());
                     // We need to map this fork task to the origin node
                     chan = tmlm.getChannelToMe(task);
                     if (chan != null) {
@@ -714,11 +715,11 @@ public class TMLMapping<E> {
                         }
                     }
                 } else {
-		    TraceManager.addDev("\n\nFORKTASK is  mapped: " + task.getName());
-		}
+                    TraceManager.addDev("\n\nFORKTASK is  mapped: " + task.getName());
+                }
             } else {
-		TraceManager.addDev("Non fork task found: " + task.getName());
-	    }
+                TraceManager.addDev("Non fork task found: " + task.getName());
+            }
             if (task.getName().startsWith("JOINTASK_")) {
                 if (!isTaskMapped(task)) {
                     // We need to map this join task to the destination node
@@ -880,14 +881,14 @@ public class TMLMapping<E> {
         // In the origin task, we change all writing to "chan" to "fromOriginToDMA"
         origin.replaceWriteChannelWith(chan, fromOriginToDMA);
         TMLEvent toDMA = new TMLEvent("toDMA" +  chan.getName(), chan, 1, false);
-	TMLEvent fromDMA = new TMLEvent("fromDMA" +  chan.getName(), chan, 1, false);
+        TMLEvent fromDMA = new TMLEvent("fromDMA" +  chan.getName(), chan, 1, false);
         tmlm.addEvent(toDMA);
-	tmlm.addEvent(fromDMA);
+        tmlm.addEvent(fromDMA);
         toDMA.addParam(new TMLType(TMLType.NATURAL));
         toDMA.setTasks(origin, dmaTask);
-	fromDMA.setTasks(dmaTask, origin);
+        fromDMA.setTasks(dmaTask, origin);
         //origin.addSendEventAfterWriteIn(fromOriginToDMA, toDMA, "size");
-	origin.addSendAndReceiveEventAfterWriteIn(fromOriginToDMA, toDMA, fromDMA, "size", "");
+        origin.addSendAndReceiveEventAfterWriteIn(fromOriginToDMA, toDMA, fromDMA, "size", "");
 
 
         // We need to create the activity diagram of DMATask
@@ -905,7 +906,7 @@ public class TMLMapping<E> {
         wait.setEvent(toDMA);
         wait.addParam("size");
         activity.addElement(wait);
-	TMLSendEvent done = new TMLSendEvent("DMATransferComplete", null);
+        TMLSendEvent done = new TMLSendEvent("DMATransferComplete", null);
         done.setEvent(fromDMA);
         activity.addElement(done);
         TMLForLoop mainLoop = new TMLForLoop("mainLoopOfDMA", null);
@@ -941,7 +942,7 @@ public class TMLMapping<E> {
         wait.addNext(loop);
         loop.addNext(read);
         loop.addNext(done);
-	done.addNext(stop);
+        done.addNext(stop);
         read.addNext(write);
         write.addNext(stopWrite);
 
@@ -1412,11 +1413,11 @@ public class TMLMapping<E> {
 
     public void linkTasks2TMLChannels() {
         if( tmlm != null ) {
-        	Iterator<TMLTask> iterator = tmlm.getTasks().listIterator();
-            
-        	while( iterator.hasNext() ) {
+            Iterator<TMLTask> iterator = tmlm.getTasks().listIterator();
+
+            while( iterator.hasNext() ) {
                 TMLTask task = iterator.next();
-                
+
                 for( TMLReadChannel readCh: task.getReadChannels() )    {
                     String readChName = readCh.toString().split(": ")[1];
                     for( TMLChannel ch: tmlm.getChannels() )    {
@@ -1426,7 +1427,7 @@ public class TMLMapping<E> {
                         }
                     }
                 }
-                
+
                 for( TMLWriteChannel writeCh: task.getWriteChannels() ) {
                     String writeChName = writeCh.toString().split(": ")[1];
                     for( TMLChannel ch: tmlm.getChannels() )    {
@@ -1445,10 +1446,10 @@ public class TMLMapping<E> {
         //ListIterator iterator;
         if( tmlm != null )      {
             final Iterator<TMLTask> iterator = tmlm.getTasks().listIterator();
-            
+
             while( iterator.hasNext() ) {
                 TMLTask task = iterator.next();
-                
+
                 for( TMLSendEvent sendEvt: task.getSendEvents() )       {
                     String sendEvtName = sendEvt.toString().split(":")[1].split("\\(")[0];
                     for( TMLEvent evt: tmlm.getEvents() )       {
@@ -1457,7 +1458,7 @@ public class TMLMapping<E> {
                         }
                     }
                 }
-                
+
                 for( TMLWaitEvent waitEvt: task.getWaitEvents() )       {
                     String waitEvtName = waitEvt.toString().split(":")[1].split("\\(")[0];
                     for( TMLEvent evt: tmlm.getEvents() )       {
@@ -1469,12 +1470,12 @@ public class TMLMapping<E> {
             }
         }
     }
-    
+
     public void setTMLDesignPanel(TMLComponentDesignPanel _tmldp){
-    	tmldp = _tmldp;
+        tmldp = _tmldp;
     }
-    
+
     public TMLComponentDesignPanel getTMLCDesignPanel(){
-    	return tmldp;
+        return tmldp;
     }
 }
