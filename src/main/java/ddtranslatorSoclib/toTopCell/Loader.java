@@ -104,8 +104,8 @@ public static AvatarSpecification avspec;
 
        		for(i=0; i<ar.nbOfSignals() ; i++) {
 
-			loader = loader + ".channel" + i + ";";
-			i++;
+			loader = loader + ".channel" + j + ";";
+			j++;
 		}
 }
 		// We resume the generation of the fixed code
