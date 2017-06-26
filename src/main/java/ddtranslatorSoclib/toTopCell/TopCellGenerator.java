@@ -97,19 +97,19 @@ public class TopCellGenerator
 		avspec =_avspec;
 	}
 
-	public String generateTopCell() {
-	    String icn;
-
-	    /* first test validity of the hardware platform*/
-            if(TopCellGenerator.avatardd.getNbCPU()==0){
-		    System.out.println("***Warning: require at least one CPU***");
-		}
+    public String generateTopCell() {
+	String icn;
+	
+	/* first test validity of the hardware platform*/
+	if(TopCellGenerator.avatardd.getNbCPU()==0){
+	    System.out.println("***Warning: require at least one CPU***");
+	}
 	    if(TopCellGenerator.avatardd.getNbRAM()==0){
-		    System.out.println("***Warning: require at least one RAM***");
-		}
+		System.out.println("***Warning: require at least one RAM***");
+	    }
 	    if(TopCellGenerator.avatardd.getNbTTY()==0){
-		    System.out.println("***Warning: require at least one TTY***");
-		}
+		System.out.println("***Warning: require at least one TTY***");
+	    }
 	    /* if there is one VGMN, this is the central interconnect */
 	    if(TopCellGenerator.avatardd.getNbVgmn()>1){
 		 System.out.println("***Warning: No more than one central VGMN***");
@@ -122,58 +122,58 @@ public class TopCellGenerator
 		System.out.println("***VGSB based ***");
 		icn="vgsb";
 	    }
-
-      // If there is a spy, add spy component to vci interface;
-      // both adjacent componants are spied.
-      // Currently for CPU and RAM only.
-      // RAM monitoring is required for determining the buffer size and
-      // various infos on MWMR channels 
-      // RAM and CPU  monitoring are for  required for determining latency
-      // of memory accesses other than channel    
-         
-      for  (AvatarConnector connector : avatardd.getConnectors()){
-	  //  AvatarConnectingPoint my_p1= (AvatarConnectingPoint)connector.get_p1(); 
-	  //AvatarConnectingPoint my_p2= (AvatarConnectingPoint)connector.get_p2(); 
-	  AvatarConnectingPoint my_p1= connector.get_p1(); 
-	  AvatarConnectingPoint my_p2= connector.get_p2(); 
-    
-      //If a spy glass symbol is found, and component itself not yet marked 
-      
-  AvatarComponent comp1 = my_p1.getComponent();
-  AvatarComponent comp2 = my_p2.getComponent(); 
-
-  if (connector.getMonitored()==1){
-      //comp2 devrait toujours etre un interconnect
-	  if (comp1 instanceof AvatarRAM){
-	      AvatarRAM comp1ram = (AvatarRAM)comp1;
-	      System.out.println("RAM  monitored "+comp1ram.getMonitored());
 	    
-	  }
-
-	  if (comp1 instanceof AvatarCPU){ 
-	      AvatarCPU comp1cpu = (AvatarCPU)comp1;
-	    System.out.println("CPU monitored "+comp1cpu.getMonitored());
-	     
-	  }
-
-	  /*	if (comp2 instanceof AvatarRAM){ 
-	    AvatarRAM comp2ram = (AvatarRAM)comp1;
-	    System.out.println("RAM2 topcell monitored "+comp2ram.getMonitored());
-	    comp2ram.setMonitored(comp2ram.getMonitored());
-	}
-
-	if (comp2 instanceof AvatarCPU){ 
-	    AvatarCPU comp2cpu = (AvatarCPU)comp2;
-	       System.out.println("CPU2 topcell monitored "+comp2cpu.getMonitored());
-	       comp2cpu.setMonitored(comp2cpu.getMonitored());
-	       }*/
-  }
-}
-    
+	    // If there is a spy, add spy component to vci interface;
+	    // both adjacent componants are spied.
+	    // Currently for CPU and RAM only.
+	    // RAM monitoring is required for determining the buffer size and
+	    // various infos on MWMR channels 
+	    // RAM and CPU  monitoring are for  required for determining latency
+	    // of memory accesses other than channel    
+	    
+	    for  (AvatarConnector connector : avatardd.getConnectors()){
+		//  AvatarConnectingPoint my_p1= (AvatarConnectingPoint)connector.get_p1(); 
+		//AvatarConnectingPoint my_p2= (AvatarConnectingPoint)connector.get_p2(); 
+		AvatarConnectingPoint my_p1= connector.get_p1(); 
+		AvatarConnectingPoint my_p2= connector.get_p2(); 
+		
+		//If a spy glass symbol is found, and component itself not yet marked 
+		
+		AvatarComponent comp1 = my_p1.getComponent();
+		AvatarComponent comp2 = my_p2.getComponent(); 
+		
+		if (connector.getMonitored()==1){
+		    //comp2 devrait toujours etre un interconnect
+		    if (comp1 instanceof AvatarRAM){
+			AvatarRAM comp1ram = (AvatarRAM)comp1;
+			System.out.println("RAM  monitored "+comp1ram.getMonitored());
+			
+		    }
+		    
+		    if (comp1 instanceof AvatarCPU){ 
+			AvatarCPU comp1cpu = (AvatarCPU)comp1;
+			System.out.println("CPU monitored "+comp1cpu.getMonitored());
+			
+		    }
+		    
+		    /*	if (comp2 instanceof AvatarRAM){ 
+			AvatarRAM comp2ram = (AvatarRAM)comp1;
+			System.out.println("RAM2 topcell monitored "+comp2ram.getMonitored());
+			comp2ram.setMonitored(comp2ram.getMonitored());
+			}
+			
+			if (comp2 instanceof AvatarCPU){ 
+			AvatarCPU comp2cpu = (AvatarCPU)comp2;
+			System.out.println("CPU2 topcell monitored "+comp2cpu.getMonitored());
+			comp2cpu.setMonitored(comp2cpu.getMonitored());
+			}*/
+		}
+	    }
+	    
 	    /* Central interconnect or local crossbars */
-	   
+	    
 	    if(TopCellGenerator.avatardd.getNbCrossbar()>0){
-		 System.out.println("***Clustered Interconnect***");
+		System.out.println("***Clustered Interconnect***");
 	    }
 	    makeVCIparameters();
 	    makeConfig();
@@ -188,11 +188,11 @@ public class TopCellGenerator
 		NetList.getNetlist(icn,tracing) +
 		Simulation.getSimulation();
 	    return (top);
-	}	
-
+    }	
+    
 	public List<String> readInMapping() {
-		List<String> mappingLines = new ArrayList<String>();		
-		try {
+	    List<String> mappingLines = new ArrayList<String>();		
+	    try {
 		    BufferedReader in = new BufferedReader(new FileReader(MAPPING_TXT));
 		    String line = null;
 			while ((line = in.readLine()) != null) {
@@ -233,14 +233,14 @@ public class TopCellGenerator
 		    
 		    System.err.println(path + GENERATED_PATH + "deployinfo_map.h");
 		    FileWriter fw_map = new FileWriter(path + GENERATED_PATH + "/deployinfo_map.h");
-		    deployinfo_map = TasksAndMainGenerator.getDeployInfoMap();
+		    deployinfo_map = Deployinfo.getDeployInfoMap(avspec);
 		    fw_map.write(deployinfo_map);
 		    fw_map.close();
 		    
 		    //ajout CD 9.6
 		    System.err.println(path + GENERATED_PATH + "deployinfo_ram.h");
 		    FileWriter fw_ram = new FileWriter(path + GENERATED_PATH + "/deployinfo_ram.h");
-		    deployinfo_ram = TasksAndMainGenerator.getDeployInfoRam();
+		    deployinfo_ram = Deployinfo.getDeployInfoRam(avspec);
 		    fw_ram.write(deployinfo_ram);
 		    fw_ram.close();
 		} catch (Exception ex) {
