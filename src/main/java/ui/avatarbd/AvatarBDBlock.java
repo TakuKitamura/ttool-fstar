@@ -618,7 +618,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 	
         int tab = 0;
 
-	TraceManager.addDev("limitAttr=" + limitAttr + " method=" + limitMethod + " limitSignal=" + limitSignal + " y=" + _y + " height=" + height);
+	//TraceManager.addDev("limitAttr=" + limitAttr + " method=" + limitMethod + " limitSignal=" + limitSignal + " y=" + _y + " height=" + height);
 
 	if (limitMethod == -1) {
 	    limitMethod = limitAttr;
