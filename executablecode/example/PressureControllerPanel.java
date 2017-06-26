@@ -45,7 +45,7 @@ public class PressureControllerPanel extends JPanel  {
         duration = _duration;
     }
 
-    public void 
+    
 
     /*public void paintComponent(Graphics g) {
         super.paintComponent(g);

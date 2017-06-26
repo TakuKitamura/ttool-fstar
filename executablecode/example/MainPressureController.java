@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class MainPressureController extends JFrame implements Feeder, MouseListener {
+public class MainPressureController extends JFrame implements Feeder, ChangeListener {
 
     static final int PRESSURE_MIN = 1;
     static final int PRESSURE_MAX = 30;
@@ -37,18 +37,18 @@ public class MainPressureController extends JFrame implements Feeder, MouseListe
     public void initComponents() {
         setLayout(new BorderLayout());
 	pressureValue = new JSlider(JSlider.HORIZONTAL, PRESSURE_MIN, PRESSURE_MAX, PRESSURE_INIT);
-	pressureValue..addChangeListener(this);
+	pressureValue.addChangeListener(this);
 
 	//Turn on labels at major tick marks.
-	pressure.setMajorTickSpacing(5);
-	pressure.setMinorTickSpacing(1);
-	pressure.setPaintTicks(true);
-	pressure.setPaintLabels(true);
+	pressureValue.setMajorTickSpacing(5);
+	pressureValue.setMinorTickSpacing(1);
+	pressureValue.setPaintTicks(true);
+	pressureValue.setPaintLabels(true);
 
 	Font font = new Font("Serif", Font.ITALIC, 15);
-	pressure.setFont(font);
+	pressureValue.setFont(font);
 	
-	add(pressure, BorderLayout.NORTH);
+	add(pressureValue, BorderLayout.NORTH);
 
 	alarm = new JLabel(ALARM_OFF);
 	add(alarm, BorderLayout.SOUTH);
@@ -109,7 +109,10 @@ public class MainPressureController extends JFrame implements Feeder, MouseListe
         mp.repaint();
     }
 
-    public void mouseClicked(MouseEvent e){
+    public void stateChanged(ChangeEvent e) {
+    }
+
+    /*public void mouseClicked(MouseEvent e){
         int x = e.getX();
         int y = e.getY();
 
@@ -128,10 +131,10 @@ public class MainPressureController extends JFrame implements Feeder, MouseListe
     public void mouseEntered(MouseEvent e){}
     public void mouseExited(MouseEvent e){}
     public void mousePressed(MouseEvent e){}
-    public void mouseReleased(MouseEvent e){}
+    public void mouseReleased(MouseEvent e){}*/
 
     public static void main(String[] args) {
-        MainMicrowave mmw = new MainMicrowave();
+        MainPressureController mmw = new MainPressureController();
     }
 
 }
