@@ -96,7 +96,7 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
     debugInt("asyncchannel \n",channel->mwmr_fifo->width);
     debugInt("asyncchannel msg size \n",sizeof(msg));
     // async_read(channel->mwmr_fifo, &msg, 1);
-    async_read(channel->mwmr_fifo, &msg, sizeof(*msg));
+    async_read(channel->mwmr_fifo, &msg, sizeof(msg));
     return msg;
   }
 
@@ -114,7 +114,7 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
   debugInt("asyncchannel \n",channel->mwmr_fifo->depth);
   debugInt("asyncchannel \n",channel->mwmr_fifo->width);
   debugInt("asyncchannel msg size \n",sizeof(msg));
-  async_read(channel->mwmr_fifo, &msg, sizeof(msg));//DG 13.6. *msg au lieu de msg
+  async_read(channel->mwmr_fifo, &msg, sizeof(msg));
   
   return msg;
 }
