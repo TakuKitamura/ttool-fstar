@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class MainPressureController extends JFrame implements Feeder, MouseListener {
+public class MainPressureController extends JFrame implements Feeder, ChangeListener {
 
     static final int PRESSURE_MIN = 1;
     static final int PRESSURE_MAX = 30;
@@ -17,7 +17,6 @@ public class MainPressureController extends JFrame implements Feeder, MouseListe
     static final String ALARM_ON = "ALARM ON";
     static final String ALARM_OFF = "alarm off";
 
-    private PressureControllerPanel mp;
     private DatagramServer ds;
 
     private JSlider pressureValue;
@@ -25,7 +24,7 @@ public class MainPressureController extends JFrame implements Feeder, MouseListe
 
     public MainPressureController() {
         super("Pressure Controller demonstration");
-        setSize(800, 600);
+        setSize(400, 150);
         setVisible(true);
         ds = new DatagramServer();
         ds.setFeeder(this);
@@ -37,79 +36,60 @@ public class MainPressureController extends JFrame implements Feeder, MouseListe
     public void initComponents() {
         setLayout(new BorderLayout());
 	pressureValue = new JSlider(JSlider.HORIZONTAL, PRESSURE_MIN, PRESSURE_MAX, PRESSURE_INIT);
-	pressureValue..addChangeListener(this);
+	pressureValue.addChangeListener(this);
 
 	//Turn on labels at major tick marks.
-	pressure.setMajorTickSpacing(5);
-	pressure.setMinorTickSpacing(1);
-	pressure.setPaintTicks(true);
-	pressure.setPaintLabels(true);
+	pressureValue.setMajorTickSpacing(5);
+	pressureValue.setMinorTickSpacing(1);
+	pressureValue.setPaintTicks(true);
+	pressureValue.setPaintLabels(true);
 
 	Font font = new Font("Serif", Font.ITALIC, 15);
-	pressure.setFont(font);
+	pressureValue.setFont(font);
 	
-	add(pressure, BorderLayout.NORTH);
+	add(pressureValue, BorderLayout.NORTH);
 
 	alarm = new JLabel(ALARM_OFF);
-	add(alarm, BorderLayout.SOUTH);
+	alarm.setHorizontalAlignment(JLabel.CENTER);
+	alarm.setVerticalAlignment(JLabel.CENTER);
+	add(alarm, BorderLayout.CENTER);
 
 
         //mp = new PressureControllerPanel();
         //mp.addMouseListener(this);
 	// mp.setPreferredSize(new Dimension(800,600));
         //add(mp, BorderLayout.CENTER);
-        mp.revalidate();
+        //mp.revalidate();
     }
 
     public void setMessage(String msg) {
-        if (mp == null) {
-            return;
-        }
-
+ 
         int index;
         String s;
         int duration;
         System.out.println("Got message:" + msg);
         try {
-            if (msg.startsWith("Duration ")) {
+            if (msg.startsWith("+")) {
                 s = msg.substring(9, msg.length());
-
-                duration = Integer.decode(s.trim()).intValue();
-                mp.setDuration(duration);
-                mp.setStart(false);
-                //System.out.println("Setting new duration :" + duration);
-                mp.setCookingFinished(false);
-            } else if (msg.startsWith("Start ")) {
-                s = msg.substring(6, msg.length());
-
-                duration = Integer.decode(s.trim()).intValue();
-                mp.setDuration(duration);
-                mp.setStart(true);
-                mp.setCookingFinished(false);
-                //System.out.println("Setting new duration (start): " + duration);
-            } else if (msg.startsWith("Magnetron_ON")) {
-                mp.setMagnetronON(true);
-                mp.setCookingFinished(false);
-            } else if (msg.startsWith("Magnetron_OFF")) {
-                mp.setMagnetronON(false);
-                mp.setCookingFinished(false);
-            } else if (msg.startsWith("Open Door")) {
-                mp.setDoorOpened(true);
-                mp.setCookingFinished(false);
-            } else if (msg.startsWith("Close Door")) {
-                mp.setDoorOpened(false);
-                mp.setCookingFinished(false);
-            } else if (msg.startsWith("Dring")) {
-                mp.setCookingFinished(true);
-            }
+		alarm.setText(ALARM_ON);
+                
+            } else if (msg.startsWith("-")) {
+                alarm.setText(ALARM_OFF);
+            } 
         } catch (Exception e) {
             System.out.println("Exception when computing message: " + e.getMessage());
         }
 
-        mp.repaint();
     }
 
-    public void mouseClicked(MouseEvent e){
+    public void stateChanged(ChangeEvent e) {
+	System.out.println("Value of pressure changed:" + pressureValue.getValue());
+	if (ds != null) {
+	    ds.sendDatagramTo("PRESSURE=" + pressureValue.getValue());
+	}
+    }
+
+    /*public void mouseClicked(MouseEvent e){
         int x = e.getX();
         int y = e.getY();
 
@@ -128,10 +108,10 @@ public class MainPressureController extends JFrame implements Feeder, MouseListe
     public void mouseEntered(MouseEvent e){}
     public void mouseExited(MouseEvent e){}
     public void mousePressed(MouseEvent e){}
-    public void mouseReleased(MouseEvent e){}
+    public void mouseReleased(MouseEvent e){}*/
 
     public static void main(String[] args) {
-        MainMicrowave mmw = new MainMicrowave();
+        MainPressureController mmw = new MainPressureController();
     }
 
 }
