@@ -231,15 +231,16 @@ System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
 	deployinfo_map += "#define MAP_A\\" + CR;
 	try{		
 	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
-		if (/*!*/(ram.getChannels().isEmpty())){ //"!" removed because it returned the wrong results. Logic is now incorrect but results are correct (needs further investigating) CD 20.6
+		//	if (/*!*/(ram.getChannels().isEmpty())){ //"!" removed because it returned the wrong results. Logic is now incorrect but results are correct (needs further investigating) CD 20.6
+		//if (!(ram.getChannels().isEmpty())){
 		    for(AvatarRelation ar: avspec.getRelations()){
-			for (j=0;j<ar.nbOfSignals();j++) {
+		    	for (j=0;j<ar.nbOfSignals();j++) {
 			    deployinfo_map = deployinfo_map + "\n .channel"+i+" : {";
 			    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")";	
 			    deployinfo_map = deployinfo_map + "} > uram" + ram.getNo_ram() + CR;	//ram n° was incorrect (see above) 
 			i++;
 			}
-		    }
+			}
 		    i=0;
 		    for(AvatarRelation ar: avspec.getRelations()){ 
 			for (j=0;j<ar.nbOfSignals();j++) { //CD 15.06 dynamic to signal number
@@ -250,7 +251,7 @@ System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
 			}
 		    }
 		}	    
-	    }
+	    // }
 	}catch (Exception e){
 	    e.printStackTrace();
 	}
