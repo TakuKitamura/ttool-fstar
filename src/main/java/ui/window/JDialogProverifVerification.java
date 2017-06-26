@@ -349,11 +349,20 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
 
                     // TraceManager.addDev("\n--- Trace ---");
                     int i=0;
-                    for (ProVerifResultTraceStep step: this.menuItem.result.getTrace().getTrace()) {
-                        step.describeAsSDTransaction(this.adp, bw, i);
-                        i++;
-                        // TraceManager.addDev(step.describeAsString(this.adp));
-                    }
+					if (adp!=null){
+	                    for (ProVerifResultTraceStep step: this.menuItem.result.getTrace().getTrace()) {
+	                        step.describeAsSDTransaction(this.adp, bw, i);
+	                        i++;
+	                        // TraceManager.addDev(step.describeAsString(this.adp));
+	                    }
+					}
+					else {
+						for (ProVerifResultTraceStep step: this.menuItem.result.getTrace().getTrace()) {
+	                        step.describeAsTMLSDTransaction(bw, i);
+	                        i++;
+	                        // TraceManager.addDev(step.describeAsString(this.adp));
+	                    }
+					}
                     bw.close();
                 } catch(IOException e) {
                     TraceManager.addDev("Error when writing trace step SD transaction");
@@ -604,7 +613,8 @@ public class JDialogProverifVerification extends javax.swing.JDialog implements 
             if (o instanceof AvatarPragma) {
                 this.menuItem.pragma = (AvatarPragma) o;
                 this.menuItem.result = this.results.get(this.menuItem.pragma);
-                this.menuItem.setEnabled(this.adp != null && this.menuItem.result.getTrace() != null);
+             //   this.menuItem.setEnabled(this.adp != null && this.menuItem.result.getTrace() != null);
+				this.menuItem.setEnabled(this.menuItem.result.getTrace() != null);
                 popup.show(e.getComponent(), e.getX(), e.getY());
             }
         }

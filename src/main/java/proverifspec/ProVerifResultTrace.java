@@ -119,6 +119,13 @@ public class ProVerifResultTrace {
             writer.newLine();
             writer.flush();
         }
+        @Override
+        public void describeAsTMLSDTransaction(BufferedWriter writer, int step) throws IOException
+        {
+            writer.write("#" + step + " time=0.000000000 block=" + this.from + " blockdestination=" + this.to + " type=synchro channel=" + this.channel + " params=\"" + this.message.replaceAll(",", ", ") + "\"");
+            writer.newLine();
+            writer.flush();
+        }
     }
 
     private class EventStep implements ProVerifResultTraceStep {
@@ -144,6 +151,13 @@ public class ProVerifResultTrace {
             writer.newLine();
             writer.flush();
         }
+        @Override
+        public void describeAsTMLSDTransaction(BufferedWriter writer, int step) throws IOException
+        {
+            writer.write("#" + step + " time=0.000000000 block=" + this.block + " type=state_entering state="+ this.name);
+            writer.newLine();
+            writer.flush();
+        }
     }
 
     private class NewStep implements ProVerifResultTraceStep {
@@ -164,6 +178,13 @@ public class ProVerifResultTrace {
         public void describeAsSDTransaction(AvatarDesignPanel adp, BufferedWriter writer, int step) throws IOException
         {
             writer.write("#" + step + " time=0.000000000 block=Attacker type=function_call func=new parameters=" + ProVerifResultTrace.this.replaceAttributeName(adp, this.name));
+            writer.newLine();
+            writer.flush();
+        }
+        @Override
+        public void describeAsTMLSDTransaction(BufferedWriter writer, int step) throws IOException
+        {
+            writer.write("#" + step + " time=0.000000000 block=Attacker type=function_call func=new parameters=" + this.name);
             writer.newLine();
             writer.flush();
         }

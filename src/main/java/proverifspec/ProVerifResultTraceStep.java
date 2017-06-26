@@ -54,5 +54,6 @@ import java.io.IOException;
  */
 public interface ProVerifResultTraceStep {
     String describeAsString(AvatarDesignPanel adp);
+    void describeAsTMLSDTransaction(BufferedWriter writer, int step) throws IOException;
     void describeAsSDTransaction(AvatarDesignPanel adp, BufferedWriter writer, int step) throws IOException;
 }
