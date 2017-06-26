@@ -92,8 +92,8 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
     channel->pendingMessages = NULL;
   
     debugInt("asyncchannel read: address \n",channel->mwmr_fifo);
-    debugInt("asyncchannel \n",channel->mwmr_fifo->depth);
-    debugInt("asyncchannel \n",channel->mwmr_fifo->width);
+    debugInt("asyncchannel fifo->depth \n",channel->mwmr_fifo->depth);
+    debugInt("asyncchannel fifo->width \n",channel->mwmr_fifo->width);
     debugInt("asyncchannel msg size \n",sizeof(msg));
     // async_read(channel->mwmr_fifo, &msg, 1);
     async_read(channel->mwmr_fifo, &msg, sizeof(msg));
@@ -111,8 +111,8 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
   previous->next = NULL;
   debugInt("before async read 1\n");
   debugInt("asyncchannel address \n",channel->mwmr_fifo);
-  debugInt("asyncchannel \n",channel->mwmr_fifo->depth);
-  debugInt("asyncchannel \n",channel->mwmr_fifo->width);
+  debugInt("asyncchannel fifo->depth \n",channel->mwmr_fifo->depth);
+  debugInt("asyncchannel fifo->width \n",channel->mwmr_fifo->width);
   debugInt("asyncchannel msg size \n",sizeof(msg));
   async_read(channel->mwmr_fifo, &msg, sizeof(msg));
   
