@@ -47,13 +47,35 @@
 package ddtranslatorSoclib.toTopCell;
 
 import ddtranslatorSoclib.*;
+import avatartranslator.AvatarRelation;//DG 26.06.
+import avatartranslator.AvatarBlock;//DG 26.06.
+import avatartranslator.AvatarSignal;//DG 26.06.
+import avatartranslator.AvatarSpecification;//DG 23.06.
 
 public class Declaration {
-    
+    public static AvatarSpecification avspec;
     private static String CR = "\n";
     private static String CR2 = "\n\n";   
-       
-    public static String generateName(AvatarChannel channel){
+    
+
+     
+        public static String generateName(AvatarRelation ar, AvatarSignal signal1, AvatarSignal signal2){ 
+
+	String channelName="";
+	AvatarBlock block1=ar.getBlock1();
+	AvatarBlock block2=ar.getBlock2();
+	String blockname1=block1.getName();
+        String blockname2=block2.getName();
+	String signalname1=signal1.getSignalName();
+	String signalname2=signal2.getSignalName();
+	if(signal1.isOut())
+	    channelName=blockname1+"_"+signalname1+"__"+blockname2+"_"+signalname2;
+	else
+	    channelName=blockname2+"_"+signalname1+"__"+blockname1+"_"+signalname2;
+	return channelName;
+    }
+   
+    /*  public static String generateName(AvatarChannel channel){
 	String channelName="";
 	String channelNameTest = channel.getChannelName();
 
@@ -97,9 +119,10 @@ public class Declaration {
         channelName=channelName+channelNameTest.substring(1,pos1);	
  
     return channelName;
-    }
+    }*/
 
-	public static String getDeclarations() {
+	public static String getDeclarations(AvatarSpecification _avspec) {
+	        avspec =_avspec;
 	   
 		String declaration = "//----------------------------Instantiation-------------------------------" + CR2;	
 	
@@ -336,15 +359,23 @@ int  i=0;
 	      }	
 	      else{
 		  if (ram.getMonitored()==2){		      
-              System.out.println("Spy RAM : Stats");
+		      System.out.println("Spy RAM : Stats");
 		      String strArray="";
 
-		      for(AvatarChannel channel: ram.getChannels()){ 
-		   
-			  String chname = generateName(channel);
-		     
-			  strArray=strArray+"\""+chname+"\",";
-		      }   
+		      // for(AvatarChannel channel: ram.getChannels()){ //DG 27.06.
+		      for(AvatarRelation ar: avspec.getRelations()) {
+		      
+			  for(i=0; i<ar.nbOfSignals() ; i++) {
+			  
+			      AvatarSignal as1=ar.getSignal1(i);
+			      AvatarSignal as2=ar.getSignal2(i);
+			      //String chname = generateName(channel);
+			      String chname = generateName(ar,as1,as2);
+			      strArray=strArray+"\""+chname+"\",";
+		  
+			  }
+		      }
+		      // }   
 		
 		      declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+j+"(\"mwmr_stats" + j+"\",maptab, data_ldr, \"mwmr"+j+".log\",stringArray("+strArray+"NULL));" + CR2;
 		      j++;	      

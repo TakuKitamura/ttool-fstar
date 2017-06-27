@@ -47,6 +47,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 
+import javax.swing.*;
+
 /**
    * Class Plugin
    * Creation: 24/05/2017
@@ -92,5 +94,35 @@ public class Plugin {
 
     }
 
+    public String executeRetStringMethod(String _className, String _methodName) {
+	// We have a valid plugin. We now need to get the Method
+	Method m = getMethod(_className, _methodName);
+	if (m == null) {
+	    return null;
+	}
+	
+	try {
+	    return (String)(m.invoke(null));
+	} catch (Exception e) {
+	    TraceManager.addDev("Exception occured when executing method " + _methodName);
+	    return null;
+	}
+    }
+
+    
+    public ImageIcon executeRetImageIconMethod(String _className, String _methodName) {
+	// We have a valid plugin. We now need to get the Method
+	Method m = getMethod(_className, _methodName);
+	if (m == null) {
+	    return null;
+	}
+	
+	try {
+	    return (ImageIcon)(m.invoke(null));
+	} catch (Exception e) {
+	    TraceManager.addDev("Exception occured when executing method " + _methodName);
+	    return null;
+	}
+    }
 
 }

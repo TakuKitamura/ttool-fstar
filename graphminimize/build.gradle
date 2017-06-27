@@ -9,6 +9,7 @@ sourceSets {
             srcDir "${rootProject.absPath}/src/main/java/ui/file"
             srcDir "${rootProject.absPath}/src/main/java/vcd"
             srcDir "${rootProject.absPath}/src/main/java/myutil"
+            srcDir "${rootProject.absPath}/src/main/java/common"
         }
     }
 

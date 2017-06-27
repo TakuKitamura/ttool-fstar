@@ -46,7 +46,7 @@ import myutil.FileUtils;
 import myutil.TraceManager;
 import proverifspec.*;
 import tmltranslator.*;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 
 import javax.swing.*;
 import java.io.BufferedReader;

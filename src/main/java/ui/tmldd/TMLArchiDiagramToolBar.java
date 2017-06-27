@@ -184,6 +184,8 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         box = new JComboBox<>(viewInfos);
         this.add(box);
         box.addActionListener(this);
+
+	setPluginButtons("TMLArchiDiagramPanel");
     }
 
     public void setPanel(TMLArchiDiagramPanel _panel) {

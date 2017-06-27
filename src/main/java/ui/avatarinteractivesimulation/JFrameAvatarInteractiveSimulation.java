@@ -43,6 +43,7 @@ package ui.avatarinteractivesimulation;
 
 import avatartranslator.*;
 import avatartranslator.directsimulation.*;
+import common.ConfigurationTTool;
 import myutil.*;
 import ui.*;
 import ui.avatarbd.AvatarBDPortConnector;

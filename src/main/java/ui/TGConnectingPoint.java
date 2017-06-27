@@ -316,4 +316,13 @@ public class TGConnectingPoint implements CDElement {
     public boolean isSource()   {
         return source;
     }
+
+    // Issue #14 The max x of a connector should not use the x and width values but be computed from the points
+    public int getCurrentMaxX() {
+    	return getX() + getWidth();
+    }
+
+    public int getCurrentMaxY() {
+    	return getY() + getHeight();
+    }
 }

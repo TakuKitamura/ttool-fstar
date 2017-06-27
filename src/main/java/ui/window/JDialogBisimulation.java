@@ -45,7 +45,7 @@ import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.FileUtils;
 import myutil.ScrolledJTextArea;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.util.IconManager;
 import ui.file.AUTFileFilter;
 

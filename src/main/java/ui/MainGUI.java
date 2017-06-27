@@ -42,6 +42,7 @@
 package ui;
 
 import avatartranslator.AvatarSpecification;
+import common.ConfigurationTTool;
 import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
 import launcher.RemoteExecutionThread;
@@ -6523,7 +6524,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
         return null;
     }
-
 
     public void alignInstances() {
         //TraceManager.addDev("Align instances");

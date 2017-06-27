@@ -1,6 +1,7 @@
-/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  * 
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT telecom-paristech.fr
+ * andrea.enrici AT telecom-paristech.fr
  * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -39,85 +40,20 @@
 
 
 
-package myutil;
+package ui;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
+import myutil.*;
 
-import java.awt.*;
 
 /**
-   * Class PluginManager
-   * Creation: 24/05/2017
-   * Version 1.0 24/05/2017
-   * @author Ludovic APVRILLE
+ * Class TGComponentPlugin
+ * Graphical Component with a plugin facility
+ * Creation: 27/06/2017
+ * @version 1.0 27/06/2017
+ * @author Ludovic APVRILLE
  */
-public class PluginManager  {
-    public ArrayList<Plugin> plugins;
-    public static PluginManager pluginManager;
+public class TGComponentPlugin extends TGComponent {
 
-    public PluginManager() {
-	plugins = new ArrayList<Plugin>();
-    }
-
-    public void addPlugin(Plugin _plugin) {
-	plugins.add(_plugin);
-    }
-
-    public Plugin getPluginOrCreate(String _name) {
-	Plugin plug = getPlugin(_name);
-	if (plug != null) {
-	    return plug;
-	}
-
-	return createPlugin(_name);
-    }
-
-    public Plugin getPlugin(String _name) {
-	for(Plugin plugin: plugins) {
-	    if (plugin.getName().compareTo(_name) == 0) {
-		return plugin;
-	    }
-	}
-	return null;
-    }
-
-    public Plugin createPlugin(String _name) {
-	Plugin plugin = new Plugin(_name);
-	addPlugin(plugin);
-	return plugin;
-    }
-
-    public void executeGraphics(Plugin _plugin, String _className, String _methodName, Graphics g) {
-	if (_plugin == null) {
-	    return;
-	}
-
-	Method m = _plugin.getMethod(_className, _methodName);
-	if (m == null) {
-	    return;
-	}
-
-	try {
-	    m.invoke(g);
-	} catch (Exception e) {
-	    TraceManager.addDev("Exception occured when executing method " + _methodName);
-	}
-    }
-    
-    public String executeString(String _pluginName, String _className, String _methodName) {
-	Plugin plugin = getPlugin(_pluginName);
-	if (plugin == null) {
-	    plugin = createPlugin(_pluginName);
-	    if (plugin == null) {
-		return null;
-	    }
-	}
-
-	return plugin.executeRetStringMethod(_className, _methodName);
-
-	
-    }
-
-
+    private Plugin componentPlugin;
+    private String className;
 }

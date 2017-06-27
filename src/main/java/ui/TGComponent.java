@@ -353,14 +353,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return false;
     }
 
-    public LinkedList<TGComponent> getAllCheckableAccessibility() {
-        LinkedList<TGComponent> list = new LinkedList<TGComponent>();
+    public java.util.List<TGComponent> getAllCheckableAccessibility() {
+    	java.util.List<TGComponent> list = new LinkedList<TGComponent>();
         getAllCheckableAccessibility(list);
         
         return list;
     }
 
-    public void getAllCheckableAccessibility(LinkedList<TGComponent> _list) {
+    public void getAllCheckableAccessibility(java.util.List<TGComponent> _list) {
         if (accessibility) {
             _list.add(this);
         }
@@ -973,11 +973,12 @@ public abstract class TGComponent implements CDElement, GenericTree {
         }
 
         if ((accessibility) || (reachability !=  ACCESSIBILITY_UNKNOWN) || (liveness !=  ACCESSIBILITY_UNKNOWN)) {
-	    drawAccessibility(reachability, g, x+width-18, y-1, "R");
-	    drawAccessibility(liveness, g, x+width-10, y-1, "L");
-	    if ((reachability ==  ACCESSIBILITY_UNKNOWN) && (liveness ==  ACCESSIBILITY_UNKNOWN)) {
-		drawAccessibility(liveness, g, x+width-2, y-2, "?");
-	    }
+		    drawAccessibility(reachability, g, x+width-18, y-1, "R");
+		    drawAccessibility(liveness, g, x+width-10, y-1, "L");
+		    
+		    if ((reachability ==  ACCESSIBILITY_UNKNOWN) && (liveness ==  ACCESSIBILITY_UNKNOWN)) {
+		    	drawAccessibility(liveness, g, x+width-2, y-2, "?");
+		    }
 	    
 	    // Old way to do ..
             /*g.setColor(ColorManager.ACCESSIBILITY);
@@ -1072,7 +1073,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
                       drawDiploID(g);
                       }*/
                 } else if (tdp instanceof TMLArchiDiagramPanel) {
-		     if (getDIPLOID() != -1) {
+                	if (getDIPLOID() != -1) {
                         if ( TDiagramPanel.DIPLO_ID_ON ) {
                             drawDiploID(g);
                         }
@@ -1080,7 +1081,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
                         if (li != null) {
                             drawLoadDiploID(g, li);
                         }
-			ArrayList<SimulationTransaction> ts= tdp.getMGUI().getTransactions(getDIPLOID());
+                        java.util.List<SimulationTransaction> ts= tdp.getMGUI().getTransactions(getDIPLOID());
 			if (ts !=null && ts.size()>0){
 			    transactions = new ArrayList<SimulationTransaction>(ts);
 			    transaction = transactions.get(transactions.size()-1).taskName+ ":" +transactions.get(transactions.size()-1).command;
@@ -1372,7 +1373,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return 0;
     }
 
-
     // operations on internal components
 
     public boolean areAllInRectangle(int x1, int y1, int width, int height) {
@@ -1387,6 +1387,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
                 return false;
             }
         }
+    
         return true;
     }
 
@@ -1402,6 +1403,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
             current = Math.min(current, tgcomponent[i].getCurrentMinX());
             //}
         }
+        
         return current;
     }
 
@@ -1433,6 +1435,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
             current = Math.min(current, tgcomponent[i].getCurrentMinY());
             //}
         }
+        
         return current;
     }
 
@@ -1448,6 +1451,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
             current = Math.max(current, tgcomponent[i].getCurrentMaxY());
             //}
         }
+        
         return current;
     }
 
@@ -2228,17 +2232,19 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public int getXZoom() {
-	if (tdp == null) {
-	    return x;
-	}
-	return (int)(x*tdp.getZoom());
+		if (tdp == null) {
+		    return x;
+		}
+
+		return (int)(x*tdp.getZoom());
     }
 
     public int getYZoom() {
-	if (tdp == null) {
-	    return y;
-	}
-	return (int)(y*tdp.getZoom());
+		if (tdp == null) {
+		    return y;
+		}
+
+		return (int)(y*tdp.getZoom());
     }
 
     public final int getWidth() {
@@ -2505,9 +2511,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
         if ((father != null) && (drawingZoneRelativeToFather)) {
             targetX =  Math.min(maxX + father.getX(), Math.max(minX + father.getX(), targetX));
         }
-        int currentWidthPos = Math.abs(getCurrentMaxX() - x);
-        int currentWidthNeg = Math.abs(getCurrentMinX() - x);
-        targetX = Math.max(Math.min(tdp.getMaxX() - currentWidthPos, targetX), tdp.getMinX() + currentWidthNeg);
+        
+        // Issue #46: Added the else.
+        // When we are moving a contained component, we should not check for the max of the diagram. This should be done for the father only
+        else {
+	        int currentWidthPos = Math.abs(getCurrentMaxX() - x);
+	        int currentWidthNeg = Math.abs(getCurrentMinX() - x);
+	        targetX = Math.max(Math.min(tdp.getMaxX() - currentWidthPos, targetX), tdp.getMinX() + currentWidthNeg);
+        }
 
         return targetX;
 
@@ -2518,10 +2529,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
         if ((father != null) && (drawingZoneRelativeToFather)) {
             targetY = Math.min(maxY + father.getY(), Math.max(minY + father.getY(), targetY));
         }
-
-        int currentWidthPos = Math.abs(getCurrentMaxY() - y);
-        int currentWidthNeg = Math.abs(getCurrentMinY() - y);
-        targetY = Math.max(Math.min(tdp.getMaxY() - currentWidthPos, targetY), tdp.getMinY() + currentWidthNeg);
+        
+        // Issue #46: Added the else.
+        // When we are moving a contained component, we should not check for the max of the diagram. This should be done for the father only
+        else {
+	        int currentWidthPos = Math.abs(getCurrentMaxY() - y);
+	        int currentWidthNeg = Math.abs(getCurrentMinY() - y);
+	        targetY = Math.max(Math.min(tdp.getMaxY() - currentWidthPos, targetY), tdp.getMinY() + currentWidthNeg);
+        }
 
         return targetY;
     }

@@ -36,17 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import ui.window.JDialogSearchBox;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 /**
@@ -56,7 +52,7 @@ import java.util.ArrayList;
  * @version 1.1 06/07/2004
  * @author Ludovic APVRILLE
  */
-public class TDiagramMouseManager implements MouseListener, MouseMotionListener  {
+public class TDiagramMouseManager extends MouseAdapter {//implements MouseListener, MouseMotionListener  {
 
     private TDiagramPanel tdp;
 
@@ -95,9 +91,8 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
         tdp = _tdp;
     }
 
-
     // Mouse operations
-
+    @Override
     public void mousePressed(MouseEvent e) {
         int selected = tdp.getGUI().getTypeButtonSelected();
 
@@ -257,6 +252,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
 
         if (tdp.mode == TDiagramPanel.MOVING_SELECTED_COMPONENTS) {
@@ -329,14 +325,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
         }
     }
 
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    public void mouseExited(MouseEvent e) {
-
-    }
-
+    @Override
     public void mouseClicked(MouseEvent e) {
         //System.out.println("MouseClick: " + e.getClickCount());
 
@@ -508,6 +497,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
         }
     }
 
+    @Override
     public void mouseMoved(MouseEvent e) {
         tdp.currentX = e.getX();
         tdp.currentY = e.getY();
@@ -552,6 +542,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 
     }
 
+    @Override
     public void mouseDragged(MouseEvent e) {
         if (tdp.mode == TDiagramPanel.MOVING_COMPONENT) {
             tgc.setMoveCd(e.getX() - decx, e.getY() - decy);
@@ -575,6 +566,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
         if (tdp.mode == TDiagramPanel.SELECTING_COMPONENTS) {
             tdp.updateSelectingComponents(e.getX(), e.getY());
             tdp.repaint();
+            
             return;
         }
 
@@ -645,10 +637,12 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
     public java.util.List<String> getSelectComponents(){
         return selectedMultiComponents  ;
     }
+
     public void clearSelectComponents(){
         this.selectedMultiComponents.clear();
     }
-    public void removeSelectedComponentFromList(){
-        this.selectedMultiComponents.clear();
-    }
+//
+//    public void removeSelectedComponentFromList(){
+//        this.selectedMultiComponents.clear();
+//    }
 }

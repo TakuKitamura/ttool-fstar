@@ -46,6 +46,7 @@ import avatartranslator.toproverif.AVATAR2ProVerif;
 import avatartranslator.totpn.AVATAR2TPN;
 import avatartranslator.toturtle.AVATAR2TURTLE;
 import avatartranslator.touppaal.AVATAR2UPPAAL;
+import common.ConfigurationTTool;
 import ddtranslator.DDSyntaxException;
 import ddtranslator.DDTranslator;
 import launcher.LauncherException;
@@ -652,8 +653,8 @@ public class GTURTLEModeling {
         return this.avatar2proverif.getOutputAnalyzer ();
     }
 
-    public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed){
-        return generateProVerifFromAVATAR(_path, _stateReachability, _typed, "1");
+    public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, boolean allowPrivateChannelDuplication){
+        return generateProVerifFromAVATAR(_path, _stateReachability, _typed, allowPrivateChannelDuplication, "1");
     }
 
     public int calcSec(){
@@ -1985,7 +1986,7 @@ public class GTURTLEModeling {
 
         avatar2proverif = new AVATAR2ProVerif(avatarspec);
         try {
-            proverif = avatar2proverif.generateProVerif(true, true, 1, true);
+            proverif = avatar2proverif.generateProVerif(true, true, 1, true, false);
             warnings = avatar2proverif.getWarnings();
 
             if (!avatar2proverif.saveInFile("pvspec")){
@@ -2797,7 +2798,7 @@ public class GTURTLEModeling {
         }
     }
 
-    public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, String loopLimit) {
+    public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, boolean allowPrivateChannelDuplication, String loopLimit) {
         //      System.out.println(avatarspec);
         if (avatarspec !=null){
             //use avspec
@@ -2822,7 +2823,7 @@ public class GTURTLEModeling {
         avatar2proverif = new AVATAR2ProVerif(avatarspec);
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
-        proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _typed);
+        proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _typed, allowPrivateChannelDuplication);
         warnings = avatar2proverif.getWarnings();
         languageID = PROVERIF;
         mgui.setMode(MainGUI.EDIT_PROVERIF_OK);

@@ -36,18 +36,12 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GraphicLib;
 import ui.util.IconManager;
 
 import java.awt.*;
-
-//import java.awt.geom.*;
-//import javax.swing.*;
 
 /**
  * Class TGCPointOfConnector
@@ -65,7 +59,7 @@ public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
         
         nbConnectingPoint = 0;
 
-	initScaling(0, 0);
+        initScaling(0, 0);
         
         nbInternalTGComponent = 0;
         
@@ -79,6 +73,7 @@ public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
         myImageIcon = IconManager.imgic304;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         if ((state != TGState.NORMAL) && (tdp.isSelectedTemp())){
             g.fillRect(x - width/2, y - height /2, width, height);
@@ -86,6 +81,7 @@ public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
         }
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x - width/2, y - height/2, width, height)) {
             return this;
@@ -93,6 +89,7 @@ public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
         return null;
     }
     
+    @Override
     public void myActionWhenRemoved() {
         if (father != null) {
             if (father instanceof TGConnector) {
@@ -102,25 +99,14 @@ public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
         }
     }
 
-    /*public int getX() {
-        return getXZoom();
+    // Issue #14 The max x of a connector should not use the x and width values but be computed from the points
+    @Override
+    public int getCurrentMaxX() {
+    	return getX() + getWidth();
     }
 
-    public int getY() {
-        return getYZoom();
-	}*/
-    
-        /*public void postLoading(int decId) throws MalformedModelingException {
-            if (decId == 0) {
-                forceNewId();
-            }
-         
-        }*/
+    @Override
+    public int getCurrentMaxY() {
+    	return getY() + getHeight();
+    }
 }
-
-
-
-
-
-
-

@@ -47,7 +47,7 @@
 package ddtranslatorSoclib.toTopCell;
 
 import ddtranslatorSoclib.AvatarCPU;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 
 import java.io.BufferedReader;
 import java.io.File;

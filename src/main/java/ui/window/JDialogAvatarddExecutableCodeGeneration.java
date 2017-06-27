@@ -41,17 +41,15 @@
 
 package ui.window;
 
-import avatartranslator.AvatarRelation;
 import avatartranslator.AvatarSpecification;
 import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
-import ddtranslatorSoclib.toTopCell.Deployinfo;
 import ddtranslatorSoclib.toTopCell.TopCellGenerator;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.*;
 import ui.AvatarDeploymentPanelTranslator;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.avatardd.ADDDiagramPanel;

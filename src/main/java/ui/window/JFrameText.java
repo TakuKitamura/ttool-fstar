@@ -42,7 +42,7 @@
 package ui.window;
 
 import myutil.FileUtils;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.util.IconManager;
 import ui.file.RTLFileFilter;
 

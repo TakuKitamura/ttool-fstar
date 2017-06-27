@@ -41,7 +41,7 @@
 
 package ui;
 
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -618,7 +618,13 @@ public class TGUIAction extends AbstractAction {
 
     public static final String LARGE_ICON = "LargeIcon";
 
-
+    public TGUIAction(TAction _t) {
+	putValue(Action.NAME, _t.NAME);
+        putValue(Action.SMALL_ICON, _t.SMALL_ICON);
+        putValue(LARGE_ICON, _t.LARGE_ICON);
+        putValue(Action.SHORT_DESCRIPTION, _t.SHORT_DESCRIPTION);
+        putValue(Action.LONG_DESCRIPTION, _t.LONG_DESCRIPTION);
+    }
 
     public TGUIAction(int id) {
         if (actions[0] == null) {
@@ -655,7 +661,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_NEW_DESIGN] = new TAction("new-command-design", "New design", IconManager.imgic14, IconManager.imgic14, "New design", "New TURTLE design", 0);
         actions[ACT_NEW_ANALYSIS] = new TAction("new-command-analysis", "New analysis", IconManager.imgic17, IconManager.imgic17, "New analysis", "New TURTLE analysis", 0);
         actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TTooll model",'O', true);
-	actions[ACT_OPEN_FROM_NETWORK] = new TAction("open-command-from-network","Open from TTool repository", IconManager.imgic22, IconManager.imgic23, "Open from TTool repository", "Open an existing TTool model from the TTool repository (TTool website)",'O', true);
+        actions[ACT_OPEN_FROM_NETWORK] = new TAction("open-command-from-network","Open from TTool repository", IconManager.imgic22, IconManager.imgic23, "Open from TTool repository", "Open an existing TTool model from the TTool repository (TTool website)",'O', true);
         actions[ACT_OPEN_LAST] = new TAction("openlast-command","Open file: " + ConfigurationTTool.LastOpenFile, IconManager.imgic22, IconManager.imgic23, "Open: " + ConfigurationTTool.LastOpenFile, "Open the lastly saved TTool model", 0);
         actions[ACT_MERGE] = new TAction("merge-command","Merge", IconManager.imgic22, IconManager.imgic23, "Merge", "Merge the current TTool modeling with another one saved in a file ", 0);
         actions[ACT_SAVE] = new TAction("save-command", "Save",IconManager.imgic24, IconManager.imgic25, "Save", "Save an opened or a new TTool modeling", 'S', true);

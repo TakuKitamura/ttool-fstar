@@ -11,7 +11,10 @@ or make your own ttool.exe. See the online documentation for more information
 For developers: (rw access to the git)
 ---------------
 
-* Compiling the latest version:
+* Compiling the latest version of TTool:
+make ttool
+
+* Compiling the latest version of TTool + companions software:
 make all
 
 If the compilation fails with the following error: 'unmappable character for encoding ASCII', you need to do, before the compilation process:

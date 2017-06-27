@@ -84,7 +84,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         p1 = _p1;
         p2 = _p2;
 	
-	initScaling(0, 0);
+        initScaling(0, 0);
 
         nbInternalTGComponent = _listPoint.size();
         tgcomponent = new TGComponent[nbInternalTGComponent];
@@ -103,44 +103,46 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     }
 
     public int getNbOfPointsOfConnector() {
-	return getListOfPoints().size();
+    	return getListOfPoints().size();
     }
 
     public int getIndexOfFirstTGCPointOfConnector() {
-	for(int i=0; i<nbInternalTGComponent; i++) {
-	    if (tgcomponent[i] instanceof TGCPointOfConnector) {
-		return i;
-	    }
-	}
-	return -1;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+		    if (tgcomponent[i] instanceof TGCPointOfConnector) {
+		    	return i;
+		    }
+		}
+		
+		return -1;
     }
 
     public TGCPointOfConnector[] listOfPointsToArray() {
-	int nb = 0;
-	for(int i=0; i<nbInternalTGComponent; i++) {
-	    if (tgcomponent[i] instanceof TGCPointOfConnector) {
-		nb ++;
-	    }
-	}
-	TGCPointOfConnector []tab = new TGCPointOfConnector[nb];
-	nb = 0;
-	for(int i=0; i<nbInternalTGComponent; i++) {
-	    if (tgcomponent[i] instanceof TGCPointOfConnector) {
-		tab[nb] = (TGCPointOfConnector)(tgcomponent[i]);
-		nb ++;
-	    }
-	}
-	return tab;
+		int nb = 0;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+		    if (tgcomponent[i] instanceof TGCPointOfConnector) {
+		    	nb ++;
+		    }
+		}
+
+		TGCPointOfConnector []tab = new TGCPointOfConnector[nb];
+		nb = 0;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof TGCPointOfConnector) {
+				tab[nb] = (TGCPointOfConnector)(tgcomponent[i]);
+				nb++;
+			}
+		}
 	
+		return tab;
     }
 
     public Vector<Point> getListOfPoints() {
         Vector<Point> v = new Vector<Point>();
 	
         for(int i=0; i<nbInternalTGComponent; i++) {
-	    if (tgcomponent[i] instanceof TGCPointOfConnector) {
-		v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
-	    }
+        	if (tgcomponent[i] instanceof TGCPointOfConnector) {
+        		v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
+        	}
         }
 	
         return v;
@@ -320,7 +322,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         //int nbInternalTGComponentOld;
         int i;
 
-	TGCPointOfConnector []points = listOfPointsToArray();
+        TGCPointOfConnector[] points = listOfPointsToArray();
 
         if (dist_y > 0) {
             // algorithm 1
@@ -882,4 +884,33 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         return false;
     }
 
+    // Issue #14 The max x of a connector should not use the x and width values but be computed from the points
+    @Override
+    public int getMyCurrentMaxX() {
+    	int maxValue = 0;
+    	
+//        for ( final Point point : getListOfPoints() ) {
+//        	maxX = Math.max( maxX,  point.x );
+//        }
+        
+    	maxValue = Math.max( maxValue,  getTGConnectingPointP1().getCurrentMaxX() );
+    	maxValue = Math.max( maxValue,  getTGConnectingPointP2().getCurrentMaxX() );
+        
+        return maxValue;
+    }
+
+    // Issue #14 The max x of a connector should not use the x and width values but be computed from the points
+    @Override
+    public int getMyCurrentMaxY() {
+    	int maxValue = 0;
+    	
+//        for ( final Point point : getListOfPoints() ) {
+//        	maxX = Math.max( maxX,  point.x );
+//        }
+        
+    	maxValue = Math.max( maxValue,  getTGConnectingPointP1().getCurrentMaxY() );
+    	maxValue = Math.max( maxValue,  getTGConnectingPointP2().getCurrentMaxY() );
+        
+        return maxValue;
+    }
 }//End of class

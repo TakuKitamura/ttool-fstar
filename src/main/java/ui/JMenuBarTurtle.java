@@ -41,7 +41,7 @@
 
 package ui;
 
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 
 import javax.swing.*;
 //import javax.swing.event.*;
