@@ -64,6 +64,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -146,7 +147,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
 
     private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
-
+	private List<String> simtraces= new ArrayList<String>();
     // Status elements
     JLabel status, time, info;
 
@@ -233,7 +234,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private Map<String, String> checkTable = new HashMap<String, String>();
     private Map<String, List<String>> transTimes = new HashMap<String, List<String>>();
     private Vector<SimulationLatency> latencies = new Vector<SimulationLatency>();
-    
+	PipedOutputStream pos;
+	PipedInputStream pis;
+	private JFrameTMLSimulationPanel tmlSimPanel;
+    BufferedWriter bw;
+	int simIndex=0;
     public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping<TGComponent> _tmap, List<Point> _points) {
         super(_title);
 
@@ -262,6 +267,25 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         runningTable = new Hashtable<Integer, Integer>();
         diagramTable = new Hashtable<String, String>();
 
+
+		tmlSimPanel = new JFrameTMLSimulationPanel(new Frame(), _mgui, "Simulation Transactions");
+		try {
+		pos = new PipedOutputStream();
+		pis = new PipedInputStream(pos, 4096);
+		tmlSimPanel.setFileReference(new BufferedReader(new InputStreamReader(pis)));
+		bw = new BufferedWriter(new OutputStreamWriter(pos));
+
+		//bw.close();
+		//pos.close();
+		}
+		catch (Exception e){
+			System.out.println("failed " + e);
+		}
+		for (TMLTask task : tmap.getTMLModeling().getTasks()){
+			simtraces.add("time=0 block="+ task.getName()+" type=state_entering state=startState");
+			simIndex++;
+		}
+		tmlSimPanel.setVisible(true);
 
         mgui.resetRunningID();
         mgui.resetLoadID();
@@ -1370,7 +1394,74 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         return true;
 
     }
+	public void writeSimTrace(){
+		try {
+		Collections.sort(simtraces, new Comparator<String>() {
+
+    	@Override
+    	public int compare(String o1, String o2) {
+       		int i = Integer.valueOf((o1.split(" ")[0]).split("=")[1]);
+			int j = Integer.valueOf((o2.split(" ")[0]).split("=")[1]);
+			return i-j;
+    	}
+	});
+
+			//System.out.println(simtraces);
+			for (String s: simtraces){
+				bw.write("#0 " +s);
+				bw.newLine();
+				bw.flush();
+			}
+			bw.close();
+			pos.close();
+		}
+		catch (Exception e){
+			System.out.println("Could not write sim trace " + e);
+		}
+	}
     protected void addTransactionToNode(SimulationTransaction tran){
+		try {
+			if (tran.command.contains("Write")){
+				TMLChannel chan = tmap.getTMLModeling().getChannelByShortName(tran.channelName);
+				if (chan!=null){
+					TMLTask originTask = chan.getOriginTask();
+					TMLTask destTask = chan.getDestinationTask();
+					if (originTask!=null && destTask!=null){
+						//JK asynch channels don't work
+					//	if (chan.getType()==TMLChannel.BRBW){
+							String trace="time=" + tran.endTime+ " block="+ originTask.getName() + " blockdestination="+ destTask.getName() +" type=synchro channel="+tran.channelName+" params=\"" +chan.getSize()+"\"";
+							if (!simtraces.contains(trace)){
+								simtraces.add(trace);
+							}
+						//}
+						//else {
+						//	String asynchType = (tran.command.contains("Write") ? "send_asynch" : "receive_asynch");
+							//simtraces.add("#"+simIndex+" time=" + tran.startTime+ " block="+ originTask.getName() + " blockdestination="+ destTask.getName() +" type="+asynchType+ " channel="+tran.channelName+" params=\"" +chan.getSize()+"\"");
+						//}
+					}
+				}
+			}
+			else if (tran.command.contains("Exec")){
+				String trace="time="+tran.endTime+ " block=" + tran.taskName + " type=state_entering state=exec" + tran.length;
+				if (!simtraces.contains(trace)){
+					simtraces.add(trace);
+				}
+			}
+			else {
+				// :(
+			}
+			//System.out.println("Simulation command " + tran.command + " " + tran.channelName + " " + tran.length);
+
+			
+		//	bw.write("#1 time=0.000000000 block=Attacker blockdestination=Bob type=synchro channel= params=\"Attacker.m2");
+//			bw.newLine();
+	//		bw.flush();
+			//bw.close();
+			//pos.close();
+		}
+		catch (Exception e){
+			System.out.println(e);
+		}
         String nodename = tran.deviceName;
         for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
             if ((node.getName()+"_0").equals(nodename)){
@@ -2815,6 +2906,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             updateTasks();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS].getActionCommand())) {
             updateTransactions();
+			writeSimTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_ADD_LATENCY].getActionCommand())) {
             addLatency();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY].getActionCommand())) {
