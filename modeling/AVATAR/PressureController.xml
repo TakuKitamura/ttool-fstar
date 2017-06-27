@@ -102,7 +102,7 @@
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="1" />
 <P1  x="964" y="240" id="61" />
-<P2  x="1088" y="240" id="10" />
+<P2  x="1033" y="240" id="10" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in alarmOff()" />
@@ -141,7 +141,7 @@
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="5000" id="31" >
-<cdparam x="1088" y="140" />
+<cdparam x="1033" y="140" />
 <sizeparam width="250" height="200" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -173,14 +173,16 @@
 <extraparam>
 <CryptoBlock value="false" />
 <Method value="$setAlarm(bool state)" />
-<Signal value="in alarmOn()" attached="false" />
-<Signal value="in alarmOff()" attached="false" />
+<Signal value="in alarmOn()" attached="true" />
+<Signal value="in alarmOff()" attached="true" />
 <globalCode value="" />
 <globalCode value="" />
 <globalCode value="void __userImplemented__AlarmActuator__setAlarm(bool att1) {" />
 <globalCode value="  if (att1) {" />
+<globalCode value="    printf(&quot;Alarm ON\n&quot;);" />
 <globalCode value="    sendDatagram(&quot;+&quot;);" />
 <globalCode value="  } else {" />
+<globalCode value="    printf(&quot;Alarm OFF\n&quot;);" />
 <globalCode value="    sendDatagram(&quot;-&quot;);" />
 <globalCode value="  }" />
 <globalCode value="}" />
@@ -223,7 +225,7 @@
 <Attribute access="0" id="branch" value="false" type="4" typeOther="" />
 <Method value="$int readingPressure()" />
 <Method value="$bool isInCode()" />
-<Signal value="out pressureValue(int value)" attached="false" />
+<Signal value="out pressureValue(int value)" attached="true" />
 <globalCode value="extern int pressure;" />
 <globalCode value="" />
 <globalCode value="int __userImplemented__PressureSensor__readingPressure() {" />

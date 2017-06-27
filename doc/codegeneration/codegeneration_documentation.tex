@@ -293,7 +293,7 @@ Basically, there are two types of custom code as show in the "prototyping" windo
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.9\textwidth]{figures/customhelloworld}
-\caption{Executing the Hello world program} \label{fig:customhelloworld}
+\caption{Global code of an application and global code of a block} \label{fig:customhelloworld}
 \end{figure}
 
 \subsection{Global code}
@@ -309,9 +309,9 @@ void __user_init() {
 \end{lstlisting}
 
 \subsection{Block code}
-The block code typically contains variables that are not declared as block attributes. Block attributes can indeed be directly used in the custom code. The block code can also provide an implementation for the block methods. For a method called "method" of the block "block", the function must be declared as "\_userImplemented\_block\_method" and \textbf{you must ensure to check the "Implementation provided by the user" option} in the method definition window (see Figure \ref{fig:methodhelloworld}). For instance, the following code correesponds to the block code of "MainBlock". It implements the method \textit{printHelloWorld()} referenced in the model (see Figure \ref{fig:printhelloworld}).
+The block code typically contains variables that are not declared as block attributes. Block attributes can indeed be directly used in the custom code. The block code can also provide an implementation for the block methods. For a method called "method" of the block "block", the function must be declared as "\_\_userImplemented\_\_block\_\_method" and \textbf{you must ensure to check the "Implementation provided by the user" option} in the method definition window (see Figure \ref{fig:methodhelloworld}). For instance, the following code correesponds to the block code of "MainBlock". It implements the method \textit{printHelloWorld()} referenced in the model (see Figure \ref{fig:printhelloworld}).
 \begin{lstlisting}
-void _userImplemented_MainBlock__printHelloWorld() {
+void __userImplemented__MainBlock__printHelloWorld() {
   printf("Hello world from generated code\n");
 }
 \end{lstlisting}
@@ -341,8 +341,9 @@ This section explains how a code generated from TTool can be linked with an exte
 The TTool distribution includes an external software which represents a graphical user interface of a microwave system. The source code (in Java) of this software is located in "TTool/executablecode/example":
 \begin{lstlisting}
 $cd TTool/executablecode/example
-$ ls
-DatagramServer.java  Feeder.java  MainMicrowave.java  MicrowavePanel.java  README
+$ls
+DatagramServer.java  MainMicrowave.java           MicrowavePanel.java
+Feeder.java          MainPressureController.java  README
 \end{lstlisting}
 This directory contains the java sources as well as a README file. First compile the java source code, and then execute the GUI, as follows:
 \begin{lstlisting}
@@ -490,11 +491,11 @@ Then, we need to define the user defined C code for both \textit{openM()} and \t
 const char* openD = "Open Door";
 const char* closeD = "Close Door";
 
-void _userImplemented_Door__openM() {
+void __userImplemented__Door__openM() {
   sendDatagram(openD, 10);
 }
 
-void _userImplemented_Door__closeM() {
+void __userImplemented__Door__closeM() {
    sendDatagram(closeD, 10);
 }
 \end{lstlisting}
@@ -576,10 +577,10 @@ The method itself works as follows:
 \item It unlocks the mutex
 \end{enumerate}
 
-Then , the execution of the \textit{ControlPanel} block can continue with the sending of the "startButton" signal. Note that  this is thanks to the mutex facility that the datagram receinving facility and the \textit{ControlPanel} block cannot modify "start" at the same time.\\
+Then, the execution of the \textit{ControlPanel} block can continue with the sending of the "startButton" signal. Note that  this is thanks to the mutex facility that the datagram receinving facility and the \textit{ControlPanel} block cannot modify "start" at the same time.\\
 
 \begin{lstlisting}
-void _userImplemented_ControlPanel__start() {
+void __userImplemented__ControlPanel__start() {
   pthread_mutex_lock(&startMutex);
   printf("Waiting for next start");
   while(start < 1) {
@@ -590,6 +591,58 @@ void _userImplemented_ControlPanel__start() {
   printf("****** MW can start cooking\n");
 }
 \end{lstlisting}
+
+\newpage
+\section{Another exampe of advanced model enhancement with user code}\label{sec:otheradvanced}
+We now consider a PressureController (PC) system. This xml TTool model is available via the TTool model repository.
+\subsection{GUI}
+The TTool distribution includes an external software which represents a graphical user interface of the pressure controller environment: pressure sensor and alarm. The source code (in Java) of this software is located in "TTool/executablecode/example": \textit{MainPressureController.java}.
+ First compile the java source code, and then execute the GUI, as follows:
+\begin{lstlisting}
+$javac MainPressureController.java
+$java MainPressureController
+\end{lstlisting}
+A window similar to the one of Figure \ref{fig:guipc} should open. This window is not yet animated. To do so, we need to build the PC. The GUI and Pc exchange UDP packets to inform each other about modifications:
+\begin{itemize}
+\item Each time the slider is moved, a datagram packet with the pressure value is sent by GUI to PC.
+\item Each time the alarm actuator is triggered, a datagram packet is sent by PC to GUI. This packet contains "+" when the alarm must be activated, and "-" when it must be deactivated.
+\end{itemize}
+
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/guipc}
+\caption{Graphical User Interface of the Pressure Controller System} \label{fig:guipc}
+\end{figure}
+
+\subsection{Pressure Controller (PC)}
+The Pressure Controller is build upon a set of blocks representing the system itself, and two blocks representing the environment (the pressure sensor, and the alarm actuator), see Figure \ref{fig:pc}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{figures/PressureController}
+\caption{Pressure Controller System: Avatar Design} \label{fig:pc}
+\end{figure}
+
+Since we would like the pressure controller to interact with its environment, we have customized the methods of \textit{PressureSensor} and \textit{AlarmActuator}. 
+
+\subsubsection{PressureSensor}
+The pressure sensor (see Figure \ref{fig:ps}) monitors the pressure with a period of 1 unit of time. The model does not act the same when simulating the model or executing its code. To do this, we have a "IsInCode" method that is \textbf{not} executed when the model is considered for functional simulation or formal verification. Indeed, the "branch" boolean is set to false by default, so the random command is executed (and not the \textit{readingPressure()} method). On the contrary, when executing the C code of this model, \textit{IsIncode()} returns true, so \textit{branch} is equal to true, so the left branch is executed, and the pressure is read (\textit{readingPressure()}).  
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/pressuresensor}
+\caption{State Machine Diagram of Pressure Sensor} \label{fig:ps}
+\end{figure}
+
+\subsubsection{AlarmActuator}
+The alarm actuator (see Figure \ref{fig:aa}) waits for an oder to activate or deactivate the alarm. In both case, it calls a user implement method \textit{setAlarm()} with a different parameter ("true", "false").
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/alarmactuator}
+\caption{State Machine Diagram of Pressure Sensor} \label{fig:aa}
+\end{figure}
 
 
 \newpage
