@@ -47,9 +47,7 @@ import translator.CheckingError;
 import ui.atd.*;
 
 import java.util.LinkedList;
-
-//import translator.*;
-
+import java.util.List;
 
 /**
  * Class AvatarTreePanelTranslator
@@ -108,7 +106,7 @@ public class AttackTreePanelTranslator {
     }
 
     public void translate(AttackTreeDiagramPanel atdp) {
-        LinkedList<TGComponent> allComponents = atdp.getAllComponentList();
+        List<TGComponent> allComponents = atdp.getAllComponentList();
 
         int nodeID = 0;
         TGComponent father;
@@ -663,7 +661,7 @@ public class AttackTreePanelTranslator {
 
 
     private void makeAttackNodeBlocks(AvatarSpecification _as, AvatarBlock _main) {
-        Attack att;
+        //Attack att;
 
         for(AttackNode node: at.getAttackNodes()) {
             if (node.isWellFormed()) {
@@ -1198,14 +1196,11 @@ public class AttackTreePanelTranslator {
         }
         checkingErrors.add (ce);
     }
-
-    private void addWarning(CheckingError ce) {
-        if (warnings == null) {
-            warnings = new LinkedList<CheckingError> ();
-        }
-        warnings.add (ce);
-    }
-
-
-
+//
+//    private void addWarning(CheckingError ce) {
+//        if (warnings == null) {
+//            warnings = new LinkedList<CheckingError> ();
+//        }
+//        warnings.add (ce);
+//    }
 }
