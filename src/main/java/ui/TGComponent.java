@@ -2513,7 +2513,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         }
         
         // Issue #46: Added the else.
-        // When we are moving a contained component, we should not check for the max of the diagram. This should be doen for the father only
+        // When we are moving a contained component, we should not check for the max of the diagram. This should be done for the father only
         else {
 	        int currentWidthPos = Math.abs(getCurrentMaxX() - x);
 	        int currentWidthNeg = Math.abs(getCurrentMinX() - x);
@@ -2531,7 +2531,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         }
         
         // Issue #46: Added the else.
-        // When we are moving a contained component, we should not check for the max of the diagram. This should be doen for the father only
+        // When we are moving a contained component, we should not check for the max of the diagram. This should be done for the father only
         else {
 	        int currentWidthPos = Math.abs(getCurrentMaxY() - y);
 	        int currentWidthNeg = Math.abs(getCurrentMinY() - y);
