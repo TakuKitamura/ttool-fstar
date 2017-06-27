@@ -71,7 +71,7 @@ public class Declaration {
 	if(signal1.isOut())
 	    channelName=blockname1+"_"+signalname1+"_"+blockname2+"_"+signalname2;
 	else
-	    channelName=blockname2+"_"+signalname1+"_"+blockname1+"_"+signalname2;
+	    channelName=blockname2+"_"+signalname1+"__"+blockname1+"_"+signalname2;
 	return channelName;
     }
    
