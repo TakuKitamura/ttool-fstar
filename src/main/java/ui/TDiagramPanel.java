@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GenericTree;
@@ -98,6 +95,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public static final int MOVE_COMPONENT = 4;
     public static final int MOVE_CONNECTOR = 5;
 
+    // Issue #14
+    public static final int DIAGRAM_RESIZED = 6;
+
     // For cut/copy/paste
     public static String copyData;
     /*private static int copyX;
@@ -106,7 +106,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     protected String name;
 
-    protected LinkedList<TGComponent> componentList;
+    protected List<TGComponent> componentList;
     protected TGConnectingPoint selectedConnectingPoint;
     protected TGComponent componentPointed;
     protected TGComponent componentPopup;
@@ -124,7 +124,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide,search, enableDisable, setAsCryptoBlock, setAsRegularBlock;
     protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex, checkLatency;
     protected JMenuItem breakpoint;
-    protected JMenuItem paste, insertLibrary, upX, upY, downX, downY;
+    protected JMenuItem paste, insertLibrary, upX, upY, downX, downY, fitToContent;
     protected JMenuItem cut, copy, saveAsLibrary, captureSelected;
     //author:huytruong
     //search dialog
@@ -143,9 +143,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     private int maxX = 2500;
     private int maxY = 1500;
     private final int limit = 10;
-
-    private final int minimumXSize = 900;
-    private final int minimumYSize = 900;
+// Issue #14 Useless data
+//    private final int minimumXSize = 900;
+//    private final int minimumYSize = 900;
     protected final int increment = 500;
 
     private double zoom = 1.0;
@@ -397,11 +397,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     private Font fontToUse = null;
+    
     public void paintMycomponents(Graphics g, boolean b, double w, double h) {
-
-	if (!drawable) {
-	    return;
-	}
+		if (!drawable) {
+		    return;
+		}
 
 	
         if (this.fontToUse == null)
@@ -635,7 +635,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //TraceManager.addDev("x=" + x + " y=" + y + " width=" +width + " height=" + height);
         int cpt = 0;
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc: this.componentList) {
             if (tgc.areAllInRectangle(x, y, width, height)) {
                 tgc.select(true);
                 tgc.setState(TGState.SELECTED);
@@ -644,6 +644,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 tgc.select(false);
                 tgc.setState(TGState.NORMAL);
             }
+        }
 
         return cpt;
     }
@@ -830,7 +831,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return null;
     }
 
-
     public boolean highlightOutAndFreeConnectingPoint(int x, int y, int type) {
         boolean b = false;
         boolean pointedElementFound = false;
@@ -959,9 +959,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return this.componentList;
     }
 
-    public LinkedList<TGComponent> getAllComponentList() {
+    public List<TGComponent> getAllComponentList() {
 
-        LinkedList<TGComponent> ll = new LinkedList<TGComponent> ();
+        List<TGComponent> ll = new LinkedList<TGComponent> ();
         ll.addAll(this.componentList);
 
         for (TGComponent tgc: this.componentList)
@@ -1043,8 +1043,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void updateSelectingComponents(int x, int y) {
-        x = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), x), (int)(Math.ceil(maxX*zoom)));
-        y = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), y), (int)(Math.ceil(maxY*zoom)));
+        x = Math.min(Math.max( (int) Math.floor(minLimit*zoom), x), (int) Math.ceil(maxX*zoom) );
+        y = Math.min(Math.max( (int) Math.floor(minLimit*zoom), y), (int) Math.ceil(maxY*zoom) );
         //x = Math.min(Math.max(minLimit, x), maxX);
         //y = Math.min(Math.max(minLimit, y), maxY);
         currentSelectX = x;
@@ -1324,9 +1324,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         diagramMenu.add(upY);
         diagramMenu.add(downX);
         diagramMenu.add(downY);
-        /*diagramMenu.addSeparator();
-          diagramMenu.add(rename);
-          diagramMenu.add(delete);*/
+        diagramMenu.add(fitToContent);
     }
 
     private void buildSelectedPopupMenu() {
@@ -1344,10 +1342,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     private void buildPopupMenus() {
         menuAL = new ActionListener() {
-                public void actionPerformed(ActionEvent e){
-                    popupAction(e);
-                }
-            };
+        	
+        	@Override
+        	public void actionPerformed(ActionEvent e){
+                popupAction(e);
+            }
+        };
 
         remove = new JMenuItem("Remove");
         remove.addActionListener(menuAL);
@@ -1427,23 +1427,26 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         insertLibrary = new JMenuItem("Insert Library");
         insertLibrary.addActionListener(menuAL);
 
-        upX = new JMenuItem("Increase horizontal size");
+        upX = new JMenuItem("Increase diagram width");
         upX.addActionListener(menuAL);
 
-        upY = new JMenuItem("Increase vertical size");
+        upY = new JMenuItem("Increase diagram height");
         upY.addActionListener(menuAL);
 
-        downX = new JMenuItem("Decrease horizontal size");
+        downX = new JMenuItem("Decrease diagram width");
         downX.addActionListener(menuAL);
 
-        downY = new JMenuItem("Decrease vertical size");
+        downY = new JMenuItem("Decrease diagram height");
         downY.addActionListener(menuAL);
 
-        /*rename = new JMenuItem("Rename diagram");
-          rename.addActionListener(menuAL);
-
-          delete = new JMenuItem("Delete diagram");
-          delete.addActionListener(menuAL);*/
+        fitToContent = new JMenuItem("Adjust diagram size to content");
+        fitToContent.addActionListener( new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fitDiagramSizeToContent();
+			}
+		});
 
         // Selected Menu
         cut = new JMenuItem("Cut");
@@ -1463,7 +1466,51 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return increment;
     }
 
-    public void popupAction(ActionEvent e) {
+    // Issue #14
+    private void fitDiagramSizeToContent() {
+    	maxX = getRealMaxX();
+    	maxY = getRealMaxY();
+        mgui.changeMade(this, DIAGRAM_RESIZED );
+    	updateSize();
+    }
+    
+    private void increaseDiagramWidth() {
+    	maxX += increment;
+        mgui.changeMade(this, DIAGRAM_RESIZED );
+    	updateSize();
+    }
+    
+    private void increaseDiagramHeight() {
+    	maxY += increment;
+        mgui.changeMade(this, DIAGRAM_RESIZED );
+    	updateSize();
+    }
+    
+    private boolean canDecreaseMaxX() {
+    	return maxX - increment >= getRealMaxX();
+    }
+    
+    private void decreaseDiagramWidth() {
+    	if ( canDecreaseMaxX() ) {
+    		maxX -= increment;
+            mgui.changeMade(this, DIAGRAM_RESIZED );
+    		updateSize();
+    	}
+    }
+    
+    private boolean canDecreaseMaxY() {
+    	return maxY - increment >= getRealMaxY();
+    }
+
+    private void decreaseDiagramHeight() {
+    	if ( canDecreaseMaxY() ) {
+    		maxY -= increment;
+            mgui.changeMade(this, DIAGRAM_RESIZED );
+    		updateSize();
+    	}
+    }
+
+    private void popupAction(ActionEvent e) {
         if (e.getSource() == remove) {
             removeComponent(componentPopup);
             mgui.changeMade(this, REMOVE_COMPONENT);
@@ -1653,26 +1700,34 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //--
 
         if (e.getSource() == upX) {
-            maxX += increment;
-            updateSize();
+        	increaseDiagramWidth();
+//            maxX += increment;
+//            updateSize();
             return;
         }
 
         if (e.getSource() == upY) {
-            maxY += increment;
-            updateSize();
+        	increaseDiagramHeight();
+//            maxY += increment;
+//            updateSize();
             return;
         }
 
         if (e.getSource() == downX) {
-            maxX -= increment;
-            updateSize();
+        	
+        	// Issue #14
+        	decreaseDiagramWidth();
+//        	maxX -= increment;
+//            updateSize();
             return;
         }
 
         if (e.getSource() == downY) {
-            maxY -= increment;
-            updateSize();
+        	
+        	// Issue #14
+        	decreaseDiagramHeight();
+//            maxY -= increment;
+//            updateSize();
             return;
         }
 
@@ -1742,7 +1797,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
-    public void setComponentPopupMenu() {
+    private void setComponentPopupMenu() {
 
         //author: huytruong
         search.setEnabled(true);
@@ -1865,37 +1920,28 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         } else {
             breakpoint.setEnabled(false);
         }
-
-
     }
 
-    public void setDiagramPopupMenu() {
+    private void setDiagramPopupMenu() {
         paste.setEnabled(copyData != null);
         insertLibrary.setEnabled(true);
-        if (maxX < minimumXSize + increment) {
-            downX.setEnabled(false);
-        } else {
-            downX.setEnabled(true);
-        }
+        
+//        if (maxX < minimumXSize + increment) {
+//            downX.setEnabled(false);
+//        } else {
+        	// Issue #14
+        downX.setEnabled( canDecreaseMaxX() );
+//        }
 
-        if (maxY < minimumYSize + increment) {
-            downY.setEnabled(false);
-        } else {
-            downY.setEnabled(true);
-        }
-
-        /* rename / delete diagram -> Sequence diagram */
-        /*if (this instanceof SequenceDiagramPanel) {
-          rename.setEnabled(true);
-          delete.setEnabled(true);
-          } else {
-          rename.setEnabled(false);
-          delete.setEnabled(false);
-          }*/
-
+//        if (maxY < minimumYSize + increment) {
+//            downY.setEnabled(false);
+//        } else {
+        	// Issue #14
+        downY.setEnabled( canDecreaseMaxY() );
+//        }
     }
 
-    public void setSelectedPopupMenu() {
+    private void setSelectedPopupMenu() {
         cut.setEnabled(true);
         copy.setEnabled(true);
     }
@@ -1921,7 +1967,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return;
     }
 
-    public void captureSelected() {
+    private void captureSelected() {
         mgui.selectedCapture();
     }
 
@@ -2001,7 +2047,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
-    public void removeAllSelectedComponents() {
+    private void removeAllSelectedComponents() {
         TGComponent tgc = nextSelectedComponent();
         while(tgc != null) {
             removeComponent(tgc);
@@ -2035,7 +2081,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
     }
 
-    public void removeConnectors(TGComponent tgc) {
+    private void removeConnectors(TGComponent tgc) {
         for (int i = 0; i<tgc.getNbConnectingPoint(); i++) {
             TGConnectingPoint cp = tgc.tgconnectingPointAtIndex(i);
             Iterator<TGComponent> iterator = this.componentList.iterator ();
@@ -2920,7 +2966,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return image;
     }
 
-    public int getRealMinX() {
+    private int getRealMinX() {
         int res = maxX;
 
         for (TGComponent tgc: this.componentList) {
@@ -2939,7 +2985,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return res;
     }
 
-    public int getRealMinY() {
+    private int getRealMinY() {
         int res = maxY;
 
         for (TGComponent tgc: this.componentList) {
@@ -2961,10 +3007,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         int res = limit;
 
         for (TGComponent tgc: this.componentList) {
-            int cur = tgc.getCurrentMaxX();
-            if (cur > res)
-                res = cur;
+            res = Math.max( res, tgc.getCurrentMaxX() );
+//            
+//            if (cur > res) {
+//                res = cur;
+//            }
         }
+        
         return res;
     }
 
@@ -2972,10 +3021,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         int res = limit;
 
         for (TGComponent tgc: this.componentList) {
-            int cur = tgc.getCurrentMaxY();
-            if (cur > res)
-                res = cur;
+            res = Math.max( res, tgc.getCurrentMaxY() );
+//            int cur = tgc.getCurrentMaxY();
+//            if (cur > res)
+//                res = cur;
         }
+        
         return res;
     }
 
