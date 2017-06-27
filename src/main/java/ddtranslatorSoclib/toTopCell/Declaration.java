@@ -65,11 +65,14 @@ public class Declaration {
 	AvatarBlock block1=ar.getBlock1();
 	AvatarBlock block2=ar.getBlock2();
 	String blockname1=block1.getName();
-        String blockname2=block1.getName();
+        String blockname2=block2.getName();
 	String signalname1=signal1.getSignalName();
 	String signalname2=signal2.getSignalName();
-	channelName=blockname1+"_"+signalname1+"_"+blockname2+"_"+signalname2;
-    return channelName;
+	if(signal1.isOut())
+	    channelName=blockname1+"_"+signalname1+"_"+blockname2+"_"+signalname2;
+	else
+	    channelName=blockname2+"_"+signalname1+"_"+blockname1+"_"+signalname2;
+	return channelName;
     }
    
     /*  public static String generateName(AvatarChannel channel){
@@ -368,7 +371,7 @@ int  i=0;
 			      AvatarSignal as2=ar.getSignal2(i);
 			      //String chname = generateName(channel);
 			      String chname = generateName(ar,as1,as2);
-			      //strArray=strArray+"\""+chname+"\",";
+			      strArray=strArray+"\""+chname+"\",";
 		  
 			  }
 		      }
