@@ -85,15 +85,21 @@ public abstract class TToolBar extends JToolBar {
 	for(int i=0; i<ConfigurationTTool.PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
 	    Plugin p = PluginManager.pluginManager.getPluginOrCreate(ConfigurationTTool.PLUGIN_GRAPHICAL_COMPONENT[i]);
 	    if (p != null) {
+		String panelName = p.executeRetStringMethod("CustomizerGraphicalComponent", "getPanelClassName");
+		if (panelName.compareTo(diag) == 0){
 		String shortText = p.executeRetStringMethod("CustomizerGraphicalComponent", "getShortText");
 		String longText = p.executeRetStringMethod("CustomizerGraphicalComponent", "getLongText");
 		String veryShortText = p.executeRetStringMethod("CustomizerGraphicalComponent", "veryShortText");
 		ImageIcon img = p.executeRetImageIconMethod("CustomizerGraphicalComponent", "getImageIcon");
-		TraceManager.addDev("Plugin: " + p.getName() + " short name:" + shortText);
-		TAction t = new TAction("command-" + i, shortText, img, img, veryShortText, longText, 0);
-		pluginActions.add(t);
-		/*JButton button = add(t);
-		  button.addMouseListener(mgui.mouseHandler);*/
+		if ((imgIcon != null)  && (shortText != null)) {
+		    TraceManager.addDev("Plugin: " + p.getName() + " short name:" + shortText);
+		    TAction t = new TAction("command-" + i, shortText, img, img, veryShortText, longText, 0);
+		    TGUIAction tguia = new TGUIAction(t);
+		    pluginActions.add(t);
+		    JButton button = add(tguia);
+		    button.addMouseListener(mgui.mouseHandler);
+		}
+		}
 		    
 	    }
 	}
