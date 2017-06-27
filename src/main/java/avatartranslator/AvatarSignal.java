@@ -57,14 +57,18 @@ public class AvatarSignal extends AvatarMethod {
 
     private int inout;
 
-
     public AvatarSignal(String _name, int _inout, Object _referenceObject) {
         super(_name, _referenceObject);
         inout = _inout;
+	name = _name;
     }
 
     public int getInOut() {
         return inout;
+    }
+
+    public String getSignalName() {
+        return name;
     }
 
     public void setInOut(int _inout) {
