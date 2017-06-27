@@ -49,7 +49,7 @@ import proverifspec.*;
 import ui.AvatarDesignPanel;
 import ui.UICheckingError;
 import translator.CheckingError;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.TGComponent;
 import ui.window.JDialogProverifVerification;
 

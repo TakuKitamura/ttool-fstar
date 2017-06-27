@@ -46,7 +46,7 @@ import myutil.FileException;
 import myutil.FileUtils;
 import myutil.TraceManager;
 import tmltranslator.*;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.GTMLModeling;
 import ui.TMLCommunicationPatternPanel;
 

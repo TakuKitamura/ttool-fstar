@@ -42,7 +42,7 @@
 
 package ui;
 
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -41,7 +41,7 @@
 
 package ui;
 
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.util.IconManager;
 
 import javax.swing.*;

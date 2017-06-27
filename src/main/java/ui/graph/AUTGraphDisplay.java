@@ -46,8 +46,7 @@ import org.graphstream.graph.implementations.*;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.view.*;
 import org.graphstream.ui.view.Viewer;
-import org.graphstream.ui.view.Viewer.*;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.util.IconManager;
 import ui.file.PNGFilter;
 

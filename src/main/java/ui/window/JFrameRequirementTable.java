@@ -41,6 +41,7 @@
 
 package ui.window;
 
+import common.ConfigurationTTool;
 import myutil.*;
 import ui.*;
 import ui.avatarrd.AvatarRDPanel;

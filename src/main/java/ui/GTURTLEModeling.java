@@ -46,6 +46,7 @@ import avatartranslator.toproverif.AVATAR2ProVerif;
 import avatartranslator.totpn.AVATAR2TPN;
 import avatartranslator.toturtle.AVATAR2TURTLE;
 import avatartranslator.touppaal.AVATAR2UPPAAL;
+import common.ConfigurationTTool;
 import ddtranslator.DDSyntaxException;
 import ddtranslator.DDTranslator;
 import launcher.LauncherException;

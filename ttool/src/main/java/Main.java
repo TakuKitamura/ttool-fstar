@@ -46,7 +46,7 @@
 
 import myutil.BoolExpressionEvaluator;
 import myutil.TraceManager;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.*;
 import ui.util.DefaultText;
 import ui.util.IconManager;

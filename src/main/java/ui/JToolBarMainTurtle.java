@@ -42,7 +42,7 @@
 
 package ui;
 
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import myutil.TraceManager;
 
 import javax.swing.*;

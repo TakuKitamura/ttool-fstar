@@ -44,7 +44,7 @@ package ui.window;
 import myutil.FileException;
 import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.FormatManager;
 import ui.util.IconManager;
 import ui.StoppableGUIElement;

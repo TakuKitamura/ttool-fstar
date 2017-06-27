@@ -46,7 +46,7 @@ import avatartranslator.toexecutable.AVATAR2CPOSIX;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.*;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.util.IconManager;
 import ui.JTextAreaWriter;
 import ui.MainGUI;

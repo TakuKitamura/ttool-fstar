@@ -42,7 +42,7 @@
 package ui.diplodocusmethodology;
 
 
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import myutil.TraceManager;
 import ui.*;
 import ui.window.JDialogSystemCGeneration;
