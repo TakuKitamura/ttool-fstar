@@ -68,7 +68,7 @@ import java.util.LinkedList;
  */
 public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree, AvatarBDStateMachineOwner {
 
-    private static String GLOBAL_CODE_INFO = "(global code)";
+    private static String GLOBAL_CODE_INFO = "(block code)";
 
     private int textY1 = 3;
     private static String stereotype = "block";
@@ -82,6 +82,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     private int limitName = -1;
     private int limitAttr = -1;
     private int limitMethod = -1;
+    private int limitSignal = -1;
 
     // Icon
     private int iconSize = 15;
@@ -186,6 +187,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         this.limitName = -1;
         this.limitAttr = -1;
         this.limitMethod = -1;
+	this.limitSignal = y + height;
 
         // h retains the coordinate along X where an element was last drawn
         int h = 0;
@@ -317,7 +319,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         h += textY1;
 
-        // Attributes 
+        // Attributes
+	limitAttr = limitName;
         for (TAttribute attr: this.myAttributes) {
             h += step;
             if (h >= this.height - textX) {
@@ -364,10 +367,13 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         h += textY1;
 
         // Methods
+	limitMethod = limitAttr;
+	limitSignal = limitAttr;
         for (AvatarMethod method: this.myMethods) {
             h += step;
             if (h >= this.height - textX) {
                 this.limitMethod = this.y + this.height;
+		this.limitSignal = limitMethod;
                 return;
             }
 
@@ -397,11 +403,15 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         h += graph.getFontMetrics ().getDescent () + textY1;
 
-        // Remember limit of methods
-        this.limitMethod = this.y + h;
-
-        if (h + textY1 >= this.height)
+        if (h + textY1 >= this.height) {
+	    limitMethod = this.y + this.height;
+	    limitSignal = this.y + this.height;
             return;
+	}
+
+	// Remember limit of methods
+        this.limitMethod = this.y + h;
+	this.limitSignal = this.y + h;
 
         graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
         h += textY1;
@@ -409,8 +419,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         // Signals
         for (AvatarSignal signal: this.mySignals) {
             h += step;
-            if (h >= this.height - textX)
+            if (h >= this.height - textX) {
+		limitSignal = this.height + this.y;
                 return;
+	    }
 
             String signalString = "~ " + signal.toString ();
             w = graph.getFontMetrics ().stringWidth (signalString);
@@ -442,21 +454,25 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         h += graph.getFontMetrics ().getDescent () + textY1;
 
-        if (h + textY1 >= this.height)
+        if (h + textY1 >= this.height) {
+	    limitSignal = this.height + this.y;
             return;
+	}
 
         // Global code
+	limitSignal = this.y+h;
         if (hasGlobalCode()) {
             if (h+textY1+step >= this.height - textX)
                 return;
-
             graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
             h += textY1+step;
-
+	    
             w = graph.getFontMetrics ().stringWidth (GLOBAL_CODE_INFO);
             if (w + 2*textX < this.width)
                 graph.drawString (GLOBAL_CODE_INFO, this.x + (this.width - w)/2, this.y + h);
-        }
+        } else {
+	    limitSignal = height;
+	}
     }
 
     private void drawInfoAttachement(AvatarSignal _as,  Graphics g, int _x, int _y) {
@@ -599,8 +615,36 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
 
         // And so -> attributes!
+	
         int tab = 0;
-        if (limitAttr != -1) {
+
+	//TraceManager.addDev("limitAttr=" + limitAttr + " method=" + limitMethod + " limitSignal=" + limitSignal + " y=" + _y + " height=" + height);
+
+	if (limitMethod == -1) {
+	    limitMethod = limitAttr;
+	}
+
+	if (limitSignal == -1) {
+	    limitSignal = limitMethod;
+	}
+	
+	if (limitAttr == -1) {
+	    tab = 0;
+	} else {
+	    if (_y < limitAttr) {
+		tab = 0;
+	    } else if (_y < limitMethod){
+		tab = 1;
+	    } else if (_y < limitSignal) {
+		tab = 2;
+	    } else if (_y > limitSignal && hasGlobalCode()) {
+		tab = 3;
+	    } else if (_y > limitSignal && !hasGlobalCode()) {
+		tab = 2;
+	    }
+	}
+	
+        /*if (limitAttr != -1) {
             if (_y > limitAttr) {
                 if (limitMethod == -1) {
                     tab = 2;
@@ -619,7 +663,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             if (this.mySignals.size() > 1) {
                 tab = 2;
             }
-        }
+	    }*/
 
         String mainCode = null;
         TDiagramPanel ttdp = getTDiagramPanel();

@@ -346,8 +346,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         jta.append("Loading model: " + fileName);
         String urlToLoad = URLManager.getBaseURL(url) + fileName;
         URLManager urlm = new URLManager();
-        filePath = ConfigurationTTool.FILEPath + "/" + fileName;
-        boolean ok = urlm.downloadFile(ConfigurationTTool.FILEPath + "/" + fileName, urlToLoad,this);
+        filePath = ConfigurationTTool.DownloadedFILEPath + "/" + fileName;
+        boolean ok = urlm.downloadFile(filePath, urlToLoad,this);
         if (!ok) {
             jta.append("Model transfer failed\nPlease, select another model, or retry\n");
             panel.reactivateSelection();
@@ -370,8 +370,17 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         //mgui.openProjectFromFile(new File(filePath));
     }
 
+    @Override
     public void loadFailed() {
         jta.append("Model transfer failed\nPlease, select another model, or retry\n");
+        panel.reactivateSelection();
+    }
+
+    @Override
+    public void loadFailed(Exception e) {
+        jta.append("Model transfer failed with message:\n");
+        jta.append(e.getMessage());
+        jta.append("\n\nPlease, select another model, or retry\n");
         panel.reactivateSelection();
     }
 

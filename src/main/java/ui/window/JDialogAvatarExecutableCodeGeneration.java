@@ -912,7 +912,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(f, mgui, "Simulation trace of " + simulationTraceFile.getText());
         jfssdp.setIconImage(IconManager.img8);
         // jfssdp.setSize(600, 600);
-        GraphicLib.centerOnParent(jfssdp, 600, 600);
+        GraphicLib.centerOnParent(jfssdp, 800, 600);
         if (selectedViewTrace == 0) {
             jfssdp.setFileReference(simulationTraceFile.getText());
         } else {

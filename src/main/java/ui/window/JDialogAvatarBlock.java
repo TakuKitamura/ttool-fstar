@@ -544,7 +544,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         panelCode.add(jsp, c2);
 
         panelCode.add(new JLabel("Global code of block:"), c7);
-	panelCode.add(new JLabel("To implement a method m of block B: \"userImplemented_B_m(...){...}\""), c7);
+	panelCode.add(new JLabel("To implement a method m of block B: \"__userImplemented__B__m(...){...}\""), c7);
         jtaGlobalCode = new JTextArea();
         jtaGlobalCode.setEditable(true);
         jtaGlobalCode.setMargin(new Insets(10, 10, 10, 10));

@@ -366,7 +366,7 @@ public class AVATAR2CPOSIX {
             // Implementation is provided by the user?
             // In that case, no need to generate the code!
             if (_am.isImplementationProvided()) {
-                ret += "return _userImplemented_" + nameMethod + "(";
+                ret += "return __userImplemented__" + nameMethod + "(";
                 cpt = 0;
                 for(AvatarAttribute aaa: listA) {
                     if (cpt != 0) {
@@ -388,7 +388,7 @@ public class AVATAR2CPOSIX {
             }
         } else {
             if (_am.isImplementationProvided()) {
-                ret += "_userImplemented_" + nameMethod + "(";
+                ret += "__userImplemented__" + nameMethod + "(";
                 cpt = 0;
                 for(AvatarAttribute aaa: listA) {
                     if (cpt != 0) {

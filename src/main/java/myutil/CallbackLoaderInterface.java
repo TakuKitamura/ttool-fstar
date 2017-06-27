@@ -51,5 +51,6 @@ public interface CallbackLoaderInterface {
 
     void loadDone();
     void loadFailed();
+    void loadFailed(Exception e);
 
 }
