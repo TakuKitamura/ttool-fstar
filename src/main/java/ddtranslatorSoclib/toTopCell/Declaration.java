@@ -69,7 +69,7 @@ public class Declaration {
 	String signalname1=signal1.getSignalName();
 	String signalname2=signal2.getSignalName();
 	if(signal1.isOut())
-	    channelName=blockname1+"_"+signalname1+"_"+blockname2+"_"+signalname2;
+	    channelName=blockname1+"_"+signalname1+"__"+blockname2+"_"+signalname2;
 	else
 	    channelName=blockname2+"_"+signalname1+"__"+blockname1+"_"+signalname2;
 	return channelName;
