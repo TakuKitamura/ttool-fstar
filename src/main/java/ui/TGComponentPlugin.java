@@ -56,11 +56,4 @@ public class TGComponentPlugin extends TGComponent {
 
     private Plugin componentPlugin;
     private String className;
-
-    
-    
-
-    
-
-    
 }

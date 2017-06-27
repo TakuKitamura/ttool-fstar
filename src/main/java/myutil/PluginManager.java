@@ -64,6 +64,15 @@ public class PluginManager  {
 	plugins.add(_plugin);
     }
 
+    public Plugin getPluginOrCreate(String _name) {
+	Plugin plug = getPlugin(_name);
+	if (plug != null) {
+	    return plug;
+	}
+
+	return createPlugin(_name);
+    }
+
     public Plugin getPlugin(String _name) {
 	for(Plugin plugin: plugins) {
 	    if (plugin.getName().compareTo(_name) == 0) {
@@ -105,18 +114,9 @@ public class PluginManager  {
 	    }
 	}
 
-	// We have a valid plugin. We now need to get the Method
-	Method m = plugin.getMethod(_className, _methodName);
-	if (m == null) {
-	    return null;
-	}
+	return plugin.executeRetStringMethod(_className, _methodName);
 
-	try {
-	    return (String)(m.invoke(null));
-	} catch (Exception e) {
-	    TraceManager.addDev("Exception occured when executing method " + _methodName);
-	    return null;
-	}
+	
     }
 
 

@@ -42,8 +42,11 @@
 package ui;
 
 import javax.swing.*;
-//import java.awt.*;
+import java.util.*;
 //import java.awt.event.*;
+
+import myutil.*;
+import common.*;
 
 
 /**
@@ -55,6 +58,9 @@ import javax.swing.*;
  * @see TGComponent
  */
 public abstract class TToolBar extends JToolBar {
+
+    protected ArrayList<TAction> pluginActions;
+    
     //protected ActionListener buttonTB;
     protected MainGUI mgui;
         /*protected int typeSelected = TGComponentManager.EDIT;
@@ -72,6 +78,26 @@ public abstract class TToolBar extends JToolBar {
     protected abstract void setButtons();
     
     protected abstract void setActive(boolean b);
+
+    protected void setPluginButtons(String diag) {
+	pluginActions = new ArrayList<TAction>();
+	this.addSeparator();
+	for(int i=0; i<ConfigurationTTool.PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
+	    Plugin p = PluginManager.pluginManager.getPluginOrCreate(ConfigurationTTool.PLUGIN_GRAPHICAL_COMPONENT[i]);
+	    if (p != null) {
+		String shortText = p.executeRetStringMethod("CustomizerGraphicalComponent", "getShortText");
+		String longText = p.executeRetStringMethod("CustomizerGraphicalComponent", "getLongText");
+		String veryShortText = p.executeRetStringMethod("CustomizerGraphicalComponent", "veryShortText");
+		ImageIcon img = p.executeRetImageIconMethod("CustomizerGraphicalComponent", "getImageIcon");
+		TraceManager.addDev("Plugin: " + p.getName() + " short name:" + shortText);
+		TAction t = new TAction("command-" + i, shortText, img, img, veryShortText, longText, 0);
+		pluginActions.add(t);
+		/*JButton button = add(t);
+		  button.addMouseListener(mgui.mouseHandler);*/
+		    
+	    }
+	}
+    }
     
 } // Class
 

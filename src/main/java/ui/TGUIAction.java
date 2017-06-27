@@ -618,8 +618,6 @@ public class TGUIAction extends AbstractAction {
 
     public static final String LARGE_ICON = "LargeIcon";
 
-
-
     public TGUIAction(int id) {
         if (actions[0] == null) {
             init();
