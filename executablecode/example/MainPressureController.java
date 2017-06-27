@@ -70,9 +70,7 @@ public class MainPressureController extends JFrame implements Feeder, ChangeList
         System.out.println("Got message:" + msg);
         try {
             if (msg.startsWith("+")) {
-                s = msg.substring(9, msg.length());
 		alarm.setText(ALARM_ON);
-                
             } else if (msg.startsWith("-")) {
                 alarm.setText(ALARM_OFF);
             } 

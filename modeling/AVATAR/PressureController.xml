@@ -177,7 +177,7 @@
 <Signal value="in alarmOff()" attached="false" />
 <globalCode value="" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_AlarmActuator__setAlarm(bool att1) {" />
+<globalCode value="void __userImplemented__AlarmActuator__setAlarm(bool att1) {" />
 <globalCode value="  if (att1) {" />
 <globalCode value="    sendDatagram(&quot;+&quot;);" />
 <globalCode value="  } else {" />
@@ -223,14 +223,14 @@
 <Attribute access="0" id="branch" value="false" type="4" typeOther="" />
 <Method value="$int readingPressure()" />
 <Method value="$bool isInCode()" />
-<Signal value="out pressureValue(int value)" attached="true" />
+<Signal value="out pressureValue(int value)" attached="false" />
 <globalCode value="extern int pressure;" />
 <globalCode value="" />
-<globalCode value="int _userImplemented_PressureSensor__readingPressure() {" />
+<globalCode value="int __userImplemented__PressureSensor__readingPressure() {" />
 <globalCode value="  return pressure;" />
 <globalCode value="}" />
 <globalCode value="" />
-<globalCode value="bool _userImplemented_PressureSensor__isInCode() {" />
+<globalCode value="bool __userImplemented__PressureSensor__isInCode() {" />
 <globalCode value="  return 1;" />
 <globalCode value="}" />
 </extraparam>
