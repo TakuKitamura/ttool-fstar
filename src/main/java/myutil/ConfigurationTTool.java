@@ -81,6 +81,7 @@ public class ConfigurationTTool {
     public static String DOTTYHost = "";
     public static String DOTTYPath = "";
     public static String FILEPath = "";
+    public static String DownloadedFILEPath = "";
     public static String LOTOSPath = "";
     public static String LIBPath = "";
     public static String IMGPath = "";
@@ -396,6 +397,7 @@ public class ConfigurationTTool {
 
         sb.append("\nYour files (modeling, librairies, etc.):\n");
         sb.append("FILEPath: " + FILEPath + "\n");
+        sb.append("DownloadedFILEPath: " + DownloadedFILEPath + "\n");
         sb.append("LOTOSPath: " + LOTOSPath + "\n");
         sb.append("LIBPath: " + LIBPath + "\n");
         sb.append("IMGPath: " + IMGPath + "\n");
@@ -536,6 +538,9 @@ public class ConfigurationTTool {
             nl = doc.getElementsByTagName("FILEPath");
             if (nl.getLength() > 0)
                 FILEPath(nl);
+            nl = doc.getElementsByTagName("DownloadedFILEPath");
+            if (nl.getLength() > 0)
+                DownloadedFILEPath(nl);
             nl = doc.getElementsByTagName("LOTOSPath");
             if (nl.getLength() > 0)
                 LOTOSPath(nl);
@@ -898,6 +903,17 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             FILEPath = elt.getAttribute("data");
+            if (DownloadedFILEPath.isEmpty())
+                DownloadedFILEPath = FILEPath;
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void DownloadedFILEPath(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            DownloadedFILEPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
