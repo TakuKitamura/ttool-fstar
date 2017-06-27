@@ -6525,7 +6525,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return null;
     }
 
-
     public void alignInstances() {
         //TraceManager.addDev("Align instances");
         if (getCurrentTDiagramPanel() instanceof ui.sd.SequenceDiagramPanel) {
