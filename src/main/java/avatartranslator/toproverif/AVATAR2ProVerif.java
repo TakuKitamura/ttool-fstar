@@ -121,6 +121,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     private int dummyDataCounter;
 
     private int stateReachability;
+    private boolean allowPrivateChannelDuplication;
 
     private LinkedList<CheckingError> warnings;
 
@@ -183,8 +184,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         return this.avspec;
     }
 
-    public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, int _stateReachability, boolean _typed) {
-
+    public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, int _stateReachability, boolean _typed, boolean allowPrivateChannelDuplication) {
+        this.allowPrivateChannelDuplication = allowPrivateChannelDuplication;
         this.stateReachability = _stateReachability;
         this.warnings = new LinkedList<CheckingError> ();
         if (_typed)
@@ -1038,8 +1039,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         int index = ar.getIndexOfSignal (as);
         String name = ar.getBlock1().getName() + ar.getSignal1 (index).getName () + "__" + ar.getBlock2().getName() + ar.getSignal2 (index).getName ();
 
-        if (ar != null)
-            isPrivate = ar.isPrivate();
+        isPrivate = ar.isPrivate();
 
         if (as.isOut()) {
             // If this is an out operation
@@ -1051,11 +1051,20 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             }
 
             String tmp = "out (" + CH_MAINCH + ", ";
-            if (isPrivate)
-                tmp += CH_ENCRYPT + name + " (";
-	    if (_asme.getNbOfValues()>1){
-		tmp +="(";
-	    }
+            if (isPrivate) {
+                if (this.allowPrivateChannelDuplication)
+                        tmp += CH_ENCRYPT + name + " (";
+                else {
+                    this.dummyDataCounter++;
+                    _lastInstr = _lastInstr.setNextInstr(new ProVerifProcIn(CHCTRL_CH, new ProVerifVar[]{new ProVerifVar("strong" + ATTR_DELIM + "priv" + this.dummyDataCounter, "bitstring")}));
+                    tmp += CH_ENCRYPT + name + " ((strong" + ATTR_DELIM + "priv" + this.dummyDataCounter + ", ";
+                }
+            }
+
+            if (_asme.getNbOfValues()>1){
+                tmp +="(";
+            }
+
             if (_asme.getNbOfValues() == 0)
                 tmp += "data" + ATTR_DELIM + this.dummyDataCounter;
             else {
@@ -1078,8 +1087,11 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 }
             }
 
-            if (isPrivate)
+            if (isPrivate) {
+                if (!this.allowPrivateChannelDuplication)
+                    tmp += ")";
                 tmp += ")";
+            }
 
             tmp += ")";
 	    if (_asme.getNbOfValues()>1){
@@ -1115,9 +1127,27 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             // If the channel is private use the CH_DECRYPT function
             if (isPrivate) {
                 TraceManager.addDev("|    |    in (chPriv, ...)");
-                this.dummyDataCounter ++;
-                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcIn (CH_MAINCH, new ProVerifVar[] {new ProVerifVar ("privChData" + this.dummyDataCounter, "bitstring")}));
-                _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (vars.toArray (new ProVerifVar[vars.size()]), CH_DECRYPT + name + " (privChData" + this.dummyDataCounter + ")"));
+                if (!this.allowPrivateChannelDuplication) {
+                    this.dummyDataCounter++;
+                    String strong = "strong" + ATTR_DELIM + "priv" + this.dummyDataCounter;
+                    _lastInstr = _lastInstr.setNextInstr(new ProVerifProcNew(strong, "bitstring"));
+                    _lastInstr = _lastInstr.setNextInstr(new ProVerifProcRaw ("out (" + CHCTRL_CH + ", " + strong + ");"));
+
+                    this.dummyDataCounter++;
+                    _lastInstr = _lastInstr.setNextInstr(new ProVerifProcIn(CH_MAINCH, new ProVerifVar[]{new ProVerifVar("privChData" + this.dummyDataCounter, "bitstring")}));
+
+                    this.dummyDataCounter++;
+                    LinkedList<ProVerifVar> strongCheckVars = new LinkedList<>();
+                    strongCheckVars.add(new ProVerifVar(strong, "bitstring", false, true));
+                    strongCheckVars.add(new ProVerifVar("privChData" + this.dummyDataCounter, "bitstring"));
+                    _lastInstr = _lastInstr.setNextInstr(new ProVerifProcLet(strongCheckVars.toArray(new ProVerifVar[strongCheckVars.size()]), CH_DECRYPT + name + " (privChData" + (this.dummyDataCounter-1) + ")"));
+
+                    _lastInstr = _lastInstr.setNextInstr(new ProVerifProcLet(vars.toArray(new ProVerifVar[vars.size()]), "privChData" + this.dummyDataCounter));
+                } else {
+                    this.dummyDataCounter++;
+                    _lastInstr = _lastInstr.setNextInstr(new ProVerifProcIn(CH_MAINCH, new ProVerifVar[]{new ProVerifVar("privChData" + this.dummyDataCounter, "bitstring")}));
+                    _lastInstr = _lastInstr.setNextInstr(new ProVerifProcLet(vars.toArray(new ProVerifVar[vars.size()]), CH_DECRYPT + name + " (privChData" + this.dummyDataCounter + ")"));
+                }
             } else {
                 TraceManager.addDev("|    |    in (ch, ...)");
                 _lastInstr = _lastInstr.setNextInstr (new ProVerifProcIn (CH_MAINCH, vars.toArray (new ProVerifVar[vars.size()])));
