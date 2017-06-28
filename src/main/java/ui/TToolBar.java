@@ -95,18 +95,18 @@ public abstract class TToolBar extends JToolBar implements ActionListener {
                     ImageIcon img = p.executeRetImageIconMethod("CustomizerGraphicalComponent", "getImageIcon");
                     if ((img != null)  && (shortText != null)) {
                         TraceManager.addDev("Plugin: " + p.getName() + " short name:" + shortText);
-                        TAction t = new TAction("command-" + i, shortText, img, img, veryShortText, longText, 0);
+                        TAction t = new TAction("command-" + p.getName(), shortText, img, img, veryShortText, longText, 0);
                         TGUIAction tguia = new TGUIAction(t);
                         pluginActions.add(tguia);
 			plugins.add(p);
                         JButton button = add(tguia);
                         button.addMouseListener(mgui.mouseHandler);
-			//tguia.addActionListener(this);
+			tguia.addActionListener(this);
 			//button.addActionListener(this);
 
-			JButton toto = new JButton("Test");
+			/*JButton toto = new JButton("Test");
 			toto.addActionListener(this);
-			add(toto);
+			add(toto);*/
 			//TraceManager.addDev("Action listener...");
                     }
                 }
@@ -114,15 +114,18 @@ public abstract class TToolBar extends JToolBar implements ActionListener {
         }
     }
 
-    public void actionPerformed(ActionEvent e) {
-	TraceManager.addDev("Action listener of TToolBar");
-	TraceManager.addDev("Action on event " + e + " source=" + e.getSource());
-	Object o = e.getSource();
+    public void actionPerformed(ActionEvent evt) {
+	//TraceManager.addDev("Action listener of TToolBar");
+	//TraceManager.addDev("Action on event " + e + "\n\nsource=" + e.getSource());
+	//Object o = e.getSource();
 	int index = 0;
 	Plugin p = null;
 	TGUIAction act = null;
+	String command = evt.getActionCommand();
+	//TraceManager.addDev("command=" + command);
 	for(TGUIAction t: pluginActions) {
-	    if (t == o) {
+	    //TraceManager.addDev(" command of action:" + t.getActionCommand());
+	    if (t.getActionCommand().compareTo(command) == 0) {
 		p = plugins.get(index);
 		act = t;
 		break;
@@ -132,6 +135,7 @@ public abstract class TToolBar extends JToolBar implements ActionListener {
 
 	if ((act != null) && (p != null)) {
 	    TraceManager.addDev("Action on plugin " + p);
+	    mgui.actionOnButton(TGComponentManager.COMPONENT, p);
 	}
 
     }

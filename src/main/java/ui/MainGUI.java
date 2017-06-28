@@ -275,6 +275,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     private int typeButtonSelected;
     private int idButtonSelected;
+    private Plugin pluginSelected;
 
     private File file;
     private File lotosfile;
@@ -1586,6 +1587,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             typeButtonSelected = - 1;
             idButtonSelected = -1;
+	    pluginSelected = null;
 
             //activeDiagramToolBar = null;
 
@@ -5220,9 +5222,24 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return typeButtonSelected;
     }
 
+    public Plugin getPluginSelected() {
+	return pluginSelected;
+    }
+
     public void actionOnButton(int type, int id) {
         typeButtonSelected = type;
         idButtonSelected = id;
+	pluginSelected = null;
+        //TDiagramPanel tdp1 = ((TURTLEPanel)(tabs.elementAt(mainTabbedPane.getSelectedIndex()))).tdp;
+        TDiagramPanel tdp1 = getCurrentTDiagramPanel();
+        //TraceManager.addDev("Selected TDiagramPanel=" + tdp1.getName());
+        tdp1.repaint();
+    }
+
+    public void actionOnButton(int type, Plugin _p) {
+        typeButtonSelected = type;
+        idButtonSelected = TGComponentManager.COMPONENT_PLUGIN;
+	pluginSelected = _p;
         //TDiagramPanel tdp1 = ((TURTLEPanel)(tabs.elementAt(mainTabbedPane.getSelectedIndex()))).tdp;
         TDiagramPanel tdp1 = getCurrentTDiagramPanel();
         //TraceManager.addDev("Selected TDiagramPanel=" + tdp1.getName());

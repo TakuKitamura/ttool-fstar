@@ -69,6 +69,35 @@ public class Plugin {
         return name;
     }
 
+    public Class getClass(String _className) {
+	Class<?> c = listOfClasses.get(_className);
+	if (c != null) {
+	    return c;
+	}
+
+	try {
+            if (c == null) {
+                file = new File(name);
+                TraceManager.addDev("Loading plugin=" + name);
+                URL[] urls = new URL[] { file.toURI().toURL() };
+                ClassLoader loader = new URLClassLoader(urls);
+                TraceManager.addDev("Loader created");
+                c = loader.loadClass(_className);
+                if (c == null) {
+                    return null;
+                }
+                listOfClasses.put(_className, c);
+		return c;
+            }
+
+        } catch (Exception e) {
+	    TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
+	    return null;
+        }
+
+	return null;
+    }
+
     public Method getMethod(String _className, String _methodName) {
         Class<?> c = listOfClasses.get(_className);
 
@@ -107,6 +136,18 @@ public class Plugin {
 	    TraceManager.addDev("Exception occured when executing method " + _methodName);
 	    return null;
 	}
+    }
+
+    public static int executeIntMethod(Object instance, String _methodName) throws Exception {
+	Class[] cArg = new Class[0];
+	Method method = instance.getClass().getMethod(_methodName, cArg);
+	return (int)(method.invoke(instance));
+    }
+
+    public static boolean executeBoolMethod(Object instance, String _methodName) throws Exception {
+	Class[] cArg = new Class[0];
+	Method method = instance.getClass().getMethod(_methodName, cArg);
+	return (boolean)(method.invoke(instance));
     }
 
     

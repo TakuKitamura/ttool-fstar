@@ -7868,12 +7868,12 @@ public class GTURTLEModeling {
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
                     try {
                         tgc = makeXMLComponent(n, tdp);
-                        //TraceManager.addDev("About to add component= " + tgc);
+                        TraceManager.addDev("About to add component= " + tgc);
                         if ((tgc != null) && (tgc.getFather() == null)) {
-                            //TraceManager.addDev("Component added to diagram tgc=" + tgc);
+                            TraceManager.addDev("Component added to diagram tgc=" + tgc);
                             tdp.addBuiltComponent(tgc);
                         } else {
-                            //TraceManager.addDev("Component not added to diagram");
+                            TraceManager.addDev("Component not added to diagram");
                         }
                     } catch (MalformedModelingException mme) {
                         int type = getTypeOfComponentNode(n);
@@ -7881,7 +7881,7 @@ public class GTURTLEModeling {
                         if (type > 0) {
                             t = "" + type;
                         }
-                        TraceManager.addDev ("a badly formed component Could not be created in the diagram");
+                        TraceManager.addDev ("A badly formed component could not be created in the diagram");
 
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A component could not be correctly loaded - type=" + t);
                         ce.setTDiagramPanel(tdp);

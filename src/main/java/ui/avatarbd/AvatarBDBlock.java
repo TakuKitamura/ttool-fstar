@@ -979,6 +979,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         } catch (Exception e) {
             throw new MalformedModelingException();
         }
+	
 
 	if (isCryptoBlock()) {
 	    addCryptoElements();
