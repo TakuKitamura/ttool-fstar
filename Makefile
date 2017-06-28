@@ -5,8 +5,19 @@ JAVADOC			= javadoc
 MAKE			= make -s
 TAR			= tar
 GZIP			= gzip
-GRADLE			= ./gradlew
-#GRADLE			= /opt/gradle/gradle-3.5/bin/gradle
+GRADLE			= $(shell which gradle)
+ERROR_MSG		= echo "$(COLOR)\nBuild with gradle failed. Falling back to basic javac command...\n$(RESET)"
+ifeq "$(GRADLE)" ""
+    ERROR_MSG	= echo "Gradle was not found. Falling back to basic javac command...\n"
+    GRADLE 	= false && echo >/dev/null
+else
+    GRADLE_VERSION 	= $(shell $(GRADLE) --version | grep "^Gradle" | awk '{print $$2}')
+    GRADLE_VERSION_MIN 	= $(shell echo -e "3.5\n$(GRADLE_VERSION)" | sort -V | head -n1)
+    ifneq "3.5" "$(GRADLE_VERSION_MIN)"
+	ERROR_MSG	= echo "$(COLOR)Gradle $(GRADLE_VERSION) is too old. Needs at least 3.5. Falling back to basic javac command...\n$(RESET)"
+	GRADLE = false && echo >/dev/null
+    endif
+endif
 
 export COLOR		= $(shell tput setaf 1)
 export RESET		= $(shell tput sgr0)
@@ -99,57 +110,55 @@ export WEBCRAWLER_SERVER_BINARY	= $(TTOOL_BIN)/webcrawler-server.jar
 export JTTOOL_DIR		= $(TTOOL_PATH)/jttool
 export JTTOOL_BINARY		= $(TTOOL_BIN)/jttool.jar
 
-ERROR_MSG			= echo "$(COLOR)\nBuild with gradle failed. Falling back to basic javac command...\n$(RESET)"
-
 all: ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
 
 ttool: $(TTOOL_BINARY)
 
 $(TTOOL_BINARY): FORCE
-	@$(GRADLE) :ttool:build || ($(ERROR_MSG) && $(MAKE) -C $(TTOOL_DIR) -e $@)
+	@($(GRADLE) :ttool:build) || ($(ERROR_MSG) && $(MAKE) -C $(TTOOL_DIR) -e $@)
 
 launcher: $(LAUNCHER_BINARY)
 
 $(LAUNCHER_BINARY): FORCE
-	@$(GRADLE) :launcher:build || ($(ERROR_MSG) && $(MAKE) -C $(LAUNCHER_DIR) -e $@)
+	@($(GRADLE) :launcher:build) || ($(ERROR_MSG) && $(MAKE) -C $(LAUNCHER_DIR) -e $@)
 
 graphminimize: $(GRAPHMINIMIZE_BINARY)
 
 $(GRAPHMINIMIZE_BINARY): FORCE
-	@$(GRADLE) :graphminimize:build || ($(ERROR_MSG) && $(MAKE) -C $(GRAPHMINIMIZE_DIR) -e $@)
+	@($(GRADLE) :graphminimize:build) || ($(ERROR_MSG) && $(MAKE) -C $(GRAPHMINIMIZE_DIR) -e $@)
 
 graphshow: $(GRAPHSHOW_BINARY)
 
 $(GRAPHSHOW_BINARY): FORCE
-	@$(GRADLE) :graphshow:build || ($(ERROR_MSG) && $(MAKE) -C $(GRAPHSHOW_DIR) -e $@)
+	@($(GRADLE) :graphshow:build) || ($(ERROR_MSG) && $(MAKE) -C $(GRAPHSHOW_DIR) -e $@)
 
 tiftranslator: $(TIFTRANSLATOR_BINARY)
 
 $(TIFTRANSLATOR_BINARY): FORCE
-	@$(GRADLE) :tiftranslator:build || ($(ERROR_MSG) && $(MAKE) -C $(TIFTRANSLATOR_DIR) -e $@)
+	@($(GRADLE) :tiftranslator:build) || ($(ERROR_MSG) && $(MAKE) -C $(TIFTRANSLATOR_DIR) -e $@)
 
 tmltranslator: $(TMLTRANSLATOR_BINARY)
 
 $(TMLTRANSLATOR_BINARY): FORCE
-	@$(GRADLE) :tmltranslator:build || ($(ERROR_MSG) && $(MAKE) -C $(TMLTRANSLATOR_DIR) -e $@)
+	@($(GRADLE) :tmltranslator:build) || ($(ERROR_MSG) && $(MAKE) -C $(TMLTRANSLATOR_DIR) -e $@)
 
 rundse: $(RUNDSE_BINARY)
 
 $(RUNDSE_BINARY): FORCE
-	@$(GRADLE) :rundse:build || ($(ERROR_MSG) && $(MAKE) -C $(RUNDSE_DIR) -e $@)
+	@($(GRADLE) :rundse:build) || ($(ERROR_MSG) && $(MAKE) -C $(RUNDSE_DIR) -e $@)
 
 remotesimulator: $(REMOTESIMULATOR_BINARY)
 
 $(REMOTESIMULATOR_BINARY): FORCE
-	@$(GRADLE) :simulationcontrol:build || ($(ERROR_MSG) && $(MAKE) -C $(REMOTESIMULATOR_DIR) -e $@)
+	@($(GRADLE) :simulationcontrol:build) || ($(ERROR_MSG) && $(MAKE) -C $(REMOTESIMULATOR_DIR) -e $@)
 
 webcrawler: $(WEBCRAWLER_CLIENT_BINARY) $(WEBCRAWLER_SERVER_BINARY)
 
 $(WEBCRAWLER_CLIENT_BINARY): FORCE
-	@$(GRADLE) :webcrawler-client:build || ($(ERROR_MSG) && $(MAKE) -C $(WEBCRAWLER_CLIENT_DIR) -e $@)
+	@($(GRADLE) :webcrawler-client:build) || ($(ERROR_MSG) && $(MAKE) -C $(WEBCRAWLER_CLIENT_DIR) -e $@)
 
 $(WEBCRAWLER_SERVER_BINARY): FORCE
-	@$(GRADLE) :webcrawler-server:build || ($(ERROR_MSG) && $(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e $@)
+	@($(GRADLE) :webcrawler-server:build) || ($(ERROR_MSG) && $(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e $@)
 
 $(JTTOOL_BINARY): FORCE
 	@$(MAKE) -C $(JTTOOL_DIR) -e $@

@@ -10,10 +10,6 @@ ext {
     absPath = projectDir.getAbsolutePath()
 }
 
-subprojects.each { p ->
-    println p.path
-}
-
 subprojects {
     apply plugin: 'java'
     sourceCompatibility = 1.7
