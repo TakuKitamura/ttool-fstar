@@ -5,6 +5,7 @@ JAVADOC			= javadoc
 MAKE			= make -s
 TAR			= tar
 GZIP			= gzip
+GRADLE			= ./gradlew
 
 export COLOR		= $(shell tput setaf 1)
 export RESET		= $(shell tput sgr0)
@@ -97,55 +98,57 @@ export WEBCRAWLER_SERVER_BINARY	= $(TTOOL_BIN)/webcrawler-server.jar
 export JTTOOL_DIR		= $(TTOOL_PATH)/jttool
 export JTTOOL_BINARY		= $(TTOOL_BIN)/jttool.jar
 
+ERROR_MSG			= echo "$(COLOR)\nBuild with gradle failed. Falling back to basic javac command...\n$(RESET)"
+
 all: ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
 
 ttool: $(TTOOL_BINARY)
 
 $(TTOOL_BINARY): FORCE
-	@$(MAKE) -C $(TTOOL_DIR) -e $@
+	@$(GRADLE) :ttool:build || ($(ERROR_MSG) && $(MAKE) -C $(TTOOL_DIR) -e $@)
 
 launcher: $(LAUNCHER_BINARY)
 
 $(LAUNCHER_BINARY): FORCE
-	@$(MAKE) -C $(LAUNCHER_DIR) -e $@
+	@$(GRADLE) :launcher:build || ($(ERROR_MSG) && $(MAKE) -C $(LAUNCHER_DIR) -e $@)
 
 graphminimize: $(GRAPHMINIMIZE_BINARY)
 
 $(GRAPHMINIMIZE_BINARY): FORCE
-	@$(MAKE) -C $(GRAPHMINIMIZE_DIR) -e $@
+	@$(GRADLE) :graphminimize:build || ($(ERROR_MSG) && $(MAKE) -C $(GRAPHMINIMIZE_DIR) -e $@)
 
 graphshow: $(GRAPHSHOW_BINARY)
 
 $(GRAPHSHOW_BINARY): FORCE
-	@$(MAKE) -C $(GRAPHSHOW_DIR) -e $@
+	@$(GRADLE) :graphshow:build || ($(ERROR_MSG) && $(MAKE) -C $(GRAPHSHOW_DIR) -e $@)
 
 tiftranslator: $(TIFTRANSLATOR_BINARY)
 
 $(TIFTRANSLATOR_BINARY): FORCE
-	@$(MAKE) -C $(TIFTRANSLATOR_DIR) -e $@
+	@$(GRADLE) :tiftranslator:build || ($(ERROR_MSG) && $(MAKE) -C $(TIFTRANSLATOR_DIR) -e $@)
 
 tmltranslator: $(TMLTRANSLATOR_BINARY)
 
 $(TMLTRANSLATOR_BINARY): FORCE
-	@$(MAKE) -C $(TMLTRANSLATOR_DIR) -e $@
+	@$(GRADLE) :tmltranslator:build || ($(ERROR_MSG) && $(MAKE) -C $(TMLTRANSLATOR_DIR) -e $@)
 
 rundse: $(RUNDSE_BINARY)
 
 $(RUNDSE_BINARY): FORCE
-	@$(MAKE) -C $(RUNDSE_DIR) -e $@
+	@$(GRADLE) :rundse:build || ($(ERROR_MSG) && $(MAKE) -C $(RUNDSE_DIR) -e $@)
 
 remotesimulator: $(REMOTESIMULATOR_BINARY)
 
 $(REMOTESIMULATOR_BINARY): FORCE
-	@$(MAKE) -C $(REMOTESIMULATOR_DIR) -e $@
+	@$(GRADLE) :simulationcontrol:build || ($(ERROR_MSG) && $(MAKE) -C $(REMOTESIMULATOR_DIR) -e $@)
 
 webcrawler: $(WEBCRAWLER_CLIENT_BINARY) $(WEBCRAWLER_SERVER_BINARY)
 
 $(WEBCRAWLER_CLIENT_BINARY): FORCE
-	@$(MAKE) -C $(WEBCRAWLER_CLIENT_DIR) -e $@
+	@$(GRADLE) :webcrawler-client:build || ($(ERROR_MSG) && $(MAKE) -C $(WEBCRAWLER_CLIENT_DIR) -e $@)
 
 $(WEBCRAWLER_SERVER_BINARY): FORCE
-	@$(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e $@
+	@$(GRADLE) :webcrawler-server:build || ($(ERROR_MSG) && $(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e $@)
 
 $(JTTOOL_BINARY): FORCE
 	@$(MAKE) -C $(JTTOOL_DIR) -e $@
@@ -427,7 +430,7 @@ git:
 # ==========       TESTS        ========== 
 # ======================================== 
 test:
-	@./gradlew test
+	@$(GRADLE) test
 
 # ======================================== 
 # ==========       CLEAN        ========== 
