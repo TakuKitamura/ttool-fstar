@@ -6,6 +6,7 @@ MAKE			= make -s
 TAR			= tar
 GZIP			= gzip
 GRADLE			= ./gradlew
+#GRADLE			= /opt/gradle/gradle-3.5/bin/gradle
 
 export COLOR		= $(shell tput setaf 1)
 export RESET		= $(shell tput sgr0)
