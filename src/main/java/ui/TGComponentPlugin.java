@@ -43,7 +43,7 @@
 package ui;
 
 import myutil.*;
-
+import java.awt.*;
 
 /**
  * Class TGComponentPlugin
@@ -56,4 +56,22 @@ public class TGComponentPlugin extends TGComponent {
 
     private Plugin componentPlugin;
     private String className;
+
+    public TGComponentPlugin(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+	super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    }
+
+
+
+    public void internalDrawing(Graphics g) {
+	
+    }
+    
+    public TGComponent isOnMe(int _x, int _y) {
+	return this;
+    }
+    
+    public void setState(int s) {
+	state = s;
+    }
 }
