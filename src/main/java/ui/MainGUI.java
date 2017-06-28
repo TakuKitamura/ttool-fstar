@@ -514,7 +514,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
 
-    private     void initActions() {
+    private void initActions() {
         actions = new TGUIAction[TGUIAction.NB_ACTION];
         for(int i=0; i<TGUIAction.NB_ACTION; i++) {
             actions[i] = new TGUIAction(i);

@@ -50,6 +50,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import myutil.*;
+
 
 /**
    * Class TGUIAction
@@ -610,7 +612,7 @@ public class TGUIAction extends AbstractAction {
 
     public static final int NB_ACTION = 458;
 
-    private  static final TAction [] actions = new TAction[NB_ACTION];
+    private static final TAction [] actions = new TAction[NB_ACTION];
 
     private EventListenerList listeners;
 
@@ -1240,6 +1242,7 @@ public class TGUIAction extends AbstractAction {
         if (listeners == null) {
             listeners = new EventListenerList();
         }
+	TraceManager.addDev("Action listener added");
         listeners.add(ActionListener.class, l);
     }
 
