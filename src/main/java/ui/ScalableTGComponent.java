@@ -36,17 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
-
-
 
 /**
  * Class ScalableTGComponent
- * Component that can swallow another component into its internal components
+ * Component that can be scaled for zooming a diagram
  * Creation: 10/13/2008
  * @version 1.0 10/03/2008
  * @author Ludovic APVRILLE

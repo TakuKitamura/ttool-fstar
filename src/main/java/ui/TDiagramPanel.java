@@ -288,6 +288,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void setZoom(double _zoom) {
+    	final double zoomChange = _zoom / zoom;
+    	
         if (_zoom < zoom) {
             if (zoom > 0.199) {
                 zoom = _zoom;
@@ -299,27 +301,41 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 this.savedFontMetrics = null;
             }
         }
+        
+        // Issue #14: We need to resize the diagram as well
+        final int maxXPrev = maxX;
+        final int maxYPrev = maxY;
+    	maxX = (int) Math.round( zoomChange * maxX );
+    	maxY = (int) Math.round( zoomChange * maxY );
+        
+    	if ( maxXPrev != maxX || maxYPrev != maxY ) {
+            mgui.changeMade(this, DIAGRAM_RESIZED );
+        	updateSize();
+    	}
+
+    	updateComponentsAfterZoom();
     }
 
     public boolean isDrawingMain() {
         return drawingMain;
     }
 
-    public void updateComponentsAfterZoom() {
+    protected void updateComponentsAfterZoom() {
         //TraceManager.addDev("Zoom factor=" + zoom);
         boolean change = false;
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc: this.componentList) {
             if (tgc instanceof ScalableTGComponent) {
                 ((ScalableTGComponent)tgc).rescale(zoom);
                 change = true;
             }
+        }
 
         if (change) {
             mgui.changeMade(this, MOVE_COMPONENT);
-        }
 
-        repaint();
+        	repaint();
+        }
     }
 
     public String getName() {
@@ -374,6 +390,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
 
+    @Override
     protected void paintComponent(Graphics g) {
         paintMycomponents(g);
     }
@@ -1478,6 +1495,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     	updateSize();
     }
     
+    private boolean canFitDiagramSizeToContent() {
+    	return maxX != getRealMaxX() || maxY != getRealMaxY();
+    }
+   
     private void increaseDiagramWidth() {
     	maxX += increment;
         mgui.changeMade(this, DIAGRAM_RESIZED );
@@ -1943,6 +1964,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         	// Issue #14
         downY.setEnabled( canDecreaseMaxY() );
 //        }
+        
+        fitToContent.setEnabled( canFitDiagramSizeToContent() );
     }
 
     private void setSelectedPopupMenu() {
@@ -2169,21 +2192,21 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public int getMaxX() {
         //return maxX;
-        return (int)(Math.ceil(maxX * zoom));
+        return (int) Math.ceil(maxX * zoom);
     }
 
     public int getMinX() {
-        return (int)(Math.floor(minLimit*zoom));
+        return (int) Math.floor(minLimit*zoom);
     }
 
     public int getMinY() {
-        return (int)(Math.floor(minLimit*zoom));
+        return (int) Math.floor(minLimit*zoom);
         //return minLimit*zoom;
     }
 
     public int getMaxY() {
         //return maxY;
-        return (int)(Math.ceil(maxY * zoom));
+        return (int) Math.ceil(maxY * zoom);
     }
 
     public void setMaxX(int x) {

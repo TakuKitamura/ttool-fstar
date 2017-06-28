@@ -159,7 +159,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     //Associated transactions
     public String transaction="";
-    public ArrayList<SimulationTransaction> transactions=new ArrayList<SimulationTransaction>();
+    public java.util.List<SimulationTransaction> transactions=new ArrayList<SimulationTransaction>();
 
     //If task
     public String runningStatus="";
@@ -209,6 +209,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     //Constructor
     public TGComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    	tgcomponent = new TGComponent[ 0 ];
         setCdRectangle(_minX, _maxX, _minY, _maxY);
         drawingZoneRelativeToFather = _pos;
         father = _father;
@@ -2394,26 +2395,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     }
 
-    /*
-     * old function. We don't need it anymore
-     * we have fatherHasmoved instead
-     *  public final void fatherHasMovedTo(int _x, int _y) {
-     TGComponent tgc;
-
-     x = _x;
-     y = _y;
-
-     for(int i=0; i<nbInternalTGComponent; i++) {
-     tgc = tgcomponent[i];
-     if (tgc.moveWithFather()) {
-     tgc.fatherHasMovedTo(_x, _y);
-
-     }
-     }
-     }
-    */
-
-
     public void move(int decx, int decy) {
         //System.out.println("here111111111111");
         setMoveCd(x+decx, y+decy, false);
@@ -2508,20 +2489,20 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     protected final int verifyMoveCdX(int targetX) {
         // if it has a father, check that it is in its authorized area first
-        if ((father != null) && (drawingZoneRelativeToFather)) {
+        if ( father != null && drawingZoneRelativeToFather ) {
             targetX =  Math.min(maxX + father.getX(), Math.max(minX + father.getX(), targetX));
         }
-
+        
         // Issue #46: Added the else.
         // When we are moving a contained component, we should not check for the max of the diagram. This should be done for the father only
-        else {
-            int currentWidthPos = Math.abs(getCurrentMaxX() - x);
-            int currentWidthNeg = Math.abs(getCurrentMinX() - x);
-            targetX = Math.max(Math.min(tdp.getMaxX() - currentWidthPos, targetX), tdp.getMinX() + currentWidthNeg);
-        }
+        // Issue #14: Do not check the diagram size
+//        else {
+//            int currentWidthPos = Math.abs(getCurrentMaxX() - x);
+//            int currentWidthNeg = Math.abs(getCurrentMinX() - x);
+//            targetX = Math.max(Math.min(tdp.getMaxX() - currentWidthPos, targetX), tdp.getMinX() + currentWidthNeg);
+//        }
 
         return targetX;
-
     }
 
     protected final int verifyMoveCdY(int targetY) {
@@ -2532,11 +2513,12 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
         // Issue #46: Added the else.
         // When we are moving a contained component, we should not check for the max of the diagram. This should be done for the father only
-        else {
-            int currentWidthPos = Math.abs(getCurrentMaxY() - y);
-            int currentWidthNeg = Math.abs(getCurrentMinY() - y);
-            targetY = Math.max(Math.min(tdp.getMaxY() - currentWidthPos, targetY), tdp.getMinY() + currentWidthNeg);
-        }
+        // Issue #14: Do not check the diagram size
+//        else {
+//	        int currentWidthPos = Math.abs(getCurrentMaxY() - y);
+//	        int currentWidthNeg = Math.abs(getCurrentMinY() - y);
+//	        targetY = Math.max(Math.min(tdp.getMaxY() - currentWidthPos, targetY), tdp.getMinY() + currentWidthNeg);
+//        }
 
         return targetY;
     }

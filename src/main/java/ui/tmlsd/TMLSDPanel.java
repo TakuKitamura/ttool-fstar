@@ -132,24 +132,24 @@ public class TMLSDPanel extends TDiagramPanel {
     public String getXMLCloneTail() {
         return "</TMLSDPanelCopy>";
     }
-    
-    public void makePostLoadingProcessing() throws MalformedModelingException {
-        TGComponent tgc;
-        
-        /*for(int i=0; i<componentList.size(); i++) {
-            tgc = (TGComponent)(componentList.elementAt(i));
-            if (tgc instanceof TCDTObject) {
-                ((TCDTObject)tgc).postLoadingProcessing();
-            }
-        }*/
-    }
-    
+//    
+//    public void makePostLoadingProcessing() throws MalformedModelingException {
+//        TGComponent tgc;
+//        
+//        /*for(int i=0; i<componentList.size(); i++) {
+//            tgc = (TGComponent)(componentList.elementAt(i));
+//            if (tgc instanceof TCDTObject) {
+//                ((TCDTObject)tgc).postLoadingProcessing();
+//            }
+//        }*/
+//    }
+//    
     public TMLSDTransferInstance getTMLSDTransferInstance(String name) {
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.iterator();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLSDTransferInstance) {
                 if (tgc.getValue().compareTo(name) ==0) {
                     return (TMLSDTransferInstance)tgc;
@@ -161,10 +161,10 @@ public class TMLSDPanel extends TDiagramPanel {
 
     public TMLSDControllerInstance getTMLSDControllerInstance(String name) {
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.iterator();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLSDControllerInstance) {
                 if (tgc.getValue().compareTo(name) ==0) {
                     return (TMLSDControllerInstance)tgc;
@@ -176,10 +176,10 @@ public class TMLSDPanel extends TDiagramPanel {
 
     public TMLSDStorageInstance getTMLSDStorageInstance(String name) {
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLSDStorageInstance) {
                 if (tgc.getValue().compareTo(name) ==0) {
                     return (TMLSDStorageInstance)tgc;
@@ -194,10 +194,10 @@ public class TMLSDPanel extends TDiagramPanel {
         TGComponent tmp;
         TGComponent tmp1;
         TGConnectingPoint p2 = tgco.getTGConnectingPointP2();
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.iterator();
         
         while(iterator.hasNext()) {
-            tmp = (TGComponent)(iterator.next());
+            tmp = iterator.next();
             tmp1 = tmp.belongsToMeOrSon(p2);
             if (tmp1 != null) {
                 return tmp1;
@@ -213,10 +213,10 @@ public class TMLSDPanel extends TDiagramPanel {
         TGConnector found = null;
         TGComponent tmp;
         TGConnectingPoint p;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.iterator();
         
         while(iterator.hasNext()) {
-            tmp = (TGComponent)(iterator.next());
+            tmp =iterator.next();
             if (tmp instanceof TGConnectorMessageTMLSD){
                 p = ((TGConnector)tmp).getTGConnectingPointP1();
                 if (sd.belongsToMe(p)) {
@@ -292,12 +292,12 @@ public class TMLSDPanel extends TDiagramPanel {
 	
 	//TMLSDStorage,Controller,Transfer inherit from TMLSDInstance so they are also of type TMLSDInstance
 	public void increaseInstanceSize(int size) {
-		Iterator iterator = componentList.listIterator();
+		Iterator<TGComponent> iterator = componentList.iterator();
         TGComponent tgc;
 		int maxYH = 0;
 		
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
 			
 			if (tgc instanceof TMLSDInstance) {
 				tgc.setUserResize(tgc.getX(), tgc.getY(), tgc.getWidth(), tgc.getHeight() + size);
@@ -315,16 +315,16 @@ public class TMLSDPanel extends TDiagramPanel {
 	
 	//TMLSDStorage,Controller,Transfer inherit from TMLSDInstance so they are also of type TMLSDInstance
 	public void alignInstances() {
-        TMLSDInstance ontheLeft = null, sdi;
+        TMLSDInstance ontheLeft = null;//, sdi;
         int x = getMaxX(),xtmp;
         int y;
-        int i;
+      //  int i;
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.iterator();
         
         // search for the instances which is the most on the left
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLSDInstance) {
                 xtmp = tgc.getX();
                 if (xtmp < x) {

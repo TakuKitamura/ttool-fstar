@@ -2753,7 +2753,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void zoom(double multFactor) {
         TDiagramPanel tdp = getCurrentTDiagramPanel();
         tdp.setZoom(tdp.getZoom() * multFactor);
-        tdp.updateComponentsAfterZoom();
+       // tdp.updateComponentsAfterZoom();
         updateZoomInfo();
     }
 
