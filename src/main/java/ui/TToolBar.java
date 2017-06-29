@@ -43,7 +43,7 @@ package ui;
 
 import javax.swing.*;
 import java.util.*;
-//import java.awt.event.*;
+import java.awt.event.*;
 
 import myutil.*;
 import common.*;
@@ -57,9 +57,10 @@ import common.*;
  * @author Ludovic APVRILLE
  * @see TGComponent
  */
-public abstract class TToolBar extends JToolBar {
+public abstract class TToolBar extends JToolBar implements ActionListener {
 
-    protected ArrayList<TAction> pluginActions;
+    protected ArrayList<TGUIAction> pluginActions;
+    protected ArrayList<Plugin> plugins;
 
     //protected ActionListener buttonTB;
     protected MainGUI mgui;
@@ -80,29 +81,66 @@ public abstract class TToolBar extends JToolBar {
     protected abstract void setActive(boolean b);
 
     protected void setPluginButtons(String diag) {
-        pluginActions = new ArrayList<TAction>();
+        pluginActions = new ArrayList<TGUIAction>();
+        plugins = new ArrayList<Plugin>();
         this.addSeparator();
         for(int i=0; i<ConfigurationTTool.PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
             Plugin p = PluginManager.pluginManager.getPluginOrCreate(ConfigurationTTool.PLUGIN_GRAPHICAL_COMPONENT[i]);
             if (p != null) {
                 String panelName = p.executeRetStringMethod("CustomizerGraphicalComponent", "getPanelClassName");
-                if (panelName.compareTo(diag) == 0){
-                    String shortText = p.executeRetStringMethod("CustomizerGraphicalComponent", "getShortText");
-                    String longText = p.executeRetStringMethod("CustomizerGraphicalComponent", "getLongText");
-                    String veryShortText = p.executeRetStringMethod("CustomizerGraphicalComponent", "veryShortText");
-                    ImageIcon img = p.executeRetImageIconMethod("CustomizerGraphicalComponent", "getImageIcon");
-                    if ((img != null)  && (shortText != null)) {
-                        TraceManager.addDev("Plugin: " + p.getName() + " short name:" + shortText);
-                        TAction t = new TAction("command-" + i, shortText, img, img, veryShortText, longText, 0);
-                        TGUIAction tguia = new TGUIAction(t);
-                        pluginActions.add(t);
-                        JButton button = add(tguia);
-                        button.addMouseListener(mgui.mouseHandler);
+                if (panelName != null) {
+                    if (panelName.compareTo(diag) == 0){
+                        String shortText = p.executeRetStringMethod("CustomizerGraphicalComponent", "getShortText");
+                        String longText = p.executeRetStringMethod("CustomizerGraphicalComponent", "getLongText");
+                        String veryShortText = p.executeRetStringMethod("CustomizerGraphicalComponent", "getVeryShortText");
+                        ImageIcon img = p.executeRetImageIconMethod("CustomizerGraphicalComponent", "getImageIcon");
+                        if ((img != null)  && (shortText != null)) {
+                            TraceManager.addDev("Plugin: " + p.getName() + " short name:" + shortText);
+                            TAction t = new TAction("command-" + p.getName(), shortText, img, img, veryShortText, longText, 0);
+                            TGUIAction tguia = new TGUIAction(t);
+                            pluginActions.add(tguia);
+                            plugins.add(p);
+                            JButton button = add(tguia);
+                            button.addMouseListener(mgui.mouseHandler);
+                            tguia.addActionListener(this);
+                            //button.addActionListener(this);
+
+                            /*JButton toto = new JButton("Test");
+                              toto.addActionListener(this);
+                              add(toto);*/
+                            //TraceManager.addDev("Action listener...");
+                        }
                     }
                 }
-
             }
         }
     }
 
+    public void actionPerformed(ActionEvent evt) {
+        //TraceManager.addDev("Action listener of TToolBar");
+        //TraceManager.addDev("Action on event " + e + "\n\nsource=" + e.getSource());
+        //Object o = e.getSource();
+        int index = 0;
+        Plugin p = null;
+        TGUIAction act = null;
+        String command = evt.getActionCommand();
+        //TraceManager.addDev("command=" + command);
+        for(TGUIAction t: pluginActions) {
+            //TraceManager.addDev(" command of action:" + t.getActionCommand());
+            if (t.getActionCommand().compareTo(command) == 0) {
+                p = plugins.get(index);
+                act = t;
+                break;
+            }
+            index ++;
+        }
+
+        if ((act != null) && (p != null)) {
+            TraceManager.addDev("Action on plugin " + p);
+            mgui.actionOnButton(TGComponentManager.COMPONENT, p);
+        }
+
+    }
+
 } // Class
+

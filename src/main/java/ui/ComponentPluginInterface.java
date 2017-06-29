@@ -1,6 +1,7 @@
-/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  * 
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT telecom-paristech.fr
+ * andrea.enrici AT telecom-paristech.fr
  * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -36,15 +37,23 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui;
 
+import myutil.*;
+import java.awt.*;
+
 /**
- * Class ScalableTGComponent
- * Component that can be scaled for zooming a diagram
- * Creation: 10/13/2008
- * @version 1.0 10/03/2008
+ * Class ComponentPluginInteface
+ * Component having a plugin interface
+ * Creation: 28/06/2017
+ * @version 1.0 28/06/2017
  * @author Ludovic APVRILLE
  */
-public interface ScalableTGComponent  {
-    void rescale(double scaleFactor);
+public interface ComponentPluginInterface {
+
+    public void setPlugin(Plugin _plugin);
+
 }

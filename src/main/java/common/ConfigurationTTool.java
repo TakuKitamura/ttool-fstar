@@ -46,6 +46,8 @@ package common;
 import myutil.FileUtils;
 import myutil.MalformedConfigurationException;
 import myutil.TraceManager;
+import myutil.PluginManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -148,6 +150,7 @@ public class ConfigurationTTool {
     public static String AttackOntologyWebsite = "";
 
     // PLUGINS
+    public static String PLUGIN_PATH = "";
     public static String PLUGIN_JAVA_CODE_GENERATOR = "";
     public static String[] PLUGIN_GRAPHICAL_COMPONENT = new String[0];
 
@@ -453,6 +456,7 @@ public class ConfigurationTTool {
 
 	// Plugins
 	sb.append("\nPlugins:\n");
+	sb.append("Plugin path: " + PLUGIN_PATH + "\n");
 	sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
 	for (int i=0; i<PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
 	    sb.append("Plugin for graphical component: " + PLUGIN_GRAPHICAL_COMPONENT[i] + "\n");
@@ -735,6 +739,10 @@ public class ConfigurationTTool {
             nl = doc.getElementsByTagName("ExternalCommand2");
             if (nl.getLength() > 0)
                 ExternalCommand2(nl);
+
+	    nl = doc.getElementsByTagName("PLUGIN_PATH");
+            if (nl.getLength() > 0)
+                PluginPath(nl);
 
 	    nl = doc.getElementsByTagName("PLUGIN_JAVA_CODE_GENERATOR");
             if (nl.getLength() > 0)
@@ -1417,6 +1425,16 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             ExternalCommand2 = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void PluginPath(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            PLUGIN_PATH = elt.getAttribute("data");
+	    PluginManager.PLUGIN_PATH = PLUGIN_PATH;
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

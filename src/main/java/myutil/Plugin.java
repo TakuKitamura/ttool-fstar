@@ -56,11 +56,13 @@ import javax.swing.*;
    * @author Ludovic APVRILLE
  */
 public class Plugin {
+    private String path;
     private String name;
     private File file;
     private HashMap<String, Class> listOfClasses;
 
-    public Plugin(String _name) {
+    public Plugin(String _path, String _name) {
+	path = _path;
         name = _name;
         listOfClasses = new HashMap<String, Class>();
     }
@@ -69,13 +71,46 @@ public class Plugin {
         return name;
     }
 
+    public String getPath() {
+	return path;
+    }
+
+    public Class getClass(String _className) {
+	Class<?> c = listOfClasses.get(_className);
+	if (c != null) {
+	    return c;
+	}
+
+	try {
+            if (c == null) {
+                file = new File( path + java.io.File.separator + name);
+                TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
+                URL[] urls = new URL[] { file.toURI().toURL() };
+                ClassLoader loader = new URLClassLoader(urls);
+                TraceManager.addDev("Loader created");
+                c = loader.loadClass(_className);
+                if (c == null) {
+                    return null;
+                }
+                listOfClasses.put(_className, c);
+		return c;
+            }
+
+        } catch (Exception e) {
+	    TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
+	    return null;
+        }
+
+	return null;
+    }
+
     public Method getMethod(String _className, String _methodName) {
         Class<?> c = listOfClasses.get(_className);
 
         try {
             if (c == null) {
-                file = new File(name);
-                TraceManager.addDev("Loading plugin=" + name);
+                file = new File(path + java.io.File.separator + name);
+                TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
                 URL[] urls = new URL[] { file.toURI().toURL() };
                 ClassLoader loader = new URLClassLoader(urls);
                 TraceManager.addDev("Loader created");
@@ -98,6 +133,7 @@ public class Plugin {
 	// We have a valid plugin. We now need to get the Method
 	Method m = getMethod(_className, _methodName);
 	if (m == null) {
+	    TraceManager.addDev("Null method");
 	    return null;
 	}
 	
@@ -107,6 +143,18 @@ public class Plugin {
 	    TraceManager.addDev("Exception occured when executing method " + _methodName);
 	    return null;
 	}
+    }
+
+    public static int executeIntMethod(Object instance, String _methodName) throws Exception {
+	Class[] cArg = new Class[0];
+	Method method = instance.getClass().getMethod(_methodName, cArg);
+	return (int)(method.invoke(instance));
+    }
+
+    public static boolean executeBoolMethod(Object instance, String _methodName) throws Exception {
+	Class[] cArg = new Class[0];
+	Method method = instance.getClass().getMethod(_methodName, cArg);
+	return (boolean)(method.invoke(instance));
     }
 
     

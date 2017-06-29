@@ -58,6 +58,7 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
     }
 
+    @Override
     public void rescale (double scaleFactor){
         rescaled = true;
 
@@ -65,7 +66,7 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
         dheight = (height + dheight) / oldScaleFactor * scaleFactor;
         dx = (dx + x) / oldScaleFactor * scaleFactor;
         dy = (dy + y) / oldScaleFactor * scaleFactor;
-	dMinWidth = (minWidth + dMinWidth) / oldScaleFactor * scaleFactor;
+        dMinWidth = (minWidth + dMinWidth) / oldScaleFactor * scaleFactor;
         dMinHeight = (minHeight + dMinHeight) / oldScaleFactor * scaleFactor;
         dMaxWidth = (maxWidth + dMaxWidth) / oldScaleFactor * scaleFactor;
         dMaxHeight = (maxHeight + dMaxHeight) / oldScaleFactor * scaleFactor;
@@ -74,7 +75,7 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
         dwidth = dwidth - width;
         height = (int)(dheight);
         dheight = dheight - height;
-	minWidth = (int)(dMinWidth);
+        minWidth = (int)(dMinWidth);
         minHeight = (int)(dMinHeight);
         maxWidth = (int)(dMaxWidth);
         maxHeight = (int)(dMaxHeight);
@@ -82,7 +83,7 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
 	//TraceManager.addDev("tgc= " + this + " minHeight=" + minHeight);
 	//TraceManager.addDev("tgc= " + this + " maxHeight=" + maxHeight);
 	
-	dMinWidth = dMinWidth - minWidth;
+        dMinWidth = dMinWidth - minWidth;
         dMinHeight = dMinHeight - minHeight;
         dMaxWidth = dMaxWidth - maxWidth;
         dMaxHeight = dMaxHeight - maxHeight;
@@ -97,8 +98,8 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
             // Must rescale my zone...
             resizeWithFather();
         }
-	setMoveCd(x, y);
-
+	
+        setMoveCd(x, y);
     }
 
     public void initScaling(int w, int h) {
@@ -126,5 +127,4 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
 
         rescaled = true;
     }
-
 }

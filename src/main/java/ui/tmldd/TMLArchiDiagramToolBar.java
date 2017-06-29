@@ -177,6 +177,8 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
         button.addMouseListener(mgui.mouseHandler);
 
+	setPluginButtons("TMLArchiDiagramPanel");
+	
         this.addSeparator();
         if (viewInfos == null) {
             TraceManager.addDev("null viewInfos");
@@ -185,7 +187,7 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         this.add(box);
         box.addActionListener(this);
 
-	setPluginButtons("TMLArchiDiagramPanel");
+	
     }
 
     public void setPanel(TMLArchiDiagramPanel _panel) {
@@ -194,6 +196,7 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
 
 
     public void actionPerformed(ActionEvent e) {
+	super.actionPerformed(e);
         if (e.getSource() == box) {
             if (panel != null) {
                 panel.setCurrentView(box.getSelectedIndex());
