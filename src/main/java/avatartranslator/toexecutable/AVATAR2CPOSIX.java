@@ -83,11 +83,13 @@ public class AVATAR2CPOSIX {
     private boolean tracing;
     private boolean includeUserCode = true;
 
+    private String pluginPath = "";
     private String plugin = "";
 
 
-    public AVATAR2CPOSIX(AvatarSpecification _avspec, String _plugin) {
+    public AVATAR2CPOSIX(AvatarSpecification _avspec, String _pluginPath, String _plugin) {
         avspec = _avspec;
+	pluginPath = _pluginPath;
         plugin = _plugin;
     }
 
@@ -139,7 +141,7 @@ public class AVATAR2CPOSIX {
         debug = _debug;
         tracing = _tracing;
 
-        mainFile = new MainFile("main", plugin);
+        mainFile = new MainFile("main", pluginPath + java.io.File.separator + plugin);
         taskFiles = new Vector<TaskFile>();
 
         avspec.removeCompositeStates();

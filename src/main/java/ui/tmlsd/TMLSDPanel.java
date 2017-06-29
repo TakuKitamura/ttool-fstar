@@ -341,7 +341,7 @@ public class TMLSDPanel extends TDiagramPanel {
         y = ontheLeft.getY();
         iterator = componentList.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if ((tgc instanceof TMLSDInstance) && (tgc !=  ontheLeft)){
                 tgc.setCd(tgc.getX(), y);
             }

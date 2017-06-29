@@ -43,9 +43,10 @@
 package ui;
 
 import myutil.*;
+import common.*;
+
 import java.awt.*;
 import javax.swing.*;
-
 import java.lang.reflect.Method;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
