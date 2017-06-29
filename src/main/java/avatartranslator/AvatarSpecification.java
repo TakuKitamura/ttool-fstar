@@ -49,7 +49,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.ArrayList;
 /**
    * Class AvatarSpecification
    * Avatar specification
@@ -75,7 +75,7 @@ public class AvatarSpecification extends AvatarElement {
     private LinkedList<AvatarPragma> pragmas;
     private LinkedList<String> safety_pragmas;
     private LinkedList<AvatarConstant> constants;
-
+	public List<String> checkedIDs;
     private boolean robustnessMade = false;
 
     private Object informationSource; // element from which the spec has been built
@@ -91,7 +91,7 @@ public class AvatarSpecification extends AvatarElement {
 	safety_pragmas = new LinkedList<String>();
         this.constants.add (AvatarConstant.FALSE);
         this.constants.add (AvatarConstant.TRUE);
-
+		checkedIDs= new ArrayList<String>();
         this.libraryFunctions = new LinkedList<AvatarLibraryFunction> ();
     }
 
@@ -639,6 +639,9 @@ public class AvatarSpecification extends AvatarElement {
 		for(AvatarConstant constant: constants) {
 		    AvatarConstant cN = constant.advancedClone();
 		    spec.addConstant(cN);
+		}
+		for (String id:checkedIDs){
+			spec.checkedIDs.add(id);
 		}
 
 		spec.setInformationSource(getInformationSource());

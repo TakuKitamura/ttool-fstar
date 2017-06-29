@@ -47,6 +47,7 @@ import common.ConfigurationTTool;
 import myutil.*;
 import ui.*;
 import ui.avatarbd.AvatarBDPortConnector;
+import ui.interactivesimulation.*;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -61,6 +62,11 @@ import java.io.File;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Collections;
 
 /**
    * Class JFrameAvatarInteractiveSimulation
@@ -220,6 +226,20 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     // Async messages
     Vector<AvatarSimulationAsynchronousTransaction> lastAsyncmsgs;
 
+    //Latency
+    JPanel latencyPanel;
+    JComboBox<String> transaction1;
+    JComboBox<String> transaction2;
+    JButton addLatencyCheckButton;
+    JButton updateLatencyButton;
+    LatencyTableModel latm;
+    public Vector<String> checkedTransactions = new Vector<String>();
+    private Vector<SimulationLatency> latencies = new Vector<SimulationLatency>();
+	List<String> toCheck = new ArrayList<String>();
+	Map<String, List<String>> transTimes = new HashMap<String, List<String>>();
+
+    private JScrollPane jspLatency;
+
     public JFrameAvatarInteractiveSimulation(/*Frame _f,*/ MainGUI _mgui, String _title, AvatarSpecification _avspec) {
         super(_title);
 
@@ -241,7 +261,10 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         initActions();
 
         initSimulation();
-
+		for (String id: _avspec.checkedIDs){
+			checkedTransactions.add(id);
+			transTimes.put(id, new ArrayList<String>());		
+		}
         makeComponents();
         setComponents();
     }
@@ -772,6 +795,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         transactionPanel.add(jspTransactionInfo, BorderLayout.CENTER);
 
 
+
+
 	// Met elements
         metElementsPanel = new JPanel();
         metElementsPanel.setLayout(new BorderLayout());
@@ -820,6 +845,71 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         jspDisplayedBlocks.getVerticalScrollBar().setUnitIncrement(10);
         jspDisplayedBlocks.setPreferredSize(new Dimension(250, 300));
         infoTab.addTab("Displayed blocks", IconManager.imgic1202, jspDisplayedBlocks, "Displayed blocks");
+
+
+        // Latencies
+       	latencyPanel = new JPanel();
+		infoTab.addTab("Latencies", IconManager.imgic1202, latencyPanel, "Latencies");
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        latencyPanel.setLayout(gridbag0);
+        c0.gridwidth = GridBagConstraints.REMAINDER;
+		latencyPanel.add(new JLabel("Latencies shown in number of cycles relative to the main clock"), c0);
+
+        c0.gridwidth=1;
+        c0.gridheight=1;
+        latencyPanel.add(new JLabel("Checkpoint 1:"),c0);
+        c0.gridwidth = GridBagConstraints.REMAINDER;
+        transaction1 = new JComboBox<String>(checkedTransactions);
+        latencyPanel.add(transaction1, c0);
+
+        c0.gridwidth=1;
+        latencyPanel.add(new JLabel("Checkpoint 2:"),c0);
+        c0.gridwidth= GridBagConstraints.REMAINDER;
+        transaction2 = new JComboBox<String>(checkedTransactions);
+        latencyPanel.add(transaction2, c0);
+
+
+        addLatencyCheckButton = new JButton(actions[AvatarInteractiveSimulationActions.ACT_ADD_LATENCY]);
+        latencyPanel.add(addLatencyCheckButton,c0);
+        latm = new LatencyTableModel();
+        latm.setData(latencies);
+        sorterPI = new TableSorter(latm);
+        final JTable latTable = new JTable(sorterPI);
+	/*	latTable.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+ 			public void mouseClicked(java.awt.event.MouseEvent evt) {
+    			int row = latTable.rowAtPoint(evt.getPoint());
+    			int col = latTable.columnAtPoint(evt.getPoint());
+    			if (row >= 0 && col >= 0 && col <2) {
+					for (TGComponent tgc: tmap.getTMLModeling().getCheckedComps().keySet()){
+						if (tmap.getTMLModeling().getCheckedComps().get(tgc).equals(latm.getValueAt(row,col).toString().split(" ")[0])){
+        				    mgui.selectTab(tgc.getTDiagramPanel());
+            				tgc.getTDiagramPanel().highlightTGComponent(tgc);
+						}
+					}
+    			}
+ 			}
+		});*/
+        sorterPI.setTableHeader(latTable.getTableHeader());
+        ((latTable.getColumnModel()).getColumn(0)).setPreferredWidth(700);
+        ((latTable.getColumnModel()).getColumn(1)).setPreferredWidth(700);
+        ((latTable.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+        ((latTable.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+        ((latTable.getColumnModel()).getColumn(4)).setPreferredWidth(100);
+        ((latTable.getColumnModel()).getColumn(5)).setPreferredWidth(100);
+        latTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jspLatency = new JScrollPane(latTable);
+        jspLatency.setWheelScrollingEnabled(true);
+        jspLatency.getVerticalScrollBar().setUnitIncrement(10);
+        jspLatency.setMinimumSize(new Dimension(400, 250));
+        jspLatency.setPreferredSize(new Dimension(1400, 250));
+        latencyPanel.add(jspLatency, c0);
+
+
+
+//        updateLatencyButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY]);
+  //      latencyPanel.add(updateLatencyButton,c0);
 
         //Randomness
         randomPanel = new JPanel();
@@ -991,6 +1081,11 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             ass.resetSimulation();
             //ass.backOneTransactionBunch();
         }
+	//	latencies.clear();
+		transTimes.clear();
+		for (String id: avspec.checkedIDs){
+			transTimes.put(id, new ArrayList<String>());		
+		}
         //ass.killSimulation();
     }
 
@@ -1332,10 +1427,84 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         //nbOfAllExecutedElements = hashOfAllElements.hashCode();
     }
 
+	public void addLatency(){
+		toCheck.add(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString());
+		updateTransactionsTable();
+	}
+
     public void updateTransactionsTable() {
         if (transactiontm != null) {
             transactiontm.fireTableStructureChanged();
         }
+		if (ass!=null && latm!=null){
+			latencies.clear();
+			if (ass.getAllTransactions()!=null){
+				for (AvatarSimulationTransaction trans: ass.getAllTransactions()){
+					String id = ((TGComponent)trans.executedElement.getReferenceObject()).getName() + ":"+Integer.toString(trans.executedElement.getID());
+				//	System.out.println(id + " " + transTimes.keySet());
+				//	System.out.println("transaction " + trans.executedElement.getID() + " " + trans.initialClockValue);
+					if (transTimes.containsKey(id)){
+						if (!transTimes.get(id).contains(Long.toString(trans.initialClockValue))){
+							transTimes.get(id).add(Long.toString(trans.initialClockValue));
+						}
+					}
+				}
+			}
+		//	System.out.println(transTimes);
+			 for (String st1:transTimes.keySet()){
+                for (String st2:transTimes.keySet()){
+                    if (st1!=st2 && toCheck.contains(st1 +"--"+st2)){
+                            if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
+
+    	                        ArrayList<Integer> minTimes = new ArrayList<Integer>();
+								SimulationLatency sl = new SimulationLatency();
+								sl.trans1=st1;
+								sl.trans2=st2;
+                                for(String time1: transTimes.get(st1)){
+                                    //Find the first subsequent transaction
+                                    int time = Integer.MAX_VALUE;
+                                    for (String time2: transTimes.get(st2)){
+                                        int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
+                                        if (diff < time && diff >=0){
+                                            time=diff;
+                                        }
+								//		System.out.println("diff " + diff + " " + transTimes.get(st1) + " " + transTimes.get(st2));
+                                    }
+                                    if (time!=Integer.MAX_VALUE){
+                                        minTimes.add(time);
+                                    }
+                                }
+							//	System.out.println("Min times " + minTimes);
+                                if (minTimes.size()>0){
+                                    int sum=0;
+                                    sl.minTime=Integer.toString(Collections.min(minTimes));
+                                    sl.maxTime=Integer.toString(Collections.max(minTimes));
+                                    for (int time: minTimes){
+                                        sum+=time;
+                                    }
+                                    double average = (double) sum/ (double) minTimes.size();
+                                    double stdev =0.0;
+                                    for (int time:minTimes){
+                                        stdev +=(time - average)*(time-average);
+                                    }
+                                    stdev= stdev/minTimes.size();
+                                    stdev = Math.sqrt(stdev);
+                                    sl.avTime= String.format("%.1f",average);
+                                    sl.stDev = String.format("%.1f",stdev);
+                                }
+								latencies.add(sl);
+
+                            }
+
+                        }
+
+                    }
+                }
+
+			if (latm !=null && latencies.size()>0){
+				latm.setData(latencies);
+     		}
+		}
     }
 
 
@@ -1789,7 +1958,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_ZOOM_OUT].getActionCommand())) {
             zoomOut();
             return;
-
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_ADD_LATENCY].getActionCommand())) {
+            addLatency();
+            return;
         } else if (evt.getSource() == displayedTransactionsText) {
             TraceManager.addDev("Entered text:" + displayedTransactionsText.getText());
 

@@ -52,10 +52,10 @@ public class SimulationLatency  {
 
     public String trans1;
     public String trans2;
-    public String minTime=""; 
-	public String maxTime="";
-	public String avTime="";
-	public String stDev="";
+    public String minTime="N/A"; 
+	public String maxTime="N/A";
+	public String avTime="N/A";
+	public String stDev="N/A";
 
     public SimulationLatency() {
     }

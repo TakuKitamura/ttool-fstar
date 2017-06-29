@@ -55,6 +55,7 @@ import java.awt.*;
 public class PluginManager  {
     public ArrayList<Plugin> plugins;
     public static PluginManager pluginManager;
+    public static String PLUGIN_PATH = "";
 
     public PluginManager() {
 	plugins = new ArrayList<Plugin>();
@@ -83,7 +84,7 @@ public class PluginManager  {
     }
 
     public Plugin createPlugin(String _name) {
-	Plugin plugin = new Plugin(_name);
+	Plugin plugin = new Plugin(PLUGIN_PATH, _name);
 	addPlugin(plugin);
 	return plugin;
     }

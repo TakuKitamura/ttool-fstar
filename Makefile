@@ -265,8 +265,9 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_DOC)/README_java $(TTOOL_TARGET)/java
 # Basic bin
 	@cp $(TTOOL_EXE) $(TTOOL_TARGET)/
+	@cp $(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin
 	@cp $(TTOOL_LOTOS_H) $(TTOOL_TARGET)/bin
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/java TTool/figures TTool/nc TTool/lotos TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE))
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/java TTool/figures TTool/nc TTool/lotos TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE)) $(patsubst $(TTOOL_DOC)/%,TTool/bin/%,$(TTOOL_CONFIG_SRC))
 
 $(ADVANCED_RELEASE:.tgz=.tar): $(STDRELEASE:.tgz=.tar) documentation
 	@echo "$(PREFIX) Generating advanced release"
@@ -294,9 +295,9 @@ $(TTOOL_PREINSTALL_WINDOWS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@mkdir -p $(TTOOL_TARGET_WINDOWS)/TTool/bin
 	@$(TAR) xzvf $(TTOOL_PRIVATE)/stocks/proverif_windows.tar.gz -C $(TTOOL_TARGET_WINDOWS)
 	@$(TAR) xzvf $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz -C $(TTOOL_TARGET_WINDOWS)
-	@cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_TARGET_WINDOWS)/TTool/bin/config.xml
-	@cp $(TTOOL_DOC)/ttool_windows.bat $(TTOOL_TARGET_WINDOWS)/ttool.bat
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_WINDOWS) proverif uppaal TTool/bin/config.xml ttool.bat
+	@cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_TARGET_WINDOWS)/TTool/bin/
+	@sed 's#chdir .*#chdir TTool/bin#' $(TTOOL_DOC)/ttool_windows.bat > $(TTOOL_TARGET_WINDOWS)/ttool.bat
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_WINDOWS) proverif uppaal TTool/bin/config_windows.xml ttool.bat
 
 $(TTOOL_PREINSTALL_MACOS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@echo "$(PREFIX) Generating preinstall for MacOS"
@@ -305,9 +306,9 @@ $(TTOOL_PREINSTALL_MACOS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@$(TAR) xzf $(TTOOL_PRIVATE)/stocks/proverif_macos.tar.gz -C $(TTOOL_TARGET_MACOS)
 	@$(TAR) xzf $(TTOOL_PRIVATE)/stocks/uppaal_macos.tar.gz -C $(TTOOL_TARGET_MACOS)
 	@mv $(TTOOL_TARGET_MACOS)/uppaal* $(TTOOL_TARGET_MACOS)/uppaal
-	@cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_TARGET_MACOS)/TTool/bin/config.xml
-	@cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_TARGET_MACOS)/ttool.exe
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_MACOS) proverif uppaal TTool/bin/config.xml ttool.exe
+	@cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_TARGET_MACOS)/TTool/bin/config_macosx.xml
+	@sed 's#cd [^;]*#cd TTool/bin#' $(TTOOL_DOC)/ttool_macosx.exe > $(TTOOL_TARGET_MACOS)/ttool.exe
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_MACOS) proverif uppaal TTool/bin/config_macosx.xml ttool.exe
 
 $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@echo "$(PREFIX) Generating preinstall for Linux"
@@ -315,13 +316,13 @@ $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@mkdir -p $(TTOOL_TARGET_LINUX)/TTool/bin
 	@$(TAR) xzvf $(TTOOL_PRIVATE)/stocks/proverif_linux.tar.gz -C $(TTOOL_TARGET_LINUX)
 	@$(TAR) xzvf $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz -C $(TTOOL_TARGET_LINUX)
-	@cp $(TTOOL_DOC)/config_linux.xml $(TTOOL_TARGET_LINUX)/TTool/bin/config.xml
-	@cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_TARGET_LINUX)/ttool.exe
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_LINUX) proverif uppaal TTool/bin/config.xml ttool.exe
+	@cp $(TTOOL_DOC)/config_linux.xml $(TTOOL_TARGET_LINUX)/TTool/bin/config_linux.xml
+	@sed 's#cd [^;]*#cd TTool/bin#' $(TTOOL_DOC)/ttool_linux.exe > $(TTOOL_TARGET_LINUX)/ttool.exe
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_LINUX) proverif uppaal TTool/bin/config_linux.xml ttool.exe
 
-$(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY)
+$(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY) FORCE
 	@echo "$(PREFIX) Preparing base release"
-	@rm -rf $(TTOOL_TARGET)
+	@rm -rf $(TTOOL_TARGET_RELEASE)
 	@mkdir -p $(TTOOL_TARGET)
 # modeling
 	@mkdir -p $(TTOOL_TARGET)/modeling

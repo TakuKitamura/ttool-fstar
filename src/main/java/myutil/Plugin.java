@@ -56,17 +56,23 @@ import javax.swing.*;
    * @author Ludovic APVRILLE
  */
 public class Plugin {
+    private String path;
     private String name;
     private File file;
     private HashMap<String, Class> listOfClasses;
 
-    public Plugin(String _name) {
+    public Plugin(String _path, String _name) {
+	path = _path;
         name = _name;
         listOfClasses = new HashMap<String, Class>();
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getPath() {
+	return path;
     }
 
     public Class getClass(String _className) {
@@ -77,8 +83,8 @@ public class Plugin {
 
 	try {
             if (c == null) {
-                file = new File(name);
-                TraceManager.addDev("Loading plugin=" + name);
+                file = new File( path + java.io.File.separator + name);
+                TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
                 URL[] urls = new URL[] { file.toURI().toURL() };
                 ClassLoader loader = new URLClassLoader(urls);
                 TraceManager.addDev("Loader created");
@@ -103,8 +109,8 @@ public class Plugin {
 
         try {
             if (c == null) {
-                file = new File(name);
-                TraceManager.addDev("Loading plugin=" + name);
+                file = new File(path + java.io.File.separator + name);
+                TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
                 URL[] urls = new URL[] { file.toURI().toURL() };
                 ClassLoader loader = new URLClassLoader(urls);
                 TraceManager.addDev("Loader created");
@@ -127,6 +133,7 @@ public class Plugin {
 	// We have a valid plugin. We now need to get the Method
 	Method m = getMethod(_className, _methodName);
 	if (m == null) {
+	    TraceManager.addDev("Null method");
 	    return null;
 	}
 	
