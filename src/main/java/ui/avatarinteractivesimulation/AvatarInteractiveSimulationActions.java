@@ -103,8 +103,8 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
     public static final int ACT_DELETE_ASYNC_MSG = 32;
     public static final int ACT_UP_ASYNC_MSG = 33;
     public static final int ACT_DOWN_ASYNC_MSG = 34;
-
-    public static final int NB_ACTION = 35;
+    public static final int ACT_ADD_LATENCY = 35;
+    public static final int NB_ACTION = 36;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -190,6 +190,7 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
         actions[ACT_DELETE_ASYNC_MSG] = new TAction("delete-async-command", "Delete", IconManager.imgic336, IconManager.imgic336, "Delete msg +", "Delete the selected message", '0');
         actions[ACT_UP_ASYNC_MSG] = new TAction("up-async-command", "Up", IconManager.imgic78, IconManager.imgic78, "Up msg", "Put a async msg closer to the FIFO exit", '0');
         actions[ACT_DOWN_ASYNC_MSG] = new TAction("up-async-command", "Down", IconManager.imgic79, IconManager.imgic79, "Down msg", "Put a async msg further from the FIFO exit", '0');
+        actions[ACT_ADD_LATENCY] = new TAction("add-latency-command", "Add latency", IconManager.imgic75, IconManager.imgic75, "Add latency", "Add latency checkpoint", '0');
     }
 
     public String getActionCommand()  {

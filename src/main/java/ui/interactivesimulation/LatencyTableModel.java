@@ -52,13 +52,13 @@ import java.util.Vector;
    * @author Ludovic APVRILLE
  */
 public class LatencyTableModel extends AbstractTableModel {
-    private JFrameInteractiveSimulation jfis;
+   // private JFrameInteractiveSimulation jfis;
     private int nbOfRows;
     private SimulationLatency data[];
 	
     //private String [] names;
-    public LatencyTableModel(JFrameInteractiveSimulation _jfis) {
-	jfis = jfis;
+    public LatencyTableModel() {
+//	jfis = jfis;
 	SimulationLatency sl = new SimulationLatency();
 	data = new SimulationLatency[]{sl};
 	

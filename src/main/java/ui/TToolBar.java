@@ -91,7 +91,7 @@ public abstract class TToolBar extends JToolBar {
                     String longText = p.executeRetStringMethod("CustomizerGraphicalComponent", "getLongText");
                     String veryShortText = p.executeRetStringMethod("CustomizerGraphicalComponent", "veryShortText");
                     ImageIcon img = p.executeRetImageIconMethod("CustomizerGraphicalComponent", "getImageIcon");
-                    if ((imgIcon != null)  && (shortText != null)) {
+                    if ((img != null)  && (shortText != null)) {
                         TraceManager.addDev("Plugin: " + p.getName() + " short name:" + shortText);
                         TAction t = new TAction("command-" + i, shortText, img, img, veryShortText, longText, 0);
                         TGUIAction tguia = new TGUIAction(t);
