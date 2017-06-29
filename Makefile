@@ -321,7 +321,7 @@ $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 
 $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY)
 	@echo "$(PREFIX) Preparing base release"
-	@rm -rf $(TTOOL_TARGET)
+	@rm -rf $(TTOOL_TARGET_RELEASE)
 	@mkdir -p $(TTOOL_TARGET)
 # modeling
 	@mkdir -p $(TTOOL_TARGET)/modeling
