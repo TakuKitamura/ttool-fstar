@@ -2496,6 +2496,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
         // Issue #46: Added the else.
         // When we are moving a contained component, we should not check for the max of the diagram. This should be done for the father only
         // Issue #14: Do not check the diagram size
+        // The problem is that this method is applied after a zoom and readjusts the targeted coordinate if it is outside the diagram area. 
+        // However the check involves getting the size of the component, but taking into account the size of its childs (getCurrentMaxX) that 
+        // have not been zoomed yet therefore leading to an erroneous calculation of size. Disable this verification for now.
 //        else {
 //            int currentWidthPos = Math.abs(getCurrentMaxX() - x);
 //            int currentWidthNeg = Math.abs(getCurrentMinX() - x);
@@ -2511,9 +2514,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
             targetY = Math.min(maxY + father.getY(), Math.max(minY + father.getY(), targetY));
         }
 
-        // Issue #46: Added the else.
-        // When we are moving a contained component, we should not check for the max of the diagram. This should be done for the father only
-        // Issue #14: Do not check the diagram size
+        // Issues #46 and #14: See comment in verifyMoveCdX
 //        else {
 //	        int currentWidthPos = Math.abs(getCurrentMaxY() - y);
 //	        int currentWidthNeg = Math.abs(getCurrentMinY() - y);
