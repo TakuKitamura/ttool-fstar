@@ -1,8 +1,20 @@
-* First, compile the microwave graphical interface
+*Microwave system
+-First, compile the microwave graphical interface
 $ javac *.java
 
-* Start the microwave interface
+-Start the microwave interface
 $ java MainMicrowave
 
-* Open the microwave model with code in TTool
-* Generate the code, compile it, execute it
+-Open the microwave model with code in TTool
+-Generate the code, compile it, execute it
+
+
+*Pressure controller system
+-First, compile the pressure controller system
+$ javac *.java
+
+-Start the pressure controller GUI
+$ java MainPressureController
+
+-Open the pressure controller model with code in TTool
+-Generate the code, compile it, execute it

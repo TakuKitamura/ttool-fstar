@@ -267,7 +267,7 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_EXE) $(TTOOL_TARGET)/
 	@cp $(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin
 	@cp $(TTOOL_LOTOS_H) $(TTOOL_TARGET)/bin
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/java TTool/figures TTool/nc TTool/lotos TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE)) $(patsubst $(TTOOL_DOC)/%,TTool/bin/%,$(TTOOL_CONFIG_SRC))
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/java TTool/figures TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE))
 
 $(ADVANCED_RELEASE:.tgz=.tar): $(STDRELEASE:.tgz=.tar) documentation
 	@echo "$(PREFIX) Generating advanced release"
@@ -286,7 +286,7 @@ $(ADVANCED_RELEASE:.tgz=.tar): $(STDRELEASE:.tgz=.tar) documentation
 	@cp -r $(WEBCRAWLER_CLIENT_DIR)/src/main/java/* $(TTOOL_TARGET)/src
 	@cp -r $(WEBCRAWLER_SERVER_DIR)/src/main/java/* $(TTOOL_TARGET)/src
 	@find $(TTOOL_TARGET)/src -type f -not \( -name '*.java' -o -name '*.gif' -o -name '*.jjt' -o -name '*.txt' \) -a -exec rm -f {} \;
-	@cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
+	@cp $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
 	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/doc/srcdoc TTool/src
 
 $(TTOOL_PREINSTALL_WINDOWS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
