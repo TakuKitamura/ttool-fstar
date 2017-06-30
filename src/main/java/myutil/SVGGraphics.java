@@ -139,7 +139,7 @@ public class SVGGraphics extends Graphics2D {
 
     }
 
-
+    @Override
     public void drawRect(int x, int y, int width, int height) {
         //TraceManager.addDev("Drawing svg rect");
         String s = makeArg("x", x);
@@ -154,6 +154,7 @@ public class SVGGraphics extends Graphics2D {
         svgvalue += makeDesc("rect", s);
     }
 
+    @Override
     public void draw3DRect(int x, int y, int width, int height, boolean raised) {
         String s = makeArg("x", x);
         s += makeArg("y", y);
@@ -166,6 +167,7 @@ public class SVGGraphics extends Graphics2D {
         svgvalue += makeDesc("rect", s);
     }
 
+    @Override
     public void drawLine(int x1, int y1, int x2, int y2) {
         //TraceManager.addDev("Drawing svg 3D line");
         String s = makeArg("x1", x1);
@@ -179,6 +181,7 @@ public class SVGGraphics extends Graphics2D {
         svgvalue += makeDesc("line", s);
     }
 
+    @Override
     public void drawOval(int x, int y, int width, int height) {
         String s = makeArg("cx", x+width/2);
         s += makeArg("cy", y+height/2);
@@ -191,6 +194,7 @@ public class SVGGraphics extends Graphics2D {
         svgvalue += makeDesc("ellipse", s);
     }
 
+    @Override
     public void drawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
         String s = "";
         for(int i=0; i<nPoints; i++) {
@@ -205,6 +209,7 @@ public class SVGGraphics extends Graphics2D {
 
     }
 
+    @Override
     public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
         String s = makeArg("x", x);
         s += makeArg("y", y);
@@ -219,6 +224,7 @@ public class SVGGraphics extends Graphics2D {
         svgvalue += makeDesc("rect", s);
     }
 
+    @Override
     public  void drawString(String str, int x, int y){
         String s = makeArg("x", x);
         s += makeArg("y", y);
@@ -230,6 +236,7 @@ public class SVGGraphics extends Graphics2D {
         svgvalue += makeDescWithValue("text", s, Conversion.transformToXMLString(str));
     }
 
+    @Override
     public void fill3DRect(int x, int y, int width, int height, boolean raised) {
         String s = makeArg("x", x);
         s += makeArg("y", y);
@@ -240,6 +247,7 @@ public class SVGGraphics extends Graphics2D {
         svgvalue += makeDesc("rect", s);
     }
 
+    @Override
     public void fillOval(int x, int y, int width, int height) {
         String s = makeArg("cx", x+width/2);
         s += makeArg("cy", y+height/2);
@@ -250,6 +258,7 @@ public class SVGGraphics extends Graphics2D {
         svgvalue += makeDesc("ellipse", s);
     }
 
+    @Override
     public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
         String s = "";
         for(int i=0; i<nPoints; i++) {
@@ -262,6 +271,7 @@ public class SVGGraphics extends Graphics2D {
 
     }
 
+    @Override
     public void fillRect(int x, int y, int width, int height) {
         String s = makeArg("x", x);
         s += makeArg("y", y);
@@ -272,6 +282,7 @@ public class SVGGraphics extends Graphics2D {
         svgvalue += makeDesc("rect", s);
     }
 
+    @Override
     public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
         String s = makeArg("x", x);
         s += makeArg("y", y);
@@ -290,239 +301,281 @@ public class SVGGraphics extends Graphics2D {
 
     // From Graphics2D
 
+    @Override
     public void addRenderingHints(Map<?,?> hints) {}
 
+    @Override
     public void clip(Shape s) {}
 
+    @Override
     public void draw(Shape s) {}
 
+    @Override
     public void drawGlyphVector(GlyphVector g, float x, float y) {}
 
+    @Override
     public void drawImage(BufferedImage img, BufferedImageOp op, int x, int y) {}
 
-    public  boolean     drawImage(Image img, AffineTransform xform, ImageObserver obs) {
+    @Override
+    public boolean drawImage(Image img, AffineTransform xform, ImageObserver obs) {
         return true;
     }
 
-    public  void drawRenderableImage(RenderableImage img, AffineTransform xform){}
+    @Override
+    public void drawRenderableImage(RenderableImage img, AffineTransform xform){}
 
-    public  void drawRenderedImage(RenderedImage img, AffineTransform xform){}
+    @Override
+    public void drawRenderedImage(RenderedImage img, AffineTransform xform){}
 
-    public  void drawString(AttributedCharacterIterator iterator, float x, float y){}
+    @Override
+    public void drawString(AttributedCharacterIterator iterator, float x, float y){}
 
-    public  void drawString(AttributedCharacterIterator iterator, int x, int y){}
+    @Override
+    public void drawString(AttributedCharacterIterator iterator, int x, int y){}
 
-    public  void drawString(String str, float x, float y){}
+    @Override
+    public void drawString(String str, float x, float y){}
 
+    @Override
+    public void fill(Shape s){}
 
-
-    public  void fill(Shape s){}
-
-
-
+    @Override
     public Color getBackground() {
         return graphics.getBackground();
     }
 
+    @Override
     public Composite getComposite() {
         return graphics.getComposite();
     }
 
+    @Override
     public GraphicsConfiguration getDeviceConfiguration() {
         return graphics.getDeviceConfiguration();
     }
 
+    @Override
     public FontRenderContext getFontRenderContext() {
         return graphics.getFontRenderContext();
     }
 
+    @Override
     public Paint getPaint() {
         return graphics.getPaint();
     }
 
+    @Override
     public Object getRenderingHint(RenderingHints.Key hintKey) {
         return graphics.getRenderingHint(hintKey);
     }
 
+    @Override
     public RenderingHints getRenderingHints() {
         return graphics.getRenderingHints();
     }
 
+    @Override
     public Stroke getStroke() {
         return graphics.getStroke();
     }
 
+    @Override
     public AffineTransform getTransform() {
         return graphics.getTransform();
     }
 
+    @Override
     public boolean hit(Rectangle rect, Shape s, boolean onStroke) {
         return graphics.hit(rect, s, onStroke);
     }
 
+    @Override
     public void rotate(double theta) {
     }
 
+    @Override
     public void rotate(double theta, double x, double y) {
     }
 
+    @Override
     public void scale(double sx, double sy) {
     }
 
+    @Override
     public void setBackground(Color color) {
         graphics.setBackground(color);
     }
 
+    @Override
     public void setComposite(Composite comp) {
         graphics.setComposite(comp);
     }
 
+    @Override
     public void setPaint(Paint paint) {
         graphics.setPaint(paint);
     }
 
+    @Override
     public void setRenderingHint(RenderingHints.Key hintKey, Object hintValue) {
         graphics.setRenderingHint(hintKey, hintValue);
     }
 
+    @Override
     public void setRenderingHints(Map<?,?> hints) {
         graphics.setRenderingHints(hints);
     }
 
+    @Override
     public void setStroke(Stroke s) {
         graphics.setStroke(s);
     }
 
-
+    @Override
     public void setTransform(AffineTransform Tx) {
         graphics.setTransform(Tx);
     }
 
+    @Override
     public void shear(double shx, double shy) {
     }
 
+    @Override
     public void transform(AffineTransform Tx) {
     }
 
+    @Override
     public void translate(double tx, double ty) {
     }
 
+    @Override
     public void translate(int x, int y) {
     }
 
 
     // Graphics
-
+    
+    @Override
     public void clearRect(int x, int y, int width, int height) {}
 
+    @Override
     public void clipRect(int x, int y, int width, int height) {}
 
+    @Override
     public void copyArea(int x, int y, int width, int height, int dx, int dy) {}
 
+    @Override
     public Graphics create() {
         return graphics.create();
     }
 
+    @Override
     public void dispose() {}
 
+    @Override
     public  void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
     }
 
+    @Override
     public boolean drawImage(Image img, int x, int y, Color bgcolor, ImageObserver observer) {
         return true;
     }
 
+    @Override
     public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
         return true;
     }
 
+    @Override
     public boolean drawImage(Image img, int x, int y, int width, int height, Color bgcolor, ImageObserver observer) {
         return true;
     }
 
+    @Override
     public boolean drawImage(Image img, int x, int y, int width, int height, ImageObserver observer) {
         return true;
     }
 
+    @Override
     public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, int sx1, int sy1, int sx2, int sy2, Color bgcolor, ImageObserver observer) {
         return true;
     }
 
+    @Override
     public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, int sx1, int sy1, int sx2, int sy2, ImageObserver observer) {
         return true;
     }
 
+    @Override
     public void drawPolyline(int[] xPoints, int[] yPoints, int nPoints) {
     }
 
+    @Override
     public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
     }
 
+    @Override
     public Shape getClip() {
         return graphics.getClip();
     }
 
+    @Override
     public Rectangle getClipBounds() {
         return graphics.getClipBounds();
     }
 
+    @Override
     public Rectangle getClipBounds(Rectangle r) {
         return graphics.getClipBounds(r);
     }
 
+    @Override
     public Color getColor() {
         return graphics.getColor();
     }
 
+    @Override
     public Font getFont() {
         return graphics.getFont();
     }
 
+    @Override
     public FontMetrics getFontMetrics() {
         return graphics.getFontMetrics();
     }
 
+    @Override
     public FontMetrics getFontMetrics(Font f) {
         return graphics.getFontMetrics(f);
     }
 
+    @Override
     public void setClip(int x, int y, int width, int height) {
         graphics.setClip(x, y, width, height);
     }
 
+    @Override
     public void setClip(Shape clip) {
         graphics.setClip(clip);
     }
 
+    @Override
     public void setColor(Color c) {
         graphics.setColor(c);
     }
 
+    @Override
     public void setFont(Font font) {
         graphics.setFont(font);
     }
 
+    @Override
     public void setPaintMode() {
         graphics.setPaintMode();
     }
 
+    @Override
     public void setXORMode(Color c1) {
         graphics.setXORMode(c1);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

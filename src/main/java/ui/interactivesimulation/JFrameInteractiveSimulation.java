@@ -269,24 +269,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         diagramTable = new Hashtable<String, String>();
 
 
-		tmlSimPanel = new JFrameTMLSimulationPanel(new Frame(), _mgui, "Simulation Transactions");
-		try {
-		pos = new PipedOutputStream();
-		pis = new PipedInputStream(pos, 4096);
-		tmlSimPanel.setFileReference(new BufferedReader(new InputStreamReader(pis)));
-		bw = new BufferedWriter(new OutputStreamWriter(pos));
 
-		//bw.close();
-		//pos.close();
-		}
-		catch (Exception e){
-			System.out.println("failed " + e);
-		}
-		for (TMLTask task : tmap.getTMLModeling().getTasks()){
-			simtraces.add("time=0 block="+ task.getName()+" type=state_entering state=startState");
-			simIndex++;
-		}
-		tmlSimPanel.setVisible(true);
 
         mgui.resetRunningID();
         mgui.resetLoadID();
@@ -967,7 +950,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         addLatencyCheckButton = new JButton(actions[InteractiveSimulationActions.ACT_ADD_LATENCY]);
         latencyPanel.add(addLatencyCheckButton,c0);
 
-        latm = new LatencyTableModel(this);
+        latm = new LatencyTableModel();
         latm.setData(latencies);
         sorterPI = new TableSorter(latm);
         final JTable latTable = new JTable(sorterPI);
@@ -1397,24 +1380,35 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 	public void writeSimTrace(){
 		try {
-		Collections.sort(simtraces, new Comparator<String>() {
-
-    	@Override
-    	public int compare(String o1, String o2) {
-       		int i = Integer.valueOf((o1.split(" ")[0]).split("=")[1]);
-			int j = Integer.valueOf((o2.split(" ")[0]).split("=")[1]);
-			return i-j;
-    	}
-	});
-
+			tmlSimPanel = new JFrameTMLSimulationPanel(new Frame(), mgui, "Simulation Transactions");
+			pos = new PipedOutputStream();
+			pis = new PipedInputStream(pos, 4096);
+			tmlSimPanel.setFileReference(new BufferedReader(new InputStreamReader(pis)));
+			bw = new BufferedWriter(new OutputStreamWriter(pos));	
+			for (TMLTask task : tmap.getTMLModeling().getTasks()){
+				simtraces.add("time=0 block="+ task.getName()+" type=state_entering state=startState");
+				simIndex++;
+			}
+			//Sort simtraces by end time
+			Collections.sort(simtraces, new Comparator<String>() {
+    			@Override
+    			public int compare(String o1, String o2) {
+       				int i = Integer.valueOf((o1.split(" ")[0]).split("=")[1]);
+					int j = Integer.valueOf((o2.split(" ")[0]).split("=")[1]);
+					return i-j;
+    			}
+			});
 			//System.out.println(simtraces);
 			for (String s: simtraces){
-				bw.write("#0 " +s);
+				bw.write("#"+simIndex+ " "+s);
 				bw.newLine();
 				bw.flush();
+				simIndex++;
 			}
 			bw.close();
 			pos.close();
+			tmlSimPanel.setVisible(true);
+	
 		}
 		catch (Exception e){
 			System.out.println("Could not write sim trace " + e);

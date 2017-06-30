@@ -153,7 +153,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     private boolean draw;
 
-    private Graphics lastGraphics;
+    // Issue #14 point 10: Always use the current graphics
+    //private Graphics lastGraphics;
 
     // MODE
     public int mode;
@@ -426,7 +427,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         else
             g.setFont (fontToUse);
 
-        this.lastGraphics = g;
+       // this.lastGraphics = g;
         this.drawingMain = b;
 
         if (!this.overcomeShowing && !this.isShowing()) {
@@ -1954,14 +1955,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 //        if (maxX < minimumXSize + increment) {
 //            downX.setEnabled(false);
 //        } else {
-        	// Issue #14
+        // Issue #14
         downX.setEnabled( canDecreaseMaxX() );
 //        }
 
 //        if (maxY < minimumYSize + increment) {
 //            downY.setEnabled(false);
 //        } else {
-        	// Issue #14
+        // Issue #14
         downY.setEnabled( canDecreaseMaxY() );
 //        }
         
@@ -2942,9 +2943,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         boolean b = draw;
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
-        if (lastGraphics != null) {
-            g.setFont(lastGraphics.getFont());
-        }
+        g.setFont( getGraphics().getFont() );
+//        if (lastGraphics != null) {
+//            g.setFont(lastGraphics.getFont());
+//        }
         draw = true;
         //paintMycomponents(g);
         overcomeShowing = true;
@@ -2979,9 +2981,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         int h = this.getHeight();
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
-        if (lastGraphics != null) {
-            g.setFont(lastGraphics.getFont());
-        }
+        
+        // Issue #14 point 10: Always use the current graphics
+        g.setFont( getGraphics().getFont() );
+//        if (lastGraphics != null) {
+//            g.setFont(lastGraphics.getFont());
+//        }
         selectedTemp = false;
         Color colorTmp = ColorManager.SELECTED_0;
         ColorManager.SELECTED_0 = ColorManager.NORMAL_0;
@@ -3231,7 +3236,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"");
         sb.append(" width=\"" + (w+x) + "\" height=\"" + (h+y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
 
-        SVGGraphics svgg = new SVGGraphics((Graphics2D)lastGraphics);
+        // Issue #14 point 10: Somehow the last graphics that was used is different than the actual one leading
+        // to an error in calculating string lengths
+        final SVGGraphics svgg = new SVGGraphics( (Graphics2D) getGraphics() );
+//      SVGGraphics svgg = new SVGGraphics((Graphics2D)lastGraphics);
 
         RepaintManager.currentManager(this).setDoubleBufferingEnabled(false);
         //this.paint(svgg);
