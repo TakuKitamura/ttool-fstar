@@ -1,5 +1,5 @@
 TTool, an open-source UML toolkit for modeling emebedded systems and procotols.
-TTool is developed at ENST, http://labsoc.comelec.enst.fr/turtle/
+TTool is developed at ENST, http://ttool.telecom-paristech.fr/
 -------------------------------------------------------------------------------
 
 The src directory contains all Java sources and images used to generate the jar archive of TTool, and of the launcher.

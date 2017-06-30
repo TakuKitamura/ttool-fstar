@@ -285,7 +285,7 @@ $(ADVANCED_RELEASE:.tgz=.tar): $(STDRELEASE:.tgz=.tar) documentation
 	@cp -r $(WEBCRAWLER_CLIENT_DIR)/src/main/java/* $(TTOOL_TARGET)/src
 	@cp -r $(WEBCRAWLER_SERVER_DIR)/src/main/java/* $(TTOOL_TARGET)/src
 	@find $(TTOOL_TARGET)/src -type f -not \( -name '*.java' -o -name '*.gif' -o -name '*.jjt' -o -name '*.txt' \) -a -exec rm -f {} \;
-	@cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
+	@cp $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
 	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/doc/srcdoc TTool/src
 
 $(TTOOL_PREINSTALL_WINDOWS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
