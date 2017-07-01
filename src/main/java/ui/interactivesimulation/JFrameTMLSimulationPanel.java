@@ -106,13 +106,13 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
         JPanel topPanel = new JPanel();
         JButton buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_ALL]);
         topPanel.add(buttonClose);
-        topPanel.add(new JLabel(" time unit:"));
+        /*topPanel.add(new JLabel(" time unit:"));
         units = new JComboBox<>(unitTab);
         units.setSelectedIndex(1);
         units.addActionListener(this);
         topPanel.add(units);
         JButton buttonRefresh = new JButton(actions[InteractiveSimulationActions.ACT_REFRESH]);
-        topPanel.add(buttonRefresh);
+        topPanel.add(buttonRefresh);*/
         framePanel.add(topPanel, BorderLayout.NORTH);
         
         // Simulation panel

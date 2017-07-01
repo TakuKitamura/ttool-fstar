@@ -104,8 +104,8 @@ public class InteractiveSimulationActions extends AbstractAction {
 
     public static final int ACT_ANALYSIS_RG = 30;
     public static final int ACT_VIEW_RG = 31;
-
-    public static final int NB_ACTION = 36;
+    public static final int ACT_SHOW_TRACE = 36;
+    public static final int NB_ACTION = 37;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -189,6 +189,7 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_VIEW_RG] = new TAction("view-rg", "View last RG", IconManager.imgic344, IconManager.imgic344, "View last RG", "View last RG", '0');
         actions[ACT_UPDATE_LATENCY] = new TAction("update-latency", "Update latencies", IconManager.imgic75, IconManager.imgic75, "Update latencies", "Update latencies", '0');
         actions[ACT_ADD_LATENCY] = new TAction("add-latency", "Measure Latency", null, null, "Measure Latency", "Measure Latency", '0');
+		actions[ACT_SHOW_TRACE] = new TAction("show-trace", "Show Simulation Traces", IconManager.imgic7007, IconManager.imgic7007, "Show Simulation Traces", "Show Simulation Traces", '0');
 
 
     }
