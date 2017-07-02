@@ -378,4 +378,13 @@ public class TMLTask extends TMLElement {
     public void removeEmptyInfiniteLoop() {
     	activity.removeEmptyInfiniteLoop();
     }
+
+    public String toXML() {
+	String s = new String("<TASK name=\"" + name + "\" priority=\"" + priority + "\" >\n");
+	for(TMLAttribute attr: attributes) {
+	    s += attr.toXML();
+	}
+	s += "</TASK>\n";
+	return s;
+    }
 }

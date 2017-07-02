@@ -562,4 +562,13 @@ public class TMLActivity extends TMLElement {
             removeEmptyInfiniteLoop();
         }
     }
+
+    public String toXML() {
+	String s = new String("<ACTIVITY first=\"" + elements.indexOf(first) + "\">\n");
+	for(TMLActivityElement elt: elements) {
+	}
+	return s;
+    }
+
+    
 }
