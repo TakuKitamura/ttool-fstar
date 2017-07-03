@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlsd;
 
 import myutil.GraphicLib;
@@ -84,26 +81,24 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
         
         value = "Transfer instance name";
         name = "TransferInstance";
-				isActor = false;
+		isActor = false;
         
         myImageIcon = IconManager.imgic500;
 	}
     
+    @Override
 	public boolean editOndoubleClick(JFrame frame) {
-			
-		JDialogTMLCPTransferInstance jdab = new JDialogTMLCPTransferInstance( myAttributes, null, frame,
-																											"Setting properties of " + name, "Attribute", name );
+		JDialogTMLCPTransferInstance jdab = new JDialogTMLCPTransferInstance( 	myAttributes, 
+																				null, 
+																				frame,
+																				"Setting properties of " + name, 
+																				"Attribute", 
+																				name );
 		setJDialogOptions(jdab);
-	//	jdab.setSize(650, 575);
-		GraphicLib.centerOnParent(jdab, 650, 575);
+		GraphicLib.centerOnParent(jdab, 650, 500);
 		jdab.setVisible(true); // blocked until dialog has been closed
 		name = jdab.getName();																											
-    //makeValue();
-    //if (oldValue.equals(value)) {
-		//return false;
-    //}
-        
-		//rescaled = true;
+
 		return true;
 	}
 

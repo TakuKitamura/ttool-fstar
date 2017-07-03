@@ -89,21 +89,19 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
         myImageIcon = IconManager.imgic500;
 	}
     
+    @Override
 	public boolean editOndoubleClick(JFrame frame) {
-			
-		JDialogTMLCPControllerInstance jdab = new JDialogTMLCPControllerInstance( myAttributes, null, frame,
-																											"Setting properties of " + name, "Attribute", name );
+		JDialogTMLCPControllerInstance jdab = new JDialogTMLCPControllerInstance( 	myAttributes,
+																					null,
+																					frame,
+																					"Setting properties of " + name,
+																					"Attribute",
+																					name );
 		setJDialogOptions(jdab);
-   // jdab.setSize(650, 575);
-    GraphicLib.centerOnParent(jdab, 650, 575 );
-    jdab.setVisible(true); // blocked until dialog has been closed
+	    GraphicLib.centerOnParent(jdab, 650, 500 );
+	    jdab.setVisible(true); // blocked until dialog has been closed
 		name = jdab.getName();																											
-    //makeValue();
-    //if (oldValue.equals(value)) {
-		//return false;
-    //}
-        
-		//rescaled = true;
+
 		return true;
 	}
 	
