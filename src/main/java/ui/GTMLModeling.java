@@ -3383,25 +3383,34 @@ public class GTMLModeling  {
         //    TMLTask task;
         //    TMLElement elt;
         //     String s;
-        TMLArchiCPNode cp;
+        TMLArchiCPNode cp = null;
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
             //TraceManager.addDev("---------------- tgc=" + tgc);
             if (tgc instanceof TMLArchiCPNode) {
-                cp = (TMLArchiCPNode)tgc;
-                TMLCPLib tmlcplib = new TMLCPLib( cp.getCompleteName(), cp.getReference(), tgc, cp.getCPMEC() );
-                map.addTMLCPLib(tmlcplib);
-                tmlcplib.setMappedUnits(cp.getMappedUnits());
-                tmlcplib.setAssignedAttributes( cp.getAssignedAttributes() );
-                tmlcplib.setTransferTypes( cp.getTransferTypes() );
-
-                // Handling mapped artifacts
-                for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
-                    TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority(), artifact.getBufferParameters() );
-                    tmlcplib.addArtifact(arti);
-                    //TraceManager.addDev("Adding CP artifact:" + arti);
-                }
+		try {
+		    cp = (TMLArchiCPNode)tgc;
+		    TMLCPLib tmlcplib = new TMLCPLib( cp.getCompleteName(), cp.getReference(), tgc, cp.getCPMEC() );
+		    map.addTMLCPLib(tmlcplib);
+		    tmlcplib.setMappedUnits(cp.getMappedUnits());
+		    tmlcplib.setAssignedAttributes( cp.getAssignedAttributes() );
+		    
+		    tmlcplib.setTransferTypes( cp.getTransferTypes() );
+		    
+		    // Handling mapped artifacts
+		    for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
+			TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority(), artifact.getBufferParameters() );
+			tmlcplib.addArtifact(arti);
+			//TraceManager.addDev("Adding CP artifact:" + arti);
+		    }
+		} catch (Exception e) {
+		    TraceManager.addDev("\n\n==========> Badly formed TMLCPLib:" + cp + "\nADDING WARNING\n");
+		    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "CP " +  cp.getCompleteName() + " has been removed (invalid CP)");
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(cp);
+                    warnings.add(ce);		    
+		}
             }
         }
     }
