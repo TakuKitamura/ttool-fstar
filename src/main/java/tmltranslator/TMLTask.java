@@ -384,6 +384,7 @@ public class TMLTask extends TMLElement {
 	for(TMLAttribute attr: attributes) {
 	    s += attr.toXML();
 	}
+	s += activity.toXML();
 	s += "</TASK>\n";
 	return s;
     }

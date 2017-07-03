@@ -114,4 +114,13 @@ public class TMLActivityElement extends TMLElement{
             }
         }
     }
+
+    public String toXML() {
+	String s = "<ACTIVITYELEMENT value=\"" + value + "\">\n";
+	if (securityPattern != null) {
+	    s += securityPattern.toXML();
+	}
+	s += "</ACTIVITYELEMENT>\n";
+	return s;
+    }
 }
