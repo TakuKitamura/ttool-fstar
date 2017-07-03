@@ -75,8 +75,7 @@ public class AvatarDeploymentPanelTranslator {
 	 */
 
 	private int nb_target = 6;
-	private int no_proc = 0;
-	private int no_ram = 0;
+  
 	private int no_tty = 0;
 
 	private int nb_clusters = 0;
@@ -112,26 +111,27 @@ public class AvatarDeploymentPanelTranslator {
 				int dCacheSets = addCPUNode.getDCacheSets();
 				int dCacheWords = addCPUNode.getDCacheWords();
 				AvatarCPU avcpu;
-				int monitored = addCPUNode.getMonitored();
+				//int monitored = addCPUNode.getMonitored();
 
-System.out.println("ADD CPU  monitored "+ monitored);
-
-				avcpu = new AvatarCPU(cpuName, nbOfIRQs, ICacheWays, ICacheSets, ICacheWords, dCacheWays, dCacheSets, dCacheWords, nb_init, no_proc, monitored);
-				nb_init++;
-				no_proc++;
-
+				avcpu = new AvatarCPU(cpuName, nbOfIRQs, ICacheWays, ICacheSets, ICacheWords, dCacheWays, dCacheSets, dCacheWords, nb_init, addCPUNode.getIndex(), addCPUNode.getMonitored());
+			
+				System.out.println("CPU name : "+ cpuName);
+				System.out.println("CPU index : "+ addCPUNode.getIndex());
 				Vector<ADDBlockArtifact> tasks = addCPUNode.getArtifactList();
-				
+			
 				for (int i = 0; i < tasks.size(); i++) {
 					ADDBlockArtifact task = tasks.get(i);
 
 					String taskName = task.getTaskName();
 					String referenceTaskName = task.getReferenceTaskName();
-
+														
 					AvatarTask avtask = new AvatarTask(taskName, referenceTaskName, avcpu);
+					
 					avcpu.addTask(avtask);
 					avatarMappedObject.add(avtask);
 				}
+				nb_init++;
+			
 				avatarMap.put(dp, avcpu);
 				avatarComponents.add(avcpu);
 
@@ -141,7 +141,7 @@ System.out.println("ADD CPU  monitored "+ monitored);
 				int index = tty.getIndex();
 				String ttyName = tty.getNodeName();
 
-				AvatarTTY avtty = new AvatarTTY(ttyName, index, no_tty, index);
+				AvatarTTY avtty = new AvatarTTY(ttyName, index, index, index);//DG 3.7.
 				nb_target++;
 
 				avatarMap.put(dp, avtty);
@@ -256,12 +256,12 @@ System.out.println("ADD CPU  monitored "+ monitored);
 					int index = addRamNode.getIndex();
 					int byteDataSize = addRamNode.getDataSize();
 
-					int monitored = addRamNode.getMonitored();
-  System.out.println("ADD RAM  monitored "+ monitored);
-					AvatarRAM avram = new AvatarRAM(name, index, byteDataSize, no_ram, index, monitored);
+					//int monitored = addRamNode.getMonitored();
+  System.out.println("ADD RAM  monitored "+ addRamNode.getMonitored());
+  AvatarRAM avram = new AvatarRAM(name, index, byteDataSize, index, index, addRamNode.getMonitored());//DG 3.7.
 					int cluster_index = avram.getIndex();
 
-					no_ram++;
+					//	no_ram++;
 					nb_target++;
 
 					Vector<ADDChannelArtifact> channels = addRamNode.getArtifactList();
@@ -271,7 +271,7 @@ System.out.println("ADD CPU  monitored "+ monitored);
 						String referenceDiagram = c.getReferenceDiagram();
 						String channelName = c.getChannelName();
 						//channel is inevitably on same cluster as RAM it is mapped on :)
-						AvatarChannel avcl = new AvatarChannel(referenceDiagram, channelName, avram, cluster_index, monitored);
+						AvatarChannel avcl = new AvatarChannel(referenceDiagram, channelName, avram, cluster_index, addRamNode.getMonitored());
 						avram.addChannel(avcl);
 						avatarMappedObject.add(avcl);
 					}
@@ -308,22 +308,32 @@ System.out.println("ADD CPU  monitored "+ monitored);
 				// monitored = 2 MWMR stats
 				boolean spy = connector.hasASpy();
 				int monitored = 0;
+				System.out.println("@@@ avowner "+ avowner_p1);
+			
 				if (spy == true) {
-					monitored = 1; 
-				}
+					monitored = 1; 	
+					System.out.println("@@@ owner "+ owner_p1.getName()+" monitored");
+					System.out.println("@@@ avowner "+ avowner_p1+" monitored");
+									
+				}				
 				AvatarConnector avconnector = new AvatarConnector(avConnectingPoint1, avConnectingPoint2, monitored);			
 			
 				if (avowner_p1 instanceof AvatarRAM) {	
-				    //if stats mode selected beforehand in menu of component or spy				   
+				    //if stats mode selected beforehand in menu of component or spy				   	
+				    AvatarRAM ram1=(AvatarRAM) avowner_p1;
+				    System.out.println("@@@@@@@@@@@@@@ RAM no "+ram1.getNo_ram()+" @@@@@@@@@@@@@@@@@");
 				    if ((((AvatarRAM)avowner_p1).getMonitored() == 2)||(spy == true)) 
 					//if (((AvatarRAM)avowner_p1).getMonitored() == 2)
 					{   
 					    monitored = 2;
 					    //monitored = 1;
-					}
-				  
-				    (((AvatarRAM) avowner_p1)).setMonitored(monitored); 
+					    //}
 				   
+					    (((AvatarRAM) avowner_p1)).setMonitored(monitored); 
+					    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+					    System.out.println("@@@@@@@@@@@@@@ RAM no "+ram1.getNo_ram()+" monitored@@@@@@@@@@@@@@@@@");
+					    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+					}
 				}
 
 				if (avowner_p1 instanceof AvatarCPU) {

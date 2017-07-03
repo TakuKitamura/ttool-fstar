@@ -162,15 +162,15 @@ public class Deployinfo {
 	    
 	    String string_size_half = (Integer.toHexString(size/2)); //segments on this are half uram, half cram
 	    
-	    deployinfo += "#define CACHED_RAM" + ram.getNo_ram()  + "_NAME cram" + ram.getNo_ram() + CR;	    
-	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*CLUSTER_SIZE) + CR; 
+	    deployinfo += "#define CACHED_RAM" + ram.getIndex()  + "_NAME cram" + ram.getIndex() + CR;	    
+	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getIndex()  + "_ADDR 0x" + Integer.toHexString(address_start+i*CLUSTER_SIZE) + CR; 
 	    // 31.08. simplifie
-	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ string_size_half + CR; 
-	    deployinfo += "#define DEPLOY_RAM" + ram.getNo_ram()  + "_NAME uram" + ram.getNo_ram() + CR; 	    
+	    deployinfo = deployinfo + "#define CACHED_RAM" + ram.getIndex()  + "_SIZE 0x"+ string_size_half + CR; 
+	    deployinfo += "#define DEPLOY_RAM" + ram.getIndex()  + "_NAME uram" + ram.getIndex() + CR; 	    
 	    int cacheability_bit= 2097152; //0x00200000 
-	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_ADDR 0x" + Integer.toHexString(address_start+i*CLUSTER_SIZE+size/2+cacheability_bit) + CR; 
+	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getIndex()  + "_ADDR 0x" + Integer.toHexString(address_start+i*CLUSTER_SIZE+size/2+cacheability_bit) + CR; 
 	    // 31.08. simplifie
-	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getNo_ram()  + "_SIZE 0x"+ (string_size_half) + CR;
+	    deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getIndex()  + "_SIZE 0x"+ (string_size_half) + CR;
 
 	    i++;
 	}
@@ -196,7 +196,7 @@ System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
 		    deployinfo_map = deployinfo_map +"\n .channel"+nb_signals+" : { \\" + CR;
 		    deployinfo_map = deployinfo_map + "*(section_channel"+nb_signals+ ")\\"+ CR;
 		   
-		    deployinfo_map=deployinfo_map+ "} > uram"+ram.getNo_ram()+"\\"+ CR;	
+		    deployinfo_map=deployinfo_map+ "} > uram"+ram.getIndex()+"\\"+ CR;	
 		    i++;nb_signals++;
 		}
 		}
@@ -232,26 +232,27 @@ System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
 	try{		
 	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
 		//	if (/*!*/(ram.getChannels().isEmpty())){ //"!" removed because it returned the wrong results. Logic is now incorrect but results are correct (needs further investigating) CD 20.6
-		//if (!(ram.getChannels().isEmpty())){
+		if (!(ram.getChannels().isEmpty())){
 		    for(AvatarRelation ar: avspec.getRelations()){
 		    	for (j=0;j<ar.nbOfSignals();j++) {
 			    deployinfo_map = deployinfo_map + "\n .channel"+i+" : {";
 			    deployinfo_map = deployinfo_map + "*(section_channel"+i+ ")";	
-			    deployinfo_map = deployinfo_map + "} > uram" + ram.getNo_ram() + CR;	//ram n° was incorrect (see above) 
+			    deployinfo_map = deployinfo_map + "} > uram" + ram.getIndex() + CR;	//ram n° was incorrect (see above) 
 			i++;
 			}
 			}
+		
 		    i=0;
 		    for(AvatarRelation ar: avspec.getRelations()){ 
 			for (j=0;j<ar.nbOfSignals();j++) { //CD 15.06 dynamic to signal number
 			    deployinfo_map = deployinfo_map + "\n .lock"+i+" : { " ;
 			    deployinfo_map = deployinfo_map + "*(section_lock" + i + ")";		   
-			deployinfo_map = deployinfo_map + "} > uram" + ram.getNo_ram() + CR;
+			deployinfo_map = deployinfo_map + "} > uram" + ram.getIndex() + CR;
 			i++;
 			}
 		    }
 		}	    
-	    // }
+	     }
 	}catch (Exception e){
 	    e.printStackTrace();
 	}
