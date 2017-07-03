@@ -71,6 +71,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 //    private int spacePt = 3;
     private Color myColor;
 
+	public boolean isAttacker=false;
     // Icon
     private int iconSize = 15;
     private boolean iconIsDrawn = false;
