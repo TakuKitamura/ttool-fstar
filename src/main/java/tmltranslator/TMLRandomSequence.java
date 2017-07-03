@@ -97,4 +97,8 @@ public class TMLRandomSequence extends TMLActivityElement{
 		 // System.out.println("sequence #" + i + " = " + nexts.elementAt(i));
 	  //} 
     }
+
+    public String customExtraToXML() {
+	return "";
+    }
 }

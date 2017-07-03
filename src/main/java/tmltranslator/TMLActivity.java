@@ -566,7 +566,7 @@ public class TMLActivity extends TMLElement {
     public String toXML() {
 	String s = new String("<ACTIVITY first=\"" + elements.indexOf(first) + "\">\n");
 	for(TMLActivityElement elt: elements) {
-	    s += elt.toXML();
+	    s += elt.toXML(elements);
 	}
 	s += "</ACTIVITY>\n";
 	return s;

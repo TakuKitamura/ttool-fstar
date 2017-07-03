@@ -75,6 +75,10 @@ public class TMLForLoop extends TMLActivityElement {
     public boolean isInfinite() {
 	return isInfinite;
     }
+
+    public String customExtraToXML() {
+	return " init=\"" + init + "\" + condition=\"" + condition + "\" increment=\"" + increment + "\" isInfinite=\"" + isInfinite + "\" ";
+    }
     
  
 }
