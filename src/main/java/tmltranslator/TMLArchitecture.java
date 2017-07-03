@@ -427,4 +427,10 @@ public class TMLArchitecture {
 	    }
 	}
     }
+
+    public String toXML() {
+	String s = "<TMLARCHITECTURE>\n";
+	s += "</TMLARCHITECTURE>";
+	return s;
+    }
 }

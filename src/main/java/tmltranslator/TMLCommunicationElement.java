@@ -52,9 +52,9 @@ import myutil.TraceManager;
 public abstract class TMLCommunicationElement extends TMLElement {
     //private boolean infected;
 
-    private boolean isLossy;
-    private int lossPercentage;
-    private int maxNbOfLoss;
+    protected boolean isLossy;
+    protected int lossPercentage;
+    protected int maxNbOfLoss;
 
     public TMLCommunicationElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
