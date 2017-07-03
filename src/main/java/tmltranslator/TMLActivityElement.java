@@ -116,9 +116,11 @@ public class TMLActivityElement extends TMLElement{
     }
 
     public String toXML() {
-	String s = "<ACTIVITYELEMENT value=\"" + value + "\">\n";
+	String s = "<ACTIVITYELEMENT value=\"" + value + "\" name=\"" + name + "\" >\n";
 	if (securityPattern != null) {
 	    s += securityPattern.toXML();
+	}
+	for(TMLActivityElement tmlae: nexts) {
 	}
 	s += "</ACTIVITYELEMENT>\n";
 	return s;
