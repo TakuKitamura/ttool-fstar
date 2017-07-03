@@ -45,7 +45,7 @@ import automata.Automata;
 import automata.State;
 import automata.Transition;
 import myutil.*;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.util.IconManager;
 import ui.StoppableGUIElement;
 import ui.ThreadGUIElement;

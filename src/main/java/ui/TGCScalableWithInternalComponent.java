@@ -53,6 +53,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
     }
 
+    @Override
     public void rescale(double scaleFactor){
         rescaled = true;
 

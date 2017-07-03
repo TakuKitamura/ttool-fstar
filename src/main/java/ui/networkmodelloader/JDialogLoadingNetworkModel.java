@@ -48,6 +48,7 @@ import java.util.*;
 import javax.swing.*;
 import java.io.*;
 
+import common.ConfigurationTTool;
 import ui.*;
 import myutil.*;
 import ui.util.IconManager;

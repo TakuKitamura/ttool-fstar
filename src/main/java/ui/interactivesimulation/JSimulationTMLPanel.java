@@ -64,7 +64,7 @@ import java.util.Vector;
  * @version 1.0 26/05/2011
  * @author Ludovic APVRILLE
  */
-public class JSimulationSDPanel extends JPanel implements MouseMotionListener, Runnable  {
+public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, Runnable  {
 
     private static int MAX_X = 800;
     private static int MAX_Y = 200;
@@ -98,7 +98,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
     private int yMouse;
     private boolean drawInfo = false;
     private long clockValueMouse;
-    private long clockDiviser = 1000000; //ms
+    private long clockDiviser = 1; //ms
     private Vector<Point> points;
     private Vector<GenericTransaction> transactionsOfPoints;
     private Hashtable<String, Point> asyncMsgs;
@@ -116,10 +116,10 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 
     private Vector<GenericTransaction> transactions;
 
-    private JFrameSimulationSDPanel jfssdp;
+    private JFrameTMLSimulationPanel jfssdp;
 
 
-    JSimulationSDPanel(JFrameSimulationSDPanel _jfssdp) {
+    JSimulationTMLPanel(JFrameTMLSimulationPanel _jfssdp) {
         //points = new Vector<Point>();
         //transactionsOfPoints = new Vector<AvatarSimulationTransaction>();
         jfssdp = _jfssdp;
@@ -1046,25 +1046,25 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         //TraceManager.addDev("2 tmp=" + tmp);
 
         try {
-            index0 = tmp.indexOf('.');
-            if (index0 == -1) {
-                TraceManager.addDev("Invalid time value");
-                return;
-            }
-            tmp1 = tmp.substring(0, index0);
-            tmp2 = Conversion.removeStartingCharacters(tmp.substring(index0+1, tmp.length()), "0");
+            //index0 = tmp.indexOf('.');
+            //if (index0 == -1) {
+                //TraceManager.addDev("Invalid time value");
+              //  return;
+            //}
+            //tmp1 = tmp.substring(0, index0);
+            //tmp2 = Conversion.removeStartingCharacters(tmp.substring(index0+1, tmp.length()), "0");
             //TraceManager.addDev("2 tmp1=" + tmp1 + " tmp2=" + tmp2);
-            value1 = Integer.decode(tmp1);
-            if (tmp2.length() == 0) {
-                value2 = 0;
-            } else {
-                value2 = Integer.decode(tmp2);
-            }
-            value = ((long)value1)*1000000000+value2;
-            gt.startingTime = value;
-            gt.finishTime = value;
+            //value1 = Integer.decode(tmp1);
+           // if (tmp2.length() == 0) {
+             //   value2 = 0;
+           // } else {
+             //   value2 = Integer.decode(tmp2);
+            //}
+           // value = ((long)value1)*1000000000+value2;
+            gt.startingTime = Long.valueOf(tmp);
+            gt.finishTime = Long.valueOf(tmp);
         } catch (Exception e) {
-            TraceManager.addDev("Exception: " + e.getMessage() + " on transaction " + trans);
+            System.out.println("Exception: " + e.getMessage() + " on transaction " + trans);
             return;
         }
 
@@ -1086,6 +1086,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         if (tmp == null) {
             return;
         }
+
 
         if (tmp.compareTo("state_entering") == 0) {
             gt.type = GenericTransaction.STATE_ENTERING;
@@ -1157,7 +1158,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         if (tmp != null) {
             gt.messageID = tmp;
         }
-		System.out.println("Added transaction " + gt);
+
         transactions.add(gt);
         //TraceManager.addDev("One transactions added");
 

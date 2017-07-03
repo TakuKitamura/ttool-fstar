@@ -81,66 +81,82 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
 
     public TGConnector(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        
         p1 = _p1;
         p2 = _p2;
 	
-	initScaling(0, 0);
+        initScaling(0, 0);
+        initPoints( _listPoint );
 
-        nbInternalTGComponent = _listPoint.size();
-        tgcomponent = new TGComponent[nbInternalTGComponent];
-
-        Point p;
-        //System.out.println("nbInternalTGComponent" + nbInternalTGComponent);
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            p = _listPoint.elementAt(i);
-            //System.out.println("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
-            tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, _minX, _maxX, _minY, _maxY, false, this, _tdp);
-        }
+//        nbInternalTGComponent = _listPoint.size();
+//        tgcomponent = new TGComponent[nbInternalTGComponent];
+//
+//        Point p;
+//        //System.out.println("nbInternalTGComponent" + nbInternalTGComponent);
+//        for(int i=0; i<nbInternalTGComponent; i++) {
+//            p = _listPoint.elementAt(i);
+//            //System.out.println("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
+//            tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, _minX, _maxX, _minY, _maxY, false, this, _tdp);
+//        }
         name = "connector";
 
         canBeCloned = false;
         removable = true;
     }
+    
+    protected void initPoints( final Vector<Point> _listPoint ) {
+        nbInternalTGComponent = _listPoint.size();
+        tgcomponent = new TGComponent[nbInternalTGComponent];
+
+        //System.out.println("nbInternalTGComponent" + nbInternalTGComponent);
+        for(int i=0; i<nbInternalTGComponent; i++) {
+            final Point p = _listPoint.elementAt(i);
+            //System.out.println("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
+            tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp );
+        }
+    }
 
     public int getNbOfPointsOfConnector() {
-	return getListOfPoints().size();
+    	return getListOfPoints().size();
     }
 
     public int getIndexOfFirstTGCPointOfConnector() {
-	for(int i=0; i<nbInternalTGComponent; i++) {
-	    if (tgcomponent[i] instanceof TGCPointOfConnector) {
-		return i;
-	    }
-	}
-	return -1;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+		    if (tgcomponent[i] instanceof TGCPointOfConnector) {
+		    	return i;
+		    }
+		}
+		
+		return -1;
     }
 
     public TGCPointOfConnector[] listOfPointsToArray() {
-	int nb = 0;
-	for(int i=0; i<nbInternalTGComponent; i++) {
-	    if (tgcomponent[i] instanceof TGCPointOfConnector) {
-		nb ++;
-	    }
-	}
-	TGCPointOfConnector []tab = new TGCPointOfConnector[nb];
-	nb = 0;
-	for(int i=0; i<nbInternalTGComponent; i++) {
-	    if (tgcomponent[i] instanceof TGCPointOfConnector) {
-		tab[nb] = (TGCPointOfConnector)(tgcomponent[i]);
-		nb ++;
-	    }
-	}
-	return tab;
+		int nb = 0;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+		    if (tgcomponent[i] instanceof TGCPointOfConnector) {
+		    	nb ++;
+		    }
+		}
+
+		TGCPointOfConnector []tab = new TGCPointOfConnector[nb];
+		nb = 0;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof TGCPointOfConnector) {
+				tab[nb] = (TGCPointOfConnector)(tgcomponent[i]);
+				nb++;
+			}
+		}
 	
+		return tab;
     }
 
     public Vector<Point> getListOfPoints() {
         Vector<Point> v = new Vector<Point>();
 	
         for(int i=0; i<nbInternalTGComponent; i++) {
-	    if (tgcomponent[i] instanceof TGCPointOfConnector) {
-		v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
-	    }
+        	if (tgcomponent[i] instanceof TGCPointOfConnector) {
+        		v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
+        	}
         }
 	
         return v;
@@ -309,131 +325,98 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     }
 
     public void makeSquareWithoutMovingTGComponents() {
-        if ((p1 == null) ||(p2 == null)) {
-            return;
-        }
+    	if ( p1 == null || p2 == null ) {
+    		return;
+    	}
 
-        int dist_y = p2.getY() - p1.getY();
-        //int dist_x = p2.getX() - p1.getX();
-        //TGComponent tgc;
-        //TGComponent [] tgcomponentOld;
-        //int nbInternalTGComponentOld;
-        int i;
+		int dist_y = p2.getY() - p1.getY();
+    	//int dist_x = p2.getX() - p1.getX();
+    	//TGComponent tgc;
+    	//TGComponent [] tgcomponentOld;
+    	//int nbInternalTGComponentOld;
+    	int i;
 
-	TGCPointOfConnector []points = listOfPointsToArray();
+    	TGCPointOfConnector[] points = listOfPointsToArray();
 
-        if (dist_y > 0) {
-            // algorithm 1
-            // We need only two points
-            // we complete to two Points if dist_x is really grater than dist_y
+    	if (dist_y > 0) {
+    		// algorithm 1
+    		// We need only two points
+    		// we complete to two Points if dist_x is really grater than dist_y
 
-            //System.out.println("Algo1");
+    		//System.out.println("Algo1");
 
-            /*if ((dist_x != 0) && ((dist_y/5) > dist_x))  {
+    		/*if ((dist_x != 0) && ((dist_y/5) > dist_x))  {
               completePointsTo(2);
               }*/
 
-            // greater than two, or equal to two
-            // we cut in half The first half points to the fist cd, the others to the last
-            for(i=0; i<points.length/2; i++) {
-                points[i].setCd(p1.getX(), p1.getY() + dist_y / 2);
-            }
-            for(i=points.length/2; i<points.length; i++) {
-                points[i].setCd(p2.getX(), p1.getY() + dist_y / 2);
-            }
-        } else {
-            //System.out.println("Algo2");
-            // Algorithm 2: more complex
-            // we need at least 4 points
-            //TraceManager.addDev("Making square ...");
-            int minXX = 500000, maxXX = 0, resX = 0;
-            // search for the min x and maxX
-	    int averageX = 0;
-            for (i=0; i<points.length; i++) {
-                minXX = Math.min(minXX, points[i].getX());
-                maxXX = Math.max(maxXX, points[i].getX());
-		if ((i != 0) && (i != points.length-1))
-		    averageX += points[i].getX();
-            }
-	    
-	    //TraceManager.addDev("averageX = " + averageX + " minXX= " + minXX + " maxXX =" +  maxXX);
-	    
-            resX = 0;
-            //System.out.println("p1.x = " + p1.getX() + " p2.x = " + p2.getX() + " minXX=" + minXX + "maxXX=" + maxXX);
-            if (!((minXX >= 500000) ||(points.length == 0))){
- 
-                //System.out.println("p1.x = " + p1.getX() + " p2.x = " + p2.getX() + " minXX=" + minXX + "maxXX=" + maxXX);
+    		// greater than two, or equal to two
+    		// we cut in half The first half points to the fist cd, the others to the last
+    		for(i=0; i<points.length/2; i++) {
+    			points[i].setCd(p1.getX(), p1.getY() + dist_y / 2);
+    		}
+    		for(i=points.length/2; i<points.length; i++) {
+    			points[i].setCd(p2.getX(), p1.getY() + dist_y / 2);
+    		}
+    	} else {
+    		//System.out.println("Algo2");
+    		// Algorithm 2: more complex
+    		// we need at least 4 points
+    		//TraceManager.addDev("Making square ...");
+    		int minXX = 500000, maxXX = 0, resX = 0;
+    		// search for the min x and maxX
+    		int averageX = 0;
 
-		if (averageX >0) {
-		    averageX = averageX / (points.length-2);
-		    if ((Math.abs(averageX - maxXX)) < (Math.abs(averageX - minXX))) {
-			resX = maxXX;
-		    } else {
-			resX = minXX;
-		    }
-		} else {
-		    resX = p1.getX() + p2.getX() / 2;
-		}
+    		for (i=0; i<points.length; i++) {
+    			minXX = Math.min(minXX, points[i].getX());
+    			maxXX = Math.max(maxXX, points[i].getX());
+    			if ((i != 0) && (i != points.length-1))
+    				averageX += points[i].getX();
+    		}
 
-		//TraceManager.addDev("Using resX = " + resX);
-		
-		/*if (resX < p2.getX()) {
-		    resX = minXX;
-		} else {
-		    resX = maxXX;
-		}
+    		resX = 0;
 
-		if (p1.getX() > resX && p2.getX() < p1.getX()) {
-		    resX = maxXX;
-		    }*/
-		
-                /*if (p1.getX() < p2.getX()) {
-		  if (minXX < p1.getX()) {
-                        //System.out.println("min1");
-                        resX = minXX;
-                    } else {
-                        if (maxXX > (p2.getX() + DIST_X)) {
-                            resX = maxXX;
-                        }
-                    }
-                } else {
-                    if (maxXX > p1.getX() + DIST_X) {
-                        resX = maxXX;
-                    } else {
-                        if (minXX < (p1.getX() - DIST_X)) {
-                            resX = minXX;
-                        }
-                    }
-		    }*/
-	    }
-            if (resX == 0) {
-                //System.out.println("setting resX");
-                resX = (p2.getX() + p1.getX()) / 2;
-            }
-            completePointsTo(4);
-	    points = listOfPointsToArray();
+    		if (!((minXX >= 500000) ||(points.length == 0))){
+    			if (averageX >0) {
+    				averageX = averageX / (points.length-2);
 
+    				if ((Math.abs(averageX - maxXX)) < (Math.abs(averageX - minXX))) {
+    					resX = maxXX;
+    				} else {
+    					resX = minXX;
+    				}
+    			} else {
+    				resX = p1.getX() + p2.getX() / 2;
+    			}
+    		}
 
-            // we cut all points in four quaters
-            for(i=0; i<points.length/4; i++) {
-                points[i].setCd(p1.getX(), p1.getY() + DIST_Y);
-            }
+    		if (resX == 0) {
+    			resX = (p2.getX() + p1.getX()) / 2;
+    		}
 
-            for(i=(points.length/4); i<points.length/2; i++) {
-                points[i].setCd(resX, p1.getY() + DIST_Y);
-            }
-            for(i=(points.length/2); i<3*points.length/4; i++) {
-                points[i].setCd(resX, p2.getY() - DIST_Y);
-            }
-            for(i=(3*points.length/4); i<points.length; i++) {
-		if (resX > p2.getX()) {
-		    points[i].setCd(p2.getX()+DIST_X,  p2.getY() - DIST_Y);
-		} else {
-		     points[i].setCd(p2.getX()-DIST_X,  p2.getY() - DIST_Y);
-		}
-            }
-            //}
-        }
+    		completePointsTo(4);
+    		points = listOfPointsToArray();
+
+    		// we cut all points in four quaters
+    		for(i=0; i<points.length/4; i++) {
+    			points[i].setCd(p1.getX(), p1.getY() + DIST_Y);
+    		}
+
+    		for(i=(points.length/4); i<points.length/2; i++) {
+    			points[i].setCd(resX, p1.getY() + DIST_Y);
+    		}
+    		
+    		for(i=(points.length/2); i<3*points.length/4; i++) {
+    			points[i].setCd(resX, p2.getY() - DIST_Y);
+    		}
+    		
+    		for(i=(3*points.length/4); i<points.length; i++) {
+    			if (resX > p2.getX()) {
+    				points[i].setCd(p2.getX()+DIST_X,  p2.getY() - DIST_Y);
+    			} else {
+    				points[i].setCd(p2.getX()-DIST_X,  p2.getY() - DIST_Y);
+    			}
+    		}
+    	}
     }
 
     private void completePointsTo(int desiredNbOfPoints) {
@@ -882,4 +865,33 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         return false;
     }
 
+    // Issue #14 The max x of a connector should not use the x and width values but be computed from the points
+    @Override
+    public int getMyCurrentMaxX() {
+    	int maxValue = 0;
+    	
+//        for ( final Point point : getListOfPoints() ) {
+//        	maxX = Math.max( maxX,  point.x );
+//        }
+        
+    	maxValue = Math.max( maxValue,  getTGConnectingPointP1().getCurrentMaxX() );
+    	maxValue = Math.max( maxValue,  getTGConnectingPointP2().getCurrentMaxX() );
+        
+        return maxValue;
+    }
+
+    // Issue #14 The max x of a connector should not use the x and width values but be computed from the points
+    @Override
+    public int getMyCurrentMaxY() {
+    	int maxValue = 0;
+    	
+//        for ( final Point point : getListOfPoints() ) {
+//        	maxX = Math.max( maxX,  point.x );
+//        }
+        
+    	maxValue = Math.max( maxValue,  getTGConnectingPointP1().getCurrentMaxY() );
+    	maxValue = Math.max( maxValue,  getTGConnectingPointP2().getCurrentMaxY() );
+        
+        return maxValue;
+    }
 }//End of class

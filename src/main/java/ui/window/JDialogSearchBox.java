@@ -45,7 +45,7 @@ import myutil.*;
 import myutil.externalSearch.Client;
 import myutil.externalSearch.Message;
 import myutil.externalSearch.Record;
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 import ui.util.IconManager;
 import myutil.MalformedConfigurationException;
 import ui.TDiagramMouseManager;

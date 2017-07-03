@@ -87,9 +87,9 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
-    public ArrayList<SimulationTransaction> transactions;
+    private java.util.List<SimulationTransaction> transactions;
     /** Creates new form  */
-    public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, ArrayList<SimulationTransaction> _transactions) {
+    public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
       //  frame = _frame;
         node = _node;

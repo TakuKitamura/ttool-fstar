@@ -5,6 +5,21 @@ JAVADOC			= javadoc
 MAKE			= make -s
 TAR			= tar
 GZIP			= gzip
+GRADLE			= $(shell which gradle)
+GRADLE_VERSION_NEEDED	= 3.3
+ERROR_MSG		= echo "$(COLOR)\nBuild with gradle failed. Falling back to regular javac command...\n$(RESET)"
+
+ifeq "$(GRADLE)" ""
+    ERROR_MSG	= echo "Gradle was not found. Falling back to regular javac command...\n"
+    GRADLE 	= false && echo >/dev/null
+else
+    GRADLE_VERSION 	:= $(shell $(GRADLE) --version | grep "^Gradle" | awk '{print $$2}')
+    GRADLE_VERSION_MIN 	:= $(shell echo "$(GRADLE_VERSION_NEEDED)\n$(GRADLE_VERSION)" | sort -V 2>/dev/null | head -n1)
+    ifneq "$(GRADLE_VERSION_NEEDED)" "$(GRADLE_VERSION_MIN)"
+	ERROR_MSG	= echo "$(COLOR)Gradle $(GRADLE_VERSION) is too old. Needs at least $(GRADLE_VERSION_NEEDED). Falling back to regular javac command...\n$(RESET)"
+	GRADLE = false && echo >/dev/null
+    endif
+endif
 
 export COLOR		= $(shell tput setaf 1)
 export RESET		= $(shell tput sgr0)
@@ -102,50 +117,50 @@ all: ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse r
 ttool: $(TTOOL_BINARY)
 
 $(TTOOL_BINARY): FORCE
-	@$(MAKE) -C $(TTOOL_DIR) -e $@
+	@($(GRADLE) :ttool:build) || ($(ERROR_MSG) && $(MAKE) -C $(TTOOL_DIR) -e $@)
 
 launcher: $(LAUNCHER_BINARY)
 
 $(LAUNCHER_BINARY): FORCE
-	@$(MAKE) -C $(LAUNCHER_DIR) -e $@
+	@($(GRADLE) :launcher:build) || ($(ERROR_MSG) && $(MAKE) -C $(LAUNCHER_DIR) -e $@)
 
 graphminimize: $(GRAPHMINIMIZE_BINARY)
 
 $(GRAPHMINIMIZE_BINARY): FORCE
-	@$(MAKE) -C $(GRAPHMINIMIZE_DIR) -e $@
+	@($(GRADLE) :graphminimize:build) || ($(ERROR_MSG) && $(MAKE) -C $(GRAPHMINIMIZE_DIR) -e $@)
 
 graphshow: $(GRAPHSHOW_BINARY)
 
 $(GRAPHSHOW_BINARY): FORCE
-	@$(MAKE) -C $(GRAPHSHOW_DIR) -e $@
+	@($(GRADLE) :graphshow:build) || ($(ERROR_MSG) && $(MAKE) -C $(GRAPHSHOW_DIR) -e $@)
 
 tiftranslator: $(TIFTRANSLATOR_BINARY)
 
 $(TIFTRANSLATOR_BINARY): FORCE
-	@$(MAKE) -C $(TIFTRANSLATOR_DIR) -e $@
+	@($(GRADLE) :tiftranslator:build) || ($(ERROR_MSG) && $(MAKE) -C $(TIFTRANSLATOR_DIR) -e $@)
 
 tmltranslator: $(TMLTRANSLATOR_BINARY)
 
 $(TMLTRANSLATOR_BINARY): FORCE
-	@$(MAKE) -C $(TMLTRANSLATOR_DIR) -e $@
+	@($(GRADLE) :tmltranslator:build) || ($(ERROR_MSG) && $(MAKE) -C $(TMLTRANSLATOR_DIR) -e $@)
 
 rundse: $(RUNDSE_BINARY)
 
 $(RUNDSE_BINARY): FORCE
-	@$(MAKE) -C $(RUNDSE_DIR) -e $@
+	@($(GRADLE) :rundse:build) || ($(ERROR_MSG) && $(MAKE) -C $(RUNDSE_DIR) -e $@)
 
 remotesimulator: $(REMOTESIMULATOR_BINARY)
 
 $(REMOTESIMULATOR_BINARY): FORCE
-	@$(MAKE) -C $(REMOTESIMULATOR_DIR) -e $@
+	@($(GRADLE) :simulationcontrol:build) || ($(ERROR_MSG) && $(MAKE) -C $(REMOTESIMULATOR_DIR) -e $@)
 
 webcrawler: $(WEBCRAWLER_CLIENT_BINARY) $(WEBCRAWLER_SERVER_BINARY)
 
 $(WEBCRAWLER_CLIENT_BINARY): FORCE
-	@$(MAKE) -C $(WEBCRAWLER_CLIENT_DIR) -e $@
+	@($(GRADLE) :webcrawler-client:build) || ($(ERROR_MSG) && $(MAKE) -C $(WEBCRAWLER_CLIENT_DIR) -e $@)
 
 $(WEBCRAWLER_SERVER_BINARY): FORCE
-	@$(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e $@
+	@($(GRADLE) :webcrawler-server:build) || ($(ERROR_MSG) && $(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e $@)
 
 $(JTTOOL_BINARY): FORCE
 	@$(MAKE) -C $(JTTOOL_DIR) -e $@
@@ -250,8 +265,9 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_DOC)/README_java $(TTOOL_TARGET)/java
 # Basic bin
 	@cp $(TTOOL_EXE) $(TTOOL_TARGET)/
+	@cp $(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin
 	@cp $(TTOOL_LOTOS_H) $(TTOOL_TARGET)/bin
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/java TTool/figures TTool/nc TTool/lotos TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE))
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/java TTool/figures TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE))
 
 $(ADVANCED_RELEASE:.tgz=.tar): $(STDRELEASE:.tgz=.tar) documentation
 	@echo "$(PREFIX) Generating advanced release"
@@ -270,7 +286,7 @@ $(ADVANCED_RELEASE:.tgz=.tar): $(STDRELEASE:.tgz=.tar) documentation
 	@cp -r $(WEBCRAWLER_CLIENT_DIR)/src/main/java/* $(TTOOL_TARGET)/src
 	@cp -r $(WEBCRAWLER_SERVER_DIR)/src/main/java/* $(TTOOL_TARGET)/src
 	@find $(TTOOL_TARGET)/src -type f -not \( -name '*.java' -o -name '*.gif' -o -name '*.jjt' -o -name '*.txt' \) -a -exec rm -f {} \;
-	@cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
+	@cp $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
 	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/doc/srcdoc TTool/src
 
 $(TTOOL_PREINSTALL_WINDOWS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
@@ -279,9 +295,9 @@ $(TTOOL_PREINSTALL_WINDOWS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@mkdir -p $(TTOOL_TARGET_WINDOWS)/TTool/bin
 	@$(TAR) xzvf $(TTOOL_PRIVATE)/stocks/proverif_windows.tar.gz -C $(TTOOL_TARGET_WINDOWS)
 	@$(TAR) xzvf $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz -C $(TTOOL_TARGET_WINDOWS)
-	@cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_TARGET_WINDOWS)/TTool/bin/config.xml
-	@cp $(TTOOL_DOC)/ttool_windows.bat $(TTOOL_TARGET_WINDOWS)/ttool.bat
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_WINDOWS) proverif uppaal TTool/bin/config.xml ttool.bat
+	@cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_TARGET_WINDOWS)/TTool/bin/
+	@sed 's#chdir .*#chdir TTool/bin#' $(TTOOL_DOC)/ttool_windows.bat > $(TTOOL_TARGET_WINDOWS)/ttool.bat
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_WINDOWS) proverif uppaal TTool/bin/config_windows.xml ttool.bat
 
 $(TTOOL_PREINSTALL_MACOS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@echo "$(PREFIX) Generating preinstall for MacOS"
@@ -290,9 +306,9 @@ $(TTOOL_PREINSTALL_MACOS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@$(TAR) xzf $(TTOOL_PRIVATE)/stocks/proverif_macos.tar.gz -C $(TTOOL_TARGET_MACOS)
 	@$(TAR) xzf $(TTOOL_PRIVATE)/stocks/uppaal_macos.tar.gz -C $(TTOOL_TARGET_MACOS)
 	@mv $(TTOOL_TARGET_MACOS)/uppaal* $(TTOOL_TARGET_MACOS)/uppaal
-	@cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_TARGET_MACOS)/TTool/bin/config.xml
-	@cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_TARGET_MACOS)/ttool.exe
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_MACOS) proverif uppaal TTool/bin/config.xml ttool.exe
+	@cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_TARGET_MACOS)/TTool/bin/config_macosx.xml
+	@sed 's#cd [^;]*#cd TTool/bin#' $(TTOOL_DOC)/ttool_macosx.exe > $(TTOOL_TARGET_MACOS)/ttool.exe
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_MACOS) proverif uppaal TTool/bin/config_macosx.xml ttool.exe
 
 $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@echo "$(PREFIX) Generating preinstall for Linux"
@@ -300,13 +316,13 @@ $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@mkdir -p $(TTOOL_TARGET_LINUX)/TTool/bin
 	@$(TAR) xzvf $(TTOOL_PRIVATE)/stocks/proverif_linux.tar.gz -C $(TTOOL_TARGET_LINUX)
 	@$(TAR) xzvf $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz -C $(TTOOL_TARGET_LINUX)
-	@cp $(TTOOL_DOC)/config_linux.xml $(TTOOL_TARGET_LINUX)/TTool/bin/config.xml
-	@cp $(TTOOL_DOC)/ttool4preinstalllinux.exe $(TTOOL_TARGET_LINUX)/ttool.exe
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_LINUX) proverif uppaal TTool/bin/config.xml ttool.exe
+	@cp $(TTOOL_DOC)/config_linux.xml $(TTOOL_TARGET_LINUX)/TTool/bin/config_linux.xml
+	@sed 's#cd [^;]*#cd TTool/bin#' $(TTOOL_DOC)/ttool_linux.exe > $(TTOOL_TARGET_LINUX)/ttool.exe
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_LINUX) proverif uppaal TTool/bin/config_linux.xml ttool.exe
 
-$(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY)
+$(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY) FORCE
 	@echo "$(PREFIX) Preparing base release"
-	@rm -rf $(TTOOL_TARGET)
+	@rm -rf $(TTOOL_TARGET_RELEASE)
 	@mkdir -p $(TTOOL_TARGET)
 # modeling
 	@mkdir -p $(TTOOL_TARGET)/modeling
@@ -427,7 +443,7 @@ git:
 # ==========       TESTS        ========== 
 # ======================================== 
 test:
-	@./gradlew test
+	@$(GRADLE) test
 
 # ======================================== 
 # ==========       CLEAN        ========== 

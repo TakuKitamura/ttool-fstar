@@ -97,8 +97,8 @@ public class TMLCPForLoop extends TGCWithoutInternalComponent implements Embedde
     }
 
     public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
+        final int textWidth  = g.getFontMetrics().stringWidth(value);
+        int w1 = Math.max(minWidth, textWidth + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
             setCd(x + width/2 - w1/2, y);
             width = w1;
@@ -123,7 +123,7 @@ public class TMLCPForLoop extends TGCWithoutInternalComponent implements Embedde
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
 
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+        g.drawString(value, x + (width - textWidth) / 2 , y + textY);
     }
 
     public boolean editOndoubleClick(JFrame frame) {

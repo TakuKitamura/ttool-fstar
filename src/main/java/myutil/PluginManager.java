@@ -44,6 +44,8 @@ package myutil;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import java.awt.*;
+
 /**
    * Class PluginManager
    * Creation: 24/05/2017
@@ -53,6 +55,7 @@ import java.util.ArrayList;
 public class PluginManager  {
     public ArrayList<Plugin> plugins;
     public static PluginManager pluginManager;
+    public static String PLUGIN_PATH = "";
 
     public PluginManager() {
 	plugins = new ArrayList<Plugin>();
@@ -60,6 +63,15 @@ public class PluginManager  {
 
     public void addPlugin(Plugin _plugin) {
 	plugins.add(_plugin);
+    }
+
+    public Plugin getPluginOrCreate(String _name) {
+	Plugin plug = getPlugin(_name);
+	if (plug != null) {
+	    return plug;
+	}
+
+	return createPlugin(_name);
     }
 
     public Plugin getPlugin(String _name) {
@@ -72,9 +84,26 @@ public class PluginManager  {
     }
 
     public Plugin createPlugin(String _name) {
-	Plugin plugin = new Plugin(_name);
+	Plugin plugin = new Plugin(PLUGIN_PATH, _name);
 	addPlugin(plugin);
 	return plugin;
+    }
+
+    public void executeGraphics(Plugin _plugin, String _className, String _methodName, Graphics g) {
+	if (_plugin == null) {
+	    return;
+	}
+
+	Method m = _plugin.getMethod(_className, _methodName);
+	if (m == null) {
+	    return;
+	}
+
+	try {
+	    m.invoke(g);
+	} catch (Exception e) {
+	    TraceManager.addDev("Exception occured when executing method " + _methodName);
+	}
     }
     
     public String executeString(String _pluginName, String _className, String _methodName) {
@@ -86,18 +115,9 @@ public class PluginManager  {
 	    }
 	}
 
-	// We have a valid plugin. We now need to get the Method
-	Method m = plugin.getMethod(_className, _methodName);
-	if (m == null) {
-	    return null;
-	}
+	return plugin.executeRetStringMethod(_className, _methodName);
 
-	try {
-	    return (String)(m.invoke(null));
-	} catch (Exception e) {
-	    TraceManager.addDev("Exception occured when executing method " + _methodName);
-	    return null;
-	}
+	
     }
 
 

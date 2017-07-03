@@ -487,6 +487,8 @@ public class TGComponentManager {
     public static final int SYSMLSEC_METHODOLOGY_REF_ATTACK = 5712;
     public static final int SYSMLSEC_METHODOLOGY_CONNECTOR = 5718;
 
+    // PLUGIN
+    public static final int COMPONENT_PLUGIN = 10000;
 
     public static final int EDIT = -1;
     public static final int COMPONENT = 0;
@@ -503,7 +505,11 @@ public class TGComponentManager {
     public final static TGComponent addComponent(int x, int y, int id, TDiagramPanel tdp) {
         TGComponent tgc = null;
         switch (id) {
-            // AVATAR
+            // PLUGIN
+	case COMPONENT_PLUGIN:
+            tgc = new TGComponentPlugin(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	    // AVATAR
         case AVATARBD_BLOCK:
             tgc = new AvatarBDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
@@ -1335,11 +1341,14 @@ public class TGComponentManager {
 
 
     public final static int getType(TGComponent tgc) {
-        // AVATAR
-        // AVATAR BD
-        if (tgc instanceof AvatarBDBlock) {
+	// PLUGIN
+        if (tgc instanceof TGComponentPlugin) {
+            return COMPONENT_PLUGIN;
+
+	    // AVATAR BD    
+        } else if (tgc instanceof AvatarBDBlock) {
             return AVATARBD_BLOCK;
-        } else if (tgc instanceof AvatarBDDataType) {
+	} else if (tgc instanceof AvatarBDDataType) {
             return AVATARBD_DATATYPE;
         } else if (tgc instanceof AvatarBDCompositionConnector) {
             return AVATARBD_COMPOSITION_CONNECTOR;

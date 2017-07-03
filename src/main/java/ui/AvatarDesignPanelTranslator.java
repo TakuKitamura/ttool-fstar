@@ -1009,6 +1009,9 @@ public class AvatarDesignPanelTranslator {
 
         this.listE.addCor (aaos, asmdss);
         asmdss.setAVATARID (aaos.getID());
+		if (asmdss.getCheckLatency()){
+			_as.checkedIDs.add(asmdss.getName()+":"+aaos.getID());
+		}
         asm.addElement (aaos);
     }
 
@@ -1285,6 +1288,9 @@ public class AvatarDesignPanelTranslator {
         this.listE.addCor (aaos, asmdrs);
         asmdrs.setAVATARID (aaos.getID());
         asm.addElement (aaos);
+		if (asmdrs.getCheckLatency()){
+			_as.checkedIDs.add(asmdrs.getName()+":"+aaos.getID());
+		}
     }
 
     private void translateAvatarSMDState (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDState tgc) throws CheckingError {
@@ -1305,6 +1311,9 @@ public class AvatarDesignPanelTranslator {
         this.listE.addCor (astate, tgc);
         astate.addReferenceObject (tgc);
         tgc.setAVATARID (astate.getID());
+		if (tgc.getCheckLatency()){
+			_as.checkedIDs.add(tgc.getName()+":"+astate.getID());
+		}
     }
 
     private void translateAvatarSMDRandom (TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDRandom asmdrand) throws CheckingError {

@@ -42,7 +42,7 @@
 
 package ui;
 
-import myutil.ConfigurationTTool;
+import common.ConfigurationTTool;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -68,7 +68,7 @@ public class ActionPerformer {
             mgui.newAnalysis();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN_FROM_NETWORK].getActionCommand())) {
             mgui.openNetworkProject();
-	} else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN].getActionCommand())) {
             mgui.openProject();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_MERGE].getActionCommand())) {
             mgui.mergeProject();
