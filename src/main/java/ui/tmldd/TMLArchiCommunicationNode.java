@@ -48,6 +48,7 @@ import ui.TGComponent;
 import ui.TGComponentManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
    * Class TMLArchiCommunicationNode
@@ -102,9 +103,9 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
     }
 
 
-    public ArrayList<TMLArchiCommunicationArtifact> getChannelArtifactList() {
+    public List<TMLArchiCommunicationArtifact> getChannelArtifactList() {
 
-        ArrayList<TMLArchiCommunicationArtifact> v = new ArrayList<TMLArchiCommunicationArtifact>();
+        List<TMLArchiCommunicationArtifact> v = new ArrayList<TMLArchiCommunicationArtifact>();
         for( int i = 0; i < nbInternalTGComponent; i++ ) {
             if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact )       {
                 v.add( (TMLArchiCommunicationArtifact)( tgcomponent[i]) );
@@ -122,9 +123,9 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
         return v;
     }
 
-    public ArrayList<TMLArchiEventArtifact> getEventArtifactList() {
+    public List<TMLArchiEventArtifact> getEventArtifactList() {
 
-        ArrayList<TMLArchiEventArtifact> v = new ArrayList<TMLArchiEventArtifact>();
+        List<TMLArchiEventArtifact> v = new ArrayList<TMLArchiEventArtifact>();
         for( int i = 0; i < nbInternalTGComponent; i++ )        {
             if( tgcomponent[i] instanceof TMLArchiEventArtifact )       {
                 v.add( (TMLArchiEventArtifact)(tgcomponent[i]) );

@@ -178,12 +178,12 @@ public class NetList {
      
 		netlist = netlist + ram.getMemoryName()+".p_clk(" + NAME_CLK + ");" + CR;
 		netlist = netlist + ram.getMemoryName()+".p_resetn(" + NAME_RST + ");" + CR;
-		netlist = netlist + ram.getMemoryName()+".p_vci(signal_vci_vciram"+ram.getNo_ram()+");" + CR2;
+		netlist = netlist + ram.getMemoryName()+".p_vci(signal_vci_vciram"+ram.getIndex()+");" + CR2;
 		if(icn=="vgmn"){
-		    netlist = netlist + "vgmn.p_to_target["+(ram.getNo_target())+"](signal_vci_vciram"+ram.getNo_ram()+");" + CR2;
+		    netlist = netlist + "vgmn.p_to_target["+(ram.getNo_target())+"](signal_vci_vciram"+ram.getIndex()+");" + CR2;
 		}
 		else{
-		    netlist = netlist + "vgsb.p_to_target["+(ram.getNo_target())+"](signal_vci_vciram"+ram.getNo_ram()+");" + CR2;
+		    netlist = netlist + "vgsb.p_to_target["+(ram.getNo_target())+"](signal_vci_vciram"+ram.getIndex()+");" + CR2;
 		}		   
 	    }		  
 	}
@@ -197,9 +197,9 @@ public class NetList {
      
 		netlist = netlist + ram.getMemoryName()+".p_clk(" + NAME_CLK + ");" + CR;
 		netlist = netlist + ram.getMemoryName()+".p_resetn(" + NAME_RST + ");" + CR;
-		netlist = netlist + ram.getMemoryName()+".p_vci(signal_vci_vciram"+ram.getNo_ram()+");" + CR2;
+		netlist = netlist + ram.getMemoryName()+".p_vci(signal_vci_vciram"+ram.getIndex()+");" + CR2;
 		//target number for local cluster: this is set at avatardd creation	      		    
-		netlist = netlist + "crossbar"+ram.getNo_cluster()+".p_to_target["+ram.getNo_target()+"](signal_vci_vciram"+ram.getNo_ram()+");" + CR2;		  	   
+		netlist = netlist + "crossbar"+ram.getNo_cluster()+".p_to_target["+ram.getNo_target()+"](signal_vci_vciram"+ram.getIndex()+");" + CR2;		  	   
 	    }
 	
 	    //one mwmr ram and one mwmrdram per cluster are added transparently
@@ -372,7 +372,7 @@ public class NetList {
   
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
 	    if (ram.getMonitored()==1){	
-		int number = number = ram.getNo_ram();
+		int number = number = ram.getIndex();
 		netlist += "logger"+i+".p_clk(signal_clk);" + CR;
 		netlist += "logger"+i+".p_resetn(signal_resetn);" + CR; 
 		netlist += "logger"+i+".p_vci(signal_vci_vciram"+number+");" + CR2;  	  
@@ -381,7 +381,7 @@ public class NetList {
 	    else{
 		
 		if (ram.getMonitored()==2){
-		    int number = number = ram.getNo_ram();	
+		    int number = number = ram.getIndex();	
 		    netlist += "mwmr_stats"+j+".p_clk(signal_clk);" + CR;
 		    netlist += "mwmr_stats"+j+".p_resetn(signal_resetn);" + CR; 
 		    netlist += "mwmr_stats"+j+".p_vci(signal_vci_vciram"+number+");" + CR2;		    
@@ -429,7 +429,7 @@ public class NetList {
     
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
 	    if (ram.getMonitored()==0){			
-		netlist += "sc_trace(tf,signal_vci_vciram"+ram.getNo_ram()+",\"Memory"+ram.getNo_ram()+"\");" + CR;
+		netlist += "sc_trace(tf,signal_vci_vciram"+ram.getIndex()+",\"Memory"+ram.getIndex()+"\");" + CR;
 	    }
 	    }	   
     	}

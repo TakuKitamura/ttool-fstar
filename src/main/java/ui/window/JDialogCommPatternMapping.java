@@ -303,7 +303,7 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 		
 		//fifth line panel1
 		c1.insets = lblInsets;
-		pnlComPatternStruct.add( new JLabel( "Available Communication Patterns"), c1 );
+		pnlComPatternStruct.add( new JLabel( "Available Communication Patterns" ), c1 );
 
 		communicationPatternsCB = new JComboBox<String>( communicationPatternsSL );
 		

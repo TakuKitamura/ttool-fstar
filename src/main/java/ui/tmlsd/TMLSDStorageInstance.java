@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlsd;
 
 import myutil.GraphicLib;
@@ -84,25 +81,24 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
         
         value = "Storage instance name";
         name = "StorageInstance";
-				isActor = false;
+		isActor = false;
         
         myImageIcon = IconManager.imgic500;
 	}
     
+    @Override
 	public boolean editOndoubleClick(JFrame frame) {
-		JDialogTMLCPStorageInstance jdab = new JDialogTMLCPStorageInstance( myAttributes, null, frame,
-																											"Setting properties of " + name, "Attribute", name );
+		JDialogTMLCPStorageInstance jdab = new JDialogTMLCPStorageInstance( myAttributes, 
+																			null,
+																			frame,
+																			"Setting properties of " + name, 
+																			"Attribute", 
+																			name );
 		setJDialogOptions(jdab);
-  //  jdab.setSize(650, 575);
-		GraphicLib.centerOnParent( jdab, 650, 575 );
+		GraphicLib.centerOnParent( jdab, 650, 500 );
 		jdab.setVisible(true); // blocked until dialog has been closed
 		name = jdab.getName();																											
-    //makeValue();
-    //if (oldValue.equals(value)) {
-		//return false;
-    //}
-        
-		//rescaled = true;
+
 		return true;
 	}
 	
@@ -125,7 +121,8 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 		//jda.enableTMLKeyword(false);
 	}
 
-	@Override public int getType() {
+	@Override
+	public int getType() {
 		return TGComponentManager.TMLSD_STORAGE_INSTANCE;
 	}
 
