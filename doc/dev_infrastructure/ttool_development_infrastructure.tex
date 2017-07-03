@@ -474,6 +474,44 @@ Here are gathered all tricks on how TTool source codes are organized, and what f
 
 \subsection{Coding Instructions}
 
+\subsubsection{Best practices}
+
+TTool is a constantly evolving project with more or less experimental parts. As
+such, some leniency is expected from TTool developers and---while comments and
+advice are always welcome---a perfect knowledge of best software engineering
+practices should not be expected from every developers.
+
+Nonetheless, we advise any developer to make her/his best to follow these best
+practices. Indeed, the purpose of these principles is to enable the development
+of easily understandable, extendable and reusable code. A good place to start if
+you are not familiar with these principles is to have a look at the
+\href{https://en.wikipedia.org/wiki/SOLID_(object-oriented_design)}{SOLID}
+acronym.
+
+In particular, developers should try to:
+\begin{itemize}
+    \item \textbf{Avoid public attributes}. Use getters and setters instead.
+        This way, if the internal representation of the class changes, only the
+        getters/setters would need to be modified.
+    \item \textbf{Implement all of the methods of the superclass}.
+        If some of the methods of the superclass are not relevant for the
+        subclass, then it should probably not inherit from it. Indeed, other
+        classes that uses the superclass logically assume that all of the
+        subclasses implement the functionalities of the superclass.
+    \item \textbf{Use abstractions instead of concrete
+        classes when possible}. For instance, if an object A of package
+        \textit{avatartranslator} must use an object B of package \textit{ui},
+        create an interface in package \textit{avatartranslator} that is
+        implemented by B and use it in A. This would make the low-level package
+        \textit{ui} depend on the high-level package \textit{avatartranslator}
+        instead of the opposite (which enables to use A in a CLI application for
+        instance). This principle is also valid when the abstract class and its
+        implementation are in the same package: for instance, prefer using
+        \textit{List} objects in function arguments instead of the
+        \textit{LinkedList} or \textit{ArrayList} concrete classes so that the
+        caller can choose which subtype to instantiate.
+\end{itemize}
+
 \subsubsection{Style instructions}
 
 \begin{itemize}
