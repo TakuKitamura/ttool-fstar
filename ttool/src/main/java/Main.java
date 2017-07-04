@@ -44,8 +44,7 @@
    * @see
    */
 
-import myutil.BoolExpressionEvaluator;
-import myutil.TraceManager;
+import myutil.*;
 import common.ConfigurationTTool;
 import ui.*;
 import ui.util.DefaultText;
@@ -302,6 +301,13 @@ public class Main implements ActionListener {
         TraceManager.addDev("\nConfiguration:\n--------------");
         TraceManager.addDev(ConfigurationTTool.getConfiguration(systemc));
         TraceManager.addDev("\nDebugging trace:\n----------------");
+
+	TraceManager.addDev("\nPreparing plugins\n");
+	if (splashFrame != null) {
+            splashFrame.setMessage("Preparing plugins");
+        }
+	PluginManager.pluginManager = new PluginManager();
+	PluginManager.pluginManager.preparePlugins(ConfigurationTTool.PLUGIN_PATH, ConfigurationTTool.PLUGIN);
 
         if (ConfigurationTTool.LauncherPort.length() > 0) {
             try {

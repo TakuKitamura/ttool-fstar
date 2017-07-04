@@ -53,12 +53,29 @@ import java.awt.*;
    * @author Ludovic APVRILLE
  */
 public class PluginManager  {
-    public ArrayList<Plugin> plugins;
     public static PluginManager pluginManager;
     public static String PLUGIN_PATH = "";
+    
+    public ArrayList<Plugin> plugins;
 
     public PluginManager() {
 	plugins = new ArrayList<Plugin>();
+    }
+
+    public void preparePlugins(String path, String[] plugins) {
+	PLUGIN_PATH = path;
+	for(String s: plugins) {
+	    createPlugin(s);
+	}
+    }
+
+    public Plugin getPluginAvatarCodeGenerator() {
+	for(Plugin plugin: plugins) {
+	    if (plugin.hasAvatarCodeGenerator()) {
+		return plugin;
+	    }
+	}
+	return null;
     }
 
     public void addPlugin(Plugin _plugin) {
@@ -119,6 +136,7 @@ public class PluginManager  {
 
 	
     }
+
 
 
 }

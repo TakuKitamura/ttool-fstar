@@ -603,7 +603,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
                     if (avspec == null) {
                         jta.append("Error: No AVATAR specification\n");
                     } else {
-                        AVATAR2CPOSIX avatartocposix = new AVATAR2CPOSIX(avspec, ConfigurationTTool.PLUGIN_PATH, ConfigurationTTool.PLUGIN);
+                        AVATAR2CPOSIX avatartocposix = new AVATAR2CPOSIX(avspec, PluginManager.pluginManager.getPluginAvatarCodeGenerator());
                         avatartocposix.includeUserCode(putUserCode.isSelected());
                         avatartocposix.setTimeUnit(selectedUnit);
                         avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());

@@ -42,10 +42,7 @@
 package avatartranslator.toexecutable;
 
 import avatartranslator.*;
-import myutil.Conversion;
-import myutil.FileException;
-import myutil.FileUtils;
-import myutil.TraceManager;
+import myutil.*;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -83,13 +80,11 @@ public class AVATAR2CPOSIX {
     private boolean tracing;
     private boolean includeUserCode = true;
 
-    private String pluginPath = "";
-    private String plugin = "";
+    private Plugin plugin;
 
 
-    public AVATAR2CPOSIX(AvatarSpecification _avspec, String _pluginPath, String _plugin) {
+    public AVATAR2CPOSIX(AvatarSpecification _avspec, Plugin _plugin) {
         avspec = _avspec;
-	pluginPath = _pluginPath;
         plugin = _plugin;
     }
 
@@ -140,8 +135,8 @@ public class AVATAR2CPOSIX {
     public void generateCPOSIX(boolean _debug, boolean _tracing) {
         debug = _debug;
         tracing = _tracing;
-
-        mainFile = new MainFile("main", pluginPath + java.io.File.separator + plugin);
+	
+        mainFile = new MainFile("main", plugin);
         taskFiles = new Vector<TaskFile>();
 
         avspec.removeCompositeStates();

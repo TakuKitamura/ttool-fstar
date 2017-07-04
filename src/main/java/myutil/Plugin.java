@@ -60,6 +60,7 @@ public class Plugin {
     private String name;
     private File file;
     private HashMap<String, Class> listOfClasses;
+    private Class classAvatarCodeGenerator;
 
     public Plugin(String _path, String _name) {
 	path = _path;
@@ -73,6 +74,21 @@ public class Plugin {
 
     public String getPath() {
 	return path;
+    }
+
+    public boolean hasAvatarCodeGenerator() {
+
+	String ret = executeRetStringMethod(name, "hasAvatarCodeGenerator");
+	if (ret != null) {
+	    classAvatarCodeGenerator = getClass(ret);
+	    return true;
+	}
+
+	return false;
+    }
+
+    public Class getClassAvatarCodeGenerator() {
+	return classAvatarCodeGenerator;
     }
 
     public Class getClass(String _className) {
@@ -138,6 +154,23 @@ public class Plugin {
 	}
 	
 	try {
+	    return (String)(m.invoke(null));
+	} catch (Exception e) {
+	    TraceManager.addDev("Exception occured when executing method " + _methodName);
+	    return null;
+	}
+    }
+
+    public String executeRetStringMethod(Class<?> c, String _methodName) {
+	// We have a valid plugin. We now need to get the Method
+		
+	try {
+	    Method m = c.getMethod(_methodName);
+	    
+	    if (m == null) {
+		TraceManager.addDev("Null method");
+		return null;
+	    }
 	    return (String)(m.invoke(null));
 	} catch (Exception e) {
 	    TraceManager.addDev("Exception occured when executing method " + _methodName);
