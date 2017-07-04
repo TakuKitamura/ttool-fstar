@@ -12,6 +12,7 @@
 int async_read_nonblocking( struct mwmr_s *fifo, void *_ptr, int lensw ){
   int i;
   i = mwmr_try_read(fifo,_ptr,lensw);
+  debugInt("debug  bytes read \n", i);
   return i;
 }
 
@@ -22,7 +23,8 @@ int async_write_nonblocking( struct mwmr_s *fifo, void *_ptr, int lensw ){
   i = mwmr_try_write(fifo,_ptr,lensw);
   if (i<lensw){
     /* the data item is thrown away */
-    debugInt("data discarded");
+    debugInt("debug  bytes written \n", i);
+    debugInt("data discarded",lensw-i);
     return i;
   }
   else{
@@ -33,7 +35,7 @@ int async_write_nonblocking( struct mwmr_s *fifo, void *_ptr, int lensw ){
 
 
 void async_read( struct mwmr_s *fifo, void *_ptr, int lensw ){
-  debugInt("debug fifo \n",fifo);
+  debugInt("debug fifo read \n",fifo);
   debugInt("debug ptr \n",_ptr);
   debugInt("debug  lensw \n", lensw);
   debugInt("debug  fifo status address \n", &(fifo->status));
@@ -44,7 +46,7 @@ void async_read( struct mwmr_s *fifo, void *_ptr, int lensw ){
 }
 
 void async_write( struct mwmr_s *fifo, void *_ptr, int lensw ){
-  debugInt("debug fifo \n",fifo);
+  debugInt("debug fifo write\n",fifo);
   debugInt("debug ptr \n",_ptr);
   debugInt("debug  lensw \n", lensw);
   debugInt("debug  fifo status address \n", &(fifo->status));
@@ -113,8 +115,8 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
   debugInt("asyncchannel address \n",channel->mwmr_fifo);
   debugInt("asyncchannel fifo->depth \n",channel->mwmr_fifo->depth);
   debugInt("asyncchannel fifo->width \n",channel->mwmr_fifo->width);
-  debugInt("asyncchannel msg size \n",sizeof(msg));
-  async_read(channel->mwmr_fifo, &msg, sizeof(msg));
+  debugInt("asyncchannel msg size \n",sizeof(*msg));
+  async_read(channel->mwmr_fifo, &msg, sizeof(*msg));
   
   return msg;
 }
@@ -134,6 +136,6 @@ void addMessageToAsyncChannel(asyncchannel *channel, message *msg) {
   debugInt("asyncchannel->fifo rptr \n", channel->mwmr_fifo->status->rptr);
   debugInt("asyncchannel->fifo wptr \n", channel->mwmr_fifo->status->wptr);
   //async_write(channel->mwmr_fifo, &msg, 1 );
-  debugInt("asyncchannel msg size \n",sizeof(msg));
-  async_write(channel->mwmr_fifo, &msg, sizeof(msg));//DG 13.6. *msg au lieu de msg
+  debugInt("asyncchannel msg size \n",sizeof(*msg));
+  async_write(channel->mwmr_fifo, &msg, sizeof(*msg));//DG 13.6. *msg au lieu de msg
 }
