@@ -1392,6 +1392,17 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public void writeSimTrace(){
 		try {
 			tmlSimPanel = new JFrameTMLSimulationPanel(new Frame(), mgui, "Simulation Transactions");
+			HashMap<String, ArrayList<String>> deviceTaskMap = new HashMap<String, ArrayList<String>>();
+			for (HwNode node : tmap.getTMLArchitecture().getHwNodes()){
+				deviceTaskMap.put(node.getName(), new ArrayList<String>());
+			}
+			for (TMLTask task: tmap.getTMLModeling().getTasks()){
+				HwNode node = tmap.getHwNodeOf(task);
+				if (node!=null){
+					deviceTaskMap.get(node.getName()).add(task.getName());
+				}
+			}
+			tmlSimPanel.getSDPanel().setDevices(deviceTaskMap);
 			pos = new PipedOutputStream();
 			pis = new PipedInputStream(pos, 4096);
 			tmlSimPanel.setFileReference(new BufferedReader(new InputStreamReader(pis)));
@@ -1573,37 +1584,98 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					simtraces.add(trace);
 				}
 			}
-			else if (command.equals("Send")){
+			else if ((command.equals("Send") || command.equals("Wait"))  && tran.deviceName.contains("CPU")){
 				TMLEvent evt = tmap.getTMLModeling().getEventByShortName(tran.channelName);
 				if (evt!=null){
 					TMLTask originTask = evt.getOriginTask();
 					TMLTask destTask = evt.getDestinationTask();
 					if (originTask!=null && destTask!=null){
-						String trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type=synchro blockdestination="+ destTask.getName() + " channel="+tran.channelName+ " params=\"";
-						if (!simtraces.contains(trace)){
-							simtraces.add(trace);
+							String asynchType = (command.equals("Send") ? "send_async" : "receive_async");
+							int msgId=chanId;
+							if (!msgTimes.containsKey(tran.channelName)){
+								msgTimes.put(tran.channelName, new ArrayList<String>());
+							} 
+							if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
+	//						int tmp=msgId-1;
+						
+							if (command.equals("Send")){	
+								if (!channelIDMap.containsKey(tran.channelName)){
+									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
+								}
+								channelIDMap.get(tran.channelName).add(msgId);
+								chanId++;
+							}
+							else {
+								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
+									msgId=channelIDMap.get(tran.channelName).remove(0);
+								}
+							
+							}
+						String trace="";
+						if (command.equals("Send")){
+							trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
 						}
+						else {
+							trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";
+						}
+						//	System.out.println("sending asynch " + trace);
+							if (!simtraces.contains(trace)){
+								simtraces.add(trace);
+								if (!msgTimes.containsKey(tran.channelName)){
+									msgTimes.put(tran.channelName, new ArrayList<String>());
+								}
+								msgTimes.get(tran.channelName).add(tran.endTime);
+							}
+						//}
 					}
 				}
+				}
 			}
-			else if (command.equals("Wait")){
-				//
-			}
-			else if (command.equals("Request")){
+			else if ((command.equals("Request") || command.equals("Notified")) && tran.deviceName.contains("CPU")){
 				TMLRequest req = tmap.getTMLModeling().getRequestByShortName(tran.channelName);
 				if (req!=null){
-//					TMLTask originTask = req.getOriginTask();
 					TMLTask destTask = req.getDestinationTask();
 					if (destTask!=null){
-						String trace = "time=" + tran.endTime+ " block="+ tran.taskName + " type=synchro blockdestination="+ destTask.getName() + " channel="+tran.channelName + " params=\"";
-						if (!simtraces.contains(trace)){
-							simtraces.add(trace);
+							String asynchType = (command.equals("Request") ? "send_async" : "receive_async");
+							int msgId=chanId;
+							if (!msgTimes.containsKey(tran.channelName)){
+								msgTimes.put(tran.channelName, new ArrayList<String>());
+							} 
+							if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
+	//						int tmp=msgId-1;
+						
+							if (command.equals("Request")){	
+								if (!channelIDMap.containsKey(tran.channelName)){
+									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
+								}
+								channelIDMap.get(tran.channelName).add(msgId);
+								chanId++;
+							}
+							else {
+								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
+									msgId=channelIDMap.get(tran.channelName).remove(0);
+								}
+							
+							}
+						String trace="";
+						if (command.equals("Request")){
+							trace = "time=" + tran.endTime+ " block="+ tran.taskName + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
 						}
+						else {
+							trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
+						}
+						//	System.out.println("sending asynch " + trace);
+							if (!simtraces.contains(trace)){
+								simtraces.add(trace);
+								if (!msgTimes.containsKey(tran.channelName)){
+									msgTimes.put(tran.channelName, new ArrayList<String>());
+								}
+								msgTimes.get(tran.channelName).add(tran.endTime);
+							}
+						//}
 					}
 				}
-			}
-			else if (command.equals("Notified")){
-				//
+				}
 			}
 			else if (command.contains("Execi")){
 				String trace="time="+tran.endTime+ " block=" + tran.taskName + " type=state_entering state=exec" + tran.length;

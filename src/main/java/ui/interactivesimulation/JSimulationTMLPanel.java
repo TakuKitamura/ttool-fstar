@@ -55,6 +55,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class JSimulationSDPanel
@@ -81,7 +83,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     private boolean spaceBetweenLifeLinesComputed = false;
     private int spaceAtEnd = 50;
     private int spaceAtTop = 50;
-    private int spaceVerticalText = 2;
+    private int spaceVerticalText = 4;
     private int spaceHorizontalText = 2;
     private int verticalLink = 10;
 
@@ -106,6 +108,8 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     // List of entities ... List is discovered progressively
     // Or the list is described in the trace (header information)
     private Vector <String> entityNames;
+
+	private HashMap<String, ArrayList<String>> deviceTaskMap = new HashMap<String, ArrayList<String>>();
 
     private final int NO_MODE = 0;
     private final int FILE_MODE = 1;
@@ -175,6 +179,15 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
         this.repaint();
     }
 
+	public void setDevices(HashMap<String, ArrayList<String>> map){
+		deviceTaskMap = map;
+		for (String device: deviceTaskMap.keySet()){
+			for (String task: deviceTaskMap.get(device)){
+				addEntityNameIfApplicable(task);
+			}
+		}
+	}
+
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         int currentY = spaceAtTop;
@@ -225,13 +238,30 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     private int paintTopElements(Graphics g, int currentX, int currentY) {
         int w;
 
-        for(String name : entityNames) {
-            g.drawLine(currentX + (spaceBetweenLifeLines/4), currentY, currentX + (3*spaceBetweenLifeLines/4), currentY);
-            g.drawLine(currentX + (spaceBetweenLifeLines/2), currentY, currentX + (spaceBetweenLifeLines/2), currentY + verticalSpaceUnderBlocks);
-            w = g.getFontMetrics().stringWidth(name);
-            g.drawString(name, currentX + ((spaceBetweenLifeLines-w)/2), currentY - spaceVerticalText);
-            currentX += spaceBetweenLifeLines;
-        }
+		if (deviceTaskMap.keySet().size()==0){
+	        for(String name : entityNames) {
+    	        g.drawLine(currentX + (spaceBetweenLifeLines/4), currentY, currentX + (3*spaceBetweenLifeLines/4), currentY);
+    	        g.drawLine(currentX + (spaceBetweenLifeLines/2), currentY, currentX + (spaceBetweenLifeLines/2), currentY + verticalSpaceUnderBlocks);
+    	        w = g.getFontMetrics().stringWidth(name);
+    	        g.drawString(name, currentX + ((spaceBetweenLifeLines-w)/2), currentY - spaceVerticalText);
+    	        currentX += spaceBetweenLifeLines;
+    	    }
+		}
+		else {
+			for (String device: deviceTaskMap.keySet()){
+				if (deviceTaskMap.get(device).size()>0){
+					w = g.getFontMetrics().stringWidth(device);
+					g.drawString(device, currentX + (deviceTaskMap.get(device).size()-1)*((spaceBetweenLifeLines-w)/2), (currentY - spaceVerticalText)/2);
+					for(String name : deviceTaskMap.get(device)) {
+	    	        	g.drawLine(currentX + (spaceBetweenLifeLines/4), currentY, currentX + (3*spaceBetweenLifeLines/4), currentY);
+	    	        	g.drawLine(currentX + (spaceBetweenLifeLines/2), currentY, currentX + (spaceBetweenLifeLines/2), currentY + verticalSpaceUnderBlocks);
+	    	        	w = g.getFontMetrics().stringWidth(name);
+	    	        	g.drawString(name, currentX + ((spaceBetweenLifeLines-w)/2), currentY - spaceVerticalText);
+	    	        	currentX += spaceBetweenLifeLines;	
+					}
+				}
+    	    }
+		}
 
         maxX = currentX;
 
