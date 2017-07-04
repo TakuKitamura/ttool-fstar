@@ -845,6 +845,47 @@ gradle :ttool:build
 \end{verbatim}
 if you only want to build TTool.
 
+\subsection{Executing TTool}
+When TTool is executed, it fetches configuration settings from a
+\texttt{config.xml} file and modifies it when closed. When you build TTool, a
+default \texttt{config.xml} file is copied from
+\texttt{ttool/runtime/config.xml} to \texttt{bin/config.xml}. As the
+\texttt{bin} folder is not tracked by git, you can modify this configuration
+file without committing your personal changes to the distant repository---which
+you should not do. However, building TTool once again would replace your
+personal \texttt{bin/config.xml} with the generic
+\texttt{ttool/runtime/config.xml}, losing the changes you made on your
+configuration file.
+
+A better way to use your personal configuration file through different TTool
+builds is to keep your own copy of \texttt{config.xml} outside of the
+\texttt{bin} folder (which is removed when calling \texttt{make ultraclean}).
+You can either create your own configuration file anywhere on the repository and
+be careful not to add it to be tracked by git, or put it in a location where it
+would not appear when doing a \texttt{git status}: either outside of the TTool
+folder, or in a \texttt{.ttool} subdirectory which is explicitly ignored by git:
+\begin{verbatim}
+$ mkdir .ttool
+$ cp ttool/runtime/config.xml .ttool/
+\end{verbatim}
+You could thus either call ttool directly:
+\begin{verbatim}
+$ java -jar bin/ttool.jar -config .ttool/config.xml
+\end{verbatim}
+or copy \texttt{ttool.exe} to \texttt{.ttool} subdirectory and modify it:
+\begin{verbatim}
+$ cat .ttool/ttool.exe
+#!/bin/sh
+
+java -version
+cd .ttool;
+java -Xmx1024m -Djavax.net.ssl.trustStore=ServerKeyStore \
+    -Djavax.net.ssl.trustStorePassword=123456  -jar ../bin/ttool.jar \
+    -config config.xml -experimental -debug -avatar -uppaal -launcher
+
+$
+\end{verbatim}
+
 \subsection{Automated Tests}
 TODO
 

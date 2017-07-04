@@ -53,6 +53,11 @@ public class CustomizerGraphicalComponent {
     public CustomizerGraphicalComponent() {
     }
 
+    
+    public static String hasGraphicalComponent() {
+	return "CustomizerGraphicalComponent";
+    }
+
     public static String getPanelClassName() {
 	return "TMLArchiDiagramPanel";
     }

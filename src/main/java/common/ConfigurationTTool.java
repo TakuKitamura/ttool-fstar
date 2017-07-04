@@ -151,6 +151,7 @@ public class ConfigurationTTool {
 
     // PLUGINS
     public static String PLUGIN_PATH = "";
+    public static String[] PLUGIN = new String[0];
     public static String PLUGIN_JAVA_CODE_GENERATOR = "";
     public static String[] PLUGIN_GRAPHICAL_COMPONENT = new String[0];
 
@@ -461,6 +462,9 @@ public class ConfigurationTTool {
 	for (int i=0; i<PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
 	    sb.append("Plugin for graphical component: " + PLUGIN_GRAPHICAL_COMPONENT[i] + "\n");
 	}
+	for (int i=0; i<PLUGIN.length; i++) {
+	    sb.append("Multi purpose plugin: " + PLUGIN[i] + "\n");
+	}
 
 	// URL
 	sb.append("\nURLs:\n");
@@ -743,6 +747,10 @@ public class ConfigurationTTool {
 	    nl = doc.getElementsByTagName("PLUGIN_PATH");
             if (nl.getLength() > 0)
                 PluginPath(nl);
+
+	    nl = doc.getElementsByTagName("PLUGIN");
+            if (nl.getLength() > 0)
+                Plugin(nl);
 
 	    nl = doc.getElementsByTagName("PLUGIN_JAVA_CODE_GENERATOR");
             if (nl.getLength() > 0)
@@ -1435,6 +1443,18 @@ public class ConfigurationTTool {
             Element elt = (Element)(nl.item(0));
             PLUGIN_PATH = elt.getAttribute("data");
 	    PluginManager.PLUGIN_PATH = PLUGIN_PATH;
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void Plugin(NodeList nl) throws MalformedConfigurationException {
+	PLUGIN = new String[nl.getLength()];
+        try {
+	    for (int i=0; i<nl.getLength(); i++) {
+		Element elt = (Element)(nl.item(i));
+		PLUGIN[i] = elt.getAttribute("data");
+	    }
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

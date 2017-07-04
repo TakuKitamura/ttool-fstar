@@ -63,9 +63,8 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal ../uppaal/spec.xml"/>
 
-<PLUGIN_JAVA_CODE_GENERATOR data="../plugins/CustomizerAvatarCodeGeneration.jar" />
 
-<LastOpenFile data="/home/dblouin/Projets/TTool/git/TTool/modeling/DIPLODOCUS/ZigBeeDEMO.xml"/>
+<LastOpenFile data=""/>
 
 
 

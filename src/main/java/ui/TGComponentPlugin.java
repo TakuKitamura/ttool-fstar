@@ -112,10 +112,11 @@ public class TGComponentPlugin extends TGComponent implements ComponentPluginInt
 	    }
 	    if (instance == null) {
 		//TraceManager.addDev("[create instance] Name of the plugin:" + componentPlugin.getName());
-		String className = componentPlugin.executeRetStringMethod("CustomizerGraphicalComponent", "getGraphicalComponentClassName");
-		classRef = componentPlugin.getClass(className);
+		//String className = componentPlugin.executeRetStringMethod(componentPlugin.getClassGraphicalComponent(), "getGraphicalComponentClassName");
+		//classRef = componentPlugin.getClass(className);
 		//TraceManager.addDev("[create instance] classRef:" + classRef);
-		instance = classRef.newInstance();
+		classRef = componentPlugin.getClassGraphicalComponent();
+		instance = componentPlugin.getClassGraphicalComponent().newInstance();
 		if (width == 0) {
 		    width = Plugin.executeIntMethod(instance, "getWidth");
 		}
@@ -228,9 +229,11 @@ public class TGComponentPlugin extends TGComponent implements ComponentPluginInt
                             elt = (Element) n2;
                             if (elt.getTagName().equals("PluginName")) {
 				pName = elt.getAttribute("value");
-				componentPlugin = PluginManager.pluginManager.getPluginOrCreate(pName);
+				componentPlugin = PluginManager.pluginManager.getPlugin(pName);
 				if (componentPlugin != null) {
-				    createInstance();
+				    if (componentPlugin.hasGraphicalComponent()) {
+					createInstance();
+				    }
 				} else {
 				    TraceManager.addDev("No corresponding plugin");
 				}
