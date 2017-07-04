@@ -61,6 +61,9 @@ public class Plugin {
     private File file;
     private HashMap<String, Class> listOfClasses;
     private Class classAvatarCodeGenerator;
+    private Class classDiplodocusCodeGenerator;
+    private Class classGraphicalComponent;
+    
 
     public Plugin(String _path, String _name) {
 	path = _path;
@@ -77,7 +80,6 @@ public class Plugin {
     }
 
     public boolean hasAvatarCodeGenerator() {
-
 	String ret = executeRetStringMethod(removeJar(name), "hasAvatarCodeGenerator");
 	if (ret != null) {
 	    classAvatarCodeGenerator = getClass(ret);
@@ -86,10 +88,66 @@ public class Plugin {
 
 	return false;
     }
+    
+    public boolean hasDiplodocusCodeGenerator() {
+	String ret = executeRetStringMethod(removeJar(name), "hasDiplodocusCodeGenerator");
+	if (ret != null) {
+	    classDiplodocusCodeGenerator = getClass(ret);
+	    return true;
+	}
+
+	return false;
+    }
+
+    public String getDiplodocusCodeGeneratorIdentifier() {
+	String desc = executeRetStringMethod(classDiplodocusCodeGenerator, "getIdentifier");
+	return desc;
+    }
+    
+
+    public boolean hasGraphicalComponent() {
+	String ret = executeRetStringMethod(removeJar(name), "hasGraphicalComponent");
+	if (ret != null) {
+	    classGraphicalComponent = getClass(ret);
+	    String diagOk = executeRetStringMethod(classGraphicalComponent, "getPanelClassName");
+	    if (diagOk != null) {
+		return true;
+	    }
+	}
+	classGraphicalComponent = null;
+	return false;	
+    }
+
+    public boolean hasGraphicalComponent(String _diagID) {
+	TraceManager.addDev("Test GC with diag=" + _diagID);
+	String ret = executeRetStringMethod(removeJar(name), "hasGraphicalComponent");
+	if (ret != null) {
+	    classGraphicalComponent = getClass(ret);
+	    String diagOk = executeRetStringMethod(classGraphicalComponent, "getPanelClassName");
+	    if (diagOk != null) {
+		if (diagOk.compareTo(_diagID) == 0) {
+		    TraceManager.addDev("Found graphical component in plugin:" + name);
+		    return true;
+		}
+	    }
+	}
+	classGraphicalComponent = null;
+
+	return false;
+    }
 
     public Class getClassAvatarCodeGenerator() {
 	return classAvatarCodeGenerator;
     }
+    
+    public Class getClassGraphicalComponent() {
+	return classGraphicalComponent;
+    }
+
+    public Class getClassDiplodocusCodeGenerator() {
+	return classDiplodocusCodeGenerator;
+    }
+    
 
     public Class getClass(String _className) {
 	Class<?> c = listOfClasses.get(_className);
@@ -190,17 +248,26 @@ public class Plugin {
 	Method method = instance.getClass().getMethod(_methodName, cArg);
 	return (boolean)(method.invoke(instance));
     }
+    
+    public static boolean executeBoolStringMethod(Object instance, String value, String _methodName) throws Exception {
+	Class[] cArg = new Class[1];
+	cArg[0] = String.class;
+	TraceManager.addDev("Looking for method=" + _methodName + " in instance " + instance);
+	Method method = instance.getClass().getMethod(_methodName, cArg);
+	return (boolean)(method.invoke(instance, value));
+    }
+    
 
     
-    public ImageIcon executeRetImageIconMethod(String _className, String _methodName) {
+    public ImageIcon executeRetImageIconMethod(Class<?> c, String _methodName) {
 	// We have a valid plugin. We now need to get the Method
-	Method m = getMethod(_className, _methodName);
+	try {
+	Method m = c.getMethod(_methodName);
 	if (m == null) {
 	    return null;
 	}
 	
-	try {
-	    return (ImageIcon)(m.invoke(null));
+	return (ImageIcon)(m.invoke(null));
 	} catch (Exception e) {
 	    TraceManager.addDev("Exception occured when executing method " + _methodName);
 	    return null;
