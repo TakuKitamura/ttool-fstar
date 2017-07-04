@@ -384,7 +384,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         mainTop.add(commands, c02);
 
         // Issue #41 Ordering of tabbed panes 
-        commandTab = GraphicLib.createTabbedPane();//new JTabbedPane();
+        commandTab = GraphicLib.createTabbedPaneRegular();//new JTabbedPane();
 
         // Control commands
         jp01 = new JPanel(new BorderLayout());
@@ -711,7 +711,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         mainTop.add(infos, c02);
 
         // Issue #41 Ordering of tabbed panes 
-        infoTab = GraphicLib.createTabbedPane();//new JTabbedPane();
+        infoTab = GraphicLib.createTabbedPaneRegular();//new JTabbedPane();
         infoTab.setMinimumSize(new Dimension(300, 250));
         infos.add(infoTab, BorderLayout.NORTH);
 
