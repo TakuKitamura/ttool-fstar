@@ -1478,4 +1478,18 @@ public class TMLMapping<E> {
     public TMLComponentDesignPanel getTMLCDesignPanel(){
         return tmldp;
     }
+
+
+    public String toXML() {
+	String s = "<TMLMAPPING>\n";
+	s += tmlm.toXML();
+	s += tmla.toXML();
+	for(int i=0; i<onnodes.size(); i++) {
+	    HwExecutionNode node = onnodes.get(i);
+	    TMLTask task = mappedtasks.get(i);
+	    s += "<TASKMAP node=\"" + node.getName() + "\" task=\"" + task.getName() + " />\n";
+	}
+	s += "</TMLMAPPING>\n";
+	return s;
+    }
 }

@@ -8795,6 +8795,7 @@ public class GTURTLEModeling {
         //TraceManager.addDev(tmlm.toString());
         //TraceManager.addDev("------------------------");
         checkingErrors = gtmlm.getCheckingErrors();
+	warnings = gtmlm.getCheckingWarnings();
 
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
             analyzeErrors();
@@ -8848,6 +8849,7 @@ public class GTURTLEModeling {
         //TraceManager.addDev("------------------------");
         //mgui.generateTMLTxt();
         checkingErrors = gctmlm.getCheckingErrors();
+	warnings = gctmlm.getCheckingWarnings();
 
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
             analyzeErrors();
@@ -8910,10 +8912,11 @@ public class GTURTLEModeling {
         listE = gtmlm.getCorrespondanceTable();
 
         checkingErrors = gtmlm.getCheckingErrors();
+	warnings = gtmlm.getCheckingWarnings();
+	
         avatarspec = gtmlm.avspec;
         if ((checkingErrors != null) && (checkingErrors.size() > 0)){
             analyzeErrors();
-            warnings = gtmlm.getCheckingWarnings();
             return false;
         } else {
             //tmap.removeAllRandomSequences();

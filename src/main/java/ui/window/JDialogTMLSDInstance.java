@@ -37,12 +37,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.TAttribute;
+import ui.util.IconManager;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -62,13 +60,15 @@ import java.util.LinkedList;
  */
 public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
 
-    protected LinkedList<TAttribute> attributes, attributesPar, forbidden;
-    protected LinkedList<Boolean> initValues;
+	protected static final int DEFAULT_MARGIN_SIZE = 5;
+
+    protected java.util.List<TAttribute> attributes, attributesPar, forbidden;
+    protected java.util.List<Boolean> initValues;
     protected boolean checkKeyword, checkJavaKeyword;
 
     protected boolean cancelled = false;
 
-    protected JPanel panel1, panel2;
+    protected JPanel pnlAddingAtt, pnlManagingAtt;
 
     protected Frame frame;
     protected int tab;
@@ -91,7 +91,7 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
     protected JButton removeButton;
 
     //Panel 3
-    protected JComboBox referenceUnitsName;
+    //protected JComboBox<String> referenceUnitsName;
 
     // Main Panel
     protected JButton closeButton;
@@ -100,7 +100,7 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
     protected String name = "";
 
     /** Creates new form  */
-    public JDialogTMLSDInstance( LinkedList<TAttribute> _attributes, LinkedList<TAttribute> _forbidden, Frame f, String title, String attrib, String _name )	{
+    public JDialogTMLSDInstance( java.util.List<TAttribute> _attributes, java.util.List<TAttribute> _forbidden, Frame f, String title, String attrib, String _name )	{
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
@@ -111,8 +111,9 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
 
         attributes = new LinkedList<TAttribute> ();
 
-        for (TAttribute attr: attributesPar)
+        for (TAttribute attr: attributesPar) {
             attributes.add (attr.makeClone());
+        }
 
         initComponents();
         myInitComponents();
@@ -125,17 +126,354 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
         downButton.setEnabled(false);
     }
 
-    protected abstract void initComponents();
+    // Issue #55
+    protected JPanel createNamePanel() {
+        final JPanel pnlName = new JPanel(new GridBagLayout());
+        
+        GridBagConstraints cstLblName = new GridBagConstraints();
+        cstLblName.anchor = GridBagConstraints.NORTHEAST;
+        cstLblName.gridx = 0;
+        cstLblName.gridy = 0;
+        cstLblName.weightx = 0.0;
+        cstLblName.weighty = 0.0;
+        cstLblName.fill = GridBagConstraints.HORIZONTAL;
+        cstLblName.gridwidth = 1;
+        cstLblName.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0 );
+        pnlName.add( new JLabel( "Name:" ), cstLblName );
+        
+        nameOfInstance = new JTextField( this.name );//, 30 );
+        GridBagConstraints cstTfdName = new GridBagConstraints();
+        cstTfdName.anchor = GridBagConstraints.NORTHWEST;
+        cstTfdName.gridx = 1;
+        cstTfdName.gridy = 0;
+        cstTfdName.weightx = 1.0;
+        cstTfdName.weighty = 0.0;
+        cstTfdName.fill = GridBagConstraints.BOTH;
+        cstTfdName.gridwidth = GridBagConstraints.REMAINDER; //end row
+        cstTfdName.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE );
+        pnlName.add( nameOfInstance, cstTfdName );
+        
+        return pnlName;
+    }
+    
+    // Issue #55
+    protected JPanel createAttributesPanel() {
+        JPanel pnlAttributes = new JPanel(new GridBagLayout());
 
+        pnlManagingAtt = new JPanel();
+        pnlManagingAtt.setLayout( new GridBagLayout() );
+        pnlManagingAtt.setBorder(new javax.swing.border.TitledBorder("Managing " + attrib + "s"));
+
+        final GridBagConstraints cstMngAtt = new GridBagConstraints();
+        cstMngAtt.anchor = GridBagConstraints.NORTHWEST;
+        cstMngAtt.gridx = 0;
+        cstMngAtt.gridy = 0;
+        cstMngAtt.weightx = 1.0;
+        cstMngAtt.weighty = 1.0;
+        cstMngAtt.fill = GridBagConstraints.BOTH;
+        cstMngAtt.gridwidth = GridBagConstraints.REMAINDER; //end row;
+        cstMngAtt.insets = new Insets( 0, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE );
+        pnlAttributes.add(pnlManagingAtt, cstMngAtt );//BorderLayout.EAST);
+
+        // 1st line panel2
+        listAttribute = new JList<TAttribute>(attributes.toArray(new TAttribute[ attributes.size() ]));
+        listAttribute.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listAttribute.addListSelectionListener(this);
+        final GridBagConstraints cstLstAtt = new GridBagConstraints();
+        cstLstAtt.anchor = GridBagConstraints.NORTHWEST;
+        cstLstAtt.gridx = 0;
+        cstLstAtt.gridy = 0;
+        cstLstAtt.weightx = 1.0;
+        cstLstAtt.weighty = 1.0;
+        cstLstAtt.fill = GridBagConstraints.BOTH;
+        cstLstAtt.gridwidth = GridBagConstraints.REMAINDER;
+        cstLstAtt.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0, DEFAULT_MARGIN_SIZE );
+        JScrollPane scrollPane = new JScrollPane(listAttribute);
+        pnlManagingAtt.add(scrollPane, cstLstAtt);
+
+        upButton = new JButton("Up");
+        upButton.addActionListener(this);
+        final GridBagConstraints cstBtnUp = new GridBagConstraints();
+        cstBtnUp.anchor = GridBagConstraints.NORTHWEST;
+        cstBtnUp.gridx = 0;
+        cstBtnUp.gridy = 1;
+        cstBtnUp.weightx = 1.0;
+        cstBtnUp.weighty = 0.0;
+        cstBtnUp.fill = GridBagConstraints.HORIZONTAL;
+        cstBtnUp.gridwidth = GridBagConstraints.REMAINDER;
+        cstBtnUp.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0, DEFAULT_MARGIN_SIZE );
+        pnlManagingAtt.add(upButton, cstBtnUp );
+
+        downButton = new JButton("Down");
+        downButton.addActionListener(this);
+        final GridBagConstraints cstBtnDown = new GridBagConstraints();
+        cstBtnDown.anchor = GridBagConstraints.NORTHWEST;
+        cstBtnDown.gridx = 0;
+        cstBtnDown.gridy = 2;
+        cstBtnDown.weightx = 1.0;
+        cstBtnDown.weighty = 0.0;
+        cstBtnDown.fill = GridBagConstraints.HORIZONTAL;
+        cstBtnDown.gridwidth = GridBagConstraints.REMAINDER;
+        cstBtnDown.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0, DEFAULT_MARGIN_SIZE );
+        pnlManagingAtt.add( downButton, cstBtnDown );
+
+        removeButton = new JButton("Remove " + attrib);
+        removeButton.addActionListener(this);
+        final GridBagConstraints cstBtnRem = new GridBagConstraints();
+        cstBtnRem.anchor = GridBagConstraints.NORTHWEST;
+        cstBtnRem.gridx = 0;
+        cstBtnRem.gridy = 3;
+        cstBtnRem.weightx = 1.0;
+        cstBtnRem.weighty = 0.0;
+        cstBtnRem.fill = GridBagConstraints.HORIZONTAL;
+        cstBtnRem.gridwidth = GridBagConstraints.REMAINDER;
+        cstBtnRem.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE );
+        pnlManagingAtt.add(removeButton, cstBtnRem);
+
+
+        pnlAddingAtt = new JPanel();
+        pnlAddingAtt.setLayout( new GridBagLayout() );
+        pnlAddingAtt.setBorder(new javax.swing.border.TitledBorder("Adding / Modifying " + attrib + "s"));
+
+        GridBagConstraints cstPnlAddAtt = new GridBagConstraints();
+        cstPnlAddAtt.anchor = GridBagConstraints.NORTHWEST;
+        cstPnlAddAtt.gridx = 0;
+        cstPnlAddAtt.gridy = 1;
+        cstPnlAddAtt.weightx = 1.0;
+        cstPnlAddAtt.weighty = 0.0;
+        cstPnlAddAtt.fill = GridBagConstraints.BOTH;
+        cstPnlAddAtt.gridwidth = 1;
+        cstPnlAddAtt.insets = new Insets( 0, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE );
+        pnlAttributes.add( pnlAddingAtt, cstPnlAddAtt );//BorderLayout.WEST);
+
+        int xPos = 0;
+        final GridBagConstraints cstLblAccess = new GridBagConstraints();
+        cstLblAccess.anchor = GridBagConstraints.NORTHWEST;
+        cstLblAccess.gridx = xPos++;
+        cstLblAccess.gridy = 0;
+        cstLblAccess.weightx = 0.0;
+        cstLblAccess.weighty = 0.0;
+        cstLblAccess.fill = GridBagConstraints.HORIZONTAL;
+        cstLblAccess.gridwidth = 1;
+        cstLblAccess.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0, 0 );
+        pnlAddingAtt.add( new JLabel("Access"), cstLblAccess );
+       
+        final GridBagConstraints cstLblId = new GridBagConstraints();
+        cstLblId.anchor = GridBagConstraints.NORTHWEST;
+        cstLblId.gridx = xPos++;
+        cstLblId.gridy = 0;
+        cstLblId.weightx = 0.0;
+        cstLblId.weighty = 0.0;
+        cstLblId.fill = GridBagConstraints.HORIZONTAL;
+        cstLblId.gridwidth = 1;
+        cstLblId.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0, 0 );
+        pnlAddingAtt.add(new JLabel("Identifier"), cstLblId );
+        
+        if (attrib.equals("Attribute") || attrib.equals("Variable")) {
+            
+            // For = label of row below
+            xPos++;
+
+            final GridBagConstraints cstLblInVal = new GridBagConstraints();
+            cstLblInVal.anchor = GridBagConstraints.NORTHWEST;
+            cstLblInVal.gridx = xPos++;
+            cstLblInVal.gridy = 0;
+            cstLblInVal.weightx = 0.0;
+            cstLblInVal.weighty = 0.0;
+            cstLblInVal.fill = GridBagConstraints.HORIZONTAL;
+            cstLblInVal.gridwidth = 1;
+            cstLblInVal.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0, 0 );
+            pnlAddingAtt.add(new JLabel("Initial Value"), cstLblInVal );
+        }
+        
+        // For = label of row below
+        xPos++;
+
+        final GridBagConstraints cstLblType = new GridBagConstraints();
+        cstLblType.anchor = GridBagConstraints.NORTHWEST;
+        cstLblType.gridx = xPos++;
+        cstLblType.gridy = 0;
+        cstLblType.weightx = 0.0;
+        cstLblType.weighty = 0.0;
+        cstLblType.fill = GridBagConstraints.HORIZONTAL;
+        cstLblType.gridwidth = GridBagConstraints.REMAINDER;
+        cstLblType.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0, DEFAULT_MARGIN_SIZE );
+        pnlAddingAtt.add(new JLabel("Type"), cstLblType );
+
+        xPos = 0;
+        final GridBagConstraints cstCmbAccess = new GridBagConstraints();
+        cstCmbAccess.anchor = GridBagConstraints.NORTHWEST;
+        cstCmbAccess.gridx = xPos++;
+        cstCmbAccess.gridy = 1;
+        cstCmbAccess.weightx = 0.0;
+        cstCmbAccess.weighty = 0.0;
+        cstCmbAccess.fill = GridBagConstraints.HORIZONTAL;
+        cstCmbAccess.gridwidth = 1;
+        cstCmbAccess.insets = new Insets( 0, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0 );
+        accessBox = new JComboBox<String>();
+        pnlAddingAtt.add(accessBox, cstCmbAccess );
+        
+        identifierText = new JTextField();
+        identifierText.setEditable(true);
+        final GridBagConstraints cstTfdId = new GridBagConstraints();
+        cstTfdId.anchor = GridBagConstraints.NORTHWEST;
+        cstTfdId.gridx = xPos++;
+        cstTfdId.gridy = 1;
+        cstTfdId.weightx = 1.0;
+        cstTfdId.weighty = 0.0;
+        cstTfdId.fill = GridBagConstraints.BOTH;
+        cstTfdId.gridwidth = 1;
+        cstTfdId.insets = new Insets( 0, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0 );
+        pnlAddingAtt.add(identifierText, cstTfdId );
+
+        if (attrib.equals("Attribute") || attrib.equals("Variable")) {
+            final GridBagConstraints cstLblEq = new GridBagConstraints();
+            cstLblEq.anchor = GridBagConstraints.CENTER;
+            cstLblEq.gridx = xPos++;
+            cstLblEq.gridy = 1;
+            cstLblEq.weightx = 0.0;
+            cstLblEq.weighty = 0.0;
+            cstLblEq.fill = GridBagConstraints.BOTH;
+            cstLblEq.gridwidth = 1;
+            cstLblEq.insets = new Insets( 0, 0, DEFAULT_MARGIN_SIZE, 0 );
+        	pnlAddingAtt.add( new JLabel( " = " ), cstLblEq );
+            initialValue = new JTextField();
+            initialValue.setEditable(true);
+            final GridBagConstraints cstTfdInVal = new GridBagConstraints();
+            cstTfdInVal.anchor = GridBagConstraints.NORTHWEST;
+            cstTfdInVal.gridx = xPos++;
+            cstTfdInVal.gridy = 1;
+            cstTfdInVal.weightx = 0.4;
+            cstTfdInVal.weighty = 0.0;
+            cstTfdInVal.fill = GridBagConstraints.BOTH;
+            cstTfdInVal.gridwidth = 1;
+            cstTfdInVal.insets = new Insets( 0, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0 );
+            pnlAddingAtt.add(initialValue, cstTfdInVal );
+        }
+
+        final GridBagConstraints cstLblColumn = new GridBagConstraints();
+        cstLblColumn.anchor = GridBagConstraints.CENTER;
+        cstLblColumn.gridx = xPos++;
+        cstLblColumn.gridy = 1;
+        cstLblColumn.weightx = 0.0;
+        cstLblColumn.weighty = 0.0;
+        cstLblColumn.fill = GridBagConstraints.BOTH;
+        cstLblColumn.gridwidth = 1;
+        cstLblColumn.insets = new Insets( 0, 0, DEFAULT_MARGIN_SIZE, 0 );
+    	pnlAddingAtt.add( new JLabel( " : " ), cstLblColumn );
+        typeBox = new JComboBox<String>();
+        typeBox.addActionListener(this);
+        final GridBagConstraints cstCmbType = new GridBagConstraints();
+        cstCmbType.anchor = GridBagConstraints.NORTHWEST;
+        cstCmbType.gridx = xPos++;
+        cstCmbType.gridy = 1;
+        cstCmbType.weightx = 0.0;
+        cstCmbType.weighty = 0.0;
+        cstCmbType.fill = GridBagConstraints.HORIZONTAL;
+        cstCmbType.gridwidth = GridBagConstraints.REMAINDER; //end row
+        cstCmbType.insets = new Insets( 0, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE );
+        pnlAddingAtt.add(typeBox, cstCmbType );
+
+        addButton = new JButton("Add / Modify " + attrib);
+        addButton.addActionListener(this);
+        final GridBagConstraints cstBtnAdd = new GridBagConstraints();
+        cstBtnAdd.anchor = GridBagConstraints.NORTHWEST;
+        cstBtnAdd.gridx = 0;
+        cstBtnAdd.gridy = 2;
+        cstBtnAdd.weightx = 1.0;
+        cstBtnAdd.weighty = 0.0;
+        cstBtnAdd.fill = GridBagConstraints.HORIZONTAL;
+        cstBtnAdd.gridwidth = xPos;
+        cstBtnAdd.insets = new Insets( 0, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE );
+        pnlAddingAtt.add(addButton, cstBtnAdd );
+        
+        return pnlAttributes;
+    }
+
+    // Issue #55
+    protected JPanel createButtonsPanel() {
+        JPanel pnlButtons = new JPanel(new GridBagLayout());
+        closeButton = new JButton("Save and Close", IconManager.imgic25 );
+        closeButton.addActionListener(this);
+        GridBagConstraints cstBtnClose = new GridBagConstraints();
+        cstBtnClose.anchor = GridBagConstraints.NORTHWEST;
+        cstBtnClose.gridx = 0;
+        cstBtnClose.gridy = 0;
+        cstBtnClose.weightx = 1.0;
+        cstBtnClose.weighty = 0.0;
+        cstBtnClose.fill = GridBagConstraints.HORIZONTAL;
+        cstBtnClose.gridwidth = 1;
+        cstBtnClose.insets = new Insets( 0, DEFAULT_MARGIN_SIZE, 0, DEFAULT_MARGIN_SIZE );
+        pnlButtons.add(closeButton, cstBtnClose);
+
+        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        cancelButton.addActionListener(this);
+        GridBagConstraints cstBtnCancel = new GridBagConstraints();
+        cstBtnCancel.anchor = GridBagConstraints.NORTHWEST;
+        cstBtnCancel.gridx = 1;
+        cstBtnCancel.gridy = 0;
+        cstBtnCancel.weightx = 1.0;
+        cstBtnCancel.weighty = 0.0;
+        cstBtnCancel.fill = GridBagConstraints.HORIZONTAL;
+        cstBtnCancel.gridwidth = GridBagConstraints.REMAINDER;
+        cstBtnCancel.insets = new Insets( 0, 0, 0, DEFAULT_MARGIN_SIZE );
+        pnlButtons.add(cancelButton, cstBtnCancel);
+        
+        return pnlButtons;
+    }
+
+    protected void initComponents() {
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        setDefaultCloseOperation( DISPOSE_ON_CLOSE );
+
+        Container contentPane = getContentPane();
+		contentPane.setLayout( new GridBagLayout() );
+
+	    // Issue #55
+        GridBagConstraints cstPnlName = new GridBagConstraints();
+        cstPnlName.anchor = GridBagConstraints.NORTHWEST;
+        cstPnlName.gridx = 0;
+        cstPnlName.gridy = 0;
+        cstPnlName.weightx = 1.0;
+        cstPnlName.weighty = 0.0;
+        cstPnlName.fill = GridBagConstraints.HORIZONTAL;
+        cstPnlName.gridwidth = GridBagConstraints.REMAINDER;
+		cstPnlName.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0, DEFAULT_MARGIN_SIZE );
+        final JPanel pnlName = createNamePanel();
+        contentPane.add( pnlName, cstPnlName );
+
+        JPanel pnlAttr = createAttributesPanel();
+        GridBagConstraints cstPnlAtt = new GridBagConstraints();
+        cstPnlAtt.anchor = GridBagConstraints.NORTHWEST;
+        cstPnlAtt.gridx = 0;
+        cstPnlAtt.gridy = 1;
+        cstPnlAtt.weightx = 1.0;
+        cstPnlAtt.weighty = 1.0;
+        cstPnlAtt.fill = GridBagConstraints.BOTH;
+        cstPnlAtt.gridwidth = GridBagConstraints.REMAINDER; //end row
+        cstPnlAtt.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, 0, DEFAULT_MARGIN_SIZE );
+        contentPane.add( pnlAttr, cstPnlAtt );
+
+        final JPanel pnlButtons = createButtonsPanel();
+        GridBagConstraints cstPnlButtons = new GridBagConstraints();
+        cstPnlButtons.anchor = GridBagConstraints.NORTHWEST;
+        cstPnlButtons.gridx = 0;
+        cstPnlButtons.gridy = 2;
+        cstPnlButtons.weightx = 1.0;
+        cstPnlButtons.weighty = 0.0;
+        cstPnlButtons.fill = GridBagConstraints.BOTH;
+        cstPnlButtons.gridwidth = GridBagConstraints.REMAINDER;
+        cstPnlButtons.insets = new Insets( DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE, DEFAULT_MARGIN_SIZE );
+        contentPane.add( pnlButtons, cstPnlButtons );
+    }
+
+    @Override
     public void	actionPerformed(ActionEvent evt)  {
         if (evt.getSource() == typeBox) {
             boolean b = initValues.get (typeBox.getSelectedIndex()).booleanValue();
             initialValue.setEnabled(b);
             return;
         }
-
-
-        //String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
         if (evt.getSource() == closeButton)  {
@@ -281,7 +619,7 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
         }
     }
 
-    public abstract void closeDialog();
+   // public abstract void closeDialog();
 
     public boolean hasBeenCancelled() {
         return cancelled;
@@ -308,7 +646,9 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
             if (a.getType() == TAttribute.OTHER) {
                 select(typeBox, a.getTypeOther());
             } else {
-                select(typeBox, TAttribute.getStringAvatarType(a.getType()));
+            	// Issue #55: The string type is used to populate the combo boxes not the avatar type.
+                select(typeBox, TAttribute.getStringType(a.getType()));
+//                select(typeBox, TAttribute.getStringAvatarType(a.getType()));
             }
             removeButton.setEnabled(true);
             if (i > 0) {
@@ -337,5 +677,18 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
 
     public String getName()	{
         return this.name;
+    }
+
+    public void closeDialog() {
+        cancelled = false;
+        attributesPar.clear ();
+        
+        for(int i=0; i<attributes.size(); i++) {
+            attributesPar.add (attributes.get (i));
+        }
+        
+        this.name = nameOfInstance.getText();
+        
+        dispose();
     }
 }	//End of class

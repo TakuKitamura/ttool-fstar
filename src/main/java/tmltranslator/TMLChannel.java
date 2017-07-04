@@ -445,4 +445,33 @@ public class TMLChannel extends TMLCommunicationElement {
         return s;
     }
 
+    // We assume the channel is a basic channel
+    public String toXML() {
+	String s = "<TMLCHANNEL ";
+	s += "name=\"" + name + "\" ";
+	s += "origintask=\"" +  originTask.getName() + "\" ";
+	s += "originport=\"" +  originPort.getName() + "\" ";
+	s += "destinationtask=\"" + destinationTask.getName() + "\" ";
+	s += "destinationport=\"" + destinationPort.getName() + "\" ";
+	s += "isLossy=\"" + isLossy + "\" ";
+        s += "lossPercentage=\"" + lossPercentage + "\" ";
+	s += "maxNbOfLoss=\"" + maxNbOfLoss + "\" ";
+	switch(type) {
+	case BRBW:
+	    s += "type=\"BRWB\" ";
+	    break;
+	case BRNBW:
+	    s += "type=\"BRNWB\" ";
+	    break;
+	case NBRNBW:
+	default:
+	    s += "type=\"NBRNWB\" ";  
+	}
+	s += "size=\"" + size + "\" ";
+	s += "max=\"" + max + "\" ";
+	
+	s += " />\n";
+	return s;
+    }
+
 }

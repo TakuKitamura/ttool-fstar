@@ -52,7 +52,9 @@ public class TMLJunction extends TMLActivityElement{
     
     public TMLJunction(String _name, Object _referenceObject) {
          super(_name, _referenceObject);
-       
     }
- 
+
+    public String customExtraToXML() {
+	return "";
+    }
 }

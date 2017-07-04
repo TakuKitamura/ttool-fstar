@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -69,27 +69,27 @@ import java.util.Map;
 import java.util.Collections;
 
 /**
-   * Class JFrameAvatarInteractiveSimulation
-   * Creation: 21/01/2011
-   * version 1.0 21/01/2011
-   * @author Ludovic APVRILLE
+ * Class JFrameAvatarInteractiveSimulation
+ * Creation: 21/01/2011
+ * version 1.0 21/01/2011
+ * @author Ludovic APVRILLE
  */
 public  class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener, WindowListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
     private static int TRACED_TRANSACTIONS = 1000;
     private static int LAST_TRANSACTIONS = 0;
 
 
-//    private static String buttonStartS = "Start simulator";
-//    private static String buttonStopAndCloseS = "Stop simulator and close";
-//
-//    private static int NOT_STARTED = 0;
-//    private static int STARTED = 1;
+    //    private static String buttonStartS = "Start simulator";
+    //    private static String buttonStopAndCloseS = "Stop simulator and close";
+    //
+    //    private static int NOT_STARTED = 0;
+    //    private static int STARTED = 1;
 
     private static long SPACE_UPDATE_TIME = 100;
 
-   // private Frame f;
+    // private Frame f;
     private MainGUI mgui;
- //   private String title;
+    //   private String title;
 
     protected JButton buttonClose, buttonStart, buttonStopAndClose;
     protected JTextArea jta;
@@ -166,7 +166,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     private JPanel metElementsPanel;
     private MetElementsTableModel metelementstm;
     private JScrollPane jspMetElementsInfo;
-    
+
 
     // DisplayedBlocks
     private JPanel displayedBlockPanel;
@@ -212,8 +212,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     private AvatarSpecification avspec;
     private AvatarSpecificationSimulation ass;
     private Thread simulationThread;
-//    private boolean resetThread;
-//    private boolean killThread;
+    //    private boolean resetThread;
+    //    private boolean killThread;
 
     private LinkedList<TGComponent> runningTGComponents;
     private int nbOfAllExecutedElements = 0;
@@ -235,17 +235,17 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     LatencyTableModel latm;
     public Vector<String> checkedTransactions = new Vector<String>();
     private Vector<SimulationLatency> latencies = new Vector<SimulationLatency>();
-	List<String> toCheck = new ArrayList<String>();
-	Map<String, List<String>> transTimes = new HashMap<String, List<String>>();
+    List<String> toCheck = new ArrayList<String>();
+    Map<String, List<String>> transTimes = new HashMap<String, List<String>>();
 
     private JScrollPane jspLatency;
 
     public JFrameAvatarInteractiveSimulation(/*Frame _f,*/ MainGUI _mgui, String _title, AvatarSpecification _avspec) {
         super(_title);
 
-     //   f = _f;
+        //   f = _f;
         mgui = _mgui;
-      //  title = _title;
+        //  title = _title;
         avspec = _avspec;
 
         addWindowListener(this);
@@ -261,10 +261,10 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         initActions();
 
         initSimulation();
-		for (String id: _avspec.checkedIDs){
-			checkedTransactions.add(id);
-			transTimes.put(id, new ArrayList<String>());		
-		}
+        for (String id: _avspec.checkedIDs){
+            checkedTransactions.add(id);
+            transTimes.put(id, new ArrayList<String>());
+        }
         makeComponents();
         setComponents();
     }
@@ -423,7 +423,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         commands = new JPanel(new BorderLayout());
         commands.setBorder(new javax.swing.border.TitledBorder("Commands"));
 
-        // Issue #41 Ordering of tabbed panes 
+        // Issue #41 Ordering of tabbed panes
         commandTab = GraphicLib.createTabbedPaneRegular();//new JTabbedPane();
         commands.add(commandTab, BorderLayout.CENTER);
 
@@ -539,7 +539,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         //c02.gridwidth = GridBagConstraints.REMAINDER; //end row
 
-        // Issue #41 Ordering of tabbed panes 
+        // Issue #41 Ordering of tabbed panes
         infoTab = GraphicLib.createTabbedPaneRegular();// new JTabbedPane();
         infoTab.setPreferredSize(new Dimension(300, 200));
         infos.add(infoTab, BorderLayout.CENTER);
@@ -559,8 +559,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         jp02.add(new JLabel(" "));
         jp02.add(new JLabel("Transactions:"));
         info = new JLabel("Unknown");
-	jp02.add(info);
-	jp02.add(new JLabel(" "));
+        jp02.add(info);
+        jp02.add(new JLabel(" "));
         jp02.add(new JLabel("Coverage:"));
         coverage = new JLabel(coverageVal + " %");
         coverage.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
@@ -797,7 +797,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
 
 
-	// Met elements
+        // Met elements
         metElementsPanel = new JPanel();
         metElementsPanel.setLayout(new BorderLayout());
         infoTab.addTab("Met states", IconManager.imgic1202, metElementsPanel, "Met states");
@@ -848,13 +848,13 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
 
         // Latencies
-       	latencyPanel = new JPanel();
-		infoTab.addTab("Latencies", IconManager.imgic1202, latencyPanel, "Latencies");
+        latencyPanel = new JPanel();
+        infoTab.addTab("Latencies", IconManager.imgic1202, latencyPanel, "Latencies");
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         latencyPanel.setLayout(gridbag0);
         c0.gridwidth = GridBagConstraints.REMAINDER;
-		latencyPanel.add(new JLabel("Latencies shown in number of cycles relative to the main clock"), c0);
+        latencyPanel.add(new JLabel("Latencies shown in number of cycles relative to the main clock"), c0);
 
         c0.gridwidth=1;
         c0.gridheight=1;
@@ -876,21 +876,21 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         latm.setData(latencies);
         sorterPI = new TableSorter(latm);
         final JTable latTable = new JTable(sorterPI);
-	/*	latTable.addMouseListener(new java.awt.event.MouseAdapter() {
-			@Override
- 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-    			int row = latTable.rowAtPoint(evt.getPoint());
-    			int col = latTable.columnAtPoint(evt.getPoint());
-    			if (row >= 0 && col >= 0 && col <2) {
-					for (TGComponent tgc: tmap.getTMLModeling().getCheckedComps().keySet()){
-						if (tmap.getTMLModeling().getCheckedComps().get(tgc).equals(latm.getValueAt(row,col).toString().split(" ")[0])){
-        				    mgui.selectTab(tgc.getTDiagramPanel());
-            				tgc.getTDiagramPanel().highlightTGComponent(tgc);
-						}
-					}
-    			}
- 			}
-		});*/
+        /*      latTable.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = latTable.rowAtPoint(evt.getPoint());
+                int col = latTable.columnAtPoint(evt.getPoint());
+                if (row >= 0 && col >= 0 && col <2) {
+                for (TGComponent tgc: tmap.getTMLModeling().getCheckedComps().keySet()){
+                if (tmap.getTMLModeling().getCheckedComps().get(tgc).equals(latm.getValueAt(row,col).toString().split(" ")[0])){
+                mgui.selectTab(tgc.getTDiagramPanel());
+                tgc.getTDiagramPanel().highlightTGComponent(tgc);
+                }
+                }
+                }
+                }
+                });*/
         sorterPI.setTableHeader(latTable.getTableHeader());
         ((latTable.getColumnModel()).getColumn(0)).setPreferredWidth(700);
         ((latTable.getColumnModel()).getColumn(1)).setPreferredWidth(700);
@@ -908,8 +908,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
 
 
-//        updateLatencyButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY]);
-  //      latencyPanel.add(updateLatencyButton,c0);
+        //        updateLatencyButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY]);
+        //      latencyPanel.add(updateLatencyButton,c0);
 
         //Randomness
         randomPanel = new JPanel();
@@ -1081,11 +1081,11 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             ass.resetSimulation();
             //ass.backOneTransactionBunch();
         }
-	//	latencies.clear();
-		transTimes.clear();
-		for (String id: avspec.checkedIDs){
-			transTimes.put(id, new ArrayList<String>());		
-		}
+        //      latencies.clear();
+        transTimes.clear();
+        for (String id: avspec.checkedIDs){
+            transTimes.put(id, new ArrayList<String>());
+        }
         //ass.killSimulation();
     }
 
@@ -1278,7 +1278,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
                 time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
                 info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
-		coverage.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+                coverage.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
                 break;
             case AvatarSpecificationSimulation.GATHER:
             case AvatarSpecificationSimulation.EXECUTE:
@@ -1288,21 +1288,21 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 status.setForeground(ColorManager.InteractiveSimulationText_BUSY);
                 time.setForeground(ColorManager.InteractiveSimulationText_BUSY);
                 info.setForeground(ColorManager.InteractiveSimulationText_BUSY);
-		coverage.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+                coverage.setForeground(ColorManager.InteractiveSimulationText_BUSY);
                 break;
             case AvatarSpecificationSimulation.TERMINATED:
                 status.setText("Terminated");
                 status.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 time.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 info.setForeground(ColorManager.InteractiveSimulationText_TERM);
-		coverage.setForeground(ColorManager.InteractiveSimulationText_TERM);
+                coverage.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 break;
             case AvatarSpecificationSimulation.KILLED:
                 status.setText("killed");
                 status.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 time.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 info.setForeground(ColorManager.InteractiveSimulationText_TERM);
-		coverage.setForeground(ColorManager.InteractiveSimulationText_TERM);
+                coverage.setForeground(ColorManager.InteractiveSimulationText_TERM);
                 break;
             }
         }
@@ -1336,9 +1336,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             ((AttackTreePanel)(avspec.getReferenceObject())).resetMetElements();
         }
 
-	if (coverage != null) {
-	    coverage.setText("0 %");
-	}
+        if (coverage != null) {
+            coverage.setText("0 %");
+        }
     }
 
     public void updateMetElements() {
@@ -1347,48 +1347,48 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         Object o;
 
 
-	if ((totalNbOfElements == -1) && (ass != null)){
-	    totalNbOfElements = 0;
-	    Vector<Object> mettableElements = new Vector<Object>();
-	    for(AvatarSimulationBlock asb: ass.getSimulationBlocks()) {
-		AvatarBlock ab = asb.getBlock();
-		if (ab != null) {
-		    //if (!(ab.getName().startsWith("Timer__"))) {
-		    AvatarStateMachine asm = ab.getStateMachine();
-		    if (asm != null) {
-			for(AvatarStateMachineElement elt: asm.getListOfElements()) {
-			    Object obj = elt.getReferenceObject();
-			    if (obj != null) {
-				
-				// Verifier que obj est une element de machine à états
-				if (obj.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
-				    if (!(mettableElements.contains(obj))) {
-					mettableElements.add(obj);
-				    }
-				}
-				
-			    }
-			}
-		    }
-		    //for(Avatar
-		    //totalNbOfElements = mettable
-			//}
-		}
-	    }
-	    totalNbOfElements = mettableElements.size();
-	    //totalNbOfElements = ass.getNbOfASMGraphicalElements();
-	}
+        if ((totalNbOfElements == -1) && (ass != null)){
+            totalNbOfElements = 0;
+            Vector<Object> mettableElements = new Vector<Object>();
+            for(AvatarSimulationBlock asb: ass.getSimulationBlocks()) {
+                AvatarBlock ab = asb.getBlock();
+                if (ab != null) {
+                    //if (!(ab.getName().startsWith("Timer__"))) {
+                    AvatarStateMachine asm = ab.getStateMachine();
+                    if (asm != null) {
+                        for(AvatarStateMachineElement elt: asm.getListOfElements()) {
+                            Object obj = elt.getReferenceObject();
+                            if (obj != null) {
+
+                                // Verifier que obj est une element de machine à états
+                                if (obj.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
+                                    if (!(mettableElements.contains(obj))) {
+                                        mettableElements.add(obj);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                    //for(Avatar
+                    //totalNbOfElements = mettable
+                    //}
+                }
+            }
+            totalNbOfElements = mettableElements.size();
+            //totalNbOfElements = ass.getNbOfASMGraphicalElements();
+        }
 
         if (hashOfAllElements == null) {
             nbOfAllExecutedElements = 0;
             return;
         }
 
-	int total = 0;
+        int total = 0;
         if (hashOfAllElements.hashCode() != nbOfAllExecutedElements) {
             Object objs[] = hashOfAllElements.keySet().toArray();
-	    //int total = 0;
-	    //int totalMet = 0;
+            //int total = 0;
+            //int totalMet = 0;
             //TraceManager.addDev("Parsing array of elements: " + objs.length);
             for(int i=0; i<objs.length; i++) {
                 o = objs[i];
@@ -1396,86 +1396,85 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 Object oo = ((AvatarStateMachineElement)o).getReferenceObject();
                 if (oo != null) {
                     tgc = (TGComponent)oo;
-		    /*if (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
-			total ++;
-			}*/
+                    /*if (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
+                      total ++;
+                      }*/
                     //TraceManager.addDev("TGComponent: " + tgc);
-		    int met = hashOfAllElements.get(o).intValue();
-		    if ((met > 0) && (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0)) {
-			total ++;
-		    }
+                    int met = hashOfAllElements.get(o).intValue();
+                    if ((met > 0) && (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0)) {
+                        total ++;
+                    }
                     tgc.setAVATARMet(met);
-		    //total ++;
-		    //if (met >0) {
-		    //totalMet ++;
-		    //}
-		    
+                    //total ++;
+                    //if (met >0) {
+                    //totalMet ++;
+                    //}
+
                 }
 
             }
-	    nbOfAllExecutedElements = hashOfAllElements.hashCode();
-	    if ((totalNbOfElements != -1)) {
-		//TraceManager.addDev("totalMet=" + hashOfAllElements.size() + " total=" + totalNbOfElements);
-		double cov = (total*1000.0)/totalNbOfElements;
-		cov = Math.floor(cov);
-		coverageVal = cov / 10;
-		if(coverage != null) {
-		    coverage.setText(""+  coverageVal + "%");
-		}
-	    }
+            nbOfAllExecutedElements = hashOfAllElements.hashCode();
+            if ((totalNbOfElements != -1)) {
+                //TraceManager.addDev("totalMet=" + hashOfAllElements.size() + " total=" + totalNbOfElements);
+                double cov = (total*1000.0)/totalNbOfElements;
+                cov = Math.floor(cov);
+                coverageVal = cov / 10;
+                if(coverage != null) {
+                    coverage.setText(""+  coverageVal + "%");
+                }
+            }
         }
         //nbOfAllExecutedElements = hashOfAllElements.hashCode();
     }
 
-	public void addLatency(){
-		toCheck.add(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString());
-		updateTransactionsTable();
-	}
+    public void addLatency(){
+        toCheck.add(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString());
+        updateTransactionsTable();
+    }
 
     public void updateTransactionsTable() {
         if (transactiontm != null) {
             transactiontm.fireTableStructureChanged();
         }
-		if (ass!=null && latm!=null){
-			latencies.clear();
-			if (ass.getAllTransactions()!=null){
-				for (AvatarSimulationTransaction trans: ass.getAllTransactions()){
-					String id = ((TGComponent)trans.executedElement.getReferenceObject()).getName() + ":"+Integer.toString(trans.executedElement.getID());
-				//	System.out.println(id + " " + transTimes.keySet());
-				//	System.out.println("transaction " + trans.executedElement.getID() + " " + trans.initialClockValue);
-					if (transTimes.containsKey(id)){
-						if (!transTimes.get(id).contains(Long.toString(trans.initialClockValue))){
-							transTimes.get(id).add(Long.toString(trans.initialClockValue));
-						}
-					}
-				}
-			}
-		//	System.out.println(transTimes);
-			 for (String st1:transTimes.keySet()){
+        if (ass!=null && latm!=null){
+            latencies.clear();
+            if (ass.getAllTransactions()!=null){
+                for (AvatarSimulationTransaction trans: ass.getAllTransactions()){
+                    if ((trans.executedElement != null) && (trans.executedElement.getReferenceObject() != null)) {
+                        String id = ((TGComponent)trans.executedElement.getReferenceObject()).getName() + ":"+Integer.toString(trans.executedElement.getID());
+                        //  System.out.println(id + " " + transTimes.keySet());
+                        //  System.out.println("transaction " + trans.executedElement.getID() + " " + trans.initialClockValue);
+                        if (transTimes.containsKey(id)){
+                            if (!transTimes.get(id).contains(Long.toString(trans.initialClockValue))){
+                                transTimes.get(id).add(Long.toString(trans.initialClockValue));
+                            }
+                        }
+                    }
+                }
+            }
+            //  System.out.println(transTimes);
+            for (String st1:transTimes.keySet()){
                 for (String st2:transTimes.keySet()){
                     if (st1!=st2 && toCheck.contains(st1 +"--"+st2)){
-                            if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
-
-    	                        ArrayList<Integer> minTimes = new ArrayList<Integer>();
-								SimulationLatency sl = new SimulationLatency();
-								sl.setTransaction1(st1);
-								sl.setTransaction2(st2);
-                                for(String time1: transTimes.get(st1)){
-                                    //Find the first subsequent transaction
-                                    int time = Integer.MAX_VALUE;
-                                    for (String time2: transTimes.get(st2)){
-                                        int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
-                                        if (diff < time && diff >=0){
-                                            time=diff;
-                                        }
-								//		System.out.println("diff " + diff + " " + transTimes.get(st1) + " " + transTimes.get(st2));
-                                    }
-                                    if (time!=Integer.MAX_VALUE){
-                                        minTimes.add(time);
-                                    }
-                                }
-							//	System.out.println("Min times " + minTimes);
-                                if (minTimes.size()>0){
+                    	if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
+							ArrayList<Integer> minTimes = new ArrayList<Integer>();
+							SimulationLatency sl = new SimulationLatency();
+							sl.setTransaction1(st1);
+							sl.setTransaction2(st2);
+							for(String time1: transTimes.get(st1)){
+								//Find the first subsequent transaction
+ 								int time = Integer.MAX_VALUE;
+								for (String time2: transTimes.get(st2)){
+									int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
+									if (diff < time && diff >=0){
+										time=diff;
+									}
+								}
+								if (time!=Integer.MAX_VALUE){
+									minTimes.add(time);
+								}
+							}
+							if (minTimes.size()>0){
                                     int sum=0;
                                     sl.setMinTime(Integer.toString(Collections.min(minTimes)));
                                     sl.setMaxTime(Integer.toString(Collections.max(minTimes)));
@@ -1491,20 +1490,21 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                                     stdev = Math.sqrt(stdev);
                                     sl.setAverageTime(String.format("%.1f",average));
                                     sl.setStDev(String.format("%.1f",stdev));
-                                }
-								latencies.add(sl);
-
                             }
+                            	latencies.add(sl);
+							
 
                         }
 
                     }
-                }
 
-			if (latm !=null && latencies.size()>0){
-				latm.setData(latencies);
-     		}
-		}
+                }
+            }
+
+            if (latm !=null && latencies.size()>0){
+                latm.setData(latencies);
+            }
+        }
     }
 
 
@@ -2023,7 +2023,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             try {
                 AvatarSimulationPendingTransaction aspt = listPendingTransactions.getSelectedValue();
                 selectedComponentForTransaction1 = (TGComponent)(aspt.elementToExecute.getReferenceObject());
-		selectedComponentForTransaction2 = null;
+                selectedComponentForTransaction2 = null;
                 if ((selectedComponentForTransaction1 == null) && (aspt.linkedTransaction != null)) {
                     //TraceManager.addDev("Adding reference object: " + aspt.linkedTransaction.elementToExecute.getReferenceObject());
                     selectedComponentForTransaction1 = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
@@ -2084,7 +2084,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             openDiagram.setEnabled(animate.isSelected());
         } else if (e.getSource() == diploids) {
             mgui.setAVATARIDs(diploids.isSelected());
-	    if (sdpanel != null) {
+            if (sdpanel != null) {
                 sdpanel.setShowIDs(diploids.isSelected());
             }
         } else if (e.getSource() == executeEmptyTransition) {

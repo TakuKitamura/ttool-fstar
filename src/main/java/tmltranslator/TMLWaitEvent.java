@@ -51,7 +51,6 @@ package tmltranslator;
  */
 public class TMLWaitEvent extends TMLActivityElementEvent {
  
-    
     public TMLWaitEvent(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
@@ -60,5 +59,8 @@ public class TMLWaitEvent extends TMLActivityElementEvent {
 	return "Wait event: " + event.getName() + "(" + getAllParams() +")";
     }
 
-       
+    public String customExtraToXML() {
+	return " event=\"" + event.getName() +  "\" params=\"" + getAllParams() + "\" ";
+    }
+
 }
