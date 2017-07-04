@@ -50,14 +50,60 @@ package ui.interactivesimulation;
  */
 public class SimulationLatency  {
 
-    public String trans1;
-    public String trans2;
-    public String minTime="N/A"; 
-	public String maxTime="N/A";
-	public String avTime="N/A";
-	public String stDev="N/A";
+    private String trans1;
+    private String trans2;
+    private String minTime="N/A"; 
+	private String maxTime="N/A";
+	private String avTime="N/A";
+	private String stDev="N/A";
 
     public SimulationLatency() {
     }
+
+	public void setTransaction1(String t){
+		trans1=t;
+	}
+	public void setTransaction2(String t){
+		trans2=t;
+	}
+
+	public void setMinTime(String time){
+		minTime=time;
+	}
+
+	public void setMaxTime(String time){
+		maxTime=time;
+	}
+
+	public void setAverageTime(String time){
+		avTime=time;
+	}
+
+	public void setStDev(String dev){
+		stDev=dev;
+	}
+
+	public String getTransaction1(){
+		return trans1;
+	}
+	public String getTransaction2(){
+		return trans2;
+	}
+
+	public String getMinTime(){
+		return minTime;
+	}
+
+	public String getMaxTime(){
+		return maxTime;
+	}
+
+	public String getAverageTime(){
+		return avTime;
+	}
+
+	public String getStDev(){
+		return stDev;
+	}
 
 }

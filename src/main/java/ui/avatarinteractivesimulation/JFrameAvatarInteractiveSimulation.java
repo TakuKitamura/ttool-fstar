@@ -1456,45 +1456,43 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             for (String st1:transTimes.keySet()){
                 for (String st2:transTimes.keySet()){
                     if (st1!=st2 && toCheck.contains(st1 +"--"+st2)){
-                        if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
-
-                            ArrayList<Integer> minTimes = new ArrayList<Integer>();
-                            SimulationLatency sl = new SimulationLatency();
-                            sl.trans1=st1;
-                            sl.trans2=st2;
-                            for(String time1: transTimes.get(st1)){
-                                //Find the first subsequent transaction
-                                int time = Integer.MAX_VALUE;
-                                for (String time2: transTimes.get(st2)){
-                                    int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
-                                    if (diff < time && diff >=0){
-                                        time=diff;
+                    	if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
+							ArrayList<Integer> minTimes = new ArrayList<Integer>();
+							SimulationLatency sl = new SimulationLatency();
+							sl.setTransaction1(st1);
+							sl.setTransaction2(st2);
+							for(String time1: transTimes.get(st1)){
+								//Find the first subsequent transaction
+ 								int time = Integer.MAX_VALUE;
+								for (String time2: transTimes.get(st2)){
+									int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
+									if (diff < time && diff >=0){
+										time=diff;
+									}
+								}
+								if (time!=Integer.MAX_VALUE){
+									minTimes.add(time);
+								}
+							}
+							if (minTimes.size()>0){
+                                    int sum=0;
+                                    sl.setMinTime(Integer.toString(Collections.min(minTimes)));
+                                    sl.setMaxTime(Integer.toString(Collections.max(minTimes)));
+                                    for (int time: minTimes){
+                                        sum+=time;
                                     }
-                                    //          System.out.println("diff " + diff + " " + transTimes.get(st1) + " " + transTimes.get(st2));
-                                }
-                                if (time!=Integer.MAX_VALUE){
-                                    minTimes.add(time);
-                                }
+                                    double average = (double) sum/ (double) minTimes.size();
+                                    double stdev =0.0;
+                                    for (int time:minTimes){
+                                        stdev +=(time - average)*(time-average);
+                                    }
+                                    stdev= stdev/minTimes.size();
+                                    stdev = Math.sqrt(stdev);
+                                    sl.setAverageTime(String.format("%.1f",average));
+                                    sl.setStDev(String.format("%.1f",stdev));
                             }
-                            //  System.out.println("Min times " + minTimes);
-                            if (minTimes.size()>0){
-                                int sum=0;
-                                sl.minTime=Integer.toString(Collections.min(minTimes));
-                                sl.maxTime=Integer.toString(Collections.max(minTimes));
-                                for (int time: minTimes){
-                                    sum+=time;
-                                }
-                                double average = (double) sum/ (double) minTimes.size();
-                                double stdev =0.0;
-                                for (int time:minTimes){
-                                    stdev +=(time - average)*(time-average);
-                                }
-                                stdev= stdev/minTimes.size();
-                                stdev = Math.sqrt(stdev);
-                                sl.avTime= String.format("%.1f",average);
-                                sl.stDev = String.format("%.1f",stdev);
-                            }
-                            latencies.add(sl);
+                            	latencies.add(sl);
+							
 
                         }
 

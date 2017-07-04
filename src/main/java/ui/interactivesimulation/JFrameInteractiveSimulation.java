@@ -961,7 +961,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
  			public void mouseClicked(java.awt.event.MouseEvent evt) {
     			int row = latTable.rowAtPoint(evt.getPoint());
     			int col = latTable.columnAtPoint(evt.getPoint());
-    			if (row >= 0 && col >= 0 && col <2) {
+    			if (row >= 0 && col >= 0 && col <2 && latencies.size()>row) {
 					for (TGComponent tgc: tmap.getTMLModeling().getCheckedComps().keySet()){
 						if (tmap.getTMLModeling().getCheckedComps().get(tgc).equals(latm.getValueAt(row,col).toString().split(" ")[0])){
         				    mgui.selectTab(tgc.getTDiagramPanel());
@@ -1443,6 +1443,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						//else {
 							String asynchType = (command.equals("Write") ? "send_async" : "receive_async");
 							int msgId=chanId;
+							int tmp=msgId-1;
+							if (!simtraces.contains("time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+  tmp+ " params=\"" +chan.getSize()+"\"")){
 							if (command.equals("Write")){	
 								if (!channelIDMap.containsKey(tran.channelName)){
 									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
@@ -1456,13 +1458,20 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								}
 							
 							}
-							String trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
+						String trace="";
+						if (command.equals("Write")){
+							trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
+						}
+						else {
+							trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
+						}
 						//	System.out.println("sending asynch " + trace);
 							if (!simtraces.contains(trace)){
 								simtraces.add(trace);
 							}
 						//}
 					}
+				}
 				}
 			}
 			else if (command.equals("SelectEvent")){
@@ -2395,16 +2404,16 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     private void addLatency(){
         SimulationLatency sl = new SimulationLatency();
-        sl.trans1 = transaction1.getSelectedItem().toString();
-        sl.trans2 = transaction2.getSelectedItem().toString();
-        sl.minTime="??";
-        sl.maxTime="??";
-        sl.avTime="??";
-        sl.stDev="??";
+        sl.setTransaction1(transaction1.getSelectedItem().toString());
+        sl.setTransaction2(transaction2.getSelectedItem().toString());
+        sl.setMinTime("??");
+        sl.setMaxTime("??");
+        sl.setAverageTime("??");
+        sl.setStDev("??");
         boolean found=false;
         for (Object o:latencies){
             SimulationLatency s = (SimulationLatency) o;
-            if (s.trans1 == sl.trans1 && s.trans2 == sl.trans2){
+            if (s.getTransaction1() == sl.getTransaction1() && s.getTransaction2() == sl.getTransaction2()){
                 found=true;
             }
         }
@@ -2420,7 +2429,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         for (Object o:latencies){
             SimulationLatency sl = (SimulationLatency) o;
             //calcuate response + checkpoint 1 id + checkpoint 2 id
-            sendCommand("cl " + sl.trans1.split("ID: ")[1].split("\\)")[0] + " " + sl.trans2.split("ID: ")[1].split("\\)")[0]);
+            sendCommand("cl " + sl.getTransaction1().split("ID: ")[1].split("\\)")[0] + " " + sl.getTransaction2().split("ID: ")[1].split("\\)")[0]);
         }
     }
 
@@ -2432,14 +2441,14 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         for (Object o: latencies){
             SimulationLatency sl = (SimulationLatency) o;
 			//System.out.println(sl.trans2 + " " + sl.trans1);
-            sl.minTime="??";
-            sl.maxTime="??";
-            sl.avTime="??";
-            sl.stDev="??";
+            sl.setMinTime("??");
+            sl.setMaxTime("??");
+            sl.setAverageTime("??");
+            sl.setStDev("??");
             for (String st1:transTimes.keySet()){
                 for (String st2:transTimes.keySet()){
                     if (st1!=st2){
-                        if (checkTable.get(st2).contains(sl.trans2) && checkTable.get(st1).contains(sl.trans1)){
+                        if (checkTable.get(st2).contains(sl.getTransaction2()) && checkTable.get(st1).contains(sl.getTransaction1())){
                             ArrayList<Integer> minTimes = new ArrayList<Integer>();
                             if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
                                 for(String time1: transTimes.get(st1)){
@@ -2457,11 +2466,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                 }
                                 if (minTimes.size()>0){
                                     int sum=0;
-                                    sl.minTime=Integer.toString(Collections.min(minTimes));
-                                    sl.maxTime=Integer.toString(Collections.max(minTimes));
+                                    sl.setMinTime(Integer.toString(Collections.min(minTimes)));
+                                    sl.setMaxTime(Integer.toString(Collections.max(minTimes)));
                                     for (int time: minTimes){
                                         sum+=time;
                                     }
+									//System.out.println("mintimes " + minTimes);
                                     double average = (double) sum/ (double) minTimes.size();
                                     double stdev =0.0;
                                     for (int time:minTimes){
@@ -2469,8 +2479,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                     }
                                     stdev= stdev/minTimes.size();
                                     stdev = Math.sqrt(stdev);
-                                    sl.avTime= String.format("%.1f",average);
-                                    sl.stDev = String.format("%.1f",stdev);
+                                    sl.setAverageTime(String.format("%.1f",average));
+                                    sl.setStDev(String.format("%.1f",stdev));
                                 }
                             }
 

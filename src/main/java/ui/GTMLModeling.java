@@ -419,6 +419,7 @@ public class GTMLModeling  {
                     throw new MalformedTMLDesignException(tmlcpc.getValue() + " msg");
                 }
                 tmlt = new TMLTask(makeName(tgc, tmlcpc.getValue()), tmlcpc, tmladp);
+				tmlt.setAttacker(tmlcpc.isAttacker());
                 TraceManager.addDev("Task added:" + tmlt.getName() + " with tadp=" + tmladp + " major=" + tmladp.getMGUI().getMajorTitle(tmladp));
                 listE.addCor(tmlt, tgc);
                 tmlm.addTask(tmlt);
@@ -1816,6 +1817,7 @@ public class GTMLModeling  {
                 listE.addCor(tmlrsequence, tgc);
 
             } else if (tgc instanceof TMLADReadChannel) {
+				if (!tmltask.isAttacker()){
                 // Get the channel
                 channel = tmlm.getChannelByName(getFromTable(tmltask, ((TMLADReadChannel)tgc).getChannelName()));
                 if (channel == null) {
@@ -1867,7 +1869,15 @@ public class GTMLModeling  {
                     activity.addElement(tmlreadchannel);
                     ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlreadchannel, tgc);
-                }
+					}
+                } else {
+					tmlexecc = new TMLExecC("execc", tgc);
+					tmlexecc.setValue("100");
+					tmlexecc.setAction("100");
+					activity.addElement(tmlexecc);
+					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+					listE.addCor(tmlexecc, tgc);
+				}
             } else if (tgc instanceof TMLADSendEvent) {
                 event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADSendEvent)tgc).getEventName()));
                 if (event == null) {
@@ -2116,6 +2126,7 @@ public class GTMLModeling  {
 
             } else if (tgc instanceof TMLADWriteChannel) {
                 // Get channels
+				if (!tmltask.isAttacker()){
                 channels = ((TMLADWriteChannel)tgc).getChannelsByName();
                 boolean error = false;
                 for(int i=0; i<channels.length; i++) {
@@ -2171,7 +2182,19 @@ public class GTMLModeling  {
                     ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlwritechannel, tgc);
                 }
-            }
+			} else {
+					System.out.println("removing write channel");
+					tmlexecc = new TMLExecC("execc", tgc);
+					tmlexecc.setValue("100");
+					tmlexecc.setAction("100");
+					activity.addElement(tmlexecc);
+					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+					listE.addCor(tmlexecc, tgc);
+				}
+            }    
+			
+
+
         }
 
         // Interconnection between elements
