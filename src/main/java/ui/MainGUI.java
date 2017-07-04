@@ -343,7 +343,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         pbt = new PeriodicBehaviorThread(this, 120000); // save every two minutes
 
-        PluginManager.pluginManager = new PluginManager();
+        //PluginManager.pluginManager = new PluginManager();
 
     }
 

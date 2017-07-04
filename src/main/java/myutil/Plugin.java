@@ -60,6 +60,7 @@ public class Plugin {
     private String name;
     private File file;
     private HashMap<String, Class> listOfClasses;
+    private Class classAvatarCodeGenerator;
 
     public Plugin(String _path, String _name) {
 	path = _path;
@@ -75,6 +76,21 @@ public class Plugin {
 	return path;
     }
 
+    public boolean hasAvatarCodeGenerator() {
+
+	String ret = executeRetStringMethod(removeJar(name), "hasAvatarCodeGenerator");
+	if (ret != null) {
+	    classAvatarCodeGenerator = getClass(ret);
+	    return true;
+	}
+
+	return false;
+    }
+
+    public Class getClassAvatarCodeGenerator() {
+	return classAvatarCodeGenerator;
+    }
+
     public Class getClass(String _className) {
 	Class<?> c = listOfClasses.get(_className);
 	if (c != null) {
@@ -87,7 +103,7 @@ public class Plugin {
                 TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
                 URL[] urls = new URL[] { file.toURI().toURL() };
                 ClassLoader loader = new URLClassLoader(urls);
-                TraceManager.addDev("Loader created");
+                //TraceManager.addDev("Loader created");
                 c = loader.loadClass(_className);
                 if (c == null) {
                     return null;
@@ -133,11 +149,29 @@ public class Plugin {
 	// We have a valid plugin. We now need to get the Method
 	Method m = getMethod(_className, _methodName);
 	if (m == null) {
-	    TraceManager.addDev("Null method");
+	    TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
 	    return null;
 	}
 	
 	try {
+	    return (String)(m.invoke(null));
+	} catch (Exception e) {
+	    TraceManager.addDev("Exception occured when executing method " + _methodName + " in class=" + _className);
+	    return null;
+	}
+    }
+
+    public String executeRetStringMethod(Class<?> c, String _methodName) {
+	// We have a valid plugin. We now need to get the Method
+		
+	try {
+	    TraceManager.addDev("Getting " + _methodName + " in class " + c.getName());
+	    Method m = c.getMethod(_methodName);
+	    
+	    if (m == null) {
+		TraceManager.addDev("Null method in executeRetStringMethod with Class parameter");
+		return null;
+	    }
 	    return (String)(m.invoke(null));
 	} catch (Exception e) {
 	    TraceManager.addDev("Exception occured when executing method " + _methodName);
@@ -171,6 +205,15 @@ public class Plugin {
 	    TraceManager.addDev("Exception occured when executing method " + _methodName);
 	    return null;
 	}
+    }
+
+    public String removeJar(String withjar) {
+	int index = withjar.indexOf(".jar");
+	if (index == -1) {
+	    return withjar;
+	}
+	return withjar.substring(0, index);
+
     }
 
 }
