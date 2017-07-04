@@ -1,7 +1,7 @@
 JAVAC  = javac
 JAR    = jar
 JAR_TXT = customizer.txt
-JAR_TARGET = ../CustomizerAvatarCodeGeneration.jar
+JAR_TARGET = ../CustomizerAvatarJavaCodeGeneration.jar
 
 all:
 	javac *.java

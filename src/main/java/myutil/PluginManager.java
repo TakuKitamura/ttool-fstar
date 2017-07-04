@@ -72,9 +72,11 @@ public class PluginManager  {
     public Plugin getPluginAvatarCodeGenerator() {
 	for(Plugin plugin: plugins) {
 	    if (plugin.hasAvatarCodeGenerator()) {
+		TraceManager.addDev("     Found avatar code generation plugin");
 		return plugin;
 	    }
 	}
+	TraceManager.addDev("     NOT Found avatar code generation plugin");
 	return null;
     }
 
