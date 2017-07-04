@@ -71,7 +71,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 //    private int spacePt = 3;
     private Color myColor;
 
-	public boolean isAttacker=false;
+	private boolean isAttacker=false;
     // Icon
     private int iconSize = 15;
     private boolean iconIsDrawn = false;
@@ -200,6 +200,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         } else {
             iconIsDrawn = false;
         }
+		if (isAttacker){
+			g.drawImage(IconManager.imgic8.getImage(), x + width - iconSize - textX, y + 2*textX, null);
+		}
 
         // Attributes
         if (tdp.areAttributesVisible()) {
@@ -283,6 +286,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     }
 
 
+	public boolean isAttacker(){
+		return isAttacker;
+	}
+
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         // On the icon?
         if (iconIsDrawn) {
@@ -323,6 +330,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
                 //TraceManager.addDev("Set value with change");
                 setValueWithChange(s);
+				isAttacker = s.contains("Attacker");
                 rescaled = true;
                 //TraceManager.addDev("return true");
                 return true;

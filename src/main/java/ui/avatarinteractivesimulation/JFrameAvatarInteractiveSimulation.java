@@ -1458,8 +1458,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     	                        ArrayList<Integer> minTimes = new ArrayList<Integer>();
 								SimulationLatency sl = new SimulationLatency();
-								sl.trans1=st1;
-								sl.trans2=st2;
+								sl.setTransaction1(st1);
+								sl.setTransaction2(st2);
                                 for(String time1: transTimes.get(st1)){
                                     //Find the first subsequent transaction
                                     int time = Integer.MAX_VALUE;
@@ -1477,8 +1477,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 							//	System.out.println("Min times " + minTimes);
                                 if (minTimes.size()>0){
                                     int sum=0;
-                                    sl.minTime=Integer.toString(Collections.min(minTimes));
-                                    sl.maxTime=Integer.toString(Collections.max(minTimes));
+                                    sl.setMinTime(Integer.toString(Collections.min(minTimes)));
+                                    sl.setMaxTime(Integer.toString(Collections.max(minTimes)));
                                     for (int time: minTimes){
                                         sum+=time;
                                     }
@@ -1489,8 +1489,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                                     }
                                     stdev= stdev/minTimes.size();
                                     stdev = Math.sqrt(stdev);
-                                    sl.avTime= String.format("%.1f",average);
-                                    sl.stDev = String.format("%.1f",stdev);
+                                    sl.setAverageTime(String.format("%.1f",average));
+                                    sl.setStDev(String.format("%.1f",stdev));
                                 }
 								latencies.add(sl);
 

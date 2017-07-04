@@ -84,22 +84,21 @@ public class LatencyTableModel extends AbstractTableModel {
 	if (row >= data.length) {
 	    return "";
 	}
-
 	SimulationLatency st = data[row];
 
 	switch(column) {
         case 0:
-            return st.trans1;
+            return st.getTransaction1();
         case 1:
-            return st.trans2;
+            return st.getTransaction2();
         case 2:
-            return st.minTime;
+            return st.getMinTime();
 		case 3:
-			return st.maxTime;
+			return st.getMaxTime();
 		case 4:	
-			return st.avTime;
+			return st.getAverageTime();
 		case 5:
-			return st.stDev;
+			return st.getStDev();
         }
         return "unknown";		
     }
@@ -124,11 +123,11 @@ public class LatencyTableModel extends AbstractTableModel {
     }
 
     public synchronized void setData(Vector<SimulationLatency> _trans) {
-	data = new SimulationLatency[_trans.size()];
-	for(int i=0; i<_trans.size(); i++) {
-	    data[i] = _trans.get(i);
-	}
-	fireTableStructureChanged();
-    }
+		data = new SimulationLatency[_trans.size()];
+		for(int i=0; i<_trans.size(); i++) {
+		    data[i] = _trans.get(i);
+		}
+		fireTableStructureChanged();
+    	}
 
 }
