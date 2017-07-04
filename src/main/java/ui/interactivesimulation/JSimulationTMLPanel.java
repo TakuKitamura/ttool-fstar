@@ -1012,6 +1012,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     }
 
     private void addGenericTransaction(String trans) {
+	//	System.out.println("trans " + trans);
         int index0;
         String tmp, tmp1, tmp2;
         long value;
