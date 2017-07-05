@@ -4233,11 +4233,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //            path = file.getAbsolutePath();
         //        }
         JDialogCCodeGeneration jgen = new JDialogCCodeGeneration( frame, this, "Application code generation and compilation",
-                                                                  ConfigurationTTool.SystemCHost, ConfigurationTTool.CCodeDirectory,
+                                                                  ConfigurationTTool.CCodeDirectory,
                                                                   "make -C " + ConfigurationTTool.CCodeDirectory,
-                                                                  ConfigurationTTool.SystemCCodeExecuteCommand,
-                                                                  ConfigurationTTool.SystemCCodeInteractiveExecuteCommand,
-                                                                  ConfigurationTTool.GGraphPath, gtm );
+                                                                  gtm );
         //   jgen.setSize(500, 750);
         GraphicLib.centerOnParent(jgen, 500, 750);
         jgen.setVisible(true);

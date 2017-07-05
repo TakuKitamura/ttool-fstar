@@ -43,7 +43,7 @@
 
 package tmltranslator;
 
-import myutil.TraceManager;
+import myutil.*;
 import tmltranslator.toproverif.TML2ProVerif;
 import ui.TMLArchiPanel;
 import ui.TMLComponentDesignPanel;
@@ -1487,9 +1487,10 @@ public class TMLMapping<E> {
 	for(int i=0; i<onnodes.size(); i++) {
 	    HwExecutionNode node = onnodes.get(i);
 	    TMLTask task = mappedtasks.get(i);
-	    s += "<TASKMAP node=\"" + node.getName() + "\" task=\"" + task.getName() + " />\n";
+	    s += "<TASKMAP node=\"" + node.getName() + "\" task=\"" + task.getName() + "\" />\n";
 	}
 	s += "</TMLMAPPING>\n";
+	//s = myutil.Conversion.transformToXMLString(s);
 	return s;
     }
 }

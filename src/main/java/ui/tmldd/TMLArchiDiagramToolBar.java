@@ -140,12 +140,14 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE]);
         button.addMouseListener(mgui.mouseHandler);
+	this.addSeparator();
 
         if (MainGUI.experimentalOn) {
             button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPNODE]);
             button.addMouseListener(mgui.mouseHandler);
             button = this.add(mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT]);
             button.addMouseListener(mgui.mouseHandler);
+	    this.addSeparator();
         }
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
@@ -155,7 +157,6 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         button.addMouseListener(mgui.mouseHandler);
         this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
@@ -167,9 +168,6 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         this.addSeparator();
 
         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
         button.addMouseListener(mgui.mouseHandler);
 
         this.addSeparator();

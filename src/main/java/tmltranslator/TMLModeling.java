@@ -609,6 +609,37 @@ public class TMLModeling<E> {
         return null;
     }
 
+    public TMLEvent getEventByShortName(String _name) {
+        TMLEvent evt;
+        Iterator<TMLEvent> iterator = events.listIterator();
+
+        while(iterator.hasNext()) {
+            evt = iterator.next();
+            if (evt.getName().endsWith(_name)) {
+                return evt;
+            }
+        }
+
+        return null;
+    }
+
+
+    public TMLRequest getRequestByShortName(String _name) {
+        TMLRequest req;
+        Iterator<TMLRequest> iterator = requests.listIterator();
+
+        while(iterator.hasNext()) {
+            req = iterator.next();
+
+            if (req.getName().endsWith(_name)) {
+                return req;
+            }
+        }
+
+        return null;
+    }
+
+
     public TMLRequest getRequestByName(String _name) {
         TMLRequest req;
         Iterator<TMLRequest> iterator = requests.listIterator();

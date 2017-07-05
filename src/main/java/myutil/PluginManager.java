@@ -43,6 +43,7 @@ package myutil;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import java.awt.*;
 
@@ -78,6 +79,28 @@ public class PluginManager  {
 	}
 	TraceManager.addDev("     NOT Found avatar code generation plugin");
 	return null;
+    }
+
+    public LinkedList<Plugin> getPluginDiplodocusCodeGenerator() {
+	LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
+	for(Plugin plugin: plugins) {
+	    if (plugin.hasDiplodocusCodeGenerator()) {
+		lplugins.add(plugin);
+		TraceManager.addDev("     Found diplodocus code generator plugin");
+	    }
+	}
+	return lplugins;
+    }
+
+    public LinkedList<Plugin> getPluginGraphicalComponent(String diag) {
+	LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
+	for(Plugin plugin: plugins) {
+	    if (plugin.hasGraphicalComponent(diag)) {
+		lplugins.add(plugin);
+		TraceManager.addDev("     Found graphical plugin");
+	    }
+	}
+	return lplugins;
     }
 
     public void addPlugin(Plugin _plugin) {

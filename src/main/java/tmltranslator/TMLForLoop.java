@@ -41,6 +41,7 @@
 
 package tmltranslator;
 
+import myutil.*;
 
 /**
  * Class TMLForLoop
@@ -77,7 +78,7 @@ public class TMLForLoop extends TMLActivityElement {
     }
 
     public String customExtraToXML() {
-	return " init=\"" + init + "\" + condition=\"" + condition + "\" increment=\"" + increment + "\" isInfinite=\"" + isInfinite + "\" ";
+	return " init=\"" + Conversion.transformToXMLString(init) + "\" condition=\"" + Conversion.transformToXMLString(condition) + "\" increment=\"" + Conversion.transformToXMLString(increment) + "\" isInfinite=\"" + isInfinite + "\" ";
     }
     
  

@@ -135,6 +135,10 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
         //System.out.println("Row table:" + rowTable.toString());
         //System.out.println("Value table:" + valueTable.toString());
 	}
+
+	public JSimulationTMLPanel getSDPanel(){
+		return sdpanel;
+	}
     
     private	void initActions() {
         actions = new InteractiveSimulationActions[InteractiveSimulationActions.NB_ACTION];
