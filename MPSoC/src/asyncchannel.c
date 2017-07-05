@@ -96,9 +96,9 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
     debugInt("asyncchannel read: address \n",channel->mwmr_fifo);
     debugInt("asyncchannel fifo->depth \n",channel->mwmr_fifo->depth);
     debugInt("asyncchannel fifo->width \n",channel->mwmr_fifo->width);
-    debugInt("asyncchannel msg size \n",sizeof(msg));
+    debugInt("asyncchannel msg size \n",sizeof(*msg));
     // async_read(channel->mwmr_fifo, &msg, 1);
-    async_read(channel->mwmr_fifo, &msg, sizeof(msg));
+    async_read(channel->mwmr_fifo, &msg, sizeof(*msg));
     return msg;
   }
 
