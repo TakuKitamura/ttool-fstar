@@ -48,8 +48,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-//import myutil.*;
-
 
 /**
  * Class JFrameBasicText
@@ -57,49 +55,53 @@ import java.awt.event.ActionListener;
  * version 1.0 11/12/2003
  * @author Ludovic APVRILLE
  */
-public	class JFrameBasicText extends JFrame implements ActionListener {
+public class JFrameBasicText extends JFrame implements ActionListener {
 	private String theText;
 
 	public JFrameBasicText(String title, String _theText) {
-		super(title);
-		theText = _theText;
-		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		Container framePanel = getContentPane();
-		framePanel.setLayout(new BorderLayout());
-		
-		JTextArea jta = new JTextArea(theText);
-		jta.setEditable(true);
-		jta.setMargin(new Insets(10, 10, 10, 10));
-		jta.setTabSize(3);
-		Font f = new Font("Courrier", Font.BOLD, 12); 
-		jta.setFont(f);
-		JScrollPane jsp = new JScrollPane(jta);
-		
-		framePanel.add(jsp, BorderLayout.CENTER);
-		
-		JButton button1 = new JButton("Close", IconManager.imgic27);
-		
-		button1.addActionListener(this);
-		
-		JPanel jp = new JPanel();
-		jp.add(button1);
-		
-		framePanel.add(jp, BorderLayout.SOUTH);
-		
-		pack();
+		this( title, _theText, null );
+//		super(title);
+//		theText = _theText;
+//		
+//		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//		Container framePanel = getContentPane();
+//		framePanel.setLayout(new BorderLayout());
+//		
+//		JTextArea jta = new JTextArea(theText);
+//		jta.setEditable(true);
+//		jta.setMargin(new Insets(10, 10, 10, 10));
+//		jta.setTabSize(3);
+//		Font f = new Font("Courrier", Font.BOLD, 12); 
+//		jta.setFont(f);
+//		JScrollPane jsp = new JScrollPane(jta);
+//		
+//		framePanel.add(jsp, BorderLayout.CENTER);
+//		
+//		JButton button1 = new JButton("Close", IconManager.imgic27);
+//		
+//		button1.addActionListener(this);
+//		
+//		JPanel jp = new JPanel();
+//		jp.add(button1);
+//		
+//		framePanel.add(jp, BorderLayout.SOUTH);
+//		
+//		pack();
 	}
         
-        public JFrameBasicText(String title, String _theText, ImageIcon imgic) {
+    public JFrameBasicText(String title, String _theText, ImageIcon imgic) {
 		super(title);
 		theText = _theText;
 		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation( DISPOSE_ON_CLOSE );
 		Container framePanel = getContentPane();
 		framePanel.setLayout(new BorderLayout());
 		
 		JTextArea jta = new JTextArea(theText);
-		jta.setEditable(true);
+		// Issue #35: This should not be editable because changes will not be 
+		// taken into account
+		jta.setEditable( false );
+//		jta.setEditable(true);
 		jta.setMargin(new Insets(10, 10, 10, 10));
 		jta.setTabSize(3);
 		Font f = new Font("Courrier", Font.BOLD, 12); 
@@ -116,11 +118,13 @@ public	class JFrameBasicText extends JFrame implements ActionListener {
 		jp.add(button1);
 		
 		framePanel.add(jp, BorderLayout.SOUTH);
-                
-                JButton button2 = new JButton(imgic);
-                jp = new JPanel();
-		jp.add(button2);
-                framePanel.add(jp, BorderLayout.NORTH);
+        
+		if ( imgic != null ) {
+	        JButton button2 = new JButton(imgic);
+	        jp = new JPanel();
+			jp.add(button2);
+	        framePanel.add(jp, BorderLayout.NORTH);
+		}
 		
 		pack();
 	}

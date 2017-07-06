@@ -2823,7 +2823,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void aboutVersion() {
         JFrameBasicText jft = new JFrameBasicText("About TTool ...", DefaultText.getAboutText(), IconManager.imgic324);
         jft.setIconImage(IconManager.img8);
-        GraphicLib.centerOnParent(jft, 700, 800 );
+        GraphicLib.centerOnParent(jft, 740, 800 );
         jft.setVisible(true);
 
     }
@@ -4418,7 +4418,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                        gtm.getUPPAALVerifierHost(),
                                                                        _tp);
             // jduv.setSize(450, 600);
-            GraphicLib.centerOnParent(jduv, 450, 600);
+            GraphicLib.centerOnParent(jduv, 650, 600);
             jduv.setVisible(true);
             dtree.toBeUpdated();
         } else if (gtm.getLanguageID() == GTURTLEModeling.MATRIX) {
