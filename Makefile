@@ -54,7 +54,7 @@ make git		Update the build number.
 
 
 Please report bugs or suggestions of improvements to:
-  Ludovic Apvrille <ludovic.apvrille@telecom-paristech.fr>
+  ttool.telecom-paristech.fr/support.html
 endef
 export HELP_message
 
