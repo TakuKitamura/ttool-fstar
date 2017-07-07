@@ -430,6 +430,9 @@ public class TMLArchitecture {
 
     public String toXML() {
 	String s = "<TMLARCHITECTURE>\n";
+	for(HwNode node: hwnodes) {
+	    node.toXML();
+	}
 	s += "</TMLARCHITECTURE>";
 	return s;
     }

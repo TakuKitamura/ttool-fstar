@@ -2695,7 +2695,7 @@ public class GTMLModeling  {
                     memory = new HwMemory(memorynode.getName());
                     memory.byteDataSize = memorynode.getByteDataSize();
                     memory.clockRatio = memorynode.getClockRatio();
-                    memory.BufferType = memorynode.getBufferType();
+                    memory.bufferType = memorynode.getBufferType();
                     listE.addCor(memory, memorynode);
                     archi.addHwNode(memory);
                     TraceManager.addDev("Memory node added:" + memory.getName());
