@@ -1,7 +1,8 @@
-/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici, Matteo Bertolino
  * 
  * ludovic.apvrille AT telecom-paristech.fr
  * andrea.enrici AT telecom-paristech.fr
+ * matteo.bertolino AT telecom-paristech.fr
  * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -3482,7 +3483,12 @@ public class GTMLModeling  {
                         node.addMECToHwExecutionNode( mec );
                         map.addTaskToHwExecutionNode(task, (HwExecutionNode)node);
                     } else {
-                        TraceManager.addDev("Null task");
+                        TraceManager.addDev("Null task. Raising an error");
+			String msg = "The task named " + artifact.getTaskName() + " was not found";
+                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                        ce.setTDiagramPanel(tmlap.tmlap);
+                        ce.setTGComponent(tgc);
+                        checkingErrors.add(ce);
                     }
                 }
             }
