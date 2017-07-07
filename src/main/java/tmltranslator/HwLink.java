@@ -49,8 +49,10 @@ package tmltranslator;
  */
 public class HwLink implements Comparable<HwLink> {
     public HwBus bus;
+    //public HwCommunicationNode bus;
     public HwVGMN vgmn;//DG 10.08.
     public HwCrossbar crossbar;//DG 10.08.
+    
     public HwNode hwnode;
     protected String name;
     protected int priority;
@@ -76,5 +78,12 @@ public class HwLink implements Comparable<HwLink> {
         if (priority < o.getPriority()) return -1;
         return 0;
     }
+
+    public String toXML() {
+	String s = "<LINK name=\"" + name + "\" bus=\"" + bus.getName() + "\" hwnode=\"" + hwnode.getName() + "\" priority=\"" + priority + "\" />\n";
+	return s;
+    }
+
+    
 
 }

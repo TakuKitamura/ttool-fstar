@@ -99,8 +99,8 @@ public class HwCPU extends HwExecutionNode  {
     }
 
     public String toXML() {
-	String s = "<HWA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
-	s += pipelineSize + "\" goIdleTime=\"" + goIdleTime + "\" maxConsecutiveIdleCycles=\"" + maxConsecutiveIdleCycles + "\" taskSwitchingTime=\"" + taskSwitchingTime + "\" cacheMiss=\"" +cacheMiss + "\"  schedulingPolicy=\"" + schedulingPolicy + "\" sliceTime=" + sliceTime + "\" />\n";
+	String s = "<CPU name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
+	s += pipelineSize + "\" goIdleTime=\"" + goIdleTime + "\" maxConsecutiveIdleCycles=\"" + maxConsecutiveIdleCycles + "\" taskSwitchingTime=\"" + taskSwitchingTime + "\" cacheMiss=\"" +cacheMiss + "\"  schedulingPolicy=\"" + schedulingPolicy + "\" sliceTime=\"" + sliceTime + "\" />\n";
 	return s;
     }
 
