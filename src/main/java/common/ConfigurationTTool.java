@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package common;
-
-//import java.awt.*;
 
 import myutil.FileUtils;
 import myutil.MalformedConfigurationException;
@@ -57,8 +52,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-
-//import org.xml.sax.*;
 
 
 /**
@@ -116,6 +109,12 @@ public class ConfigurationTTool {
     public static String UPPAALCodeDirectory = "";
     public static String UPPAALVerifierPath = "";
     public static String UPPAALVerifierHost = "";
+    
+    // Issue #35: UPPAAL change in property verification message
+    public static String UPPAALPropertyVerifMessage = "";
+    public static String UPPAALPropertyNotVerifMessage = "";
+    
+    
     public static String ProVerifCodeDirectory = "";
     public static String ProVerifVerifierPath = "";
     public static String ProVerifVerifierHost = "";
@@ -200,7 +199,7 @@ public class ConfigurationTTool {
     }
 
     public static void saveConfiguration() throws MalformedConfigurationException {
-        int index0, index1, index2, index3;
+        int index0, index1, index2;//, index3;
         String tmp, tmp1, tmp2, location;
         File f = new File(fileName);
         boolean write = false;
@@ -375,6 +374,13 @@ public class ConfigurationTTool {
         sb.append("\nUPPAAL:\n");
         sb.append("UPPAALCodeDirectory: " + UPPAALCodeDirectory + "\n");
         sb.append("UPPAALVerifierPATH: " + UPPAALVerifierPath + "\n");
+        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
+        
+        // Issue #35
+        sb.append("UPPAALPropertyVerifMessage: " + UPPAALPropertyVerifMessage + "\n");
+        sb.append("UPPAALPropertyNotVerifMessage: " + UPPAALPropertyNotVerifMessage + "\n");
+
+
         sb.append("AVATARCPPSIMCompileCommand: " + AVATARCPPSIMCompileCommand + "\n");
         sb.append("AVATARCPPSIMCodeExecuteCommand: " + AVATARCPPSIMCodeExecuteCommand + "\n");
         sb.append("AVATARCPPSIMInteractiveExecuteCommand: " + AVATARCPPSIMInteractiveExecuteCommand + "\n");
@@ -383,7 +389,9 @@ public class ConfigurationTTool {
         sb.append("\nAVATAR (simulation):\n");
         sb.append("AVATARSimulationHost: " + AVATARSimulationHost + "\n");
         sb.append("AVATARCPPSIMCodeDirectory: " + AVATARCPPSIMCodeDirectory + "\n");
-        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
+        
+        // Issue #35: Moved with other UPPAAL properties
+//        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
 
         // AVATAR: executable code
         sb.append("\nAVATAR (executable code):\n");
@@ -701,6 +709,16 @@ public class ConfigurationTTool {
             nl = doc.getElementsByTagName("UPPAALVerifierHost");
             if (nl.getLength() > 0)
                 UPPAALVerifierHost(nl);
+
+            nl = doc.getElementsByTagName("UPPAALPropertyVerifMessage");
+            if (nl.getLength() > 0) {
+            	UPPAALPropertyVerifMessage(nl);
+            }
+
+            nl = doc.getElementsByTagName("UPPAALPropertyNotVerifMessage");
+            if (nl.getLength() > 0) {
+            	UPPAALPropertyNotVerifMessage(nl);
+            }
 
             nl = doc.getElementsByTagName("ProVerifCodeDirectory");
             if (nl.getLength() > 0)
@@ -1208,6 +1226,24 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             UPPAALVerifierHost = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void UPPAALPropertyVerifMessage(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            UPPAALPropertyVerifMessage = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void UPPAALPropertyNotVerifMessage(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            UPPAALPropertyNotVerifMessage = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
