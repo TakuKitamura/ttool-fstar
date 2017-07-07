@@ -79,6 +79,7 @@ public class TMLModeling<E> {
     public Map<SecurityPattern, List<TMLTask>> securityTaskMap;
     private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
     private Map<E, String> checkedActivities;
+    
     private int hashCode;
     private boolean hashCodeComputed = false;
 
@@ -2469,6 +2470,15 @@ public class TMLModeling<E> {
 	String s = "<TMLMODELING>\n";
 	for (TMLTask t: tasks) {
 	    s += t.toXML();
+	}
+	for (TMLChannel c: channels) {
+	    s += c.toXML();
+	}
+	for (TMLRequest r: requests) {
+	    s += r.toXML();
+	}
+	for (TMLEvent e: events) {
+	    s += e.toXML();
 	}
 	s += "</TMLMODELING>\n";
 	return s;

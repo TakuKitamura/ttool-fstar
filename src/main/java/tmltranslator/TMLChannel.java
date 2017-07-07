@@ -458,14 +458,14 @@ public class TMLChannel extends TMLCommunicationElement {
 	s += "maxNbOfLoss=\"" + maxNbOfLoss + "\" ";
 	switch(type) {
 	case BRBW:
-	    s += "type=\"BRWB\" ";
+	    s += "type=\"BRBW\" ";
 	    break;
 	case BRNBW:
-	    s += "type=\"BRNWB\" ";
+	    s += "type=\"BRNBW\" ";
 	    break;
 	case NBRNBW:
 	default:
-	    s += "type=\"NBRNWB\" ";  
+	    s += "type=\"NBRNBW\" ";  
 	}
 	s += "size=\"" + size + "\" ";
 	s += "max=\"" + max + "\" ";
