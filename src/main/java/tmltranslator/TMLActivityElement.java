@@ -116,7 +116,7 @@ public abstract class TMLActivityElement extends TMLElement{
     }
 
     public String toXML(Vector<TMLActivityElement> elements) {
-	String s = "<ACTIVITYELEMENT value=\"" + value + "\" id=\"" + elements.indexOf(this) + "\" name=\"" + name + "\">\n";
+	String s = "<ACTIVITYELEMENT type=\"" + getClass().getName() + "\" value=\"" + value + "\" id=\"" + elements.indexOf(this) + "\" name=\"" + name + "\">\n";
 	if (securityPattern != null) {
 	    s += securityPattern.toXML();
 	}
@@ -130,7 +130,7 @@ public abstract class TMLActivityElement extends TMLElement{
 
 
     public String extraToXML() {
-	String s = "<CUSTOM type=\"" + getClass().getName() + "\" " + customExtraToXML() + " />\n";
+	String s = "<CUSTOM " + customExtraToXML() + " />\n";
 	return s;
     }
     
