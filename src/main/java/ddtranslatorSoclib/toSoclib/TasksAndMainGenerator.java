@@ -148,6 +148,7 @@ public class TasksAndMainGenerator {
         mainFile = new  MainFileSoclib("main");
 
         avspec.removeCompositeStates();
+	avspec.removeLibraryFunctionCalls();
         avspec.removeTimers();
 
         if (avspec.hasApplicationCode() && includeUserCode) {
@@ -353,15 +354,22 @@ public class TasksAndMainGenerator {
     	return -1;
     }
 
+    /* DG 7.7. give CPUid of outer block to block created e.g. for a timer */
     public void makeTasks() {
         for(AvatarBlock block: avspec.getListOfBlocks()) {
-	      if (FindCPUidFromTask(block)!=-1)
+	    if (FindCPUidFromTask(block)!=-1) 
 	      makeTask(block,FindCPUidFromTask(block));
-	      else {
-		  System.out.println("Warning: Unmapped Block "+block.getName());
-	      }
+	    else {
+		//AvatarBlock father = block.getFather();
+		//if(father!=null){ //DG bug: donne null pointer
+		//makeTask(block,FindCPUidFromTask(father));
+		makeTask(block,0);
+	
+		System.out.println("Warning: Unmapped Block "+block.getName());
+		}
+	    }
         }
-    }
+
 
     public void makeTask(AvatarBlock block , int cpuId) {
 	TaskFileSoclib taskFile = new TaskFileSoclib(block.getName(),cpuId);
