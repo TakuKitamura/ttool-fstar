@@ -95,4 +95,8 @@ public abstract class ArchUnitMEC       {
         return localMemoryPointer;
     }
 
+    public String typeToString() {
+	return stringTypesArr[index];
+    }
+
 }       //End of class
