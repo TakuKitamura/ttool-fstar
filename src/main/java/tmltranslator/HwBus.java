@@ -49,7 +49,7 @@ package tmltranslator;
  */
 public class HwBus extends HwCommunicationNode  {
 
-    // Arbitratuion policy
+    // Management policy
     public static final int BASIC_ROUND_ROBIN = 0;
     public static final int PRIORITY_BASED = 1;
     public static final int CAN = 2;

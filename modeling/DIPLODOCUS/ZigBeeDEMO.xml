@@ -171,8 +171,8 @@
 <cdparam x="100" y="100" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="1165" y="522" id="334" />
-<P2  x="1299" y="409" id="299" />
+<P1  x="1152" y="509" id="334" />
+<P2  x="1312" y="396" id="299" />
 <Point x="1232" y="522" />
 <Point x="1232" y="409" />
 <AutomaticDrawing  data="true" />
@@ -197,8 +197,8 @@
 <cdparam x="180" y="17" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="1174" y="261" id="411" />
-<P2  x="1299" y="353" id="295" />
+<P1  x="1161" y="248" id="411" />
+<P2  x="1312" y="340" id="295" />
 <Point x="1226" y="261" />
 <Point x="1226" y="353" />
 <AutomaticDrawing  data="true" />
@@ -223,8 +223,8 @@
 <cdparam x="1492" y="534" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="859" y="402" id="262" />
-<P2  x="1001" y="499" id="336" />
+<P1  x="846" y="389" id="262" />
+<P2  x="1014" y="486" id="336" />
 <Point x="897" y="402" />
 <Point x="897" y="499" />
 <AutomaticDrawing  data="true" />
@@ -249,8 +249,8 @@
 <cdparam x="1492" y="484" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="859" y="370" id="258" />
-<P2  x="959" y="261" id="377" />
+<P1  x="846" y="357" id="258" />
+<P2  x="972" y="248" id="377" />
 <Point x="901" y="370" />
 <Point x="901" y="261" />
 <AutomaticDrawing  data="true" />
@@ -275,7 +275,7 @@
 <cdparam x="179" y="42" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="1169" y="392" id="319" />
+<P1  x="1156" y="379" id="319" />
 <P2  x="1259" y="256" id="101" />
 <Point x="1259" y="392" />
 <AutomaticDrawing  data="true" />
@@ -292,48 +292,48 @@
 <cdparam x="947" y="492" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="648" y="380" id="217" />
-<P2  x="699" y="380" id="256" />
+<P1  x="635" y="367" id="217" />
+<P2  x="712" y="367" id="256" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="57" >
 <cdparam x="947" y="344" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="653" y="254" id="202" />
-<P2  x="702" y="254" id="241" />
+<P1  x="640" y="241" id="202" />
+<P2  x="715" y="241" id="241" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="58" >
 <cdparam x="663" y="568" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="427" y="379" id="178" />
-<P2  x="468" y="379" id="219" />
+<P1  x="414" y="366" id="178" />
+<P2  x="481" y="366" id="219" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="59" >
 <cdparam x="662" y="426" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="426" y="263" id="163" />
-<P2  x="471" y="263" id="204" />
+<P1  x="413" y="250" id="163" />
+<P2  x="484" y="250" id="204" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="60" >
 <cdparam x="264" y="567" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="213" y="374" id="141" />
-<P2  x="247" y="374" id="180" />
+<P1  x="200" y="361" id="141" />
+<P2  x="260" y="361" id="180" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="61" >
 <cdparam x="267" y="416" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="175" y="251" id="128" />
-<P2  x="244" y="251" id="165" />
+<P1  x="162" y="238" id="128" />
+<P2  x="257" y="238" id="165" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="62" >
@@ -341,14 +341,14 @@
 <sizeparam width="10" height="10" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="1276" y="248" id="96" />
-<P2  x="1299" y="249" id="282" />
+<P2  x="1312" y="236" id="282" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="64" >
 <cdparam x="179" y="10" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="1170" y="123" id="396" />
+<P1  x="1157" y="110" id="396" />
 <P2  x="1259" y="239" id="99" />
 <Point x="1259" y="123" />
 <AutomaticDrawing  data="true" />
@@ -366,7 +366,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="919" y="245" id="117" />
-<P2  x="999" y="387" id="321" />
+<P2  x="1012" y="374" id="321" />
 <Point x="919" y="387" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="65" >
@@ -382,8 +382,8 @@
 <cdparam x="1578" y="147" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="985" y="261" id="382" />
-<P2  x="1005" y="261" id="413" />
+<P1  x="972" y="274" id="382" />
+<P2  x="1018" y="248" id="413" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="69" >
@@ -391,7 +391,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="919" y="228" id="115" />
-<P2  x="959" y="122" id="358" />
+<P2  x="972" y="109" id="358" />
 <Point x="919" y="122" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="68" >
@@ -407,15 +407,15 @@
 <cdparam x="1578" y="4" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="985" y="122" id="363" />
-<P2  x="1000" y="122" id="398" />
+<P1  x="972" y="135" id="363" />
+<P2  x="1013" y="109" id="398" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="71" >
 <cdparam x="1486" y="336" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="862" y="237" id="243" />
+<P1  x="849" y="224" id="243" />
 <P2  x="903" y="237" id="112" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -424,7 +424,7 @@
 <sizeparam width="10" height="10" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="1433" y="317" id="297" />
-<P2  x="1339" y="303" id="284" />
+<P2  x="1339" y="277" id="284" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="73" >
@@ -432,7 +432,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="1129" y="180" id="415" />
-<P2  x="1050" y="170" id="400" />
+<P2  x="1050" y="144" id="400" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="74" >
@@ -440,7 +440,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="1134" y="457" id="338" />
-<P2  x="1041" y="449" id="323" />
+<P2  x="1041" y="423" id="323" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="75" >
@@ -448,7 +448,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="827" y="315" id="260" />
-<P2  x="751" y="305" id="245" />
+<P2  x="751" y="279" id="245" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="76" >
@@ -456,7 +456,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="613" y="321" id="221" />
-<P2  x="525" y="306" id="206" />
+<P2  x="525" y="280" id="206" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="77" >
@@ -464,7 +464,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="386" y="312" id="182" />
-<P2  x="290" y="296" id="167" />
+<P2  x="290" y="270" id="167" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="78" >
@@ -472,7 +472,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="126" y="313" id="143" />
-<P2  x="61" y="295" id="130" />
+<P2  x="61" y="269" id="130" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="301" id="95" >
@@ -11652,6 +11652,26 @@ sequence diagram.
 
 <Modeling type="TML Architecture" nameTab="Mapping_2" >
 <TMLArchiDiagramPanel name="DIPLODOCUS architecture and mapping Diagram" minX="10" maxX="1900" minY="10" maxY="1900" attributes="0" masterClockFrequency="200" >
+<COMPONENT type="1108" id="7787" >
+<cdparam x="208" y="56" />
+<sizeparam width="344" height="104" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
+<infoparam name="CP0" value="CP0" />
+<TGConnectingPoint num="0" id="7788" />
+<TGConnectingPoint num="1" id="7789" />
+<TGConnectingPoint num="2" id="7790" />
+<TGConnectingPoint num="3" id="7791" />
+<TGConnectingPoint num="4" id="7792" />
+<TGConnectingPoint num="5" id="7793" />
+<TGConnectingPoint num="6" id="7794" />
+<TGConnectingPoint num="7" id="7795" />
+<extraparam>
+<info stereotype="CP" nodeName="CP0" cpMEC="VOID" transferType1="-1" transferType2="-1" />
+<attributes reference="" />
+</extraparam>
+</COMPONENT>
+
 <COMPONENT type="1100" id="5407" >
 <cdparam x="560" y="807" />
 <sizeparam width="150" height="100" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -13368,16 +13388,16 @@ sequence diagram.
 <cdparam x="1029" y="409" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1021" y="401" id="7174" />
-<P2  x="1054" y="416" id="7141" />
+<P1  x="1029" y="409" id="7174" />
+<P2  x="1044" y="406" id="7141" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6239" >
 <cdparam x="16" y="272" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="251" y="438" id="6381" />
-<P2  x="530" y="438" id="6400" />
+<P1  x="241" y="448" id="6381" />
+<P2  x="541" y="448" id="6400" />
 <Point x="220" y="526" />
 <Point x="220" y="560" />
 <Point x="570" y="560" />
@@ -13420,8 +13440,8 @@ sequence diagram.
 <cdparam x="207" y="242" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="530" y="438" id="6402" />
-<P2  x="251" y="438" id="6379" />
+<P1  x="541" y="448" id="6402" />
+<P2  x="241" y="448" id="6379" />
 <Point x="587" y="478" />
 <Point x="587" y="578" />
 <Point x="208" y="578" />
@@ -13464,8 +13484,8 @@ sequence diagram.
 <cdparam x="487" y="102" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="983" y="232" id="6358" />
-<P2  x="251" y="438" id="6383" />
+<P1  x="994" y="242" id="6358" />
+<P2  x="241" y="448" id="6383" />
 <Point x="1005" y="242" />
 <Point x="1005" y="282" />
 <Point x="201" y="282" />
@@ -13508,8 +13528,8 @@ sequence diagram.
 <cdparam x="487" y="88" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="983" y="208" id="6360" />
-<P2  x="251" y="438" id="6373" />
+<P1  x="994" y="218" id="6360" />
+<P2  x="241" y="448" id="6373" />
 <Point x="1020" y="220" />
 <Point x="1020" y="291" />
 <Point x="215" y="291" />
@@ -13552,120 +13572,120 @@ sequence diagram.
 <cdparam x="1124" y="324" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1054" y="455" id="7098" />
-<P2  x="1123" y="447" id="7209" />
+<P1  x="1064" y="465" id="7098" />
+<P2  x="1113" y="457" id="7209" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6256" >
 <cdparam x="1124" y="303" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1054" y="396" id="7136" />
-<P2  x="1123" y="409" id="7207" />
+<P1  x="1064" y="406" id="7136" />
+<P2  x="1113" y="419" id="7207" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6257" >
 <cdparam x="987" y="323" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="901" y="432" id="7068" />
-<P2  x="946" y="432" id="7117" />
+<P1  x="912" y="442" id="7068" />
+<P2  x="936" y="442" id="7117" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6258" >
 <cdparam x="987" y="303" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="901" y="410" id="7070" />
-<P2  x="946" y="405" id="7155" />
+<P1  x="912" y="420" id="7070" />
+<P2  x="936" y="415" id="7155" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6259" >
 <cdparam x="869" y="320" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="783" y="431" id="6966" />
-<P2  x="831" y="431" id="7072" />
+<P1  x="793" y="441" id="6966" />
+<P2  x="821" y="441" id="7072" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6260" >
 <cdparam x="869" y="299" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="783" y="410" id="7004" />
-<P2  x="831" y="410" id="7066" />
+<P1  x="793" y="420" id="7004" />
+<P2  x="821" y="420" id="7066" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6261" >
 <cdparam x="734" y="300" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="647" y="410" id="6419" />
-<P2  x="693" y="410" id="7023" />
+<P1  x="658" y="420" id="6419" />
+<P2  x="683" y="420" id="7023" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6262" >
 <cdparam x="734" y="321" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="647" y="431" id="6417" />
-<P2  x="693" y="431" id="6985" />
+<P1  x="658" y="441" id="6417" />
+<P2  x="683" y="441" id="6985" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6263" >
 <cdparam x="617" y="298" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="530" y="410" id="6398" />
-<P2  x="577" y="410" id="6415" />
+<P1  x="541" y="420" id="6398" />
+<P2  x="567" y="420" id="6415" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6264" >
 <cdparam x="617" y="320" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="530" y="430" id="6396" />
-<P2  x="577" y="430" id="6421" />
+<P1  x="541" y="440" id="6396" />
+<P2  x="567" y="440" id="6421" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6265" >
 <cdparam x="519" y="353" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="431" y="438" id="6794" />
-<P2  x="480" y="438" id="6404" />
+<P1  x="441" y="448" id="6794" />
+<P2  x="470" y="448" id="6404" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6266" >
 <cdparam x="519" y="333" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="431" y="438" id="6923" />
-<P2  x="480" y="438" id="6394" />
+<P1  x="441" y="448" id="6923" />
+<P2  x="470" y="448" id="6394" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6267" >
 <cdparam x="389" y="379" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="301" y="438" id="6375" />
-<P2  x="343" y="438" id="6904" />
+<P1  x="312" y="448" id="6375" />
+<P2  x="333" y="448" id="6904" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6268" >
 <cdparam x="389" y="359" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="301" y="438" id="6377" />
-<P2  x="343" y="438" id="6885" />
+<P1  x="312" y="448" id="6377" />
+<P2  x="333" y="448" id="6885" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6273" >
 <cdparam x="782" y="137" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="983" y="160" id="6356" />
-<P2  x="343" y="385" id="6866" />
+<P1  x="994" y="170" id="6356" />
+<P2  x="333" y="395" id="6866" />
 <Point x="1058" y="170" />
 <Point x="1058" y="328" />
 <Point x="302" y="328" />
@@ -13708,8 +13728,8 @@ sequence diagram.
 <cdparam x="782" y="159" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="983" y="180" id="6354" />
-<P2  x="343" y="406" id="6847" />
+<P1  x="994" y="190" id="6354" />
+<P2  x="333" y="416" id="6847" />
 <Point x="1047" y="189" />
 <Point x="1047" y="321" />
 <Point x="288" y="321" />
@@ -13752,135 +13772,135 @@ sequence diagram.
 <cdparam x="693" y="193" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="880" y="211" id="6694" />
-<P2  x="933" y="211" id="6362" />
+<P1  x="890" y="221" id="6694" />
+<P2  x="923" y="221" id="6362" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6280" >
 <cdparam x="693" y="172" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="880" y="189" id="6732" />
-<P2  x="933" y="189" id="6352" />
+<P1  x="890" y="199" id="6732" />
+<P2  x="923" y="199" id="6352" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6281" >
 <cdparam x="557" y="191" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Composite port" value="Connector between ports" />
-<P1  x="743" y="209" id="6464" />
-<P2  x="790" y="209" id="6713" />
+<P1  x="753" y="219" id="6464" />
+<P2  x="780" y="219" id="6713" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6282" >
 <cdparam x="557" y="170" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Composite port" value="Connector between ports" />
-<P1  x="743" y="189" id="6502" />
-<P2  x="790" y="189" id="6751" />
+<P1  x="753" y="199" id="6502" />
+<P2  x="780" y="199" id="6751" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6283" >
 <cdparam x="427" y="190" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="624" y="189" id="6337" />
-<P2  x="653" y="189" id="6483" />
+<P1  x="635" y="199" id="6337" />
+<P2  x="643" y="199" id="6483" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6284" >
 <cdparam x="427" y="170" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="624" y="209" id="6339" />
-<P2  x="653" y="209" id="6521" />
+<P1  x="635" y="219" id="6339" />
+<P2  x="643" y="219" id="6521" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6285" >
 <cdparam x="320" y="186" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="503" y="195" id="6579" />
-<P2  x="544" y="205" id="6341" />
+<P1  x="513" y="205" id="6579" />
+<P2  x="534" y="215" id="6341" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6286" >
 <cdparam x="320" y="166" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="503" y="166" id="6617" />
-<P2  x="544" y="185" id="6335" />
+<P1  x="513" y="176" id="6617" />
+<P2  x="534" y="195" id="6335" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6287" >
 <cdparam x="188" y="186" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="311" y="206" id="6434" />
-<P2  x="358" y="202" id="6598" />
+<P1  x="322" y="216" id="6434" />
+<P2  x="348" y="212" id="6598" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6288" >
 <cdparam x="188" y="166" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="311" y="185" id="6436" />
-<P2  x="358" y="168" id="6636" />
+<P1  x="322" y="195" id="6436" />
+<P2  x="348" y="178" id="6636" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6289" >
 <cdparam x="67" y="336" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="184" y="203" id="6324" />
-<P2  x="231" y="205" id="6438" />
+<P1  x="195" y="213" id="6324" />
+<P2  x="221" y="215" id="6438" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6290" >
 <cdparam x="67" y="304" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="184" y="183" id="6322" />
-<P2  x="231" y="185" id="6432" />
+<P1  x="195" y="193" id="6322" />
+<P2  x="221" y="195" id="6432" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6291" >
 <cdparam x="480" y="337" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="472" y="215" id="6564" />
-<P2  x="503" y="215" id="6584" />
+<P1  x="480" y="223" id="6564" />
+<P2  x="493" y="205" id="6584" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6292" >
 <cdparam x="484" y="239" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="442" y="165" id="6655" />
-<P2  x="503" y="186" id="6622" />
+<P1  x="450" y="173" id="6655" />
+<P2  x="493" y="176" id="6622" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6293" >
 <cdparam x="403" y="300" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="358" y="222" id="6603" />
-<P2  x="397" y="215" id="6566" />
+<P1  x="368" y="212" id="6603" />
+<P2  x="389" y="223" id="6566" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6294" >
 <cdparam x="403" y="274" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="358" y="188" id="6641" />
-<P2  x="389" y="162" id="6657" />
+<P1  x="368" y="178" id="6641" />
+<P2  x="381" y="170" id="6657" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6295" >
 <cdparam x="469" y="378" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="410" y="175" id="6659" />
+<P1  x="410" y="191" id="6659" />
 <P2  x="416" y="191" id="6568" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -13888,39 +13908,39 @@ sequence diagram.
 <cdparam x="756" y="327" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="719" y="240" id="6453" />
-<P2  x="743" y="229" id="6469" />
+<P1  x="727" y="248" id="6453" />
+<P2  x="733" y="219" id="6469" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6297" >
 <cdparam x="760" y="229" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="720" y="168" id="6544" />
-<P2  x="743" y="209" id="6507" />
+<P1  x="728" y="176" id="6544" />
+<P2  x="733" y="199" id="6507" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6298" >
 <cdparam x="679" y="290" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="653" y="209" id="6488" />
-<P2  x="676" y="240" id="6451" />
+<P1  x="663" y="199" id="6488" />
+<P2  x="668" y="248" id="6451" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6299" >
 <cdparam x="679" y="264" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="653" y="229" id="6526" />
-<P2  x="675" y="165" id="6542" />
+<P1  x="663" y="219" id="6526" />
+<P2  x="667" y="173" id="6542" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6300" >
 <cdparam x="745" y="368" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="696" y="178" id="6540" />
+<P1  x="696" y="194" id="6540" />
 <P2  x="697" y="213" id="6449" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -13928,39 +13948,39 @@ sequence diagram.
 <cdparam x="928" y="350" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="860" y="241" id="6679" />
-<P2  x="880" y="231" id="6699" />
+<P1  x="868" y="249" id="6679" />
+<P2  x="870" y="221" id="6699" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6302" >
 <cdparam x="932" y="252" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="856" y="172" id="6770" />
-<P2  x="880" y="209" id="6737" />
+<P1  x="864" y="180" id="6770" />
+<P2  x="870" y="199" id="6737" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6303" >
 <cdparam x="851" y="313" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="790" y="229" id="6718" />
-<P2  x="810" y="241" id="6681" />
+<P1  x="800" y="219" id="6718" />
+<P2  x="802" y="249" id="6681" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6304" >
 <cdparam x="851" y="287" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="790" y="209" id="6756" />
-<P2  x="810" y="168" id="6772" />
+<P1  x="800" y="199" id="6756" />
+<P2  x="802" y="176" id="6772" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6305" >
 <cdparam x="917" y="391" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="829" y="184" id="6774" />
+<P1  x="829" y="200" id="6774" />
 <P2  x="833" y="215" id="6683" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -13968,55 +13988,55 @@ sequence diagram.
 <cdparam x="698" y="478" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="412" y="476" id="6836" />
-<P2  x="431" y="458" id="6799" />
+<P1  x="420" y="484" id="6836" />
+<P2  x="421" y="448" id="6799" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6307" >
 <cdparam x="696" y="390" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="410" y="425" id="6819" />
-<P2  x="431" y="458" id="6928" />
+<P1  x="418" y="433" id="6819" />
+<P2  x="421" y="448" id="6928" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6308" >
 <cdparam x="619" y="480" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="343" y="458" id="6909" />
-<P2  x="370" y="485" id="6830" />
+<P1  x="353" y="448" id="6909" />
+<P2  x="362" y="493" id="6830" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6309" >
 <cdparam x="619" y="386" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="343" y="426" id="6852" />
-<P2  x="370" y="468" id="6832" />
+<P1  x="353" y="416" id="6852" />
+<P2  x="362" y="476" id="6832" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6310" >
 <cdparam x="619" y="453" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="343" y="458" id="6890" />
-<P2  x="368" y="430" id="6813" />
+<P1  x="353" y="448" id="6890" />
+<P2  x="360" y="438" id="6813" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6311" >
 <cdparam x="619" y="360" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="343" y="405" id="6871" />
-<P2  x="368" y="413" id="6815" />
+<P1  x="353" y="395" id="6871" />
+<P2  x="360" y="421" id="6815" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6312" >
 <cdparam x="571" y="583" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="389" y="437" id="6817" />
+<P1  x="389" y="453" id="6817" />
 <P2  x="390" y="467" id="6834" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -14024,39 +14044,39 @@ sequence diagram.
 <cdparam x="918" y="409" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="760" y="427" id="6951" />
-<P2  x="783" y="451" id="6971" />
+<P1  x="768" y="435" id="6951" />
+<P2  x="773" y="441" id="6971" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6314" >
 <cdparam x="922" y="311" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="762" y="390" id="7042" />
-<P2  x="783" y="430" id="7009" />
+<P1  x="770" y="398" id="7042" />
+<P2  x="773" y="420" id="7009" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6315" >
 <cdparam x="841" y="372" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="693" y="451" id="6990" />
-<P2  x="713" y="427" id="6953" />
+<P1  x="703" y="441" id="6990" />
+<P2  x="705" y="435" id="6953" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6316" >
 <cdparam x="841" y="346" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="693" y="430" id="7028" />
-<P2  x="712" y="386" id="7044" />
+<P1  x="703" y="420" id="7028" />
+<P2  x="704" y="394" id="7044" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6317" >
 <cdparam x="907" y="450" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="733" y="407" id="7046" />
+<P1  x="733" y="423" id="7046" />
 <P2  x="733" y="406" id="6955" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -14064,31 +14084,31 @@ sequence diagram.
 <cdparam x="1272" y="373" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1025" y="461" id="7083" />
-<P2  x="1054" y="475" id="7103" />
+<P1  x="1033" y="469" id="7083" />
+<P2  x="1044" y="465" id="7103" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6319" >
 <cdparam x="1195" y="336" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="946" y="452" id="7122" />
-<P2  x="978" y="465" id="7085" />
+<P1  x="956" y="442" id="7122" />
+<P2  x="970" y="473" id="7085" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6320" >
 <cdparam x="1195" y="310" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="946" y="425" id="7160" />
-<P2  x="971" y="400" id="7176" />
+<P1  x="956" y="415" id="7160" />
+<P2  x="963" y="408" id="7176" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6321" >
 <cdparam x="1261" y="414" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="992" y="418" id="7178" />
+<P1  x="992" y="434" id="7178" />
 <P2  x="1004" y="448" id="7087" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
