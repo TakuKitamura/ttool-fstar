@@ -46,6 +46,7 @@ import ui.SwallowTGComponent;
 import ui.TDiagramPanel;
 import ui.TGComponent;
 import ui.TGComponentManager;
+import myutil.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,18 +77,16 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
             //Set its coordinates
             tgc.setFather(this);
             tgc.setDrawingZone(true);
-            //System.out.println("Internal component");
-            //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
-            tgc.resizeWithFather();
-            //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
-            //tgc.setCd(x, y);
+	    tgc.resizeWithFather();
+ 
             //add it
             addInternalComponent( tgc, 0 );
             return true;
         }
         else    {
+	    TraceManager.addDev("Testing swallow " + tgc);
             if( tgc instanceof TMLArchiEventArtifact )  {
+		TraceManager.addDev("Testing swallow archievent ok " + tgc);
                 tgc.setFather( this );
                 tgc.setDrawingZone( true );
                 tgc.resizeWithFather();

@@ -250,6 +250,8 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
 
         return true;
     }
+
+    
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
 	boolean ret = super.acceptSwallowedTGComponent(tgc);
 	if (ret == true) {
@@ -276,8 +278,9 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
         }
 
         return false;
-
     }
+
+    
     public int getType() {
         return TGComponentManager.TMLARCHI_MEMORYNODE;
     }
