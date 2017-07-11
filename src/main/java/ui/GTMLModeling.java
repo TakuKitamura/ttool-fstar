@@ -3460,8 +3460,17 @@ public class GTMLModeling  {
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
-            //if( tgc instanceof TMLArchiCPNode )       {
 
+	    // Custom values (for plugin)
+	    if (tgc instanceof TGComponentPlugin) {
+		String val = ((TGComponentPlugin)(tgc)).getCustomValue();
+		if (val != null) {
+		    TraceManager.addDev("Adding custom value:" +  val);
+		    map.addCustomValue(val);
+		}
+	    }
+
+	    // Execution nodes
             node = archi.getHwNodeByName( tgc.getName() );
             if( ( node != null ) && ( node instanceof HwExecutionNode ) ) {     //why checking this instanceof?
                 artifacts = ( (TMLArchiNode)(tgc) ).getAllTMLArchiArtifacts();

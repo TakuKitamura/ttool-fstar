@@ -69,22 +69,32 @@ public class TMLMapping<E> {
 
     // Mapping of communications
     private List<HwCommunicationNode> oncommnodes;
-    public List<TMLElement> mappedcommelts;
+    private List<TMLElement> mappedcommelts;
     
     public CorrespondanceElement<E> listE;
+
+    // Security
     public boolean firewall = false;
-    //private List<TMLCP> mappedCPs;
-    // private List<TMLElement> commEltsMappedOnCPs;
     public Map<SecurityPattern, List<HwMemory>> mappedSecurity= new HashMap<SecurityPattern, List<HwMemory>>();
+    private List<String[]> pragmas= new ArrayList<String[]>();
+
+    // CPs
     private List<TMLCPLib> mappedCPLibs;
 
-    private List<String[]> pragmas= new ArrayList<String[]>();
+    // For plugins
+    private ArrayList<String> customValues;
+    
     private boolean optimized = false;
-
     private int hashCode;
     private boolean hashCodeComputed = false;
+
+   
+
+    // REFERENCES TO BE REMOVED!!!!
     private TMLComponentDesignPanel tmldp;
     public TMLArchiPanel tmlap;
+
+   
     public TMLMapping(TMLModeling<E> _tmlm, TMLArchitecture _tmla, boolean reset) {
 
         tmlm = _tmlm;
@@ -138,6 +148,11 @@ public class TMLMapping<E> {
         }
         return null;
     }
+
+    public void addCustomValue(String custom) {
+	customValues.add(custom);
+    }
+    
     public void makeMinimumMapping() {
         HwCPU cpu;
         //   HwMemory mem;
@@ -293,6 +308,7 @@ public class TMLMapping<E> {
         //        mappedCPs = new ArrayList<TMLCP>();
         //        commEltsMappedOnCPs = new ArrayList<TMLElement>();
         mappedCPLibs = new ArrayList<TMLCPLib>();
+	customValues = new ArrayList<String>();
     }
 
     public TMLTask getTMLTaskByCommandID(int id) {
@@ -1498,6 +1514,9 @@ public class TMLMapping<E> {
 	    HwCommunicationNode node = oncommnodes.get(i);
 	    TMLElement elt = mappedcommelts.get(i);
 	    s += "<COMMMAP node=\"" + node.getName() + "\" elt=\"" + elt.getName() + "\" />\n";
+	}
+	for(TMLCPLib cplib: mappedCPLibs) {
+	    s += cplib.toXML();
 	}
 	s += "</TMLMAPPING>\n";
 	//s = myutil.Conversion.transformToXMLString(s);

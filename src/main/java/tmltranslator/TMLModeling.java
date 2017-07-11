@@ -70,14 +70,18 @@ public class TMLModeling<E> {
     private List<TMLRequest> requests;
     private List<TMLEvent> events;
     private List<String[]> pragmas;
+    
     private TMLElement correspondance[];
 
+    // Security
     public List<String> securityPatterns;
     public List<SecurityPattern> secPatterns;
     private boolean optimized = false;
     public Map<String, List<String>> secChannelMap;
     public Map<SecurityPattern, List<TMLTask>> securityTaskMap;
+    
     private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
+    
     private Map<E, String> checkedActivities;
     
     private int hashCode;
