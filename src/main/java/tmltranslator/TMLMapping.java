@@ -62,10 +62,15 @@ public class TMLMapping<E> {
     private TMLModeling<E> tmlm;
     private TMLArchitecture tmla;
     //   private TMLCP tmlcp;
+
+    // Mapping of tasks
     private List<HwExecutionNode> onnodes;
     private List<TMLTask> mappedtasks;
+
+    // Mapping of communications
     private List<HwCommunicationNode> oncommnodes;
     public List<TMLElement> mappedcommelts;
+    
     public CorrespondanceElement<E> listE;
     public boolean firewall = false;
     //private List<TMLCP> mappedCPs;
@@ -1488,6 +1493,11 @@ public class TMLMapping<E> {
 	    HwExecutionNode node = onnodes.get(i);
 	    TMLTask task = mappedtasks.get(i);
 	    s += "<TASKMAP node=\"" + node.getName() + "\" task=\"" + task.getName() + "\" />\n";
+	}
+	for(int i=0; i<oncommnodes.size(); i++) {
+	    HwCommunicationNode node = oncommnodes.get(i);
+	    TMLElement elt = mappedcommelts.get(i);
+	    s += "<COMMMAP node=\"" + node.getName() + "\" elt=\"" + elt.getName() + "\" />\n";
 	}
 	s += "</TMLMAPPING>\n";
 	//s = myutil.Conversion.transformToXMLString(s);

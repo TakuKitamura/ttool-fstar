@@ -68,12 +68,15 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class TMLArchiCPNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiCPInterface {
+    // Graphical attributes
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
     private String stereotype = "CP";
     private String reference="";
+
+    // Mapped data
     private Vector<String> mappedUnits = new Vector<String>();
     private Vector<String> assignedAttributes = new Vector<String>();
     private String cpMEC = "VOID";
