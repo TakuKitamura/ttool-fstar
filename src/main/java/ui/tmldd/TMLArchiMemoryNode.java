@@ -175,6 +175,7 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
     }
 
     public void hasBeenResized() {
+	super.hasBeenResized();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLArchiKey) {
                 tgcomponent[i].resizeWithFather();
