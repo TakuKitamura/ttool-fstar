@@ -3460,12 +3460,14 @@ public class GTMLModeling  {
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
+	    //TraceManager.addDev(" is custom component?" + tgc + " class=" + tgc.getClass());
 
 	    // Custom values (for plugin)
 	    if (tgc instanceof TGComponentPlugin) {
+		//TraceManager.addDev("custom component found:" + tgc);
 		String val = ((TGComponentPlugin)(tgc)).getCustomValue();
 		if (val != null) {
-		    TraceManager.addDev("Adding custom value:" +  val);
+		    //TraceManager.addDev("Adding custom value:" +  val);
 		    map.addCustomValue(val);
 		}
 	    }

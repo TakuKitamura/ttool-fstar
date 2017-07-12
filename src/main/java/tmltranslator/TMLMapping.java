@@ -70,7 +70,7 @@ public class TMLMapping<E> {
     // Mapping of communications
     private List<HwCommunicationNode> oncommnodes;
     private List<TMLElement> mappedcommelts;
-    
+
     public CorrespondanceElement<E> listE;
 
     // Security
@@ -83,18 +83,18 @@ public class TMLMapping<E> {
 
     // For plugins
     private ArrayList<String> customValues;
-    
+
     private boolean optimized = false;
     private int hashCode;
     private boolean hashCodeComputed = false;
 
-   
+
 
     // REFERENCES TO BE REMOVED!!!!
     private TMLComponentDesignPanel tmldp;
     public TMLArchiPanel tmlap;
 
-   
+
     public TMLMapping(TMLModeling<E> _tmlm, TMLArchitecture _tmla, boolean reset) {
 
         tmlm = _tmlm;
@@ -150,9 +150,9 @@ public class TMLMapping<E> {
     }
 
     public void addCustomValue(String custom) {
-	customValues.add(custom);
+        customValues.add(custom);
     }
-    
+
     public void makeMinimumMapping() {
         HwCPU cpu;
         //   HwMemory mem;
@@ -308,7 +308,7 @@ public class TMLMapping<E> {
         //        mappedCPs = new ArrayList<TMLCP>();
         //        commEltsMappedOnCPs = new ArrayList<TMLElement>();
         mappedCPLibs = new ArrayList<TMLCPLib>();
-	customValues = new ArrayList<String>();
+        customValues = new ArrayList<String>();
     }
 
     public TMLTask getTMLTaskByCommandID(int id) {
@@ -1502,24 +1502,27 @@ public class TMLMapping<E> {
 
 
     public String toXML() {
-	String s = "<TMLMAPPING>\n";
-	s += tmlm.toXML();
-	s += tmla.toXML();
-	for(int i=0; i<onnodes.size(); i++) {
-	    HwExecutionNode node = onnodes.get(i);
-	    TMLTask task = mappedtasks.get(i);
-	    s += "<TASKMAP node=\"" + node.getName() + "\" task=\"" + task.getName() + "\" />\n";
-	}
-	for(int i=0; i<oncommnodes.size(); i++) {
-	    HwCommunicationNode node = oncommnodes.get(i);
-	    TMLElement elt = mappedcommelts.get(i);
-	    s += "<COMMMAP node=\"" + node.getName() + "\" elt=\"" + elt.getName() + "\" />\n";
-	}
-	for(TMLCPLib cplib: mappedCPLibs) {
-	    s += cplib.toXML();
-	}
-	s += "</TMLMAPPING>\n";
-	//s = myutil.Conversion.transformToXMLString(s);
-	return s;
+        String s = "<TMLMAPPING>\n";
+        s += tmlm.toXML();
+        s += tmla.toXML();
+        for(int i=0; i<onnodes.size(); i++) {
+            HwExecutionNode node = onnodes.get(i);
+            TMLTask task = mappedtasks.get(i);
+            s += "<TASKMAP node=\"" + node.getName() + "\" task=\"" + task.getName() + "\" />\n";
+        }
+        for(int i=0; i<oncommnodes.size(); i++) {
+            HwCommunicationNode node = oncommnodes.get(i);
+            TMLElement elt = mappedcommelts.get(i);
+            s += "<COMMMAP node=\"" + node.getName() + "\" elt=\"" + elt.getName() + "\" />\n";
+        }
+        for(TMLCPLib cplib: mappedCPLibs) {
+            s += cplib.toXML();
+        }
+        for(String val: customValues) {
+            s += "<CUSTOMVALUE value=\"" + val + "\" />\n";
+        }
+        s += "</TMLMAPPING>\n";
+        //s = myutil.Conversion.transformToXMLString(s);
+        return s;
     }
 }
