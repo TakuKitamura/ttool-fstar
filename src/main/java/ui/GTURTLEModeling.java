@@ -3162,7 +3162,7 @@ public class GTURTLEModeling {
     }
 
     public String showRGDiplodocus() {
-        TraceManager.addDev("Show diplodocus graph located in " + ConfigurationTTool.GGraphPath + "/tree.dot");
+        //TraceManager.addDev("Show diplodocus graph located in " + ConfigurationTTool.GGraphPath + "/tree.dot");
         RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, null, null, ConfigurationTTool.DOTTYPath + " " + ConfigurationTTool.GGraphPath + "/tree.dot");
         ret.start();
         return null;
@@ -6820,14 +6820,14 @@ public class GTURTLEModeling {
         diagramNl = node.getChildNodes();
 
         for(int j=0; j<diagramNl.getLength(); j++) {
-            TraceManager.addDev("TML Architecture nodes: " + j);
+            //TraceManager.addDev("TML Architecture nodes: " + j);
             node = diagramNl.item(j);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 elt = (Element)node;
                 if (elt.getTagName().compareTo("TMLArchiDiagramPanel") == 0) {
-                    TraceManager.addDev("Loading TML DD" + elt.getTagName() );
+                    //TraceManager.addDev("Loading TML DD" + elt.getTagName() );
                     loadTMLArchitectureDiagram(elt, indexDesign);
-                    TraceManager.addDev("End loading TML DD");
+                    //TraceManager.addDev("End loading TML DD");
                 }
             }
         }
@@ -7186,7 +7186,7 @@ public class GTURTLEModeling {
         tdp = mgui.getMainTDiagramPanel(indexDesign);
         tdp.setName(name);
 
-        TraceManager.addDev("tdp=" + tdp.getName());
+        //TraceManager.addDev("tdp=" + tdp.getName());
 
         loadDiagram(elt, tdp);
     }
@@ -7868,12 +7868,12 @@ public class GTURTLEModeling {
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
                     try {
                         tgc = makeXMLComponent(n, tdp);
-                        TraceManager.addDev("About to add component= " + tgc);
+                        //TraceManager.addDev("About to add component= " + tgc);
                         if ((tgc != null) && (tgc.getFather() == null)) {
-                            TraceManager.addDev("Component added to diagram tgc=" + tgc);
+                            //TraceManager.addDev("Component added to diagram tgc=" + tgc);
                             tdp.addBuiltComponent(tgc);
-                        } else {
-                            TraceManager.addDev("Component not added to diagram");
+                        } else if (tgc == null) {
+                            TraceManager.addDev("Component not added to diagram:" + tgc);
                         }
                     } catch (MalformedModelingException mme) {
                         int type = getTypeOfComponentNode(n);

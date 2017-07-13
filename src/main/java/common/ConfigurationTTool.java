@@ -151,8 +151,8 @@ public class ConfigurationTTool {
     // PLUGINS
     public static String PLUGIN_PATH = "";
     public static String[] PLUGIN = new String[0];
-    public static String PLUGIN_JAVA_CODE_GENERATOR = "";
-    public static String[] PLUGIN_GRAPHICAL_COMPONENT = new String[0];
+    //public static String PLUGIN_JAVA_CODE_GENERATOR = "";
+    //public static String[] PLUGIN_GRAPHICAL_COMPONENT = new String[0];
 
     // URL for models
     public static String URL_MODEL = "http://ttool.telecom-paristech.fr/networkmodels/models.txt";
@@ -466,12 +466,12 @@ public class ConfigurationTTool {
 	// Plugins
 	sb.append("\nPlugins:\n");
 	sb.append("Plugin path: " + PLUGIN_PATH + "\n");
-	sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
+	/*sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
 	for (int i=0; i<PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
 	    sb.append("Plugin for graphical component: " + PLUGIN_GRAPHICAL_COMPONENT[i] + "\n");
-	}
+	    }*/
 	for (int i=0; i<PLUGIN.length; i++) {
-	    sb.append("Multi purpose plugin: " + PLUGIN[i] + "\n");
+	    sb.append("Plugin: " + PLUGIN[i] + "\n");
 	}
 
 	// URL
@@ -770,13 +770,13 @@ public class ConfigurationTTool {
             if (nl.getLength() > 0)
                 Plugin(nl);
 
-	    nl = doc.getElementsByTagName("PLUGIN_JAVA_CODE_GENERATOR");
+	    /*nl = doc.getElementsByTagName("PLUGIN_JAVA_CODE_GENERATOR");
             if (nl.getLength() > 0)
                 PluginJavaCodeGenerator(nl);
 
 	    nl = doc.getElementsByTagName("PLUGIN_GRAPHICAL_COMPONENT");
             if (nl.getLength() > 0)
-                PluginGraphicalComponent(nl);
+	    PluginGraphicalComponent(nl);*/
 
 	    nl = doc.getElementsByTagName("URL_MODEL");
             if (nl.getLength() > 0)
@@ -1496,7 +1496,7 @@ public class ConfigurationTTool {
         }
     }
 
-    private static void PluginJavaCodeGenerator(NodeList nl) throws MalformedConfigurationException {
+    /*private static void PluginJavaCodeGenerator(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             PLUGIN_JAVA_CODE_GENERATOR = elt.getAttribute("data");
@@ -1515,7 +1515,7 @@ public class ConfigurationTTool {
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
-    }
+	}*/
 
     private static void URLModel(NodeList nl) throws MalformedConfigurationException {
         try {

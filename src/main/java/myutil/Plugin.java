@@ -187,7 +187,7 @@ public class Plugin {
                 TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
                 URL[] urls = new URL[] { file.toURI().toURL() };
                 ClassLoader loader = new URLClassLoader(urls);
-                TraceManager.addDev("Loader created");
+                //TraceManager.addDev("Loader created");
                 c = loader.loadClass(_className);
                 if (c == null) {
                     return null;
@@ -223,7 +223,7 @@ public class Plugin {
 	// We have a valid plugin. We now need to get the Method
 		
 	try {
-	    TraceManager.addDev("Getting " + _methodName + " in class " + c.getName());
+	    //TraceManager.addDev("Getting " + _methodName + " in class " + c.getName());
 	    Method m = c.getMethod(_methodName);
 	    
 	    if (m == null) {
@@ -252,7 +252,7 @@ public class Plugin {
     public static boolean executeBoolStringMethod(Object instance, String value, String _methodName) throws Exception {
 	Class[] cArg = new Class[1];
 	cArg[0] = String.class;
-	TraceManager.addDev("Looking for method=" + _methodName + " in instance " + instance);
+	//TraceManager.addDev("Looking for method=" + _methodName + " in instance " + instance);
 	Method method = instance.getClass().getMethod(_methodName, cArg);
 	return (boolean)(method.invoke(instance, value));
     }

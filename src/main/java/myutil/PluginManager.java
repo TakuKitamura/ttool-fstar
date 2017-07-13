@@ -77,7 +77,7 @@ public class PluginManager  {
 		return plugin;
 	    }
 	}
-	TraceManager.addDev("     NOT Found avatar code generation plugin");
+	//TraceManager.addDev("     NOT Found avatar code generation plugin");
 	return null;
     }
 
