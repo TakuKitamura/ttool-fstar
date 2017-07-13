@@ -124,11 +124,11 @@ public class ConfigurationTTool {
     public static String ExternalCommand2 = "";
 
     // AVATAR Simulation
-    public static String AVATARSimulationHost = "";
+    /*public static String AVATARSimulationHost = "";
     public static String AVATARCPPSIMCodeDirectory = "";
     public static String AVATARCPPSIMCompileCommand = "";
     public static String AVATARCPPSIMCodeExecuteCommand = "";
-    public static String AVATARCPPSIMInteractiveExecuteCommand = "";
+    public static String AVATARCPPSIMInteractiveExecuteCommand = "";*/
 
     // AVATAR Code generation
     public static String AVATARExecutableCodeDirectory = "";
@@ -145,8 +145,8 @@ public class ConfigurationTTool {
 
 
     // Ontology
-    public static String RequirementOntologyWebsite = "";
-    public static String AttackOntologyWebsite = "";
+    //public static String RequirementOntologyWebsite = "";
+    //public static String AttackOntologyWebsite = "";
 
     // PLUGINS
     public static String PLUGIN_PATH = "";
@@ -381,14 +381,14 @@ public class ConfigurationTTool {
         sb.append("UPPAALPropertyNotVerifMessage: " + UPPAALPropertyNotVerifMessage + "\n");
 
 
-        sb.append("AVATARCPPSIMCompileCommand: " + AVATARCPPSIMCompileCommand + "\n");
+        /*sb.append("AVATARCPPSIMCompileCommand: " + AVATARCPPSIMCompileCommand + "\n");
         sb.append("AVATARCPPSIMCodeExecuteCommand: " + AVATARCPPSIMCodeExecuteCommand + "\n");
         sb.append("AVATARCPPSIMInteractiveExecuteCommand: " + AVATARCPPSIMInteractiveExecuteCommand + "\n");
 
         // AVATAR: simulation
         sb.append("\nAVATAR (simulation):\n");
         sb.append("AVATARSimulationHost: " + AVATARSimulationHost + "\n");
-        sb.append("AVATARCPPSIMCodeDirectory: " + AVATARCPPSIMCodeDirectory + "\n");
+        sb.append("AVATARCPPSIMCodeDirectory: " + AVATARCPPSIMCodeDirectory + "\n");*/
         
         // Issue #35: Moved with other UPPAAL properties
 //        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
@@ -459,9 +459,9 @@ public class ConfigurationTTool {
 
 
         // Ontology
-        sb.append("\nOntologies:\n");
+        /*sb.append("\nOntologies:\n");
         sb.append("Requirement ontology website: " + RequirementOntologyWebsite + "\n");
-        sb.append("Attack ontology website: " + AttackOntologyWebsite + "\n");
+        sb.append("Attack ontology website: " + AttackOntologyWebsite + "\n");*/
 
 	// Plugins
 	sb.append("\nPlugins:\n");
@@ -620,7 +620,7 @@ public class ConfigurationTTool {
                 SystemCCodeDirectory(nl);
 
             // AVATAR Simulation
-            nl = doc.getElementsByTagName("AVATARSimulationHost");
+            /*nl = doc.getElementsByTagName("AVATARSimulationHost");
             if (nl.getLength() > 0)
                 AVATARSimulationHost(nl);
             nl = doc.getElementsByTagName("AVATARCPPSIMCodeDirectory");
@@ -634,7 +634,7 @@ public class ConfigurationTTool {
                 AVATARCPPSIMCodeExecuteCommand(nl);
             nl = doc.getElementsByTagName("AVATARCPPSIMInteractiveExecuteCommand");
             if (nl.getLength() > 0)
-                AVATARCPPSIMInteractiveExecuteCommand(nl);
+	    AVATARCPPSIMInteractiveExecuteCommand(nl);*/
 
             // AVATAR Executable code
             nl = doc.getElementsByTagName("AVATARExecutableCodeDirectory");
@@ -738,13 +738,13 @@ public class ConfigurationTTool {
 
 
             // Ontologies
-            nl = doc.getElementsByTagName("RequirementOntologyWebsite");
+            /*nl = doc.getElementsByTagName("RequirementOntologyWebsite");
             if (nl.getLength() > 0)
                 RequirementOntologyWebsite(nl);
 
             nl = doc.getElementsByTagName("AttackOntologyWebsite");
             if (nl.getLength() > 0)
-                AttackOntologyWebsite(nl);
+	    AttackOntologyWebsite(nl);*/
 
             nl = doc.getElementsByTagName("ExternalCommand1Host");
             if (nl.getLength() > 0)
@@ -1249,7 +1249,7 @@ public class ConfigurationTTool {
         }
     }
 
-    private static void AVATARSimulationHost(NodeList nl) throws MalformedConfigurationException {
+    /*private static void AVATARSimulationHost(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             AVATARSimulationHost = elt.getAttribute("data");
@@ -1292,7 +1292,7 @@ public class ConfigurationTTool {
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
-    }
+	}*/
 
     private static void AVATARExecutableCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
@@ -1420,7 +1420,7 @@ public class ConfigurationTTool {
         }
     }
 
-    private static void RequirementOntologyWebsite(NodeList nl) throws MalformedConfigurationException {
+    /*private static void RequirementOntologyWebsite(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             RequirementOntologyWebsite = elt.getAttribute("data");
@@ -1436,7 +1436,7 @@ public class ConfigurationTTool {
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
-    }
+	}*/
 
     private static void ExternalCommand1Host(NodeList nl) throws MalformedConfigurationException {
         try {
