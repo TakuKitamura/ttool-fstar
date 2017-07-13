@@ -41,8 +41,7 @@
 
 package avatartranslator.toexecutable;
 
-import myutil.PluginManager;
-import myutil.TraceManager;
+import myutil.*;
 
 /**
  * Class MainFile
@@ -68,10 +67,10 @@ public class MainFile {
     private String beforeMainCode;
     private String mainCode;
 
-    private String plugin;
+    private Plugin plugin;
 
 
-    public MainFile(String _name, String _plugin) {
+    public MainFile(String _name, Plugin _plugin) {
         name = _name;
         plugin = _plugin;
         hCode = "";
@@ -107,7 +106,9 @@ public class MainFile {
 	
 
         try {
-	    mainDec = PluginManager.pluginManager.executeString(plugin, "CustomizerAvatarJavaCodeGeneration", "getMainDeclaration");
+	    if (plugin != null) {
+		mainDec = plugin.executeRetStringMethod(plugin.getClassAvatarCodeGenerator(), "getMainDeclaration");
+	    }
             /*File file = new File(plugin);
             TraceManager.addDev("Loading plugin=" + plugin);
             URL[] urls = new URL[] { file.toURI().toURL() };

@@ -343,7 +343,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         pbt = new PeriodicBehaviorThread(this, 120000); // save every two minutes
 
-        PluginManager.pluginManager = new PluginManager();
+        //PluginManager.pluginManager = new PluginManager();
 
     }
 
@@ -2823,7 +2823,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void aboutVersion() {
         JFrameBasicText jft = new JFrameBasicText("About TTool ...", DefaultText.getAboutText(), IconManager.imgic324);
         jft.setIconImage(IconManager.img8);
-        GraphicLib.centerOnParent(jft, 700, 800 );
+        GraphicLib.centerOnParent(jft, 740, 800 );
         jft.setVisible(true);
 
     }
@@ -4233,11 +4233,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //            path = file.getAbsolutePath();
         //        }
         JDialogCCodeGeneration jgen = new JDialogCCodeGeneration( frame, this, "Application code generation and compilation",
-                                                                  ConfigurationTTool.SystemCHost, ConfigurationTTool.CCodeDirectory,
+                                                                  ConfigurationTTool.CCodeDirectory,
                                                                   "make -C " + ConfigurationTTool.CCodeDirectory,
-                                                                  ConfigurationTTool.SystemCCodeExecuteCommand,
-                                                                  ConfigurationTTool.SystemCCodeInteractiveExecuteCommand,
-                                                                  ConfigurationTTool.GGraphPath, gtm );
+                                                                  gtm );
         //   jgen.setSize(500, 750);
         GraphicLib.centerOnParent(jgen, 500, 750);
         jgen.setVisible(true);
@@ -4412,7 +4410,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             dtree.toBeUpdated();
         } else if (gtm.getLanguageID() == GTURTLEModeling.UPPAAL) {
             JDialogUPPAALValidation jduv = new JDialogUPPAALValidation(frame,
-                                                                       this, "Formal verification with UPPAAL",
+                                                                       this, "Formal Verification with UPPAAL",
                                                                        gtm.getPathUPPAALVerifier(),
                                                                        gtm.getPathUPPAALFile(),
                                                                        REMOTE_UPPAAL_FILE,
@@ -4420,7 +4418,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                                        gtm.getUPPAALVerifierHost(),
                                                                        _tp);
             // jduv.setSize(450, 600);
-            GraphicLib.centerOnParent(jduv, 450, 600);
+            GraphicLib.centerOnParent(jduv, 650, 600);
             jduv.setVisible(true);
             dtree.toBeUpdated();
         } else if (gtm.getLanguageID() == GTURTLEModeling.MATRIX) {

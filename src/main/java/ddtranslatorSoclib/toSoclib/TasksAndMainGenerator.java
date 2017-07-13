@@ -148,6 +148,7 @@ public class TasksAndMainGenerator {
         mainFile = new  MainFileSoclib("main");
 
         avspec.removeCompositeStates();
+	avspec.removeLibraryFunctionCalls();
         avspec.removeTimers();
 
         if (avspec.hasApplicationCode() && includeUserCode) {
@@ -232,41 +233,13 @@ public class TasksAndMainGenerator {
 
 	AvatarSignal sig = ar.getSignal1(i);
         int nbParams= sig.getNbParams();
-	// int nbOfMaxParams = _block.getMaxNbOfParams();
-	//DG 13.06. variant dans le code C
-
-	//ainsi on declare les attributs au debut d'une tache:
-
-	//s += makeAttributesDeclaration(_block, _taskFile);
-	//fonction dans tasksAndMainGenerator
-
-	/*mainFile.appendToMainCode("sizeParams = sizeof(" );
-	int cpt = 0;
 	
-	for(AvatarAttribute attribute: parameters) {
-	    String param_type = getCTypeOf(attribute);//Attention sizeof(bool)=sizeof(int)
-	    mainFile.appendToMainCode(attribute.getName() + "sizeof("+ret);
-	}
-	mainFile.appendToMainCode(");"+ CR);*/
 	int sizeParams = 0;
-	// DG 13.06. variant calcule mais risque que cela ne cqpte pqs les data types
-	//for(AvatarAttribute attribute: parameters) {
-	//    sizeParams+=4;//soit int soit bool?
-	//}
-
-	//ici variant calcule
+		
 	if (nbParams>0)
 	    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
-	    //mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ sizeParams +";" + CR);
-	//mainFile.appendToMainCode(getChannelName(ar, i) + ".width = sizeParams;" + CR);
-
-	//int sizeParams= sig.getCumulSizeParams();
-	//DG 13.06. Attention paramaters have not all size 4!!
-	//if (nbParams>0)
-	    //mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4) +";" + CR);
-	    //mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ sizeParams +";" + CR);
-	//else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
-	else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);//DG 13.06.
+	
+	else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 100;" + CR);
 	
 	mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = " +getChannelName(ar, i)+".depth;" + CR);
@@ -329,22 +302,11 @@ public class TasksAndMainGenerator {
 			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
 
 		
-			AvatarSignal sig = ar.getSignal1(0);
-			int nbParams= sig.getNbParams();
-			//int sizeParams= sig.getCumulSizeParams();
-			//DG 13.06. Attention paramaters have not all size 4!!
-
-			//mainFile.appendToMainCode("sizeParams = sizeof(" );
-			//int cpt = 0;
-			//for(AvatarAttribute attribute: parameters) {
-			//    mainFile.appendToMainCode(attribute.getName() + "sizeof(");
-			//}
-			//mainFile.appendToMainCode(");"+ CR);
+			AvatarSignal sig = ar.getSignal1(i);
+			int nbParams= sig.getNbParams();			
 		
 			if (nbParams>0)
-			    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
-			    //mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ sizeParams +";" + CR);
-			    //mainFile.appendToMainCode(getChannelName(ar, i) + ".width = sizeParams;" + CR);
+			    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);			    
 			else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
 
 			mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+";" + CR);
@@ -392,15 +354,22 @@ public class TasksAndMainGenerator {
     	return -1;
     }
 
+    /* DG 7.7. give CPUid of outer block to block created e.g. for a timer */
     public void makeTasks() {
         for(AvatarBlock block: avspec.getListOfBlocks()) {
-	      if (FindCPUidFromTask(block)!=-1)
+	    if (FindCPUidFromTask(block)!=-1) 
 	      makeTask(block,FindCPUidFromTask(block));
-	      else {
-		  System.out.println("Warning: Unmapped Block "+block.getName());
-	      }
+	    else {
+		//AvatarBlock father = block.getFather();
+		//if(father!=null){ //DG bug: donne null pointer
+		//makeTask(block,FindCPUidFromTask(father));
+		makeTask(block,0);
+	
+		System.out.println("Warning: Unmapped Block "+block.getName());
+		}
+	    }
         }
-    }
+
 
     public void makeTask(AvatarBlock block , int cpuId) {
 	TaskFileSoclib taskFile = new TaskFileSoclib(block.getName(),cpuId);

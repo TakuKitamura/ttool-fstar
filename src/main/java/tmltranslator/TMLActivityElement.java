@@ -50,7 +50,7 @@ import java.util.Vector;
    * @version 1.0 23/11/2005
    * @author Ludovic APVRILLE
  */
-public class TMLActivityElement extends TMLElement{
+public abstract class TMLActivityElement extends TMLElement{
     protected Vector<TMLActivityElement> nexts;
     public SecurityPattern securityPattern;
     private String value="";
@@ -114,4 +114,25 @@ public class TMLActivityElement extends TMLElement{
             }
         }
     }
+
+    public String toXML(Vector<TMLActivityElement> elements) {
+	String s = "<ACTIVITYELEMENT type=\"" + getClass().getName() + "\" value=\"" + value + "\" id=\"" + elements.indexOf(this) + "\" name=\"" + name + "\">\n";
+	if (securityPattern != null) {
+	    s += securityPattern.toXML();
+	}
+	s += extraToXML();
+	for(TMLActivityElement tmlae: nexts) {
+	    s += "<NEXTACTIVITYELEMENT id=\"" + elements.indexOf(tmlae) + "\" />\n";
+	}
+	s += "</ACTIVITYELEMENT>\n";
+	return s;
+    }
+
+
+    public String extraToXML() {
+	String s = "<CUSTOM " + customExtraToXML() + " />\n";
+	return s;
+    }
+    
+    public abstract String customExtraToXML();
 }

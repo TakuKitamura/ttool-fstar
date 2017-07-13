@@ -61,7 +61,7 @@ public class TMLTask extends TMLElement {
     private Set<TMLChannel> writeTMLChannelsList;
     private Set<TMLEvent> eventsList;
     private int operationType;
-
+	private boolean isAttacker;
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass);
@@ -89,6 +89,14 @@ public class TMLTask extends TMLElement {
     public boolean isRequested() {
         return isRequested;
     }
+
+	public boolean isAttacker(){
+		return isAttacker;
+	}
+	
+	public void setAttacker(boolean a){
+		isAttacker=a;
+	}
 
     public void setRequest(TMLRequest _request) {
         request = _request;
@@ -377,5 +385,15 @@ public class TMLTask extends TMLElement {
 
     public void removeEmptyInfiniteLoop() {
     	activity.removeEmptyInfiniteLoop();
+    }
+
+    public String toXML() {
+	String s = new String("<TASK name=\"" + name + "\" priority=\"" + priority + "\" >\n");
+	for(TMLAttribute attr: attributes) {
+	    s += attr.toXML();
+	}
+	s += activity.toXML();
+	s += "</TASK>\n";
+	return s;
     }
 }

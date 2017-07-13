@@ -910,11 +910,12 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         }
     }
 
-    protected boolean processCmd(       final String cmd,
-                                        final JTextArea _jta,
-                                        final Integer okReturnCode )
-        throws LauncherException {
+    protected boolean processCmd(	final String cmd,
+                                    final JTextArea _jta,
+                                    final Integer okReturnCode )
+    throws LauncherException {
         rshc.setCmd( cmd );
+        
         rshc.sendExecuteCommandRequest( okReturnCode != null );
 
         rshc.writeCommandMessages( textAreaWriter );

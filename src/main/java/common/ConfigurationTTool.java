@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package common;
-
-//import java.awt.*;
 
 import myutil.FileUtils;
 import myutil.MalformedConfigurationException;
@@ -57,8 +52,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-
-//import org.xml.sax.*;
 
 
 /**
@@ -116,6 +109,12 @@ public class ConfigurationTTool {
     public static String UPPAALCodeDirectory = "";
     public static String UPPAALVerifierPath = "";
     public static String UPPAALVerifierHost = "";
+    
+    // Issue #35: UPPAAL change in property verification message
+    public static String UPPAALPropertyVerifMessage = "";
+    public static String UPPAALPropertyNotVerifMessage = "";
+    
+    
     public static String ProVerifCodeDirectory = "";
     public static String ProVerifVerifierPath = "";
     public static String ProVerifVerifierHost = "";
@@ -151,6 +150,7 @@ public class ConfigurationTTool {
 
     // PLUGINS
     public static String PLUGIN_PATH = "";
+    public static String[] PLUGIN = new String[0];
     public static String PLUGIN_JAVA_CODE_GENERATOR = "";
     public static String[] PLUGIN_GRAPHICAL_COMPONENT = new String[0];
 
@@ -199,7 +199,7 @@ public class ConfigurationTTool {
     }
 
     public static void saveConfiguration() throws MalformedConfigurationException {
-        int index0, index1, index2, index3;
+        int index0, index1, index2;//, index3;
         String tmp, tmp1, tmp2, location;
         File f = new File(fileName);
         boolean write = false;
@@ -374,6 +374,13 @@ public class ConfigurationTTool {
         sb.append("\nUPPAAL:\n");
         sb.append("UPPAALCodeDirectory: " + UPPAALCodeDirectory + "\n");
         sb.append("UPPAALVerifierPATH: " + UPPAALVerifierPath + "\n");
+        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
+        
+        // Issue #35
+        sb.append("UPPAALPropertyVerifMessage: " + UPPAALPropertyVerifMessage + "\n");
+        sb.append("UPPAALPropertyNotVerifMessage: " + UPPAALPropertyNotVerifMessage + "\n");
+
+
         sb.append("AVATARCPPSIMCompileCommand: " + AVATARCPPSIMCompileCommand + "\n");
         sb.append("AVATARCPPSIMCodeExecuteCommand: " + AVATARCPPSIMCodeExecuteCommand + "\n");
         sb.append("AVATARCPPSIMInteractiveExecuteCommand: " + AVATARCPPSIMInteractiveExecuteCommand + "\n");
@@ -382,7 +389,9 @@ public class ConfigurationTTool {
         sb.append("\nAVATAR (simulation):\n");
         sb.append("AVATARSimulationHost: " + AVATARSimulationHost + "\n");
         sb.append("AVATARCPPSIMCodeDirectory: " + AVATARCPPSIMCodeDirectory + "\n");
-        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
+        
+        // Issue #35: Moved with other UPPAAL properties
+//        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
 
         // AVATAR: executable code
         sb.append("\nAVATAR (executable code):\n");
@@ -460,6 +469,9 @@ public class ConfigurationTTool {
 	sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
 	for (int i=0; i<PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
 	    sb.append("Plugin for graphical component: " + PLUGIN_GRAPHICAL_COMPONENT[i] + "\n");
+	}
+	for (int i=0; i<PLUGIN.length; i++) {
+	    sb.append("Multi purpose plugin: " + PLUGIN[i] + "\n");
 	}
 
 	// URL
@@ -698,6 +710,16 @@ public class ConfigurationTTool {
             if (nl.getLength() > 0)
                 UPPAALVerifierHost(nl);
 
+            nl = doc.getElementsByTagName("UPPAALPropertyVerifMessage");
+            if (nl.getLength() > 0) {
+            	UPPAALPropertyVerifMessage(nl);
+            }
+
+            nl = doc.getElementsByTagName("UPPAALPropertyNotVerifMessage");
+            if (nl.getLength() > 0) {
+            	UPPAALPropertyNotVerifMessage(nl);
+            }
+
             nl = doc.getElementsByTagName("ProVerifCodeDirectory");
             if (nl.getLength() > 0)
                 ProVerifCodeDirectory(nl);
@@ -743,6 +765,10 @@ public class ConfigurationTTool {
 	    nl = doc.getElementsByTagName("PLUGIN_PATH");
             if (nl.getLength() > 0)
                 PluginPath(nl);
+
+	    nl = doc.getElementsByTagName("PLUGIN");
+            if (nl.getLength() > 0)
+                Plugin(nl);
 
 	    nl = doc.getElementsByTagName("PLUGIN_JAVA_CODE_GENERATOR");
             if (nl.getLength() > 0)
@@ -1205,6 +1231,24 @@ public class ConfigurationTTool {
         }
     }
 
+    private static void UPPAALPropertyVerifMessage(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            UPPAALPropertyVerifMessage = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void UPPAALPropertyNotVerifMessage(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            UPPAALPropertyNotVerifMessage = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
     private static void AVATARSimulationHost(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
@@ -1435,6 +1479,18 @@ public class ConfigurationTTool {
             Element elt = (Element)(nl.item(0));
             PLUGIN_PATH = elt.getAttribute("data");
 	    PluginManager.PLUGIN_PATH = PLUGIN_PATH;
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void Plugin(NodeList nl) throws MalformedConfigurationException {
+	PLUGIN = new String[nl.getLength()];
+        try {
+	    for (int i=0; i<nl.getLength(); i++) {
+		Element elt = (Element)(nl.item(i));
+		PLUGIN[i] = elt.getAttribute("data");
+	    }
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

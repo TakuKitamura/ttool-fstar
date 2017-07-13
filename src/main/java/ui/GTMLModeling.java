@@ -1,7 +1,8 @@
-/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici, Matteo Bertolino
  * 
  * ludovic.apvrille AT telecom-paristech.fr
  * andrea.enrici AT telecom-paristech.fr
+ * matteo.bertolino AT telecom-paristech.fr
  * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -419,6 +420,7 @@ public class GTMLModeling  {
                     throw new MalformedTMLDesignException(tmlcpc.getValue() + " msg");
                 }
                 tmlt = new TMLTask(makeName(tgc, tmlcpc.getValue()), tmlcpc, tmladp);
+				tmlt.setAttacker(tmlcpc.isAttacker());
                 TraceManager.addDev("Task added:" + tmlt.getName() + " with tadp=" + tmladp + " major=" + tmladp.getMGUI().getMajorTitle(tmladp));
                 listE.addCor(tmlt, tgc);
                 tmlm.addTask(tmlt);
@@ -1816,6 +1818,7 @@ public class GTMLModeling  {
                 listE.addCor(tmlrsequence, tgc);
 
             } else if (tgc instanceof TMLADReadChannel) {
+				if (!tmltask.isAttacker()){
                 // Get the channel
                 channel = tmlm.getChannelByName(getFromTable(tmltask, ((TMLADReadChannel)tgc).getChannelName()));
                 if (channel == null) {
@@ -1867,7 +1870,15 @@ public class GTMLModeling  {
                     activity.addElement(tmlreadchannel);
                     ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlreadchannel, tgc);
-                }
+					}
+                } else {
+					tmlexecc = new TMLExecC("execc", tgc);
+					tmlexecc.setValue("100");
+					tmlexecc.setAction("100");
+					activity.addElement(tmlexecc);
+					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+					listE.addCor(tmlexecc, tgc);
+				}
             } else if (tgc instanceof TMLADSendEvent) {
                 event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADSendEvent)tgc).getEventName()));
                 if (event == null) {
@@ -2116,6 +2127,7 @@ public class GTMLModeling  {
 
             } else if (tgc instanceof TMLADWriteChannel) {
                 // Get channels
+				if (!tmltask.isAttacker()){
                 channels = ((TMLADWriteChannel)tgc).getChannelsByName();
                 boolean error = false;
                 for(int i=0; i<channels.length; i++) {
@@ -2171,7 +2183,19 @@ public class GTMLModeling  {
                     ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlwritechannel, tgc);
                 }
-            }
+			} else {
+					System.out.println("removing write channel");
+					tmlexecc = new TMLExecC("execc", tgc);
+					tmlexecc.setValue("100");
+					tmlexecc.setAction("100");
+					activity.addElement(tmlexecc);
+					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+					listE.addCor(tmlexecc, tgc);
+				}
+            }    
+			
+
+
         }
 
         // Interconnection between elements
@@ -2671,7 +2695,7 @@ public class GTMLModeling  {
                     memory = new HwMemory(memorynode.getName());
                     memory.byteDataSize = memorynode.getByteDataSize();
                     memory.clockRatio = memorynode.getClockRatio();
-                    memory.BufferType = memorynode.getBufferType();
+                    memory.bufferType = memorynode.getBufferType();
                     listE.addCor(memory, memorynode);
                     archi.addHwNode(memory);
                     TraceManager.addDev("Memory node added:" + memory.getName());
@@ -3383,25 +3407,34 @@ public class GTMLModeling  {
         //    TMLTask task;
         //    TMLElement elt;
         //     String s;
-        TMLArchiCPNode cp;
+        TMLArchiCPNode cp = null;
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
             //TraceManager.addDev("---------------- tgc=" + tgc);
             if (tgc instanceof TMLArchiCPNode) {
-                cp = (TMLArchiCPNode)tgc;
-                TMLCPLib tmlcplib = new TMLCPLib( cp.getCompleteName(), cp.getReference(), tgc, cp.getCPMEC() );
-                map.addTMLCPLib(tmlcplib);
-                tmlcplib.setMappedUnits(cp.getMappedUnits());
-                tmlcplib.setAssignedAttributes( cp.getAssignedAttributes() );
-                tmlcplib.setTransferTypes( cp.getTransferTypes() );
-
-                // Handling mapped artifacts
-                for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
-                    TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority(), artifact.getBufferParameters() );
-                    tmlcplib.addArtifact(arti);
-                    //TraceManager.addDev("Adding CP artifact:" + arti);
-                }
+		try {
+		    cp = (TMLArchiCPNode)tgc;
+		    TMLCPLib tmlcplib = new TMLCPLib( cp.getCompleteName(), cp.getReference(), tgc, cp.getCPMEC() );
+		    map.addTMLCPLib(tmlcplib);
+		    tmlcplib.setMappedUnits(cp.getMappedUnits());
+		    tmlcplib.setAssignedAttributes( cp.getAssignedAttributes() );
+		    
+		    tmlcplib.setTransferTypes( cp.getTransferTypes() );
+		    
+		    // Handling mapped artifacts
+		    for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
+			TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority(), artifact.getBufferParameters() );
+			tmlcplib.addArtifact(arti);
+			//TraceManager.addDev("Adding CP artifact:" + arti);
+		    }
+		} catch (Exception e) {
+		    TraceManager.addDev("\n\n==========> Badly formed TMLCPLib:" + cp + "\nADDING WARNING\n");
+		    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "CP " +  cp.getCompleteName() + " has been removed (invalid CP)");
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(cp);
+                    warnings.add(ce);		    
+		}
             }
         }
     }
@@ -3427,8 +3460,19 @@ public class GTMLModeling  {
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
-            //if( tgc instanceof TMLArchiCPNode )       {
+	    //TraceManager.addDev(" is custom component?" + tgc + " class=" + tgc.getClass());
 
+	    // Custom values (for plugin)
+	    if (tgc instanceof TGComponentPlugin) {
+		//TraceManager.addDev("custom component found:" + tgc);
+		String val = ((TGComponentPlugin)(tgc)).getCustomValue();
+		if (val != null) {
+		    //TraceManager.addDev("Adding custom value:" +  val);
+		    map.addCustomValue(val);
+		}
+	    }
+
+	    // Execution nodes
             node = archi.getHwNodeByName( tgc.getName() );
             if( ( node != null ) && ( node instanceof HwExecutionNode ) ) {     //why checking this instanceof?
                 artifacts = ( (TMLArchiNode)(tgc) ).getAllTMLArchiArtifacts();
@@ -3450,7 +3494,12 @@ public class GTMLModeling  {
                         node.addMECToHwExecutionNode( mec );
                         map.addTaskToHwExecutionNode(task, (HwExecutionNode)node);
                     } else {
-                        TraceManager.addDev("Null task");
+                        TraceManager.addDev("Null task. Raising an error");
+			String msg = "The task named " + artifact.getTaskName() + " was not found";
+                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                        ce.setTDiagramPanel(tmlap.tmlap);
+                        ce.setTGComponent(tgc);
+                        checkingErrors.add(ce);
                     }
                 }
             }

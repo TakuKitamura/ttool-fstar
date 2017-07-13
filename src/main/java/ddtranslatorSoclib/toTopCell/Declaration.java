@@ -192,7 +192,7 @@ public class Declaration {
 	 //target address depends on number of TTYs and RAMs
 	
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
-	     if(ram.getNo_ram()==0){
+	     if(ram.getIndex()==0){
 		 declaration += "soclib::caba::VciRam<vci_param>" + ram.getMemoryName()+ "(\"" + ram.getMemoryName()+ "\"" + ", IntTab(2), maptab);" + CR; 
 	     }
 	     else{
@@ -364,16 +364,16 @@ int  i=0;
 
 		      // for(AvatarChannel channel: ram.getChannels()){ //DG 27.06.
 		      for(AvatarRelation ar: avspec.getRelations()) {
-		      
-			  for(i=0; i<ar.nbOfSignals() ; i++) {
-			  
-			      AvatarSignal as1=ar.getSignal1(i);
-			      AvatarSignal as2=ar.getSignal2(i);
-			      //String chname = generateName(channel);
-			      String chname = generateName(ar,as1,as2);
-			      strArray=strArray+"\""+chname+"\",";
-		  
-			  }
+			  // if ar.isMonitored(){//DG 29.06 per relation, all signals - how to make connection between channel and relation?
+				  for(i=0; i<ar.nbOfSignals() ; i++) {
+			      
+				      AvatarSignal as1=ar.getSignal1(i);
+				      AvatarSignal as2=ar.getSignal2(i);
+				      //String chname = generateName(channel);
+				      String chname = generateName(ar,as1,as2);
+				      strArray=strArray+"\""+chname+"\",";
+				  }
+				  //}
 		      }
 		      // }   
 		

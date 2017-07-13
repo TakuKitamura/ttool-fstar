@@ -140,36 +140,31 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE]);
         button.addMouseListener(mgui.mouseHandler);
+	this.addSeparator();
 
+	button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
+        button.addMouseListener(mgui.mouseHandler);
+	
+	/*button = this.add(mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT]);
+	  button.addMouseListener(mgui.mouseHandler);*/
+	    
         if (MainGUI.experimentalOn) {
+	    this.addSeparator();
             button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPNODE]);
             button.addMouseListener(mgui.mouseHandler);
-            button = this.add(mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT]);
-            button.addMouseListener(mgui.mouseHandler);
+	    button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
+	    button.addMouseListener(mgui.mouseHandler);
         }
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
-        button.addMouseListener(mgui.mouseHandler);
+	this.addSeparator();
+	
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_KEY]);
         button.addMouseListener(mgui.mouseHandler);
+	button = this.add(mgui.actions[TGUIAction.TMLARCHI_FIREWALL]);
+        button.addMouseListener(mgui.mouseHandler);
+
+	
         this.addSeparator();
-
         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_KEY]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_FIREWALL]);
-        button.addMouseListener(mgui.mouseHandler);
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
         button.addMouseListener(mgui.mouseHandler);
 
         this.addSeparator();

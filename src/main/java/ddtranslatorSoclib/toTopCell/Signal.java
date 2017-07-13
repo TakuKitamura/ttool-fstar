@@ -93,8 +93,8 @@ signal = signal +"caba::VciSignals<vci_param> signal_vci_vcilocks(\"signal_vci_v
 
 if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){
 		for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM())
-					signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getNo_ram()
-							+ "(\"signal_vci_vciram" + ram.getNo_ram() + "\");" + CR2;							
+					signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
+							+ "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;							
 		i = 0;
 								
 		for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){
@@ -109,8 +109,8 @@ i++;
 
 else{
     for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM())
-	signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getNo_ram()
-	    + "(\"signal_vci_vciram" + ram.getNo_ram() + "\");" + CR2;					i=0;		
+	signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
+	    + "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;					i=0;		
     for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){
 		    // signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;		
 signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2;

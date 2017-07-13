@@ -474,6 +474,44 @@ Here are gathered all tricks on how TTool source codes are organized, and what f
 
 \subsection{Coding Instructions}
 
+\subsubsection{Best practices}
+
+TTool is a constantly evolving project with more or less experimental parts. As
+such, some leniency is expected from TTool developers and---while comments and
+advice are always welcome---a perfect knowledge of best software engineering
+practices should not be expected from every developers.
+
+Nonetheless, we advise any developer to make her/his best to follow these best
+practices. Indeed, the purpose of these principles is to enable the development
+of easily understandable, extendable and reusable code. A good place to start if
+you are not familiar with these principles is to have a look at the
+\href{https://en.wikipedia.org/wiki/SOLID_(object-oriented_design)}{SOLID}
+acronym.
+
+In particular, developers should try to:
+\begin{itemize}
+    \item \textbf{Avoid public attributes}. Use getters and setters instead.
+        This way, if the internal representation of the class changes, only the
+        getters/setters would need to be modified.
+    \item \textbf{Implement all of the methods of the superclass}.
+        If some of the methods of the superclass are not relevant for the
+        subclass, then it should probably not inherit from it. Indeed, other
+        classes that uses the superclass logically assume that all of the
+        subclasses implement the functionalities of the superclass.
+    \item \textbf{Use abstractions instead of concrete
+        classes when possible}. For instance, if an object A of package
+        \textit{avatartranslator} must use an object B of package \textit{ui},
+        create an interface in package \textit{avatartranslator} that is
+        implemented by B and use it in A. This would make the low-level package
+        \textit{ui} depend on the high-level package \textit{avatartranslator}
+        instead of the opposite (which enables to use A in a CLI application for
+        instance). This principle is also valid when the abstract class and its
+        implementation are in the same package: for instance, prefer using
+        \textit{List} objects in function arguments instead of the
+        \textit{LinkedList} or \textit{ArrayList} concrete classes so that the
+        caller can choose which subtype to instantiate.
+\end{itemize}
+
 \subsubsection{Style instructions}
 
 \begin{itemize}
@@ -806,6 +844,47 @@ or
 gradle :ttool:build
 \end{verbatim}
 if you only want to build TTool.
+
+\subsection{Executing TTool}
+When TTool is executed, it fetches configuration settings from a
+\texttt{config.xml} file and modifies it when closed. When you build TTool, a
+default \texttt{config.xml} file is copied from
+\texttt{ttool/runtime/config.xml} to \texttt{bin/config.xml}. As the
+\texttt{bin} folder is not tracked by git, you can modify this configuration
+file without committing your personal changes to the distant repository---which
+you should not do. However, building TTool once again would replace your
+personal \texttt{bin/config.xml} with the generic
+\texttt{ttool/runtime/config.xml}, losing the changes you made on your
+configuration file.
+
+A better way to use your personal configuration file through different TTool
+builds is to keep your own copy of \texttt{config.xml} outside of the
+\texttt{bin} folder (which is removed when calling \texttt{make ultraclean}).
+You can either create your own configuration file anywhere on the repository and
+be careful not to add it to be tracked by git, or put it in a location where it
+would not appear when doing a \texttt{git status}: either outside of the TTool
+folder, or in a \texttt{.ttool} subdirectory which is explicitly ignored by git:
+\begin{verbatim}
+$ mkdir .ttool
+$ cp ttool/runtime/config.xml .ttool/
+\end{verbatim}
+You could thus either call ttool directly:
+\begin{verbatim}
+$ java -jar bin/ttool.jar -config .ttool/config.xml
+\end{verbatim}
+or copy \texttt{ttool.exe} to \texttt{.ttool} subdirectory and modify it:
+\begin{verbatim}
+$ cat .ttool/ttool.exe
+#!/bin/sh
+
+java -version
+cd .ttool;
+java -Xmx1024m -Djavax.net.ssl.trustStore=ServerKeyStore \
+    -Djavax.net.ssl.trustStorePassword=123456  -jar ../bin/ttool.jar \
+    -config config.xml -experimental -debug -avatar -uppaal -launcher
+
+$
+\end{verbatim}
 
 \subsection{Automated Tests}
 TODO

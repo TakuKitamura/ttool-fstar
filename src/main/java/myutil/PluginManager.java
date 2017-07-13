@@ -43,6 +43,7 @@ package myutil;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import java.awt.*;
 
@@ -53,12 +54,53 @@ import java.awt.*;
    * @author Ludovic APVRILLE
  */
 public class PluginManager  {
-    public ArrayList<Plugin> plugins;
     public static PluginManager pluginManager;
     public static String PLUGIN_PATH = "";
+    
+    public ArrayList<Plugin> plugins;
 
     public PluginManager() {
 	plugins = new ArrayList<Plugin>();
+    }
+
+    public void preparePlugins(String path, String[] plugins) {
+	PLUGIN_PATH = path;
+	for(String s: plugins) {
+	    createPlugin(s);
+	}
+    }
+
+    public Plugin getPluginAvatarCodeGenerator() {
+	for(Plugin plugin: plugins) {
+	    if (plugin.hasAvatarCodeGenerator()) {
+		TraceManager.addDev("     Found avatar code generation plugin");
+		return plugin;
+	    }
+	}
+	TraceManager.addDev("     NOT Found avatar code generation plugin");
+	return null;
+    }
+
+    public LinkedList<Plugin> getPluginDiplodocusCodeGenerator() {
+	LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
+	for(Plugin plugin: plugins) {
+	    if (plugin.hasDiplodocusCodeGenerator()) {
+		lplugins.add(plugin);
+		TraceManager.addDev("     Found diplodocus code generator plugin");
+	    }
+	}
+	return lplugins;
+    }
+
+    public LinkedList<Plugin> getPluginGraphicalComponent(String diag) {
+	LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
+	for(Plugin plugin: plugins) {
+	    if (plugin.hasGraphicalComponent(diag)) {
+		lplugins.add(plugin);
+		TraceManager.addDev("     Found graphical plugin");
+	    }
+	}
+	return lplugins;
     }
 
     public void addPlugin(Plugin _plugin) {
@@ -119,6 +161,7 @@ public class PluginManager  {
 
 	
     }
+
 
 
 }

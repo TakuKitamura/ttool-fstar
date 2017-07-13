@@ -445,4 +445,63 @@ public class TMLChannel extends TMLCommunicationElement {
         return s;
     }
 
+    // We assume the channel is a basic channel
+    public String toXML() {
+	TraceManager.addDev("Channel:" + this.toString());
+	String s = "<TMLCHANNEL ";
+	s += "name=\"" + name + "\" ";
+	if( isBasicChannel() )  {
+	    s += "origintask=\"" +  originTask.getName() + "\" ";
+	    s += "originport=\"" +  originPort.getName() + "\" ";
+	    s += "destinationtask=\"" + destinationTask.getName() + "\" ";
+	    s += "destinationport=\"" + destinationPort.getName() + "\" ";
+	}
+	if( isAForkChannel() )  {
+	    s += "origintask=\"" +  originTasks.get(0).getName() + "\" ";
+	    s += "originport=\"" +  originPorts.get(0).getName() + "\" ";
+	    String destTask = "";
+	    String destPort = "";
+	    for( int i = 0; i < destinationTasks.size(); i++ )  {
+		destTask += destinationTasks.get(i).getName() + ";";
+		destPort += destinationPorts.get(i).getName() + ";";
+	    }
+	    s += "destinationtask=\"" + destTask + "\" ";
+	    s += "destinationport=\"" +  destPort + "\" ";
+	}
+	if (isAJoinChannel()) {
+	    s += "destinationtask=\"" + destinationTasks.get(0).getName() + "\" ";
+	    s += "destinationport=\"" + destinationPorts.get(0).getName() + "\" ";
+
+	    // Origin
+	    String oriTask = "";
+	    String oriPort = "";
+	    for( int i = 0; i < originTasks.size(); i++ )  {
+		oriTask += originTasks.get(i).getName() + ";";
+		oriPort += originPorts.get(i).getName() + ";";
+	    }
+	    s += "origintask=\"" + oriTask + "\" ";
+	    s += "originport=\"" +  oriPort + "\" ";
+	}
+	
+	s += "isLossy=\"" + isLossy + "\" ";
+        s += "lossPercentage=\"" + lossPercentage + "\" ";
+	s += "maxNbOfLoss=\"" + maxNbOfLoss + "\" ";
+	switch(type) {
+	case BRBW:
+	    s += "type=\"BRBW\" ";
+	    break;
+	case BRNBW:
+	    s += "type=\"BRNBW\" ";
+	    break;
+	case NBRNBW:
+	default:
+	    s += "type=\"NBRNBW\" ";  
+	}
+	s += "size=\"" + size + "\" ";
+	s += "max=\"" + max + "\" ";
+	
+	s += " />\n";
+	return s;
+    }
+
 }

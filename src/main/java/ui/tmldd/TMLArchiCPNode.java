@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,14 +31,14 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
 
 
-   
+
 
 package ui.tmldd;
 
@@ -61,19 +61,22 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 /**
-   * Class TMLArchiCPNode
-   * Node. To be used in TML architecture diagrams.
-   * Creation: 20/02/2013
-   * @version 1.0 20/02/2013
-   * @author Ludovic APVRILLE
-   */
+ * Class TMLArchiCPNode
+ * Node. To be used in TML architecture diagrams.
+ * Creation: 20/02/2013
+ * @version 1.0 20/02/2013
+ * @author Ludovic APVRILLE
+ */
 public class TMLArchiCPNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiCPInterface {
+    // Graphical attributes
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
     private String stereotype = "CP";
     private String reference="";
+
+    // Mapped data
     private Vector<String> mappedUnits = new Vector<String>();
     private Vector<String> assignedAttributes = new Vector<String>();
     private String cpMEC = "VOID";
@@ -157,10 +160,10 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                             String s = tabOfNames[i].trim();
                             if (s.length() > 0) {
                                 ListIterator<TGComponent> iterator = tdp.getComponentList().listIterator();
-                               
+
                                 while(iterator.hasNext()) {
                                     tgc = iterator.next();
-                                 
+
                                     if (tgc instanceof TMLArchiNode) {
                                         //TraceManager.addDev("Testing |" + tgc.getName() + "|  vs | " + s + "|");
                                         if (tgc.getName().compareTo(s) == 0) {
@@ -230,22 +233,22 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         transferType1 = dialog.getTransferTypes().get(0);
         transferType2 = dialog.getTransferTypes().get(1);
         assignedAttributes = dialog.getAssignedAttributes();
-//        TraceManager.addDev( "name " + name );
-//        TraceManager.addDev( "mappedUnits " + mappedUnits );
-//        TraceManager.addDev( "cpMEC " + cpMEC );
-//        TraceManager.addDev( "transferType1 " + transferType1 );
-//        TraceManager.addDev( "transferType2 " + transferType2 );
-//        TraceManager.addDev( "assignedAttributes " + assignedAttributes.toString() );
+        //        TraceManager.addDev( "name " + name );
+        //        TraceManager.addDev( "mappedUnits " + mappedUnits );
+        //        TraceManager.addDev( "cpMEC " + cpMEC );
+        //        TraceManager.addDev( "transferType1 " + transferType1 );
+        //        TraceManager.addDev( "transferType2 " + transferType2 );
+        //        TraceManager.addDev( "assignedAttributes " + assignedAttributes.toString() );
 
         // Issue #36
-//        if( !dialog.isRegularClose() )  {
-//            return false;
-//        }
+        //        if( !dialog.isRegularClose() )  {
+        //            return false;
+        //        }
 
         if( dialog.getNodeName().length() != 0 )        {
             tmpName = dialog.getNodeName();
             tmpName = tmpName.trim();
-      
+
             if( !TAttribute.isAValidId(tmpName, false, false) ) {
                 error = true;
                 errors += "Name of the node  ";
@@ -278,32 +281,32 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         sb.append("\" />\n");
         sb.append("<attributes reference=\"" + reference + "\" ");
         sb.append("/>\n");
-        
+
         for( String s: mappedUnits )    {
             String[] firstPart = s.split( " : " );
             String[] secondPart = firstPart[0].split("\\.");
             sb.append( "<mappingInfo " + "CPname=\"" + secondPart[0] + "\" instanceName=\"" + secondPart[1] +
                        "\" architectureUnit=\"" + firstPart[1] + "\" />\n" );
         }
-        
+
         for( String s: assignedAttributes )    {
             String[] tokens = s.split( " " );
             sb.append( "<mappedAttributes " + "type=\"" + tokens[0] + "\" name=\"" + tokens[1] + "\" value=\"" + tokens[3].substring(0,tokens[3].length()-1) + "\" />\n" );
         }
-        
+
         sb.append("</extraparam>\n");
-        
+
         return sb.toString();
     }
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId)
-    throws MalformedModelingException {
+        throws MalformedModelingException {
         try {
             NodeList nli;
             Node n1, n2;
             Element elt;
-     //       int t1id;
+            //       int t1id;
             String sstereotype = null, snodeName = null;
 
             mappedUnits.removeAllElements();
@@ -413,15 +416,15 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     }
 
     public java.util.List<TMLArchiPortArtifact> getPortArtifactList() {
-    	java.util.List<TMLArchiPortArtifact> v = new ArrayList<TMLArchiPortArtifact>();
-        
-    	for( int i = 0; i < nbInternalTGComponent; i++ )        {
+        java.util.List<TMLArchiPortArtifact> v = new ArrayList<TMLArchiPortArtifact>();
+
+        for( int i = 0; i < nbInternalTGComponent; i++ )        {
             if( tgcomponent[i] instanceof TMLArchiPortArtifact )        {
                 v.add( (TMLArchiPortArtifact)(tgcomponent[i]) );
             }
         }
-        
-    	return v;
+
+        return v;
     }
 
     public Vector<String> getMappedUnits()      {
@@ -445,7 +448,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         return completeName;
     }
 
-    public Vector<String> getAssignedAttributes() {
+    public Vector<String> getAssignedAttributes() throws java.lang.IllegalArgumentException {
         Vector<String> vectorToReturn;
         switch( cpMEC ) {
         case CPMEC.MemoryCopy:
@@ -464,28 +467,31 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 
             break;
         default:
-        	throw new IllegalArgumentException( "Unknown communication pattern " + cpMEC + "." );
+	    if (cpMEC == null) {
+		throw new IllegalArgumentException( "Unknown communication pattern ");
+	    }
+            throw new IllegalArgumentException( "Unknown communication pattern " + cpMEC + "." );
             //TraceManager.addDev( "ERROR in returning assignedAttributes" );
             //vectorToReturn = assignedAttributes;
-            
+
             //break;
         }
-        
+
         return vectorToReturn;
     }
 
     public java.util.List<Integer> getTransferTypes()        {
-    	java.util.List<Integer> transferTypes = new ArrayList<Integer>();
+        java.util.List<Integer> transferTypes = new ArrayList<Integer>();
         transferTypes.add( transferType1 );
         transferTypes.add( transferType2 );
-        
+
         return transferTypes;
     }
 
     // Display the mapping of instances onto platform units
     public String getAttributes()   {
         String attr = "";
-        
+
         for( String s: mappedUnits )    {
             if( s.split("\\.").length > 0 ) {   // Remove the trailing name of the CP
                 attr += s.split("\\.")[1] + "\n";
@@ -494,7 +500,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                 attr += s + "\n";
             }
         }
-        
+
         return attr;
     }
 }

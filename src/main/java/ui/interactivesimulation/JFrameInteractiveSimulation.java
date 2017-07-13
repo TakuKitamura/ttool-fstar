@@ -82,7 +82,7 @@ import java.util.List;
  */
 public class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener {
 
-    protected static final int NB_OF_TRANSACTIONS = 10;
+    protected static final int NB_OF_TRANSACTIONS = 1000;
 
     protected static final String SIMULATION_HEADER = "siminfo";
     protected static final String SIMULATION_GLOBAL = "global";
@@ -108,7 +108,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private String hostSystemC;
     private String pathExecute;
 
-    protected JButton buttonClose, buttonStart, buttonStopAndClose;
+    protected JButton buttonClose, buttonStart, buttonStopAndClose, buttonShowTrace;
     protected JTextArea jta;
     protected JScrollPane jsp;
 
@@ -145,7 +145,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     protected JTextField stateFileName;
     protected JTextField benchmarkFileName;
     protected JComboBox<String> cpus, busses, mems, tasks, chans;
-
+	HashMap<String, List<Integer>> channelIDMap= new HashMap<String, List<Integer>>();
 
     private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
 	private List<String> simtraces= new ArrayList<String>();
@@ -209,6 +209,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     LatencyTableModel latm;
     public Vector<String> checkedTransactions = new Vector<String>();
     private JScrollPane jspLatency;
+	int chanId=0;
 
     private int mode = 0;
     //private boolean busyStatus = false;
@@ -235,6 +236,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private Map<String, String> checkTable = new HashMap<String, String>();
     private Map<String, List<String>> transTimes = new HashMap<String, List<String>>();
     private Vector<SimulationLatency> latencies = new Vector<SimulationLatency>();
+	private HashMap<String, List<String>> msgTimes = new HashMap<String, List<String>>(); 
+
+
 	PipedOutputStream pos;
 	PipedInputStream pis;
 	private JFrameTMLSimulationPanel tmlSimPanel;
@@ -261,7 +265,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         }
 
         points = _points;
-
 
         valueTable = new Hashtable<Integer, String>();
         rowTable = new Hashtable<Integer, Integer>();
@@ -307,6 +310,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         buttonStart = new JButton(actions[InteractiveSimulationActions.ACT_START_ALL]);
         buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_ALL]);
         buttonStopAndClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL]);
+        buttonShowTrace = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_TRACE]);
         //buttonStopAndClose = new JButton(buttonStopAndCloseS, IconManager.imgic27);
 
 
@@ -330,6 +334,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         jp.add(buttonStart);
         jp.add(buttonStopAndClose);
         jp.add(buttonClose);
+        jp.add(buttonShowTrace);
         mainpanel.add(jp, BorderLayout.NORTH);
 
 
@@ -379,7 +384,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         mainTop.add(commands, c02);
 
         // Issue #41 Ordering of tabbed panes 
-        commandTab = GraphicLib.createTabbedPane();//new JTabbedPane();
+        commandTab = GraphicLib.createTabbedPaneRegular();//new JTabbedPane();
 
         // Control commands
         jp01 = new JPanel(new BorderLayout());
@@ -706,7 +711,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         mainTop.add(infos, c02);
 
         // Issue #41 Ordering of tabbed panes 
-        infoTab = GraphicLib.createTabbedPane();//new JTabbedPane();
+        infoTab = GraphicLib.createTabbedPaneRegular();//new JTabbedPane();
         infoTab.setMinimumSize(new Dimension(300, 250));
         infos.add(infoTab, BorderLayout.NORTH);
 
@@ -959,7 +964,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
  			public void mouseClicked(java.awt.event.MouseEvent evt) {
     			int row = latTable.rowAtPoint(evt.getPoint());
     			int col = latTable.columnAtPoint(evt.getPoint());
-    			if (row >= 0 && col >= 0 && col <2) {
+    			if (row >= 0 && col >= 0 && col <2 && latencies.size()>row) {
 					for (TGComponent tgc: tmap.getTMLModeling().getCheckedComps().keySet()){
 						if (tmap.getTMLModeling().getCheckedComps().get(tgc).equals(latm.getValueAt(row,col).toString().split(" ")[0])){
         				    mgui.selectTab(tgc.getTDiagramPanel());
@@ -1378,17 +1383,40 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         return true;
 
     }
+
+	public void resetSimTrace(){
+		channelIDMap.clear();
+		simtraces.clear();
+	}
+
 	public void writeSimTrace(){
 		try {
 			tmlSimPanel = new JFrameTMLSimulationPanel(new Frame(), mgui, "Simulation Transactions");
+			HashMap<String, ArrayList<String>> deviceTaskMap = new HashMap<String, ArrayList<String>>();
+			for (HwNode node : tmap.getTMLArchitecture().getHwNodes()){
+				deviceTaskMap.put(node.getName(), new ArrayList<String>());
+			}
+			for (TMLTask task: tmap.getTMLModeling().getTasks()){
+				HwNode node = tmap.getHwNodeOf(task);
+				if (node!=null){
+					deviceTaskMap.get(node.getName()).add(task.getName());
+				}
+			}
+			tmlSimPanel.getSDPanel().setDevices(deviceTaskMap);
 			pos = new PipedOutputStream();
 			pis = new PipedInputStream(pos, 4096);
 			tmlSimPanel.setFileReference(new BufferedReader(new InputStreamReader(pis)));
 			bw = new BufferedWriter(new OutputStreamWriter(pos));	
+		/*	for (HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+				simtraces.add("time=0 block="+ node.getName()+" type=state_entering state=start");
+				simIndex++;
+			}*/
 			for (TMLTask task : tmap.getTMLModeling().getTasks()){
 				simtraces.add("time=0 block="+ task.getName()+" type=state_entering state=startState");
 				simIndex++;
 			}
+			
+
 			//Sort simtraces by end time
 			Collections.sort(simtraces, new Comparator<String>() {
     			@Override
@@ -1411,39 +1439,252 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 		}
 		catch (Exception e){
-			System.out.println("Could not write sim trace " + e);
+			System.out.println("Could not write sim trace " + e + " " + simtraces + " " +simIndex);
 		}
 	}
-    protected void addTransactionToNode(SimulationTransaction tran){
+	public void writeArchitectureSimTrace(){
+	}
+
+	public void processDeviceTraces(SimulationTransaction tran){
+		String command = tran.command;
+		if (command.contains(" ")){
+			command = command.split(" ")[0];
+		}
 		try {
-			if (tran.command.contains("Write")){
+			if ((command.equals("Write") || command.equals("Read"))){
 				TMLChannel chan = tmap.getTMLModeling().getChannelByShortName(tran.channelName);
 				if (chan!=null){
 					TMLTask originTask = chan.getOriginTask();
 					TMLTask destTask = chan.getDestinationTask();
 					if (originTask!=null && destTask!=null){
-						//JK asynch channels don't work
-					//	if (chan.getType()==TMLChannel.BRBW){
-							String trace="time=" + tran.endTime+ " block="+ originTask.getName() + " blockdestination="+ destTask.getName() +" type=synchro channel="+tran.channelName+" params=\"" +chan.getSize()+"\"";
+							String asynchType = (command.equals("Write") ? "send_async" : "receive_async");
+							int msgId=chanId;
+							if (!msgTimes.containsKey(tran.channelName)){
+								msgTimes.put(tran.channelName, new ArrayList<String>());
+							} 
+							if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
+	//						int tmp=msgId-1;
+						
+							if (command.equals("Write")){	
+								if (!channelIDMap.containsKey(tran.channelName)){
+									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
+								}
+								channelIDMap.get(tran.channelName).add(msgId);
+								chanId++;
+							}
+							else {
+								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
+									msgId=channelIDMap.get(tran.channelName).remove(0);
+								}
+							
+							}
+						String trace="";
+						if (command.equals("Write")){
+							if (tran.nodeType.equals("0")){
+								trace = "time=" + tran.endTime+ " block="+ tran.deviceName.replaceAll("_0","") + " type="+asynchType+ " blockdestination="+ tmap.getHwNodeOf(destTask).getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
+							}
+						}
+						else {
+							trace = "time=" + tran.endTime+ " block="+ tran.deviceName.replaceAll("_0","") + " type="+asynchType+ " blockdestination="+ tmap.getHwNodeOf(destTask).getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
+						}
+						//	System.out.println("sending asynch " + trace);
 							if (!simtraces.contains(trace)){
 								simtraces.add(trace);
+								if (!msgTimes.containsKey(tran.channelName)){
+									msgTimes.put(tran.channelName, new ArrayList<String>());
+								}
+								msgTimes.get(tran.channelName).add(tran.endTime);
 							}
-						//}
-						//else {
-						//	String asynchType = (tran.command.contains("Write") ? "send_asynch" : "receive_asynch");
-							//simtraces.add("#"+simIndex+" time=" + tran.startTime+ " block="+ originTask.getName() + " blockdestination="+ destTask.getName() +" type="+asynchType+ " channel="+tran.channelName+" params=\"" +chan.getSize()+"\"");
 						//}
 					}
 				}
+				}
 			}
-			else if (tran.command.contains("Exec")){
+			else if (command.equals("SelectEvent")){
+			}
+			else if (command.equals("Send")){
+			}
+			else if (command.equals("Wait")){
+			}
+			else if (command.equals("Request")){
+
+			}
+			else if (command.equals("Notified")){
+			}
+			else if (command.contains("Execi")){
+				String trace="time="+tran.endTime+ " block=" + tran.deviceName.replaceAll("_0","") + " type=state_entering state=exec" + tran.length;
+				if (!simtraces.contains(trace)){
+					simtraces.add(trace);
+				}
+			}
+			else {
+				System.out.println("UNHANDLED COMMAND " + tran.command);
+			}
+		} catch (Exception e){
+			System.out.println("Exception " + e);
+		}
+	}
+    protected void addTransactionToNode(SimulationTransaction tran){
+		//System.out.println("Command " + tran.command + " " + tran.deviceName);
+		String command = tran.command;
+		if (command.contains(" ")){
+			command = command.split(" ")[0];
+		}
+		try {
+			if ((command.equals("Write") || command.equals("Read")) && tran.deviceName.contains("CPU")){
+				TMLChannel chan = tmap.getTMLModeling().getChannelByShortName(tran.channelName);
+				if (chan!=null){
+					TMLTask originTask = chan.getOriginTask();
+					TMLTask destTask = chan.getDestinationTask();
+					if (originTask!=null && destTask!=null){
+							String asynchType = (command.equals("Write") ? "send_async" : "receive_async");
+							int msgId=chanId;
+							if (!msgTimes.containsKey(tran.channelName)){
+								msgTimes.put(tran.channelName, new ArrayList<String>());
+							} 
+							if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
+	//						int tmp=msgId-1;
+						
+							if (command.equals("Write")){	
+								if (!channelIDMap.containsKey(tran.channelName)){
+									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
+								}
+								channelIDMap.get(tran.channelName).add(msgId);
+								chanId++;
+							}
+							else {
+								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
+									msgId=channelIDMap.get(tran.channelName).remove(0);
+								}
+							
+							}
+						String trace="";
+						if (command.equals("Write")){
+							trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
+						}
+						else {
+							trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
+						}
+						//	System.out.println("sending asynch " + trace);
+							if (!simtraces.contains(trace)){
+								simtraces.add(trace);
+								if (!msgTimes.containsKey(tran.channelName)){
+									msgTimes.put(tran.channelName, new ArrayList<String>());
+								}
+								msgTimes.get(tran.channelName).add(tran.endTime);
+							}
+						//}
+					}
+				}
+				}
+			}
+			else if (command.equals("SelectEvent")){
+				String trace="time="+tran.endTime+ " block=" + tran.taskName + " type=state_entering state=SelectEvent";
+				if (!simtraces.contains(trace)){
+					simtraces.add(trace);
+				}
+			}
+			else if ((command.equals("Send") || command.equals("Wait"))  && tran.deviceName.contains("CPU")){
+				TMLEvent evt = tmap.getTMLModeling().getEventByShortName(tran.channelName);
+				if (evt!=null){
+					TMLTask originTask = evt.getOriginTask();
+					TMLTask destTask = evt.getDestinationTask();
+					if (originTask!=null && destTask!=null){
+							String asynchType = (command.equals("Send") ? "send_async" : "receive_async");
+							int msgId=chanId;
+							if (!msgTimes.containsKey(tran.channelName)){
+								msgTimes.put(tran.channelName, new ArrayList<String>());
+							} 
+							if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
+	//						int tmp=msgId-1;
+						
+							if (command.equals("Send")){	
+								if (!channelIDMap.containsKey(tran.channelName)){
+									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
+								}
+								channelIDMap.get(tran.channelName).add(msgId);
+								chanId++;
+							}
+							else {
+								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
+									msgId=channelIDMap.get(tran.channelName).remove(0);
+								}
+							
+							}
+						String trace="";
+						if (command.equals("Send")){
+							trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
+						}
+						else {
+							trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";
+						}
+						//	System.out.println("sending asynch " + trace);
+							if (!simtraces.contains(trace)){
+								simtraces.add(trace);
+								if (!msgTimes.containsKey(tran.channelName)){
+									msgTimes.put(tran.channelName, new ArrayList<String>());
+								}
+								msgTimes.get(tran.channelName).add(tran.endTime);
+							}
+						//}
+					}
+				}
+				}
+			}
+			else if ((command.equals("Request") || command.equals("Notified")) && tran.deviceName.contains("CPU")){
+				TMLRequest req = tmap.getTMLModeling().getRequestByShortName(tran.channelName);
+				if (req!=null){
+					TMLTask destTask = req.getDestinationTask();
+					if (destTask!=null){
+							String asynchType = (command.equals("Request") ? "send_async" : "receive_async");
+							int msgId=chanId;
+							if (!msgTimes.containsKey(tran.channelName)){
+								msgTimes.put(tran.channelName, new ArrayList<String>());
+							} 
+							if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
+	//						int tmp=msgId-1;
+						
+							if (command.equals("Request")){	
+								if (!channelIDMap.containsKey(tran.channelName)){
+									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
+								}
+								channelIDMap.get(tran.channelName).add(msgId);
+								chanId++;
+							}
+							else {
+								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
+									msgId=channelIDMap.get(tran.channelName).remove(0);
+								}
+							
+							}
+						String trace="";
+						if (command.equals("Request")){
+							trace = "time=" + tran.endTime+ " block="+ tran.taskName + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
+						}
+						else {
+							trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
+						}
+						//	System.out.println("sending asynch " + trace);
+							if (!simtraces.contains(trace)){
+								simtraces.add(trace);
+								if (!msgTimes.containsKey(tran.channelName)){
+									msgTimes.put(tran.channelName, new ArrayList<String>());
+								}
+								msgTimes.get(tran.channelName).add(tran.endTime);
+							}
+						//}
+					}
+				}
+				}
+			}
+			else if (command.contains("Execi")){
 				String trace="time="+tran.endTime+ " block=" + tran.taskName + " type=state_entering state=exec" + tran.length;
 				if (!simtraces.contains(trace)){
 					simtraces.add(trace);
 				}
 			}
 			else {
-				// :(
+				TraceManager.addDev("UNHANDLED COMMAND " + tran.command + " " + tran.deviceName + " " + tran.nodeType);
 			}
 			//System.out.println("Simulation command " + tran.command + " " + tran.channelName + " " + tran.length);
 
@@ -2356,16 +2597,16 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     private void addLatency(){
         SimulationLatency sl = new SimulationLatency();
-        sl.trans1 = transaction1.getSelectedItem().toString();
-        sl.trans2 = transaction2.getSelectedItem().toString();
-        sl.minTime="??";
-        sl.maxTime="??";
-        sl.avTime="??";
-        sl.stDev="??";
+        sl.setTransaction1(transaction1.getSelectedItem().toString());
+        sl.setTransaction2(transaction2.getSelectedItem().toString());
+        sl.setMinTime("??");
+        sl.setMaxTime("??");
+        sl.setAverageTime("??");
+        sl.setStDev("??");
         boolean found=false;
         for (Object o:latencies){
             SimulationLatency s = (SimulationLatency) o;
-            if (s.trans1 == sl.trans1 && s.trans2 == sl.trans2){
+            if (s.getTransaction1() == sl.getTransaction1() && s.getTransaction2() == sl.getTransaction2()){
                 found=true;
             }
         }
@@ -2381,7 +2622,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         for (Object o:latencies){
             SimulationLatency sl = (SimulationLatency) o;
             //calcuate response + checkpoint 1 id + checkpoint 2 id
-            sendCommand("cl " + sl.trans1.split("ID: ")[1].split("\\)")[0] + " " + sl.trans2.split("ID: ")[1].split("\\)")[0]);
+            sendCommand("cl " + sl.getTransaction1().split("ID: ")[1].split("\\)")[0] + " " + sl.getTransaction2().split("ID: ")[1].split("\\)")[0]);
         }
     }
 
@@ -2393,14 +2634,14 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         for (Object o: latencies){
             SimulationLatency sl = (SimulationLatency) o;
 			//System.out.println(sl.trans2 + " " + sl.trans1);
-            sl.minTime="??";
-            sl.maxTime="??";
-            sl.avTime="??";
-            sl.stDev="??";
+            sl.setMinTime("??");
+            sl.setMaxTime("??");
+            sl.setAverageTime("??");
+            sl.setStDev("??");
             for (String st1:transTimes.keySet()){
                 for (String st2:transTimes.keySet()){
                     if (st1!=st2){
-                        if (checkTable.get(st2).contains(sl.trans2) && checkTable.get(st1).contains(sl.trans1)){
+                        if (checkTable.get(st2).contains(sl.getTransaction2()) && checkTable.get(st1).contains(sl.getTransaction1())){
                             ArrayList<Integer> minTimes = new ArrayList<Integer>();
                             if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
                                 for(String time1: transTimes.get(st1)){
@@ -2418,11 +2659,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                 }
                                 if (minTimes.size()>0){
                                     int sum=0;
-                                    sl.minTime=Integer.toString(Collections.min(minTimes));
-                                    sl.maxTime=Integer.toString(Collections.max(minTimes));
+                                    sl.setMinTime(Integer.toString(Collections.min(minTimes)));
+                                    sl.setMaxTime(Integer.toString(Collections.max(minTimes)));
                                     for (int time: minTimes){
                                         sum+=time;
                                     }
+									//System.out.println("mintimes " + minTimes);
                                     double average = (double) sum/ (double) minTimes.size();
                                     double stdev =0.0;
                                     for (int time:minTimes){
@@ -2430,8 +2672,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                     }
                                     stdev= stdev/minTimes.size();
                                     stdev = Math.sqrt(stdev);
-                                    sl.avTime= String.format("%.1f",average);
-                                    sl.stDev = String.format("%.1f",stdev);
+                                    sl.setAverageTime(String.format("%.1f",average));
+                                    sl.setStDev(String.format("%.1f",stdev));
                                 }
                             }
 
@@ -2883,6 +3125,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             mgui.resetLoadID();
             mgui.resetTransactions();
             mgui.resetStatus();
+            resetSimTrace();
             sendCommand("reset");
             transTimes=new HashMap<String, List<String>>();
             processLatency();
@@ -2901,7 +3144,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             updateTasks();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS].getActionCommand())) {
             updateTransactions();
-			writeSimTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_ADD_LATENCY].getActionCommand())) {
             addLatency();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY].getActionCommand())) {
@@ -2914,7 +3156,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             analyzeRG();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_VIEW_RG].getActionCommand())) {
             viewRG();
-        }
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_REFRESH].getActionCommand())) {
+            resetSimTrace();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_TRACE].getActionCommand())) {
+			writeSimTrace();
+		}
     }
 
     public void error(String error) {

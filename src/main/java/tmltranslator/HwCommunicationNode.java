@@ -49,7 +49,13 @@ package tmltranslator;
  * @author Ludovic APVRILLE
  */
 public abstract class HwCommunicationNode extends HwNode  {
- 
+    
+    // Security
+    public static final int BUS_PUBLIC = 0;
+    public static final int BUS_PRIVATE = 1;
+   
+    public int privacy = BUS_PUBLIC;
+	
     public HwCommunicationNode(String _name) {
 		super(_name);
     }

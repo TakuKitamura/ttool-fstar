@@ -175,6 +175,7 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
     }
 
     public void hasBeenResized() {
+	super.hasBeenResized();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLArchiKey) {
                 tgcomponent[i].resizeWithFather();
@@ -250,11 +251,24 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
 
         return true;
     }
+
+    
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+	boolean ret = super.acceptSwallowedTGComponent(tgc);
+	if (ret == true) {
+	    return true;
+	}
+	
         return (tgc instanceof TMLArchiKey );
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+	boolean ret = super.addSwallowedTGComponent(tgc, x, y);
+
+	if (ret == true) {
+	    return true;
+	}
+	
         //Set its coordinates
         if (tgc instanceof TMLArchiKey) {
             tgc.setFather(this);
@@ -265,8 +279,9 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
         }
 
         return false;
-
     }
+
+    
     public int getType() {
         return TGComponentManager.TMLARCHI_MEMORYNODE;
     }

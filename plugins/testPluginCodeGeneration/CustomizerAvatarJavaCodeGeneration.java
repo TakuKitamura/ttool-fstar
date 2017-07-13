@@ -44,6 +44,11 @@
  */
 
 public class CustomizerAvatarJavaCodeGeneration {
+
+    public static String hasAvatarCodeGenerator() {
+	return "CustomizerAvatarJavaCodeGeneration";
+    }
+    
     public static String getMainDeclaration() {
         return ("/* This is the main */\nint main(int argc, char *argv[]) {\n");
     }

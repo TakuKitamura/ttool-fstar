@@ -43,7 +43,7 @@
 
 package tmltranslator;
 
-import myutil.TraceManager;
+import myutil.*;
 import tmltranslator.toproverif.TML2ProVerif;
 import ui.TMLArchiPanel;
 import ui.TMLComponentDesignPanel;
@@ -62,24 +62,39 @@ public class TMLMapping<E> {
     private TMLModeling<E> tmlm;
     private TMLArchitecture tmla;
     //   private TMLCP tmlcp;
+
+    // Mapping of tasks
     private List<HwExecutionNode> onnodes;
     private List<TMLTask> mappedtasks;
+
+    // Mapping of communications
     private List<HwCommunicationNode> oncommnodes;
-    public List<TMLElement> mappedcommelts;
+    private List<TMLElement> mappedcommelts;
+
     public CorrespondanceElement<E> listE;
+
+    // Security
     public boolean firewall = false;
-    //private List<TMLCP> mappedCPs;
-    // private List<TMLElement> commEltsMappedOnCPs;
     public Map<SecurityPattern, List<HwMemory>> mappedSecurity= new HashMap<SecurityPattern, List<HwMemory>>();
+    private List<String[]> pragmas= new ArrayList<String[]>();
+
+    // CPs
     private List<TMLCPLib> mappedCPLibs;
 
-    private List<String[]> pragmas= new ArrayList<String[]>();
-    private boolean optimized = false;
+    // For plugins
+    private ArrayList<String> customValues;
 
+    private boolean optimized = false;
     private int hashCode;
     private boolean hashCodeComputed = false;
+
+
+
+    // REFERENCES TO BE REMOVED!!!!
     private TMLComponentDesignPanel tmldp;
     public TMLArchiPanel tmlap;
+
+
     public TMLMapping(TMLModeling<E> _tmlm, TMLArchitecture _tmla, boolean reset) {
 
         tmlm = _tmlm;
@@ -133,6 +148,11 @@ public class TMLMapping<E> {
         }
         return null;
     }
+
+    public void addCustomValue(String custom) {
+        customValues.add(custom);
+    }
+
     public void makeMinimumMapping() {
         HwCPU cpu;
         //   HwMemory mem;
@@ -288,6 +308,7 @@ public class TMLMapping<E> {
         //        mappedCPs = new ArrayList<TMLCP>();
         //        commEltsMappedOnCPs = new ArrayList<TMLElement>();
         mappedCPLibs = new ArrayList<TMLCPLib>();
+        customValues = new ArrayList<String>();
     }
 
     public TMLTask getTMLTaskByCommandID(int id) {
@@ -1477,5 +1498,31 @@ public class TMLMapping<E> {
 
     public TMLComponentDesignPanel getTMLCDesignPanel(){
         return tmldp;
+    }
+
+
+    public String toXML() {
+        String s = "<TMLMAPPING>\n";
+        s += tmlm.toXML();
+        s += tmla.toXML();
+        for(int i=0; i<onnodes.size(); i++) {
+            HwExecutionNode node = onnodes.get(i);
+            TMLTask task = mappedtasks.get(i);
+            s += "<TASKMAP node=\"" + node.getName() + "\" task=\"" + task.getName() + "\" />\n";
+        }
+        for(int i=0; i<oncommnodes.size(); i++) {
+            HwCommunicationNode node = oncommnodes.get(i);
+            TMLElement elt = mappedcommelts.get(i);
+            s += "<COMMMAP node=\"" + node.getName() + "\" elt=\"" + elt.getName() + "\" />\n";
+        }
+        for(TMLCPLib cplib: mappedCPLibs) {
+            s += cplib.toXML();
+        }
+        for(String val: customValues) {
+            s += "<CUSTOMVALUE value=\"" + val + "\" />\n";
+        }
+        s += "</TMLMAPPING>\n";
+        //s = myutil.Conversion.transformToXMLString(s);
+        return s;
     }
 }

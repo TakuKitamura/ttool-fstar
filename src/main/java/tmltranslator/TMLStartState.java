@@ -52,8 +52,11 @@ package tmltranslator;
 public class TMLStartState extends TMLActivityElement{
     
     public TMLStartState(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);
-       
+         super(_name, _referenceObject); 
+    }
+
+    public String customExtraToXML() {
+	return "";
     }
  
 }

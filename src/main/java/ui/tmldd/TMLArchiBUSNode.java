@@ -65,13 +65,16 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
-    private String stereotype = "BUS";
+    private static String stereotype = "Bus";
 
     private int byteDataSize = HwBus.DEFAULT_BYTE_DATA_SIZE;
     private int pipelineSize = HwBus.DEFAULT_PIPELINE_SIZE;
     private int arbitrationPolicy = HwBus.DEFAULT_ARBITRATION;
     private int sliceTime = HwBus.DEFAULT_SLICE_TIME;
+
     private int privacy = HwBus.BUS_PUBLIC;
+
+    
     public TMLArchiBUSNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
