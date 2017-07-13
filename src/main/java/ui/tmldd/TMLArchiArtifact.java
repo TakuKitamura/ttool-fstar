@@ -355,40 +355,40 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
                 return FepOperationMEC.CwmMEC;
             }
             else if( operation.equals( "CWL" ) )        {
-                TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwlMEC );
+                //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwlMEC );
                 return FepOperationMEC.CwlMEC;
             }
             else if( operation.equals( "CWA" ) )        {
-                TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwaMEC );
+                //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwaMEC );
                 return FepOperationMEC.CwaMEC;
             }
             else if( operation.equals( "CWP" ) )        {
-                TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwpMEC );
+                //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwpMEC );
                 return FepOperationMEC.CwpMEC;
             }
             else if( operation.equals( "FFT" ) )        {
-                TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.FftMEC );
+                //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.FftMEC );
                 return FepOperationMEC.FftMEC;
             }
             else if( operation.equals( "SUM" ) )        {
-                TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.SumMEC );
+                //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.SumMEC );
                 return FepOperationMEC.SumMEC;
             }
         }
         else if( fatherArchUnitMECType instanceof MapperMEC )   {
-            TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.MappOperationMEC );
+            //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.MappOperationMEC );
             return OperationMEC.MappOperationMEC;
         }
         else if( fatherArchUnitMECType instanceof InterleaverMEC        )       {
-            TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.IntlOperationMEC );
+            //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.IntlOperationMEC );
             return OperationMEC.IntlOperationMEC;
         }
         else if( fatherArchUnitMECType instanceof AdaifMEC )    {
-            TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.AdaifOperationMEC );
+            //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.AdaifOperationMEC );
             return OperationMEC.AdaifOperationMEC;
         }
         else if( fatherArchUnitMECType instanceof CpuMEC )      {
-            TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.CpuOperationMEC );
+            //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.CpuOperationMEC );
             return OperationMEC.CpuOperationMEC;
         }
         return -1;

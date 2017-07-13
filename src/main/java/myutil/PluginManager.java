@@ -73,7 +73,7 @@ public class PluginManager  {
     public Plugin getPluginAvatarCodeGenerator() {
 	for(Plugin plugin: plugins) {
 	    if (plugin.hasAvatarCodeGenerator()) {
-		TraceManager.addDev("     Found avatar code generation plugin");
+		//TraceManager.addDev("     Found avatar code generation plugin");
 		return plugin;
 	    }
 	}
@@ -86,7 +86,7 @@ public class PluginManager  {
 	for(Plugin plugin: plugins) {
 	    if (plugin.hasDiplodocusCodeGenerator()) {
 		lplugins.add(plugin);
-		TraceManager.addDev("     Found diplodocus code generator plugin");
+		//TraceManager.addDev("     Found diplodocus code generator plugin");
 	    }
 	}
 	return lplugins;
@@ -97,7 +97,7 @@ public class PluginManager  {
 	for(Plugin plugin: plugins) {
 	    if (plugin.hasGraphicalComponent(diag)) {
 		lplugins.add(plugin);
-		TraceManager.addDev("     Found graphical plugin");
+		//TraceManager.addDev("     Found graphical plugin");
 	    }
 	}
 	return lplugins;

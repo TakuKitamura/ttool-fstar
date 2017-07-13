@@ -119,14 +119,14 @@ public class Plugin {
     }
 
     public boolean hasGraphicalComponent(String _diagID) {
-	TraceManager.addDev("Test GC with diag=" + _diagID);
+	//TraceManager.addDev("Test GC with diag=" + _diagID);
 	String ret = executeRetStringMethod(removeJar(name), "hasGraphicalComponent");
 	if (ret != null) {
 	    classGraphicalComponent = getClass(ret);
 	    String diagOk = executeRetStringMethod(classGraphicalComponent, "getPanelClassName");
 	    if (diagOk != null) {
 		if (diagOk.compareTo(_diagID) == 0) {
-		    TraceManager.addDev("Found graphical component in plugin:" + name);
+		    //TraceManager.addDev("Found graphical component in plugin:" + name);
 		    return true;
 		}
 	    }
@@ -171,7 +171,7 @@ public class Plugin {
             }
 
         } catch (Exception e) {
-	    TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
+	    //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
 	    return null;
         }
 
@@ -197,7 +197,7 @@ public class Plugin {
 
             return c.getMethod(_methodName);
         } catch (Exception e) {
-	    TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
+	    //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
 	    return null;
         }
 
@@ -207,7 +207,7 @@ public class Plugin {
 	// We have a valid plugin. We now need to get the Method
 	Method m = getMethod(_className, _methodName);
 	if (m == null) {
-	    TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
+	    //TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
 	    return null;
 	}
 	
@@ -227,7 +227,7 @@ public class Plugin {
 	    Method m = c.getMethod(_methodName);
 	    
 	    if (m == null) {
-		TraceManager.addDev("Null method in executeRetStringMethod with Class parameter");
+		//TraceManager.addDev("Null method in executeRetStringMethod with Class parameter");
 		return null;
 	    }
 	    return (String)(m.invoke(null));
