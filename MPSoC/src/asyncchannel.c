@@ -98,7 +98,7 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
     debugInt("asyncchannel fifo->width \n",channel->mwmr_fifo->width);
     debugInt("asyncchannel msg size \n",sizeof(*msg));
     // async_read(channel->mwmr_fifo, &msg, 1);
-    async_read(channel->mwmr_fifo, &msg, sizeof(*msg));
+    async_read(channel->mwmr_fifo, &msg, channel->mwmr_fifo->width);
     return msg;
   }
 
@@ -115,8 +115,8 @@ void destroyAsyncchannel(asyncchannel *asyncch) {
   debugInt("asyncchannel address \n",channel->mwmr_fifo);
   debugInt("asyncchannel fifo->depth \n",channel->mwmr_fifo->depth);
   debugInt("asyncchannel fifo->width \n",channel->mwmr_fifo->width);
-  debugInt("asyncchannel msg size \n",sizeof(*msg));
-  async_read(channel->mwmr_fifo, &msg, sizeof(*msg));
+  debugInt("asyncchannel msg size \n", channel->mwmr_fifo->width);
+  async_read(channel->mwmr_fifo, &msg, channel->mwmr_fifo->width);
   
   return msg;
 }
@@ -136,6 +136,6 @@ void addMessageToAsyncChannel(asyncchannel *channel, message *msg) {
   debugInt("asyncchannel->fifo rptr \n", channel->mwmr_fifo->status->rptr);
   debugInt("asyncchannel->fifo wptr \n", channel->mwmr_fifo->status->wptr);
   //async_write(channel->mwmr_fifo, &msg, 1 );
-  debugInt("asyncchannel msg size \n",sizeof(*msg));
-  async_write(channel->mwmr_fifo, &msg, sizeof(*msg));//DG 13.6. *msg au lieu de msg
+  debugInt("asyncchannel msg size \n", channel->mwmr_fifo->width);
+  async_write(channel->mwmr_fifo, &msg, channel->mwmr_fifo->width);//DG 13.6. *msg au lieu de msg//DG 18.07. fifo width
 }
