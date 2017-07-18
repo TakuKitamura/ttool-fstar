@@ -67,12 +67,6 @@ tmpl()::VciMwmrStats(
     for ( typename std::vector<std::string>::const_iterator i = fifo_name.begin();
           i != fifo_name.end();
           ++i ) {
-
-const std::string name2 = (*i);
-loader.get_symbol_by_name(name2);
-const soclib::common::BinaryFileSymbol *sym2 = loader.get_symbol_by_name(name2);
-std::cout << " mwmr fifo with address " << sym2->address() << std::endl;
-
         const std::string name = (*i)+"_status";
         const soclib::common::BinaryFileSymbol *sym = loader.get_symbol_by_name(name);
         if ( ! sym || sym->name() != name ) {
@@ -83,6 +77,26 @@ std::cout << " mwmr fifo with address " << sym2->address() << std::endl;
         std::cout << " mwmr fifo with status address " << addr << std::endl;
         m_mwmr_info.push_back( mwmr_info_t(addr, *i) );
     }
+
+    /*    for ( typename std::vector<std::string>::const_iterator i = fifo_name.begin();
+          i != fifo_name.end();
+          ++i ) {
+
+        const std::string name2 = (*i);
+        loader.get_symbol_by_name(name2);
+        const soclib::common::BinaryFileSymbol *sym2 = loader.get_symbol_by_name(name2);
+        std::cout << " mwmr fifo with address " << sym2->address() << std::endl;
+
+        const std::string name = (*i)+"_status";
+        const soclib::common::BinaryFileSymbol *sym = loader.get_symbol_by_name(name);
+        if ( ! sym || sym->name() != name ) {
+            std::cerr << this->name() << " name not found: " << name << std::endl;
+            continue;
+        }
+        typename vci_param::fast_addr_t addr = sym->address();
+        std::cout << " mwmr fifo with status address " << addr << std::endl;
+        m_mwmr_info.push_back( mwmr_info_t(addr, *i) );
+        }*/
 }
 
 tmpl()::~VciMwmrStats()
@@ -145,7 +159,7 @@ tmpl(void)::handle_txn(const VciLoggerElem<vci_param> &elem, const mwmr_info_t &
         //prefix(elem, mwmr) << "WDATA" << std::hex<< wdata<<std::endl;
        
         //if ( wdata == 0x1) {  
-        if ( wdata >= 1 ) {  
+             if ( wdata >= 1 ) {  
             if ( rdata == vci_param::STORE_COND_ATOMIC ){ 
                
                 prefix(elem, mwmr) << "lock_take" << std::endl;
