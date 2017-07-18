@@ -41,8 +41,8 @@
 
 package ui.window;
 
+import ui.*;
 import ui.util.IconManager;
-import ui.TGComponent;
 import ui.tmldd.TMLArchiNode;
 
 import javax.swing.*;
@@ -118,6 +118,9 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
             if (tgc instanceof TMLArchiNode) {
                 v.addElement(tgc);
             }
+	    if (tgc instanceof TGComponentPlugin) {
+		v.addElement(tgc);
+	    }
         }
         
         return v;
@@ -142,7 +145,7 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
         for(int i=0; i<source.size(); i++) {
             tgc = source.get(i);
             
-            if ((tgc instanceof TMLArchiNode) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
+            if (((tgc instanceof TMLArchiNode) || (tgc instanceof TGComponentPlugin)) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
                 added.addElement(tgc);
                 //System.out.println("New element");
             }

@@ -720,8 +720,11 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_LOTOS] = new TAction("gen_lotos-command", "Generate LOTOS", IconManager.imgic90, IconManager.imgic90, "Generate LOTOS specification",  "Generates a LOTOS specification from TTool diagrams", '0');
         actions[ACT_ONECLICK_LOTOS_RG] = new TAction("gen_rglotos-command", "One-click LOTOS-based verification", IconManager.imgic342, IconManager.imgic342, "One-click LOTOS-based verification",  "Generates a LOTOS-based RG  from TTool diagrams", '0');
         actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TTool diagrams", '0');
-        actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Safety formal verification with UPPAAL", IconManager.imgic86, IconManager.imgic86, "Generate UPPAAL specification",  "Generates a UPPAAL specification from TTool diagrams", '0');
-	actions[ACT_AVATAR_MODEL_CHECKER] = new TAction("avatar-model-checker", "Avatar model checker", IconManager.imgic140, IconManager.imgic140, "Avatar model checker",  "Executes the AVATAR model checker from an AVATAR design", '0');
+        
+        // Issue #35: Renamed action name to be closer to actual functionality
+        actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Formal Verification with UPPAAL", IconManager.imgic86, IconManager.imgic86, "Formal Verification with UPPAAL",  "Formal verification of TTool diagrams with UPPAAL", '0');
+        
+        actions[ACT_AVATAR_MODEL_CHECKER] = new TAction("avatar-model-checker", "Avatar model checker", IconManager.imgic140, IconManager.imgic140, "Avatar model checker",  "Executes the AVATAR model checker from an AVATAR design", '0');
         actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
         actions[ACT_SIMU_JAVA] = new TAction("gen_simujava-command", "Java-based simulation", IconManager.imgic38, IconManager.imgic39, "JAVA-based simualtion",  "Simulate diagrams using Java language", 0);
 //@author: Huy TRUONG

@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package common;
-
-//import java.awt.*;
 
 import myutil.FileUtils;
 import myutil.MalformedConfigurationException;
@@ -57,8 +52,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-
-//import org.xml.sax.*;
 
 
 /**
@@ -116,6 +109,12 @@ public class ConfigurationTTool {
     public static String UPPAALCodeDirectory = "";
     public static String UPPAALVerifierPath = "";
     public static String UPPAALVerifierHost = "";
+    
+    // Issue #35: UPPAAL change in property verification message
+    public static String UPPAALPropertyVerifMessage = "";
+    public static String UPPAALPropertyNotVerifMessage = "";
+    
+    
     public static String ProVerifCodeDirectory = "";
     public static String ProVerifVerifierPath = "";
     public static String ProVerifVerifierHost = "";
@@ -125,11 +124,11 @@ public class ConfigurationTTool {
     public static String ExternalCommand2 = "";
 
     // AVATAR Simulation
-    public static String AVATARSimulationHost = "";
+    /*public static String AVATARSimulationHost = "";
     public static String AVATARCPPSIMCodeDirectory = "";
     public static String AVATARCPPSIMCompileCommand = "";
     public static String AVATARCPPSIMCodeExecuteCommand = "";
-    public static String AVATARCPPSIMInteractiveExecuteCommand = "";
+    public static String AVATARCPPSIMInteractiveExecuteCommand = "";*/
 
     // AVATAR Code generation
     public static String AVATARExecutableCodeDirectory = "";
@@ -146,14 +145,14 @@ public class ConfigurationTTool {
 
 
     // Ontology
-    public static String RequirementOntologyWebsite = "";
-    public static String AttackOntologyWebsite = "";
+    //public static String RequirementOntologyWebsite = "";
+    //public static String AttackOntologyWebsite = "";
 
     // PLUGINS
     public static String PLUGIN_PATH = "";
     public static String[] PLUGIN = new String[0];
-    public static String PLUGIN_JAVA_CODE_GENERATOR = "";
-    public static String[] PLUGIN_GRAPHICAL_COMPONENT = new String[0];
+    //public static String PLUGIN_JAVA_CODE_GENERATOR = "";
+    //public static String[] PLUGIN_GRAPHICAL_COMPONENT = new String[0];
 
     // URL for models
     public static String URL_MODEL = "http://ttool.telecom-paristech.fr/networkmodels/models.txt";
@@ -200,7 +199,7 @@ public class ConfigurationTTool {
     }
 
     public static void saveConfiguration() throws MalformedConfigurationException {
-        int index0, index1, index2, index3;
+        int index0, index1, index2;//, index3;
         String tmp, tmp1, tmp2, location;
         File f = new File(fileName);
         boolean write = false;
@@ -375,15 +374,24 @@ public class ConfigurationTTool {
         sb.append("\nUPPAAL:\n");
         sb.append("UPPAALCodeDirectory: " + UPPAALCodeDirectory + "\n");
         sb.append("UPPAALVerifierPATH: " + UPPAALVerifierPath + "\n");
-        sb.append("AVATARCPPSIMCompileCommand: " + AVATARCPPSIMCompileCommand + "\n");
+        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
+        
+        // Issue #35
+        sb.append("UPPAALPropertyVerifMessage: " + UPPAALPropertyVerifMessage + "\n");
+        sb.append("UPPAALPropertyNotVerifMessage: " + UPPAALPropertyNotVerifMessage + "\n");
+
+
+        /*sb.append("AVATARCPPSIMCompileCommand: " + AVATARCPPSIMCompileCommand + "\n");
         sb.append("AVATARCPPSIMCodeExecuteCommand: " + AVATARCPPSIMCodeExecuteCommand + "\n");
         sb.append("AVATARCPPSIMInteractiveExecuteCommand: " + AVATARCPPSIMInteractiveExecuteCommand + "\n");
 
         // AVATAR: simulation
         sb.append("\nAVATAR (simulation):\n");
         sb.append("AVATARSimulationHost: " + AVATARSimulationHost + "\n");
-        sb.append("AVATARCPPSIMCodeDirectory: " + AVATARCPPSIMCodeDirectory + "\n");
-        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
+        sb.append("AVATARCPPSIMCodeDirectory: " + AVATARCPPSIMCodeDirectory + "\n");*/
+        
+        // Issue #35: Moved with other UPPAAL properties
+//        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
 
         // AVATAR: executable code
         sb.append("\nAVATAR (executable code):\n");
@@ -451,19 +459,19 @@ public class ConfigurationTTool {
 
 
         // Ontology
-        sb.append("\nOntologies:\n");
+        /*sb.append("\nOntologies:\n");
         sb.append("Requirement ontology website: " + RequirementOntologyWebsite + "\n");
-        sb.append("Attack ontology website: " + AttackOntologyWebsite + "\n");
+        sb.append("Attack ontology website: " + AttackOntologyWebsite + "\n");*/
 
 	// Plugins
 	sb.append("\nPlugins:\n");
 	sb.append("Plugin path: " + PLUGIN_PATH + "\n");
-	sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
+	/*sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
 	for (int i=0; i<PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
 	    sb.append("Plugin for graphical component: " + PLUGIN_GRAPHICAL_COMPONENT[i] + "\n");
-	}
+	    }*/
 	for (int i=0; i<PLUGIN.length; i++) {
-	    sb.append("Multi purpose plugin: " + PLUGIN[i] + "\n");
+	    sb.append("Plugin: " + PLUGIN[i] + "\n");
 	}
 
 	// URL
@@ -612,7 +620,7 @@ public class ConfigurationTTool {
                 SystemCCodeDirectory(nl);
 
             // AVATAR Simulation
-            nl = doc.getElementsByTagName("AVATARSimulationHost");
+            /*nl = doc.getElementsByTagName("AVATARSimulationHost");
             if (nl.getLength() > 0)
                 AVATARSimulationHost(nl);
             nl = doc.getElementsByTagName("AVATARCPPSIMCodeDirectory");
@@ -626,7 +634,7 @@ public class ConfigurationTTool {
                 AVATARCPPSIMCodeExecuteCommand(nl);
             nl = doc.getElementsByTagName("AVATARCPPSIMInteractiveExecuteCommand");
             if (nl.getLength() > 0)
-                AVATARCPPSIMInteractiveExecuteCommand(nl);
+	    AVATARCPPSIMInteractiveExecuteCommand(nl);*/
 
             // AVATAR Executable code
             nl = doc.getElementsByTagName("AVATARExecutableCodeDirectory");
@@ -702,6 +710,16 @@ public class ConfigurationTTool {
             if (nl.getLength() > 0)
                 UPPAALVerifierHost(nl);
 
+            nl = doc.getElementsByTagName("UPPAALPropertyVerifMessage");
+            if (nl.getLength() > 0) {
+            	UPPAALPropertyVerifMessage(nl);
+            }
+
+            nl = doc.getElementsByTagName("UPPAALPropertyNotVerifMessage");
+            if (nl.getLength() > 0) {
+            	UPPAALPropertyNotVerifMessage(nl);
+            }
+
             nl = doc.getElementsByTagName("ProVerifCodeDirectory");
             if (nl.getLength() > 0)
                 ProVerifCodeDirectory(nl);
@@ -720,13 +738,13 @@ public class ConfigurationTTool {
 
 
             // Ontologies
-            nl = doc.getElementsByTagName("RequirementOntologyWebsite");
+            /*nl = doc.getElementsByTagName("RequirementOntologyWebsite");
             if (nl.getLength() > 0)
                 RequirementOntologyWebsite(nl);
 
             nl = doc.getElementsByTagName("AttackOntologyWebsite");
             if (nl.getLength() > 0)
-                AttackOntologyWebsite(nl);
+	    AttackOntologyWebsite(nl);*/
 
             nl = doc.getElementsByTagName("ExternalCommand1Host");
             if (nl.getLength() > 0)
@@ -752,13 +770,13 @@ public class ConfigurationTTool {
             if (nl.getLength() > 0)
                 Plugin(nl);
 
-	    nl = doc.getElementsByTagName("PLUGIN_JAVA_CODE_GENERATOR");
+	    /*nl = doc.getElementsByTagName("PLUGIN_JAVA_CODE_GENERATOR");
             if (nl.getLength() > 0)
                 PluginJavaCodeGenerator(nl);
 
 	    nl = doc.getElementsByTagName("PLUGIN_GRAPHICAL_COMPONENT");
             if (nl.getLength() > 0)
-                PluginGraphicalComponent(nl);
+	    PluginGraphicalComponent(nl);*/
 
 	    nl = doc.getElementsByTagName("URL_MODEL");
             if (nl.getLength() > 0)
@@ -1213,7 +1231,25 @@ public class ConfigurationTTool {
         }
     }
 
-    private static void AVATARSimulationHost(NodeList nl) throws MalformedConfigurationException {
+    private static void UPPAALPropertyVerifMessage(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            UPPAALPropertyVerifMessage = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void UPPAALPropertyNotVerifMessage(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            UPPAALPropertyNotVerifMessage = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    /*private static void AVATARSimulationHost(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             AVATARSimulationHost = elt.getAttribute("data");
@@ -1256,7 +1292,7 @@ public class ConfigurationTTool {
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
-    }
+	}*/
 
     private static void AVATARExecutableCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
@@ -1384,7 +1420,7 @@ public class ConfigurationTTool {
         }
     }
 
-    private static void RequirementOntologyWebsite(NodeList nl) throws MalformedConfigurationException {
+    /*private static void RequirementOntologyWebsite(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             RequirementOntologyWebsite = elt.getAttribute("data");
@@ -1400,7 +1436,7 @@ public class ConfigurationTTool {
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
-    }
+	}*/
 
     private static void ExternalCommand1Host(NodeList nl) throws MalformedConfigurationException {
         try {
@@ -1460,7 +1496,7 @@ public class ConfigurationTTool {
         }
     }
 
-    private static void PluginJavaCodeGenerator(NodeList nl) throws MalformedConfigurationException {
+    /*private static void PluginJavaCodeGenerator(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             PLUGIN_JAVA_CODE_GENERATOR = elt.getAttribute("data");
@@ -1479,7 +1515,7 @@ public class ConfigurationTTool {
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
-    }
+	}*/
 
     private static void URLModel(NodeList nl) throws MalformedConfigurationException {
         try {

@@ -41,8 +41,10 @@
 <GTKWavePath data="/opt/local/bin/gtkwave" />
 <VCDPath data="../simulators/c++2/" />
 <UPPAALCodeDirectory data="../uppaal/" />
-<UPPAALVerifierPath data="/packages/uppaal-4.0.11/verifyta" />
+<UPPAALVerifierPath data="/home/dblouin/Produits/uppaal64-4.1.19/bin-Linux/verifyta" />
 <UPPAALVerifierHost data="localhost" />
+<UPPAALPropertyVerifMessage data="Property is satisfied, Formula is satisfied"/>
+<UPPAALPropertyNotVerifMessage data="Property is NOT satisfied, Formula is NOT satisfied"/>
 <ProVerifCodeDirectory data="../proverif/" />
 <ProVerifVerifierPath data="/packages/proverif/proverif" />
 <ProVerifVerifierHost data="localhost" />
@@ -65,7 +67,7 @@
 
 <PLUGIN_JAVA_CODE_GENERATOR data="../plugins/CustomizerAvatarCodeGeneration.jar" />
 
-<LastOpenFile data="/home/dblouin/Projets/TTool/git/TTool/modeling/DIPLODOCUS/ZigBeeDEMO.xml"/>
+<LastOpenFile data="/home/dblouin/Projets/TTool/git/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.xml"/>
 
 
 

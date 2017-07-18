@@ -4410,7 +4410,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             dtree.toBeUpdated();
         } else if (gtm.getLanguageID() == GTURTLEModeling.UPPAAL) {
             JDialogUPPAALValidation jduv = new JDialogUPPAALValidation(frame,
-                                                                       this, "Formal verification with UPPAAL",
+                                                                       this, "Formal Verification with UPPAAL",
                                                                        gtm.getPathUPPAALVerifier(),
                                                                        gtm.getPathUPPAALFile(),
                                                                        REMOTE_UPPAAL_FILE,

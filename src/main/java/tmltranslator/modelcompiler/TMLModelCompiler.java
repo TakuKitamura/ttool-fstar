@@ -1140,11 +1140,11 @@ public class TMLModelCompiler   {
                     }
                     if( s1.contains( CPMEC.sourceStorage ) )    {
                         String memoryUnit = s1.split(":")[1].replaceAll("\\s+","");
-                        srcMemoryType = tmla.getHwMemoryByName( memoryUnit ).BufferType;
+                        srcMemoryType = tmla.getHwMemoryByName( memoryUnit ).bufferType;
                     }
                     if( s1.contains( CPMEC.destinationStorage ) )       {
                         String memoryUnit = s1.split(":")[1].replaceAll("\\s+","");
-                        dstMemoryType = tmla.getHwMemoryByName( memoryUnit ).BufferType;
+                        dstMemoryType = tmla.getHwMemoryByName( memoryUnit ).bufferType;
                     }
                 }
                 SingleDmaMEC mec = new SingleDmaMEC( ctxName, dmaArchMEC, srcMemoryType, dstMemoryType, tmlcplib.getTransferTypes().get(0), attributes );
@@ -1171,12 +1171,12 @@ public class TMLModelCompiler   {
                     }
                     if( s1.contains( CPMEC.sourceStorage + "_" + String.valueOf(iSrc) ) )       {
                         String memoryUnit = s1.split(":")[1].replaceAll("\\s+","");
-                        srcMemoryTypes.add( iSrc-1, tmla.getHwMemoryByName( memoryUnit ).BufferType );
+                        srcMemoryTypes.add( iSrc-1, tmla.getHwMemoryByName( memoryUnit ).bufferType );
                         iSrc++;
                     }
                     if( s1.contains( CPMEC.destinationStorage + "_" + String.valueOf(iDst) ) )  {
                         String memoryUnit = s1.split(":")[1].replaceAll("\\s+","");
-                        dstMemoryTypes.add( iDst-1, tmla.getHwMemoryByName( memoryUnit ).BufferType );
+                        dstMemoryTypes.add( iDst-1, tmla.getHwMemoryByName( memoryUnit ).bufferType );
                         iDst++;
                     }
                 }

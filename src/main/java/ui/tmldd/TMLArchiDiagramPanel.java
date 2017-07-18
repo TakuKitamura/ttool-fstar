@@ -217,8 +217,8 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
       return true;
       }*/
 
-    public List<TMLArchiNode> getListOfNodes() {
-        List<TMLArchiNode> ll = new LinkedList<TMLArchiNode>();
+    public List<TGComponent> getListOfNodes() {
+        List<TGComponent> ll = new LinkedList<TGComponent>();
         TGComponent tgc;
         Iterator<TGComponent> iterator = componentList.listIterator();
 
@@ -236,6 +236,10 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
             if (tgc instanceof TMLArchiCommunicationNode) {
                 ll.add( (TMLArchiCommunicationNode) tgc );
             }
+
+	    if (tgc instanceof TGComponentPlugin) {
+		ll.add(tgc);
+	    }
         }
 
         return ll;
@@ -258,8 +262,8 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     }
 
     public boolean isMapped(String _ref, String _name) {
-        Iterator<TMLArchiNode> iterator = getListOfNodes().listIterator();
-        TMLArchiNode node;
+        Iterator<TGComponent> iterator = getListOfNodes().listIterator();
+        TGComponent node;
         Vector<TMLArchiArtifact> v;
         TMLArchiArtifact artifact;
         int i;
@@ -285,8 +289,8 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     }
 
     public void renameMapping(String oldName, String newName) {
-        Iterator<TMLArchiNode> iterator = getListOfNodes().listIterator();
-        TMLArchiNode node;
+        Iterator<TGComponent> iterator = getListOfNodes().listIterator();
+        TGComponent node;
         Vector<TMLArchiArtifact> v;
         TMLArchiArtifact artifact;
         List<TMLArchiCommunicationArtifact> ChannelList;
@@ -334,8 +338,8 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     }
 
     public void setPriority( String _name, int _priority ) {
-        Iterator<TMLArchiNode> iterator = getListOfNodes().iterator();
-        TMLArchiNode node;
+        Iterator<TGComponent> iterator = getListOfNodes().iterator();
+        TGComponent node;
         //Vector v;
        // TMLArchiArtifact artifact;
         List<TMLArchiCommunicationArtifact> ChannelList;
@@ -367,8 +371,8 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 
     public int getMaxPriority( String _name ) {
 
-        Iterator<TMLArchiNode> iterator = getListOfNodes().iterator();
-        TMLArchiNode node;
+        Iterator<TGComponent> iterator = getListOfNodes().iterator();
+        TGComponent node;
        // Vector v;
         //TMLArchiArtifact artifact;
         List<TMLArchiCommunicationArtifact> ChannelList;

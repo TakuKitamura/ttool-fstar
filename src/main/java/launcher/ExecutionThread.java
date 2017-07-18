@@ -46,6 +46,8 @@ import myutil.TraceManager;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -56,7 +58,10 @@ import java.net.Socket;
    * @author Ludovic APVRILLE
  */
 class ExecutionThread extends Thread {
-    private final String cmd;
+	private static final String ERROR_KEY = "error=";
+	private static final Pattern ERROR_PATTERN = Pattern.compile( ".*(" + ERROR_KEY + "\\d+,).*" );
+
+	private final String cmd;
     private final int port;
     private final RshServer rsh;
     private ServerSocket server;// = null;
@@ -86,6 +91,7 @@ class ExecutionThread extends Thread {
         rsh = _rsh;
         server = null;
         go = true;
+        sendReturnCode = false;
         returnCode = null;
         mustWaitForPiped = false;
         parentExecThread = null;
@@ -217,9 +223,9 @@ class ExecutionThread extends Thread {
         }
     }
 
-    private void respond(       final PrintStream out,
-                                final ResponseCode code,
-                                final String message ) {
+    private void respond(	final PrintStream out,
+                            final ResponseCode code,
+                            final String message ) {
         SocketComHelper.send( out, code, message);
         //try {
         //out.println( co de.name() + message );
@@ -228,13 +234,52 @@ class ExecutionThread extends Thread {
         //        }
     }
 
+    /**
+     * Issue #35: Handle the case where the executable to be run does not exists or is not accessible
+     * @param ex
+     * @param out
+     * @throws InterruptedException
+     */
+    private void handleReturnCode( 	final IOException ex,
+    								final PrintStream out )
+    throws InterruptedException {
+    	if ( ex.getMessage() == null ) {
+    		returnCode = - 1;
+    	}
+    	else {
+    		returnCode = parseErrorCode( ex.getMessage() );
+    	}
+    	
+        final String message = "Error executing command " + cmd + " with return code " + returnCode + ".";
+        TraceManager.addError( message );
+        respond( out, ResponseCode.PROCESS_OUTPUT, message );
+        respond( out, ResponseCode.PROCESS_OUTPUT, ex.getMessage() );
+        respond( out, ResponseCode.PROCESS_END, null );//"5");
+    }
+    
+    private Integer parseErrorCode( final String message ) {
+    	final Matcher matcher = ERROR_PATTERN.matcher( message );
+    	
+    	if ( matcher.matches() ) {
+    		if ( matcher.groupCount() > 1 ) {
+	    		final String expr = matcher.group( 1 );
+	    		final String errorNum = expr.substring( ERROR_KEY.length(), expr.length() - 1 );
+	    		
+	    		return Integer.decode( errorNum );
+    		}
+    	}
+    	
+    	return -1;
+    }
+
     private void handleReturnCode( PrintStream out )
-        throws InterruptedException {
+    throws InterruptedException {
         if ( sendReturnCode ) {
             returnCode = proc.waitFor();
             final String message = "Ended command " + cmd + " with return code " + returnCode + ".";
             TraceManager.addDev( message );
             respond( out, ResponseCode.PROCESS_OUTPUT, message );
+            respond( out, ResponseCode.PROCESS_END, null );//"5");
         }
         else {
             returnCode = null;
@@ -316,33 +361,39 @@ class ExecutionThread extends Thread {
                 // TraceManager.addDev("Going to start command " + cmd + "..." );
                 final PrintStream out = new PrintStream( s.getOutputStream(), true );
 
-                proc = Runtime.getRuntime().exec(cmd);
-
-                if ( parentExecThread != null ) {
-                    // TraceManager.addDev( "Giving my pipe to the other..." );
-                    parentExecThread.setMyPipe( proc.getOutputStream() );
+                try {
+	                proc = Runtime.getRuntime().exec(cmd);
+	
+	                if ( parentExecThread != null ) {
+	                    // TraceManager.addDev( "Giving my pipe to the other..." );
+	                    parentExecThread.setMyPipe( proc.getOutputStream() );
+	                }
+	
+	                proc_in = new BufferedReader( new InputStreamReader( proc.getInputStream() ) );
+	                String str;
+	
+	                //TraceManager.addDev("Reading the output stream of the process " + cmd);
+	                while ( go && ( str = proc_in.readLine() ) != null ) {
+	                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+	                    respond( out, ResponseCode.PROCESS_OUTPUT, str );
+	                }
+	
+	                proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+	
+	                while ( go && ( str = proc_err.readLine() ) != null ) {
+	                    TraceManager.addError( str );
+	                    respond( out, ResponseCode.PROCESS_OUTPUT_ERROR, str );
+	                }
+	
+	                handleReturnCode( out );
                 }
-
-                proc_in = new BufferedReader( new InputStreamReader( proc.getInputStream() ) );
-                String str;
-
-                //TraceManager.addDev("Reading the output stream of the process " + cmd);
-                while ( go && ( str = proc_in.readLine() ) != null ) {
-                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
-                    respond( out, ResponseCode.PROCESS_OUTPUT, str );
-                }
-
-                proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-
-                while ( go && ( str = proc_err.readLine() ) != null ) {
-                    TraceManager.addError( str );
-                    respond( out, ResponseCode.PROCESS_OUTPUT_ERROR, str );
-                }
-
-                handleReturnCode( out );
-
-                if ( s != null ) {
-                    closeConnect( s );
+	            catch ( final IOException ex )	{
+	            	handleReturnCode( ex, out );
+	            }
+                finally {
+	                if ( s != null ) {
+	                    closeConnect( s );
+	                }
                 }
             }
         }

@@ -141,4 +141,22 @@ public class TMLCPLib extends TMLElement {
     public List<Integer> getTransferTypes()        {
         return transferTypes;
     }
+
+    public String toXML() {
+	String s = "<TMLCPLIB name=\"" + name + "\" cpMECType=\"" + cpMECType + "\" typeName=\"" + typeName + "\">\n";
+	for(TMLCPLibArtifact arti: artifacts) {
+	    s += arti.toXML();
+	}
+	for(String mu: mappedUnits) {
+	    s += "<MAPPEUNIT unit=\"" + mu + "\" />\n"; 
+	}
+	for(String aa: assignedAttributes) {
+	    s += "<ASSIGNEDATTRIBUTE attr=\"" + aa + "\" />\n"; 
+	}
+	for(Integer i: transferTypes) {
+	    s += "<TRANSFERTYPE type=\"" + i.toString() + "\" />\n"; 
+	}
+	s += "</TMLCPLIB>";
+	return s;
+    }
 }       //End of the class

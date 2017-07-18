@@ -285,9 +285,13 @@ public class TMLEvent extends TMLCommunicationElement {
         String s = "<TMLEVENT ";
         s += "name=\"" + name + "\" ";
         s += "origintask=\"" +  origin.getName() + "\" ";
-        s += "originport=\"" +  originPort.getName() + "\" ";
+	if (originPort != null) {
+	    s += "originport=\"" +  originPort.getName() + "\" ";
+	}
         s += "destinationtask=\"" + destination.getName() + "\" ";
-        s += "destinationport=\"" + destinationPort.getName() + "\" ";
+	if (destinationPort != null) {
+	    s += "destinationport=\"" + destinationPort.getName() + "\" ";
+	}
 	s += "maxEvt=\"" + maxEvt + "\" ";
         s += "isBlocking=\"" + isBlocking + "\" ";
 	s += "canBeNotified=\"" + canBeNotified + "\" ";

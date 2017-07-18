@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 
@@ -47,7 +44,7 @@ import javax.swing.*;
 
 /**
  * Class ScrolledJTextArea
- * For scrolling a textarea in xhich text is appended
+ * For scrolling a textarea in which text is appended
  * Creation: 2005
  * @version 1.1 09/03/2005
  * @author Ludovic APVRILLE

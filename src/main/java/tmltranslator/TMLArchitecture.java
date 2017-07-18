@@ -429,7 +429,13 @@ public class TMLArchitecture {
     }
 
     public String toXML() {
-	String s = "<TMLARCHITECTURE>\n";
+	String s = "<TMLARCHITECTURE freq=\"" + masterClockFrequency + "\" >\n";
+	for(HwNode node: hwnodes) {
+	    s += node.toXML();
+	}
+	for(HwLink link: hwlinks) {
+	    s += link.toXML();
+	}
 	s += "</TMLARCHITECTURE>";
 	return s;
     }
