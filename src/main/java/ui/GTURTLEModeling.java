@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import avatartranslator.*;
@@ -1078,16 +1075,16 @@ public class GTURTLEModeling {
 
 
         //ProVerif analysis
-        ArrayList<String> nonAuthChans = new ArrayList<String>();
-        ArrayList<String> nonSecChans = new ArrayList<String>();
+        List<String> nonAuthChans = new ArrayList<String>();
+        List<String> nonSecChans = new ArrayList<String>();
 
         proverifAnalysis(tmap, nonAuthChans, nonSecChans);
 
         TGConnector fromStart;
-        HashMap<String, HSMChannel> secChannels = new HashMap<String, HSMChannel>();
+        Map<String, HSMChannel> secChannels = new HashMap<String, HSMChannel>();
         //Add a HSM for each selected CPU on the component diagram
         for (String cpuName: selectedCpuTasks.keySet()){
-            HashMap<String, HSMChannel> hsmChannels = new HashMap<String, HSMChannel>();
+            Map<String, HSMChannel> hsmChannels = new HashMap<String, HSMChannel>();
             TMLCPrimitiveComponent hsm = new TMLCPrimitiveComponent(0, 500, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxY(), false, null, tcdp);
             TAttribute isEnc = new TAttribute(2, "isEnc", "true", 4);
             hsm.getAttributes().add(isEnc);
@@ -1127,11 +1124,11 @@ public class GTURTLEModeling {
             //System.out.println("nonSecChans "+ nonSecChans);
             for (TMLCPrimitiveComponent comp: comps){
 
-                HashMap<String, HSMChannel> compChannels = new HashMap<String, HSMChannel>();
+                Map<String, HSMChannel> compChannels = new HashMap<String, HSMChannel>();
                 String compName=comp.getValue();
                 TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(compName);
-                HashSet<TGComponent> channelInstances = new HashSet<TGComponent>();
-                HashSet<TGComponent> secOperators = new HashSet<TGComponent>();
+                Set<TGComponent> channelInstances = new HashSet<TGComponent>();
+                Set<TGComponent> secOperators = new HashSet<TGComponent>();
                 isEnc = new TAttribute(2, "isEnc", "true", 4);
                 comp.getAttributes().add(isEnc);
                 //Find all unsecured channels
@@ -1939,11 +1936,14 @@ public class GTURTLEModeling {
         int arch = gui.tabs.indexOf(tmap.tmlap);
         gui.cloneRenameTab(arch,"enc");
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
+        
         return autoSecure(gui, "enc", tmap,newarch,autoConf,autoWeakAuth, autoStrongAuth);
     }
+    
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch){
         return autoSecure(gui,name,map,newarch,"100","0","100",true,false,false);
     }
+    
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
         return autoSecure(gui,name,map,newarch,"100","0","100",autoConf,autoWeakAuth, autoStrongAuth);
     }
@@ -1967,11 +1967,12 @@ public class GTURTLEModeling {
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size()-1);
         return autoSecure(gui,"enc", tmap,newarch,encComp, overhead,decComp,autoConf,autoWeakAuth, autoStrongAuth);
     }
+    
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp){
         return autoSecure(gui,name, tmap,newarch,encComp, overhead,decComp,true,false, false);
     }
 
-    public void proverifAnalysis(TMLMapping<TGComponent> map,  ArrayList<String> nonAuthChans, ArrayList<String> nonSecChans){
+    public void proverifAnalysis(TMLMapping<TGComponent> map,  List<String> nonAuthChans, List<String> nonSecChans){
         if (map==null){
             TraceManager.addDev("No mapping");
             return;
@@ -2029,24 +2030,24 @@ public class GTURTLEModeling {
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth){
-        HashMap<TMLTask, java.util.List<TMLTask>> toSecure = new HashMap<TMLTask, java.util.List<TMLTask>>();
-        HashMap<TMLTask, java.util.List<TMLTask>> toSecureRev = new HashMap<TMLTask, java.util.List<TMLTask>>();
-        HashMap<TMLTask, java.util.List<String>> secOutChannels = new HashMap<TMLTask, java.util.List<String>>();
-        HashMap<TMLTask, java.util.List<String>> secInChannels = new HashMap<TMLTask, java.util.List<String>>();
-        HashMap<TMLTask, java.util.List<String>> nonceOutChannels = new HashMap<TMLTask, java.util.List<String>>();
-        HashMap<TMLTask, java.util.List<String>> nonceInChannels = new HashMap<TMLTask, java.util.List<String>>();
-        HashMap<TMLTask, java.util.List<String>> macOutChannels = new HashMap<TMLTask, java.util.List<String>>();
-        HashMap<TMLTask, java.util.List<String>> macInChannels = new HashMap<TMLTask, java.util.List<String>>();
-        HashMap<TMLTask, java.util.List<String>> macNonceOutChannels = new HashMap<TMLTask, java.util.List<String>>();
-        HashMap<TMLTask, java.util.List<String>> macNonceInChannels = new HashMap<TMLTask, java.util.List<String>>();
+        Map<TMLTask, List<TMLTask>> toSecure = new HashMap<TMLTask, List<TMLTask>>();
+        Map<TMLTask, List<TMLTask>> toSecureRev = new HashMap<TMLTask, List<TMLTask>>();
+        Map<TMLTask, List<String>> secOutChannels = new HashMap<TMLTask, List<String>>();
+        Map<TMLTask, List<String>> secInChannels = new HashMap<TMLTask, List<String>>();
+        Map<TMLTask, List<String>> nonceOutChannels = new HashMap<TMLTask, List<String>>();
+        Map<TMLTask, List<String>> nonceInChannels = new HashMap<TMLTask, List<String>>();
+        Map<TMLTask, List<String>> macOutChannels = new HashMap<TMLTask, List<String>>();
+        Map<TMLTask, List<String>> macInChannels = new HashMap<TMLTask, List<String>>();
+        Map<TMLTask, List<String>> macNonceOutChannels = new HashMap<TMLTask, List<String>>();
+        Map<TMLTask, List<String>> macNonceInChannels = new HashMap<TMLTask, List<String>>();
         TraceManager.addDev("mapping " + map.getSummaryTaskMapping());
-        ArrayList<String> nonAuthChans = new ArrayList<String>();
-        ArrayList<String> nonSecChans = new ArrayList<String>();
+        List<String> nonAuthChans = new ArrayList<String>();
+        List<String> nonSecChans = new ArrayList<String>();
 
         proverifAnalysis(map, nonAuthChans, nonSecChans);
 
         TMLModeling<TGComponent> tmlmodel = map.getTMLModeling();
-        java.util.List<TMLChannel> channels = tmlmodel.getChannels();
+        List<TMLChannel> channels = tmlmodel.getChannels();
         for (TMLChannel channel: channels){
             for (TMLCPrimitivePort p: channel.ports){
                 channel.checkConf = channel.checkConf || p.checkConf;
@@ -2071,16 +2072,16 @@ public class GTURTLEModeling {
         newarch.renameMapping(tabName, tabName+"_"+name);
 
         for (TMLTask task: map.getTMLModeling().getTasks()){
-            java.util.List<String> tmp = new ArrayList<String>();
-            java.util.List<String> tmp2 = new ArrayList<String>();
-            java.util.List<TMLTask> tmp3 = new ArrayList<TMLTask>();
-            java.util.List<TMLTask> tmp4 = new ArrayList<TMLTask>();
-            java.util.List<String> tmp5 = new ArrayList<String>();
-            java.util.List<String> tmp6 = new ArrayList<String>();
-            java.util.List<String> tmp7 = new ArrayList<String>();
-            java.util.List<String> tmp8 = new ArrayList<String>();
-            java.util.List<String> tmp9 = new ArrayList<String>();
-            java.util.List<String> tmp10 = new ArrayList<String>();
+            List<String> tmp = new ArrayList<String>();
+            List<String> tmp2 = new ArrayList<String>();
+            List<TMLTask> tmp3 = new ArrayList<TMLTask>();
+            List<TMLTask> tmp4 = new ArrayList<TMLTask>();
+            List<String> tmp5 = new ArrayList<String>();
+            List<String> tmp6 = new ArrayList<String>();
+            List<String> tmp7 = new ArrayList<String>();
+            List<String> tmp8 = new ArrayList<String>();
+            List<String> tmp9 = new ArrayList<String>();
+            List<String> tmp10 = new ArrayList<String>();
             secInChannels.put(task, tmp);
             secOutChannels.put(task, tmp2);
             toSecure.put(task,tmp3);
@@ -2290,7 +2291,7 @@ public class GTURTLEModeling {
                 int yShift=50;
                 TMLChannel tmlc = tmlmodel.getChannelByName(title +"__"+channel);
                 //First, find the connector that points to it. We will add the encryption, nonce operators directly before the write channel operator
-                HashSet<TGComponent> channelInstances = new HashSet<TGComponent>();
+                Set<TGComponent> channelInstances = new HashSet<TGComponent>();
                 for (TGComponent tg: tad.getComponentList()){
                     if (tg instanceof TMLADWriteChannel){
                         TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
@@ -2629,13 +2630,13 @@ public class GTURTLEModeling {
     public boolean securePath(TMLMapping<TGComponent> map, TMLTask t1, TMLTask t2){
         //Check if a path between two tasks is secure
         boolean secure=true;
-        java.util.List<HwLink> links = map.getTMLArchitecture().getHwLinks();
+        List<HwLink> links = map.getTMLArchitecture().getHwLinks();
         HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
         HwExecutionNode node2 = (HwExecutionNode) map.getHwNodeOf(t2);
-        java.util.List<HwNode> found = new ArrayList<HwNode>();
-        java.util.List<HwNode> done = new ArrayList<HwNode>();
-        java.util.List<HwNode> path = new ArrayList<HwNode>();
-        Map<HwNode, java.util.List<HwNode>> pathMap = new HashMap<HwNode, java.util.List<HwNode>>();
+        List<HwNode> found = new ArrayList<HwNode>();
+        List<HwNode> done = new ArrayList<HwNode>();
+        List<HwNode> path = new ArrayList<HwNode>();
+        Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
         TraceManager.addDev("Links " + links);
         if (node1==node2){
             return true;
@@ -2643,7 +2644,7 @@ public class GTURTLEModeling {
         for (HwLink link: links){
             if (link.hwnode == node1){
                 found.add(link.bus);
-                java.util.List<HwNode> tmp = new ArrayList<HwNode>();
+                List<HwNode> tmp = new ArrayList<HwNode>();
                 tmp.add(link.bus);
                 pathMap.put(link.bus, tmp);
             }
@@ -2659,7 +2660,7 @@ public class GTURTLEModeling {
                     }
                     if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
                         found.add(link.hwnode);
-                        java.util.List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+                        List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
                         tmp.add(link.hwnode);
                         pathMap.put(link.hwnode, tmp);
                     }
@@ -2667,7 +2668,7 @@ public class GTURTLEModeling {
                 else if (curr == link.hwnode){
                     if (!done.contains(link.bus) && !found.contains(link.bus)){
                         found.add(link.bus);
-                        java.util.List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+                        List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
                         tmp.add(link.bus);
                         pathMap.put(link.bus, tmp);
                     }
@@ -2699,7 +2700,7 @@ public class GTURTLEModeling {
         if (tmap==null){
             return;
         }
-        java.util.List<HwLink> links = tmap.getArch().getHwLinks();
+        List<HwLink> links = tmap.getArch().getHwLinks();
         //Find all Security Patterns, if they don't have an associated memory at encrypt and decrypt, map them
         TMLModeling<TGComponent> tmlm = tmap.getTMLModeling();
         if (tmlm.securityTaskMap ==null){
@@ -2714,9 +2715,9 @@ public class GTURTLEModeling {
                     boolean keyFound=false;
                     HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
                     //Try to find memory using only private buses
-                    java.util.List<HwNode> toVisit = new ArrayList<HwNode>();
-                    //  java.util.List<HwNode> toMemory = new ArrayList<HwNode>();
-                    java.util.List<HwNode> complete = new ArrayList<HwNode>();
+                    List<HwNode> toVisit = new ArrayList<HwNode>();
+                    //  List<HwNode> toMemory = new ArrayList<HwNode>();
+                    List<HwNode> complete = new ArrayList<HwNode>();
                     for (HwLink link:links){
                         if (link.hwnode==node1){
                             if (link.bus.privacy==1){
@@ -3203,8 +3204,6 @@ public class GTURTLEModeling {
         return (data.indexOf("Queue_nat") != -1);
 
     }
-
-
 
     public void saveInFile(File file, String s) {
         TraceManager.addDev("Saving in file " + file.getAbsolutePath() + " size of file=" + s.length());
@@ -3910,7 +3909,6 @@ public class GTURTLEModeling {
             tdp.repaint();
         }
 
-
         TraceManager.addDev("Selecting backward mode");
         selectBackwardMode();
         undoRunning = false;
@@ -3948,6 +3946,9 @@ public class GTURTLEModeling {
         removeAllComponents();
         mgui.reinitMainTabbedPane();
 
+        // Issue #42: the selected tabs should be memorized before incrementing the pointer
+        final Point prevSelectedTabs = savedPanels.elementAt( pointerOperation );
+
         try {
             pointerOperation ++;
             loadModelingFromXML(savedOperations.elementAt(pointerOperation));
@@ -3955,9 +3956,9 @@ public class GTURTLEModeling {
             TraceManager.addError("Exception in forward: " + e.getMessage());
         }
 
-        Point p = savedPanels.elementAt(pointerOperation);
-        if (p != null) {
-            TDiagramPanel tdp = mgui.selectTab(p);
+        //Point prevSelectedTabs = savedPanels.elementAt(pointerOperation);
+        if ( prevSelectedTabs != null ) {
+            TDiagramPanel tdp = mgui.selectTab( prevSelectedTabs );
             tdp.mode = TDiagramPanel.NORMAL;
             tdp.setDraw(true);
             tdp.repaint();

@@ -1708,6 +1708,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     protected void addStatusToNode(String status, String task){
         mgui.addStatus(task,status);
     }
+    
     protected boolean loadConfiguration(Node node1) {
         NodeList diagramNl = node1.getChildNodes();
         if (diagramNl == null) {
@@ -1717,11 +1718,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         Node node, node0, node00;
         NodeList nl, nl0;
 
-
-        // String tmp;
-        //int val;
-
-        // int[] colors;
         String msg = null;
         String error = null;
         String hash = null;
@@ -1758,11 +1754,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
                     // Status
                     if (elt.getTagName().compareTo(SIMULATION_GLOBAL) == 0) {
-			String minT = "";
-			String maxT = "";
-			    
+						String minT = "";
+						String maxT = "";
 
                         nl = elt.getElementsByTagName("status");
+                        
                         if ((nl != null) && (nl.getLength() > 0)) {
                             node0 = nl.item(0);
                             //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
@@ -1786,24 +1782,27 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             time.setText(node0.getTextContent());
                         }
 
-			nl = elt.getElementsByTagName("simtimemin");
+                        nl = elt.getElementsByTagName("simtimemin");
+                        
                         if ((nl != null) && (nl.getLength() > 0)) {
                             gotTimeAnswerFromServer = true;
                             node0 = nl.item(0);
                             //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-			    minT = node0.getTextContent();
+                            minT = node0.getTextContent();
                             //time.setText(minT + " ... " + maxT);
                         }
 
-			nl = elt.getElementsByTagName("simtimemax");
+                        nl = elt.getElementsByTagName("simtimemax");
+                        
                         if ((nl != null) && (nl.getLength() > 0)) {
                             gotTimeAnswerFromServer = true;
                             node0 = nl.item(0);
                             //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-			    maxT = node0.getTextContent();
-			    if (minT.compareTo(maxT) != 0) {
-				time.setText(minT + " ... " + maxT);
-			    }
+						    maxT = node0.getTextContent();
+						    
+						    if (minT.compareTo(maxT) != 0) {
+						    	time.setText(minT + " ... " + maxT);
+						    }
                         }
 
                         nl = elt.getElementsByTagName("msg");
@@ -1847,10 +1846,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                 updateCommandExecutionState(id, util);
                             }
                         }
-
-
-
-
                     }
 
                     if (hashOK) {
@@ -2133,18 +2128,23 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         if ((msg != null) && (error != null)) {
             if (error.trim().equals("0")) {
                 printFromServer(msg + ": command successful");
+                
                 if (msg.indexOf("reset") != -1) {
                     time.setText("0");
                 }
-		if (msg.compareTo("Tree was explored") == 0) {
-		    addGraph();
-		}
-            } else {
-                printFromServer(msg + ": command failed (error=" + error + ")");
-            }
-        } else if (msg != null) {
+		
+                if (msg.compareTo("Tree was explored") == 0) {
+                	addGraph();
+                }
+	        } 
+            else {
+	                printFromServer(msg + ": command failed (error=" + error + ")");
+	        }
+        } 
+        else if (msg != null) {
             printFromServer("Server: " + msg);
-        } else {
+        } 
+        else {
             //TraceManager.addDev("Node: " +node1 + " diagramNL=" + diagramNl);
             //printFromServer("Server: error " + error);
         }
@@ -2487,19 +2487,18 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 
     private void addGraph() {
-	TraceManager.addDev("Adding graph");
-	/*lastRG =*/ mgui.setLastRGDiplodocus(lastGraphName);
+    	TraceManager.addDev("Adding graph");
+    	mgui.setLastRGDiplodocus(lastGraphName);
     }
 
     private String getCurrentRGName() {
-	DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
-	Date date = new Date();
-	String dateAndTime=dateFormat.format(date);
-	lastGraphName = "RG_Diplo_" + dateAndTime;
-	return lastGraphName;
+		DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+		Date date = new Date();
+		String dateAndTime=dateFormat.format(date);
+		lastGraphName = "RG_Diplo_" + dateAndTime;
+
+		return lastGraphName;
     }
-
-
 
     private void updateVariables() {
         if (tmap == null) {
@@ -3035,7 +3034,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 
     private void analyzeRG() {
-	mgui.statAUTDiplodocus();
+    	mgui.statAUTDiplodocus();
         //mgui.statAUTDiplodocus();
     }
 

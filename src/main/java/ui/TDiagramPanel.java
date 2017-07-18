@@ -1674,6 +1674,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (e.getSource() == checkAccessibility) {
             if (componentPopup instanceof CheckableAccessibility) {
                 componentPopup.setCheckableAccessibility(!componentPopup.getCheckableAccessibility());
+
+                // Issue #35: Enable the save button so that the change can be saved
+                mgui.changeMade(this, CHANGE_VALUE_COMPONENT);
             }
         }
 
