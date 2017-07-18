@@ -640,9 +640,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 return;
             }
         }
+
         status.setText("Autosave done in " + fileSave.getAbsolutePath());
-
-
     }
 
     public void search(String text) {
@@ -1450,12 +1449,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         SwingUtilities.updateComponentTreeUI(mainTabbedPane);
         mainTabbedPane.setOpaque(true);
 
-
         ChangeListener cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    paneAction(e);
-                }
-            };
+        	@Override
+            public void stateChanged(ChangeEvent e){
+                paneAction(e);
+            }
+        };
+
         mainTabbedPane.addChangeListener(cl);
         panelForTab.add(mainTabbedPane, BorderLayout.CENTER);
         mainTabbedPane.addMouseListener(new PopupListener(this));
@@ -1587,7 +1587,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             typeButtonSelected = - 1;
             idButtonSelected = -1;
-	    pluginSelected = null;
+            pluginSelected = null;
 
             //activeDiagramToolBar = null;
 
@@ -2172,26 +2172,27 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             //TraceManager.addDev("Loading");
             // load the new TURTLE modeling
-            try {
-                //TraceManager.addDev("Merging");
-                gtm.enableUndo(false);
-                gtm.loadModelingFromXML(gtm.mergeTURTLEGModeling(oldmodeling, s));
-                gtm.enableUndo(true);
-                gtm.saveOperation(getCurrentSelectedPoint());
-                //gtm.saveOperation(tcdp);
-                frame.setTitle("TTool: " + file.getAbsolutePath());
-                makeLotosFile();
-
-                if (gtm.getCheckingErrors().size() > 0) {
-                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-                }
-
-            } catch (MalformedModelingException mme) {
-                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            }
-            dtree.forceUpdate();
+            // Issue #41: Moved to common method
+            loadModels( gtm.mergeTURTLEGModeling(oldmodeling, s),  "merged" );
+//            try {
+//                //TraceManager.addDev("Merging");
+//                gtm.enableUndo(false);
+//                gtm.loadModelingFromXML(gtm.mergeTURTLEGModeling(oldmodeling, s));
+//                gtm.enableUndo(true);
+//                gtm.saveOperation(getCurrentSelectedPoint());
+//                //gtm.saveOperation(tcdp);
+//                frame.setTitle("TTool: " + file.getAbsolutePath());
+//                makeLotosFile();
+//
+//                if (gtm.getCheckingErrors().size() > 0) {
+//                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+//                }
+//
+//            } catch (MalformedModelingException mme) {
+//                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+//            }
+//            dtree.forceUpdate();
         }
-
     }
 
     public void openNetworkProject() {
@@ -2206,15 +2207,16 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 }*/
         }
 
-	JDialogLoadingNetworkModel jdlnm = new JDialogLoadingNetworkModel(frame, this, "Opening a network model", ConfigurationTTool.URL_MODEL);
-	GraphicLib.centerOnParent(jdlnm, 700, 800);
-	jdlnm.setVisible(true); // blocked until dialog has been closed
+        JDialogLoadingNetworkModel jdlnm = new JDialogLoadingNetworkModel(frame, this, "Opening a network model", ConfigurationTTool.URL_MODEL);
+        GraphicLib.centerOnParent(jdlnm, 700, 800);
+        jdlnm.setVisible(true); // blocked until dialog has been closed
     }
 
 
     public void openProject() {
         // check if a current modeling is opened
         boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
+        
         if (b) {
             if (!saveBeforeAction("Save and Open", "Open")) {
                 return;
@@ -2234,15 +2236,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfc.getSelectedFile();
-	    openProjectFromFile(file);
+            openProjectFromFile(file);
         }
 
     }
 
     public void openProjectFromFile(File _f) {
-	file = _f;
-        String s = null;
-        if(checkFileForOpen(_f)) {
+    	file = _f;
+        
+    	if(checkFileForOpen(_f)) {
+            String s = null;
+
             try {
                 FileInputStream fis = new FileInputStream(_f);
                 int nb = fis.available();
@@ -2259,36 +2263,36 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             // close current modeling
             closeTurtleModeling();
 
-
-
             // open the new TURTLE modeling
             newTurtleModeling();
 
-            gtm.enableUndo(false);
+//            gtm.enableUndo(false);
 
             // Update configuration
             updateLastOpenFile(_f);
 
-            //TraceManager.addDev("Loading");
-            // load the new TURTLE modeling
-            try {
-                gtm.loadModelingFromXML(s);
-                //gtm.saveOperation(tcdp);
-                frame.setTitle("TTool: " + file.getAbsolutePath());
-                makeLotosFile();
-
-                if (gtm.getCheckingErrors().size() > 0) {
-                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-
-                }
-            } catch (MalformedModelingException mme) {
-                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-                frame.setTitle("TToolt: unamed project");
-            }
-            gtm.enableUndo(true);
-            gtm.saveOperation(getCurrentSelectedPoint());
-            dtree.forceUpdate();
-	    getCurrentTDiagramPanel().repaint();
+            // Issue #41: Moved to common method
+            loadModels( s, "loaded" );
+//            // load the new TURTLE modeling
+//            try {
+//                gtm.loadModelingFromXML(s);
+//                //gtm.saveOperation(tcdp);
+//                frame.setTitle("TTool: " + file.getAbsolutePath());
+//                makeLotosFile();
+//
+//                if (gtm.getCheckingErrors().size() > 0) {
+//                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+//
+//                }
+//            } catch (MalformedModelingException mme) {
+//                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+//                frame.setTitle("TToolt: unamed project");
+//            }
+//            
+//            gtm.enableUndo(true);
+//            gtm.saveOperation(getCurrentSelectedPoint());
+//            dtree.forceUpdate();
+            getCurrentTDiagramPanel().repaint();
         }
     }
 
@@ -2303,8 +2307,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         file = new File(ConfigurationTTool.LastOpenFile);
 
-        String s = null;
         if(checkFileForOpen(file)) {
+            String s = null;
+
             try {
                 FileInputStream fis = new FileInputStream(file);
                 int nb = fis.available();
@@ -2326,32 +2331,62 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             gtm.enableUndo(false);
 
+            // Issue #41: Moved to common method
+            loadModels( s, "loaded" );
             //TraceManager.addDev("Loading");
             // load the new TURTLE modeling
-            try {
-                gtm.loadModelingFromXML(s);
-                //gtm.saveOperation(tcdp);
-                frame.setTitle("TTool: " + file.getAbsolutePath());
-                makeLotosFile();
-
-                if (gtm.getCheckingErrors().size() > 0) {
-                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-            catch (MalformedModelingException mme) {
-                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-                frame.setTitle("TTool: unamed project");
-            }
-
-            dtree.forceUpdate();
-            gtm.enableUndo(true);
-            gtm.saveOperation(getCurrentSelectedPoint());
+//            try {
+//                gtm.loadModelingFromXML(s);
+//                //gtm.saveOperation(tcdp);
+//                frame.setTitle("TTool: " + file.getAbsolutePath());
+//                makeLotosFile();
+//
+//                if (gtm.getCheckingErrors().size() > 0) {
+//                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+//                }
+//            }
+//            catch (MalformedModelingException mme) {
+//                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+//                frame.setTitle("TTool: unamed project");
+//            }
+//
+//            dtree.forceUpdate();
+//            gtm.enableUndo(true);
+//            gtm.saveOperation(getCurrentSelectedPoint());
         }
 
         //Added by Solange
         //TURTLEPanel tp = getCurrentTURTLEPanel();
         //gtm.generateLists((ProactiveDesignPanel)tp);
         //
+    }
+    
+    private void loadModels( 	final String xmlModel,
+    							final String actionMessage ) {
+        gtm.enableUndo(false);
+
+        // load the new TURTLE modeling
+        try {
+            gtm.loadModelingFromXML( xmlModel );
+            frame.setTitle("TTool: " + file.getAbsolutePath());
+            makeLotosFile();
+            
+            // Issue #41: Reselect the last tab
+            mainTabbedPane.setSelectedIndex( mainTabbedPane.getTabCount() - 1 );
+
+            if (gtm.getCheckingErrors().size() > 0) {
+                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+        }
+        catch (MalformedModelingException mme) {
+            JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+            frame.setTitle("TToolt: unnamed project");
+        }
+        
+        gtm.enableUndo(true);
+        gtm.saveOperation(getCurrentSelectedPoint());
+        dtree.forceUpdate();
     }
 
     public void saveAsLibrary(String data) {
@@ -4630,7 +4665,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void statAUTDiplodocus() {
         if (lastDiploRG == null) {
             JOptionPane.showMessageDialog(frame,
-                                          "The fill could not be loaded:",
+                                          "The file could not be loaded:",
                                           "Error",
                                           JOptionPane.INFORMATION_MESSAGE);
             return;
