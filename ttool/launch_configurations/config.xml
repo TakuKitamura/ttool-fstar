@@ -43,8 +43,8 @@
 <UPPAALCodeDirectory data="../uppaal/" />
 <UPPAALVerifierPath data="/home/dblouin/Produits/uppaal64-4.1.19/bin-Linux/verifyta" />
 <UPPAALVerifierHost data="localhost" />
-<UPPAALPropertyVerifMessage data="Property is satisfied, Formula is satisfied"/>
-<UPPAALPropertyNotVerifMessage data="Property is NOT satisfied, Formula is NOT satisfied"/>
+<UPPAALPropertyVerifMessage data="Formula is satisfied"/>
+<UPPAALPropertyNotVerifMessage data="Formula is NOT satisfied"/>
 <ProVerifCodeDirectory data="../proverif/" />
 <ProVerifVerifierPath data="/packages/proverif/proverif" />
 <ProVerifVerifierHost data="localhost" />
@@ -67,11 +67,11 @@
 
 <PLUGIN_JAVA_CODE_GENERATOR data="../plugins/CustomizerAvatarCodeGeneration.jar" />
 
-<LastOpenFile data="/home/dblouin/Projets/TTool/git/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.xml"/>
+<LastOpenFile data="/home/dblouin/git/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.xml"/>
 
 
 
-<LastWindowAttributes x="65" y="24" width="1855" height="992" max="true" />
+<LastWindowAttributes x="65" y="24" width="1855" height="1056" max="true" />
 
 
 <ProVerifHash data=""/>
