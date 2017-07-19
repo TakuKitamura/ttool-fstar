@@ -20,8 +20,8 @@
 <LIBPath data="../lib" />
 <IMGPath data="../figures" />
 <LOTOSPath data="../lotos" />
-<GGraphPath data="../graphs" />
-<TGraphPath data="../graphs" />
+<GGraphPath data="./launch_configurations/graphs" />
+<TGraphPath data="./launch_configurations/graphs" />
 <TToolUpdateURL data="" data1="http://labsoc.comelec.enst.fr/turtle/ttoolversion.html" />
 <TToolUpdateProxy data="false" />
 <TToolUpdateProxyPort data="8080" />
@@ -67,7 +67,7 @@
 
 <PLUGIN_JAVA_CODE_GENERATOR data="../plugins/CustomizerAvatarCodeGeneration.jar" />
 
-<LastOpenFile data="/home/dblouin/git/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.xml"/>
+<LastOpenFile data="/home/dblouin/Projets/TTool/git/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.xml"/>
 
 
 

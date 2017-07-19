@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 import tmltranslator.TMLModeling;
@@ -46,7 +43,7 @@ import tmltranslator.TMLTask;
 import ui.TGComponent;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
    * Class TaskVariableTableModel
@@ -56,14 +53,15 @@ import java.util.Hashtable;
    * @author Ludovic APVRILLE
  */
 public class TaskVariableTableModel extends AbstractTableModel {
-    private TMLModeling<TGComponent> tmlm;
-    private Hashtable <Integer, String> valueTable;
-    private Hashtable <Integer, Integer> rowTable;
+    
+	private TMLModeling<TGComponent> tmlm;
+    private Map<Integer, String> valueTable;
+    private Map<Integer, Integer> rowTable;
 
     private int nbOfRows;
 
     //private String [] names;
-    public TaskVariableTableModel(TMLModeling<TGComponent> _tmlm, Hashtable<Integer, String> _valueTable, Hashtable <Integer, Integer> _rowTable) {
+    public TaskVariableTableModel(TMLModeling<TGComponent> _tmlm, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
         tmlm = _tmlm;
         valueTable = _valueTable;
         rowTable = _rowTable;
@@ -231,5 +229,4 @@ public class TaskVariableTableModel extends AbstractTableModel {
         }
         return;
     }
-
 }

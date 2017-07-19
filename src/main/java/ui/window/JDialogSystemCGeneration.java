@@ -618,6 +618,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         return errorTabIndex < 0 || tabbedPane.getSelectedIndex() <= errorTabIndex;
     }
 
+    @Override
     public void run() {
         try {
             if ( automatic > 0 ) {

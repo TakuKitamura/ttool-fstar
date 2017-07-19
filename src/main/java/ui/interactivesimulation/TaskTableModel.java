@@ -36,17 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 import tmltranslator.TMLModeling;
-import tmltranslator.TMLTask;
 import ui.TGComponent;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Class TaskTableModel
@@ -56,14 +52,15 @@ import java.util.Hashtable;
  * @author Ludovic APVRILLE
  */
 public class TaskTableModel extends AbstractTableModel {
+	
 	private TMLModeling<TGComponent> tmlm;
-	private Hashtable <Integer, String> valueTable;
-	private Hashtable <Integer, Integer> rowTable;
+	private Map<Integer, String> valueTable;
+	private Map<Integer, Integer> rowTable;
 	
 	private int nbOfRows;
 	
 	//private String [] names;
-	public TaskTableModel(TMLModeling<TGComponent> _tmlm, Hashtable<Integer, String> _valueTable, Hashtable <Integer, Integer> _rowTable) {
+	public TaskTableModel(TMLModeling<TGComponent> _tmlm, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
 		tmlm = _tmlm;
 		valueTable = _valueTable;
 		rowTable = _rowTable;
@@ -119,20 +116,20 @@ public class TaskTableModel extends AbstractTableModel {
 	private String getTaskID(int row) {
 		return ""+tmlm.getTasks().get(row).getID();
 	}
-	
-	private String getVariableName(int row) {
-		int cpt = 0;
-		int size;
-		for(TMLTask task: tmlm.getTasks()) {
-			size = task.getAttributes().size();
-			cpt += size;
-			if (row < cpt) {
-				return "" + task.getAttributes().get(row+size-cpt).getName();
-			}
-		}
-		
-		return "unknown name";
-	}
+//	
+//	private String getVariableName(int row) {
+//		int cpt = 0;
+//		int size;
+//		for(TMLTask task: tmlm.getTasks()) {
+//			size = task.getAttributes().size();
+//			cpt += size;
+//			if (row < cpt) {
+//				return "" + task.getAttributes().get(row+size-cpt).getName();
+//			}
+//		}
+//		
+//		return "unknown name";
+//	}
 	
 	public String getCycles(String _s) {
 		if (_s == null) {
@@ -155,8 +152,6 @@ public class TaskTableModel extends AbstractTableModel {
 		}
 		return _s.substring(0, index);
 	}
-	
-	
 	
 	private String getTaskCycles(int row) {
 		int ID = tmlm.getTasks().get(row).getID();
@@ -199,5 +194,4 @@ public class TaskTableModel extends AbstractTableModel {
 		}
 		return;
 	}
-
 }

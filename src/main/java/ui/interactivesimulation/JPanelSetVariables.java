@@ -36,18 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
-
-//import java.io.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Hashtable;
+import java.util.Map;
 
 
 /**
@@ -56,12 +51,9 @@ import java.util.Hashtable;
 * version 1.0 11/06/2009
 * @author Ludovic APVRILLE
  */
-public	class JPanelSetVariables extends JPanel implements ActionListener  {
-	
+public	class JPanelSetVariables extends JPanel implements ActionListener {
 	
 	private JFrameInteractiveSimulation jfis;
-	
- 
 	
 	private JComboBox<String> tasks;
 	private JComboBox<String> variables;
@@ -70,10 +62,9 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 	
 	private String[] taskIDs, variableIDs;
 	
-	private Hashtable <Integer, String> valueTable;
+	private Map<Integer, String> valueTable;
 	
-	
-	public JPanelSetVariables(JFrameInteractiveSimulation _jfis, Hashtable <Integer, String> _valueTable) {
+	public JPanelSetVariables(JFrameInteractiveSimulation _jfis, Map<Integer, String> _valueTable) {
 		super();
 		
 		jfis = _jfis;
@@ -85,7 +76,7 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 		setComponents();
 	}
 	
-	public void makeComponents() {
+	private void makeComponents() {
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c2 = new GridBagConstraints();
 		setLayout(gridbag2);
@@ -140,7 +131,7 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
         add(setButton, c2);
 	}
 	
-	public void setComponents() {
+	private void setComponents() {
 		if ((variableIDs != null) && (variableIDs.length > 0)){
 			setButton.setEnabled(true);
 			newValue.setEditable(true);
@@ -150,6 +141,7 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 		}
 	}
 	
+	@Override
     public void	actionPerformed(ActionEvent evt)  {
         
         // Compare the action command to the known actions.
@@ -167,8 +159,7 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 		} 
     }
 	
-	
-	public void setValue() {
+	private void setValue() {
 		int idTask = getID((String)(tasks.getSelectedItem()));
 		int idVariable = getID((String)(variables.getSelectedItem()));
 		String val = newValue.getText().trim();
@@ -180,7 +171,7 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 		jfis.setVariables(idTask, idVariable, val);
 	}
 	
-	public int getID(String s) {
+	private int getID(String s) {
 		if (s == null) {
 			return -1;
 		}
@@ -201,7 +192,7 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 		return -1;
 	}
 	
-	protected String getCurrentVariableValue() {
+	private String getCurrentVariableValue() {
 		int id = getID((String)(variables.getSelectedItem()));
 		if (id == -1) {
 			return " - ";
@@ -237,8 +228,4 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 	protected void setVariableButton(boolean b) {
 		setButton.setEnabled(b);
 	}
-	
-
-	
-	
 } // Class
