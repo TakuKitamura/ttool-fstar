@@ -818,13 +818,10 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       aInpStream >> _commandCoverage;
       aInpStream >> _branchCoverage;
       aInpStream >> aStrParam;
-      std::stringstream aPath;
-      //aPath << _graphOutPath << aStrParam << ".dot";
-      //std::ofstream myDOTfile (aPath.str().c_str());
+      std::stringstream aPathAutFile;
+      aPathAutFile << _graphOutPath << aStrParam << ".aut.tmp";
+      std::ofstream myAUTfile(aPathAutFile.str().c_str());
       //aPath.str("");
-      aPath << _graphOutPath << aStrParam << ".aut.tmp";
-      std::ofstream myAUTfile (aPath.str().c_str());
-      aPath.str("");
       //std::ofstream myfile2 ("tree.txt");
       //if (myDOTfile.is_open() && myAUTfile.is_open()){
       if (myAUTfile.is_open()){
@@ -833,8 +830,8 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
         //#endif
         unsigned int aTransCounter=0;
         _terminateExplore=false;
-	_nbOfBranchesToExplore = 1;
-	_nbOfBranchesExplored = 0;
+        _nbOfBranchesToExplore = 1;
+        _nbOfBranchesExplored = 0;
         exploreTree(0, 0, myAUTfile, aTransCounter);
         //#ifdef DOT_GRAPH_ENABLED
         //myDOTfile << "}\n";
@@ -842,26 +839,40 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
         //myDOTfile.close();
         //#else
         myAUTfile.close();
-        aPath.str("");
-        aPath <<  _graphOutPath << "header";
-        std::ofstream myTMPfile (aPath.str().c_str());
-        if (myTMPfile.is_open()){
+//        aPath.str("");
+        std::stringstream aPathTreeFile;
+        aPathTreeFile <<  _graphOutPath << "header";
+        std::ofstream myTMPfile( aPathTreeFile.str().c_str() );
+
+        if (myTMPfile.is_open()) {
           //des (0, 29, 27)
           myTMPfile << "des(0," << aTransCounter << "," << TMLTransaction::getID() << ")\n";
           myTMPfile.close();
           //system ("cat header tree.aut.tmp > tree.aut");
           //system ("rm header tree.aut.tmp");
-          aPath.str("");
-          aPath << "cat " << _graphOutPath << "header " << _graphOutPath << aStrParam << ".aut.tmp > " << _graphOutPath << aStrParam << ".aut";
-          system(aPath.str().c_str());
-          aPath.str("");
-          aPath << "rm " <<  _graphOutPath << "header " << _graphOutPath << aStrParam << ".aut.tmp";
-          system(aPath.str().c_str());
+          std::stringstream treeFileContent;
+          treeFileContent << "cat " << _graphOutPath << "header " << _graphOutPath << aStrParam << ".aut.tmp > " << _graphOutPath << aStrParam << ".aut";
+          system( treeFileContent.str().c_str() );
+          treeFileContent.str("");
+          treeFileContent << "rm " <<  _graphOutPath << "header " << _graphOutPath << aStrParam << ".aut.tmp";
+          system( treeFileContent.str().c_str() );
+
+          aGlobMsg << TAG_MSGo  << "Tree was explored" << TAG_MSGc << std::endl;
         }
-        //#endif
-        //myfile2.close();
+
+        // Issue #56: Output error message when could not open the file
+        else {
+            aGlobMsg << TAG_MSGo << MSG_FILEERR << aPathTreeFile.str() << TAG_MSGc << std::endl;
+            anErrorCode = 4;
+        }
       }
-      aGlobMsg << TAG_MSGo  << "Tree was explored" << TAG_MSGc << std::endl;
+
+      // Issue #56: Output error message when could not open the file
+      else {
+          aGlobMsg << TAG_MSGo << MSG_FILEERR << aPathAutFile.str() << TAG_MSGc << std::endl;
+          anErrorCode = 4;
+      }
+
       _simTerm=true;
       //aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
       //anErrorCode=1;
@@ -1382,11 +1393,12 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     anErrorCode=3;
 
   }
+
   aGlobMsg << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl;
   //if (aSimTerminated) aGlobMsg << SIM_TERM; else aGlobMsg << SIM_READY;
   writeSimState(aGlobMsg);
   aGlobMsg << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
-  //std::cout << "Before reply." << std::endl;
+
   if (_replyToServer) {
     if (_syncInfo->_server != NULL) {
       _syncInfo->_server->sendReply(aGlobMsg.str());
