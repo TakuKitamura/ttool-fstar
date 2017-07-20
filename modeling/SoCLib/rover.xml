@@ -2330,6 +2330,20 @@ state 2: obstacles in close proximity
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="538" />
+<P1  x="950" y="422" id="647" />
+<P2  x="1013" y="421" id="564" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<isd value="in motorCommand(int leftCommand, int rightCommand)" />
+<oso value="out motorCommand(int leftVelocity, int rightVelocity)" />
+<FIFOType asynchronous="true" size="4096" blocking="false" private="false" broadcast="false" lossy="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="5002" id="541" >
+<cdparam x="0" y="0" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="" />
+<TGConnectingPoint num="0" id="540" />
 <P1  x="514" y="618" id="648" />
 <P2  x="461" y="582" id="622" />
 <AutomaticDrawing  data="true" />
@@ -2338,21 +2352,7 @@ state 2: obstacles in close proximity
 <osd value="out sensorData(int distanceLeft, int distanceFront, int distanceRight)" />
 <isd value="in changeRate(int samplingRate)" />
 <oso value="out changeRate(int samplingRate)" />
-<FIFOType asynchronous="true" size="8" blocking="false" private="false" broadcast="false" lossy="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="5002" id="541" >
-<cdparam x="0" y="0" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="" />
-<TGConnectingPoint num="0" id="540" />
-<P1  x="950" y="422" id="647" />
-<P2  x="1013" y="421" id="564" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<isd value="in motorCommand(int leftCommand, int rightCommand)" />
-<oso value="out motorCommand(int leftVelocity, int rightVelocity)" />
-<FIFOType asynchronous="true" size="8" blocking="false" private="false" broadcast="false" lossy="false" />
+<FIFOType asynchronous="true" size="4096" blocking="false" private="false" broadcast="false" lossy="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="543" >
@@ -2368,7 +2368,7 @@ state 2: obstacles in close proximity
 <osd value="out tempData(int temp)" />
 <isd value="in control(bool sensorOn)" />
 <oso value="out control(bool sensorOn)" />
-<FIFOType asynchronous="true" size="8" blocking="false" private="false" broadcast="false" lossy="false" />
+<FIFOType asynchronous="true" size="4096" blocking="false" private="false" broadcast="false" lossy="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="302" id="560" >
@@ -2618,7 +2618,7 @@ state 2: obstacles in close proximity
 <SUBCOMPONENT type="-1" id="668" >
 <father id="673" num="3" />
 <cdparam x="451" y="157" />
-<sizeparam width="80" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="77" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2692,8 +2692,8 @@ state 2: obstacles in close proximity
 </SUBCOMPONENT>
 
 <COMPONENT type="5104" id="698" >
-<cdparam x="267" y="176" />
-<sizeparam width="280" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="268" y="176" />
+<sizeparam width="279" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Receive signal" value="motorCommand(leftVelocity, rightVelocity)" />
