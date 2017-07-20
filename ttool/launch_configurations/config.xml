@@ -37,7 +37,7 @@
 <SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
 <SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
 <TMLCodeDirectory data="../simulators/c++2/tmlcode" />
-<CCodeDirectory data="../simulators/c++2/Ccode" />
+<CCodeDirectory data="./launch_configurations/c_code" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
 <VCDPath data="../simulators/c++2/" />
 <UPPAALCodeDirectory data="../uppaal/" />
