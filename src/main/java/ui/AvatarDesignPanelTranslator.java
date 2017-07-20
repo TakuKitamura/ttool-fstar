@@ -1010,7 +1010,7 @@ public class AvatarDesignPanelTranslator {
         this.listE.addCor (aaos, asmdss);
         asmdss.setAVATARID (aaos.getID());
 		if (asmdss.getCheckLatency()){
-			_as.checkedIDs.add(asmdss.getName()+":"+aaos.getID());
+			_as.checkedIDs.add(asmdss.getName()+"-"+ asmdss.getSignalName()+":"+aaos.getID());
 		}
         asm.addElement (aaos);
     }
@@ -1289,7 +1289,7 @@ public class AvatarDesignPanelTranslator {
         asmdrs.setAVATARID (aaos.getID());
         asm.addElement (aaos);
 		if (asmdrs.getCheckLatency()){
-			_as.checkedIDs.add(asmdrs.getName()+":"+aaos.getID());
+			_as.checkedIDs.add(asmdrs.getName()+"-"+asmdrs.getSignalName()+":"+aaos.getID());
 		}
     }
 
@@ -1312,7 +1312,7 @@ public class AvatarDesignPanelTranslator {
         astate.addReferenceObject (tgc);
         tgc.setAVATARID (astate.getID());
 		if (tgc.getCheckLatency()){
-			_as.checkedIDs.add(tgc.getName()+":"+astate.getID());
+			_as.checkedIDs.add(tgc.getName()+"-"+tgc.getValue()+":"+astate.getID());
 		}
     }
 
