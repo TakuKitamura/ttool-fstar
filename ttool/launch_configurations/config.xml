@@ -20,8 +20,8 @@
 <LIBPath data="../lib" />
 <IMGPath data="../figures" />
 <LOTOSPath data="../lotos" />
-<GGraphPath data="../graphs" />
-<TGraphPath data="../graphs" />
+<GGraphPath data="./launch_configurations/graphs" />
+<TGraphPath data="./launch_configurations/graphs" />
 <TToolUpdateURL data="" data1="http://labsoc.comelec.enst.fr/turtle/ttoolversion.html" />
 <TToolUpdateProxy data="false" />
 <TToolUpdateProxyPort data="8080" />
@@ -37,14 +37,14 @@
 <SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
 <SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
 <TMLCodeDirectory data="../simulators/c++2/tmlcode" />
-<CcodeDirectory data="../simulators/c++2/Ccode" />
+<CCodeDirectory data="./launch_configurations/c_code" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
 <VCDPath data="../simulators/c++2/" />
 <UPPAALCodeDirectory data="../uppaal/" />
 <UPPAALVerifierPath data="/home/dblouin/Produits/uppaal64-4.1.19/bin-Linux/verifyta" />
 <UPPAALVerifierHost data="localhost" />
-<UPPAALPropertyVerifMessage data="Property is satisfied, Formula is satisfied"/>
-<UPPAALPropertyNotVerifMessage data="Property is NOT satisfied, Formula is NOT satisfied"/>
+<UPPAALPropertyVerifMessage data="Formula is satisfied"/>
+<UPPAALPropertyNotVerifMessage data="Formula is NOT satisfied"/>
 <ProVerifCodeDirectory data="../proverif/" />
 <ProVerifVerifierPath data="/packages/proverif/proverif" />
 <ProVerifVerifierHost data="localhost" />
@@ -71,7 +71,7 @@
 
 
 
-<LastWindowAttributes x="65" y="24" width="1855" height="992" max="true" />
+<LastWindowAttributes x="65" y="24" width="1855" height="1056" max="true" />
 
 
 <ProVerifHash data=""/>

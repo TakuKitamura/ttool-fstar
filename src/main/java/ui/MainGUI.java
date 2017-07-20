@@ -4175,7 +4175,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void interactiveSimulationSystemC(String executePath) {
         TraceManager.addDev("MainGUI / Execute path=" + executePath);
-        ArrayList<Point> points = getListOfBreakPoints();
+        List<Point> points = getListOfBreakPoints();
+        
         if (gtm == null) {
             jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, null, points);
         } else {
@@ -4192,11 +4193,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 }
             }
         }
+        
         jfis.setIconImage(IconManager.img9);
         //jfis.setSize(1024, 900);
         GraphicLib.centerOnParent( jfis, 1024, 900 );
         jfis.setVisible(true);
-
     }
 
     public void addBreakPoint(int commandId) {
@@ -6595,7 +6596,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             getCurrentTDiagramPanel().repaint();
         }
     }
-
 
     public void alignPartitions() {
         //TraceManager.addDev("Align instances");

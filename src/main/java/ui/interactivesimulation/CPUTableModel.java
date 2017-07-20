@@ -36,16 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 import tmltranslator.*;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class CPUTableModel
@@ -55,15 +53,16 @@ import java.util.Hashtable;
  * @author Ludovic APVRILLE
  */
 public class CPUTableModel extends AbstractTableModel {
-	private TMLMapping tmap;
-	ArrayList<HwExecutionNode> cpus;
-	private Hashtable <Integer, String> valueTable;
-	private Hashtable <Integer, Integer> rowTable;
+	
+	private TMLMapping<?> tmap;
+	private List<HwExecutionNode> cpus;
+	private Map<Integer, String> valueTable;
+	private Map<Integer, Integer> rowTable;
 	
 	private int nbOfRows;
 	
 	//private String [] names;
-	public CPUTableModel(TMLMapping _tmap, Hashtable<Integer, String> _valueTable, Hashtable <Integer, Integer> _rowTable) {
+	public CPUTableModel(TMLMapping<?> _tmap, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
 		tmap = _tmap;
 		valueTable = _valueTable;
 		rowTable = _rowTable;

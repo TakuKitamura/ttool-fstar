@@ -82,7 +82,7 @@ public class TMLMapping<E> {
     private List<TMLCPLib> mappedCPLibs;
 
     // For plugins
-    private ArrayList<String> customValues;
+    private List<String> customValues;
 
     private boolean optimized = false;
     private int hashCode;
