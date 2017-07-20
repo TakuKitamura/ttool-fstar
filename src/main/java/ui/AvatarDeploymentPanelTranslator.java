@@ -259,6 +259,7 @@ public class AvatarDeploymentPanelTranslator {
 					//int monitored = addRamNode.getMonitored();
   System.out.println("ADD RAM  monitored "+ addRamNode.getMonitored());
   AvatarRAM avram = new AvatarRAM(name, index, byteDataSize, index, index, addRamNode.getMonitored());//DG 3.7.
+  avram.setNo_ram(index);
 					int cluster_index = avram.getIndex();
 
 					//	no_ram++;
@@ -308,12 +309,12 @@ public class AvatarDeploymentPanelTranslator {
 				// monitored = 2 MWMR stats
 				boolean spy = connector.hasASpy();
 				int monitored = 0;
-				System.out.println("@@@ avowner "+ avowner_p1);
+				//System.out.println("@@@ avowner "+ avowner_p1);
 			
 				if (spy == true) {
 					monitored = 1; 	
-					System.out.println("@@@ owner "+ owner_p1.getName()+" monitored");
-					System.out.println("@@@ avowner "+ avowner_p1+" monitored");
+					//System.out.println("@@@ owner "+ owner_p1.getName()+" monitored");
+					//System.out.println("@@@ avowner "+ avowner_p1+" monitored");
 									
 				}				
 				AvatarConnector avconnector = new AvatarConnector(avConnectingPoint1, avConnectingPoint2, monitored);			
@@ -321,7 +322,7 @@ public class AvatarDeploymentPanelTranslator {
 				if (avowner_p1 instanceof AvatarRAM) {	
 				    //if stats mode selected beforehand in menu of component or spy				   	
 				    AvatarRAM ram1=(AvatarRAM) avowner_p1;
-				    System.out.println("@@@@@@@@@@@@@@ RAM no "+ram1.getNo_ram()+" @@@@@@@@@@@@@@@@@");
+				    //System.out.println("@@@@@@@@@@@@@@ RAM no "+ram1.getNo_ram()+" @@@@@@@@@@@@@@@@@");
 				    if ((((AvatarRAM)avowner_p1).getMonitored() == 2)||(spy == true)) 
 					//if (((AvatarRAM)avowner_p1).getMonitored() == 2)
 					{   
@@ -330,9 +331,9 @@ public class AvatarDeploymentPanelTranslator {
 					    //}
 				   
 					    (((AvatarRAM) avowner_p1)).setMonitored(monitored); 
-					    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-					    System.out.println("@@@@@@@@@@@@@@ RAM no "+ram1.getNo_ram()+" monitored@@@@@@@@@@@@@@@@@");
-					    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+					    
+					    //System.out.println("@@@@@@@@@@@@@@ RAM no "+ram1.getNo_ram()+" monitored@@@@@@@@@@@@@@@@@");
+					   
 					}
 				}
 
