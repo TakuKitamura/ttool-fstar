@@ -164,7 +164,8 @@ if(nb_clusters==0){
           System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
           System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
 	  
-	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+");" + CR2;
+	  //declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+");" + CR2;
+	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+ ");" + CR2;
 	  int i=0;
 
           //if BUS was not last in input file, update here
@@ -174,8 +175,8 @@ if(nb_clusters==0){
 	  }	
 
          for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
-          System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
-          System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
+	     //System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
+	     //System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
 	  /* The user might have forgotten to specify the following, thus set default values */
 
 	  if(vgmn.getMinLatency()<2)
@@ -184,8 +185,9 @@ if(nb_clusters==0){
           vgmn.setFifoDepth(8); //default value; must be > 2
 
 
-	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+
-	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+	  //declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+
+ declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNbRAM()+TopCellGenerator.avatardd.getNbTTY()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 
 	  // if VGMN was not last in input file, update here 
           vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
