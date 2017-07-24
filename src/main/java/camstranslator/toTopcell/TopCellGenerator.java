@@ -124,10 +124,7 @@ public class TopCellGenerator
 	    }
 	    makeVCIparameters();
 	    makeConfig();
-	    String top = Header.getHeader() + 	
-		Code.getCode() +
-		MappingTable.getMappingTable() +
-		Loader.getLoader(avspec) + 
+	    String top = Header.getHeader() + 	      	
 		Declaration.getDeclarations(avspec) +  
 		Signal.getSignal() +
 		NetList.getNetlist(icn,tracing) +
@@ -160,73 +157,8 @@ public class TopCellGenerator
 			fw.write(top);
 			fw.close();
 		} catch (IOException ex) {
-		}
-		saveFileDeploy(path);
-		saveFilePlatform(path);
-		saveFileProcinfo(path);
-		saveFileNBproc(path);
+		}       
 	}
 
-    public void saveFileDeploy(String path) {
-
-		try {
-		    System.err.println(path + GENERATED_PATH + "deployinfo.h");
-		    FileWriter fw = new FileWriter(path + GENERATED_PATH + "/deployinfo.h");
-		    deployinfo = Deployinfo.getDeployInfo();
-		    fw.write(deployinfo);
-		    fw.close();
-		    
-		    System.err.println(path + GENERATED_PATH + "deployinfo_map.h");
-		    FileWriter fw_map = new FileWriter(path + GENERATED_PATH + "/deployinfo_map.h");
-		    deployinfo_map = Deployinfo.getDeployInfoMap(avspec);
-		    fw_map.write(deployinfo_map);
-		    fw_map.close();
-		    
-		    //ajout CD 9.6
-		    System.err.println(path + GENERATED_PATH + "deployinfo_ram.h");
-		    FileWriter fw_ram = new FileWriter(path + GENERATED_PATH + "/deployinfo_ram.h");
-		    deployinfo_ram = Deployinfo.getDeployInfoRam(avspec);
-		    fw_ram.write(deployinfo_ram);
-		    fw_ram.close();
-		} catch (Exception ex) {
-		    ex.printStackTrace();
-		}
-	}
-
-    public void saveFileProcinfo(String path) {
-
-		try {
-          System.err.println(path + GENERATED_PATH + "procinfo.mk");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/procinfo.mk");
-			procinfo = Deployinfo.getProcInfo();
-			fw.write(procinfo);
-			fw.close();
-		} catch (IOException ex) {
-		}
-	}
-
-    public void saveFileNBproc(String path) {
-
-		try {
-          System.err.println(path + GENERATED_PATH + "nbproc");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/nbproc");
-			nbproc = Deployinfo.getNbProc();
-			fw.write(nbproc);
-			fw.close();
-		} catch (IOException ex) {
-		}
-	}
-
- public void saveFilePlatform(String path) {
-
-		try {
-          System.err.println(path + GENERATED_PATH + "platform_desc");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/platform_desc");
-			platform_desc = Platforminfo.getPlatformInfo();
-			fw.write(platform_desc);
-			fw.close();
-		} catch (IOException ex) {
-		}
-	}
-
+   
 }
