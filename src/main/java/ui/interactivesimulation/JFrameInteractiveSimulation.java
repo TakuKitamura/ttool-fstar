@@ -2671,6 +2671,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                     stdev = Math.sqrt(stdev);
                                     sl.setAverageTime(String.format("%.1f",average));
                                     sl.setStDev(String.format("%.1f",stdev));
+									
+									mgui.addLatencyVals(Integer.valueOf(st2), new String[]{sl.getTransaction1(), Integer.toString(Collections.max(minTimes))}); 
                                 }
                             }
 
