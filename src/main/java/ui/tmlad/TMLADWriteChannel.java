@@ -54,6 +54,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
    * Class TMLADWriteChannel
@@ -68,6 +69,15 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     protected int textY =  15;
     protected int arc = 5;
     protected int linebreak = 10;
+
+
+	private HashMap<String, String> latencyVals;
+		
+	protected int latencyX=30;
+	protected int latencyY=10;
+	protected int textWidth=10;
+	protected int textHeight=20;
+
 
     protected String channelName = "ch";
     protected String nbOfSamples= "1";
@@ -87,6 +97,8 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
         height = 20;
         minWidth = 30;
 
+
+
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
@@ -100,6 +112,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
         name = "write channel";
 
         myImageIcon = IconManager.imgic900;
+		latencyVals = new HashMap<String, String>();
     }
 
     public void internalDrawing(Graphics g) {
@@ -155,9 +168,31 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
 	if (!securityContext.equals("")){
 	    g.drawString("sec:"+securityContext, x+3*width/4, y+height+textY);
 	}
-	drawReachabilityInformation(g);
-
+				
+		if (getCheckLatency()){
+			String[] latency =tdp.getMGUI().getLatencyVals(getDIPLOID());
+			if (latency!=null){
+				addLatency(latency[0], latency[1]);
+				drawLatencyInformation(g);	
+			}
+		}
+		drawReachabilityInformation(g);
     }
+
+	public void drawLatencyInformation(Graphics g){
+		for (String s:latencyVals.keySet()){
+			int w  = g.getFontMetrics().stringWidth(s);
+			g.drawString(s, x-latencyX-w+1, y-latencyY-2);
+			g.drawRect(x-latencyX-w, y-latencyY-textHeight, w+4, textHeight); 
+			g.drawLine(x,y,x-latencyX, y-latencyY);
+			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY/2);
+		}
+	}
+
+
+	public void addLatency(String name, String num){
+		latencyVals.put(name,num);
+	}
 
     public void drawReachabilityInformation(Graphics g) {
         if (reachabilityInformation > 0) {

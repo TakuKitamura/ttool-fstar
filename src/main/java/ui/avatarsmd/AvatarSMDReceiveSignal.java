@@ -51,7 +51,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.LinkedList;
-
+import java.util.HashMap;
 /**
  * Class AvatarSMDReceiveSignal
  * Action of receiving a signal
@@ -66,8 +66,14 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
     protected int arc = 5;
     protected int linebreak = 10;
 	protected int textX1 = 2;
-    
+   
+	private HashMap<String, String> latencyVals;
 	
+	protected int latencyX=30;
+	protected int latencyY=10;
+	protected int textWidth=10;
+	protected int textHeight=20;
+
 	protected int stateOfError = 0; // Not yet checked
     
     public AvatarSMDReceiveSignal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -93,8 +99,14 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         //makeValue();
         
         myImageIcon = IconManager.imgic908;
+		latencyVals = new HashMap<String, String>();
+		//latencyVals.put("sendChannel: sensorData", "15");
     }
     
+
+	public void addLatency(String name, String num){
+		latencyVals.put(name,num);
+	}
     public void internalDrawing(Graphics g) {
 		
         int w  = g.getFontMetrics().stringWidth(value + textX1);
@@ -154,9 +166,29 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		   
         //g.drawString("sig()", x+(width-w) / 2, y);
         g.drawString(value, x + linebreak + textX1, y + textY);
-		
+		//System.out.println(getDIPLOID());
+		if (getCheckLatency()){
+			String[] latency =tdp.getMGUI().getLatencyVals(getAVATARID());
+			if (latency!=null){
+				addLatency(latency[0], latency[1]);
+				drawLatencyInformation(g);
+			}
+		}
 		
     }
+	public void drawLatencyInformation(Graphics g){
+		for (String s:latencyVals.keySet()){
+			int w  = g.getFontMetrics().stringWidth(s);
+			g.drawString(s, x-latencyX-w+1, y-latencyY-2);
+			g.drawRect(x-latencyX-w, y-latencyY-textHeight, w+4, textHeight); 
+			g.drawLine(x,y,x-latencyX, y-latencyY);
+			Color c = g.getColor();
+			g.setColor(Color.RED);
+			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY/2);
+			g.setColor(c);
+		}
+	}
+
     
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {

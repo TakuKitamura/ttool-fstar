@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 import common.ConfigurationTTool;
@@ -135,26 +132,26 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
 
     // Commands
-    JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel;
+    private JPanel /*main,*/ mainTop, commands/*, save, state*/, infos/*, outputs*/, cpuPanel, variablePanel;
     protected JPanelTransactions transactionPanel;
-    JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo;
-    JTabbedPane commandTab, infoTab;
+    private JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo;
+    private JTabbedPane commandTab, infoTab;
     protected JTextField paramMainCommand;
     protected JTextField saveDirName;
     protected JTextField saveFileName;
     protected JTextField stateFileName;
     protected JTextField benchmarkFileName;
     protected JComboBox<String> cpus, busses, mems, tasks, chans;
-	HashMap<String, List<Integer>> channelIDMap= new HashMap<String, List<Integer>>();
+    private Map<String, List<Integer>> channelIDMap= new HashMap<String, List<Integer>>();
 
     private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
 	private List<String> simtraces= new ArrayList<String>();
     // Status elements
-    JLabel status, time, info;
+	private JLabel status, time, info;
 
     // Task elements
-    TaskVariableTableModel tvtm;
-    JButton updateTaskVariableInformationButton;
+	private TaskVariableTableModel tvtm;
+	private JButton updateTaskVariableInformationButton;
     private JScrollPane jspTaskVariableInfo;
 
     // Last transactions elements
@@ -164,52 +161,52 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private Vector<SimulationTransaction> trans;
 
     // Breakpoints
-    JPanelBreakPoints jpbp;
+    private JPanelBreakPoints jpbp;
 
     // Set variables
-    JPanelSetVariables jpsv;
+    private JPanelSetVariables jpsv;
 
     // Formal verification
-    JSlider minimalCommandCoverage, minimalBranchCoverage;
-    JLabel labelMinimalCommandCoverage, labelMinimalBranchCoverage;
+    private JSlider minimalCommandCoverage, minimalBranchCoverage;
+    private JLabel labelMinimalCommandCoverage, labelMinimalBranchCoverage;
     private String lastGraphName;
    // private RG lastRG;
     
     // Tasks
-    JPanel taskPanel;
-    TaskTableModel tasktm;
-    JButton updateTaskInformationButton;
+    private JPanel taskPanel;
+    private TaskTableModel tasktm;
+    private JButton updateTaskInformationButton;
     private JScrollPane jspTaskInfo;
 
     // CPU
-    CPUTableModel cputm;
-    JButton updateCPUInformationButton, printCPUInfo;
+    private CPUTableModel cputm;
+    private JButton updateCPUInformationButton, printCPUInfo;
     private JScrollPane jspCPUInfo;
     private JPanel panelCPU;
 
     // Memories
-    JPanel memPanel;
-    MemTableModel memtm;
-    JButton updateMemoryInformationButton, printBusInfo;
+    private JPanel memPanel;
+   // private MemTableModel memtm;
+    private JButton updateMemoryInformationButton, printBusInfo;
     private JScrollPane jspMemInfo;
 
     // Bus
-    JPanel busPanel;
-    BusTableModel bustm;
-    JButton updateBusInformationButton;
+    private JPanel busPanel;
+    private BusTableModel bustm;
+    private JButton updateBusInformationButton;
     private JScrollPane jspBusInfo;
     private JPanel panelBus;
 
     //Latency
-    JPanel latencyPanel;
-    JComboBox<String> transaction1;
-    JComboBox<String> transaction2;
-    JButton addLatencyCheckButton;
-    JButton updateLatencyButton;
-    LatencyTableModel latm;
+    private JPanel latencyPanel;
+    private JComboBox<String> transaction1;
+    private JComboBox<String> transaction2;
+    private JButton addLatencyCheckButton;
+    private JButton updateLatencyButton;
+    private LatencyTableModel latm;
     public Vector<String> checkedTransactions = new Vector<String>();
     private JScrollPane jspLatency;
-	int chanId=0;
+    private int chanId=0;
 
     private int mode = 0;
     //private boolean busyStatus = false;
@@ -226,11 +223,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private int hashCode;
     private boolean hashOK = true;
 
-    private Hashtable <Integer, String> valueTable;
-    private Hashtable <Integer, Integer> rowTable;
+    private Map<Integer, String> valueTable;
+    private Map<Integer, Integer> rowTable;
 
-    private Hashtable <Integer, Integer> runningTable;
-    private Hashtable <String, String> diagramTable;
+    private Map<Integer, Integer> runningTable;
+    private Map<String, String> diagramTable;
 
     private List<Point> points;
     private Map<String, String> checkTable = new HashMap<String, String>();
@@ -239,12 +236,13 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private HashMap<String, List<String>> msgTimes = new HashMap<String, List<String>>(); 
 
 
-	PipedOutputStream pos;
-	PipedInputStream pis;
+	private PipedOutputStream pos;
+	private PipedInputStream pis;
 	private JFrameTMLSimulationPanel tmlSimPanel;
-    BufferedWriter bw;
-	int simIndex=0;
-    public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping<TGComponent> _tmap, List<Point> _points) {
+	private BufferedWriter bw;
+	private int simIndex=0;
+    
+	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping<TGComponent> _tmap, List<Point> _points) {
         super(_title);
 
         // f = _f;
@@ -271,9 +269,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         runningTable = new Hashtable<Integer, Integer>();
         diagramTable = new Hashtable<String, String>();
 
-
-
-
         mgui.resetRunningID();
         mgui.resetLoadID();
 
@@ -282,7 +277,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         initActions();
         makeComponents();
         setComponents();
-
     }
 
     private JLabel createStatusBar()  {
@@ -292,7 +286,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         return status;
     }
 
-    public void makeComponents() {
+    private void makeComponents() {
         JPanel jp01, jp02;
         //jp01.setPreferredSize(new Dimension(375, 400));
         GridBagLayout gridbag01;
@@ -985,11 +979,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         jspLatency = new JScrollPane(latTable);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
-        jspLatency.setMinimumSize(new Dimension(400, 250));
-        jspLatency.setPreferredSize(new Dimension(1400, 250));
+        jspLatency.setMinimumSize(new Dimension(1000, 250));
+        jspLatency.setPreferredSize(new Dimension(2100, 250));
         latencyPanel.add(jspLatency, c0);
-
-
 
         updateLatencyButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY]);
         latencyPanel.add(updateLatencyButton,c0);
@@ -997,13 +989,14 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         if (!hashOK) {
             wrongHashCode();
         }
+        
         pack();
 
         //System.out.println("Row table:" + rowTable.toString());
         //System.out.println("Value table:" + valueTable.toString());
     }
 
-    private     void initActions() {
+    private void initActions() {
         actions = new InteractiveSimulationActions[InteractiveSimulationActions.NB_ACTION];
         for(int i=0; i<InteractiveSimulationActions.NB_ACTION; i++) {
             actions[i] = new InteractiveSimulationActions(i);
@@ -1019,9 +1012,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         fillCheckedTrans();
     }
 
-
-
-    public void setComponents() {
+    private void setComponents() {
         if (mode == NOT_STARTED) {
             buttonStart.setEnabled(true);
         } else {
@@ -1107,6 +1098,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     // Must first start the remote server
     // Then, must start
 
+    @Override
     public void run() {
         String s;
         TraceManager.addDev("mode=" + threadMode);
@@ -1233,12 +1225,16 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         //t.start();
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {}
 
+    @Override
     public void mouseEntered(MouseEvent e) {}
 
+    @Override
     public void mouseExited(MouseEvent e) {}
 
+    @Override
     public void mousePressed(MouseEvent e){
         if (e.getSource() == sendTextCommand) {
             if (sendTextCommand.isEnabled()) {
@@ -1326,8 +1322,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             loadXMLInfoFromServer(ssxml);
             ssxml = "";
         }
-        //System.out.println("toto4");
-
     }
 
     protected boolean loadXMLInfoFromServer(String xmldata) {
@@ -1371,7 +1365,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                     return loadConfiguration(node);
                 }
             }
-
         } catch (IOException e) {
             TraceManager.addError("Error when parsing server info:" + e.getMessage());
             return false;
@@ -1380,8 +1373,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             TraceManager.addError("xml:" + xmldata);
             return false;
         }
+        
         return true;
-
     }
 
 	public void resetSimTrace(){
@@ -1442,6 +1435,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			System.out.println("Could not write sim trace " + e + " " + simtraces + " " +simIndex);
 		}
 	}
+	
 	public void writeArchitectureSimTrace(){
 	}
 
@@ -1507,7 +1501,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			else if (command.equals("Wait")){
 			}
 			else if (command.equals("Request")){
-
 			}
 			else if (command.equals("Notified")){
 			}
@@ -1524,12 +1517,14 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			System.out.println("Exception " + e);
 		}
 	}
-    protected void addTransactionToNode(SimulationTransaction tran){
+    
+	protected void addTransactionToNode(SimulationTransaction tran){
 		//System.out.println("Command " + tran.command + " " + tran.deviceName);
 		String command = tran.command;
 		if (command.contains(" ")){
 			command = command.split(" ")[0];
 		}
+		
 		try {
 			if ((command.equals("Write") || command.equals("Read")) && tran.deviceName.contains("CPU")){
 				TMLChannel chan = tmap.getTMLModeling().getChannelByShortName(tran.channelName);
@@ -1537,14 +1532,14 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					TMLTask originTask = chan.getOriginTask();
 					TMLTask destTask = chan.getDestinationTask();
 					if (originTask!=null && destTask!=null){
-							String asynchType = (command.equals("Write") ? "send_async" : "receive_async");
-							int msgId=chanId;
-							if (!msgTimes.containsKey(tran.channelName)){
-								msgTimes.put(tran.channelName, new ArrayList<String>());
-							} 
-							if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
-	//						int tmp=msgId-1;
-						
+						String asynchType = (command.equals("Write") ? "send_async" : "receive_async");
+						int msgId=chanId;
+						if (!msgTimes.containsKey(tran.channelName)){
+							msgTimes.put(tran.channelName, new ArrayList<String>());
+						} 
+						if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
+							//						int tmp=msgId-1;
+
 							if (command.equals("Write")){	
 								if (!channelIDMap.containsKey(tran.channelName)){
 									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
@@ -1556,16 +1551,16 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
 									msgId=channelIDMap.get(tran.channelName).remove(0);
 								}
-							
+
 							}
-						String trace="";
-						if (command.equals("Write")){
-							trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
-						}
-						else {
-							trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
-						}
-						//	System.out.println("sending asynch " + trace);
+							String trace="";
+							if (command.equals("Write")){
+								trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
+							}
+							else {
+								trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
+							}
+							//	System.out.println("sending asynch " + trace);
 							if (!simtraces.contains(trace)){
 								simtraces.add(trace);
 								if (!msgTimes.containsKey(tran.channelName)){
@@ -1573,9 +1568,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								}
 								msgTimes.get(tran.channelName).add(tran.endTime);
 							}
-						//}
+							//}
+						}
 					}
-				}
 				}
 			}
 			else if (command.equals("SelectEvent")){
@@ -1590,14 +1585,14 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					TMLTask originTask = evt.getOriginTask();
 					TMLTask destTask = evt.getDestinationTask();
 					if (originTask!=null && destTask!=null){
-							String asynchType = (command.equals("Send") ? "send_async" : "receive_async");
-							int msgId=chanId;
-							if (!msgTimes.containsKey(tran.channelName)){
-								msgTimes.put(tran.channelName, new ArrayList<String>());
-							} 
-							if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
-	//						int tmp=msgId-1;
-						
+						String asynchType = (command.equals("Send") ? "send_async" : "receive_async");
+						int msgId=chanId;
+						if (!msgTimes.containsKey(tran.channelName)){
+							msgTimes.put(tran.channelName, new ArrayList<String>());
+						} 
+						if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
+							//						int tmp=msgId-1;
+
 							if (command.equals("Send")){	
 								if (!channelIDMap.containsKey(tran.channelName)){
 									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
@@ -1609,16 +1604,16 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
 									msgId=channelIDMap.get(tran.channelName).remove(0);
 								}
-							
+
 							}
-						String trace="";
-						if (command.equals("Send")){
-							trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
-						}
-						else {
-							trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";
-						}
-						//	System.out.println("sending asynch " + trace);
+							String trace="";
+							if (command.equals("Send")){
+								trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
+							}
+							else {
+								trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";
+							}
+							//	System.out.println("sending asynch " + trace);
 							if (!simtraces.contains(trace)){
 								simtraces.add(trace);
 								if (!msgTimes.containsKey(tran.channelName)){
@@ -1626,24 +1621,25 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								}
 								msgTimes.get(tran.channelName).add(tran.endTime);
 							}
-						//}
+							//}
+						}
 					}
-				}
 				}
 			}
 			else if ((command.equals("Request") || command.equals("Notified")) && tran.deviceName.contains("CPU")){
 				TMLRequest req = tmap.getTMLModeling().getRequestByShortName(tran.channelName);
-				if (req!=null){
+
+				if (req!=null) {
 					TMLTask destTask = req.getDestinationTask();
 					if (destTask!=null){
-							String asynchType = (command.equals("Request") ? "send_async" : "receive_async");
-							int msgId=chanId;
-							if (!msgTimes.containsKey(tran.channelName)){
-								msgTimes.put(tran.channelName, new ArrayList<String>());
-							} 
-							if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
-	//						int tmp=msgId-1;
-						
+						String asynchType = (command.equals("Request") ? "send_async" : "receive_async");
+						int msgId=chanId;
+						if (!msgTimes.containsKey(tran.channelName)){
+							msgTimes.put(tran.channelName, new ArrayList<String>());
+						} 
+						if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
+							//						int tmp=msgId-1;
+
 							if (command.equals("Request")){	
 								if (!channelIDMap.containsKey(tran.channelName)){
 									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
@@ -1655,16 +1651,16 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
 									msgId=channelIDMap.get(tran.channelName).remove(0);
 								}
-							
+
 							}
-						String trace="";
-						if (command.equals("Request")){
-							trace = "time=" + tran.endTime+ " block="+ tran.taskName + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
-						}
-						else {
-							trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
-						}
-						//	System.out.println("sending asynch " + trace);
+							String trace="";
+							if (command.equals("Request")){
+								trace = "time=" + tran.endTime+ " block="+ tran.taskName + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
+							}
+							else {
+								trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
+							}
+							//	System.out.println("sending asynch " + trace);
 							if (!simtraces.contains(trace)){
 								simtraces.add(trace);
 								if (!msgTimes.containsKey(tran.channelName)){
@@ -1672,9 +1668,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								}
 								msgTimes.get(tran.channelName).add(tran.endTime);
 							}
-						//}
+							//}
+						}
 					}
-				}
 				}
 			}
 			else if (command.contains("Execi")){
@@ -1688,26 +1684,28 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			}
 			//System.out.println("Simulation command " + tran.command + " " + tran.channelName + " " + tran.length);
 
-			
-		//	bw.write("#1 time=0.000000000 block=Attacker blockdestination=Bob type=synchro channel= params=\"Attacker.m2");
-//			bw.newLine();
-	//		bw.flush();
+
+			//	bw.write("#1 time=0.000000000 block=Attacker blockdestination=Bob type=synchro channel= params=\"Attacker.m2");
+			//			bw.newLine();
+			//		bw.flush();
 			//bw.close();
 			//pos.close();
 		}
 		catch (Exception e){
 			System.out.println(e);
 		}
-        String nodename = tran.deviceName;
-        for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
-            if ((node.getName()+"_0").equals(nodename)){
-                mgui.addTransaction(node.getID(), tran);
-            }
-        }
-    }
+		String nodename = tran.deviceName;
+		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+			if ((node.getName()+"_0").equals(nodename)){
+				mgui.addTransaction(node.getID(), tran);
+			}
+		}
+	}
+    
     protected void addStatusToNode(String status, String task){
         mgui.addStatus(task,status);
     }
+    
     protected boolean loadConfiguration(Node node1) {
         NodeList diagramNl = node1.getChildNodes();
         if (diagramNl == null) {
@@ -1717,11 +1715,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         Node node, node0, node00;
         NodeList nl, nl0;
 
-
-        // String tmp;
-        //int val;
-
-        // int[] colors;
         String msg = null;
         String error = null;
         String hash = null;
@@ -1758,11 +1751,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
                     // Status
                     if (elt.getTagName().compareTo(SIMULATION_GLOBAL) == 0) {
-			String minT = "";
-			String maxT = "";
-			    
+						String minT = "";
+						String maxT = "";
 
                         nl = elt.getElementsByTagName("status");
+                        
                         if ((nl != null) && (nl.getLength() > 0)) {
                             node0 = nl.item(0);
                             //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
@@ -1786,24 +1779,27 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             time.setText(node0.getTextContent());
                         }
 
-			nl = elt.getElementsByTagName("simtimemin");
+                        nl = elt.getElementsByTagName("simtimemin");
+                        
                         if ((nl != null) && (nl.getLength() > 0)) {
                             gotTimeAnswerFromServer = true;
                             node0 = nl.item(0);
                             //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-			    minT = node0.getTextContent();
+                            minT = node0.getTextContent();
                             //time.setText(minT + " ... " + maxT);
                         }
 
-			nl = elt.getElementsByTagName("simtimemax");
+                        nl = elt.getElementsByTagName("simtimemax");
+                        
                         if ((nl != null) && (nl.getLength() > 0)) {
                             gotTimeAnswerFromServer = true;
                             node0 = nl.item(0);
                             //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-			    maxT = node0.getTextContent();
-			    if (minT.compareTo(maxT) != 0) {
-				time.setText(minT + " ... " + maxT);
-			    }
+						    maxT = node0.getTextContent();
+						    
+						    if (minT.compareTo(maxT) != 0) {
+						    	time.setText(minT + " ... " + maxT);
+						    }
                         }
 
                         nl = elt.getElementsByTagName("msg");
@@ -1847,10 +1843,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                 updateCommandExecutionState(id, util);
                             }
                         }
-
-
-
-
                     }
 
                     if (hashOK) {
@@ -2133,18 +2125,23 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         if ((msg != null) && (error != null)) {
             if (error.trim().equals("0")) {
                 printFromServer(msg + ": command successful");
+                
                 if (msg.indexOf("reset") != -1) {
                     time.setText("0");
                 }
-		if (msg.compareTo("Tree was explored") == 0) {
-		    addGraph();
-		}
-            } else {
-                printFromServer(msg + ": command failed (error=" + error + ")");
-            }
-        } else if (msg != null) {
+		
+                if (msg.compareTo("Tree was explored") == 0) {
+                	addGraph();
+                }
+	        } 
+            else {
+	            printFromServer(msg + ": command failed (error=" + error + ")");
+	        }
+        } 
+        else if (msg != null) {
             printFromServer("Server: " + msg);
-        } else {
+        } 
+        else {
             //TraceManager.addDev("Node: " +node1 + " diagramNL=" + diagramNl);
             //printFromServer("Server: error " + error);
         }
@@ -2373,14 +2370,14 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         }
     }
 
-    public void printFromServer(String s) {
+    private void printFromServer(String s) {
         jta.append("Server> " + s + "\n");
     }
 
 
     // Mouse management
+    @Override
     public void mouseReleased(MouseEvent e) {}
-
 
 
     /**
@@ -2388,7 +2385,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
      */
     private class MouseHandler extends MouseAdapter  {
 
-        private JLabel label;
+        private final JLabel label;
 
         /**
          * ctor for the adapter.
@@ -2396,13 +2393,14 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
          *              Action.LONG_DESCRIPTION key.
          */
         public MouseHandler(JLabel label)  {
-            setLabel(label);
-        }
-
-        public void setLabel(JLabel label)  {
             this.label = label;
         }
 
+//        public void setLabel(JLabel label)  {
+//            this.label = label;
+//        }
+
+        @Override
         public void mouseEntered(MouseEvent evt)  {
             if (evt.getSource() instanceof AbstractButton)  {
                 AbstractButton button = (AbstractButton)evt.getSource();
@@ -2487,19 +2485,18 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 
     private void addGraph() {
-	TraceManager.addDev("Adding graph");
-	/*lastRG =*/ mgui.setLastRGDiplodocus(lastGraphName);
+    	TraceManager.addDev("Adding graph");
+    	mgui.setLastRGDiplodocus(lastGraphName);
     }
 
     private String getCurrentRGName() {
-	DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
-	Date date = new Date();
-	String dateAndTime=dateFormat.format(date);
-	lastGraphName = "RG_Diplo_" + dateAndTime;
-	return lastGraphName;
+		DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+		Date date = new Date();
+		String dateAndTime=dateFormat.format(date);
+		lastGraphName = "RG_Diplo_" + dateAndTime;
+
+		return lastGraphName;
     }
-
-
 
     private void updateVariables() {
         if (tmap == null) {
@@ -2674,6 +2671,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                     stdev = Math.sqrt(stdev);
                                     sl.setAverageTime(String.format("%.1f",average));
                                     sl.setStDev(String.format("%.1f",stdev));
+									
+									mgui.addLatencyVals(Integer.valueOf(st2), new String[]{sl.getTransaction1(), Integer.toString(Collections.max(minTimes))}); 
                                 }
                             }
 
@@ -2716,8 +2715,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         sendCommand("get-executed-operators");
     }
-
-
 
     private void updateRunningCommand(String id, String command, String progression, String startTime, String finishTime, String nextCommand, String transStartTime, String transFinishTime, String _state) {
         Integer i = getInteger(id);
@@ -2794,8 +2791,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             mgui.openTMLTaskActivityDiagram(diag, tab);
         }
     }
-
-
 
     private void printCPUs() {
         if (latex.isSelected()) {
@@ -2917,8 +2912,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             s+= _extime;
         }
 
-
-
         if ((i != null) && (ex != null)) {
             try {
                 valueTable.remove(i);
@@ -2940,7 +2933,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 TraceManager.addDev("Exception updateTaskCyclesAndStates: " + e.getMessage());
             }
         }
-
     }
 
     private void updateCPUState(String _id, String _utilization, String _usedEnergy, String contdel, String busName, String busID) {
@@ -2976,7 +2968,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     /*private void updateTableOfTransactions(int index) {
       ttm.fireTableRowUpdated(index);
       }*/
-
 
     private void updateBusState(String _id, String _utilization) {
         Integer i = getInteger(_id);
@@ -3035,7 +3026,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 
     private void analyzeRG() {
-	mgui.statAUTDiplodocus();
+    	mgui.statAUTDiplodocus();
         //mgui.statAUTDiplodocus();
     }
 
@@ -3068,6 +3059,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         //}
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
         //TraceManager.addDev("Command:" + command);
@@ -3256,8 +3248,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         return -1;
     }
 
-
-
     public void addBreakPoint(int _commandID) {
         //TraceManager.addDev("Add breakpoint: " + _commandID);
         // Check whether that breakpoint is already listed or not
@@ -3387,6 +3377,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             checkTable.put(Integer.toString(tgc.getDIPLOID()),tmap.getTMLModeling().getCheckedComps().get(tgc)+" (ID: " + tgc.getDIPLOID() + ")");
         }
     }
+    
     public void activeBreakPoint(boolean active) {
         if (mode == STARTED_AND_CONNECTED) {
             if (active) {

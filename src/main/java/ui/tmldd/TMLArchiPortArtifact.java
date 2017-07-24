@@ -226,7 +226,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
             bufferType = Buffer.FEP_BUFFER;
         }*/
 
-        TraceManager.addDev( "mapped Port: " + dialog.getMappedPort() );
+        //TraceManager.addDev( "mapped Port: " + dialog.getMappedPort() );
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -348,19 +348,19 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
                                 svalue = elt.getAttribute("value");
-                                TraceManager.addDev( svalue );
+                                //TraceManager.addDev( svalue );
                                 sname = elt.getAttribute("portName");
-                                TraceManager.addDev( sname );
+                                //TraceManager.addDev( sname );
                                 sreferenceCommunication = elt.getAttribute("referenceCommunicationName");
-                                TraceManager.addDev( referenceCommunicationName );
+                                //TraceManager.addDev( referenceCommunicationName );
                                 stype = elt.getAttribute("typeName");
-                                TraceManager.addDev( typeName );
+                                //TraceManager.addDev( typeName );
                                 mappedMemory = elt.getAttribute("mappedMemory");
-                                TraceManager.addDev( mappedMemory );
-                                TraceManager.addDev( "bufferType = " + elt.getAttribute("bufferType") );
+                                //TraceManager.addDev( mappedMemory );
+                                //TraceManager.addDev( "bufferType = " + elt.getAttribute("bufferType") );
                                 if( (elt.getAttribute("bufferType") != null) &&  (elt.getAttribute("bufferType").length() > 0) )        {
                                     bufferType = elt.getAttribute("bufferType");
-                                    TraceManager.addDev( bufferType );
+                                    //TraceManager.addDev( bufferType );
                                     //bufferParameters.add( bufferType );
                                     switch( Integer.parseInt( bufferType ) )    {
                                     case Buffer.FEP_BUFFER:
@@ -383,7 +383,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                         break;
                                     }
                                 }
-                                TraceManager.addDev( "Buffer parameters of " + sname + ":\n" + bufferParameters.toString() );
+                                //TraceManager.addDev( "Buffer parameters of " + sname + ":\n" + bufferParameters.toString() );
                                 //prio = elt.getAttribute("priority");
                             }
                             if (svalue != null) {
@@ -408,7 +408,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
             }
 
         } catch (Exception e) {
-            System.out.println("Channel artifact");
+            System.out.println("Channel artifact exception:" + e.getMessage());
             throw new MalformedModelingException();
         }
         makeFullValue();

@@ -1441,12 +1441,20 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             if (ass.getAllTransactions()!=null){
                 for (AvatarSimulationTransaction trans: ass.getAllTransactions()){
                     if ((trans.executedElement != null) && (trans.executedElement.getReferenceObject() != null)) {
-                        String id = ((TGComponent)trans.executedElement.getReferenceObject()).getName() + ":"+Integer.toString(trans.executedElement.getID());
+//                        String id = ((TGComponent)trans.executedElement.getReferenceObject()).getName() + ":"+Integer.toString(trans.executedElement.getID());
+					String id = Integer.toString(trans.executedElement.getID());
                         //  System.out.println(id + " " + transTimes.keySet());
                         //  System.out.println("transaction " + trans.executedElement.getID() + " " + trans.initialClockValue);
-                        if (transTimes.containsKey(id)){
-                            if (!transTimes.get(id).contains(Long.toString(trans.initialClockValue))){
-                                transTimes.get(id).add(Long.toString(trans.initialClockValue));
+						String key="";
+						for (String s: transTimes.keySet()){
+							String tmpid = s.split(":")[1];
+							if (id.equals(tmpid)){
+								key=s;
+							}
+						}
+                        if (transTimes.containsKey(key)){
+                            if (!transTimes.get(key).contains(Long.toString(trans.initialClockValue))){
+                                transTimes.get(key).add(Long.toString(trans.initialClockValue));
                             }
                         }
                     }
@@ -1474,6 +1482,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 									minTimes.add(time);
 								}
 							}
+						//	System.out.println(transTimes.get(st1) + " " + transTimes.get(st2) + " " + minTimes);
 							if (minTimes.size()>0){
                                     int sum=0;
                                     sl.setMinTime(Integer.toString(Collections.min(minTimes)));
@@ -1490,6 +1499,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                                     stdev = Math.sqrt(stdev);
                                     sl.setAverageTime(String.format("%.1f",average));
                                     sl.setStDev(String.format("%.1f",stdev));
+									mgui.addLatencyVals(Integer.valueOf(st2.split(":")[1]), new String[]{st1, Integer.toString(Collections.max(minTimes))});
                             }
                             	latencies.add(sl);
 							

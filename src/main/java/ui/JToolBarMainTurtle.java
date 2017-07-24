@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -53,11 +53,11 @@ import java.awt.event.ActionListener;
 
 
 /**
-* Class JToolBarMainTurtle
-* Main toolbar of the ttool main window
-* Creation: 09/12/2003
-* @author Ludovic APVRILLE
-*/
+ * Class JToolBarMainTurtle
+ * Main toolbar of the ttool main window
+ * Creation: 09/12/2003
+ * @author Ludovic APVRILLE
+ */
 public  class JToolBarMainTurtle extends JToolBar implements ActionListener     {
     // Avatar
     JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarFVStaticAnalysis, avatarCodeGeneration, avatarMC;
@@ -143,10 +143,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         button.addMouseListener(mgui.mouseHandler);
         addSeparator();
 
-	if (MainGUI.experimentalOn) {
-	    gendesign = add(mgui.actions[TGUIAction.ACT_GEN_DESIGN]);
-	    gendesign.addMouseListener(mgui.mouseHandler);
-	}
+        if (MainGUI.experimentalOn) {
+            gendesign = add(mgui.actions[TGUIAction.ACT_GEN_DESIGN]);
+            gendesign.addMouseListener(mgui.mouseHandler);
+        }
 
         addSeparator();
 
@@ -154,18 +154,18 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         avatarSimu.addMouseListener(mgui.mouseHandler);
 
 
-	dse = add(mgui.actions[TGUIAction.ACT_DSE]);
-	dse.addMouseListener(mgui.mouseHandler);
+        dse = add(mgui.actions[TGUIAction.ACT_DSE]);
+        dse.addMouseListener(mgui.mouseHandler);
 
         addSeparator();
 
         //if (MainGUI.experimentalOn) {
-            avatarMC = add(mgui.actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER]);
-            avatarMC.addMouseListener(mgui.mouseHandler);
-	    //}
+        avatarMC = add(mgui.actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER]);
+        avatarMC.addMouseListener(mgui.mouseHandler);
+        //}
         avatarFVUPPAAL = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_UPPAAL]);
         avatarFVUPPAAL.addMouseListener(mgui.mouseHandler);
-	if (MainGUI.uppaalOn) {
+        if (MainGUI.uppaalOn) {
             genuppaal = add(mgui.actions[TGUIAction.ACT_GEN_UPPAAL]);
             genuppaal.addMouseListener(mgui.mouseHandler);
         }
@@ -211,7 +211,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         addSeparator();
 
         oneClickrtlotos = add(mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG]);
-	oneClickrtlotos.addMouseListener(mgui.mouseHandler);
+        oneClickrtlotos.addMouseListener(mgui.mouseHandler);
         if (MainGUI.lotosOn) {
             onclicklotos = add(mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG]);
             onclicklotos.addMouseListener(mgui.mouseHandler);
@@ -313,7 +313,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     public void showAvatarActions(boolean b) {
 
         //TraceManager.addDev("Show avatar options with b = " + b);
-	dse.setVisible(!b);
+        dse.setVisible(!b);
 
         avatarSimu.setVisible(b);
         avatarFVUPPAAL.setVisible(b);
@@ -388,12 +388,12 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
     public void showDiplodocusActions(boolean b) {
 
-        TraceManager.addDev("Show diplodocus options with b = " + b);
+        //TraceManager.addDev("Show diplodocus options with b = " + b);
 
-	dse.setVisible(b);
+        dse.setVisible(b);
         avatarSimu.setVisible(!b);
         avatarFVUPPAAL.setVisible(!b);
-	avatarFVStaticAnalysis.setVisible(!b);
+        avatarFVStaticAnalysis.setVisible(!b);
         if (avatarFVProVerif != null) {
             avatarFVProVerif.setVisible(b);
         }
@@ -405,7 +405,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         if (genlotos != null) {
             genlotos.setVisible(!b);
-	}
+        }
 
         if (genuppaal != null) {
             genuppaal.setVisible(b);
@@ -429,7 +429,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         if (onclicklotos != null) {
             onclicklotos.setVisible(!b);
-	}
+        }
 
         if (gensystemc != null) {
             gensystemc.setVisible(b);

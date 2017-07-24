@@ -50,6 +50,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.LinkedList;
+import java.util.HashMap;
 
 /**
    * Class AvatarSMDSendSignal
@@ -65,6 +66,12 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
     protected int arc = 5;
     protected int linebreak = 10;
 
+	private HashMap<String, String> latencyVals;
+	
+	protected int latencyX=30;
+	protected int latencyY=10;
+	protected int textWidth=10;
+	protected int textHeight=20;
 
     protected int stateOfError = 0; // Not yet checked
 
@@ -91,8 +98,11 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
         //makeValue();
 
         myImageIcon = IconManager.imgic904;
+		latencyVals = new HashMap<String, String>();
     }
-
+	public void addLatency(String name, String num){
+		latencyVals.put(name,num);
+	}
     public void internalDrawing(Graphics g) {
 
         int w  = g.getFontMetrics().stringWidth(value);
@@ -152,8 +162,28 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
         //g.drawString("sig()", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2 , y + textY);
 
+		if (getCheckLatency()){
 
+			String[] latency =tdp.getMGUI().getLatencyVals(getAVATARID());
+			if (latency!=null){
+				addLatency(latency[0], latency[1]);
+				drawLatencyInformation(g);
+			}
+		}
     }
+
+	public void drawLatencyInformation(Graphics g){
+		for (String s:latencyVals.keySet()){
+			int w  = g.getFontMetrics().stringWidth(s);
+			g.drawString(s, x-latencyX-w+1, y-latencyY-2);
+			g.drawRect(x-latencyX-w, y-latencyY-textHeight, w+4, textHeight); 
+			g.drawLine(x,y,x-latencyX, y-latencyY);
+			Color c = g.getColor();
+			g.setColor(Color.RED);
+			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY/2);
+			g.setColor(c);
+		}
+	}
 
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
