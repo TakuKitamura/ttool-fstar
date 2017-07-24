@@ -86,10 +86,6 @@ public class CustomizerGraphicalComponent {
 	return "Plugin component";
     }
 
-    public static String getGraphicalComponentClassName() {
-	return "CustomizerGraphicalComponent";
-    }
-
     public static int getWidth() {
 	return 100;
     }
@@ -114,8 +110,22 @@ public class CustomizerGraphicalComponent {
     public boolean isEditable() {
 	return true;
     }
+
+    public String getCustomValue(String value, String diagramName) {
+	return "My custom component: " + value + " in diagram:" + diagramName;
+    }
+
     
-    public void internalDrawing(Graphics g, int _x, int _y, int _width, int _height, String _value) {
+    public int getWidth(Graphics g, String _value) {
+	int w = g.getFontMetrics ().stringWidth (_value);
+	return w + 20;	
+    }
+
+    public int getHeight(Graphics g, String _value) {
+	return 40;
+    }
+    
+    public void internalDrawing(Graphics g, int _x, int _y, int _width, int _height, String _value, String _diagramName) {
 	g.drawRect(_x, _y, _width, _height);
 	g.drawString(_value, _x+5, _y+20);
     }

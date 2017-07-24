@@ -119,14 +119,14 @@ public class Plugin {
     }
 
     public boolean hasGraphicalComponent(String _diagID) {
-	TraceManager.addDev("Test GC with diag=" + _diagID);
+	//TraceManager.addDev("Test GC with diag=" + _diagID);
 	String ret = executeRetStringMethod(removeJar(name), "hasGraphicalComponent");
 	if (ret != null) {
 	    classGraphicalComponent = getClass(ret);
 	    String diagOk = executeRetStringMethod(classGraphicalComponent, "getPanelClassName");
 	    if (diagOk != null) {
 		if (diagOk.compareTo(_diagID) == 0) {
-		    TraceManager.addDev("Found graphical component in plugin:" + name);
+		    //TraceManager.addDev("Found graphical component in plugin:" + name);
 		    return true;
 		}
 	    }
@@ -171,7 +171,7 @@ public class Plugin {
             }
 
         } catch (Exception e) {
-	    TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
+	    //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
 	    return null;
         }
 
@@ -187,7 +187,7 @@ public class Plugin {
                 TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
                 URL[] urls = new URL[] { file.toURI().toURL() };
                 ClassLoader loader = new URLClassLoader(urls);
-                TraceManager.addDev("Loader created");
+                //TraceManager.addDev("Loader created");
                 c = loader.loadClass(_className);
                 if (c == null) {
                     return null;
@@ -197,7 +197,7 @@ public class Plugin {
 
             return c.getMethod(_methodName);
         } catch (Exception e) {
-	    TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
+	    //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
 	    return null;
         }
 
@@ -207,7 +207,7 @@ public class Plugin {
 	// We have a valid plugin. We now need to get the Method
 	Method m = getMethod(_className, _methodName);
 	if (m == null) {
-	    TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
+	    //TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
 	    return null;
 	}
 	
@@ -223,11 +223,11 @@ public class Plugin {
 	// We have a valid plugin. We now need to get the Method
 		
 	try {
-	    TraceManager.addDev("Getting " + _methodName + " in class " + c.getName());
+	    //TraceManager.addDev("Getting " + _methodName + " in class " + c.getName());
 	    Method m = c.getMethod(_methodName);
 	    
 	    if (m == null) {
-		TraceManager.addDev("Null method in executeRetStringMethod with Class parameter");
+		//TraceManager.addDev("Null method in executeRetStringMethod with Class parameter");
 		return null;
 	    }
 	    return (String)(m.invoke(null));
@@ -252,7 +252,7 @@ public class Plugin {
     public static boolean executeBoolStringMethod(Object instance, String value, String _methodName) throws Exception {
 	Class[] cArg = new Class[1];
 	cArg[0] = String.class;
-	TraceManager.addDev("Looking for method=" + _methodName + " in instance " + instance);
+	//TraceManager.addDev("Looking for method=" + _methodName + " in instance " + instance);
 	Method method = instance.getClass().getMethod(_methodName, cArg);
 	return (boolean)(method.invoke(instance, value));
     }

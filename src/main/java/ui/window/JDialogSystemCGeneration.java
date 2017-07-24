@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import launcher.LauncherException;
@@ -74,7 +71,7 @@ import java.util.Vector;
  * @version 1.2 02/06/2014
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class JDialogSystemCGeneration extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface, ListSelectionListener  {
+public class JDialogSystemCGeneration extends JDialog implements ActionListener, Runnable, MasterProcessInterface, ListSelectionListener  {
 
     protected MainGUI mgui;
 
@@ -149,7 +146,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     public final static int FORMAL_VERIFICATION = 3;
 
     private int automatic;
-    private boolean wasClosed = false;
+  //  private boolean wasClosed = false;
 
 
     /** Creates new form  */
@@ -553,13 +550,13 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 
         updateStaticList();
         optimizeModeSelected = optimizemode.isSelected();
-        wasClosed = true;
+       // wasClosed = true;
         dispose();
     }
-
-    public boolean wasClosed() {
-        return wasClosed;
-    }
+//
+//    public boolean wasClosed() {
+//        return wasClosed;
+//    }
 
     public void stopProcess() {
         try {
@@ -618,6 +615,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         return errorTabIndex < 0 || tabbedPane.getSelectedIndex() <= errorTabIndex;
     }
 
+    @Override
     public void run() {
         try {
             if ( automatic > 0 ) {

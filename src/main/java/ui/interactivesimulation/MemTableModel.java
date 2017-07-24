@@ -47,7 +47,8 @@ import tmltranslator.TMLMapping;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class MemTableModel
@@ -57,15 +58,16 @@ import java.util.Hashtable;
  * @author Ludovic APVRILLE
  */
 public class MemTableModel extends AbstractTableModel {
-	private TMLMapping tmap;
-	ArrayList<HwMemory> mems;
-	private Hashtable <Integer, String> valueTable;
-	private Hashtable <Integer, Integer> rowTable;
+	
+	private TMLMapping<?> tmap;
+	private List<HwMemory> mems;
+	private Map<Integer, String> valueTable;
+	private Map<Integer, Integer> rowTable;
 	
 	private int nbOfRows;
 	
 	//private String [] names;
-	public MemTableModel(TMLMapping _tmap, Hashtable<Integer, String> _valueTable, Hashtable <Integer, Integer> _rowTable) {
+	public MemTableModel(TMLMapping<?> _tmap, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
 		tmap = _tmap;
 		valueTable = _valueTable;
 		rowTable = _rowTable;
@@ -124,7 +126,6 @@ public class MemTableModel extends AbstractTableModel {
 		
 	}
 		
-	
 	private void computeData() {
 		if (tmap == null) {
 			nbOfRows = 0;
@@ -146,5 +147,4 @@ public class MemTableModel extends AbstractTableModel {
 		}
 		return;
 	}
-
 }

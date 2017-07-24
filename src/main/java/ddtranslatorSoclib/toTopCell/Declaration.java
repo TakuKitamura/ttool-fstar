@@ -42,91 +42,30 @@
 
 /* authors: v1.0 Raja GATGOUT 2014
             v2.0 Daniela GENIUS, Julien HENON 2015 
-	    v2.1 Daniela GENIUS, summer 2016*/
+	    v2.1 Daniela GENIUS, 2016, 2017 */
 
 package ddtranslatorSoclib.toTopCell;
 
 import ddtranslatorSoclib.*;
-import avatartranslator.AvatarRelation;//DG 26.06.
-import avatartranslator.AvatarBlock;//DG 26.06.
-import avatartranslator.AvatarSignal;//DG 26.06.
-import avatartranslator.AvatarSpecification;//DG 23.06.
+import avatartranslator.AvatarRelation;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarSignal;
+import avatartranslator.AvatarSpecification;
 
 public class Declaration {
     public static AvatarSpecification avspec;
     private static String CR = "\n";
     private static String CR2 = "\n\n";   
     
-
-     
-        public static String generateName(AvatarRelation ar, AvatarSignal signal1, AvatarSignal signal2){ 
-
-	String channelName="";
-	AvatarBlock block1=ar.getBlock1();
-	AvatarBlock block2=ar.getBlock2();
-	String blockname1=block1.getName();
-        String blockname2=block2.getName();
-	String signalname1=signal1.getSignalName();
-	String signalname2=signal2.getSignalName();
-	if(signal1.isOut())
-	    channelName=blockname1+"_"+signalname1+"__"+blockname2+"_"+signalname2;
-	else
-	    channelName=blockname2+"_"+signalname1+"__"+blockname1+"_"+signalname2;
-	return channelName;
+    public static String generateName(AvatarRelation _ar, int _index) {
+        return _ar.block1.getName() + "_" + _ar.getSignal1(_index).getName() + "__" + _ar.block2.getName() + "_" + _ar.getSignal2(_index).getName();
     }
-   
-    /*  public static String generateName(AvatarChannel channel){
-	String channelName="";
-	String channelNameTest = channel.getChannelName();
-
-	//extract first block name
-	int pos1=channelNameTest.indexOf('/');
-	int pos2;
-	if ((channelNameTest.substring(pos1+1,pos1+3)).equals("in")){
-	    pos2=pos1+3;	
-	}
-	else{ 	    
-	    pos2=pos1+4;
-	}
-	channelName=channelName+channelNameTest.substring(0,pos1)+"_";
-
-	//extract first signal name
-	channelNameTest=channelNameTest.substring((pos2),channelNameTest.length());
-	pos1=channelNameTest.indexOf('(');
-	channelName=channelName+channelNameTest.substring(1,pos1)+"__";
-	
-	pos1=channelNameTest.indexOf('#');
-	channelNameTest=channelNameTest.substring(pos1+1,channelNameTest.length());
-	pos1=channelNameTest.indexOf('#');
-	channelNameTest=channelNameTest.substring(pos1+2,channelNameTest.length());
-
-	//extract second  block name
-	pos1=channelNameTest.indexOf('/');
-
-	if ((channelNameTest.substring(pos1+1,pos1+3)).equals("in")){
-	    pos2=pos1+3;
-	}
-	else{ 
-	    pos2=pos1+4;
-	}
-	channelName=channelName+channelNameTest.substring(0,pos1)+"_";
-
-	//extract second signal name
-	
-        channelNameTest=channelNameTest.substring((pos2),channelNameTest.length());
-
-	pos1=channelNameTest.indexOf('(');	
-        channelName=channelName+channelNameTest.substring(1,pos1);	
- 
-    return channelName;
-    }*/
-
+         
 	public static String getDeclarations(AvatarSpecification _avspec) {
 	        avspec =_avspec;
 	   
 		String declaration = "//----------------------------Instantiation-------------------------------" + CR2;	
-	
-		//Is the platform clustered (currently only 1 central ICN permitted)?
+			
 	
 		int nb_clusters = TopCellGenerator.avatardd.getAllCrossbar().size();	
 		
@@ -225,7 +164,8 @@ if(nb_clusters==0){
           System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
           System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
 	  
-	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+");" + CR2;
+	  //declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+");" + CR2;
+	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+ ");" + CR2;
 	  int i=0;
 
           //if BUS was not last in input file, update here
@@ -235,8 +175,8 @@ if(nb_clusters==0){
 	  }	
 
          for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
-          System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
-          System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
+	     //System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
+	     //System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
 	  /* The user might have forgotten to specify the following, thus set default values */
 
 	  if(vgmn.getMinLatency()<2)
@@ -245,8 +185,9 @@ if(nb_clusters==0){
           vgmn.setFifoDepth(8); //default value; must be > 2
 
 
-	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+
-	     "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+	  //declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+
+ declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNbRAM()+TopCellGenerator.avatardd.getNbTTY()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 
 	  // if VGMN was not last in input file, update here 
           vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
@@ -291,7 +232,6 @@ else {
           //if BUS was not last in input file, update here	 
 	  int i=0;	
     }	
-
          
     for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
           System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
@@ -324,8 +264,6 @@ else {
           System.out.println("initiators: "+crossbar.getNbOfAttachedInitiators());	
           System.out.println("targets: "+crossbar.getNbOfAttachedTargets());
 	
-	  //declaration += "soclib::caba::VciLocalCrossbar<vci_param> crossbar"+crossbar.getClusterAddress()+"(\"" + crossbar.getCrossbarName() + "\"" + " , maptab, IntTab("+ crossbar.getClusterIndex()+"),IntTab("+crossbar.getClusterAddress()+"), "+crossbar.getNbOfAttachedInitiators()+", "+crossbar.getNbOfAttachedTargets()+");" + CR2;
-
 	  declaration += "soclib::caba::VciLocalCrossbar<vci_param> crossbar"+crossbar.getClusterIndex()+"(\"" + crossbar.getCrossbarName() + "\"" + " , maptab, IntTab("+ crossbar.getClusterIndex()+"),IntTab("+crossbar.getClusterIndex()+"), "+crossbar.getNbOfAttachedInitiators()+", "+crossbar.getNbOfAttachedTargets()+");" + CR2;
 
 
@@ -361,21 +299,20 @@ int  i=0;
 		  if (ram.getMonitored()==2){		      
 		      System.out.println("Spy RAM : Stats");
 		      String strArray="";
-
-		      // for(AvatarChannel channel: ram.getChannels()){ //DG 27.06.
+		    
 		      for(AvatarRelation ar: avspec.getRelations()) {
-			  // if ar.isMonitored(){//DG 29.06 per relation, all signals - how to make connection between channel and relation?
+			 
 				  for(i=0; i<ar.nbOfSignals() ; i++) {
 			      
 				      AvatarSignal as1=ar.getSignal1(i);
 				      AvatarSignal as2=ar.getSignal2(i);
-				      //String chname = generateName(channel);
-				      String chname = generateName(ar,as1,as2);
+				      
+				      String chname = generateName(ar,i);
 				      strArray=strArray+"\""+chname+"\",";
 				  }
-				  //}
+				 
 		      }
-		      // }   
+		         
 		
 		      declaration += "soclib::caba::VciMwmrStats<vci_param> mwmr_stats"+j+"(\"mwmr_stats" + j+"\",maptab, data_ldr, \"mwmr"+j+".log\",stringArray("+strArray+"NULL));" + CR2;
 		      j++;	      

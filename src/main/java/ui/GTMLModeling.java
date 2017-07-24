@@ -2374,17 +2374,17 @@ public class GTMLModeling  {
         warnings = new LinkedList<CheckingError> ();
         //listE = new CorrespondanceTGElement();
 
-        TraceManager.addDev("Making architecture");
+        //TraceManager.addDev("Making architecture");
         makeArchitecture();     //fills archi
-        TraceManager.addDev("Making TML modeling");
+        //TraceManager.addDev("Making TML modeling");
         if (!makeTMLModeling()) {
             return null;
         }
-        TraceManager.addDev("Making mapping");
+        //TraceManager.addDev("Making mapping");
         makeMapping();  //fills map
         map.listE = listE;
         //  map.securityPatterns.addAll(securityPatterns.keySet());
-        TraceManager.addDev("Making TMLCPLib");
+        //TraceManager.addDev("Making TMLCPLib");
         makeTMLCPLib();
 
         //TraceManager.addDev("<--- TML modeling:");
@@ -3460,12 +3460,14 @@ public class GTMLModeling  {
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
+	    //TraceManager.addDev(" is custom component?" + tgc + " class=" + tgc.getClass());
 
 	    // Custom values (for plugin)
 	    if (tgc instanceof TGComponentPlugin) {
+		//TraceManager.addDev("custom component found:" + tgc);
 		String val = ((TGComponentPlugin)(tgc)).getCustomValue();
 		if (val != null) {
-		    TraceManager.addDev("Adding custom value:" +  val);
+		    //TraceManager.addDev("Adding custom value:" +  val);
 		    map.addCustomValue(val);
 		}
 	    }
@@ -3479,11 +3481,11 @@ public class GTMLModeling  {
                     s = artifact.getReferenceTaskName();
                     ArchUnitMEC mec = artifact.getArchUnitMEC();
                     int operationType = artifact.getOperationType();
-                    TraceManager.addDev("1) Trying to get task named:" + s);
+                    //TraceManager.addDev("1) Trying to get task named:" + s);
                     s = s.replaceAll("\\s", "");
-                    TraceManager.addDev("2) Trying to get task named:" + s);
+                    //TraceManager.addDev("2) Trying to get task named:" + s);
                     s = s + "__" + artifact.getTaskName();
-                    TraceManager.addDev("3) Trying to get task named:" + s);
+                    //TraceManager.addDev("3) Trying to get task named:" + s);
                     task = tmlm.getTMLTaskByName(s);
                     if (task != null) {
                         if( operationType != -1 )       {

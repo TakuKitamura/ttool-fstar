@@ -2392,30 +2392,42 @@ state 2: obstacles in close proximity
 <cdparam x="0" y="0" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
+<<<<<<< HEAD
 <TGConnectingPoint num="0" id="550" />
 <P1  x="514" y="618" id="660" />
 <P2  x="461" y="582" id="634" />
+=======
+<TGConnectingPoint num="0" id="538" />
+<P1  x="950" y="422" id="647" />
+<P2  x="1013" y="421" id="564" />
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <AutomaticDrawing  data="true" />
 <extraparam>
-<iso value="in sensorData(int distanceLeft, int distanceFront, int distanceRight)" />
-<osd value="out sensorData(int distanceLeft, int distanceFront, int distanceRight)" />
-<isd value="in changeRate(int samplingRate)" />
-<oso value="out changeRate(int samplingRate)" />
-<FIFOType asynchronous="true" size="8" blocking="false" private="false" broadcast="false" lossy="false" />
+<isd value="in motorCommand(int leftCommand, int rightCommand)" />
+<oso value="out motorCommand(int leftVelocity, int rightVelocity)" />
+<FIFOType asynchronous="true" size="4096" blocking="false" private="false" broadcast="false" lossy="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="553" >
 <cdparam x="0" y="0" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
+<<<<<<< HEAD
 <TGConnectingPoint num="0" id="552" />
 <P1  x="950" y="422" id="659" />
 <P2  x="1013" y="421" id="576" />
+=======
+<TGConnectingPoint num="0" id="540" />
+<P1  x="514" y="618" id="648" />
+<P2  x="461" y="582" id="622" />
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <AutomaticDrawing  data="true" />
 <extraparam>
-<isd value="in motorCommand(int leftCommand, int rightCommand)" />
-<oso value="out motorCommand(int leftVelocity, int rightVelocity)" />
-<FIFOType asynchronous="true" size="8" blocking="false" private="false" broadcast="false" lossy="false" />
+<iso value="in sensorData(int distanceLeft, int distanceFront, int distanceRight)" />
+<osd value="out sensorData(int distanceLeft, int distanceFront, int distanceRight)" />
+<isd value="in changeRate(int samplingRate)" />
+<oso value="out changeRate(int samplingRate)" />
+<FIFOType asynchronous="true" size="4096" blocking="false" private="false" broadcast="false" lossy="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="555" >
@@ -2431,7 +2443,7 @@ state 2: obstacles in close proximity
 <osd value="out tempData(int temp)" />
 <isd value="in control(bool sensorOn)" />
 <oso value="out control(bool sensorOn)" />
-<FIFOType asynchronous="true" size="8" blocking="false" private="false" broadcast="false" lossy="false" />
+<FIFOType asynchronous="true" size="4096" blocking="false" private="false" broadcast="false" lossy="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="302" id="572" >
@@ -2681,7 +2693,7 @@ state 2: obstacles in close proximity
 <SUBCOMPONENT type="-1" id="680" >
 <father id="685" num="3" />
 <cdparam x="451" y="157" />
-<sizeparam width="80" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="77" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2754,9 +2766,15 @@ state 2: obstacles in close proximity
 </extraparam>
 </SUBCOMPONENT>
 
+<<<<<<< HEAD
 <COMPONENT type="5104" id="710" >
 <cdparam x="267" y="176" />
 <sizeparam width="280" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+=======
+<COMPONENT type="5104" id="698" >
+<cdparam x="268" y="176" />
+<sizeparam width="279" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Receive signal" value="motorCommand(leftVelocity, rightVelocity)" />
@@ -3056,7 +3074,11 @@ state 2: obstacles in close proximity
 </extraparam>
 </COMPONENT>
 
+<<<<<<< HEAD
 <COMPONENT type="5104" id="817" >
+=======
+<COMPONENT type="5104" id="805" >
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <cdparam x="232" y="230" />
 <sizeparam width="132" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -3439,12 +3461,18 @@ state 2: obstacles in close proximity
 </extraparam>
 </SUBCOMPONENT>
 
+<<<<<<< HEAD
 <COMPONENT type="5103" id="950" >
 <cdparam x="108" y="498" />
+=======
+<COMPONENT type="5103" id="938" >
+<cdparam x="108" y="527" />
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <sizeparam width="359" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Send signal" value="sensorData(distanceLeft, distanceFront, distanceRight)" />
+<<<<<<< HEAD
 <TGConnectingPoint num="0" id="940" />
 <TGConnectingPoint num="1" id="941" />
 <TGConnectingPoint num="2" id="942" />
@@ -3459,6 +3487,22 @@ state 2: obstacles in close proximity
 </COMPONENT>
 
 <COMPONENT type="5104" id="961" >
+=======
+<TGConnectingPoint num="0" id="928" />
+<TGConnectingPoint num="1" id="929" />
+<TGConnectingPoint num="2" id="930" />
+<TGConnectingPoint num="3" id="931" />
+<TGConnectingPoint num="4" id="932" />
+<TGConnectingPoint num="5" id="933" />
+<TGConnectingPoint num="6" id="934" />
+<TGConnectingPoint num="7" id="935" />
+<TGConnectingPoint num="8" id="936" />
+<TGConnectingPoint num="9" id="937" />
+<latencyCheck />
+</COMPONENT>
+
+<COMPONENT type="5104" id="949" >
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <cdparam x="429" y="201" />
 <sizeparam width="189" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -3549,7 +3593,11 @@ state 2: obstacles in close proximity
 </extraparam>
 </COMPONENT>
 
+<<<<<<< HEAD
 <COMPONENT type="5108" id="1010" >
+=======
+<COMPONENT type="5108" id="998" >
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <cdparam x="178" y="355" />
 <sizeparam width="218" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -3562,7 +3610,11 @@ state 2: obstacles in close proximity
 </extraparam>
 </COMPONENT>
 
+<<<<<<< HEAD
 <COMPONENT type="5108" id="1013" >
+=======
+<COMPONENT type="5108" id="1001" >
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <cdparam x="183" y="292" />
 <sizeparam width="208" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -5124,6 +5176,7 @@ state 2: obstacles in close proximity
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2500" />
 <infoparam name="State" value="measureTemp" />
+<<<<<<< HEAD
 <TGConnectingPoint num="0" id="1686" />
 <TGConnectingPoint num="1" id="1687" />
 <TGConnectingPoint num="2" id="1688" />
@@ -5164,11 +5217,57 @@ state 2: obstacles in close proximity
 <TGConnectingPoint num="37" id="1723" />
 <TGConnectingPoint num="38" id="1724" />
 <TGConnectingPoint num="39" id="1725" />
+=======
+<TGConnectingPoint num="0" id="1674" />
+<TGConnectingPoint num="1" id="1675" />
+<TGConnectingPoint num="2" id="1676" />
+<TGConnectingPoint num="3" id="1677" />
+<TGConnectingPoint num="4" id="1678" />
+<TGConnectingPoint num="5" id="1679" />
+<TGConnectingPoint num="6" id="1680" />
+<TGConnectingPoint num="7" id="1681" />
+<TGConnectingPoint num="8" id="1682" />
+<TGConnectingPoint num="9" id="1683" />
+<TGConnectingPoint num="10" id="1684" />
+<TGConnectingPoint num="11" id="1685" />
+<TGConnectingPoint num="12" id="1686" />
+<TGConnectingPoint num="13" id="1687" />
+<TGConnectingPoint num="14" id="1688" />
+<TGConnectingPoint num="15" id="1689" />
+<TGConnectingPoint num="16" id="1690" />
+<TGConnectingPoint num="17" id="1691" />
+<TGConnectingPoint num="18" id="1692" />
+<TGConnectingPoint num="19" id="1693" />
+<TGConnectingPoint num="20" id="1694" />
+<TGConnectingPoint num="21" id="1695" />
+<TGConnectingPoint num="22" id="1696" />
+<TGConnectingPoint num="23" id="1697" />
+<TGConnectingPoint num="24" id="1698" />
+<TGConnectingPoint num="25" id="1699" />
+<TGConnectingPoint num="26" id="1700" />
+<TGConnectingPoint num="27" id="1701" />
+<TGConnectingPoint num="28" id="1702" />
+<TGConnectingPoint num="29" id="1703" />
+<TGConnectingPoint num="30" id="1704" />
+<TGConnectingPoint num="31" id="1705" />
+<TGConnectingPoint num="32" id="1706" />
+<TGConnectingPoint num="33" id="1707" />
+<TGConnectingPoint num="34" id="1708" />
+<TGConnectingPoint num="35" id="1709" />
+<TGConnectingPoint num="36" id="1710" />
+<TGConnectingPoint num="37" id="1711" />
+<TGConnectingPoint num="38" id="1712" />
+<TGConnectingPoint num="39" id="1713" />
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <extraparam>
 </extraparam>
 </COMPONENT>
 
+<<<<<<< HEAD
 <COMPONENT type="5104" id="1737" >
+=======
+<COMPONENT type="5104" id="1725" >
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <cdparam x="423" y="374" />
 <sizeparam width="122" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -5342,6 +5441,7 @@ state 2: obstacles in close proximity
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2500" />
 <infoparam name="choice" value="null" />
+<<<<<<< HEAD
 <TGConnectingPoint num="0" id="1861" />
 <TGConnectingPoint num="1" id="1862" />
 <TGConnectingPoint num="2" id="1863" />
@@ -5360,11 +5460,32 @@ state 2: obstacles in close proximity
 </COMPONENT>
 
 <COMPONENT type="5104" id="1887" >
+=======
+<TGConnectingPoint num="0" id="1849" />
+<TGConnectingPoint num="1" id="1850" />
+<TGConnectingPoint num="2" id="1851" />
+<TGConnectingPoint num="3" id="1852" />
+<TGConnectingPoint num="4" id="1853" />
+<TGConnectingPoint num="5" id="1854" />
+<TGConnectingPoint num="6" id="1855" />
+<TGConnectingPoint num="7" id="1856" />
+<TGConnectingPoint num="8" id="1857" />
+<TGConnectingPoint num="9" id="1858" />
+<TGConnectingPoint num="10" id="1859" />
+<TGConnectingPoint num="11" id="1860" />
+<TGConnectingPoint num="12" id="1861" />
+<TGConnectingPoint num="13" id="1862" />
+<TGConnectingPoint num="14" id="1863" />
+</COMPONENT>
+
+<COMPONENT type="5104" id="1875" >
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <cdparam x="216" y="192" />
 <sizeparam width="358" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2500" />
 <infoparam name="Receive signal" value="sensorData(distanceLeft, distanceFront, distanceLeft)" />
+<<<<<<< HEAD
 <TGConnectingPoint num="0" id="1877" />
 <TGConnectingPoint num="1" id="1878" />
 <TGConnectingPoint num="2" id="1879" />
@@ -5378,6 +5499,22 @@ state 2: obstacles in close proximity
 </COMPONENT>
 
 <COMPONENT type="5106" id="1928" >
+=======
+<TGConnectingPoint num="0" id="1865" />
+<TGConnectingPoint num="1" id="1866" />
+<TGConnectingPoint num="2" id="1867" />
+<TGConnectingPoint num="3" id="1868" />
+<TGConnectingPoint num="4" id="1869" />
+<TGConnectingPoint num="5" id="1870" />
+<TGConnectingPoint num="6" id="1871" />
+<TGConnectingPoint num="7" id="1872" />
+<TGConnectingPoint num="8" id="1873" />
+<TGConnectingPoint num="9" id="1874" />
+<latencyCheck />
+</COMPONENT>
+
+<COMPONENT type="5106" id="1916" >
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <cdparam x="313" y="112" />
 <sizeparam width="165" height="50" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -5436,12 +5573,17 @@ state 2: obstacles in close proximity
 <TGConnectingPoint num="0" id="1929" />
 </COMPONENT>
 
+<<<<<<< HEAD
 <COMPONENT type="5103" id="1941" >
+=======
+<COMPONENT type="5103" id="1929" >
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <cdparam x="401" y="1143" />
 <sizeparam width="124" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2500" />
 <infoparam name="Send signal" value="control(sensorOn)" />
+<<<<<<< HEAD
 <TGConnectingPoint num="0" id="1931" />
 <TGConnectingPoint num="1" id="1932" />
 <TGConnectingPoint num="2" id="1933" />
@@ -5455,6 +5597,21 @@ state 2: obstacles in close proximity
 </COMPONENT>
 
 <COMPONENT type="5103" id="1952" >
+=======
+<TGConnectingPoint num="0" id="1919" />
+<TGConnectingPoint num="1" id="1920" />
+<TGConnectingPoint num="2" id="1921" />
+<TGConnectingPoint num="3" id="1922" />
+<TGConnectingPoint num="4" id="1923" />
+<TGConnectingPoint num="5" id="1924" />
+<TGConnectingPoint num="6" id="1925" />
+<TGConnectingPoint num="7" id="1926" />
+<TGConnectingPoint num="8" id="1927" />
+<TGConnectingPoint num="9" id="1928" />
+</COMPONENT>
+
+<COMPONENT type="5103" id="1940" >
+>>>>>>> a6a1725f23e810ab4a0e8ac5e3130babc2c34c14
 <cdparam x="188" y="1147" />
 <sizeparam width="124" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />

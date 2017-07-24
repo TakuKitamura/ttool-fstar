@@ -97,7 +97,7 @@ public class TGComponentPlugin extends TGComponent implements ComponentPluginInt
                 cArg[0] = String.class;
                 cArg[1] = String.class;
                 methodGetCustomValue = classRef.getMethod("getCustomValue", cArg);
-                TraceManager.addDev("Method =" + methodGetWidth);
+                //TraceManager.addDev("Method =" + methodGetWidth);
             }
 
             String ret = (String)(methodGetCustomValue.invoke(instance, value, tdp.getName()));
@@ -117,7 +117,7 @@ public class TGComponentPlugin extends TGComponent implements ComponentPluginInt
                 cArg[0] = Graphics.class;
                 cArg[1] = String.class;
                 methodGetWidth = classRef.getMethod("getWidth", cArg);
-                TraceManager.addDev("Method =" + methodGetWidth);
+                //TraceManager.addDev("Method =" + methodGetWidth);
             }
 
             width = (int)(methodGetWidth.invoke(instance, g, value));
@@ -128,14 +128,14 @@ public class TGComponentPlugin extends TGComponent implements ComponentPluginInt
                 cArg[0] = Graphics.class;
                 cArg[1] = String.class;
                 methodGetHeight = classRef.getMethod("getHeight", cArg);
-                TraceManager.addDev("Method =" + methodGetHeight);
+                //TraceManager.addDev("Method =" + methodGetHeight);
             }
 
             height = (int)(methodGetHeight.invoke(instance, g, value));
 
             if (methodInternalDrawing == null) {
                 createInstance();
-                TraceManager.addDev("instance =" + instance);
+                //TraceManager.addDev("instance =" + instance);
                 Class[] cArg = new Class[7];
                 cArg[0] = Graphics.class;
                 cArg[1] = int.class;
@@ -145,7 +145,7 @@ public class TGComponentPlugin extends TGComponent implements ComponentPluginInt
                 cArg[5] = String.class;
                 cArg[6] = String.class;
                 methodInternalDrawing = classRef.getMethod("internalDrawing", cArg);
-                TraceManager.addDev("Method =" + methodInternalDrawing);
+                //TraceManager.addDev("Method =" + methodInternalDrawing);
             }
             methodInternalDrawing.invoke(instance, g, x, y, width, height, value, tdp.getName());
 
