@@ -53,7 +53,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 /**
    * Class TMLADReadChannel
    * Action of writting data in channel
@@ -62,12 +62,18 @@ import java.util.ArrayList;
    * @author Ludovic APVRILLE
  */
 public class TMLADReadChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+	private HashMap<String, String> latencyVals;
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textX0 =  2;
     protected int textY0 = 0;
     protected int textY1 =  15;
     protected int linebreak = 10;
+
+	protected int latencyX=30;
+	protected int latencyY=10;
+	protected int textWidth=10;
+	protected int textHeight=20;
 
     protected String channelName = "ch";
     protected String nbOfSamples= "1";
@@ -79,6 +85,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
     public final static int NOT_REACHABLE = 2;
 
     public int reachabilityInformation;
+
 
     public TMLADReadChannel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -100,8 +107,14 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         name = "read channel";
 
         myImageIcon = IconManager.imgic906;
+		latencyVals = new HashMap<String, String>();
+		latencyVals.put("sendChannel: distanceData", "3");
+
     }
 
+	public void addLatency(String name, String num){
+		latencyVals.put(name,num);
+	}
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -156,10 +169,21 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
 	if (!securityContext.equals("")){
 	    g.drawString("sec:"+securityContext, x+3*width/4, y+height+textY1);
 	}
-	drawReachabilityInformation(g);
-
+		drawReachabilityInformation(g);
+		if (getCheckLatency()){
+			drawLatencyInformation(g);	
+		}
     }
 
+	public void drawLatencyInformation(Graphics g){
+		for (String s:latencyVals.keySet()){
+			int w  = g.getFontMetrics().stringWidth(s);
+			g.drawString(s, x-latencyX-w+1, y-latencyY-2);
+			g.drawRect(x-latencyX-w, y-latencyY-textHeight, w+4, textHeight); 
+			g.drawLine(x,y,x-latencyX, y-latencyY);
+			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY/2);
+		}
+	}
 
     public void drawReachabilityInformation(Graphics g) {
         if (reachabilityInformation > 0) {

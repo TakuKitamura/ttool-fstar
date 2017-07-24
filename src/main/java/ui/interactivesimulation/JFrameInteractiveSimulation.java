@@ -985,8 +985,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         jspLatency = new JScrollPane(latTable);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
-        jspLatency.setMinimumSize(new Dimension(400, 250));
-        jspLatency.setPreferredSize(new Dimension(1400, 250));
+        jspLatency.setMinimumSize(new Dimension(1000, 250));
+        jspLatency.setPreferredSize(new Dimension(2100, 250));
         latencyPanel.add(jspLatency, c0);
 
 

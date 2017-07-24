@@ -41,7 +41,7 @@
 
 
 package ui;
-
+import java.util.HashMap;
 /**
  * Class CheckableLatency
  * Components which can be set as a latency checkpoint
@@ -50,5 +50,6 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface CheckableLatency  {
+
 
 }
