@@ -308,6 +308,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private ArrayList<RunningInfo> runningIDs;
     private ArrayList<LoadInfo> loadIDs;
     private ConcurrentHashMap<Integer, ArrayList<SimulationTransaction>> transactionMap = new ConcurrentHashMap<Integer, ArrayList<SimulationTransaction>>();
+	private ConcurrentHashMap<Integer, String[]> latencyMap = new ConcurrentHashMap<Integer, String[]>();
     private ConcurrentHashMap<String, String> statusMap = new ConcurrentHashMap<String, String>();
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
@@ -7646,6 +7647,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         return transactionMap.get(id);
     }
+
+	public synchronized void addLatencyVals(int id, String[] latency){
+		if (latencyMap!=null){
+			latencyMap.put(id, latency);
+		}
+	//	System.out.println(latencyMap);
+	}
+
+	public synchronized String[] getLatencyVals(int id){
+	//	System.out.println(id + " " + latencyMap);
+		if (latencyMap!=null){
+			return latencyMap.get(id);
+		}
+		return null;
+	}
     public synchronized ConcurrentHashMap<String,String> getStatus(int id){
         if (statusMap == null) {
             return null;

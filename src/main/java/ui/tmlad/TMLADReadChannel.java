@@ -108,7 +108,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
 
         myImageIcon = IconManager.imgic906;
 		latencyVals = new HashMap<String, String>();
-		latencyVals.put("sendChannel: distanceData", "3");
+		//latencyVals.put("sendChannel: sensorData", "3");
 
     }
 
@@ -171,7 +171,11 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
 	}
 		drawReachabilityInformation(g);
 		if (getCheckLatency()){
-			drawLatencyInformation(g);	
+			String[] latency =tdp.getMGUI().getLatencyVals(getDIPLOID());
+			if (latency!=null){
+				addLatency(latency[0], latency[1]);
+				drawLatencyInformation(g);	
+			}
 		}
     }
 

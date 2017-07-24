@@ -100,7 +100,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         
         myImageIcon = IconManager.imgic908;
 		latencyVals = new HashMap<String, String>();
-		latencyVals.put("sendChannel: distanceData", "15");
+		//latencyVals.put("sendChannel: sensorData", "15");
     }
     
 
@@ -166,8 +166,13 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		   
         //g.drawString("sig()", x+(width-w) / 2, y);
         g.drawString(value, x + linebreak + textX1, y + textY);
+		//System.out.println(getDIPLOID());
 		if (getCheckLatency()){
-			drawLatencyInformation(g);
+			String[] latency =tdp.getMGUI().getLatencyVals(getAVATARID());
+			if (latency!=null){
+				addLatency(latency[0], latency[1]);
+				drawLatencyInformation(g);
+			}
 		}
 		
     }
@@ -178,7 +183,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 			g.drawRect(x-latencyX-w, y-latencyY-textHeight, w+4, textHeight); 
 			g.drawLine(x,y,x-latencyX, y-latencyY);
 			Color c = g.getColor();
-			g.setColor(Color.ORANGE);
+			g.setColor(Color.RED);
 			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY/2);
 			g.setColor(c);
 		}

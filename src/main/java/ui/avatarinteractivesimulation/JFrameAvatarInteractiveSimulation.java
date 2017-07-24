@@ -1482,7 +1482,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 									minTimes.add(time);
 								}
 							}
-							System.out.println(transTimes.get(st1) + " " + transTimes.get(st2) + " " + minTimes);
+						//	System.out.println(transTimes.get(st1) + " " + transTimes.get(st2) + " " + minTimes);
 							if (minTimes.size()>0){
                                     int sum=0;
                                     sl.setMinTime(Integer.toString(Collections.min(minTimes)));
@@ -1499,6 +1499,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                                     stdev = Math.sqrt(stdev);
                                     sl.setAverageTime(String.format("%.1f",average));
                                     sl.setStDev(String.format("%.1f",stdev));
+									mgui.addLatencyVals(Integer.valueOf(st2.split(":")[1]), new String[]{st1, Integer.toString(Collections.max(minTimes))});
                             }
                             	latencies.add(sl);
 							
