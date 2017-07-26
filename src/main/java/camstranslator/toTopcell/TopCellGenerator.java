@@ -39,11 +39,12 @@
   knowledge of the CeCILL license and that you accept its terms.
 */
 
-/* Generator of the top cell for simulation with SoCLib virtual component 
-   library */
+/* Generator of the top cell for SystemC simulation 
+of heterogeneous platforms with SoCLib virtual component 
+   library ans SystemC AMS extension */
 
-/* authors: v1.0 Raja GATGOUT 2014
-            v2.0 Daniela GENIUS, Julien HENON 2015 */
+/* authors: 
+            v1.0 Daniela GENIUS, Côme Demarigny 2017 */
 
 package ddtranslatorSoclib.toTopCell;
 
@@ -58,24 +59,14 @@ import java.util.List;
 
 public class TopCellGenerator
 {
-	private static final String MAPPING_TXT = "mapping.txt"; //$NON-NLS-1$	
-	//--------------- accessing Avatardd -----------------
-	public static AvatarddSpecification avatardd;
-	// ---------------------------------------------------
-
-        public static AvatarSpecification avspec;
+	private static final String MAPPING_TXT = "mapping.txt"; 
+        public static SystemCAMSSpecification scamsspec;
 
 	public String VCIparameters;
 	public String config;
 	public String mainFile;
 	public String src;
-	public String top;
-        public String deployinfo;
-        public String deployinfo_map; 
-        public String deployinfo_ram;
-        public String platform_desc;
-        public String procinfo; 
-        public String nbproc;
+	public String top;       
 	public final String DOTH = ".h";
 	public final String DOTCPP = ".cpp";
 	public final String SYSTEM_INCLUDE = "#include \"systemc.h\"";
@@ -113,17 +104,8 @@ public class TopCellGenerator
 	    else{
 		System.out.println("***VGSB based ***");
 		icn="vgsb";
-	    }	    	  
-	    
-	    for  (AvatarConnector connector : avatardd.getConnectors()){
-	
-	    /* Central interconnect or local crossbars */
-	    
-	    if(TopCellGenerator.avatardd.getNbCrossbar()>0){
-		System.out.println("***Clustered Interconnect***");
-	    }
-	    makeVCIparameters();
-	    makeConfig();
+	    }	    	  	    	  
+	   
 	    String top = Header.getHeader() + 	      	
 		Declaration.getDeclarations(avspec) +  
 		Signal.getSignal() +
@@ -139,8 +121,7 @@ public class TopCellGenerator
 		    String line = null;
 			while ((line = in.readLine()) != null) {
 			    System.out.println(" Line read : " + line);
-			    mappingLines.add(line);// read one line of the file;
-			}
+			    mappingLines.add(line);		}
 			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();

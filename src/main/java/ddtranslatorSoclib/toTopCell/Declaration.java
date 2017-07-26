@@ -185,9 +185,9 @@ if(nb_clusters==0){
           vgmn.setFifoDepth(8); //default value; must be > 2
 
 
-	  //declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 
- declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNbRAM()+TopCellGenerator.avatardd.getNbTTY()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+	  // declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNbRAM()+TopCellGenerator.avatardd.getNbTTY()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 
 	  // if VGMN was not last in input file, update here 
           vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
