@@ -106,7 +106,8 @@ public class TopCellGenerator
 		icn="vgsb";
 	    }	    	  	    	  
 	   
-	    String top = Header.getHeader() + 	      	
+	    String top = Header.getHeader() + 	 
+		Constants.getConstants() + 	 
 		Declaration.getDeclarations(avspec) +  
 		Signal.getSignal() +
 		NetList.getNetlist(icn,tracing) +

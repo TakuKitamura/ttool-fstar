@@ -56,70 +56,21 @@ public class Signal {
 
     private final static String CR = "\n";
     private final static String CR2 = "\n\n";
-    private final static String NAME_CLK = "signal_clk";
-    private static final String NAME_RST = "signal_resetn";
-
+  
 	public static String getSignal() {
-	    int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();	
-	    //nb_clusters=2;
-		String signal = CR2 + "//-------------------------------signaux------------------------------------" + CR2;
-		
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_m[cpus.size() + 1];"+ CR;
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_xicu(\"signal_vci_xicu\");"+ CR;
+	  
+	    String signal = CR2;
 
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_vcifdtrom(\"signal_vci_vcifdtrom\");"+ CR;
-		signal = signal +" caba::VciSignals<vci_param> signal_vci_vcihetrom(\"signal_vci_vcihetrom\");"+ CR;
-		signal = signal +" caba::VciSignals<vci_param> signal_vci_vcirom(\"signal_vci_vcirom\");"+ CR;
-		signal = signal +" caba::VciSignals<vci_param> signal_vci_vcisimhelper(\"signal_vci_vcisimhelper\");"+ CR;
-		signal = signal +"caba::VciSignals<vci_param> signal_vci_vcirttimer(\"signal_vci_vcirttimer\");"+ CR;
-signal = signal +"caba::VciSignals<vci_param> signal_vci_vcilocks(\"signal_vci_vcilocks\");"+ CR;
-//signal = signal +"caba::VciSignals<vci_param> signal_vci_mwmr_ram(\"signal_vci_mwmr_ram\");"+ CR;
-//signal = signal +"caba::VciSignals<vci_param> signal_vci_mwmrd_ram(\"signal_vci_mwmrd_ram\");"+ CR;
-		signal = signal +"caba::VciSignals<vci_param> signal_vci_vcifdaccessi;"+ CR;
-		signal = signal +"caba::VciSignals<vci_param> signal_vci_vcifdaccesst;"+ CR;
-		signal = signal +"caba::VciSignals<vci_param> signal_vci_bdi;"+ CR;
-		signal = signal +"caba::VciSignals<vci_param> signal_vci_bdt;"+ CR;	
-		signal = signal +"caba::VciSignals<vci_param> signal_vci_etherneti;"+ CR;
-		signal = signal +"caba::VciSignals<vci_param> signal_vci_ethernett;"+ CR;
-		signal = signal +""+ CR;
-		signal = signal + "sc_clock signal_clk(\"signal_clk\");" + CR;
-		signal = signal + "sc_signal<bool>  signal_resetn(\"" + NAME_RST + "\");" + CR2;	
-		int i=0;	
-  for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
-	signal = signal +"caba::VciSignals<vci_param> signal_mwmr_"+i+"_initiator;"+ CR;
-	signal = signal +"caba::VciSignals<vci_param> signal_mwmr_"+i+"_target;"+ CR;	
-	signal = signal +"caba::VciSignals<vci_param> signal_fifo_"+i+"_ctrl;"+ CR;	
-  }
+signal +="////////////////////////////////////////////////////////////////////////
+  // Model instantiation.
+  ////////////////////////////////////////////////////////////////////////
 
-if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){
-		for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM())
-					signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
-							+ "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;							
-		i = 0;
-								
-		for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){
-		    //signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;		
-signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2; 
-i++;		
-	}
-			
-		signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
-		System.out.print("number of processors : " + TopCellGenerator.avatardd.getNbCPU()+"\n");
-}
+// TDF Signals
+  sca_tdf::sca_signal
 
-else{
-    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM())
-	signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
-	    + "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;					i=0;		
-    for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){
-		    // signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;		
-signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2;
-		i++;
-    }
-				
-		signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
-		//System.out.print("number of processors : " + TopCellGenerator.avatardd.getNbCPU()+"\n");
-		System.out.print("number of clusters : " + TopCellGenerator.avatardd.getNbClusters()+"\n");
+signal +="// Digital Signals
+sc_core::sc_signal
+
 
 }
 		return signal;

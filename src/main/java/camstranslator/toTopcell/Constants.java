@@ -41,42 +41,39 @@
 
 
 
+/* this class produces the lines containing essentially the initial #includes; we include all potential components event if they are not used in the deployment diagram*/
+
 /* authors: v1.0 Raja GATGOUT 2014
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
 package ddtranslatorSoclib.toTopCell;
 
-public class Simulation {
+public class Constants {
 	
-    private  static String simulation;
-	
+    static private String constants;
     private final static String CR = "\n";
-	private final static String CR2 = "\n\n";
-    
-    public Simulation(){
+    private final static String CR2 = "\n\n";
+
+    Constants(){
     }
+    public static  String getConstants() {
 
-    //Dans un premier temps, nous n'implémentons pas encore le tracing
-
-    public static String getSimulation(){
-		 simulation  = "  
-////////////////////////////////////////////////////////////////////////
-  // Tracing and simulation
+	constants = "
+  ////////////////////////////////////////////////////////////////////////
+  // System components constants.
   ////////////////////////////////////////////////////////////////////////
 
 
-  try {
-    sc_start(t_stop);
-  } catch (const std::exception& e) {
-    std::cerr << e.what() << std::endl;
-  }
+constants +=
 
-  sca_close_tabular_trace_file(tfp);
++ CR2	    
 
-  sc_stop();
-  return sc_report_handler::get_count(SC_ERROR);
-    }"+CR2;
+ ////////////////////////////////////////////////////////////////////////
+  // Initial conditions and stimuli.
+  ////////////////////////////////////////////////////////////////////////
 
-		return simulation;
-    }
+
+
+		}
+		return constants;
 }
