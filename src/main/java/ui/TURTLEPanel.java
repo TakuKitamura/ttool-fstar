@@ -96,6 +96,12 @@ public abstract class TURTLEPanel implements GenericTree {
             panelAt(i).getAllCheckableTGComponent(_list);
         }
     }
+	public void getAllLatencyChecks(ArrayList<TGComponent> _list){
+        for(int i=0; i<panels.size(); i++) {
+            panelAt(i).getAllLatencyChecks(_list);
+        }
+	}
+
 
     public void removeElementAt(int index) {
         panels.removeElementAt(index);

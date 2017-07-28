@@ -54,6 +54,8 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import java.util.concurrent.ConcurrentHashMap;
 /**
    * Class TMLADReadChannel
    * Action of writting data in channel
@@ -62,7 +64,7 @@ import java.util.HashMap;
    * @author Ludovic APVRILLE
  */
 public class TMLADReadChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-	private HashMap<String, String> latencyVals;
+	private ConcurrentHashMap<String, String> latencyVals;
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textX0 =  2;
@@ -107,7 +109,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         name = "read channel";
 
         myImageIcon = IconManager.imgic906;
-		latencyVals = new HashMap<String, String>();
+		latencyVals = new ConcurrentHashMap<String, String>();
 		//latencyVals.put("sendChannel: sensorData", "3");
 
     }
@@ -115,6 +117,11 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
 	public void addLatency(String name, String num){
 		latencyVals.put(name,num);
 	}
+
+	public ConcurrentHashMap<String, String> getLatencyMap(){
+		return latencyVals;
+	}
+
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -171,21 +178,24 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
 	}
 		drawReachabilityInformation(g);
 		if (getCheckLatency()){
-			String[] latency =tdp.getMGUI().getLatencyVals(getDIPLOID());
+			ConcurrentHashMap<String, String> latency =tdp.getMGUI().getLatencyVals(getDIPLOID());
+			//System.out.println(latency);
 			if (latency!=null){
-				addLatency(latency[0], latency[1]);
-				drawLatencyInformation(g);	
+				latencyVals=latency;
+				drawLatencyInformation(g);
 			}
 		}
     }
 
 	public void drawLatencyInformation(Graphics g){
+		int index =1;
 		for (String s:latencyVals.keySet()){
 			int w  = g.getFontMetrics().stringWidth(s);
-			g.drawString(s, x-latencyX-w+1, y-latencyY-2);
-			g.drawRect(x-latencyX-w, y-latencyY-textHeight, w+4, textHeight); 
-			g.drawLine(x,y,x-latencyX, y-latencyY);
-			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY/2);
+			g.drawString(s, x-latencyX-w+1, y-latencyY*index-2);
+			g.drawRect(x-latencyX-w, y-latencyY*index-textHeight, w+4, textHeight); 
+			g.drawLine(x,y,x-latencyX, y-latencyY*index);
+			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
+			index++;
 		}
 	}
 
