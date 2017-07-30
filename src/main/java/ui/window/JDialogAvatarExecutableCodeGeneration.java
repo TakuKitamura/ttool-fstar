@@ -79,7 +79,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     //private String textSysC3 = "with";
     private String textSysC4 = "Run code:";
     private String textSysC5 = "Run code and trace events (if enabled at code generation):";
-    private String textSysC6 = "Run code in soclib / mutekh:";
+    //private String textSysC6 = "Run code in soclib / mutekh:";
     private String textSysC8 = "Show trace from file:";
     private String textSysC9 = "Show trace from soclib file:";
 
@@ -352,12 +352,12 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         exe3 = new JTextField(pathExecute +  " " + pathCode + File.separator + "trace.txt", 100);
         jp03.add(exe3, c03);
 
-        exesoclib = new JRadioButton(textSysC6, false);
-        exesoclib.addActionListener(this);
-        exegroup.add(exesoclib);
-        jp03.add(exesoclib, c03);
-        exe4 = new JTextField(pathExecuteSoclib, 100);
-        jp03.add(exe4, c03);
+        //exesoclib = new JRadioButton(textSysC6, false);
+        //exesoclib.addActionListener(this);
+        //exegroup.add(exesoclib);
+        //jp03.add(exesoclib, c03);
+        //exe4 = new JTextField(pathExecuteSoclib, 100);
+        //jp03.add(exe4, c03);
 
         exe.setSelected(selectedRun == 0);
         exetrace.setSelected(selectedRun == 1);
@@ -496,7 +496,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
         exe2.setEnabled(selectedRun == 0);
         exe3.setEnabled(selectedRun == 1);
-        exe4.setEnabled(selectedRun == 2);
+        //exe4.setEnabled(selectedRun == 2);
 
     }
 
@@ -665,7 +665,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
                             if (selectedRun == 1) {
                                 cmd = exe3.getText();
                             } else {
-                                cmd = exe4.getText();
+                                //cmd = exe4.getText();
                             }
                         }
 
