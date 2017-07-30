@@ -56,6 +56,8 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
    * Class TMLADWriteChannel
    * Action of writting data in channel
@@ -71,7 +73,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     protected int linebreak = 10;
 
 
-	private HashMap<String, String> latencyVals;
+	private ConcurrentHashMap<String, String> latencyVals;
 		
 	protected int latencyX=30;
 	protected int latencyY=10;
@@ -112,8 +114,12 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
         name = "write channel";
 
         myImageIcon = IconManager.imgic900;
-		latencyVals = new HashMap<String, String>();
+		latencyVals = new ConcurrentHashMap<String, String>();
     }
+
+	public ConcurrentHashMap<String, String> getLatencyMap(){
+		return latencyVals;
+	}
 
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
@@ -170,22 +176,25 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
 	}
 				
 		if (getCheckLatency()){
-			String[] latency =tdp.getMGUI().getLatencyVals(getDIPLOID());
+			ConcurrentHashMap<String, String> latency =tdp.getMGUI().getLatencyVals(getDIPLOID());
+			//System.out.println(latency);
 			if (latency!=null){
-				addLatency(latency[0], latency[1]);
-				drawLatencyInformation(g);	
+				latencyVals=latency;
+				drawLatencyInformation(g);
 			}
 		}
 		drawReachabilityInformation(g);
     }
 
 	public void drawLatencyInformation(Graphics g){
+		int index=1;
 		for (String s:latencyVals.keySet()){
 			int w  = g.getFontMetrics().stringWidth(s);
-			g.drawString(s, x-latencyX-w+1, y-latencyY-2);
-			g.drawRect(x-latencyX-w, y-latencyY-textHeight, w+4, textHeight); 
-			g.drawLine(x,y,x-latencyX, y-latencyY);
-			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY/2);
+			g.drawString(s, x-latencyX-w+1, y-latencyY*index-2);
+			g.drawRect(x-latencyX-w, y-latencyY*index-textHeight, w+4, textHeight); 
+			g.drawLine(x,y,x-latencyX, y-latencyY*index);
+			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
+			index++;
 		}
 	}
 

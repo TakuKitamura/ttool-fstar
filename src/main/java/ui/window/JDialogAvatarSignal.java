@@ -43,13 +43,15 @@ package ui.window;
 
 import ui.AvatarSignal;
 import ui.util.IconManager;
+import ui.TGComponent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
-
+import java.util.List;
+import java.util.Vector;
 /**
  * Class JDialogAvatarSignal
  * Dialog for managing several string components
@@ -63,8 +65,13 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
     private LinkedList<String> showSignals;
     private String currentSignal;
     private boolean isOut;
+	
+	private TGComponent reference;
+    private Vector<TGComponent> refs;
 
     private boolean cancelled = false;
+
+	private JComboBox<TGComponent> refChecks;
 
     private JPanel panel1;
 
@@ -79,18 +86,22 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
 
 
     /** Creates new form  */
-    public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, LinkedList<AvatarSignal> _signals, boolean _isOut) {
+    public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, LinkedList<AvatarSignal> _signals, boolean _isOut, TGComponent _reference, Vector<TGComponent> _refs) {
 
         super(_f, _title, true);
 
         signals = _signals;
         currentSignal = _currentSignal;
         isOut = _isOut;
+		reference=_reference;
+		refs=_refs;
+
 
         makeSignals();
 
         initComponents();
         myInitComponents();
+
         pack();
     }
 
@@ -126,7 +137,7 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
 
         panel1.setBorder(new javax.swing.border.TitledBorder("Signals"));
 
-        panel1.setPreferredSize(new Dimension(300, 150));
+        panel1.setPreferredSize(new Dimension(500, 250));
 
         // first line panel1
         c1.weighty = 1.0;
@@ -162,6 +173,16 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
         panel1.add(signal, c1);
         //panel1.setEditable(true);
 
+		//Reference to DIPLODOCUS signal
+		c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+		panel1.add(new JLabel("Reference Requirement"),c1);
+		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		refChecks = new JComboBox<TGComponent>(refs);
+		panel1.add(refChecks,c1);
+
+
         // main panel;
         c0.gridwidth = 1;
         c0.gridheight = 10;
@@ -170,6 +191,9 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 
         c.add(panel1, c0);
+
+
+
 
         c0.gridwidth = 1;
         c0.gridheight = 1;
@@ -209,6 +233,11 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
     public String getSignal() {
         return signal.getText();
     }
+	
+	public TGComponent getReference(){
+		return (TGComponent) refChecks.getSelectedItem();
+	}
+
 
     public boolean hasValidString() {
         return signal.getText().length() > 0;

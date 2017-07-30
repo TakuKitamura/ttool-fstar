@@ -47,11 +47,17 @@ import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarSignal;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
+
+import ui.tmlad.TMLADReadChannel;
 /**
  * Class AvatarSMDReceiveSignal
  * Action of receiving a signal
@@ -67,8 +73,9 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
     protected int linebreak = 10;
 	protected int textX1 = 2;
    
-	private HashMap<String, String> latencyVals;
-	
+	private ConcurrentHashMap<String, String> latencyVals;
+	private TGComponent reference;	
+
 	protected int latencyX=30;
 	protected int latencyY=10;
 	protected int textWidth=10;
@@ -99,7 +106,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         //makeValue();
         
         myImageIcon = IconManager.imgic908;
-		latencyVals = new HashMap<String, String>();
+		latencyVals = new ConcurrentHashMap<String, String>();
 		//latencyVals.put("sendChannel: sensorData", "15");
     }
     
@@ -168,27 +175,46 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         g.drawString(value, x + linebreak + textX1, y + textY);
 		//System.out.println(getDIPLOID());
 		if (getCheckLatency()){
-			String[] latency =tdp.getMGUI().getLatencyVals(getAVATARID());
+			ConcurrentHashMap<String, String> latency =tdp.getMGUI().getLatencyVals(getAVATARID());
 			if (latency!=null){
-				addLatency(latency[0], latency[1]);
+				latencyVals=latency;
 				drawLatencyInformation(g);
 			}
 		}
 		
     }
 	public void drawLatencyInformation(Graphics g){
+		int index=1;
 		for (String s:latencyVals.keySet()){
 			int w  = g.getFontMetrics().stringWidth(s);
-			g.drawString(s, x-latencyX-w+1, y-latencyY-2);
-			g.drawRect(x-latencyX-w, y-latencyY-textHeight, w+4, textHeight); 
-			g.drawLine(x,y,x-latencyX, y-latencyY);
+			g.drawString(s, x-latencyX-w+1, y-latencyY*index-2);
+			g.drawRect(x-latencyX-w, y-latencyY*index-textHeight, w+4, textHeight); 
+			g.drawLine(x,y,x-latencyX, y-latencyY*index);
 			Color c = g.getColor();
-			g.setColor(Color.RED);
-			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY/2);
+			if (reference instanceof TMLADReadChannel){
+			//	System.out.println("ref " + reference.toString().split(": ")[1].split("\\(")[0] + " " + s.split("-")[1].split(":")[0]);
+				TMLADReadChannel rc = (TMLADReadChannel) reference;
+				ConcurrentHashMap<String, String> refLats =rc.getLatencyMap();
+				//System.out.println("referencelats " + refLats);
+				for (String checkpoint:refLats.keySet()){
+					if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split("channel:")[1].split(" ")[0])){
+						String time=refLats.get(checkpoint);
+						int tdip= Integer.valueOf(time);
+						int tav=Integer.valueOf(latencyVals.get(s));
+						if (Math.abs(tdip-tav)>tdip){
+							g.setColor(Color.RED);		
+						}
+						else {
+							g.setColor(Color.GREEN);
+						}
+					}
+				}
+			}
+			System.out.println("drawing...");
+			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
 			g.setColor(c);
 		}
 	}
-
     
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
@@ -259,9 +285,17 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		LinkedList<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
 		TraceManager.addDev("Nb of signals:" + signals.size());
 		
-		JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting receive signal",  value, signals, false);
+
+		ArrayList<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
+		Vector<TGComponent> refs = new Vector<TGComponent>();
+		for (TGComponent tg:comps){
+			if (tg instanceof TMLADReadChannel){
+				refs.add(tg);
+			}
+		}
+		JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting receive signal",  value, signals, false, reference, refs);
 		//jdas.setSize(350, 300);
-        GraphicLib.centerOnParent(jdas, 350, 300);
+        GraphicLib.centerOnParent(jdas, 550, 300);
         jdas.setVisible( true ); // blocked until dialog has been closed
 		
 		if (jdas.hasBeenCancelled()) {
@@ -269,7 +303,9 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		}
 		
 		String val = jdas.getSignal();
-		
+		if (jdas.getReference()!=null){
+			reference = jdas.getReference();
+		}
 		if (val.indexOf('(') == -1) {
 			val += "()";
 		}
