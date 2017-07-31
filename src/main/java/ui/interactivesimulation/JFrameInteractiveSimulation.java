@@ -2422,10 +2422,34 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         }
     }
 
-    public void sendSaveTraceCommand(String format) {
-        String param = saveFileName.getText().trim();
+    private void saveTraceVCD() {
+    	sendSaveTraceCommand( manageFileExtension( saveFileName.getText(), ".vcd" ), "0" );
+    }
+
+    private void saveTraceHTML() {
+    	sendSaveTraceCommand( manageFileExtension( saveFileName.getText(), ".html" ), "1" );
+    }
+
+    private void saveTraceText() {
+    	sendSaveTraceCommand( manageFileExtension( saveFileName.getText(), ".txt" ), "2" );
+    }
+    
+    private String manageFileExtension( String filename,
+    									final String extension ) {
+    	filename = filename.trim();
+    	
+    	if ( !filename.isEmpty() && !filename.endsWith( extension ) ) {
+    		return filename.concat( extension );
+    	}
+    
+    	return filename;
+    }
+
+    private void sendSaveTraceCommand( 	String filename,
+    									final String format) {
+//        String param = saveFileName.getText().trim();
         
-        if ( param.isEmpty() ) {
+        if ( filename.isEmpty() ) {
         	final String message = "Please enter a file name for the trace.";
         	JOptionPane.showMessageDialog( this, message, "Output File Name not Specified", JOptionPane.ERROR_MESSAGE );
         	error( message );
@@ -2434,12 +2458,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         	final String directory = saveDirName.getText().trim();
         	
 	        if ( !directory.isEmpty() ) {
-	            param = directory + File.separator + param;
+	        	filename = directory + File.separator + filename;
 	        }
 
 	        // DB: now useless check
 //	        if (param.length() >0) {
-	        sendCommand( "save-trace-in-file" + " " + format + " " + param );
+	        sendCommand( "save-trace-in-file" + " " + format + " " + filename );
 //	        } else {
 //	            error("Wrong parameter: must be a file name");
 //	        }
@@ -3099,11 +3123,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS].getActionCommand()))  {
             runUntilChannelAccess();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_VCD].getActionCommand()))  {
-            sendSaveTraceCommand("0");
+            saveTraceVCD();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_HTML].getActionCommand()))  {
-            sendSaveTraceCommand("1");
+            saveTraceHTML();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand()))  {
-            sendSaveTraceCommand("2");
+            saveTraceText();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_STATE].getActionCommand()))  {
             sendSaveStateCommand();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESTORE_STATE].getActionCommand()))  {
