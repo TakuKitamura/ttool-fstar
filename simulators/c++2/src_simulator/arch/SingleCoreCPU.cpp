@@ -335,48 +335,79 @@ void SingleCoreCPU::schedule2HTML(std::ofstream& myfile) const{
   //if (_transactList.empty()) return;
   //std::cout << "0. size: " << _transactList.size() << '\n';
   myfile << "<h2><span>Scheduling for device: "<< _name <<"</span></h2>\n<table>\n<tr>";
+
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     aCurrTrans=*i;
     //if (aCurrTrans->getVirtualLength()==0) continue;
     aBlanks=aCurrTrans->getStartTime()-aCurrTime;
     if (aBlanks>0){
-      if (aBlanks==1)
-        myfile << "<td title=\"idle time\" class=\"not\"></td>\n";
-      else
-        myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
+
+    	// Issue #4
+		writeColums( myfile, aBlanks, "not", "idle time" );
+//      if (aBlanks==1)
+//        myfile << "<td title=\"idle time\" class=\"not\"></td>\n";
+//      else
+//        myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
     }
-    aLength=aCurrTrans->getPenalties();
-    if (aLength!=0){
-      if (aLength==1){
-        //myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t15\"></td>\n";
-        //myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
-        myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
-      }else{
-        //myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
-        myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
-      }
+
+    aLength = aCurrTrans->getPenalties();
+
+    if ( aLength != 0 ) {
+    	// Issue #4
+        std::ostringstream title;
+        title << "idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty();
+		writeColums( myfile, aLength, "not", title.str() );
+//      if (aLength==1){
+//        //myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t15\"></td>\n";
+//        //myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
+//        myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
+//      }else{
+//        //myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
+//        myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
+//      }
     }
-    aLength=aCurrTrans->getOperationLength();
-    aColor=aCurrTrans->getCommand()->getTask()->getInstanceNo() & 15;
-    if (aLength==1)
-      myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
-    else
-      myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+
+    aLength = aCurrTrans->getOperationLength();
+    aColor = aCurrTrans->getCommand()->getTask()->getInstanceNo() & NB_HTML_COLORS;
+    std::ostringstream cellClass;
+    cellClass << "t" << aColor;
+
+    writeColums( myfile, aLength, cellClass.str(), aCurrTrans->toShortString() );
+//
+//    if ( aLength == 1 )
+//      myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+//    else
+//      myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
 
 
-    aCurrTime=aCurrTrans->getEndTime();
+    aCurrTime = aCurrTrans->getEndTime();
     //std::cout << "end time: " << aCurrTrans->getEndTime() << std::endl;
   }
   //std::cout << "acurrTime: " << aCurrTime << std::endl;
   myfile << "</tr>\n<tr>";
-  for(aLength=0;aLength<aCurrTime;aLength++) myfile << "<th></th>";
-  myfile << "</tr>\n<tr>";
-  for(aLength=0;aLength<aCurrTime;aLength+=5) myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
-  myfile << "</tr>\n</table>\n<table>\n<tr>";
-  for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
-    aColor=(*j)->getInstanceNo() & 15;
-    myfile << "<td class=\"t"<< aColor <<"\"></td><td>"<< (*j)->toString() << "</td><td class=\"space\"></td>\n";
+
+  for ( aLength = 0; aLength < aCurrTime; aLength++ ) {
+	  myfile << "<th></th>";
   }
+
+  myfile << "</tr>\n<tr>";
+
+  for ( aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
+	  std::ostringstream spanVal;
+	  spanVal << aLength;
+	  writeColums( myfile, 5, "sc", "", spanVal.str(), false );
+	  //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
+  }
+
+  myfile << "</tr>\n</table>\n<table>\n<tr>";
+
+  for( TaskList::const_iterator j = _taskList.begin(); j != _taskList.end(); ++j ) {
+	  unsigned int instNumber = (*j)->getInstanceNo() - 1;
+	  aColor = instNumber % NB_HTML_COLORS;
+    							// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
+	  myfile << "<td class=\"t" << aColor << "\"></td><td style=\"max-width: unset;\">" << (*j)->toString() << "</td><td class=\"space\"></td>\n";
+  }
+
   myfile << "</tr>";
 #ifdef ADD_COMMENTS
   bool aMoreComments=true, aInit=true;
@@ -429,15 +460,15 @@ int SingleCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) cons
 }
 
 void SingleCoreCPU::latencies2XML(std::ostringstream& glob, int id1, int id2) {
+	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+		if ((*i)->getCommand() !=NULL){
+			if ((*i)->getCommand()->getID() == id1 || (*i)->getCommand()->getID() == id2){
+				(*i)->toXML(glob, 1, _name);
+			}
+		}
+	}
 
-  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
-	if ((*i)->getCommand() !=NULL){
-	if ((*i)->getCommand()->getID() == id1 || (*i)->getCommand()->getID() == id2){
-	    (*i)->toXML(glob, 1, _name);
-	}
-	}
-  }
-  return;
+	return;
 }
 
 

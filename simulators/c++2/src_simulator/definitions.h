@@ -225,9 +225,17 @@ using std::max;
 #define TAG_ENERGYo "<energy>"
 #define TAG_ENERGYc "</energy>"
 
-// Issue #4 HTML Trace Constants
 #define EXT_SEP "."
-#define CSS "css"
+#define EXT_VCD ".vcd"
+#define EXT_TXT ".txt"
+#define EXT_HTML ".html"
+#define EXT_CSS ".css"
+
+// Issue #4 HTML Trace Constants
+#define MAX_COL_SPAN 1000
+#define START_TD "<td"
+#define END_TD "</td>"
+
 #define SCHED_CSS_FILE_NAME "schedstyle.css"
 #define SCHED_HTML_DOC "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
 #define SCHED_HTML_BEG_HTML "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n"
@@ -243,7 +251,7 @@ using std::max;
 #define SCHED_HTML_END_STYLE "</style>\n"
 #define SCHED_HTML_CSS_BEG_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
 #define SCHED_HTML_CSS_END_LINK "\" />\n"
-
+#define NB_HTML_COLORS 15
 #define SCHED_HTML_CSS_CONTENT "table{\n \
 	border-collapse: collapse;\n \
 	empty-cells: show;\n \
@@ -252,6 +260,7 @@ using std::max;
 td{\n \
 	padding: 10px 5px;\n \
 	border: 1px solid black;\n \
+	max-width: 5px;\n \
 }\n \
 th{\n \
 	padding: 5px;\n \
@@ -277,22 +286,213 @@ h2 span {\n \
 }\n \
 .space{border-style: none;}\n \
 .not{background-color: white;}\n \
-.t1{background-color: yellow;}\n \
-.t2{background-color: purple;}\n \
-.t3{background-color: red;}\n \
-.t4{background-color: silver;}\n \
-.t5{background-color: teal;}\n \
-.t6{background-color: aqua;}\n \
-.t7{background-color: olive;}\n \
-.t8{background-color: navy;}\n \
-.t9{background-color: maroon;}\n \
-.t10{background-color: lime;}\n \
-.t11{background-color: green;}\n \
-.t12{background-color: gray;}\n \
-.t13{background-color: fuchsia;}\n \
-.t14{background-color: blue;}\n \
-.t15{background-color: black;}\n \
-.t16{background-color: white;}"
+.notfirst {\n \
+	background-color: white;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.notmid {\n \
+	background-color: white;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.notlast {\n \
+	background-color: white;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t0{background-color: yellow;}\n \
+.t0first {\n \
+	background-color: yellow;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t0mid {\n \
+	background-color: yellow;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t0last {\n \
+	background-color: yellow;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t1{background-color: purple;}\n \
+.t1first {\n \
+	background-color: purple;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t1mid {\n \
+	background-color: purple;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t1last {\n \
+	background-color: purple;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t2{background-color: red;}\n \
+.t2first {\n \
+	background-color: red;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t2mid {\n \
+	background-color: red;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t2last {\n \
+	background-color: red;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t3{background-color: silver;}\n \
+.t3first {\n \
+	background-color: silver;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t3mid {\n \
+	background-color: silver;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t3last {\n \
+	background-color: silver;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t4{background-color: teal;}\n \
+.t4first {\n \
+	background-color: teal;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t4mid {\n \
+	background-color: teal;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t4last {\n \
+	background-color: teal;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t5{background-color: aqua;}\n \
+.t5first {\n \
+	background-color: aqua;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t5mid {\n \
+	background-color: aqua;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t5last {\n \
+	background-color: aqua;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t6{background-color: olive;}\n \
+.t6first {\n \
+	background-color: olive;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t6mid {\n \
+	background-color: olive;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t6last {\n \
+	background-color: olive;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t7{background-color: navy;}\n \
+.t7first {\n \
+	background-color: navy;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t7mid {\n \
+	background-color: navy;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t7last {\n \
+	background-color: navy;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t8{background-color: maroon;}\n \
+.t8first {\n \
+	background-color: maroon;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t8mid {\n \
+	background-color: maroon;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t8last {\n \
+	background-color: maroon;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t9{background-color: lime;}\n \
+.t9first {\n \
+	background-color: lime;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t9mid {\n \
+	background-color: lime;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t9last {\n \
+	background-color: lime;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t10{background-color: green;}\n \
+.t10first {\n \
+	background-color: green;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t10mid {\n \
+	background-color: green;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t10last {\n \
+	background-color: green;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t11{background-color: gray;}\n \
+.t11first {\n \
+	background-color: gray;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t11mid {\n \
+	background-color: gray;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t11last {\n \
+	background-color: gray;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t12{background-color: fuchsia;}\n \
+.t12first {\n \
+	background-color: fuchsia;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t12mid {\n \
+	background-color: fuchsia;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t12last {\n \
+	background-color: fuchsia;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t13{background-color: blue;}\n \
+.t13first {\n \
+	background-color: blue;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t13mid {\n \
+	background-color: blue;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t13last {\n \
+	background-color: blue;\n \
+	border-style: solid solid solid none;\n \
+}\n \
+.t14{background-color: black;}\n \
+.t14first {\n \
+	background-color: black;\n \
+	border-style: solid none solid solid;\n \
+}\n \
+.t14mid {\n \
+	background-color: black;\n \
+	border-style: solid none solid none;\n \
+}\n \
+.t14last {\n \
+	background-color: black;\n \
+	border-style: solid solid solid none;\n \
+}"
 
 class TMLTask;
 class TMLTransaction;
