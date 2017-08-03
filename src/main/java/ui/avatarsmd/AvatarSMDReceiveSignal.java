@@ -77,7 +77,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 	private TGComponent reference;	
 
 	protected int latencyX=30;
-	protected int latencyY=10;
+	protected int latencyY=25;
 	protected int textWidth=10;
 	protected int textHeight=20;
 
@@ -210,9 +210,9 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 					}
 				}
 			}
-			System.out.println("drawing...");
 			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
 			g.setColor(c);
+			index++;
 		}
 	}
     
