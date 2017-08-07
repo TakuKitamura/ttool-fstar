@@ -76,7 +76,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
 	private ConcurrentHashMap<String, String> latencyVals;
 		
 	protected int latencyX=30;
-	protected int latencyY=10;
+	protected int latencyY=25;
 	protected int textWidth=10;
 	protected int textHeight=20;
 

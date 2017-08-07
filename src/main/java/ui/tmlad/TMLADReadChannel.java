@@ -73,7 +73,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
     protected int linebreak = 10;
 
 	protected int latencyX=30;
-	protected int latencyY=10;
+	protected int latencyY=25;
 	protected int textWidth=10;
 	protected int textHeight=20;
 
