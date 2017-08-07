@@ -236,10 +236,6 @@ void Simulator::schedule2Graph(std::string& iTraceFileName) const{
   std::cout << "The Graph output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
 
-bool ends_with(std::string const& str, std::string const& suffix) {
-    return suffix.size() <= str.size() && str.find( suffix, str.size() - suffix.size()) != str.npos;
-}
-
 void Simulator::schedule2TXT(std::string& iTraceFileName) const{
   struct timeval aBegin,aEnd;
   gettimeofday(&aBegin,NULL);

@@ -43,8 +43,9 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <MemPoolNoDel.h>
+#include <TMLCommand.h>
 
-class TMLCommand;
+//class TMLCommand;
 class TMLChannel;
 
 class TMLTransaction {

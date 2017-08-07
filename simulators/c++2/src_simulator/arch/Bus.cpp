@@ -144,66 +144,76 @@ std::string Bus::toShortString() const{
 	return outp.str();
 }
 
+// Issue #4: Moved to SchedulableDevice for easier maintenance
 //Writes a HTML representation of the schedule to an output file
-void Bus::schedule2HTML(std::ofstream& myfile) const{
-	TMLTime aCurrTime = 0;
-	TMLTransaction* aCurrTrans;
-	unsigned int aBlanks,aLength,aColor;
-
-	if ( _transactList.empty( )) {
-		return;
-	}
-
-	myfile << "<h2><span>Scheduling for device: "<< _name <<"</span></h2>\n<table>\n<tr>";
-
-	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
-		aCurrTrans = *i;
-		//if (aCurrTrans->getVirtualLength()==0) continue;
-		aBlanks = aCurrTrans->getStartTimeOperation() - aCurrTime;
-
-		if ( aBlanks > 0 ) {
-			writeColums( myfile, aBlanks, "not", "idle time" );
-//			if (aBlanks==1)
-//				myfile << "<td title=\"idle time\" class=\"not\"></td>\n";
-//			else
-//				myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
-		}
-
-		aLength = aCurrTrans->getOperationLength();
-		unsigned int instNumber = aCurrTrans->getCommand()->getTask()->getInstanceNo() - 1;
-		aColor = instNumber % NB_HTML_COLORS;
-	    std::ostringstream cellClass;
-	    cellClass << "t" << aColor;
-
-		writeColums( myfile, aLength, cellClass.str(), aCurrTrans->toShortString() );
+//void Bus::schedule2HTML(std::ofstream& myfile) const{
+//	TMLTime aCurrTime = 0;
+//	TMLTransaction* aCurrTrans;
+//	unsigned int aBlanks, aLength;//,aColor;
 //
-//		if ( aLength==1 ) {
-//			myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+//	std::map<TMLTask*, std::string> taskColors;
+//	unsigned int nextColor = 0;
+//
+//	if ( _transactList.empty( )) {
+//		return;
+//	}
+//
+//	myfile << "<h2><span>Scheduling for device: "<< _name <<"</span></h2>\n<table>\n<tr>";
+//
+//	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+//		aCurrTrans = *i;
+//		//if (aCurrTrans->getVirtualLength()==0) continue;
+//		aBlanks = aCurrTrans->getStartTimeOperation() - aCurrTime;
+//
+//		if ( aBlanks > 0 ) {
+//
+//			// Issue #4
+//			writeActivityRow( myfile, aBlanks, "not", "idle time" );
+////			if (aBlanks==1)
+////				myfile << "<td title=\"idle time\" class=\"not\"></td>\n";
+////			else
+////				myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
 //		}
-//		else {
-//			myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
-//		}
-
-		aCurrTime = aCurrTrans->getEndTime();
-	}
-
-	myfile << "</tr>\n<tr>";
-
-	for ( aLength = 0; aLength < aCurrTime; aLength++ ) {
-		myfile << "<th></th>";
-	}
-
-	myfile << "</tr>\n<tr>";
-
-	for ( aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
-		std::ostringstream spanVal;
-		spanVal << aLength;
-		writeColums( myfile, 5, "sc", "", spanVal.str(), false );
-//		myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
-	}
-
-	myfile << "</tr>\n</table>\n";
-}
+//
+//		aLength = aCurrTrans->getOperationLength();
+//
+//		// Issue #4
+//	    TMLTask* task = aCurrTrans->getCommand()->getTask();
+//	    const std::string cellClass = taskColor( taskColors, task, nextColor );
+//		//unsigned int instNumber = aCurrTrans->getCommand()->getTask()->getInstanceNo() - 1;
+//		//aColor = instNumber % NB_HTML_COLORS;
+////	    std::ostringstream cellClass;
+////	    cellClass << "t" << aColor;
+//
+//		writeActivityRow( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+////
+////		if ( aLength==1 ) {
+////			myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+////		}
+////		else {
+////			myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+////		}
+//
+//		aCurrTime = aCurrTrans->getEndTime();
+//	}
+//
+//	myfile << "</tr>\n<tr>";
+//
+//	for ( aLength = 0; aLength < aCurrTime; aLength++ ) {
+//		myfile << "<th></th>";
+//	}
+//
+//	myfile << "</tr>\n<tr>";
+//
+//	for ( aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
+//		std::ostringstream spanVal;
+//		spanVal << aLength;
+//		writeActivityRow( myfile, 5, "sc", "", spanVal.str(), false );
+////		myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
+//	}
+//
+//	myfile << "</tr>\n</table>\n";
+//}
 
 //Writes a plain text representation of the schedule to an output file
 void Bus::schedule2TXT(std::ofstream& myfile) const{
@@ -231,7 +241,7 @@ int Bus::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const {
   return total;
 }
 
-void Bus::latencies2XML(std::ostringstream& glob, int id1, int id2) {
+void Bus::latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2) {
 
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 	if ((*i)->getCommand() !=NULL){

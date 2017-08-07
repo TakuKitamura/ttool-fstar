@@ -46,8 +46,9 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ListenerSubject.h>
 #include <GeneralListener.h>
 #include <TMLTransaction.h>
+#include <TMLTask.h>
 
-class TMLTask;
+//class TMLTask;
 class TMLChannel;
 class Comment;
 class SimComponents;
@@ -128,7 +129,7 @@ public:
 	\return Short string representation of command type
 	*/
 	virtual std::string getCommandStr() const=0;
-#ifdef ADD_COMMENTS	
+#ifdef ADD_COMMENTS
 	///Translates a comment into a readable string
 	/**
 	\param iCom Pointer to comment

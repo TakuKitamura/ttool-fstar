@@ -480,17 +480,19 @@ h2 span {\n \
 	background-color: blue;\n \
 	border-style: solid solid solid none;\n \
 }\n \
-.t14{background-color: black;}\n \
+.t14{\n \
+	background-color: LightGoldenRodYellow;\n\
+}\n \
 .t14first {\n \
-	background-color: black;\n \
+	background-color: LightGoldenRodYellow;\n \
 	border-style: solid none solid solid;\n \
 }\n \
 .t14mid {\n \
-	background-color: black;\n \
+	background-color: LightGoldenRodYellow;\n \
 	border-style: solid none solid none;\n \
 }\n \
 .t14last {\n \
-	background-color: black;\n \
+	background-color: LightGoldenRodYellow;\n \
 	border-style: solid solid solid none;\n \
 }"
 
@@ -753,6 +755,9 @@ long getTimeDiff(struct timeval& begin, struct timeval& end);
 	\param iReplace String which is filled in
 */
 void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace);
+
+bool ends_with(std::string const& str, std::string const& suffix);
+
 inline std::string vcdValConvert(unsigned int iVal) {if(iVal==1 || iVal==2) return "1"; else return "0";}
 std::string vcdTimeConvert(TMLTime iVal);
 int getexename(char* buf, size_t size);

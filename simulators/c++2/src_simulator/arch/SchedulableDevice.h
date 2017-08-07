@@ -45,15 +45,14 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Serializable.h>
 #include <ListenerSubject.h>
 #include <WorkloadSource.h>
+#include <TMLTransaction.h>
 
 class Master;
-class TMLTransaction;
-//class TransactionListener;
+//class TMLTransaction;
 class GeneralListener;
 
 ///Base class for devices which perform a scheduling
-//class SchedulableDevice: public Serializable, public ListenerSubject <TransactionListener> {
-class SchedulableDevice: public Serializable, public ListenerSubject <GeneralListener> {
+class SchedulableDevice: public Serializable, public ListenerSubject<GeneralListener> {
 public:
 	///Constructor
 	/**
@@ -61,27 +60,27 @@ public:
 	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
 	*/
-	SchedulableDevice(ID iID, std::string iName, WorkloadSource* iScheduler):_ID(iID), _name(iName), _endSchedule(0), _scheduler(iScheduler), _nextTransaction(0), _deleteScheduler(true), _busyCycles(0), _static_consumPerCycle (15), _dynamic_consumPerCycle (35) {
-		_transactList.reserve(BLOCK_SIZE_TRANS);
-	}
+	SchedulableDevice(	ID iID,
+						std::string iName,
+						WorkloadSource* iScheduler );
+
 	///Determines the next transaction to be executed
 	virtual void schedule()=0;
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual bool addTransaction(TMLTransaction* iTransToBeAdded)=0;
+
 	///Returns a pointer to the transaction determined by the scheduling algorithm
     	/**
       	\return Pointer to transaction
     	*/
-	//virtual TMLTransaction* getNextTransaction()=0;
-	virtual TMLTransaction* getNextTransaction(){
-		//std::cout << "Raw version of getNextTransaction " << _nextTransaction << "\n";
-		return _nextTransaction;
-	}
+	virtual TMLTransaction* getNextTransaction() { return _nextTransaction; }
+
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
-	virtual void schedule2HTML(std::ofstream& myfile) const =0;
+	void schedule2HTML(std::ofstream& myfile) const;
+
 	///Writes a plain text representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
@@ -92,93 +91,63 @@ public:
       	\param glob references the output stream object 
     	*/
 	virtual int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const =0;
-	virtual void latencies2XML(std::ostringstream& glob, int id1, int id2)=0;
+	virtual void latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2)=0;
 	virtual std::string toString() const =0;
-	virtual std::istream& readObject(std::istream &is){
-		READ_STREAM(is,_endSchedule);
-		//_simulatedTime=max(_simulatedTime,_endSchedule);   ????????????
-#ifdef DEBUG_SERIALIZE
-		std::cout << "Read: Schedulable Device " << _name << ": " << _endSchedule << std::endl;
-#endif
-		return is;
-	}
-	virtual std::ostream& writeObject(std::ostream &os){
-		WRITE_STREAM(os,_endSchedule);
-#ifdef DEBUG_SERIALIZE
-		std::cout << "Write: Schedulable Device " << _name << ": " << _endSchedule << std::endl;
-#endif
-		return os;
-	}
-	virtual void reset(){
-		_endSchedule=0;
-		_simulatedTime=0;
-	}
-	///Returns the number of simulated clock cycles
+	virtual std::istream& readObject(std::istream &is);
+	virtual std::ostream& writeObject(std::ostream &os);
+	virtual void reset();
+
 	/**
 	\return Number of simulated clock cycles
 	*/
-	static TMLTime getSimulatedTime() {return _simulatedTime;}
+	static TMLTime getSimulatedTime() { return _simulatedTime; }
+
 	///Sets the number of simulated clock cycles
 	/**
 	\param iSimulatedTime Number of simulated clock cycles
 	*/
-	static void setSimulatedTime(TMLTime iSimulatedTime) {
-		//if (iSimulatedTime<_simulatedTime) std::cout << "FAILURE SIMULATION TIME!!!!!!!!!!\n";
-		_simulatedTime=iSimulatedTime;
-	}
+	static void setSimulatedTime( TMLTime iSimulatedTime ) { _simulatedTime=iSimulatedTime; }
+
 	///Returns the unique ID of the device
 	/**
       	\return Unique ID
     	*/ 
-	ID getID() const {return _ID;}
+	ID getID() const { return _ID; }
+
 	///Destructor
-	virtual ~SchedulableDevice(){
-		if (_scheduler!=0 && _deleteScheduler) delete _scheduler; 
-	}
+	virtual ~SchedulableDevice();
+
 	///Returns the end time of the last scheduled transaction of the device 
 	/**
       	\return End time of the last scheduled transaction
     	*/ 
-	TMLTime getEndSchedule(){return _endSchedule;}
+	TMLTime getEndSchedule(){ return _endSchedule; }
 	///Sets the scheduler object
 	/**
 	\param iScheduler Pointer to the scheduler object 
 	\param iDelScheduler Determines whether the scheduler is destroyed upon destruction of the device
 	*/
-	void setScheduler(WorkloadSource* iScheduler, bool iDelScheduler=true){ _scheduler=iScheduler; _deleteScheduler=iDelScheduler;}
+	void setScheduler(WorkloadSource* iScheduler, bool iDelScheduler=true){ _scheduler=iScheduler; _deleteScheduler=iDelScheduler; }
 	///Returns a pointer to the scheduler object
 	/**
 	\return Pointer to the scheduler object 
 	*/
-	WorkloadSource* getScheduler(){ return _scheduler;}
+	WorkloadSource* getScheduler(){ return _scheduler; }
+
 	///Returns the scheduled transaction one after another
 	/**
       	\param iInit If init is true, the methods starts from the first transaction 
 	\return Pointer to the next transaction
     	*/
-	TMLTransaction* getTransactions1By1(bool iInit){
-		if (iInit) _posTrasactListGraph=_transactList.begin();
-		if (_posTrasactListGraph == _transactList.end()) return 0; 
-		TMLTransaction* aTrans = *_posTrasactListGraph;
-		_posTrasactListGraph++;
-		return aTrans;
-	}
+	TMLTransaction* getTransactions1By1( bool iInit );
 	
-	void addRawTransaction(TMLTransaction* iTrans){
-		_transactList.push_back(iTrans);
-	}
+	void addRawTransaction(TMLTransaction* iTrans){ _transactList.push_back(iTrans);}
 	
-	TMLTime getBusyCycles(){
-		return _busyCycles;
-	}
+	TMLTime getBusyCycles(){	return _busyCycles;	}
 	
-	static TMLTime getOverallTransNo(){
-		return _overallTransNo;
-	}
+	static TMLTime getOverallTransNo() { return _overallTransNo; }
 	
-	static TMLTime getOverallTransSize(){
-		return _overallTransSize;
-	}
+	static TMLTime getOverallTransSize() { return _overallTransSize; }
 	
 protected:
 	///Unique ID of the device
@@ -202,86 +171,29 @@ protected:
 	///Busy cycles since simulation start
 	TMLTime _busyCycles;
 	unsigned int _static_consumPerCycle; 
-        unsigned int _dynamic_consumPerCycle; 
+    unsigned int _dynamic_consumPerCycle;
 	static TMLTime _overallTransNo;
 	static TMLTime _overallTransSize;
 
-	// Issue #4: Some browsers (like Firefox) do not support column spans of more than 1000 columns
-	void writeColums(	std::ofstream& myfile,
-						const unsigned int colSpan,
-						const std::string cellClass ) const {
-		writeColums( myfile, colSpan, cellClass, "" );
-	}
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass );
 
-	void writeColums(	std::ofstream& myfile,
-						const unsigned int colSpan,
-						const std::string cellClass,
-						const std::string title ) const {
-		writeColums( myfile, colSpan, cellClass, title, "", true );
-	}
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title );
 
-	void writeColums(	std::ofstream& myfile,
-						const unsigned int colSpan,
-						const std::string cellClass,
-						const std::string title,
-						const std::string content,
-						const bool endline ) const {
-		std::string begLine( START_TD );
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title,
+									const std::string content,
+									const bool endline );
 
-		if ( !title.empty() ) {
-			begLine.append( " title=\"" );
-			begLine.append( title );
-			begLine.append( "\"" );
-		}
-
-		begLine.append( " class=\"" );
-
-		if ( colSpan == 1 ) {
-			begLine.append( cellClass );
-			begLine.append( "\"" );
-			myfile << begLine << ">" << END_TD;
-
-			if ( endline ) {
-				myfile << std::endl;
-			}
-		}
-		else {
-			int actualLength = colSpan;
-			bool first = true;
-			bool last = false;
-
-			do {
-				last = actualLength <= MAX_COL_SPAN;
-				std::string clasVal( cellClass );
-
-				if ( first && !last ) {
-					clasVal.append( "first" );
-					first = false;
-				}
-				else if ( last && !first ) {
-					clasVal.append( "last" );
-				}
-				else if ( !last && !first ) {
-					clasVal.append( "mid" );
-				}
-
-				clasVal.append( "\"" );
-
-				std::string colSpan( " colspan=\"" );
-				std::ostringstream spanVal;
-				spanVal << std::min( MAX_COL_SPAN, actualLength ) <<  "\"";
-				colSpan.append( spanVal.str() );
-
-				myfile << begLine << clasVal << colSpan << ">" << content << END_TD;
-
-				if ( last && endline ) {
-					myfile << std::endl;
-				}
-
-				actualLength -= MAX_COL_SPAN;
-			} while ( !last );
-		}
-	}
+	static std::string determineHTMLCellClass( 	std::map<TMLTask*, std::string> &taskColors,
+												TMLTask* task,
+												unsigned int &nextColor );
 };
 
 #endif
