@@ -713,8 +713,8 @@ public class BoolExpressionEvaluator {
         _expr = Conversion.replaceAllString(_expr, "and", "&").trim();
         _expr = Conversion.replaceAllString(_expr, "==", "=").trim();
         _expr = Conversion.replaceAllString(_expr, "!=", "$").trim();
-        //_expr = Conversion.replaceAllString(_expr, ">=", ":").trim();
-        //_expr = Conversion.replaceAllString(_expr, "<=", ";").trim();
+        _expr = Conversion.replaceAllString(_expr, ">=", ":").trim();
+        _expr = Conversion.replaceAllString(_expr, "<=", ";").trim();
 
         // For not() -> must find the closing bracket
 

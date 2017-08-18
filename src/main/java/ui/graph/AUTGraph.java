@@ -268,6 +268,10 @@ public class AUTGraph implements myutil.Graph {
         statesComputed = false;
     }
 
+    public void addState(AUTState _st) {
+	states.add(_st);
+    }
+
 
 
     public int getNbPotentialDeadlocks(){
@@ -1313,6 +1317,57 @@ public class AUTGraph implements myutil.Graph {
 
         //TraceManager.addDev("New graph: " + toFullString());
 
+    }
+
+
+    public AUTGraph generateRefusalGraph() {
+	computeStates();
+	
+	AUTState currentState = new AUTState(0);
+	ArrayList<AUTState> newStates = new ArrayList<AUTState>();
+	ArrayList<AUTTransition> newTransitions = new ArrayList<AUTTransition>();
+	newStates.add(currentState);
+
+	// We go thru the graph, starting at state1. Each time we meet an already handled state, we stop.
+	HashSet<AUTState> metStates = new HashSet<AUTState>(); // in origin Graph
+	HashMap<AUTState, AUTState> toRefusalState = new HashMap<AUTState, AUTState>();
+	LinkedList<AUTState> toHandle = new LinkedList<AUTState>();
+	toHandle.add(states.get(0));
+	toRefusalState.put(states.get(0), currentState);
+
+	while(toHandle.size() > 0) {
+	    AUTState current = toHandle.get(0);
+	    toHandle.remove(0);
+	    metStates.add(current);
+	    AUTState currentRefusal = toRefusalState.get(current);
+	    if (currentRefusal == null) {
+		TraceManager.addDev("NULL current Refusal");
+	    } else {	
+		// For each possible transition, we create a new transition to a new destination state
+		for(AUTTransition tr: current.outTransitions) {
+		    // Create new transition. Is a new staqte necessary?
+		    AUTState destState = states.get(tr.destination);
+		    AUTState stRefusal;
+		    stRefusal = new AUTState(newStates.size());
+		    newStates.add(stRefusal);
+		    toRefusalState.put(destState, stRefusal);
+		    AUTTransition trRefusal = new AUTTransition(current.id, tr.transition, stRefusal.id);
+		    newTransitions.add(trRefusal);
+		    stRefusal.addInTransition(trRefusal);
+		    currentRefusal.addOutTransition(trRefusal);
+
+		    if (!metStates.contains(destState)) {
+			if (!(toHandle.contains(destState))) {
+			    toHandle.add(destState);
+			}
+		    }
+		    
+		}
+	    }
+	}
+	AUTGraph refusalGraph = new AUTGraph(newStates, newTransitions);
+	
+	return refusalGraph;
     }
 
 

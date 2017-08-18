@@ -41,6 +41,8 @@
 
 package ui.graph;
 
+import myutil.*;
+
 /**
    * Class RG
    * Creation : 07/12/2016
@@ -69,6 +71,28 @@ public class RG {
 	    return name;
 	}
 	return name + " " + nbOfStates + " states, " + nbOfTransitions + " transitions";
+    }
+
+    public RG generateRefusalGraph() {
+	if (graph == null) {
+	    if (data == null){
+		return null;
+	    }
+	    graph = new AUTGraph();
+	    graph.buildGraph(data);
+	}
+
+	TraceManager.addDev("Making Ref. G");
+	AUTGraph refusalGraph = graph.generateRefusalGraph();
+	//TraceManager.addDev("Null graph?");
+	if (refusalGraph == null) {
+	    TraceManager.addDev("Null graph...");
+	    return null;
+	}
+
+	RG ret = new RG(name+"_RF");
+	ret.graph = refusalGraph;
+	return ret;
     }
 
 }

@@ -686,6 +686,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         jfm.setVisible(true);
     }
 
+    public void makeRefusalGraph(RG inputGraph) {
+        JFrameRefusalGraph jfm = new JFrameRefusalGraph(frame, this, "Refusal Graph Construction", inputGraph);
+        //jfm.setSize(900, 700);
+        GraphicLib.centerOnParent(jfm, 900, 700);
+        jfm.setVisible(true);
+    }
+
 
     public void setCurrentInvariant(Invariant inv) {
         currentInvariant = inv;
