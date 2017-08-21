@@ -84,6 +84,19 @@ public class AUTState implements Comparable<AUTState> {
         return outTransitions.size();
     }
 
+    public boolean isTerminationState() {
+	return (outTransitions.size() == 0);
+    }
+
+    public AUTTransition getTransitionTo(int destination) {
+	for(AUTTransition tr: outTransitions) {
+            if (tr.destination == destination) {
+                return tr;
+            }
+        }
+        return null;
+    }
+
     public boolean hasTransitionTo(int destination) {
         for(AUTTransition aut1 : outTransitions) {
             if (aut1.destination == destination) {

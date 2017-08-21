@@ -74,6 +74,7 @@ public class JFrameRefusalGraph extends javax.swing.JFrame implements ActionList
     private MainGUI mgui;
     private RG rg;
     private RG newRG;
+    private RG newRGTS;
     
     protected Thread t;
 
@@ -123,7 +124,7 @@ public class JFrameRefusalGraph extends javax.swing.JFrame implements ActionList
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
-        jta.append("Select actions and then, click on 'start' to start minimization\n");
+        jta.append("Select actions and then, click on 'start' to generate test sequences\n");
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
         JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -226,6 +227,13 @@ public class JFrameRefusalGraph extends javax.swing.JFrame implements ActionList
 	    newRG.nbOfTransitions = newRG.graph.getTransitions().size();
 	    mgui.addRG(newRG);
 	    jta.append("\nRefusal Graph: " + newRG.nbOfStates + " states, " + newRG.nbOfTransitions + " transitions\n");
+	    jta.append("Generating test sequences\n");
+	    newRGTS = newRG.generateTestSequences();
+	    newRGTS.nbOfStates = newRGTS.graph.getNbOfStates();
+	    newRGTS.nbOfTransitions = newRGTS.graph.getTransitions().size();
+	    mgui.addRG(newRGTS);
+	    jta.append("\nTest sequences: " + newRGTS.nbOfStates + " states, " + newRGTS.nbOfTransitions + " transitions\n");
+	    
 	} else {
 	    jta.append("\nCould not build Refusal Graph\n"); 
 	}

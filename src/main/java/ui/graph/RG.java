@@ -95,4 +95,26 @@ public class RG {
 	return ret;
     }
 
+    public RG generateTestSequences() {
+	if (graph == null) {
+	    if (data == null){
+		return null;
+	    }
+	    graph = new AUTGraph();
+	    graph.buildGraph(data);
+	}
+
+	TraceManager.addDev("Making Test sequences");
+	AUTGraph testSequencesGraph = graph.makeTestSequencesFromRefusalGraph();
+	//TraceManager.addDev("Null graph?");
+	if (testSequencesGraph == null) {
+	    TraceManager.addDev("Null graph...");
+	    return null;
+	}
+
+	RG ret = new RG(name+"_Test");
+	ret.graph = testSequencesGraph;
+	return ret;
+    }
+
 }

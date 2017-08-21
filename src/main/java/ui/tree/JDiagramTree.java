@@ -193,7 +193,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 jmiShow.addActionListener(this);
                 jmiMinimize = new JMenuItem("Minimize");
                 jmiMinimize.addActionListener(this);
-		jmiRefusalGraph = new JMenuItem("Make Refusal Graph");
+		jmiRefusalGraph = new JMenuItem("Make Test Sequences");
                 jmiRefusalGraph.addActionListener(this);
                 jmiRemove = new JMenuItem("Remove from tree");
                 jmiRemove.addActionListener(this);

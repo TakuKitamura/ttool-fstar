@@ -42,7 +42,7 @@
 package ui.graph;
 
 import myutil.Conversion;
-import myutil.GraphAlgorithms;
+import myutil.*;
 import myutil.TraceManager;
 
 import java.io.BufferedReader;
@@ -1368,6 +1368,64 @@ public class AUTGraph implements myutil.Graph {
 	AUTGraph refusalGraph = new AUTGraph(newStates, newTransitions);
 	
 	return refusalGraph;
+    }
+
+
+
+    public AUTGraph makeTestSequencesFromRefusalGraph() {
+	ArrayList<AUTState> newStates = new ArrayList<AUTState>();
+	ArrayList<AUTTransition> newTransitions = new ArrayList<AUTTransition>();
+	AUTState firstState = new AUTState(0);
+	newStates.add(firstState);
+
+	// Take all termination states of the refusal graph and get the shortest path
+	// from the first state to this termination state
+	// Add this path as a new path of the new graph
+
+	computeStates();
+
+	DijkstraState[] allPaths = GraphAlgorithms.ShortestPathFrom(this, 0);
+
+	for(AUTState state: states) {
+	    if (state.isTerminationState()) {
+		int[] path = allPaths[state.id].path;
+		if (path != null) {
+		    AUTState currentStateN = firstState;
+		    // We create a corresponding path in the new graph.
+		    String s = "";
+		    for(int j=0; j<path.length; j++) {
+			s += path[j] + " ";
+		    }
+		    TraceManager.addDev("path=" + s);
+		    for(int i=1; i<path.length; i++) {
+			AUTState currentState = states.get(path[i-1]);
+			AUTState nextState = states.get(path[i]);
+			
+			AUTTransition tr = currentState.getTransitionTo(nextState.id);
+			TraceManager.addDev("Looking for transition");
+			if (tr != null) {
+			    // We need to create the destination state
+			    AUTState newDest = new AUTState(newStates.size());
+			    newStates.add(newDest);
+			    AUTTransition newTr = new AUTTransition(currentStateN.id, tr.transition, newDest.id);
+			    newTransitions.add(newTr);
+			    TraceManager.addDev("Adding transition:" + newTr);
+			    currentStateN = newDest;
+			} else {
+			    TraceManager.addDev(" -> null transitions");
+			}
+		    }
+		}
+	    }
+	}
+	
+
+
+	// Making the graph
+	AUTGraph testGraph = new AUTGraph(newStates, newTransitions);
+	
+	return testGraph;
+	
     }
 
 

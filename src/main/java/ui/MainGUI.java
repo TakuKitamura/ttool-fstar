@@ -687,7 +687,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void makeRefusalGraph(RG inputGraph) {
-        JFrameRefusalGraph jfm = new JFrameRefusalGraph(frame, this, "Refusal Graph Construction", inputGraph);
+        JFrameRefusalGraph jfm = new JFrameRefusalGraph(frame, this, "Test Sequences Construction", inputGraph);
         //jfm.setSize(900, 700);
         GraphicLib.centerOnParent(jfm, 900, 700);
         jfm.setVisible(true);
