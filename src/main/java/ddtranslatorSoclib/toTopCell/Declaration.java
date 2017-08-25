@@ -213,9 +213,22 @@ if(nb_clusters==0){
 	  */
 
 	  //only non-clustered version
+	 int i=0;
 	  for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
-		      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+copro.getSrcid() + "), IntTab("+copro.getTgtid() + "),copro.getPlaps(),copro.getFifoToCoProcDepth(),copro.getNToCopro(),copro.getNFromCopro(),copro.getNConfig(),copro.getNStatus(), copro.getUseLLSC());"+ CR;
+	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+copro.getSrcid() + "), IntTab("+copro.getTgtid() + "),copro.getPlaps(),copro.getFifoToCoProcDepth(),copro.getNToCopro(),copro.getNFromCopro(),copro.getNConfig(),copro.getNStatus(), copro.getUseLLSC());"+ CR;
 	
+
+	      //one virtual component for each hardware accellerator
+	      declaration += "caba::FifoVirtualCoprocessorWrapper(\"hwa"+i+"\",1,1,1,1);"+ CR;
+
+//DG 23.08. a adapter
+/*fifos_out,
+        fifos_out_width,
+        fifos_in,
+        fifos_in_width)*/
+
+i++;
+
 	  }
 }
 else {

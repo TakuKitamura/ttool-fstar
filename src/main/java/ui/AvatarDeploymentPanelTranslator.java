@@ -243,9 +243,12 @@ public class AvatarDeploymentPanelTranslator {
 				int nStatus = addCoproMWMRNode.getNStatus(); // nb of status registers
 				boolean useLLSC = addCoproMWMRNode.getUseLLSC(); // more efficient protocol. 0: not used. 1 or more -> used
 
+				//	System.out.println("$$$$$$$$$$$Hardware Accelerator found$$$$$$$$$$$");
+
 				AvatarCoproMWMR acpMWMR;
 				acpMWMR = new AvatarCoproMWMR(timerName, srcid, srcid, tgtid, plaps, fifoToCoprocDepth, fifoFromCoprocDepth, nToCopro, nFromCopro, nConfig, nStatus, useLLSC);
 				avatarMap.put(dp, acpMWMR);
+				avatarComponents.add(acpMWMR);
 
 			} else if (dp instanceof ADDMemoryNode) {
 
@@ -255,7 +258,7 @@ public class AvatarDeploymentPanelTranslator {
 					String name = addRamNode.getNodeName();
 					int index = addRamNode.getIndex();
 					int byteDataSize = addRamNode.getDataSize();
-
+					System.out.println("ADD RAM Data Size" + byteDataSize);
 					//int monitored = addRamNode.getMonitored();
   System.out.println("ADD RAM  monitored "+ addRamNode.getMonitored());
   AvatarRAM avram = new AvatarRAM(name, index, byteDataSize, index, index, addRamNode.getMonitored());//DG 3.7.

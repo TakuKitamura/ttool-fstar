@@ -48,6 +48,8 @@
 
 package ddtranslatorSoclib.toTopCell;
 
+import ddtranslatorSoclib.*; //DG 23.08.
+
 public class Header {
 	
     static private String header;
@@ -89,7 +91,27 @@ int nb_clusters=5;
 	    else{
 		header +="#include \"vci_vgmn.h\""+ CR;
 	    }
-	    
+	   int with_hw_accellerator = 1; //DG 23.08. a la main
+	   if (with_hw_accellerator>0){  
+	       header +="#include \"vci_mwmr_controller.h\""+ CR;
+	   }
+	   //include statements for all coprocessors found
+	   //The user must ensure that there is a SoCLib component corresponding to this coprocessor
+	   // if (with_hw_accellerator>0){  
+	   //DG 23.08. actuellement il ne les trouve pas!
+	      for (AvatarCoproMWMR HWAccelerator : TopCellGenerator.avatardd.getAllCoproMWMR()) {
+	       //	   String name = HWAccelerator.getCoprocName();
+	       //	   header +="#include \""+name+"\""+ CR;
+
+	       //Per default for testing
+	       //  header +="#include \"input_coproc.h\""+ CR;
+	       //header +="#include \"output_coproc.hh\""+ CR;
+
+	       /* can be found in /users/outil/soc/soclib/soclib/module/internal_component/fifo* */
+	       header +="#include \"fifo_virtual_coprocessor_wrapper.h\""+ CR;
+	        }
+		//  }
+
 	    header+= "#include \"vci_block_device.h\"" + CR
 		+ "#include \"vci_simhelper.h\"" + CR + "#include \"vci_fd_access.h\"" + CR
 		+ "#include \"vci_ethernet.h\"" + CR

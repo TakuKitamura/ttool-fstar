@@ -49,9 +49,8 @@ package ddtranslatorSoclib;
 
 import java.util.LinkedList;
 import java.util.List;
-
+import ui.tmldd.TMLArchiHWANode;//DG 23.08.
 public class AvatarddSpecification{
-	
     private List<AvatarComponent> components;
     private List<AvatarConnector> connectors;
     private List<AvatarMappedObject> mappedObjects;
@@ -195,7 +194,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       return crossbars;
     }
 
-    /*    public LinkedList<AvatarBridge> getAllBridge(){
+    /*     public LinkedList<AvatarBridge> getAllBridge(){
       LinkedList<AvatarBridge> bridges = new LinkedList<AvatarBridge>();   
       for (AvatarComponent bridge : components )
         {
@@ -212,16 +211,22 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
        return getAllCrossbar().size();
     }
 
-    public List<AvatarCoproMWMR> getAllCoproMWMR(){
+    /* DG 23.08. les hardware accelerators proviennent en fait de la specification DIPLODOCUS */
+
+    //	    copro= new AvatarCoproMWMR("test",0,0,0,10,8,8,1,1,1,1,false);
+     
+      public List<AvatarCoproMWMR> getAllCoproMWMR(){
       List<AvatarCoproMWMR> copros = new LinkedList<AvatarCoproMWMR>();
       for (AvatarComponent copro : components )
         {
-          if (copro instanceof AvatarCoproMWMR)
-            copros.add((AvatarCoproMWMR)copro);
+	    if (copro instanceof AvatarCoproMWMR){
+		System.out.println("$$$$$$$Coproc added to specification!$$$$$$$");
 
+            copros.add((AvatarCoproMWMR)copro);
+	    }
         }
       return copros;
-    }
+      }
 
     public int getNbCPU(){
       return (getAllCPU()).size();

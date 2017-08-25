@@ -389,6 +389,27 @@ public class NetList {
 		}	 		
 	    }	   	   
 	}
+
+	//if (with_hw_accellerator>0){  
+
+	int p=0;
+	//for testing:   vci_synthetic_initiator.h and vci_synthetic_target.h    
+for (AvatarCoproMWMR HWAccelerator : TopCellGenerator.avatardd.getAllCoproMWMR()) {
+    /*    netlist += "mwmr"+HWAccelerator.getNo()+".p_clk(signal_clk);" + CR;
+    netlist += "mwmr"+HWAccelerator.getNo()+".p_resetn(signal_resetn);" + CR;
+    netlist += "mwmr"+HWAccelerator.getNo()+".p_vci_initiator(signal_mwmr"+HWAccelerator.getNo()+"_initiator);" + CR;
+    netlist += "	mwmr"+HWAccelerator.getNo()+".p_vci_target(signal_mwmr"+HWAccelerator.getNo()+"_target);" + CR;
+    netlist += "	mwmr"+HWAccelerator.getNo()+".p_from_coproc["+HWAccelerator.getNo()+"](signal_fifo_to_ctrl);" + CR;
+    netlist += "	mwmr"+HWAccelerator.getNo()+".p_to_coproc["+HWAccelerator.getNo()+"](signal_fifo_from_ctrl);" + CR;*/
+
+   netlist += "mwmr"+p+".p_clk(signal_clk);" + CR;
+    netlist += "mwmr"+p+".p_resetn(signal_resetn);" + CR;
+    netlist += "mwmr"+p+".p_vci_initiator(signal_mwmr"+p+"_initiator);" + CR;
+    netlist += "	mwmr"+p+".p_vci_target(signal_mwmr"+p+"_target);" + CR;
+    netlist += "	mwmr"+p+".p_from_coproc["+p+"](signal_fifo_to_ctrl);" + CR;
+    netlist += "	mwmr"+p+".p_to_coproc["+p+"](signal_fifo_from_ctrl);" + CR;
+}	    
+//	   }
 		
 	//generate trace file if marked trace option 
 	

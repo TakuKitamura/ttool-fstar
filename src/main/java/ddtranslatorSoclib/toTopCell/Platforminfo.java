@@ -78,9 +78,11 @@ public class Platforminfo {
 	    platforminfo+="Uses('caba:vci_vgmn'),"+CR;
 	}
 
+	//DG 23.08. added virtual coprocessor
         platforminfo+="Uses('caba:vci_mwmr_stats'),"+CR
         +"Uses('caba:vci_logger'),"+CR
-        +"Uses('caba:vci_local_crossbar'),"+CR     
+        +"Uses('caba:vci_local_crossbar'),"+CR  
+	+"Uses('caba:fifo_virtual_coprocessor_wrapper'),"+CR 
         +"Uses('common:elf_file_loader'),"+CR
 	+"Uses('common:plain_file_loader'),"+CR
         +"Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:ppc405'),"+CR
