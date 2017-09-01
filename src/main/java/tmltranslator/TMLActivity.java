@@ -155,6 +155,13 @@ public class TMLActivity extends TMLElement {
         return null;
     }
 
+	public void replaceElement(TMLActivityElement _oldE, TMLActivityElement _newE) {
+		_newE.setNexts(_oldE.getNexts());
+		replaceAllNext(_oldE, _newE);
+		elements.add(_newE);
+		elements.remove(_oldE);
+	}
+
     public void removeAllRandomSequences(TMLTask _task) {
         int idRandomSequence = 0;
         TMLRandomSequence tmlrs = findTMLRandomSequence();

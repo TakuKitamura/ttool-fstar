@@ -53,10 +53,12 @@ import java.util.ArrayList;
 public class TMLActivityElementChannel extends TMLActivityElement {
     protected ArrayList<TMLChannel> channels;
     protected String nbOfSamples;
+	private boolean isAttacker;
 
     public TMLActivityElementChannel(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         channels = new ArrayList<TMLChannel>();
+		isAttacker=false;
     }
 
     public void addChannel(TMLChannel _channel) {
@@ -70,6 +72,14 @@ public class TMLActivityElementChannel extends TMLActivityElement {
     public TMLChannel getChannel(int _index) {
         return channels.get(_index);
     }
+
+	public boolean isAttacker(){
+		return isAttacker;
+	}
+
+	public void setAttacker(boolean attacker){
+		isAttacker=attacker;
+	}
 
     public void setNbOfSamples(String _nbOfSamples) {
         nbOfSamples = _nbOfSamples;
