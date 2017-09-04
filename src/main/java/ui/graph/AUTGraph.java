@@ -42,7 +42,7 @@
 package ui.graph;
 
 import myutil.Conversion;
-import myutil.GraphAlgorithms;
+import myutil.*;
 import myutil.TraceManager;
 
 import java.io.BufferedReader;
@@ -266,6 +266,10 @@ public class AUTGraph implements myutil.Graph {
     public void addTransition(AUTTransition _tr) {
         transitions.add(_tr);
         statesComputed = false;
+    }
+
+    public void addState(AUTState _st) {
+	states.add(_st);
     }
 
 
@@ -1313,6 +1317,115 @@ public class AUTGraph implements myutil.Graph {
 
         //TraceManager.addDev("New graph: " + toFullString());
 
+    }
+
+
+    public AUTGraph generateRefusalGraph() {
+	computeStates();
+	
+	AUTState currentState = new AUTState(0);
+	ArrayList<AUTState> newStates = new ArrayList<AUTState>();
+	ArrayList<AUTTransition> newTransitions = new ArrayList<AUTTransition>();
+	newStates.add(currentState);
+
+	// We go thru the graph, starting at state1. Each time we meet an already handled state, we stop.
+	HashSet<AUTState> metStates = new HashSet<AUTState>(); // in origin Graph
+	HashMap<AUTState, AUTState> toRefusalState = new HashMap<AUTState, AUTState>();
+	LinkedList<AUTState> toHandle = new LinkedList<AUTState>();
+	toHandle.add(states.get(0));
+	toRefusalState.put(states.get(0), currentState);
+
+	while(toHandle.size() > 0) {
+	    AUTState current = toHandle.get(0);
+	    toHandle.remove(0);
+	    metStates.add(current);
+	    AUTState currentRefusal = toRefusalState.get(current);
+	    if (currentRefusal == null) {
+		TraceManager.addDev("NULL current Refusal");
+	    } else {	
+		// For each possible transition, we create a new transition to a new destination state
+		for(AUTTransition tr: current.outTransitions) {
+		    // Create new transition. Is a new staqte necessary?
+		    AUTState destState = states.get(tr.destination);
+		    AUTState stRefusal;
+		    stRefusal = new AUTState(newStates.size());
+		    newStates.add(stRefusal);
+		    toRefusalState.put(destState, stRefusal);
+		    AUTTransition trRefusal = new AUTTransition(current.id, tr.transition, stRefusal.id);
+		    newTransitions.add(trRefusal);
+		    stRefusal.addInTransition(trRefusal);
+		    currentRefusal.addOutTransition(trRefusal);
+
+		    if (!metStates.contains(destState)) {
+			if (!(toHandle.contains(destState))) {
+			    toHandle.add(destState);
+			}
+		    }
+		    
+		}
+	    }
+	}
+	AUTGraph refusalGraph = new AUTGraph(newStates, newTransitions);
+	
+	return refusalGraph;
+    }
+
+
+
+    public AUTGraph makeTestSequencesFromRefusalGraph() {
+	ArrayList<AUTState> newStates = new ArrayList<AUTState>();
+	ArrayList<AUTTransition> newTransitions = new ArrayList<AUTTransition>();
+	AUTState firstState = new AUTState(0);
+	newStates.add(firstState);
+
+	// Take all termination states of the refusal graph and get the shortest path
+	// from the first state to this termination state
+	// Add this path as a new path of the new graph
+
+	computeStates();
+
+	DijkstraState[] allPaths = GraphAlgorithms.ShortestPathFrom(this, 0);
+
+	for(AUTState state: states) {
+	    if (state.isTerminationState()) {
+		int[] path = allPaths[state.id].path;
+		if (path != null) {
+		    AUTState currentStateN = firstState;
+		    // We create a corresponding path in the new graph.
+		    String s = "";
+		    for(int j=0; j<path.length; j++) {
+			s += path[j] + " ";
+		    }
+		    TraceManager.addDev("path=" + s);
+		    for(int i=1; i<path.length; i++) {
+			AUTState currentState = states.get(path[i-1]);
+			AUTState nextState = states.get(path[i]);
+			
+			AUTTransition tr = currentState.getTransitionTo(nextState.id);
+			TraceManager.addDev("Looking for transition");
+			if (tr != null) {
+			    // We need to create the destination state
+			    AUTState newDest = new AUTState(newStates.size());
+			    newStates.add(newDest);
+			    AUTTransition newTr = new AUTTransition(currentStateN.id, tr.transition, newDest.id);
+			    newTransitions.add(newTr);
+			    TraceManager.addDev("Adding transition:" + newTr);
+			    currentStateN = newDest;
+			} else {
+			    TraceManager.addDev(" -> null transitions");
+			}
+		    }
+		}
+	    }
+	}
+	
+
+
+	// Making the graph
+	AUTGraph testGraph = new AUTGraph(newStates, newTransitions);
+	
+	return testGraph;
+	
     }
 
 

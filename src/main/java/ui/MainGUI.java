@@ -308,7 +308,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private ArrayList<RunningInfo> runningIDs;
     private ArrayList<LoadInfo> loadIDs;
     private ConcurrentHashMap<Integer, ArrayList<SimulationTransaction>> transactionMap = new ConcurrentHashMap<Integer, ArrayList<SimulationTransaction>>();
-	private ConcurrentHashMap<Integer, String[]> latencyMap = new ConcurrentHashMap<Integer, String[]>();
+	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, String>> latencyMap = new ConcurrentHashMap<Integer, ConcurrentHashMap<String,String>>();
     private ConcurrentHashMap<String, String> statusMap = new ConcurrentHashMap<String, String>();
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
@@ -681,6 +681,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void minimizeRG(RG toBeMinimized) {
         JFrameMinimize jfm = new JFrameMinimize(frame, this, "Graph minimization", toBeMinimized);
+        //jfm.setSize(900, 700);
+        GraphicLib.centerOnParent(jfm, 900, 700);
+        jfm.setVisible(true);
+    }
+
+    public void makeRefusalGraph(RG inputGraph) {
+        JFrameRefusalGraph jfm = new JFrameRefusalGraph(frame, this, "Test Sequences Construction", inputGraph);
         //jfm.setSize(900, 700);
         GraphicLib.centerOnParent(jfm, 900, 700);
         jfm.setVisible(true);
@@ -3569,6 +3576,16 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return tmlcomp.getAllOutEvents(name);
     }
 
+	public ArrayList<TGComponent> getAllLatencyChecks(){
+		TURTLEPanel tp;
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+        for(int i=0; i<tabs.size(); i++) {
+            tp = tabs.elementAt(i);
+            tp.getAllLatencyChecks(list);
+        }
+        return list;
+	}
+
     public String[] getAllInEvents() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {return null;}
@@ -3584,8 +3601,28 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (!(tp instanceof TMLComponentDesignPanel)) { return null;}
         TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
         String name =  getCurrentTDiagramPanel().getName();
+		System.out.println("Name " + name);
         return tmlcomp.getAllOutChannels(name);
     }
+
+
+    public String[] getAllCompOutChannels() {   //this routine can be called only from a TMLComponentDesignPanel
+		List<String> chans = new ArrayList<String>();
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) { return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) { return null;}
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+		return tmlcomp.getCompOutChannels();
+    }
+
+    public String[] getAllCompInChannels() {   //this routine can be called only from a TMLComponentDesignPanel
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) { return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) { return null;}
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+		return tmlcomp.getCompInChannels();		
+    }
+
 
     public String[] getAllInChannels() {    //this routine can be called only from a TMLComponentDesignPanel
         TURTLEPanel tp = getCurrentTURTLEPanel();
@@ -7650,12 +7687,18 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 	public synchronized void addLatencyVals(int id, String[] latency){
 		if (latencyMap!=null){
-			latencyMap.put(id, latency);
+			//System.out.println("Adding latency...");
+			if (!latencyMap.containsKey(id)){
+				ConcurrentHashMap<String, String> map = new ConcurrentHashMap<String, String>();
+				latencyMap.put(id, map);
+			}
+			latencyMap.get(id).put(latency[0], latency[1]);
+			//System.out.println(latencyMap);
 		}
 	//	System.out.println(latencyMap);
 	}
 
-	public synchronized String[] getLatencyVals(int id){
+	public synchronized ConcurrentHashMap<String, String> getLatencyVals(int id){
 	//	System.out.println(id + " " + latencyMap);
 		if (latencyMap!=null){
 			return latencyMap.get(id);

@@ -47,7 +47,7 @@ import myutil.*;
 import tmltranslator.toproverif.TML2ProVerif;
 import ui.TMLArchiPanel;
 import ui.TMLComponentDesignPanel;
-import ui.util.CorrespondanceElement;
+import ui.CorrespondanceTGElement;
 
 import java.util.*;
 
@@ -71,7 +71,7 @@ public class TMLMapping<E> {
     private List<HwCommunicationNode> oncommnodes;
     private List<TMLElement> mappedcommelts;
 
-    public CorrespondanceElement<E> listE;
+	private CorrespondanceTGElement listE;
 
     // Security
     public boolean firewall = false;
@@ -90,9 +90,9 @@ public class TMLMapping<E> {
 
 
 
-    // REFERENCES TO BE REMOVED!!!!
-    private TMLComponentDesignPanel tmldp;
-    public TMLArchiPanel tmlap;
+    // REFERENCES TO BE REMOVED!!!! :(
+    //private TMLComponentDesignPanel tmldp;
+    //public TMLArchiPanel tmlap;
 
 
     public TMLMapping(TMLModeling<E> _tmlm, TMLArchitecture _tmla, boolean reset) {
@@ -148,6 +148,15 @@ public class TMLMapping<E> {
         }
         return null;
     }
+
+	public CorrespondanceTGElement getCorrespondanceList(){
+		return listE;
+	}
+
+	public void setCorrespondanceList(CorrespondanceTGElement cl){
+		listE=cl;
+	}
+
 
     public void addCustomValue(String custom) {
         customValues.add(custom);
@@ -1492,12 +1501,78 @@ public class TMLMapping<E> {
         }
     }
 
-    public void setTMLDesignPanel(TMLComponentDesignPanel _tmldp){
-        tmldp = _tmldp;
-    }
+	public boolean channelAllowed(TMLChannel chan){
+		TMLTask orig = chan.getOriginTask();
+        TMLTask dest = chan.getDestinationTask();
+        List<HwNode> path = getPath(orig, dest);
+        for (HwNode node:path){
+            if (node instanceof HwBridge){
+                for (String rule:((HwBridge) node).firewallRules){
+                    String t1 = rule.split("->")[0];
+                    String t2 = rule.split("->")[1];
+                    if (t1.equals(orig.getName().replaceAll("__","::")) || t1.equals("*")){
+                        if (t2.equals(dest.getName().replaceAll("__","::")) || t2.equals("*")){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+	}
 
-    public TMLComponentDesignPanel getTMLCDesignPanel(){
-        return tmldp;
+
+	public List<HwNode> getPath(TMLTask t1, TMLTask t2){
+        HwNode node1 = getHwNodeOf(t1);
+        HwNode node2 = getHwNodeOf(t2);
+        List<HwNode> path = new ArrayList<HwNode>();
+        if (node1==node2){
+            return path;
+        }
+        if (node1!=node2){
+            //Navigate architecture for node
+            List<HwLink> links = getTMLArchitecture().getHwLinks();
+            //  HwNode last = node1;
+            List<HwNode> found = new ArrayList<HwNode>();
+            List<HwNode> done = new ArrayList<HwNode>();
+            Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
+            for (HwLink link: links){
+                if (link.hwnode == node1){
+                    found.add(link.bus);
+                    List<HwNode> tmp = new ArrayList<HwNode>();
+                    tmp.add(link.bus);
+                    pathMap.put(link.bus, tmp);
+                }
+            }
+            outerloop:
+            while (found.size()>0){
+                HwNode curr = found.remove(0);
+                for (HwLink link: links){
+                    if (curr == link.bus){
+                        if (link.hwnode == node2){
+                            path = pathMap.get(curr);
+                            break outerloop;
+                        }
+                        if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+                            found.add(link.hwnode);
+                            List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+                            tmp.add(link.hwnode);
+                            pathMap.put(link.hwnode, tmp);
+                        }
+                    }
+                    else if (curr == link.hwnode){
+                        if (!done.contains(link.bus) && !found.contains(link.bus)){
+                            found.add(link.bus);
+                            List<HwNode> tmp = new ArrayList<HwNode>(pathMap.get(curr));
+                            tmp.add(link.bus);
+                            pathMap.put(link.bus, tmp);
+                        }
+                    }
+                }
+                done.add(curr);
+            }
+        }
+        return path;
     }
 
 

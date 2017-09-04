@@ -86,6 +86,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     protected JMenuItem jmiAnalyze;
     protected JMenuItem jmiShow;
     protected JMenuItem jmiMinimize;
+    protected JMenuItem jmiRefusalGraph;
     protected JMenuItem jmiRemove;
     protected JPopupMenu popupTree;
     protected RG selectedRG;
@@ -192,11 +193,14 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 jmiShow.addActionListener(this);
                 jmiMinimize = new JMenuItem("Minimize");
                 jmiMinimize.addActionListener(this);
+		jmiRefusalGraph = new JMenuItem("Make Test Sequences");
+                jmiRefusalGraph.addActionListener(this);
                 jmiRemove = new JMenuItem("Remove from tree");
                 jmiRemove.addActionListener(this);
                 popupTree.add(jmiAnalyze);
                 popupTree.add(jmiShow);
                 popupTree.add(jmiMinimize);
+		popupTree.add(jmiRefusalGraph);
                 popupTree.addSeparator();
                 popupTree.add(jmiRemove);
             }
@@ -392,7 +396,11 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 if (selectedRG != null) {
                     mgui.minimizeRG(selectedRG);
                 }
-            }
+            } else if (ae.getSource() == jmiRefusalGraph) {
+                if (selectedRG != null) {
+                    mgui.makeRefusalGraph(selectedRG);
+                }
+	    }
 
         }
 

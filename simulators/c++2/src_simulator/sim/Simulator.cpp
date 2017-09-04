@@ -236,10 +236,19 @@ void Simulator::schedule2Graph(std::string& iTraceFileName) const{
   std::cout << "The Graph output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
 
+bool ends_with(std::string const& str, std::string const& suffix) {
+    return suffix.size() <= str.size() && str.find( suffix, str.size() - suffix.size()) != str.npos;
+}
+
 void Simulator::schedule2TXT(std::string& iTraceFileName) const{
   struct timeval aBegin,aEnd;
   gettimeofday(&aBegin,NULL);
-  std::ofstream myfile (iTraceFileName.c_str());
+
+  if ( !ends_with( iTraceFileName, EXT_TXT ) ) {
+	  iTraceFileName.append( EXT_TXT );
+  }
+
+  std::ofstream myfile(iTraceFileName.c_str());
   if (myfile.is_open()){
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
@@ -251,8 +260,10 @@ void Simulator::schedule2TXT(std::string& iTraceFileName) const{
     }
     myfile.close();
   }
-  else
+  else {
     std::cout << "Unable to open text output file." << std::endl;
+  }
+
   gettimeofday(&aEnd,NULL);
   std::cout << "The text output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
@@ -284,7 +295,12 @@ void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
 void Simulator::schedule2HTML(std::string& iTraceFileName) const {
   struct timeval aBegin,aEnd;
   gettimeofday(&aBegin,NULL);
-  std::ofstream myfile (iTraceFileName.c_str());
+
+  if ( !ends_with( iTraceFileName, EXT_HTML ) ) {
+	  iTraceFileName.append( EXT_HTML );
+  }
+
+  std::ofstream myfile(iTraceFileName.c_str());
 
   if (myfile.is_open()) {
   	// DB: Issue #4
@@ -292,16 +308,18 @@ void Simulator::schedule2HTML(std::string& iTraceFileName) const {
     myfile << SCHED_HTML_BEG_HTML; // <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n
     myfile << SCHED_HTML_BEG_HEAD; // <head>\n
 
-    const int indexSlash = iTraceFileName.find_last_of( "/" );
-    const int indexExt = iTraceFileName.find_last_of( EXT_SEP );
-    std::string cssFileName;
+    const std::string::size_type findSlash = iTraceFileName.find_last_of( "/" );
+    unsigned int indexSlash;
 
-    if ( indexExt >= 0 ) {
-    	cssFileName = iTraceFileName.substr( indexSlash + 1, indexExt - indexSlash ) + CSS;
+    if ( findSlash == std::string::npos ) {
+    	indexSlash = 0;
     }
     else {
-    	cssFileName = iTraceFileName.substr( indexSlash + 1 ).append( EXT_SEP ).append( CSS );
+    	indexSlash = findSlash;
     }
+
+    const std::string ext( EXT_HTML );
+    const std::string cssFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_CSS;
 
     const std::string cssFullFileName = iTraceFileName.substr( 0, indexSlash + 1 ) + cssFileName;
     std::ofstream cssfile( cssFullFileName.c_str() );
@@ -357,7 +375,13 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
   gettimeofday(&aBegin,NULL);
   time(&aRawtime);
   aTimeinfo=localtime(&aRawtime);
-  std::ofstream myfile (iTraceFileName.c_str());
+
+  if ( !ends_with( iTraceFileName, EXT_VCD ) ) {
+	  iTraceFileName.append( EXT_VCD );
+  }
+
+  std::ofstream myfile(iTraceFileName.c_str());
+
   if (myfile.is_open()){
     //std::cout << "File is open" << std::endl;
     SignalChangeQueue aQueue;

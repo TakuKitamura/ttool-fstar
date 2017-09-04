@@ -1360,12 +1360,8 @@ public class TML2Avatar {
 	//TODO: Make state names readable
 	//TODO: Put back numeric guards
 	//TODO: Calcuate for temp variable
+	this.avspec = new AvatarSpecification("spec", tmlmap.getTMLModeling().getTGComponent().getTDiagramPanel().tp);
 
-	this.avspec = new AvatarSpecification("spec", tmlmap.getTMLCDesignPanel());
-	if (tmlmap.getTMLCDesignPanel()==null){
-		//System.out.println("Failed to generate specification");
-	//	return avspec;
-	}
 	attrsToCheck.clear();
 	//tmlmodel.removeForksAndJoins();
 	//Only set the loop limit if it's a number

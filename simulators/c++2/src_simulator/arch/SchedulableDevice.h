@@ -205,6 +205,83 @@ protected:
         unsigned int _dynamic_consumPerCycle; 
 	static TMLTime _overallTransNo;
 	static TMLTime _overallTransSize;
+
+	// Issue #4: Some browsers (like Firefox) do not support column spans of more than 1000 columns
+	void writeColums(	std::ofstream& myfile,
+						const unsigned int colSpan,
+						const std::string cellClass ) const {
+		writeColums( myfile, colSpan, cellClass, "" );
+	}
+
+	void writeColums(	std::ofstream& myfile,
+						const unsigned int colSpan,
+						const std::string cellClass,
+						const std::string title ) const {
+		writeColums( myfile, colSpan, cellClass, title, "", true );
+	}
+
+	void writeColums(	std::ofstream& myfile,
+						const unsigned int colSpan,
+						const std::string cellClass,
+						const std::string title,
+						const std::string content,
+						const bool endline ) const {
+		std::string begLine( START_TD );
+
+		if ( !title.empty() ) {
+			begLine.append( " title=\"" );
+			begLine.append( title );
+			begLine.append( "\"" );
+		}
+
+		begLine.append( " class=\"" );
+
+		if ( colSpan == 1 ) {
+			begLine.append( cellClass );
+			begLine.append( "\"" );
+			myfile << begLine << ">" << END_TD;
+
+			if ( endline ) {
+				myfile << std::endl;
+			}
+		}
+		else {
+			int actualLength = colSpan;
+			bool first = true;
+			bool last = false;
+
+			do {
+				last = actualLength <= MAX_COL_SPAN;
+				std::string clasVal( cellClass );
+
+				if ( first && !last ) {
+					clasVal.append( "first" );
+					first = false;
+				}
+				else if ( last && !first ) {
+					clasVal.append( "last" );
+				}
+				else if ( !last && !first ) {
+					clasVal.append( "mid" );
+				}
+
+				clasVal.append( "\"" );
+
+				std::string colSpan( " colspan=\"" );
+				std::ostringstream spanVal;
+				spanVal << std::min( MAX_COL_SPAN, actualLength ) <<  "\"";
+				colSpan.append( spanVal.str() );
+
+				myfile << begLine << clasVal << colSpan << ">" << content << END_TD;
+
+				if ( last && endline ) {
+					myfile << std::endl;
+				}
+
+				actualLength -= MAX_COL_SPAN;
+			} while ( !last );
+		}
+	}
 };
 
 #endif

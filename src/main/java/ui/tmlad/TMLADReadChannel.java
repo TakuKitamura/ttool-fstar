@@ -54,6 +54,8 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import java.util.concurrent.ConcurrentHashMap;
 /**
    * Class TMLADReadChannel
    * Action of writting data in channel
@@ -62,7 +64,7 @@ import java.util.HashMap;
    * @author Ludovic APVRILLE
  */
 public class TMLADReadChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-	private HashMap<String, String> latencyVals;
+	private ConcurrentHashMap<String, String> latencyVals;
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textX0 =  2;
@@ -71,13 +73,15 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
     protected int linebreak = 10;
 
 	protected int latencyX=30;
-	protected int latencyY=10;
+	protected int latencyY=25;
 	protected int textWidth=10;
 	protected int textHeight=20;
 
     protected String channelName = "ch";
     protected String nbOfSamples= "1";
-    public String securityContext ="";
+    protected String securityContext ="";
+	protected boolean isAttacker=false;
+
     protected int stateOfError = 0; // Not yet checked
 
     public final static int NOT_VERIFIED = 0;
@@ -107,7 +111,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         name = "read channel";
 
         myImageIcon = IconManager.imgic906;
-		latencyVals = new HashMap<String, String>();
+		latencyVals = new ConcurrentHashMap<String, String>();
 		//latencyVals.put("sendChannel: sensorData", "3");
 
     }
@@ -115,6 +119,11 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
 	public void addLatency(String name, String num){
 		latencyVals.put(name,num);
 	}
+
+	public ConcurrentHashMap<String, String> getLatencyMap(){
+		return latencyVals;
+	}
+
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -162,8 +171,12 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         g.drawLine(x, y+height, x+width, y+height);
         g.drawLine(x, y, x+linebreak, y+height/2);
         g.drawLine(x, y+height, x+linebreak, y+height/2);
-
-        g.drawString("chl", x+(width-w) / 2, y+textY0);
+		if (isAttacker){
+	        g.drawString("attack", x+(width-w) / 2, y+textY0);	
+		}
+		else {
+	        g.drawString("chl", x+(width-w) / 2, y+textY0);
+		}
         g.drawString(value, x + linebreak + textX0, y + textY1);
 	
 	if (!securityContext.equals("")){
@@ -171,21 +184,24 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
 	}
 		drawReachabilityInformation(g);
 		if (getCheckLatency()){
-			String[] latency =tdp.getMGUI().getLatencyVals(getDIPLOID());
+			ConcurrentHashMap<String, String> latency =tdp.getMGUI().getLatencyVals(getDIPLOID());
+			//System.out.println(latency);
 			if (latency!=null){
-				addLatency(latency[0], latency[1]);
-				drawLatencyInformation(g);	
+				latencyVals=latency;
+				drawLatencyInformation(g);
 			}
 		}
     }
 
 	public void drawLatencyInformation(Graphics g){
+		int index =1;
 		for (String s:latencyVals.keySet()){
 			int w  = g.getFontMetrics().stringWidth(s);
-			g.drawString(s, x-latencyX-w+1, y-latencyY-2);
-			g.drawRect(x-latencyX-w, y-latencyY-textHeight, w+4, textHeight); 
-			g.drawLine(x,y,x-latencyX, y-latencyY);
-			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY/2);
+			g.drawString(s, x-latencyX-w+1, y-latencyY*index-2);
+			g.drawRect(x-latencyX-w, y-latencyY*index-textHeight, w+4, textHeight); 
+			g.drawLine(x,y,x-latencyX, y-latencyY*index);
+			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
+			index++;
 		}
 	}
 
@@ -248,25 +264,32 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
 
     public boolean editOndoubleClick(JFrame frame) {
 
-	String [] labels = new String[3];
-        String [] values = new String[3];
+		String [] labels = new String[4];
+        String [] values = new String[4];
         labels[0] = "Channel name";
         values[0] = channelName;
-	labels[1] = "Nb of samples";
+		labels[1] = "Nb of samples";
         values[1] = nbOfSamples;
         labels[2] = "Security Pattern";
-	values[2] = securityContext;
+		values[2] = securityContext;
+		labels[3] = "Attacker?";
+		values[3] = isAttacker ? "Yes" : "No";
 	
         ArrayList<String []> help = new ArrayList<String []>();
-	String[] allInChannels = tdp.getMGUI().getAllInChannels();
-	help.add(allInChannels);
-	help.add(null);
-	help.add(tdp.getMGUI().getCurrentCryptoConfig());
+		String[] allInChannels = tdp.getMGUI().getAllInChannels();
+		System.out.println("isAttacker "+ isAttacker);
+		if (isAttacker){
+			allInChannels = tdp.getMGUI().getAllCompInChannels();
 
-
+		}
+		help.add(allInChannels);
+		help.add(null);
+		help.add(tdp.getMGUI().getCurrentCryptoConfig());
+		String[] choice = new String[]{"Yes", "No"};
+		help.add(choice);
        // JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
 
-	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 3, labels, values, help);
+	JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 4, labels, values, help);
         //jdms.setSize(600, 300);
         GraphicLib.centerOnParent(jdms, 600, 300);
         jdms.setVisible( true ); // blocked until dialog has been closed
@@ -274,7 +297,8 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
             channelName = jdms.getString(0);
             nbOfSamples = jdms.getString(1);
-	    securityContext = jdms.getString(2);
+		    securityContext = jdms.getString(2);
+			isAttacker=jdms.getString(3).equals("Yes");
             makeValue();
             return true;
         }
@@ -306,6 +330,8 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         sb.append(getSamplesValue());
         sb.append("\" secPattern=\"");
         sb.append(securityContext);
+		sb.append("\" isAttacker=\"");
+        sb.append(isAttacker ? "Yes": "No");
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -337,6 +363,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
                                 channelName = elt.getAttribute("channelName");
                                 nbOfSamples = elt.getAttribute("nbOfSamples");
                                 securityContext = elt.getAttribute("secPattern");
+								isAttacker = elt.getAttribute("isAttacker").equals("Yes");
                             }
                         }
                     }
@@ -349,6 +376,18 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         makeValue();
     }
 
+
+	public String getSecurityContext(){
+		return securityContext;
+	}
+
+	public void setSecurityContext(String sc){
+		securityContext=sc;
+	}
+
+	public boolean isAttacker(){
+		return isAttacker;
+	}
 
     public int getType() {
         return TGComponentManager.TMLAD_READ_CHANNEL;
