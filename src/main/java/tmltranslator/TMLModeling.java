@@ -52,6 +52,7 @@ import proverifspec.ProVerifQueryResult;
 import ui.TAttribute;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLCPrimitivePort;
+import ui.TGComponent;
 
 import java.util.*;
 
@@ -682,6 +683,17 @@ public class TMLModeling<E> {
     public List<TMLTask> getTasks() {
         return tasks;
     }
+
+	public List<TMLTask> getAttackerTasks(){
+		List<TMLTask> attackers = new ArrayList<TMLTask>();
+		for (TMLTask task: tasks){
+			if (task.isAttacker()){
+				attackers.add(task);
+			}
+		}
+		return attackers;
+	}
+	
     public List<String[]> getPragmas(){
         return pragmas;
     }
@@ -812,6 +824,10 @@ public class TMLModeling<E> {
             }
         }
     }
+	public TGComponent getTGComponent(){
+		return (TGComponent) getTasks().get(0).getReferenceObject();
+	}
+
 
     public void backtraceAuthenticity(HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authenticityResults, String mappingName) {
         //        System.out.println("Backtracing Authenticity");
