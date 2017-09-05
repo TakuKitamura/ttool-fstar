@@ -88,7 +88,7 @@ public class Platforminfo {
 	    //DG 28.08. example coprocessors
 	int i=0;					      
 	for(i=0;i<nb_hwa;i++){
-	    platforminfo+="Uses('caba:my_hwa"+i+"),"+CR; 
+	    platforminfo+="Uses('caba:my_hwa"+i+"'),"+CR; 
 		}
 	//+"Uses('caba:MyHWA1'),"+CR 
         platforminfo+="Uses('common:elf_file_loader'),"+CR
