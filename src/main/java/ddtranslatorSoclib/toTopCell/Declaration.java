@@ -114,22 +114,25 @@ public class Declaration {
 	    declaration +=  "caba::VciFdtRom<vci_param> vcifdtrom(\"vci_fdt_rom\", IntTab(0,6), maptab);" + CR;
 	}
 
-	if(nb_clusters==0){
-	    declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+3)+"), maptab);" + CR;
-	}	
-	else{
-	    declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab(0,8), maptab);" + CR;
-	}
-	   			    	
+	int last_tty=0;	   			    	
 	if(nb_clusters==0){
 	    int i=0;
 	    for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()){
 		declaration += "caba::VciMultiTty<vci_param> " + tty.getTTYName()+ "(\"" + tty.getTTYName()+ "\", IntTab(" + tty.getNo_target()+ "), maptab, \"vci_multi_tty"+i+"\", NULL);"+ CR;
 		i++;
+		last_tty=tty.getNo_target()+1;
 	    }
 
 	 //target address depends on number of TTYs and RAMs
 	
+	if(nb_clusters==0){
+	    // declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+3)+"), maptab);" + CR;
+ declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(last_tty+3)+"), maptab);" + CR;
+	}	
+	else{
+	    declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab(0,8), maptab);" + CR;
+	}
+
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
 	     if(ram.getIndex()==0){
 		 declaration += "soclib::caba::VciRam<vci_param>" + ram.getMemoryName()+ "(\"" + ram.getMemoryName()+ "\"" + ", IntTab(2), maptab);" + CR; 
@@ -150,9 +153,34 @@ public class Declaration {
 		    + ram.getNo_target() + "), maptab);" + CR2; 
 	}
 	if(nb_clusters==0){
-	declaration +=  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(cpus.size()+1), IntTab("+(TopCellGenerator.avatardd.getNb_target())+"));" + CR;
+	    /*declaration +=  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(cpus.size()+1), IntTab("+(TopCellGenerator.avatardd.getNb_target())+"));" + CR;
 	declaration +=  "caba::VciEthernet<vci_param> vcieth(\"vcieth\", maptab, IntTab(cpus.size()+2), IntTab("+(TopCellGenerator.avatardd.getNb_target()+1)+"), \"soclib0\");" + CR;
-	declaration +=  "caba::VciBlockDevice<vci_param> vcibd(\"vcibd\", maptab, IntTab(cpus.size()), IntTab("+(TopCellGenerator.avatardd.getNb_target()+2)+"),\"block0.iso\", 2048);" + CR;	
+	declaration +=  "caba::VciBlockDevice<vci_param> vcibd(\"vcibd\", maptab, IntTab(cpus.size()), IntTab("+(TopCellGenerator.avatardd.getNb_target()+2)+"),\"block0.iso\", 2048);" + CR;*/
+
+declaration +=  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(cpus.size()+1), IntTab("+last_tty +"));" + CR;
+	declaration +=  "caba::VciEthernet<vci_param> vcieth(\"vcieth\", maptab, IntTab(cpus.size()+2), IntTab("+(last_tty +1)+"), \"soclib0\");" + CR;
+	declaration +=  "caba::VciBlockDevice<vci_param> vcibd(\"vcibd\", maptab, IntTab(cpus.size()), IntTab("+(last_tty +2)+"),\"block0.iso\", 2048);" + CR;
+
+	  //only non-clustered version
+         int hwa_no=0;
+	 int target_no = TopCellGenerator.avatardd.getNb_target();
+	 int init_no = TopCellGenerator.avatardd.getNb_init();
+	  for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
+	      //	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+copro.getSrcid() + "), IntTab("+copro.getTgtid() + "),copro.getPlaps(),copro.getFifoToCoProcDepth(),copro.getNToCopro(),copro.getNFromCopro(),copro.getNConfig(),copro.getNStatus(), copro.getUseLLSC());"+ CR;
+	
+	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+init_no+"), IntTab("+target_no+ "),"+copro.getPlaps()+","+copro.getFifoToCoprocDepth()+","+copro.getFifoFromCoprocDepth()+","+copro.getNToCopro()+","+copro.getNFromCopro()+","+copro.getNConfig()+","+copro.getNStatus()+","+ copro.getUseLLSC()+");"+ CR2;
+
+//one virtual component for each hardware accellerator, info from diplodocus (not yet implemented)
+
+//DG 28.08. 
+	      //   declaration += "soclib::caba::FifoVirtualCoprocessorWrapper hwa"+hwa_no+"(\"hwa"+hwa_no+"\",1,1,1,1);"+ CR2;
+
+declaration += "caba::MyHWA"+hwa_no+" hwa"+hwa_no+"(\"hwa"+hwa_no+"\");"+ CR2;
+	      target_no++;
+	      init_no++;
+	      hwa_no++;
+	  }
+	
   }else{
 	declaration +=  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(0,cpus.size()+1), IntTab(0,7));" + CR;
 	declaration +=  "caba::VciEthernet<vci_param> vcieth(\"vcieth\", maptab, IntTab(0,cpus.size()+2), IntTab(0,8), \"soclib0\");" + CR;
@@ -160,12 +188,15 @@ public class Declaration {
   }
 
 if(nb_clusters==0){
+
 	  for  (AvatarBus bus : TopCellGenerator.avatardd.getAllBus()) {
           System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
           System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
 	  
 	  //declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+");" + CR2;
-	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+ ");" + CR2;
+	  //	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+ ");" + CR2;
+
+	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab,"+(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+4)+ ");" + CR2;//DG 28.08.
 	  int i=0;
 
           //if BUS was not last in input file, update here
@@ -185,7 +216,9 @@ if(nb_clusters==0){
           vgmn.setFifoDepth(8); //default value; must be > 2
 
 
-	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+	  //	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
+	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, " +(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;//DG 28.08.
+
 
 	  // declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNbRAM()+TopCellGenerator.avatardd.getNbTTY()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 
@@ -212,24 +245,7 @@ if(nb_clusters==0){
 		const bool use_llsc );
 	  */
 
-	  //only non-clustered version
-	 int i=0;
-	  for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
-	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+copro.getSrcid() + "), IntTab("+copro.getTgtid() + "),copro.getPlaps(),copro.getFifoToCoProcDepth(),copro.getNToCopro(),copro.getNFromCopro(),copro.getNConfig(),copro.getNStatus(), copro.getUseLLSC());"+ CR;
-	
 
-	      //one virtual component for each hardware accellerator
-	      declaration += "caba::FifoVirtualCoprocessorWrapper(\"hwa"+i+"\",1,1,1,1);"+ CR;
-
-//DG 23.08. a adapter
-/*fifos_out,
-        fifos_out_width,
-        fifos_in,
-        fifos_in_width)*/
-
-i++;
-
-	  }
 }
 else {
 
@@ -278,7 +294,6 @@ else {
           System.out.println("targets: "+crossbar.getNbOfAttachedTargets());
 	
 	  declaration += "soclib::caba::VciLocalCrossbar<vci_param> crossbar"+crossbar.getClusterIndex()+"(\"" + crossbar.getCrossbarName() + "\"" + " , maptab, IntTab("+ crossbar.getClusterIndex()+"),IntTab("+crossbar.getClusterIndex()+"), "+crossbar.getNbOfAttachedInitiators()+", "+crossbar.getNbOfAttachedTargets()+");" + CR2;
-
 
           //if CROSSBAR was not last in input file, update here 
           crossbar.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 

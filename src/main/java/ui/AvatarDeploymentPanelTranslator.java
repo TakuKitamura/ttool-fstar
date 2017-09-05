@@ -242,9 +242,8 @@ public class AvatarDeploymentPanelTranslator {
 				int nConfig = addCoproMWMRNode.getNConfig(); // Nb of configuration registers
 				int nStatus = addCoproMWMRNode.getNStatus(); // nb of status registers
 				boolean useLLSC = addCoproMWMRNode.getUseLLSC(); // more efficient protocol. 0: not used. 1 or more -> used
-
-				//	System.out.println("$$$$$$$$$$$Hardware Accelerator found$$$$$$$$$$$");
-
+				nb_init++;
+				nb_target+=2;//DG 28.08. two targets as two segments of memory are created mwmr and mwmrd
 				AvatarCoproMWMR acpMWMR;
 				acpMWMR = new AvatarCoproMWMR(timerName, srcid, srcid, tgtid, plaps, fifoToCoprocDepth, fifoFromCoprocDepth, nToCopro, nFromCopro, nConfig, nStatus, useLLSC);
 				avatarMap.put(dp, acpMWMR);

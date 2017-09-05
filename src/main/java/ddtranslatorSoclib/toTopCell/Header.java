@@ -99,7 +99,10 @@ int nb_clusters=5;
 	   //The user must ensure that there is a SoCLib component corresponding to this coprocessor
 	   // if (with_hw_accellerator>0){  
 	   //DG 23.08. actuellement il ne les trouve pas!
-	      for (AvatarCoproMWMR HWAccelerator : TopCellGenerator.avatardd.getAllCoproMWMR()) {
+	   int hwas=0;
+	   header +="#include \"fifo_virtual_copro_wrapper.h\""+ CR;
+
+	   for (AvatarCoproMWMR HWAccelerator : TopCellGenerator.avatardd.getAllCoproMWMR()) {
 	       //	   String name = HWAccelerator.getCoprocName();
 	       //	   header +="#include \""+name+"\""+ CR;
 
@@ -108,10 +111,12 @@ int nb_clusters=5;
 	       //header +="#include \"output_coproc.hh\""+ CR;
 
 	       /* can be found in /users/outil/soc/soclib/soclib/module/internal_component/fifo* */
-	       header +="#include \"fifo_virtual_coprocessor_wrapper.h\""+ CR;
-	        }
-		//  }
-
+	       //header +="#include \"fifo_virtual_copro_wrapper.h\""+ CR;
+	       header +="#include \"my_hwa"+hwas+".h\""+ CR;
+	       hwas++;
+	   }
+	   //  }
+	   
 	    header+= "#include \"vci_block_device.h\"" + CR
 		+ "#include \"vci_simhelper.h\"" + CR + "#include \"vci_fd_access.h\"" + CR
 		+ "#include \"vci_ethernet.h\"" + CR

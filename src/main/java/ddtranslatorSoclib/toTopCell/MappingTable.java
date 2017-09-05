@@ -118,7 +118,7 @@ public class MappingTable {
 		    size = 1073741824;
 		}
 		else {//dimension segments to be smaller
-		    size = 268435456; 
+		    size = 268435456;		          
 		}
 	    }
 	    else{
@@ -168,18 +168,27 @@ public class MappingTable {
       mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0xd1200000, 0x00000020, IntTab("+(l+3)+"), false));" + CR2;
       mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0xC0200000, 0x00000100, IntTab("+(l+4)+"), false));" + CR2;
     
- int hwa_count=0;
- int hwa_count2=0;
-  // if (with_hw_mwmr>0){  
-	      //les accellerateurs sont caches car apparaissent uniquement au niveau DIPLODOCUS
-for (AvatarCoproMWMR HWAccelerator : TopCellGenerator.avatardd.getAllCoproMWMR()) {
-    //   mapping += "maptab.add(Segment(\"mwmr"+HWAccelerator.getNo()+"\", MWMR_BASE , MWMR_SIZE , IntTab("+(m+hwa_count)+"), false));" + CR; 	  
-    //  mapping += "maptab.add(Segment(\"mwmr_ram"+HWAccelerator.getNo()+"\", MWMRd_BASE , MWMRd_SIZE , IntTab("+(m+hwa_count+1)+"), false));" + CR2; 
-   mapping += "maptab.add(Segment(\"mwmr"+hwa_count+"\", MWMR_BASE , MWMR_SIZE , IntTab("+(m+hwa_count2)+"), false));" + CR; 	  
-      mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", MWMRd_BASE , MWMRd_SIZE , IntTab("+(m+hwa_count2+1)+"), false));" + CR2; 
-	      hwa_count2+=2;
-	      hwa_count++;	  	
-	   }	  
+
+      /* Instanciation of the MWMR wrappers for hardware accellerators */
+      /* The accelerators themselves are specifies on DIPLODOCUS level */
+
+      int hwa_count=0;
+      int MWMRd_SIZE=4096;
+      int MWMR_SIZE=1024;
+      int MWMR_BASE=359242137;
+       int MWMRd_BASE=360919859; 
+      // int MWMR_BASE=3592421376; //0xd62
+      //int MWMRd_BASE=3609198592; //0xd72
+
+      for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {   
+	  mapping += "maptab.add(Segment(\"mwmr"+hwa_count+"\", 0x"+Integer.toHexString(MWMR_BASE+i*1024)+", 0x"+  Integer.toHexString(MWMR_SIZE)+", IntTab("+(l+5+hwa_count)+"), false));" + CR; 	 
+     hwa_count++;
+      } 
+ hwa_count=0;
+      for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {
+	  mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0x"+(Integer.toHexString(MWMRd_BASE+i*4096))+", 0x"+Integer.toHexString(MWMRd_SIZE)+", IntTab("+(l+5+hwa_count)+"), false));" + CR2; 
+	  hwa_count++;   	     
+      }	  
 
       return mapping;   
     }

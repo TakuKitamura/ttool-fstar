@@ -41,40 +41,59 @@
 
 
 
-
-
 /* * @version 1.0 07/07/2015
    * @author  Julien Henon, Daniela Genius */
 
-
 package ddtranslatorSoclib;
 
-public class AvatarTask extends AvatarMappedObject{
+public class AvatarCoproMWMR extends AvatarComponent{
 
-    private AvatarCPU avatarCPUReference;
-    private String taskName ;
-    private String referenceTaskName;
+    private String coprocName;
+    private int srcid ;
+    private int tgtid ;
+    private int plaps ;
+    private int fifoToCoprocDepth;
+    private int fifoFromCoproDepth;
+    private int nToCopro;
+    private int nFromCopro;
+    private int nConfig;
+    private int nStatus;
+    private boolean useLLSC;
 
-    public AvatarTask(String _taskName , String _referenceTaskName, AvatarCPU _avatarCPUReference ){
+    private AvatarConnectingPoint[] connectingsPoints;
+    private int nbConnectingPoint = 16 ;
 
-      taskName = _taskName;
-      referenceTaskName = _referenceTaskName;
-      avatarCPUReference = _avatarCPUReference;   
+    public AvatarDMA(String _Dmaname, int _srcid, int _tgtid)
+    {
+      DmaName = _DmaName;
+      srcid =  _srcid;
+      tgtid = _tgtid;
+
+      connectingsPoints = new AvatarConnectingPoint[nbConnectingPoint] ;
+
+    }
+    
+    AvatarConnectingPoint[] getAvatarConnectingPoints(){
+      return connectingsPoints;
+    }
+    
+    int  getnbConnectingPoint(){
+      return nbConnectingPoint;
     }
 
-    public String getTaskName(){
-      return taskName;
+    void setConnectingPoint(int _indexConnectingPoint, AvatarConnector _connector){
+      connectingsPoints[_indexConnectingPoint].setConnector(_connector);
     }
+    
+	public  String getDmaName(){
+	return coprocName;
+	}
 
-    public String getReferenceTaskName(){
-      return referenceTaskName;
-    }
+	public int getSrcid(){
+	return srcid;
+	}
 
-    public AvatarCPU getAvatarCPUReference(){
-      return avatarCPUReference;
-    } 
-
-    public int getCPUNo(){
-      return avatarCPUReference.getNo_proc();
-    }
+	public int getTgtid(){
+	return tgtid;
+	}
 }

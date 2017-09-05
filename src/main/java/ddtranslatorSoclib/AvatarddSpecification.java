@@ -220,13 +220,28 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       for (AvatarComponent copro : components )
         {
 	    if (copro instanceof AvatarCoproMWMR){
-		System.out.println("$$$$$$$Coproc added to specification!$$$$$$$");
+			System.out.println("Coproc added to specification");
 
             copros.add((AvatarCoproMWMR)copro);
 	    }
         }
       return copros;
       }
+
+    /* to do, actuellement c'est un hwa generique */
+    /* the hardware accelerators must be taken from DIPLODOCUS specification */
+    /* public List<DiploHWA> getAllHWA(){
+      List<DiploHWA> hwas = new LinkedList<DiploHWA>();
+      for (DiploComponent hwa : diplocomponents )
+        {
+	    if (hwa instanceof DiploHWA){
+			System.out.println("Hardware accelerator added to specification");
+
+            hwas.add((DiploHWA)hwa);
+	    }
+        }
+      return hwas;
+      }*/
 
     public int getNbCPU(){
       return (getAllCPU()).size();

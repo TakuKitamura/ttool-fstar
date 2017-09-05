@@ -88,7 +88,9 @@ signal = signal +"caba::VciSignals<vci_param> signal_vci_vcilocks(\"signal_vci_v
   for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
 	signal = signal +"caba::VciSignals<vci_param> signal_mwmr_"+i+"_initiator;"+ CR;
 	signal = signal +"caba::VciSignals<vci_param> signal_mwmr_"+i+"_target;"+ CR;	
-	signal = signal +"caba::VciSignals<vci_param> signal_fifo_"+i+"_ctrl;"+ CR;	
+	signal = signal +"caba::VciSignals<vci_param> signal_fifo_"+i+"_from_ctrl;"+ CR;
+	signal = signal +"caba::VciSignals<vci_param> signal_fifo_"+i+"_to_ctrl;"+ CR;	
+	i++;
   }
 
 if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){
