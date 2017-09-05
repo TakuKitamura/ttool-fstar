@@ -163,12 +163,13 @@ declaration +=  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(cp
 
 	  //only non-clustered version
          int hwa_no=0;
-	 int target_no = TopCellGenerator.avatardd.getNb_target();
+	 //int target_no = TopCellGenerator.avatardd.getNb_target();
+	 int target_no = (last_tty +4);//DG 5.9.
 	 int init_no = TopCellGenerator.avatardd.getNb_init();
 	  for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
 	      //	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+copro.getSrcid() + "), IntTab("+copro.getTgtid() + "),copro.getPlaps(),copro.getFifoToCoProcDepth(),copro.getNToCopro(),copro.getNFromCopro(),copro.getNConfig(),copro.getNStatus(), copro.getUseLLSC());"+ CR;
 	
-	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+init_no+"), IntTab("+target_no+ "),"+copro.getPlaps()+","+copro.getFifoToCoprocDepth()+","+copro.getFifoFromCoprocDepth()+","+copro.getNToCopro()+","+copro.getNFromCopro()+","+copro.getNConfig()+","+copro.getNStatus()+","+ copro.getUseLLSC()+");"+ CR2;
+	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+(init_no-1)+"), IntTab("+target_no+ "),"+copro.getPlaps()+","+copro.getFifoToCoprocDepth()+","+copro.getFifoFromCoprocDepth()+","+copro.getNToCopro()+","+copro.getNFromCopro()+","+copro.getNConfig()+","+copro.getNStatus()+","+ copro.getUseLLSC()+");"+ CR2;
 
 //one virtual component for each hardware accellerator, info from diplodocus (not yet implemented)
 
@@ -217,8 +218,9 @@ if(nb_clusters==0){
 
 
 	  //	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
-	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, " +(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;//DG 28.08.
+	  //	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, " +(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;//DG 28.08.
 
+	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, " +(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+3)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;//DG 5.9.
 
 	  // declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNbRAM()+TopCellGenerator.avatardd.getNbTTY()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 
