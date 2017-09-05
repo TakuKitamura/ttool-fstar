@@ -320,6 +320,25 @@ public class TMLChannel extends TMLCommunicationElement {
         return destinationTask;
     }
 
+	public TMLTask getSystemOriginTask() {
+		for (TMLTask task: originTasks){
+			if (!task.isAttacker()){
+				return task;
+			}
+		}
+        return originTask;
+    }
+
+    public TMLTask getSystemDestinationTask() {
+		for (TMLTask task: destinationTasks){
+			if (!task.isAttacker()){
+				return task;
+			}
+		}
+        return destinationTask;
+    }
+
+
     public TMLPort getOriginPort() {
         return originPort;
     }

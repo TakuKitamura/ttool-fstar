@@ -1576,6 +1576,21 @@ public class TMLMapping<E> {
     }
 
 
+	public boolean isAttackerAccessible(TMLChannel chan){
+		TMLTask orig = chan.getSystemOriginTask();
+        TMLTask dest = chan.getSystemDestinationTask();
+        List<HwNode> path = getPath(orig, dest);
+        for (HwNode node:path){
+			if (node instanceof HwBus){
+				HwBus bus = (HwBus) node;
+				if (bus.privacy==HwCommunicationNode.BUS_PUBLIC){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
     public String toXML() {
         String s = "<TMLMAPPING>\n";
         s += tmlm.toXML();

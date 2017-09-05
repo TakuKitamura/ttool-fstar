@@ -373,7 +373,7 @@ public class GTMLModeling  {
 
                 addTMLComponents();
 				//Adapt for attacker
-				System.out.println("Processing attacker");
+				TraceManager.addDev("Processing attacker");
 				processAttacker();
                 TraceManager.addDev("Adding channels");
                 addTMLCChannels();
@@ -1993,9 +1993,9 @@ public class GTMLModeling  {
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
                     }
-					/*if (tmltask.isAttacker()){
+					if (tmltask.isAttacker()){
 						tmlreadchannel.setAttacker(true);						
-					}*/
+					}
                     activity.addElement(tmlreadchannel);
                     ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlreadchannel, tgc);
@@ -2305,9 +2305,9 @@ public class GTMLModeling  {
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
                     }
-				/*	if (tmltask.isAttacker()){
+					if (tmltask.isAttacker()){
 						tmlwritechannel.setAttacker(true);
-					}*/
+					}
                     activity.addElement(tmlwritechannel);
                     ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlwritechannel, tgc);
@@ -2521,24 +2521,31 @@ public class GTMLModeling  {
 	public void processAttackerScenario(){
 		//Scan tasks and activity diagrams for attacker read/write channels
 		for (TMLTask task: tmlm.getTasks()){
-			System.out.println(task + " " + task.isAttacker());
 			if (task.isAttacker()){
 				TMLActivity act=task.getActivityDiagram();
+				List<TMLActivityElement> toRemove= new ArrayList<TMLActivityElement>();
 				for (TMLActivityElement elem: act.getElements()){
 					if (elem instanceof TMLActivityElementChannel){
 						TMLActivityElementChannel elemChannel = (TMLActivityElementChannel) elem;
 						if (elemChannel.isAttacker()){
 							TMLChannel chan = elemChannel.getChannel(0);
-							if (!map.channelAllowed(chan)){
+							if (!map.isAttackerAccessible(chan)){
+								toRemove.add(elem);
 								//Remove read/writechannel
-								TMLExecI exec= new TMLExecI("100",elem.getReferenceObject());
-								act.replaceElement(elem, exec);
 							}
 						}
 					}
 				}
+				for (TMLActivityElement elem: toRemove){
+					TMLExecI exec= new TMLExecI("100",elem.getReferenceObject());
+ 					exec.setAction("100");
+                	exec.setValue("100");
+					act.replaceElement(elem, exec);
+				}
+				//System.out.println("activity " +  act.toXML());
 			}
 		}
+
 	}
 
     public TMLCP translateToTMLCPDataStructure( String _cpName )        {
