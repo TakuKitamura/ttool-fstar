@@ -53,7 +53,7 @@ public class AvatarCoproMWMR extends AvatarComponent{
     private int tgtid ;
     private int plaps ;
     private int fifoToCoprocDepth;
-    private int fifoFromCoproDepth;
+    private int fifoFromCoprocDepth;
     private int nToCopro;
     private int nFromCopro;
     private int nConfig;
@@ -63,14 +63,14 @@ public class AvatarCoproMWMR extends AvatarComponent{
     private AvatarConnectingPoint[] connectingsPoints;
     private int nbConnectingPoint = 16 ;
 
-    public AvatarCoproMWMR(String _coprocName,int srcid, int _srcid, int _tgtid, int _plaps, int _fifoToCoprocDepth,int _fifoFromCoproDepth, int _nToCopro, int _nFromCopro, int _nConfig, int _nStatus, boolean _useLLSC)
+    public AvatarCoproMWMR(String _coprocName,int srcid, int _srcid, int _tgtid, int _plaps, int _fifoToCoprocDepth,int _fifoFromCoprocDepth, int _nToCopro, int _nFromCopro, int _nConfig, int _nStatus, boolean _useLLSC)
     {
       coprocName = _coprocName;
       srcid =  _srcid;
       tgtid = _tgtid;
 	plaps = _plaps ;
       fifoToCoprocDepth = _fifoToCoprocDepth;
-      fifoFromCoproDepth = _fifoFromCoproDepth;
+      fifoFromCoprocDepth = _fifoFromCoprocDepth;
       nToCopro = _nToCopro;
       nFromCopro = _nFromCopro;
       nConfig = _nConfig;
@@ -109,8 +109,12 @@ public class AvatarCoproMWMR extends AvatarComponent{
 	return plaps;
 	}
 
-	public int getFifoToCoProcDepth(){
+	public int getFifoToCoprocDepth(){
 	return fifoToCoprocDepth;
+	}
+
+	public int getFifoFromCoprocDepth(){
+	return fifoFromCoprocDepth;
 	}
 
 	public int getNToCopro(){

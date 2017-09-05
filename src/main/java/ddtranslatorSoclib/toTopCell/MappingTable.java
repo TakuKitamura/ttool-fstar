@@ -51,6 +51,7 @@ package ddtranslatorSoclib.toTopCell;
 
 import ddtranslatorSoclib.AvatarRAM;
 import ddtranslatorSoclib.AvatarTTY;
+import ddtranslatorSoclib.*;
 
 public class MappingTable {
 	
@@ -117,7 +118,7 @@ public class MappingTable {
 		    size = 1073741824;
 		}
 		else {//dimension segments to be smaller
-		    size = 268435456; 
+		    size = 268435456;		          
 		}
 	    }
 	    else{
@@ -167,6 +168,28 @@ public class MappingTable {
       mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0xd1200000, 0x00000020, IntTab("+(l+3)+"), false));" + CR2;
       mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0xC0200000, 0x00000100, IntTab("+(l+4)+"), false));" + CR2;
     
+
+      /* Instanciation of the MWMR wrappers for hardware accellerators */
+      /* The accelerators themselves are specifies on DIPLODOCUS level */
+
+      int hwa_count=0;
+      int MWMRd_SIZE=4096;
+      int MWMR_SIZE=1024;
+      //   int MWMR_BASE=359242137;
+      // int MWMRd_BASE=360919859; 
+      // int MWMR_BASE=3592421376; //0xd62
+      //int MWMRd_BASE=3609198592; //0xd72
+
+       /*  for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {   
+	  mapping += "maptab.add(Segment(\"mwmr"+hwa_count+"\", 0x"+Integer.toHexString(MWMR_BASE+i*1024)+", 0x"+  Integer.toHexString(MWMR_SIZE)+", IntTab("+(l+5+hwa_count)+"), false));" + CR; 	 
+     hwa_count++;
+      } 
+ hwa_count=0;
+   for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {
+	  mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0x"+(Integer.toHexString(MWMRd_BASE+i*4096))+", 0x"+Integer.toHexString(MWMRd_SIZE)+", IntTab("+(l+5+hwa_count)+"), false));" + CR2; 
+	  hwa_count++;   	     
+	  }	  */
+
       return mapping;   
     }
 
@@ -262,7 +285,11 @@ mapping += "maptab.add(Segment(\"vci_rttimer\", 0x"+ Integer.toHexString(SEG_TIM
 	      tty.setNo_target(nb_ram);
 	  }	 	     
 	  mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0x"+Integer.toHexString(SEG_TTY_BASE +  tty.getNo_cluster()* CLUSTER_SIZE)+", 0x00000010, IntTab("+tty.getNo_cluster()+","+(tty.getNo_target())+"), false));" + CR; 	  
-      }	  
+      }
+      /* Add as manin mwmr controllers as there are hardware accelerators */
+      //int with_hw_accelerator = 0; //DG 23.08.
+ 
+// }
     }
     return mapping;   
     }
