@@ -175,7 +175,7 @@ declaration +=  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(cp
 //DG 28.08. 
 	      //   declaration += "soclib::caba::FifoVirtualCoprocessorWrapper hwa"+hwa_no+"(\"hwa"+hwa_no+"\",1,1,1,1);"+ CR2;
 
-declaration += "caba::MyHWA"+hwa_no+" hwa"+hwa_no+"(\"hwa"+hwa_no+"\");"+ CR2;
+declaration += "dsx::caba::MyHWA"+hwa_no+" hwa"+hwa_no+"(\"hwa"+hwa_no+"\");"+ CR2;
 	      target_no++;
 	      init_no++;
 	      hwa_no++;
