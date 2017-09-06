@@ -41,40 +41,95 @@
 
 
 
-
-
 /* * @version 1.0 07/07/2015
    * @author  Julien Henon, Daniela Genius */
 
-
 package ddtranslatorSoclib;
 
-public class AvatarTask extends AvatarMappedObject{
+public class AvatarCoproMWMR extends AvatarComponent{
 
-    private AvatarCPU avatarCPUReference;
-    private String taskName ;
-    private String referenceTaskName;
+    private String coprocName;
+    private int srcid ;
+    private int tgtid ;
+    private int plaps ;
+    private int fifoToCoprocDepth;
+    private int fifoFromCoproDepth;
+    private int nToCopro;
+    private int nFromCopro;
+    private int nConfig;
+    private int nStatus;
+    private boolean useLLSC;
 
-    public AvatarTask(String _taskName , String _referenceTaskName, AvatarCPU _avatarCPUReference ){
+    private AvatarConnectingPoint[] connectingsPoints;
+    private int nbConnectingPoint = 16 ;
 
-      taskName = _taskName;
-      referenceTaskName = _referenceTaskName;
-      avatarCPUReference = _avatarCPUReference;   
+    public AvatarCoproMWMR(String _coprocName,int srcid, int _srcid, int _tgtid, int _plaps, int _fifoToCoprocDepth,int _fifoFromCoproDepth, int _nToCopro, int _nFromCopro, int _nConfig, int _nStatus, boolean _useLLSC)
+    {
+      coprocName = _coprocName;
+      srcid =  _srcid;
+      tgtid = _tgtid;
+	plaps = _plaps ;
+      fifoToCoprocDepth = _fifoToCoprocDepth;
+      fifoFromCoproDepth = _fifoFromCoproDepth;
+      nToCopro = _nToCopro;
+      nFromCopro = _nFromCopro;
+      nConfig = _nConfig;
+      nStatus = _nStatus;
+      useLLSC = _useLLSC;
+
+      connectingsPoints = new AvatarConnectingPoint[nbConnectingPoint] ;
+
+    }
+    
+    AvatarConnectingPoint[] getAvatarConnectingPoints(){
+      return connectingsPoints;
+    }
+    
+    int  getnbConnectingPoint(){
+      return nbConnectingPoint;
     }
 
-    public String getTaskName(){
-      return taskName;
+    void setConnectingPoint(int _indexConnectingPoint, AvatarConnector _connector){
+      connectingsPoints[_indexConnectingPoint].setConnector(_connector);
     }
+    
+	public  String getCoprocName(){
+	return coprocName;
+	}
 
-    public String getReferenceTaskName(){
-      return referenceTaskName;
-    }
+	public int getSrcid(){
+	return srcid;
+	}
 
-    public AvatarCPU getAvatarCPUReference(){
-      return avatarCPUReference;
-    } 
+	public int getTgtid(){
+	return tgtid;
+	}
 
-    public int getCPUNo(){
-      return avatarCPUReference.getNo_proc();
-    }
+	public int getPlaps(){
+	return plaps;
+	}
+
+	public int getFifoToCoProcDepth(){
+	return fifoToCoprocDepth;
+	}
+
+	public int getNToCopro(){
+	return nToCopro;
+	}
+
+	public int getNFromCopro(){
+	return nFromCopro;
+	}
+	public int getNConfig(){
+	return nConfig;
+	}
+
+	public int getNStatus(){
+	return nStatus;
+	}
+
+	public boolean getUseLLSC(){
+	return useLLSC;
+	}
+
 }

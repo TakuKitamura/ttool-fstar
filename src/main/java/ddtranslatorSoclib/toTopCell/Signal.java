@@ -88,7 +88,9 @@ signal = signal +"caba::VciSignals<vci_param> signal_vci_vcilocks(\"signal_vci_v
   for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
 	signal = signal +"caba::VciSignals<vci_param> signal_mwmr_"+i+"_initiator;"+ CR;
 	signal = signal +"caba::VciSignals<vci_param> signal_mwmr_"+i+"_target;"+ CR;	
-	signal = signal +"caba::VciSignals<vci_param> signal_fifo_"+i+"_ctrl;"+ CR;	
+	signal = signal +" soclib::caba::FifoSignals<uint32_t> signal_fifo_"+i+"_from_ctrl;"+ CR;
+	signal = signal +" soclib::caba::FifoSignals<uint32_t> signal_fifo_"+i+"_to_ctrl;"+ CR;	
+	i++;
   }
 
 if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){
@@ -116,8 +118,26 @@ else{
 signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2;
 		i++;
     }
-				
-		signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
+    int p=0;
+    // if (with_hw_accellerator>0){ //DG 23.08.	
+for (AvatarCoproMWMR HWAccelerator : TopCellGenerator.avatardd.getAllCoproMWMR()) {
+//les accellerateurs sont caches car apparaissent uniquement au niveau DIPLODOCUS
+//signal = signal + "	soclib::caba::VciSignals<vci_param> signal_mwmr"+HWAccelerator.getNo()+"_target(\"signal_mwmr"+HWAccelerator.getNo()+"_target\""+CR;
+//signal = signal + "	soclib::caba::VciSignals<vci_param> signal_mwmr"+HWAccelerator.getNo()+"_initiator(\"signal_mwmr"+HWAccelerator.getNo()+"_initiator\""  +CR;
+
+//signal = signal + "	soclib::caba::FifoSignals<uint32_t> signal_fifo_to_ctrl"+HWAccelerator.getNo()+"(\"signal_fifo_to_ctrl"+HWAccelerator.getNo()+"\");"+CR;
+    //signal = signal + "       soclib::caba::FifoSignals<uint32_t> signal_fifo_from_ctrl"+HWAccelerator.getNo()+"(\"signal_fifo_from_ctrl"+HWAccelerator.getNo()+"\");"+CR;
+
+
+signal = signal + "	soclib::caba::VciSignals<vci_param> signal_mwmr"+p+"_target(\"signal_mwmr"+p+"_target\""+CR;
+signal = signal + "	soclib::caba::VciSignals<vci_param> signal_mwmr"+p+"_initiator(\"signal_mwmr"+p+"_initiator\""  +CR;
+
+signal = signal + "	soclib::caba::FifoSignals<uint32_t> signal_fifo_to_ctrl"+p+"(\"signal_fifo_to_ctrl"+p+"\");"+CR;
+    signal = signal + "       soclib::caba::FifoSignals<uint32_t> signal_fifo_from_ctrl"+p+"(\"signal_fifo_from_ctrl"+p+"\");"+CR;
+    p++;
+}
+			
+    signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
 		//System.out.print("number of processors : " + TopCellGenerator.avatardd.getNbCPU()+"\n");
 		System.out.print("number of clusters : " + TopCellGenerator.avatardd.getNbClusters()+"\n");
 
