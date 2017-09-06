@@ -63,11 +63,19 @@ public class AvatarCoproMWMR extends AvatarComponent{
     private AvatarConnectingPoint[] connectingsPoints;
     private int nbConnectingPoint = 16 ;
 
-    public AvatarDMA(String _Dmaname, int _srcid, int _tgtid)
+    public AvatarCoproMWMR(String _coprocName,int srcid, int _srcid, int _tgtid, int _plaps, int _fifoToCoprocDepth,int _fifoFromCoproDepth, int _nToCopro, int _nFromCopro, int _nConfig, int _nStatus, boolean _useLLSC)
     {
-      DmaName = _DmaName;
+      coprocName = _coprocName;
       srcid =  _srcid;
       tgtid = _tgtid;
+	plaps = _plaps ;
+      fifoToCoprocDepth = _fifoToCoprocDepth;
+      fifoFromCoproDepth = _fifoFromCoproDepth;
+      nToCopro = _nToCopro;
+      nFromCopro = _nFromCopro;
+      nConfig = _nConfig;
+      nStatus = _nStatus;
+      useLLSC = _useLLSC;
 
       connectingsPoints = new AvatarConnectingPoint[nbConnectingPoint] ;
 
@@ -85,7 +93,7 @@ public class AvatarCoproMWMR extends AvatarComponent{
       connectingsPoints[_indexConnectingPoint].setConnector(_connector);
     }
     
-	public  String getDmaName(){
+	public  String getCoprocName(){
 	return coprocName;
 	}
 
@@ -96,4 +104,32 @@ public class AvatarCoproMWMR extends AvatarComponent{
 	public int getTgtid(){
 	return tgtid;
 	}
+
+	public int getPlaps(){
+	return plaps;
+	}
+
+	public int getFifoToCoProcDepth(){
+	return fifoToCoprocDepth;
+	}
+
+	public int getNToCopro(){
+	return nToCopro;
+	}
+
+	public int getNFromCopro(){
+	return nFromCopro;
+	}
+	public int getNConfig(){
+	return nConfig;
+	}
+
+	public int getNStatus(){
+	return nStatus;
+	}
+
+	public boolean getUseLLSC(){
+	return useLLSC;
+	}
+
 }
