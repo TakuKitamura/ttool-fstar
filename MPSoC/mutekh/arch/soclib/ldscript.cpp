@@ -73,10 +73,14 @@ MEMORY
     mem_rom (RXAL): ORIGIN = CONFIG_ROM_ADDR, LENGTH = CONFIG_ROM_SIZE
 #endif
     mem_ram (RWAL): ORIGIN = CONFIG_RAM_ADDR, LENGTH = CONFIG_RAM_SIZE
-//ajoute DG provisiore
-//mwmr_ram (RWAL): ORIGIN = 0xA0200000, LENGTH = 0x00001000
-//mwmrd_ram (RWAL): ORIGIN = 0xB0200000, LENGTH = 0x00003000
-//19.05. une seule RAMLOCKS en cas de besoin (actually unused)
+//DG 7.9.
+#if defined(MWMR_RAM0_NAME)
+mwmr_ram0 (RWAL): ORIGIN = 0xA0200000, LENGTH = 0x00001000
+#endif
+#if defined(MWMR_RAM1_NAME)
+mwmr_ram1 (RWAL): ORIGIN = 0xA1200000, LENGTH = 0x00001000
+#endif
+
 vci_locks (RWAL): ORIGIN = 0xC0200000, LENGTH = 0x100
 
 //ajout CD

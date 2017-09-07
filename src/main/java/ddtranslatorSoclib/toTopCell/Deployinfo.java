@@ -174,6 +174,16 @@ public class Deployinfo {
 
 	    i++;
 	}
+	//Calculate Adresses of MWMR segments, one for each hardware accellerator
+	i=0;
+
+	for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()) {
+	    deployinfo = deployinfo + "#define MWMR_RAM" + i  + "_NAME mwmr_ram" + i + CR; 
+	    deployinfo = deployinfo + "#define MWMR_RAM" + i  + "_ADDR 0xA02" + Integer.toHexString(i*4096) + CR; 
+	    deployinfo = deployinfo + "#define MWMR_RAM" + i  + "_SIZE 0x1000"+ CR;
+	    i++;
+	}
+
 	return deployinfo;	
     }
     

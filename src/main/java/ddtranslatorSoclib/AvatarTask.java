@@ -52,8 +52,8 @@ package ddtranslatorSoclib;
 public class AvatarTask extends AvatarMappedObject{
 
     private AvatarCPU avatarCPUReference;
-     private String taskName ;
-	 private String referenceTaskName;
+    private String taskName ;
+    private String referenceTaskName;
 
     public AvatarTask(String _taskName , String _referenceTaskName, AvatarCPU _avatarCPUReference ){
 

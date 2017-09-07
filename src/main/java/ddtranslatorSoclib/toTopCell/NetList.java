@@ -341,16 +341,23 @@ public class NetList {
 	//	if(nb_cluster == 0){
 	    i=0;
 	    for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
-		//a coprocessor with FIFO interface
-		netlist = netlist +copro.getCoprocName()+".p_clk(signal_clk);" + CR;
-		netlist = netlist +copro.getCoprocName()+".p_resetn(signal_resetn);" + CR;	      	
-                netlist = netlist + copro.getCoprocName()+".p_"+i+"_ctrl(signal_fifo_"+i+"_ctrl);" + CR;
-		//and its mwmr controller
-		netlist = netlist + "mwmr"+i+".p_clk(signal_clk);" + CR;
-		netlist = netlist + "mwmr"+i+".p_resetn(signal_resetn);" + CR;
-		netlist = netlist + "mwmr"+i+".p_vci_initiator(signal_mwmr_"+i+"initiator);" + CR;
-		netlist = netlist + "mwmr"+i+".p_vci_target(signal_mwmr_"+i+"_target);" + CR;	
-                netlist = netlist + copro.getCoprocName()+".p_"+i+"_ctrl(signal_fifo_"+i+"_ctrl);" + CR;
+		//a coprocessor with its FIFO interface built from HWA 
+		netlist = netlist +"hwa"+i+".p_clk(signal_clk);" + CR;
+		netlist = netlist +"hwa"+i+".p_resetn(signal_resetn);" + CR;	      	
+                netlist = netlist +"hwa"+i+".p_from_ctrl["+i+"](signal_fifo_"+i+"_from_ctrl);" + CR;
+		netlist = netlist +"hwa"+i+".p_to_ctrl["+i+"](signal_fifo_"+i+"_to_ctrl);" + CR2;
+	
+		//MWMR controller of the HWA
+		netlist = netlist +copro.getCoprocName() +".p_clk(signal_clk);" + CR;
+		netlist = netlist +copro.getCoprocName() +".p_resetn(signal_resetn);" + CR;
+		netlist = netlist +copro.getCoprocName() +".p_vci_initiator(signal_mwmr_"+i+"_initiator);" + CR;
+		netlist = netlist + copro.getCoprocName()+".p_vci_target(signal_mwmr_"+i+"_target);" + CR2;
+		netlist = netlist +copro.getCoprocName() +".p_from_coproc["+i+"](signal_fifo_"+i+"_from_ctrl);" + CR;
+netlist = netlist +copro.getCoprocName() +".p_to_coproc["+i+"](signal_fifo_"+i+"_to_ctrl);" + CR;
+//DG 5.9.
+//	netlist = netlist +copro.getCoprocName() +".status();" + CR;
+//	netlist = netlist +copro.getCoprocName() +".config();" + CR;
+i++;
           }
 	   
 	
@@ -389,6 +396,27 @@ public class NetList {
 		}	 		
 	    }	   	   
 	}
+
+	//if (with_hw_accellerator>0){  
+
+	int p=0;
+	//for testing:   vci_synthetic_initiator.h and vci_synthetic_target.h    
+	//for (AvatarCoproMWMR HWAccelerator : TopCellGenerator.avatardd.getAllCoproMWMR()) {
+    /*    netlist += "mwmr"+HWAccelerator.getNo()+".p_clk(signal_clk);" + CR;
+    netlist += "mwmr"+HWAccelerator.getNo()+".p_resetn(signal_resetn);" + CR;
+    netlist += "mwmr"+HWAccelerator.getNo()+".p_vci_initiator(signal_mwmr"+HWAccelerator.getNo()+"_initiator);" + CR;
+    netlist += "	mwmr"+HWAccelerator.getNo()+".p_vci_target(signal_mwmr"+HWAccelerator.getNo()+"_target);" + CR;
+    netlist += "	mwmr"+HWAccelerator.getNo()+".p_from_coproc["+HWAccelerator.getNo()+"](signal_fifo_to_ctrl);" + CR;
+    netlist += "	mwmr"+HWAccelerator.getNo()+".p_to_coproc["+HWAccelerator.getNo()+"](signal_fifo_from_ctrl);" + CR;*/
+
+	/*  netlist += "mwmr"+p+".p_clk(signal_clk);" + CR;
+    netlist += "mwmr"+p+".p_resetn(signal_resetn);" + CR;
+    netlist += "mwmr"+p+".p_vci_initiator(signal_mwmr"+p+"_initiator);" + CR;
+    netlist += "	mwmr"+p+".p_vci_target(signal_mwmr"+p+"_target);" + CR;
+    netlist += "	mwmr"+p+".p_from_coproc["+p+"](signal_fifo_"+p+"_to_ctrl);" + CR;
+    netlist += "	mwmr"+p+".p_to_coproc["+p+"](signal_fifo_"+p+"_from_ctrl);" + CR;
+    }	 */   
+//	   }
 		
 	//generate trace file if marked trace option 
 	

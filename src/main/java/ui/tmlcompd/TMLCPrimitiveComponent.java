@@ -201,7 +201,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             iconIsDrawn = false;
         }
 		if (isAttacker){
-			g.drawImage(IconManager.imgic8.getImage(), x + width - iconSize - textX, y + 2*textX, null);
+			g.drawImage(IconManager.imgic7008.getImage(), x + width - iconSize - textX, y + 2*textX, null);
 		}
 
         // Attributes
@@ -497,6 +497,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         //TraceManager.addDev("Loading extra params of " + value);
         //value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
+			sb.append("<Data isAttacker=\"");
+            sb.append(isAttacker() ? "Yes": "No");
+	        sb.append("\" />\n");
         for(int i=0; i<myAttributes.size(); i++) {
             //TraceManager.addDev("Attribute:" + i);
             a = myAttributes.get (i);
@@ -541,6 +544,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                         //TraceManager.addDev(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
+							if (elt.getTagName().equals("Data")) {
+                                isAttacker = elt.getAttribute("isAttacker").equals("Yes");
+							}
                             if (elt.getTagName().equals("Attribute")) {
                                 //TraceManager.addDev("Analyzing attribute");
                                 access = Integer.decode(elt.getAttribute("access")).intValue();

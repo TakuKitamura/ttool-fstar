@@ -3601,8 +3601,28 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (!(tp instanceof TMLComponentDesignPanel)) { return null;}
         TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
         String name =  getCurrentTDiagramPanel().getName();
+		System.out.println("Name " + name);
         return tmlcomp.getAllOutChannels(name);
     }
+
+
+    public String[] getAllCompOutChannels() {   //this routine can be called only from a TMLComponentDesignPanel
+		List<String> chans = new ArrayList<String>();
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) { return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) { return null;}
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+		return tmlcomp.getCompOutChannels();
+    }
+
+    public String[] getAllCompInChannels() {   //this routine can be called only from a TMLComponentDesignPanel
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) { return null;}
+        if (!(tp instanceof TMLComponentDesignPanel)) { return null;}
+        TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel)tp;
+		return tmlcomp.getCompInChannels();		
+    }
+
 
     public String[] getAllInChannels() {    //this routine can be called only from a TMLComponentDesignPanel
         TURTLEPanel tp = getCurrentTURTLEPanel();
