@@ -1040,7 +1040,7 @@ public class TasksAndMainGenerator {
 	  size_t no, const struct mwmr_s* mwmr );*/
 
 	/*uint32_t *fifo_data_in    = (uint32_t*)(base(MWMRd)+0x000); //0x20200000;*/
-	/* uint32_t *lock_in     = (uint32_t*)(base(LOCKS)+0x00);*§
+	/* uint32_t *lock_in     = (uint32_t*)(base(LOCKS)+0x00);*/
 	/* mwmr_t *p_mwmr_in    = (mwmr_t*)(base(MWMRd)+0x1000);*/
 
 
