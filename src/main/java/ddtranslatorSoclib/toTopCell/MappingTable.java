@@ -173,18 +173,15 @@ public class MappingTable {
       /* The accelerators themselves are specifies on DIPLODOCUS level */
 
       int hwa_count=0;
-      int MWMRd_SIZE=4096;
-      int MWMR_SIZE=1024;
-      //   int MWMR_BASE=359242137;
-      // int MWMRd_BASE=360919859; 
-      // int MWMR_BASE=3592421376; //0xd62
-      //int MWMRd_BASE=3609198592; //0xd72
-
-       /*  for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {   
-	  mapping += "maptab.add(Segment(\"mwmr"+hwa_count+"\", 0x"+Integer.toHexString(MWMR_BASE+i*1024)+", 0x"+  Integer.toHexString(MWMR_SIZE)+", IntTab("+(l+5+hwa_count)+"), false));" + CR; 	 
+      int MWMR_SIZE=4096;
+      // int MWMR_BASE=0xA0200000;
+      i=0;
+        for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {   
+	    mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0xA0"+  Integer.toHexString(2097152+MWMR_SIZE*i)+",  0x00001000, IntTab("+(l+5+hwa_count)+"), false));" + CR; 	 
      hwa_count++;
       } 
- hwa_count=0;
+ hwa_count=0; 
+ /*
    for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {
 	  mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0x"+(Integer.toHexString(MWMRd_BASE+i*4096))+", 0x"+Integer.toHexString(MWMRd_SIZE)+", IntTab("+(l+5+hwa_count)+"), false));" + CR2; 
 	  hwa_count++;   	     

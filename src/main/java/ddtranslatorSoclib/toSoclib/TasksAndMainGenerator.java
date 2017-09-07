@@ -1033,6 +1033,26 @@ public class TasksAndMainGenerator {
         mainFile.appendToMainCode("/* Activating randomness */" + CR);
         mainFile.appendToMainCode("initRandom();" + CR);
 
+	/* DG 7.9.2017 additions for use of hardware MWMR controller */
+
+
+	/*void mwmr_hw_init( void *coproc, enum SoclibMwmrWay way,
+	  size_t no, const struct mwmr_s* mwmr );*/
+
+	/*uint32_t *fifo_data_in    = (uint32_t*)(base(MWMRd)+0x000); //0x20200000;*/
+	/* uint32_t *lock_in     = (uint32_t*)(base(LOCKS)+0x00);*§
+	/* mwmr_t *p_mwmr_in    = (mwmr_t*)(base(MWMRd)+0x1000);*/
+
+
+/*mwmr_initialize_pointer(p_mwmr_in,    WIDTH, DEPTH, fifo_data_in,    lock_in   );*/
+
+/* mwmr_hw_init(base(MWMR), MWMR_TO_COPROC, 0 , p_mwmr_in);*/
+
+/*for all coproc 
+  uint32_t *fifo =  (uint32_t*) + i*4096;*/
+
+/* end ajoute 7.9. */
+
 	mainFile.appendToMainCode("/* Initializing the main mutex */" + CR);
 	mainFile.appendToMainCode("if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}" + CR + CR);
 
