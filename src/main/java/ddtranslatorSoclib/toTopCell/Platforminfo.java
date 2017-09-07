@@ -90,7 +90,6 @@ public class Platforminfo {
 	for(i=0;i<nb_hwa;i++){
 	    platforminfo+="Uses('caba:my_hwa"+i+"'),"+CR; 
 		}
-	//+"Uses('caba:MyHWA1'),"+CR 
         platforminfo+="Uses('common:elf_file_loader'),"+CR
 	+"Uses('common:plain_file_loader'),"+CR
         +"Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:ppc405'),"+CR
