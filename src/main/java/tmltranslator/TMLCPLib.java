@@ -144,17 +144,34 @@ public class TMLCPLib extends TMLElement {
 
     public String toXML() {
 	String s = "<TMLCPLIB name=\"" + name + "\" cpMECType=\"" + cpMECType + "\" typeName=\"" + typeName + "\">\n";
-	for(TMLCPLibArtifact arti: artifacts) {
+	if (artifacts != null) {
+	    for(TMLCPLibArtifact arti: artifacts) {
 	    s += arti.toXML();
+	    }
 	}
-	for(String mu: mappedUnits) {
-	    s += "<MAPPEUNIT unit=\"" + mu + "\" />\n"; 
+	
+	if (mappedUnits != null) {
+	    for(String mu: mappedUnits) {
+		if (mu != null) {
+		    s += "<MAPPEUNIT unit=\"" + mu + "\" />\n";
+		}
+	    }
 	}
-	for(String aa: assignedAttributes) {
-	    s += "<ASSIGNEDATTRIBUTE attr=\"" + aa + "\" />\n"; 
+
+	if (assignedAttributes!= null) {
+	    for(String aa: assignedAttributes) {
+		if (aa != null) {
+		    s += "<ASSIGNEDATTRIBUTE attr=\"" + aa + "\" />\n";
+		}
+	    }
 	}
-	for(Integer i: transferTypes) {
-	    s += "<TRANSFERTYPE type=\"" + i.toString() + "\" />\n"; 
+
+	if (transferTypes != null) {
+	    for(Integer i: transferTypes) {
+		if (i != null) {
+		    s += "<TRANSFERTYPE type=\"" + i.toString() + "\" />\n";
+		}
+	    }
 	}
 	s += "</TMLCPLIB>";
 	return s;
