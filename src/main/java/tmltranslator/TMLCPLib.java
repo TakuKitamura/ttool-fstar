@@ -166,7 +166,7 @@ public class TMLCPLib extends TMLElement {
 	    }
 	}
 
-	if (transferTypesm != null) {
+	if (transferTypes != null) {
 	    for(Integer i: transferTypes) {
 		if (i != null) {
 		    s += "<TRANSFERTYPE type=\"" + i.toString() + "\" />\n";
