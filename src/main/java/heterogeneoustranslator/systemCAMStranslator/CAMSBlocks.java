@@ -39,47 +39,88 @@
 
 
 
-package ui.util;
+package heterogeneoustranslator.systemCAMStranslator;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.Vector;
+import ui.*;
 
 /**
- * Class DefaultText
- * Text of some windows
- * Creation: 01/12/2003
- * @version 1.1 29/01/2004
- * @author Ludovic APVRILLE
+* Class CAMSBlocks
+* Simulation Block for SystemC-AMS Diagrams
+* Creation: 28/08/2017
+* @version 1.0 28/08/2017
+* @author Côme DEMARIGNY
  */
-public class DefaultText  {
 
-    public static String BUILD = "12360";
-    public static String DATE = "2017/09/11 02:01:25 CET";
+public class CAMSBlocks{
+
+    private String name;
+    private int nbOfIn;
+    private int nbOfOut;
+    private LinkedList<TAttribute> myAttributes;
+    private LinkedList<CAMSSignal> mySignals;
+    private String [] processCode;
+
     
+    public CAMSBlocks(String _name, int _nbOfIn, int _nbOfOut, LinkedList<TAttribute> _myAttributes, LinkedList<CAMSSignal> _mySignals, String [] _processCode){
+	name=_name;
+	nbOfIn=_nbOfIn;
+	nbOfOut=_nbOfOut;
+	myAttributes=_myAttributes;
+	mySignals=_mySignals;
+	processCode=_processCode;
     
-    public static StringBuffer sbAbout = makeAbout();
-    
-    public static String getAboutText() {
-        return new String(sbAbout);
+    }
+
+    public void setBlockName(String newName){
+	name = newName;
+    }
+
+    public void setNbOfIn(int newIn){
+	nbOfIn = newIn;
+    }
+
+    public void setNbOfOut(int newOut){
+	nbOfOut = newOut;
+    }
+
+    public void setMyAttributes(LinkedList<TAttribute> newMyAttributes){
+	myAttributes = newMyAttributes;
+    }
+
+    public void setMySignals(LinkedList<CAMSSignal> newMySignals){
+	mySignals = newMySignals;
+    }
+
+    public void setProcessCode(String[] newProcessCode){
+	processCode = newProcessCode;
+    }
+
+    public String getBlockName(){
+	return name;
+    }
+
+    public int getNbOfIn() {
+        return nbOfIn;
+    }
+
+    public int getNbOfOut() {
+        return nbOfOut;
+    }
+
+    public LinkedList<TAttribute> getMyAttributes(){
+	return myAttributes;
     }
     
-    public static String getVersion() {
-        return "0.99-beta4"; /* Set new release April. 6th, 2017 (to come)*/
+    public LinkedList<CAMSSignal> getMySignals(){
+	return mySignals;
     }
-    
-    public static String getFullVersion() {
-	return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
+
+    public String[] getProcessCode(){
+	return processCode;
     }
-    
-    private static StringBuffer makeAbout() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n\n");
-        sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck, Andrea Enrici, Florian Lugou, Letitia Li - Telecom ParisTech\n");
-	sb.append("Daniela Genius - LIP6\n");
-	sb.append("Contact email: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\tCopyright IMT - Telecom ParisTech / Ludovic Apvrille \n\n");
-        sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n\n");
-        sb.append("For more information regarding TTool, and the UML/SysML profiles supportd by TTool:\n");
-        sb.append("TTool's website: http://ttool.telecom-paristech.fr/\n\n");
-        return sb;
-    }
-		
+
 }

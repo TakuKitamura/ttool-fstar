@@ -1,4 +1,4 @@
-/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  * 
  * ludovic.apvrille AT enst.fr
  * 
@@ -39,47 +39,71 @@
 
 
 
-package ui.util;
+package heterogeneoustranslator.systemCAMStranslator;
+
+import myutil.GraphicLib;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import ui.*;
+import ui.het.*;
+import ui.util.IconManager;
+import ui.window.JDialogCAMSBlocks;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.Vector;
 
 
 /**
- * Class DefaultText
- * Text of some windows
- * Creation: 01/12/2003
- * @version 1.1 29/01/2004
- * @author Ludovic APVRILLE
+* Class CAMSSignal
+* Signals for SystemC-AMS Diagrams
+* Creation: 27/06/2017
+* @version 1.0 27/06/2017
+* @author Côme DEMARIGNY
  */
-public class DefaultText  {
+public class CAMSSignal {
+    
+    public final static int IN = 0;
+    public final static int OUT= 1;
+    public final static int INCORRECT=-1;
 
-    public static String BUILD = "12360";
-    public static String DATE = "2017/09/11 02:01:25 CET";
+    private static int i=0;
+
+    private String name;
     
+    public int inout;
     
-    public static StringBuffer sbAbout = makeAbout();
-    
-    public static String getAboutText() {
-        return new String(sbAbout);
+    public CAMSSignal (String _name, int _inout) {
+	inout = _inout;
     }
     
-    public static String getVersion() {
-        return "0.99-beta4"; /* Set new release April. 6th, 2017 (to come)*/
+
+    public CAMSSignal makeclone(){
+	return this;
+    }
+
+    public static CAMSSignal isAValidSignal(String _name, int _inout) {
+        if (_inout==INCORRECT) {
+            return null;
+        }
+	String s = signalName(_name);
+        CAMSSignal cs = new CAMSSignal(s, _inout);
+
+        return cs;
     }
     
-    public static String getFullVersion() {
-	return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
+    public int getInout(){
+	return inout;
     }
-    
-    private static StringBuffer makeAbout() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n\n");
-        sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck, Andrea Enrici, Florian Lugou, Letitia Li - Telecom ParisTech\n");
-	sb.append("Daniela Genius - LIP6\n");
-	sb.append("Contact email: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\tCopyright IMT - Telecom ParisTech / Ludovic Apvrille \n\n");
-        sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n\n");
-        sb.append("For more information regarding TTool, and the UML/SysML profiles supportd by TTool:\n");
-        sb.append("TTool's website: http://ttool.telecom-paristech.fr/\n\n");
-        return sb;
+
+    public static String signalName(String _n){
+	String s="";
+	s+= _n + ": " + signalID();
+	return s;
     }
-		
+
+    public static int signalID(){i++;return i;}    
+
 }

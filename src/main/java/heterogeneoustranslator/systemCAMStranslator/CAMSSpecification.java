@@ -1,6 +1,8 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ * Daniela Genius, Lip6, UMR 7606 
  * 
  * ludovic.apvrille AT enst.fr
+ * daniela.genius@lip6.fr
  * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -39,47 +41,62 @@
 
 
 
-package ui.util;
 
+/* * @version 1.0 04/09/2017
+   * @author  Côme Demarigny */
 
-/**
- * Class DefaultText
- * Text of some windows
- * Creation: 01/12/2003
- * @version 1.1 29/01/2004
- * @author Ludovic APVRILLE
- */
-public class DefaultText  {
+package heterogeneoustranslator.systemCAMStranslator;
 
-    public static String BUILD = "12360";
-    public static String DATE = "2017/09/11 02:01:25 CET";
-    
-    
-    public static StringBuffer sbAbout = makeAbout();
-    
-    public static String getAboutText() {
-        return new String(sbAbout);
-    }
-    
-    public static String getVersion() {
-        return "0.99-beta4"; /* Set new release April. 6th, 2017 (to come)*/
-    }
-    
-    public static String getFullVersion() {
-	return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
-    }
-    
-    private static StringBuffer makeAbout() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n\n");
-        sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck, Andrea Enrici, Florian Lugou, Letitia Li - Telecom ParisTech\n");
-	sb.append("Daniela Genius - LIP6\n");
-	sb.append("Contact email: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\tCopyright IMT - Telecom ParisTech / Ludovic Apvrille \n\n");
-        sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n\n");
-        sb.append("For more information regarding TTool, and the UML/SysML profiles supportd by TTool:\n");
-        sb.append("TTool's website: http://ttool.telecom-paristech.fr/\n\n");
-        return sb;
-    }
+import java.util.LinkedList;
+import java.util.List;
+
+public class CAMSSpecification{
+	
+
+    private List<CAMSBlocks> blocks;
+    private List<CAMSSignal> signals;
+    private List<CAMSConnection> connections;
 		
+
+    public CAMSSpecification( List<CAMSBlocks> _blocks, List<CAMSSignal> _signals, List<CAMSConnection> _connections, int _nb_target, int _nb_init){
+	blocks = _blocks ;
+	signals = _signals ;
+	connections = _connections ;
+        nb_target = _nb_target;
+        nb_init = _nb_init;
+    }
+    
+    public List<CAMSBlock> getBlock(){
+	return blocks;
+    }
+
+    public List<CAMSSignals> getSignals(){
+	return signals;
+    }
+
+    public List<CAMSConnection> getConnection(){
+	return connections;
+    }
+
+    public List<CAMSBlocks> getUnconnectedBlocks(){
+	List<CAMSBlocks> unconnectedBlocks;
+	for(CAMSBlocks block : blocks){
+	    for(CAMSConnections connection : connections){
+		if (block == connection.getInputBlock() || block == connection.getOutputBlock()){
+		    break;
+		}
+		else {
+		    unconnectedBlocks.add(block);
+		}
+	    }
+	}
+	return unconnectedBlocks;
+    }
+
+    public list<CAMSSignals> getunconnectedSignals(){
+	list<CAMSSignals> unconnectedSignals;
+	return unconnectedSignals;
+    }
+
+
 }
