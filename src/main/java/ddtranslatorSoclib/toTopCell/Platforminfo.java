@@ -56,6 +56,8 @@ public class Platforminfo {
     public static String getPlatformInfo() {
 	//determine if the platform is vgsb or vgmn based (mutually exclusive)
     int with_vgsb=TopCellGenerator.avatardd.getAllBus().size();
+    int nb_hwa=TopCellGenerator.avatardd.getAllCoproMWMR().size();
+
     //bus can be other than VGSB (CAN...), for the moment restricted to VGSB
         String platforminfo = CR;
         platforminfo +="use =  ["+CR
@@ -78,10 +80,17 @@ public class Platforminfo {
 	    platforminfo+="Uses('caba:vci_vgmn'),"+CR;
 	}
 
+	//DG 23.08. added virtual coprocessor
         platforminfo+="Uses('caba:vci_mwmr_stats'),"+CR
         +"Uses('caba:vci_logger'),"+CR
-        +"Uses('caba:vci_local_crossbar'),"+CR     
-        +"Uses('common:elf_file_loader'),"+CR
+        +"Uses('caba:vci_local_crossbar'),"+CR  
+	    +"Uses('caba:fifo_virtual_copro_wrapper'),"+CR ;
+	    //DG 28.08. example coprocessors
+	int i=0;					      
+	for(i=0;i<nb_hwa;i++){
+	    platforminfo+="Uses('caba:my_hwa"+i+"'),"+CR; 
+		}
+        platforminfo+="Uses('common:elf_file_loader'),"+CR
 	+"Uses('common:plain_file_loader'),"+CR
         +"Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:ppc405'),"+CR
         +"Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:arm'),"+CR

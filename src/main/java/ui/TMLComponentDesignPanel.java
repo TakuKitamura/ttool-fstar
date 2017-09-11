@@ -94,6 +94,8 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         tabbedPane.setTabLayoutPolicy( JTabbedPane.SCROLL_TAB_LAYOUT );
     }
 
+	
+
     public TMLActivityDiagramPanel getTMLActivityDiagramPanel(String _name) {
         TMLActivityDiagramPanel tmladp;
         for(int i=1; i<panels.size(); i++) {
@@ -192,6 +194,14 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
     public TMLCPrimitiveComponent getPrimitiveComponentByName(String _name) {
         return tmlctdp.getPrimitiveComponentByName(_name);
     }
+
+	public String[] getCompOutChannels(){
+		return tmlctdp.getCompOutChannels();
+	}
+
+	public String[] getCompInChannels(){
+		return tmlctdp.getCompInChannels();
+	}
 
     public java.util.List<String> getAllTMLCommunicationNames(String _name) {
         return tmlctdp.getAllTMLCommunicationNames(_name);

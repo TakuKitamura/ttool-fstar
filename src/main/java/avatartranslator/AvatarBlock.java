@@ -133,12 +133,11 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     }
 
     public AvatarSignal getSignalByName(String _name) {
-	for(AvatarSignal sig: signals) {
-		System.out.println("finding " +sig.getName() + " " + _name);
-	    if (sig.getName().compareTo(_name) == 0) {
-		return sig;
-	    }
-	}
+		for(AvatarSignal sig: signals) {
+		    if (sig.getName().compareTo(_name) == 0) {
+				return sig;
+		    }
+		}
 
 	if (father != null) {
 	    return father.getSignalByName(_name);

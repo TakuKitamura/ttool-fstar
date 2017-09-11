@@ -158,6 +158,8 @@ public class IconManager {
     public static ImageIcon imgic7002, imgic7003, imgic7004, imgic7005, imgic7006;
 	//Show traces
     public static ImageIcon imgic7007;
+	//Attacker Scenarios
+    public static ImageIcon imgic7008;
     // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
 
@@ -605,6 +607,10 @@ public class IconManager {
     private static String icon7006 = "imply.gif";	
 	//Show traces
     private static String icon7007 = "toolbarButtonGraphics/general/showTrace.gif";
+
+	//Attacker Scenarios
+    private static String icon7008 = "attacker.gif";
+
     public IconManager() {
 
 
@@ -1026,6 +1032,7 @@ public class IconManager {
 	imgic7005 = getIcon(icon7005);
 	imgic7006 = getIcon(icon7006);
 	imgic7007 = getIcon(icon7007);
+	imgic7008 = getIcon(icon7008);
     }
 
 } // Class
