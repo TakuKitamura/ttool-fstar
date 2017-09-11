@@ -72,6 +72,10 @@ public class CAMSBlock extends TGComponent {
     
     private int nbOfIn = 0;
     private int nbOfOut = 0;
+    private int nbOfHybridIn = 0;
+    private int nbOfHybridOut = 0;
+    private int totIn = 0;
+    private int totOut = 0;
 
     protected int index = 0;
     
@@ -119,7 +123,7 @@ public class CAMSBlock extends TGComponent {
 	if(this.myAttributes == null){this.myAttributes = new LinkedList<TAttribute>();}
 	if(this.mySignals == null){this.mySignals = new LinkedList<CAMSSignal>();}
 	
-	SBlock= new CAMSBlocks(name, nbOfIn, nbOfOut, myAttributes, mySignals, processCode);
+	SBlock= new CAMSBlocks(name, nbOfIn, nbOfOut, nbOfHybridIn, nbOfHybridOut, myAttributes, mySignals, processCode);
     }
 
     public void createConnectingPoints(){
@@ -132,24 +136,38 @@ public class CAMSBlock extends TGComponent {
 	    for(i=0;i<mySignals.size();i++){	
 		if(mySignals.get(i).getInout()==0){
 		    nbOfIn++;
-		} else {
+		} else if(mySignals.get(i).getInout()==1) {
 		    nbOfOut++;
+		} else if(mySignals.get(i).getInout()==2) {
+		    nbOfHybridIn++;
+		} else{
+		    nbOfHybridOut++;
 		}
 	    }
 	}
 
-	nbConnectingPoint = nbOfIn + nbOfOut;
+	nbConnectingPoint = nbOfIn + nbOfOut + nbOfHybridIn + nbOfHybridOut;
+	totIn =  nbOfIn + nbOfHybridIn;
+	totOut = nbOfOut + nbOfHybridOut;
 
         connectingPoint = new CAMSConnectingPoint[nbConnectingPoint];
         
-	for (i = 1; i<= nbOfIn; i++){
-	    h = i/(nbOfIn + 1.0);
-	    connectingPoint[i-1] = new CAMSConnectingPoint(this, 0, 0, true, false, 0.0, h);
+	for (i = 1; i<= totIn; i++){
+	    h = i/(totIn + 1.0);
+	    if((i-1)<nbOfIn){
+		connectingPoint[i-1] = new CAMSConnectingPoint(this, 0, 0, true, false, false, 0.0, h);
+	    } else{
+		connectingPoint[i-1] = new CAMSConnectingPoint(this, 0, 0, true, false, true, 0.0, h);
+	    }
 	}
 	
-	for (i = 1; i<= nbOfOut; i++){
-	    h = i/(nbOfOut + 1.0);
-	    connectingPoint[i+nbOfIn-1] = new CAMSConnectingPoint(this, 0, 0, false, true, 1.0, h);
+	for (i = 1; i<=totOut; i++){
+	    h = i/(totOut + 1.0);
+	    if ((i+totIn-1)<(nbOfOut + totIn)){
+		connectingPoint[i+totIn-1] = new CAMSConnectingPoint(this, 0, 0, false, true, false, 1.0, h);
+	    } else {
+		connectingPoint[i+totIn-1] = new CAMSConnectingPoint(this, 0, 0, false, true, true, 1.0, h);
+	    }
 	}
 	
         addTGConnectingPointsComment();
@@ -291,6 +309,8 @@ public class CAMSBlock extends TGComponent {
 	SBlock.setBlockName(name);
 	SBlock.setNbOfIn(nbOfIn);
 	SBlock.setNbOfOut(nbOfOut);
+	SBlock.setNbOfHybridIn(nbOfHybridIn);
+	SBlock.setNbOfHybridOut(nbOfHybridOut);
 	SBlock.setMyAttributes(myAttributes);
 	SBlock.setMySignals(mySignals);
 	SBlock.setProcessCode(processCode);
@@ -308,8 +328,8 @@ public class CAMSBlock extends TGComponent {
     
     public String getAttributes() {
         String attr = "";
-        attr += "Nb of in = " + nbOfIn + "\n";
-        attr += "Nb of out = " + nbOfOut + "\n";
+        attr += "Nb of in = " + totIn + "\n";
+        attr += "Nb of out = " + totOut + "\n";
 
         return attr;
     }
@@ -337,13 +357,33 @@ public class CAMSBlock extends TGComponent {
     public void resetInOut(){
 	nbOfIn = 0;
 	nbOfOut= 0;
+	nbOfHybridIn = 0;
+	nbOfHybridOut= 0;
+	totIn = 0;
+	totOut= 0;
     }
 
     public int getNbOfIn() {
-        return nbOfIn;
+        return totIn;
     }
 
     public int getNbOfOut() {
+        return totOut;
+    }
+
+   public int getNbOfHybridIn() {
+        return nbOfHybridIn;
+    }
+
+    public int getNbOfHybridOut() {
+        return nbOfHybridOut;
+    }
+
+   public int getNbOfNonHybridIn() {
+        return nbOfIn;
+    }
+
+    public int getNbOfNonHybridOut() {
         return nbOfOut;
     }
         

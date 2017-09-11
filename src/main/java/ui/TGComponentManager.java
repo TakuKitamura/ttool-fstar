@@ -75,6 +75,7 @@ import ui.tmlcompd.*;
 import ui.tmlcp.*;
 import ui.tmldd.*;
 import ui.tmlsd.*;
+import ui.het.*;
 import ui.ucd.*;
 
 import java.awt.*;
@@ -261,6 +262,7 @@ public class TGComponentManager {
     public static final int TMLARCHI_BUSNODE = 1102;
     public static final int TMLARCHI_COMMUNICATION_ARTIFACT = 1103;
     public static final int TMLARCHI_HWANODE = 1104;
+    public static final int TMLARCHI_CAMSNODE = 1115;
     public static final int TMLARCHI_MEMORYNODE = 1105;
     public static final int TMLARCHI_BRIDGENODE = 1106;
     public static final int TMLARCHI_DMANODE = 1107;
@@ -319,6 +321,10 @@ public class TGComponentManager {
     public static final int TMLSD_CONTROLLER_INSTANCE = 1522;
     public static final int CONNECTOR_MESSAGE_ASYNC_TMLSD = 1523;
     public static final int TMLSD_ACTION_STATE = 1524;
+
+    // SystemC-AMS
+    public static final int CAMS_CONNECTOR = 1601;
+    public static final int CAMS_BLOCK = 1602 ;
 
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -1172,6 +1178,9 @@ public class TGComponentManager {
         case TMLARCHI_HWANODE:
             tgc = new TMLArchiHWANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
+        case TMLARCHI_CAMSNODE:
+            tgc = new TMLArchiCAMSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
         case TMLARCHI_MEMORYNODE:
             tgc = new TMLArchiMemoryNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
@@ -1193,6 +1202,9 @@ public class TGComponentManager {
         case TMLARCHI_KEY:
             tgc = new TMLArchiKey(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
+	case CAMS_BLOCK:
+	    tgc = new CAMSBlock(x,y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+	    break;
 
             // Communication patterns + SD
         case TMLCP_CHOICE:
@@ -1575,6 +1587,10 @@ public class TGComponentManager {
         }  else if (tgc instanceof AvatarADAssociationConnector) {
             return AAD_ASSOCIATION_CONNECTOR;
 
+	    //SystemC-AMS -----mark
+	} else if (tgc instanceof CAMSBlockConnector) {
+	    return CAMS_CONNECTOR;
+
             // Others
         } else if (tgc instanceof       TADDeterministicDelay) {
             return      TAD_DETERMINISTIC_DELAY;
@@ -1889,6 +1905,8 @@ public class TGComponentManager {
             //            return AVATAR_FIREWALL;
         } else if (tgc instanceof TMLArchiHWANode) {
             return TMLARCHI_HWANODE;
+	} else if (tgc instanceof TMLArchiCAMSNode) {
+	    return TMLARCHI_CAMSNODE;
         } else if (tgc instanceof TMLArchiMemoryNode) {
             return TMLARCHI_MEMORYNODE;
         } else if (tgc instanceof TMLArchiDMANode) {
@@ -2066,6 +2084,11 @@ public class TGComponentManager {
         case SYSMLSEC_METHODOLOGY_CONNECTOR:
             tgc = new SysmlsecMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
+
+	//     // System C-AMS
+	// case CAMS_CONNECTOR:
+	//     tgc = new CAMSBlockConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+	//     break;
 
             // AVATAR MAD
         case AVATARMAD_COMPOSITION_CONNECTOR:
@@ -2287,6 +2310,12 @@ public class TGComponentManager {
 
         return tgc;
 
+    }
+
+    public final static CAMSBlockConnector addCAMSConnector(int x, int y, int id, TDiagramPanel tdp, CAMSConnectingPoint p1, CAMSConnectingPoint p2, Vector<Point> listPoint) {
+        CAMSBlockConnector cbc = null;
+	cbc = new CAMSBlockConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+	return cbc;
     }
 
 } // Class

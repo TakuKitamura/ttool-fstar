@@ -70,6 +70,7 @@ import ui.tmlsd.TGConnectorMessageTMLSD;
 import ui.tmlsd.TMLSDControllerInstance;
 import ui.tmlsd.TMLSDStorageInstance;
 import ui.tmlsd.TMLSDTransferInstance;
+import ui.het.*;
 
 import java.util.*;
 import java.awt.Point;
@@ -2517,6 +2518,35 @@ public class GTMLModeling  {
         }
         return map;     // the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
     }
+
+    // public SystemCAMSPanel<TGComponent> translateToSystemCAMS() { //ajout CD 04/07 FIXME
+	/*tous est a changé et a créé ici*/
+        // tmlm = new TMLModeling<>(true);
+        // archi = new TMLArchitecture();  //filled by makeArchitecture
+        // cams = new TMLSystemCAMS<>(tmlm, archi, false);
+        // cams.tmlscp = tmlscp;
+        // checkingErrors = new LinkedList<CheckingError> ();
+        // warnings = new LinkedList<CheckingError> ();
+
+        // TraceManager.addDev("Making architecture");
+        // makeArchitecture();     //fills archi
+        // TraceManager.addDev("Making TML modeling");
+        // if (!makeTMLModeling()) {
+        //     return null;
+        // }
+        // TraceManager.addDev("Making SystemC-AMS");
+        // makeMapping();  //fills cams
+        // cams.listE = listE;
+        // TraceManager.addDev("Making TMLSCPlib");
+        // makeTMLCPLib();
+
+        // removeActionsWithRecords();
+        // cams.setTMLDesignPanel(this.tmlcdp);//a ajouter
+        // if (cams.firewall){ // j'espère pas besoin de tous ca
+        //     tmlscp.getMainGUI().gtm.drawFirewall(cams); 
+        // }
+    //  return cams;
+    // }
 
 	public void processAttackerScenario(){
 		//Scan tasks and activity diagrams for attacker read/write channels
