@@ -62,7 +62,7 @@ import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLCRecordComponent;
-import ui.het.*;
+//import ui.het.*;
 import ui.window.JDialogCode;
 import ui.window.JDialogNote;
 import ui.window.JDialogSearchBox;

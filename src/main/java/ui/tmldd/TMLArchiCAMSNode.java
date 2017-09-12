@@ -47,7 +47,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import tmltranslator.HwCPU;
 import ui.*;
-import ui.het.*;
+//import ui.het.*;
 import ui.util.IconManager;
 
 import javax.swing.*;

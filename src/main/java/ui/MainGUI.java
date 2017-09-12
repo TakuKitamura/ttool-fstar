@@ -85,7 +85,7 @@ import ui.tmlcp.TMLCPPanel;
 import ui.tmldd.TMLArchiDiagramPanel;
 import ui.tmldd.TMLArchiCAMSNode;
 import ui.tmlsd.TMLSDPanel;
-import ui.het.*;
+//import ui.het.*;
 import ui.tree.DiagramTreeModel;
 import ui.tree.DiagramTreeRenderer;
 import ui.tree.JDiagramTree;

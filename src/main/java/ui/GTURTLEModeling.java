@@ -120,7 +120,7 @@ import ui.tmlcompd.*;
 import ui.tmlcp.TMLCPPanel;
 import ui.tmldd.*;
 import ui.tmlsd.TMLSDPanel;
-import ui.het.*;
+//import ui.het.*;
 import ui.tree.GraphTree;
 import ui.tree.InvariantDataTree;
 import ui.tree.SearchTree;
