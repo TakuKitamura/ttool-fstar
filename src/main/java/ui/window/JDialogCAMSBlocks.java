@@ -348,9 +348,11 @@ public class JDialogCAMSBlocks extends javax.swing.JDialog implements ActionList
         // second line panel5
         c5.gridwidth = 1;
         c5.fill = GridBagConstraints.HORIZONTAL;
-        String[] v = new String[2];
+        String[] v = new String[4];
         v[0] = "in";
         v[1] = "out";
+	v[2] = "hybrid in";
+	v[3] = "hybrid out";
         signalInOutBox = new JComboBox<String>(v);
         panel5.add(signalInOutBox, c5);
         signalText = new JTextField();
@@ -641,6 +643,10 @@ public class JDialogCAMSBlocks extends javax.swing.JDialog implements ActionList
 		inout=0;
 	    }else if(signalInOutBox.getSelectedIndex()==1){
 		inout=1;
+	    }else if(signalInOutBox.getSelectedIndex()==2){
+		inout=2;
+	    }else if(signalInOutBox.getSelectedIndex()==3){
+		inout=3;
 	    }else{
 		inout=-1;
 	    }

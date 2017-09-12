@@ -74,6 +74,7 @@ public class TAttribute {
 		public final static int INTEGER = 8;
 		public final static int TIMER = 9;
     public final static int ADDRESS = 10;
+    public final static int DOUBLE = 11;
 	
 	// Confidentiality verififcation
     public final static int NOT_VERIFIED = 0;
@@ -90,7 +91,8 @@ public class TAttribute {
     
     private int confidentialityVerification = NOT_VERIFIED;
 	
-	public boolean isAvatar;
+    public boolean isAvatar;
+    public boolean isCAMS;
     
     private boolean set = false;
     
@@ -302,6 +304,17 @@ public class TAttribute {
         }
         return -1;
     }
+
+    public static int getCAMSType(String s) {
+	if (s.equals("bool")) {
+	    return BOOLEAN;
+	} else if (s.equals("double")) {
+	    return DOUBLE;
+	} else if (!s.equals("")) {
+	    return OTHER;
+	}
+	return -1;
+    }
     
     
     
@@ -348,20 +361,31 @@ public class TAttribute {
         }
     }
 	
-	public static String getStringAvatarType(int type) {
+    public static String getStringAvatarType(int type) {
         switch(type) {
-            case INTEGER:
-                return "int";
-            case BOOLEAN:
-                return "bool";
-						case TIMER:
-                return "Timer";
-						case NATURAL:
-                return "int";
-						case ADDRESS:
-									return "addr";
-            default:
-                return "unknown";
+	case INTEGER:
+	    return "int";
+	case BOOLEAN:
+	    return "bool";
+	case TIMER:
+	    return "Timer";
+	case NATURAL:
+	    return "int";
+	case ADDRESS:
+	    return "addr";
+	default:
+	    return "unknown";
+        }
+    }
+
+    public static String getStringCAMSType(int type) {
+        switch(type) {
+	case DOUBLE:
+	    return "double";
+	case BOOLEAN:
+	    return "bool";
+	default:
+	    return "unknown";
         }
     }
     
@@ -379,15 +403,15 @@ public class TAttribute {
         if ((initialValue == null)  || (initialValue.equals(""))) {
             return getStringAccess(access) + " " + id + " : " + myType + ";";
         } else {
-			if (type == ARRAY_NAT) {
-				return getStringAccess(access) + " " + id + " [" + getInitialValue() + "] : " + myType + ";";
-			} else {
-				return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + ";";
-			}
+	    if (type == ARRAY_NAT) {
+		return getStringAccess(access) + " " + id + " [" + getInitialValue() + "] : " + myType + ";";
+	    } else {
+		return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + ";";
+	    }
         }
     }
 	
-	 public String toAvatarString() {
+    public String toAvatarString() {
         String myType;
         if (type == OTHER) {
             myType = typeOther;
@@ -398,11 +422,30 @@ public class TAttribute {
         if ((initialValue == null)  || (initialValue.equals(""))) {
             return getStringAccess(access) + " " + id + " : " + myType + ";";
         } else {
-			if (type == ARRAY_NAT) {
-				return getStringAccess(access) + " " + id + " [" + getInitialValue() + "] : " + myType + ";";
-			} else {
-				return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + ";";
-			}
+	    if (type == ARRAY_NAT) {
+		return getStringAccess(access) + " " + id + " [" + getInitialValue() + "] : " + myType + ";";
+	    } else {
+		return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + ";";
+	    }
+        }
+    }
+
+    public String toCAMSString() {
+        String myType;
+        if (type == OTHER) {
+            myType = typeOther;
+        } else {
+            myType = getStringCAMSType(type);
+        }
+		
+        if ((initialValue == null)  || (initialValue.equals(""))) {
+            return getStringAccess(access) + " " + id + " : " + myType + ";";
+        } else {
+	    if (type == ARRAY_NAT) {
+		return getStringAccess(access) + " " + id + " [" + getInitialValue() + "] : " + myType + ";";
+	    } else {
+		return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + ";";
+	    }
         }
     }
     

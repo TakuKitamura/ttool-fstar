@@ -67,6 +67,8 @@ public class CAMSSignal {
     
     public final static int IN = 0;
     public final static int OUT= 1;
+    public final static int HYBRID_IN = 2;
+    public final static int HYBRID_OUT= 3;
     public final static int INCORRECT=-1;
 
     private static int i=0;
