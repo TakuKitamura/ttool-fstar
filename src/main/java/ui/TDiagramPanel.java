@@ -2614,7 +2614,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             });
     }
 
-   public String findCAMSBlockName(String name) {
+    /*public String findCAMSBlockName(String name) {
         return this.findGoodName (name, new NameChecker () {
                 public boolean checkCAMSBlock (CAMSBlock o, String name) {
                     if (o.getValue ().equals (name))
@@ -2622,7 +2622,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		    return o.hasBlockWithName();
                 }
             });
-    }
+	    }*/
 
     public String findAvatarSMDStateName(String name) {
         return this.findGoodName (name, new NameChecker () {

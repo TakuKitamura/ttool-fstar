@@ -6053,7 +6053,7 @@ public class GTURTLEModeling {
                     }
                 }
 
-            } else if (tdp instanceof CAMSBlockDiagramPanel) {  //ajout CD 24.07----mark
+		/*} else if (tdp instanceof CAMSBlockDiagramPanel) {  //ajout CD 24.07----mark
                 nl = doc.getElementsByTagName("CAMSBlockDiagramPanelCopy");
 
                 if (nl == null) {
@@ -6081,7 +6081,7 @@ public class GTURTLEModeling {
                         camsp.structureChanged();
                         makePostLoading(camsp, beginIndex);
                     }
-                }
+		    }*/
 
             } else if (tdp instanceof AvatarADPanel) {
                 nl = doc.getElementsByTagName("AvatarADPanelCopy");
@@ -6283,8 +6283,8 @@ public class GTURTLEModeling {
             loadAvatarMethodology(node);
         } else if (type.compareTo("Sysmlsec Methodology") == 0) {
             loadSysmlsecMethodology(node);
-        } else if (type.compareTo("SystemC-AMS") == 0) {
-            loadSystemCAMS(node);
+	    /*} else if (type.compareTo("SystemC-AMS") == 0) {
+	      loadSystemCAMS(node);*/
         } else if (type.compareTo("TML Design") == 0) {
             loadTMLDesign(node);
         } else if (type.compareTo("TML Component Design") == 0) {
@@ -6789,7 +6789,7 @@ public class GTURTLEModeling {
         }
     }
 
-    public void loadSystemCAMS(Node node) throws  MalformedModelingException, SAXException {
+    /*public void loadSystemCAMS(Node node) throws  MalformedModelingException, SAXException {
         Element elt = (Element) node;
         String nameTab;
         NodeList diagramNl;
@@ -6815,7 +6815,7 @@ public class GTURTLEModeling {
                 }
             }
         }
-    }
+	}*/
 
     public void loadTMLDesign(Node node) throws  MalformedModelingException, SAXException {
         Element elt = (Element) node;
@@ -7086,10 +7086,10 @@ public class GTURTLEModeling {
             ((AvatarADPanel)tdp).setConnectorsToFront();
         }
 
-	if (tdp instanceof CAMSBlockDiagramPanel) {
+	/*if (tdp instanceof CAMSBlockDiagramPanel) {
             //TraceManager.addDev("Connectors...");
             ((CAMSBlockDiagramPanel)tdp).setConnectorsToFront();
-        }
+	    }*/
     }
 
     // AVATAR
@@ -8994,7 +8994,7 @@ public class GTURTLEModeling {
         }
     }
 
-     public boolean checkSyntaxSystemCAMS(Vector<TGComponent> blocksToTakeIntoAccount, SystemCAMSPanel scp, boolean optimize) { //ajout CD 04/07 FIXME
+    //public boolean checkSyntaxSystemCAMS(Vector<TGComponent> blocksToTakeIntoAccount, SystemCAMSPanel scp, boolean optimize) { //ajout CD 04/07 FIXME
     //     List<TMLError> warningsOptimize = new ArrayList<TMLError>();
     //     warnings = new LinkedList<CheckingError> ();
     //     mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
@@ -9023,9 +9023,9 @@ public class GTURTLEModeling {
     //         mgui.resetAllDIPLOIDs();
     //         listE.useDIPLOIDs();
     //         mgui.setMode(MainGUI.GEN_DESIGN_OK);
-             return true;
+    //return true;
     //     }
-     }
+    //}
 
     public boolean checkSyntaxTMLMapping(Vector<TGComponent> nodesToTakeIntoAccount, TMLArchiPanel tmlap, boolean optimize) {
         List<TMLError> warningsOptimize = new ArrayList<TMLError>();

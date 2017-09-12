@@ -3332,7 +3332,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     }
                 }
             }
-        }  else if (tp instanceof SystemCAMSPanel) { //Ajout CD
+	    /*}  else if (tp instanceof SystemCAMSPanel) { //Ajout CD
 	    
 	    SystemCAMSPanel camsp = (SystemCAMSPanel)tp;
             JDialogSelectSystemCAMSBlock.validated = camsp.validated;
@@ -3367,7 +3367,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                       JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
-            }
+		}*/
 
 	} else if (tp instanceof TMLArchiPanel) {
             tmlap = (TMLArchiPanel)tp;
@@ -8392,9 +8392,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                         mgui.newAvatarMADs();
                     } else if (e.getSource() == newAVATARAnalysis) {
                         mgui.newAvatarAnalysis();
-                    }  else if (e.getSource() == newSystemCAMS) { //ajout CD
+                    }  /*else if (e.getSource() == newSystemCAMS) { //ajout CD
 			mgui.newSystemCAMS();
-		    }
+			}*/
                 }
             };
     }

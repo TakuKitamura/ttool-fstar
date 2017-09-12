@@ -1906,7 +1906,7 @@ public class TGComponentManager {
         } else if (tgc instanceof TMLArchiHWANode) {
             return TMLARCHI_HWANODE;
 	    /*} else if (tgc instanceof TMLArchiCAMSNode) {
-	      return TMLARCHI_CAMSNODE;*//
+	      return TMLARCHI_CAMSNODE;*/
         } else if (tgc instanceof TMLArchiMemoryNode) {
             return TMLARCHI_MEMORYNODE;
         } else if (tgc instanceof TMLArchiDMANode) {
