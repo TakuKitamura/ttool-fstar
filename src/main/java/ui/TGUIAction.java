@@ -856,7 +856,7 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_ROMNODE] = new TAction("add-add-romnode", "Add a ROM", IconManager.imgic1108, IconManager.imgic1108, "ROM", "Add a memory node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_DMANODE] = new TAction("add-add-dmanode", "Add a DMA", IconManager.imgic1110, IconManager.imgic1110, "DMA", "Add a DMA node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_ICUNODE] = new TAction("add-add-icunode", "Add an ICU", IconManager.imgic1112, IconManager.imgic1112, "ICU", "Add a ICU node to the currently opened AVATAR deployment diagram", 0);
-        actions[ADD_COPROMWMRNODE] = new TAction("add-add-copromwmrnode", "Add a MWMR Copro", IconManager.imgic1114, IconManager.imgic1114, "MWMR Copro", "Add a DMA node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_COPROMWMRNODE] = new TAction("add-add-copromwmrnode", "Add a MWMR Copro", IconManager.imgic1114, IconManager.imgic1114, "MWMR Copro", "Add a MWMR Coprocessor node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_TIMERNODE] = new TAction("add-add-timernode", "Add a Timer", IconManager.imgic1116, IconManager.imgic1116, "Timer", "Add a timer node to the currently opened AVATAR deployment diagram", 0);
 
 
