@@ -42,11 +42,11 @@
 package ui;
 
 import myutil.GraphicLib;
-import ui.het.CAMSBlockDiagramToolBar;
-import ui.het.CAMSBlockDiagramPanel;
+//import ui.het.CAMSBlockDiagramToolBar;
+//import ui.het.CAMSBlockDiagramPanel;
 import ui.util.IconManager;
 import ui.TDiagramPanel;
-import ui.window.JDialogCAMSBlocks;
+//import ui.window.JDialogCAMSBlocks;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -63,8 +63,8 @@ import java.util.Vector;
  * @see MainGUI
  */
 public class SystemCAMSPanel extends TURTLEPanel {
-    public SystemCAMSPanel scp;
-    public CAMSBlockDiagramPanel camsbdp; 
+    //public SystemCAMSPanel scp;
+    //public CAMSBlockDiagramPanel camsbdp; 
     public TURTLEPanel tp;
     public TDiagramPanel tdp;
     public Vector<TGComponent> validated, ignored;
@@ -87,7 +87,7 @@ public class SystemCAMSPanel extends TURTLEPanel {
     public void init() {
 	
         // Class Diagram toolbar
-        CAMSBlockDiagramToolBar camstoolBar = new CAMSBlockDiagramToolBar(mgui);
+        /*CAMSBlockDiagramToolBar camstoolBar = new CAMSBlockDiagramToolBar(mgui);
         toolbars.add(camstoolBar);
         toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
@@ -108,7 +108,7 @@ public class SystemCAMSPanel extends TURTLEPanel {
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("SystemC-AMS Diagram", IconManager.imgic60, toolBarPanel, "opens SystemC-AMS diagram");
         tabbedPane.setSelectedIndex(0);
-        mgui.changeMade(camsbdp, TDiagramPanel.NEW_COMPONENT);
+        mgui.changeMade(camsbdp, TDiagramPanel.NEW_COMPONENT);*/
         
  
     }
@@ -134,7 +134,7 @@ public class SystemCAMSPanel extends TURTLEPanel {
 	}
     }
 
-    public CAMSBlockDiagramPanel getCAMSBlockDiagramPanel(){
+    /*public CAMSBlockDiagramPanel getCAMSBlockDiagramPanel(){
 	return camsbdp;
-    }
+	}*/
 }

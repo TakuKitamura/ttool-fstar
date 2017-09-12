@@ -70,7 +70,6 @@ import ui.tmlsd.TGConnectorMessageTMLSD;
 import ui.tmlsd.TMLSDControllerInstance;
 import ui.tmlsd.TMLSDStorageInstance;
 import ui.tmlsd.TMLSDTransferInstance;
-import ui.het.*;
 
 import java.util.*;
 import java.awt.Point;

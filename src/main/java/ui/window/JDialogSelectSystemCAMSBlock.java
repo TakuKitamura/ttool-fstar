@@ -45,7 +45,7 @@ package ui.window;
 import myutil.TraceManager;
 import ui.util.IconManager;
 import ui.TGComponent;
-import ui.het.*;
+//import ui.het.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -122,16 +122,16 @@ public class JDialogSelectSystemCAMSBlock extends javax.swing.JDialog implements
         for( int i = 0; i < list.size(); i++ ) {
             tgc = list.get(i);
 	    // System.out.println(tgc);
-            if (tgc instanceof CAMSBlock) {
-                v.addElement( tgc );
-            }
+            //if (tgc instanceof CAMSBlock) {
+	    //     v.addElement( tgc );
+            //}
         }
         return v;
     }
 
     private void checkBlock( Vector<TGComponent> tobeChecked, List<TGComponent> source ) {
 
-        CAMSBlock block;
+        /*CAMSBlock block;
 
         for(int i = 0; i < tobeChecked.size(); i++ ) {
             if( tobeChecked.elementAt(i) instanceof CAMSBlock ){
@@ -141,12 +141,12 @@ public class JDialogSelectSystemCAMSBlock extends javax.swing.JDialog implements
                     i--;
                 }
 	    }
-        }
+	    }*/
     }
 
     public void addNewBlock( Vector<TGComponent> added, List<TGComponent> source, Vector<TGComponent> notSource ) {
 
-        TGComponent tgc;
+        /*TGComponent tgc;
 
         for( int i = 0; i < source.size(); i++ ) {
             tgc = source.get(i);
@@ -154,7 +154,7 @@ public class JDialogSelectSystemCAMSBlock extends javax.swing.JDialog implements
                 added.addElement( tgc );
                 System.out.println("New element");
             }
-        }
+	    }*/
     }
 
     private void myInitComponents() {
