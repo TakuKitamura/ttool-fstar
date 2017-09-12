@@ -245,7 +245,6 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLARCHI_PORT_ARTIFACT = 412;
     public static final int TMLARCHI_EVENT_ARTIFACT = 395;
     public static final int TMLARCHI_HWANODE = 223;
-    public static final int TMLARCHI_CAMSNODE = 461;
     public static final int TMLARCHI_MEMORYNODE = 224;
     public static final int TMLARCHI_DMANODE = 364;
     public static final int TMLARCHI_BRIDGENODE = 225;
@@ -271,9 +270,6 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLSD_MESSAGE_ASYNC = 390;
     public static final int TMLSD_EDIT = 391;
 
-    public static final int CAMS_EDIT = 458;
-    public static final int CAMS_BLOCK = 459;
-    public static final int CAMS_CONNECTOR = 460;
 
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
@@ -614,7 +610,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_INTERNAL_SEARCH = 415;
     //--
 
-    public static final int NB_ACTION = 462;
+    public static final int NB_ACTION = 458;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -860,7 +856,7 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_ROMNODE] = new TAction("add-add-romnode", "Add a ROM", IconManager.imgic1108, IconManager.imgic1108, "ROM", "Add a memory node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_DMANODE] = new TAction("add-add-dmanode", "Add a DMA", IconManager.imgic1110, IconManager.imgic1110, "DMA", "Add a DMA node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_ICUNODE] = new TAction("add-add-icunode", "Add an ICU", IconManager.imgic1112, IconManager.imgic1112, "ICU", "Add a ICU node to the currently opened AVATAR deployment diagram", 0);
-        actions[ADD_COPROMWMRNODE] = new TAction("add-add-copromwmrnode", "Add a MWMR Copro", IconManager.imgic1114, IconManager.imgic1114, "MWMR Copro", "Add a DMA node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_COPROMWMRNODE] = new TAction("add-add-copromwmrnode", "Add a MWMR Copro", IconManager.imgic1114, IconManager.imgic1114, "MWMR Copro", "Add a MWMR Coprocessor node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_TIMERNODE] = new TAction("add-add-timernode", "Add a Timer", IconManager.imgic1116, IconManager.imgic1116, "Timer", "Add a timer node to the currently opened AVATAR deployment diagram", 0);
 
 
@@ -1026,7 +1022,6 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_EVENT_ARTIFACT] = new TAction("add-tmlarchi-event-artifact", "Map an event / request", IconManager.imgic702, IconManager.imgic702, "Map an event/request", "Map an event or a request onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_BRIDGENODE] = new TAction("add-tmlarchi-bridgenode", "Add a Bridge node", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_HWANODE] = new TAction("add-tmlarchi-hwanode", "Add a hardware accelerator node", IconManager.imgic1106, IconManager.imgic1106, "Hardware accelerator node", "Add a hardware accelerator node to the currently opened DIPLODOCUS architecture diagram", 0);
-	actions[TMLARCHI_CAMSNODE] = new TAction("add-tmlarchi-camsnode", "Add a System C-AMS node", IconManager.imgic1106, IconManager.imgic1106, "System C-AMS node", "Add a System C-AMS node to the currently open DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_MEMORYNODE] = new TAction("add-tmlarchi-memorynode", "Add a memory node", IconManager.imgic1108, IconManager.imgic1108, "Memory node", "Add a memory node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_DMANODE] = new TAction("add-tmlarchi-dmanode", "Add a DMA node", IconManager.imgic1110, IconManager.imgic1110, "DMA node", "Add a DMA node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_KEY] = new TAction("add-tmlarchi-key", "Map a key", IconManager.imgic1118, IconManager.imgic1118, "Map a key", "Map a key onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
@@ -1050,11 +1045,6 @@ public class TGUIAction extends AbstractAction {
         actions[TMLSD_TRANSFER_INSTANCE] = new TAction("add-transfer-instance-tmlsd", "Transfer instance", IconManager.imgic500, IconManager.imgic500, "Transfer instance", "Add a transfer instance to the currently opened communication pattern sequence diagram", 0);
         actions[TMLSD_CONTROLLER_INSTANCE] = new TAction("add-controller-instance-tmlsd", "Controller instance", IconManager.imgic500, IconManager.imgic500, "Controller instance", "Add a controller instance to the currently opened communication pattern sequence diagram", 0);
         actions[TMLSD_ACTION_STATE] = new TAction("add-action-tmlsd", "Action state", IconManager.imgic512, IconManager.imgic512, "Action state", "Add an action state to the currently opened communication pattern sequence diagram", 0);
-
-	//System C-AMS
-	actions[CAMS_EDIT] = new TAction("add-action-C-AMS", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened SystemC-AMS diagram", 0);
-	actions[CAMS_BLOCK] = new TAction("C-AMS-block", "Add a block", IconManager.imgic5000, IconManager.imgic5000, "Block", "Add a Block to the currently opened SystemC-AMS Diagram", 0);
-	actions[CAMS_CONNECTOR] = new TAction("C-AMS-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened SystemC-AMS Diagram", 0);
 
 
         //ProActive State Machine Diagram
