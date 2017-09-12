@@ -76,6 +76,7 @@ public class CAMSConnectingPoint extends TGConnectingPointWidthHeight {
 
     protected boolean in;
     protected boolean out;
+    protected boolean hybrid;
 
     public JDialogCAMSConnectingPoint dialog;
 
@@ -89,33 +90,56 @@ public class CAMSConnectingPoint extends TGConnectingPointWidthHeight {
 
     protected TGConnector referenceToConnector;
 
-    public CAMSConnectingPoint (CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    public CAMSConnectingPoint (CDElement _container, int _x, int _y, boolean _in, boolean _out,boolean _hybrid, double _w, double _h) {
 	super(_container, _x, _y, _in, _out, _w, _h);
-
-        if (_in) {
-            if (_out) {
-                myColor = INOUT;
+	hybrid = _hybrid;
+	
+	//color selection
+	if (_in) {
+	    if (_out) {
+		myColor = INOUT;
+	    } else {
+		myColor = IN;
+	    }
+	} else {
+	    if (_out) {
+		myColor = OUT;
             } else {
-                myColor = IN;
-            }
-        } else {
-            if (_out) {
-                myColor = OUT;
-            } else {
-                myColor = NO;
-            }
-        }
+		myColor = NO;
+	    }
+	}	    
 
         id = TGComponent.getGeneralId();
         TGComponent.setGeneralId(id + 1);
 
     }
+
+    // public CAMSConnectingPoint (CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    // 	super(_container, _x, _y, _in, _out, _w, _h);
+    // 	CAMSConnectingPoint camsco = new CAMSConnectingPoint (_container, _x, _y, _in, _out, false, _w, _h);
+    // }
       
     public void draw(Graphics g) {
         int mx = getX();
         int my = getY();
 	g.setColor(myColor);
-	g.fillRect(mx - width, my - width, width*2, height*2);
+
+	//taking into account hybrid connectors
+	if(this.hybrid==false){
+	    g.fillRect(mx - width, my - width, width*2, height*2);
+	}else if (this.in==true){
+	    System.out.println("test");
+	    g.setColor(Color.white);
+	    g.fillRect(mx - width, my - width, width*2, height*2);
+	    g.setColor(myColor);
+	    g.fillRect(mx - width, my - width, width, height*2);
+	}else {
+	    g.setColor(Color.white);
+	    g.fillRect(mx - width, my - width, width*2, height*2);
+	    g.setColor(myColor);
+	    g.fillRect(mx - width, my - width, width, height*2);
+	}
+
 	GraphicLib.doubleColorRect(g, mx - width, my - width, width*2, height*2, Color.white, Color.black);
     }
     

@@ -120,6 +120,7 @@ import ui.tmlcompd.*;
 import ui.tmlcp.TMLCPPanel;
 import ui.tmldd.*;
 import ui.tmlsd.TMLSDPanel;
+import ui.het.*;
 import ui.tree.GraphTree;
 import ui.tree.InvariantDataTree;
 import ui.tree.SearchTree;
@@ -6051,6 +6052,37 @@ public class GTURTLEModeling {
                         makePostLoading(acdp, beginIndex);
                     }
                 }
+
+            } else if (tdp instanceof CAMSBlockDiagramPanel) {  //ajout CD 24.07----mark
+                nl = doc.getElementsByTagName("CAMSBlockDiagramPanelCopy");
+
+                if (nl == null) {
+                    return;
+                }
+
+                CAMSBlockDiagramPanel camsp = (CAMSBlockDiagramPanel)tdp;
+
+                for(i=0; i<nl.getLength(); i++) {
+                    adn = nl.item(i);
+                    if (adn.getNodeType() == Node.ELEMENT_NODE) {
+                        elt = (Element) adn;
+
+                        if (camsp == null) {
+                            throw new MalformedModelingException();
+                        }
+
+                        decX = _decX;
+                        decY = _decY;
+
+                        makeXMLComponents(elt.getElementsByTagName("COMPONENT"), camsp);
+                        makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), camsp);
+                        makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), camsp);
+                        connectConnectorsToRealPoints(camsp);
+                        camsp.structureChanged();
+                        makePostLoading(camsp, beginIndex);
+                    }
+                }
+
             } else if (tdp instanceof AvatarADPanel) {
                 nl = doc.getElementsByTagName("AvatarADPanelCopy");
 
@@ -6251,6 +6283,8 @@ public class GTURTLEModeling {
             loadAvatarMethodology(node);
         } else if (type.compareTo("Sysmlsec Methodology") == 0) {
             loadSysmlsecMethodology(node);
+        } else if (type.compareTo("SystemC-AMS") == 0) {
+            loadSystemCAMS(node);
         } else if (type.compareTo("TML Design") == 0) {
             loadTMLDesign(node);
         } else if (type.compareTo("TML Component Design") == 0) {
@@ -6755,6 +6789,34 @@ public class GTURTLEModeling {
         }
     }
 
+    public void loadSystemCAMS(Node node) throws  MalformedModelingException, SAXException {
+        Element elt = (Element) node;
+        String nameTab;
+        NodeList diagramNl;
+        int indexDesign;
+
+
+        nameTab = elt.getAttribute("nameTab");
+
+        indexDesign = mgui.createSystemCAMS(nameTab);
+
+        diagramNl = node.getChildNodes();
+
+        for(int j=0; j<diagramNl.getLength(); j++) {
+            //TraceManager.addDev("Design nodes: " + j);
+            node = diagramNl.item(j);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                elt = (Element)node;
+                if (elt.getTagName().compareTo("SystemCAMSDiagramPanel") == 0) {
+                    // Class diagram
+                    TraceManager.addDev("Loading SystemC-AMS");
+                    loadSystemCAMSDiagram(elt, indexDesign);
+                    TraceManager.addDev("End loading SystemC-AMS");
+                }
+            }
+        }
+    }
+
     public void loadTMLDesign(Node node) throws  MalformedModelingException, SAXException {
         Element elt = (Element) node;
         String nameTab;
@@ -7023,6 +7085,11 @@ public class GTURTLEModeling {
             //TraceManager.addDev("Connectors...");
             ((AvatarADPanel)tdp).setConnectorsToFront();
         }
+
+	if (tdp instanceof CAMSBlockDiagramPanel) {
+            //TraceManager.addDev("Connectors...");
+            ((CAMSBlockDiagramPanel)tdp).setConnectorsToFront();
+        }
     }
 
     // AVATAR
@@ -7232,6 +7299,22 @@ public class GTURTLEModeling {
         // class diagram name
         name = elt.getAttribute("name");
         mgui.setSysmlsecMethodologyDiagramName(indexDesign, name);
+        tdp = mgui.getMainTDiagramPanel(indexDesign);
+        tdp.setName(name);
+
+        //TraceManager.addDev("tdp=" + tdp.getName());
+
+        loadDiagram(elt, tdp);
+    }
+
+    public void loadSystemCAMSDiagram(Element elt, int indexDesign) throws  MalformedModelingException, SAXException {
+	//ajout CD
+        String name;
+        TDiagramPanel tdp;
+
+        // class diagram name
+        name = elt.getAttribute("name");
+        mgui.setSystemCAMSDiagramName(indexDesign, name);
         tdp = mgui.getMainTDiagramPanel(indexDesign);
         tdp.setName(name);
 
@@ -8910,6 +8993,39 @@ public class GTURTLEModeling {
             }
         }
     }
+
+     public boolean checkSyntaxSystemCAMS(Vector<TGComponent> blocksToTakeIntoAccount, SystemCAMSPanel scp, boolean optimize) { //ajout CD 04/07 FIXME
+    //     List<TMLError> warningsOptimize = new ArrayList<TMLError>();
+    //     warnings = new LinkedList<CheckingError> ();
+    //     mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
+    //     GTMLModeling gtmlm = new GTMLModeling(scp, true);
+
+    // 	// gtmlm.setBlocks(blocksToTakeIntoAccount); //simply transforms the parameter from a Vector to LinkedList
+    //     nullifyTMLModeling();
+    //     tmlm = null;
+    //     tm = null;
+    //     tmState = 1;
+    // 	// scp = gtmlm.translateToSystemCAMS();
+
+    //     listE = gtmlm.getCorrespondanceTable();
+
+    //     checkingErrors = gtmlm.getCheckingErrors();
+    //     avatarspec = gtmlm.avspec;
+    //     if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+    //         analyzeErrors();
+    //         warnings = gtmlm.getCheckingWarnings();
+    //         return false;
+    //     } else {
+    //         if (optimize) {
+    //             warningsOptimize = tmap.optimize();
+    //         }
+    // 	    //  warnings.addAll(convertToCheckingErrorTMLErrors(warningsOptimize, scp.scp));
+    //         mgui.resetAllDIPLOIDs();
+    //         listE.useDIPLOIDs();
+    //         mgui.setMode(MainGUI.GEN_DESIGN_OK);
+             return true;
+    //     }
+     }
 
     public boolean checkSyntaxTMLMapping(Vector<TGComponent> nodesToTakeIntoAccount, TMLArchiPanel tmlap, boolean optimize) {
         List<TMLError> warningsOptimize = new ArrayList<TMLError>();

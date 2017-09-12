@@ -83,7 +83,9 @@ import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
 import ui.tmlcp.TMLCPPanel;
 import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmldd.TMLArchiCAMSNode;
 import ui.tmlsd.TMLSDPanel;
+import ui.het.*;
 import ui.tree.DiagramTreeModel;
 import ui.tree.DiagramTreeRenderer;
 import ui.tree.JDiagramTree;
@@ -989,6 +991,36 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return index;
     }
 
+        public int addSystemCAMSPanel(String name, int index) { //ajout CD -----Mark
+        if (index == -1) {
+            index = tabs.size();
+        }
+	SystemCAMSPanel scp = new SystemCAMSPanel(this);
+        tabs.add(index, scp);
+        mainTabbedPane.add(scp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open System C-AMS diagrams ");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic60);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        scp.init();
+        //ystem.out.println("Design added");
+        return index;
+    }
+    
+    public CAMSBlockDiagramPanel addSystemCAMSPanel(String name, int index, TMLArchiCAMSNode parent) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+	SystemCAMSPanel scp = new SystemCAMSPanel(this);
+        tabs.add(index, scp);
+        mainTabbedPane.add(scp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open System C-AMS diagrams ");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic60);
+        scp.init();
+	return scp.getCAMSBlockDiagramPanel();
+    }
+
     //Return the list of all the TMLArchiDiagramPanels
     public Vector<TMLArchiPanel> getTMLArchiDiagramPanels()     {
 
@@ -1364,6 +1396,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return index;
     }
 
+    public int createSystemCAMS(String name) { //ajout CD
+        int index = addSystemCAMSPanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+
     public int createADD(String name) {
         int index = addADDPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
@@ -1731,6 +1769,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newTMLArchi() {
         //TraceManager.addDev("NEW DIPLO Architecture");
         addTMLArchiPanel("Architecture", -1);
+        tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size()-1);
+        //paneAction(null);
+        //frame.repaint();
+    }
+
+    public void newSystemCAMS() {//ajout CD
+        //TraceManager.addDev("NEW DIPLO Architecture");
+        addSystemCAMSPanel("SystemC-AMS", -1);
         tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
@@ -3286,7 +3333,44 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     }
                 }
             }
-        } else if (tp instanceof TMLArchiPanel) {
+        }  else if (tp instanceof SystemCAMSPanel) { //Ajout CD
+	    
+	    SystemCAMSPanel camsp = (SystemCAMSPanel)tp;
+            JDialogSelectSystemCAMSBlock.validated = camsp.validated;
+            JDialogSelectSystemCAMSBlock.ignored = camsp.ignored;
+	    Vector<TGComponent> camsBlocksToValidate = new Vector<TGComponent>();
+	    JDialogSelectSystemCAMSBlock jdsscb = new JDialogSelectSystemCAMSBlock(frame, camsBlocksToValidate, camsp.camsbdp.getComponentList(),"Block Parameter");
+            if (!automatic) {
+                GraphicLib.centerOnParent(jdsscb);
+                jdsscb.setVisible(true);
+            } else {
+                jdsscb.closeDialog();
+	    }
+
+	    if (camsBlocksToValidate.size() > 0) {
+                camsp.validated = JDialogSelectSystemCAMSBlock.validated;
+                camsp.ignored = JDialogSelectSystemCAMSBlock.ignored;
+                if (b) {
+                    setMode(MainGUI.GEN_SYSTEMC_OK);
+                    setMode(MainGUI.MODEL_OK);
+                    ret = true;
+                    if (!automatic) {
+                        JOptionPane.showMessageDialog(frame,
+                                                      "0 error, " + getCheckingWarnings().size() + " warning(s). You can now perform verifications (safety, security, performance) or generate executable code",
+                                                      "Syntax analysis successful on SystemC-AMS",
+                                                      JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    if (!automatic) {
+                        JOptionPane.showMessageDialog(frame,
+                                                      "The SystemC-AMS contains several errors",
+                                                      "Syntax analysis failed",
+                                                      JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+
+	} else if (tp instanceof TMLArchiPanel) {
             tmlap = (TMLArchiPanel)tp;
             JDialogSelectTMLNodes.validated = tmlap.validated;
             JDialogSelectTMLNodes.ignored = tmlap.ignored;
@@ -5689,6 +5773,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         tp.tabbedPane.setTitleAt(0, name);
     }
 
+    public void setSystemCAMSDiagramName(int indexDesign, String name) {
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
+        tp.tabbedPane.setTitleAt(0, name);
+    }
+
     public void setSysmlsecMethodologyDiagramName(int indexDesign, String name) {
         TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
@@ -8044,7 +8133,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         private JPopupMenu menu;
 
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement/*, newTMLDesign*/, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
-            newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo;
+            newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSystemCAMS;
         private JMenuItem newAVATARAnalysis;
 
         public PopupListener(MainGUI _mgui) {
@@ -8091,6 +8180,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             newTMLComponentDesign = createMenuItem("New Partitioning - Functional view");
             newTMLArchi = createMenuItem("New Partitioning - Architecture and Mapping");
             newTMLCP = createMenuItem("New Partitioning - Communication Pattern");
+	    newSystemCAMS = createMenuItem("New SystemC-AMS Block Diagram"); //ajout CD
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
             newNCDesign = createMenuItem("New Network Calculus Design");
@@ -8177,6 +8267,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     menu.add(newTMLComponentDesign);
                     menu.add(newTMLCP);
                     menu.add(newTMLArchi);
+                    menu.addSeparator();
+		    menu.add(newSystemCAMS);//ajout CD
                     menu.addSeparator();
                 }
             }
@@ -8301,7 +8393,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                         mgui.newAvatarMADs();
                     } else if (e.getSource() == newAVATARAnalysis) {
                         mgui.newAvatarAnalysis();
-                    }
+                    }  else if (e.getSource() == newSystemCAMS) { //ajout CD
+			mgui.newSystemCAMS();
+		    }
                 }
             };
     }
