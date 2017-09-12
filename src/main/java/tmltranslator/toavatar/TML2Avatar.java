@@ -666,14 +666,16 @@ public class TML2Avatar {
 				else if (ae.securityPattern.type.equals("Symmetric Encryption")){
 					if (!ae.securityPattern.nonce.isEmpty()){
 						block.addAttribute(new AvatarAttribute(ae.securityPattern.nonce, AvatarType.INTEGER, block, null));
+						block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block,null));
 						AvatarMethod concat2 = new AvatarMethod("concat2",ae);
 						concat2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
 						concat2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.nonce));
 						concat2.addReturnParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
 						if (block.getAvatarAttributeWithName(ae.securityPattern.name) !=null && block.getAvatarAttributeWithName(ae.securityPattern.nonce)!=null){
 							block.addMethod(concat2);
+							System.out.println("Adding concat2");
+							tran.addAction(ae.securityPattern.name+"=concat2("+ae.securityPattern.name + ","+ae.securityPattern.nonce+")");
 						}
-						tran.addAction(ae.securityPattern.name+"=concat2("+ae.securityPattern.name + ","+ae.securityPattern.nonce+")");
 					}
 					//Securing a key instead of data
 					if (!ae.securityPattern.key.isEmpty()){
@@ -820,7 +822,8 @@ public class TML2Avatar {
 					get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
 					get2.addParameter(block.getAvatarAttributeWithName(ae.securityPattern.name));
 					get2.addParameter(block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce));
-					if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce)!=null) {
+					if (block.getAvatarAttributeWithName(ae.securityPattern.name)!=null && block.getAvatarAttributeWithName("testnonce_"+ae.securityPattern.nonce)!=null) {
+						System.out.println("adding get2");
 						block.addMethod(get2);
 					}
 					tran.addAction("get2("+ae.securityPattern.name + ","+ae.securityPattern.name+",testnonce_"+ae.securityPattern.nonce+")");
