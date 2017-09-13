@@ -144,11 +144,16 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
 	
 	/*button = this.add(mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT]);
 	  button.addMouseListener(mgui.mouseHandler);*/
+        
+        // Issue #66: CP mapping now part of core functions
+    	this.addSeparator();
+        button = this.add( mgui.actions[ TGUIAction.TMLARCHI_CPNODE ] );
+        button.addMouseListener( mgui.mouseHandler );
 	    
-        if (MainGUI.experimentalOn) {
-        	this.addSeparator();
-            button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPNODE]);
-            button.addMouseListener(mgui.mouseHandler);
+        if ( MainGUI.experimentalOn ) {
+//        	this.addSeparator();
+//            button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPNODE]);
+//            button.addMouseListener(mgui.mouseHandler);
             button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
             button.addMouseListener(mgui.mouseHandler);
         }
