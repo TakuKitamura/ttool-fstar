@@ -8403,7 +8403,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     /**
      * This adapter is constructed to handle mouse over component events.
      */
-    private class MouseHandler extends MouseAdapter  {
+    private class MouseHandler extends MouseAdapter {
 
         private JLabel label;
 
@@ -8420,6 +8420,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             this.label = label;
         }
 
+        @Override
         public void mouseEntered(MouseEvent evt)  {
             if (evt.getSource() instanceof AbstractButton)  {
                 AbstractButton button = (AbstractButton)evt.getSource();
