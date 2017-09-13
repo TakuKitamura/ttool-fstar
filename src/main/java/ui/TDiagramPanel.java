@@ -126,7 +126,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide,search, enableDisable, setAsCryptoBlock, setAsRegularBlock;
     protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex, checkLatency;
     protected JMenuItem breakpoint;
-    protected JMenuItem paste, insertLibrary, upX, upY, downX, downY, fitToContent;
+    protected JMenuItem paste, insertLibrary, upX, upY, downX, downY, fitToContent, backToMainDiagram;
     protected JMenuItem cut, copy, saveAsLibrary, captureSelected;
     //author:huytruong
     //search dialog
@@ -1398,6 +1398,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         diagramMenu.add(downX);
         diagramMenu.add(downY);
         diagramMenu.add(fitToContent);
+        diagramMenu.add(backToMainDiagram);
     }
 
     private void buildSelectedPopupMenu() {
@@ -1520,6 +1521,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 				fitDiagramSizeToContent();
 			}
 		});
+        
+        //Issue #62: Provide quick navigation to main diagram
+        backToMainDiagram = new JMenuItem("Back to main diagram");
+        backToMainDiagram.addActionListener(new ActionListener() {
+        	
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		tp.tabbedPane.setSelectedIndex(0);        	
+        	}
+        });
 
         // Selected Menu
         cut = new JMenuItem("Cut");
@@ -2021,6 +2032,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 //        }
         
         fitToContent.setEnabled( canFitDiagramSizeToContent() );
+        
+        //Issue #62: Provide quick navigation to main diagram 
+        backToMainDiagram.setEnabled(tp.tabbedPane.getSelectedIndex() != 0);
     }
 
     private void setSelectedPopupMenu() {
