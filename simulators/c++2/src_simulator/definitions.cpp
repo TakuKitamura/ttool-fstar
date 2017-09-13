@@ -51,8 +51,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <LogConstraint.h>
 #include <sys/types.h>
 #include <unistd.h>
-//#include <MemPool.h>
-//#include <Parameter.h>
 
 TMLTime SchedulableDevice::_simulatedTime=0;
 TMLTime SchedulableDevice::_overallTransNo=0;
@@ -81,7 +79,6 @@ long getTimeDiff(struct timeval& begin, struct timeval& end){
 	return end.tv_usec-begin.tv_usec+(end.tv_sec-begin.tv_sec)*1000000;
 }
 
-
 /*bool greaterRunnableTime::operator()(TMLTransaction const* p1, TMLTransaction const* p2){
 	return p1->getRunnableTime() > p2->getRunnableTime();
 }
@@ -90,31 +87,43 @@ bool greaterPrio::operator()(TMLTransaction const* p1, TMLTransaction const* p2)
 	return p1->getCommand()->getTask()->getPriority() > p2->getCommand()->getTask()->getPriority();
 }*/
 
-bool greaterStartTime::operator()(TMLTransaction const* p1, TMLTransaction const* p2){
+bool greaterStartTime::operator()(	TMLTransaction const* p1,
+									TMLTransaction const* p2 ) {
 	return p1->getStartTime() > p2->getStartTime();
 }
 
-void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace){
-	unsigned int aPos=0;
-	while (aPos< ioHTML.length() && (aPos= ioHTML.find(iSearch,aPos))!=std::string::npos){
-		ioHTML.replace(aPos++,iSearch.length(),iReplace);
+void replaceAll( 	std::string& ioHTML,
+					std::string iSearch,
+					std::string iReplace ) {
+	// Issue #4: aPos must be declared as size_type otherwise the comparison with npos does not work leading to a crash
+	std::string::size_type aPos = 0;
+//	unsigned int aPos=0;
+	while ( aPos < ioHTML.length() && ( aPos = ioHTML.find( iSearch, aPos ) ) != std::string::npos ) {
+		ioHTML.replace( aPos++, iSearch.length(), iReplace );
 	}
+}
+
+bool ends_with(std::string const& str, std::string const& suffix) {
+    return suffix.size() <= str.size() && str.find( suffix, str.size() - suffix.size()) != str.npos;
 }
 
 //std::string vcdValConvert(unsigned int iVal){
 //	if(iVal==1 || iVal==2) return "1"; else return "0";
 //}
 
-std::string vcdTimeConvert(TMLTime iVal){
+std::string vcdTimeConvert( TMLTime iVal ) {
 	std::string iResult;
+
 	do{
 		if (iVal & 1) iResult="1" + iResult; else iResult="0" + iResult;
 		iVal >>= 1;
 	}while(iVal);
+
 	return iResult;
 }
 
-int getexename(char* buf, size_t size){
+int getexename(	char* buf,
+				size_t size ) {
 	char linkname[64]; /* /proc/<pid>/exe */
 	pid_t pid;
 	int ret;

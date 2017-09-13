@@ -101,17 +101,16 @@ public:
 	\return Short string representation
 	*/
 	std::string toShortString() const;
-	///Writes a HTML representation of the schedule to an output file
 
 	/**
       	\param glob refers to the output stream
     	*/
 	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
-	void latencies2XML(std::ostringstream& glob, int id1, int id2);
+	void latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2);
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
-	void schedule2HTML(std::ofstream& myfile) const;
+//	void schedule2HTML(std::ofstream& myfile) const;
 	///Writes a plain text representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file

@@ -117,11 +117,13 @@ public:
     	*/ 
 	inline ID getID() const {return _ID;}
 #ifdef ADD_COMMENTS
+
 	///Adds a new execution comment to the internal list
 	/**
       	\param iComment Pointer to the comment
     	*/ 
 	inline void addComment(Comment* iComment) {_commentList.push_back(iComment);}
+
 	///Returns the next execution comment (pointed to by _posCommentList)
 	/**
       	\param iInit Indicates if the list iterator has to be reset to the beginning of the list

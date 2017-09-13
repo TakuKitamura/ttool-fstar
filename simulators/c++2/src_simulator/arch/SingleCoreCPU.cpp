@@ -48,7 +48,18 @@
 //#include <TransactionListener.h>
 
 
-SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iScheduler), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle)
+SingleCoreCPU::SingleCoreCPU(	ID iID,
+								std::string iName,
+								WorkloadSource* iScheduler,
+								TMLTime iTimePerCycle,
+								unsigned int iCyclesPerExeci,
+								unsigned int iCyclesPerExecc,
+								unsigned int iPipelineSize,
+								unsigned int iTaskSwitchingCycles,
+								unsigned int iBranchingMissrate,
+								unsigned int iChangeIdleModeCycles,
+								unsigned int iCyclesBeforeIdle,
+								unsigned int ibyteDataSize ) : CPU( iID, iName, iScheduler ), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle)
 #ifdef PENALTIES_ENABLED
                                                                                                                                                                                                                                                                                                                                                                       , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
                                                                                                                                                                                                                                                                                                                                                                       , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
@@ -324,39 +335,27 @@ std::string SingleCoreCPU::toShortString() const{
   return outp.str();
 }
 
-
-
-
-void SingleCoreCPU::schedule2HTML(std::ofstream& myfile) const{
-  TMLTime aCurrTime=0;
-  TMLTransaction* aCurrTrans;
-  unsigned int aBlanks,aLength,aColor;
-  std::string aCommentString;
-  //if (_transactList.empty()) return;
-  //std::cout << "0. size: " << _transactList.size() << '\n';
-  myfile << "<h2><span>Scheduling for device: "<< _name <<"</span></h2>\n<table>\n<tr>";
-
-  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
-    aCurrTrans=*i;
-    //if (aCurrTrans->getVirtualLength()==0) continue;
-    aBlanks=aCurrTrans->getStartTime()-aCurrTime;
-    if (aBlanks>0){
-
-    	// Issue #4
-		writeColums( myfile, aBlanks, "not", "idle time" );
+// Issue #4: Moved to SchedulableDevice for easier maintenance
+//void SingleCoreCPU::schedule2HTML(std::ofstream& myfile) const{
+//  TMLTime aCurrTime=0;
+//  TMLTransaction* aCurrTrans;
+//  unsigned int aBlanks,aLength,aColor;
+//  std::string aCommentString;
+//  //if (_transactList.empty()) return;
+//  //std::cout << "0. size: " << _transactList.size() << '\n';
+//  myfile << "<h2><span>Scheduling for device: "<< _name <<"</span></h2>\n<table>\n<tr>";
+//  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+//    aCurrTrans=*i;
+//    //if (aCurrTrans->getVirtualLength()==0) continue;
+//    aBlanks=aCurrTrans->getStartTime()-aCurrTime;
+//    if (aBlanks>0){
 //      if (aBlanks==1)
 //        myfile << "<td title=\"idle time\" class=\"not\"></td>\n";
 //      else
 //        myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
-    }
-
-    aLength = aCurrTrans->getPenalties();
-
-    if ( aLength != 0 ) {
-    	// Issue #4
-        std::ostringstream title;
-        title << "idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty();
-		writeColums( myfile, aLength, "not", title.str() );
+//    }
+//    aLength=aCurrTrans->getPenalties();
+//    if (aLength!=0){
 //      if (aLength==1){
 //        //myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t15\"></td>\n";
 //        //myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
@@ -365,73 +364,52 @@ void SingleCoreCPU::schedule2HTML(std::ofstream& myfile) const{
 //        //myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
 //        myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
 //      }
-    }
-
-    aLength = aCurrTrans->getOperationLength();
-    aColor = aCurrTrans->getCommand()->getTask()->getInstanceNo() & NB_HTML_COLORS;
-    std::ostringstream cellClass;
-    cellClass << "t" << aColor;
-
-    writeColums( myfile, aLength, cellClass.str(), aCurrTrans->toShortString() );
-//
-//    if ( aLength == 1 )
+//    }
+//    aLength=aCurrTrans->getOperationLength();
+//    aColor=aCurrTrans->getCommand()->getTask()->getInstanceNo() & 15;
+//    if (aLength==1)
 //      myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
 //    else
 //      myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
-
-
-    aCurrTime = aCurrTrans->getEndTime();
-    //std::cout << "end time: " << aCurrTrans->getEndTime() << std::endl;
-  }
-  //std::cout << "acurrTime: " << aCurrTime << std::endl;
-  myfile << "</tr>\n<tr>";
-
-  for ( aLength = 0; aLength < aCurrTime; aLength++ ) {
-	  myfile << "<th></th>";
-  }
-
-  myfile << "</tr>\n<tr>";
-
-  for ( aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
-	  std::ostringstream spanVal;
-	  spanVal << aLength;
-	  writeColums( myfile, 5, "sc", "", spanVal.str(), false );
-	  //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
-  }
-
-  myfile << "</tr>\n</table>\n<table>\n<tr>";
-
-  for( TaskList::const_iterator j = _taskList.begin(); j != _taskList.end(); ++j ) {
-	  unsigned int instNumber = (*j)->getInstanceNo() - 1;
-	  aColor = instNumber % NB_HTML_COLORS;
-    							// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
-	  myfile << "<td class=\"t" << aColor << "\"></td><td style=\"max-width: unset;\">" << (*j)->toString() << "</td><td class=\"space\"></td>\n";
-  }
-
-  myfile << "</tr>";
-#ifdef ADD_COMMENTS
-  bool aMoreComments=true, aInit=true;
-  Comment* aComment;
-  while(aMoreComments){
-    aMoreComments=false;
-    myfile << "<tr>";
-    for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
-      aCommentString = (*j)->getNextComment(aInit, aComment);
-      if (aComment==0){
-        myfile << "<td></td><td></td><td class=\"space\"></td>";
-      } else{
-        replaceAll(aCommentString,"<","&lt;");
-        replaceAll(aCommentString,">","&gt;");
-        aMoreComments=true;
-        myfile << "<td>" << aComment->_time << "</td><td><pre>" << aCommentString << "</pre></td><td class=\"space\"></td>";
-      }
-    }
-    aInit=false;
-    myfile << "</tr>\n";
-  }
-#endif
-  myfile << "</table>\n";
-}
+//
+//
+//    aCurrTime=aCurrTrans->getEndTime();
+//    //std::cout << "end time: " << aCurrTrans->getEndTime() << std::endl;
+//  }
+//  //std::cout << "acurrTime: " << aCurrTime << std::endl;
+//  myfile << "</tr>\n<tr>";
+//  for(aLength=0;aLength<aCurrTime;aLength++) myfile << "<th></th>";
+//  myfile << "</tr>\n<tr>";
+//  for(aLength=0;aLength<aCurrTime;aLength+=5) myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
+//  myfile << "</tr>\n</table>\n<table>\n<tr>";
+//  for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
+//    aColor=(*j)->getInstanceNo() & 15;
+//    myfile << "<td class=\"t"<< aColor <<"\"></td><td>"<< (*j)->toString() << "</td><td class=\"space\"></td>\n";
+//  }
+//  myfile << "</tr>";
+//#ifdef ADD_COMMENTS
+//  bool aMoreComments=true, aInit=true;
+//  Comment* aComment;
+//  while(aMoreComments){
+//    aMoreComments=false;
+//    myfile << "<tr>";
+//    for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
+//      aCommentString = (*j)->getNextComment(aInit, aComment);
+//      if (aComment==0){
+//        myfile << "<td></td><td></td><td class=\"space\"></td>";
+//      } else{
+//        replaceAll(aCommentString,"<","&lt;");
+//        replaceAll(aCommentString,">","&gt;");
+//        aMoreComments=true;
+//        myfile << "<td>" << aComment->_time << "</td><td><pre>" << aCommentString << "</pre></td><td class=\"space\"></td>";
+//      }
+//    }
+//    aInit=false;
+//    myfile << "</tr>\n";
+//  }
+//#endif
+//  myfile << "</table>\n";
+//}
 
 void SingleCoreCPU::schedule2TXT(std::ofstream& myfile) const{
   myfile << "========= Scheduling for device: "<< _name << " =========\n" ;
@@ -439,7 +417,6 @@ void SingleCoreCPU::schedule2TXT(std::ofstream& myfile) const{
     myfile << (*i)->toShortString() << std::endl;
   }
 }
-
 
 int SingleCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const {
   int size = _transactList.size();
@@ -459,7 +436,7 @@ int SingleCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) cons
   return total;
 }
 
-void SingleCoreCPU::latencies2XML(std::ostringstream& glob, int id1, int id2) {
+void SingleCoreCPU::latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2) {
 	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 		if ((*i)->getCommand() !=NULL){
 			if ((*i)->getCommand()->getID() == id1 || (*i)->getCommand()->getID() == id2){
@@ -471,32 +448,21 @@ void SingleCoreCPU::latencies2XML(std::ostringstream& glob, int id1, int id2) {
 	return;
 }
 
-
-
-//TMLTime SingleCoreCPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
 void SingleCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
-  //new (oSigData) SignalChangeData(RUNNING, aCurrTrans->getStartTimeOperation(), this);
-  //std::ostringstream outp;
-  //oNoMoreTrans=false;
   if (iInit){
     _posTrasactListVCD=_transactList.begin();
     _previousTransEndTime=0;
-    _vcdOutputState=END_IDLE_CPU;
+    _vcdOutputState = END_IDLE_CPU;
     if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
-      //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
-      //oSigChange=outp.str();
       new (oSigData) SignalChangeData(END_IDLE_CPU, 0, this);
-      //return 0
       return;
     }
   }
+
   if (_posTrasactListVCD == _transactList.end()){
-    //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
-    //oSigChange=outp.str();
-    //oNoMoreTrans=true;
-    //return _previousTransEndTime;
     new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
-  }else{
+  }
+  else{
     TMLTransaction* aCurrTrans=*_posTrasactListVCD;
     switch (_vcdOutputState){
     case END_TASK_CPU:

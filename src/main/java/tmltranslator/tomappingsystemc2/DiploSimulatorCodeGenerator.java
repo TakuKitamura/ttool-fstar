@@ -214,7 +214,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 
                 TraceManager.addDev("cores " + exNode.nbOfCores);
                 
-                for(int cores=0; cores<exNode.nbOfCores; cores++){
+                for(int cores = 0; cores < exNode.nbOfCores; cores++ ) {
                 	final String cpuInstName = namesGen.cpuInstanceName( exNode, cores );
                     declaration += "CPU* " + cpuInstName + " = new SingleCoreCPU(" + exNode.getID() + ", \"" + namesGen.cpuName( exNode, cores ) + "\", " + schedulerInstName + ", ";
                     declaration  += exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", "  + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
