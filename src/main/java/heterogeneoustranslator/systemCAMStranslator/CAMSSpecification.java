@@ -80,7 +80,7 @@ public class CAMSSpecification{
     }
 
     public List<CAMSBlocks> getUnconnectedBlocks(){
-	List<CAMSBlocks> unconnectedBlocks;
+	/*	List<CAMSBlocks> unconnectedBlocks;
 	for(CAMSBlocks block : blocks){
 	    for(CAMSConnection connection : connections){
 		if (block == connection.getInputBlock() || block == connection.getOutputBlock()){
@@ -91,11 +91,11 @@ public class CAMSSpecification{
 		}
 	    }
 	}
-	return unconnectedBlocks;
+	return unconnectedBlocks;*/
     }
 
     public List<CAMSSignal> getunconnectedSignals(){
-	List<CAMSSignal> unconnectedSignals;
+	/*	List<CAMSSignal> unconnectedSignals;*/
 	return unconnectedSignals;
     }
 }
