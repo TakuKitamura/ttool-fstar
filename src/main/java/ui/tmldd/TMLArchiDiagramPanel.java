@@ -60,17 +60,15 @@ import java.util.Vector;
  */
 public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 
-    public static final int VIEW_ALL = 0;
-    public static final int VIEW_ARCHITECTURE_ONLY = 1;
-    public static final int VIEW_TASK_MAPPING = 2;
-    public static final int VIEW_CHANNEL_MAPPING = 3;
+    public static final int VIEW_TASK_MAPPING = 16;
+    public static final int VIEW_CHANNEL_MAPPING = 8;
     public static final int VIEW_COMM_PATTERN = 4;
-    public static final int VIEW_COMM_PATTERN_MAPPING = 5;
-    public static final int VIEW_SECURITY_MAPPING = 6;
+    public static final int VIEW_PORT_INTERFACE = 2;
+    public static final int VIEW_SECURITY_MAPPING = 1;
 
     private int masterClockFrequency = 200; // in MHz
 
-    protected int view = VIEW_ALL;
+    protected int view = 31;
 
   
 
@@ -410,23 +408,41 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     }
 
     public boolean inCurrentView(TGComponent tgc) {
-		switch(view) {
-		case VIEW_ALL:
-		    return true;
-		case VIEW_ARCHITECTURE_ONLY:
-		    return (tgc instanceof TMLArchiElementInterface);
-		case VIEW_TASK_MAPPING:
-		    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiTaskInterface);
-		case VIEW_CHANNEL_MAPPING:
-		    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiChannelInterface);
-		case VIEW_COMM_PATTERN:
-		    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface);
-		case VIEW_COMM_PATTERN_MAPPING:
-		    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiCPInterface) ||  (tgc instanceof TMLArchiPortInterface);
-		case VIEW_SECURITY_MAPPING:
-		    return (tgc instanceof TMLArchiElementInterface) || (tgc instanceof TMLArchiSecurityInterface) || (tgc instanceof TMLArchiTaskInterface);
-		default:
-		    return true;
-		}
+    	
+    	boolean res = (tgc instanceof TMLArchiElementInterface);
+    	int tmp = view;
+    	
+    	if (view >= VIEW_TASK_MAPPING)
+    	{
+    		res = res || (tgc instanceof TMLArchiTaskInterface);
+    		view -= 16;
+    	}
+    	
+    	if (view >= VIEW_CHANNEL_MAPPING)
+    	{
+    		res = res || (tgc instanceof TMLArchiChannelInterface);
+    		view -= 8;
+    	}
+    	
+    	if (view >= VIEW_COMM_PATTERN)
+    	{
+    		res = res || (tgc instanceof TMLArchiCPInterface);
+    		view -= 4;
+    	}
+    	
+    	if (view >= VIEW_PORT_INTERFACE)
+    	{
+    		res = res || (tgc instanceof TMLArchiPortInterface);
+    		view -= 2;
+    	}
+    	
+    	if (view >= VIEW_SECURITY_MAPPING)
+    	{
+    		res = res || (tgc instanceof TMLArchiSecurityInterface);
+    		view -= 1;
+    	}
+    	
+    	view = tmp;
+    	return res;
     }
 }//End of class
