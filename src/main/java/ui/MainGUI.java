@@ -3766,6 +3766,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return list;
     }
 
+	public ArrayList<TGComponent> getAllAttacks(){
+		TURTLEPanel tp;
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+
+        for(int i=0; i<tabs.size(); i++) {
+            tp = tabs.elementAt(i);
+            if (tp instanceof AttackTreePanel) {
+                for (TGComponent s:((AttackTreePanel)tp).getAllAttacks()){
+                    list.add(s);
+                }
+            }
+        }
+        return list;
+
+	}
+
 	public ArrayList<TGComponent> getAllRequirements(){
 		TURTLEPanel tp;
         ArrayList<TGComponent> list = new ArrayList<TGComponent>();
