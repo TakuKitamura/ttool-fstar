@@ -242,14 +242,28 @@ public class NetList {
 		netlist = netlist + "vgmn.p_to_target["+(l+1)+"](signal_vci_ethernett);" + CR;	
 		netlist = netlist + "vgmn.p_to_target["+(l+2)+"](signal_vci_bdt);" + CR;	
 	netlist = netlist + "vgmn.p_to_target["+(l+3)+"](signal_vci_vcilocks);" + CR;	
+	int i;
+	//DG 14.09.
+	int coproc_count=0;
+	for(i=0;i<coproc_count;i++){
+
+	    netlist = netlist + "vgmn.p_to_target["+(l+4+i)+"](signal_mwmr_"+i+"_target);" + CR;
+	}
 	    }else{ //vgsb 
 		netlist = netlist + "vgsb.p_to_target["+(l)+"](signal_vci_vcifdaccesst);" + CR; 
 		netlist = netlist + "vgsb.p_to_target["+(l+1)+"](signal_vci_ethernett);" + CR;	
 		netlist = netlist + "vgsb.p_to_target["+(l+2)+"](signal_vci_bdt);" + CR;	
 		   		netlist = netlist + "vgsb.p_to_target["+(l+3)+"](signal_vci_vcilocks);" + CR;	
-		   }
 
-    }else{
+	//DG 14.09.
+				int coproc_count=0;
+				int i;
+	  for(i=0;i<coproc_count;i++){
+	      netlist = netlist + "vgmn.p_to_target["+(l+4+i)+"](signal_mwmr_"+i+"_target);" + CR;
+	  }
+	    }
+
+	}else{
 	    /* cluster case */
 	    if(icn=="vgmn"){
 		netlist = netlist + "vgmn.p_to_target["+5+"](signal_vci_vcifdaccesst);" + CR; 						
@@ -355,6 +369,8 @@ public class NetList {
 	////////////////MWMR controller; hypothesis 1 per coprocessor
 	//	if(nb_cluster == 0){
 	    i=0;
+	    int coproc_count=0;
+
 	    for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
 		//a coprocessor with its FIFO interface built from HWA 
 		netlist = netlist +"hwa"+i+".p_clk(signal_clk);" + CR;
@@ -373,6 +389,7 @@ netlist = netlist +copro.getCoprocName() +".p_to_coproc["+i+"](signal_fifo_"+i+"
 //	netlist = netlist +copro.getCoprocName() +".status();" + CR;
 //	netlist = netlist +copro.getCoprocName() +".config();" + CR;
 i++;
+coproc_count++;
           }
 	   
 	
