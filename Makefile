@@ -7,14 +7,14 @@ TAR			= tar
 GZIP			= gzip
 GRADLE			= $(shell which gradle)
 GRADLE_VERSION_NEEDED	= 3.3
-ERROR_MSG		= echo "$(COLOR)\nBuild with gradle failed. Falling back to regular javac command...\n$(RESET)"
+ERROR_MSG		= printf "$(COLOR)\nBuild with gradle failed. Falling back to regular javac command...\n$(RESET)"
 
 ifeq "$(GRADLE)" ""
     ERROR_MSG	= echo "Gradle was not found. Falling back to regular javac command...\n"
     GRADLE 	= false && echo >/dev/null
 else
     GRADLE_VERSION 	:= $(shell $(GRADLE) --version | grep "^Gradle" | awk '{print $$2}')
-    GRADLE_VERSION_MIN 	:= $(shell echo "$(GRADLE_VERSION_NEEDED)\n$(GRADLE_VERSION)" | sort -V 2>/dev/null | head -n1)
+    GRADLE_VERSION_MIN 	:= $(shell printf "%s\n%s\n" "$(GRADLE_VERSION_NEEDED)" "$(GRADLE_VERSION)" | sort -V 2>/dev/null | head -n1)
     ifneq "$(GRADLE_VERSION_NEEDED)" "$(GRADLE_VERSION_MIN)"
 	ERROR_MSG	= echo "$(COLOR)Gradle $(GRADLE_VERSION) is too old. Needs at least $(GRADLE_VERSION_NEEDED). Falling back to regular javac command...\n$(RESET)"
 	GRADLE = false && echo >/dev/null
