@@ -52,6 +52,7 @@ import java.util.List;
 
 public class CAMSSpecification{
 	
+    public int nb_target, nb_init;
 
     private List<CAMSBlocks> blocks;
     private List<CAMSSignal> signals;
@@ -66,11 +67,11 @@ public class CAMSSpecification{
         nb_init = _nb_init;
     }
     
-    public List<CAMSBlock> getBlock(){
+    public List<CAMSBlocks> getBlock(){
 	return blocks;
     }
 
-    public List<CAMSSignals> getSignals(){
+    public List<CAMSSignal> getSignals(){
 	return signals;
     }
 
@@ -79,9 +80,9 @@ public class CAMSSpecification{
     }
 
     public List<CAMSBlocks> getUnconnectedBlocks(){
-	List<CAMSBlocks> unconnectedBlocks;
+	/*	List<CAMSBlocks> unconnectedBlocks;
 	for(CAMSBlocks block : blocks){
-	    for(CAMSConnections connection : connections){
+	    for(CAMSConnection connection : connections){
 		if (block == connection.getInputBlock() || block == connection.getOutputBlock()){
 		    break;
 		}
@@ -90,13 +91,11 @@ public class CAMSSpecification{
 		}
 	    }
 	}
-	return unconnectedBlocks;
+	return unconnectedBlocks;*/
     }
 
-    public list<CAMSSignals> getunconnectedSignals(){
-	list<CAMSSignals> unconnectedSignals;
+    public List<CAMSSignal> getunconnectedSignals(){
+	/*	List<CAMSSignal> unconnectedSignals;*/
 	return unconnectedSignals;
     }
-
-
 }
