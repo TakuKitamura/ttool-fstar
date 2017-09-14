@@ -96,6 +96,6 @@ public class CAMSSpecification{
 
     public List<CAMSSignal> getunconnectedSignals(){
 	/*	List<CAMSSignal> unconnectedSignals;*/
-	return unconnectedSignals;
+	//return unconnectedSignals;
     }
 }
