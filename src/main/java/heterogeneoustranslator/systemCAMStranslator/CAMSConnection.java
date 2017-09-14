@@ -62,16 +62,16 @@ public class CAMSConnection{
     public int rate;
     public int type;
 
-    public CAMSConnection(CAMSBlocks _inputBlock, CAMSBlock _outputBlock){
+    public CAMSConnection(CAMSBlocks _inputBlock, CAMSBlocks _outputBlock){
 	inputBlock = _inputBlock;
 	outputBlock = _outputBlock;
     }
 
-    public CAMSBlock getInputBlock(){
+    public CAMSBlocks getInputBlock(){
 	return inputBlock;
     }
 
-    public CAMSBlock getOutputBlock(){
+    public CAMSBlocks getOutputBlock(){
 	return outputBlock;
     }
 
