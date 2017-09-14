@@ -19,6 +19,7 @@
 <FILEPath data="../modeling" />
 <LIBPath data="../lib" />
 <IMGPath data="../figures" />
+<DocGenPath data="../document_generation" />
 <LOTOSPath data="../lotos" />
 <GGraphPath data="../graphs" />
 <TGraphPath data="../graphs" />

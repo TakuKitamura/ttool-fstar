@@ -5348,7 +5348,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void generateDocumentation() {
         //TraceManager.addDev("Documentation");
-        ThreadGUIElement t = new ThreadGUIElement(frame, 1, tabs, mainTabbedPane, ConfigurationTTool.IMGPath, file.getName(),"Documentation", "Generating documentation ... Please wait");
+        ThreadGUIElement t = new ThreadGUIElement(frame, 1, tabs, mainTabbedPane, ConfigurationTTool.DocGenPath, file.getName(),"Documentation", "Generating documentation ... Please wait");
         t.go();
         /*DocumentationGenerator docgen = new DocumentationGenerator(tabs, mainTabbedPane, ConfigurationTTool.IMGPath, file.getName());
           docgen.setFirstHeadingNumber(2);
