@@ -174,18 +174,15 @@ public class MappingTable {
 
       int hwa_count=0;
       int MWMR_SIZE=4096;
+      int MWMRd_SIZE=12288;
       // int MWMR_BASE=0xA0200000;
       i=0;
         for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {   
-	    mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0xA0"+  Integer.toHexString(2097152+MWMR_SIZE*i)+",  0x00001000, IntTab("+(l+5+hwa_count)+"), false));" + CR; 	 
+	    mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0xA0"+  Integer.toHexString(2097152+MWMR_SIZE*i)+",  0x00001000, IntTab("+(l+5+hwa_count)+"), false));" + CR; 
+	    //mapping += "maptab.add(Segment(\"mwmrd_ram"+hwa_count+"\", 0xA0"+  Integer.toHexString(2097152+MWMR_SIZE*i)+",  0x00001000, IntTab("+(l+5+hwa_count2)+"), false));" + CR; 	 
      hwa_count++;
       } 
- hwa_count=0; 
- /*
-   for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {
-	  mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0x"+(Integer.toHexString(MWMRd_BASE+i*4096))+", 0x"+Integer.toHexString(MWMRd_SIZE)+", IntTab("+(l+5+hwa_count)+"), false));" + CR2; 
-	  hwa_count++;   	     
-	  }	  */
+ hwa_count=0;  
 
       return mapping;   
     }
