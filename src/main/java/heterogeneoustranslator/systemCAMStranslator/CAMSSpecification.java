@@ -92,10 +92,12 @@ public class CAMSSpecification{
 	    }
 	}
 	return unconnectedBlocks;*/
+	return;
     }
 
     public List<CAMSSignal> getunconnectedSignals(){
 	/*	List<CAMSSignal> unconnectedSignals;*/
 	//return unconnectedSignals;
+	return;
     }
 }
