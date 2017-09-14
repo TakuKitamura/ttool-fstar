@@ -62,7 +62,7 @@ import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLCRecordComponent;
-//import ui.het.*;
+import ui.het.*;
 import ui.window.JDialogCode;
 import ui.window.JDialogNote;
 import ui.window.JDialogSearchBox;
@@ -109,7 +109,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     protected List<TGComponent> componentList;
     protected TGConnectingPoint selectedConnectingPoint;
-    //protected CAMSConnectingPoint selectedCAMSConnectingPoints;
+    protected CAMSConnectingPoint selectedCAMSConnectingPoints;
     protected TGComponent componentPointed;
     protected TGComponent componentPopup;
     protected TToolBar ttb;
@@ -178,7 +178,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected int y2;
     protected Vector<Point> listPoint;
     protected TGConnectingPoint p1, p2;
-    //protected CAMSConnectingPoint cp1, cp2;
+    protected CAMSConnectingPoint cp1, cp2;
     protected int type;
 
     // For component selection
@@ -475,8 +475,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             if (this.javaVisible && (tgc.hasPostJavaCode () || tgc.hasPreJavaCode ()))
                 tgc.drawJavaCode (g);
 
-	    //if (this instanceof CAMSBlockDiagramPanel) //Connecting points should always be visible in System-C AMS panels
-	    //tgc.drawTGConnectingPoint (g, this.type);
+	    if (this instanceof CAMSBlockDiagramPanel) //Connecting points should always be visible in System-C AMS panels
+		tgc.drawTGConnectingPoint (g, this.type);
         }
 
         // Draw name of component selected
@@ -907,9 +907,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return selectedConnectingPoint;
     }
 
-    //public CAMSConnectingPoint getSelectedCAMSConnectingPoint(){
-    //return selectedCAMSConnectingPoints;
-    //}
+    public CAMSConnectingPoint getSelectedCAMSConnectingPoint(){
+	return selectedCAMSConnectingPoints;
+    }
 
     // Adding component
     public TGComponent addComponent(int x, int y, boolean swallow) {
@@ -1050,7 +1050,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         listPoint = null;
     }
 
-    /*public void addingCAMSConnector() {
+    public void addingCAMSConnector() {
         listPoint = new Vector<Point>();
         cp1 = getSelectedCAMSConnectingPoint();
         x1 = cp1.getX(); y1 = cp1.getY();
@@ -1086,7 +1086,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             stopAddingConnector(true);
             cp1.setFree(true);
         }
-	}*/
+    }
 
 // -------------mark
 
@@ -2628,7 +2628,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             });
     }
 
-    /*public String findCAMSBlockName(String name) {
+   public String findCAMSBlockName(String name) {
         return this.findGoodName (name, new NameChecker () {
                 public boolean checkCAMSBlock (CAMSBlock o, String name) {
                     if (o.getValue ().equals (name))
@@ -2636,7 +2636,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		    return o.hasBlockWithName();
                 }
             });
-	    }*/
+    }
 
     public String findAvatarSMDStateName(String name) {
         return this.findGoodName (name, new NameChecker () {

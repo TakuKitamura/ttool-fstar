@@ -49,9 +49,11 @@ import tmltranslator.HwBus;
 import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogBUSNode;
+import ui.atd.ATDAttack;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Vector;
 
 /**
    * Class TMLArchiBUSNode
@@ -73,7 +75,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
     private int sliceTime = HwBus.DEFAULT_SLICE_TIME;
 
     private int privacy = HwBus.BUS_PUBLIC;
-
+	public String referenceAttack;
     
     public TMLArchiBUSNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -195,6 +197,10 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 
     }
 
+	public String getRefAttack(){
+		return referenceAttack;
+	}
+
     public String getNodeName() {
         return name;
     }
@@ -204,8 +210,14 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         String errors = "";
         int tmp;
         String tmpName;
+		Vector<String> attacks = new Vector<String>();
+		for (TGComponent attack: tdp.getMGUI().getAllAttacks()){
+			if (attack instanceof ATDAttack){	
+				attacks.add(((ATDAttack) attack).getValue().trim());
+			}
+		}
 
-        JDialogBUSNode dialog = new JDialogBUSNode(frame, "Setting VGMN attributes", this);
+        JDialogBUSNode dialog = new JDialogBUSNode(frame, "Setting VGMN attributes", this, attacks);
        // dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
         dialog.setVisible( true ); // blocked until dialog has been closed
@@ -227,6 +239,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 
         arbitrationPolicy = dialog.getArbitrationPolicy();
         privacy = dialog.getPrivacy();
+		referenceAttack = dialog.getReferenceAttack();
         if (arbitrationPolicy == HwBus.BASIC_ROUND_ROBIN) {
             stereotype = "BUS-RR";
         }
@@ -303,6 +316,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
             }
         }
 
+		
         if (error) {
             JOptionPane.showMessageDialog(frame,
                                           "Invalid value for the following attributes: " + errors,
@@ -329,6 +343,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         sb.append(" pipelineSize=\"" + pipelineSize + "\" ");
         sb.append(" clockRatio=\"" + clockRatio + "\" ");
         sb.append(" privacy=\"" + privacy + "\" ");
+        sb.append(" referenceAttack=\"" + referenceAttack + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -365,6 +380,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
                             }
                             if (elt.getTagName().equals("attributes")) {
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
+                                referenceAttack = elt.getAttribute("referenceAttack");
                                 arbitrationPolicy =Integer.decode(elt.getAttribute("arbitrationPolicy")).intValue();                                                                    pipelineSize = Integer.decode(elt.getAttribute("pipelineSize")).intValue();
                                 if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();

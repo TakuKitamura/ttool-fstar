@@ -51,6 +51,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.Iterator;
+import java.util.ArrayList;
 
 /**
    * Class AttackTreePanel
@@ -155,6 +156,20 @@ public class AttackTreePanel extends TURTLEPanel {
         return true;
     }
 
+	public ArrayList<TGComponent> getAllAttacks(){
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+		TDiagramPanel tp;
+        for(int i=0; i<panels.size(); i++) {
+			tp = panels.get(i);
+            if (tp instanceof AttackTreeDiagramPanel) {
+                for (TGComponent s:((AttackTreeDiagramPanel)tp).getAllAttacks()){
+                    list.add(s);
+                }
+            }
+        }
+        return list;
+
+	}
     public void resetMetElements() {
         //TraceManager.addDev("Reset met elements");
         TGComponent tgc;

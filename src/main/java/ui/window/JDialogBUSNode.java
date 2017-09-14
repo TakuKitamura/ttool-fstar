@@ -48,7 +48,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.Vector;
 
 /**
  * Class JDialogBUSNode
@@ -69,15 +69,15 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
 
     // Panel2
     protected JTextField byteDataSize, pipelineSize, clockRatio;
-    private JComboBox<String> arbitrationPolicy, privacy;
+    private JComboBox<String> arbitrationPolicy, privacy, refAttacks;
     protected JTextField sliceTime;
-
+    private Vector<String> refs;
 
     /** Creates new form  */
-    public JDialogBUSNode(Frame _frame, String _title, TMLArchiBUSNode _node) {
+    public JDialogBUSNode(Frame _frame, String _title, TMLArchiBUSNode _node, Vector<String> _refs) {
         super(_frame, _title, true);
         node = _node;
-
+		refs= _refs;
         initComponents();
         myInitComponents();
         pack();
@@ -166,6 +166,13 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
         privacy.setSelectedIndex(node.getPrivacy());
         panel2.add(privacy, c2);
 
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Reference Attack:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        refAttacks = new JComboBox<>(refs);
+        refAttacks.setSelectedItem(node.getRefAttack());
+        panel2.add(refAttacks, c2);
+
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
@@ -241,6 +248,10 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
     public int getPrivacy(){
         return privacy.getSelectedIndex();
     }
+	
+	public String getReferenceAttack(){
+		return (String) refAttacks.getSelectedItem();
+	}
     public String getSliceTime() {
         return sliceTime.getText();
     }

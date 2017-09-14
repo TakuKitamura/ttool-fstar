@@ -88,13 +88,13 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
     private Vector<String> origins, finites, blockings, portTypes, types1, types2, types3, types4, types5;
 	private Vector<String> types;
     private Vector<String> refs;
-	
+	private String referenceReq;
 	// Robustness
 	private JCheckBox isLossyBox, isPrexCB, isPostexCB, confCheckBox, authCheckBox;
 	private JTextField lossPercentageText, maxNbOfLossText;
 
 
-	public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf, boolean _checkAuth, String referenceReq, Vector<String> _refs) {
+	public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf, boolean _checkAuth, String _referenceReq, Vector<String> _refs) {
         super(f, title, true);
         frame = f;
         
@@ -122,7 +122,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 		checkConf = _checkConf;
 		checkAuth = _checkAuth;
 		refs=_refs;
-
+		referenceReq= _referenceReq;
         myInitComponents();
         initComponents();
         checkMode();
@@ -295,6 +295,15 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 		refReq = new JComboBox<>(refs);
 		panel2.add(refReq,c2);
+		int index=-1;
+		for (int ind=0; ind<refs.size(); ind++) {
+			if (referenceReq.equals(refs.get(ind))){
+				index=ind;
+			}
+		}
+		if (index!=-1){
+			refReq.setSelectedIndex(index);
+		}
 
         c2.gridwidth = 1;
         c2.fill = GridBagConstraints.HORIZONTAL;
@@ -556,6 +565,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
 		JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
+		repaint();
     }
     
     public void	actionPerformed(ActionEvent evt)  {
@@ -600,9 +610,9 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         dispose();
     }
 
-		public String getDataFlowType()	{
-			return dataFlowType;
-		}
+	public String getDataFlowType()	{
+		return dataFlowType;
+	}
 
 		public String getAssociatedEvent()	{
 			return associatedEvent;
@@ -611,6 +621,9 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
     public void cancelDialog() {
         dispose();
     }
+	public String getReferenceReq(){
+		return (String) refReq.getSelectedItem();
+	}
     
     public void checkMode() {
 		int index = typePort.getSelectedIndex();

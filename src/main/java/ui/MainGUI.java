@@ -83,8 +83,9 @@ import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
 import ui.tmlcp.TMLCPPanel;
 import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmldd.TMLArchiCAMSNode;
 import ui.tmlsd.TMLSDPanel;
-//import ui.het.*;
+import ui.het.*;
 import ui.tree.DiagramTreeModel;
 import ui.tree.DiagramTreeRenderer;
 import ui.tree.JDiagramTree;
@@ -989,8 +990,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //ystem.out.println("Design added");
         return index;
     }
-
-    /*public int addSystemCAMSPanel(String name, int index) { //ajout CD -----Mark
+    
+    public int addSystemCAMSPanel(String name, int index) { //ajout CD -----Mark
         if (index == -1) {
             index = tabs.size();
         }
@@ -1018,7 +1019,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         mainTabbedPane.setIconAt(index, IconManager.imgic60);
         scp.init();
 	return scp.getCAMSBlockDiagramPanel();
-	}*/
+    }
 
     //Return the list of all the TMLArchiDiagramPanels
     public Vector<TMLArchiPanel> getTMLArchiDiagramPanels()     {
@@ -1395,11 +1396,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return index;
     }
 
-    /*public int createSystemCAMS(String name) { //ajout CD
+    public int createSystemCAMS(String name) { //ajout CD
         int index = addSystemCAMSPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
         return index;
-	}*/
+	}
 
     public int createADD(String name) {
         int index = addADDPanel(name, -1);
@@ -1774,14 +1775,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //frame.repaint();
     }
 
-    /*public void newSystemCAMS() {//ajout CD
+    public void newSystemCAMS() {//ajout CD
         //TraceManager.addDev("NEW DIPLO Architecture");
         addSystemCAMSPanel("SystemC-AMS", -1);
         tabs.elementAt(tabs.size()-1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();
-	}*/
+    }
 
     public void newADD() {
         //TraceManager.addDev("NEW Avatar deployment");
@@ -3332,7 +3333,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     }
                 }
             }
-	    /*}  else if (tp instanceof SystemCAMSPanel) { //Ajout CD
+	}  else if (tp instanceof SystemCAMSPanel) { //Ajout CD
 	    
 	    SystemCAMSPanel camsp = (SystemCAMSPanel)tp;
             JDialogSelectSystemCAMSBlock.validated = camsp.validated;
@@ -3367,7 +3368,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                                                       JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
-		}*/
+	    }
 
 	} else if (tp instanceof TMLArchiPanel) {
             tmlap = (TMLArchiPanel)tp;
@@ -3765,6 +3766,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
         return list;
     }
+
+	public ArrayList<TGComponent> getAllAttacks(){
+		TURTLEPanel tp;
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+
+        for(int i=0; i<tabs.size(); i++) {
+            tp = tabs.elementAt(i);
+            if (tp instanceof AttackTreePanel) {
+                for (TGComponent s:((AttackTreePanel)tp).getAllAttacks()){
+                    list.add(s);
+                }
+            }
+        }
+        return list;
+
+	}
 
 	public ArrayList<TGComponent> getAllRequirements(){
 		TURTLEPanel tp;
@@ -8392,9 +8409,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                         mgui.newAvatarMADs();
                     } else if (e.getSource() == newAVATARAnalysis) {
                         mgui.newAvatarAnalysis();
-                    }  /*else if (e.getSource() == newSystemCAMS) { //ajout CD
+                    }  else if (e.getSource() == newSystemCAMS) { //ajout CD
 			mgui.newSystemCAMS();
-			}*/
+		    }
                 }
             };
     }
@@ -8403,7 +8420,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     /**
      * This adapter is constructed to handle mouse over component events.
      */
-    private class MouseHandler extends MouseAdapter {
+    private class MouseHandler extends MouseAdapter  {
 
         private JLabel label;
 

@@ -37,6 +37,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmldd;
 
 import myutil.TraceManager;
@@ -52,7 +55,7 @@ import java.awt.event.ActionListener;
    * Class TMLArchiDiagramToolBar
    * Implements the toolbar to be used in conjunction with the panel of a TML Architecture diagram
    * Creation: 18/09/2007
-   * @version 1.0 18/09/2007
+   * @version 1.0 08/09/2017
    * @author Ludovic APVRILLE
    * @see ui.cd.TClassDiagramPanel
  */
@@ -73,6 +76,7 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         mgui.actions[TGUIAction.TMLARCHI_LINK].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_CPUNODE].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_HWANODE].setEnabled(b);
+	mgui.actions[TGUIAction.TMLARCHI_CAMSNODE].setEnabled(b); //ajout CD
         mgui.actions[TGUIAction.TMLARCHI_BUSNODE].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_CPNODE].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_BRIDGENODE].setEnabled(b);
@@ -121,6 +125,8 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_HWANODE]);
         button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TMLARCHI_CAMSNODE]); //ajout CD
+        button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
 
@@ -137,32 +143,26 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE]);
         button.addMouseListener(mgui.mouseHandler);
-        this.addSeparator();
+	this.addSeparator();
 
-		button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
+	button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
 	
 	/*button = this.add(mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT]);
 	  button.addMouseListener(mgui.mouseHandler);*/
-        
-        // Issue #66: CP mapping now part of core functions
-    	this.addSeparator();
-        button = this.add( mgui.actions[ TGUIAction.TMLARCHI_CPNODE ] );
-        button.addMouseListener( mgui.mouseHandler );
 	    
-        if ( MainGUI.experimentalOn ) {
-//        	this.addSeparator();
-//            button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPNODE]);
-//            button.addMouseListener(mgui.mouseHandler);
-            button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
+        if (MainGUI.experimentalOn) {
+	    this.addSeparator();
+            button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPNODE]);
             button.addMouseListener(mgui.mouseHandler);
+	    button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
+	    button.addMouseListener(mgui.mouseHandler);
         }
-
-        this.addSeparator();
+	this.addSeparator();
 	
         button = this.add(mgui.actions[TGUIAction.TMLARCHI_KEY]);
         button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_FIREWALL]);
+	button = this.add(mgui.actions[TGUIAction.TMLARCHI_FIREWALL]);
         button.addMouseListener(mgui.mouseHandler);
 
 	
@@ -175,7 +175,7 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
         button.addMouseListener(mgui.mouseHandler);
 
-        setPluginButtons("TMLArchiDiagramPanel");
+	setPluginButtons("TMLArchiDiagramPanel");
 	
         this.addSeparator();
         if (viewInfos == null) {
@@ -184,20 +184,22 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         box = new JComboBox<>(viewInfos);
         this.add(box);
         box.addActionListener(this);
+
+	
     }
 
     public void setPanel(TMLArchiDiagramPanel _panel) {
         panel = _panel;
     }
 
-    @Override
+
     public void actionPerformed(ActionEvent e) {
-    	super.actionPerformed(e);
-        
-    	if (e.getSource() == box) {
+	super.actionPerformed(e);
+        if (e.getSource() == box) {
             if (panel != null) {
                 panel.setCurrentView(box.getSelectedIndex());
             }
         }
     }
+
 } // Class
