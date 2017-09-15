@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import common.ConfigurationTTool;
@@ -53,6 +50,8 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Vector;
@@ -64,6 +63,8 @@ import java.util.Vector;
 * @author Ludovic APVRILLE
  */
 public	class JFrameRequirementTable extends JFrame implements ActionListener /*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
+	
+	private static final String DOC_GEN_NAME = "tablereq.html";
 	
 	private Vector<TURTLEPanel> tabs;
 	
@@ -98,6 +99,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	
 	public JFrameRequirementTable(String title, Vector<TURTLEPanel> _tabs, JTabbedPane _main, Point [] _pts) {
 		super(title);
+		
 		tabs = _tabs;
 		pts = _pts;
 		main = _main;
@@ -115,7 +117,6 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		Container framePanel = getContentPane();
 		framePanel.setLayout(new BorderLayout());
 		
-		
 		JButton button1 = new JButton("Close", IconManager.imgic27);
 		button1.addActionListener(this);
 		buttonGenerate = new JButton("Generate doc.", IconManager.imgic29);
@@ -125,7 +126,6 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		jp.add(buttonGenerate);
 		
 		framePanel.add(jp, BorderLayout.SOUTH);
-		
 		
     	// Issue #41 Ordering of tabbed panes 
 		mainTabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
@@ -203,6 +203,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		titles.add(title);
 	}
 	
+	@Override
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();
 		//System.out.println("Command:" + command);
@@ -211,13 +212,37 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 			dispose();
 			return;
 		} else if (evt.getSource() == buttonGenerate) {
-			generateDoc();
+			
+			// Issue #32 Improve document generation
+			final File genFile = new File( ConfigurationTTool.DocGenPath );
+			String path;
+			
+			try {
+				path = genFile.getCanonicalPath();
+			} catch (IOException e) {
+				e.printStackTrace();
+				
+				path = genFile.getAbsolutePath();
+			}
+			
+			path += File.separator + DOC_GEN_NAME;
+
+			if ( generateDoc() ) {
+                JOptionPane.showMessageDialog(	this,
+												"Document '" + path + "' has been successfully generated.",
+												"Documentation Generation",
+												JOptionPane.INFORMATION_MESSAGE );
+			}
+			else {
+                JOptionPane.showMessageDialog( 	this,
+                								"Error generating document '" + path + "'.",
+						                        "Error",
+						                        JOptionPane.INFORMATION_MESSAGE);
+			}
 		} 
 	}
 	
-	
-	
-	private void generateDoc() {
+	private boolean generateDoc() {
 		TraceManager.addDev("Generate doc");
 		HTMLCodeGeneratorForTables doc = new HTMLCodeGeneratorForTables();
 		//String s = doc.getHTMLCode(atms, titles, "List of Requirements").toString();
@@ -225,25 +250,24 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		TraceManager.addDev("HTML code:" + s); 
 		
 		String path;
-		if (ConfigurationTTool.IMGPath.length() > 0) {
-			path = ConfigurationTTool.IMGPath + "/";
+		if (ConfigurationTTool.DocGenPath.length() > 0) {
+			path = ConfigurationTTool.DocGenPath + "/";
 		} else {
 			path = "";
 		}
-		path += "tablereq.html";
+		path += DOC_GEN_NAME;//"tablereq.html";
 		
 		try {
 			FileUtils.saveFile(path, s);
 		} catch (FileException fe) {
+			fe.printStackTrace();
 			TraceManager.addDev("HTML file could not be saved in " + path);
-			return ;
+			
+			return false;
 		}
 		
-		TraceManager.addDev("File generated in " + path);
-		
+		return true;
 	}
-	
-	
 	
 //	
 //	private int maxLengthColumn(Component c, AbstractTableModel tm, int index) {

@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
-
-//import java.awt.*;
 
 import ui.*;
 
@@ -50,10 +45,6 @@ import java.util.*;
 import java.util.List;
 
 import myutil.*;
-
-//import org.w3c.dom.*;
-//import org.xml.sax.*;
-//import javax.xml.parsers.*;
 
 /**
  * Class AvatarSMDPanel
@@ -123,12 +114,13 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
     
     public void enhance() {
         //TraceManager.addDev("Enhance");
-        Vector<TGComponent> v = new Vector<>();
-        Object o;
-        Iterator iterator = componentList.listIterator();
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent o;
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
             o = iterator.next();
+            
             if (o instanceof AvatarSMDStartState){
                 enhance(v, (AvatarSMDStartState)o);
             }
@@ -180,13 +172,14 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 		
 		//System.out.println("list size=" + componentList.size());
 		
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
-		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+		List<TGComponent> list = new ArrayList<TGComponent>();
 		
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-			if (!(tgc instanceof TGConnector)) {
+            tgc = iterator.next();
+			
+            if (!(tgc instanceof TGConnector)) {
 				list.add(tgc);
 			}
 		}
@@ -205,22 +198,22 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 	
 
 	public List<String> getAllStates(){
-		TGComponent tgc;
-		Iterator iterator = componentList.listIterator();
+		Iterator<TGComponent> iterator = componentList.listIterator();
         
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 		
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            final TGComponent tgc = iterator.next();
+            
 			if (tgc instanceof AvatarSMDState) {
 				list.add(tgc.getValue());
 			}
 		}
+        
 		return list;
 	}
+	
 	public void autoConnect(TGComponent added) {
-		
-		
 		boolean cond = hasAutoConnect();
 		
 		if (!cond) {
@@ -233,25 +226,25 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 		
 		Vector<Point> listPoint = new Vector<>();
 		
-		Vector v = new Vector();
+		//Vector v = new Vector();
 		
-		int distance = 100;
+		//int distance = 100;
         int dist1, dist2;
         int x1, y1;
-		TGConnectingPoint found = null;
+		//TGConnectingPoint found = null;
 		int distanceTmp;
 		
-		boolean cd1, cd2;
+		//boolean cd1, cd2;
 		
 		TGConnectingPoint tgcp, tgcp1;
 		
 		TGConnector tgco;
 		
 		TGComponent tgc;
-        Iterator iterator;
+     //   Iterator iterator;
         
-        boolean inTaken = false;
-        boolean outTaken = false;
+//        boolean inTaken = false;
+//        boolean outTaken = false;
         
         //Tries to locate the two closer connecting point both in and out
         // Connection can occur only from top to down
@@ -268,12 +261,14 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 			if (tgcp.isFree() && tgcp.isCompatibleWith(added.getDefaultConnector())) {
 				
 				// Try to connect that connecting point
-				found = null;
-				distance = 100;
+		//		found = null;
+			//	distance = 100;
 				
-				iterator = componentList.listIterator();
+				final Iterator<TGComponent> iterator = componentList.listIterator();
+				
 				while(iterator.hasNext()) {
-					tgc = (TGComponent)(iterator.next());
+					tgc = iterator.next();
+					
 					if (tgc != added) {
 						for(j=0; j<tgc.getNbConnectingPoint(); j++) {
 							tgcp1 = tgc.getTGConnectingPointAtIndex(j);
@@ -324,18 +319,18 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 						}
 					}
 				}
-				if (found != null) {
-					//TraceManager.addDev("Adding connector");
-					if (found.isIn()) {
-						tgco = TGComponentManager.addConnector(tgcp.getX(), tgcp.getY(), added.getDefaultConnector(), this, tgcp, found, listPoint);
-					} else {
-						tgco = TGComponentManager.addConnector(found.getX(), found.getY(), added.getDefaultConnector(), this, found, tgcp, listPoint);
-					}
-					found.setFree(false);
-					tgcp.setFree(false);
-					componentList.add(tgco);
-					//TraceManager.addDev("Connector added");
-				}
+//				if (found != null) {
+//					//TraceManager.addDev("Adding connector");
+//					if (found.isIn()) {
+//						tgco = TGComponentManager.addConnector(tgcp.getX(), tgcp.getY(), added.getDefaultConnector(), this, tgcp, found, listPoint);
+//					} else {
+//						tgco = TGComponentManager.addConnector(found.getX(), found.getY(), added.getDefaultConnector(), this, found, tgcp, listPoint);
+//					}
+//					found.setFree(false);
+//					tgcp.setFree(false);
+//					componentList.add(tgco);
+//					//TraceManager.addDev("Connector added");
+//				}
 			}
 		}
         
@@ -356,15 +351,15 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 	}
 	
 	public void resetStateSecurityInfo() {
-		ListIterator iterator = getComponentList().listIterator();
-		TGComponent tgc;
+		Iterator<TGComponent> iterator = getComponentList().listIterator();
+		//TGComponent tgc;
 		
 		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
+			final TGComponent tgc = iterator.next();
+			
 			if (tgc instanceof AvatarSMDState) {
 				((AvatarSMDState)tgc).resetSecurityInfo();
 			}
 		}
 	}
-    
 }

@@ -83,6 +83,7 @@ public class ConfigurationTTool {
     public static String LOTOSPath = "";
     public static String LIBPath = "";
     public static String IMGPath = "";
+    public static String DocGenPath = "";
     public static String GGraphPath = "";
     public static String TGraphPath = "";
     public static String TToolUpdateURL = "";
@@ -417,6 +418,7 @@ public class ConfigurationTTool {
         sb.append("LOTOSPath: " + LOTOSPath + "\n");
         sb.append("LIBPath: " + LIBPath + "\n");
         sb.append("IMGPath: " + IMGPath + "\n");
+        sb.append("DocGenPath: " + DocGenPath + "\n");
         sb.append("GGraphPath: " + GGraphPath + "\n");
         sb.append("TGraphPath: " + TGraphPath + "\n");
         sb.append("\nTTool update:\n");
@@ -432,7 +434,7 @@ public class ConfigurationTTool {
         sb.append("JavaExecutePath: " + JavaExecutePath + "\n");
         sb.append("SimuJavaCodeDirectory: " + SimuJavaCodeDirectory + "\n");
         sb.append("TToolSimuClassPath: " + TToolSimuClassPath + "\n");
-
+        
         sb.append("\nDIPLODOCUS:\n");
         if (systemcOn) {
             sb.append("SystemCCodeDirectory: " + SystemCCodeDirectory + "\n");
@@ -573,6 +575,9 @@ public class ConfigurationTTool {
             nl = doc.getElementsByTagName("IMGPath");
             if (nl.getLength() > 0)
                 IMGPath(nl);
+            nl = doc.getElementsByTagName("DocGenPath");
+            if (nl.getLength() > 0)
+            	DocGenPath(nl);
             nl = doc.getElementsByTagName("GGraphPath");
             if (nl.getLength() > 0)
                 GGraphPath(nl);
@@ -986,6 +991,15 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             IMGPath = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void DocGenPath(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            DocGenPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

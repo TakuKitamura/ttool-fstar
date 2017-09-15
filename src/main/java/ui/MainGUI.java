@@ -3767,6 +3767,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return list;
     }
 
+	public ArrayList<TGComponent> getAllAttacks(){
+		TURTLEPanel tp;
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+
+        for(int i=0; i<tabs.size(); i++) {
+            tp = tabs.elementAt(i);
+            if (tp instanceof AttackTreePanel) {
+                for (TGComponent s:((AttackTreePanel)tp).getAllAttacks()){
+                    list.add(s);
+                }
+            }
+        }
+        return list;
+
+	}
+
 	public ArrayList<TGComponent> getAllRequirements(){
 		TURTLEPanel tp;
         ArrayList<TGComponent> list = new ArrayList<TGComponent>();
@@ -5332,7 +5348,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void generateDocumentation() {
         //TraceManager.addDev("Documentation");
-        ThreadGUIElement t = new ThreadGUIElement(frame, 1, tabs, mainTabbedPane, ConfigurationTTool.IMGPath, file.getName(),"Documentation", "Generating documentation ... Please wait");
+        ThreadGUIElement t = new ThreadGUIElement(frame, 1, tabs, mainTabbedPane, ConfigurationTTool.DocGenPath, file.getName(),"Documentation", "Generating documentation ... Please wait");
         t.go();
         /*DocumentationGenerator docgen = new DocumentationGenerator(tabs, mainTabbedPane, ConfigurationTTool.IMGPath, file.getName());
           docgen.setFirstHeadingNumber(2);

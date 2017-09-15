@@ -1676,7 +1676,6 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             fileName += "simulationtrace_fromttool.txt";
         }
 
-
         if (ConfigurationTTool.isConfigured(ConfigurationTTool.IMGPath)) {
             fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
         } else {

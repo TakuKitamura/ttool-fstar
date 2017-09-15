@@ -548,7 +548,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
 			//System.out.println("req " + req);
 			if (req instanceof AvatarRDRequirement){	
-				refs.add(((AvatarRDRequirement) req).getID()+ ":" + ((AvatarRDRequirement) req).getText());
+				refs.add(((AvatarRDRequirement) req).getID()+ ":" + ((AvatarRDRequirement) req).getText().trim());
 			}
 		}
 	
@@ -583,6 +583,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 oldTypep = typep;
                 typep = jda.getPortType();
                 checkConf = jda.checkConf;
+				referenceReq = jda.getReferenceReq();
                 if (checkConf){
                     if (checkConfStatus==NOCHECK){
                         checkConfStatus=TOCHECK;
@@ -650,6 +651,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         sb.append("\" checkAuth=\"" + checkAuth);
         sb.append("\" checkWeakAuthStatus=\"" + checkWeakAuthStatus);
         sb.append("\" checkStrongAuthStatus=\"" + checkStrongAuthStatus);
+        sb.append("\" referenceReq=\"" + referenceReq);
         sb.append("\" />\n");
         for(int i=0; i<nbMaxAttribute; i++) {
             //System.out.println("Attribute:" + i);
@@ -710,7 +712,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
                             if (elt.getTagName().equals("Prop")) {
                                 commName = elt.getAttribute("commName");
-
+                                referenceReq = elt.getAttribute("referenceReq");
                                 try {
                                     //System.out.println("Setting type");
                                     typep = Integer.decode(elt.getAttribute("commType")).intValue();
@@ -719,6 +721,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     maxSamples = Integer.decode(elt.getAttribute("maxSamples")).intValue();
                                     //System.out.println("Setting width");
                                     widthSamples = Integer.decode(elt.getAttribute("widthSamples")).intValue();
+
                                 } catch (Exception e) {
 
                                 }

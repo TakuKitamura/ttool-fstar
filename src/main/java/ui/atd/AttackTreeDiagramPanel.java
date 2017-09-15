@@ -47,6 +47,8 @@ import ui.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 //import org.w3c.dom.*;
 //import org.xml.sax.*;
@@ -116,7 +118,22 @@ public class AttackTreeDiagramPanel extends TDiagramPanel implements TDPWithAttr
         // Position correctly guards of choice
     }
     
-    
+    public LinkedList<TGComponent> getAllAttacks() {
+		LinkedList<TGComponent> list = new LinkedList<TGComponent>();
+		TGComponent tgc;
+		
+		ListIterator iterator = getComponentList().listIterator();
+		
+		while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof ATDAttack) {
+				list.add(tgc);
+			}
+		}
+		
+		return list;
+		
+	}
 	
 	public boolean hasAutoConnect() {
 		return false;
