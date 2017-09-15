@@ -412,32 +412,27 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     	boolean res = (tgc instanceof TMLArchiElementInterface);
     	int tmp = view;
     	
-    	if (view >= VIEW_TASK_MAPPING)
-    	{
+    	if (view >= VIEW_TASK_MAPPING) {
     		res = res || (tgc instanceof TMLArchiTaskInterface);
     		view -= 16;
     	}
     	
-    	if (view >= VIEW_CHANNEL_MAPPING)
-    	{
+    	if (view >= VIEW_CHANNEL_MAPPING) {
     		res = res || (tgc instanceof TMLArchiChannelInterface);
     		view -= 8;
     	}
     	
-    	if (view >= VIEW_COMM_PATTERN)
-    	{
+    	if (view >= VIEW_COMM_PATTERN) {
     		res = res || (tgc instanceof TMLArchiCPInterface);
     		view -= 4;
     	}
     	
-    	if (view >= VIEW_PORT_INTERFACE)
-    	{
+    	if (view >= VIEW_PORT_INTERFACE) {
     		res = res || (tgc instanceof TMLArchiPortInterface);
     		view -= 2;
     	}
     	
-    	if (view >= VIEW_SECURITY_MAPPING)
-    	{
+    	if (view >= VIEW_SECURITY_MAPPING) {
     		res = res || (tgc instanceof TMLArchiSecurityInterface);
     		view -= 1;
     	}
