@@ -80,8 +80,8 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     //"C++ Simulator - LabSoc version" };
 
     private static String DEFAULT_GENERATOR = "TTool integrated C generator";
-	
-  //  private static int selectedItem = 1;
+
+    //  private static int selectedItem = 1;
 
     protected static String pathCode;
     protected static String pathCompiler;
@@ -104,7 +104,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     protected JButton stop;
     protected JButton close;
 
-     protected JLabel gen, comp;
+    protected JLabel gen, comp;
     protected JTextField code1, code2, compiler1;
     //exe1, exe2, exe3, exe2int, exe2formal;
     protected JTabbedPane jp1;
@@ -114,7 +114,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
 
     protected Vector<String> generators;
     protected JComboBox<String> generatorsBox;
-    
+
     private Thread t;
     private boolean go = false;
     private boolean hasError = false;
@@ -209,18 +209,18 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
-		generators = new Vector<String>();
-		generators.add(DEFAULT_GENERATOR);
-		fillGeneratorsWithPlugins(generators);
-		
-		generatorsBox = new JComboBox<>(generators);
-		if (generators.size() > 1) {
-		    generatorsBox.setSelectedIndex(1);
-		}
-		jp01.add(generatorsBox, c01);
-	        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-	
-		jp01.add(new JLabel(" "), c01);
+        generators = new Vector<String>();
+        generators.add(DEFAULT_GENERATOR);
+        fillGeneratorsWithPlugins(generators);
+
+        generatorsBox = new JComboBox<>(generators);
+        if (generators.size() > 1) {
+            generatorsBox.setSelectedIndex(1);
+        }
+        jp01.add(generatorsBox, c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+
+        jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
         removeCppFiles = new JCheckBox("Remove old .h, .c, .o  files");
@@ -256,7 +256,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
 
         code2 = new JTextField(pathCode, 100);
         // Issue #57
-//        code2.setEnabled(false);
+        //        code2.setEnabled(false);
         jp02.add(code2, c02);
 
         jp02.add(new JLabel("with"), c02);
@@ -322,7 +322,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     public void actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
         // Compare the action command to the known actions.
- 
+
         if (command.equals("Start"))  {
             startProcess();
         } else if (command.equals("Stop")) {
@@ -340,10 +340,10 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         //wasClosed = true;
         dispose();
     }
-//
-//    public boolean wasClosed() {
-//        return wasClosed;
-//    }
+    //
+    //    public boolean wasClosed() {
+    //        return wasClosed;
+    //    }
 
     public void stopProcess() {
         try {
@@ -382,8 +382,8 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
 
     @Override
     public void run() {
-//        String cmd;
-//        String data;
+        //        String cmd;
+        //        String data;
         hasError = false;
 
         try {
@@ -418,112 +418,112 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
 
     private boolean generateCode() throws InterruptedException {
 
-    	String list;
-    	// int cycle = 0;
-    	boolean error = false;
+        String list;
+        // int cycle = 0;
+        boolean error = false;
 
-    	jta.append( "Generating C code...\n\n" );
-    	if( removeCppFiles.isSelected() )       {
-    		jta.append( "Removing all .h files...\n" );
-    		list = FileUtils.deleteFiles( code1.getText(), ".h" );
-    		if( list.length() == 0 )    {
-    			jta.append("No files were deleted\n");
-    		}
-    		else        {
-    			jta.append("Files deleted:\n" + list + "\n");
-    		}
-    		jta.append("\nRemoving all .c files...\n");
-    		list = FileUtils.deleteFiles( code1.getText(), ".c" );
-    		if( list.length() == 0 )    {
-    			jta.append( "No files were deleted\n" );
-    		}
-    		else        {
-    			jta.append("Files deleted:\n" + list + "\n");
-    		}
-    		jta.append("\nRemoving all .o files...\n");
-    		list = FileUtils.deleteFiles( code1.getText(), ".o" );
-    		if( list.length() == 0 )    {
-    			jta.append( "No files were deleted\n" );
-    		}
-    		else        {
-    			jta.append( "Files deleted:\n" + list + "\n" );
-    		}
-    	}
-    	if (removeXFiles.isSelected()) {
-    		jta.append( "\nRemoving all .x files...\n" );
-    		list = FileUtils.deleteFiles( code1.getText(), ".x" );
-    		if( list.length() == 0 )    {
-    			jta.append("No files were deleted\n");
-    		}
-    		else        {
-    			jta.append("Files deleted:\n" + list + "\n");
-    		}
-    	}
-    	testGo();
-    	if (generatorsBox.getSelectedIndex() == 0) {
-    		error = gtm.generateCCode( code1.getText() );
-    		if( !error )    {
-    			File dir = new File( code1.getText() );
-    			StringBuffer s = new StringBuffer();
-    			jta.append( "\nSource files successfully generated:\n" );
-    			for( File f: dir.listFiles() )      {
-    				try     {
-    					if( f.getCanonicalPath().contains(".c") || f.getCanonicalPath().contains(".h") )    {
-    						s.append( f.getCanonicalPath() + "\n" );
-    					}
-    				}
-    				catch( IOException ioe )        {
-    					jta.append("Error: " + ioe.getMessage() + "\n");
-    					mode = STOPPED;
-    					setButtons();
-    					return true;
-    				}
-    			}
-    			jta.append( s.toString() );
-    		}
-    	} else {
-    		// code generation by plugin!
-    		int index = generatorsBox.getSelectedIndex() - 1;
-    		int cpt = 0;
-    		Plugin foundPlugin = null;
-    		LinkedList<Plugin> listP = PluginManager.pluginManager.getPluginDiplodocusCodeGenerator();
-    		for(Plugin p: listP) {
-    			String desc = p.getDiplodocusCodeGeneratorIdentifier();
-    			if (desc != null) {
-    				if (index == cpt) {
-    					foundPlugin = p;
-    					break;
-    				}
-    			}
-    		}
+        jta.append( "Generating C code...\n\n" );
+        if( removeCppFiles.isSelected() )       {
+            jta.append( "Removing all .h files...\n" );
+            list = FileUtils.deleteFiles( code1.getText(), ".h" );
+            if( list.length() == 0 )    {
+                jta.append("No files were deleted\n");
+            }
+            else        {
+                jta.append("Files deleted:\n" + list + "\n");
+            }
+            jta.append("\nRemoving all .c files...\n");
+            list = FileUtils.deleteFiles( code1.getText(), ".c" );
+            if( list.length() == 0 )    {
+                jta.append( "No files were deleted\n" );
+            }
+            else        {
+                jta.append("Files deleted:\n" + list + "\n");
+            }
+            jta.append("\nRemoving all .o files...\n");
+            list = FileUtils.deleteFiles( code1.getText(), ".o" );
+            if( list.length() == 0 )    {
+                jta.append( "No files were deleted\n" );
+            }
+            else        {
+                jta.append( "Files deleted:\n" + list + "\n" );
+            }
+        }
+        if (removeXFiles.isSelected()) {
+            jta.append( "\nRemoving all .x files...\n" );
+            list = FileUtils.deleteFiles( code1.getText(), ".x" );
+            if( list.length() == 0 )    {
+                jta.append("No files were deleted\n");
+            }
+            else        {
+                jta.append("Files deleted:\n" + list + "\n");
+            }
+        }
+        testGo();
+        if (generatorsBox.getSelectedIndex() == 0) {
+            error = gtm.generateCCode( code1.getText() );
+            if( !error )    {
+                File dir = new File( code1.getText() );
+                StringBuffer s = new StringBuffer();
+                jta.append( "\nSource files successfully generated:\n" );
+                for( File f: dir.listFiles() )      {
+                    try     {
+                        if( f.getCanonicalPath().contains(".c") || f.getCanonicalPath().contains(".h") )    {
+                            s.append( f.getCanonicalPath() + "\n" );
+                        }
+                    }
+                    catch( IOException ioe )        {
+                        jta.append("Error: " + ioe.getMessage() + "\n");
+                        mode = STOPPED;
+                        setButtons();
+                        return true;
+                    }
+                }
+                jta.append( s.toString() );
+            }
+        } else {
+            // code generation by plugin!
+            int index = generatorsBox.getSelectedIndex() - 1;
+            int cpt = 0;
+            Plugin foundPlugin = null;
+            LinkedList<Plugin> listP = PluginManager.pluginManager.getPluginDiplodocusCodeGenerator();
+            for(Plugin p: listP) {
+                String desc = p.getDiplodocusCodeGeneratorIdentifier();
+                if (desc != null) {
+                    if (index == cpt) {
+                        foundPlugin = p;
+                        break;
+                    }
+                }
+            }
 
-    		if (foundPlugin == null) {
-    			jta.append("Invalid plugin\n");
+            if (foundPlugin == null) {
+                jta.append("Invalid plugin\n");
 
-    		} else {
-    			// We have a valid plugin
-    			// We first need to get an XML representation of the current mapping
-    			TMLMapping<?> tmap = gtm.getTMLMapping();
+            } else {
+                // We have a valid plugin
+                // We first need to get an XML representation of the current mapping
+                TMLMapping<?> tmap = gtm.getTMLMapping();
 
-    			if (tmap == null) {
-    				jta.append("Invalid mapping\n");
-    			} else {
-    				String XML = tmap.toXML();
-    				try {
-    					Object instance = foundPlugin.getClassDiplodocusCodeGenerator().newInstance();
-    					if (instance == null) {
-    						jta.append("Invalid plugin: could not create an instance\n");
-    					} else {
-    						boolean ret = Plugin.executeBoolStringMethod(instance, XML, "generateCode");
-    					}
-    				} catch (Exception e) {
-    					jta.append("Exception when calling plugin:" + e.getMessage());
-    				}
-    			}
-    		}
+                if (tmap == null) {
+                    jta.append("Invalid mapping\n");
+                } else {
+                    String XML = tmap.toXML();
+                    try {
+                        Object instance = foundPlugin.getClassDiplodocusCodeGenerator().newInstance();
+                        if (instance == null) {
+                            jta.append("Invalid plugin: could not create an instance\n");
+                        } else {
+                            boolean ret = Plugin.executeBoolStringMethod(instance, XML, "generateCode");
+                        }
+                    } catch (Exception e) {
+                        jta.append("Exception when calling plugin:" + e.getMessage());
+                    }
+                }
+            }
 
-    	}
-    	return error;
+        }
+        return error;
     }   //End of method generateCode()
 
     public void compileCode() throws InterruptedException {
@@ -593,12 +593,12 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     }
 
     public void fillGeneratorsWithPlugins(Vector<String> v) {
-		LinkedList<Plugin> list = PluginManager.pluginManager.getPluginDiplodocusCodeGenerator();
-		for(Plugin p: list) {
-		    String desc = p.getDiplodocusCodeGeneratorIdentifier();
-		    if (desc != null) {
-		    	v.add(desc);
-		    }
-		}
+        LinkedList<Plugin> list = PluginManager.pluginManager.getPluginDiplodocusCodeGenerator();
+        for(Plugin p: list) {
+            String desc = p.getDiplodocusCodeGeneratorIdentifier();
+            if (desc != null) {
+                v.add(desc);
+            }
+        }
     }
 }       //End of class

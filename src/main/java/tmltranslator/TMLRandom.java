@@ -69,7 +69,7 @@ public class TMLRandom extends TMLActivityElement {
     public int getFunctionId()  { return functionId;}
 
     public String customExtraToXML() {
-	return " politics=\"" + functionId + "\" variable=\"" + variable + "\" min=\"" + minValue + "\" maxValue=\"" + maxValue + "\" ";
+	return " politics=\"" + functionId + "\" variable=\"" + variable + "\" minValue=\"" + minValue + "\" maxValue=\"" + maxValue + "\" ";
     }
 
 

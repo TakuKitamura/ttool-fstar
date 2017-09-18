@@ -84,8 +84,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
     protected final static String XML_SUB_TAIL = "</SUBCOMPONENT>\n";
 
     protected final static int RESIZE = 10;
-    protected final static int RESIZE_SPACE = 2;
-    protected final static int RESIZE_SPACE2 = 4;
+    protected final static int RESIZE_SPACE = 8;
+    protected final static int RESIZE_SPACE2 = 16;
 
     public static final int ACCESSIBILITY_UNKNOWN = 0;
     public static final int ACCESSIBILITY_OK = 1;
