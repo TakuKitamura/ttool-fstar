@@ -112,6 +112,8 @@ public class ActionPerformer {
             mgui.paste();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_DELETE].getActionCommand())) {
             mgui.delete();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_SUPPR].getActionCommand())) {
+            mgui.delete();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_ZOOM_MORE].getActionCommand())) {
             mgui.zoomMore();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_ZOOM_LESS].getActionCommand())) {

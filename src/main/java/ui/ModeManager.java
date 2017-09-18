@@ -120,6 +120,8 @@ public class ModeManager {
             actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS].setEnabled(true);
             actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS].setEnabled(true);
             actions[TGUIAction.ACT_DELETE].setEnabled(true);
+            actions[TGUIAction.ACT_SUPPR].setEnabled(true);
+            
             if (mainBar != null) {
                 mainBar.activateSearch(true);
             }
