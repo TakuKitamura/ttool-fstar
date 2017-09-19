@@ -2348,9 +2348,23 @@ public abstract class TGComponent implements CDElement, GenericTree {
         //System.out.println("SetCd -> " + this.getName());
         int oldX = x;
         int oldY = y;
-
-        x = verifyMoveCdX(_x);
-        y = verifyMoveCdY(_y);
+       
+       // if ( father != null && drawingZoneRelativeToFather ) {
+        	x = verifyMoveCdX(_x);
+        	y = verifyMoveCdY(_y);
+        /*}
+        
+        else {
+        if (oldX > _x)
+        	x = verifyMoveCdX(Math.max(Math.max(_x, minX), Math.min(_x, maxX - width)));
+        else
+        	x = verifyMoveCdX(Math.min(Math.max(_x, minX), Math.min(_x, maxX - width)));
+        
+        if (oldY > _y)
+        	y = verifyMoveCdY(Math.max(Math.max(_y, minY), Math.min(_y, maxY - height)));
+        else
+        	y = verifyMoveCdY(Math.min(Math.max(_y, minY), Math.min(_y, maxY - height)));
+        }*/
 
         repaint = true;
         if ((oldX != x) || (oldY != y)) {
@@ -2492,7 +2506,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
         if ( father != null && drawingZoneRelativeToFather ) {
             targetX =  Math.min(maxX + father.getX(), Math.max(minX + father.getX(), targetX));
         }
-        
+        else {
+        	if (x > targetX)
+            	targetX = Math.max(Math.max(targetX, minX), Math.min(targetX, maxX - width));
+            else
+            	targetX = Math.min(Math.max(targetX, minX), Math.min(targetX, maxX - width));
+        }
+        	
         // Issue #46: Added the else.
         // When we are moving a contained component, we should not check for the max of the diagram. This should be done for the father only
         // Issue #14: Do not check the diagram size
@@ -2513,7 +2533,12 @@ public abstract class TGComponent implements CDElement, GenericTree {
         if ((father != null) && (drawingZoneRelativeToFather)) {
             targetY = Math.min(maxY + father.getY(), Math.max(minY + father.getY(), targetY));
         }
-
+        else {
+        	if (y > targetY)
+            	targetY = Math.max(Math.max(targetY, minY), Math.min(targetY, maxY - height));
+            else
+            	targetY = Math.min(Math.max(targetY, minY), Math.min(targetY, maxY - height));
+        }
         // Issues #46 and #14: See comment in verifyMoveCdX
 //        else {
 //	        int currentWidthPos = Math.abs(getCurrentMaxY() - y);
