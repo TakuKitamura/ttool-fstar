@@ -60,7 +60,7 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 
-public class JDialogTMLCompositePort extends JDialog implements ActionListener {
+public class JDialogTMLCompositePort extends JDialogBase implements ActionListener {
 
 	private JPanel panel3;
 	private Frame frame;
@@ -79,6 +79,7 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
     public boolean data;
     public boolean checkConf;
     public boolean checkAuth;
+    private JButton closeButton, cancelButton;
     // Panel1
     private JTextField nameText, maxText, widthText, associatedEventJT;
     private JComboBox<String> typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
@@ -558,13 +559,8 @@ public class JDialogTMLCompositePort extends JDialog implements ActionListener {
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-		JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
 		repaint();
     }
     

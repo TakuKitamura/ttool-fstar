@@ -64,7 +64,7 @@ import java.util.Vector;
    * @version 1.0 09/04/2010
    * @author Ludovic APVRILLE
  */
-public class JDialogSignalAssociation extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogSignalAssociation extends JDialogBase implements ActionListener, ListSelectionListener  {
     private Vector<String> signalAssociation, localSignalAssociations;
     private AvatarBDBlock block1, block2;
     private LinkedList<AvatarSignal> available1, available2;
@@ -76,7 +76,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
     private JCheckBox blocking, isPrivate, isBroadcast, isLossy;
     private JPanel panel1, panel2, panel3, panel4;
 
-    private boolean cancelled = false;
+    private boolean cancelled = true;
 
     // Panel1
     private JComboBox<String> signalsBlock1, signalsBlock2;
@@ -306,14 +306,8 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.VERTICAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
 
         /*JPanel panelButton = new JPanel();
           closeButton = new JButton("Save and Close", IconManager.imgic25);
@@ -464,11 +458,12 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
     public void closeDialog() {
         signalAssociation.removeAllElements();
         signalAssociation.addAll(localSignalAssociations);
+
+        cancelled = false;
         dispose();
     }
 
     public void cancelDialog() {
-        cancelled = true;
         dispose();
     }
 

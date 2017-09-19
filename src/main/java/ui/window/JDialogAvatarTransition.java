@@ -61,7 +61,7 @@ import java.util.Vector;
    * @version 1.0 12/04/2010
    * @author Ludovic APVRILLE
  */
-public class JDialogAvatarTransition extends javax.swing.JDialog implements ActionListener  {
+public class JDialogAvatarTransition extends JDialog implements ActionListener  {
 
     private Vector<String> actions;
     private String guard, afterMin, afterMax, computeMin, computeMax;
@@ -72,7 +72,7 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
     protected String [] filesToInclude;
     protected String [] codeToInclude;
 
-    private boolean cancelled = false;
+    private boolean cancelled = true;
 
     private JPanel panel1;
     private JPanel panel2;
@@ -349,6 +349,8 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         }
         filesToInclude =  Conversion.wrapText(jtaFiles.getText());
         codeToInclude =  Conversion.wrapText(jtaCode.getText());
+
+        cancelled = false;
         dispose();
     }
 
@@ -381,7 +383,6 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
     }
 
     public void cancelDialog() {
-        cancelled = true;
         dispose();
     }
 

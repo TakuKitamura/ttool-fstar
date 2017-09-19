@@ -68,7 +68,7 @@ import java.util.Vector;
  * @version 1.0 30/06/2004
  * @author Ludovic APVRILLE
  */
-public class JDialogProjection extends javax.swing.JDialog implements ActionListener, ListSelectionListener, Runnable  {
+public class JDialogProjection extends JDialog implements ActionListener, ListSelectionListener, Runnable  {
     private static boolean isAldebaranSelected = false;
     private static boolean isOminSelected = false;
     private static boolean isStrongSelected = true;

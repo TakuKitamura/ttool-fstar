@@ -65,7 +65,7 @@ import java.util.Vector;
    * @version 1.0 28/03/2008
    * @author Ludovic APVRILLE
  */
-public class JDialogSelectTMLComponent extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogSelectTMLComponent extends JDialogBase implements ActionListener, ListSelectionListener  {
     public static Vector<TGComponent> validated, ignored;
     private static boolean optimized = true;
 

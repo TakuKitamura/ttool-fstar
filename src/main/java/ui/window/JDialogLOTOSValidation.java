@@ -60,7 +60,7 @@ import java.awt.event.ActionListener;
 * @version 1.0 10/03/2006
 * @author Ludovic APVRILLE
  */
-public class JDialogLOTOSValidation extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogLOTOSValidation extends JDialog implements ActionListener, Runnable  {
 	private static boolean verboseChecked, monitorChecked, safetyChecked, gradualChecked, v3v4Checked, fc2Checked, distributorChecked, autChecked = true, dotChecked=true, bcgChecked = false;
 	private static int max = 5000000;
 	

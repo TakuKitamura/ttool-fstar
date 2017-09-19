@@ -64,7 +64,7 @@ import java.util.LinkedList;
  * @version 1.0 08/04/2010
  * @author Ludovic APVRILLE
  */
-public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogAvatarBlock extends JDialog implements ActionListener, ListSelectionListener  {
 
     private LinkedList<TAttribute> attributes, attributesPar, forbidden;
     private LinkedList<Boolean> initValues;
@@ -72,7 +72,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private LinkedList<AvatarSignal> signals, signalsPar;
     private boolean checkKeyword, checkJavaKeyword;
 
-    private boolean cancelled = false;
+    private boolean cancelled = true;
 
     protected String [] globalCode;
     protected JTextArea jtaGlobalCode;
@@ -598,6 +598,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
+        
         closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);
@@ -942,6 +943,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 
         globalCode =  Conversion.wrapText(jtaGlobalCode.getText());
         mainCode = jtaMainCode.getText();
+        cancelled = false;
         dispose();
     }
 
@@ -952,7 +954,6 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 
 
     public void cancelDialog() {
-        cancelled = true;
         dispose();
     }
 

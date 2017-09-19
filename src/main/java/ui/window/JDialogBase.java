@@ -18,8 +18,8 @@ import ui.util.IconManager;
 
 public class JDialogBase extends JDialog {
 	
-	protected JDialogBase(Frame _frame, String _title) {
-		super(_frame, _title, true);
+	protected JDialogBase(Frame _frame, String _title, boolean b) {
+		super(_frame, _title, b);
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
         getRootPane().getActionMap().put("close", new AbstractAction() {
         	@Override
@@ -45,7 +45,7 @@ public class JDialogBase extends JDialog {
         closeButton = new JButton("Save and Close", IconManager.imgic25);
         closeButton.addActionListener(al);
         c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(al);
         c.add(cancelButton, c0);

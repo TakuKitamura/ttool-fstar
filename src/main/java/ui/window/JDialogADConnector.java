@@ -49,7 +49,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Class JDialogADConnector
+ * Class JDialogBaseADConnector
  * Dialog for associating guards to connectors of ADs
  * Creation: 12/04/2010
  * @version 1.0 12/04/2010

@@ -57,13 +57,13 @@ import java.awt.event.ActionListener;
  * @version 1.0 08/03/2013
  * @author Ludovic APVRILLE
  */
-public class JDialogAvatarState extends javax.swing.JDialog implements ActionListener  {
+public class JDialogAvatarState extends JDialog implements ActionListener  {
     
 	
 	//protected String [] globalCode;
 	protected String [] entryCode;
     
-    private boolean cancelled = false;
+    private boolean cancelled = true;
     
     
     private JPanel panel1;
@@ -210,10 +210,9 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
+        
         closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
-		
-		
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -238,6 +237,7 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
 		
 		//globalCode =  Conversion.wrapText(jtaGlobalCode.getText());
 		entryCode =  Conversion.wrapText(jtaEntryCode.getText());
+		cancelled = false;
         dispose();
     }
     
@@ -254,7 +254,6 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
 	}
     
     public void cancelDialog() {
-		cancelled = true;
         dispose();
     }
 	

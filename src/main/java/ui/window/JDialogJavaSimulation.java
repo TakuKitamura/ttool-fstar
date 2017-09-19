@@ -62,7 +62,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 19/06/2006
  * @author Ludovic APVRILLE
  */
-public class JDialogJavaSimulation extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
+public class JDialogJavaSimulation extends JDialog implements ActionListener, Runnable, MasterProcessInterface  {
     
     protected MainGUI mgui;
     

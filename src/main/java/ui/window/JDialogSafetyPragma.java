@@ -57,7 +57,7 @@ import java.util.HashMap;
  * @version 1.0 06/12/2003
  * @author Ludovic APVRILLE, Letitia LI
  */
-public class JDialogSafetyPragma extends javax.swing.JDialog implements ActionListener {
+public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     
     protected String text;
     

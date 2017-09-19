@@ -56,13 +56,14 @@ import java.awt.event.ActionListener;
  * @version 1.0 20/10/2009
  * @author Ludovic APVRILLE
  */
-public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListener {
+public class JDialogNCEqNode extends JDialogBase implements ActionListener {
 
     private String eqName;
     private int schedulingPolicy;
 	private int type;
 	
 	private boolean data;
+	private JButton closeButton, cancelButton;
     
     
     // Panel1
@@ -153,13 +154,8 @@ public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListen
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

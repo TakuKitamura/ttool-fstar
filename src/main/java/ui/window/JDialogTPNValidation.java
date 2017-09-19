@@ -59,7 +59,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 13/07/2006
  * @author Ludovic APVRILLE
  */
-public class JDialogTPNValidation extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogTPNValidation extends JDialog implements ActionListener, Runnable  {
 	private static boolean verboseChecked, summaryChecked = false;
 
 	protected MainGUI mgui;

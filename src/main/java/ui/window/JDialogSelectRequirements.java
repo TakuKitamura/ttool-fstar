@@ -61,7 +61,7 @@ import java.util.Vector;
  * @version 1.0 11/08/2006
  * @author Ludovic APVRILLE
  */
-public class JDialogSelectRequirements extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogSelectRequirements extends JDialogBase implements ActionListener, ListSelectionListener  {
     
 	public static Vector<Requirement> validated, ignored;
     

@@ -63,7 +63,7 @@ import java.util.Iterator;
  * @version 1.0 20/10/2006
  * @author Ludovic APVRILLE
  */
-public class JDialogGenAUTS extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogGenAUTS extends JDialog implements ActionListener, Runnable  {
     
     private static String path = "";
     private static boolean fc2Checked = false;

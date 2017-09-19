@@ -67,7 +67,7 @@ import java.util.BitSet;
 * @version 1.0 09/01/2012
 * @author Ludovic APVRILLE
  */
-public class JDialogInvariantAnalysis extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogInvariantAnalysis extends JDialog implements ActionListener, Runnable  {
     
 	private static boolean IGNORE = true;
 	private static boolean ALL_MUTEX = true;

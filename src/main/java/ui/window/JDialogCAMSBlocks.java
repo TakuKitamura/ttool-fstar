@@ -68,14 +68,14 @@ import java.util.LinkedList;
    * @author Côme DEMARIGNY
  */
 
-public class JDialogCAMSBlocks extends javax.swing.JDialog implements ActionListener, ListSelectionListener {
+public class JDialogCAMSBlocks extends JDialog implements ActionListener, ListSelectionListener {
 
     private LinkedList<TAttribute> attributes, attributesPar, forbidden;
     private LinkedList<Boolean> initValues;
     private LinkedList<CAMSSignal> signals, signalsPar;
     private boolean checkKeyword, checkJavaKeyword;
 
-    private boolean cancelled = false;
+    private boolean cancelled = true;
     private boolean regularClose;
 
     protected String [] processCode;
@@ -473,6 +473,7 @@ public class JDialogCAMSBlocks extends javax.swing.JDialog implements ActionList
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
+        
         closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);
@@ -755,7 +756,6 @@ public class JDialogCAMSBlocks extends javax.swing.JDialog implements ActionList
     }
 
     public void cancelDialog() {
-        cancelled = true;
         dispose();
     }
 

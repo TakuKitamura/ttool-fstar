@@ -59,7 +59,7 @@ import java.util.Vector;
    * @version 1.0 28/03/2014
    * @author Ludovic APVRILLE
  */
-public class JDialogManageListOfString extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogManageListOfString extends JDialogBase implements ActionListener, ListSelectionListener  {
 
 
 
@@ -80,7 +80,7 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
     private JButton closeButton;
     private JButton cancelButton;
 
-    private boolean hasBeenCancelled = false;
+    private boolean hasBeenCancelled = true;
 
     /** Creates new form  */
     public JDialogManageListOfString(Frame f, Vector<String> _ignored, Vector<String> _selected, String title) {
@@ -262,11 +262,11 @@ public class JDialogManageListOfString extends javax.swing.JDialog implements Ac
 
 
     public void closeDialog() {
+        hasBeenCancelled = false;
         dispose();
     }
 
     public void cancelDialog() {
-        hasBeenCancelled = true;
         dispose();
     }
 

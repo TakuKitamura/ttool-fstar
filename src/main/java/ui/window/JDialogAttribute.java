@@ -60,7 +60,7 @@ import java.util.LinkedList;
  * @version 1.0 18/12/2003
  * @author Ludovic APVRILLE
  */
-public class JDialogAttribute extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogAttribute extends JDialogBase implements ActionListener, ListSelectionListener  {
     protected java.util.List<TAttribute> attributes, attributesPar, forbidden;
     protected java.util.List<Boolean> initValues;
     protected boolean checkKeyword, checkJavaKeyword, checkTMLKeyword;
@@ -251,14 +251,8 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

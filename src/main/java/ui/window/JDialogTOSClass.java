@@ -57,7 +57,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 04/10/2006
  * @author Ludovic APVRILLE
  */
-public class JDialogTOSClass extends javax.swing.JDialog implements ActionListener {
+public class JDialogTOSClass extends JDialog implements ActionListener {
 
     protected MainGUI mgui;
 

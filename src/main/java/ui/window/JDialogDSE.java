@@ -67,7 +67,7 @@ import java.util.*;
  * @version 1.1 10/09/2010
  * @author Ludovic APVRILLE
  */
-public class JDialogDSE extends javax.swing.JDialog implements ActionListener, ListSelectionListener, Runnable  {
+public class JDialogDSE extends JDialog implements ActionListener, ListSelectionListener, Runnable  {
 
     protected MainGUI mgui;
 

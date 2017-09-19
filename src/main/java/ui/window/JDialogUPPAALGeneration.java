@@ -58,7 +58,7 @@ import java.awt.event.ActionListener;
    * @version 1.0 11/05/2007
    * @author Ludovic APVRILLE
  */
-public class JDialogUPPAALGeneration extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
+public class JDialogUPPAALGeneration extends JDialog implements ActionListener, Runnable, MasterProcessInterface  {
 
     protected MainGUI mgui;
 

@@ -64,7 +64,7 @@ import java.io.File;
 * @version 1.0 28/02/2008
 * @author Ludovic APVRILLE
  */
-public class JDialogBisimulationBisimulator extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogBisimulationBisimulator extends JDialog implements ActionListener, Runnable  {
     
     
     private String [] textAlgo = { "Branching equivalence", 

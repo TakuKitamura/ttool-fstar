@@ -63,7 +63,7 @@ import java.awt.event.ActionListener;
    * @version 1.0 06/03/2008
    * @author Ludovic APVRILLE
  */
-public class JDialogGraphModification extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogGraphModification extends JDialog implements ActionListener, Runnable  {
 
     private String [] textAlgo = { "After mapping modification"};
 

@@ -61,13 +61,14 @@ import java.util.Vector;
  * @version 1.0 19/11/2008
  * @author Ludovic APVRILLE
  */
-public class JDialogNCRoute extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogNCRoute extends JDialogBase implements ActionListener, ListSelectionListener  {
     private Vector<NCRoute> routes;
 	private ArrayList<String> inputInterfaces, traffics, outputInterfaces;
 
 	protected String value;
+	protected JButton closeButton, cancelButton;
 	
-	protected boolean hasBeenCancelled;
+	protected boolean hasBeenCancelled = true;
     
     // Panel1
     private JComboBox<String> inputInterfaceBox, trafficBox, outputInterfaceBox;
@@ -272,14 +273,8 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {
@@ -380,11 +375,11 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
         //for(int i=0; i<attributes.size(); i++) {
         //    attributesPar.addElement(attributes.elementAt(i));
         //}
+		hasBeenCancelled = false;
         dispose();
     }
     
     public void cancelDialog() {
-		hasBeenCancelled = true;
         dispose();
     }
 	

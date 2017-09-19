@@ -63,7 +63,7 @@ import java.util.List;
  * @version 1.0 24/03/2006
  * @author Ludovic APVRILLE
  */
-public class JDialogGenAUT extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogGenAUT extends JDialog implements ActionListener, Runnable  {
     
     private static String path = "";
     

@@ -58,7 +58,7 @@ import java.util.Vector;
  * @version 1.0 10/05/2004
  * @author Ludovic APVRILLE
  */
-public class JDialogTObjectName extends javax.swing.JDialog implements ActionListener {
+public class JDialogTObjectName extends JDialogBase implements ActionListener {
         TCDTObject to;
         Vector<TCDTClass> tclasses;
 	
@@ -166,13 +166,8 @@ public class JDialogTObjectName extends javax.swing.JDialog implements ActionLis
      
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
  
     public void	actionPerformed(ActionEvent evt)  {

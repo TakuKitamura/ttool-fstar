@@ -56,7 +56,7 @@ import java.awt.event.ActionListener;
    * @version 1.0 27/04/2007
    * @author Ludovic APVRILLE
  */
-public class JDialogCancel extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogCancel extends JDialog implements ActionListener, Runnable  {
 
     private static String DEFAULT_WAIT = "Please wait";
 

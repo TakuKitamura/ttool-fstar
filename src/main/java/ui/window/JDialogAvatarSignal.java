@@ -59,7 +59,7 @@ import java.util.Vector;
  * @version 1.0 12/04/2010
  * @author Ludovic APVRILLE
  */
-public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionListener  {
+public class JDialogAvatarSignal extends JDialogBase implements ActionListener  {
 
     private LinkedList<AvatarSignal> signals, realSignals;
     private LinkedList<String> showSignals;
@@ -69,7 +69,7 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
 	private TGComponent reference;
     private Vector<TGComponent> refs;
 
-    private boolean cancelled = false;
+    private boolean cancelled = true;
 
 	private JComboBox<TGComponent> refChecks;
 
@@ -198,14 +198,8 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
 
     public void	actionPerformed(ActionEvent evt)  {
@@ -227,6 +221,7 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
     }
 
     public void closeDialog() {
+        cancelled = false;
         dispose();
     }
 
@@ -248,7 +243,6 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
     }
 
     public void cancelDialog() {
-        cancelled = true;
         dispose();
     }
 }

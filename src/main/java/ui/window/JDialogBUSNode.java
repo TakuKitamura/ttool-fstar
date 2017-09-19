@@ -76,7 +76,7 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
 
     /** Creates new form  */
     public JDialogBUSNode(Frame _frame, String _title, TMLArchiBUSNode _node, Vector<String> _refs) {
-        super(_frame, _title);
+        super(_frame, _title, true);
         node = _node;
 		refs= _refs;
         initComponents();

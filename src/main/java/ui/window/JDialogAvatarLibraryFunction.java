@@ -65,7 +65,7 @@ import java.util.LinkedList;
  * @version 1.0 04.11.2016
  * @author Florian Lugou
  */
-public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements ActionListener, ListSelectionListener {
+public class JDialogAvatarLibraryFunction extends JDialogBase implements ActionListener, ListSelectionListener {
     private AvatarBDLibraryFunction bdElement;
 
     private boolean checkKeyword;
@@ -569,15 +569,8 @@ public class JDialogAvatarLibraryFunction extends javax.swing.JDialog implements
         gridConstraints.gridwidth = 1;
         gridConstraints.gridheight = 1;
         gridConstraints.fill = GridBagConstraints.HORIZONTAL;
-        this.closeButton = new JButton("Save and Close", IconManager.imgic25);
-        this.closeButton.addActionListener(this);
-        c.add(this.closeButton, gridConstraints);
-
-        // Add Cancel button
-        gridConstraints.gridwidth = GridBagConstraints.REMAINDER; //end row
-        this.cancelButton = new JButton("Cancel", IconManager.imgic27);
-        this.cancelButton.addActionListener(this);
-        c.add(this.cancelButton, gridConstraints);
+        
+        initButtons(closeButton, cancelButton, gridConstraints, c, this);
     }
 
     public void selectTabIndex (int tab) {

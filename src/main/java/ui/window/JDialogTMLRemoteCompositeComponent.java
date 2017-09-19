@@ -59,7 +59,7 @@ import java.util.Vector;
  * @version 1.0 12/06/2008
  * @author Ludovic APVRILLE
  */
-public class JDialogTMLRemoteCompositeComponent extends javax.swing.JDialog implements ActionListener  {
+public class JDialogTMLRemoteCompositeComponent extends JDialogBase implements ActionListener  {
     
     private boolean regularClose;
 	private boolean emptyList = false;
@@ -67,6 +67,7 @@ public class JDialogTMLRemoteCompositeComponent extends javax.swing.JDialog impl
     private TMLCRemoteCompositeComponent artifact;
     
 	private JComboBox<String> referenceComponentName;
+	private JButton closeButton, cancelButton;
 
     /** Creates new form  */
     public JDialogTMLRemoteCompositeComponent(Frame _frame, String _title, TMLCRemoteCompositeComponent _artifact) {
@@ -148,14 +149,8 @@ public class JDialogTMLRemoteCompositeComponent extends javax.swing.JDialog impl
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {
