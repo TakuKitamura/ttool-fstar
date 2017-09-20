@@ -62,7 +62,6 @@ public class JDialogNCTraffic extends JDialogBase implements ActionListener {
     private int periodicType, period, deadline, minPacketSize, maxPacketSize, priority;
 	
 	private boolean data;
-	private JButton cancelButton, closeButton;
     
     // Panel1
     private JTextField valueText, periodText, deadlineText, minPacketSizeText, maxPacketSizeText;
@@ -214,7 +213,7 @@ public class JDialogNCTraffic extends JDialogBase implements ActionListener {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

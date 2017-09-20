@@ -72,10 +72,6 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
     private TMLArchiCommunicationArtifact artifact;
     
 	protected JComboBox<String> referenceCommunicationName, priority;
-	
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
     
     /** Creates new form  */
     public JDialogCommunicationArtifact(Frame _frame, String _title, TMLArchiCommunicationArtifact _artifact) {
@@ -180,7 +176,7 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

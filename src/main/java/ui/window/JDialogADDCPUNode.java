@@ -80,10 +80,6 @@ public class JDialogADDCPUNode extends JDialogBase implements ActionListener {
 	protected JTextField nbOfIrq, iCacheWays, iCacheSets, iCacheWords, dCacheWays, dCacheSets, dCacheWords;
 	 protected JTextField index;
 	 protected JTextField monitored;	
-
-	// Main Panel
-	private JButton closeButton;
-	private JButton cancelButton;
 	
 	/** Creates new form  */
 	public JDialogADDCPUNode(Frame _frame, String _title, ADDCPUNode _node) {
@@ -212,7 +208,7 @@ public class JDialogADDCPUNode extends JDialogBase implements ActionListener {
 		c0.gridheight = 1;
 		c0.fill = GridBagConstraints.HORIZONTAL;
 		
-		initButtons(closeButton, cancelButton, c0, c, this);
+		initButtons(c0, c, this);
 	}
 	
 	public void	actionPerformed(ActionEvent evt)  {

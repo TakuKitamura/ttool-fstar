@@ -66,7 +66,6 @@ public class JDialogParamFIFO extends JDialogBase implements ActionListener {
     private String maxInFIFO;
 
     public boolean data;
-    private JButton closeButton, cancelButton;
 
     
     
@@ -226,7 +225,7 @@ public class JDialogParamFIFO extends JDialogBase implements ActionListener {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

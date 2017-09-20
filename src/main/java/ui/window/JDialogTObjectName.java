@@ -68,10 +68,6 @@ public class JDialogTObjectName extends JDialogBase implements ActionListener {
 	// Panel1
 	private JTextField identifierText;
     private JComboBox<TCDTClass> tclassList;
-
-	// Main Panel
-	private JButton closeButton;
-	private JButton cancelButton;
 	
     /** Creates new form  */
     public JDialogTObjectName(TCDTObject _to, Frame f, String title) {
@@ -167,7 +163,7 @@ public class JDialogTObjectName extends JDialogBase implements ActionListener {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
  
     public void	actionPerformed(ActionEvent evt)  {

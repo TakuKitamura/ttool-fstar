@@ -73,12 +73,7 @@ public class JDialogDMANode extends JDialogBase implements ActionListener  {
     protected JTextField nodeName;
 	
 	// Panel2
-    protected JTextField byteDataSize, nbOfChannels, clockRatio;
-	
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
+    protected JTextField byteDataSize, nbOfChannels, clockRatio;  
     
     /** Creates new form  */
     public JDialogDMANode(Frame _frame, String _title, TMLArchiDMANode _node) {
@@ -160,7 +155,7 @@ public class JDialogDMANode extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

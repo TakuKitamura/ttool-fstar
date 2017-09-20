@@ -74,11 +74,6 @@ public class JDialogADDBusNode extends JDialogBase implements ActionListener  {
 	
 	// Panel2
     protected JTextField index, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency;
-	
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
     
     /** Creates new form  */
     public JDialogADDBusNode(Frame _frame, String _title, ADDBusNode _node) {
@@ -176,7 +171,7 @@ public class JDialogADDBusNode extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

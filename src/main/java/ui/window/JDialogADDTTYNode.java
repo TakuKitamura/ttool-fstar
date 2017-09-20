@@ -74,11 +74,6 @@ public class JDialogADDTTYNode extends JDialogBase implements ActionListener  {
 	
 	// Panel2
     protected JTextField index;
-	
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
     
     /** Creates new form  */
     public JDialogADDTTYNode(Frame _frame, String _title, ADDTTYNode _node) {
@@ -152,7 +147,7 @@ public class JDialogADDTTYNode extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

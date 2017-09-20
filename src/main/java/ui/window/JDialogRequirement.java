@@ -84,10 +84,6 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
     private JComboBox<String> kindBox, criticalityBox;
     private JTextField idBox, violatedActionBox, attackTreeNodeBox, referenceElementsBox;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
     /** Creates new form  */
     public JDialogRequirement(Frame _frame, String _title, String _id, String _text, String _kind, String _criticality, String _violatedAction, int _type, String _attackTreeNode, String _referenceElements) {
         super(_frame, _title, true);
@@ -295,7 +291,7 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

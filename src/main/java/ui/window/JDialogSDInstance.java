@@ -70,10 +70,6 @@ public class JDialogSDInstance extends JDialogBase implements ActionListener {
     private JTextField instanceName;
 	private JCheckBox actor;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
     /** Creates new form  */
     public JDialogSDInstance(Frame f, String _name, boolean _isActor, String _title) {
         super(f, _title, true);
@@ -146,7 +142,7 @@ public class JDialogSDInstance extends JDialogBase implements ActionListener {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

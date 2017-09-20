@@ -75,9 +75,6 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
     private JButton allIgnored;
     protected JCheckBox optimize;
 
-    // Main Panel
-    private JButton closeButton;
-
     private boolean hasBeenCancelled = true;
 
     /** Creates new form  */

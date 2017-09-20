@@ -84,9 +84,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     // Tabbed pane for panel1 and panel2
     private JTabbedPane tabbedPane;
 
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
     private java.util.List<SimulationTransaction> transactions;
     /** Creates new form  */
     public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
@@ -305,7 +302,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
 
     public void actionPerformed(ActionEvent evt)  {

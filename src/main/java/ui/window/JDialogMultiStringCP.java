@@ -69,11 +69,6 @@ public class JDialogMultiStringCP extends JDialogBase implements ActionListener 
     // Panel1
     private JTextField [] texts;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
-    
     /** Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogMultiStringCP(Frame f, String title, int _nbString, String[] _labels, String[] _values) {
@@ -153,7 +148,7 @@ public class JDialogMultiStringCP extends JDialogBase implements ActionListener 
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

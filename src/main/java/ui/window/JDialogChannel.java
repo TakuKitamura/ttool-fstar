@@ -63,9 +63,7 @@ public class JDialogChannel extends JDialogBase implements ActionListener {
     private String name;
     private int type, size, max;
     
-    public boolean data;
-    private JButton closeButton, cancelButton;
-    
+    public boolean data;   
     
     // Panel1
     private JTextField nameText, sizeText, maxText;
@@ -171,7 +169,7 @@ public class JDialogChannel extends JDialogBase implements ActionListener {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

@@ -84,8 +84,6 @@ public class JDialogAvatarFirewall extends JDialogBase implements ActionListener
     private JButton addButton,removeButton;
     
     // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
     private JComboBox<String> task1;
     private JComboBox<String> task2;
     /** Creates new form  */
@@ -199,7 +197,7 @@ public class JDialogAvatarFirewall extends JDialogBase implements ActionListener
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

@@ -72,11 +72,6 @@ public class JDialogESO extends JDialogBase implements ActionListener  {
     protected JTextField timeout, n ,m;
 	protected JComboBox<String> ids, oncePerEvent;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-
-    
     /** Creates new form  */
     public JDialogESO(Frame _frame, EBRDDESO _eso) {
         super(_frame, "Event Sequence Operator", true);
@@ -170,7 +165,7 @@ public class JDialogESO extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
 	
 	private void checkMode() {

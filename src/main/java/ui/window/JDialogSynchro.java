@@ -81,10 +81,6 @@ public class JDialogSynchro extends JDialogBase implements ActionListener, ListS
     private JButton downButton;
     private JButton removeButton;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
     /** Creates new form  */
     public JDialogSynchro(Frame f, TClassSynchroInterface _t1, TClassSynchroInterface _t2, java.util.List<TTwoAttributes> _synchro, TCDSynchroGateList _tcdsgl, String title) {
         super(f, title, true);
@@ -271,7 +267,7 @@ public class JDialogSynchro extends JDialogBase implements ActionListener, ListS
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

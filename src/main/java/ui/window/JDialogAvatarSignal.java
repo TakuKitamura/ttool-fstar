@@ -80,11 +80,6 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
     private JButton selectSignal;
     private JTextField signal;
 
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-
-
     /** Creates new form  */
     public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, LinkedList<AvatarSignal> _signals, boolean _isOut, TGComponent _reference, Vector<TGComponent> _refs) {
 
@@ -198,8 +193,8 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(closeButton, cancelButton, c0, c, this);
+
+        initButtons(c0, c, this);
     }
 
     public void	actionPerformed(ActionEvent evt)  {

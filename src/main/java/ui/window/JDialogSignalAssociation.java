@@ -88,9 +88,6 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
     private JButton downButton;
     private JButton removeButton;
 
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
 
     /** Creates new form  */
     public JDialogSignalAssociation(Frame _f, AvatarBDBlock _block1, AvatarBDBlock _block2, Vector<String> _signalAssociation, AvatarBDPortConnector _connector, String _title) {
@@ -307,7 +304,7 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.VERTICAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
 
         /*JPanel panelButton = new JPanel();
           closeButton = new JButton("Save and Close", IconManager.imgic25);
@@ -336,11 +333,11 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         //String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-        if (evt.getSource() == closeButton)  {
+        if (evt.getActionCommand().equals("Save and Close"))  {
             closeDialog();
         } else if (evt.getSource() == addButton) {
             addSignals();
-        } else if (evt.getSource() == cancelButton) {
+        } else if (evt.getActionCommand().equals("Cancel")) {
             cancelDialog();
         } else if (evt.getSource() == removeButton) {
             removeSignals();

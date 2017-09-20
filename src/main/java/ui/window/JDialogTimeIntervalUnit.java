@@ -66,10 +66,6 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
     private JTextField text1, text2;
 	private JComboBox<String> unit;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
     private String id1, id2;
     
     /** Creates new form  */
@@ -184,7 +180,7 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {
