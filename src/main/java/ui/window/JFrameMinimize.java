@@ -152,7 +152,7 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
         listIgnored.addListSelectionListener(this);
         JScrollPane scrollPane1 = new JScrollPane(listIgnored);
         panel1.add(scrollPane1, BorderLayout.CENTER);
-        panel1.setPreferredSize(new Dimension(400, 250));
+        panel1.setPreferredSize(new Dimension(300, 250));
         panelTop.add(panel1, BorderLayout.WEST);
         
         // validated list
@@ -165,7 +165,7 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
         listProjected.addListSelectionListener(this);
         JScrollPane scrollPane2 = new JScrollPane(listProjected);
         panel2.add(scrollPane2, BorderLayout.CENTER);
-        panel2.setPreferredSize(new Dimension(400, 250));
+        panel2.setPreferredSize(new Dimension(300, 250));
         panelTop.add(panel2, BorderLayout.EAST);
         
         // radio buttons
