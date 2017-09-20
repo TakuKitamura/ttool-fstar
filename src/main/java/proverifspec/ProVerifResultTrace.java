@@ -51,6 +51,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -289,8 +290,39 @@ public class ProVerifResultTrace {
         return str;
     }
 
+    private String removeBrackets(String str) {
+        Stack<Character> stack = new Stack<>();
+        StringBuilder builder = new StringBuilder();
+
+        for (char c: str.toCharArray()) {
+            if (c == '(' && !stack.empty()) {
+                stack.push(c);
+            } else if (c == '[') {
+                stack.push(c);
+            } else if (c == ')' && !stack.empty()) {
+                if (stack.peek() == '(')
+                    stack.pop();
+                else
+                    throw new IllegalArgumentException("Malformed expression: " + str);
+            } else if (c == ']') {
+                if (stack.empty())
+                    throw new IllegalArgumentException("Malformed expression: " + str);
+                else if (stack.peek() == '[')
+                    stack.pop();
+                else
+                    throw new IllegalArgumentException("Malformed expression: " + str);
+            }
+
+            if (stack.empty() && c != ']')
+                builder.append(c);
+        }
+
+        return builder.toString();
+    }
+
     private String replaceAllAttributeNames(AvatarDesignPanel adp, String str)
     {
+        str = this.removeBrackets(str);
         Matcher m = ProVerifResultTrace.attrPattern.matcher(str);
         String result = "";
 
