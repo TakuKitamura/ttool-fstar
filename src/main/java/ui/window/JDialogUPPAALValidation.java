@@ -97,7 +97,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 	
 	static {
 		for ( final String label : ConfigurationTTool.UPPAALPropertyVerifMessage.split( "," ) ) {
-			PROP_VERIFIED_LABELS.add( label.trim() );
+			if (!label.trim().isEmpty()){
+				PROP_VERIFIED_LABELS.add( label.trim() );
+			}
 		}
 
 		// Handle the case where nothing is defined in the configuration
@@ -107,7 +109,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 		}
 		
 		for ( final String label : ConfigurationTTool.UPPAALPropertyNotVerifMessage.split( "," ) ) {
-			PROP_NOT_VERIFIED_LABELS.add( label.trim() );
+			if (!label.trim().isEmpty()){
+				PROP_NOT_VERIFIED_LABELS.add( label.trim() );
+			}
 		}
 		
 		// Handle the case where nothing is defined in the configuration
@@ -692,6 +696,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
     private static boolean checkAnalysisResult( final String resultData,
     											final Collection<String> labels ) {
+
     	for ( final String verifiedLabel : labels ) {
     		if ( resultData.contains( verifiedLabel ) ) {
     			return true;
@@ -729,13 +734,15 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         if(showDetails.isSelected()) {
             jta.append(data);
         }
+
         //NOTE: [error] is only visible if Error Stream is parsed
         if (mode != NOT_STARTED) {
         	if (data.trim().length() == 0) {
                 //jta.append("The verifier of UPPAAL could not be started: error\n");
                 throw new LauncherException("The verifier of UPPAAL could not be started.\nProbably, UPPAAL is badly installed, or TTool is badly configured:\nCheck for UPPAALVerifierPath and UPPAALVerifierHost configurations.");
             }
-            
+           
+
             // Issue #35: Different labels for UPPAAL 4.1.19
             else if ( checkAnalysisResult( data, PROP_VERIFIED_LABELS ) ) {
 //            else if (data.indexOf("Property is satisfied") >-1){
