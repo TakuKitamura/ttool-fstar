@@ -61,7 +61,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 16/12/2003
  * @author Ludovic APVRILLE
  */
-public class JDialogFormalValidation extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogFormalValidation extends JDialog implements ActionListener, Runnable  {
     private static boolean makeDTAChecked, makeRGChecked, makeRGAutChecked, makeTLSAChecked = false;
 	private static boolean fromDTASelected, onTheFlySelected, autFromDTASelected, autOnTheFlySelected = false;
 	

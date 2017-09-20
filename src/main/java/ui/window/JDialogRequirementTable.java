@@ -57,7 +57,7 @@ import java.util.ArrayList;
  * @version 1.0 19/02/2009
  * @author Ludovic APVRILLE
  */
-public class JDialogRequirementTable extends javax.swing.JDialog implements ActionListener {
+public class JDialogRequirementTable extends JDialogBase implements ActionListener {
 
     static String[] items = {"none", "ID", "Name", "Type", "Description", "Kind", "Criticality", "Violated action", "Targetted attacks", "Satisfied", "Reference elements"};
     private static String[] sizes = {"0", "50", "100", "150", "200", "250", "300", "350", "400", "450", "500"};
@@ -65,6 +65,7 @@ public class JDialogRequirementTable extends javax.swing.JDialog implements Acti
 	private int nbColumn = 10;
     private static int[] selectedItems = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	private static int[] selectedSizes = {1, 3, 2, 6, 2, 2, 2, 2, 1, 2};
+	private JButton cancelButton, closeButton;
 	
     // Panel1
     private ArrayList<JComboBox<String>> itemBoxes, sizeBoxes;
@@ -142,13 +143,8 @@ public class JDialogRequirementTable extends javax.swing.JDialog implements Acti
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

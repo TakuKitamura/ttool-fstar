@@ -61,7 +61,7 @@ import java.util.LinkedList;
    * @version 1.0 13/12/2003
    * @author Ludovic APVRILLE
  */
-public class JDialogModelChecking extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogModelChecking extends JDialogBase implements ActionListener, ListSelectionListener  {
     public static java.util.List<TClassInterface> validated, ignored;
     private static boolean overideSyntaxChecking = false;
 

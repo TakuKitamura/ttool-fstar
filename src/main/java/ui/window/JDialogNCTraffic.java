@@ -56,12 +56,13 @@ import java.awt.event.ActionListener;
  * @version 1.0 19/11/2008
  * @author Ludovic APVRILLE
  */
-public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListener {
+public class JDialogNCTraffic extends JDialogBase implements ActionListener {
 
     private String value, periodUnit, deadlineUnit;
     private int periodicType, period, deadline, minPacketSize, maxPacketSize, priority;
 	
 	private boolean data;
+	private JButton cancelButton, closeButton;
     
     // Panel1
     private JTextField valueText, periodText, deadlineText, minPacketSizeText, maxPacketSizeText;
@@ -212,13 +213,8 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

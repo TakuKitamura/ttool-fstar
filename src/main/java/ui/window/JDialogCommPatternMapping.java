@@ -111,7 +111,7 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 	private boolean emptyCPsList = false;
 	private boolean emptyListOfMappedUnits = true;	//true if there is no mapping info
 	
-	private boolean cancelled = false;
+	private boolean cancelled = true;
 	
 	// Panel1
 	private JPanel pnlComPatternStruct;
@@ -1468,8 +1468,6 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 	}
 	
 	public void cancelDialog() {
-		cancelled = true;
-		
 		dispose();
 	}
 	

@@ -55,13 +55,13 @@ import java.awt.event.ActionListener;
    * @version 1.0 26/04/2010
    * @author Ludovic APVRILLE
  */
-public class JDialogAvatarProperty extends javax.swing.JDialog implements ActionListener  {
+public class JDialogAvatarProperty extends JDialogBase implements ActionListener  {
     private JPanel panel1;
 
     private String name;
     private int kind;
     boolean notSelected;
-    private boolean hasBeenCancelled = false;
+    private boolean hasBeenCancelled = true;
     private JTextField myName;
     private JRadioButton safety, notSafety, reachability, liveness, notReachability, notLiveness;
 
@@ -172,14 +172,8 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
 
     public void actionPerformed(ActionEvent evt)  {
@@ -199,6 +193,7 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
 
 
     public void closeDialog() {
+    	hasBeenCancelled = false;
         dispose();
     }
 
@@ -231,7 +226,6 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
     }
 
     public void cancelDialog() {
-        hasBeenCancelled = true;
         dispose();
     }
 }

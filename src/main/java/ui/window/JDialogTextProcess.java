@@ -61,7 +61,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 16/12/2003
  * @author Ludovic APVRILLE
  */
-public class JDialogTextProcess extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogTextProcess extends JDialogBase implements ActionListener, Runnable  {
 	
 	protected String cmd;
 	protected String fileName;

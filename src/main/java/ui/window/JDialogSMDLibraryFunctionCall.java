@@ -63,7 +63,7 @@ import java.util.LinkedList;
 * @version 1.0 04.21.2016
 * @author Florian LUGOU
 */
-public class JDialogSMDLibraryFunctionCall extends javax.swing.JDialog implements ActionListener, ListSelectionListener {
+public class JDialogSMDLibraryFunctionCall extends JDialogBase implements ActionListener, ListSelectionListener {
     private AvatarSMDLibraryFunctionCall functionCall;
     
     private AvatarBDLibraryFunction libraryFunction;
@@ -314,15 +314,8 @@ public class JDialogSMDLibraryFunctionCall extends javax.swing.JDialog implement
         gridConstraints.weightx = 1.0;
         gridConstraints.weighty = 1.0;
         gridConstraints.fill = GridBagConstraints.BOTH;
-        this.closeButton = new JButton("Save and Close", IconManager.imgic25);
-        this.closeButton.addActionListener(this);
-        c.add(this.closeButton, gridConstraints);
-
-        // Add Cancel button
-        gridConstraints.gridwidth = GridBagConstraints.REMAINDER; //end row
-        this.cancelButton = new JButton("Cancel", IconManager.imgic27);
-        this.cancelButton.addActionListener(this);
-        c.add(this.cancelButton, gridConstraints);
+        
+        initButtons(closeButton, cancelButton, gridConstraints, c, this);
     }
 
     private void fillParametersComboBox (TAttribute attr) {

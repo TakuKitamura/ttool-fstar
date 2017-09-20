@@ -55,7 +55,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 04/05/2005
  * @author Ludovic APVRILLE
  */
-public class JDialogArtifact extends javax.swing.JDialog implements ActionListener  {
+public class JDialogArtifact extends JDialog implements ActionListener  {
     
     private String name, jarName;
     private boolean userCode;
@@ -158,6 +158,7 @@ public class JDialogArtifact extends javax.swing.JDialog implements ActionListen
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
+        
         closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);

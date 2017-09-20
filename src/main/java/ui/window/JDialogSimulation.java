@@ -61,7 +61,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 13/12/2003
  * @author Ludovic APVRILLE
  */
-public class JDialogSimulation extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogSimulation extends JDialog implements ActionListener, Runnable  {
     
     private static String simulationTime = "";
     

@@ -551,6 +551,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_COPY = 45;
     public static final int ACT_PASTE = 46;
     public static final int ACT_DELETE = 47;
+    public static final int ACT_SUPPR = 462; //Last added input
 
     public static final int ACT_ZOOM_MORE = 235;
     public static final int ACT_ZOOM_LESS = 236;
@@ -614,7 +615,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_INTERNAL_SEARCH = 415;
     //--
 
-    public static final int NB_ACTION = 462;
+    public static final int NB_ACTION = 463;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -692,6 +693,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_CUT] = new TAction("cut-command", "Cut",IconManager.imgic330, IconManager.imgic331, "Cut", "Cut selected components", 'X', true);
         actions[ACT_COPY] = new TAction("copy-command", "Copy", IconManager.imgic332, IconManager.imgic333, "Copy", "Copy selected components", 'C', true);
         actions[ACT_PASTE] = new TAction("paste-command", "Paste",IconManager.imgic334, IconManager.imgic335, "Paste", "Paste - if possible - previously cut / copied components at the minimal position of the currently opened diagram", 'V', true);
+        actions[ACT_SUPPR] = new TAction("delete-command", "Delete", IconManager.imgic336, IconManager.imgic337, "Delete", "Delete selected components", KeyEvent.VK_DELETE);
         actions[ACT_DELETE] = new TAction("delete-command", "Delete", IconManager.imgic336, IconManager.imgic337, "Delete", "Delete selected components", KeyEvent.VK_BACK_SPACE);
 
         actions[ACT_ZOOM_MORE] = new TAction("zoommore-command", "Zoom +", IconManager.imgic316, IconManager.imgic317, "Zoom +", "Zoom +", '0');

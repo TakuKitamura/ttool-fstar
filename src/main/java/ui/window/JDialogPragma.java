@@ -59,7 +59,7 @@ import java.util.regex.Pattern;
  * @version 1.0 06/12/2003
  * @author Ludovic APVRILLE, Letitia LI
  */
-public class JDialogPragma extends javax.swing.JDialog implements ActionListener {
+public class JDialogPragma extends JDialogBase implements ActionListener {
     
     protected String text;
     

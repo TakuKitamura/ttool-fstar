@@ -56,7 +56,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 19/11/2008
  * @author Ludovic APVRILLE
  */
-public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionListener {
+public class JDialogNCSwitchNode extends JDialogBase implements ActionListener {
 
     private String switchName;
     private int schedulingPolicy;
@@ -66,6 +66,7 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
 	private int technicalLatency;
 	
 	private boolean data;
+	private JButton cancelButton, closeButton;
     
     
     // Panel1
@@ -184,13 +185,8 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

@@ -66,7 +66,7 @@ import java.util.Vector;
    * @version 1.0 02/06/2014
    * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogSelectCPDiagrams extends JDialogBase implements ActionListener, ListSelectionListener  {
 
     public static Vector<TGComponent> validated, ignored;
     private static boolean optimized = true;

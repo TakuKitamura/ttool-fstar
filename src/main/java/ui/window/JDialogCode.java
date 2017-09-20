@@ -56,7 +56,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 20/04/2005
  * @author Ludovic APVRILLE
  */
-public class JDialogCode extends javax.swing.JDialog implements ActionListener {
+public class JDialogCode extends JDialogBase implements ActionListener {
     
     protected String pretext, posttext;
     

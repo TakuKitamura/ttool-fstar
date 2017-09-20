@@ -56,7 +56,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 04/01/2011
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class JDialogSDInstance extends javax.swing.JDialog implements ActionListener {
+public class JDialogSDInstance extends JDialogBase implements ActionListener {
     
     private JPanel panel1;
     private Frame frame;
@@ -145,13 +145,8 @@ public class JDialogSDInstance extends javax.swing.JDialog implements ActionList
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

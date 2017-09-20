@@ -58,7 +58,7 @@ import java.util.LinkedList;
  * @version 1.0 25/07/2014
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public abstract class JDialogTMLSDInstance extends JDialog implements ActionListener, ListSelectionListener  {
 
 	protected static final int DEFAULT_MARGIN_SIZE = 5;
 

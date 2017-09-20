@@ -58,12 +58,13 @@ import java.util.Vector;
  * @version 1.0 03/11/2005
  * @author Ludovic APVRILLE
  */
-public class JDialogParam extends javax.swing.JDialog implements ActionListener {
+public class JDialogParam extends JDialogBase implements ActionListener {
 
     private String name;
     private int type1, type2, type3;
     
     public boolean data;
+    private JButton closeButton, cancelButton;
     
     
     // Panel1
@@ -174,13 +175,8 @@ public class JDialogParam extends javax.swing.JDialog implements ActionListener 
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        JButton closeButton = new JButton("Save and Close", IconManager.imgic25);
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

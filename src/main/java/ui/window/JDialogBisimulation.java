@@ -63,7 +63,7 @@ import java.io.File;
  * @version 1.0 12/08/2004
  * @author Ludovic APVRILLE
  */
-public class JDialogBisimulation extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogBisimulation extends JDialog implements ActionListener, Runnable  {
     
     
     private String [] textAlgo = { "Strong bisimulation equivalence [Park-81] (std)", "Strong bisimulation equivalence [Park-81] (fly)",

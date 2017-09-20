@@ -59,7 +59,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 11/12/2009
  * @author Ludovic APVRILLE
  */
-public class JDialogConstraint extends javax.swing.JDialog implements ActionListener  {
+public class JDialogConstraint extends JDialogBase implements ActionListener  {
     
     private boolean regularClose;
     
@@ -136,14 +136,8 @@ public class JDialogConstraint extends javax.swing.JDialog implements ActionList
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        
+        initButtons(closeButton, cancelButton, c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

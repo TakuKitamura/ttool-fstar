@@ -65,7 +65,7 @@ import java.util.Vector;
    * @version 1.0 04/07/2017
    * @author Côme Demarigny
  */
-public class JDialogSelectSystemCAMSBlock extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogSelectSystemCAMSBlock extends JDialogBase implements ActionListener, ListSelectionListener  {
 
     public static Vector<TGComponent> validated, ignored;
     private static boolean optimized = true;

@@ -60,7 +60,7 @@
    * @version 1.0 10/03/2006
    * @author Ludovic APVRILLE
  */
-  public class JDialogLOTOSAnalysis extends javax.swing.JDialog implements ActionListener, Runnable  {
+  public class JDialogLOTOSAnalysis extends JDialog implements ActionListener, Runnable  {
       private static boolean warningChecked = false;
       
       protected MainGUI mgui;

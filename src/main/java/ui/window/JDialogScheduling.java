@@ -58,7 +58,7 @@ import java.awt.event.ActionListener;
 * @version 1.0 22/02/2008
 * @author Ludovic APVRILLE
  */
-public class JDialogScheduling extends javax.swing.JDialog implements ActionListener, Runnable  {
+public class JDialogScheduling extends JDialog implements ActionListener, Runnable  {
 	
 	private static boolean sampleChecked=false, channelChecked= false, eventChecked = false, requestChecked = false, execChecked = false, busTransferChecked = false, schedulingChecked = false, taskStateChecked = false, channelStateChecked = false, branchingChecked = false, terminateCPUChecked = false, terminateCPUsChecked = true, clockedChecked = false, clockedEndChecked = false, countTickChecked=false, maxCountTickChecked=false, randomTaskChecked = true;
 	private static String tickIntervalValue = "1", maxCountTickValue = "1000";

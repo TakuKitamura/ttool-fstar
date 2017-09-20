@@ -61,7 +61,7 @@ import java.util.LinkedList;
  * @version 1.0 18/05/2010
  * @author Ludovic APVRILLE
  */
-public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListener, ListSelectionListener  {
     public LinkedList<AvatarBDStateMachineOwner> validated, ignored;
     private boolean optimized = true;
 
@@ -78,7 +78,7 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
     // Main Panel
     private JButton closeButton;
 
-    private boolean hasBeenCancelled = false;
+    private boolean hasBeenCancelled = true;
 
     /** Creates new form  */
     public JDialogSelectAvatarBlock(Frame f, LinkedList<AvatarBDStateMachineOwner> _back, LinkedList<AvatarBDStateMachineOwner> componentList, String title, LinkedList <AvatarBDStateMachineOwner> _validated, LinkedList <AvatarBDStateMachineOwner> _ignored, boolean _optimized) {
@@ -314,11 +314,12 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
         validated = val;
         ignored = ign;
         optimized = optimize.isSelected();
+
+        hasBeenCancelled = false;
         dispose();
     }
 
     public void cancelDialog() {
-        hasBeenCancelled = true;
         dispose();
     }
 

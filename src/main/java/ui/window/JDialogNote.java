@@ -56,7 +56,7 @@ import java.awt.event.ActionListener;
  * @version 1.0 06/12/2003
  * @author Ludovic APVRILLE
  */
-public class JDialogNote extends javax.swing.JDialog implements ActionListener {
+public class JDialogNote extends JDialogBase implements ActionListener {
     
     protected String text;
     
