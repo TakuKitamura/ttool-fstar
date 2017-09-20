@@ -71,11 +71,6 @@ public class JDialogERB extends JDialogBase implements ActionListener  {
 	// Panel
     protected JTextField evt, condition, action;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-
-    
     /** Creates new form  */
     public JDialogERB(Frame _frame, EBRDDERB _erb) {
         super(_frame, "Event Reaction Block", true);
@@ -145,7 +140,7 @@ public class JDialogERB extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
 	
     public void	actionPerformed(ActionEvent evt)  {

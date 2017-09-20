@@ -86,11 +86,6 @@ public class JDialogADDCoproMWMRNode extends JDialogBase implements ActionListen
 		private String[] choices = { "false", "true"};
 		private JComboBox<String> useLLSC;
 		
-		
-		// Main Panel
-		private JButton closeButton;
-		private JButton cancelButton;
-		
 		/** Creates new form  */
 		public JDialogADDCoproMWMRNode(Frame _frame, String _title, ADDCoproMWMRNode _node) {
 				super(_frame, _title, true);
@@ -194,7 +189,7 @@ public class JDialogADDCoproMWMRNode extends JDialogBase implements ActionListen
 				c0.gridheight = 1;
 				c0.fill = GridBagConstraints.HORIZONTAL;
 				
-				initButtons(closeButton, cancelButton, c0, c, this);
+				initButtons(c0, c, this);
 		}
 		
 		public void	actionPerformed(ActionEvent evt)  {

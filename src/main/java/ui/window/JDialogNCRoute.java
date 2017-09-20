@@ -66,7 +66,6 @@ public class JDialogNCRoute extends JDialogBase implements ActionListener, ListS
 	private ArrayList<String> inputInterfaces, traffics, outputInterfaces;
 
 	protected String value;
-	protected JButton closeButton, cancelButton;
 	
 	protected boolean hasBeenCancelled = true;
     
@@ -274,7 +273,7 @@ public class JDialogNCRoute extends JDialogBase implements ActionListener, ListS
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

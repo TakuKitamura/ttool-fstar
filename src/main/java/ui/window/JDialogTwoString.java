@@ -67,10 +67,6 @@ public class JDialogTwoString extends JDialogBase implements ActionListener  {
     // Panel1
     private JTextField text1, text2;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
     
     /** Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
@@ -154,7 +150,7 @@ public class JDialogTwoString extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

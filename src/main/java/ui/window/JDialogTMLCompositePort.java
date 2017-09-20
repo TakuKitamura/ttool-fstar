@@ -79,7 +79,6 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
     public boolean data;
     public boolean checkConf;
     public boolean checkAuth;
-    private JButton closeButton, cancelButton;
     // Panel1
     private JTextField nameText, maxText, widthText, associatedEventJT;
     private JComboBox<String> typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
@@ -560,7 +559,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
 		repaint();
     }
     

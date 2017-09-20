@@ -105,10 +105,6 @@ public class JDialogPortArtifact extends JDialogBase implements ActionListener  
 	//Mapper LUT
 	protected JTextField baseAddressLUTMapp_TF;
 	protected String baseAddressLUTMapp;
-	
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
 
 	//Code generation
 	private JPanel panel3;//, panel4, panel5;
@@ -216,7 +212,7 @@ public class JDialogPortArtifact extends JDialogBase implements ActionListener  
 		c0.gridheight = 1;
 		c0.fill = GridBagConstraints.HORIZONTAL;
 		
-		initButtons(closeButton, cancelButton, c0, c, this);
+		initButtons(c0, c, this);
   }
 
 	private String getBufferTypeFromSelectedMemory( String mappedMemory )	{

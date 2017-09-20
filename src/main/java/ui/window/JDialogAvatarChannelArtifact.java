@@ -73,10 +73,6 @@ public class JDialogAvatarChannelArtifact extends JDialogBase implements ActionL
     //protected JTextField taskName;
     protected JComboBox<String> referenceDiagram;
 
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-
     /** Creates new form  */
     public JDialogAvatarChannelArtifact(Frame _frame, String _title, ADDChannelArtifact _artifact) {
         super(_frame, _title, true);
@@ -156,7 +152,7 @@ public class JDialogAvatarChannelArtifact extends JDialogBase implements ActionL
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
 
     public void actionPerformed(ActionEvent evt)  {

@@ -71,8 +71,6 @@ public class JDialogSMDLibraryFunctionCall extends JDialogBase implements Action
     private AvatarSignal[] signals;
     private TAttribute[] returnAttributes;
 
-    private JButton closeButton, cancelButton;
-
     private static class FunctionWrapper {
         AvatarBDLibraryFunction inner;
 
@@ -315,7 +313,7 @@ public class JDialogSMDLibraryFunctionCall extends JDialogBase implements Action
         gridConstraints.weighty = 1.0;
         gridConstraints.fill = GridBagConstraints.BOTH;
         
-        initButtons(closeButton, cancelButton, gridConstraints, c, this);
+        initButtons(gridConstraints, c, this);
     }
 
     private void fillParametersComboBox (TAttribute attr) {

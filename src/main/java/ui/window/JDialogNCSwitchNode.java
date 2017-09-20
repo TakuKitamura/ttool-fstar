@@ -66,7 +66,6 @@ public class JDialogNCSwitchNode extends JDialogBase implements ActionListener {
 	private int technicalLatency;
 	
 	private boolean data;
-	private JButton cancelButton, closeButton;
     
     
     // Panel1
@@ -186,7 +185,7 @@ public class JDialogNCSwitchNode extends JDialogBase implements ActionListener {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

@@ -65,10 +65,6 @@ public class JDialogAvatarProperty extends JDialogBase implements ActionListener
     private JTextField myName;
     private JRadioButton safety, notSafety, reachability, liveness, notReachability, notLiveness;
 
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-
     //private String id1, id2;
 
     /** Creates new form  */
@@ -173,7 +169,7 @@ public class JDialogAvatarProperty extends JDialogBase implements ActionListener
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
 
     public void actionPerformed(ActionEvent evt)  {

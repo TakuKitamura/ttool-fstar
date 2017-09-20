@@ -66,7 +66,6 @@ public class JDialogFirewallNode extends JDialogBase implements ActionListener,L
     private boolean regularClose;
 
     private TMLArchiFirewallNode node;
-    private JButton cancelButton, closeButton;
     
 	
     // Panel1
@@ -187,7 +186,7 @@ public class JDialogFirewallNode extends JDialogBase implements ActionListener,L
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

@@ -72,10 +72,6 @@ public class JDialogAvatarBlockArtifact extends JDialogBase implements ActionLis
     
     //protected JTextField taskName;
 	protected JComboBox<String> referenceTaskName;
-	
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
     
     /** Creates new form  */
     public JDialogAvatarBlockArtifact(Frame _frame, String _title, ADDBlockArtifact _artifact) {
@@ -156,7 +152,7 @@ public class JDialogAvatarBlockArtifact extends JDialogBase implements ActionLis
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

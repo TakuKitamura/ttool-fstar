@@ -83,10 +83,6 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     protected JButton downButton;
     protected JButton removeButton;
     
-    // Main Panel
-    protected JButton closeButton;
-    protected JButton cancelButton;
-    
     /** Creates new form  */
     public JDialogAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute>_forbidden, Frame f, String title, String attrib) {
         super(f, title, true);
@@ -252,7 +248,7 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

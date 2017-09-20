@@ -72,7 +72,6 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
     private JComboBox<String> arbitrationPolicy, privacy, refAttacks;
     protected JTextField sliceTime;
     private Vector<String> refs;
-    private JButton closeButton, cancelButton;
 
     /** Creates new form  */
     public JDialogBUSNode(Frame _frame, String _title, TMLArchiBUSNode _node, Vector<String> _refs) {
@@ -185,7 +184,7 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
 
     public void actionPerformed(ActionEvent evt)  {

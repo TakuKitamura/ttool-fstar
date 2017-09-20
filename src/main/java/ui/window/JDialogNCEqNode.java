@@ -63,8 +63,6 @@ public class JDialogNCEqNode extends JDialogBase implements ActionListener {
 	private int type;
 	
 	private boolean data;
-	private JButton closeButton, cancelButton;
-    
     
     // Panel1
     private JTextField eqNameText;
@@ -155,7 +153,7 @@ public class JDialogNCEqNode extends JDialogBase implements ActionListener {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

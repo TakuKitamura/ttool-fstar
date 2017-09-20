@@ -78,10 +78,6 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
 	protected JComboBox<String> referenceTaskName, priority, operationsListCB;
 	
 	private JTabbedPane tabbedPane;
-	
-    // Main Panel
-  private JButton closeButton;
-  private JButton cancelButton;
     
     /** Creates new form  */
   public JDialogTMLTaskArtifact(Frame _frame, String _title, TMLArchiArtifact _artifact, String _operation, ArchUnitMEC _MECType) {
@@ -224,7 +220,7 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	c0.gridheight = 1;
     	c0.fill = GridBagConstraints.HORIZONTAL;
     	
-    	initButtons(closeButton, cancelButton, c0, c, this);
+    	initButtons(c0, c, this);
     }
     
     @Override

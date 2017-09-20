@@ -65,7 +65,6 @@ public class JDialogRequirementTable extends JDialogBase implements ActionListen
 	private int nbColumn = 10;
     private static int[] selectedItems = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	private static int[] selectedSizes = {1, 3, 2, 6, 2, 2, 2, 2, 1, 2};
-	private JButton cancelButton, closeButton;
 	
     // Panel1
     private ArrayList<JComboBox<String>> itemBoxes, sizeBoxes;
@@ -144,7 +143,7 @@ public class JDialogRequirementTable extends JDialogBase implements ActionListen
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

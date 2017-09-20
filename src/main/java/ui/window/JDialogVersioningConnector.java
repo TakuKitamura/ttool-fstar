@@ -64,10 +64,6 @@ public class JDialogVersioningConnector extends JDialogBase implements ActionLis
     int oldVersion, newVersion;
     private JTextField version1, version2;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
     boolean cancel = false;
     
     //private String id1, id2;
@@ -159,7 +155,7 @@ public class JDialogVersioningConnector extends JDialogBase implements ActionLis
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

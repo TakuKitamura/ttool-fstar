@@ -73,8 +73,6 @@ public class JDialogAvatarLibraryFunction extends JDialogBase implements ActionL
 
     // General
     private JTabbedPane tabbedPane;
-    private JButton closeButton;
-    private JButton cancelButton;
 
     private JButton removeButtons[];
     private JButton modifyButtons[];
@@ -570,7 +568,7 @@ public class JDialogAvatarLibraryFunction extends JDialogBase implements ActionL
         gridConstraints.gridheight = 1;
         gridConstraints.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, gridConstraints, c, this);
+        initButtons(gridConstraints, c, this);
     }
 
     public void selectTabIndex (int tab) {

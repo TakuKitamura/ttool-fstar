@@ -26,6 +26,8 @@ import ui.util.IconManager;
 
 public class JDialogBase extends JDialog {
 	
+	protected JButton cancelButton, closeButton;
+	
 	protected JDialogBase(Frame _frame, String _title, boolean b) {
 		super(_frame, _title, b);
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
@@ -50,7 +52,7 @@ public class JDialogBase extends JDialog {
         });
 	}
 	
-	protected void initButtons(JButton closeButton, JButton cancelButton, GridBagConstraints c0, Container c,
+	protected void initButtons(GridBagConstraints c0, Container c,
 			                  ActionListener al) {
 		//Close Button
         closeButton = new JButton("Save and Close", IconManager.imgic25);
@@ -66,6 +68,5 @@ public class JDialogBase extends JDialog {
         
         //Add closeButton's behaviour on Enter key
         this.getRootPane().setDefaultButton(closeButton);
-;
 	}
 }
