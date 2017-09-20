@@ -72,10 +72,6 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
 	// Panel2
     private JTextField jvariable, jminValue, jmaxValue;
 	private JComboBox<String> randomFunction;
-	
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
     
     /** Creates new form  */
     public JDialogTMLADRandom(Frame _frame, String _title, String _variable, String _minValue, String _maxValue, int _functionId) {
@@ -161,7 +157,7 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

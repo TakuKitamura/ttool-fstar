@@ -64,8 +64,6 @@ public class JDialogEventArtifact extends JDialogBase implements ActionListener 
     
     private boolean regularClose;
 	private boolean emptyList = false;
-
-	private JButton closeButton, cancelButton;
 	
     private TMLArchiEventArtifact artifact;
     
@@ -172,7 +170,7 @@ public class JDialogEventArtifact extends JDialogBase implements ActionListener 
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

@@ -80,10 +80,6 @@ public class JDialogReducedAttribute extends JDialogBase implements ActionListen
     private JList<TAttribute> setAttributes;
     private JButton unsetButton;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
     /** Creates new form  */
     public JDialogReducedAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute> _tclassAttributes, Frame f, String title, String  _attrib, String _nameTObject, String _nameTClass) {
         super(f, title, true);
@@ -238,7 +234,7 @@ public class JDialogReducedAttribute extends JDialogBase implements ActionListen
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

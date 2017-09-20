@@ -72,10 +72,6 @@ public class JDialogArchiKey extends JDialogBase implements ActionListener  {
     private TMLArchiKey artifact;
     
 	protected JComboBox<String> referenceCommunicationName;
-	
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
     
     /** Creates new form  */
     public JDialogArchiKey(Frame _frame, String _title, TMLArchiKey _artifact) {
@@ -181,7 +177,7 @@ public class JDialogArchiKey extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

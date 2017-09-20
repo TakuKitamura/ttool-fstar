@@ -82,10 +82,6 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
     private JButton allIgnored;
     protected JCheckBox optimize;
 
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-
     /** Creates new form  */
     public JDialogSelectTMLComponent(Frame f, Vector<TGComponent> _back, List<TGComponent> componentList, String title) {
         super(f, title, true);

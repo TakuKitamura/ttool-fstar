@@ -64,7 +64,7 @@ import java.util.LinkedList;
  * @version 1.0 08/04/2010
  * @author Ludovic APVRILLE
  */
-public class JDialogAvatarBlock extends JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogAvatarBlock extends JDialogBase implements ActionListener, ListSelectionListener  {
 
     private LinkedList<TAttribute> attributes, attributesPar, forbidden;
     private LinkedList<Boolean> initValues;
@@ -120,10 +120,6 @@ public class JDialogAvatarBlock extends JDialog implements ActionListener, ListS
     private JButton upSignalButton;
     private JButton downSignalButton;
     private JButton removeSignalButton;
-
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
 
     /** Creates new form  */
     public JDialogAvatarBlock(LinkedList<TAttribute> _attributes, LinkedList<AvatarMethod> _methods, LinkedList<AvatarSignal> _signals, LinkedList<TAttribute> _forbidden, Frame f, String title, String attrib, int _tab, String []_globalCode, boolean _hasGlobalCode, String _mainCode) {
@@ -599,14 +595,7 @@ public class JDialogAvatarBlock extends JDialog implements ActionListener, ListS
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        closeButton = new JButton("Save and Close", IconManager.imgic25);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        c.add(closeButton, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        c.add(cancelButton, c0);
+        initButtons(c0, c, this);
     }
 
     public void actionPerformed(ActionEvent evt)  {

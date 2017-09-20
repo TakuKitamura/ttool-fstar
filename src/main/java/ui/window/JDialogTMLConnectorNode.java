@@ -70,10 +70,6 @@ public class JDialogTMLConnectorNode extends JDialogBase implements ActionListen
     
     //protected JTextField taskName;
 	protected JComboBox<String> priority;
-	
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
     
     /** Creates new form  */
     public JDialogTMLConnectorNode(Frame _frame, String _title, TMLArchiConnectorNode _connector) {
@@ -146,7 +142,7 @@ public class JDialogTMLConnectorNode extends JDialogBase implements ActionListen
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

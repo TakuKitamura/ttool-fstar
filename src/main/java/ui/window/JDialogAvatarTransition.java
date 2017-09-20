@@ -61,7 +61,7 @@ import java.util.Vector;
    * @version 1.0 12/04/2010
    * @author Ludovic APVRILLE
  */
-public class JDialogAvatarTransition extends JDialog implements ActionListener  {
+public class JDialogAvatarTransition extends JDialogBase implements ActionListener  {
 
     private Vector<String> actions;
     private String guard, afterMin, afterMax, computeMin, computeMax;
@@ -82,10 +82,6 @@ public class JDialogAvatarTransition extends JDialog implements ActionListener  
     private JTextArea actionsT;
     private JComboBox<String> elements;
     private JButton insertElement;
-
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
 
     // Panel of code and files
     protected JTextArea jtaCode, jtaFiles;
@@ -297,16 +293,8 @@ public class JDialogAvatarTransition extends JDialog implements ActionListener  
     	c0.gridwidth = 1;
     	c0.gridheight = 1;
     	c0.fill = GridBagConstraints.HORIZONTAL;
-    	closeButton = new JButton("Save and Close", IconManager.imgic25);
-    	//closeButton.setPreferredSize(new Dimension(600, 50));
-
-
-    	closeButton.addActionListener(this);
-    	buttons.add(closeButton, c0);
-    	c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	cancelButton = new JButton("Cancel", IconManager.imgic27);
-    	cancelButton.addActionListener(this);
-    	buttons.add(cancelButton, c0);
+    	
+    	initButtons(c0, buttons, this);
 
     	c.add(buttons, BorderLayout.SOUTH);
     }

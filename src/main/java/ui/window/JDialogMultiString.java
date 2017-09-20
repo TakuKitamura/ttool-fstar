@@ -73,10 +73,6 @@ public class JDialogMultiString extends JDialogBase implements ActionListener  {
     private JButton inserts[];
     private HashMap<Integer, JComboBox<String>> helps;
 
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-
     private ArrayList<String[]> possibleValues = null;
 
 
@@ -195,7 +191,7 @@ public class JDialogMultiString extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
 
     public void actionPerformed(ActionEvent evt)  {

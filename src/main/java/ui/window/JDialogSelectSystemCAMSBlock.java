@@ -83,10 +83,6 @@ public class JDialogSelectSystemCAMSBlock extends JDialogBase implements ActionL
     protected JCheckBox optimize;
     //  protected JTextField clockField;
 
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-
     /* Creates new form  */
     public JDialogSelectSystemCAMSBlock( Frame f, Vector<TGComponent> _back, List<TGComponent> componentList, String title ) {
         super(f, title, true);

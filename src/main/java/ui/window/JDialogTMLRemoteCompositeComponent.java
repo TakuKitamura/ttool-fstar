@@ -67,7 +67,6 @@ public class JDialogTMLRemoteCompositeComponent extends JDialogBase implements A
     private TMLCRemoteCompositeComponent artifact;
     
 	private JComboBox<String> referenceComponentName;
-	private JButton closeButton, cancelButton;
 
     /** Creates new form  */
     public JDialogTMLRemoteCompositeComponent(Frame _frame, String _title, TMLCRemoteCompositeComponent _artifact) {
@@ -150,7 +149,7 @@ public class JDialogTMLRemoteCompositeComponent extends JDialogBase implements A
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

@@ -77,8 +77,6 @@ public class JDialogManageListOfString extends JDialogBase implements ActionList
     private JButton allIgnored;
 
     // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
 
     private boolean hasBeenCancelled = true;
 

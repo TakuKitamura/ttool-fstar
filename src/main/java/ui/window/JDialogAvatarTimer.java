@@ -72,9 +72,6 @@ public class JDialogAvatarTimer extends JDialogBase implements ActionListener  {
     private JTextField tvalue;
 
     // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-
     private String timer, value;
     private boolean setValue;
 
@@ -183,7 +180,7 @@ public class JDialogAvatarTimer extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
 
     public void	actionPerformed(ActionEvent evt)  {

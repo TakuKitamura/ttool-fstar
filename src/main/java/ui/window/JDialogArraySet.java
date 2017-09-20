@@ -70,10 +70,6 @@ public class JDialogArraySet extends JDialogBase implements ActionListener {
     private JTextField exprText, arrayText, indexText;
 	private JLabel valueLabel; 
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
     /** Creates new form  */
     public JDialogArraySet(Frame f, String _array, String _index, String _expr, String title) {
         super(f, title, true);
@@ -177,7 +173,7 @@ public class JDialogArraySet extends JDialogBase implements ActionListener {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

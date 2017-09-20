@@ -65,7 +65,6 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
     private String name;
     private int type, durability, source, status, limitation;
     private String text;
-    private JButton closeButton, cancelButton;
     
     // Panel1
     private JComboBox<String> typeBox;
@@ -213,7 +212,7 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
         c0.gridwidth = 1;
         c0.gridheight = 1;
         
-        initButtons(closeButton, cancelButton, c0, c, this);   
+        initButtons(c0, c, this);   
     }
     
     public void	actionPerformed(ActionEvent evt)  {

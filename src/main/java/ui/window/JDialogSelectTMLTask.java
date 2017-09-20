@@ -77,10 +77,6 @@ public class JDialogSelectTMLTask extends JDialogBase implements ActionListener,
     private JButton allIgnored;
 	protected JCheckBox optimize;
     
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-    
     /** Creates new form  */
     public JDialogSelectTMLTask(Frame f, Vector<TGComponent> _back, java.util.List<TGComponent> componentList, String title) {
         super(f, title, true);

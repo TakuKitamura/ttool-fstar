@@ -68,12 +68,6 @@ public class JDialogObserver extends JDialogBase implements ActionListener  {
     // Panel1
     protected JTextField diagramBox;
     private JTextField violatedActionBox;
-	
-    //Panel2
-    
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
     
     /** Creates new form  */
     public JDialogObserver(Frame _frame, String _title, String _diagram, String _violatedAction) {
@@ -150,7 +144,7 @@ public class JDialogObserver extends JDialogBase implements ActionListener  {
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
     
     public void	actionPerformed(ActionEvent evt)  {

@@ -69,10 +69,6 @@ public class JDialogCountermeasure extends JDialogBase implements ActionListener
     //protected JTextField taskName;
     protected JTextField name, description;
 
-    // Main Panel
-    private JButton closeButton;
-    private JButton cancelButton;
-
     private ATDCountermeasure countermeasure;
 
     /** Creates new form  */
@@ -138,7 +134,7 @@ public class JDialogCountermeasure extends JDialogBase implements ActionListener
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         
-        initButtons(closeButton, cancelButton, c0, c, this);
+        initButtons(c0, c, this);
     }
 
     public void actionPerformed(ActionEvent evt)  {
