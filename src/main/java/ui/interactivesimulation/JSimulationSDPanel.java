@@ -1157,7 +1157,6 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         if (tmp != null) {
             gt.messageID = tmp;
         }
-		System.out.println("Added transaction " + gt);
         transactions.add(gt);
         //TraceManager.addDev("One transactions added");
 

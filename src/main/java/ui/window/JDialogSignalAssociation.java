@@ -366,7 +366,6 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
     }
 
     private void updateAddButton() {
-        TraceManager.addDev("updateAddButton");
         int i1 = signalsBlock1.getSelectedIndex();
         int i2 = signalsBlock2.getSelectedIndex();
 

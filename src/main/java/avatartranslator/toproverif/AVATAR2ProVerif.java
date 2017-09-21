@@ -342,6 +342,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     // -> transformed into a = b, a <> b, g1 && g2, g1 || g2
     // Returns nulls otherwise
     private static String translateGuard (AvatarGuard _guard, HashMap<AvatarAttribute, Integer> attributeCmp) {
+        TraceManager.addDev(_guard.toString());
         if (_guard == null || _guard instanceof AvatarGuardEmpty)
             return null;
 
@@ -399,9 +400,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
             String delimProV = null;
 
-            if (delim.equals ("and"))
+            if (delim.equals ("and") || delim.equals("&&"))
                 delimProV = "&&";
-            else if (delim.equals ("or"))
+            else if (delim.equals ("or") || delim.equals("||"))
                 delimProV = "||";
 
             String guardAProV = AVATAR2ProVerif.translateGuard (guardA, attributeCmp);

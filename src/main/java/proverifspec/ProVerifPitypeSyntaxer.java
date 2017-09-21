@@ -226,7 +226,7 @@ public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
 
     protected void translateProcNew (ProVerifProcNew _node, int _alinea) {
         this.fullSpec += "\n" + printAlinea (_alinea);
-        this.fullSpec += "new " + _node.name + ": " + _node.type + ";";
+        this.fullSpec += "new " + _node.name + "[]: " + _node.type + ";";
         if (_node.next == null) {
             this.fullSpec += "\n" + printAlinea (_alinea);
             this.fullSpec += "0";
