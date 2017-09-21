@@ -1,0 +1,25 @@
+image: make
+
+stages:
+  - build
+  - test
+
+before_script:
+
+cache:
+
+
+build:
+  stage: build
+  script:
+    make all
+  artifacts:
+    paths:
+      - bin/ttool.jar
+  only:
+- master
+
+test:
+  stage: test
+  script:
+    make test
