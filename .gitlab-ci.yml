@@ -1,25 +1,30 @@
-image: make
+image: java:8-jdk
 
 stages:
   - build
   - test
 
 before_script:
+#  - echo `pwd` # debug
+#  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
+#  - export GRADLE_USER_HOME=`pwd`/.gradle
 
 cache:
-
+#  paths:
+#    - .gradle/wrapper
+#    - .gradle/caches
 
 build:
   stage: build
   script:
-    make all
-  artifacts:
-    paths:
-      - bin/ttool.jar
+    - make ttool
   only:
-- master
+    - master
 
 test:
   stage: test
   script:
-    make test
+    - make test
+
+after_script:
+- echo "End CI"
