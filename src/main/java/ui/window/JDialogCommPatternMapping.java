@@ -690,6 +690,7 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 		
 		if( cpMEC.equals( "VOID" ) || cpMEC.equals( "" ) )	{
 			cpMECsCB.setSelectedIndex( 0 );
+            cpMEC = CPMEC.MemoryCopy;
 		}
 		else	{
 			cpMECsCB.setSelectedIndex( new Vector<String>( Arrays.asList( CPMEC.CP_TYPES ) ).indexOf( cpMEC ) );
@@ -1457,6 +1458,9 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
 		cancelled = false;
 		name = nameOfCP.getText();
 		cpMEC = (String)cpMECsCB.getSelectedItem();
+		if( cpMEC.equals( "VOID" ) || cpMEC.equals( "" ) )	{
+            cpMEC = CPMEC.MemoryCopy;
+        }
 		transferType1 = Arrays.asList( CPMEC.TRANSFER_TYPES ).indexOf(transferTypeCB1.getSelectedItem());
 		transferType2 = Arrays.asList( CPMEC.TRANSFER_TYPES ).indexOf(transferTypeCB2.getSelectedItem());
 		

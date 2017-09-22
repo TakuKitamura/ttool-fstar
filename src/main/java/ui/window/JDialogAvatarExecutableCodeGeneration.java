@@ -195,6 +195,11 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
     protected void initComponents() {
 
+
+	if (PluginManager.pluginManager.getPluginAvatarCodeGenerator() != null) {
+	    codes[0]  = "AVATAR CPOSIX (with Plugin)";
+	}
+
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
@@ -603,7 +608,12 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
                     if (avspec == null) {
                         jta.append("Error: No AVATAR specification\n");
                     } else {
+			if (PluginManager.pluginManager.getPluginAvatarCodeGenerator() != null) {
+			    TraceManager.addDev("Using customize Avatar code generator");
+			}
+			
                         AVATAR2CPOSIX avatartocposix = new AVATAR2CPOSIX(avspec, PluginManager.pluginManager.getPluginAvatarCodeGenerator());
+			
                         avatartocposix.includeUserCode(putUserCode.isSelected());
                         avatartocposix.setTimeUnit(selectedUnit);
                         avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());

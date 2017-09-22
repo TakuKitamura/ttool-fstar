@@ -150,6 +150,7 @@ public class ConfigurationTTool {
     //public static String AttackOntologyWebsite = "";
 
     // PLUGINS
+    public static String[] PLUGIN_PKG = new String[0];
     public static String PLUGIN_PATH = "";
     public static String[] PLUGIN = new String[0];
     //public static String PLUGIN_JAVA_CODE_GENERATOR = "";
@@ -467,13 +468,14 @@ public class ConfigurationTTool {
 
 	// Plugins
 	sb.append("\nPlugins:\n");
+	//sb.append("Plugin path: " + PLUGIN_PKG + "\n");
 	sb.append("Plugin path: " + PLUGIN_PATH + "\n");
 	/*sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
 	for (int i=0; i<PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
 	    sb.append("Plugin for graphical component: " + PLUGIN_GRAPHICAL_COMPONENT[i] + "\n");
 	    }*/
 	for (int i=0; i<PLUGIN.length; i++) {
-	    sb.append("Plugin: " + PLUGIN[i] + "\n");
+	    sb.append("Plugin: " + PLUGIN[i] + " package:" + PLUGIN_PKG[i] + "\n");
 	}
 
 	// URL
@@ -1500,10 +1502,12 @@ public class ConfigurationTTool {
 
     private static void Plugin(NodeList nl) throws MalformedConfigurationException {
 	PLUGIN = new String[nl.getLength()];
+	PLUGIN_PKG = new String[nl.getLength()];
         try {
 	    for (int i=0; i<nl.getLength(); i++) {
 		Element elt = (Element)(nl.item(i));
-		PLUGIN[i] = elt.getAttribute("data");
+		PLUGIN[i] = elt.getAttribute("file");
+		PLUGIN_PKG[i] = elt.getAttribute("package");
 	    }
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());

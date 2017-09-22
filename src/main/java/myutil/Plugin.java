@@ -58,6 +58,7 @@ import javax.swing.*;
 public class Plugin {
     private String path;
     private String name;
+    private String packageName;
     private File file;
     private HashMap<String, Class> listOfClasses;
     private Class classAvatarCodeGenerator;
@@ -65,9 +66,10 @@ public class Plugin {
     private Class classGraphicalComponent;
     
 
-    public Plugin(String _path, String _name) {
+    public Plugin(String _path, String _name, String _packageName) {
 	path = _path;
         name = _name;
+	packageName = _packageName.trim();
         listOfClasses = new HashMap<String, Class>();
     }
 
@@ -161,8 +163,13 @@ public class Plugin {
                 TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
                 URL[] urls = new URL[] { file.toURI().toURL() };
                 ClassLoader loader = new URLClassLoader(urls);
-                //TraceManager.addDev("Loader created");
-                c = loader.loadClass(_className);
+                //TraceManager.addDev("getClass() Loader created");
+		if ((packageName == null) || (packageName.length() == 0)) {
+		    c = loader.loadClass( _className );
+		} else {
+		    c = loader.loadClass( packageName + "." + _className);
+		}
+                //TraceManager.addDev("getClass() class loaded");
                 if (c == null) {
                     return null;
                 }
@@ -171,7 +178,9 @@ public class Plugin {
             }
 
         } catch (Exception e) {
-	    //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
+            TraceManager.addDev( "getClass()\n" );
+            e.printStackTrace( System.out );
+    	    //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
 	    return null;
         }
 
@@ -184,11 +193,17 @@ public class Plugin {
         try {
             if (c == null) {
                 file = new File(path + java.io.File.separator + name);
-                TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
+                //TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
                 URL[] urls = new URL[] { file.toURI().toURL() };
                 ClassLoader loader = new URLClassLoader(urls);
                 //TraceManager.addDev("Loader created");
-                c = loader.loadClass(_className);
+		if ((packageName == null) || (packageName.length() == 0)) {
+		    c = loader.loadClass( _className );
+		} else {
+		    c = loader.loadClass( packageName + "." + _className);
+		}
+ 
+                //TraceManager.addDev( "Class loaded" );
                 if (c == null) {
                     return null;
                 }
@@ -197,7 +212,8 @@ public class Plugin {
 
             return c.getMethod(_methodName);
         } catch (Exception e) {
-	    //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
+            //e.printStackTrace( System.out );
+	        TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
 	    return null;
         }
 
