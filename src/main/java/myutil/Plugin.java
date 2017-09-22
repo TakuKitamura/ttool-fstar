@@ -161,8 +161,9 @@ public class Plugin {
                 TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
                 URL[] urls = new URL[] { file.toURI().toURL() };
                 ClassLoader loader = new URLClassLoader(urls);
-                //TraceManager.addDev("Loader created");
-                c = loader.loadClass(_className);
+                //TraceManager.addDev("getClass() Loader created");
+                c = loader.loadClass( PluginManager.PLUGIN_PKG + "." + _className);
+                //TraceManager.addDev("getClass() class loaded");
                 if (c == null) {
                     return null;
                 }
@@ -171,7 +172,9 @@ public class Plugin {
             }
 
         } catch (Exception e) {
-	    //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
+            TraceManager.addDev( "getClass()\n" );
+            e.printStackTrace( System.out );
+    	    //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
 	    return null;
         }
 
@@ -184,11 +187,12 @@ public class Plugin {
         try {
             if (c == null) {
                 file = new File(path + java.io.File.separator + name);
-                TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
+                //TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
                 URL[] urls = new URL[] { file.toURI().toURL() };
                 ClassLoader loader = new URLClassLoader(urls);
                 //TraceManager.addDev("Loader created");
-                c = loader.loadClass(_className);
+                c = loader.loadClass( PluginManager.PLUGIN_PKG + "." + _className);
+                //TraceManager.addDev( "Class loaded" );
                 if (c == null) {
                     return null;
                 }
@@ -197,7 +201,8 @@ public class Plugin {
 
             return c.getMethod(_methodName);
         } catch (Exception e) {
-	    //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
+            e.printStackTrace( System.out );
+	        //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
 	    return null;
         }
 

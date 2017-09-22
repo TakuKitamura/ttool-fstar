@@ -150,6 +150,7 @@ public class ConfigurationTTool {
     //public static String AttackOntologyWebsite = "";
 
     // PLUGINS
+    public static String PLUGIN_PKG = "";
     public static String PLUGIN_PATH = "";
     public static String[] PLUGIN = new String[0];
     //public static String PLUGIN_JAVA_CODE_GENERATOR = "";
@@ -467,6 +468,7 @@ public class ConfigurationTTool {
 
 	// Plugins
 	sb.append("\nPlugins:\n");
+	sb.append("Plugin path: " + PLUGIN_PKG + "\n");
 	sb.append("Plugin path: " + PLUGIN_PATH + "\n");
 	/*sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
 	for (int i=0; i<PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
@@ -766,6 +768,10 @@ public class ConfigurationTTool {
             nl = doc.getElementsByTagName("ExternalCommand2");
             if (nl.getLength() > 0)
                 ExternalCommand2(nl);
+
+	    nl = doc.getElementsByTagName("PLUGIN_PKG");
+            if (nl.getLength() > 0)
+                PluginPkg(nl);
 
 	    nl = doc.getElementsByTagName("PLUGIN_PATH");
             if (nl.getLength() > 0)
@@ -1483,6 +1489,16 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             ExternalCommand2 = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void PluginPkg(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            PLUGIN_PKG = elt.getAttribute("data");
+	    PluginManager.PLUGIN_PKG = PLUGIN_PKG;
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

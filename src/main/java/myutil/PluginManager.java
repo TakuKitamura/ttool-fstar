@@ -56,6 +56,7 @@ import java.awt.*;
 public class PluginManager  {
     public static PluginManager pluginManager;
     public static String PLUGIN_PATH = "";
+    public static String PLUGIN_PKG = "";
     
     public ArrayList<Plugin> plugins;
 
