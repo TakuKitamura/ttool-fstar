@@ -307,7 +307,7 @@ public class Main implements ActionListener {
             splashFrame.setMessage("Preparing plugins");
         }
 	PluginManager.pluginManager = new PluginManager();
-	PluginManager.pluginManager.preparePlugins(ConfigurationTTool.PLUGIN_PATH, ConfigurationTTool.PLUGIN);
+	PluginManager.pluginManager.preparePlugins(ConfigurationTTool.PLUGIN_PATH, ConfigurationTTool.PLUGIN, ConfigurationTTool.PLUGIN_PKG);
 
         if (ConfigurationTTool.LauncherPort.length() > 0) {
             try {

@@ -56,18 +56,21 @@ import java.awt.*;
 public class PluginManager  {
     public static PluginManager pluginManager;
     public static String PLUGIN_PATH = "";
-    public static String PLUGIN_PKG = "";
     
     public ArrayList<Plugin> plugins;
+    public ArrayList<Plugin> pluginPackages;
 
     public PluginManager() {
 	plugins = new ArrayList<Plugin>();
+	pluginPackages = new ArrayList<Plugin>();
     }
 
-    public void preparePlugins(String path, String[] plugins) {
+    public void preparePlugins(String path, String[] plugins, String[] packages) {
 	PLUGIN_PATH = path;
+	int cpt = 0;
 	for(String s: plugins) {
-	    createPlugin(s);
+	    createPlugin(s, packages[cpt]);
+	    cpt ++;
 	}
     }
 
@@ -108,14 +111,14 @@ public class PluginManager  {
 	plugins.add(_plugin);
     }
 
-    public Plugin getPluginOrCreate(String _name) {
+    /*public Plugin getPluginOrCreate(String _name) {
 	Plugin plug = getPlugin(_name);
 	if (plug != null) {
 	    return plug;
 	}
 
 	return createPlugin(_name);
-    }
+	}*/
 
     public Plugin getPlugin(String _name) {
 	for(Plugin plugin: plugins) {
@@ -126,8 +129,8 @@ public class PluginManager  {
 	return null;
     }
 
-    public Plugin createPlugin(String _name) {
-	Plugin plugin = new Plugin(PLUGIN_PATH, _name);
+    public Plugin createPlugin(String _name, String packageName) {
+	Plugin plugin = new Plugin(PLUGIN_PATH, _name, packageName);
 	addPlugin(plugin);
 	return plugin;
     }
@@ -149,9 +152,10 @@ public class PluginManager  {
 	}
     }
     
-    public String executeString(String _pluginName, String _className, String _methodName) {
+    /*public String executeString(String _pluginName, String _className, String _methodName) {
 	Plugin plugin = getPlugin(_pluginName);
 	if (plugin == null) {
+	    // We must find the package of this plugin
 	    plugin = createPlugin(_pluginName);
 	    if (plugin == null) {
 		return null;
@@ -161,7 +165,7 @@ public class PluginManager  {
 	return plugin.executeRetStringMethod(_className, _methodName);
 
 	
-    }
+	}*/
 
 
 
