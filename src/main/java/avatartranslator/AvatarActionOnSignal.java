@@ -55,6 +55,7 @@ import java.util.LinkedList;
 public class AvatarActionOnSignal extends AvatarStateMachineElement {
     private AvatarSignal signal;
     private LinkedList<String> values;
+	private boolean checkLatency;
 
     public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -91,6 +92,14 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
     public boolean isSending() {
         return signal.isOut();
     }
+	
+	public boolean getCheckLatency(){
+		return checkLatency;
+	}
+	
+	public void setCheckLatency(boolean b){
+		checkLatency=b;
+	}
 
     public boolean isReceiving() {
         return signal.isIn();

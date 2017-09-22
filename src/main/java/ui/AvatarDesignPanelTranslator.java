@@ -210,13 +210,90 @@ public class AvatarDesignPanelTranslator {
                 tgsp = (AvatarBDSafetyPragma)tgc;
                 values = tgsp.getValues();
                 for (String s: values){
-                    if (checkSafetyPragma(s, _blocks, _as)){
-                        _as.addSafetyPragma(s);
-                    }
+					if (s.startsWith("Latency")){
+						AvatarPragma pragma = checkLatencyPragma(s, _blocks, _as, tgc);
+						if (pragma!=null){
+	                        _as.addLatencyPragma(pragma);
+	                    }
+					}
+					else{
+						if (checkSafetyPragma(s, _blocks, _as)){
+	                        _as.addSafetyPragma(s);
+	                    }
+					}
                 }
             }
         }
     }
+	
+	public AvatarPragma checkLatencyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc){	
+		if (_pragma.contains("=") || (!_pragma.contains(">") && !_pragma.contains("<"))){
+			TraceManager.addDev("No latency expression found");
+			return null;
+		}
+
+		_pragma = _pragma.trim();
+		_pragma = _pragma.split("Latency\\(")[1];		
+		//Find first block.state
+		String p1 = _pragma.split(",")[0];
+		String block1 = p1.split("\\.")[0];
+		String state1 = p1.split("\\.")[1];
+		AvatarBlock bl1;
+		AvatarActionOnSignal st1;
+
+		bl1 = as.getBlockWithName(block1);
+		AvatarStateMachine asm = bl1.getStateMachine();
+		st1 = asm.getAOSWithName(state1);
+		if (bl1 ==null || st1 ==null){
+			TraceManager.addDev("State " + block1+ "." + state1 + " in pragma does not exist");
+			return null;
+		}
+		if (!st1.getCheckLatency()){
+			TraceManager.addDev("State " + block1+ "." + state1 + " is not checkable");
+			return null;
+		}
+
+		
+		//Find second block.state
+		String p2 = _pragma.split(",")[1].split("\\)")[0];
+		String block2 = p2.split("\\.")[0];
+		String state2 = p2.split("\\.")[1];
+
+		AvatarBlock bl2;
+		AvatarActionOnSignal st2;
+
+		bl2 = as.getBlockWithName(block2);
+		asm = bl2.getStateMachine();
+		st2 = asm.getAOSWithName(state2);
+		if (bl2 ==null || st2 ==null){
+			TraceManager.addDev("State " + block2+ "." + state2 + " in pragma does not exist");
+			return null;
+		}
+		if (!st2.getCheckLatency()){
+			TraceManager.addDev("State " + block2+ "." + state2 + " is not checkable");
+			return null;
+		}
+
+		String equation = _pragma.split("\\)")[1];
+		equation = equation.replaceAll(" ","");
+		int symbolType=0;
+		int time=0;
+		if (equation.substring(0,1).equals("<")){
+			symbolType = AvatarPragmaLatency.lessThan;
+			time= Integer.valueOf(equation.split("<")[1]);
+		}
+		else if (equation.substring(0,1).equals(">")){
+			symbolType = AvatarPragmaLatency.greaterThan;
+			time= Integer.valueOf(equation.split(">")[1]);
+		}
+		else {
+			TraceManager.addDev("No latency expression found");
+			return null;
+		}
+		return new AvatarPragmaLatency(_pragma, tgc, bl1, st1, bl2, st2, symbolType, time);
+
+
+	}
     public boolean checkSafetyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as){
         //Todo: check types
         //Todo: handle complex types
@@ -1010,6 +1087,7 @@ public class AvatarDesignPanelTranslator {
         this.listE.addCor (aaos, asmdss);
         asmdss.setAVATARID (aaos.getID());
 		if (asmdss.getCheckLatency()){
+			aaos.setCheckLatency(true);
 			_as.checkedIDs.add(asmdss.getName()+"-"+ asmdss.getSignalName()+":"+aaos.getID());
 		}
         asm.addElement (aaos);
@@ -1289,6 +1367,7 @@ public class AvatarDesignPanelTranslator {
         asmdrs.setAVATARID (aaos.getID());
         asm.addElement (aaos);
 		if (asmdrs.getCheckLatency()){
+			aaos.setCheckLatency(true);
 			_as.checkedIDs.add(asmdrs.getName()+"-"+asmdrs.getSignalName()+":"+aaos.getID());
 		}
     }
@@ -1312,6 +1391,7 @@ public class AvatarDesignPanelTranslator {
         astate.addReferenceObject (tgc);
         tgc.setAVATARID (astate.getID());
 		if (tgc.getCheckLatency()){
+		//	astate.setCheckLatency(true);
 			_as.checkedIDs.add(tgc.getName()+"-"+tgc.getValue()+":"+astate.getID());
 		}
     }

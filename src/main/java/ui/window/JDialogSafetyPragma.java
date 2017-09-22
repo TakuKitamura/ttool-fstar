@@ -80,7 +80,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
 //Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
 
     public class SuggestionPanel {
-	private final String[] pragma = {"A[]", "E<>", "A<>", "E[]"};
+	private final String[] pragma = {"A[]", "E<>", "A<>", "E[]", "min(", "max("};
 	//Form list of all blocks
 	//For each block, create a list of all attribute strings and states
 	

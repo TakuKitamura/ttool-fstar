@@ -220,11 +220,14 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         values = Conversion.wrapText(value);
 	properties.clear();
 	for (String s: values){
-	    if (s.isEmpty() || s.split(" ").length < 1){
+	    if (s.isEmpty() || (s.split(" ").length < 1 && !s.contains("Latency")) ){
 		//Ignore
 	    }
+		else if (s.contains("Latency") && (s.contains("<") || s.contains(">")) ) {
+			properties.add(s);
+		}
 	    else if (Arrays.asList(pPragma).contains(s.split(" ")[0])){
-		properties.add(s);
+			properties.add(s);
 	    }
 	    else if (s.contains("-->")){
 		properties.add(s);

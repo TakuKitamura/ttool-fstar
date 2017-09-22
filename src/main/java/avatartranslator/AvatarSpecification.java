@@ -74,6 +74,7 @@ public class AvatarSpecification extends AvatarElement {
 
     private LinkedList<AvatarPragma> pragmas;
     private LinkedList<String> safety_pragmas;
+	private LinkedList<AvatarPragma> latency_pragmas;
     private LinkedList<AvatarConstant> constants;
 	public List<String> checkedIDs;
     private boolean robustnessMade = false;
@@ -89,6 +90,7 @@ public class AvatarSpecification extends AvatarElement {
         pragmas = new LinkedList<AvatarPragma>();
 	constants = new LinkedList<AvatarConstant>();
 	safety_pragmas = new LinkedList<String>();
+		latency_pragmas = new LinkedList<AvatarPragma>();
         this.constants.add (AvatarConstant.FALSE);
         this.constants.add (AvatarConstant.TRUE);
 		checkedIDs= new ArrayList<String>();
@@ -149,9 +151,15 @@ public class AvatarSpecification extends AvatarElement {
     public List<AvatarPragma> getPragmas() {
         return pragmas;
     }
+
     public List<String> getSafetyPragmas() {
         return safety_pragmas;
     }
+
+    public List<AvatarPragma> getLatencyPragmas() {
+        return latency_pragmas;
+    }
+
     public List<AvatarConstant> getAvatarConstants() {
         return constants;
     }
@@ -208,9 +216,16 @@ public class AvatarSpecification extends AvatarElement {
     public void addPragma(AvatarPragma _pragma) {
         pragmas.add(_pragma);
     }
+
     public void addSafetyPragma(String _pragma) {
         safety_pragmas.add(_pragma);
     }
+
+    public void addLatencyPragma(AvatarPragma _pragma) {
+		System.out.println(_pragma);
+        latency_pragmas.add(_pragma);
+    }
+
     public void addConstant(AvatarConstant _constant) {
 	//Only add unique constants
 	if (this.getAvatarConstantWithName(_constant.getName())==null){
@@ -634,6 +649,10 @@ public class AvatarSpecification extends AvatarElement {
 	
 		for(String safetyPragma: safety_pragmas) {
 		    spec.addSafetyPragma(safetyPragma);
+		}
+
+		for(AvatarPragma latencyPragma: latency_pragmas) {
+		    spec.addLatencyPragma(latencyPragma);
 		}
 	
 		for(AvatarConstant constant: constants) {
