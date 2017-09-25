@@ -171,6 +171,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     protected int state;
     protected boolean selected;
+    protected boolean isSelect = false;
 
     protected int distanceSelected = 5;
 
@@ -1522,6 +1523,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
             if (tgc != null) {
                 return tgc;
             }
+            if (tgcomponent[i].isClickSelected())
+            {
+            	return tgcomponent[i];
+            }
         }
         return null;
     }
@@ -2723,6 +2728,22 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return b;
     }
 
+    /**
+     * Highlight the selected component
+     * @author Fabien Tessier
+     */
+    public final boolean singleClick(JFrame frame, int x, int y)
+    {
+    	boolean b = true;
+    	isSelect = true;
+    	tdp.highlightComponent(x, y);
+    	if (moveable) {
+    		
+    	}
+    	
+    	return b;
+    }
+    
     public final void actionOnRemove(){
         if (removable) {
             myActionWhenRemoved();
@@ -3207,5 +3228,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
         for(int i=0; i<nbInternalTGComponent; i++) {
             tgcomponent[i].searchForText(text, elements);
         }
+    }
+    
+    public boolean isClickSelected() {
+    	return isSelect;
+    }
+    
+    public void clickSelect(boolean b) {
+    	isSelect = b;
     }
 }
