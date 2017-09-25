@@ -211,7 +211,7 @@ public class AvatarDesignPanelTranslator {
                 values = tgsp.getValues();
                 for (String s: values){
 					if (s.startsWith("Latency")){
-						AvatarPragma pragma = checkLatencyPragma(s, _blocks, _as, tgc);
+						AvatarPragmaLatency pragma = checkLatencyPragma(s, _blocks, _as, tgc);
 						if (pragma!=null){
 	                        _as.addLatencyPragma(pragma);
 	                    }
@@ -226,7 +226,7 @@ public class AvatarDesignPanelTranslator {
         }
     }
 	
-	public AvatarPragma checkLatencyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc){	
+	public AvatarPragmaLatency checkLatencyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc){	
 		if (_pragma.contains("=") || (!_pragma.contains(">") && !_pragma.contains("<"))){
 			TraceManager.addDev("No latency expression found");
 			return null;
@@ -240,7 +240,7 @@ public class AvatarDesignPanelTranslator {
 		String state1 = p1.split("\\.")[1];
 		AvatarBlock bl1;
 		AvatarActionOnSignal st1;
-
+		List<String> id1= new ArrayList<String>();
 		bl1 = as.getBlockWithName(block1);
 		AvatarStateMachine asm = bl1.getStateMachine();
 		st1 = asm.getAOSWithName(state1);
@@ -252,6 +252,8 @@ public class AvatarDesignPanelTranslator {
 			TraceManager.addDev("State " + block1+ "." + state1 + " is not checkable");
 			return null;
 		}
+		id1.add((st1.getSignal().isIn() ? "Receive signal" : "Send signal") +"-"+ st1.getSignal().getName()+":"+st1.getID());
+		
 
 		
 		//Find second block.state
@@ -265,6 +267,7 @@ public class AvatarDesignPanelTranslator {
 		bl2 = as.getBlockWithName(block2);
 		asm = bl2.getStateMachine();
 		st2 = asm.getAOSWithName(state2);
+		List<String> id2= new ArrayList<String>();
 		if (bl2 ==null || st2 ==null){
 			TraceManager.addDev("State " + block2+ "." + state2 + " in pragma does not exist");
 			return null;
@@ -273,6 +276,9 @@ public class AvatarDesignPanelTranslator {
 			TraceManager.addDev("State " + block2+ "." + state2 + " is not checkable");
 			return null;
 		}
+
+		id2.add((st2.getSignal().isIn() ? "Receive signal" : "Send signal")+"-"+ st2.getSignal().getName()+":"+st2.getID());
+		
 
 		String equation = _pragma.split("\\)")[1];
 		equation = equation.replaceAll(" ","");
@@ -290,7 +296,7 @@ public class AvatarDesignPanelTranslator {
 			TraceManager.addDev("No latency expression found");
 			return null;
 		}
-		return new AvatarPragmaLatency(_pragma, tgc, bl1, st1, bl2, st2, symbolType, time);
+		return new AvatarPragmaLatency(_pragma, tgc, bl1, st1, bl2, st2, symbolType, time, id1, id2);
 
 
 	}

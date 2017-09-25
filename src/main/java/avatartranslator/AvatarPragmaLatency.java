@@ -47,6 +47,8 @@ package avatartranslator;
  * @version 1.0 22/09/2017
  * @author Letitia LI
  */
+import java.util.List;
+
 public class AvatarPragmaLatency extends AvatarPragma {
     private AvatarActionOnSignal state1;
     private AvatarBlock block1;
@@ -56,8 +58,11 @@ public class AvatarPragmaLatency extends AvatarPragma {
 	public static final int lessThan =1;
 	public static final int greaterThan=2;
 	private int time;
+	private List<String> id1;
+	private List<String> id2;
+	
 
-    public AvatarPragmaLatency(String _name, Object _referenceObject, AvatarBlock block1, AvatarActionOnSignal state1, AvatarBlock block2, AvatarActionOnSignal state2,  int symbolType, int time)
+    public AvatarPragmaLatency(String _name, Object _referenceObject, AvatarBlock block1, AvatarActionOnSignal state1, AvatarBlock block2, AvatarActionOnSignal state2,  int symbolType, int time, List<String> id1, List<String> id2)
     {
         super(_name, _referenceObject);
         this.block1 = block1;
@@ -66,6 +71,8 @@ public class AvatarPragmaLatency extends AvatarPragma {
         this.state2 = state2;
 		this.symbolType = symbolType;
 		this.time = time;
+		this.id1=id1;
+		this.id2=id2;
     }
 
     public AvatarActionOnSignal getState1()
@@ -87,6 +94,14 @@ public class AvatarPragmaLatency extends AvatarPragma {
     {
         return this.block2;
     }
+
+	public List<String> getId1(){
+		return this.id1;
+	}
+
+	public List<String> getId2(){
+		return this.id2;
+	}
 
 	public int getSymbolType(){
 		return this.symbolType;

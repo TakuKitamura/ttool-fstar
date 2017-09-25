@@ -265,6 +265,10 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             checkedTransactions.add(id);
             transTimes.put(id, new ArrayList<String>());
         }
+		for (AvatarPragmaLatency latencyPragma: _avspec.getLatencyPragmas()){
+			toCheck.add(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0));
+			updateTransactionsTable();
+		}
         makeComponents();
         setComponents();
     }

@@ -74,7 +74,7 @@ public class AvatarSpecification extends AvatarElement {
 
     private LinkedList<AvatarPragma> pragmas;
     private LinkedList<String> safety_pragmas;
-	private LinkedList<AvatarPragma> latency_pragmas;
+	private LinkedList<AvatarPragmaLatency> latency_pragmas;
     private LinkedList<AvatarConstant> constants;
 	public List<String> checkedIDs;
     private boolean robustnessMade = false;
@@ -90,7 +90,7 @@ public class AvatarSpecification extends AvatarElement {
         pragmas = new LinkedList<AvatarPragma>();
 	constants = new LinkedList<AvatarConstant>();
 	safety_pragmas = new LinkedList<String>();
-		latency_pragmas = new LinkedList<AvatarPragma>();
+		latency_pragmas = new LinkedList<AvatarPragmaLatency>();
         this.constants.add (AvatarConstant.FALSE);
         this.constants.add (AvatarConstant.TRUE);
 		checkedIDs= new ArrayList<String>();
@@ -156,7 +156,7 @@ public class AvatarSpecification extends AvatarElement {
         return safety_pragmas;
     }
 
-    public List<AvatarPragma> getLatencyPragmas() {
+    public List<AvatarPragmaLatency> getLatencyPragmas() {
         return latency_pragmas;
     }
 
@@ -221,7 +221,7 @@ public class AvatarSpecification extends AvatarElement {
         safety_pragmas.add(_pragma);
     }
 
-    public void addLatencyPragma(AvatarPragma _pragma) {
+    public void addLatencyPragma(AvatarPragmaLatency _pragma) {
 		System.out.println(_pragma);
         latency_pragmas.add(_pragma);
     }
@@ -651,7 +651,7 @@ public class AvatarSpecification extends AvatarElement {
 		    spec.addSafetyPragma(safetyPragma);
 		}
 
-		for(AvatarPragma latencyPragma: latency_pragmas) {
+		for(AvatarPragmaLatency latencyPragma: latency_pragmas) {
 		    spec.addLatencyPragma(latencyPragma);
 		}
 	
