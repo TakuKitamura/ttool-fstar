@@ -86,14 +86,16 @@ public class TCDOperationBox extends TGCWithoutInternalComponent {
 		myImageIcon = IconManager.imgic122;
 	}
 
+	@Override
 	public void internalDrawing(Graphics g) {
 		g.drawRect(x, y, width, height);
 		g.setColor(ColorManager.OPERATION_BOX);
 		g.fillRect(x+1, y+1, width-1, height-1);
 		ColorManager.setColor(g, getState(), 0);
-                if (value.length() > 0) {
-                    g.drawString(value, x + textX, y + textY);
-                }
+		
+        if (value.length() > 0) {
+        	g.drawString(value, x + textX, y + textY);
+        }
 	}
 
 	public boolean editOndoubleClick(JFrame frame) {
