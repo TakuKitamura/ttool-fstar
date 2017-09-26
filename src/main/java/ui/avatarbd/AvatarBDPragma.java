@@ -386,8 +386,8 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         JDialogPragma jdn = new JDialogPragma(frame, "Setting the pragma", value);
         //jdn.setLocation(200, 150);
 		AvatarBDPanel abdp = (AvatarBDPanel) tdp;
-		jdn.blockAttributeMap = abdp.getBlockStrings(true,false);
-		jdn.blockStateMap = abdp.getBlockStrings(false,true);
+		jdn.blockAttributeMap = abdp.getBlockStrings(true,false,false);
+		jdn.blockStateMap = abdp.getBlockStrings(false,true,false);
         GraphicLib.centerOnParent(jdn);
         jdn.setVisible( true ); // blocked until dialog has been closed
 

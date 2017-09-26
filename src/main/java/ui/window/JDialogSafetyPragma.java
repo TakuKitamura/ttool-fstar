@@ -130,9 +130,11 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
 		}
 		else {
 			String block = subWord.split("\\.")[0];
-			for (String attr: blockAttributeMap.get(block)){
-				if (attr.startsWith(subWord.split("\\.")[1])){
-					matches.add(block+"."+attr);
+			if (blockAttributeMap.containsKey(block)){
+				for (String attr: blockAttributeMap.get(block)){
+					if (attr.startsWith(subWord.split("\\.")[1])){
+						matches.add(block+"."+attr);
+					}
 				}
 			}
 		}
@@ -218,7 +220,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         String text = textarea.getText();
         int start = Math.max(0, position - 1);
         while (start > 0) {
-            if (!Character.isWhitespace(text.charAt(start))) {
+            if (!Character.isWhitespace(text.charAt(start)) && !text.substring(start,start+1).equals("(") && !text.substring(start,start+1).equals(")") && !text.substring(start,start+1).equals(",") ) {
                 start--;
             } else {
                 start++;
@@ -228,7 +230,9 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         if (start > position) {
             return;
         }
+
         final String subWord = text.substring(start, position);
+
         if (subWord.length() < 1) {
             return;
         }

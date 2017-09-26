@@ -227,7 +227,7 @@ public class AvatarDesignPanelTranslator {
     }
 	
 	public AvatarPragmaLatency checkLatencyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc){	
-		if (_pragma.contains("=") || (!_pragma.contains(">") && !_pragma.contains("<"))){
+		if (_pragma.contains("=") || (!_pragma.contains(">") && !_pragma.contains("<")) || !_pragma.contains("Latency")){
 			TraceManager.addDev("No latency expression found");
 			return null;
 		}
@@ -235,7 +235,16 @@ public class AvatarDesignPanelTranslator {
 		String pragma = _pragma.trim();
 		pragma = pragma.split("Latency\\(")[1];		
 		//Find first block.state
+		
+
 		String p1 = pragma.split(",")[0];
+
+		//Throw error if lack of '.' in block.signal
+		if (!p1.contains(".")){
+			TraceManager.addDev("Invalid block.signal format");
+			return null;
+		}
+
 		String block1 = p1.split("\\.")[0];
 		String state1 = p1.split("\\.")[1];
 		AvatarBlock bl1;
@@ -256,10 +265,20 @@ public class AvatarDesignPanelTranslator {
 		
 
 		
-		//Find second block.state
+		//Find second block.signal
+		//Throw error if lack of '.'
+
+
 		String p2 = pragma.split(",")[1].split("\\)")[0];
+		if (!p2.contains(".")){
+			TraceManager.addDev("Invalid block.signal format");
+			return null;
+		}
+
 		String block2 = p2.split("\\.")[0];
 		String state2 = p2.split("\\.")[1];
+
+
 
 		AvatarBlock bl2;
 		AvatarActionOnSignal st2;
@@ -286,11 +305,23 @@ public class AvatarDesignPanelTranslator {
 		int time=0;
 		if (equation.substring(0,1).equals("<")){
 			symbolType = AvatarPragmaLatency.lessThan;
-			time= Integer.valueOf(equation.split("<")[1]);
+			try {
+				time= Integer.valueOf(equation.split("<")[1]);
+			}
+			catch (Exception e){
+				TraceManager.addDev("Invalid number format");
+				return null;
+			}
 		}
 		else if (equation.substring(0,1).equals(">")){
 			symbolType = AvatarPragmaLatency.greaterThan;
+			try {
 			time= Integer.valueOf(equation.split(">")[1]);
+			} 
+			catch (Exception e){
+				TraceManager.addDev("Invalid number format");
+				return null;
+			}
 		}
 		else {
 			TraceManager.addDev("No latency expression found");

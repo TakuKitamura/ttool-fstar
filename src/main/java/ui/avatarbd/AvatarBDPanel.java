@@ -458,7 +458,7 @@ public class AvatarBDPanel extends TDiagramPanel {
         }
     }
 
-	public HashMap<String, List<String>> getBlockStrings(boolean addAttributes, boolean addStates){
+	public HashMap<String, List<String>> getBlockStrings(boolean addAttributes, boolean addStates, boolean addSignals){
 		HashMap<String,List<String>> blockStringMap = new HashMap<String, List<String>>();
 		for (AvatarBDBlock block: getFullBlockList()){
 			List<String> strs = new ArrayList<String>();
@@ -470,6 +470,11 @@ public class AvatarBDPanel extends TDiagramPanel {
 			if (addStates){
 				AvatarSMDPanel smd = block.getAvatarSMDPanel();
 				strs.addAll(smd.getAllStates());
+			}
+			if (addSignals){
+				for (AvatarSignal sig: getAllSignalsOfBlock(block.getBlockName())){
+					strs.add(sig.getId());
+				}
 			}
 			blockStringMap.put(block.getBlockName(), strs);		
 		}
