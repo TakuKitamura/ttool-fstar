@@ -232,10 +232,10 @@ public class AvatarDesignPanelTranslator {
 			return null;
 		}
 
-		_pragma = _pragma.trim();
-		_pragma = _pragma.split("Latency\\(")[1];		
+		String pragma = _pragma.trim();
+		pragma = pragma.split("Latency\\(")[1];		
 		//Find first block.state
-		String p1 = _pragma.split(",")[0];
+		String p1 = pragma.split(",")[0];
 		String block1 = p1.split("\\.")[0];
 		String state1 = p1.split("\\.")[1];
 		AvatarBlock bl1;
@@ -257,7 +257,7 @@ public class AvatarDesignPanelTranslator {
 
 		
 		//Find second block.state
-		String p2 = _pragma.split(",")[1].split("\\)")[0];
+		String p2 = pragma.split(",")[1].split("\\)")[0];
 		String block2 = p2.split("\\.")[0];
 		String state2 = p2.split("\\.")[1];
 
@@ -280,7 +280,7 @@ public class AvatarDesignPanelTranslator {
 		id2.add((st2.getSignal().isIn() ? "Receive signal" : "Send signal")+"-"+ st2.getSignal().getName()+":"+st2.getID());
 		
 
-		String equation = _pragma.split("\\)")[1];
+		String equation = pragma.split("\\)")[1];
 		equation = equation.replaceAll(" ","");
 		int symbolType=0;
 		int time=0;
@@ -296,7 +296,7 @@ public class AvatarDesignPanelTranslator {
 			TraceManager.addDev("No latency expression found");
 			return null;
 		}
-		return new AvatarPragmaLatency(_pragma, tgc, bl1, st1, bl2, st2, symbolType, time, id1, id2);
+		return new AvatarPragmaLatency(_pragma, tgc, bl1, st1, bl2, st2, symbolType, time, id1, id2, _pragma);
 
 
 	}

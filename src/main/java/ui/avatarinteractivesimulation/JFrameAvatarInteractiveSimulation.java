@@ -233,10 +233,11 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     JButton addLatencyCheckButton;
     JButton updateLatencyButton;
     LatencyTableModel latm;
-    public Vector<String> checkedTransactions = new Vector<String>();
+//    public Vector<String> checkedTransactions = new Vector<String>();
     private Vector<SimulationLatency> latencies = new Vector<SimulationLatency>();
-    List<String> toCheck = new ArrayList<String>();
-    Map<String, List<String>> transTimes = new HashMap<String, List<String>>();
+    //List<String> toCheck = new ArrayList<String>();
+	Map<String, SimulationLatency> nameLatencyMap = new HashMap<String, SimulationLatency>();
+    Map<String, List<String>> transTimes = new HashMap<String, List<String>>(); //Map of each checked element: all transaction times
 
     private JScrollPane jspLatency;
 
@@ -262,12 +263,23 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         initSimulation();
         for (String id: _avspec.checkedIDs){
-            checkedTransactions.add(id);
+           // checkedTransactions.add(id);
             transTimes.put(id, new ArrayList<String>());
         }
 		for (AvatarPragmaLatency latencyPragma: _avspec.getLatencyPragmas()){
-			toCheck.add(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0));
-			updateTransactionsTable();
+			if (!nameLatencyMap.containsKey(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0))){
+				SimulationLatency sl = new SimulationLatency();
+				sl.setTransaction1(latencyPragma.getId1().get(0));
+				sl.setTransaction2(latencyPragma.getId2().get(0));
+				sl.addPragma(latencyPragma);
+				nameLatencyMap.put(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0), sl);
+				latencies.add(sl);
+				//toCheck.add(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0));
+				updateTransactionsTable();
+			}
+			else {
+				nameLatencyMap.get(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0)).addPragma(latencyPragma);
+			}
 		}
         makeComponents();
         setComponents();
@@ -864,13 +876,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         c0.gridheight=1;
         latencyPanel.add(new JLabel("Checkpoint 1:"),c0);
         c0.gridwidth = GridBagConstraints.REMAINDER;
-        transaction1 = new JComboBox<String>(checkedTransactions);
+		Vector<String> transactions = new Vector<String>(transTimes.keySet());
+        transaction1 = new JComboBox<String>(transactions);
         latencyPanel.add(transaction1, c0);
 
         c0.gridwidth=1;
         latencyPanel.add(new JLabel("Checkpoint 2:"),c0);
         c0.gridwidth= GridBagConstraints.REMAINDER;
-        transaction2 = new JComboBox<String>(checkedTransactions);
+        transaction2 = new JComboBox<String>(transactions);
         latencyPanel.add(transaction2, c0);
 
 
@@ -1334,7 +1347,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     public void resetMetElements() {
         if (avspec.getReferenceObject() instanceof AvatarDesignPanel) {
-            ((AvatarDesignPanel)(avspec.getReferenceObject())).resetMetElements();
+            ((AvatarDesignPanel)(avspec.getReferenceObject())).resetMetElements();		
 
         } else if (avspec.getReferenceObject() instanceof AttackTreePanel) {
             ((AttackTreePanel)(avspec.getReferenceObject())).resetMetElements();
@@ -1432,16 +1445,30 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     }
 
     public void addLatency(){
-        toCheck.add(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString());
+		SimulationLatency sl = new SimulationLatency();
+		sl.setTransaction1(transaction1.getSelectedItem().toString());
+		sl.setTransaction2(transaction2.getSelectedItem().toString());
+		nameLatencyMap.put(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString(), sl);
+		latencies.add(sl);
+//        toCheck.add(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString());
         updateTransactionsTable();
     }
+
+	public void resetLatencies(){
+		for (SimulationLatency latency: latencies){
+			latency.setMinTime("N/A");
+			latency.setMaxTime("N/A");
+			latency.setAverageTime("N/A");
+			latency.setStDev("N/A");
+		}
+	}
 
     public void updateTransactionsTable() {
         if (transactiontm != null) {
             transactiontm.fireTableStructureChanged();
         }
         if (ass!=null && latm!=null){
-            latencies.clear();
+            resetLatencies();
             if (ass.getAllTransactions()!=null){
                 for (AvatarSimulationTransaction trans: ass.getAllTransactions()){
                     if ((trans.executedElement != null) && (trans.executedElement.getReferenceObject() != null)) {
@@ -1467,12 +1494,13 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             //  System.out.println(transTimes);
             for (String st1:transTimes.keySet()){
                 for (String st2:transTimes.keySet()){
-                    if (st1!=st2 && toCheck.contains(st1 +"--"+st2)){
+                    if (st1!=st2 && nameLatencyMap.containsKey(st1 +"--"+st2)){
+						SimulationLatency sl = nameLatencyMap.get(st1 +"--"+st2);
                     	if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
 							ArrayList<Integer> minTimes = new ArrayList<Integer>();
-							SimulationLatency sl = new SimulationLatency();
+							/*SimulationLatency sl = new SimulationLatency();
 							sl.setTransaction1(st1);
-							sl.setTransaction2(st2);
+							sl.setTransaction2(st2);*/
 							for(String time1: transTimes.get(st1)){
 								//Find the first subsequent transaction
  								int time = Integer.MAX_VALUE;
@@ -1505,7 +1533,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                                     sl.setStDev(String.format("%.1f",stdev));
 									mgui.addLatencyVals(Integer.valueOf(st2.split(":")[1]), new String[]{st1, Integer.toString(Collections.max(minTimes))});
                             }
-                            	latencies.add(sl);
+   //                         	latencies.add(sl);
 							
 
                         }
@@ -1517,6 +1545,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
             if (latm !=null && latencies.size()>0){
                 latm.setData(latencies);
+	            ((AvatarDesignPanel)(avspec.getReferenceObject())).modelBacktracingLatency(latencies);	
             }
         }
     }

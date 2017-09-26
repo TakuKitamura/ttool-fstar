@@ -45,6 +45,7 @@ import avatartranslator.AvatarAttribute;
 import avatartranslator.AvatarPragmaAuthenticity;
 import avatartranslator.AvatarPragmaReachability;
 import avatartranslator.AvatarPragmaSecret;
+import avatartranslator.AvatarPragmaLatency;
 import myutil.GraphicLib;
 import proverifspec.ProVerifOutputAnalyzer;
 import proverifspec.ProVerifQueryAuthResult;
@@ -54,6 +55,7 @@ import ui.avatardd.ADDDiagramPanel;
 import ui.avatarsmd.AvatarSMDPanel;
 import ui.avatarsmd.AvatarSMDState;
 import ui.avatarsmd.AvatarSMDToolBar;
+import ui.interactivesimulation.SimulationLatency;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -384,6 +386,51 @@ public class AvatarDesignPanel extends TURTLEPanel {
             }
         }
     }
+
+	public void modelBacktracingLatency(Vector<SimulationLatency> latencies){
+		//Search for Safety Pragma
+		for (Object ob: abdp.getComponentList()) {
+			if (ob instanceof AvatarBDSafetyPragma) {
+				AvatarBDSafetyPragma bdpragma = (AvatarBDSafetyPragma) ob;
+				//Match each safety pragma to latency result
+				for (String s: bdpragma.getProperties()){
+					for (SimulationLatency latency: latencies){
+						for (AvatarPragmaLatency pragma : latency.getPragmas()){
+							if (pragma.getPragmaString().equals(s)){
+								//Check if the latency statement is true
+								int refTime = pragma.getTime();
+								float time = 0;
+								//System.out.println("time " + latency.getAverageTime() + " " + refTime);
+								try {
+									time = Float.valueOf(latency.getAverageTime());
+								} catch (Exception e){
+									continue;
+								}				
+								if (pragma.getSymbolType() == AvatarPragmaLatency.lessThan){
+									if (time<refTime){
+										bdpragma.verifMap.put(s, AvatarBDSafetyPragma.PROVED_TRUE);
+										//mark as true
+									}
+									else {
+										bdpragma.verifMap.put(s, AvatarBDSafetyPragma.PROVED_FALSE);
+									}
+								}
+								else {
+									if (time>refTime){
+										bdpragma.verifMap.put(s, AvatarBDSafetyPragma.PROVED_TRUE);
+										//mark as true
+									}
+									else {
+										bdpragma.verifMap.put(s, AvatarBDSafetyPragma.PROVED_FALSE);
+									}
+								}	
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 
     public void modelBacktracingProVerif(ProVerifOutputAnalyzer pvoa) {

@@ -41,6 +41,9 @@
 
 package ui.interactivesimulation;
 
+import avatartranslator.AvatarPragmaLatency;
+import java.util.List;
+import java.util.ArrayList;
 /**
    * Class SimulationTransaction
    * Transaction as defined by the simulation engine
@@ -56,6 +59,7 @@ public class SimulationLatency  {
 	private String maxTime="N/A";
 	private String avTime="N/A";
 	private String stDev="N/A";
+	private List<AvatarPragmaLatency> pragmas= new ArrayList<AvatarPragmaLatency>();
 
     public SimulationLatency() {
     }
@@ -104,6 +108,14 @@ public class SimulationLatency  {
 
 	public String getStDev(){
 		return stDev;
+	}
+
+	public List<AvatarPragmaLatency> getPragmas(){
+		return pragmas;
+	}
+
+	public void addPragma(AvatarPragmaLatency ap){
+		pragmas.add(ap);
 	}
 
 }

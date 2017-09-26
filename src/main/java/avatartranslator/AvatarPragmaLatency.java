@@ -60,9 +60,9 @@ public class AvatarPragmaLatency extends AvatarPragma {
 	private int time;
 	private List<String> id1;
 	private List<String> id2;
-	
+	private String pragmaString="";	
 
-    public AvatarPragmaLatency(String _name, Object _referenceObject, AvatarBlock block1, AvatarActionOnSignal state1, AvatarBlock block2, AvatarActionOnSignal state2,  int symbolType, int time, List<String> id1, List<String> id2)
+    public AvatarPragmaLatency(String _name, Object _referenceObject, AvatarBlock block1, AvatarActionOnSignal state1, AvatarBlock block2, AvatarActionOnSignal state2,  int symbolType, int time, List<String> id1, List<String> id2, String pragmaString)
     {
         super(_name, _referenceObject);
         this.block1 = block1;
@@ -73,6 +73,7 @@ public class AvatarPragmaLatency extends AvatarPragma {
 		this.time = time;
 		this.id1=id1;
 		this.id2=id2;
+		this.pragmaString=pragmaString;
     }
 
     public AvatarActionOnSignal getState1()
@@ -109,6 +110,10 @@ public class AvatarPragmaLatency extends AvatarPragma {
 
 	public int getTime(){
 		return this.time;
+	}
+	
+	public String getPragmaString(){
+		return this.pragmaString;
 	}
 
     public String toString()
