@@ -160,7 +160,7 @@ public class JDialogSMDLibraryFunctionCall extends JDialogBase implements Action
         panelMethod.add(new JLabel("Function:  "), gridConstraints);
 
         gridConstraints.gridwidth = GridBagConstraints.REMAINDER; //end row
-        LinkedList<AvatarBDLibraryFunction> libFunctions = this.functionCall.getTDiagramPanel ().getMGUI ().getAllLibraryFunctions ();
+        java.util.List<AvatarBDLibraryFunction> libFunctions = this.functionCall.getTDiagramPanel ().getMGUI ().getAllLibraryFunctions ();
         Collections.sort (libFunctions);
         {
         FunctionWrapper[] l = new FunctionWrapper[libFunctions.size ()+1];

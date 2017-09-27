@@ -3618,12 +3618,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
 
-    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctions () {
+    public List<AvatarBDLibraryFunction> getAllLibraryFunctions () {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         return this.getAllLibraryFunctions (tp);
     }
 
-    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctions (TURTLEPanel tp) {
+    public List<AvatarBDLibraryFunction> getAllLibraryFunctions (TURTLEPanel tp) {
         String name =  getCurrentTDiagramPanel().getName();
         return this.getAllLibraryFunctions (tp, name);
     }
@@ -3631,7 +3631,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     /* Note that this is here for historical purpose : Now, any block can access library functions of any
      * other block.
      */
-    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctions (TURTLEPanel tp, String name) {
+    public List<AvatarBDLibraryFunction> getAllLibraryFunctions (TURTLEPanel tp, String name) {
         if (tp == null) {
             return null;
         }
@@ -3691,7 +3691,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
     public String[] getAllCompOutChannels() {   //this routine can be called only from a TMLComponentDesignPanel
-		List<String> chans = new ArrayList<String>();
+		//List<String> chans = new ArrayList<String>();
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) { return null;}
         if (!(tp instanceof TMLComponentDesignPanel)) { return null;}
