@@ -6223,7 +6223,7 @@ public class GTURTLEModeling {
                     } catch (MalformedModelingException mme) {
                         Element elt = (Element) node;
                         String type = elt.getAttribute("type");
-                        TraceManager.addDev("Error when loading diagram: " + elt + " " +type);
+                        TraceManager.addError("Error when loading diagram: " + elt + " " +type, mme);
                         error = true;
                     }
                 }
