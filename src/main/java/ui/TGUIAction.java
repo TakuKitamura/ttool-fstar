@@ -657,8 +657,8 @@ public class TGUIAction extends AbstractAction {
             if (actions[id].hasControl) {
                 putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY, java.awt.event.InputEvent.CTRL_MASK));
             } else {
-            	if (actions[id].MNEMONIC_KEY >= 500 && actions[id].MNEMONIC_KEY <= 503)
-            		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].ACTION_COMMAND_KEY));
+            	if (actions[id].MNEMONIC_KEY >= 37 && actions[id].MNEMONIC_KEY <= 40) //handling for arrow keys
+            		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].MNEMONIC_KEY, 0));
             	else
             		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY));
             }
@@ -1232,10 +1232,10 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS] = new TAction("generate-ontology-current-set-of-diagrams", "Generate ontology (current set of diagrams)", IconManager.imgic338, IconManager.imgic339, "Generate ontology (current set of diagrams)",  "Generate the ontology for the current set of diagrams under edition", 0);
         actions[ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS] = new TAction("generate-ontology-all-diagrams", "Generate ontology (all diagrams)", IconManager.imgic338, IconManager.imgic339, "Generate ontology (all diagrams)",  "Generate the ontology for the diagrams under edition", 0);
 
-        actions[ACT_UP] = new TAction("UP", "Up", IconManager.imgic78, IconManager.imgic78, "Up", "Up", 500);
-        actions[ACT_DOWN] = new TAction("DOWN", "Down", IconManager.imgic79, IconManager.imgic79, "Down", "Down", 501);
-        actions[ACT_RIGHT] = new TAction("RIGHT", "Right", IconManager.imgic780, IconManager.imgic780, "Right", "Right", 502);
-        actions[ACT_LEFT] = new TAction("LEFT", "Left", IconManager.imgic790, IconManager.imgic790, "Left", "Left", 503);
+        actions[ACT_UP] = new TAction("UP", "Up", IconManager.imgic78, IconManager.imgic78, "Up (Maj-Haut)", "Up", KeyEvent.VK_UP);
+        actions[ACT_DOWN] = new TAction("DOWN", "Down", IconManager.imgic79, IconManager.imgic79, "Down (Maj-Bas)", "Down", KeyEvent.VK_DOWN);
+        actions[ACT_RIGHT] = new TAction("RIGHT", "Right", IconManager.imgic780, IconManager.imgic780, "Right (Maj-Droit)", "Right", KeyEvent.VK_RIGHT);
+        actions[ACT_LEFT] = new TAction("LEFT", "Left", IconManager.imgic790, IconManager.imgic790, "Left (Maj-Gauche)", "Left", KeyEvent.VK_LEFT);
     }
 
 

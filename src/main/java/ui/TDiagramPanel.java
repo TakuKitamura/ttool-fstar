@@ -87,7 +87,7 @@ import java.util.List;
 public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     protected TDiagramMouseManager tdmm;
-    protected ArrowListener al;
+    protected PanelKeyListener pkl;
 
     // for tracking changes
     public static final int NEW_COMPONENT = 0;
@@ -235,14 +235,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
 
     public boolean drawable = true;
-    public static final int MOVE_SPEED = 3;
+    public static final int MOVE_SPEED = 1; //Speed of component moving with arrow keys
     
 
 
     // Constructor
     public TDiagramPanel(MainGUI _mgui, TToolBar _ttb) {
-    	UIManager.getDefaults().put("ScrollPane.ancestorInputMap", 
-    			new UIDefaults.LazyInputMap(new Object[] {}));
         setBackground(ColorManager.DIAGRAM_BACKGROUND);
         //setBackground(Color.red);
         //setMinimumSize(new Dimension(1000, 1000));
@@ -257,8 +255,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         addMouseListener(tdmm);
         addMouseMotionListener(tdmm);
         
-        al = new ArrowListener(this);
-        addKeyListener(al);
+        pkl = new PanelKeyListener(this);
+        addKeyListener(pkl);
         
         setFocusable(true);
 
