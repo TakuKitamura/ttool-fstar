@@ -551,7 +551,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_COPY = 45;
     public static final int ACT_PASTE = 46;
     public static final int ACT_DELETE = 47;
-    public static final int ACT_SUPPR = 462; //Last added input
+    public static final int ACT_SUPPR = 462;
 
     public static final int ACT_ZOOM_MORE = 235;
     public static final int ACT_ZOOM_LESS = 236;
@@ -615,7 +615,12 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_INTERNAL_SEARCH = 415;
     //--
 
-    public static final int NB_ACTION = 463;
+    public static final int ACT_UP = 463;
+    public static final int ACT_DOWN = 464;
+    public static final int ACT_LEFT = 465;
+    public static final int ACT_RIGHT = 466;
+    
+    public static final int NB_ACTION = 467;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -652,7 +657,10 @@ public class TGUIAction extends AbstractAction {
             if (actions[id].hasControl) {
                 putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY, java.awt.event.InputEvent.CTRL_MASK));
             } else {
-                putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY));
+            	if (actions[id].MNEMONIC_KEY >= 500 && actions[id].MNEMONIC_KEY <= 503)
+            		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].ACTION_COMMAND_KEY));
+            	else
+            		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY));
             }
         }
         putValue(Action.ACTION_COMMAND_KEY, actions[id].ACTION_COMMAND_KEY);
@@ -1224,7 +1232,10 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS] = new TAction("generate-ontology-current-set-of-diagrams", "Generate ontology (current set of diagrams)", IconManager.imgic338, IconManager.imgic339, "Generate ontology (current set of diagrams)",  "Generate the ontology for the current set of diagrams under edition", 0);
         actions[ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS] = new TAction("generate-ontology-all-diagrams", "Generate ontology (all diagrams)", IconManager.imgic338, IconManager.imgic339, "Generate ontology (all diagrams)",  "Generate the ontology for the diagrams under edition", 0);
 
-
+        actions[ACT_UP] = new TAction("UP", "Up", IconManager.imgic78, IconManager.imgic78, "Up", "Up", 500);
+        actions[ACT_DOWN] = new TAction("DOWN", "Down", IconManager.imgic79, IconManager.imgic79, "Down", "Down", 501);
+        actions[ACT_RIGHT] = new TAction("RIGHT", "Right", IconManager.imgic780, IconManager.imgic780, "Right", "Right", 502);
+        actions[ACT_LEFT] = new TAction("LEFT", "Left", IconManager.imgic790, IconManager.imgic790, "Left", "Left", 503);
     }
 
 

@@ -41,8 +41,6 @@ package ui;
 import ui.window.JDialogSearchBox;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -276,6 +274,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                 //System.out.println("change2");
                 tdp.getGUI().changeMade(tdp, TDiagramPanel.MOVE_COMPONENT);
             }
+            setSelection(e.getX(), e.getY());
         }
 
         if (tdp.mode == TDiagramPanel.RESIZING_COMPONENT) {
@@ -461,7 +460,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
        
         //If one click is done for selection
         if ((selected == TGComponentManager.EDIT) && (e.getClickCount() == 1) && (e.getButton() == MouseEvent.BUTTON1)) {
-    	    setSelection(e.getX(), e.getY());
+        	setSelection(e.getX(), e.getY());
         }
     }
 
@@ -469,7 +468,8 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
      * Set the selection on the clicked component
      * @author Fabien Tessier
      */
-    public void setSelection(int x, int y) {
+    private void setSelection(int x, int y) {
+    	tdp.requestFocusInWindow();
     	tdp.unselectClickSelectedComponents(); //Unselect all components
  	    tgc = null;
  	    for (TGComponent tgc: tdp.componentList) {

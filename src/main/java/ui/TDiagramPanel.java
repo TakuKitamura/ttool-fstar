@@ -87,6 +87,7 @@ import java.util.List;
 public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     protected TDiagramMouseManager tdmm;
+    protected ArrowListener al;
 
     // for tracking changes
     public static final int NEW_COMPONENT = 0;
@@ -111,7 +112,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected TGConnectingPoint selectedConnectingPoint;
     protected CAMSConnectingPoint selectedCAMSConnectingPoints;
     protected TGComponent componentPointed;
-    protected TGComponent lastClickComponent = null;
     protected TGComponent componentPopup;
     protected TToolBar ttb;
     protected TGComponent fatherOfRemoved;
@@ -235,11 +235,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
 
     public boolean drawable = true;
+    public static final int MOVE_SPEED = 3;
     
 
 
     // Constructor
     public TDiagramPanel(MainGUI _mgui, TToolBar _ttb) {
+    	UIManager.getDefaults().put("ScrollPane.ancestorInputMap", 
+    			new UIDefaults.LazyInputMap(new Object[] {}));
         setBackground(ColorManager.DIAGRAM_BACKGROUND);
         //setBackground(Color.red);
         //setMinimumSize(new Dimension(1000, 1000));
@@ -253,11 +256,15 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
         addMouseMotionListener(tdmm);
+        
+        al = new ArrowListener(this);
+        addKeyListener(al);
+        
+        setFocusable(true);
 
         buildPopupMenus();
     }
-
-
+    
     // Abstract operations
     public abstract boolean actionOnDoubleClick(TGComponent tgc);
     public abstract boolean actionOnAdd(TGComponent tgc);
@@ -3405,5 +3412,37 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     
     public void setSelect(boolean b) {
     	select = b;
+    }
+    
+    public void upComponent() {
+    	TGComponent tgc = componentPointed;
+    	if (tgc != null && tgc.moveable) {
+    		tgc.setMoveCd(tgc.x, tgc.y - MOVE_SPEED);
+    		repaint();
+    	}
+    }
+    
+    public void downComponent() {
+    	TGComponent tgc = componentPointed;
+    	if (tgc != null && tgc.moveable) {
+    		tgc.setMoveCd(tgc.x, tgc.y + MOVE_SPEED);
+    		repaint();
+    	}
+    }
+    
+    public void leftComponent() {
+    	TGComponent tgc = componentPointed;
+    	if (tgc != null && tgc.moveable) {
+    		tgc.setMoveCd(tgc.x - MOVE_SPEED, tgc.y);
+    		repaint();
+    	}
+    }
+    
+    public void rightComponent() {
+    	TGComponent tgc = componentPointed;
+    	if (tgc != null && tgc.moveable) {
+    		tgc.setMoveCd(tgc.x + MOVE_SPEED, tgc.y);
+    		repaint();
+    	}
     }
 }

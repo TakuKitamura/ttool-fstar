@@ -2732,16 +2732,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
      * Highlight the selected component
      * @author Fabien Tessier
      */
-    public final boolean singleClick(JFrame frame, int x, int y)
+    public final void singleClick(JFrame frame, int x, int y)
     {
-    	boolean b = true;
     	isSelect = true;
-    	tdp.highlightComponent(x, y);
-    	if (moveable) {
-    		
-    	}
-    	
-    	return b;
+    	tdp.highlightComponent(x, y); 
     }
     
     public final void actionOnRemove(){
