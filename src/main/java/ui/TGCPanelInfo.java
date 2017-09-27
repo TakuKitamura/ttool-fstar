@@ -69,8 +69,6 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
     public final static int LOWER_MIDDLE = 8;
     public final static int LOWER_RIGHT = 9;
     
-    
-
     protected int marginY = 5;
     protected int marginX = 5;
     
@@ -78,9 +76,9 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
 
     protected Color myColor;
 
-    private Font myFont, myFontB;
-    private int maxFontSize = 30;
-    private int minFontSize = 4;
+    private Font myFont;//, myFontB;
+//    private int maxFontSize = 30;
+//    private int minFontSize = 4;
     private int currentFontSize = -1;
 
 
@@ -102,39 +100,39 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
 
         nbConnectingPoint = 0;
         //addTGConnectingPointsComment();
-	int len = makeTGConnectingPointsComment(16);
-	int decw = 0;
-	int dech = 0;
-	for(int i=0; i<2; i++) {
-	    connectingPoint[len] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.0 + dech);
-	    connectingPoint[len + 1 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 0.0 + dech);
-	    connectingPoint[len + 2 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.0 + dech);
-	    connectingPoint[len + 3 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.5 + dech);
-	    connectingPoint[len + 4 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.5 + dech);
-	    connectingPoint[len + 5 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 1.0 + dech);
-	    connectingPoint[len + 6 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 1.0 + dech);
-	    connectingPoint[len + 7 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.9 + decw, 1.0 + dech);
-	    len += 8;
-	}
+	
+        int len = makeTGConnectingPointsComment(16);
+		int decw = 0;
+		int dech = 0;
+
+		for(int i=0; i<2; i++) {
+		    connectingPoint[len] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.0 + dech);
+		    connectingPoint[len + 1 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 0.0 + dech);
+		    connectingPoint[len + 2 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.0 + dech);
+		    connectingPoint[len + 3 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.5 + dech);
+		    connectingPoint[len + 4 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.5 + dech);
+		    connectingPoint[len + 5 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 1.0 + dech);
+		    connectingPoint[len + 6 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 1.0 + dech);
+		    connectingPoint[len + 7 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.9 + decw, 1.0 + dech);
+		    len += 8;
+		}
 
         moveable = true;
         editable = false;
         removable = false;
-	userResizable = true;
+        userResizable = true;
 
         name = "Info";
         value = "Info";
-	fillColor = Color.LIGHT_GRAY;
-	textColor = Color.RED;
-	
-
+        fillColor = Color.LIGHT_GRAY;
+        textColor = Color.RED;
         myImageIcon = IconManager.imgic320;
     }
 
-    
+    @Override
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
-        Font fold = f;
+        //Font fold = f;
 
         /*if (!tdp.isScaled()) {
           graphics = g;
@@ -153,53 +151,51 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
 
         Color c = g.getColor();
 
-	g.setColor(fillColor);
-	g.fillRect(x, y, width, height);
-	g.setColor(c);
-	g.drawRect(x, y, width, height);
-
-	int xStr = x, yStr = y;
-	Font f0 = g.getFont();
-	g.setFont(f.deriveFont(Font.BOLD));
-	int h = g.getFontMetrics().getHeight();
-	int w = g.getFontMetrics().stringWidth(value);
+		g.setColor(fillColor);
+		g.fillRect(x, y, width, height);
+		g.setColor(c);
+		g.drawRect(x, y, width, height);
 	
-	switch(stringPos) {
-	case UPPER_LEFT:
-	    xStr += marginX; yStr += marginY + currentFontSize; break;
-	case UPPER_MIDDLE:
-	    xStr += width/2 - w/2; yStr += marginY + currentFontSize; break;
-	case UPPER_RIGHT:
-	    xStr += width - marginX -w; yStr += marginY + currentFontSize; break;
-	case MIDDLE_LEFT:
-	    xStr += marginX; yStr += height/2 + currentFontSize; break;
-	case MIDDLE_MIDDLE:
-	    xStr += width/2 - w/2; yStr += height/2 + currentFontSize; break;
-	case MIDDLE_RIGHT:  
-	    xStr += width - marginX -w;	yStr += height/2 + currentFontSize; break;
-	case LOWER_LEFT:
-	    xStr += marginX; yStr += height - marginY; break;
-	case LOWER_MIDDLE:
-	    xStr += width/2 - w/2; yStr += height - marginY; break;
-	case LOWER_RIGHT:
-	    xStr += width - marginX -w; yStr += height - marginY; break; 
-	default:
-	     xStr += width/2 - w/2; yStr += marginY + currentFontSize; break;
-	    
-	}
-
-
-	TraceManager.addDev("Color=" + c);
-	if (!(c == ColorManager.POINTER_ON_ME_0)) {
-	    g.setColor(textColor);
-	}
-	g.drawString(value, xStr, yStr);
-	g.setFont(f0);
-	g.setColor(c);
+		int xStr = x, yStr = y;
+		Font f0 = g.getFont();
+		g.setFont(f.deriveFont(Font.BOLD));
+		//int h = g.getFontMetrics().getHeight();
+		int w = g.getFontMetrics().stringWidth(value);
+		
+		switch(stringPos) {
+		case UPPER_LEFT:
+		    xStr += marginX; yStr += marginY + currentFontSize; break;
+		case UPPER_MIDDLE:
+		    xStr += width/2 - w/2; yStr += marginY + currentFontSize; break;
+		case UPPER_RIGHT:
+		    xStr += width - marginX -w; yStr += marginY + currentFontSize; break;
+		case MIDDLE_LEFT:
+		    xStr += marginX; yStr += height/2 + currentFontSize; break;
+		case MIDDLE_MIDDLE:
+		    xStr += width/2 - w/2; yStr += height/2 + currentFontSize; break;
+		case MIDDLE_RIGHT:  
+		    xStr += width - marginX -w;	yStr += height/2 + currentFontSize; break;
+		case LOWER_LEFT:
+		    xStr += marginX; yStr += height - marginY; break;
+		case LOWER_MIDDLE:
+		    xStr += width/2 - w/2; yStr += height - marginY; break;
+		case LOWER_RIGHT:
+		    xStr += width - marginX -w; yStr += height - marginY; break; 
+		default:
+		     xStr += width/2 - w/2; yStr += marginY + currentFontSize; break;
+		}
 	
+		TraceManager.addDev("Color=" + c);
+		if (!(c == ColorManager.POINTER_ON_ME_0)) {
+		    g.setColor(textColor);
+		}
+
+		g.drawString(value, xStr, yStr);
+		g.setFont(f0);
+		g.setColor(c);
     }
 
- 
+    @Override
     public TGComponent isOnMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -207,40 +203,39 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
         return null;
     }
 
+    @Override
     public void rescale(double scaleFactor){
         /*dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
           lineHeight = (int)(dlineHeight);
           dlineHeight = dlineHeight - lineHeight;
           minHeight = lineHeight;*/
 
-        
-
         super.rescale(scaleFactor);
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.INFO_PANEL;
     }
 
-
     public void setStringPos(int _pos) {
-	stringPos = _pos;
+    	stringPos = _pos;
     }
 
 
     public void setFillColor(Color _c) {
-	fillColor = _c;
+    	fillColor = _c;
     }
 
     public void setTextColor(Color _c) {
-	textColor = _c;
+    	textColor = _c;
     }
 
 
     protected String translateExtraParam() {
-        TAttribute a;
-        AvatarMethod am;
-        AvatarSignal as;
+ //       TAttribute a;
+//        AvatarMethod am;
+//        AvatarSignal as;
 
         //System.out.println("Loading extra params of " + value);
         //value = "";
@@ -273,9 +268,8 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("TextColor")) {
                                 s = elt.getAttribute("value");
-				textColor = new Color(Integer.decode(s).intValue());	
+                                textColor = new Color(Integer.decode(s).intValue());	
                              }
-                            
                         }
                     }
                 }
@@ -284,6 +278,4 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
             throw new MalformedModelingException();
         }
     }
-    
-    
 }//Class
