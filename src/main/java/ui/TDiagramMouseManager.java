@@ -285,6 +285,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                 //System.out.println("change2");
                 tdp.getGUI().changeMade(tdp, TDiagramPanel.MOVE_COMPONENT);
             }
+            setSelection(e.getX(), e.getY());
         }
 
         if (tdp.mode == TDiagramPanel.SELECTING_COMPONENTS) {
@@ -547,7 +548,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             }
         }
 
-        if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT) && (selectedComponent == false) && (!tdp.isSelect())){
+        if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT) /*&& (selectedComponent == false) && (!tdp.isSelect())*/){
             byte info = tdp.highlightComponent(e.getX(), e.getY());
             if (info > 1) {
                 tgc = tdp.componentPointed();
@@ -559,7 +560,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             } else {
                 tdp.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
-            if ((info == 1) || (info == 3)) {
+            if ((info == 1) || (info == 3) && (selectedComponent == false) && (!tdp.isSelect())) {
                 tdp.updateJavaCode();
                 tdp.repaint();
             }
