@@ -119,8 +119,12 @@ public class ModeManager {
             actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM].setEnabled(true);
             actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS].setEnabled(true);
             actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS].setEnabled(true);
-            actions[TGUIAction.ACT_DELETE].setEnabled(true);
-            actions[TGUIAction.ACT_SUPPR].setEnabled(true);
+            actions[TGUIAction.ACT_DELETE].setEnabled(false);
+            actions[TGUIAction.ACT_SUPPR].setEnabled(false);
+            actions[TGUIAction.ACT_UP].setEnabled(false);
+            actions[TGUIAction.ACT_DOWN].setEnabled(false);
+            actions[TGUIAction.ACT_LEFT].setEnabled(false);
+            actions[TGUIAction.ACT_RIGHT].setEnabled(false);
             
             if (mainBar != null) {
                 mainBar.activateSearch(true);
@@ -402,6 +406,14 @@ public class ModeManager {
             break;
         case MainGUI.NC_OK:
             actions[TGUIAction.ACT_NC].setEnabled(true);
+            break;
+        case MainGUI.COMPONENT_SELECTED:
+        	actions[TGUIAction.ACT_UP].setEnabled(true);
+            actions[TGUIAction.ACT_DOWN].setEnabled(true);
+            actions[TGUIAction.ACT_LEFT].setEnabled(true);
+            actions[TGUIAction.ACT_RIGHT].setEnabled(true);
+            actions[TGUIAction.ACT_DELETE].setEnabled(true);
+            actions[TGUIAction.ACT_SUPPR].setEnabled(true);
             break;
         default:
             TraceManager.addDev("DEFAULT");

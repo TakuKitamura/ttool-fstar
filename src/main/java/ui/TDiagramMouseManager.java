@@ -57,6 +57,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
     private TDiagramPanel tdp;
 
     private TGComponent tgc;
+    private TGComponent lastSelectedComponent = null;
 
     private int oldx;
     private int oldy;
@@ -99,9 +100,8 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
         //System.out.println("Titi");
         if (e.getButton() == MouseEvent.BUTTON3) {
             //System.out.println("toto");
-            if (selected == TGComponentManager.EDIT) {
-                tdp.openPopupMenu(e.getX(), e.getY());
-            }
+        	setSelection(e.getX(), e.getY());
+            tdp.openPopupMenu(e.getX(), e.getY());
         }
 
         //System.out.println("mode = " + tdp.mode + " selected=" + selected);
@@ -120,7 +120,8 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
 
 
         if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT)& (e.getButton() == MouseEvent.BUTTON1)) {
-            //search if an element is pointed
+        	setSelection(e.getX(), e.getY());
+        	//search if an element is pointed
             boolean actionMade = false;
             tgc = tdp.componentPointed();
             //System.out.println("Working on TGC=" + tgc);
@@ -165,7 +166,8 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                             tdp.addingTGConnector();
                             cp = p1;
                             tdp.setAddingTGConnector(e.getX(), e.getY());
-                            tdp.repaint();
+                            //tdp.repaint();
+                            setSelection(p1.container.getX(), p1.container.getY());
                         }
                     }
                 }
@@ -273,6 +275,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                 //System.out.println("change2");
                 tdp.getGUI().changeMade(tdp, TDiagramPanel.MOVE_COMPONENT);
             }
+            setSelection(e.getX(), e.getY());
         }
 
         if (tdp.mode == TDiagramPanel.RESIZING_COMPONENT) {
@@ -283,6 +286,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                 //System.out.println("change2");
                 tdp.getGUI().changeMade(tdp, TDiagramPanel.MOVE_COMPONENT);
             }
+            setSelection(e.getX(), e.getY());
         }
 
         if (tdp.mode == TDiagramPanel.SELECTING_COMPONENTS) {
@@ -455,9 +459,44 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             tdp.getGUI().changeMade(tdp, TDiagramPanel.NEW_COMPONENT);
             tdp.repaint();
         }
-
+       
+        //If one click is done for selection
+        if ((selected == TGComponentManager.EDIT) && (e.getClickCount() == 1) && (e.getButton() == MouseEvent.BUTTON1)) {
+        	setSelection(e.getX(), e.getY());
+        }
     }
 
+    /**
+     * Set the selection on the clicked component
+     * @author Fabien Tessier
+     */
+    private void setSelection(int x, int y) {
+    	tdp.requestFocusInWindow();
+    	tdp.unselectClickSelectedComponents(); //Unselect all components
+ 	    tgc = null;
+ 	    for (TGComponent tgc: tdp.componentList) {
+             TGComponent tgcTmp = tgc.isOnMeHL(x, y);
+             if (tgcTmp != null && !tgcTmp.hidden) { //Component clicked
+            	 this.tgc = tgcTmp;
+            	 break;
+             }
+ 	    }
+ 	    if (tgc != null) { //A component has been clicked
+ 	        tdp.getGUI().setMode(MainGUI.COMPONENT_SELECTED);
+     	    lastSelectedComponent = tgc;
+     	    tdp.setSelect(true);
+     	    tgc.singleClick(tdp.getGUI().getFrame(), x, y);       	   
+        }
+        else {
+        	tdp.getGUI().setMode(MainGUI.OPENED);
+     	    tdp.setSelect(false);
+     	    lastSelectedComponent = null;
+     	    tdp.componentPointed = null;
+        }
+        tdp.getGUI().changeMade(tdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
+	    tdp.repaint();
+    }
+    
     public void stopAddingConnector() {
         //TraceManager.addDev("Stop Adding connector in tdmm");
         tdp.mode = TDiagramPanel.NORMAL;
@@ -510,10 +549,12 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             }
         }
 
-        if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT) && (selectedComponent == false)){
-            byte info = tdp.highlightComponent(e.getX(), e.getY());
-            if (info > 1) {
-                tgc = tdp.componentPointed();
+        if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT)){
+            byte info = 0;
+        	if (!tdp.isSelect())
+        		info = tdp.highlightComponent(e.getX(), e.getY());
+            if (info > 1 || tdp.isSelect()) {
+            	tgc = tdp.componentPointed();
                 if (tgc.isUserResizable()) {
                     setCursor(tgc.getResizeZone(e.getX(), e.getY()));
                 } else {
@@ -644,5 +685,5 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
 //
 //    public void removeSelectedComponentFromList(){
 //        this.selectedMultiComponents.clear();
-//    }
+//    }   
 }

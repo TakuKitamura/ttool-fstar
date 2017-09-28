@@ -62,8 +62,11 @@ public abstract class TGCWithInternalComponent extends TGComponent{
         if (s != TGState.POINTER_ON_ME) {
             setStateInternalTGComponent(s);
             if (s == TGState.POINTED) {
-                if (selectedInternalComponent != null) {
+               if (selectedInternalComponent != null) {
+            	   if(!tdp.select || (tdp.select && tdp.componentPointed == selectedInternalComponent)) //Check if this is the selected component
                     selectedInternalComponent.setState(TGState.POINTER_ON_ME);
+            	   else
+            		   selectedInternalComponent.setState(TGState.POINTED);
                 } else {
                     if (father == null) {
                         state = TGState.POINTER_ON_ME;

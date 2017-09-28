@@ -87,6 +87,7 @@ import java.util.List;
 public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     protected TDiagramMouseManager tdmm;
+    protected PanelKeyListener pkl;
 
     // for tracking changes
     public static final int NEW_COMPONENT = 0;
@@ -190,6 +191,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected int sel = 5;
     protected boolean showSelectionZone = false;
     protected boolean selectedTemp = true;
+    protected boolean select = false;
 
     private boolean isScaled;
     private boolean overcomeShowing = false;
@@ -233,6 +235,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
 
     public boolean drawable = true;
+    public static final int MOVE_SPEED = 1; //Speed of component moving with arrow keys
     
 
 
@@ -251,11 +254,15 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
         addMouseMotionListener(tdmm);
+        
+        pkl = new PanelKeyListener(this);
+        addKeyListener(pkl);
+        
+        setFocusable(true);
 
         buildPopupMenus();
     }
-
-
+    
     // Abstract operations
     public abstract boolean actionOnDoubleClick(TGComponent tgc);
     public abstract boolean actionOnAdd(TGComponent tgc);
@@ -739,9 +746,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         for (TGComponent tgc: this.componentList) {
             //state = tgc.getState();
             tgcTmp = tgc.isOnMeHL(x, y);
-            if (tgcTmp != null) {
+            if ((tgcTmp != null && (!select || tgcTmp.isClickSelected())) || tgc.isClickSelected()) {
                 if (!pointedElementFound) {
                     componentPointed = tgcTmp;
+                    if (componentPointed == null)
+                    	componentPointed = tgc;
                     tgc.setState(TGState.POINTED);
                     String tooltip = componentPointed.getToolTipText();
                     if (tooltip!=null && tooltip.length()>0){
@@ -755,7 +764,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     tgc.setState(TGState.NORMAL);
                 }
             } else {
-                tgc.setState(TGState.NORMAL);
+            	if (tgcTmp != null && tgcTmp.father != null)
+            		tgc.setState(TGState.POINTED);
+            	else
+            		tgc.setState(TGState.NORMAL);
             }
         }
 
@@ -1150,8 +1162,23 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             tgc.setState(TGState.NORMAL);
         }
     }
-
-
+    
+    /**
+     * Unselect all components (triggered when a single click is done)
+     * @author Fabien Tessier
+     */
+    public void unselectClickSelectedComponents() {
+    	for (TGComponent tgc: this.componentList) {
+            tgc.select(false);
+            tgc.clickSelect(false);
+            tgc.setState(TGState.NORMAL);
+            for (TGComponent tgcTmp: tgc.getRecursiveAllInternalComponent()) {
+            	tgcTmp.select(false);
+                tgcTmp.clickSelect(false);
+                tgcTmp.setState(TGState.NORMAL);
+            }
+        }
+    }
 
     public boolean showSelectionZone(int x, int y) {
         if (GraphicLib.isInRectangle(x, y, xSel, ySel, widthSel, heightSel)) {
@@ -3375,5 +3402,45 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public MainGUI getMainGUI(){ //Ajout CD pour creation d'un panel depuis un block
 	return mgui;
+    }
+    
+    public boolean isSelect() {
+    	return select;
+    }
+    
+    public void setSelect(boolean b) {
+    	select = b;
+    }
+    
+    public void upComponent() {
+    	TGComponent tgc = componentPointed;
+    	if (tgc != null && tgc.moveable) {
+    		tgc.setMoveCd(tgc.x, tgc.y - MOVE_SPEED);
+    		repaint();
+    	}
+    }
+    
+    public void downComponent() {
+    	TGComponent tgc = componentPointed;
+    	if (tgc != null && tgc.moveable) {
+    		tgc.setMoveCd(tgc.x, tgc.y + MOVE_SPEED);
+    		repaint();
+    	}
+    }
+    
+    public void leftComponent() {
+    	TGComponent tgc = componentPointed;
+    	if (tgc != null && tgc.moveable) {
+    		tgc.setMoveCd(tgc.x - MOVE_SPEED, tgc.y);
+    		repaint();
+    	}
+    }
+    
+    public void rightComponent() {
+    	TGComponent tgc = componentPointed;
+    	if (tgc != null && tgc.moveable) {
+    		tgc.setMoveCd(tgc.x + MOVE_SPEED, tgc.y);
+    		repaint();
+    	}
     }
 }
