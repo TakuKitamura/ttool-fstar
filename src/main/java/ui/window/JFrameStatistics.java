@@ -537,7 +537,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         }
 
         // Issue #41 Ordering of tabbed panes 
-        mainTabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        mainTabbedPane = GraphicLib.createTabbedPaneRegular();//new JTabbedPane();
         mainTabbedPane.addTab("General info.", IconManager.imgic13, jp, "# states, #transitions");
         mainTabbedPane.addTab("Statistics", IconManager.imgic13, jsp, "Statistics on states & transitions");
         mainTabbedPane.addTab("Deadlocks", IconManager.imgic13, jspDeadlock, "Potential deadlocks");
