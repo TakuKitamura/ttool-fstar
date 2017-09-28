@@ -2754,17 +2754,37 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         rgautprojdotfile = new File(myFile + "_proj.aut.dot");
     }
 
+    /**
+     * Display "Modeling has not been saved" window
+     * @author Fabien Tessier
+     * @param str1 (text for the left button)
+     * @param str2 (text for the right button)
+     * @return boolean (false = cancel, true = perform action)
+     */
     public boolean saveBeforeAction(String str1, String str2) {
-        Object[] options = { str1, str2, "CANCEL" };
-        int back = JOptionPane.showOptionDialog(frame, "Modeling has not been saved", "Warning",
-                                                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
-                                                null, options, options[0]);
-        //TraceManager.addDev("back= " + back);
-        if (back == JOptionPane.CANCEL_OPTION) {
+    	Object[] options = { str1, str2, "CANCEL" }; //Texts for buttons
+    	JOptionPane optionPane = new JOptionPane("Modeling has not been saved", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_CANCEL_OPTION, null, options, options[0]);
+        JDialog dialog = optionPane.createDialog(activetdp, "Warning"); //Use JDialog to enable navigation with arrow keys
+        dialog.setLocation((frame.getSize().width)/2 - dialog.getWidth()/2, (frame.getSize().height)/2 - dialog.getHeight()/2);
+        UIManager.put("Button.defaultButtonFollowsFocus", Boolean.TRUE);
+        
+        Set forwardTraversalKeys = new HashSet(dialog.getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+        forwardTraversalKeys.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.VK_UNDEFINED));
+        dialog.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, forwardTraversalKeys); //Navigation with right arrow
+
+        Set backwardTraversalKeys = new HashSet(dialog.getFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS));
+        backwardTraversalKeys.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_LEFT, KeyEvent.VK_UNDEFINED));
+        dialog.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, backwardTraversalKeys); //Navigation with left arrow
+        
+        dialog.setVisible(true);
+        dialog.dispose();
+        String ret = (String) optionPane.getValue(); //Get value of the pressed button
+        if (ret == null || ret.equals("CANCEL")) {
             return false;
         }
-        if (back == JOptionPane.YES_OPTION) {
-            saveProject();
+        
+        if (ret.equals(str1)) {
+        	saveProject();
         }
         return true;
     }
