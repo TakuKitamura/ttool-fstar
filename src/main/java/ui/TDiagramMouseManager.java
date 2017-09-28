@@ -480,14 +480,16 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
              }
  	    }
  	    if (tgc != null) { //A component has been clicked
-     	   lastSelectedComponent = tgc;
-     	   tdp.setSelect(true);
-     	   tgc.singleClick(tdp.getGUI().getFrame(), x, y);       	   
+ 	        tdp.getGUI().setMode(MainGUI.COMPONENT_SELECTED);
+     	    lastSelectedComponent = tgc;
+     	    tdp.setSelect(true);
+     	    tgc.singleClick(tdp.getGUI().getFrame(), x, y);       	   
         }
         else {
-     	   tdp.setSelect(false);
-     	   lastSelectedComponent = null;
-     	   tdp.componentPointed = null;
+        	tdp.getGUI().setMode(MainGUI.OPENED);
+     	    tdp.setSelect(false);
+     	    lastSelectedComponent = null;
+     	    tdp.componentPointed = null;
         }
         tdp.getGUI().changeMade(tdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
 	    tdp.repaint();

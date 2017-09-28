@@ -233,6 +233,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public final static byte AVATAR_SYNTAXCHECKING_OK = 47;
     public final static byte PANEL_CHANGED = 48;
     public final static byte ATTACKTREE_SYNTAXCHECKING_OK = 49;
+    public final static byte COMPONENT_SELECTED = 50;
 
     public final static int INCREMENT = 10;
 
@@ -2816,6 +2817,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void delete() {
         getCurrentTDiagramPanel().makeDelete();
+        setMode(MainGUI.OPENED);
     }
 
     public void backward() {
