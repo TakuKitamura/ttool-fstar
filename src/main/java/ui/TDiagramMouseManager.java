@@ -166,7 +166,8 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                             tdp.addingTGConnector();
                             cp = p1;
                             tdp.setAddingTGConnector(e.getX(), e.getY());
-                            tdp.repaint();
+                            //tdp.repaint();
+                            setSelection(p1.container.getX(), p1.container.getY());
                         }
                     }
                 }
@@ -548,10 +549,12 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             }
         }
 
-        if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT) /*&& (selectedComponent == false) && (!tdp.isSelect())*/){
-            byte info = tdp.highlightComponent(e.getX(), e.getY());
-            if (info > 1) {
-                tgc = tdp.componentPointed();
+        if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT)){
+            byte info = 0;
+        	if (!tdp.isSelect())
+        		info = tdp.highlightComponent(e.getX(), e.getY());
+            if (info > 1 || tdp.isSelect()) {
+            	tgc = tdp.componentPointed();
                 if (tgc.isUserResizable()) {
                     setCursor(tgc.getResizeZone(e.getX(), e.getY()));
                 } else {
@@ -560,7 +563,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             } else {
                 tdp.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
-            if ((info == 1) || (info == 3) && (selectedComponent == false) && (!tdp.isSelect())) {
+            if ((info == 1) || (info == 3)) {
                 tdp.updateJavaCode();
                 tdp.repaint();
             }
