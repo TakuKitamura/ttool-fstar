@@ -79,8 +79,13 @@ public class AvatarSafetyTests {
 		blocks = new ArrayList<AvatarBDBlock>();
 		as = new AvatarSpecification("avspec",null);
 		AvatarBlock A = new AvatarBlock("A", null, null);
+		avatartranslator.AvatarSignal sig = new avatartranslator.AvatarSignal("sig", 0, null);
+		A.addSignal(sig);
 		AvatarStateMachine Aasm = A.getStateMachine();
-		Aasm.addElement(new AvatarActionOnSignal("action_on_signal", null, null));
+		AvatarActionOnSignal aaos = new AvatarActionOnSignal("action_on_signal", sig, null);
+		aaos.setCheckLatency(true);
+		Aasm.addElement(aaos);
+
 		A.addAttribute(new AvatarAttribute("key1", AvatarType.INTEGER, A, null));
 		A.addAttribute(new AvatarAttribute("key2", AvatarType.INTEGER, A, null));
 
@@ -124,14 +129,16 @@ public class AvatarSafetyTests {
 	@Test
 	public void testFormLessThanPragma(){
 		//Test : Form pragma with less than expression
-		pragma = adpt.checkLatencyPragma("Lat(A.sig,A,sig)<1", blocks, as, null);
+		pragma = adpt.checkLatencyPragma("Latency(A.sig,A.sig)<1", blocks, as, null);
+		assertTrue(pragma !=null);
 	}
 
 
 	@Test
 	public void testFormGreaterThanPragma(){
 		//Test : Form pragma with greater than expression
-		pragma = adpt.checkLatencyPragma("Lat(A.sig,A,sig)>1", blocks, as, null);
+		pragma = adpt.checkLatencyPragma("Latency(A.sig,A.sig)>1", blocks, as, null);
+		assertTrue(pragma !=null);
 	}
 
     
