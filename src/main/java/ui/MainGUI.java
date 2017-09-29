@@ -2768,11 +2768,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         dialog.setLocation((frame.getSize().width)/2 - dialog.getWidth()/2, (frame.getSize().height)/2 - dialog.getHeight()/2);
         UIManager.put("Button.defaultButtonFollowsFocus", Boolean.TRUE);
         
-        Set forwardTraversalKeys = new HashSet(dialog.getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+        Set<AWTKeyStroke> forwardTraversalKeys = new HashSet<AWTKeyStroke>(dialog.getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
         forwardTraversalKeys.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.VK_UNDEFINED));
         dialog.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, forwardTraversalKeys); //Navigation with right arrow
 
-        Set backwardTraversalKeys = new HashSet(dialog.getFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS));
+        Set<AWTKeyStroke> backwardTraversalKeys = new HashSet<AWTKeyStroke>(dialog.getFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS));
         backwardTraversalKeys.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_LEFT, KeyEvent.VK_UNDEFINED));
         dialog.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, backwardTraversalKeys); //Navigation with left arrow
         
