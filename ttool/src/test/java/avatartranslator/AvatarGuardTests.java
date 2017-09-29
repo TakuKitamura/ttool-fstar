@@ -43,6 +43,8 @@
  * @see
  */
 
+package avatartranslator;
+
 import org.junit.Test;
 import org.junit.*;
 
