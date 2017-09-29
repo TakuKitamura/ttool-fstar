@@ -2837,7 +2837,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void delete() {
         getCurrentTDiagramPanel().makeDelete();
-        setMode(MainGUI.OPENED);
     }
 
     public void backward() {

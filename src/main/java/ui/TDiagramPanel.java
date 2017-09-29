@@ -2104,6 +2104,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             return;
         }
         mode = NORMAL;
+        tdmm.setSelection(-1, -1);
         mgui.setMode(MainGUI.CUTCOPY_KO);
         mgui.setMode(MainGUI.EXPORT_LIB_KO);
         mgui.changeMade(this, REMOVE_COMPONENT);

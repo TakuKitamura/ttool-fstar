@@ -63,6 +63,10 @@ public abstract class AvatarTerm extends AvatarElement {
     }
 
     public static AvatarTerm createFromString (AvatarStateMachineOwner block, String toParse) {
+        return AvatarTerm.createFromString(block, toParse, false);
+    }
+
+    public static AvatarTerm createFromString (AvatarStateMachineOwner block, String toParse, boolean allowRaw) {
         if (toParse == null || toParse.isEmpty ())
             return null;
 
@@ -105,7 +109,10 @@ public abstract class AvatarTerm extends AvatarElement {
         //TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
 
         //TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
-        return new AvatarTermRaw (toParse, block);
+        if (allowRaw)
+            return new AvatarTermRaw (toParse, block);
+        else
+            return null;
     }
 
     public static AvatarAction createActionFromString (AvatarStateMachineOwner block, String toParse) {
