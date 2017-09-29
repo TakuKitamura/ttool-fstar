@@ -62,8 +62,8 @@ public class AvatarTuple extends AvatarLeftHand {
     public static AvatarTuple createFromString (AvatarStateMachineOwner block, String toParse) {
         AvatarTuple result = null;
 
-        int indexLParen = toParse.indexOf ("(");
-        if (indexLParen != -1) {
+        if (toParse.trim().startsWith("(")) {
+            int indexLParen = toParse.indexOf ("(");
             int indexRParen = toParse.indexOf (")", indexLParen);
             if (indexRParen == -1)
                 indexRParen = toParse.length ();
