@@ -470,7 +470,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
      * Set the selection on the clicked component
      * @author Fabien Tessier
      */
-    private void setSelection(int x, int y) {
+    public void setSelection(int x, int y) {
     	tdp.requestFocusInWindow();
     	tdp.unselectClickSelectedComponents(); //Unselect all components
  	    tgc = null;

@@ -657,7 +657,7 @@ public class TGUIAction extends AbstractAction {
             if (actions[id].hasControl) {
                 putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY, java.awt.event.InputEvent.CTRL_MASK));
             } else {
-            	if (actions[id].MNEMONIC_KEY >= 37 && actions[id].MNEMONIC_KEY <= 40) //handling for arrow keys
+            	if ((actions[id].MNEMONIC_KEY >= 37 && actions[id].MNEMONIC_KEY <= 40) || actions[id].MNEMONIC_KEY == KeyEvent.VK_DELETE) //handling for arrow and delete keys
             		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].MNEMONIC_KEY, 0));
             	else
             		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY));
