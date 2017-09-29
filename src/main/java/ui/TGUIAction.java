@@ -545,6 +545,7 @@ public class TGUIAction extends AbstractAction {
     public static final int UML_NOTE = 42;
     public static final int PRAGMA = 424;
     public static final int SAFETY_PRAGMA = 425;
+	public static final int PERFORMANCE_PRAGMA = 438;
     public static final int AVATAR_FIREWALL = 437;
 
     public static final int ACT_CUT = 44;
@@ -886,6 +887,7 @@ public class TGUIAction extends AbstractAction {
         actions[UML_NOTE] = new TAction("edit-note", "Add a note to a diagram", IconManager.imgic320, IconManager.imgic321, "Add a comment", "Add a comment to the currently opened TTool diagram", 0);
         actions[PRAGMA] = new TAction("pragma", "Add a pragma to a diagram", IconManager.imgic6000, IconManager.imgic6001, "Add a pragma", "Add a pragma to the currently opened TTool diagram", 0);
         actions[SAFETY_PRAGMA] = new TAction("safety_pragma", "Add a safety (UPPAAL) pragma to a diagram", IconManager.imgic6002, IconManager.imgic6003, "Add a safety (UPPAAL) pragma", "Add a safety (UPPAAL) pragma to the currently opened TTool diagram", 0);
+        actions[PERFORMANCE_PRAGMA] = new TAction("performance_pragma", "Add a performance pragma to a diagram", IconManager.imgic6004, IconManager.imgic6005, "Add a performance pragma", "Add a performance pragma to the currently opened TTool diagram", 0);
 		actions[AVATAR_FIREWALL] = new TAction("avatar_firewall", "Add an avatar firewall to a diagram", IconManager.imgic7001, IconManager.imgic7001, "Add an avatar firewall", "Add an avatar firewall to the currently opened TTool diagram", 0);
 
         actions[IOD_EDIT] = new TAction("edit-io-diagram", "Edit interaction overview diagram", IconManager.imgic100, IconManager.imgic101, "Edit interaction overview diagram", "Make it possible to edit the currently opened interaction overview diagram", 0);

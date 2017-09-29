@@ -90,7 +90,7 @@ public class IconManager {
     //Common to all diagrams
     public static ImageIcon imgic302, imgic304, imgic306, imgic308;
     public static ImageIcon imgic310, imgic312, imgic314, imgic315, imgic316, imgic317, imgic318, imgic319;
-    public static ImageIcon imgic320, imgic321, imgic322, imgic323, imgic324, imgic6000, imgic6001, imgic6002, imgic6003;
+    public static ImageIcon imgic320, imgic321, imgic322, imgic323, imgic324;
     public static ImageIcon imgic330, imgic331, imgic332, imgic333, imgic334, imgic335, imgic336, imgic337, imgic338, imgic339;
     public static ImageIcon imgic340, imgic341, imgic342, imgic344;
 
@@ -152,6 +152,10 @@ public class IconManager {
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
     public static ImageIcon imgic5110, imgic5112, imgic5113,imgic5114;
     public static ImageIcon imgic5200;
+
+	//pragmas
+	public static ImageIcon imgic6000, imgic6001, imgic6002, imgic6003, imgic6004, imgic6005;
+
     //Security
     public static ImageIcon imgic7000, imgic7001;
     //Safety
@@ -595,10 +599,14 @@ public class IconManager {
     // Avatar DD
     private static String icon5200 = "search-ideogram-25px.png";
    
+	//Dfferent Pragma
     private static String icon6000 = "toolbarButtonGraphics/general/pragma16.gif";
     private static String icon6001 = "toolbarButtonGraphics/general/pragma24.gif";
     private static String icon6002 = "toolbarButtonGraphics/general/safepragma16.gif";
     private static String icon6003 = "toolbarButtonGraphics/general/safepragma24.gif";
+    private static String icon6004 = "toolbarButtonGraphics/general/performancepragma16.gif";
+    private static String icon6005 = "toolbarButtonGraphics/general/performancepragma24.gif";
+
     //Security stuff
     private static String icon7000 = "tmlcrypto.gif";
     private static String icon7001 = "tmlfirewallnode.gif";
@@ -1024,10 +1032,14 @@ public class IconManager {
             img5200 = imgic5200.getImage();
         }
 
-        imgic6000 = getIcon(icon6000);
+	imgic6000 = getIcon(icon6000);
 	imgic6001 = getIcon(icon6001);
-        imgic6002 = getIcon(icon6002);
+	imgic6002 = getIcon(icon6002);
 	imgic6003 = getIcon(icon6003);
+	imgic6004 = getIcon(icon6004);
+	imgic6005 = getIcon(icon6005);
+
+
 	imgic7000 = getIcon(icon7000);
 	imgic7001 = getIcon(icon7001);
 	imgic7002 = getIcon(icon7002);

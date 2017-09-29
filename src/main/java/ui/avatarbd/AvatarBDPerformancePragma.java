@@ -48,7 +48,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
-import ui.window.JDialogSafetyPragma;
+import ui.window.JDialogPerformancePragma;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,7 +64,7 @@ import java.util.Map;
    * @version 1.0 06/12/2003
    * @author Ludovic APVRILLE, Letitia LI
  */
-public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
+public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalComponent {
 
     protected String[] values;
     protected LinkedList<String> properties;
@@ -90,7 +90,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     public Map<String, Integer> verifMap = new HashMap<String, Integer>();
 
     protected Graphics graphics;
-    public AvatarBDSafetyPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarBDPerformancePragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         width = 200;
         height = 30;
@@ -120,7 +120,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         editable = true;
         removable = true;
 
-        name = "UPPAAL Pragma";
+        name = "Performance Pragma";
         value = "";
 
         myImageIcon = IconManager.imgic6000;
@@ -160,7 +160,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         Color c = g.getColor();
 
         int desiredWidth = minWidth;
-        desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Safety Pragma") + marginX+ textX);
+        desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Performance Pragma") + marginX+ textX);
 	
         for(int i=0; i< values.length; i++) {
             desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX+textX);
@@ -179,7 +179,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         g.drawLine(x, y+height, x+width-limit, y+height);
         g.drawLine(x+width, y, x+width, y+height - limit);
 
-        g.setColor(ColorManager.SAFETY_PRAGMA_BG);
+        g.setColor(ColorManager.PERFORMANCE_PRAGMA_BG);
         int [] px1 = {x+1, x+width, x + width, x + width-limit, x+1};
         int [] py1 = {y+1, y+1, y+height-limit, y+height, y+height};
         g.fillPolygon(px1, py1, 5);
@@ -199,7 +199,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 	int i = 1;
 	Font heading = new Font("heading", Font.BOLD, 14);
 	g.setFont(heading);
-	g.drawString("Safety Pragma", x+textX, y+textY + currentFontSize);
+	g.drawString("Performance Pragma", x+textX, y+textY + currentFontSize);
 	g.setFont(fold);
 	for (String s: properties){
 	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
@@ -220,15 +220,12 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         values = Conversion.wrapText(value);
 	properties.clear();
 	for (String s: values){
-	    if (s.isEmpty() || (s.split(" ").length < 1) ){
+	    if (s.isEmpty() || !s.contains("Latency") ){
 		//Ignore
 	    }
-	    else if (Arrays.asList(pPragma).contains(s.split(" ")[0])){
+		else if (s.contains("Latency") && (s.contains("<") || s.contains(">")) ) {
 			properties.add(s);
-	    }
-	    else if (s.contains("-->")){
-		properties.add(s);
-	    }
+		}
 	    else {
 		//Warning Message
 		JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
@@ -258,7 +255,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
-        JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, "Setting the safety pragma", value);
+        JDialogPerformancePragma jdn = new JDialogPerformancePragma(frame, "Setting the performance pragma", value);
         //jdn.setLocation(200, 150);
         GraphicLib.centerOnParent(jdn);
 		AvatarBDPanel abdp = (AvatarBDPanel) tdp;
@@ -294,7 +291,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     }
 
     public int getType() {
-        return TGComponentManager.SAFETY_PRAGMA;
+        return TGComponentManager.PERFORMANCE_PRAGMA;
     }
 
     protected String translateExtraParam() {

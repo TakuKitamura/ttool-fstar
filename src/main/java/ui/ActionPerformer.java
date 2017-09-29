@@ -311,6 +311,8 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PRAGMA);
         } else if (command.equals(mgui.actions[TGUIAction.SAFETY_PRAGMA].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SAFETY_PRAGMA);
+        } else if (command.equals(mgui.actions[TGUIAction.PERFORMANCE_PRAGMA].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PERFORMANCE_PRAGMA);
 
             // AVATAR actions
         } else if (command.equals(mgui.actions[TGUIAction.ACT_AVATAR_SIM].getActionCommand())) {

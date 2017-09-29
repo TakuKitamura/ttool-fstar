@@ -390,8 +390,8 @@ public class AvatarDesignPanel extends TURTLEPanel {
 	public void modelBacktracingLatency(Vector<SimulationLatency> latencies){
 		//Search for Safety Pragma
 		for (Object ob: abdp.getComponentList()) {
-			if (ob instanceof AvatarBDSafetyPragma) {
-				AvatarBDSafetyPragma bdpragma = (AvatarBDSafetyPragma) ob;
+			if (ob instanceof AvatarBDPerformancePragma) {
+				AvatarBDPerformancePragma bdpragma = (AvatarBDPerformancePragma) ob;
 				//Match each safety pragma to latency result
 				for (String s: bdpragma.getProperties()){
 					for (SimulationLatency latency: latencies){

@@ -57,7 +57,7 @@ import java.util.HashMap;
  * @version 1.0 06/12/2003
  * @author Ludovic APVRILLE, Letitia LI
  */
-public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
+public class JDialogPerformancePragma extends JDialogBase implements ActionListener {
     
     protected String text;
     
@@ -70,7 +70,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     protected JPopupMenu helpPopup;
 	public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
     /** Creates new form  */
-    public JDialogSafetyPragma(Frame f, String title, String _text) {
+    public JDialogPerformancePragma(Frame f, String title, String _text) {
         super(f, title, true);
         text = _text;
         
@@ -220,7 +220,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         String text = textarea.getText();
         int start = Math.max(0, position - 1);
         while (start > 0) {
-            if (!Character.isWhitespace(text.charAt(start))) {
+            if (!Character.isWhitespace(text.charAt(start)) && !text.substring(start,start+1).equals("(") && !text.substring(start,start+1).equals(")") && !text.substring(start,start+1).equals(",") ) {
                 start--;
             } else {
                 start++;
@@ -268,16 +268,6 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         setFont(f);
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
-        helpPopup = new JPopupMenu();
-		//JTextArea jft = new JTextArea("UPPAAL pragmas");
-		//helpPopup.add(jft);
-		helpPopup.add(new JLabel("UPPAAL safety queries determine if the behavior of a system. They must appear in one of the following formats."));
-		helpPopup.add(new JLabel(IconManager.imgic7002));	
-		helpPopup.add(new JLabel(IconManager.imgic7003));
-		helpPopup.add(new JLabel(IconManager.imgic7004));
-		helpPopup.add(new JLabel(IconManager.imgic7005));
-		helpPopup.add(new JLabel(IconManager.imgic7006));
-		helpPopup.setPreferredSize(new Dimension(150,650));
         textarea = new JTextArea();
 
         textarea.setEditable(true);

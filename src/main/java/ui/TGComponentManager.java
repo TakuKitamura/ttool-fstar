@@ -174,6 +174,7 @@ public class TGComponentManager {
     public static final int SAFETY_PRAGMA = 303;
     public static final int INFO_PANEL = 304;
     public static final int AVATAR_FIREWALL = 306;
+    public static final int PERFORMANCE_PRAGMA = 307;
 
     public static final int IOD_CHOICE = 501;
     public static final int IOD_START_STATE = 502;
@@ -862,6 +863,9 @@ public class TGComponentManager {
             break;
         case SAFETY_PRAGMA:
             tgc = new AvatarBDSafetyPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case PERFORMANCE_PRAGMA:
+            tgc = new AvatarBDPerformancePragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
             //        case AVATAR_FIREWALL:
             //            tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);

@@ -172,6 +172,7 @@ public class AvatarDesignPanelTranslator {
         TGComponent tgc;
         AvatarBDPragma tgcn;
         AvatarBDSafetyPragma tgsp;
+        AvatarBDPerformancePragma tgpp;
         String values [];
         String tmp;
         List<AvatarPragma> pragmaList;
@@ -210,19 +211,21 @@ public class AvatarDesignPanelTranslator {
                 tgsp = (AvatarBDSafetyPragma)tgc;
                 values = tgsp.getValues();
                 for (String s: values){
-					if (s.startsWith("Latency")){
-						AvatarPragmaLatency pragma = checkLatencyPragma(s, _blocks, _as, tgc);
-						if (pragma!=null){
-	                        _as.addLatencyPragma(pragma);
-	                    }
-					}
-					else{
-						if (checkSafetyPragma(s, _blocks, _as)){
-	                        _as.addSafetyPragma(s);
-	                    }
+					if (checkSafetyPragma(s, _blocks, _as)){
+						_as.addSafetyPragma(s);
 					}
                 }
             }
+			if (tgc instanceof AvatarBDPerformancePragma) {
+				tgpp = (AvatarBDPerformancePragma)tgc;
+                values = tgpp.getValues();
+				for (String s: values){
+					AvatarPragmaLatency pragma = checkLatencyPragma(s, _blocks, _as, tgc);
+					if (pragma!=null){
+						_as.addLatencyPragma(pragma);
+					}
+				}
+			}
         }
     }
 	

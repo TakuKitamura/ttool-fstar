@@ -84,6 +84,7 @@ public class ColorManager {
     public static Color UML_NOTE_BG = new Color(173, 190, 234);
     public static Color PRAGMA_BG = new Color(200, 170, 200);
     public static Color SAFETY_PRAGMA_BG = new Color(230, 200, 230);
+    public static Color PERFORMANCE_PRAGMA_BG = new Color(123, 127, 215);
     public static final Color COMPOSITION_OPERATOR = Color.yellow;
     public static final Color ATTRIBUTE_BOX = new Color(199, 243, 105);
     public static final Color ATTRIBUTE_BOX_ACTION = new Color(199, 243, 105);

@@ -74,6 +74,7 @@ public class AvatarBDToolBar extends TToolBar {
         mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.PRAGMA].setEnabled(b);
         mgui.actions[TGUIAction.SAFETY_PRAGMA].setEnabled(b);
+        mgui.actions[TGUIAction.PERFORMANCE_PRAGMA].setEnabled(b);
         mgui.actions[TGUIAction.AVATAR_FIREWALL].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
@@ -113,6 +114,9 @@ public class AvatarBDToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 
         button = this.add(mgui.actions[TGUIAction.SAFETY_PRAGMA]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        button = this.add(mgui.actions[TGUIAction.PERFORMANCE_PRAGMA]);
         button.addMouseListener(mgui.mouseHandler);
 
         button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
