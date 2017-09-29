@@ -251,6 +251,10 @@ public class AvatarDesignPanelTranslator {
 		AvatarActionOnSignal st1;
 		List<String> id1= new ArrayList<String>();
 		bl1 = as.getBlockWithName(block1);
+		if (bl1==null){
+			TraceManager.addDev("Block " + block1 + " in pragma does not exist");
+			return null;
+		}
 		AvatarStateMachine asm = bl1.getStateMachine();
 		st1 = asm.getAOSWithName(state1);
 		if (bl1 ==null || st1 ==null){
@@ -285,6 +289,10 @@ public class AvatarDesignPanelTranslator {
 		AvatarActionOnSignal st2;
 
 		bl2 = as.getBlockWithName(block2);
+		if (bl2==null){
+			TraceManager.addDev("Block " + block2 + " in pragma does not exist");
+			return null;
+		}
 		asm = bl2.getStateMachine();
 		st2 = asm.getAOSWithName(state2);
 		List<String> id2= new ArrayList<String>();
