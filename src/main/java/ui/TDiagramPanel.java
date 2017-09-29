@@ -3443,4 +3443,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     		repaint();
     	}
     }
+    
+    public void setComponentPointed(TGComponent tgc) {
+    	componentPointed = tgc;
+    }
 }
