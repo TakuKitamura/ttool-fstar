@@ -295,7 +295,7 @@ public class AvatarPragmaTests {
 	
 	@Test
 	public void testPublicPragmaCreation(){
-		res = AvatarPragma.createFromString("Public A.key1 B.key2", bdpragma ,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
+		res = AvatarPragma.createFromString("Public A.key1 B.key2", bdpragma, blocks, typeAttributesMap, nameTypeMap, errorAcc);	
 		//Check no error
 		assertEquals(res.size(),1);
 		//Check Type
@@ -305,84 +305,82 @@ public class AvatarPragmaTests {
 		assertEquals(((AvatarPragmaPublic) res.get(0)).getArgs().get(0).getName(),"key1");
 		assertEquals(((AvatarPragmaPublic) res.get(0)).getArgs().get(1).getName(),"key2");
 	}
+
+	@Test
+	public void testPragmaAuthenticityFailWrongArgs(){
+		//Fail if wrong # of arguments
+		res = AvatarPragma.createFromString("Authenticity A.key1 A.key2 B.key1 C.attr", bdpragma, blocks, typeAttributesMap, nameTypeMap, errorAcc);	
+		assertEquals(res.size(),0);
+		res = AvatarPragma.createFromString("Authenticity C.attr", bdpragma, blocks, typeAttributesMap, nameTypeMap, errorAcc);	
+		assertEquals(res.size(),0);
+	}
+
+	@Test
+	public void testPragmaAuthenticityFailMissingState(){
+		//Fail if lack of state
+		res = AvatarPragma.createFromString("Authenticity A.state.attr", bdpragma, blocks, typeAttributesMap, nameTypeMap, errorAcc);	
+		assertEquals(res.size(),0);
+	}
+	
+	@Test	
+	public void testPragmaAuthenticityFailAttributeWrongType(){
+		//Fail if attributes are not same type
+		res = AvatarPragma.createFromString("Authenticity A.a1.key1 C.c1.m", bdpragma, blocks, typeAttributesMap, nameTypeMap, errorAcc);
+		assertEquals(res.size(),0);
+		res = AvatarPragma.createFromString("Authenticity B.b1.m C.c1.d", bdpragma, blocks, typeAttributesMap, nameTypeMap, errorAcc);
+		assertEquals(res.size(),0);
+		res = AvatarPragma.createFromString("Authenticity B.b1.key2 A.a1.key1", bdpragma, blocks, typeAttributesMap, nameTypeMap, errorAcc);
+		assertEquals(res.size(),0);	
+	}
+	
+	@Test
+	public void testPragmaAuthenticityCreation(){
+		//Check no error
+		res = AvatarPragma.createFromString("Authenticity A.a1.key1 C.c1.attr", bdpragma, blocks, typeAttributesMap, nameTypeMap, errorAcc);	
+		assertEquals(res.size(),1);
+		//Check Type
+		assertTrue(res.get(0) instanceof AvatarPragmaAuthenticity);
+		//Check Attributes
+		AvatarPragmaAuthenticity res3 = (AvatarPragmaAuthenticity) res.get(0);
+		assertEquals(res3.getAttrA().getAttribute().getName(),"key1");
+		assertEquals(res3.getAttrB().getAttribute().getName(),"attr");
+		assertEquals(res3.getAttrA().getState().getName(),"a1");
+		assertEquals(res3.getAttrB().getState().getName(),"c1");
+	}
+	
+	@Test
+	public void testPragmaAuthenticityMultipleCreation(){
+		res = AvatarPragma.createFromString("Authenticity B.b1.m C.c1.m", bdpragma, blocks, typeAttributesMap, nameTypeMap, errorAcc);	
+		assertEquals(res.size(),2);
+		AvatarPragmaAuthenticity res3 = (AvatarPragmaAuthenticity) res.get(1);
+		assertEquals(res3.getAttrA().getAttribute().getName(),"m__b");
+		assertEquals(res3.getAttrB().getAttribute().getName(),"m__b");
+		assertEquals(res3.getAttrA().getState().getName(),"b1");
+		assertEquals(res3.getAttrB().getState().getName(),"c1");
+
+		res3 = (AvatarPragmaAuthenticity) res.get(0);
+		assertEquals(res3.getAttrA().getAttribute().getName(),"m__a");
+		assertEquals(res3.getAttrB().getAttribute().getName(),"m__a");
+		assertEquals(res3.getAttrA().getState().getName(),"b1");
+		assertEquals(res3.getAttrB().getState().getName(),"c1");
+	}
+
+	@Test
+	public void testPragmaConstant(){
+		res = AvatarPragma.createFromString("PublicConstant 1 0 a b", bdpragma, blocks, typeAttributesMap, nameTypeMap, errorAcc);	
+		assertTrue(res.get(0) instanceof AvatarPragmaConstant);
+		AvatarPragmaConstant res5 = (AvatarPragmaConstant) res.get(0);
+        assertEquals(res5.getConstants().size(),2);
+		String[] attrs = new String[]{"a","b"};
+		for (int i=0; i< res5.getConstants().size(); i++){
+            assertEquals(res5.getConstants().get(i).getName(),attrs[i]);
+		}
+	}
 	
 	public void	test(){
-/*
-	
-
-
-	//Test Public
-	this.updateDigest("Public Tests");
-	
-	this.updateDigest("-------------------------------------");
-	
-	//Test Authenticity
-	this.updateDigest("Authenticity Tests");
-	//Fail if wrong # of args
-	res = AvatarPragma.createFromString("Authenticity A.key1 A.key2 B.key1 C.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
-	this.updateDigest("Authenticity args count " + (res.size()==0));
-	res = AvatarPragma.createFromString("Authenticity C.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
-	this.updateDigest("Authenticity args count " + (res.size()==0));
-	//Fail if lack of state
-	res = AvatarPragma.createFromString("Authenticity A.state.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
-	this.updateDigest("Missing State " + (res.size()==0));
-	//Fail if attributes are not same type
-	res = AvatarPragma.createFromString("Authenticity A.a1.key1 C.c1.m", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
-	this.updateDigest("Incompatible types " + (res.size()==0));
-	res = AvatarPragma.createFromString("Authenticity B.b1.m C.c1.d", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
-	this.updateDigest("Incompatible types " + (res.size()==0));
-	res = AvatarPragma.createFromString("Authenticity B.b1.key2 A.a1.key1", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);
-	this.updateDigest("Incompatible types " + (res.size()==0));	
-	//Check no error
-	res = AvatarPragma.createFromString("Authenticity A.a1.key1 C.c1.attr", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
-	this.updateDigest("No error: "+ (res.size()!=0));
-	//Check Type
-	this.updateDigest("Right Type: " + (res.get(0) instanceof AvatarPragmaAuthenticity));
-
-	//Attribute
-	AvatarPragmaAuthenticity res3 = (AvatarPragmaAuthenticity) res.get(0);
-	// this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
-	//this.updateDigest("Attr "+ res3.getAttrA());
-	//this.updateDigest("Attr "+ res3.getAttrB());
-	this.updateDigest("Attr Name "+ res3.getAttrA().getName());
-	this.updateDigest("Attr Name "+ res3.getAttrB().getName());
-	this.updateDigest("Attr State "+ res3.getAttrA().getState());
-	this.updateDigest("Attr State "+ res3.getAttrB().getState());
-	//Check multi-creation
-	res = AvatarPragma.createFromString("Authenticity B.b1.m C.c1.m", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
-	this.updateDigest("Multiple creation pass: "+ (res.size()==2));
-	res3 = (AvatarPragmaAuthenticity) res.get(1);
-	// this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
-	//this.updateDigest("Attr "+ res3.getAttrA());
-	//this.updateDigest("Attr "+ res3.getAttrB());
-	this.updateDigest("Attr Name "+ res3.getAttrA().getName());
-	this.updateDigest("Attr Name "+ res3.getAttrB().getName());
-	this.updateDigest("Attr State "+ res3.getAttrA().getState());
-	this.updateDigest("Attr State "+ res3.getAttrB().getState());
-	res3 = (AvatarPragmaAuthenticity) res.get(0);
-	// this.updateDigest("# of Attributes: " + (res3.getArgs().size() == 2));
-	this.updateDigest("Attr Name "+ res3.getAttrA().getName());
-	this.updateDigest("Attr Name "+ res3.getAttrB().getName());
-	this.updateDigest("Attr State "+ res3.getAttrA().getState());
-	this.updateDigest("Attr State "+ res3.getAttrB().getState());
-	this.updateDigest("-------------------------------------");
-	
-
-	//Test Constants
-	this.updateDigest("Constant Tests");
-	res = AvatarPragma.createFromString("PublicConstant 1 0 a b", null,blocks, typeAttributesMap, nameTypeMap, errorAcc);	
-	this.updateDigest("Right type :" + (res.get(0) instanceof AvatarPragmaConstant));
-	AvatarPragmaConstant res5 = (AvatarPragmaConstant) res.get(0);
-        this.updateDigest("Right number of constants " + (res5.getConstants().size() == 4));
-	for (int i=0; i< res5.getConstants().size(); i++){
-            this.updateDigest("Constant " + res5.getConstants().get(i).getName());
-	}
-	this.updateDigest("-------------------------------------");
-*/
-
-	//Avatar Specification Tests
 	
     }
+
     public static void main(String[] args){
         AvatarPragmaTests apt = new AvatarPragmaTests ();
         //apt.runTest ();

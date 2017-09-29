@@ -271,6 +271,7 @@ public class AvatarDesignPanelTranslator {
 
 		String p2 = pragma.split(",")[1].split("\\)")[0];
 		if (!p2.contains(".")){
+
 			TraceManager.addDev("Invalid block.signal format");
 			return null;
 		}
@@ -324,6 +325,7 @@ public class AvatarDesignPanelTranslator {
 			}
 		}
 		else {
+
 			TraceManager.addDev("No latency expression found");
 			return null;
 		}

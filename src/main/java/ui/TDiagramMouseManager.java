@@ -166,7 +166,8 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                             tdp.addingTGConnector();
                             cp = p1;
                             tdp.setAddingTGConnector(e.getX(), e.getY());
-                            tdp.repaint();
+                            //tdp.repaint();
+                            setSelection(p1.container.getX(), p1.container.getY());
                         }
                     }
                 }
@@ -285,6 +286,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                 //System.out.println("change2");
                 tdp.getGUI().changeMade(tdp, TDiagramPanel.MOVE_COMPONENT);
             }
+            setSelection(e.getX(), e.getY());
         }
 
         if (tdp.mode == TDiagramPanel.SELECTING_COMPONENTS) {
@@ -480,14 +482,16 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
              }
  	    }
  	    if (tgc != null) { //A component has been clicked
-     	   lastSelectedComponent = tgc;
-     	   tdp.setSelect(true);
-     	   tgc.singleClick(tdp.getGUI().getFrame(), x, y);       	   
+ 	        tdp.getGUI().setMode(MainGUI.COMPONENT_SELECTED);
+     	    lastSelectedComponent = tgc;
+     	    tdp.setSelect(true);
+     	    tgc.singleClick(tdp.getGUI().getFrame(), x, y);       	   
         }
         else {
-     	   tdp.setSelect(false);
-     	   lastSelectedComponent = null;
-     	   tdp.componentPointed = null;
+        	tdp.getGUI().setMode(MainGUI.OPENED);
+     	    tdp.setSelect(false);
+     	    lastSelectedComponent = null;
+     	    tdp.componentPointed = null;
         }
         tdp.getGUI().changeMade(tdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
 	    tdp.repaint();
@@ -545,10 +549,12 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             }
         }
 
-        if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT) && (selectedComponent == false) && (!tdp.isSelect())){
-            byte info = tdp.highlightComponent(e.getX(), e.getY());
-            if (info > 1) {
-                tgc = tdp.componentPointed();
+        if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT)){
+            byte info = 0;
+        	if (!tdp.isSelect())
+        		info = tdp.highlightComponent(e.getX(), e.getY());
+            if (info > 1 || tdp.isSelect()) {
+            	tgc = tdp.componentPointed();
                 if (tgc.isUserResizable()) {
                     setCursor(tgc.getResizeZone(e.getX(), e.getY()));
                 } else {
