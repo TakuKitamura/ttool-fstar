@@ -7577,17 +7577,25 @@ public class GTURTLEModeling {
         //TraceManager.addDev("Loading seq diag1");
         ui.sd.SequenceDiagramPanel sdp = mgui.getSequenceDiagramPanel(indexAnalysis, name);
         //TraceManager.addDev("Loading seq diag2");
+        ui.sd2.SequenceDiagramPanel sdp2 = mgui.getSequenceDiagramPanelZV(indexAnalysis, name);
+        
+        if (sdp != null) {
+        	sdp.removeAll();
+            //TraceManager.addDev("Loading seq diag4");
 
-        if (sdp == null) {
-            throw new MalformedModelingException();
+            loadDiagram(elt, sdp);
+            //TraceManager.addDev("Loading seq diag5");
         }
+        else if (sdp2 != null) {
+        	sdp2.removeAll();
+
+            loadDiagram(elt, sdp2);
+        }
+        else
+        	throw new MalformedModelingException();
         //TraceManager.addDev("Loading seq diag3");
 
-        sdp.removeAll();
-        //TraceManager.addDev("Loading seq diag4");
-
-        loadDiagram(elt, sdp);
-        //TraceManager.addDev("Loading seq diag5");
+        
     }
 
     public void loadSequenceDiagramZV(Element elt, int indexAnalysis) throws  MalformedModelingException, SAXException {
