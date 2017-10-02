@@ -482,7 +482,11 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
              }
  	    }
  	    if (tgc != null) { //A component has been clicked
- 	        tdp.getGUI().setMode(MainGUI.COMPONENT_SELECTED);
+ 	    	if (!(tgc instanceof TGConnector) && tgc.moveable)
+ 	    		tdp.getGUI().setMode(MainGUI.COMPONENT_SELECTED);
+ 	    	else
+ 	    		tdp.getGUI().setMode(MainGUI.OPENED);
+ 	    	
      	    lastSelectedComponent = tgc;
      	    tdp.setSelect(true);
      	    tgc.singleClick(tdp.getGUI().getFrame(), x, y);       	   
