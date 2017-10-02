@@ -164,7 +164,8 @@ public class TMLCPRefSD extends TGCOneLineText {
       }
 			else {
 				( (TMLCPPanel)tdp ).createTMLCPSequenceDiagram( name );
-			}   
+			}
+      tdp.getMouseManager().setSelection(-1, -1);
       return true;
     }
 	

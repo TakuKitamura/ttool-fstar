@@ -158,6 +158,7 @@ public class IODRefSD extends TGCOneLineText {
         } else {
             ((InteractionOverviewDiagramPanel)tdp).createSequenceDiagram(value);
         }   
+        tdp.getMouseManager().setSelection(-1, -1);
         return true;
     }
 	
