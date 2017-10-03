@@ -267,18 +267,22 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             transTimes.put(id, new ArrayList<String>());
         }
 		for (AvatarPragmaLatency latencyPragma: _avspec.getLatencyPragmas()){
-			if (!nameLatencyMap.containsKey(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0))){
-				SimulationLatency sl = new SimulationLatency();
-				sl.setTransaction1(latencyPragma.getId1().get(0));
-				sl.setTransaction2(latencyPragma.getId2().get(0));
-				sl.addPragma(latencyPragma);
-				nameLatencyMap.put(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0), sl);
-				latencies.add(sl);
-				//toCheck.add(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0));
-				updateTransactionsTable();
-			}
-			else {
-				nameLatencyMap.get(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0)).addPragma(latencyPragma);
+			for (String id1: latencyPragma.getId1()){
+				for (String id2: latencyPragma.getId2()){
+					if (!nameLatencyMap.containsKey(id1 + "--"+id2)){
+						SimulationLatency sl = new SimulationLatency();
+						sl.setTransaction1(id1);
+						sl.setTransaction2(id2);
+						sl.addPragma(latencyPragma);
+						nameLatencyMap.put(id1 + "--"+id2, sl);
+						latencies.add(sl);
+						//toCheck.add(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0));
+						updateTransactionsTable();
+					}
+					else {
+						nameLatencyMap.get(id1 + "--"+id2).addPragma(latencyPragma);
+					}
+				}
 			}
 		}
         makeComponents();

@@ -222,7 +222,6 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public void addLatencyPragma(AvatarPragmaLatency _pragma) {
-		System.out.println(_pragma);
         latency_pragmas.add(_pragma);
     }
 

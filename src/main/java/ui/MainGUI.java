@@ -519,7 +519,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
 
-    private void initActions() {
+    public void initActions() {
         actions = new TGUIAction[TGUIAction.NB_ACTION];
         for(int i=0; i<TGUIAction.NB_ACTION; i++) {
             actions[i] = new TGUIAction(i);
@@ -6832,6 +6832,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void setPanelMode() {
         int index;
         TURTLEPanel tp = getCurrentTURTLEPanel();
+		if (tp==null){
+			return;
+		}
         index = tp.tabbedPane.getSelectedIndex();
 
         if (index < tp.panels.size() -1) {

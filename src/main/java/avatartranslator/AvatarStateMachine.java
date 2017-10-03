@@ -1080,17 +1080,17 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
 
-	public AvatarActionOnSignal getAOSWithName(String _name){
+	public List<AvatarActionOnSignal> getAllAOSWithName(String _name){
+		List<AvatarActionOnSignal> list = new ArrayList<AvatarActionOnSignal>();
 		for(AvatarStateMachineElement element: elements) {
             if (element instanceof AvatarActionOnSignal) {
 				AvatarActionOnSignal aaos = (AvatarActionOnSignal) element;
-				System.out.println("element " + aaos.getSignal().getName());
                 if (aaos.getSignal().getName().compareTo(_name) == 0) {
-                    return aaos;
+                    list.add(aaos);
                 }
             }
         }
-        return null;
+        return list;
 	}
 
     // All transitions reaching a state that has an internal start state

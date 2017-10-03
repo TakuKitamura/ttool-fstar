@@ -68,7 +68,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 
     protected String[] values;
     protected LinkedList<String> properties;
-    protected int textX = 25;
+    protected int textX = 40;
     protected int textY = 5;
     protected int marginY = 20;
     protected int marginX = 20;
@@ -82,12 +82,9 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
     private Font myFont;//, myFontB;
 //    private int maxFontSize = 30;
 //    private int minFontSize = 4;
-    public final static int PROVED_TRUE = 1;
-    public final static int PROVED_FALSE = 0; 
-	public final static int PROVED_ERROR=2;
     private int currentFontSize = -1;
     private final String[] pPragma = {"A[]", "A<>", "E[]", "E<>"};
-    public Map<String, Integer> verifMap = new HashMap<String, Integer>();
+    public Map<String, String> verifMap = new HashMap<String, String>();
 
     protected Graphics graphics;
     public AvatarBDPerformancePragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -223,7 +220,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 	    if (s.isEmpty() || !s.contains("Latency") ){
 		//Ignore
 	    }
-		else if (s.contains("Latency") && (s.contains("<") || s.contains(">")) ) {
+		else if (s.contains("Latency") && (s.contains("<") || s.contains(">") || s.contains("?")) ) {
 			properties.add(s);
 		}
 	    else {
@@ -310,36 +307,41 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
     private void drawVerification(String s, Graphics g, int _x, int _y){
         Color c = g.getColor();
      //   Color c1;
-	int status;
-	if (verifMap.containsKey(s)){
-	    status = verifMap.get(s);
-	    if (status== PROVED_TRUE){
-		g.setColor(Color.green);
-		int[] xp1 = new int[]{_x-20, _x-18, _x-12, _x-14};
-		int[] yp1 = new int[]{_y-3, _y-5, _y-1, _y+1};
-		int[] xp2 = new int[]{_x-14, _x-12, _x-3, _x-5};
-		int[] yp2 = new int[]{_y-1, _y+1, _y-8, _y-10};	
-		g.fillPolygon(xp1, yp1, 4);
-		g.fillPolygon(xp2, yp2, 4);
-	    } 
-
-		else if (status==PROVED_ERROR){
-		Font f= g.getFont();
-		g.setFont(new Font("TimesRoman", Font.BOLD, 14)); 
-		g.drawString("?",_x-15,_y);
-		g.setFont(f);
+		String status;
+		if (verifMap.containsKey(s)){
+	    	status = verifMap.get(s);
+	    	if (status.equals("PROVED_TRUE")){
+				g.setColor(Color.green);
+				int[] xp1 = new int[]{_x-35, _x-33, _x-27, _x-29};
+				int[] yp1 = new int[]{_y-3, _y-5, _y-1, _y+1};
+				int[] xp2 = new int[]{_x-29, _x-27, _x-18, _x-20};
+				int[] yp2 = new int[]{_y-1, _y+1, _y-8, _y-10};	
+				g.fillPolygon(xp1, yp1, 4);
+				g.fillPolygon(xp2, yp2, 4);
+	    	} 
+			else if (status.equals("PROVED_ERROR")){
+				Font f= g.getFont();
+				g.setFont(new Font("TimesRoman", Font.BOLD, 14)); 
+				g.drawString("?",_x-30,_y);
+				g.setFont(f);
+			}
+	    	else if (status.equals("PROVED_FALSE")){
+				g.setColor(Color.red);
+				int[] xp1 = new int[]{_x-32, _x-30, _x-21, _x-23};
+				int[] yp1 = new int[]{_y-12, _y-10, _y-2, _y};
+				int[] xp2 = new int[]{_x-30, _x-32, _x-23, _x-21};
+				int[] yp2 = new int[]{_y, _y-2, _y-12, _y-10};	
+				g.fillPolygon(xp1, yp1, 4);
+				g.fillPolygon(xp2, yp2, 4);
+	    	}
+			else {
+				Font f= g.getFont();
+				g.setFont(new Font("TimesRoman", Font.BOLD, 10)); 
+				g.drawString(status,_x-35,_y);
+				g.setFont(f);
+			}	
 		}
-	    else {
-		g.setColor(Color.red);
-		int[] xp1 = new int[]{_x-17, _x-15, _x-6, _x-8};
-		int[] yp1 = new int[]{_y-12, _y-10, _y-2, _y};
-		int[] xp2 = new int[]{_x-15, _x-17, _x-8, _x-6};
-		int[] yp2 = new int[]{_y, _y-2, _y-12, _y-10};	
-		g.fillPolygon(xp1, yp1, 4);
-		g.fillPolygon(xp2, yp2, 4);
-	    }
-	}
-	g.setColor(c);
+		g.setColor(c);
     }
 
     @Override

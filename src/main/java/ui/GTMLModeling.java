@@ -1598,7 +1598,7 @@ public class GTMLModeling  {
                 if (!((TMLADEncrypt)tgc).securityContext.isEmpty()){
                     SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).encTime, ((TMLADEncrypt)tgc).decTime, ((TMLADEncrypt)tgc).nonce, ((TMLADEncrypt)tgc).formula, ((TMLADEncrypt)tgc).key);
                     securityPatterns.put(securityPattern.name, securityPattern);
-                    tmlm.addSec(securityPattern);
+                    tmlm.addSecurityPattern(securityPattern);
                     ArrayList<TMLTask> l = new ArrayList<TMLTask>();
                     tmlm.securityTaskMap.put(securityPattern, l);
                     TraceManager.addDev("Adding Security Pattern " + securityPattern.name);
