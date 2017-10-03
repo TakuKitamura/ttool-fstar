@@ -8182,15 +8182,18 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
 
         public void mousePressed(MouseEvent e) {
-        	activetdp.tdmm.setSelection(-1, -1);
+        	if (activetdp != null)
+        		activetdp.tdmm.setSelection(-1, -1);
             checkForPopup(e);
         }
         public void mouseReleased(MouseEvent e) {
-        	activetdp.tdmm.setSelection(-1, -1);
+        	if (activetdp != null)
+        		activetdp.tdmm.setSelection(-1, -1);
             checkForPopup(e);
         }
         public void mouseClicked(MouseEvent e) {
-        	activetdp.tdmm.setSelection(-1, -1);
+        	if (activetdp != null)
+        		activetdp.tdmm.setSelection(-1, -1);
             checkForPopup(e);
         }
 
