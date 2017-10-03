@@ -161,6 +161,7 @@ public class IODRefIOD extends TGCOneLineText {
         } else {
             ((InteractionOverviewDiagramPanel)tdp).createIODiagram(value);
         }
+        tdp.getMouseManager().setSelection(-1, -1);
         return true;
     }
 	

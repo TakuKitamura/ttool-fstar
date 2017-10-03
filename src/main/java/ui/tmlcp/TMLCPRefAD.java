@@ -166,6 +166,7 @@ public class TMLCPRefAD extends TGCOneLineText {
         else {
             ( (TMLCPPanel)tdp ).createTMLCPDiagram( name );
         }
+        tdp.getMouseManager().setSelection(-1, -1);
         return true;
     }
 

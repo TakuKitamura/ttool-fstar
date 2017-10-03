@@ -3448,4 +3448,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void setComponentPointed(TGComponent tgc) {
     	componentPointed = tgc;
     }
+    
+    public TDiagramMouseManager getMouseManager() {
+    	return tdmm;
+    }
 }

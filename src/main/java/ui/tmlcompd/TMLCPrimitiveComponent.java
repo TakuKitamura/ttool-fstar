@@ -294,6 +294,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         // On the icon?
         if (iconIsDrawn) {
             if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, iconSize, iconSize)) {
+            	tdp.getMouseManager().setSelection(-1, -1);
                 tdp.selectTab(getValue());
                 return true;
             }

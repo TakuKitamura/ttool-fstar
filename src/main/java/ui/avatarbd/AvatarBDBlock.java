@@ -566,6 +566,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         int textX = (int) (this.textX * this.tdp.getZoom ());
         if (iconIsDrawn) {
             if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, iconSize, iconSize)) {
+            	tdp.getMouseManager().setSelection(-1, -1);
                 tdp.selectTab(getValue());
                 return true;
             }

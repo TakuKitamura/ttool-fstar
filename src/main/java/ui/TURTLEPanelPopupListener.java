@@ -75,14 +75,17 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     }
 
     public void mousePressed(MouseEvent e) {
+    	mgui.getCurrentTDiagramPanel().getMouseManager().setSelection(-1, -1);
         checkForPopup(e);
     }
     
     public void mouseReleased(MouseEvent e) {
+    	mgui.getCurrentTDiagramPanel().getMouseManager().setSelection(-1, -1);
         checkForPopup(e);
     }
     
     public void mouseClicked(MouseEvent e) {
+    	mgui.getCurrentTDiagramPanel().getMouseManager().setSelection(-1, -1);
         checkForPopup(e);
     }
 
