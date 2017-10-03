@@ -68,6 +68,10 @@ public class AvatarSafetyTests {
 	AvatarDesignPanelTranslator adpt;
 	AvatarPragmaLatency pragma;
 
+	avatartranslator.AvatarSignal sig2;
+	avatartranslator.AvatarSignal sig;
+	
+
     public AvatarSafetyTests () {
        // super ("AvatarSafety", true);
     }
@@ -79,7 +83,8 @@ public class AvatarSafetyTests {
 		blocks = new ArrayList<AvatarBDBlock>();
 		as = new AvatarSpecification("avspec",null);
 		AvatarBlock A = new AvatarBlock("A", null, null);
-		avatartranslator.AvatarSignal sig = new avatartranslator.AvatarSignal("sig", 0, null);
+
+		sig = new avatartranslator.AvatarSignal("sig", 0, null);
 		A.addSignal(sig);
 		AvatarStateMachine Aasm = A.getStateMachine();
 		AvatarActionOnSignal aaos = new AvatarActionOnSignal("action_on_signal", sig, null);
@@ -92,7 +97,7 @@ public class AvatarSafetyTests {
 		AvatarBlock B = new AvatarBlock("B", null, null);
 		AvatarStateMachine Basm = B.getStateMachine();
 
-		avatartranslator.AvatarSignal sig2 = new avatartranslator.AvatarSignal("sig2", 0, null);
+		sig2 = new avatartranslator.AvatarSignal("sig2", 0, null);
 		AvatarActionOnSignal aaos2= new AvatarActionOnSignal("action_on_signal", sig2, null);
 		aaos2.setCheckLatency(true);
 		Basm.addElement(aaos2);
@@ -117,24 +122,24 @@ public class AvatarSafetyTests {
 
 	@Test
 	public void testFailIfLatencyPragmaEmpty(){
-		pragma = adpt.checkLatencyPragma("", blocks, as, null);
+		pragma = adpt.checkPerformancePragma("", blocks, as, null);
 		assertNull(pragma);
 	}
 	
 	@Test
 	public void testFailIfBadFormat(){
 		//Fail if does not contain 'Latency()'
-		pragma = adpt.checkLatencyPragma("Lat(b,s)<1", blocks, as, null);
+		pragma = adpt.checkPerformancePragma("Lat(b,s)<1", blocks, as, null);
 		assertNull(pragma);
 		//Fail if unmatched ')'
-		pragma = adpt.checkLatencyPragma("Latency(b,s<1", blocks, as, null);
+		pragma = adpt.checkPerformancePragma("Latency(b,s<1", blocks, as, null);
 		assertNull(pragma);
 	}
 
 	@Test
 	public void testFormLessThanPragma(){
 		//Test : Form pragma with less than expression
-		pragma = adpt.checkLatencyPragma("Latency(A.sig,B.sig2)<1", blocks, as, null);
+		pragma = adpt.checkPerformancePragma("Latency(A.sig,B.sig2)<1", blocks, as, null);
 		assertTrue(pragma !=null);
 		//Check Block names
 		assertEquals(pragma.getBlock1().getName(),"A");
@@ -155,7 +160,7 @@ public class AvatarSafetyTests {
 	@Test
 	public void testFormGreaterThanPragma(){
 		//Test : Form pragma with greater than expression
-		pragma = adpt.checkLatencyPragma("Latency(B.sig2,A.sig)>231", blocks, as, null);
+		pragma = adpt.checkPerformancePragma("Latency(B.sig2,A.sig)>231", blocks, as, null);
 		assertTrue(pragma !=null);
 		//Check symbol
 		assertEquals(pragma.getSymbolType(),AvatarPragmaLatency.greaterThan);
@@ -165,28 +170,49 @@ public class AvatarSafetyTests {
 
 	@Test
 	public void testFailWrongNumberFormat(){
-		pragma = adpt.checkLatencyPragma("Latency(B.sig2,A.sig)>a231", blocks, as, null);
+		pragma = adpt.checkPerformancePragma("Latency(B.sig2,A.sig)>a231", blocks, as, null);
 		assertNull(pragma);
 	}
 
 	@Test
 	public void testFailMissingBlock(){
-		pragma = adpt.checkLatencyPragma("Latency(Bob.sig2,A.sig)>231", blocks, as, null);
+		pragma = adpt.checkPerformancePragma("Latency(Bob.sig2,A.sig)>231", blocks, as, null);
 		assertNull(pragma);
-		pragma = adpt.checkLatencyPragma("Latency(B.sig2,Alice.sig)>231", blocks, as, null);
+		pragma = adpt.checkPerformancePragma("Latency(B.sig2,Alice.sig)>231", blocks, as, null);
 		assertNull(pragma);
 	}
 
 	@Test
 	public void testFailMissingState(){
-		pragma = adpt.checkLatencyPragma("Latency(B.state,A.sig)>231", blocks, as, null);
+		pragma = adpt.checkPerformancePragma("Latency(B.state,A.sig)>231", blocks, as, null);
 		assertNull(pragma);
-		pragma = adpt.checkLatencyPragma("Latency(B.sig2,A.sig2)>231", blocks, as, null);
+		pragma = adpt.checkPerformancePragma("Latency(B.sig2,A.sig2)>231", blocks, as, null);
 		assertNull(pragma);
 	}
 
+	@Test
+	public void testFormQueryPragma(){
+		pragma = adpt.checkPerformancePragma("Latency(B.sig2,A.sig)?", blocks, as, null);
+		assertTrue(pragma!=null);
+	}
 
 
+	@Test
+	public void testMultipleIdsPerSignal(){
+		AvatarBlock A = as.getBlockWithName("A");
+		AvatarStateMachine Aasm = A.getStateMachine();
+		AvatarActionOnSignal aaos = new AvatarActionOnSignal("action_on_signal", sig, null);
+		aaos.setCheckLatency(true);
+		Aasm.addElement(aaos);
+		Aasm.getListOfElements().get(0).addNext(aaos);
+
+		//Form pragma
+		pragma = adpt.checkPerformancePragma("Latency(B.sig2,A.sig)>231", blocks, as, null);
+
+		assertEquals(pragma.getId1().size(),1);
+		assertEquals(pragma.getId2().size(),2);	
+	
+	}
     
     public static void main(String[] args){
         AvatarSafetyTests ast = new AvatarSafetyTests ();

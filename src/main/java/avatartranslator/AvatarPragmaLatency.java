@@ -57,6 +57,7 @@ public class AvatarPragmaLatency extends AvatarPragma {
 	private int symbolType;
 	public static final int lessThan =1;
 	public static final int greaterThan=2;
+	public static final int query=3;
 	private int time;
 	private List<String> id1;
 	private List<String> id2;

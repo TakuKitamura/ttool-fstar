@@ -80,9 +80,8 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
 //Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
 
     public class SuggestionPanel {
-	private final String[] pragma = {"A[]", "E<>", "A<>", "E[]", "min(", "max("};
 	//Form list of all blocks
-	//For each block, create a list of all attribute strings and states
+	//For each block, create a list of all states and signals
 	
         private JList list;
         private JPopupMenu popupMenu;
@@ -113,15 +112,11 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
 
 	private JList createSuggestionList(int linePosition, final int position, final String subWord) {
 	    ArrayList<String> matches = new ArrayList<String>();
-	    if (linePosition<3){
-	        for (String p: pragma) {
-          	    if (p.startsWith(subWord)){
-					matches.add(p);
-			    }
-			}
+	    if (linePosition<6){
+	        matches.add("Latency(");
 	    }
 		
-		if (!subWord.contains(".")){
+		else if (!subWord.contains(".")){
 			for (String block: blockAttributeMap.keySet()){
 				if (block.startsWith(subWord)){
 					matches.add(block);
@@ -220,7 +215,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
         String text = textarea.getText();
         int start = Math.max(0, position - 1);
         while (start > 0) {
-            if (!Character.isWhitespace(text.charAt(start)) && !text.substring(start,start+1).equals("(") && !text.substring(start,start+1).equals(")") && !text.substring(start,start+1).equals(",") ) {
+            if (!text.substring(start,start+1).equals("(") && !text.substring(start,start+1).equals(")") && !text.substring(start,start+1).equals(",") ) {
                 start--;
             } else {
                 start++;

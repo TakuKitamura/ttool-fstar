@@ -408,21 +408,25 @@ public class AvatarDesignPanel extends TURTLEPanel {
 								}				
 								if (pragma.getSymbolType() == AvatarPragmaLatency.lessThan){
 									if (time<refTime){
-										bdpragma.verifMap.put(s, AvatarBDSafetyPragma.PROVED_TRUE);
+										bdpragma.verifMap.put(s, "PROVED_TRUE");
 										//mark as true
 									}
 									else {
-										bdpragma.verifMap.put(s, AvatarBDSafetyPragma.PROVED_FALSE);
+										bdpragma.verifMap.put(s, "PROVED_FALSE");
 									}
 								}
-								else {
+								else if (pragma.getSymbolType() == AvatarPragmaLatency.greaterThan) {
 									if (time>refTime){
-										bdpragma.verifMap.put(s, AvatarBDSafetyPragma.PROVED_TRUE);
+										bdpragma.verifMap.put(s, "PROVED_TRUE");
 										//mark as true
 									}
 									else {
-										bdpragma.verifMap.put(s, AvatarBDSafetyPragma.PROVED_FALSE);
+										bdpragma.verifMap.put(s, "PROVED_FALSE");
 									}
+								}
+								else if (pragma.getSymbolType() == AvatarPragmaLatency.query) {
+									//Draw average time on verif map
+									bdpragma.verifMap.put(s,Float.toString(time));
 								}	
 							}
 						}

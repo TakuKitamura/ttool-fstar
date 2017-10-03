@@ -99,7 +99,7 @@ public class TMLModeling<E> {
         }
     }
 
-    public void addSec(SecurityPattern sp){
+    public void addSecurityPattern(SecurityPattern sp){
         if (!secPatterns.contains(sp)){
             secPatterns.add(sp);
         }

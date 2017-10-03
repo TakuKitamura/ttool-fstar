@@ -130,7 +130,6 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         if (oldValue.compareTo(value) != 0) {
             setValue(value, g);
         }
-        g.drawString(value, x + textX , y + textY);
         g.drawRect(x, y, width, height);
         Color c = g.getColor();
 

@@ -220,7 +220,7 @@ public class AvatarDesignPanelTranslator {
 				tgpp = (AvatarBDPerformancePragma)tgc;
                 values = tgpp.getValues();
 				for (String s: values){
-					AvatarPragmaLatency pragma = checkLatencyPragma(s, _blocks, _as, tgc);
+					AvatarPragmaLatency pragma = checkPerformancePragma(s, _blocks, _as, tgc);
 					if (pragma!=null){
 						_as.addLatencyPragma(pragma);
 					}
@@ -229,8 +229,8 @@ public class AvatarDesignPanelTranslator {
         }
     }
 	
-	public AvatarPragmaLatency checkLatencyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc){	
-		if (_pragma.contains("=") || (!_pragma.contains(">") && !_pragma.contains("<")) || !_pragma.contains("Latency")){
+	public AvatarPragmaLatency checkPerformancePragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc){	
+		if (_pragma.contains("=") || (!_pragma.contains(">") && !_pragma.contains("<") && !_pragma.contains("?")) || !_pragma.contains("Latency")){
 			TraceManager.addDev("No latency expression found");
 			return null;
 		}
@@ -251,7 +251,7 @@ public class AvatarDesignPanelTranslator {
 		String block1 = p1.split("\\.")[0];
 		String state1 = p1.split("\\.")[1];
 		AvatarBlock bl1;
-		AvatarActionOnSignal st1;
+		AvatarActionOnSignal st1=null;
 		List<String> id1= new ArrayList<String>();
 		bl1 = as.getBlockWithName(block1);
 		if (bl1==null){
@@ -259,16 +259,17 @@ public class AvatarDesignPanelTranslator {
 			return null;
 		}
 		AvatarStateMachine asm = bl1.getStateMachine();
-		st1 = asm.getAOSWithName(state1);
-		if (bl1 ==null || st1 ==null){
-			TraceManager.addDev("State " + block1+ "." + state1 + " in pragma does not exist");
+		for (AvatarActionOnSignal aaos: asm.getAllAOSWithName(state1)){
+			if (aaos.getCheckLatency()){
+				id1.add((aaos.getSignal().isIn() ? "Receive signal" : "Send signal") +"-"+ aaos.getSignal().getName()+":"+aaos.getID());
+				st1= aaos;
+			}
+		}
+		if (id1.size()==0){
+			TraceManager.addDev("Cannot find checkable state " + block1+ "." + state1 + " in pragma");
 			return null;
 		}
-		if (!st1.getCheckLatency()){
-			TraceManager.addDev("State " + block1+ "." + state1 + " is not checkable");
-			return null;
-		}
-		id1.add((st1.getSignal().isIn() ? "Receive signal" : "Send signal") +"-"+ st1.getSignal().getName()+":"+st1.getID());
+		
 		
 
 		
@@ -289,7 +290,7 @@ public class AvatarDesignPanelTranslator {
 
 
 		AvatarBlock bl2;
-		AvatarActionOnSignal st2;
+		AvatarActionOnSignal st2=null;
 
 		bl2 = as.getBlockWithName(block2);
 		if (bl2==null){
@@ -297,19 +298,24 @@ public class AvatarDesignPanelTranslator {
 			return null;
 		}
 		asm = bl2.getStateMachine();
-		st2 = asm.getAOSWithName(state2);
-		List<String> id2= new ArrayList<String>();
-		if (bl2 ==null || st2 ==null){
-			TraceManager.addDev("State " + block2+ "." + state2 + " in pragma does not exist");
-			return null;
-		}
-		if (!st2.getCheckLatency()){
-			TraceManager.addDev("State " + block2+ "." + state2 + " is not checkable");
-			return null;
-		}
 
-		id2.add((st2.getSignal().isIn() ? "Receive signal" : "Send signal")+"-"+ st2.getSignal().getName()+":"+st2.getID());
+		List<String> id2= new ArrayList<String>();
+		for (AvatarActionOnSignal aaos: asm.getAllAOSWithName(state2)){
+
+			if (aaos.getCheckLatency()){
+				id2.add((aaos.getSignal().isIn() ? "Receive signal" : "Send signal")+"-"+ aaos.getSignal().getName()+":"+aaos.getID());
+				st2=aaos;	
+			}
+		}
 		
+		if (id2.size()==0){
+			TraceManager.addDev("Cannot find checkable state " + block2+ "." + state2 + " in pragma");
+			return null;
+		}
+	
+
+
+
 
 		String equation = pragma.split("\\)")[1];
 		equation = equation.replaceAll(" ","");
@@ -334,6 +340,9 @@ public class AvatarDesignPanelTranslator {
 				TraceManager.addDev("Invalid number format");
 				return null;
 			}
+		}
+		else if (equation.substring(0,1).equals("?")){
+			symbolType=AvatarPragmaLatency.query;
 		}
 		else {
 
