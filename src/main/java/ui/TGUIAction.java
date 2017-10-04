@@ -13,7 +13,7 @@
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
- * "http://www.cecill.info".
+ * "http://www.cecil.info".
  * 
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
@@ -677,7 +677,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_NEW] = new TAction("new-command", "New", IconManager.imgic20, IconManager.imgic21, "New", "New modeling", 'N');
         actions[ACT_NEW_DESIGN] = new TAction("new-command-design", "New design", IconManager.imgic14, IconManager.imgic14, "New design", "New TURTLE design", 0);
         actions[ACT_NEW_ANALYSIS] = new TAction("new-command-analysis", "New analysis", IconManager.imgic17, IconManager.imgic17, "New analysis", "New TURTLE analysis", 0);
-        actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TTooll model",'O', true);
+        actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TTool model",'O', true);
         actions[ACT_OPEN_FROM_NETWORK] = new TAction("open-command-from-network","Open from TTool repository", IconManager.imgic22, IconManager.imgic23, "Open from TTool repository", "Open an existing TTool model from the TTool repository (TTool website)",'0', true);
         actions[ACT_OPEN_LAST] = new TAction("openlast-command","Open file: " + ConfigurationTTool.LastOpenFile, IconManager.imgic22, IconManager.imgic23, "Open: " + ConfigurationTTool.LastOpenFile, "Open the lastly saved TTool model", 0);
         actions[ACT_MERGE] = new TAction("merge-command","Merge", IconManager.imgic22, IconManager.imgic23, "Merge", "Merge the current TTool modeling with another one saved in a file ", 0);

@@ -109,10 +109,10 @@ public abstract class AvatarTerm extends AvatarElement {
         //TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
 
         //TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
-        if (allowRaw)
+        //if (allowRaw)
             return new AvatarTermRaw (toParse, block);
-        else
-            return null;
+	    //else
+            //return null;
     }
 
     public static AvatarAction createActionFromString (AvatarStateMachineOwner block, String toParse) {
