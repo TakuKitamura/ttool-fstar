@@ -64,6 +64,7 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     private int lineLength = 5;
   //  private int textX, textY;
     private int ex=5;
+	private int textHeight=8;
     private int ilength = 12;
     private int lineLength1 = 3;
     public String type="";
@@ -101,113 +102,88 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     }
     
     public void internalDrawing(Graphics g) {
-	if (stateOfError > 0)  {
-	    Color c = g.getColor();
-	    switch(stateOfError) {
-		case ErrorHighlight.OK:
-		    g.setColor(ColorManager.EXEC);
-		    break;
-		default:
-		    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-	    }
-	    g.fillRect(x, y, width, height);
-	    int[] xP = new int[]{x,x+width,x+width/2};
-	    int[] yP = new int[]{y+height, y+height, y+height+ex};
-	    g.fillPolygon(xP,yP,3);
-	    g.setColor(c);
-	}
+		if (stateOfError > 0)  {
+		    Color c = g.getColor();
+		    switch(stateOfError) {
+				case ErrorHighlight.OK:
+				    g.setColor(ColorManager.EXEC);
+			    break;
+				default:
+				    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+	    	}
+	    	g.fillRect(x, y, width, height);
+	    	int[] xP = new int[]{x,x+width,x+width/2};
+	    	int[] yP = new int[]{y+height, y+height, y+height+ex};
+	    	g.fillPolygon(xP,yP,3);
+	    	g.setColor(c);
+		}	
         g.drawLine(x, y, x+width, y);
         g.drawLine(x, y, x, y+height);
-	g.drawLine(x+width, y, x+width, y+height);
+		g.drawLine(x+width, y, x+width, y+height);
         g.drawLine(x, y+height, x+width/2, y+height+ex);
         g.drawLine(x+width/2, y+height+ex, x+width, y+height);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height+ex, x+(width/2), y + lineLength + height+ex);
 
-	if (type.equals("Symmetric Encryption")){
-	    //S
-	    g.drawLine(x + ex, y+(height-ilength)/4,  x + width -ex, y+(height-ilength)/4);
-
-
+		if (type.equals("Symmetric Encryption")){
+	    	//S
+	    	g.drawLine(x + ex, y+(height-ilength)/4,  x + width -ex, y+(height-ilength)/4);
             g.drawLine(x + ex, y+(height-ilength)/4 + ilength,  x + width-ex, y+(height-ilength)/4 + ilength);
-
-
             g.drawLine(x + ex, y+(height-ilength)/4 + ilength/2,  x + width-ex, y+(height-ilength)/4 + ilength/2);
-        
-   	    g.drawLine(x + ex, y+(height-ilength)/4, x + ex, y+(height-ilength)/4 + ilength/2);
-	
-	    g.drawLine(x + width-ex, y+(height-ilength)/4+ilength/2, x + width -ex, y+(height-ilength)/4 + ilength);
-	    //E
-
-	    g.drawLine(x + ex, y+(height-ilength)/4 + height/2 - ex/2,  x + width -ex, y+(height-ilength)/4 + height/2 -ex/2);
+	   	    g.drawLine(x + ex, y+(height-ilength)/4, x + ex, y+(height-ilength)/4 + ilength/2);
+		    g.drawLine(x + width-ex, y+(height-ilength)/4+ilength/2, x + width -ex, y+(height-ilength)/4 + ilength);
+		    //E
+		    g.drawLine(x + ex, y+(height-ilength)/4 + height/2 - ex/2,  x + width -ex, y+(height-ilength)/4 + height/2 -ex/2);
             g.drawLine(x + ex, y+(height-ilength)/4 + ilength + height/2 -ex/2,  x + width -ex, y+(height-ilength)/4 + ilength + height/2 -ex/2);
             g.drawLine(x + ex, y+(height-ilength)/4 + ilength/2 + height/2 - ex/2,  x + width-ex, y+(height-ilength)/4 + ilength/2 + height/2 -ex/2);
             g.drawLine(x + ex, y+(height-ilength)/4 + height/2 - ex/2, x + ex, y+(height-ilength)/4 + ilength +  height/2 -ex/2);
+		}
 
-
-
-	}
-	else if (type.equals("Asymmetric Encryption")) {
-
-	    //A
-	    g.drawLine(x + (width/2), y+(height-ilength)/4,  x + ex, y+(height-ilength)/4+ilength);
-
-
+		else if (type.equals("Asymmetric Encryption")) {
+		    //A
+		    g.drawLine(x + (width/2), y+(height-ilength)/4,  x + ex, y+(height-ilength)/4+ilength);
             g.drawLine(x + (width/2), y+(height-ilength)/4,  x + (width) - ex, y+(height-ilength)/4 + ilength);
-
-
             g.drawLine(x + 3*ex/2, y+(height-ilength)/4 + ilength/2 + ex/2,  x + width - 3*ex/2, y+(height-ilength)/4 + ilength/2+ex/2);
-	    //E
-
-	    g.drawLine(x + ex, y+(height-ilength)/4 + height/2 - ex/2,  x +width-ex, y+(height-ilength)/4 + height/2 -ex/2);
+		    //E
+			g.drawLine(x + ex, y+(height-ilength)/4 + height/2 - ex/2,  x +width-ex, y+(height-ilength)/4 + height/2 -ex/2);
             g.drawLine(x + ex, y+(height-ilength)/4 + ilength + height/2 -ex/2,  x + width -ex, y+(height-ilength)/4 + ilength + height/2 -ex/2);
             g.drawLine(x + ex, y+(height-ilength)/4 + ilength/2 + height/2 - ex/2,  x + width -ex, y+(height-ilength)/4 + ilength/2 + height/2 -ex/2);
             g.drawLine(x + ex, y+(height-ilength)/4 + height/2 - ex/2, x + ex, y+(height-ilength)/4 + ilength +  height/2 -ex/2);
-
-
-
-	}
-
-	else if (type.equals("Nonce")){
-
-	    //N
-	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) - lineLength1, y+(height-ilength)/2+ilength);
-
-   	    g.drawLine(x + (width/2) + lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2+ilength);
-
-	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2, x + (width/2) + lineLength1, y+(height-ilength)/2+ilength);
-	
-	}
-	else if (type.equals("MAC")){
-
-	    //M
-	    g.drawLine(x + ex/2+1, y+(height-ilength)/2,  x + ex/2+1, y+(height-ilength)/2+ilength);
-
-   	    g.drawLine(x + width -ex/2-1, y+(height-ilength)/2,  x + width - ex/2-1, y+(height-ilength)/2+ilength);
-
-	    g.drawLine(x + ex/2+1, y+(height-ilength)/2, x+width/2, y+(height-ilength)/2+ilength);
-	    g.drawLine(x + width - ex/2-1, y+(height-ilength)/2, x + width/2, y+(height-ilength)/2+ilength);
-	}
-	else if (type.equals("Hash")){
-	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) - lineLength1, y+(height-ilength)/2+ilength);
-
-   	    g.drawLine(x + (width/2) + lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2+ilength);
-
-	    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength/2,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength/2);
-
-	}
-	else if (type.equals("Advanced")){
-
-	    //A
-	    g.drawLine(x + (width/2), y+(height-ilength)/2,  x + ex, y+(height-ilength)/2+ilength);
-
-
+		}
+		else if (type.equals("Nonce")){
+		    //N
+		    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) - lineLength1, y+(height-ilength)/2+ilength);
+	   	    g.drawLine(x + (width/2) + lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2+ilength);
+		    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2, x + (width/2) + lineLength1, y+(height-ilength)/2+ilength);
+		}
+		else if (type.equals("MAC")){
+		    //M
+		    g.drawLine(x + ex/2+1, y+(height-ilength)/2,  x + ex/2+1, y+(height-ilength)/2+ilength);
+	   	    g.drawLine(x + width -ex/2-1, y+(height-ilength)/2,  x + width - ex/2-1, y+(height-ilength)/2+ilength);
+		    g.drawLine(x + ex/2+1, y+(height-ilength)/2, x+width/2, y+(height-ilength)/2+ilength);
+		    g.drawLine(x + width - ex/2-1, y+(height-ilength)/2, x + width/2, y+(height-ilength)/2+ilength);
+		}
+		else if (type.equals("Hash")){
+		    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) - lineLength1, y+(height-ilength)/2+ilength);
+	   	    g.drawLine(x + (width/2) + lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2+ilength);
+		    g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength/2,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength/2);
+		}
+		else if (type.equals("Advanced")){
+		    //A
+		    g.drawLine(x + (width/2), y+(height-ilength)/2,  x + ex, y+(height-ilength)/2+ilength);
             g.drawLine(x + (width/2), y+(height-ilength)/2,  x + (width) - ex, y+(height-ilength)/2 + ilength);
-
-
             g.drawLine(x + 3*ex/2, y+(height-ilength)/2 + ilength/2 + ex/2,  x + width - 3*ex/2, y+(height-ilength)/2 + ilength/2+ex/2);
-	}
-	g.drawString("sec:"+ securityContext, x+3*width/2, y+ height/2);
+		}
+		//Draw security pattern
+		g.drawString("sec:"+ securityContext, x+3*width/2, y+ height/2);
+		//Draw nonce if it exists
+		if (!nonce.isEmpty()){
+			g.drawString("nonce:"+ nonce, x+3*width/2, y+ height/2+textHeight);
+		}
+		//Draw key if it exists
+		if (!key.isEmpty()){
+			g.drawString("key:"+ key, x+3*width/2, y+ height/2+2*textHeight);
+		}
         g.drawImage(IconManager.imgic7000.getImage(), x - 22, y + height/2, null);
     }
     

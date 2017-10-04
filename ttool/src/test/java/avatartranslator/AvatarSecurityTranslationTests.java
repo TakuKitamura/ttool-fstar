@@ -104,6 +104,8 @@ public class AvatarSecurityTranslationTests {
 		tmlm.addTask(task1);
 		TMLArchitecture arch = new TMLArchitecture();
 		map = new TMLMapping<TGComponent>(tmlm, arch, false);
+
+		
 		
 	}
     //protected void test () {
@@ -117,6 +119,13 @@ public class AvatarSecurityTranslationTests {
 		assertEquals(avspec.getListOfBlocks().size(),1);
 	
 	}
+
+
+	@Test
+	public void testKeyDistribution(){
+		
+	}	
+
 
 	@Test
 	public void testTranslateStatesSymmetricEncryption(){
