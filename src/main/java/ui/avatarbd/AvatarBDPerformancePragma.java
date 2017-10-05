@@ -196,7 +196,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 	int i = 1;
 	Font heading = new Font("heading", Font.BOLD, 14);
 	g.setFont(heading);
-	g.drawString("Performance Pragma", x+textX, y+textY + currentFontSize);
+	g.drawString("Performance Pragmas", x+textX, y+textY + currentFontSize);
 	g.setFont(fold);
 	for (String s: properties){
 	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
@@ -252,7 +252,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
-        JDialogPerformancePragma jdn = new JDialogPerformancePragma(frame, "Setting the performance pragma", value);
+        JDialogPerformancePragma jdn = new JDialogPerformancePragma(frame, "Setting the performance pragmas", value);
         //jdn.setLocation(200, 150);
         GraphicLib.centerOnParent(jdn);
 		AvatarBDPanel abdp = (AvatarBDPanel) tdp;

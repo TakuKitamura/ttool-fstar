@@ -188,7 +188,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
          * from the Graphics object.
          * Thus we use a saved FontMetrics object in TDiagramPanel that only changes when zoom changes.
          */
-		int desiredWidth = Math.max(this.minWidth, 2*this.tdp.stringWidth(g, "Property Pragma") + marginX+ textX);
+		int desiredWidth = Math.max(this.minWidth, 2*this.tdp.stringWidth(g, "Property Pragmas") + marginX+ textX);
         for(int i=0; i< values.length; i++)
             desiredWidth = Math.max(desiredWidth, this.tdp.stringWidth(g, values[i]) + marginX+textX);
 
@@ -227,7 +227,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 		int i = 1;
 		Font heading = new Font("heading", Font.BOLD, this.tdp.getFontSize ()*7/6);
 		g.setFont(heading);
-		g.drawString("Model Pragma", x+textX, y+textY + currentFontSize);
+		g.drawString("Model Pragmas", x+textX, y+textY + currentFontSize);
 		g.setFont(fold);
 		for (String s: models){
 		    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
@@ -246,7 +246,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 		i++;
 		g.drawLine(x, y+textY/2+i*currentFontSize, x+width, y+textY/2+i*currentFontSize);
 		g.setFont(heading);
-		g.drawString("Property Pragma", x+textX, y+textY+(i+1)* currentFontSize);
+		g.drawString("Property Pragmas", x+textX, y+textY+(i+1)* currentFontSize);
 		g.setFont(fold);
 		i++;
 //		System.out.println("syntax errors " + syntaxErrors.toString()); 
@@ -383,7 +383,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
-        JDialogPragma jdn = new JDialogPragma(frame, "Setting the pragma", value);
+        JDialogPragma jdn = new JDialogPragma(frame, "Setting the security pragmas", value);
         //jdn.setLocation(200, 150);
 		AvatarBDPanel abdp = (AvatarBDPanel) tdp;
 		jdn.blockAttributeMap = abdp.getBlockStrings(true,false,false);
