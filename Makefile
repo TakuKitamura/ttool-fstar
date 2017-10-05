@@ -308,6 +308,7 @@ $(TTOOL_PREINSTALL_MACOS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@mv $(TTOOL_TARGET_MACOS)/uppaal* $(TTOOL_TARGET_MACOS)/uppaal
 	@cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_TARGET_MACOS)/TTool/bin/config_macosx.xml
 	@sed 's#cd [^;]*#cd TTool/bin#' $(TTOOL_DOC)/ttool_macosx.exe > $(TTOOL_TARGET_MACOS)/ttool.exe
+	@chmod u+x $(TTOOL_TARGET_MACOS)/ttool.exe
 	@$(TAR) uf $@ -C $(TTOOL_TARGET_MACOS) proverif uppaal TTool/bin/config_macosx.xml ttool.exe
 
 $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
@@ -318,6 +319,7 @@ $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@$(TAR) xzvf $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz -C $(TTOOL_TARGET_LINUX)
 	@cp $(TTOOL_DOC)/config_linux.xml $(TTOOL_TARGET_LINUX)/TTool/bin/config_linux.xml
 	@sed 's#cd [^;]*#cd TTool/bin#' $(TTOOL_DOC)/ttool_linux.exe > $(TTOOL_TARGET_LINUX)/ttool.exe
+	@chmod u+x $(TTOOL_TARGET_LINUX)/ttool.exe
 	@$(TAR) uf $@ -C $(TTOOL_TARGET_LINUX) proverif uppaal TTool/bin/config_linux.xml ttool.exe
 
 $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY) FORCE
