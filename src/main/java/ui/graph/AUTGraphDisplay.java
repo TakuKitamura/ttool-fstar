@@ -212,6 +212,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
             // to avoid 100% CPU usage. The blockingPump() method is only available from
             // the nightly builds.
         }
+	//viewPipe = null;
     }
     
     
@@ -224,8 +225,14 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
     }
     
     public void viewClosed(String id) {
-        TraceManager.addDev("View closed");
+        TraceManager.addDev("View closed and closed !");
         loop = false;
+	if (viewer != null) {
+	    viewer.close();
+	    viewer.disableAutoLayout();
+	}
+	viewer =  null;
+	vGraph.clear();
 	if (exitOnClose) {
 	    System.exit(1);
 	}
