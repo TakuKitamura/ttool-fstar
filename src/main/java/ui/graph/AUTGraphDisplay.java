@@ -156,7 +156,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         //View   vi = viewer.addDefaultView(true);
         
         viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.CLOSE_VIEWER);
-        BasicFrame bf = new BasicFrame(viewer, vGraph, graph, edges, exitOnClose);
+        BasicFrame bf = new BasicFrame(this, viewer, vGraph, graph, edges, exitOnClose);
         
         //vi.addMouseListener(this);
         
@@ -204,7 +204,7 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
             
             // here your simulation code.
             //TraceManager.addDev("End of loop" + cpt);
-            cpt ++;
+            //cpt ++;
             
             // You do not necessarily need to use a loop, this is only an example.
             // as long as you call pump() before using the graph. pump() is non
@@ -332,9 +332,12 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         protected JLabel help, info;
 
 	protected boolean exitOnClose;
+
+	private AUTGraphDisplay autD;
         
         
-        public BasicFrame(Viewer viewer, MultiGraph vGraph, AUTGraph autgraph, ArrayList<AbstractEdge>_edges, boolean _exitOnClose) {
+        public BasicFrame(AUTGraphDisplay autD, Viewer viewer, MultiGraph vGraph, AUTGraph autgraph, ArrayList<AbstractEdge>_edges, boolean _exitOnClose) {
+	    this.autD = autD;
             this.viewer = viewer;
             this.vGraph = vGraph;
             this.graph = autgraph;
@@ -416,6 +419,9 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         }
         
         public void closeFrame() {
+	    if (autD != null) {
+		autD.viewClosed("closed pushed");
+	    }
 	    if (exitOnClose) {
 		System.exit(1);
 	    }

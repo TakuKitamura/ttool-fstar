@@ -380,6 +380,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
         if (selectedRG != null) {
             if (ae.getSource() == jmiAnalyze) {
                 mgui.showAUTFromRG(selectedRG.name, selectedRG);
+		
             } else if (ae.getSource() == jmiShow) {
                 if (selectedRG.graph != null) {
                     selectedRG.graph.display();
