@@ -160,7 +160,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         Color c = g.getColor();
 
         int desiredWidth = minWidth;
-        desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Safety Pragma") + marginX+ textX);
+        desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Safety Pragmas") + marginX+ textX);
 	
         for(int i=0; i< values.length; i++) {
             desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX+textX);
@@ -199,7 +199,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 	int i = 1;
 	Font heading = new Font("heading", Font.BOLD, 14);
 	g.setFont(heading);
-	g.drawString("Safety Pragma", x+textX, y+textY + currentFontSize);
+	g.drawString("Safety Pragmas", x+textX, y+textY + currentFontSize);
 	g.setFont(fold);
 	for (String s: properties){
 	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
@@ -258,7 +258,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
-        JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, "Setting the safety pragma", value);
+        JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, "Setting the safety pragmas", value);
         //jdn.setLocation(200, 150);
         GraphicLib.centerOnParent(jdn);
 		AvatarBDPanel abdp = (AvatarBDPanel) tdp;
