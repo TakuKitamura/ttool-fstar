@@ -755,12 +755,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                     d = previousDate;
                 }
                 long duration  = d.getTime() - startDate.getTime();
+		long durationMn = TimeUnit.MILLISECONDS.toMinutes(duration);
+		long durationSec = TimeUnit.MILLISECONDS.toSeconds(duration) - durationMn*60;
+		long durationMs = duration - 1000*(durationSec - durationMn*60);
 
-                String t = String.format("%02d min %02d sec %03d msec",
-                                         TimeUnit.MILLISECONDS.toMinutes(duration),
-                                         TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)),
-                                         duration
-                                         );
+		//TraceManager.addDev("mn=" + durationMn + " sec=" + durationSec + " ms=" + durationMs + " raw=" + duration);
+
+                String t = String.format("%02d min %02d sec %03d msec", durationMn, durationSec, durationMs);
 
 //                long diffInSeconds = TimeUnit.MILLISECONDS.toSeconds(duration);
 //                long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration);
