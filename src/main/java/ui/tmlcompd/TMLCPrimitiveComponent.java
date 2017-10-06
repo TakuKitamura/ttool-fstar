@@ -330,6 +330,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
 
                 //TraceManager.addDev("Set value with change");
+    			setComponentName(s);
                 setValueWithChange(s);
 				isAttacker = s.contains("Attacker");
                 rescaled = true;
