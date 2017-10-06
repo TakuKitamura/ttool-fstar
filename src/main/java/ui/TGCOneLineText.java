@@ -123,4 +123,22 @@ public class TGCOneLineText extends TGCWithoutInternalComponent{
 
         return false;
     }
+    
+    public void renameTab(String s) {
+    	TURTLEPanel tp = this.tdp.tp;
+    	for (TDiagramPanel tdpTmp: tp.panels) {
+    		if (tdpTmp.name.equals(name)) {
+    	    	if (!tp.nameInUse(s)) {
+    	            tp.tabbedPane.setTitleAt(tp.getIndexOfChild(tdpTmp), s);
+    	            tp.panels.elementAt(tp.getIndexOfChild(tdpTmp)).setName(s);
+    	            tp.mgui.changeMade(null, -1);
+    	        }
+    			break;
+    		}
+    	}
+    }
+    
+   public boolean nameUsed(String s) {
+    	return this.tdp.tp.refNameUsed(s);
+   }
 }

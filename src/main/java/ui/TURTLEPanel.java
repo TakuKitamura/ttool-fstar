@@ -42,6 +42,8 @@
 package ui;
 
 import myutil.GenericTree;
+import ui.tmlcp.TMLCPRefAD;
+import ui.tmlcp.TMLCPRefSD;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -267,12 +269,32 @@ public abstract class TURTLEPanel implements GenericTree {
         String s = (String)JOptionPane.showInputDialog(mgui.frame, "TTool modeling:", "Name=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, tabbedPane.getTitleAt(index));
         if ((s != null) && (s.length() > 0)){
             // name already in use?
-            if (!nameInUse(s)) {
+            if (!nameInUse(s) && !refNameUsed(s)) {
+            	for (TDiagramPanel tdpTmp: panels)
+            		for (TGComponent tgc: tdpTmp.componentList) {
+            			if ((tgc instanceof TMLCPRefSD || tgc instanceof TMLCPRefAD) && tgc.name.equals(tabbedPane.getTitleAt(index)))
+            				tgc.name = s;
+            		}
                 tabbedPane.setTitleAt(index, s);
                 panels.elementAt(index).setName(s);
                 mgui.changeMade(null, -1);
             }
+            else {
+            	JOptionPane.showMessageDialog(this.mgui.frame,
+                        "Error: the name is already in use",
+                        "Name modification",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
+    }
+
+    public boolean refNameUsed(String s) {
+    	for (TDiagramPanel tdpTmp: this.panels)
+    		for (TGComponent tgc: tdpTmp.componentList) {
+    			if ((tgc instanceof TMLCPRefSD || tgc instanceof TMLCPRefAD) && tgc.name.equals(s))
+    				return true;
+    		}
+    	return false;
     }
 
     public boolean canFirstDiagramBeMoved() {
