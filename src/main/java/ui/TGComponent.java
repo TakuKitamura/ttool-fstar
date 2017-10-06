@@ -2682,7 +2682,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 					if (t2 instanceof TMLArchiCPUNode) {
 						TMLArchiCPUNode tcpu = (TMLArchiCPUNode) t2;
 						for (TMLArchiArtifact art: tcpu.getArtifactList()) {
-							if (art.getTaskName().equals(value));
+							if (art.getTaskName().equals(value))
 								art.setTaskName(s);
 							String tmp = art.getValue().replaceAll("(?i)" + value + "$", s);
 							art.setValue(tmp);
