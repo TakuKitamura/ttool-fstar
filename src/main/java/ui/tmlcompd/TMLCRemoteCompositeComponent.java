@@ -311,6 +311,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 				updateReference();
 				rescaled = true;
 			}
+			tdp.repaint();
 		}
 		return false;
     }
