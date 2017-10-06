@@ -50,6 +50,10 @@ import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogTMLCompositePort;
 import ui.avatarrd.AvatarRDRequirement;
+import ui.tmlad.TMLADReadChannel;
+import ui.tmlad.TMLADWriteChannel;
+import ui.tmldd.TMLArchiCPNode;
+import ui.tmldd.TMLArchiPortArtifact;
 
 import javax.swing.*;
 import java.awt.*;
@@ -576,6 +580,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 isOrigin = jda.isOrigin();
                 isFinite = jda.isFinite();
                 isBlocking = jda.isBlocking();
+                setPortName(jda.getParamName());
                 commName = jda.getParamName();
                 isLossy = jda.isLossy();
                 lossPercentage = jda.getLossPercentage();
@@ -951,6 +956,37 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 	    }
 	}
 	return true;
+    }
+    
+    public void setPortName(String s) {
+    	for (TURTLEPanel tp: tdp.getMainGUI().tabs)
+			for (TDiagramPanel t: tp.getPanels()) {
+				for (TGComponent t2: t.getComponentList()) {					
+					if (t2 instanceof TMLArchiCPNode) {
+						TMLArchiCPNode tacn = (TMLArchiCPNode) t2;
+						for (TGComponent tgc: tacn.getRecursiveAllInternalComponent()) {
+							if (tgc instanceof TMLArchiPortArtifact) {
+								TMLArchiPortArtifact tapi = (TMLArchiPortArtifact) tgc;
+				    			String tmp = tapi.getValue().replaceAll("(?i)" + commName + "$", s);
+				    			tapi.setValue(tmp);						
+							}
+						}
+					}
+					
+					if (t2 instanceof TMLADWriteChannel) {
+						TMLADWriteChannel twc = (TMLADWriteChannel) t2;
+						if (twc.getChannelName().equals(commName))
+							twc.setChannelName(s);
+					}
+					
+					if (t2 instanceof TMLADReadChannel) {
+						TMLADReadChannel twc = (TMLADReadChannel) t2;
+						if (twc.getChannelName().equals(commName))
+							twc.setChannelName(s);
+					}
+				}
+				t.repaint();		
+			}
     }
 
 }

@@ -220,6 +220,13 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 					JOptionPane.INFORMATION_MESSAGE);
 				return false;
 			}
+			if (((TMLComponentTaskDiagramPanel)(tdp)).isCompositeNameUsed(s)) {
+                JOptionPane.showMessageDialog(frame,
+                                              "Error: the name is already in use",
+                                              "Name modification",
+                                              JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
             setValueWithChange(s);
             return true;
         }

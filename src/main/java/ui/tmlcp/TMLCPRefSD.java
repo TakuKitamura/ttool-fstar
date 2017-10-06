@@ -187,6 +187,14 @@ public class TMLCPRefSD extends TGCOneLineText {
     String s = (String) JOptionPane.showInputDialog(frame, text,
 		"Setting Name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() );
     if( (s != null) && (s.length() > 0) )	{
+    	if (nameUsed(s)) {
+            JOptionPane.showMessageDialog(frame,
+                                          "Error: the name is already in use",
+                                          "Name modification",
+                                          JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    		renameTab(s);
 			setName(s);
 			return true;
 		}

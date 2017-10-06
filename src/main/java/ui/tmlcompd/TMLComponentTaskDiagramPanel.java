@@ -188,20 +188,26 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
     public boolean namePrimitiveComponentInUse(String oldValue, String newValue) {
         boolean ko = mgui.nameComponentInUse(tp, oldValue, newValue);
-        if (ko == true) {
-            return ko;
-        }
-
-        return nameAllRecordComponentInUse(oldValue, newValue);
+        return ko ? ko : nameAllRecordComponentInUse(oldValue, newValue);
     }
 
     public boolean nameRecordComponentInUse(String oldValue, String newValue) {
         boolean ko = mgui.nameComponentInUse(tp, oldValue, newValue);
-        if (ko == true) {
-            return ko;
-        }
-
-        return nameAllRecordComponentInUse(oldValue, newValue);
+        return ko? ko : nameAllRecordComponentInUse(oldValue, newValue);
+    }
+    
+    /**
+     * Check if newvalue is already a name of a component.
+     * @author Fabien Tessier
+     * @param newvalue
+     * @return true if the name is used
+     */
+    public boolean isCompositeNameUsed(String newvalue) {
+    	for (TGComponent tgc: this.componentList) {
+    		if (tgc.getValue().equals(newvalue))
+    			return true;
+    	}
+    	return false;
     }
 
     public boolean nameAllRecordComponentInUse(String oldValue, String newValue) {

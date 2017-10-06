@@ -54,6 +54,7 @@ import ui.tmlcd.TMLTaskDiagramPanel;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
 import ui.tmldd.TMLArchiArtifact;
+import ui.tmldd.TMLArchiCPUNode;
 import ui.tmldd.TMLArchiDiagramPanel;
 import ui.tmldd.TMLArchiFirewallNode;
 import ui.util.IconManager;
@@ -2669,6 +2670,29 @@ public abstract class TGComponent implements CDElement, GenericTree {
         repaint = true;
     }
 
+    /**
+     * Rename all reference of a primitive component.
+     * @author Fabien Tessier
+     * @param s new name
+     */
+    public void setComponentName(String s) {
+    	for (TURTLEPanel tp: tdp.mgui.tabs)
+			for (TDiagramPanel t: tp.getPanels()) {
+				for (TGComponent t2: t.componentList) {					
+					if (t2 instanceof TMLArchiCPUNode) {
+						TMLArchiCPUNode tcpu = (TMLArchiCPUNode) t2;
+						for (TMLArchiArtifact art: tcpu.getArtifactList()) {
+							if (art.getTaskName().equals(value))
+								art.setTaskName(s);
+							String tmp = art.getValue().replaceAll("(?i)" + value + "$", s);
+							art.setValue(tmp);
+						}			
+					}
+				}
+				t.repaint();		
+			}
+    }
+    
     public final int getState() {
         return state;
     }
