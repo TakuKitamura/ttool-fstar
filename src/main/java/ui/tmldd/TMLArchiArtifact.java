@@ -342,6 +342,10 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     public String getTaskName() {
         return taskName;
     }
+    
+    public void setTaskName(String s) {
+        taskName = s;
+    }
 
     public String getAttributes() {
         return "Priority = " + priority;
