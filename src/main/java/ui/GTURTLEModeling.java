@@ -2725,9 +2725,79 @@ public class GTURTLEModeling {
         }
         //      System.out.println(tmlm.securityTaskMap);
         for (SecurityPattern sp: tmlm.securityTaskMap.keySet()){
-            if (sp.type.contains("Encryption") || sp.type.equals("MAC")){
-                TraceManager.addDev("Finding security "+sp);
+            if (sp.type.contains("Symmetric Encryption") || sp.type.equals("MAC")){
+                TraceManager.addDev("Adding keys for "+sp.name);
                 for (TMLTask t:tmlm.securityTaskMap.get(sp)){
+                    ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
+                    boolean keyFound=false;
+                    HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
+                    //Try to find memory using only private buses
+                    List<HwNode> toVisit = new ArrayList<HwNode>();
+                    //  List<HwNode> toMemory = new ArrayList<HwNode>();
+                    List<HwNode> complete = new ArrayList<HwNode>();
+                    for (HwLink link:links){
+                        if (link.hwnode==node1){
+                            if (link.bus.privacy==1){
+                                toVisit.add(link.bus);
+                            }
+                        }
+                    }
+                    memloop:
+                    while (toVisit.size()>0){
+                        HwNode curr = toVisit.remove(0);
+                        for (HwLink link: links){
+                            if (curr == link.bus){
+                                if (link.hwnode instanceof HwMemory){
+                                    mems.add((HwMemory) link.hwnode);
+                                    TMLArchiMemoryNode memNode= (TMLArchiMemoryNode) listE.getTG(link.hwnode);
+                                    ArrayList<TMLArchiKey> keys = memNode.getKeyList();
+                                    String patternString= "";
+                                    for (TMLArchiKey key: keys){
+                                        if (key.getValue().equals(sp.name)){
+
+                                            keyFound=true;
+                                            break memloop;
+                                        }
+                                        patternString += key.getValue();
+                                        patternString += " ";
+                                    }
+                                    TraceManager.addDev("Memory "+ link.hwnode.getName() + " has currently mapped: " + patternString);
+                                }
+                                if (!complete.contains(link.hwnode) && !toVisit.contains(link.hwnode) && link.hwnode instanceof HwBridge){
+                                    toVisit.add(link.hwnode);
+                                }
+                            }
+                            else if (curr == link.hwnode){
+                                if (!complete.contains(link.bus) && !toVisit.contains(link.bus)){
+                                    toVisit.add(link.bus);
+                                }
+                            }
+                        }
+                        complete.add(curr);
+                    }
+                    if (!keyFound){
+                        if (mems.size()>0){
+                            TMLArchiMemoryNode memNode= (TMLArchiMemoryNode) listE.getTG(mems.get(0));
+                            TMLArchiKey key = new TMLArchiKey(memNode.x, memNode.y, memNode.tdp.getMinX(), memNode.tdp.getMaxX(), memNode.tdp.getMinY(), memNode.tdp.getMaxY(), false, memNode, memNode.tdp);
+                            key.setReferenceKey(sp.name);
+                            key.makeFullValue();
+                            TraceManager.addDev("Adding " +sp.name+ " key to " +memNode.getName());
+                            TraceManager.addDev("Adding " +sp + " key to " +memNode.getName());
+                            memNode.tdp.addComponent(key, memNode.x, memNode.y, true,true);
+                            memNode.tdp.repaint();
+                        }
+                        else {
+                            System.out.println("Can't map key to memory for " + sp.name + " on task " + t.getName());
+                            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Cannot map key in memory for " + sp.name + " on task " + t.getName());
+                            ce.setTDiagramPanel(tmap.getCorrespondanceList().getTG(tmap.getArch().getFirstCPU()).getTDiagramPanel());
+                            ce.setTGComponent(null);
+                            checkingErrors.add(ce);
+                        }
+                    }
+                }
+            }
+            else if (sp.type.contains("Asymmetric Encryption")){
+                 for (TMLTask t:tmlm.securityTaskMap.get(sp)){
                     ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
                     boolean keyFound=false;
                     HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
