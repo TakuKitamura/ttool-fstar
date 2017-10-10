@@ -65,6 +65,7 @@ import ui.avatarpd.AvatarPDPanel;
 import ui.avatarrd.AvatarRDPanel;
 import ui.avatarsmd.AvatarSMDPanel;
 import ui.cd.TClassDiagramPanel;
+import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.file.*;
 import ui.graph.AUTGraph;
@@ -7400,7 +7401,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if ((s != null) && (s.length() > 0)){
             // name already in use?
             if (s.compareTo(oldName) != 0) {
-                if (isAValidTabName(s)) {
+                if (isAValidTabName(s) && (!isTabNameUsed(s))) {
+                	renameInMethodo(mainTabbedPane.getTitleAt(index), s);
                     mainTabbedPane.setTitleAt(index, s);
                     changeMade(getCurrentTDiagramPanel(), /*((TURTLEPanel)(tabs.elementAt(index))).tdp*/TDiagramPanel.MOVE_COMPONENT);
 
@@ -7415,6 +7417,39 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             }
         }
         changeMade(null, -1);
+    }
+    
+    /**
+     * Check if a name is already used by another TURTLEPanel tab
+     * @author Fabien Tessier
+     * @param name
+     * @return true if the name matches another tab name
+     */
+    public boolean isTabNameUsed(String name) {
+    	for (int i = 0; i < mainTabbedPane.getTabCount(); i++) {
+    		if (mainTabbedPane.getTitleAt(i).equals(name))
+    			return true;
+    	}
+    	return false;
+    }
+    
+    /**
+     * Rename reference to the tab in Diplodocus Methodology
+     * @author Fabien Tessier
+     * @param oldname
+     * @param newname
+     */
+    public void renameInMethodo(String oldname, String newname) {
+    	for (TURTLEPanel tp: tabs) {
+    		if (tp instanceof DiplodocusMethodologyPanel) {
+    			DiplodocusMethodologyDiagramPanel dmdp = (DiplodocusMethodologyDiagramPanel) tp.tdp;
+    			for (TGComponent tgc: dmdp.componentList)
+    				for (TGComponent tgc2: tgc.tgcomponent) {
+    					if (tgc2.getValue().equals(oldname))
+    						tgc2.setValue(newname);
+    				}
+    		}
+    	}
     }
 
     public void renameMapping(String oldName, String newName) {
