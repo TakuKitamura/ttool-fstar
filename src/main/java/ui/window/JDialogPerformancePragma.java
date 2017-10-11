@@ -354,13 +354,13 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
 	
     }
     
-    public void	actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
+    public void actionPerformed(ActionEvent evt)  {
+        //String command = evt.getActionCommand();
         
         // Compare the action command to the known actions.
-        if (command.equals("Cancel"))  {
+        if (ect.getSource() == cancel)  {
             cancel();
-        } else if (command.equals("Ok")) {
+        } else if (evt.getSource() == close) {
             close();
         }
 	
