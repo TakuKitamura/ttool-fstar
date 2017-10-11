@@ -270,13 +270,15 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
 
         // RG
-        saveGraphAUT = new JCheckBox("Save RG (AUT format) in: (this option enables graph analysis)", graphSelected);
+        saveGraphAUT = new JCheckBox("Reachability Graph Generation", graphSelected);
         saveGraphAUT.addActionListener(this);
+	//saveGraphAUT.addSelectionListener(this);
         jp01.add(saveGraphAUT, c01);
         graphPath = new JTextField(graphDir);
         jp01.add(graphPath, c01);
-        saveGraphDot = new JCheckBox("Save RG (dotty format) in:", graphSelectedDot);
+        saveGraphDot = new JCheckBox("Save RG in dotty:", graphSelectedDot);
         saveGraphDot.addActionListener(this);
+	//saveGraphDot.setEnebaled(false);
         jp01.add(saveGraphDot, c01);
         graphPathDot = new JTextField(graphDirDot);
         jp01.add(graphPathDot, c01);
@@ -665,7 +667,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         graphSelected = saveGraphAUT.isSelected();
         graphPath.setEnabled(saveGraphAUT.isSelected());
         graphSelectedDot = saveGraphDot.isSelected();
-        graphPathDot.setEnabled(saveGraphDot.isSelected());
+	saveGraphDot.setEnabled(saveGraphAUT.isSelected());
+        graphPathDot.setEnabled(saveGraphDot.isSelected() && saveGraphAUT.isSelected());
         if (generateDesign != null) {
             generateDesignSelected = generateDesign.isSelected();
         }
