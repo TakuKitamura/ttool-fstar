@@ -346,8 +346,11 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     //    }
 
     public void stopProcess() {
+	
         try {
-            rshc.stopCommand();
+	    if (rshc != null) {
+		rshc.stopCommand();
+	    }
         } catch (LauncherException le) {
 
         }
