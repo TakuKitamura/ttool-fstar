@@ -16,7 +16,7 @@ Then, start TTool, and generate Java code from an avatar design model.
 
 2) Add the plugin reference in config.xml
 For example:
-<PLUGIN file data="../plugins/CustomizerAvatarCodeGeneration.jar" />
+<PLUGIN file="../plugins/CustomizerAvatarCodeGeneration.jar" package="."/>
 
 3) Load the configuration information in ConfigurationTTool.java
 
