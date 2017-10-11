@@ -246,7 +246,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 		i++;
 		g.drawLine(x, y+textY/2+i*currentFontSize, x+width, y+textY/2+i*currentFontSize);
 		g.setFont(heading);
-		g.drawString("Property Pragmas", x+textX, y+textY+(i+1)* currentFontSize);
+		g.drawString("Security Property", x+textX, y+textY+(i+1)* currentFontSize);
 		g.setFont(fold);
 		i++;
 //		System.out.println("syntax errors " + syntaxErrors.toString()); 

@@ -55,7 +55,7 @@ import java.awt.event.ActionListener;
    * Class TMLArchiDiagramToolBar
    * Implements the toolbar to be used in conjunction with the panel of a TML Architecture diagram
    * Creation: 18/09/2007
-   * @version 1.0 18/09/2007
+   * @version 1.1 18/09/2017
    * @author Ludovic APVRILLE
    * @see ui.cd.TClassDiagramPanel
  */
