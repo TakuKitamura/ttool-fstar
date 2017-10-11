@@ -382,6 +382,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
             helpPopup.setVisible(false);
         }
     }
+    
     public String getText() {
         return text;
     }
