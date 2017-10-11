@@ -184,7 +184,7 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         
         //Issue #68: Review Filters of Diagram Elements
         box = new JMenuBar();
-        menu = new JMenu("Edit configuration view");
+        menu = new JMenu("View (options)");
         
        	m1 = new JCheckBoxMenuItem(viewInfos[0], true);
        	m1.addActionListener(this);
