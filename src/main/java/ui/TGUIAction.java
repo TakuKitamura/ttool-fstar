@@ -875,8 +875,6 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_TIMERNODE] = new TAction("add-add-timernode", "Add a Timer", IconManager.imgic1116, IconManager.imgic1116, "Timer", "Add a timer node to the currently opened AVATAR deployment diagram", 0);
 
 
-
-
         actions[TCD_PARALLEL_OPERATOR] = new TAction("add-parallel-operator", "Add Parallel composition operator", IconManager.imgic112, IconManager.imgic112, "Parallel composition operator", "Add a Parallel composition operator to the currently opened class diagram", 0);
         actions[TCD_CONNECTOR_ATTRIBUTE] = new TAction("add-attribute-connector", "Connects an association to a composition operator", IconManager.imgic108, IconManager.imgic108, "Attributes an association with a composition operator", "Adds a connector between an association and a composition operator to the currently opened class diagram", 0);
         actions[TCD_SEQUENCE_OPERATOR] = new TAction("add-sequence-operator", "Add Sequence composition operator", IconManager.imgic114, IconManager.imgic114, "Sequence composition operator", "Add a Sequence composition operator to the currently opened class diagram", 0);
@@ -886,7 +884,7 @@ public class TGUIAction extends AbstractAction {
         actions[TCD_ASSOCIATION_NAVIGATION] = new TAction("add-association-navigation", "Add association with navigation", IconManager.imgic106, IconManager.imgic108, "Association with navigation", "Adds an association with a navigation indication between two tclasses of the currently opened class diagram", 0);
         actions[UML_NOTE] = new TAction("edit-note", "Add a note to a diagram", IconManager.imgic320, IconManager.imgic321, "Add a comment", "Add a comment to the currently opened TTool diagram", 0);
         actions[PRAGMA] = new TAction("pragma", "Security pragmas", IconManager.imgic6000, IconManager.imgic6001, "Security pragmas", "Add security pragmas to the currently opened TTool diagram", 0);
-        actions[SAFETY_PRAGMA] = new TAction("safety_pragma", "Add a safety (UPPAAL) property to a diagram", IconManager.imgic6002, IconManager.imgic6003, "Safety  property (UPPAAL)", "Add a safety (UPPAAL) property to the currently opened TTool diagram", 0);
+        actions[SAFETY_PRAGMA] = new TAction("safety_pragma", "Add a safety (UPPAAL) property to a diagram", IconManager.imgic6002, IconManager.imgic6003, "Safety property (UPPAAL)", "Add a safety (UPPAAL) property to the currently opened TTool diagram", 0);
         actions[PERFORMANCE_PRAGMA] = new TAction("performance_pragma", "Add a performance property to a diagram", IconManager.imgic6004, IconManager.imgic6005, "Performance property", "Add a performance property to the currently opened TTool diagram", 0);
         actions[AVATAR_FIREWALL] = new TAction("avatar_firewall", "Add an avatar firewall to a diagram", IconManager.imgic7001, IconManager.imgic7001, "Add an avatar firewall", "Add an avatar firewall to the currently opened TTool diagram", 0);
 
