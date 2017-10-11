@@ -61,7 +61,9 @@ public class ActionPerformer {
 	
         // Compare the action command to the known actions.
         if (command.equals(mgui.actions[TGUIAction.ACT_NEW].getActionCommand()))  {
-            mgui.newProject();
+        	mgui.newProject();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_PROJECT].getActionCommand()))  {
+        	mgui.newProjectDir();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_DESIGN].getActionCommand())) {
             mgui.newDesign();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_ANALYSIS].getActionCommand())) {

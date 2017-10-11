@@ -60,6 +60,7 @@ public class ModeManager {
         case MainGUI.NOT_OPENED:
             mgui.activeActions(false);
             actions[TGUIAction.ACT_NEW].setEnabled(true);
+            actions[TGUIAction.ACT_NEW_PROJECT].setEnabled(true);
             actions[TGUIAction.ACT_OPEN].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_FROM_NETWORK].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_TIF].setEnabled(true);

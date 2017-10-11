@@ -67,6 +67,7 @@ public class TGUIAction extends AbstractAction {
 	
 	// Actions
     public static final int ACT_NEW = 0;
+    public static final int ACT_NEW_PROJECT = 467;
     public static final int ACT_NEW_DESIGN = 100;
     public static final int ACT_NEW_ANALYSIS = 101;
     public static final int ACT_OPEN = 1;
@@ -621,7 +622,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_LEFT = 465;
     public static final int ACT_RIGHT = 466;
     
-    public static final int NB_ACTION = 467;
+    public static final int NB_ACTION = 468;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -675,6 +676,7 @@ public class TGUIAction extends AbstractAction {
 
     public void init() {
         actions[ACT_NEW] = new TAction("new-command", "New", IconManager.imgic20, IconManager.imgic21, "New", "New modeling", 'N');
+        actions[ACT_NEW_PROJECT] = new TAction("new-project-command", "New project", IconManager.imgic20, IconManager.imgic21, "New project", "New project", 0);
         actions[ACT_NEW_DESIGN] = new TAction("new-command-design", "New design", IconManager.imgic14, IconManager.imgic14, "New design", "New TURTLE design", 0);
         actions[ACT_NEW_ANALYSIS] = new TAction("new-command-analysis", "New analysis", IconManager.imgic17, IconManager.imgic17, "New analysis", "New TURTLE analysis", 0);
         actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TTool model",'O', true);

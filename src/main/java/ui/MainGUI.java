@@ -134,6 +134,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public static boolean experimentalOn;
     public static boolean avatarOnly;
     public static boolean turtleOn;
+    
+    public boolean isxml = false;
 
     public final static int LOTOS = 0;
     public final static int RT_LOTOS = 1;
@@ -282,6 +284,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private Plugin pluginSelected;
 
     private File file;
+    private File dir;
     private File lotosfile;
     private File simfile;
     private File dtafile;
@@ -1617,13 +1620,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void closeTurtleModeling() {
         if (mode != NOT_OPENED) {
-            setMode(NOT_OPENED);
-
             // tabbed pane
             for(int i=0; i<tabs.size(); i++) {
                 tabs.elementAt(i).tabbedPane.removeAll();
             }
-
+            setMode(NOT_OPENED);
             tabs = null;
             mainTabbedPane = null;
             panelForTab.removeAll();
@@ -1902,6 +1903,33 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             rgautprojdotfile = null;
 
             frame.setTitle("TTool: unsaved project");
+        }
+    }
+    
+    public void newProjectDir() {
+    	if (mode == NOT_OPENED) {
+    		int val = createFileDialog();
+    		if (val == JFileChooser.APPROVE_OPTION) 
+    			createFile();      
+        }
+        else {
+            //  check if previous modeling is saved
+            boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
+            if (b) {
+                if (!saveBeforeAction("Save and Start New Modeling", "Start New modeling")) {
+                    return;
+                }
+                /*int back = JOptionPane.showConfirmDialog(frame, "Modeling has not been saved\nDo you really want to open a new one ?", "Attention: current modeling not saved ?", JOptionPane.OK_CANCEL_OPTION);
+                  if (back == JOptionPane.CANCEL_OPTION) {
+                  return;       */
+                /*}*/
+            }
+            int val = createFileDialog();
+            if (val == JFileChooser.APPROVE_OPTION) {
+            // close current modeling
+            	closeTurtleModeling();
+            	createFile();
+            }
         }
     }
 
@@ -2299,13 +2327,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void openProjectFromFile(File _f) {
-    	file = _f;
+    	if (FileUtils.getExtension(_f).equals("ttool")) {
+    		dir = _f;
+    		String filename = dir.getAbsolutePath() + dir.getName().replaceAll(".ttool", ".xml");
+    		file = new File(filename);
+    	}
+    	else {
+    		dir = null;
+    		file = _f;
+    	}
         
-    	if(checkFileForOpen(_f)) {
+    	if(checkFileForOpen(file)) {
             String s = null;
 
             try {
-                FileInputStream fis = new FileInputStream(_f);
+                FileInputStream fis = new FileInputStream(file);
                 int nb = fis.available();
 
                 byte [] ba = new byte[nb];
@@ -2326,7 +2362,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 //            gtm.enableUndo(false);
 
             // Update configuration
-            updateLastOpenFile(_f);
+            updateLastOpenFile(file);
 
             // Issue #41: Moved to common method
             loadModels( s, "loaded" );
@@ -2349,7 +2385,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 //            gtm.enableUndo(true);
 //            gtm.saveOperation(getCurrentSelectedPoint());
 //            dtree.forceUpdate();
-            getCurrentTDiagramPanel().repaint();
+            if (getCurrentTDiagramPanel() != null)
+              getCurrentTDiagramPanel().repaint();
         }
     }
 
@@ -2587,23 +2624,57 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
 
+    private int createFileDialog() {
+    	int returnVal = jfc.showSaveDialog(frame);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        	dir = jfc.getSelectedFile();
+        	dir = FileUtils.addFileExtensionIfMissing(dir, "ttool");
+        	dir.mkdir();
+        	String newname = FileUtils.removeFileExtension(dir.getName());
+            file = new File(dir, newname);
+            file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
+        }
+        
+        return returnVal;
+    }
+    
+    private void createFile() {
+        newTurtleModeling();
+    	frame.setTitle(file.getName());
+    	try {
+    		String s = gtm.makeXMLFromTurtleModeling(-1);
+    		if (s == null) {
+    			throw new Exception("Internal model Error 2");
+    		}
+    		FileOutputStream fos = new FileOutputStream(file);
+    		fos.write(s.getBytes());
+    		fos.close();
+    		updateLastOpenFile(file);
+    		setMode(MODEL_SAVED);
+    		String title = "TTool: " + file.getAbsolutePath();
+    		if (!frame.getTitle().equals(title)) {
+    			frame.setTitle(title);
+    		}
+    		if (lotosfile == null) {
+    			makeLotosFile();
+    		}
+    	}
+        catch(Exception e) {
+            JOptionPane.showMessageDialog(frame, "File could not be saved because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    	
     protected boolean saveProject() {
         if (file == null) {
-            //jfc.setApproveButtonText("Save");
-            int returnVal = jfc.showSaveDialog(frame);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
-                file = jfc.getSelectedFile();
-                file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
-            }
+            createFileDialog();
         }
 
         if( checkFileForSave(file)) {
-            String s = gtm.makeXMLFromTurtleModeling(-1);
-
             try {
                 if (gtm == null) {
                     throw new Exception("Internal model Error 1");
                 }
+                String s = gtm.makeXMLFromTurtleModeling(-1);
                 if (s == null) {
                     throw new Exception("Internal model Error 2");
                 }
