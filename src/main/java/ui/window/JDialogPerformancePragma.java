@@ -358,7 +358,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
         //String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-        if (ect.getSource() == cancel)  {
+        if (evt.getSource() == cancel)  {
             cancel();
         } else if (evt.getSource() == close) {
             close();
@@ -382,7 +382,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
             helpPopup.setVisible(false);
         }
     }
-    
+
     public String getText() {
         return text;
     }
