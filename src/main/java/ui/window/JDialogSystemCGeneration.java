@@ -158,9 +158,8 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         mgui = _mgui;
 
-        if (pathCode == null) {
-            pathCode = _pathCode;
-        }
+        pathCode = _pathCode;
+        
 
         if (pathCompiler == null)
             pathCompiler = _pathCompiler;
