@@ -9479,7 +9479,7 @@ public class GTURTLEModeling {
             else {
                 bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
             }
-            if (attr.getName().contains("key_")){
+            if (attr.getName().contains("key_") || attr.getName().contains("privKey_")){
                 hasCrypto=true;
                 bl.addCryptoElements();
             }

@@ -56,6 +56,7 @@ public class SecurityPattern {
     public String nonce;
     public String formula;
     public String key;
+    public String algorithm="";
     
     public SecurityPattern(String _name, String _type, String _overhead, String _size, String _enctime, String _dectime, String _nonce, String _formula, String _key){
         this.name=_name;
