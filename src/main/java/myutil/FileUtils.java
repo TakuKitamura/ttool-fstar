@@ -87,6 +87,15 @@ public class FileUtils {
 	return new File(path).isDirectory();
     }
 
+    public static boolean checkAndCreateDir(String s) throws FileException {
+    	File f = new File(s);
+    	try {
+    		return f.exists() ? true : f.mkdir(); 
+		} catch (Exception e) {
+			throw new FileException(e.getMessage());
+		}
+    }
+    
     public static boolean checkFileForSave(File file) throws FileException {
         //     boolean ok = true;
         //    String pb = "";

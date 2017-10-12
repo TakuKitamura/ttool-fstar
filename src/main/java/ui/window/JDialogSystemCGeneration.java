@@ -57,6 +57,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import common.ConfigurationTTool;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -771,6 +774,8 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                 jta.append("Saving C++ files...\n");
 
                 pathCode = code1.getText();
+                if (!FileUtils.checkAndCreateDir(ConfigurationTTool.SystemCCodeDirectory))
+                	throw new Throwable();
                 tml2systc.saveFile(pathCode, "appmodel");
 
                 jta.append( "C++ files saved." + System.lineSeparator() );

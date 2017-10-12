@@ -2328,14 +2328,27 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
 
+    public void setDirConfig() {
+    	ConfigurationTTool.SystemCCodeDirectory = dir.getAbsolutePath() + "/c++code/";
+    }
+    
+    public void setBasicConfig() {
+    	try {
+			ConfigurationTTool.loadConfiguration("./launch_configurations/config.xml", systemcOn);
+		} catch (MalformedConfigurationException e) {
+			System.out.println("Couldn't load configuration from file: config.xml");
+		}
+    }
     public void openProjectFromFile(File _f) {
     	if (FileUtils.getExtension(_f).equals("ttool")) {
     		dir = _f;
+    		setDirConfig();
     		String filename = dir.getAbsolutePath() + "/" + dir.getName().replaceAll(".ttool", ".xml");
     		file = new File(filename);
     	}
     	else {
     		dir = null;
+    		setBasicConfig();
     		file = _f;
     	}
         
@@ -2632,6 +2645,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         	dir = jfc.getSelectedFile();
         	dir = FileUtils.addFileExtensionIfMissing(dir, "ttool");
         	dir.mkdir();
+        	setDirConfig();
         	String newname = FileUtils.removeFileExtension(dir.getName());
             file = new File(dir, newname);
             file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
@@ -2644,6 +2658,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         newTurtleModeling();
     	frame.setTitle(file.getName());
     	try {
+    		if (gtm == null) {
+    			throw new Exception("Internal model Error 1");
+    		}
     		String s = gtm.makeXMLFromTurtleModeling(-1);
     		if (s == null) {
     			throw new Exception("Internal model Error 2");
