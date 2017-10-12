@@ -72,7 +72,7 @@ public class FileUtils {
 
 
     public static String getExtension(File f) {
-        String ext = null;
+        String ext = "";
         String s = f.getName();
         int i = s.lastIndexOf('.');
 

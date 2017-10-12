@@ -445,6 +445,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         TFileFilter filter = new TFileFilter();
         jfc.setFileFilter(filter);
+        jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
         TTIFFilter filtertif = new TTIFFilter();
         jfctif.setFileFilter(filtertif);
@@ -2329,7 +2330,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void openProjectFromFile(File _f) {
     	if (FileUtils.getExtension(_f).equals("ttool")) {
     		dir = _f;
-    		String filename = dir.getAbsolutePath() + dir.getName().replaceAll(".ttool", ".xml");
+    		String filename = dir.getAbsolutePath() + "/" + dir.getName().replaceAll(".ttool", ".xml");
     		file = new File(filename);
     	}
     	else {
