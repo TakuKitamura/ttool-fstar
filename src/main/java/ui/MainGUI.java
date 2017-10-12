@@ -1866,6 +1866,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             newTurtleModeling();
             //gtm.saveOperation(tcdp);
             file = null;
+            dir = null;
             frame.setTitle("TTool: unsaved project");
         } else {
             //  check if previous modeling is saved
@@ -2667,7 +2668,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     	
     protected boolean saveProject() {
         if (file == null) {
-            createFileDialog();
+        	if (dir != null)
+        		createFileDialog();
+        	else {
+        		int returnVal = jfc.showSaveDialog(frame);
+                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                    file = jfc.getSelectedFile();
+                    file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
+                }
+        	}
         }
 
         if( checkFileForSave(file)) {
