@@ -34,7 +34,7 @@ subprojects {
         }
     }
 
-    test.workingDir "${rootProject.absPath}/tests/util/fr.tpt.ttool.tests.util"
+    test.workingDir "${rootProject.absPath}/oldTest_DoNotUse/util/fr.tpt.ttool.tests.util"
     libsDirName = "${rootProject.absPath}/bin"
 
     task copyRuntimeLibs(type: Copy) {
