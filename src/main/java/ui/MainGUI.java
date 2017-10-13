@@ -2331,7 +2331,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void setDirConfig() {
     	SpecConfigTTool.SystemCCodeDirectory = dir.getAbsolutePath() + "/c++code/";
-    	SpecConfigTTool.SystemCCodeCompileCommand = "make -C " + SpecConfigTTool.SystemCCodeDirectory;
+    	SpecConfigTTool.SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
+    	SpecConfigTTool.SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
+    	SpecConfigTTool.SystemCCodeInteractiveExecuteCommand = ConfigurationTTool.SystemCCodeInteractiveExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
     }
     
     public void setBasicConfig() {
@@ -4430,7 +4432,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         } else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {
             JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation Code Generation and Compilation",
                                                                          ConfigurationTTool.SystemCHost, SpecConfigTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeCompileCommand,
-                                                                         ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, _mode);
+                                                                         SpecConfigTTool.SystemCCodeExecuteCommand, SpecConfigTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, _mode);
             //jgen.setSize(500, 750);
             GraphicLib.centerOnParent( jgen, 700, 750 );
             jgen.setVisible(true);

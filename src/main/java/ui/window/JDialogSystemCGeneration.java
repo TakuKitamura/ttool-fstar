@@ -163,24 +163,21 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         
         pathCompiler = _pathCompiler;
 
-        if (pathExecute == null)
-            pathExecute = _pathExecute;
+        pathExecute = _pathExecute;
 
-        if (pathInteractiveExecute == null) {
-            if (_graphPath != null) {
-                _pathInteractiveExecute += " -gpath " + _graphPath;
-            }
-            pathInteractiveExecute = _pathInteractiveExecute;
+        if (_graphPath != null) {
+            _pathInteractiveExecute += " -gpath " + _graphPath;
         }
+        pathInteractiveExecute = _pathInteractiveExecute;
+     
 
-        if (pathFormalExecute == null) {
-            pathFormalExecute = pathInteractiveExecute;
+        pathFormalExecute = pathInteractiveExecute;
 
-            int index = pathFormalExecute.indexOf("-server");
-            if (index != -1) {
-                pathFormalExecute = pathFormalExecute.substring(0, index) + pathFormalExecute.substring(index+7, pathFormalExecute.length());
-                pathFormalExecute += " -gname graph -explo";
-            }
+        int index = pathFormalExecute.indexOf("-server");
+        if (index != -1) {
+            pathFormalExecute = pathFormalExecute.substring(0, index) + pathFormalExecute.substring(index+7, pathFormalExecute.length());
+            pathFormalExecute += " -gname graph -explo";
+            
         }
 
         simulatorHost = _simulatorHost;
