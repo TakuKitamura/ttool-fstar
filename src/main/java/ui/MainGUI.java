@@ -2330,10 +2330,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void setDirConfig() {
-    	SpecConfigTTool.SystemCCodeDirectory = dir.getAbsolutePath() + "/c++code/";
+    	SpecConfigTTool.SystemCCodeDirectory = dir.getAbsolutePath() + "/c++_code/";
+    	SpecConfigTTool.CCodeDirectory = dir.getAbsolutePath() + "/c_code/";
     	SpecConfigTTool.SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
     	SpecConfigTTool.SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
     	SpecConfigTTool.SystemCCodeInteractiveExecuteCommand = ConfigurationTTool.SystemCCodeInteractiveExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
+    	
     }
     
     public void setBasicConfig() {
@@ -4544,8 +4546,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //            path = file.getAbsolutePath();
         //        }
         JDialogCCodeGeneration jgen = new JDialogCCodeGeneration( frame, this, "Application code generation and compilation",
-                                                                  ConfigurationTTool.CCodeDirectory,
-                                                                  "make -C " + ConfigurationTTool.CCodeDirectory,
+                                                                  SpecConfigTTool.CCodeDirectory,
+                                                                  "make -C " + SpecConfigTTool.CCodeDirectory,
                                                                   gtm );
         //   jgen.setSize(500, 750);
         GraphicLib.centerOnParent(jgen, 500, 750);

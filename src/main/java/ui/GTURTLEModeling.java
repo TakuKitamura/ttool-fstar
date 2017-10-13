@@ -44,6 +44,7 @@ import avatartranslator.totpn.AVATAR2TPN;
 import avatartranslator.toturtle.AVATAR2TURTLE;
 import avatartranslator.touppaal.AVATAR2UPPAAL;
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ddtranslator.DDSyntaxException;
 import ddtranslator.DDTranslator;
 import launcher.LauncherException;
@@ -474,14 +475,17 @@ public class GTURTLEModeling {
         CCode = new TMLModelCompiler( _title, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
         CCode.toTextFormat();
         try {
-            if( ConfigurationTTool.CCodeDirectory.equals("") )  {
+            if( SpecConfigTTool.CCodeDirectory.equals("") )  {
                 JOptionPane.showMessageDialog(  mgui.frame,
                                                 "No directory for C code generation found in config.xml. The C code cannot be generated.",
                                                 "Control code generation failed", JOptionPane.INFORMATION_MESSAGE );
                 return true;
             }
-            else                {
-                CCode.saveFile( ConfigurationTTool.CCodeDirectory + File.separator, applicationName );
+            else {
+            	File test = new File(SpecConfigTTool.CCodeDirectory);
+            	if (!test.exists())
+            		test.mkdir();
+                CCode.saveFile( SpecConfigTTool.CCodeDirectory + File.separator, applicationName );
             }
         }
         catch( Exception e ) {
@@ -492,8 +496,7 @@ public class GTURTLEModeling {
     }
 
     public boolean generateTMLTxt( String _title ) {
-
-
+    	
         //This branch is activated if doing the syntax check from the architecture panel.
         //It generates the text TML for the architecture and the application + mapping information
         if (tmap != null) {

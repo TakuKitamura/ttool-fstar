@@ -122,6 +122,7 @@ public class TMLModelCompiler   {
         tmlm = _tmap.getTMLModeling();
         tmla = _tmap.getTMLArchitecture();
         mappedCPLibs = _tmap.getMappedTMLCPLibs();
+       
         init();
     }
 
@@ -141,6 +142,9 @@ public class TMLModelCompiler   {
         prexList = new ArrayList<TMLPort>();
         buffersList = new ArrayList<Buffer>();
         dataTransfersList = new ArrayList<DataTransfer>();
+        File f = new File(ConfigurationTTool.CCodeDirectory);
+        if (!f.exists())
+        	f.mkdir();
         debugFileName = ConfigurationTTool.CCodeDirectory + "debugFile.txt";
         tmlcpsList = new ArrayList<TMLCP>();
     }

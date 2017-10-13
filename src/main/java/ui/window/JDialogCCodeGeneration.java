@@ -138,12 +138,9 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         mgui = _mgui;
         gtm = _gtm;
 
-        if (pathCode == null) {
-            pathCode = _pathCode;
-        }
-
-        if (pathCompiler == null)
-            pathCompiler = _pathCompiler;
+        pathCode = _pathCode;
+        
+        pathCompiler = _pathCompiler;
 
         initComponents();
         myInitComponents();
