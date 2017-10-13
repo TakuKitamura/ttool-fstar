@@ -95,11 +95,11 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
     		if (!f.exists())
     			if(!f.mkdir())
     					return false;
-    		if (!ConfigurationTTool.SystemCCodeDirectory.equals("../simulators/c++2/")) {
-    			File make = new File("../simulators/c++2/Makefile");
-    			File defs = new File("../simulators/c++2/Makefile.defs");
-    			File src = new File("../simulators/c++2/src_simulator");
-    			File dir = new File(ConfigurationTTool.SystemCCodeDirectory);
+    		if (!s.equals(ConfigurationTTool.SystemCCodeDirectory)) {
+    			File make = new File(ConfigurationTTool.SystemCCodeDirectory + "Makefile");
+    			File defs = new File(ConfigurationTTool.SystemCCodeDirectory + "Makefile.defs");
+    			File src = new File(ConfigurationTTool.SystemCCodeDirectory + "src_simulator");
+    			File dir = new File(s);
     			FileUtils.copyFileToDirectory(make, dir, false);
     			FileUtils.copyFileToDirectory(defs, dir, false);
     			FileUtils.copyDirectoryToDirectory(src, dir);

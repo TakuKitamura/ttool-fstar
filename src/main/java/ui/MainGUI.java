@@ -43,6 +43,7 @@ package ui;
 
 import avatartranslator.AvatarSpecification;
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
 import launcher.RemoteExecutionThread;
@@ -2329,8 +2330,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void setDirConfig() {
-    	ConfigurationTTool.SystemCCodeDirectory = dir.getAbsolutePath() + "/c++code/";
-    	ConfigurationTTool.SystemCCodeCompileCommand = "make -C " + ConfigurationTTool.SystemCCodeDirectory;
+    	SpecConfigTTool.SystemCCodeDirectory = dir.getAbsolutePath() + "/c++code/";
+    	SpecConfigTTool.SystemCCodeCompileCommand = "make -C " + SpecConfigTTool.SystemCCodeDirectory;
     }
     
     public void setBasicConfig() {
@@ -4428,7 +4429,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             avatarSimulation();
         } else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {
             JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation Code Generation and Compilation",
-                                                                         ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand,
+                                                                         ConfigurationTTool.SystemCHost, SpecConfigTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeCompileCommand,
                                                                          ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, _mode);
             //jgen.setSize(500, 750);
             GraphicLib.centerOnParent( jgen, 700, 750 );
