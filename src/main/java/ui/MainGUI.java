@@ -2431,7 +2431,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-
+            
+            if (ConfigurationTTool.LastOpenFile.contains(".ttool/")) {
+            	int last = 0;
+            	for (int i = 0;i < ConfigurationTTool.LastOpenFile.length(); i++) {
+            		if (ConfigurationTTool.LastOpenFile.charAt(i) == '/')
+            			last = i;
+            	}
+            	dir = new File(ConfigurationTTool.LastOpenFile.substring(0, last));
+            	this.setDirConfig();
+            }
+            else {
+            	dir = null;
+            	this.setBasicConfig();
+            }
             // close current modeling
             closeTurtleModeling();
 
