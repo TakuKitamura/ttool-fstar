@@ -63,12 +63,12 @@ import avatartranslator.*;
 
 public class AvatarGuardTests {
 
-	AvatarGuard res;
-	AvatarBlock A,B;
+    AvatarGuard res;
+    AvatarBlock A,B;
     public AvatarGuardTests () {
-      //  super ("AvatarGuards", false);
+        //  super ("AvatarGuards", false);
     }
-	@Before
+    @Before
     public void test () {
         AvatarSpecification as = new AvatarSpecification("avatarspecification", null);
         A = new AvatarBlock("A", as, null);
@@ -119,44 +119,44 @@ public class AvatarGuardTests {
         typeAttributesMap.put("T1", t1s);
         typeAttributesMap.put("T2", t2s);
 
-	}
-	
-	@Test
-	public void testElseGuardCreation(){
-		res= AvatarGuard.createFromString(A, "else");
-		assertTrue(res instanceof AvatarGuardElse);
-	}
+    }
 
-	@Test
-	public void testEmptyGuardCreation(){
-		//Empty Guard
+    @Test
+    public void testElseGuardCreation(){
+        res= AvatarGuard.createFromString(A, "else");
+        assertTrue(res instanceof AvatarGuardElse);
+    }
+
+    @Test
+    public void testEmptyGuardCreation(){
+        //Empty Guard
         res= AvatarGuard.createFromString(A, "");
         assertTrue(res instanceof AvatarGuardEmpty);
-	}
-   
-	@Test
-	public void testFailNonValidExpression(){
+    }
+
+    /*@Test
+    public void testFailNonValidExpression(){
         //Fail if not valid expression
         /*res= AvatarGuard.createFromString(A, "arg(key1==key2))");
-        assertTrue(res instanceof AvatarGuardEmpty);
-        res= AvatarGuard.createFromString(A, "key1=key2");
-        assertTrue(res instanceof AvatarGuardEmpty);
-        res= AvatarGuard.createFromString(A, "key1==)");
-        assertTrue(res instanceof AvatarGuardEmpty);
-        res= AvatarGuard.createFromString(A, "(key1==)))");
-        assertTrue(res instanceof AvatarGuardEmpty);*/
-	}
-        
-	
-	@Test
-	public void testMonoGuardCreation(){
-		res= AvatarGuard.createFromString(A, "test");
-        assertTrue(res instanceof AvatarSimpleGuardMono);
-	}
+          assertTrue(res instanceof AvatarGuardEmpty);
+          res= AvatarGuard.createFromString(A, "key1=key2");
+          assertTrue(res instanceof AvatarGuardEmpty);
+          res= AvatarGuard.createFromString(A, "key1==)");
+          assertTrue(res instanceof AvatarGuardEmpty);
+          res= AvatarGuard.createFromString(A, "(key1==)))");
+          assertTrue(res instanceof AvatarGuardEmpty);
+    }*/
 
-	@Test
-	public void testDuoGuardCreation(){
-		res= AvatarGuard.createFromString(A, "test==test2");
+
+    @Test
+    public void testMonoGuardCreation(){
+        res= AvatarGuard.createFromString(A, "test");
+        assertTrue(res instanceof AvatarSimpleGuardMono);
+    }
+
+    @Test
+    public void testDuoGuardCreation(){
+        res= AvatarGuard.createFromString(A, "test==test2");
         assertTrue(res instanceof AvatarSimpleGuardDuo);
         res= AvatarGuard.createFromString(A, "key1==key2");
         assertTrue(res instanceof AvatarSimpleGuardDuo);
@@ -177,10 +177,10 @@ public class AvatarGuardTests {
         res= AvatarGuard.createFromString(A, "(a,b)==(c,d)");
 
         assertTrue(res instanceof AvatarSimpleGuardDuo);
-	}
+    }
 
-	@Test
-	public void testUnaryGuardCreation(){
+    @Test
+    public void testUnaryGuardCreation(){
         res= AvatarGuard.createFromString(A, "not(test)");
         assertTrue(res instanceof AvatarUnaryGuard);
         res= AvatarGuard.createFromString(A, "not(test==test2)");
@@ -192,10 +192,10 @@ public class AvatarGuardTests {
         res= AvatarGuard.createFromString(B, "not(m__a==m__b)");
         assertTrue(res instanceof AvatarUnaryGuard);
 
-	}
+    }
 
-	@Test
-	public void testBinaryGuardCreation(){
+    @Test
+    public void testBinaryGuardCreation(){
         //Binary Guards
         res= AvatarGuard.createFromString(A, "(key1==true) and (key2==false)");
         assertTrue(res instanceof AvatarBinaryGuard);
@@ -205,9 +205,9 @@ public class AvatarGuardTests {
         assertTrue(res instanceof AvatarBinaryGuard);
         res= AvatarGuard.createFromString(A, "((key1==key1) or (key2==key1)) and (m__a==m__b)");
         assertTrue(res instanceof AvatarBinaryGuard);
-	}
- 
-    
+    }
+
+
     public static void main(String[] args){
         AvatarGuardTests apt = new AvatarGuardTests ();
         //apt.runTest ();
