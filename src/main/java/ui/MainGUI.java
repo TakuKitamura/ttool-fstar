@@ -2330,6 +2330,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void setDirConfig() {
     	ConfigurationTTool.SystemCCodeDirectory = dir.getAbsolutePath() + "/c++code/";
+    	ConfigurationTTool.SystemCCodeCompileCommand = "make -C " + ConfigurationTTool.SystemCCodeDirectory;
     }
     
     public void setBasicConfig() {

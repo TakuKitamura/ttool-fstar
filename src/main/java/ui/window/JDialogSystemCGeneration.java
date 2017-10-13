@@ -160,9 +160,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         pathCode = _pathCode;
         
-
-        if (pathCompiler == null)
-            pathCompiler = _pathCompiler;
+        pathCompiler = _pathCompiler;
 
         if (pathExecute == null)
             pathExecute = _pathExecute;

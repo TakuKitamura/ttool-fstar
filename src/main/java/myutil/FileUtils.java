@@ -46,6 +46,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 
+import common.ConfigurationTTool;
+
 
 /**
    * Class FileUtils
@@ -53,7 +55,7 @@ import java.io.FilenameFilter;
    * @version 1.1 01/12/2003
    * @author Ludovic APVRILLE
  */
-public class FileUtils {
+public class FileUtils extends org.apache.commons.io.FileUtils{
 
     public final static String xml = "xml";
     public final static String rtl = "lot";
@@ -90,7 +92,17 @@ public class FileUtils {
     public static boolean checkAndCreateDir(String s) throws FileException {
     	File f = new File(s);
     	try {
-    		return f.exists() ? true : f.mkdir(); 
+    		if (!f.exists())
+    			if(!f.mkdir())
+    					return false;
+    		File make = new File("../simulators/c++2/Makefile");
+    		File defs = new File("../simulators/c++2/Makefile.defs");
+    		File src = new File("../simulators/c++2/src_simulator");
+    		File dir = new File(ConfigurationTTool.SystemCCodeDirectory);
+    		FileUtils.copyFileToDirectory(make, dir, false);
+    		FileUtils.copyFileToDirectory(defs, dir, false);
+    		FileUtils.copyDirectoryToDirectory(src, dir);
+    		return true;
 		} catch (Exception e) {
 			throw new FileException(e.getMessage());
 		}
