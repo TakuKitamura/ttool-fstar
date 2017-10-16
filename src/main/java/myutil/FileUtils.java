@@ -45,6 +45,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 
 import common.ConfigurationTTool;
 
@@ -89,6 +90,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
 	return new File(path).isDirectory();
     }
 
+    /**
+     * Check and create the directory for c++ code generation in DIPLODOCUS
+     * @author Fabien Tessier
+     * @param s directory path
+     * @return true if there's no error, false if the directory cannot be created
+     * @throws FileException
+     */
     public static boolean checkAndCreateDir(String s) throws FileException {
     	File f = new File(s);
     	try {
@@ -99,15 +107,47 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
     			File make = new File(ConfigurationTTool.SystemCCodeDirectory + "Makefile");
     			File defs = new File(ConfigurationTTool.SystemCCodeDirectory + "Makefile.defs");
     			File src = new File(ConfigurationTTool.SystemCCodeDirectory + "src_simulator");
-    			File dir = new File(s);
-    			FileUtils.copyFileToDirectory(make, dir, false);
-    			FileUtils.copyFileToDirectory(defs, dir, false);
-    			FileUtils.copyDirectoryToDirectory(src, dir);
+    			
+    			FileUtils.copyFileToDirectory(make, f, false);
+    			FileUtils.copyFileToDirectory(defs, f, false);
+    			FileUtils.copyDirectoryToDirectory(src, f);
     		}
     		return true;
 		} catch (Exception e) {
 			throw new FileException(e.getMessage());
 		}
+    }
+    
+    /**
+     * Check and create the directory for c code generation in AVATAR
+     * @author Fabien Tessier
+     * @param s directory path
+     * @return true if there's no error, false if the directory cannot be created
+     * @throws FileException
+     */
+    public static boolean checkAndCreateAVATARDir(String s) throws FileException {
+    	File f = new File(s);
+    	try {
+    		if (!f.exists())
+    			if(!f.mkdir())
+					return false;
+    		if (!s.equals(ConfigurationTTool.AVATARExecutableCodeDirectory)) {
+    			File make = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile");
+    			File defs = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.defs");
+    			File soclib = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.forsoclib");
+    			File src = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "src");
+    		
+				FileUtils.copyFileToDirectory(make, f);
+				FileUtils.copyFileToDirectory(defs, f);
+				FileUtils.copyFileToDirectory(soclib, f);
+				FileUtils.copyDirectoryToDirectory(src, f);
+			}
+    		return true;
+    	}
+    	catch (IOException e) {
+			throw new FileException(e.getMessage());
+		}
+    	
     }
     
     public static boolean checkFileForSave(File file) throws FileException {

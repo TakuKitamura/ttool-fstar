@@ -2332,10 +2332,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void setDirConfig() {
     	SpecConfigTTool.SystemCCodeDirectory = dir.getAbsolutePath() + "/c++_code/";
     	SpecConfigTTool.CCodeDirectory = dir.getAbsolutePath() + "/c_code/";
+    	SpecConfigTTool.ProVerifCodeDirectory = dir.getAbsolutePath() + "/proverif/";
+    	SpecConfigTTool.AVATARExecutableCodeDirectory = dir.getAbsolutePath() + "/AVATAR_executablecode/";
+    	
     	SpecConfigTTool.SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
     	SpecConfigTTool.SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
     	SpecConfigTTool.SystemCCodeInteractiveExecuteCommand = ConfigurationTTool.SystemCCodeInteractiveExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
     	
+    	SpecConfigTTool.AVATARExecutableCodeExecuteCommand = ConfigurationTTool.AVATARExecutableCodeExecuteCommand.replace(ConfigurationTTool.AVATARExecutableCodeDirectory,  SpecConfigTTool.AVATARExecutableCodeDirectory);
+    	SpecConfigTTool.AVATARExecutableCodeCompileCommand = ConfigurationTTool.AVATARExecutableCodeCompileCommand.replace(ConfigurationTTool.AVATARExecutableCodeDirectory,  SpecConfigTTool.AVATARExecutableCodeDirectory);
     }
     
     public void setBasicConfig() {
@@ -4247,7 +4252,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             adp = (AvatarDesignPanel) tp;
 			limit=false;
 		}
-        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp,limit);
+        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, SpecConfigTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp,limit);
         // jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);
@@ -4274,7 +4279,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarExecutableCodeGeneration() {
         TraceManager.addDev("Avatar code generation");
-        JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, ConfigurationTTool.AVATARExecutableCodeDirectory,  ConfigurationTTool.AVATARExecutableCodeCompileCommand, ConfigurationTTool.AVATARExecutableCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand, ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand,  ConfigurationTTool.AVATARExecutableSoclibTraceFile);
+        JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, SpecConfigTTool.AVATARExecutableCodeDirectory,  SpecConfigTTool.AVATARExecutableCodeCompileCommand, SpecConfigTTool.AVATARExecutableCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand, ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand,  ConfigurationTTool.AVATARExecutableSoclibTraceFile);
         //   jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);

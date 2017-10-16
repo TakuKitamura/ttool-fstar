@@ -151,15 +151,12 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         f = _f;
         mgui = _mgui;
 
-        if (pathCode == null) {
-            pathCode = _pathCode;
-        }
 
-        if (pathCompiler == null)
-            pathCompiler = _pathCompiler;
+        pathCode = _pathCode;
+        
+        pathCompiler = _pathCompiler;
 
-        if (pathExecute == null)
-            pathExecute = _pathExecute;
+        pathExecute = _pathExecute;
 
         if (pathCompileSoclib == null) {
             pathCompileSoclib = _pathCompilerSoclib;

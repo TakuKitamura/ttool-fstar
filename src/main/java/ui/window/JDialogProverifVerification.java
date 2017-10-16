@@ -164,9 +164,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         this.adp = adp;
         this.pvoa = null;
 		this.limit=lim;
-        if (pathCode == null) {
-            pathCode = _pathCode;
-        }
+
+        pathCode = _pathCode;
 
         if (pathExecute == null)
             pathExecute = _pathExecute;
@@ -439,6 +438,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
             }
 
             testFile = new File(pathCode);
+            if (!testFile.exists())
+            	testFile.mkdirs();
 
             if (testFile.isDirectory()){
                 pathCode += File.separator;
