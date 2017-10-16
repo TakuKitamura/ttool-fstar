@@ -504,7 +504,7 @@ public class GTURTLEModeling {
             spec.toTextFormat( tmap );    //TMLMapping
             try {
                 //TraceManager.addDev( "*** " + ConfigurationTTool.TMLCodeDirectory + File.separator );
-                spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
+                spec.saveFile( SpecConfigTTool.TMLCodeDirectory, "spec" );
             }
             catch( Exception e ) {
                 TraceManager.addError( "Files could not be saved: " + e.getMessage() );

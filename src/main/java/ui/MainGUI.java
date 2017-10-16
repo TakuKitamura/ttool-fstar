@@ -2329,37 +2329,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
 
-    public void setDirConfig() {
-    	SpecConfigTTool.SystemCCodeDirectory = dir.getAbsolutePath() + "/c++_code/";
-    	SpecConfigTTool.CCodeDirectory = dir.getAbsolutePath() + "/c_code/";
-    	SpecConfigTTool.ProVerifCodeDirectory = dir.getAbsolutePath() + "/proverif/";
-    	SpecConfigTTool.AVATARExecutableCodeDirectory = dir.getAbsolutePath() + "/AVATAR_executablecode/";
-    	
-    	SpecConfigTTool.SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
-    	SpecConfigTTool.SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
-    	SpecConfigTTool.SystemCCodeInteractiveExecuteCommand = ConfigurationTTool.SystemCCodeInteractiveExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeDirectory);
-    	
-    	SpecConfigTTool.AVATARExecutableCodeExecuteCommand = ConfigurationTTool.AVATARExecutableCodeExecuteCommand.replace(ConfigurationTTool.AVATARExecutableCodeDirectory,  SpecConfigTTool.AVATARExecutableCodeDirectory);
-    	SpecConfigTTool.AVATARExecutableCodeCompileCommand = ConfigurationTTool.AVATARExecutableCodeCompileCommand.replace(ConfigurationTTool.AVATARExecutableCodeDirectory,  SpecConfigTTool.AVATARExecutableCodeDirectory);
-    }
     
-    public void setBasicConfig() {
-    	try {
-			ConfigurationTTool.loadConfiguration("./launch_configurations/config.xml", systemcOn);
-		} catch (MalformedConfigurationException e) {
-			System.out.println("Couldn't load configuration from file: config.xml");
-		}
-    }
+    
+    
+    
     public void openProjectFromFile(File _f) {
     	if (FileUtils.getExtension(_f).equals("ttool")) {
     		dir = _f;
-    		setDirConfig();
+    		SpecConfigTTool.setDirConfig(dir);
     		String filename = dir.getAbsolutePath() + "/" + dir.getName().replaceAll(".ttool", ".xml");
     		file = new File(filename);
     	}
     	else {
     		dir = null;
-    		setBasicConfig();
+    		SpecConfigTTool.setBasicConfig(systemcOn);
     		file = _f;
     	}
         
@@ -2450,11 +2433,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             			last = i;
             	}
             	dir = new File(ConfigurationTTool.LastOpenFile.substring(0, last));
-            	this.setDirConfig();
+            	SpecConfigTTool.setDirConfig(dir);
             }
             else {
             	dir = null;
-            	this.setBasicConfig();
+            	SpecConfigTTool.setBasicConfig(systemcOn);
             }
             // close current modeling
             closeTurtleModeling();
@@ -2669,7 +2652,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         	dir = jfc.getSelectedFile();
         	dir = FileUtils.addFileExtensionIfMissing(dir, "ttool");
         	dir.mkdir();
-        	setDirConfig();
+        	SpecConfigTTool.setDirConfig(dir);
         	String newname = FileUtils.removeFileExtension(dir.getName());
             file = new File(dir, newname);
             file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());

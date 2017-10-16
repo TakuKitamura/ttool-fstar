@@ -136,11 +136,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
     			File defs = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.defs");
     			File soclib = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.forsoclib");
     			File src = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "src");
+    			//File topcell = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "generated_topcell");
     		
 				FileUtils.copyFileToDirectory(make, f);
 				FileUtils.copyFileToDirectory(defs, f);
 				FileUtils.copyFileToDirectory(soclib, f);
 				FileUtils.copyDirectoryToDirectory(src, f);
+				//FileUtils.copyDirectoryToDirectory(topcell, f);
 			}
     		return true;
     	}
