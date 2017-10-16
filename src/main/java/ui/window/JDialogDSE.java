@@ -145,7 +145,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         mgui = _mgui;
         simulator=_simulator;
 		cpuTaskMap = cpuTasks;
-        tmlDir = dir+"/";
+        tmlDir = dir;
         resDirect = _simulator + "results/";
 		for (String cpu: cpuTasks.keySet()){
 			for (String task: cpuTasks.get(cpu)){

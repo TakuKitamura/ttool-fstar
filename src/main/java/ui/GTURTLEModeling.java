@@ -547,7 +547,7 @@ public class GTURTLEModeling {
             // from which the button is pressed. If there are multiple CP panels this operation must be repeated for each panel. It
             // should be no difficult to implement.
             try {
-                specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
+                specCP.saveFile( SpecConfigTTool.TMLCodeDirectory, "spec.tmlcp" );
             }
             catch( Exception e ) {
                 TraceManager.addError( "Writing TMLText for CPs, file could not be saved: " + e.getMessage() );
@@ -561,7 +561,7 @@ public class GTURTLEModeling {
                 TMLTextSpecification<TGComponent> spec = new TMLTextSpecification<>( _title );
                 spec.toTextFormat( tmlm );        //TMLModeling
                 try {
-                    spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml" );
+                    spec.saveFile( SpecConfigTTool.TMLCodeDirectory, "spec.tml" );
                 }
                 catch( Exception e ) {
                     TraceManager.addError( "File could not be saved: " + e.getMessage() );
