@@ -286,6 +286,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     private File file;
     private File dir;
+    private File config;
     private File lotosfile;
     private File simfile;
     private File dtafile;
@@ -355,7 +356,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //PluginManager.pluginManager = new PluginManager();
 
     }
-
+    
     public void setKey(String _sk) {
         sk = _sk;
         RshClient.sk = sk;
@@ -364,7 +365,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public String getKey() {
         return sk;
     }
-
+    
+    public File getDir() {
+    	return dir;
+    }
 
     public boolean isAvatarOn() {
         return avatarOn;
@@ -1868,6 +1872,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             //gtm.saveOperation(tcdp);
             file = null;
             dir = null;
+            config = null;
             frame.setTitle("TTool: unsaved project");
         } else {
             //  check if previous modeling is saved
@@ -1935,7 +1940,23 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             }
         }
     }
-
+    
+    public void saveConfig() {
+        int i = 0;
+        for (; i < tabs.size(); i++) {
+        	if (tabs.get(i) == activetdp.tp)
+        		break;
+        }
+        int j = tabs.get(i).getIndexOfChild(activetdp);
+        SpecConfigTTool.lastTab = i;
+        SpecConfigTTool.lastPanel = j;
+        try {
+			SpecConfigTTool.saveConfiguration(config);
+		} catch (MalformedConfigurationException e) {
+			System.err.println(e.getMessage() + " : Can't save config file.");
+		}
+    }
+    
     public String loadFile(File f) {
         String s = null;
 
@@ -2339,9 +2360,16 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     		SpecConfigTTool.setDirConfig(dir);
     		String filename = dir.getAbsolutePath() + "/" + dir.getName().replaceAll(".ttool", ".xml");
     		file = new File(filename);
+    		config = new File(dir.getAbsolutePath() + "/project_config.xml");
+    		try {
+				SpecConfigTTool.loadConfigFile(config);
+			} catch (MalformedConfigurationException e) {
+				System.err.println(e.getMessage() + " : Can't load config file.");
+			}
     	}
     	else {
     		dir = null;
+    		config = null;
     		SpecConfigTTool.setBasicConfig(systemcOn);
     		file = _f;
     	}
@@ -2434,9 +2462,16 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             	}
             	dir = new File(ConfigurationTTool.LastOpenFile.substring(0, last));
             	SpecConfigTTool.setDirConfig(dir);
+            	config = new File(dir.getAbsolutePath() + "/project_config.xml");
+            	try {
+    				SpecConfigTTool.loadConfigFile(config);
+    			} catch (MalformedConfigurationException e) {
+    				System.err.println(e.getMessage() + " : Can't load config file.");
+    			}
             }
             else {
             	dir = null;
+            	config = null;
             	SpecConfigTTool.setBasicConfig(systemcOn);
             }
             // close current modeling
@@ -2499,7 +2534,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
             frame.setTitle("TToolt: unnamed project");
         }
-        
         gtm.enableUndo(true);
         gtm.saveOperation(getCurrentSelectedPoint());
         dtree.forceUpdate();
@@ -2653,6 +2687,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         	dir = FileUtils.addFileExtensionIfMissing(dir, "ttool");
         	dir.mkdir();
         	SpecConfigTTool.setDirConfig(dir);
+        	config = SpecConfigTTool.createProjectConfig(dir);
+        	try {
+				SpecConfigTTool.loadConfigFile(config);
+			} catch (MalformedConfigurationException e) {
+				System.err.println(e.getMessage() + " : Can't load config file.");
+			}
         	String newname = FileUtils.removeFileExtension(dir.getName());
             file = new File(dir, newname);
             file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
@@ -2917,6 +2957,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         try {
             if (ConfigurationTTool.LastOpenFileDefined) {
+            	if (dir != null)
+            		saveConfig();
                 ConfigurationTTool.saveConfiguration();
                 //TraceManager.addDev("Configuration written to file");
             }
@@ -7016,8 +7058,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void paneDiplodocusMethodologyAction(ChangeEvent e) {
         //TraceManager.addDev("Pane design action size=" + tabs.size());
         try {
-
-            TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
+        	TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
             //TraceManager.addDev("Pane design action 1");
             if (activetdp != null) {
 

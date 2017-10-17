@@ -686,6 +686,10 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
     public void clearSelectComponents(){
         this.selectedMultiComponents.clear();
     }
+    
+    public TDiagramPanel getTdp() {
+    	return tdp;
+    }
 //
 //    public void removeSelectedComponentFromList(){
 //        this.selectedMultiComponents.clear();

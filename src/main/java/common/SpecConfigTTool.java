@@ -1,8 +1,20 @@
 package common;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import myutil.FileUtils;
 import myutil.MalformedConfigurationException;
+import myutil.TraceManager;
 
 public class SpecConfigTTool {
 	public static String SystemCCodeDirectory="";
@@ -24,6 +36,9 @@ public class SpecConfigTTool {
 	public static String AVATARExecutableSoclibCodeExecuteCommand="";
 	public static String AVATARExecutableSoclibCodeTraceCommand="";
 	public static String TMLCodeDirectory="";
+	
+	public static int lastPanel = -1;
+	public static int lastTab = -1;
 	
 	public static void loadConfiguration() {
 		SystemCCodeDirectory = ConfigurationTTool.SystemCCodeDirectory;
@@ -71,9 +86,119 @@ public class SpecConfigTTool {
 	
 	public static void setBasicConfig(boolean systemcOn) {
     	try {
+    		lastPanel = -1;
+            lastTab = -1;
 			ConfigurationTTool.loadConfiguration("./launch_configurations/config.xml", systemcOn);
 		} catch (MalformedConfigurationException e) {
 			System.out.println("Couldn't load configuration from file: config.xml");
 		}
     }
+	
+	public static File createProjectConfig(File dir) {
+		File base = new File("./launch_configurations/project_config.xml");
+		try {
+			FileUtils.copyFileToDirectory(base, dir, false);
+			return new File(dir + File.separator + "project_config.xml");
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+		return null;	
+	}
+	
+	 public static void loadConfigFile(File f) throws MalformedConfigurationException {
+	        if (!FileUtils.checkFileForOpen(f)) {
+	            throw new MalformedConfigurationException("Filepb");
+	        }
+
+	        String data = FileUtils.loadFileData(f);
+
+	        if (data == null) {
+	            throw new MalformedConfigurationException("Filepb");
+	        }
+
+	        loadConfigurationFromXML(data);
+	        SpecConfigTTool.loadConfiguration();
+	    }
+	 
+	 public static void loadConfigurationFromXML(String data) throws MalformedConfigurationException {
+
+	        try {
+	            ByteArrayInputStream bais = new ByteArrayInputStream(data.getBytes());
+	            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	            DocumentBuilder db = dbf.newDocumentBuilder();
+
+	            // building nodes from xml String
+	            Document doc = db.parse(bais);
+	            NodeList nl;
+
+	            nl = doc.getElementsByTagName("LastOpenDiagram");
+	            if (nl.getLength() > 0)
+	                LastOpenDiagram(nl);
+	        } catch (Exception e) {
+	            throw new MalformedConfigurationException(e.getMessage());
+	        }
+	 }
+	 
+	 private static void LastOpenDiagram(NodeList nl) throws MalformedConfigurationException {
+		 try {
+			 Element elt = (Element)(nl.item(0));
+             lastTab = Integer.parseInt(elt.getAttribute("tab"));
+	         lastPanel = Integer.parseInt(elt.getAttribute("panel"));
+         } catch (Exception e) {
+        	 throw new MalformedConfigurationException(e.getMessage());
+	     }
+	 }
+	 
+	 public static void saveConfiguration(File f) throws MalformedConfigurationException {
+	        int index0, index1;
+	        String tmp1, tmp2, location;
+	        boolean write = false;
+
+	        if (!FileUtils.checkFileForOpen(f)) {
+	            throw new MalformedConfigurationException("Filepb");
+	        }
+
+	        String data = FileUtils.loadFileData(f);
+
+	        if (data == null) {
+	            throw new MalformedConfigurationException("Filepb");
+	        }
+
+	        index0 = data.indexOf("LastOpenDiagram");
+
+	        if (index0 > -1) {
+	            tmp1 = data.substring(0, index0+16);
+	            tmp2 = data.substring(index0+20, data.length());
+	            index1 = tmp2.indexOf("/>");
+	            if (index1 > -1) {
+	                tmp2 = tmp2.substring(index1, tmp2.length());
+	                location = " tab=\"" + lastTab;
+	                location += "\" panel=\"" + lastPanel + "\" ";
+	                data = tmp1 + location + tmp2;
+	                write = true;
+	            }
+	        } else {
+	            index1= data.indexOf("</PROJECTCONFIGURATION>");
+	            if (index1 > -1) {
+	                location = "<LastOpenDiagram tab=\"" + lastTab;
+	                location += "\" panel=\"" + lastPanel + "\"/>\n\n";
+	                data = data.substring(0, index1) + location + data.substring(index1, data.length());
+	                write = true;
+	            }
+	        }
+	        
+	        if (write) {
+	            //sb.append("Writing data=" + data);
+	            try {
+	                FileOutputStream fos = new FileOutputStream(f);
+	                fos.write(data.getBytes());
+	                fos.close();
+	            } catch (Exception e) {
+	                throw new  MalformedConfigurationException("Saving file failed");
+	            }
+	        } else {
+	            TraceManager.addError("Configuration could not be saved");
+	        }
+
+	 }
 }
