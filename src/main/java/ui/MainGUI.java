@@ -2537,6 +2537,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         gtm.enableUndo(true);
         gtm.saveOperation(getCurrentSelectedPoint());
         dtree.forceUpdate();
+        if (SpecConfigTTool.lastTab > -1 && SpecConfigTTool.lastPanel > -1) {
+        	this.mainTabbedPane.setSelectedIndex(SpecConfigTTool.lastTab);
+        	activetdp = tabs.get(SpecConfigTTool.lastTab).getPanels().elementAt(SpecConfigTTool.lastPanel);
+        	activetdp.selectTab(activetdp.name);
+        }
+        this.basicActivateDrawing();
+        
     }
 
     public void saveAsLibrary(String data) {

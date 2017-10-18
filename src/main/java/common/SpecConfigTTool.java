@@ -16,6 +16,13 @@ import myutil.FileUtils;
 import myutil.MalformedConfigurationException;
 import myutil.TraceManager;
 
+/**
+ * Specific configuration for ttool project
+ * Creation: 13/10/2017
+ * @version 1.0
+ * @author Fabien Tessier
+ *
+ */
 public class SpecConfigTTool {
 	public static String SystemCCodeDirectory="";
 	public static String SystemCCodeCompileCommand="";
@@ -117,7 +124,6 @@ public class SpecConfigTTool {
 	        }
 
 	        loadConfigurationFromXML(data);
-	        SpecConfigTTool.loadConfiguration();
 	    }
 	 
 	 public static void loadConfigurationFromXML(String data) throws MalformedConfigurationException {
