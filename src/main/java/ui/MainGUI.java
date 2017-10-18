@@ -2323,6 +2323,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
     public void openProject() {
+    	if (config != null)
+			saveConfig();
         // check if a current modeling is opened
         boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
         
@@ -2537,12 +2539,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         gtm.enableUndo(true);
         gtm.saveOperation(getCurrentSelectedPoint());
         dtree.forceUpdate();
-        if (SpecConfigTTool.lastTab > -1 && SpecConfigTTool.lastPanel > -1) {
-        	this.mainTabbedPane.setSelectedIndex(SpecConfigTTool.lastTab);
+        if (SpecConfigTTool.lastTab > -1 && SpecConfigTTool.lastPanel > -1 && mainTabbedPane.getTabCount() > 0) {
+        	mainTabbedPane.setSelectedIndex(SpecConfigTTool.lastTab);
         	activetdp = tabs.get(SpecConfigTTool.lastTab).getPanels().elementAt(SpecConfigTTool.lastPanel);
         	activetdp.selectTab(activetdp.name);
+        	basicActivateDrawing();
         }
-        this.basicActivateDrawing();
+        
         
     }
 
