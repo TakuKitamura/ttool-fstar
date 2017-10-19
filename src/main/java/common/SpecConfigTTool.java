@@ -42,7 +42,15 @@ public class SpecConfigTTool {
 	public static String AVATARExecutableSoclibCodeCompileCommand="";
 	public static String AVATARExecutableSoclibCodeExecuteCommand="";
 	public static String AVATARExecutableSoclibCodeTraceCommand="";
+	
 	public static String TMLCodeDirectory="";
+	
+	private static String ProjectSystemCCodeDirectory = "/c++_code/";
+	private static String ProjectCCodeDirectory = "/c_code/";
+	private static String ProjectProVerifCodeDirectory = "/proverif/";
+	private static String ProjectAVATARExecutableCodeDirectory = "/AVATAR_executablecode/";
+	private static String ProjectAVATARMPSoCCodeDirectory = "/MPSoC/";
+	private static String ProjectTMLCodeDirectory = "/tmlcode/";
 	
 	public static int lastPanel = -1;
 	public static int lastTab = -1;
@@ -71,12 +79,12 @@ public class SpecConfigTTool {
 	}
 	
 	public static void setDirConfig(File dir) {
-    	SystemCCodeDirectory = dir.getAbsolutePath() + "/c++_code/";
-    	CCodeDirectory = dir.getAbsolutePath() + "/c_code/";
-    	ProVerifCodeDirectory = dir.getAbsolutePath() + "/proverif/";
-    	AVATARExecutableCodeDirectory = dir.getAbsolutePath() + "/AVATAR_executablecode/";
-    	AVATARMPSoCCodeDirectory = dir.getAbsolutePath() + "/MPSoC/";
-    	TMLCodeDirectory = dir.getAbsolutePath() + "/tmlcode/";
+    	SystemCCodeDirectory = dir.getAbsolutePath() + ProjectSystemCCodeDirectory;
+    	CCodeDirectory = dir.getAbsolutePath() + ProjectCCodeDirectory;
+    	ProVerifCodeDirectory = dir.getAbsolutePath() + ProjectProVerifCodeDirectory;
+    	AVATARExecutableCodeDirectory = dir.getAbsolutePath() + ProjectAVATARExecutableCodeDirectory;
+    	AVATARMPSoCCodeDirectory = dir.getAbsolutePath() + ProjectAVATARMPSoCCodeDirectory;
+    	TMLCodeDirectory = dir.getAbsolutePath() + ProjectTMLCodeDirectory;
     	
     	SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
     	SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
