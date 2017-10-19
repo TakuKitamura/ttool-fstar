@@ -433,7 +433,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
             testGo();
             pathCode = code1.getText().trim ();
 
-            if (pathCode.isEmpty() || pathCode.endsWith(File.separator)) {
+            if (pathCode.isEmpty()) {
                 pathCode += "pvspec";
             }
 
@@ -442,7 +442,6 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
             	testFile.mkdirs();
 
             if (testFile.isDirectory()){
-                pathCode += File.separator;
                 pathCode += "pvspec";
                 testFile = new File(pathCode);
             }
