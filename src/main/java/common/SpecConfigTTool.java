@@ -102,7 +102,13 @@ public class SpecConfigTTool {
     }
 	
 	public static File createProjectConfig(File dir) {
-		File base = new File("./launch_configurations/project_config.xml");
+		File test = new File ("./");
+		System.out.println(test.getAbsolutePath());
+		File base;
+		if (test.getAbsolutePath().contains("TTool/bin/"))
+			base = new File("../ttool/launch_configurations/project_config.xml");
+		else
+			base = new File("./launch_configurations/project_config.xml");
 		try {
 			FileUtils.copyFileToDirectory(base, dir, false);
 			return new File(dir + File.separator + "project_config.xml");

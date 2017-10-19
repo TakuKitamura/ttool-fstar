@@ -2323,7 +2323,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
 
     public void openProject() {
-    	if (config != null)
+    	if (config != null && activetdp != null)
 			saveConfig();
         // check if a current modeling is opened
         boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
