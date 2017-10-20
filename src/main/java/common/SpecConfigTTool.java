@@ -45,12 +45,15 @@ public class SpecConfigTTool {
 	
 	public static String TMLCodeDirectory="";
 	
+	public static String IMGPath="";
+	
 	private static String ProjectSystemCCodeDirectory = "/c++_code/";
 	private static String ProjectCCodeDirectory = "/c_code/";
 	private static String ProjectProVerifCodeDirectory = "/proverif/";
 	private static String ProjectAVATARExecutableCodeDirectory = "/AVATAR_executablecode/";
 	private static String ProjectAVATARMPSoCCodeDirectory = "/MPSoC/";
 	private static String ProjectTMLCodeDirectory = "/tmlcode/";
+	private static String ProjectIMGPath = "/figures";
 	
 	public static int lastPanel = -1;
 	public static int lastTab = -1;
@@ -76,6 +79,8 @@ public class SpecConfigTTool {
 		AVATARExecutableSoclibCodeTraceCommand = ConfigurationTTool.AVATARExecutableSoclibCodeTraceCommand;
 		
 		TMLCodeDirectory = ConfigurationTTool.TMLCodeDirectory;
+		
+		IMGPath = ConfigurationTTool.IMGPath;
 	}
 	
 	public static void setDirConfig(File dir) {
@@ -85,6 +90,7 @@ public class SpecConfigTTool {
     	AVATARExecutableCodeDirectory = dir.getAbsolutePath() + ProjectAVATARExecutableCodeDirectory;
     	AVATARMPSoCCodeDirectory = dir.getAbsolutePath() + ProjectAVATARMPSoCCodeDirectory;
     	TMLCodeDirectory = dir.getAbsolutePath() + ProjectTMLCodeDirectory;
+    	IMGPath = dir.getAbsolutePath() + ProjectIMGPath;
     	
     	SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
     	SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
@@ -108,6 +114,9 @@ public class SpecConfigTTool {
     }
 	
 	public static File createProjectConfig(File dir) {
+		File figures = new File(IMGPath);
+		figures.mkdir();
+		
 		File test = new File ("./");
 		File base;
 		if (test.getAbsolutePath().contains("TTool/bin/"))

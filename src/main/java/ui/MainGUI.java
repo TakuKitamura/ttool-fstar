@@ -418,14 +418,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             jfclib = new JFileChooser();
         }
 
-        if (ConfigurationTTool.IMGPath.length() > 0) {
-            jfcimg = new JFileChooser(ConfigurationTTool.IMGPath);
+        if (SpecConfigTTool.IMGPath.length() > 0) {
+            jfcimg = new JFileChooser(SpecConfigTTool.IMGPath);
         } else {
             jfcimg = new JFileChooser();
         }
 
-        if (ConfigurationTTool.IMGPath.length() > 0) {
-            jfcimgsvg = new JFileChooser(ConfigurationTTool.IMGPath);
+        if (SpecConfigTTool.IMGPath.length() > 0) {
+            jfcimgsvg = new JFileChooser(SpecConfigTTool.IMGPath);
         } else {
             jfcimgsvg = new JFileChooser();
         }
@@ -5451,6 +5451,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public File selectFileForCapture() {
         File file = null;
+        jfcimg.setCurrentDirectory(new File(SpecConfigTTool.IMGPath));
         int returnVal = jfcimg.showSaveDialog(frame);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfcimg.getSelectedFile();
@@ -5469,6 +5470,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public File selectSVGFileForCapture() {
         File file = null;
+        jfcimgsvg.setCurrentDirectory(new File(SpecConfigTTool.IMGPath));
         int returnVal = jfcimgsvg.showSaveDialog(frame);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfcimgsvg.getSelectedFile();

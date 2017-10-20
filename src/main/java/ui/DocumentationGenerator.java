@@ -58,6 +58,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -189,7 +190,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
         	docFolder.mkdir();
     
     		final String makefileName = File.separator + "Makefile";
-        	final File makeFile = new File( ConfigurationTTool.IMGPath + makefileName );
+        	final File makeFile = new File( SpecConfigTTool.IMGPath + makefileName );
         	
         	try {
 	        	if ( makeFile.exists() ) {
@@ -197,7 +198,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 	        	}
 	            
 	    		final String mliFileName = File.separator + "mli.mk";
-	        	final File mliFile = new File( ConfigurationTTool.IMGPath + mliFileName );
+	        	final File mliFile = new File( SpecConfigTTool.IMGPath + mliFileName );
 	        	
 	        	if ( mliFile.exists() ) {
 	        		Files.copy( mliFile.toPath(), new File( getPath() + mliFileName ).toPath() );
