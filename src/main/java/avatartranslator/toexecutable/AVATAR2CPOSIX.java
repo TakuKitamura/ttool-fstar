@@ -104,7 +104,7 @@ public class AVATAR2CPOSIX {
     public void saveInFiles(String path) throws FileException {
 
         TraceManager.addDev("Generating files");
-        if (!FileUtils.checkAndCreateAVATARDir(path))
+        if (!FileUtils.checkAndCreateAVATARCodeDir(path))
         	throw new FileException("ERROR: Executable code directory cannot be created.");
         File src_dir = new File(path + GENERATED_PATH);
         if (!src_dir.exists()) {

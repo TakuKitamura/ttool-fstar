@@ -106,9 +106,7 @@ public class TMLTextSpecification<E> {
     }
 
     public void saveFile(String path, String filename) throws FileException {
-    	File dir = new File(path);
-    	if (!dir.exists())
-    		dir.mkdir();
+    	FileUtils.checkAndCreateTMLDir(path);
         TraceManager.addUser("Saving TML spec file in " + path + filename);
         FileUtils.saveFile(path + filename, spec);
     }

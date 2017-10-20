@@ -482,9 +482,7 @@ public class GTURTLEModeling {
                 return true;
             }
             else {
-            	File test = new File(SpecConfigTTool.CCodeDirectory);
-            	if (!test.exists())
-            		test.mkdir();
+            	FileUtils.checkAndCreateCCodeDir(SpecConfigTTool.CCodeDirectory);
                 CCode.saveFile( SpecConfigTTool.CCodeDirectory + File.separator, applicationName );
             }
         }

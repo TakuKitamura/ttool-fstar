@@ -48,6 +48,8 @@ import avatartranslator.AvatarPragmaSecret;
 import launcher.LauncherException;
 import launcher.RshClient;
 import launcher.RshClientReader;
+import myutil.FileException;
+import myutil.FileUtils;
 import myutil.GraphicLib;
 import myutil.MasterProcessInterface;
 import myutil.TraceManager;
@@ -436,15 +438,12 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
             if (pathCode.isEmpty()) {
                 pathCode += "pvspec";
             }
+            
+            FileUtils.checkAndCreateProverifDir(pathCode);
 
+            pathCode += "pvspec";
             testFile = new File(pathCode);
-            if (!testFile.exists())
-            	testFile.mkdirs();
-
-            if (testFile.isDirectory()){
-                pathCode += "pvspec";
-                testFile = new File(pathCode);
-            }
+            
 
             File dir = testFile.getParentFile();
 
@@ -507,6 +506,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
             mode = STOPPED;
         } catch (InterruptedException ie) {
             mode = NOT_STARTED;
+        } catch (FileException e) {
+        	System.err.println(e.getMessage() + " : Can't generate proverif file.");
         } catch (Exception e) {
             mode = STOPPED;
             throw e;

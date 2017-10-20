@@ -769,7 +769,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                 jta.append("Saving C++ files...\n");
 
                 pathCode = code1.getText();
-                if (!FileUtils.checkAndCreateDir(SpecConfigTTool.SystemCCodeDirectory))
+                if (!FileUtils.checkAndCreateSystemCDir(SpecConfigTTool.SystemCCodeDirectory))
                 	throw new Throwable();
                 tml2systc.saveFile(pathCode, "appmodel");
 
