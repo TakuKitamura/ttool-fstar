@@ -47,13 +47,16 @@ public class SpecConfigTTool {
 	
 	public static String IMGPath="";
 	
+	public static String DocGenPath="";
+	
 	private static String ProjectSystemCCodeDirectory = "/c++_code/";
 	private static String ProjectCCodeDirectory = "/c_code/";
 	private static String ProjectProVerifCodeDirectory = "/proverif/";
 	private static String ProjectAVATARExecutableCodeDirectory = "/AVATAR_executablecode/";
 	private static String ProjectAVATARMPSoCCodeDirectory = "/MPSoC/";
 	private static String ProjectTMLCodeDirectory = "/tmlcode/";
-	private static String ProjectIMGPath = "/figures";
+	private static String ProjectIMGDirectory = "/figures";
+	private static String ProjectDocGenDirectory = "/doc";
 	
 	public static int lastPanel = -1;
 	public static int lastTab = -1;
@@ -81,6 +84,8 @@ public class SpecConfigTTool {
 		TMLCodeDirectory = ConfigurationTTool.TMLCodeDirectory;
 		
 		IMGPath = ConfigurationTTool.IMGPath;
+		
+		DocGenPath = ConfigurationTTool.DocGenPath;
 	}
 	
 	public static void setDirConfig(File dir) {
@@ -90,7 +95,8 @@ public class SpecConfigTTool {
     	AVATARExecutableCodeDirectory = dir.getAbsolutePath() + ProjectAVATARExecutableCodeDirectory;
     	AVATARMPSoCCodeDirectory = dir.getAbsolutePath() + ProjectAVATARMPSoCCodeDirectory;
     	TMLCodeDirectory = dir.getAbsolutePath() + ProjectTMLCodeDirectory;
-    	IMGPath = dir.getAbsolutePath() + ProjectIMGPath;
+    	IMGPath = dir.getAbsolutePath() + ProjectIMGDirectory;
+    	DocGenPath = dir.getAbsolutePath() + ProjectDocGenDirectory;
     	
     	SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
     	SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
