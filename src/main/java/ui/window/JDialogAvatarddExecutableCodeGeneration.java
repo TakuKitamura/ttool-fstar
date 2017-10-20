@@ -354,7 +354,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         viewgroup.add(viewtrace);
         viewtrace.addActionListener(this);
         jp04.add(viewtrace, c04);
-        simulationTraceFile = new JTextField(pathCode + File.separator + "trace.txt", 100);
+        simulationTraceFile = new JTextField(pathCode + "trace.txt", 100);
         jp04.add(simulationTraceFile, c04);
         viewtracesoclib = new JRadioButton(textSysC6, false);
         viewgroup.add(viewtracesoclib);

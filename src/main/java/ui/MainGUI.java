@@ -1952,6 +1952,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         SpecConfigTTool.lastPanel = j;
         try {
 			SpecConfigTTool.saveConfiguration(config);
+			SpecConfigTTool.lastPanel = -1;
+			SpecConfigTTool.lastTab = -1;
 		} catch (MalformedConfigurationException e) {
 			System.err.println(e.getMessage() + " : Can't save config file.");
 		}

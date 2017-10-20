@@ -101,8 +101,6 @@ public class SpecConfigTTool {
 	
 	public static void setBasicConfig(boolean systemcOn) {
     	try {
-    		lastPanel = -1;
-            lastTab = -1;
 			ConfigurationTTool.loadConfiguration("./launch_configurations/config.xml", systemcOn);
 		} catch (MalformedConfigurationException e) {
 			System.out.println("Couldn't load configuration from file: config.xml");
