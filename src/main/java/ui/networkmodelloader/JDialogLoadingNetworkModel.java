@@ -43,13 +43,14 @@ package ui.networkmodelloader;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.*;
 import javax.swing.*;
 import java.io.*;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ui.*;
+import ui.file.TFileFilter;
 import myutil.*;
 import ui.util.IconManager;
 
@@ -361,7 +362,24 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         this.dispose();
 	SwingUtilities.invokeLater(new Runnable() {
 		public void run() {
-		    mgui.openProjectFromFile(new File(filePath));
+			File dir = new File(filePath.replace(".xml", ""));
+        	dir = FileUtils.addFileExtensionIfMissing(dir, "ttool");
+        	dir.mkdir();
+        	SpecConfigTTool.setDirConfig(dir);
+        	File config = SpecConfigTTool.createProjectConfig(dir);
+        	try {
+				SpecConfigTTool.loadConfigFile(config);
+			} catch (MalformedConfigurationException e) {
+				System.err.println(e.getMessage() + " : Can't load config file.");
+			}
+            File file = new File(filePath);
+            file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
+            try {
+				FileUtils.moveFileToDirectory(file, dir, false);
+			} catch (IOException e) {
+				System.err.println(e.getMessage() + " : Network loading failed");
+			}
+		    mgui.openProjectFromFile(dir);
 		    // Here, we can safely update the GUI
 		    // because we'll be called from the
 		    // event dispatch thread
