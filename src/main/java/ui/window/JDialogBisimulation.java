@@ -45,7 +45,7 @@ import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.FileUtils;
 import myutil.ScrolledJTextArea;
-import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ui.util.IconManager;
 import ui.file.AUTFileFilter;
 
@@ -278,8 +278,8 @@ public class JDialogBisimulation extends JDialog implements ActionListener, Runn
     
     private String selectFile() {
         JFileChooser jfc;
-        if (ConfigurationTTool.TGraphPath.length() > 0) {
-            jfc = new JFileChooser(ConfigurationTTool.TGraphPath);
+        if (SpecConfigTTool.TGraphPath.length() > 0) {
+            jfc = new JFileChooser(SpecConfigTTool.TGraphPath);
         } else {
             jfc = new JFileChooser();
         }

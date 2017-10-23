@@ -436,14 +436,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             jfclot = new JFileChooser();
         }
 
-        if (ConfigurationTTool.GGraphPath.length() > 0) {
-            jfcggraph = new JFileChooser(ConfigurationTTool.GGraphPath);
+        if (SpecConfigTTool.GGraphPath.length() > 0) {
+            jfcggraph = new JFileChooser(SpecConfigTTool.GGraphPath);
         } else {
             jfcggraph = new JFileChooser();
         }
 
-        if (ConfigurationTTool.TGraphPath.length() > 0) {
-            jfctgraph = new JFileChooser(ConfigurationTTool.TGraphPath);
+        if (SpecConfigTTool.TGraphPath.length() > 0) {
+            jfctgraph = new JFileChooser(SpecConfigTTool.TGraphPath);
         } else {
             jfctgraph = new JFileChooser();
         }
@@ -2054,6 +2054,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         /* textual form */
         DTAFileFilter filter = new DTAFileFilter();
         jfctgraph.setFileFilter(filter);
+        jfctgraph.setCurrentDirectory(new File(SpecConfigTTool.TGraphPath));
 
         int returnVal = jfctgraph.showDialog(frame, "Save last DTA (textual form)");
         if(returnVal != JFileChooser.APPROVE_OPTION) {
@@ -2095,6 +2096,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         /* textual form */
         RGFileFilter filter = new RGFileFilter();
         jfctgraph.setFileFilter(filter);
+        jfctgraph.setCurrentDirectory(new File(SpecConfigTTool.TGraphPath));
 
         int returnVal = jfctgraph.showDialog(frame, "Save last RG (textual form)");
         if(returnVal != JFileChooser.APPROVE_OPTION) {
@@ -2222,6 +2224,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         /* textual form */
         AUTFileFilter filter = new AUTFileFilter();
         jfctgraph.setFileFilter(filter);
+        jfctgraph.setCurrentDirectory(new File(SpecConfigTTool.TGraphPath));
 
         int returnVal = jfctgraph.showDialog(frame, "Load AUT graph");
         if(returnVal != JFileChooser.APPROVE_OPTION) {
@@ -2240,6 +2243,30 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         ret[0] = autfile.getName();
         ret[1] = spec;
         return ret;
+    }
+    
+    public void loadAUTGraphsDir() {
+        File dir = new File(SpecConfigTTool.TGraphPath);
+        if (!dir.exists()) {
+        	System.err.println("Graphs directory doesn't exists !");
+        	return;
+        }
+        
+        for (File autfile: dir.listFiles()) {
+        	if (!FileUtils.getExtension(autfile).equals("aut"))
+        		continue;
+        	
+        	String spec = loadFile(autfile);
+        	if (spec == null) {
+        		continue;
+        	}
+
+        	RG rg = new RG(autfile.getName());
+        	rg.fileName = autfile.getName();
+        	rg.data = spec;
+        	addRG(rg);
+        }
+        
     }
 
     public void updateLastOpenFile(File file) {
@@ -2548,7 +2575,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         	basicActivateDrawing();
         }
         
-        
+        if (dir != null)
+        	loadAUTGraphsDir();
     }
 
     public void saveAsLibrary(String data) {
@@ -4219,7 +4247,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void generateAUT() {
-        JDialogGenAUT jdgaut = new JDialogGenAUT(frame, this, "Generation of automata", ConfigurationTTool.BcgioPath, ConfigurationTTool.AldebaranHost, ConfigurationTTool.TGraphPath);
+        JDialogGenAUT jdgaut = new JDialogGenAUT(frame, this, "Generation of automata", ConfigurationTTool.BcgioPath, ConfigurationTTool.AldebaranHost, SpecConfigTTool.TGraphPath);
         //  jdgaut.setSize(450, 600);
         GraphicLib.centerOnParent(jdgaut, 450, 600);
         jdgaut.setVisible(true);
@@ -4240,7 +4268,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         JDialogGenAUTS jdgauts = new JDialogGenAUTS(frame, this, "Generation of automata via LOTOS", gtm.getPathCaesar(),
                                                     GTURTLEModeling.getPathBcgio(),
                                                     REMOTE_RTL_LOTOS_FILE,
-                                                    GTURTLEModeling.getCaesarHost(), ConfigurationTTool.TGraphPath);
+                                                    GTURTLEModeling.getCaesarHost(), SpecConfigTTool.TGraphPath);
         //  jdgauts.setSize(450, 600);
         GraphicLib.centerOnParent(jdgauts, 450, 600);
         jdgauts.setVisible(true);
@@ -4418,7 +4446,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             TraceManager.addDev("Null avatar spec");
             return;
         }
-        JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), ConfigurationTTool.TGraphPath, experimentalOn);
+        JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), SpecConfigTTool.TGraphPath, experimentalOn);
         // jmc.setSize(550, 600);
         GraphicLib.centerOnParent(jmc, 550, 600);
         jmc.setVisible(true);
@@ -4476,7 +4504,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         } else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {
             JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation Code Generation and Compilation",
                                                                          ConfigurationTTool.SystemCHost, SpecConfigTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeCompileCommand,
-                                                                         SpecConfigTTool.SystemCCodeExecuteCommand, SpecConfigTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, _mode);
+                                                                         SpecConfigTTool.SystemCCodeExecuteCommand, SpecConfigTTool.SystemCCodeInteractiveExecuteCommand, SpecConfigTTool.GGraphPath, _mode);
             //jgen.setSize(500, 750);
             GraphicLib.centerOnParent( jgen, 700, 750 );
             jgen.setVisible(true);
@@ -4489,7 +4517,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void interactiveSimulationSystemC() {
-        interactiveSimulationSystemC(ConfigurationTTool.SystemCCodeInteractiveExecuteCommand + " -gpath " + ConfigurationTTool.GGraphPath);
+        interactiveSimulationSystemC(SpecConfigTTool.SystemCCodeInteractiveExecuteCommand + " -gpath " + SpecConfigTTool.GGraphPath);
     }
 
     public void interactiveSimulationSystemC(String executePath) {
@@ -4966,7 +4994,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         // Loadng the graph
         // Adding RG to the tree on the left
         try {
-            String fileName = ConfigurationTTool.TGraphPath + "/" + graphName + ".aut";
+            String fileName = SpecConfigTTool.TGraphPath + "/" + graphName + ".aut";
             File f = new File(fileName);
             String spec = loadFile(f);
             RG rg = new RG(graphName);

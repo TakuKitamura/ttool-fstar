@@ -49,6 +49,9 @@ public class SpecConfigTTool {
 	
 	public static String DocGenPath="";
 	
+	public static String GGraphPath="";
+	public static String TGraphPath="";
+	
 	private static String ProjectSystemCCodeDirectory = "/c++_code/";
 	private static String ProjectCCodeDirectory = "/c_code/";
 	private static String ProjectProVerifCodeDirectory = "/proverif/";
@@ -57,6 +60,8 @@ public class SpecConfigTTool {
 	private static String ProjectTMLCodeDirectory = "/tmlcode/";
 	private static String ProjectIMGDirectory = "/figures";
 	private static String ProjectDocGenDirectory = "/doc";
+	private static String ProjectGGraphPath="/graphs";
+	private static String ProjectTGraphPath="/graphs";
 	
 	public static int lastPanel = -1;
 	public static int lastTab = -1;
@@ -86,6 +91,9 @@ public class SpecConfigTTool {
 		IMGPath = ConfigurationTTool.IMGPath;
 		
 		DocGenPath = ConfigurationTTool.DocGenPath;
+		
+		GGraphPath = ConfigurationTTool.GGraphPath;
+		TGraphPath = ConfigurationTTool.TGraphPath;
 	}
 	
 	public static void setDirConfig(File dir) {
@@ -97,6 +105,8 @@ public class SpecConfigTTool {
     	TMLCodeDirectory = dir.getAbsolutePath() + ProjectTMLCodeDirectory;
     	IMGPath = dir.getAbsolutePath() + ProjectIMGDirectory;
     	DocGenPath = dir.getAbsolutePath() + ProjectDocGenDirectory;
+    	GGraphPath = dir.getAbsolutePath() + ProjectGGraphPath;
+    	TGraphPath = dir.getAbsolutePath() + ProjectTGraphPath;
     	
     	SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
     	SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
@@ -122,6 +132,14 @@ public class SpecConfigTTool {
 	public static File createProjectConfig(File dir) {
 		File figures = new File(IMGPath);
 		figures.mkdir();
+		
+		File GGraph = new File(GGraphPath);
+		GGraph.mkdir();
+		
+		if (!GGraphPath.equals(TGraphPath)) {
+			File TGraph = new File(TGraphPath);
+			TGraph.mkdir();
+		}
 		
 		File test = new File ("./");
 		File base;

@@ -3252,7 +3252,7 @@ public class GTURTLEModeling {
 
     public String showRGDiplodocus() {
         //TraceManager.addDev("Show diplodocus graph located in " + ConfigurationTTool.GGraphPath + "/tree.dot");
-        RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, null, null, ConfigurationTTool.DOTTYPath + " " + ConfigurationTTool.GGraphPath + "/tree.dot");
+        RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, null, null, ConfigurationTTool.DOTTYPath + " " + SpecConfigTTool.GGraphPath + "/tree.dot");
         ret.start();
         return null;
     }

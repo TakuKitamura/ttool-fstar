@@ -46,6 +46,7 @@ import launcher.RshClient;
 import myutil.ScrolledJTextArea;
 import myutil.SortedVector;
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ui.util.IconManager;
 import ui.MainGUI;
 
@@ -314,7 +315,7 @@ public class JDialogGenAUTS extends JDialog implements ActionListener, Runnable 
             }
             
             if (fc2.isSelected()) {
-                String path = ConfigurationTTool.GGraphPath;
+                String path = SpecConfigTTool.GGraphPath;
                 if ((path == null) || (path.length() == 0)) {
                    path = new File("").getAbsolutePath();
                 } 

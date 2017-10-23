@@ -107,7 +107,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
     			File make = new File(ConfigurationTTool.SystemCCodeDirectory + "Makefile");
     			File defs = new File(ConfigurationTTool.SystemCCodeDirectory + "Makefile.defs");
     			File src = new File(ConfigurationTTool.SystemCCodeDirectory + "src_simulator");
-    			File lic = new File(ConfigurationTTool.SystemCCodeDirectory + "LICENCE");
+    			File lic = new File(ConfigurationTTool.SystemCCodeDirectory + "LICENSE");
     			File liceng = new File(ConfigurationTTool.SystemCCodeDirectory + "LICENSE_CECILL_ENG");
     			File licfr = new File(ConfigurationTTool.SystemCCodeDirectory + "LICENSE_CECILL_FR");
     			
@@ -142,7 +142,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
     			File defs = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.defs");
     			File soclib = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.forsoclib");
     			File src = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "src");
-    			File lic = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENCE");
+    			File lic = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE");
     			File liceng = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE_CECILL_ENG");
     			File licfr = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE_CECILL_FR");
     			//File topcell = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "generated_topcell");
