@@ -52,6 +52,8 @@ public class SpecConfigTTool {
 	public static String GGraphPath="";
 	public static String TGraphPath="";
 	
+	public static String UPPAALCodeDirectory="";
+	
 	private static String ProjectSystemCCodeDirectory = "/c++_code/";
 	private static String ProjectCCodeDirectory = "/c_code/";
 	private static String ProjectProVerifCodeDirectory = "/proverif/";
@@ -62,6 +64,7 @@ public class SpecConfigTTool {
 	private static String ProjectDocGenDirectory = "/doc";
 	private static String ProjectGGraphPath="/graphs";
 	private static String ProjectTGraphPath="/graphs";
+	private static String ProjectUPPAALCodeDirectory="/uppaal/";
 	
 	public static int lastPanel = -1;
 	public static int lastTab = -1;
@@ -94,6 +97,8 @@ public class SpecConfigTTool {
 		
 		GGraphPath = ConfigurationTTool.GGraphPath;
 		TGraphPath = ConfigurationTTool.TGraphPath;
+		
+		UPPAALCodeDirectory = ConfigurationTTool.UPPAALCodeDirectory;
 	}
 	
 	public static void setDirConfig(File dir) {
@@ -107,6 +112,7 @@ public class SpecConfigTTool {
     	DocGenPath = dir.getAbsolutePath() + ProjectDocGenDirectory;
     	GGraphPath = dir.getAbsolutePath() + ProjectGGraphPath;
     	TGraphPath = dir.getAbsolutePath() + ProjectTGraphPath;
+    	UPPAALCodeDirectory = dir.getAbsolutePath() + ProjectUPPAALCodeDirectory;
     	
     	SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
     	SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
