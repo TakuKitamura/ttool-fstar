@@ -39,6 +39,7 @@
 package ui.interactivesimulation;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.*;
@@ -527,7 +528,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         jp02.add(new JLabel("Directory:"), c01);
         saveDirName = new JTextField(30);
         if (ConfigurationTTool.SystemCCodeDirectory != null) {
-            saveDirName.setText(ConfigurationTTool.SystemCCodeDirectory);
+            saveDirName.setText(SpecConfigTTool.SystemCCodeDirectory);
         }
         jp02.add(saveDirName, c01);
         jp02.add(new JLabel("File name:"), c01);
