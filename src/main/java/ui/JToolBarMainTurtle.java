@@ -43,6 +43,7 @@
 package ui;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import myutil.TraceManager;
 
 import javax.swing.*;
@@ -263,10 +264,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         addSeparator();
 
 
-        if ((ConfigurationTTool.ExternalCommand1.length() > 0) && (ConfigurationTTool.ExternalCommand1Host.length() > 0)) {
+        if ((SpecConfigTTool.ExternalCommand1.length() > 0) && (ConfigurationTTool.ExternalCommand1Host.length() > 0)) {
             button = add(mgui.actions[TGUIAction.EXTERNAL_ACTION_1]);
             button.addMouseListener(mgui.mouseHandler);
-            button.setToolTipText(ConfigurationTTool.ExternalCommand1);
+            button.setToolTipText("Launch gtkwave with last vcd file");
             addSeparator();
         }
 

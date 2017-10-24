@@ -43,6 +43,7 @@
 package ui;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -300,7 +301,7 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NC].getActionCommand())) {
             mgui.NC();
         } else if (command.equals(mgui.actions[TGUIAction.EXTERNAL_ACTION_1].getActionCommand())) {
-            mgui.executeUserCommand(ConfigurationTTool.ExternalCommand1Host, ConfigurationTTool.ExternalCommand1);
+            mgui.executeUserCommand(ConfigurationTTool.ExternalCommand1Host, SpecConfigTTool.ExternalCommand1);
         } else if (command.equals(mgui.actions[TGUIAction.EXTERNAL_ACTION_2].getActionCommand())) {
             mgui.executeUserCommand(ConfigurationTTool.ExternalCommand2Host, ConfigurationTTool.ExternalCommand2);
         } else if (command.equals(mgui.actions[TGUIAction.CONNECTOR_COMMENT].getActionCommand())) {

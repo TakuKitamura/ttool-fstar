@@ -54,6 +54,9 @@ public class SpecConfigTTool {
 	
 	public static String UPPAALCodeDirectory="";
 	
+	public static String VCDPath="";
+	public static String ExternalCommand1="";
+	
 	private static String ProjectSystemCCodeDirectory = "/c++_code/";
 	private static String ProjectCCodeDirectory = "/c_code/";
 	private static String ProjectProVerifCodeDirectory = "/proverif/";
@@ -62,12 +65,14 @@ public class SpecConfigTTool {
 	private static String ProjectTMLCodeDirectory = "/tmlcode/";
 	private static String ProjectIMGDirectory = "/figures";
 	private static String ProjectDocGenDirectory = "/doc";
-	private static String ProjectGGraphPath="/graphs";
-	private static String ProjectTGraphPath="/graphs";
+	private static String ProjectGGraphDirectory="/graphs";
+	private static String ProjectTGraphDirectory="/graphs";
 	private static String ProjectUPPAALCodeDirectory="/uppaal/";
+	private static String ProjectVCDDirectory="/c++_code/";
 	
 	public static int lastPanel = -1;
 	public static int lastTab = -1;
+	public static String lastVCD="";
 	
 	public static void loadConfiguration() {
 		SystemCCodeDirectory = ConfigurationTTool.SystemCCodeDirectory;
@@ -99,6 +104,9 @@ public class SpecConfigTTool {
 		TGraphPath = ConfigurationTTool.TGraphPath;
 		
 		UPPAALCodeDirectory = ConfigurationTTool.UPPAALCodeDirectory;
+		
+		VCDPath = ConfigurationTTool.VCDPath;
+		ExternalCommand1 = ConfigurationTTool.ExternalCommand1;
 	}
 	
 	public static void setDirConfig(File dir) {
@@ -110,9 +118,10 @@ public class SpecConfigTTool {
     	TMLCodeDirectory = dir.getAbsolutePath() + ProjectTMLCodeDirectory;
     	IMGPath = dir.getAbsolutePath() + ProjectIMGDirectory;
     	DocGenPath = dir.getAbsolutePath() + ProjectDocGenDirectory;
-    	GGraphPath = dir.getAbsolutePath() + ProjectGGraphPath;
-    	TGraphPath = dir.getAbsolutePath() + ProjectTGraphPath;
+    	GGraphPath = dir.getAbsolutePath() + ProjectGGraphDirectory;
+    	TGraphPath = dir.getAbsolutePath() + ProjectTGraphDirectory;
     	UPPAALCodeDirectory = dir.getAbsolutePath() + ProjectUPPAALCodeDirectory;
+    	VCDPath = dir.getAbsolutePath() + ProjectVCDDirectory;
     	
     	SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
     	SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
@@ -125,7 +134,8 @@ public class SpecConfigTTool {
     	AVATARExecutableSoclibCodeCompileCommand = ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand.replace(ConfigurationTTool.AVATARMPSoCCodeDirectory, AVATARMPSoCCompileCommand);
     	AVATARExecutableSoclibCodeExecuteCommand = ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand.replace(ConfigurationTTool.AVATARMPSoCCodeDirectory, AVATARMPSoCCompileCommand);
     	AVATARExecutableSoclibCodeTraceCommand = ConfigurationTTool.AVATARExecutableSoclibCodeTraceCommand.replace(ConfigurationTTool.AVATARMPSoCCodeDirectory, AVATARMPSoCCompileCommand);
-    }
+    	ExternalCommand1 = ConfigurationTTool.ExternalCommand1.replace(ConfigurationTTool.VCDPath, SpecConfigTTool.VCDPath);
+	}
 	
 	public static void setBasicConfig(boolean systemcOn) {
     	try {
@@ -187,9 +197,14 @@ public class SpecConfigTTool {
 	            Document doc = db.parse(bais);
 	            NodeList nl;
 
+	            nl = doc.getElementsByTagName("LastVCD");
+	            if (nl.getLength() > 0)
+	                LastVCD(nl);
+	            
 	            nl = doc.getElementsByTagName("LastOpenDiagram");
 	            if (nl.getLength() > 0)
 	                LastOpenDiagram(nl);
+	            
 	        } catch (Exception e) {
 	            throw new MalformedConfigurationException(e.getMessage());
 	        }
@@ -205,9 +220,19 @@ public class SpecConfigTTool {
 	     }
 	 }
 	 
+	 private static void LastVCD(NodeList nl) throws MalformedConfigurationException {
+		 try {
+			 Element elt = (Element)(nl.item(0));
+             lastVCD = elt.getAttribute("data");
+             ExternalCommand1 = "gtkwave " + lastVCD;
+         } catch (Exception e) {
+        	 throw new MalformedConfigurationException(e.getMessage());
+	     }
+	 }
+	 
 	 public static void saveConfiguration(File f) throws MalformedConfigurationException {
-	        int index0, index1;
-	        String tmp1, tmp2, location;
+	        int index0, index1, index2;
+	        String tmp, tmp1, tmp2, location;
 	        boolean write = false;
 
 	        if (!FileUtils.checkFileForOpen(f)) {
@@ -218,6 +243,20 @@ public class SpecConfigTTool {
 
 	        if (data == null) {
 	            throw new MalformedConfigurationException("Filepb");
+	        }
+	        
+	        index0 = data.indexOf("LastVCD");
+
+	        if (index0 > -1) {
+	            index1 = data.indexOf('"', index0);
+	            if (index1 > -1) {
+	                index2 = data.indexOf('"', index1 + 1);
+	                if (index2 > -1) {
+	                    tmp = data.substring(index2, data.length());
+	                    data = data.substring(0, index1+1) + lastVCD + tmp;
+	                    write = true;
+	                }
+	            }
 	        }
 
 	        index0 = data.indexOf("LastOpenDiagram");
