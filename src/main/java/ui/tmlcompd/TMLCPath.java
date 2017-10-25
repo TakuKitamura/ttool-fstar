@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -47,11 +47,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
-   * Class TMLCPath
-   * Notion of Path. To be used to analyze the correctness of paths in the model
-   * Creation: 7/03/2014
-   * @version 1.0 7/03/2014
-   * @author Ludovic APVRILLE
+ * Class TMLCPath
+ * Notion of Path. To be used to analyze the correctness of paths in the model
+ * Creation: 7/03/2014
+ * @version 1.0 7/03/2014
+ * @author Ludovic APVRILLE
  */
 public class TMLCPath  {
 
@@ -81,8 +81,8 @@ public class TMLCPath  {
                                "Events are not compatible with fork/join",
                                "Requests are not compatible with fork/join",
                                "Events/requests must all have the same parameters",
-			       "Channels and events can have only one input and one output"
-                               };
+                               "Channels and events can have only one input and one output"
+    };
 
     public TMLCPath() {
         cports = new ArrayList<TMLCCompositePort>();
@@ -187,17 +187,17 @@ public class TMLCPath  {
         //rule1: Must have at least one producer
         if (producerPorts.size() == 0) {
             errorNumber = 1;
-	    if ((consumerPorts != null) && (consumerPorts.size() > 0)) {
-		faultyComponent = consumerPorts.get(0);
-	    }
+            if ((consumerPorts != null) && (consumerPorts.size() > 0)) {
+                faultyComponent = consumerPorts.get(0);
+            }
         }
 
         //rule2: Must have at least one receiver
         if (consumerPorts.size() == 0) {
             errorNumber = 2;
-	    if ((producerPorts != null) && (producerPorts.size() > 0)) {
-		faultyComponent = producerPorts.get(0);
-	    }
+            if ((producerPorts != null) && (producerPorts.size() > 0)) {
+                faultyComponent = producerPorts.get(0);
+            }
         }
 
         //rule3: If fork: must have only one producer
@@ -295,30 +295,28 @@ public class TMLCPath  {
             }
         }
 
-	// rule9: if no fork, no join, no request: one to one communication
-	boolean foundReq = true;
-	if ((forks.size() == 0) || (joins.size() == 0)) {
-	    if (producerPorts != null && producerPorts.size() > 0) {
+        // rule9: if no fork, no join, no request: one to one communication
+        boolean foundReq = true;
+        if ((forks.size() == 0) && (joins.size() == 0)) {
+            if (producerPorts != null && producerPorts.size() > 0) {
                 TMLCPrimitivePort referencePort = producerPorts.get(0);
                 if (referencePort != null) {
                     if (referencePort.getPortType() != 2) {
-			foundReq = false;
-		    }
-		}
-	    }
-	}
-	if (!foundReq) {
-	    if (producerPorts.size() > 1) {
-		errorNumber = 9;
-		faultyComponent = producerPorts.get(1);
-	    } else if (consumerPorts.size() > 1) {
-		errorNumber = 9;
-		faultyComponent = consumerPorts.get(1);
-	    }
-	    
-	}
+                        foundReq = false;
+                    }
+                }
+            }
+            if (!foundReq) {
+                if (producerPorts.size() > 1) {
+                    errorNumber = 9;
+                    faultyComponent = producerPorts.get(1);
+                } else if (consumerPorts.size() > 1) {
+                    errorNumber = 9;
+                    faultyComponent = consumerPorts.get(1);
+                }
 
-
+            }
+        }
 
     }
 
