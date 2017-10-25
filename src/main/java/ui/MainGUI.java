@@ -5100,6 +5100,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void screenCapture() {
         //Select file
         File file = selectFileForCapture();
+        if (file == null)
+        	return;
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         Rectangle screenRect = new Rectangle(screenSize);
@@ -5293,6 +5295,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public File selectFileForCapture() {
         File file = null;
         int returnVal = jfcimg.showSaveDialog(frame);
+        if (returnVal == JFileChooser.CANCEL_OPTION)
+        	return null;
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfcimg.getSelectedFile();
             file = FileUtils.addFileExtensionIfMissing(file, TImgFilter.getExtension());
@@ -5311,6 +5315,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public File selectSVGFileForCapture() {
         File file = null;
         int returnVal = jfcimgsvg.showSaveDialog(frame);
+        if (returnVal == JFileChooser.CANCEL_OPTION)
+        	return null;
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfcimgsvg.getSelectedFile();
             file = FileUtils.addFileExtensionIfMissing(file, TSVGFilter.getExtension());
