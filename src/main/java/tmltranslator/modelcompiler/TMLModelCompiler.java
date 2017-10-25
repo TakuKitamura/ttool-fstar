@@ -54,6 +54,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -1704,7 +1705,14 @@ public class TMLModelCompiler   {
 
     private void openDebugFile()        {
         File fileObject = new File( debugFileName );
+        if (!fileObject.exists())
+			try {
+				fileObject.createNewFile();
+			} catch (IOException e1) {
+				System.err.println(e1.getMessage());
+			}
         fileObject.delete();
+        
         outputStream = null;
         try     {
             outputStream = new PrintWriter( new FileOutputStream( debugFileName, true ) );
