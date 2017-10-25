@@ -472,6 +472,9 @@ public class GTURTLEModeling {
         // Parse the PEC file and the library of code snippets for each DIPLODOCUS unit
         applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];        // Remember that it works only for one application
         CCode = new TMLModelCompiler( _title, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
+        File dir = new File(ConfigurationTTool.CCodeDirectory + File.separator);
+    	if (!dir.exists())
+    		dir.mkdirs();
         CCode.toTextFormat();
         try {
             if( ConfigurationTTool.CCodeDirectory.equals("") )  {
