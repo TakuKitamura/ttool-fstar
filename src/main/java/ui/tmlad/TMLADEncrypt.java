@@ -76,6 +76,7 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     public String key ="";
     public String nonce="";
     public String formula="";
+    public String algorithm="";
     protected int stateOfError = 0; // Not yet checked
     
     public TMLADEncrypt(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -190,7 +191,7 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
     public boolean editOndoubleClick(JFrame frame) {
 
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);]
-		String[] values=new String[]{securityContext, type, message_overhead, encTime, size, nonce, formula, decTime, key};
+		String[] values=new String[]{securityContext, type, message_overhead, encTime, size, nonce, formula, decTime, key,algorithm};
 		String[] nonces=tdp.getMGUI().getAllNonce();
 		String[] keys = tdp.getMGUI().getAllKeys().toArray(new String[0]);
 		JDialogCryptographicConfiguration jdms = new JDialogCryptographicConfiguration(frame, "Setting Cryptographic Configuration properties", values, nonces, keys);
@@ -200,7 +201,7 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 
 	    if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
 		    securityContext = jdms.getString(0);
-		    type=jdms.getString(1);
+	 		type=jdms.getString(1);
 		    message_overhead=jdms.getString(2);
 		    encTime=jdms.getString(3);
 		    size=jdms.getString(4);
@@ -208,7 +209,7 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 		    formula = jdms.getString(6);
 		    decTime = jdms.getString(7);
 		    key = jdms.getString(8);
-
+		 	algorithm=jdms.getString(9);
 		    return true;
 	    }
 
@@ -239,16 +240,18 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
         sb.append(type);
         sb.append("\" overhead=\"");
         sb.append(message_overhead);
-	sb.append("\" size=\"");
+		sb.append("\" size=\"");
         sb.append(size);
-	sb.append("\" encTime=\"");
+		sb.append("\" encTime=\"");
         sb.append(encTime);
-	sb.append("\" decTime=\"");
+		sb.append("\" decTime=\"");
         sb.append(decTime);
-	sb.append("\" nonce=\"");
+		sb.append("\" nonce=\"");
         sb.append(nonce);
-	sb.append("\" key=\"");
+		sb.append("\" key=\"");
         sb.append(key);
+        sb.append("\" algorithm=\"");
+        sb.append(algorithm);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -287,6 +290,7 @@ public class TMLADEncrypt extends TGCWithoutInternalComponent implements Embedde
 								decTime = elt.getAttribute("decTime");
 								nonce = elt.getAttribute("nonce");
 								key = elt.getAttribute("key");
+								algorithm = elt.getAttribute("algorithm");
                                 //System.out.println("eventName=" +eventName + " variable=" + result);
                             }
                         }

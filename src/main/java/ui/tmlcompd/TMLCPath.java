@@ -80,7 +80,9 @@ public class TMLCPath  {
                                "One of more element of the path is badly connected",
                                "Events are not compatible with fork/join",
                                "Requests are not compatible with fork/join",
-                               "Events/requests must all have the same parameters"};
+                               "Events/requests must all have the same parameters",
+			       "Channels and events can have only one input and one output"
+                               };
 
     public TMLCPath() {
         cports = new ArrayList<TMLCCompositePort>();
@@ -174,6 +176,7 @@ public class TMLCPath  {
 
     public void checkRules() {
         errorNumber = -1;
+
 
         //rule0: fork or join, but not both
         if ((forks.size() > 0) && (joins.size() >0)) {
@@ -269,7 +272,7 @@ public class TMLCPath  {
             if (producerPorts != null && producerPorts.size() > 0) {
                 TMLCPrimitivePort referencePort = producerPorts.get(0);
                 if (referencePort != null) {
-                    if ((referencePort.getPortType() == 1) ||(referencePort.getPortType() == 1)) {
+                    if ((referencePort.getPortType() == 1) ||(referencePort.getPortType() == 2)) {
                         // Event or request found
                         // We now check that they are all compatible with the reference
                         for(TMLCPrimitivePort porto: producerPorts) {
@@ -291,6 +294,29 @@ public class TMLCPath  {
                 }
             }
         }
+
+	// rule9: if no fork, no join, no request: one to one communication
+	boolean foundReq = true;
+	if ((forks.size() == 0) || (joins.size() == 0)) {
+	    if (producerPorts != null && producerPorts.size() > 0) {
+                TMLCPrimitivePort referencePort = producerPorts.get(0);
+                if (referencePort != null) {
+                    if (referencePort.getPortType() != 2) {
+			foundReq = false;
+		    }
+		}
+	    }
+	}
+	if (!foundReq) {
+	    if (producerPorts.size() > 1) {
+		errorNumber = 9;
+		faultyComponent = producerPorts.get(1);
+	    } else if (consumerPorts.size() > 1) {
+		errorNumber = 9;
+		faultyComponent = consumerPorts.get(1);
+	    }
+	    
+	}
 
 
 

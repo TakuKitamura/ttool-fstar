@@ -738,6 +738,8 @@ outerloop:
 								//Add aencrypt method
 								AvatarMethod aencrypt = new AvatarMethod("aencrypt", ae);
 								block.addAttribute(new AvatarAttribute("encryptedKey_"+ae.securityPattern.key, AvatarType.INTEGER, block,null));
+								block.addAttribute(new AvatarAttribute("key_"+ae.securityPattern.key, AvatarType.INTEGER, block,null));
+								block.addAttribute(new AvatarAttribute("pubKey_"+ae.securityPattern.name, AvatarType.INTEGER, block,null));
 								aencrypt.addParameter(block.getAvatarAttributeWithName("key_"+ae.securityPattern.key));
 								aencrypt.addParameter(block.getAvatarAttributeWithName("pubKey_"+ae.securityPattern.name));
 								aencrypt.addReturnParameter(block.getAvatarAttributeWithName("encryptedKey_"+ae.securityPattern.key));
@@ -767,8 +769,11 @@ outerloop:
 							ae.securityPattern.state1=as;
 						}
 						else if (ae.securityPattern.type.equals("Nonce")){
+							//Do nothing except occupy time to forge nonce
+							
+							
 							//Create a nonce by a random function
-							AvatarRandom arandom = new AvatarRandom("randomnonce",ae.getReferenceObject());
+							/*AvatarRandom arandom = new AvatarRandom("randomnonce",ae.getReferenceObject());
 							arandom.setVariable(ae.securityPattern.name);
 							arandom.setValues("0","10");
 							elementList.add(arandom);
@@ -776,7 +781,7 @@ outerloop:
 							tran = new AvatarTransition(block, "__afterrandom_"+ae.getName(), ae.getReferenceObject());
 							arandom.addNext(tran);
 							elementList.add(tran);
-							block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));
+							block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null));*/
 						}
 						else if (ae.securityPattern.type.equals("Hash")){
 							AvatarMethod hash = new AvatarMethod("hash", ae);
@@ -1513,12 +1518,12 @@ outerloop:
 			distributeKeys();
 
 			System.out.println("ALL KEYS " +accessKeys);
-			for (TMLTask t: accessKeys.keySet()){
+			/*for (TMLTask t: accessKeys.keySet()){
 				System.out.println("TASK " +t.getName());
 				for (SecurityPattern sp: accessKeys.get(t)){
 					System.out.println(sp.name);
 				}
-			}
+			}*/
 
 			for (TMLTask task:tasks){
 
@@ -2042,16 +2047,16 @@ outerloop:
 					for (AvatarAttribute key: symKeys.get(sp)){
 						keys= keys+" "+key.getBlock().getName() + "."+key.getName();
 					}
-					avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge"+ keys, null, symKeys.get(sp), true));
+					avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge "+ keys, null, symKeys.get(sp), true));
 				}
 			}
 			for (SecurityPattern sp:pubKeys.keySet()){
 				if (pubKeys.get(sp).size()!=0){
 					String keys = "";
-					for (AvatarAttribute key: symKeys.get(sp)){
+					for (AvatarAttribute key: pubKeys.get(sp)){
 						keys= keys+" "+key.getBlock().getName() + "."+key.getName();
 					}
-					avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge "+sp.name, null, pubKeys.get(sp),true));
+					avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge "+keys, null, pubKeys.get(sp),true));
 				}
 			}
 			tmlmap.getTMLModeling().secChannelMap = secChannelMap;
@@ -2119,9 +2124,10 @@ outerloop:
 					else if (sp.type.equals("Asymmetric Encryption")){
 						AvatarAttribute pubkey = new AvatarAttribute("pubKey_"+sp.name, AvatarType.INTEGER, b, null);
 						b.addAttribute(pubkey);
+						
 						AvatarAttribute privkey = new AvatarAttribute("privKey_"+sp.name, AvatarType.INTEGER, b, null);
 						b.addAttribute(privkey);
-						avspec.addPragma(new AvatarPragmaPrivatePublicKey("PrivatePublicKey "+sp.name, null, privkey, pubkey));
+						avspec.addPragma(new AvatarPragmaPrivatePublicKey("#PrivatePublicKeys " +  b.getName() + " " + privkey.getName() + " " + pubkey.getName(), null, privkey, pubkey));
 						if (pubKeys.containsKey(sp)){
 							pubKeys.get(sp).add(pubkey);
 						}
@@ -2135,10 +2141,14 @@ outerloop:
 							AvatarBlock b2 = taskBlockMap.get(task2);
 							pubkey = new AvatarAttribute("pubKey_"+sp.name, AvatarType.INTEGER, b2, null);
 							b2.addAttribute(pubkey);
+							if (pubKeys.containsKey(sp)){
+								pubKeys.get(sp).add(pubkey);
+							}
 						}		
 					}
 				}
 			}
+			
 		}
 		public AvatarBlock createFifo(String name){
 			AvatarBlock fifo = new AvatarBlock("FIFO__FIFO"+name, avspec, null);

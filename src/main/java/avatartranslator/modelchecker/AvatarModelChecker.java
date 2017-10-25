@@ -174,7 +174,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         reachabilities = new ArrayList<SpecificationReachability>();
         for(AvatarBlock block: spec.getListOfBlocks()) {
             for(AvatarStateMachineElement elt: block.getStateMachine().getListOfElements()) {
-		TraceManager.addDev("null elt in state machine of block=" + block);
+		//TraceManager.addDev("null elt in state machine of block=" + block.getName());
                 if (elt.isCheckable()) {
                     SpecificationReachability reach = new SpecificationReachability(elt, block);
                     reachabilities.add(reach);
@@ -344,7 +344,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             ts[i].start();
         }
 
-	TraceManager.addDev("Waiting for threads termination (nb of threads:" + nbOfThreads + ")");
+	//TraceManager.addDev("Waiting for threads termination (nb of threads:" + nbOfThreads + ")");
         for(i=0; i<nbOfThreads; i++) {
             try {
                 ts[i].join();} catch (Exception e){TraceManager.addDev("Join on avatar model checker thread failed for thread #" + i);}

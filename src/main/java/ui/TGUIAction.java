@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecil.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -54,18 +54,18 @@ import myutil.*;
 
 
 /**
-   * Class TGUIAction
-   *
-   * Creation: 21/12/2003
-   * @version 1.1 11/07/2006
-   * @author Ludovic APVRILLE, Emil Salageanu
-   * @see TGComponent
+ * Class TGUIAction
+ *
+ * Creation: 21/12/2003
+ * @version 1.1 11/07/2006
+ * @author Ludovic APVRILLE, Emil Salageanu
+ * @see TGComponent
  */
 public class TGUIAction extends AbstractAction {
-    
+
     private static final long serialVersionUID = -4942930048930203001L;
-	
-	// Actions
+
+    // Actions
     public static final int ACT_NEW = 0;
     public static final int ACT_NEW_DESIGN = 100;
     public static final int ACT_NEW_ANALYSIS = 101;
@@ -172,7 +172,7 @@ public class TGUIAction extends AbstractAction {
     public static final int SDZV_TIMER_CANCELLATION = 452;
     public static final int SDZV_COREGION = 453;
     public static final int SDZV_ALIGN_INSTANCES = 454;
-    
+
 
     public static final int UCD_EDIT = 104;
     public static final int UCD_ACTOR = 105;
@@ -231,7 +231,7 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLAD_SELECT_EVT = 206;
     public static final int TMLAD_RANDOM = 245;
     public static final int TMLAD_READ_REQUEST_ARG = 335;
-    
+
     public static final int TMLAD_ENCRYPT = 430;
     public static final int TMLAD_DECRYPT = 431;
 
@@ -428,13 +428,13 @@ public class TGUIAction extends AbstractAction {
     public static final int ADD_CHANNELARTIFACT = 411;
     public static final int ADD_VGMNNODE = 401;
     public static final int ADD_CROSSBARNODE = 421;
- 
-  // -------------------------------------------------------------    
+
+    // -------------------------------------------------------------
     public static final int DEPLOY_AVATAR_DIAGRAM = 418;
     public static final int EXTRAC_DEPLOY_PARAM_TO_FILE = 419;
-  // --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
-	
+
 
 
     // AVATAR Parametric Diagrams
@@ -545,7 +545,7 @@ public class TGUIAction extends AbstractAction {
     public static final int UML_NOTE = 42;
     public static final int PRAGMA = 424;
     public static final int SAFETY_PRAGMA = 425;
-	public static final int PERFORMANCE_PRAGMA = 438;
+    public static final int PERFORMANCE_PRAGMA = 438;
     public static final int AVATAR_FIREWALL = 437;
 
     public static final int ACT_CUT = 44;
@@ -610,7 +610,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    //Action for the external Search 
+    //Action for the external Search
     //@author Huy TRUONG.
     public static final int ACT_EXTERNAL_SEARCH = 414;
     public static final int ACT_INTERNAL_SEARCH = 415;
@@ -629,8 +629,8 @@ public class TGUIAction extends AbstractAction {
     public static final String LARGE_ICON = "LargeIcon";
 
     public TGUIAction(TAction _t) {
-	putValue(Action.ACTION_COMMAND_KEY, _t.ACTION_COMMAND_KEY);
-	putValue(Action.NAME, _t.NAME);
+        putValue(Action.ACTION_COMMAND_KEY, _t.ACTION_COMMAND_KEY);
+        putValue(Action.NAME, _t.NAME);
         putValue(Action.SMALL_ICON, _t.SMALL_ICON);
         putValue(LARGE_ICON, _t.LARGE_ICON);
         putValue(Action.SHORT_DESCRIPTION, _t.SHORT_DESCRIPTION);
@@ -655,10 +655,10 @@ public class TGUIAction extends AbstractAction {
             if (actions[id].hasControl) {
                 putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY, java.awt.event.InputEvent.CTRL_MASK));
             } else {
-            	if ((actions[id].MNEMONIC_KEY >= 37 && actions[id].MNEMONIC_KEY <= 40) || actions[id].MNEMONIC_KEY == KeyEvent.VK_DELETE) //handling for arrow and delete keys
-            		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].MNEMONIC_KEY, 0));
-            	else
-            		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY));
+                if ((actions[id].MNEMONIC_KEY >= 37 && actions[id].MNEMONIC_KEY <= 40) || actions[id].MNEMONIC_KEY == KeyEvent.VK_DELETE) //handling for arrow and delete keys
+                    putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].MNEMONIC_KEY, 0));
+                else
+                    putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY));
             }
         }
         putValue(Action.ACTION_COMMAND_KEY, actions[id].ACTION_COMMAND_KEY);
@@ -732,18 +732,18 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_LOTOS] = new TAction("gen_lotos-command", "Generate LOTOS", IconManager.imgic90, IconManager.imgic90, "Generate LOTOS specification",  "Generates a LOTOS specification from TTool diagrams", '0');
         actions[ACT_ONECLICK_LOTOS_RG] = new TAction("gen_rglotos-command", "One-click LOTOS-based verification", IconManager.imgic342, IconManager.imgic342, "One-click LOTOS-based verification",  "Generates a LOTOS-based RG  from TTool diagrams", '0');
         actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TTool diagrams", '0');
-        
+
         // Issue #35: Renamed action name to be closer to actual functionality
         actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Formal Verification with UPPAAL", IconManager.imgic86, IconManager.imgic86, "Formal Verification with UPPAAL",  "Formal verification of TTool diagrams with UPPAAL", '0');
-        
+
         actions[ACT_AVATAR_MODEL_CHECKER] = new TAction("avatar-model-checker", "Avatar model checker", IconManager.imgic140, IconManager.imgic140, "Avatar model checker",  "Executes the AVATAR model checker from an AVATAR design", '0');
         actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
         actions[ACT_SIMU_JAVA] = new TAction("gen_simujava-command", "Java-based simulation", IconManager.imgic38, IconManager.imgic39, "JAVA-based simualtion",  "Simulate diagrams using Java language", 0);
-//@author: Huy TRUONG
-//action for button External Search and Internal Sarch
+        //@author: Huy TRUONG
+        //action for button External Search and Internal Sarch
         actions[ACT_EXTERNAL_SEARCH] = new TAction("external_search-command", "External Search", IconManager.imgic5113, IconManager.imgic5113, "External Search",  "External Search Interface", 0);
         actions[ACT_INTERNAL_SEARCH] = new TAction("internal_search-command", "Internal Search", IconManager.imgic5114, IconManager.imgic5114, "Internal Search",  "Internal Search Interface", 0);
-//--
+        //--
         actions[ACT_GEN_SYSTEMC] = new TAction("gen_systemc-command", "Generate simulation code", IconManager.imgic61, IconManager.imgic61, "Generate code for simulation",  "Generates code for simulation", 0);
         actions[ACT_SIMU_SYSTEMC] = new TAction("simu_systemc", "Interactive Simulation", IconManager.imgic61, IconManager.imgic61, "Interactive simulation",  "Interactive simulation ", 0);
         actions[ACT_GEN_TMLTXT] = new TAction("gen_tmltxt-command", "Generate TML / TMAP in text format", IconManager.imgic66, IconManager.imgic66, "Generate TML / TMAP in text format",  "Generates TML / TMAP code in text format from TML Design diagrams", 0);
@@ -767,7 +767,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_VIEW_PM_AUT] = new TAction("viewpmaut-command", "Power Management Analysis (last AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (last AUT graph)",  "Power Management Analysis on the last generated reachability graph generated in AUT (Aldebaran) format", 0);
         actions[ACT_VIEW_PM_AUTPROJ] = new TAction("viewpmautproj-command", "Power Management Analysis (last minimized AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (last minimized AUT graph)",  "Power Management Analysis on the last minimized reachability graph  in AUT (Aldebaran) format", 0);
         actions[ACT_VIEW_PM_SAVED_AUT] = new TAction("viewpmsavedautproj-command", "Power Management Analysis (saved AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (saved AUT graph)",  "Power Management Analysis on a graph saved in AUT (Aldebaran) format", 0);
-	actions[ACT_DSE] = new TAction("auto-dse", "Automated Design Space Exploration", IconManager.imgic89, IconManager.imgic89, "Automated Design Space Exploration", "Find the optimal mapping and security additions automatically",0);
+        actions[ACT_DSE] = new TAction("auto-dse", "Automated Design Space Exploration", IconManager.imgic89, IconManager.imgic89, "Automated Design Space Exploration", "Find the optimal mapping and security additions automatically",0);
         // AVATAR
         actions[ACT_AVATAR_SIM] = new TAction("avatar-simu", "Interactive simulation", IconManager.imgic18, IconManager.imgic18, "Interactive simulation",  "Interactive simulation of the AVATAR design under edition", '2');
         actions[ACT_AVATAR_FV_UPPAAL] = new TAction("avatar-formal-verification-uppaal", "Safety formal verification with UPPAAL (Safety)", IconManager.imgic86, IconManager.imgic86, "Formal verification with UPPAAL (Safety)",  "Formal verification with UPPAAL (Safety) of the AVATAR design under edition", '3');
@@ -800,7 +800,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_DIAGRAM_CAPTURE] = new TAction("diagram-capture", "Current diagram capture (PNG)", IconManager.imgic338, IconManager.imgic339, "Diagram capture",  "Capture the currenlty opened diagram", 0);
         actions[ACT_SVG_DIAGRAM_CAPTURE] = new TAction("svg-diagram-capture", "Current diagram capture (SVG)", IconManager.imgic338, IconManager.imgic339, "Diagram capture (SVG)",  "Capture the currenlty opened diagram in svg format", 0);
         actions[ACT_ALL_DIAGRAM_CAPTURE] = new TAction("all-diagram-capture", "All diagrams capture (PNG)", IconManager.imgic338, IconManager.imgic339, "All diagram capture (PNG)",  "Capture in png images the currenlty opened set of diagram (analysis, design, etc.)", 0);
-	actions[ACT_ALL_DIAGRAM_CAPTURE_SVG] = new TAction("all-diagram-capture-svg", "All diagrams capture (SVG)", IconManager.imgic338, IconManager.imgic339, "All diagram capture (SVG)",  "Capture in svg images the currenlty opened set of diagram (analysis, design, etc.)", 0);
+        actions[ACT_ALL_DIAGRAM_CAPTURE_SVG] = new TAction("all-diagram-capture-svg", "All diagrams capture (SVG)", IconManager.imgic338, IconManager.imgic339, "All diagram capture (SVG)",  "Capture in svg images the currenlty opened set of diagram (analysis, design, etc.)", 0);
         actions[ACT_SELECTED_CAPTURE] = new TAction("selected-capture", "Capture of selected components", IconManager.imgic338, IconManager.imgic339, "Capture of selected components",  "Capture the selected components of the currently opened diagram", 0);
         actions[ACT_GEN_DOC] = new TAction("gen-doc", "Documentation generation", IconManager.imgic28, IconManager.imgic28, "Documentation generation",  "Documentation may be automatically generated, in html format, from edited diagrams", 0);
         actions[ACT_GEN_DOC_REQ] = new TAction("gen-doc-req", "SysML requirements documentation", IconManager.imgic28, IconManager.imgic28, "SysML requirements documentation",  "SysML requirements documentation is displayed in an array, and may be further automatically generated in html format", 0);
@@ -809,10 +809,10 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_TURTLE_WEBSITE] = new TAction("turtle-website-command", "TTool's website", IconManager.imgic30, IconManager.imgic31, "TTool's website", "Various information (e.g., documentation) on TTool", 0);
         actions[ACT_TURTLE_DOCUMENTATION] = new TAction("turtle-docu-command", "AVATAR online help", IconManager.imgic30, IconManager.imgic31, "AVATAR online help", "AVATAR online help", 0);
         actions[ACT_DIPLODOCUS_DOCUMENTATION] = new TAction("diplo-docu-command", "DIPLODOCUS online help", IconManager.imgic30, IconManager.imgic31, "DIPLODOCUS online help", "DIPLODOCUS online help", 0);
-        
+
         // Issue # 34: SysMLSec help was using the command of DIPLODOCUS resulting in SysMLSec help being displayed instead
         actions[ACT_SYSMLSEC_DOCUMENTATION] = new TAction("sysmlsec-docu-command", "SysML-Sec online help", IconManager.imgic30, IconManager.imgic31, "SysML-Sec online help", "SysML-Sec online help", 0);
-//    	actions[ACT_SYSMLSEC_DOCUMENTATION] = new TAction("diplo-docu-command", "SysML-Sec online help", IconManager.imgic30, IconManager.imgic31, "SysML-Sec online help", "SysML-Sec online help", 0);
+        //      actions[ACT_SYSMLSEC_DOCUMENTATION] = new TAction("diplo-docu-command", "SysML-Sec online help", IconManager.imgic30, IconManager.imgic31, "SysML-Sec online help", "SysML-Sec online help", 0);
         actions[ACT_TTOOL_CONFIGURATION] = new TAction("configuration-command", "Configuration", IconManager.imgic76, IconManager.imgic77, "Configuration", "Configuration loaded at startup", 0);
 
         actions[ACT_ENHANCE] = new TAction("enhance-command", "Enhance", IconManager.imgic28, IconManager.imgic29, "Enhance", "Automatically enhance diagram", 0);
@@ -851,16 +851,16 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_CPUNODE] = new TAction("add-add-cpunode", "Add a CPU", IconManager.imgic1100, IconManager.imgic1100, "CPU", "Add a cpu node to the currently opened AVATAR deployment diagram", 0);
 
         actions[ADD_BUSNODE] = new TAction("add-add-busnode", "Add a Bus", IconManager.imgic1102, IconManager.imgic1102, "Bus", "Add a bus node to the currently opened AVATAR deployment diagram", 0);
-	actions[ADD_VGMNNODE] = new TAction("add-add-vgmnnode", "Add a VGMN", IconManager.imgic1102, IconManager.imgic1102, "VGMN", "Add a VGMN node to the currently opened AVATAR deployment diagram", 0);
-	actions[ADD_CROSSBARNODE] = new TAction("add-add-crossbarnode", "Add a CROSSBAR", IconManager.imgic1102, IconManager.imgic1102, "Crossbar", "Add a Crossbar node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_VGMNNODE] = new TAction("add-add-vgmnnode", "Add a VGMN", IconManager.imgic1102, IconManager.imgic1102, "VGMN", "Add a VGMN node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_CROSSBARNODE] = new TAction("add-add-crossbarnode", "Add a CROSSBAR", IconManager.imgic1102, IconManager.imgic1102, "Crossbar", "Add a Crossbar node to the currently opened AVATAR deployment diagram", 0);
 
         actions[ADD_TTYNODE] = new TAction("add-add-tty", "Add a TTY node", IconManager.imgic1108, IconManager.imgic1108, "TTY", "Add a tty node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_BLOCKARTIFACT] = new TAction("add-add-blockartifact", "Map an AVATAR block", IconManager.imgic702, IconManager.imgic702, "Map an AVATAR block", "Map an AVATAR block onto a node in the currently opened AVATAR deployment diagram", 0);
- // julien ----------------------------------------------------------------------------------
+        // julien ----------------------------------------------------------------------------------
         actions[DEPLOY_AVATAR_DIAGRAM] = new TAction("DEPLOY", "DEPLOY",IconManager.imgic94, IconManager.imgic94, "Generate DEPLOY Soclib", "DEPLOY diagram without check syntax", 0);
-	
+
         actions[EXTRAC_DEPLOY_PARAM_TO_FILE] = new TAction("FILE", "FILE",IconManager.imgic340,IconManager.imgic340, "Extrac attributes to File", "Extrac attributes to specified File", 0);
-      // -----------------------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------------------
 
         actions[ADD_CHANNELARTIFACT] = new TAction("add-add-channelartifact", "Map an AVATAR Channel", IconManager.imgic702, IconManager.imgic702, "Map an AVATAR channel", "Map an AVATAR channel onto a memory in the currently opened AVATAR deployment diagram", 0);
         actions[ADD_BRIDGENODE] = new TAction("add-add-bridgenode", "Add a Bridge", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened AVATAR deployment diagram", 0);
@@ -872,8 +872,6 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_TIMERNODE] = new TAction("add-add-timernode", "Add a Timer", IconManager.imgic1116, IconManager.imgic1116, "Timer", "Add a timer node to the currently opened AVATAR deployment diagram", 0);
 
 
-
-
         actions[TCD_PARALLEL_OPERATOR] = new TAction("add-parallel-operator", "Add Parallel composition operator", IconManager.imgic112, IconManager.imgic112, "Parallel composition operator", "Add a Parallel composition operator to the currently opened class diagram", 0);
         actions[TCD_CONNECTOR_ATTRIBUTE] = new TAction("add-attribute-connector", "Connects an association to a composition operator", IconManager.imgic108, IconManager.imgic108, "Attributes an association with a composition operator", "Adds a connector between an association and a composition operator to the currently opened class diagram", 0);
         actions[TCD_SEQUENCE_OPERATOR] = new TAction("add-sequence-operator", "Add Sequence composition operator", IconManager.imgic114, IconManager.imgic114, "Sequence composition operator", "Add a Sequence composition operator to the currently opened class diagram", 0);
@@ -882,10 +880,10 @@ public class TGUIAction extends AbstractAction {
         actions[TCD_INVOCATION_OPERATOR] = new TAction("add-invocation-operator", "Add Invocation composition operator", IconManager.imgic126, IconManager.imgic126, "Invocation composition operator", "Adds an invocation composition operator to the currently opened class diagram", 0);
         actions[TCD_ASSOCIATION_NAVIGATION] = new TAction("add-association-navigation", "Add association with navigation", IconManager.imgic106, IconManager.imgic108, "Association with navigation", "Adds an association with a navigation indication between two tclasses of the currently opened class diagram", 0);
         actions[UML_NOTE] = new TAction("edit-note", "Add a note to a diagram", IconManager.imgic320, IconManager.imgic321, "Add a comment", "Add a comment to the currently opened TTool diagram", 0);
-        actions[PRAGMA] = new TAction("pragma", "Add a pragma to a diagram", IconManager.imgic6000, IconManager.imgic6001, "Add a pragma", "Add a pragma to the currently opened TTool diagram", 0);
-        actions[SAFETY_PRAGMA] = new TAction("safety_pragma", "Add a safety (UPPAAL) pragma to a diagram", IconManager.imgic6002, IconManager.imgic6003, "Add a safety (UPPAAL) pragma", "Add a safety (UPPAAL) pragma to the currently opened TTool diagram", 0);
-        actions[PERFORMANCE_PRAGMA] = new TAction("performance_pragma", "Add a performance pragma to a diagram", IconManager.imgic6004, IconManager.imgic6005, "Add a performance pragma", "Add a performance pragma to the currently opened TTool diagram", 0);
-		actions[AVATAR_FIREWALL] = new TAction("avatar_firewall", "Add an avatar firewall to a diagram", IconManager.imgic7001, IconManager.imgic7001, "Add an avatar firewall", "Add an avatar firewall to the currently opened TTool diagram", 0);
+        actions[PRAGMA] = new TAction("pragma", "Security pragmas", IconManager.imgic6000, IconManager.imgic6001, "Security pragmas", "Add security pragmas to the currently opened TTool diagram", 0);
+        actions[SAFETY_PRAGMA] = new TAction("safety_pragma", "Add a safety (UPPAAL) property to a diagram", IconManager.imgic6002, IconManager.imgic6003, "Safety property (UPPAAL)", "Add a safety (UPPAAL) property to the currently opened TTool diagram", 0);
+        actions[PERFORMANCE_PRAGMA] = new TAction("performance_pragma", "Add a performance property to a diagram", IconManager.imgic6004, IconManager.imgic6005, "Performance property", "Add a performance property to the currently opened TTool diagram", 0);
+        actions[AVATAR_FIREWALL] = new TAction("avatar_firewall", "Add an avatar firewall to a diagram", IconManager.imgic7001, IconManager.imgic7001, "Add an avatar firewall", "Add an avatar firewall to the currently opened TTool diagram", 0);
 
         actions[IOD_EDIT] = new TAction("edit-io-diagram", "Edit interaction overview diagram", IconManager.imgic100, IconManager.imgic101, "Edit interaction overview diagram", "Make it possible to edit the currently opened interaction overview diagram", 0);
         actions[IOD_CONNECTOR] = new TAction("add-iod-connector", "Add IOD Connector", IconManager.imgic202, IconManager.imgic202, "Connector", "Add a Connector between two components of the currently opened interaction overview diagram", 0);
@@ -916,7 +914,7 @@ public class TGUIAction extends AbstractAction {
         actions[SD_COREGION] = new TAction("add-sd-coregion", "Coregion", IconManager.imgic520, IconManager.imgic520, "Coregion", "Add a coregion to the currently opened sequence diagram", 0);
         actions[SD_ALIGN_INSTANCES] = new TAction("add-sd-align_instances", "Align instances", IconManager.imgic522, IconManager.imgic522, "Align instances", "align instances of the currently opened sequence diagram", 0);
 
-	actions[SDZV_EDIT] = new TAction("edit-sdzv-diagram", "Edit sequence diagram", IconManager.imgic100, IconManager.imgic101, "Edit sequence diagram", "Make it possible to edit the currently opened sequence diagram", 0);
+        actions[SDZV_EDIT] = new TAction("edit-sdzv-diagram", "Edit sequence diagram", IconManager.imgic100, IconManager.imgic101, "Edit sequence diagram", "Make it possible to edit the currently opened sequence diagram", 0);
         actions[SDZV_INSTANCE] = new TAction("add-sdzv-instance", "Add an instance", IconManager.imgic500, IconManager.imgic500, "Instance", "Add a new instance  to the currently opened sequence diagram", 0);
         actions[SDZV_CONNECTOR_MESSAGE_ASYNC] = new TAction("add-sdzv-connector-message-async", "Add asynchronous message", IconManager.imgic504, IconManager.imgic504, "Asynchronous message", "Add an asynchronous message between two instances of the currently opened sequence diagram", 0);
         actions[SDZV_CONNECTOR_MESSAGE_SYNC] = new TAction("add-sdzv-connector-message-sync", "Add synchronous message", IconManager.imgic502, IconManager.imgic502, "Synchronous message", "Add an synchronous message between two instances of the currently opened sequence diagram", 0);
@@ -1006,8 +1004,8 @@ public class TGUIAction extends AbstractAction {
 
 
 
-	actions[TMLAD_ENCRYPT] = new TAction("add-tmlad-encrypt", "Add Encryption", IconManager.imgic940, IconManager.imgic940, "Encryption", "Add an encryption operator to the currently opened TML Task activity diagram", 0);
-	actions[TMLAD_DECRYPT] = new TAction("add-tmlad-decrypt", "Add Decryption", IconManager.imgic941, IconManager.imgic941, "Decryption", "Add a decryption operator to the currently opened TML Task activity diagram", 0);
+        actions[TMLAD_ENCRYPT] = new TAction("add-tmlad-encrypt", "Add Encryption", IconManager.imgic940, IconManager.imgic940, "Encryption", "Add an encryption operator to the currently opened TML Task activity diagram", 0);
+        actions[TMLAD_DECRYPT] = new TAction("add-tmlad-decrypt", "Add Decryption", IconManager.imgic941, IconManager.imgic941, "Decryption", "Add a decryption operator to the currently opened TML Task activity diagram", 0);
 
 
         actions[EBRDD_EDIT] = new TAction("edit-ebrdd-diagram", "Edit EBRDD", IconManager.imgic100, IconManager.imgic101, "Edit EBRDD", "Make it possible to edit the currently opened Event-Based Requirement Description Diagram", 0);
@@ -1035,11 +1033,11 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_EVENT_ARTIFACT] = new TAction("add-tmlarchi-event-artifact", "Map an event / request", IconManager.imgic702, IconManager.imgic702, "Map an event/request", "Map an event or a request onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_BRIDGENODE] = new TAction("add-tmlarchi-bridgenode", "Add a Bridge node", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_HWANODE] = new TAction("add-tmlarchi-hwanode", "Add a hardware accelerator node", IconManager.imgic1106, IconManager.imgic1106, "Hardware accelerator node", "Add a hardware accelerator node to the currently opened DIPLODOCUS architecture diagram", 0);
-	actions[TMLARCHI_CAMSNODE] = new TAction("add-tmlarchi-camsnode", "Add a System C-AMS node", IconManager.imgic1106, IconManager.imgic1106, "System C-AMS node", "Add a System C-AMS node to the currently open DIPLODOCUS architecture diagram", 0);
+        actions[TMLARCHI_CAMSNODE] = new TAction("add-tmlarchi-camsnode", "Add a System C-AMS node", IconManager.imgic1106, IconManager.imgic1106, "System C-AMS node", "Add a System C-AMS node to the currently open DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_MEMORYNODE] = new TAction("add-tmlarchi-memorynode", "Add a memory node", IconManager.imgic1108, IconManager.imgic1108, "Memory node", "Add a memory node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_DMANODE] = new TAction("add-tmlarchi-dmanode", "Add a DMA node", IconManager.imgic1110, IconManager.imgic1110, "DMA node", "Add a DMA node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_KEY] = new TAction("add-tmlarchi-key", "Map a key", IconManager.imgic1118, IconManager.imgic1118, "Map a key", "Map a key onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
-	actions[TMLARCHI_FIREWALL] = new TAction("add-tmlarchi-firewall", "Add a Firewall", IconManager.imgic7001, IconManager.imgic7001, "Add a Firewall", "Add a Firewall in the currently opened DIPLODOCUS architecture diagram",0);
+        actions[TMLARCHI_FIREWALL] = new TAction("add-tmlarchi-firewall", "Add a Firewall", IconManager.imgic7001, IconManager.imgic7001, "Add a Firewall", "Add a Firewall in the currently opened DIPLODOCUS architecture diagram",0);
 
         actions[TMLCP_EDIT] = new TAction("edit-tmlcp-diagram", "Edit communication pattern diagram", IconManager.imgic100, IconManager.imgic101, "Edit communication pattern diagram", "Make it possible to edit the currently opened communication pattern diagram", 0);
         actions[TMLCP_CONNECTOR] = new TAction("add-tmlcp-connector", "Add CP Connector", IconManager.imgic202, IconManager.imgic202, "Connector", "Add a Connector between two components of the currently opened communication pattern diagram", 0);
@@ -1051,7 +1049,7 @@ public class TGUIAction extends AbstractAction {
         actions[TMLCP_START] = new TAction("add-tmlcp-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened communication pattern diagram", 0);
         actions[TMLCP_STOP] = new TAction("add-tmlcp-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened communication pattern diagram", 0);
         actions[TMLCP_JUNCTION] = new TAction("add-tmlcp-junction", "Add Junction", IconManager.imgic212, IconManager.imgic212, "Junction", "Add a junction with three inputs to the currently opened communication pattern diagram", 0);
-	actions[TMLCP_FOR_LOOP] = new TAction("add-tmlcp-forloop", "Add loop", IconManager.imgic912, IconManager.imgic912, "Loop", "Add a for loop to the currently opened communication pattern diagram", 0);
+        actions[TMLCP_FOR_LOOP] = new TAction("add-tmlcp-forloop", "Add loop", IconManager.imgic912, IconManager.imgic912, "Loop", "Add a for loop to the currently opened communication pattern diagram", 0);
 
         actions[TMLSD_EDIT] = new TAction("edit-tmlsd-diagram", "Edit CP-SD diagram", IconManager.imgic100, IconManager.imgic101, "Edit the Sequence Diagram", "Make it possible to edit the currently opened communication pattern sequence diagram", 0);
         actions[TMLSD_MESSAGE_ASYNC] = new TAction("add-tmlsd-messageasync", "Add async msg", IconManager.imgic202, IconManager.imgic202, "Asynchronous message", "Add an asynchronous message between two components of the currently opened communication pattern sequence diagram", 0);
@@ -1060,10 +1058,10 @@ public class TGUIAction extends AbstractAction {
         actions[TMLSD_CONTROLLER_INSTANCE] = new TAction("add-controller-instance-tmlsd", "Controller instance", IconManager.imgic500, IconManager.imgic500, "Controller instance", "Add a controller instance to the currently opened communication pattern sequence diagram", 0);
         actions[TMLSD_ACTION_STATE] = new TAction("add-action-tmlsd", "Action state", IconManager.imgic512, IconManager.imgic512, "Action state", "Add an action state to the currently opened communication pattern sequence diagram", 0);
 
-	//System C-AMS
-	actions[CAMS_EDIT] = new TAction("add-action-C-AMS", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened SystemC-AMS diagram", 0);
-	actions[CAMS_BLOCK] = new TAction("C-AMS-block", "Add a block", IconManager.imgic5000, IconManager.imgic5000, "Block", "Add a Block to the currently opened SystemC-AMS Diagram", 0);
-	actions[CAMS_CONNECTOR] = new TAction("C-AMS-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened SystemC-AMS Diagram", 0);
+        //System C-AMS
+        actions[CAMS_EDIT] = new TAction("add-action-C-AMS", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened SystemC-AMS diagram", 0);
+        actions[CAMS_BLOCK] = new TAction("C-AMS-block", "Add a block", IconManager.imgic5000, IconManager.imgic5000, "Block", "Add a Block to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_CONNECTOR] = new TAction("C-AMS-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened SystemC-AMS Diagram", 0);
 
 
         //ProActive State Machine Diagram
@@ -1112,8 +1110,8 @@ public class TGUIAction extends AbstractAction {
         actions[ATD_ATTACK_CONNECTOR] = new TAction("atd-attack-connector", "Add a connector between attacks /constraints", IconManager.imgic1080, IconManager.imgic1080, "Connector", "Add a connector between attacks / constraints of the currently opened attack tree diagram", 0);
         actions[ATD_COMPOSITION_CONNECTOR] = new TAction("atd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Composition connector", "Add a composition between blocks of the currently opened attack tree diagram", 0);
         actions[ATD_CONSTRAINT] = new TAction("atd-constraint", "Add an constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened attack tree diagram", 0);
-	actions[ATD_COUNTERMEASURE] = new TAction("atd-countermeasure", "Add a countermeasure", IconManager.imgic1082, IconManager.imgic1082, "Countermeasure", "Add a countermeasure to the currently opened attack tree diagram", 0);
-	actions[ATD_COUNTERMEASURE_CONNECTOR] = new TAction("atd-countermeasure-connector", "Add a connector between attacks / countermeasures", IconManager.imgic1084, IconManager.imgic1084, "Connect countermeasure", "Add a connector between attacks / countermeasures of the currently opened attack tree diagram", 0);
+        actions[ATD_COUNTERMEASURE] = new TAction("atd-countermeasure", "Add a countermeasure", IconManager.imgic1082, IconManager.imgic1082, "Countermeasure", "Add a countermeasure to the currently opened attack tree diagram", 0);
+        actions[ATD_COUNTERMEASURE_CONNECTOR] = new TAction("atd-countermeasure-connector", "Add a connector between attacks / countermeasures", IconManager.imgic1084, IconManager.imgic1084, "Connect countermeasure", "Add a connector between attacks / countermeasures of the currently opened attack tree diagram", 0);
 
         // TURTLE-OS
         actions[TOS_TCLASS] = new TAction("add-tclass-os", "Add Tclass", IconManager.imgic104, IconManager.imgic104, "Tclass", "Add a TClass to the currently opened class diagram", 0);
@@ -1170,17 +1168,17 @@ public class TGUIAction extends AbstractAction {
         actions[AMAD_VERSIONING_CONNECTOR] = new TAction("add-amad-versioning", "Add a versioning link", IconManager.imgic5064, IconManager.imgic5064, "Versioning", "Add a versioning link between two assumptions of the currently opened avatar Modeling Assumptions diagram", 0);
         actions[AMAD_IMPACT_CONNECTOR] = new TAction("add-amad-impact", "Add an impact link", IconManager.imgic5066, IconManager.imgic5066, "Impact", "Add an impact link between two references to model elements, in the currently opened avatar Modeling Assumptions diagram", 0);
         actions[AMAD_MEET_CONNECTOR] = new TAction("add-amad-meet", "Add an meet link", IconManager.imgic5066, IconManager.imgic5066, "Meet", "Add an meet link between a model element and an assumption in the currently opened Avatar Modeling Assumptions diagram", 0);
-	actions[AMAD_BELONGSTOCOMPOSITION_CONNECTOR] = new TAction("amad-belongstocomposition-connector", "Add a composition connector between references", IconManager.imgic5002, IconManager.imgic5002, "Composition connector", "Add a composition between blocks of the currently opened Avatar Modeling Assumptions diagram", 0);
+        actions[AMAD_BELONGSTOCOMPOSITION_CONNECTOR] = new TAction("amad-belongstocomposition-connector", "Add a composition connector between references", IconManager.imgic5002, IconManager.imgic5002, "Composition connector", "Add a composition between blocks of the currently opened Avatar Modeling Assumptions diagram", 0);
 
         // AVATAR Requirement Diagrams
         actions[ARD_EDIT] = new TAction("edit-ard-diagram", "Edit Requirement Diagram", IconManager.imgic100, IconManager.imgic101, "Edit Requirement Diagram", "Make it possible to edit the currently opened Requirement Diagram", 0);
         actions[ARD_REQUIREMENT] = new TAction("add-ard-requirement", "Add a requirement", IconManager.imgic5006, IconManager.imgic5006, "Requirement", "Add a requirement to the currently opened requirement diagram", 0);
         actions[ARD_PROPERTY] = new TAction("add-ard-property", "Add a property", IconManager.imgic5008, IconManager.imgic5008, "Property", "Add a reference to a property of the currently opened requirement diagram", 0);
-	actions[ARD_ELEMENT_REFERENCE] = new TAction("add-ard-element-reference", "Add a reference to an element", IconManager.imgic5068, IconManager.imgic5068, "Element Reference", "Add a reference to an element of the currently opened requirement diagram", 0);
+        actions[ARD_ELEMENT_REFERENCE] = new TAction("add-ard-element-reference", "Add a reference to an element", IconManager.imgic5068, IconManager.imgic5068, "Element Reference", "Add a reference to an element of the currently opened requirement diagram", 0);
         actions[ARD_DERIVE_CONNECTOR] = new TAction("add-ard-derive", "Add a <<deriveReqt>> link", IconManager.imgic1008, IconManager.imgic1008, "DeriveReqt", "Add a <<deriveReqt>> link between two requirements of the currently opened requirement diagram", 0);
-	actions[ARD_SATISFY_CONNECTOR] = new TAction("add-ard-satisfy", "Add a <<satisfy>> link", IconManager.imgic1018, IconManager.imgic1018, "Satisfy", "Add a <<satisfy>> link between two requirements of the currently opened requirement diagram", 0);
-       
-	actions[ARD_REFINE_CONNECTOR] = new TAction("add-ard-refine", "Add a <<refine>> link", IconManager.imgic1016, IconManager.imgic1016, "refine", "Add a <<refine>> link between two requirements of the currently opened requirement diagram", 0);
+        actions[ARD_SATISFY_CONNECTOR] = new TAction("add-ard-satisfy", "Add a <<satisfy>> link", IconManager.imgic1018, IconManager.imgic1018, "Satisfy", "Add a <<satisfy>> link between two requirements of the currently opened requirement diagram", 0);
+
+        actions[ARD_REFINE_CONNECTOR] = new TAction("add-ard-refine", "Add a <<refine>> link", IconManager.imgic1016, IconManager.imgic1016, "refine", "Add a <<refine>> link between two requirements of the currently opened requirement diagram", 0);
         actions[ARD_VERIFY_CONNECTOR] = new TAction("add-ard-verify", "Add a <<verify>> link", IconManager.imgic1006, IconManager.imgic1006, "Verify", "Add a <<verify>> link between an observer and a requirement of the currently opened requirement diagram", 0);
         actions[ARD_COPY_CONNECTOR] = new TAction("add-ard-copy", "Add a <<copy>> link", IconManager.imgic1010, IconManager.imgic1010, "Copy", "Add a <<copy>> link between two requirements of the currently opened requirement diagram", 0);
         actions[ARD_COMPOSITION_CONNECTOR] = new TAction("add-ard-composition", "Add a  composition link", IconManager.imgic1012, IconManager.imgic1012, "Composition", "Add a composition link between two requirements of the currently opened requirement diagram", 0);
@@ -1265,7 +1263,7 @@ public class TGUIAction extends AbstractAction {
         if (listeners == null) {
             listeners = new EventListenerList();
         }
-	//TraceManager.addDev("Action listener added");
+        //TraceManager.addDev("Action listener added");
         listeners.add(ActionListener.class, l);
     }
 

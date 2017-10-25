@@ -55,7 +55,7 @@ import java.awt.event.ActionListener;
    * Class TMLArchiDiagramToolBar
    * Implements the toolbar to be used in conjunction with the panel of a TML Architecture diagram
    * Creation: 18/09/2007
-   * @version 1.0 18/09/2007
+   * @version 1.1 18/09/2017
    * @author Ludovic APVRILLE
    * @see ui.cd.TClassDiagramPanel
  */
@@ -184,7 +184,7 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         
         //Issue #68: Review Filters of Diagram Elements
         box = new JMenuBar();
-        menu = new JMenu("Edit configuration view");
+        menu = new JMenu("View (options)");
         
        	m1 = new JCheckBoxMenuItem(viewInfos[0], true);
        	m1.addActionListener(this);

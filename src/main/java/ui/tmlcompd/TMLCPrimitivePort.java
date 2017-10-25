@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -60,11 +60,11 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
-   * Class TMLCPrimitivePort
-   * Primitive port. To be used in TML component task diagrams
-   * Creation: 12/03/2008
-   * @version 1.0 12/03/2008
-   * @author Ludovic APVRILLE
+ * Class TMLCPrimitivePort
+ * Primitive port. To be used in TML component task diagrams
+ * Creation: 12/03/2008
+ * @version 1.0 12/03/2008
+ * @author Ludovic APVRILLE
  */
 public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
     protected Color myColor;
@@ -112,8 +112,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected String conflictMessage;
     protected String dataFlowType = "VOID";
     protected String associatedEvent = "VOID";
-	public String referenceReq = "";
+    public String referenceReq = "";
     public int verification;
+    
     public TMLCPrimitivePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
@@ -390,7 +391,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         }
     }
 
-    
+
     public void drawConfVerification(Graphics g){
 
         int lockwidth=(int) (9*tdp.getZoom());
@@ -548,14 +549,14 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             TMLCPrimitiveComponent tgc = (TMLCPrimitiveComponent)(getFather());
             otherTypes = tgc.getAllRecords();
         }
-		Vector<String> refs = new Vector<String>();
-		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
-			//System.out.println("req " + req);
-			if (req instanceof AvatarRDRequirement){	
-				refs.add(((AvatarRDRequirement) req).getID()+ ":" + ((AvatarRDRequirement) req).getText().trim());
-			}
-		}
-	
+        Vector<String> refs = new Vector<String>();
+        for (TGComponent req: tdp.getMGUI().getAllRequirements()){
+            //System.out.println("req " + req);
+            if (req instanceof AvatarRDRequirement){
+                refs.add(((AvatarRDRequirement) req).getID()+ ":" + ((AvatarRDRequirement) req).getText().trim());
+            }
+        }
+
         JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth, referenceReq, refs);
         // jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda, 350, 700 );
@@ -588,7 +589,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 oldTypep = typep;
                 typep = jda.getPortType();
                 checkConf = jda.checkConf;
-				referenceReq = jda.getReferenceReq();
+                referenceReq = jda.getReferenceReq();
                 if (checkConf){
                     if (checkConfStatus==NOCHECK){
                         checkConfStatus=TOCHECK;
@@ -950,43 +951,43 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     }
 
     public boolean hasSameParametersThan(TMLCPrimitivePort _p) {
-	for(int i=0; i<5; i++) {
-	    if (!(getParamAt(i).equals(_p.getParamAt(i)))) {
-		return false;
-	    }
-	}
-	return true;
+        for(int i=0; i<5; i++) {
+            if (!(getParamAt(i).equals(_p.getParamAt(i)))) {
+                return false;
+            }
+        }
+        return true;
     }
-    
+
     public void setPortName(String s) {
-    	for (TURTLEPanel tp: tdp.getMainGUI().tabs)
-			for (TDiagramPanel t: tp.getPanels()) {
-				for (TGComponent t2: t.getComponentList()) {					
-					if (t2 instanceof TMLArchiCPNode) {
-						TMLArchiCPNode tacn = (TMLArchiCPNode) t2;
-						for (TGComponent tgc: tacn.getRecursiveAllInternalComponent()) {
-							if (tgc instanceof TMLArchiPortArtifact) {
-								TMLArchiPortArtifact tapi = (TMLArchiPortArtifact) tgc;
-				    			String tmp = tapi.getValue().replaceAll("(?i)" + commName + "$", s);
-				    			tapi.setValue(tmp);						
-							}
-						}
-					}
-					
-					if (t2 instanceof TMLADWriteChannel) {
-						TMLADWriteChannel twc = (TMLADWriteChannel) t2;
-						if (twc.getChannelName().equals(commName))
-							twc.setChannelName(s);
-					}
-					
-					if (t2 instanceof TMLADReadChannel) {
-						TMLADReadChannel twc = (TMLADReadChannel) t2;
-						if (twc.getChannelName().equals(commName))
-							twc.setChannelName(s);
-					}
-				}
-				t.repaint();		
-			}
+        for (TURTLEPanel tp: tdp.getMainGUI().tabs)
+            for (TDiagramPanel t: tp.getPanels()) {
+                for (TGComponent t2: t.getComponentList()) {
+                    if (t2 instanceof TMLArchiCPNode) {
+                        TMLArchiCPNode tacn = (TMLArchiCPNode) t2;
+                        for (TGComponent tgc: tacn.getRecursiveAllInternalComponent()) {
+                            if (tgc instanceof TMLArchiPortArtifact) {
+                                TMLArchiPortArtifact tapi = (TMLArchiPortArtifact) tgc;
+                                String tmp = tapi.getValue().replaceAll("(?i)" + commName + "$", s);
+                                tapi.setValue(tmp);
+                            }
+                        }
+                    }
+
+                    if (t2 instanceof TMLADWriteChannel) {
+                        TMLADWriteChannel twc = (TMLADWriteChannel) t2;
+                        if (twc.getChannelName().equals(commName))
+                            twc.setChannelName(s);
+                    }
+
+                    if (t2 instanceof TMLADReadChannel) {
+                        TMLADReadChannel twc = (TMLADReadChannel) t2;
+                        if (twc.getChannelName().equals(commName))
+                            twc.setChannelName(s);
+                    }
+                }
+                t.repaint();
+            }
     }
 
 }
