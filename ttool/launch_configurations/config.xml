@@ -37,8 +37,8 @@
 <SystemCCodeCompileCommand data="make -C ../simulators/c++2/" />
 <SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
 <SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
-<TMLCodeDirectory data="../simulators/c++2/tmlcode" />
-<CCodeDirectory data="./launch_configurations/c_code" />
+<TMLCodeDirectory data="../tmlcode/" />
+<CCodeDirectory data="../CCode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
 <VCDPath data="../simulators/c++2/" />
 <UPPAALCodeDirectory data="../uppaal/" />
@@ -51,13 +51,13 @@
 <ProVerifVerifierHost data="localhost" />
 <AVATARExecutableCodeDirectory data="../executablecode/" />
 <AVATARMPSoCCodeDirectory data="../MPSoC/" />
-<AVATARMPSoCCompileCommand data="make -C ../MPSoC updateruntime updategeneratedcode compilesoclib" />
+<AVATARMPSoCCompileCommand data="make -C ../MPSoC/ updateruntime updategeneratedcode compilesoclib" />
 <AVATARExecutableCodeHost data="localhost"/>
-<AVATARExecutableCodeCompileCommand data="make -C ../executablecode" />
+<AVATARExecutableCodeCompileCommand data="make -C ../executablecode/" />
 <AVATARExecutableCodeExecuteCommand data="../executablecode/run.x" />
-<AVATARExecutableSoclibCodeCompileCommand data="make -C ../MPSoC updategeneratedcode compilesoclib" />
-<AVATARExecutableSoclibCodeExecuteCommand data="make -C ../MPSoC runsoclib" />
-<AVATARExecutableSoclibCodeTraceCommand data="make -C ../MPSoC runsoclib-trace" />
+<AVATARExecutableSoclibCodeCompileCommand data="make -C ../MPSoC/ updategeneratedcode compilesoclib" />
+<AVATARExecutableSoclibCodeExecuteCommand data="make -C ../MPSoC/ runsoclib" />
+<AVATARExecutableSoclibCodeTraceCommand data="make -C ../MPSoC/ runsoclib-trace" />
 <AVATARExecutableSoclibTraceFile data="../Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
 
 
@@ -68,12 +68,12 @@
 
 <PLUGIN_JAVA_CODE_GENERATOR data="../plugins/CustomizerAvatarCodeGeneration.jar" />
 
-<LastOpenFile data="/home/dblouin/Projets/TTool/git/TTool/modeling/AVATAR/CoffeeMachine_Avatar.xml"/>
+<LastOpenFile data="/home/satan/ZigBeeTutorial.ttool/ZigBeeTutorial.xml"/>
 
 
 
-<LastWindowAttributes x="65" y="24" width="1855" height="1056" max="true" />
+<LastWindowAttributes x="65" y="24" width="1301" height="744" max="true" />
 
 
-<ProVerifHash data="-2047053751"/>
+<ProVerifHash data="-695076237"/>
 </TURTLECONFIGURATION>
