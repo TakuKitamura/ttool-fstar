@@ -1028,14 +1028,5 @@ public class ActionPerformer {
         }   else if (command.endsWith(".dot")) {
             mgui.viewAutomata(command);
         }
-        else if (command.equals(mgui.actions[TGUIAction.ACT_UP].getActionCommand())) {
-            tdp1.upComponent();
-        }	else if (command.equals(mgui.actions[TGUIAction.ACT_DOWN].getActionCommand())) {
-            	tdp1.downComponent();
-        }	else if (command.equals(mgui.actions[TGUIAction.ACT_LEFT].getActionCommand())) {
-            	tdp1.leftComponent();
-        } 	else if (command.equals(mgui.actions[TGUIAction.ACT_RIGHT].getActionCommand())) {
-            	tdp1.rightComponent();
-        }
     }
 }
