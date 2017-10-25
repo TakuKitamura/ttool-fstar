@@ -26,13 +26,15 @@ public class PanelKeyListener implements KeyListener {
 			tdp.leftComponent();
 		if (arg0.getKeyCode() == KeyEvent.VK_RIGHT && arg0.isShiftDown())
 			tdp.rightComponent();
-		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE && tdp.mode == TDiagramPanel.ADDING_CONNECTOR) {
+		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			if (tdp.mode == TDiagramPanel.ADDING_CONNECTOR) {
                 tdp.mode = TDiagramPanel.NORMAL;
                 tdp.stopAddingConnector(true);
                 tdp.getGUI().setEditMode();
                 tdp.repaint();
-            } else {
+            } 
+			if (tdp.select){
+            	tdp.tdmm.setSelection(-1, -1);
                 tdp.getGUI().setEditMode();
                 tdp.repaint();
             }
