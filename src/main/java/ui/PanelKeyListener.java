@@ -1,5 +1,7 @@
 package ui;
 
+import java.awt.Cursor;
+import java.awt.MouseInfo;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -18,6 +20,24 @@ public class PanelKeyListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
+		if (arg0.isShiftDown() && (tdp.mode == TDiagramPanel.SELECTED_COMPONENTS || tdp.mode == TDiagramPanel.MOVING_SELECTED_COMPONENTS)) {
+			tdp.showSelectionZone = true;
+			tdp.mode = TDiagramPanel.MOVING_SELECTED_COMPONENTS;
+            tdp.setMovingSelectedComponents();
+            tdp.repaint();
+			if (arg0.getKeyCode() == KeyEvent.VK_UP) {
+	            tdp.upComponents();
+			}
+			if (arg0.getKeyCode() == KeyEvent.VK_DOWN) {
+	            tdp.downComponents();
+			}
+			if (arg0.getKeyCode() == KeyEvent.VK_LEFT) {
+	            tdp.leftComponents();
+			}
+			if (arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
+	            tdp.rightComponents();
+			}
+		}
 		if (arg0.getKeyCode() == KeyEvent.VK_UP && arg0.isShiftDown())
 			tdp.upComponent();
 		if (arg0.getKeyCode() == KeyEvent.VK_DOWN && arg0.isShiftDown())
@@ -42,7 +62,15 @@ public class PanelKeyListener implements KeyListener {
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {	
+	public void keyReleased(KeyEvent arg0) {
+		if (!arg0.isShiftDown())
+			if (tdp.mode == TDiagramPanel.MOVING_SELECTED_COMPONENTS) {
+				tdp.showSelectionZone(tdp.currentX, tdp.currentY);
+				tdp.mode = TDiagramPanel.SELECTED_COMPONENTS;
+	            tdp.setStopMovingSelectedComponents();
+	            tdp.getGUI().changeMade(tdp, TDiagramPanel.MOVE_COMPONENT);
+	            tdp.repaint();
+			}
 	}
 
 	@Override

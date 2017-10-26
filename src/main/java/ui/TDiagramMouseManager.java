@@ -396,6 +396,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                 tdp.mode = TDiagramPanel.NORMAL;
                 tdp.mgui.setMode(MainGUI.CUTCOPY_KO);
                 tdp.mgui.setMode(MainGUI.EXPORT_LIB_KO);
+                tdp.getMainGUI().actions[TGUIAction.MOVE_ENABLED].setEnabled(false);
                 tdp.unselectSelectedComponents();
                 tdp.repaint();
             }
