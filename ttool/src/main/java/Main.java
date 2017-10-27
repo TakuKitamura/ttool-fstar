@@ -79,60 +79,12 @@ public class Main implements ActionListener {
 
     public static void main(String[] args) {
 
-        //testBoolExpr();
-        //testMatrix();
-
-        /*      int x = 5 * 2 + 3;
-                int y = 3 + 5 * 2;
-                System.out.println("x=" + x + " y=" + y);*/
-
-
+ 
         TraceManager.devPolicy = TraceManager.TO_DEVNULL;
 
         System.out.println("\n*** TTool version: " + DefaultText.getFullVersion() + " ***\n");
 
-        /*
-          TraceManager.devPolicy = TraceManager.TO_CONSOLE;
-
-          IntExpressionEvaluator iee = new  IntExpressionEvaluator();
-          int result = (int)(iee.getResultOf("(11+3)*7"));
-          System.out.println("Result=" + result);
-          if(iee.hasError()) {
-          System.out.println("Error in parsing:" + iee.getError());
-          }
-
-          TraceManager.addDev("Toto");
-          BoolExpressionEvaluator bee = new  BoolExpressionEvaluator();
-          boolean b = bee.getResultOf("not (8 > 10)");
-          System.out.println("Bool result=" + b);
-          if(bee.hasError()) {
-          System.out.println("Error in parsing:" + bee.getError());
-          }
-          /*b = bee.getResultOf("true == (1 == 3)");
-          System.out.println("Bool result=" + b);
-          if(bee.hasError()) {
-          System.out.println("Error in parsing:" + bee.getError());
-          }
-          b = bee.getResultOf("true == (3 == 3)");
-          System.out.println("Bool result=" + b);
-          if(bee.hasError()) {
-          System.out.println("Error in parsing:" + bee.getError());
-          }
-          b = bee.getResultOf("(1 + 5) == (2 + 4)");
-          System.out.println("Bool result=" + b);
-          if(bee.hasError()) {
-          System.out.println("Error in parsing:" + bee.getError());
-          }
-          b = bee.getResultOf("((1 + 5) == (2 + 4)) == true");
-          System.out.println("Bool result=" + b);
-          if(bee.hasError()) {
-          System.out.println("Error in parsing:" + bee.getError());
-          }
-
-
-          System.exit(-1);*/
-
-
+ 
 
         // Read the image data and display the splash screen
         // -------------------------------------------------
