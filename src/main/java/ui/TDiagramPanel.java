@@ -1144,10 +1144,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             mode = NORMAL;
             mgui.setMode(MainGUI.CUTCOPY_KO);
             mgui.setMode(MainGUI.EXPORT_LIB_KO);
+            mgui.actions[TGUIAction.MOVE_ENABLED].setEnabled(false);
         } else {
             mode = SELECTED_COMPONENTS;
             mgui.setMode(MainGUI.CUTCOPY_OK);
             mgui.setMode(MainGUI.EXPORT_LIB_OK);
+            mgui.actions[TGUIAction.MOVE_ENABLED].setEnabled(true);
             showSelectionZone = true;
             xSel = Math.min(currentSelectX, initSelectX);
             ySel = Math.min(currentSelectY, initSelectY);
@@ -3443,6 +3445,26 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     		tgc.setMoveCd(tgc.x + MOVE_SPEED, tgc.y);
     		repaint();
     	}
+    }
+    
+    public void upComponents() {
+    	moveSelected(xSel, ySel - MOVE_SPEED);
+    	repaint();
+    }
+    
+    public void downComponents() {
+    	moveSelected(xSel, ySel + MOVE_SPEED);
+    	repaint();
+    }
+    
+    public void leftComponents() {
+    	moveSelected(xSel - MOVE_SPEED, ySel);
+    	repaint();
+    }
+    
+    public void rightComponents() {
+    	moveSelected(xSel + MOVE_SPEED, ySel);
+    	repaint();
     }
     
     public void setComponentPointed(TGComponent tgc) {
