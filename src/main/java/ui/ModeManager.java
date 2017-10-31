@@ -140,13 +140,13 @@ public class ModeManager {
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(true);
             actions[TGUIAction.ACT_DSE].setEnabled(true);
-            actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
+            actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
             actions[TGUIAction.ACT_GEN_JAVA].setEnabled(true);
             actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(true);
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);
-            actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
+            actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             break;
 
         case MainGUI.MODEL_UPPAAL_OK:

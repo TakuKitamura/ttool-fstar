@@ -60,6 +60,7 @@ import ui.AvatarDesignPanel;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.interactivesimulation.JFrameSimulationSDPanel;
+import tmltranslator.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -71,6 +72,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
 import java.util.*;
+
 
 
 /**
@@ -103,7 +105,20 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     public final static int REACHABILITY_NONE       = 3;
 
     int mode;
+    
+    
+    //Security
+    HashMap<String, HashSet<String>> cpuTaskMap = new HashMap<String, HashSet<String>>();
+	HashMap<String, String> taskCpuMap = new HashMap<String, String>();
+	Vector<String> selectedTasks =new Vector<String>();     
+	Vector<String> ignoredTasks =new Vector<String>();   
+	JList<String> listSelected;
+	JList<String> listIgnored;
 
+
+    protected static String encCC="100";
+    protected static String decCC="100";
+    protected static String secOv = "100";
     private ProVerifOutputAnalyzer pvoa;
 
     //components
@@ -112,6 +127,18 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     protected JButton stop;
     protected JButton close;
     private JPopupMenu popup;
+    JPanel listPanel;
+    
+    
+    //security generation buttons
+    ButtonGroup secGroup;
+    protected JCheckBox autoConf, autoWeakAuth, autoStrongAuth, autoMapKeys, custom, addHSM;
+
+    protected JTextField encTime, decTime, secOverhead;
+	protected JComboBox<String> addtoCPU;
+
+
+	Map<JCheckBox, ArrayList<JCheckBox>> cpuTaskObjs = new HashMap<JCheckBox, ArrayList<JCheckBox>>();
 
     private class MyMenuItem extends JMenuItem {
         AvatarPragma pragma;
@@ -141,6 +168,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     private String hostProVerif;
 
     protected RshClient rshc;
+    
+    protected JTabbedPane jp1;
 
     private class ProVerifVerificationException extends Exception {
         private String message;
@@ -157,7 +186,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     }
 
     /** Creates new form  */
-    public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute, AvatarDesignPanel adp, boolean lim) {
+    public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute, AvatarDesignPanel adp, boolean lim, HashMap<String, HashSet<String>> cpuTasks) {
         super(f, title, Dialog.ModalityType.DOCUMENT_MODAL);
 
         mgui = _mgui;
@@ -173,7 +202,13 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
 
         hostProVerif = _hostProVerif;
-
+        this.cpuTaskMap = cpuTasks;
+		for (String cpu: cpuTasks.keySet()){
+			for (String task: cpuTasks.get(cpu)){
+				ignoredTasks.add(task);
+				taskCpuMap.put(task,cpu);
+			}
+		}
         initComponents();
         myInitComponents();
         pack();
@@ -188,7 +223,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
     private void addComponent(Container container, Component component, int gridx, int gridy,
                               int gridwidth, int anchor, int fill) {
-        GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, 1, 1.0, 1.0,
+        GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, 1, 0, 0,
                 anchor, fill, insets, 0, 0);
         container.add(component, gbc);
     }
@@ -204,28 +239,185 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         gbc.fill = GridBagConstraints.BOTH;
 
         gbc.insets = WEST_INSETS;
-        gbc.weightx = 0.1;
+        gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         return gbc;
     }
 
     protected void initComponents() {
+    
+		jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
         int curY = 0;
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
 
+		
+
+
+        JPanel jp02 = new JPanel();
+        GridBagLayout gridbag01 = new GridBagLayout();
+        GridBagConstraints c01 = new GridBagConstraints();
+        jp02.setLayout(gridbag01);
+        jp02.setBorder(new javax.swing.border.TitledBorder("Automated Security"));
+
+
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c01.fill = GridBagConstraints.BOTH;
+        c01.gridheight = 1;
+
+        //genJava.addActionListener(this);
+		secGroup=new ButtonGroup(); 
+        autoConf= new JCheckBox("Add security (Confidentiality)");
+		secGroup.add(autoConf);
+        jp02.add(autoConf, c01);
+		autoConf.addActionListener(this);
+        autoWeakAuth= new JCheckBox("Add security (Weak Authenticity)");
+		autoWeakAuth.setEnabled(false);
+        jp02.add(autoWeakAuth, c01);
+		autoWeakAuth.addActionListener(this);
+
+        autoStrongAuth= new JCheckBox("Add security (Strong Authenticity)");
+		autoStrongAuth.setEnabled(false);
+        jp02.add(autoStrongAuth, c01);
+		autoStrongAuth.addActionListener(this);
+        autoMapKeys= new JCheckBox("Add Keys");
+		autoMapKeys.addActionListener(this);
+        jp02.add(autoMapKeys, c01);
+		secGroup.add(autoMapKeys);
+        addHSM = new JCheckBox("Add HSM");
+        jp02.add(addHSM,c01);
+		addHSM.addActionListener(this);
+		secGroup.add(addHSM);
+		jp02.add(new JLabel("Add HSM to component:"),c01);
+		listIgnored = new JList<String>(ignoredTasks);
+
+
+		listPanel = new JPanel();
+		GridBagConstraints c02 = new GridBagConstraints();
+		c02.gridwidth=1;
+		c02.gridheight=1;
+		c02.fill= GridBagConstraints.BOTH;
+     	listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listIgnored.addListSelectionListener(this);
+        JScrollPane scrollPane1 = new JScrollPane(listIgnored);
+		scrollPane1.setPreferredSize(new Dimension(250,200));
+        listPanel.add(scrollPane1, BorderLayout.WEST);
+
+		JPanel buttonPanel = new JPanel();
+		GridBagConstraints c13 = new GridBagConstraints();
+		c13.gridwidth=GridBagConstraints.REMAINDER;
+		c13.gridheight=1;
+        JButton allValidated = new JButton(IconManager.imgic50);
+        allValidated.setPreferredSize(new Dimension(50, 25));
+        allValidated.addActionListener(this);
+        allValidated.setActionCommand("allValidated");
+        buttonPanel.add(allValidated, c13);
+
+        JButton addOneValidated = new JButton(IconManager.imgic48);
+        addOneValidated.setPreferredSize(new Dimension(50, 25));
+        addOneValidated.addActionListener(this);
+        addOneValidated.setActionCommand("addOneValidated");
+        buttonPanel.add(addOneValidated, c13);
+
+        buttonPanel.add(new JLabel(" "), c13);
+
+        JButton addOneIgnored = new JButton(IconManager.imgic46);
+        addOneIgnored.addActionListener(this);
+        addOneIgnored.setPreferredSize(new Dimension(50, 25));
+        addOneIgnored.setActionCommand("addOneIgnored");
+        buttonPanel.add(addOneIgnored, c13);	
+
+        JButton allIgnored = new JButton(IconManager.imgic44);
+        allIgnored.addActionListener(this);
+        allIgnored.setPreferredSize(new Dimension(50, 25));
+        allIgnored.setActionCommand("allIgnored");
+        buttonPanel.add(allIgnored, c13);
+		listPanel.add(buttonPanel, c02);
+		buttonPanel.setPreferredSize(new Dimension(50,200));
+
+		listSelected=new JList<String>(selectedTasks);
+
+        //listValidated.setPreferredSize(new Dimension(200, 250));
+        listSelected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listSelected.addListSelectionListener(this);
+        JScrollPane scrollPane2 = new JScrollPane(listSelected);
+		scrollPane2.setPreferredSize(new Dimension(250,200));
+        listPanel.add(scrollPane2, BorderLayout.CENTER);
+		listPanel.setPreferredSize(new Dimension(600,250));
+		listPanel.setMinimumSize(new Dimension(600,250));
+		c01.gridheight=10;
+		jp02.add(listPanel,c01);
+		c02.gridheight=1;
+		
+		
+/*
+		for (String cpuName: cpuTaskMap.keySet()){
+			JCheckBox cpu = new JCheckBox(cpuName);
+			jp02.add(cpu,c01);		
+			cpu.setEnabled(false);
+			cpu.addActionListener(this);
+			ArrayList<JCheckBox> tasks = new ArrayList<JCheckBox>();
+			for (String s: cpuTaskMap.get(cpuName)){
+
+				JCheckBox task = new JCheckBox(s);
+				jp02.add(task,c01);
+				task.setEnabled(false);
+				tasks.add(task);
+			}
+			cpuTaskObjs.put(cpu, tasks);
+
+		}
+		if (cpuTaskMap.keySet().size()==0){
+			addHSM.setEnabled(false);
+		}
+*/
+   //     addToComp = new JTextField(compName);
+        //jp01.add(addToComp,c01);
+
+
+        custom = new JCheckBox("Custom performance attributes");
+        jp02.add(custom,c01);
+		custom.addActionListener(this);
+
+        jp02.add(new JLabel("Encryption Computational Complexity"),c01);
+        encTime = new JTextField(encCC);
+		encTime.setEnabled(false);
+        jp02.add(encTime,c01);
+
+        jp02.add(new JLabel("Decryption Computational Complexity"),c01);
+        decTime = new JTextField(decCC);
+		decTime.setEnabled(false);
+        jp02.add(decTime,c01);
+
+        jp02.add(new JLabel("Data Overhead (bits)"),c01);
+        secOverhead = new JTextField(secOv);
+		secOverhead.setEnabled(false);
+        jp02.add(secOverhead,c01);
+
+
+
+
         JPanel jp01 = new JPanel();
-        LayoutManager gridbag01 = new GridBagLayout();
+        gridbag01 = new GridBagLayout();
         jp01.setLayout(gridbag01);
         jp01.setBorder(new javax.swing.border.TitledBorder("Verification options"));
 
 
 
+
+
+
+
+
         JLabel gen = new JLabel("Generate ProVerif code in: ");
+       
         addComponent(jp01, gen, 0, curY, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         code1 = new JTextField(pathCode, 100);
+        code1.setPreferredSize(new Dimension(100,10));
         addComponent(jp01, code1, 1, curY, 3, GridBagConstraints.EAST, GridBagConstraints.BOTH);
         curY++;
 
@@ -267,24 +459,27 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         typedLanguage = new JCheckBox("Generate typed Pi calculus");
         typedLanguage.setSelected(true);
         addComponent(jp01, typedLanguage, 0, curY, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-
+		curY++;
    	    loopLimit = new JTextField("1", 3);
 		if (limit){
-	        addComponent(jp01, new JLabel("Limit on loop iterations:"), 0, 5, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+	        addComponent(jp01, new JLabel("Limit on loop iterations:"), 0, curY, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
     	    addComponent(jp01, loopLimit, 1, curY, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+    	    curY++;
 		}
-        c.add(jp01, BorderLayout.NORTH);
 
-
+		JLabel empty = new JLabel("");
+		jp01.add(empty, new GridBagConstraints(0, curY, 3, 1, 1.0, 1.0,GridBagConstraints.CENTER, GridBagConstraints.BOTH, insets, 0, 0));
+	
         jta = new JPanel();
         jta.setLayout(new GridBagLayout());
-        jta.setBorder(new javax.swing.border.TitledBorder("Verification results"));
+        jta.setBorder(new javax.swing.border.TitledBorder("Results"));
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jsp.setPreferredSize(new Dimension(300,300));
         c.add(jsp, BorderLayout.CENTER);
-
+     
+	//	addComponent(jp01, jsp, 1, curY, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         start = new JButton("Start", IconManager.imgic53);
         stop = new JButton("Stop", IconManager.imgic55);
         close = new JButton("Close", IconManager.imgic27);
@@ -302,6 +497,12 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         jp2.add(stop);
         jp2.add(close);
 
+
+        jp1.add("Security Verification", jp01);
+        
+        jp1.add("Automated Security", jp02);
+        
+        c.add(jp1, BorderLayout.NORTH);
         c.add(jp2, BorderLayout.SOUTH);
 
         this.popup = new JPopupMenu();
@@ -309,6 +510,63 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         this.menuItem.addActionListener(this);
         popup.add(this.menuItem);
     }
+    
+    private void handleStartButton() {
+		//
+
+    }
+
+
+    private void addOneIgnored() {
+        int [] list = listSelected.getSelectedIndices();
+        Vector<String> v = new Vector<String>();
+        String o;
+        for (int i=0; i<list.length; i++){
+            o = selectedTasks.elementAt(list[i]);
+            ignoredTasks.addElement(o);
+            v.addElement(o);
+        }
+
+        selectedTasks.removeAll(v);
+        listIgnored.setListData(ignoredTasks);
+        listSelected.setListData(selectedTasks);
+        setButtons();
+    }
+
+    private void addOneValidated() {
+        int [] list = listIgnored.getSelectedIndices();
+        Vector<String> v = new Vector<String>();
+        String o;
+        
+        for (int i=0; i<list.length; i++){
+            o = ignoredTasks.elementAt(list[i]);
+            selectedTasks.addElement(o);
+            v.addElement(o);
+        }
+
+        ignoredTasks.removeAll(v);
+        listIgnored.setListData(ignoredTasks);
+        listSelected.setListData(selectedTasks);
+        setButtons();
+    }
+
+    private void allValidated() {
+        selectedTasks.addAll(ignoredTasks);
+        ignoredTasks.removeAllElements();
+        listIgnored.setListData(ignoredTasks);
+        listSelected.setListData(selectedTasks);
+        setButtons();
+    }
+
+    private void allIgnored() {
+        ignoredTasks.addAll(selectedTasks);
+        selectedTasks.removeAllElements();
+        listIgnored.setListData(ignoredTasks);
+        listSelected.setListData(selectedTasks);
+        setButtons();
+    }
+
+
 
     public void actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
@@ -374,6 +632,40 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                     // TraceManager.addDev("");
                 }
                 break;
+            default:
+            	if ( (evt.getSource() == autoWeakAuth) ||(evt.getSource() == autoStrongAuth) ||(evt.getSource() == autoConf) || (evt.getSource() == autoMapKeys)) {
+	    			handleStartButton();
+				}
+			else if (evt.getSource() instanceof JCheckBox){
+				//Disable and enable tasks
+				JCheckBox src = (JCheckBox) evt.getSource();
+				if (cpuTaskObjs.containsKey(src)){
+					for (JCheckBox taskBox: cpuTaskObjs.get(src)){
+						taskBox.setEnabled(src.isSelected());
+					}
+				}
+			}
+			else if (command.equals("addOneIgnored")) {
+        	    addOneIgnored();
+       	 	} else if (command.equals("addOneValidated")) {
+            	addOneValidated();
+        	} else if (command.equals("allValidated")) {
+            	allValidated();
+        	} else if (command.equals("allIgnored")) {
+            	allIgnored();
+        	}
+			if (evt.getSource() == addHSM){
+				listPanel.setEnabled(addHSM.isSelected());
+			}
+			if (evt.getSource() == autoConf || evt.getSource() == autoMapKeys || evt.getSource() == addHSM || evt.getSource()==autoWeakAuth){	
+				autoWeakAuth.setEnabled(autoConf.isSelected());
+				autoStrongAuth.setEnabled(autoWeakAuth.isSelected());
+			}
+			if (evt.getSource() == custom){
+				encTime.setEnabled(custom.isSelected());
+				decTime.setEnabled(custom.isSelected());
+				secOverhead.setEnabled(custom.isSelected());
+			}
         }
     }
 
@@ -430,6 +722,55 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         TraceManager.addDev("Thread started");
         File testFile;
         try {
+         if (jp1.getSelectedIndex() == 1){
+            encCC=encTime.getText();
+            decCC=decTime.getText();
+            secOv = secOverhead.getText();
+            TMLMapping map;
+            if (autoConf.isSelected() || autoWeakAuth.isSelected() || autoStrongAuth.isSelected()){
+                if (custom.isSelected()){
+                    map = mgui.gtm.autoSecure(mgui, encCC,secOv,decCC,autoConf.isSelected(), autoWeakAuth.isSelected(),autoStrongAuth.isSelected());
+                }
+                else {
+                    map = mgui.gtm.autoSecure(mgui,autoConf.isSelected(), autoWeakAuth.isSelected(),autoStrongAuth.isSelected());
+                }
+            }
+			else if (addHSM.isSelected()){
+			
+			//	ArrayList<String> comps = new ArrayList<String>();
+			//	comps.add(addToComp.getText());
+				Map<String, java.util.List<String>> selectedCpuTasks = new HashMap<String, java.util.List<String>>();
+				
+				for (String task: selectedTasks){
+					String cpu = taskCpuMap.get(task);
+					if (selectedCpuTasks.containsKey(cpu)){
+						selectedCpuTasks.get(cpu).add(task);
+					}
+					else {
+						ArrayList<String> tasks = new ArrayList<String>();
+						tasks.add(task);	
+						selectedCpuTasks.put(cpu,tasks);
+					}
+				}
+				/*for (JCheckBox cpu: cpuTaskObjs.keySet()){
+					ArrayList<String> tasks = new ArrayList<String>();	
+					for (JCheckBox task: cpuTaskObjs.get(cpu)){
+						if (task.isSelected()){
+							tasks.add(task.getText());
+						}
+					}
+					if (tasks.size()>0){
+						selectedCpuTasks.put(cpu.getText(), tasks);
+					}
+				}
+				mgui.gtm.addHSM(mgui, selectedCpuTasks);*/
+				mgui.gtm.addHSM(mgui, selectedCpuTasks);
+			}
+            if (autoMapKeys.isSelected()){
+                mgui.gtm.autoMapKeys();
+            }
+			mode = NOT_STARTED;
+        }
 
             testGo();
             pathCode = code1.getText().trim ();

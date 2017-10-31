@@ -4129,16 +4129,16 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             adp = (AvatarDesignPanel) tp;
 			limit=false;
 		}
-        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp,limit);
+        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp,limit, gtm.getCPUTaskMap());
         // jgen.setSize(500, 450);
-        GraphicLib.centerOnParent(jgen, 500, 450);
+        GraphicLib.centerOnParent(jgen, 600, 800);
         jgen.setVisible(true);
         dtree.toBeUpdated();
     }
 
     public void dse(){
         TraceManager.addDev("Design space exploration");
-        JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration", ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.TMLCodeDirectory, gtm.getCPUTaskMap());
+        JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration", ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.TMLCodeDirectory);
         //   jdse.setSize(600,800);
         GraphicLib.centerOnParent(jdse, 600,800);
         jdse.setVisible(true);
