@@ -772,7 +772,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
             }
 			mode = NOT_STARTED;
         }
-
+		else {
             testGo();
             pathCode = code1.getText().trim ();
 
@@ -840,6 +840,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
             mode = NOT_STARTED;
 
+			}
         } catch (LauncherException | ProVerifVerificationException le) {
             JLabel label = new JLabel("Error: " + le.getMessage());
             label.setAlignmentX(Component.LEFT_ALIGNMENT);
