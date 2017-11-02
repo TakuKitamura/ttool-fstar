@@ -139,7 +139,12 @@ public class ModeManager {
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(true);
             actions[TGUIAction.ACT_DSE].setEnabled(true);
-            actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
+            if (mgui.getCurrentTURTLEPanel() instanceof TMLComponentDesignPanel){
+           		actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
+            }
+            else {
+	            actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
+	        }
             actions[TGUIAction.ACT_GEN_JAVA].setEnabled(true);
             actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(true);
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
