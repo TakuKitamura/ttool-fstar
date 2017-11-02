@@ -2,7 +2,7 @@ PREFIX			= [$(COLOR)REMOTESIMULATOR$(RESET)]
 
 MANIFEST		= $(REMOTESIMULATOR_DIR)/manifest.txt
 
-DEPEND			= $(patsubst %,$(TTOOL_BIN)/%,$(shell cat $(MANIFEST) | grep Class-Path | cut -d: -f2))
+DEPEND			= $(patsubst %,$(TTOOL_BUILD)/%,$(shell cat $(MANIFEST) | grep Class-Path | cut -d: -f2))
 
 LOCAL_SRC_DIR		= $(REMOTESIMULATOR_DIR)/src/main/java
 LOCAL_BUILD_DIR		= $(REMOTESIMULATOR_DIR)/build/classes/main
@@ -18,14 +18,14 @@ JARRSRCFLAGS	= uf
 
 $(REMOTESIMULATOR_BINARY): compile $(DEPEND)
 	@echo "$(PREFIX) Archiving"
-	@mkdir -p $(TTOOL_BIN)
+	@mkdir -p $(TTOOL_BUILD)
 	@$(JAR) $(JARFLAGS) $(MANIFEST) $@ -C $(LOCAL_BUILD_DIR) .
 ifneq ($(strip $(LOCAL_RESOURCES_DIR)),)
 	@$(JAR) $(JARRSRCFLAGS) $@ -C $(LOCAL_RESOURCES_DIR) .
 endif
 
-$(TTOOL_BIN)/%.jar: $(TTOOL_LIBS)/%.jar
-	@mkdir -p $(TTOOL_BIN)
+$(TTOOL_BUILD)/%.jar: $(TTOOL_LIBS)/%.jar
+	@mkdir -p $(TTOOL_BUILD)
 	@cp $< $@
 
 compile: $(patsubst %,$(LOCAL_SRC_DIR)/%,$(LOCAL_JAVA)) $(patsubst %,$(TTOOL_SRC)/%,$(GLOBAL_JAVA))

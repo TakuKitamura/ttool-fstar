@@ -42,6 +42,9 @@ make release            Prepare a new release for the website.
 make test               Run tests on TTool.
 make publish_jar        Build TTool and upload the resulting archive.
 			!!! Must have the right ssh key installed for this !!!
+make install		Install TTool, the jar of companion software and the runtime
+			dependencies to $$DESTDIR/bin. By default, install to
+			$(TTOOL_PATH)/bin.
 make clean              Clean the repository from compilation artifacts.
 make ultraclean         Clean the repository from binaries and compilation artifacts.
 
@@ -72,7 +75,7 @@ export TTOOL_SRC 		= $(TTOOL_PATH)/src/main/java
 export GLOBAL_JAVA		= $(shell cd $(TTOOL_SRC); find . -name "[^.]*.java")
 export TTOOL_RESOURCES		= $(TTOOL_PATH)/src/main/resources
 export TTOOL_WEBCRAWLER_SRC 	= $(TTOOL_PATH)/src/main/java/web/crawler
-export TTOOL_BIN 		= $(TTOOL_PATH)/bin
+export TTOOL_BUILD		= $(TTOOL_PATH)/build
 export TTOOL_LIBS		= $(TTOOL_PATH)/libs
 export TTOOL_LIBRARIES		= $(wildcard $(TTOOL_LIBS)/*.jar)
 export TTOOL_CLASSPATH		= $(subst $(eval) ,:,$(TTOOL_LIBRARIES))
@@ -80,37 +83,37 @@ export TTOOL_CLASSPATH		= $(subst $(eval) ,:,$(TTOOL_LIBRARIES))
 export GLOBAL_CFLAGS		= -encoding "UTF8" -Xlint:unchecked -Xlint:deprecation -Xlint:cast -Xlint:divzero -Xlint:empty -Xlint:finally -Xlint:fallthrough
 
 export TTOOL_DIR		= $(TTOOL_PATH)/ttool
-export TTOOL_BINARY 		= $(TTOOL_BIN)/ttool.jar
+export TTOOL_BINARY 		= $(TTOOL_BUILD)/ttool.jar
 
 export LAUNCHER_DIR		= $(TTOOL_PATH)/launcher
-export LAUNCHER_BINARY 		= $(TTOOL_BIN)/launcher.jar
+export LAUNCHER_BINARY 		= $(TTOOL_BUILD)/launcher.jar
 
 export GRAPHMINIMIZE_DIR	= $(TTOOL_PATH)/graphminimize
-export GRAPHMINIMIZE_BINARY 	= $(TTOOL_BIN)/graphminimize.jar
+export GRAPHMINIMIZE_BINARY 	= $(TTOOL_BUILD)/graphminimize.jar
 
 export GRAPHSHOW_DIR		= $(TTOOL_PATH)/graphshow
-export GRAPHSHOW_BINARY 	= $(TTOOL_BIN)/graphshow.jar
+export GRAPHSHOW_BINARY 	= $(TTOOL_BUILD)/graphshow.jar
 
 export TIFTRANSLATOR_DIR	= $(TTOOL_PATH)/tiftranslator
-export TIFTRANSLATOR_BINARY 	= $(TTOOL_BIN)/tiftranslator.jar
+export TIFTRANSLATOR_BINARY 	= $(TTOOL_BUILD)/tiftranslator.jar
 
 export TMLTRANSLATOR_DIR	= $(TTOOL_PATH)/tmltranslator
-export TMLTRANSLATOR_BINARY 	= $(TTOOL_BIN)/tmltranslator.jar
+export TMLTRANSLATOR_BINARY 	= $(TTOOL_BUILD)/tmltranslator.jar
 
 export RUNDSE_DIR		= $(TTOOL_PATH)/rundse
-export RUNDSE_BINARY 		= $(TTOOL_BIN)/rundse.jar
+export RUNDSE_BINARY 		= $(TTOOL_BUILD)/rundse.jar
 
 export REMOTESIMULATOR_DIR	= $(TTOOL_PATH)/simulationcontrol
-export REMOTESIMULATOR_BINARY 	= $(TTOOL_BIN)/simulationcontrol.jar
+export REMOTESIMULATOR_BINARY 	= $(TTOOL_BUILD)/simulationcontrol.jar
 
 export WEBCRAWLER_CLIENT_DIR	= $(TTOOL_PATH)/webcrawler/client
-export WEBCRAWLER_CLIENT_BINARY	= $(TTOOL_BIN)/webcrawler-client.jar
+export WEBCRAWLER_CLIENT_BINARY	= $(TTOOL_BUILD)/webcrawler-client.jar
 
 export WEBCRAWLER_SERVER_DIR	= $(TTOOL_PATH)/webcrawler/server
-export WEBCRAWLER_SERVER_BINARY	= $(TTOOL_BIN)/webcrawler-server.jar
+export WEBCRAWLER_SERVER_BINARY	= $(TTOOL_BUILD)/webcrawler-server.jar
 
 export JTTOOL_DIR		= $(TTOOL_PATH)/jttool
-export JTTOOL_BINARY		= $(TTOOL_BIN)/jttool.jar
+export JTTOOL_BINARY		= $(TTOOL_BUILD)/jttool.jar
 
 all: ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
 
@@ -213,7 +216,7 @@ BUILDER			= $(TTOOL_PATH)/builder.jar
 BUILD_INFO		= build.txt
 BUILD_TO_MODIFY		= $(TTOOL_SRC)/ui/util/DefaultText.java
 
-TTOOL_LOTOS_H		= $(patsubst $(TTOOL_DIR)/runtime/%,$(TTOOL_BIN)/%,$(wildcard $(TTOOL_DIR)/runtime/spec*))
+TTOOL_LOTOS_H		= $(patsubst $(TTOOL_DIR)/runtime/%,$(TTOOL_BUILD)/%,$(wildcard $(TTOOL_DIR)/runtime/spec*))
 
 RELEASE_STD_FILES_XML 	= $(patsubst %,$(TTOOL_MODELING)/%,\
 			  TURTLE/manual-HW.xml \
@@ -420,7 +423,7 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 # Basic bin
 	@mkdir -p $(TTOOL_TARGET)/bin
 	@cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
-	@cp $(TTOOL_BIN)/*.jar $(TTOOL_TARGET)/bin
+	@cp $(TTOOL_BUILD)/*.jar $(TTOOL_TARGET)/bin
 	@mkdir -p $(TTOOL_STD_RELEASE)
 	@$(TAR) cf $(BASERELEASE) -C $(TTOOL_TARGET_RELEASE) .
 
@@ -440,6 +443,15 @@ git:
 	@$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
 	git commit -m 'update on build version: $(BUILD_INFO)' $(BUILD_INFO) $(BUILD_TO_MODIFY)
 	git push
+
+# ======================================== 
+# ==========      INSTALL       ========== 
+# ======================================== 
+
+DESTDIR ?= $(TTOOL_PATH)
+
+install: ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
+	@cp $(TTOOL_BUILD)/* $(DESTDIR)/bin
 
 # ======================================== 
 # ==========       TESTS        ========== 
@@ -469,6 +481,6 @@ clean:
 	@rm -f $(TTOOL_STD_RELEASE)/*.tar
 
 ultraclean: clean
-	@rm -rf $(TTOOL_BIN)
+	@rm -rf $(TTOOL_BUILD)
 	@rm -rf $(TTOOL_DOC_HTML)
 	@rm -rf $(TTOOL_STD_RELEASE)
