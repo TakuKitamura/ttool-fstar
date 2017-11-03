@@ -4296,7 +4296,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarUPPAALVerification() {
         TraceManager.addDev("Avatar uppaal fv");
-        boolean result = gtm.generateUPPAALFromAVATAR(ConfigurationTTool.UPPAALCodeDirectory);
+        boolean result = gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
         if (result) {
             formalValidation(true);
         } else {
@@ -4378,7 +4378,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             //TraceManager.addDev("4173");
             if (gtm.getTURTLEModelingState() == 3) {
                 //AVATAR
-                boolean result = gtm.generateUPPAALFromAVATAR(ConfigurationTTool.UPPAALCodeDirectory);
+                boolean result = gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
                 TraceManager.addDev("4177");
                 if (showWindow) {
                     TraceManager.addDev("4178");
@@ -4413,7 +4413,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     boolean result = false;
 
                     if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
-                        result = gtm.generateUPPAALFromTML(ConfigurationTTool.UPPAALCodeDirectory, false, 1024, true);
+                        result = gtm.generateUPPAALFromTML(SpecConfigTTool.UPPAALCodeDirectory, false, 1024, true);
                     }
                     if (result != false) {
                         formalValidation();
@@ -4431,7 +4431,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TraceManager.addDev( "gtm.getTURTLEModelingState() <= 0)" );
         //TraceManager.addDev("After UPPAAL");
         if (showWindow) {
-            JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.TURTLE_MODE);
+            JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", SpecConfigTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.TURTLE_MODE);
             //jgen.setSize(450, 600);
             GraphicLib.centerOnParent(jgen, 450, 600);
             jgen.setVisible(true);

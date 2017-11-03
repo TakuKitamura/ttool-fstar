@@ -215,6 +215,23 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
 		}
     }
     
+    public static boolean checkAndCreateUPPAALDir(String s) throws FileException {
+    	File f = new File(s);
+    	try {
+    		if (!f.exists())
+    			if(!f.mkdir())
+					return false;
+    		if (!s.equals(ConfigurationTTool.UPPAALCodeDirectory)) {
+    			File readme = new File(ConfigurationTTool.UPPAALCodeDirectory + "README");
+    			FileUtils.copyFileToDirectory(readme, f, false);
+    		}
+    		return true;
+    	}
+    	catch (IOException e) {
+			throw new FileException(e.getMessage());
+		}
+    }
+    
     public static boolean checkFileForSave(File file) throws FileException {
         //     boolean ok = true;
         //    String pb = "";

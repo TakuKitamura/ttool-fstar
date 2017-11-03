@@ -3547,7 +3547,7 @@ public class GTURTLEModeling {
     }
 
     public String getPathUPPAALFile() {
-        return ConfigurationTTool.UPPAALCodeDirectory;
+        return SpecConfigTTool.UPPAALCodeDirectory;
     }
 
     public String getUPPAALVerifierHost() {
