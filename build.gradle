@@ -35,17 +35,17 @@ subprojects {
     }
 
     test.workingDir "${rootProject.absPath}/oldTest_DoNotUse/util/fr.tpt.ttool.tests.util"
-    libsDirName = "${rootProject.absPath}/bin"
+    libsDirName = "${rootProject.absPath}/build"
 
     task copyRuntimeLibs(type: Copy) {
         from configurations.runtime
         from 'runtime'
-        into "${rootProject.absPath}/bin"
+        into "${rootProject.absPath}/build"
     }
     build.finalizedBy(copyRuntimeLibs)
 
     clean.doFirst {
-        delete "${rootProject.absPath}/bin"
+        delete "${rootProject.absPath}/build"
     }
 }
 

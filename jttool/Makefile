@@ -14,7 +14,7 @@ JARRSRCFLAGS	= uf
 
 $(JTTOOL_BINARY): compile
 	@echo "$(PREFIX) Archiving"
-	@mkdir -p $(TTOOL_BIN)
+	@mkdir -p $(TTOOL_BUILD)
 	@$(JAR) $(JARFLAGS) $@ -C $(LOCAL_BUILD_DIR) .
 ifneq ($(strip $(LOCAL_RESOURCES_DIR)),)
 	@$(JAR) $(JARRSRCFLAGS) $@ -C $(LOCAL_RESOURCES_DIR) .

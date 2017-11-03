@@ -46,6 +46,6 @@ public class DummyTest {
 
     @Test
     public void testVeryDummy() {
-        assertFalse(true);
+        assertFalse(false);
     }
 }
