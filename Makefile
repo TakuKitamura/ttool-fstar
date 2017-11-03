@@ -450,7 +450,8 @@ git:
 
 DESTDIR ?= $(TTOOL_PATH)
 
-install: ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
+install:
+#ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
 	@cp $(TTOOL_BUILD)/* $(DESTDIR)/bin
 
 # ======================================== 

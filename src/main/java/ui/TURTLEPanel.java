@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui;
 
 import myutil.GenericTree;

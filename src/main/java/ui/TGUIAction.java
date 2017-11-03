@@ -618,6 +618,7 @@ public class TGUIAction extends AbstractAction {
     //--
 
     public static final int MOVE_ENABLED = 463;
+    public static final int FIRST_DIAGRAM = 464;
     
     public static final int NB_ACTION = 465;
 
@@ -1231,7 +1232,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS] = new TAction("generate-ontology-current-set-of-diagrams", "Generate ontology (current set of diagrams)", IconManager.imgic338, IconManager.imgic339, "Generate ontology (current set of diagrams)",  "Generate the ontology for the current set of diagrams under edition", 0);
         actions[ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS] = new TAction("generate-ontology-all-diagrams", "Generate ontology (all diagrams)", IconManager.imgic338, IconManager.imgic339, "Generate ontology (all diagrams)",  "Generate the ontology for the diagrams under edition", 0);
 
-        actions[MOVE_ENABLED] = new TAction("Move", "Move enable", IconManager.imgic780, IconManager.imgic780, "Move enabled (shift + arrow)", "Move", 0);
+        actions[MOVE_ENABLED] = new TAction("Move", "Move enabled", IconManager.imgic780, IconManager.imgic780, "Move enabled (shift + arrow)", "Move", 0);
+	actions[FIRST_DIAGRAM] = new TAction("FirstDiagram", "First Diagram", IconManager.imgic142, IconManager.imgic142, "Switch the the first diagram", "Switch to the first diagram", 0);
     }
 
 
