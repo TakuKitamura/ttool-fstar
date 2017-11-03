@@ -310,7 +310,9 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
             panel.repaint();
 
         } catch (Exception e) {
-            jta.append("Error: " + e.getMessage() + " when retreiving file " + url );
+            jta.append("Error when retreiving file: " + url + "\n No internet connection?\n No right for the Java Virtual Machine to use http connections?\n\n");
+	    TraceManager.addDev("Exception trace in loading network model:");
+	    e.printStackTrace();
         }
     }
 
