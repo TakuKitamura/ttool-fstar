@@ -4791,7 +4791,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void NC() {
         TraceManager.addDev("NC");
-        JFrameNC jfnc = new JFrameNC("Network calculus", gtm.getNCS());
+        JFrameNC jfnc = new JFrameNC("Network Calculus", gtm.getNCS());
         jfnc.setIconImage(IconManager.img8);
         //   jfnc.setSize(600, 600);
         GraphicLib.centerOnParent(jfnc, 600, 600);
