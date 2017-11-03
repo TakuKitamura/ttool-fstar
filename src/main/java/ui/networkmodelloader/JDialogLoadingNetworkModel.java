@@ -248,6 +248,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
             BufferedReader in = URLManager.getBufferedReader(url);
             if (in == null) {
                 jta.append("Could not establish a connection to the TTool server\n");
+		jta.append("Error when retreiving file: " + url + "\n No internet connection?\n No right for the Java Virtual Machine to use http connections?\n\n");
             } else {
                 jta.append("Connection established...\n");
                 String inputLine = null;
