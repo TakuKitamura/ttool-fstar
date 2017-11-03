@@ -1517,6 +1517,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return tabs;
     }
 
+    public void firstDiag() {
+	TURTLEPanel tp = getCurrentTURTLEPanel();
+	if (tp == null) {
+	    return;
+	}
+	tp.tabbedPane.setSelectedIndex(0);
+    }
+
     public String getTitleOf(TDiagramPanel _tdp) {
         TURTLEPanel panel;
         for(int i=0; i<tabs.size(); i++) {
@@ -2881,7 +2889,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         actions[TGUIAction.ACT_SHOW_ZOOM].setName(TGUIAction.ACT_SHOW_ZOOM, s);
     }
 
-    public void firstDiag() {
+    public void oldFirstDiag() {
         getCurrentJTabbedPane().setSelectedIndex(0);
     }
 
