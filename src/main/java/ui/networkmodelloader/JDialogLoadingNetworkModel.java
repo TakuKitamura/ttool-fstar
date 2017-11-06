@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -153,9 +153,9 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
         JPanel options = new JPanel();
 
-	JLabel infoModels = new JLabel("Not loaded");
-	options.add(infoModels);
-	
+        JLabel infoModels = new JLabel("Not loaded");
+        options.add(infoModels);
+
         featureList = new JComboBox<String>(FEATURES);
         featureList.addActionListener(this);
         options.add(featureList);
@@ -245,71 +245,79 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
               //connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
               TraceManager.addDev("Connection setup 1");*/
             BufferedReader in = URLManager.getBufferedReader(url);
-            jta.append("Connection established...\n");
-            String inputLine;
-            NetworkModel nm = null;
-            while ((inputLine = in.readLine()) != null) {
-                if (inputLine.startsWith("#FILE")) {
-                    nm = new NetworkModel(inputLine.substring(5, inputLine.length()).trim());
-                    listOfModels.add(nm);
-                }
+            if (in == null) {
+                jta.append("Could not establish a connection to the TTool server\n");
+		jta.append("Error when retreiving file: " + url + "\n No internet connection?\n No right for the Java Virtual Machine to use http connections?\n\n");
+            } else {
+                jta.append("Connection established...\n");
+                String inputLine = null;
+                NetworkModel nm = null;
+                while ((inputLine = in.readLine()) != null) {
+                    if (inputLine.startsWith("#FILE")) {
+                        nm = new NetworkModel(inputLine.substring(5, inputLine.length()).trim());
+                        listOfModels.add(nm);
+                    }
 
-                if (inputLine.startsWith("-FEATURES")) {
-                    if (nm != null) {
-                        String tmp = inputLine.substring(9, inputLine.length()).trim().toLowerCase();
-                        for (int i=1; i<FEATURES.length; i++) {
-                            nm.features[i] = tmp.indexOf(FEATURES[i]) != -1;
+                    if (inputLine.startsWith("-FEATURES")) {
+                        if (nm != null) {
+                            String tmp = inputLine.substring(9, inputLine.length()).trim().toLowerCase();
+                            for (int i=1; i<FEATURES.length; i++) {
+                                nm.features[i] = tmp.indexOf(FEATURES[i]) != -1;
+                            }
+                            //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
                         }
-                        //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
                     }
-                }
 
-                if (inputLine.startsWith("-PROPS")) {
-                    if (nm != null) {
-                        String tmp = inputLine.substring(6, inputLine.length()).trim().toLowerCase();
-                        for (int i=0; i<PROPS.length; i++) {
-                            nm.props[i] = tmp.indexOf(PROPS[i]) != -1;
+                    if (inputLine.startsWith("-PROPS")) {
+                        if (nm != null) {
+                            String tmp = inputLine.substring(6, inputLine.length()).trim().toLowerCase();
+                            for (int i=0; i<PROPS.length; i++) {
+                                nm.props[i] = tmp.indexOf(PROPS[i]) != -1;
+                            }
+                            //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
                         }
-                        //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
                     }
+
+                    if (inputLine.startsWith("-AUTHOR")) {
+                        if (nm != null) {
+                            nm.author = inputLine.substring(7, inputLine.length()).trim();
+                        }
+                    }
+
+
+                    if (inputLine.startsWith("-DESCRIPTION")) {
+                        if (nm != null) {
+                            nm.description = inputLine.substring(12, inputLine.length()).trim();
+                        }
+                    }
+
+                    if (inputLine.startsWith("-IMG")) {
+                        if (nm != null) {
+                            nm.image = inputLine.substring(4, inputLine.length()).trim();
+                            //TraceManager.addDev("Dealing with image:" + nm.image);
+                            //nm.bi = URLManager.getBufferedImageFromURL(URLManager.getBaseURL(url) + nm.image);
+                        }
+                    }
+
+                    //System.out.println(inputLine);
+
                 }
 
-                if (inputLine.startsWith("-AUTHOR")) {
-                    if (nm != null) {
-                        nm.author = inputLine.substring(7, inputLine.length()).trim();
-                    }
-                }
+                jta.append("\n" + listOfModels.size() + " remote models found.\nSelect a model to download it locally and open it.\n\n");
+                mode = LISTED;
+                panel.preparePanel(url);
+                panel.repaint();
+                in.close();
 
-
-                if (inputLine.startsWith("-DESCRIPTION")) {
-                    if (nm != null) {
-                        nm.description = inputLine.substring(12, inputLine.length()).trim();
-                    }
-                }
-
-                if (inputLine.startsWith("-IMG")) {
-                    if (nm != null) {
-                        nm.image = inputLine.substring(4, inputLine.length()).trim();
-                        //TraceManager.addDev("Dealing with image:" + nm.image);
-                        //nm.bi = URLManager.getBufferedImageFromURL(URLManager.getBaseURL(url) + nm.image);
-                    }
-                }
-
-                //System.out.println(inputLine);
-
+                // Wait 5seconds before refreshing panel
+                Thread.sleep(5000);
+                panel.repaint();
             }
-            jta.append("\n" + listOfModels.size() + " remote models found.\nSelect a model to download it locally and open it.\n\n");
-            mode = LISTED;
-            panel.preparePanel(url);
-            panel.repaint();
-            in.close();
-
-            // Wait 5seconds before refreshing panel
-            Thread.sleep(5000);
-            panel.repaint();
 
         } catch (Exception e) {
-            jta.append("Error: " + e.getMessage() + " when retreiving file " + url );
+            jta.append("Error when retreiving file: " + url + "\n No internet connection?\n No right for the Java Virtual Machine to use http connections?\n\n");
+            TraceManager.addDev("Exception trace in loading network model:");
+            e.printStackTrace();
         }
     }
 
@@ -347,7 +355,11 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         jta.append("Loading model: " + fileName);
         String urlToLoad = URLManager.getBaseURL(url) + fileName;
         URLManager urlm = new URLManager();
-        filePath = ConfigurationTTool.DownloadedFILEPath + "/" + fileName;
+	if ((ConfigurationTTool.DownloadedFILEPath == null) || (ConfigurationTTool.DownloadedFILEPath.length() == 0)) {
+	    filePath = fileName;
+	} else {
+	    filePath = ConfigurationTTool.DownloadedFILEPath + "/" + fileName;
+	}
         boolean ok = urlm.downloadFile(filePath, urlToLoad,this);
         if (!ok) {
             jta.append("Model transfer failed\nPlease, select another model, or retry\n");
@@ -359,15 +371,15 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     public void loadDone() {
         jta.append("Model transfered, opening it in TTool\n");
         this.dispose();
-	SwingUtilities.invokeLater(new Runnable() {
-		public void run() {
-		    mgui.openProjectFromFile(new File(filePath));
-		    // Here, we can safely update the GUI
-		    // because we'll be called from the
-		    // event dispatch thread
-		    //statusLabel.setText("Query: " + queryNo);
-		}
-	    });
+        SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    mgui.openProjectFromFile(new File(filePath));
+                    // Here, we can safely update the GUI
+                    // because we'll be called from the
+                    // event dispatch thread
+                    //statusLabel.setText("Query: " + queryNo);
+                }
+            });
         //mgui.openProjectFromFile(new File(filePath));
     }
 

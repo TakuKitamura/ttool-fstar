@@ -22,6 +22,11 @@ make all
 If the compilation fails with the following error: 'unmappable character for encoding ASCII', you need to do, before the compilation process:
 export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
 
+* Installing TTool once compiled
+make install
+
+This installs all necessary files in bin/
+
 
 * Generating a release:
 make release

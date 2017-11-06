@@ -75,6 +75,9 @@ public class IconManager {
     public static ImageIcon imgic80, imgic82, imgic84, imgic86, imgic88, imgic89;
     public static ImageIcon imgic90, imgic92, imgic94, imgic96, imgic98, imgic99;
 
+    public static ImageIcon imgic142;
+
+
     // Class diagram
     public static ImageIcon imgic100, imgic101, imgic102, imgic104, imgic106, imgic108;
     public static ImageIcon imgic110, imgic112, imgic114, imgic116, imgic118;
@@ -309,6 +312,7 @@ public class IconManager {
     private static String icon136 = "cdtogglesyn.gif";
     private static String icon138 = "adtogglejava.gif";
     private static String icon140 = "avatarfv.png";
+    private static String icon142 = "toolbarButtonGraphics/navigation/Home16.gif";
 
     private static String icon200 = "toolbarButtonGraphics/general/Properties16.gif";
     private static String icon201 = "toolbarButtonGraphics/general/Properties24.gif";
@@ -772,6 +776,7 @@ public class IconManager {
         imgic136 = getIcon(icon136);
         imgic138 = getIcon(icon138);
 	imgic140 = getIcon(icon140);
+	imgic142 = getIcon(icon142);
 
         imgic200 = getIcon(icon200);
         imgic201 = getIcon(icon201);
