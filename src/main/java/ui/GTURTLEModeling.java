@@ -2035,10 +2035,12 @@ public class GTURTLEModeling {
             HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
             for (AvatarPragmaAuthenticity pragma: authResults.keySet()) {
                 if (authResults.get(pragma).isProved() && !authResults.get(pragma).isSatisfied()) {
-                    nonAuthChans.add(pragma.getAttrA().getAttribute().getBlock().getName() + "__" + pragma.getAttrA().getState().getName().replaceAll("_chData", ""));
-                    nonAuthChans.add(pragma.getAttrB().getAttribute().getBlock().getName() + "__" + pragma.getAttrB().getState().getName().replaceAll("_chData", ""));
+                    nonAuthChans.add(pragma.getAttrA().getAttribute().getBlock().getName() + "__" + pragma.getAttrA().getAttribute().getName().replaceAll("_chData", ""));
+                    nonAuthChans.add(pragma.getAttrB().getAttribute().getBlock().getName() + "__" + pragma.getAttrB().getAttribute().getName().replaceAll("_chData", ""));
                 }
             }
+			TraceManager.addDev("nonsecchans " + nonSecChans);
+			TraceManager.addDev("nonauthchans " + nonAuthChans);
             TraceManager.addDev("all results displayed");
 
         }
@@ -2124,7 +2126,7 @@ public class GTURTLEModeling {
                         TMLChannel chan = tmlmodel.getChannelByName(tabName+"__"+writeChannel.getChannelName());
                         //System.out.println("channel " + chan);
                         if (chan!=null){
-                            if (chan.checkConf){
+                            if (chan.checkConf && autoConf){
                                 //        System.out.println(chan.getOriginTask().getName().split("__")[1]);
                                 if (nonSecChans.contains(chan.getOriginTask().getName().split("__")[1]+"__"+writeChannel.getChannelName()+"_chData") && !secInChannels.get(chan.getDestinationTask()).contains(writeChannel.getChannelName())){
                                     //                                                                                            if (!securePath(map, chan.getOriginTask(), chan.getDestinationTask())){

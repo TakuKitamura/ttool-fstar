@@ -61,6 +61,9 @@ import proverifspec.ProVerifOutputListener;
 import ui.AvatarDesignPanel;
 import ui.util.IconManager;
 import ui.MainGUI;
+import ui.TURTLEPanel;
+import ui.TMLArchiPanel;
+
 import ui.interactivesimulation.JFrameSimulationSDPanel;
 import tmltranslator.*;
 
@@ -106,6 +109,10 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     public final static int REACHABILITY_SELECTED   = 2;
     public final static int REACHABILITY_NONE       = 3;
 
+
+	TURTLEPanel currPanel;
+		
+
     int mode;
     
     
@@ -134,7 +141,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     
     //security generation buttons
     ButtonGroup secGroup;
-    protected JCheckBox autoConf, autoWeakAuth, autoStrongAuth, autoMapKeys, custom, addHSM;
+	
+    protected JCheckBox autoSec, autoConf, autoWeakAuth, autoStrongAuth, autoMapKeys, custom, addHSM;
 
     protected JTextField encTime, decTime, secOverhead;
 	protected JComboBox<String> addtoCPU;
@@ -210,6 +218,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 				taskCpuMap.put(task,cpu);
 			}
 		}
+		currPanel = mgui.getCurrentTURTLEPanel();
+		
         initComponents();
         myInitComponents();
         pack();
@@ -271,9 +281,13 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
         //genJava.addActionListener(this);
 		secGroup=new ButtonGroup(); 
+        autoSec= new JCheckBox("Add security");
+		jp02.add(autoSec, c01);
+		autoSec.addActionListener(this);
+		secGroup.add(autoSec);
         autoConf= new JCheckBox("Add security (Confidentiality)");
-		secGroup.add(autoConf);
         jp02.add(autoConf, c01);
+		autoConf.setEnabled(false);
 		autoConf.addActionListener(this);
         autoWeakAuth= new JCheckBox("Add security (Weak Authenticity)");
 		autoWeakAuth.setEnabled(false);
@@ -501,8 +515,10 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
         jp1.add("Security Verification", jp01);
         
-        jp1.add("Automated Security", jp02);
-        
+		if (currPanel instanceof TMLArchiPanel){
+			//Can only secure a mapping
+	        jp1.add("Automated Security", jp02);
+		}        
         c.add(jp1, BorderLayout.NORTH);
         c.add(jp2, BorderLayout.SOUTH);
 
@@ -658,9 +674,16 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 			if (evt.getSource() == addHSM){
 				listPanel.setEnabled(addHSM.isSelected());
 			}
-			if (evt.getSource() == autoConf || evt.getSource() == autoMapKeys || evt.getSource() == addHSM || evt.getSource()==autoWeakAuth){	
-				autoWeakAuth.setEnabled(autoConf.isSelected());
+			if (evt.getSource() == autoConf || evt.getSource() == autoSec ||evt.getSource() == autoMapKeys || evt.getSource() == addHSM || evt.getSource()==autoWeakAuth){	
+				//autoWeakAuth.setEnabled(autoConf.isSelected());
+				autoConf.setEnabled(autoSec.isSelected());
+				autoWeakAuth.setEnabled(autoSec.isSelected());
 				autoStrongAuth.setEnabled(autoWeakAuth.isSelected());
+				if (!autoSec.isSelected()){
+					autoConf.setSelected(false);
+					autoWeakAuth.setSelected(false);
+					autoStrongAuth.setSelected(false);
+				}
 			}
 			if (evt.getSource() == custom){
 				encTime.setEnabled(custom.isSelected());
