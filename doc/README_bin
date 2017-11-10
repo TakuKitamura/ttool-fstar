@@ -7,7 +7,7 @@ This directory contain files for starting the TTool's launcher and TTool itself.
 $java -jar launcher.jar
 
 2) start TTool as follows
-$ java -Xmx256m -jar ttool.jar config.xml
+$ java -Xmx256m -jar ttool.jar -config config.xml
 
 Don't forget to correctly configure various settings in your config.xml file.
 
