@@ -452,7 +452,7 @@ DESTDIR ?= $(TTOOL_PATH)
 
 install:
 #ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
-	mkdir $(DESTDIR)/bin
+	mkdir -p $(DESTDIR)/bin
 	@cp $(TTOOL_BUILD)/* $(DESTDIR)/bin
 
 # ======================================== 
