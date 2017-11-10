@@ -100,7 +100,9 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
         //System.out.println("Titi");
         if (e.getButton() == MouseEvent.BUTTON3) {
             //System.out.println("toto");
-        	setSelection(e.getX(), e.getY());
+        	if (tdp.mode != TDiagramPanel.SELECTED_COMPONENTS) {
+        		setSelection(e.getX(), e.getY());
+        	}
             tdp.openPopupMenu(e.getX(), e.getY());
         }
 
