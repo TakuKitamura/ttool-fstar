@@ -430,19 +430,16 @@ outerloop:
 						as.addValue("tmp");
 					}
 					else {
+					//	Add parameter to signal and actiononsignal
+						sig.addParameter(block.getAvatarAttributeWithName(sr.getParam(i)));
 						as.addValue(sr.getParam(i));
 					}
 				}
-				//Create new value to send....
-				AvatarAttribute requestData= new AvatarAttribute(req.getName()+"__reqData", AvatarType.INTEGER, block, null);
-				as.addValue(req.getName()+"__reqData");
-				if (block.getAvatarAttributeWithName(req.getName()+"__reqData")==null){
-					block.addAttribute(requestData);	
-				}
+				/*
 				if (req.checkAuth){
 					AvatarAttributeState authOrig = new AvatarAttributeState(block.getName()+"."+signalState.getName()+"."+requestData.getName(),ae.getReferenceObject(),requestData, signalState);
 					signalAuthOriginMap.put(req.getName(), authOrig);
-				}
+				}*/
 				tran= new AvatarTransition(block, "__after_"+ae.getName(), ae.getReferenceObject());
 				elementList.add(signalState);
 				signalState.addNext(signalTran);
@@ -585,6 +582,8 @@ outerloop:
 							System.out.println("Missing Attribute " + aee.getParam(i));
 						}
 						else {
+							//	Add parameter to signal and actiononsignal
+							sig.addParameter(block.getAvatarAttributeWithName(aee.getParam(i)));
 							as.addValue(aee.getParam(i));
 						}
 					}
@@ -620,6 +619,8 @@ outerloop:
 							System.out.println("Missing Attribute " + aee.getParam(i));
 						}
 						else {
+							//	Add parameter to signal and actiononsignal
+							sig.addParameter(block.getAvatarAttributeWithName(aee.getParam(i)));
 							as.addValue(aee.getParam(i));
 						}
 					}
@@ -1657,22 +1658,24 @@ outerloop:
 						AvatarActionOnSignal as= new AvatarActionOnSignal("getRequest__"+req.getName(), sig, req.getReferenceObject());
 						incrTran.addNext(as);
 						asm.addElement(as);
-						as.addValue(req.getName()+"__reqData");
+						/*as.addValue(req.getName()+"__reqData");
 						AvatarAttribute requestData= new AvatarAttribute(req.getName()+"__reqData", AvatarType.INTEGER, block, null);
-						block.addAttribute(requestData);
+						block.addAttribute(requestData);*/
 						for (int i=0; i< req.getNbOfParams(); i++){
 							if (block.getAvatarAttributeWithName(req.getParam(i))==null){
 								//Throw Error
 								as.addValue("tmp");
 							}
 							else {
+								sig.addParameter(block.getAvatarAttributeWithName(req.getParam(i)));
 								as.addValue(req.getParam(i));
 							}
 						}
 						AvatarTransition tran = new AvatarTransition(block, "__after_" + req.getName(), task.getActivityDiagram().get(0).getReferenceObject());
 						as.addNext(tran);
 						asm.addElement(tran);
-						if (req.checkAuth){
+						tran.addNext(newStart);
+						/*if (req.checkAuth){
 							AvatarState afterSignalState = new AvatarState("aftersignalstate_"+req.getName().replaceAll(" ","")+"_"+req.getName().replaceAll(" ",""),req.getReferenceObject());
 							AvatarTransition afterSignalTran = new AvatarTransition(block, "__aftersignalstate_"+req.getName(), req.getReferenceObject());
 							tran.addNext(afterSignalState);
@@ -1685,7 +1688,7 @@ outerloop:
 						}  
 						else {
 							tran.addNext(newStart);
-						}
+						}*/
 
 					}
 
