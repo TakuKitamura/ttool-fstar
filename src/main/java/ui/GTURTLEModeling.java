@@ -9319,12 +9319,12 @@ public class GTURTLEModeling {
     public void addStates(AvatarStateMachineElement asme, int x, int y, AvatarSMDPanel smp, AvatarBDBlock bl, Map<AvatarStateMachineElement, TGComponent> SMDMap, Map<AvatarStateMachineElement, TGComponent> locMap, Map<AvatarTransition, AvatarStateMachineElement> tranDestMap, Map<AvatarTransition, TGComponent> tranSourceMap){
         // TGConnectingPoint tp = new TGConnectingPoint(null, x, y, false, false);
         //Create dummy tgcomponent
-        TGComponent tgcomp = new AvatarSMDStartState(x,y,x,x*2,y,y*2,false,null,smp);
+        TGComponent tgcomp = new AvatarSMDStartState(x,y,smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(),false,null,smp);
         if (asme==null){
             return;
         }
         if (asme instanceof AvatarStartState){
-            AvatarSMDStartState smdss = new AvatarSMDStartState(x, y, x, x*2, y, y*2, false, null, smp);
+            AvatarSMDStartState smdss = new AvatarSMDStartState(x, y, smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(), false, null, smp);
             tgcomp = smdss;
             smp.addComponent(smdss, x, y, false, true);
             SMDMap.put(asme, smdss);
@@ -9335,7 +9335,7 @@ public class GTURTLEModeling {
             //
         }
         if (asme instanceof AvatarRandom){
-            AvatarSMDRandom smdr = new AvatarSMDRandom(x, y, x, x*2, y, y*2, false, null, smp);
+            AvatarSMDRandom smdr = new AvatarSMDRandom(x, y, smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(), false, null, smp);
             smdr.setVariable(((AvatarRandom)asme).getVariable());
             smp.addComponent(smdr, x, y, false, true);
             tgcomp=smdr;
@@ -9345,7 +9345,7 @@ public class GTURTLEModeling {
         if (asme instanceof AvatarActionOnSignal){
             avatartranslator.AvatarSignal sig = ((AvatarActionOnSignal) asme).getSignal();
             if (sig.isIn()){
-                AvatarSMDReceiveSignal smdrs = new AvatarSMDReceiveSignal(x, y, x, x*2, y, y*2, false, null, smp);
+                AvatarSMDReceiveSignal smdrs = new AvatarSMDReceiveSignal(x, y, smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(), false, null, smp);
                 tgcomp=smdrs;
                 smp.addComponent(smdrs, x, y, false, true);
                 //                              String name=sig.minString();
@@ -9371,7 +9371,7 @@ public class GTURTLEModeling {
 
             }
             else {
-                AvatarSMDSendSignal smdss = new AvatarSMDSendSignal(x, y, x, x*2, y, y*2, false, null, smp);
+                AvatarSMDSendSignal smdss = new AvatarSMDSendSignal(x, y, smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(), false, null, smp);
                 tgcomp=smdss;
                 smp.addComponent(smdss, x, y, false, true);
                 String parameters="";
@@ -9396,7 +9396,7 @@ public class GTURTLEModeling {
 
         }
         if (asme instanceof AvatarStopState){
-            AvatarSMDStopState smdstop = new AvatarSMDStopState(x, y, x, x*2, y, y*2, false, null, smp);
+            AvatarSMDStopState smdstop = new AvatarSMDStopState(x, y, smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(), false, null, smp);
             tgcomp=smdstop;
             SMDMap.put(asme, smdstop);
             smp.addComponent(smdstop, x, y, false, true);
@@ -9419,7 +9419,7 @@ public class GTURTLEModeling {
             return;
             }
             }*/
-            AvatarSMDState smdstate = new AvatarSMDState(x, y, x, x*2, y, y*2, false, null, smp);
+            AvatarSMDState smdstate = new AvatarSMDState(x, y, smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(), false, null, smp);
             tgcomp=smdstate;
             smp.addComponent(smdstate, x, y, false, true);
             smdstate.setValue(asme.getName());
@@ -9430,7 +9430,7 @@ public class GTURTLEModeling {
             locMap.put(asme, smdstate);
         }
         int i=0;
-        int diff=100;
+        int diff=300;
         int ydiff=50;
         int num = asme.nbOfNexts();
         if (!(asme instanceof AvatarTransition)){
