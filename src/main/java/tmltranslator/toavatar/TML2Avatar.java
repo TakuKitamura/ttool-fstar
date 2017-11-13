@@ -530,27 +530,62 @@ outerloop:
 
 				}
 				else {
-					//This gets really complicated in ProVerif
+					//This gets really complicated in Avatar...
 					for (int i=0; i< ae.getNbNext(); i++){
 						//For each of the possible state blocks, translate 1 and recurse on the remaining random sequence
 						tran = new AvatarTransition(block, "__after_"+ae.getName()+"_"+i, ae.getReferenceObject());
 						choiceState.addNext(tran);
 						List<AvatarStateMachineElement> tmp = translateState(ae.getNextElement(i), block);
+						
+						
+						AvatarState choiceStateEnd = new AvatarState("seqchoiceend__"+ i + "_"+ae.getName().replaceAll(" ",""), ae.getReferenceObject());
+						elementList.add(choiceStateEnd);
+						
+						
+						//Remove stop states from the first generated set
+						for (AvatarStateMachineElement e: tmp){
+							if (e instanceof AvatarStopState){
+							//ignore
+							}
+							else if (e.getNexts().size()==0){
+								//e.addNext(set1.get(0));
+								e.addNext(choiceStateEnd);
+								elementList.add(e);
+							}
+							else if (e.getNext(0) instanceof AvatarStopState){
+								//Remove the transition to AvatarStopState
+								e.removeNext(0);
+								e.addNext(choiceStateEnd);
+								//e.addNext(set1.get(0));
+								elementList.add(e);
+							}
+							else {
+								elementList.add(e);
+							}
+						}
+						
+						
+						
 						tran.addNext(tmp.get(0));
+						
 						TMLRandomSequence newSeq = new TMLRandomSequence("seqchoice__"+i+"_"+ae.getNbNext()+"_"+ae.getName(), ae.getReferenceObject());
 						for (int j=0; j< ae.getNbNext(); j++){
 							if (j!=i){
 								newSeq.addNext(ae.getNextElement(j));
 							}
 						}
+
+						
 						tran = new AvatarTransition(block, "__after_"+ae.getNextElement(i).getName(), ae.getReferenceObject());
-						tmp.get(tmp.size()-1).addNext(tran);
-						elementList.addAll(tmp);
+						choiceStateEnd.addNext(tran);
 						elementList.add(tran);
+						
 						List<AvatarStateMachineElement> nexts = translateState(newSeq, block);
 						elementList.addAll(nexts);
 						tran.addNext(nexts.get(0));
+	//					System.out.println(elementList);
 					}
+
 				}
 				return elementList;
 			}
@@ -1225,7 +1260,7 @@ outerloop:
 					}
 					else {
 						//No security pattern
-						System.out.println("no security pattern for " + ch.getName());
+					//	System.out.println("no security pattern for " + ch.getName());
 						as.addValue(getName(ch.getName())+"_chData");
 					}
 
@@ -1518,7 +1553,7 @@ outerloop:
 
 			distributeKeys();
 
-			System.out.println("ALL KEYS " +accessKeys);
+			TraceManager.addDev("ALL KEYS " +accessKeys);
 			/*for (TMLTask t: accessKeys.keySet()){
 				System.out.println("TASK " +t.getName());
 				for (SecurityPattern sp: accessKeys.get(t)){
