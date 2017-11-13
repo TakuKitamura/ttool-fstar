@@ -9445,7 +9445,7 @@ public class GTURTLEModeling {
                 }
             }
             if (!SMDMap.containsKey(el)){
-                addStates(el, x+diff*(i-num/2), y+ydiff, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
+                addStates(el, x+diff*i, y+ydiff, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
             }
             i++;
         }
@@ -9746,8 +9746,8 @@ public class GTURTLEModeling {
             //    TGConnectingPoint p1 = tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,false);
             TGConnectingPoint p1 = tranSourceMap.get(t).closerFreeTGConnectingPoint(x, y, true, false);
             if (p1==null){
-                //  p1= tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,true);
-                p1=tranSourceMap.get(t).closerFreeTGConnectingPoint(x,y,true, true);
+                  p1= tranSourceMap.get(t).findFirstFreeTGConnectingPoint(true,true);
+                //p1=tranSourceMap.get(t).closerFreeTGConnectingPoint(x,y,true, true);
             }
             x= locMap.get(tranDestMap.get(t)).getX()+ locMap.get(tranDestMap.get(t)).getWidth()/2;
             y = locMap.get(tranDestMap.get(t)).getY();
