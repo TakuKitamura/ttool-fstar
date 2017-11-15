@@ -737,7 +737,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TTool diagrams", '0');
 
         // Issue #35: Renamed action name to be closer to actual functionality
-        actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Formal Verification with UPPAAL", IconManager.imgic86, IconManager.imgic86, "Formal Verification with UPPAAL",  "Formal verification of TTool diagrams with UPPAAL", '0');
+        actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Safety Verification (UPPAAL)", IconManager.imgic86, IconManager.imgic86, "Safety Verification (UPPAAL)",  "Formal safety verification of TTool diagrams with UPPAAL", '0');
 
         actions[ACT_AVATAR_MODEL_CHECKER] = new TAction("avatar-model-checker", "Avatar model checker", IconManager.imgic140, IconManager.imgic140, "Avatar model checker",  "Executes the AVATAR model checker from an AVATAR design", '0');
         actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
@@ -774,7 +774,7 @@ public class TGUIAction extends AbstractAction {
         // AVATAR
         actions[ACT_AVATAR_SIM] = new TAction("avatar-simu", "Interactive simulation", IconManager.imgic18, IconManager.imgic18, "Interactive simulation",  "Interactive simulation of the AVATAR design under edition", '2');
         actions[ACT_AVATAR_FV_UPPAAL] = new TAction("avatar-formal-verification-uppaal", "Safety formal verification with UPPAAL (Safety)", IconManager.imgic86, IconManager.imgic86, "Formal verification with UPPAAL (Safety)",  "Formal verification with UPPAAL (Safety) of the AVATAR design under edition", '3');
-        actions[ACT_AVATAR_FV_PROVERIF] = new TAction("avatar-formal-verification-proverif", "Security verification", IconManager.imgic88, IconManager.imgic88, "Security verification",  "Security formal verification (with ProVerif)", '4');
+        actions[ACT_AVATAR_FV_PROVERIF] = new TAction("avatar-formal-verification-proverif", "Security verification (ProVerif)", IconManager.imgic88, IconManager.imgic88, "Security verification (ProVerif)",  "Security formal verification (with ProVerif)", '4');
         actions[ACT_AVATAR_FV_STATICANALYSIS] = new TAction("avatar-formal-verification-staticanalysis", "Safety analysis (invariants)", IconManager.imgic96, IconManager.imgic96, "Safaty analysis (invariants)",  "Safety analysis using the invariant tecnique", '5');
         actions[ACT_AVATAR_EXECUTABLE_GENERATION] = new TAction("avatar-executable-generation", "Code generation" , IconManager.imgic94, IconManager.imgic94, "Code generation",  "Generation of C-POSIX executable code from AVATAR design under edition", '6');
 
