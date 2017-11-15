@@ -263,7 +263,8 @@ TTOOL_CONFIG_SRC 	= $(patsubst %,$(TTOOL_DOC)/%,\
 			  config_macosx.xml \
 			  config_windows.xml)
 
-release: $(STDRELEASE) $(ADVANCED_RELEASE)
+release: $(STDRELEASE)
+#$(ADVANCED_RELEASE)
 
 $(TTOOL_STD_RELEASE)/%.tgz: $(TTOOL_STD_RELEASE)/%.tar
 	@$(GZIP) -c $< > $@
