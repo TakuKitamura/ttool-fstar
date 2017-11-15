@@ -737,7 +737,7 @@ public class TGUIAction extends AbstractAction {
         // Issue #35: Renamed action name to be closer to actual functionality
         actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Safety Verification (UPPAAL)", IconManager.imgic86, IconManager.imgic86, "Safety Verification (UPPAAL)",  "Formal safety verification of TTool diagrams with UPPAAL", '0');
 
-        actions[ACT_AVATAR_MODEL_CHECKER] = new TAction("avatar-model-checker", "Avatar model checker", IconManager.imgic140, IconManager.imgic140, "Avatar model checker",  "Executes the AVATAR model checker from an AVATAR design", '0');
+        actions[ACT_AVATAR_MODEL_CHECKER] = new TAction("avatar-model-checker", "Safety verification", IconManager.imgic140, IconManager.imgic140, "Safety verification (Internal tool)",  "Safety verification with the internal model checker", '0');
         actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
         actions[ACT_SIMU_JAVA] = new TAction("gen_simujava-command", "Java-based simulation", IconManager.imgic38, IconManager.imgic39, "JAVA-based simualtion",  "Simulate diagrams using Java language", 0);
         //@author: Huy TRUONG

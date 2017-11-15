@@ -75,11 +75,12 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     protected final static int FV_MAPPING_DIPLO = 4;
     protected final static int SIM_TRACE_MAPPING_DIPLO = 5;
     protected final static int SIM_ANIM_MAPPING_DIPLO = 8;
+    protected final static int PROVERIF_DIPLO = 9;
     protected final static int TML_MAPPING_DIPLO = 6;
 
     protected final String[] SHORT_ACTION_NAMES = {
         "sim-trace", "upp", "lot", "tml",
-        "fv", "sim-trace", "tmap", "sim-anim", "sim-anim"};
+        "fv", "sim-trace", "tmap", "sim-anim", "sim-anim", "sec"};
 
     protected final String[] LONG_ACTION_NAMES = {
         /*0*/ "Generate a vcd simulation trace of a DIPLODOCUS functional model",
@@ -90,7 +91,8 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         /*5*/ "Simulate a DIPLODOCUS mapping model",
         "Generate a TMAP/TARCHI/TML text dscription of a DIPLODOCUS mapping model",
         "Simulate and animate DIPLODOCUS functional models",
-        "Simulate and animate DIPLODOCUS mapping models"
+        "Simulate and animate DIPLODOCUS mapping models",
+	"Security verification"
     };
 
     protected int[] validations;
