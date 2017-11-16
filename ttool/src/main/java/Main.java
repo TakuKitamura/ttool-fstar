@@ -125,6 +125,12 @@ public class Main implements ActionListener {
 
         boolean startLauncher = true;
 
+	// Setting certificates
+	/*String trustStore = System.getProperty("javax.net.ssl.trustStore");
+	if (trustStore == null) {
+	    System.setProperty("javax.net.ssl.trustStore", "cacerts.jks");
+	    } */
+	
         // Analyzing arguments
         String config = "config.xml";
         startLauncher = true;
