@@ -53,6 +53,7 @@ import ui.window.JDialogSafetyPragma;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     protected int lockX = 1;
     protected int lockY = 5;
     protected Graphics myg;
-
+	public ArrayList<String> syntaxErrors;
     protected Color myColor;
 
     private Font myFont;//, myFontB;
@@ -119,7 +120,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         moveable = true;
         editable = true;
         removable = true;
-
+		syntaxErrors = new ArrayList<String>();
         name = "UPPAAL Pragma";
         value = "";
 
@@ -203,6 +204,13 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 	g.setFont(fold);
 	for (String s: properties){
 	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
+	    if (syntaxErrors.contains(s)){
+			Color ctmp= g.getColor();
+			g.setColor(Color.red);
+			g.drawLine(x+textX/2,y+textY*3/2 + i*currentFontSize, x+width-textX/2, y+textY*3/2 +(i+1)*currentFontSize);
+			g.drawLine(x+width-textX/2,y+textY*3/2 + i*currentFontSize, x+textX/2, y+textY*3/2 +(i+1)*currentFontSize);
+			g.setColor(ctmp);
+		}
 	    drawVerification(s, g, x+textX, y+textY + (i+1)* currentFontSize);
 	    i++;
 	}

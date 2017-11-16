@@ -210,11 +210,13 @@ public class AvatarDesignPanelTranslator {
             if (tgc instanceof AvatarBDSafetyPragma) {
                 tgsp = (AvatarBDSafetyPragma)tgc;
                 values = tgsp.getValues();
+                tgsp.syntaxErrors.clear();
                 for (String s: values){
 					if (checkSafetyPragma(s, _blocks, _as)){
 						_as.addSafetyPragma(s);
 					}
 					else {
+						tgsp.syntaxErrors.add(s);
 						UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Badly Formatted Pragma " + s);
 		                ce.setTDiagramPanel(adp.getAvatarBDPanel());
 		                ce.setTGComponent(tgc);
@@ -427,8 +429,13 @@ public class AvatarDesignPanelTranslator {
         if (state.contains("=") || state.contains("<") || state.contains(">")){
             String state1 = state.split("==|>(=)?|!=|<(=)?")[0];
             String state2 = state.split("==|>(=)?|!=|<(=)?")[1];
+            if (!state1.contains(".")){
+	            TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
+            	return false;
+            }
             String block1 = state1.split("\\.",2)[0];
             String attr1 = state1.split("\\.",2)[1];
+
             attr1 = attr1.replace(".","__");
             AvatarType p1Type= AvatarType.UNDEFINED;
             AvatarBlock bl1 = as.getBlockWithName(block1);
