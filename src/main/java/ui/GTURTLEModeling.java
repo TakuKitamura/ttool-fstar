@@ -8924,15 +8924,20 @@ public class GTURTLEModeling {
         } else {
             // Generate XML file
             try {
+            	if (SpecConfigTTool.NCDirectory != null) {
+            		File dir = new File(SpecConfigTTool.NCDirectory);
+            		if (!dir.exists())
+            			dir.mkdirs();
+            	}
                 String fileName = "network.xml";
-                if (ConfigurationTTool.NCDirectory != null) {
-                    fileName = ConfigurationTTool.NCDirectory + fileName;
+                if (SpecConfigTTool.NCDirectory != null) {
+                    fileName = SpecConfigTTool.NCDirectory + fileName;
                 }
                 TraceManager.addDev("Saving in network structure in file: " + fileName);
                 FileUtils.saveFile(fileName, ncs.toISAENetworkXML());
                 fileName = "traffics.xml";
-                if (ConfigurationTTool.NCDirectory != null) {
-                    fileName = ConfigurationTTool.NCDirectory + fileName;
+                if (SpecConfigTTool.NCDirectory != null) {
+                    fileName = SpecConfigTTool.NCDirectory + fileName;
                 }
                 TraceManager.addDev("Saving in traffics in file: " + fileName);
                 FileUtils.saveFile(fileName, ncs.toISAETrafficsXML());

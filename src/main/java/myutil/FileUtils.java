@@ -172,7 +172,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
 					return false;
     		if (!s.equals(ConfigurationTTool.ProVerifCodeDirectory)) {
     			File readme = new File(ConfigurationTTool.ProVerifCodeDirectory + "README");
-    			FileUtils.copyFileToDirectory(readme, f, false);
+    			if (readme.exists())
+    				FileUtils.copyFileToDirectory(readme, f, false);
     		}
     		return true;
     	}
@@ -189,7 +190,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
 					return false;
     		if (!s.equals(ConfigurationTTool.TMLCodeDirectory)) {
     			File readme = new File(ConfigurationTTool.TMLCodeDirectory + "README_TML");
-    			FileUtils.copyFileToDirectory(readme, f, false);
+    			if (readme.exists())
+    				FileUtils.copyFileToDirectory(readme, f, false);
     		}
     		return true;
     	}
@@ -206,7 +208,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
 					return false;
     		if (!s.equals(ConfigurationTTool.CCodeDirectory)) {
     			File readme = new File(ConfigurationTTool.CCodeDirectory + "README");
-    			FileUtils.copyFileToDirectory(readme, f, false);
+    			if (readme.exists())
+    				FileUtils.copyFileToDirectory(readme, f, false);
     		}
     		return true;
     	}
@@ -223,7 +226,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
 					return false;
     		if (!s.equals(ConfigurationTTool.UPPAALCodeDirectory)) {
     			File readme = new File(ConfigurationTTool.UPPAALCodeDirectory + "README");
-    			FileUtils.copyFileToDirectory(readme, f, false);
+    			if (readme.exists())
+    				FileUtils.copyFileToDirectory(readme, f, false);
     		}
     		return true;
     	}

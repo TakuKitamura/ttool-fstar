@@ -56,6 +56,8 @@ public class SpecConfigTTool {
 	
 	public static String VCDPath="";
 	public static String ExternalCommand1="";
+
+	public static String NCDirectory="";
 	
 	private static String ProjectSystemCCodeDirectory = "/c++_code/";
 	private static String ProjectCCodeDirectory = "/c_code/";
@@ -69,6 +71,7 @@ public class SpecConfigTTool {
 	private static String ProjectTGraphDirectory="/graphs";
 	private static String ProjectUPPAALCodeDirectory="/uppaal/";
 	private static String ProjectVCDDirectory="/c++_code/";
+	private static String ProjectNCDirectory="/nc/";
 	
 	public static int lastPanel = -1;
 	public static int lastTab = -1;
@@ -107,6 +110,8 @@ public class SpecConfigTTool {
 		
 		VCDPath = ConfigurationTTool.VCDPath;
 		ExternalCommand1 = ConfigurationTTool.ExternalCommand1;
+		
+		NCDirectory = ConfigurationTTool.NCDirectory;
 	}
 	
 	public static void setDirConfig(File dir) {
@@ -122,6 +127,7 @@ public class SpecConfigTTool {
     	TGraphPath = dir.getAbsolutePath() + ProjectTGraphDirectory;
     	UPPAALCodeDirectory = dir.getAbsolutePath() + ProjectUPPAALCodeDirectory;
     	VCDPath = dir.getAbsolutePath() + ProjectVCDDirectory;
+    	NCDirectory = dir.getAbsolutePath() + ProjectNCDirectory;
     	
     	SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
     	SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
