@@ -231,7 +231,25 @@ RELEASE_STD_FILES_XML 	= $(patsubst %,$(TTOOL_MODELING)/%,\
 			  AVATAR/MicroWaveOven_SafetySecurity_fullMethodo.xml)
 RELEASE_STD_FILES_LIB 	= $(patsubst %,$(TTOOL_MODELING)/%,\
 			  TURTLE/TClock1.lib \
-			  TURTLE/TTimerv01.lib)
+                          DIPLODOCUS/CPlibrary/ConfigPollingDMA_SD.lib\
+                          DIPLODOCUS/CPlibrary/ConfigureDMA_SD.lib\
+                          DIPLODOCUS/CPlibrary/DMACycle_SD.lib\
+                          DIPLODOCUS/CPlibrary/DMAPollingCycleP_AD.lib\
+                          DIPLODOCUS/CPlibrary/DMATransfer_NoPolling_MainCP.lib\
+                          DIPLODOCUS/CPlibrary/DMATransfer_Polling_MainCP.lib\
+                          DIPLODOCUS/CPlibrary/DMATransferCycleP_AD.lib\
+                          DIPLODOCUS/CPlibrary/DMATransferCycleP_SD.lib\
+                          DIPLODOCUS/CPlibrary/EnableFlag_SD.lib\
+                          DIPLODOCUS/CPlibrary/LoadCPU_LoadConfigureSD.lib\
+                          DIPLODOCUS/CPlibrary/LoadCPU_LoadTransferCycleSD.lib\
+                          DIPLODOCUS/CPlibrary/LoadCPU_mainCP.lib\
+                          DIPLODOCUS/CPlibrary/PollingCycle_SD.lib\
+                          DIPLODOCUS/CPlibrary/StoreCPU_mainCP.lib\
+                          DIPLODOCUS/CPlibrary/StoreCPU_StoreConfigureSD.lib\
+                          DIPLODOCUS/CPlibrary/StoreCPU_StoreTransferCycleSD.lib\
+                          DIPLODOCUS/CPlibrary/TerminateDMA_SD.lib\
+                          DIPLODOCUS/StoreCPU_StoreConfigureCycleSD.lib\
+			  TURTLE/TTimerv01.lib) 
 RELEASE_STD_FILES_LICENSES 	= $(patsubst %,$(TTOOL_DOC)/%,\
 			     	  LICENSE \
 				  LICENSE_CECILL_ENG \
@@ -245,7 +263,8 @@ TTOOL_CONFIG_SRC 	= $(patsubst %,$(TTOOL_DOC)/%,\
 			  config_macosx.xml \
 			  config_windows.xml)
 
-release: $(STDRELEASE) $(ADVANCED_RELEASE)
+release: $(STDRELEASE)
+#$(ADVANCED_RELEASE)
 
 $(TTOOL_STD_RELEASE)/%.tgz: $(TTOOL_STD_RELEASE)/%.tar
 	@$(GZIP) -c $< > $@
@@ -450,7 +469,9 @@ git:
 
 DESTDIR ?= $(TTOOL_PATH)
 
-install: ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
+install:
+#ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
+	mkdir -p $(DESTDIR)/bin
 	@cp $(TTOOL_BUILD)/* $(DESTDIR)/bin
 
 # ======================================== 

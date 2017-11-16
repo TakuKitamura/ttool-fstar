@@ -1145,11 +1145,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             mgui.setMode(MainGUI.CUTCOPY_KO);
             mgui.setMode(MainGUI.EXPORT_LIB_KO);
             mgui.actions[TGUIAction.MOVE_ENABLED].setEnabled(false);
+            mgui.actions[TGUIAction.ACT_DELETE].setEnabled(false);
         } else {
             mode = SELECTED_COMPONENTS;
             mgui.setMode(MainGUI.CUTCOPY_OK);
             mgui.setMode(MainGUI.EXPORT_LIB_OK);
             mgui.actions[TGUIAction.MOVE_ENABLED].setEnabled(true);
+            mgui.actions[TGUIAction.ACT_DELETE].setEnabled(true);
             showSelectionZone = true;
             xSel = Math.min(currentSelectX, initSelectX);
             ySel = Math.min(currentSelectY, initSelectY);

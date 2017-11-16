@@ -132,10 +132,11 @@ public class ActionPerformer {
             mgui.lastDiag();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_ABOUT].getActionCommand())) {
             mgui.aboutVersion();
-        }
+        } else if (command.equals(mgui.actions[TGUIAction.FIRST_DIAGRAM].getActionCommand())) {
+            mgui.firstDiag();
         //@author: Huy TRUONG.
         //open a external search box for ACT_EXTERNAL_SEARCH
-        else if (command.equals(mgui.actions[TGUIAction.ACT_EXTERNAL_SEARCH].getActionCommand())) {
+	}  else if (command.equals(mgui.actions[TGUIAction.ACT_EXTERNAL_SEARCH].getActionCommand())) {
             mgui.showExternalSearch();}
         else if (command.equals(mgui.actions[TGUIAction.ACT_INTERNAL_SEARCH].getActionCommand())) {
             mgui.doInternalSearch();
