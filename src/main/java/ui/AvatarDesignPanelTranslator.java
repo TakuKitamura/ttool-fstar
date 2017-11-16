@@ -214,6 +214,12 @@ public class AvatarDesignPanelTranslator {
 					if (checkSafetyPragma(s, _blocks, _as)){
 						_as.addSafetyPragma(s);
 					}
+					else {
+						UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Badly Formatted Pragma " + s);
+		                ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		                ce.setTGComponent(tgc);
+		                addWarning(ce);
+					}
                 }
             }
 			if (tgc instanceof AvatarBDPerformancePragma) {
@@ -369,6 +375,7 @@ public class AvatarDesignPanelTranslator {
             _pragma = _pragma.replaceAll(" ","");
             String state1 = _pragma.split("-->")[0];
             String state2 = _pragma.split("-->")[1];
+        //    System.out.println("checking... " + state1 + " " + state2);
             if (!state1.contains(".") || !state2.contains(".")){
                 TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
                 return false;
@@ -384,11 +391,13 @@ public class AvatarDesignPanelTranslator {
         else if (header.equals("E[]") || header.equals("E<>") || header.equals("A[]") || header.equals("A<>")){
             String state = _pragma.replace("E[]","").replace("A[]","").replace("E<>","").replace("A<>","").replaceAll(" ","");
             state = state.trim();
-            if (!state.contains("||") && !state.contains("&&")){
+           // if (!state.contains("||") && !state.contains("&&")){
                 if (!statementParser(state, as, _pragma)){
                     return false;
                 }
-            }
+            //}
+
+            
         }
         else {
             TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
@@ -398,9 +407,12 @@ public class AvatarDesignPanelTranslator {
     }
     public boolean statementParser(String state, AvatarSpecification as, String _pragma){
         //check the syntax of a single statement
+       
 
         //Divide into simple statements
-        String[] split = state.split("(|)|\\|&");
+        
+        String[] split = state.split("[|&]+");
+   //     System.out.println("split " + split[0]);
         if (split.length >1){
             boolean validity = true;
             for (String fragment: split){
@@ -476,8 +488,13 @@ public class AvatarDesignPanelTranslator {
             }
         }
         else {
+        	if (!state.contains(".")){
+	        	TraceManager.addDev("UPPAAL Pragma " + _pragma + " improperly formatted");
+        		return false;
+        	}
             String block1 = state.split("\\.",2)[0];
             String attr1 = state.split("\\.",2)[1];
+       //     System.out.println("ATTR " + attr1);
             attr1 = attr1.replace(".", "__");
             AvatarBlock bl1 = as.getBlockWithName(block1);
             if (bl1 !=null){
@@ -486,11 +503,13 @@ public class AvatarDesignPanelTranslator {
                     TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute or state name " + attr1);
                     return false;
                 }
+                
                 int ind = bl1.getIndexOfAvatarAttributeWithName(attr1);
                 if (ind !=-1){
                     AvatarAttribute attr = bl1.getAttribute(ind);
                     if (attr.getType()!=AvatarType.BOOLEAN){
                         TraceManager.addDev("UPPAAL Pragma " + _pragma + " performs query on non-boolean attribute");
+                        return false;
                     }
                 }
             }
