@@ -362,8 +362,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 	}
         boolean ok = urlm.downloadFile(filePath, urlToLoad,this);
         if (!ok) {
-            jta.append("Model transfer failed\nPlease, select another model, or retry\n");
-            panel.reactivateSelection();
+	    loadFailed();
         }
     }
 

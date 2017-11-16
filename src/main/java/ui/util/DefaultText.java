@@ -61,7 +61,7 @@ public class DefaultText  {
     }
     
     public static String getVersion() {
-        return "0.99-beta4"; /* Set new release April. 6th, 2017 (to come)*/
+        return "0.99"; /* Set new release Nov. 16th, 2017 */
     }
     
     public static String getFullVersion() {
@@ -70,14 +70,13 @@ public class DefaultText  {
     
     private static StringBuffer makeAbout() {
         StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n\n");
-        sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck, Andrea Enrici, Florian Lugou, Letitia Li - Telecom ParisTech\n");
-	sb.append("Daniela Genius - LIP6\n");
-	sb.append("Contact email: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\tCopyright IMT - Telecom ParisTech / Ludovic Apvrille \n\n");
-        sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n\n");
-        sb.append("For more information regarding TTool, and the UML/SysML profiles supportd by TTool:\n");
-        sb.append("TTool's website: http://ttool.telecom-paristech.fr/\n\n");
+        sb.append("TTool version " + getFullVersion() + "\n");
+	sb.append("Copyright IMT - Telecom ParisTech / Ludovic Apvrille \n");
+	sb.append("\nContact: ludovic.apvrille@telecom-paristech.fr\n");
+        sb.append("\nProgrammers\n\tTelecom ParisTech: Ludovic Apvrille, Dominique Blouin, Fabien Tessier, \n\tDaniel Knorreck, Andrea Enrici, Florian Lugou, Letitia Li\n");
+	sb.append("\n\tLIP6: Daniela Genius\n");
+        sb.append("\nFor more information:\n");
+        sb.append("http://ttool.telecom-paristech.fr/\n\n");
         return sb;
     }
 		
