@@ -81,6 +81,8 @@ import ui.TURTLEPanel;
 import ui.util.IconManager;
 import uppaaldesc.UPPAALSpec;
 import uppaaldesc.UPPAALTemplate;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * Class JDialogUPPAALValidation
@@ -683,12 +685,31 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         }
 
         java.util.List<AvatarBlock> blocks = avspec.getListOfBlocks();
+        java.util.List<String> matches = new java.util.ArrayList<String>();
         for (AvatarBlock block:blocks){
             UPPAALTemplate temp = spec.getTemplateByName(block.getName());
             if (temp !=null){
-                int index = avatar2uppaal.getIndexOfTranslatedTemplate(temp);
-                finQuery = finQuery.replaceAll(block.getName(), block.getName()+"__"+index);
+            	if (finQuery.contains(block.getName()+".")){
+            		matches.add(block.getName());
+            	}
+	               
+    	        
             }
+        }
+
+       
+       	for (String match: matches){
+       		boolean ignore=false;
+       		for (String posStrings: matches){
+       			if (!posStrings.equals(match) && posStrings.contains(match)){
+       				ignore=true;
+       			}
+       		}
+       		if (!ignore){
+		        UPPAALTemplate temp = spec.getTemplateByName(match);
+    		    int index = avatar2uppaal.getIndexOfTranslatedTemplate(temp);
+    		    finQuery = finQuery.replaceAll(match, match+"__"+index);
+    		}
         }
         //translatedText.setText(finQuery);
         return finQuery;
