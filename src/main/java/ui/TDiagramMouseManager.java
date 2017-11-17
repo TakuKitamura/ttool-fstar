@@ -133,6 +133,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                 tdp.mode = TDiagramPanel.SELECTING_COMPONENTS;
                 tdp.setSelectingComponents(e.getX(), e.getY());
             }  else {
+            	tdp.mgui.actions[TGUIAction.ACT_DELETE].setEnabled(true);
                 // Resize, move, or make a connector
                 if (tgc.isUserResizable() && ((resizeInfo=tgc.getResizeZone(e.getX(), e.getY())) != 0)) {
                     actionMade = true;
@@ -466,6 +467,10 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
         //If one click is done for selection
         if ((selected == TGComponentManager.EDIT) && (e.getClickCount() == 1) && (e.getButton() == MouseEvent.BUTTON1)) {
         	setSelection(e.getX(), e.getY());
+        	if (tdp.select)
+        		tdp.mgui.actions[TGUIAction.ACT_DELETE].setEnabled(true);
+        	else
+        		tdp.mgui.actions[TGUIAction.ACT_DELETE].setEnabled(false);
         }
     }
 
