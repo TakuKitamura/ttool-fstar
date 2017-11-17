@@ -205,6 +205,9 @@ public class AvatarDesignPanelTranslator {
                             //TraceManager.addDev("Adding pragma:" + tmp);
                         }
                     }
+                    else {
+                    	tgcn.syntaxErrors.add(values[i]);
+                    }
                 }
             }
             if (tgc instanceof AvatarBDSafetyPragma) {
@@ -435,6 +438,10 @@ public class AvatarDesignPanelTranslator {
             }
             String block1 = state1.split("\\.",2)[0];
             String attr1 = state1.split("\\.",2)[1];
+           	if (attr1.contains(".")){
+           		TraceManager.addDev("Complex UPPAAL Pragma attribute " + attr1 + " must contain __ and not .");
+           		return false;
+           	}
 
             attr1 = attr1.replace(".","__");
             AvatarType p1Type= AvatarType.UNDEFINED;
@@ -458,7 +465,11 @@ public class AvatarDesignPanelTranslator {
             if (state2.contains(".")){
                 String block2 = state2.split("\\.",2)[0];
                 String attr2= state2.split("\\.",2)[1];
-                attr2 = attr2.replace(".","__");
+                	if (attr2.contains(".")){
+           				TraceManager.addDev("Complex UPPAAL Pragma attribute " + attr2 + " must contain __ and not .");
+           				return false;
+           			}
+
                 AvatarBlock bl2 = as.getBlockWithName(block2);
                 if (bl2!=null){
                     if (bl2.getIndexOfAvatarAttributeWithName(attr2)==-1){
@@ -501,8 +512,10 @@ public class AvatarDesignPanelTranslator {
         	}
             String block1 = state.split("\\.",2)[0];
             String attr1 = state.split("\\.",2)[1];
-       //     System.out.println("ATTR " + attr1);
-            attr1 = attr1.replace(".", "__");
+           	if (attr1.contains(".")){
+         				TraceManager.addDev("Complex UPPAAL Pragma attribute " + attr1 + " must contain __ and not .");
+           				return false;
+           			}
             AvatarBlock bl1 = as.getBlockWithName(block1);
             if (bl1 !=null){
                 AvatarStateMachine asm = bl1.getStateMachine();

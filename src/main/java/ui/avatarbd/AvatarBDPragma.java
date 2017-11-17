@@ -292,9 +292,11 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 				properties.add(s);
 	    	}
 	    	else {
+	    		//Pretend it's a model pragma
+	    		models.add(s);
 			//Warning Message
-				JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+				//Do not show this: //JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
+                                    //              JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
         //checkMySize();
