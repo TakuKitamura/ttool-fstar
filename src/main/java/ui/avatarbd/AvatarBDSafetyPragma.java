@@ -240,9 +240,10 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 		properties.add(s);
 	    }
 	    else {
+	    	properties.add(s);
 		//Warning Message
-		JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+		//Never show this: JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
+                           //                       JOptionPane.INFORMATION_MESSAGE);
 	    }
 	}
         //checkMySize();
