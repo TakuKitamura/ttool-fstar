@@ -215,15 +215,12 @@ public class AvatarDesignPanelTranslator {
                 values = tgsp.getValues();
                 tgsp.syntaxErrors.clear();
                 for (String s: values){
-					if (checkSafetyPragma(s, _blocks, _as)){
+					if (checkSafetyPragma(s, _blocks, _as, tgc)){
 						_as.addSafetyPragma(s);
 					}
 					else {
 						tgsp.syntaxErrors.add(s);
-						UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Badly Formatted Pragma " + s);
-		                ce.setTDiagramPanel(adp.getAvatarBDPanel());
-		                ce.setTGComponent(tgc);
-		                addWarning(ce);
+
 					}
                 }
             }
@@ -235,6 +232,9 @@ public class AvatarDesignPanelTranslator {
 					if (pragma!=null){
 						_as.addLatencyPragma(pragma);
 					}
+					else {
+						tgpp.syntaxErrors.add(s);
+					}
 				}
 			}
         }
@@ -242,7 +242,11 @@ public class AvatarDesignPanelTranslator {
 	
 	public AvatarPragmaLatency checkPerformancePragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc){	
 		if (_pragma.contains("=") || (!_pragma.contains(">") && !_pragma.contains("<") && !_pragma.contains("?")) || !_pragma.contains("Latency")){
-			TraceManager.addDev("No latency expression found");
+			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "No latency expression found in pragma "+ _pragma);
+		   	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		   	ce.setTGComponent(tgc);
+		   	addWarning(ce);
+			TraceManager.addDev("No latency expression found in pragma "+ _pragma);
 			return null;
 		}
 
@@ -255,7 +259,11 @@ public class AvatarDesignPanelTranslator {
 
 		//Throw error if lack of '.' in block.signal
 		if (!p1.contains(".")){
-			TraceManager.addDev("Invalid block.signal format");
+			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Invalid block.signal format in pragma " + _pragma);
+		   	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		   	ce.setTGComponent(tgc);
+		   	addWarning(ce);
+			TraceManager.addDev("Invalid block.signal format in pragma " + _pragma);
 			return null;
 		}
 
@@ -266,6 +274,10 @@ public class AvatarDesignPanelTranslator {
 		List<String> id1= new ArrayList<String>();
 		bl1 = as.getBlockWithName(block1);
 		if (bl1==null){
+			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Block " + block1 + " in pragma does not exist");
+		   	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		   	ce.setTGComponent(tgc);
+		   	addWarning(ce);
 			TraceManager.addDev("Block " + block1 + " in pragma does not exist");
 			return null;
 		}
@@ -277,6 +289,10 @@ public class AvatarDesignPanelTranslator {
 			}
 		}
 		if (id1.size()==0){
+			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Cannot find checkable state " + block1+ "." + state1 + " in pragma");
+		   	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		   	ce.setTGComponent(tgc);
+		   	addWarning(ce);
 			TraceManager.addDev("Cannot find checkable state " + block1+ "." + state1 + " in pragma");
 			return null;
 		}
@@ -290,7 +306,10 @@ public class AvatarDesignPanelTranslator {
 
 		String p2 = pragma.split(",")[1].split("\\)")[0];
 		if (!p2.contains(".")){
-
+			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Invalid block.signal format in pragma "+ _pragma);
+		   	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		   	ce.setTGComponent(tgc);
+		   	addWarning(ce);
 			TraceManager.addDev("Invalid block.signal format");
 			return null;
 		}
@@ -305,6 +324,10 @@ public class AvatarDesignPanelTranslator {
 
 		bl2 = as.getBlockWithName(block2);
 		if (bl2==null){
+			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Block " + block2 + " in pragma does not exist");
+		   	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		   	ce.setTGComponent(tgc);
+		   	addWarning(ce);
 			TraceManager.addDev("Block " + block2 + " in pragma does not exist");
 			return null;
 		}
@@ -320,6 +343,10 @@ public class AvatarDesignPanelTranslator {
 		}
 		
 		if (id2.size()==0){
+			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Cannot find checkable state " + block2+ "." + state2 + " in pragma");
+		   	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		   	ce.setTGComponent(tgc);
+		   	addWarning(ce);
 			TraceManager.addDev("Cannot find checkable state " + block2+ "." + state2 + " in pragma");
 			return null;
 		}
@@ -338,6 +365,10 @@ public class AvatarDesignPanelTranslator {
 				time= Integer.valueOf(equation.split("<")[1]);
 			}
 			catch (Exception e){
+				UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Invalid number format in " + _pragma);
+		    	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		    	ce.setTGComponent(tgc);
+		    	addWarning(ce);
 				TraceManager.addDev("Invalid number format");
 				return null;
 			}
@@ -348,6 +379,10 @@ public class AvatarDesignPanelTranslator {
 			time= Integer.valueOf(equation.split(">")[1]);
 			} 
 			catch (Exception e){
+				UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Invalid number format in " + _pragma);
+		    	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		    	ce.setTGComponent(tgc);
+		    	addWarning(ce);
 				TraceManager.addDev("Invalid number format");
 				return null;
 			}
@@ -356,7 +391,10 @@ public class AvatarDesignPanelTranslator {
 			symbolType=AvatarPragmaLatency.query;
 		}
 		else {
-
+			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "no latency expression found in " + _pragma);
+		    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		    ce.setTGComponent(tgc);
+		    addWarning(ce);
 			TraceManager.addDev("No latency expression found");
 			return null;
 		}
@@ -364,13 +402,17 @@ public class AvatarDesignPanelTranslator {
 
 
 	}
-    public boolean checkSafetyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as){
+    public boolean checkSafetyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc){
         //Todo: check types
         //Todo: handle complex types
         _pragma = _pragma.trim();
 
         if (_pragma.contains("=") && !(_pragma.contains("==") || _pragma.contains("<=") || _pragma.contains(">=") || _pragma.contains("!="))){
             //not a query
+			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Pragma " + _pragma + " cannot be parsed");
+		    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		    ce.setTGComponent(tgc);
+		    addWarning(ce);
             TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
             return false;
         }
@@ -382,14 +424,14 @@ public class AvatarDesignPanelTranslator {
             String state2 = _pragma.split("-->")[1];
         //    System.out.println("checking... " + state1 + " " + state2);
             if (!state1.contains(".") || !state2.contains(".")){
-                TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
+                TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed: missing '.'");
                 return false;
             }
-            if (!statementParser(state1, as, _pragma)){
+            if (!statementParser(state1, as, _pragma, tgc)){
                 return false;
             }
             //check the second half of implies
-            if (!statementParser(state2,as, _pragma)){
+            if (!statementParser(state2,as, _pragma, tgc)){
                 return false;
             }
         }
@@ -397,7 +439,7 @@ public class AvatarDesignPanelTranslator {
             String state = _pragma.replace("E[]","").replace("A[]","").replace("E<>","").replace("A<>","").replaceAll(" ","");
             state = state.trim();
            // if (!state.contains("||") && !state.contains("&&")){
-                if (!statementParser(state, as, _pragma)){
+                if (!statementParser(state, as, _pragma, tgc)){
                     return false;
                 }
             //}
@@ -410,7 +452,7 @@ public class AvatarDesignPanelTranslator {
         }
         return true;
     }
-    public boolean statementParser(String state, AvatarSpecification as, String _pragma){
+    public boolean statementParser(String state, AvatarSpecification as, String _pragma, TGComponent tgc){
         //check the syntax of a single statement
        
 
@@ -422,7 +464,7 @@ public class AvatarDesignPanelTranslator {
             boolean validity = true;
             for (String fragment: split){
                 if (fragment.length()>2){
-                    validity = validity && statementParser(fragment, as, _pragma);
+                    validity = validity && statementParser(fragment, as, _pragma, tgc);
                 }
             }
             return validity;
@@ -433,12 +475,22 @@ public class AvatarDesignPanelTranslator {
             String state1 = state.split("==|>(=)?|!=|<(=)?")[0];
             String state2 = state.split("==|>(=)?|!=|<(=)?")[1];
             if (!state1.contains(".")){
-	            TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
+				UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Pragma " + _pragma + " cannot be parsed: missing '.'");
+			    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			    ce.setTGComponent(tgc);
+			    addWarning(ce);
+ 
+	            TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed: missing '.'");
             	return false;
             }
             String block1 = state1.split("\\.",2)[0];
             String attr1 = state1.split("\\.",2)[1];
            	if (attr1.contains(".")){
+				UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Complex UPPAAL Pragma attribute " + attr1 + " must contain __ and not .");
+			    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			    ce.setTGComponent(tgc);
+			    addWarning(ce);
+ 
            		TraceManager.addDev("Complex UPPAAL Pragma attribute " + attr1 + " must contain __ and not .");
            		return false;
            	}
@@ -449,6 +501,10 @@ public class AvatarDesignPanelTranslator {
             if (bl1 !=null){
                 //AvatarStateMachine asm = bl1.getStateMachine();
                 if (bl1.getIndexOfAvatarAttributeWithName(attr1)==-1){
+					UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr1);
+			    	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			    	ce.setTGComponent(tgc);
+			    	addWarning(ce);
                     TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr1);
                     return false;
                 }
@@ -459,6 +515,10 @@ public class AvatarDesignPanelTranslator {
                 }
             }
             else {
+				UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
+			   	ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			    ce.setTGComponent(tgc);
+			    addWarning(ce);
                 TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
                 return false;
             }
@@ -466,6 +526,10 @@ public class AvatarDesignPanelTranslator {
                 String block2 = state2.split("\\.",2)[0];
                 String attr2= state2.split("\\.",2)[1];
                 	if (attr2.contains(".")){
+						UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Complex UPPAAL Pragma attribute " + attr2 + " must contain __ and not .");
+			   			ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			    		ce.setTGComponent(tgc);
+			    		addWarning(ce);
            				TraceManager.addDev("Complex UPPAAL Pragma attribute " + attr2 + " must contain __ and not .");
            				return false;
            			}
@@ -473,6 +537,10 @@ public class AvatarDesignPanelTranslator {
                 AvatarBlock bl2 = as.getBlockWithName(block2);
                 if (bl2!=null){
                     if (bl2.getIndexOfAvatarAttributeWithName(attr2)==-1){
+						UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr2);
+			   			ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			    		ce.setTGComponent(tgc);
+			    		addWarning(ce);
                         TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr2);
                         return false;
                     }
@@ -482,6 +550,10 @@ public class AvatarDesignPanelTranslator {
 
                 }
                 else {
+					UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid block name " + block2);
+			   		ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			   		ce.setTGComponent(tgc);
+			    	addWarning(ce);
                     TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid block name " + block2);
                     return false;
                 }
@@ -489,17 +561,29 @@ public class AvatarDesignPanelTranslator {
             else {
                 if (state2.matches(number)){
                     if (p1Type != AvatarType.INTEGER){
+						UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " has incompatible types");
+			   			ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			   			ce.setTGComponent(tgc);
+			    		addWarning(ce);
                         TraceManager.addDev("UPPAAL Pragma " + _pragma + " has incompatible types");
                         return false;
                     }
                 }
                 else if (state2.matches(bo)){
                     if (p1Type != AvatarType.BOOLEAN){
+						UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " has incompatible types");
+			   			ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			   			ce.setTGComponent(tgc);
+			    		addWarning(ce);
                         TraceManager.addDev("UPPAAL Pragma " + _pragma + " has incompatible types");
                         return false;
                     }
                 }
                 else {
+					UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " cannot be parsed");
+			   		ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			   		ce.setTGComponent(tgc);
+			    	addWarning(ce);
                     TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
                     return false;
                 }
@@ -507,19 +591,32 @@ public class AvatarDesignPanelTranslator {
         }
         else {
         	if (!state.contains(".")){
+				UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " cannot be parsed: missing '.'");
+		   		ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		   		ce.setTGComponent(tgc);
+		    	addWarning(ce);
 	        	TraceManager.addDev("UPPAAL Pragma " + _pragma + " improperly formatted");
         		return false;
         	}
             String block1 = state.split("\\.",2)[0];
             String attr1 = state.split("\\.",2)[1];
            	if (attr1.contains(".")){
-         				TraceManager.addDev("Complex UPPAAL Pragma attribute " + attr1 + " must contain __ and not .");
-           				return false;
-           			}
+				UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Complex UPPAAL Pragma attribute " + attr1 + " must contain __ and not .");
+	   			ce.setTDiagramPanel(adp.getAvatarBDPanel());
+	    		ce.setTGComponent(tgc);
+	    		addWarning(ce);
+       			TraceManager.addDev("Complex UPPAAL Pragma attribute " + attr1 + " must contain __ and not .");
+         		return false;
+           	}
             AvatarBlock bl1 = as.getBlockWithName(block1);
             if (bl1 !=null){
                 AvatarStateMachine asm = bl1.getStateMachine();
                 if (bl1.getIndexOfAvatarAttributeWithName(attr1)==-1 && asm.getStateWithName(attr1)==null){
+					UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid attribute or state name " + attr1);
+		   			ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		    		ce.setTGComponent(tgc);
+		    		addWarning(ce);
+   
                     TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid attribute or state name " + attr1);
                     return false;
                 }
@@ -528,12 +625,20 @@ public class AvatarDesignPanelTranslator {
                 if (ind !=-1){
                     AvatarAttribute attr = bl1.getAttribute(ind);
                     if (attr.getType()!=AvatarType.BOOLEAN){
+						UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR,"UPPAAL Pragma " + _pragma + " performs query on non-boolean attribute");
+		   				ce.setTDiagramPanel(adp.getAvatarBDPanel());
+		    			ce.setTGComponent(tgc);
+		    			addWarning(ce);
                         TraceManager.addDev("UPPAAL Pragma " + _pragma + " performs query on non-boolean attribute");
                         return false;
                     }
                 }
             }
             else {
+				UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR,"UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
+   				ce.setTDiagramPanel(adp.getAvatarBDPanel());
+    			ce.setTGComponent(tgc);
+    			addWarning(ce);
                 TraceManager.addDev("UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
                 return false;
             }

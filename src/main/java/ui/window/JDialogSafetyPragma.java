@@ -270,38 +270,11 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
         helpPopup = new JPopupMenu();
-		//JTextArea jft = new JTextArea("UPPAAL pragmas");
-		//helpPopup.add(jft);
-		helpPopup.add(new JLabel("UPPAAL safety queries determine if the behavior of a system."));
-		helpPopup.add(new JLabel("They must appear in one of the following formats:"));
-		/*JLabel row1 = new JLabel();
-		row1.setLayout(new BoxLayout(row1, BoxLayout.X_AXIS));
-		row1.add(
-		row1.add(new JLabel(IconManager.imgic7003));
-		*/
-		helpPopup.add(new JLabel(IconManager.imgic7002));
-		helpPopup.add(new JLabel(IconManager.imgic7003));
-		/*JLabel row2 = new JLabel();
-		row2.setLayout(new BoxLayout(row2, BoxLayout.X_AXIS));
-		row2.add(new JLabel(IconManager.imgic7004));
-		row2.add(new JLabel(IconManager.imgic7005));
-		helpPopup.add(row2);*/
-		helpPopup.add(new JLabel(IconManager.imgic7004));
-		helpPopup.add(new JLabel(IconManager.imgic7005));		
-		helpPopup.add(new JLabel(IconManager.imgic7006));
-		helpPopup.add(new JLabel("An expression 'p' or 'q' may take the following forms:"));
-		helpPopup.add(new JLabel("Expressions on a state in a state machine:"));
-		helpPopup.add(new JLabel("	Block.state : ie 'System.running'"));	
-		helpPopup.add(new JLabel("Expressions on boolean or integer attribute:"));			
-		helpPopup.add(new JLabel("	Block.attribute==value : ie 'System.error==false or System.value==1'"));	
-		helpPopup.add(new JLabel("	Block.attribute==Block2.attribute2 : ie 'System.running==Sensor.isActive'"));		
-		helpPopup.add(new JLabel("Complex user-defined attributes must be written in the form attr__a:"));	
-		helpPopup.add(new JLabel("ie 'System.complexAttribute__subAttribute1'"));
+
 		
-		helpPopup.add(new JLabel("Valid expressions may be combined with the and/or operators '&&' or '||' respectively "));
-		helpPopup.add(new JLabel("	ie 'System.running || System.value==1'"));				
-				
-		helpPopup.setPreferredSize(new Dimension(600,830));
+		helpPopup.add(new JLabel(IconManager.imgic7009));
+		
+		helpPopup.setPreferredSize(new Dimension(600,900));
         textarea = new JTextArea();
 
         textarea.setEditable(true);
