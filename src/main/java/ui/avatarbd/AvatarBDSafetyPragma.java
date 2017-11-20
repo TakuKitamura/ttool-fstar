@@ -55,9 +55,10 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 import java.util.LinkedList;
 import java.util.Map;
-
+import java.util.regex.Matcher;
 /**
    * Class Pragma
    * Like a Note but with Pragma
@@ -225,11 +226,12 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     }
 
     public void makeValue() {
+
         values = Conversion.wrapText(value);
 	properties.clear();
 	for (String s: values){
-	    if (s.isEmpty() || (s.split(" ").length < 1) ){
-		//Ignore
+	    if (s.isEmpty() ){
+	    	//Ignore
 	    }
 	    else if (Arrays.asList(pPragma).contains(s.split(" ")[0])){
 			properties.add(s);
@@ -238,9 +240,10 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 		properties.add(s);
 	    }
 	    else {
+	    	properties.add(s);
 		//Warning Message
-		JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+		//Never show this: JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
+                           //                       JOptionPane.INFORMATION_MESSAGE);
 	    }
 	}
         //checkMySize();
