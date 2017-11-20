@@ -78,7 +78,11 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
     public AvatarDesignPanel(MainGUI _mgui) {
         super(_mgui);
-
+    	if (_mgui==null){
+    		//for unit testing only
+   			abdp = new AvatarBDPanel(null,null);
+   			return;
+    	}
         // Issue #41 Ordering of tabbed panes 
         tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
         
@@ -93,6 +97,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
+
 
     public void setValidated(LinkedList<AvatarBDStateMachineOwner> _validated) {
         if (abdp != null) {
