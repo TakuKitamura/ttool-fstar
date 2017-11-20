@@ -107,7 +107,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 	}
 
 	private void initComponents() {
-
+		//These values are normalized to AES as 100
 		//Add list of sample security algorithms
 		secAlgs.add(new securityAlgorithm("AES", "0","100","10","128","Symmetric Encryption"));  
 		secAlgs.add(new securityAlgorithm("Triple-DES", "0","200","200","128","Symmetric Encryption"));

@@ -56,6 +56,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
    * Class Pragma
@@ -75,6 +76,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
     protected int limit = 15;
     protected int lockX = 1;
     protected int lockY = 5;
+	public ArrayList<String> syntaxErrors;
     protected Graphics myg;
 
     protected Color myColor;
@@ -118,6 +120,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         removable = true;
 
         name = "Performance Pragma";
+		syntaxErrors = new ArrayList<String>();
         value = "";
 
         myImageIcon = IconManager.imgic6000;
@@ -201,6 +204,13 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 	for (String s: properties){
 	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
 	    drawVerification(s, g, x+textX, y+textY + (i+1)* currentFontSize);
+		if (syntaxErrors.contains(s)){
+				Color ctmp= g.getColor();
+				g.setColor(Color.red);
+				g.drawLine(x+textX/2,y+textY*3/2 + i*currentFontSize, x+width-textX/2, y+textY*3/2 +(i+1)*currentFontSize);
+				g.drawLine(x+width-textX/2,y+textY*3/2 + i*currentFontSize, x+textX/2, y+textY*3/2 +(i+1)*currentFontSize);
+				g.setColor(ctmp);
+			}
 	    i++;
 	}
 
@@ -217,7 +227,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         values = Conversion.wrapText(value);
 	properties.clear();
 	for (String s: values){
-	    if (s.isEmpty() || !s.contains("Latency") ){
+	    if (s.isEmpty()){
 		//Ignore
 	    }
 		else if (s.contains("Latency") && (s.contains("<") || s.contains(">") || s.contains("?")) ) {
@@ -225,8 +235,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 		}
 	    else {
 		//Warning Message
-		JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+				properties.add(s);
 	    }
 	}
         //checkMySize();
