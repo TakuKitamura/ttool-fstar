@@ -43,19 +43,27 @@
 
 package ui.window;
 
-import tmltranslator.modelcompiler.*;
-import ui.util.IconManager;
-import ui.TGComponent;
-import ui.tmldd.TMLArchiMemoryNode;
-import ui.tmldd.TMLArchiPortArtifact;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import ui.TGComponent;
+import ui.tmldd.TMLArchiMemoryNode;
+import ui.tmldd.TMLArchiPortArtifact;
 
 
 /**
@@ -71,7 +79,7 @@ public class JDialogPortArtifact extends JDialogBase implements ActionListener  
 	private boolean emptyPortsList = false;
     
     private JPanel panel2;
-    private Frame frame;
+    //private Frame frame;
     private TMLArchiPortArtifact artifact;
     private String mappedMemory = "VOID"; 
 
@@ -109,14 +117,14 @@ public class JDialogPortArtifact extends JDialogBase implements ActionListener  
 	//Code generation
 	private JPanel panel3;//, panel4, panel5;
 	//private JTabbedPane tabbedPane;
-	private String HALUnitName = "";
+	//private String HALUnitName = "";
 	private Vector<String> portsList;
 	//private String appName = "";
     
     /** Creates new form  */
     public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, Vector<String> _portsList, String _mappedPort ) {
         super(_frame, _title, true);
-        frame = _frame;
+        //frame = _frame;
 		artifact = _artifact;
 		mappedMemory = _mappedMemory;
 		portsList = _portsList;
@@ -214,22 +222,22 @@ public class JDialogPortArtifact extends JDialogBase implements ActionListener  
 		
 		initButtons(c0, c, this);
   }
-
-	private String getBufferTypeFromSelectedMemory( String mappedMemory )	{
-		
-		List<TGComponent> componentList = artifact.getTDiagramPanel().getComponentList();
-		//Vector<String> list = new Vector<String>();
-		
-		for( int k = 0; k < componentList.size(); k++ )	{
-			if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
-				TMLArchiMemoryNode memoryNode = (TMLArchiMemoryNode)componentList.get(k);
-				if( memoryNode.getName().equals( mappedMemory ) )	{
-					return memoryNode.getName();
-				}
-			}
-		}
-		return "NO MEC";	//default: the main memory buffer
-	}
+//
+//	private String getBufferTypeFromSelectedMemory( String mappedMemory )	{
+//		
+//		List<TGComponent> componentList = artifact.getTDiagramPanel().getComponentList();
+//		//Vector<String> list = new Vector<String>();
+//		
+//		for( int k = 0; k < componentList.size(); k++ )	{
+//			if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
+//				TMLArchiMemoryNode memoryNode = (TMLArchiMemoryNode)componentList.get(k);
+//				if( memoryNode.getName().equals( mappedMemory ) )	{
+//					return memoryNode.getName();
+//				}
+//			}
+//		}
+//		return "NO MEC";	//default: the main memory buffer
+//	}
     
   public void actionPerformed(ActionEvent evt)  {
 
@@ -306,42 +314,41 @@ public class JDialogPortArtifact extends JDialogBase implements ActionListener  
 //	}
 
     public void closeDialog() {
-
         regularClose = true;
-        mappedMemory = memoryCB.getItemAt( memoryCB.getSelectedIndex() );
-        HALUnitName = getBufferTypeFromSelectedMemory(memoryCB.getItemAt( memoryCB.getSelectedIndex() ));
-        switch ( HALUnitName )	{
-					case "FEP_BUFFER":
-						if( !FepBuffer.closePanel( frame ) )	{
-							return;
-						}
-						break;
-					case "MAPPER_BUFFER":
-						if( !MapperBuffer.closePanel( frame ) )	{
-							return;
-						}
-						break;
-					case "ADAIF_BUFFER":
-						if( !AdaifBuffer.closePanel( frame ) )	{
-							return;
-						}
-						break;
-					case "INTERLEAVER_BUFFER":
-						if( !InterleaverBuffer.closePanel( frame ) )	{
-							return;
-						}
-						break;
-					case "MAIN_MEMORY_BUFFER":
-						if( !MMBuffer.closePanel( frame ) )	{
-							return;
-						}
-						break;
-					default:	//the main memory buffer 
-						if( !FepBuffer.closePanel( frame ) )	{
-							return;
-						}
-						break;
-				}
+//        mappedMemory = memoryCB.getItemAt( memoryCB.getSelectedIndex() );
+//        HALUnitName = getBufferTypeFromSelectedMemory(memoryCB.getItemAt( memoryCB.getSelectedIndex() ));
+//        switch ( HALUnitName )	{
+//					case "FEP_BUFFER":
+//						if( !FepBuffer.closePanel( frame ) )	{
+//							return;
+//						}
+//						break;
+//					case "MAPPER_BUFFER":
+//						if( !MapperBuffer.closePanel( frame ) )	{
+//							return;
+//						}
+//						break;
+//					case "ADAIF_BUFFER":
+//						if( !AdaifBuffer.closePanel( frame ) )	{
+//							return;
+//						}
+//						break;
+//					case "INTERLEAVER_BUFFER":
+//						if( !InterleaverBuffer.closePanel( frame ) )	{
+//							return;
+//						}
+//						break;
+//					case "MAIN_MEMORY_BUFFER":
+//						if( !MMBuffer.closePanel( frame ) )	{
+//							return;
+//						}
+//						break;
+//					default:	//the main memory buffer 
+//						if( !FepBuffer.closePanel( frame ) )	{
+//							return;
+//						}
+//						break;
+//				}
         dispose();
     }
 
@@ -418,32 +425,32 @@ public class JDialogPortArtifact extends JDialogBase implements ActionListener  
 		return 0;
 	}
 	
-	public ArrayList<String> getBufferParameters()	{
-
-		ArrayList<String> params = new ArrayList<String>();
-		params.add( String.valueOf( HALUnitName ) );
-		switch( HALUnitName )	{
-			case "FEP_BUFFER":
-				params = FepBuffer.getBufferParameters();
-				break;
-            case "INTERLEAVER_BUFFER":
-				params = InterleaverBuffer.getBufferParameters();
-				break;
-			case "ADAIF_BUFFER":
-				params = AdaifBuffer.getBufferParameters();
-				break;
-            case "MAPPER_BUFFER":
-				params = MapperBuffer.getBufferParameters();
-				break;
-			case "MAIN_MEMORY_BUFFER":
-				params = MMBuffer.getBufferParameters();
-				break;
-			default:	//the main memory buffer
-				params = FepBuffer.getBufferParameters();
-				break;
-		}
-		return params;
-	}
+//	public List<String> getBufferParameters()	{
+//
+//		List<String> params = new ArrayList<String>();
+		//params.add( String.valueOf( HALUnitName ) );
+//		switch( HALUnitName )	{
+//			case "FEP_BUFFER":
+//				params = FepBuffer.getBufferParameters();
+//				break;
+//            case "INTERLEAVER_BUFFER":
+//				params = InterleaverBuffer.getBufferParameters();
+//				break;
+//			case "ADAIF_BUFFER":
+//				params = AdaifBuffer.getBufferParameters();
+//				break;
+//            case "MAPPER_BUFFER":
+//				params = MapperBuffer.getBufferParameters();
+//				break;
+//			case "MAIN_MEMORY_BUFFER":
+//				params = MMBuffer.getBufferParameters();
+//				break;
+//			default:	//the main memory buffer
+//				params = FepBuffer.getBufferParameters();
+//				break;
+//		}
+//		return params;
+//	}
 //
 //	private void cleanPanels()	{
 //		panel3.removeAll();
