@@ -340,8 +340,24 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return accessibility;
     }
 
-    public boolean hasCheckableAccessibility() {
+    public boolean hasCheckedAccessibility() {
         if (accessibility == true) {
+            return true;
+        }
+
+        if (nbInternalTGComponent >0) {
+            for(int i=0; i<tgcomponent.length; i++) {
+                if (tgcomponent[i].hasCheckedAccessibility()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean hasCheckableAccessibility() {
+        if (this instanceof CheckableAccessibility) {
             return true;
         }
 
@@ -356,6 +372,25 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return false;
     }
 
+    public java.util.List<TGComponent> getAllCheckedAccessibility() {
+        java.util.List<TGComponent> list = new LinkedList<TGComponent>();
+        getAllCheckedAccessibility(list);
+
+        return list;
+    }
+
+    public void getAllCheckedAccessibility(java.util.List<TGComponent> _list) {
+        if (accessibility) {
+            _list.add(this);
+        }
+
+        if (nbInternalTGComponent > 0) {
+            for(int i=0; i<tgcomponent.length; i++) {
+                tgcomponent[i].getAllCheckedAccessibility(_list);
+            }
+        }
+    }
+
     public java.util.List<TGComponent> getAllCheckableAccessibility() {
         java.util.List<TGComponent> list = new LinkedList<TGComponent>();
         getAllCheckableAccessibility(list);
@@ -364,7 +399,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public void getAllCheckableAccessibility(java.util.List<TGComponent> _list) {
-        if (accessibility) {
+	if (this instanceof CheckableAccessibility) {
             _list.add(this);
         }
 
@@ -373,8 +408,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
                 tgcomponent[i].getAllCheckableAccessibility(_list);
             }
         }
-
-
     }
 
     public void setCheckableInvariant(boolean b) {

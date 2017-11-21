@@ -91,11 +91,18 @@ public abstract class TURTLEPanel implements GenericTree {
         return false;
     }
 
+    public void getAllCheckedTGComponent(ArrayList<TGComponent> _list) {
+        for(int i=0; i<panels.size(); i++) {
+            panelAt(i).getAllCheckedTGComponent(_list);
+        }
+    }
+    
     public void getAllCheckableTGComponent(ArrayList<TGComponent> _list) {
         for(int i=0; i<panels.size(); i++) {
             panelAt(i).getAllCheckableTGComponent(_list);
         }
     }
+    
     
     public void getAllLatencyChecks(ArrayList<TGComponent> _list){
         for(int i=0; i<panels.size(); i++) {
