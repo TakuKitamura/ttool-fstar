@@ -79,7 +79,7 @@ public class AvatarSafetyTests {
     public void setupForTest () {
 
 		//Test creation of Latency Pragma
-		adpt = new AvatarDesignPanelTranslator(null);
+		adpt = new AvatarDesignPanelTranslator(new AvatarDesignPanel(null));
 		blocks = new ArrayList<AvatarBDBlock>();
 		as = new AvatarSpecification("avspec",null);
 		AvatarBlock A = new AvatarBlock("A", null, null);

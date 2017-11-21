@@ -167,6 +167,8 @@ public class IconManager {
     public static ImageIcon imgic7007;
 	//Attacker Scenarios
     public static ImageIcon imgic7008;
+	//UPPAAL Help popup
+    public static ImageIcon imgic7009;
     // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
 
@@ -623,6 +625,8 @@ public class IconManager {
 	//Attacker Scenarios
     private static String icon7008 = "attacker.gif";
 
+	private static String icon7009 = "uppaal.gif";
+
     public IconManager() {
 
 
@@ -1051,6 +1055,7 @@ public class IconManager {
 	imgic7006 = getIcon(icon7006);
 	imgic7007 = getIcon(icon7007);
 	imgic7008 = getIcon(icon7008);
+	imgic7009 = getIcon(icon7009);
     }
 
 } // Class
