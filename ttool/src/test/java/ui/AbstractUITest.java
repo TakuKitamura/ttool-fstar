@@ -4,11 +4,11 @@ import static org.junit.Assert.fail;
 
 import myutil.PluginManager;
 
-public class AbstractUITest {
+public abstract class AbstractUITest {
 	
 	protected final MainGUI mainGui;
 	
-	public AbstractUITest() {
+	protected AbstractUITest() {
 		mainGui = new MainGUI(false, false, false, false, false, false, false, false, false, true, false, false);
 		mainGui.build();
 		PluginManager.pluginManager = new PluginManager();
