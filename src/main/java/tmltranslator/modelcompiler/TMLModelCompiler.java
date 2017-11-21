@@ -1732,7 +1732,6 @@ public class TMLModelCompiler implements CCodeGenConstants {
         
         try {
             outputStream = new PrintWriter( new FileOutputStream( debugFileName, true ) );
-            outputStream.close();
         }
         catch( FileNotFoundException e )        {
             System.out.println( "Error opening file " + debugFileName );
