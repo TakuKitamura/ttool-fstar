@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 import java.util.Vector;
@@ -58,18 +55,23 @@ public class CpuMemoryCopyMEC extends CPMEC	{
 //	private static final int sourceAddressIndex = 1;
 //	private static final int counterIndex = 2;
 
-	private String memoryBaseAddress = "embb_mss";
+	// Issue #98: Undefined embb_mss address
+	private final String memoryBaseAddress;// = "embb_mss";
+	
 	private final String srcAddress;// = USER_TO_DO;
 	private final String dataToTransfer;// = USER_TO_DO;
 
-	public CpuMemoryCopyMEC( String ctxName, Vector<String> attributes ) {
+	public CpuMemoryCopyMEC( 	final String ctxName,
+								final Vector<String> attributes,
+								int srcMemoryType ) {
 		super( attributes );
 	
 //		if( attributes.size() > 0 )	{
-		srcAddress = getAttributeValue( SOURCE_ADDRESS_ATTRIBUTE_NAME );//attributes.get( sourceAddressIndex );
-		dataToTransfer = getAttributeValue( SAMPLES_LOAD_ATTRIBUTE_NAME );//attributes.get( counterIndex );
+		srcAddress = getAttributeValue( SOURCE_ADDRESS_ATTRIBUTE_NAME, "0" );//attributes.get( sourceAddressIndex );
+		dataToTransfer = getAttributeValue( SAMPLES_LOAD_ATTRIBUTE_NAME, "0" );//attributes.get( counterIndex );
 			// apparently there is no need to use destinationAddress
 	//	}
+		memoryBaseAddress = getMemoryBaseAddress( srcMemoryType );
 
 		CpuMEC cpu = new CpuMEC();
 		exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + srcAddress + ", " + dataToTransfer + " );" + CR;

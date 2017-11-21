@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
@@ -50,13 +47,13 @@ package tmltranslator.modelcompiler;
  */
 public class InterleaverMEC extends ArchUnitMEC	{
 
-	public static final String Ctx_cleanup = "intl_ctx_cleanup";
-	public static final String Operation = "Interleaver operation";
+	public static final String CONTEXT_CLEANUP = "intl_ctx_cleanup";
+	public static final String OPERATION = "Interleaver operation";
+	public static final String CONTEXT = "INTL_CONTEXT";
 
 	public InterleaverMEC()	{
 
 		index = 2;
-		context = "INTL_CONTEXT";
 		initCtxRoutine = "intl_ctx_init";
 		localMemoryPointer = "intl_mss";
 		ctxCleanupRoutine = "intl_ctx_cleanup";

@@ -36,13 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
 import myutil.GraphicLib;
-import myutil.TraceManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -355,44 +351,44 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 
         if( fatherArchUnitMECType instanceof FepMEC )   {
             if( operation.equals( "CWM" ) )     {
-                return FepOperationMEC.CwmMEC;
+                return FepOperationMEC.CWM_MEC;
             }
             else if( operation.equals( "CWL" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwlMEC );
-                return FepOperationMEC.CwlMEC;
+                return FepOperationMEC.CWL_MEC;
             }
             else if( operation.equals( "CWA" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwaMEC );
-                return FepOperationMEC.CwaMEC;
+                return FepOperationMEC.CWA_MEC;
             }
             else if( operation.equals( "CWP" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwpMEC );
-                return FepOperationMEC.CwpMEC;
+                return FepOperationMEC.CWP_MEC;
             }
             else if( operation.equals( "FFT" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.FftMEC );
-                return FepOperationMEC.FftMEC;
+                return FepOperationMEC.FFT_MEC;
             }
             else if( operation.equals( "SUM" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.SumMEC );
-                return FepOperationMEC.SumMEC;
+                return FepOperationMEC.SUM_MEC;
             }
         }
         else if( fatherArchUnitMECType instanceof MapperMEC )   {
             //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.MappOperationMEC );
-            return OperationMEC.MappOperationMEC;
+            return OperationMEC.MAPP_OPERATION_MEC;
         }
         else if( fatherArchUnitMECType instanceof InterleaverMEC        )       {
             //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.IntlOperationMEC );
-            return OperationMEC.IntlOperationMEC;
+            return OperationMEC.INTL_OPERATION_MEC;
         }
         else if( fatherArchUnitMECType instanceof AdaifMEC )    {
             //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.AdaifOperationMEC );
-            return OperationMEC.AdaifOperationMEC;
+            return OperationMEC.ADAIF_OPERATION_MEC;
         }
         else if( fatherArchUnitMECType instanceof CpuMEC )      {
             //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.CpuOperationMEC );
-            return OperationMEC.CpuOperationMEC;
+            return OperationMEC.CPU_OPERATION_MEC;
         }
         return -1;
     }
@@ -400,5 +396,4 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     public ArchUnitMEC getArchUnitMEC() {
         return fatherArchUnitMECType;
     }
-
 }

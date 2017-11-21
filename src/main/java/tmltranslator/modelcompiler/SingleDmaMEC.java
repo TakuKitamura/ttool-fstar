@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 import java.util.Vector;
@@ -67,48 +64,55 @@ public class SingleDmaMEC extends CPMEC	{
 	private final String dstAddress;// = USER_TO_DO;
 	private final String srcAddress;// = USER_TO_DO;
 
-	public SingleDmaMEC( String ctxName, ArchUnitMEC archMEC, int srcMemoryType, int dstMemoryType, int transferType, Vector<String> attributes )	{
+	public SingleDmaMEC(	String ctxName,
+							ArchUnitMEC archMEC,
+							int srcMemoryType,
+							int dstMemoryType,
+							int transferType,
+							Vector<String> attributes )	{
 		super( attributes );
+//		
+//		switch( srcMemoryType )	{
+//			case Buffer.FEP_BUFFER:
+//				memoryBaseAddress = "fep_mss";
+//				break;
+//			case Buffer.ADAIF_BUFFER:
+//				memoryBaseAddress = "adaif_mss";
+//			break;
+//			case Buffer.INTERLEAVER_BUFFER:
+//				memoryBaseAddress = "intl_mss";
+//			break;
+//			case Buffer.MAPPER_BUFFER:
+//				memoryBaseAddress = "mapper_mss";
+//			break;
+//			case Buffer.MAIN_MEMORY_BUFFER:
+//				memoryBaseAddress = DEFAULT_NUM_VAL;//"0";
+//			break;
+//			default:
+//				memoryBaseAddress = DEFAULT_NUM_VAL;//"0";
+//			break;
+//		}
 		
-		switch( srcMemoryType )	{
-			case Buffer.FEP_BUFFER:
-				memoryBaseAddress = "fep_mss";
-				break;
-			case Buffer.ADAIF_BUFFER:
-				memoryBaseAddress = "adaif_mss";
-			break;
-			case Buffer.INTERLEAVER_BUFFER:
-				memoryBaseAddress = "intl_mss";
-			break;
-			case Buffer.MAPPER_BUFFER:
-				memoryBaseAddress = "mapper_mss";
-			break;
-			case Buffer.MAIN_MEMORY_BUFFER:
-				memoryBaseAddress = "0";
-			break;
-			default:
-				memoryBaseAddress = "0";
-			break;
-		}
+		memoryBaseAddress = getMemoryBaseAddress( srcMemoryType );
 
 		//if( attributes.size() > 0 )	{
-		dataToTransfer = getAttributeValue( SAMPLES_LOAD_ATTRIBUTE_NAME );//attributes.get( counterIndex );
-		srcAddress = getAttributeValue( SOURCE_ADDRESS_ATTRIBUTE_NAME );//attributes.get( sourceAddressIndex );
-		dstAddress = getAttributeValue( DEST_ADDRESS_ATTRIBUTE_NAME );//attributes.get( destinationAddressIndex );
+		dataToTransfer = getAttributeValue( SAMPLES_LOAD_ATTRIBUTE_NAME, DEFAULT_NUM_VAL );//attributes.get( counterIndex );
+		srcAddress = getAttributeValue( SOURCE_ADDRESS_ATTRIBUTE_NAME, DEFAULT_NUM_VAL );//attributes.get( sourceAddressIndex );
+		dstAddress = getAttributeValue( DEST_ADDRESS_ATTRIBUTE_NAME, DEFAULT_NUM_VAL );//attributes.get( destinationAddressIndex );
 		//}
 
 		switch( transferType )	{
-			case CPMEC.mem2IP:
+			case CPMEC.MEM_2_IP:
 				exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + srcAddress + ", " + dataToTransfer + " );" + CR;
 				init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
 				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";
 			break;
-			case CPMEC.IP2mem:
+			case CPMEC.IP_2_MEM:
 				exec_code = TAB + "embb_ip2mem( " + dstAddress + ", (EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", " + dataToTransfer + " );" + CR;
 				init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
 				cleanup_code = TAB + archMEC.getCtxCleanupCode() + "(&" + ctxName +");";
 			break;
-			case CPMEC.IP2IP:
+			case CPMEC.IP_2_IP:
 				exec_code = TAB + "embb_ip2ip((EMBB_CONTEXT *)&" + ctxName + "_0, (uintptr_t) " + memoryBaseAddress + ", (EMBB_CONTEXT *)&" + ctxName + "_1, (uintptr_t) " + memoryBaseAddress + ", " + dataToTransfer + " );" + CR;	
 				init_code = TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + "_0, " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;
 				init_code += TAB + archMEC.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + "_1, " + "(uintptr_t) " + archMEC.getLocalMemoryPointer() + " );" + CR;

@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 import tmltranslator.TMLChannel;
@@ -51,13 +48,13 @@ import tmltranslator.TMLEvent;
    * @version 1.0 11/02/2014
    * @author Andrea ENRICI
  */
-public class Signal	{
+public class Signal	implements CCodeGenConstants {
 
 	public static final String DECLARATION = "struct SIG_TYPE	{\n\tbool f;\n\tvoid *pBuff;\n};\n\ntypedef struct SIG_TYPE SIG_TYPE;\nextern SIG_TYPE sig[];\n\n";
 	public static final String USERTODO = "/* USER TODO: signal */";
 
-	public String CR = "\n";
-	public String SC = ";";
+//	public String CR = "\n";
+//	public String SC = ";";
 	
 	//private boolean status = false;
 	//private Buffer buffPointer = null;
@@ -94,10 +91,11 @@ public class Signal	{
 		}
 	}*/
 
+	@Override
 	public String toString()	{
-		
 		String s = "";
 		s += "SIGNAL " + name + CR + channel.toString();
+	
 		return s;
 	}
 
@@ -129,7 +127,8 @@ public class Signal	{
 		return channel.isAJoinChannel();
 	}
 
-	@Override public boolean equals( Object o )	{
+	@Override
+	public boolean equals( Object o )	{
 		if( !( o instanceof Signal ) )	{
 			return false;
 		}
@@ -138,5 +137,4 @@ public class Signal	{
 			return sig.getName().equals( this.getName() );
 		}
 	}
-
 }	//End of class

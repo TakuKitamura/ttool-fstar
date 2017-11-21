@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 import java.util.Arrays;
@@ -53,24 +50,29 @@ import java.util.Vector;
  */
 public class FepMEC extends ArchUnitMEC	{
 
-	public static final String Ctx_cleanup = "fep_ctx_cleanup";
+	public static final String CONTEXT_CLEANUP = "fep_ctx_cleanup";
 
-	private static String[] opArr = { "CWA", "CWP", "CWM", "CWL", "SUM", "FFT" };
-	public static final Vector<String> operationsList = new Vector<String>( Arrays.asList( opArr ) );
-	public static final int CWAIndex = 0;
-	public static final int CWPIndex = 1;
-	public static final int CWMIndex = 2;
-	public static final int CWLIndex = 3;
-	public static final int SUMIndex = 4;
-	public static final int FFTIndex = 5;
+	private static String[] OPERATIONS = { "CWA", "CWP", "CWM", "CWL", "SUM", "FFT" };
+	public static final Vector<String> OPERATIONS_LIST = new Vector<String>( Arrays.asList( OPERATIONS ) );
+//	public static final int CWAIndex = 0;
+//	public static final int CWPIndex = 1;
+//	public static final int CWMIndex = 2;
+//	public static final int CWLIndex = 3;
+//	public static final int SUMIndex = 4;
+//	public static final int FFTIndex = 5;
+    
+	public static final String CONTEXT = "FEP_CONTEXT";
 
 	public FepMEC()	{
 
 		index = 1;
-		context = "FEP_CONTEXT";
 		initCtxRoutine = "fep_ctx_init";
 		localMemoryPointer = "fep_mss";
 		ctxCleanupRoutine = "fep_ctx_cleanup";
 	}
+
+    /*public static String getContext()   {
+        return context;
+    }*/
 
 }	//End of class
