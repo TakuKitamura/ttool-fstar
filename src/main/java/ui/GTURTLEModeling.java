@@ -472,11 +472,18 @@ public class GTURTLEModeling {
         // Parse the PEC file and the library of code snippets for each DIPLODOCUS unit
         applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];        // Remember that it works only for one application
         CCode = new TMLModelCompiler( directory, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
+        
+        // Issue #98: Use the passed directory
         File dir = new File(directory /*ConfigurationTTool.CCodeDirectory*/ + File.separator);
-    	if (!dir.exists())
+    	
+        if ( !dir.exists() ) {
     		dir.mkdirs();
+        }
+        
         CCode.toTextFormat();
+        
         try {
+            // Issue #98: Use the passed directory
             if( directory/*ConfigurationTTool.CCodeDirectory*/.equals("") )  {
                 JOptionPane.showMessageDialog(  mgui.frame,
                                                 "No directory for C code generation found in config.xml. The C code cannot be generated.",
@@ -484,6 +491,7 @@ public class GTURTLEModeling {
                 return true;
             }
             else                {
+                // Issue #98: Use the passed directory
                 CCode.saveFile( directory/*ConfigurationTTool.CCodeDirectory*/ + File.separator, applicationName );
             }
         }
