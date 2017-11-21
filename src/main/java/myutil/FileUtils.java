@@ -268,12 +268,23 @@ public class FileUtils {
         }
     }
 
+    public static String deleteFiles( String d ) {
+    	return deleteFiles( d, null );
+    }
+
     // d: directory, e : extension
     public static String deleteFiles(String d, String e ) {
-        ExtensionFilter filter = new ExtensionFilter(e);
         File dir = new File(d);
+        final String[] list; 
 
-        String[] list = dir.list(filter);
+        if ( e == null ) {
+        	list = dir.list();
+    	}
+    	else {
+    		final ExtensionFilter filter = new ExtensionFilter(e);
+    		list = dir.list(filter);
+    	}
+
         File file;
         boolean isDeleted;
 

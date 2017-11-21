@@ -36,14 +36,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import myutil.GraphicLib;
 import tmltranslator.modelcompiler.Buffer;
-import ui.util.IconManager;
 import ui.tmldd.TMLArchiMemoryNode;
 
 import javax.swing.*;
@@ -52,8 +48,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Vector;
-
-//import javax.swing.event.*;
 
 
 /**
@@ -178,7 +172,7 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         c3.weightx = 1.0;
         panel3.add(new JLabel("<html>Memory Extension<br>Construct:</html>"), c3);
         c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-        bufferTypesCB = new JComboBox<String>( new Vector<String>( Arrays.asList( Buffer.memoryTypesList ) ) );
+        bufferTypesCB = new JComboBox<String>( new Vector<String>( Arrays.asList( Buffer.MEMORY_TYPES ) ) );
         bufferTypesCB.setSelectedIndex( bufferType  );
         panel3.add( bufferTypesCB, c3 );
 
@@ -210,9 +204,9 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
            return;
            }*/
 
-	if (evt.getSource() == tracemode) {
+    	if (evt.getSource() == tracemode) {
            selectedTracemode = tracemode.getSelectedIndex();                   
-           }
+        }
 
         String command = evt.getActionCommand();
 
@@ -257,5 +251,4 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
     public int getBufferType()  {
         return bufferType;
     }
-
 }

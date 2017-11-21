@@ -36,26 +36,42 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
-import myutil.GraphicLib;
-import myutil.TraceManager;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import tmltranslator.modelcompiler.*;
-import ui.*;
+
+import myutil.GraphicLib;
+import tmltranslator.modelcompiler.AdaifBuffer;
+import tmltranslator.modelcompiler.Buffer;
+import tmltranslator.modelcompiler.FepBuffer;
+import tmltranslator.modelcompiler.InterleaverBuffer;
+import tmltranslator.modelcompiler.MMBuffer;
+import tmltranslator.modelcompiler.MapperBuffer;
+import ui.ColorManager;
+import ui.DesignPanel;
+import ui.MalformedModelingException;
+import ui.SwallowedTGComponent;
+import ui.TAttribute;
+import ui.TDiagramPanel;
+import ui.TGCWithoutInternalComponent;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.WithAttributes;
 import ui.util.IconManager;
 import ui.window.JDialogPortArtifact;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Vector;
 
 /**
    * Class TMLArchiPortArtifact
@@ -80,7 +96,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     protected String typeName = "port";
     protected String startAddress = "";
     protected String endAddress = "";
-    protected ArrayList<String> bufferParameters = new ArrayList<String>();
+    protected List<String> bufferParameters = new ArrayList<String>();
     protected String bufferType = "noBuffer";
     protected int priority = 5; // Between 0 and 10
 
@@ -217,7 +233,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         GraphicLib.centerOnParent(dialog);
         dialog.setVisible( true ); // blocked until dialog has been closed
         mappedMemory = dialog.getMappedMemory();
-        bufferParameters = dialog.getBufferParameters();        //becomes empty if closing the window without pushing Save
+        //bufferParameters = dialog.getBufferParameters();        //becomes empty if closing the window without pushing Save
         //TraceManager.addDev( "bufferParameters after closing the window: " + bufferParameters.toString() );
         if( bufferParameters.size() > 0 )   {
             bufferType = bufferParameters.get( Buffer.BUFFER_TYPE_INDEX );
@@ -458,8 +474,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         return startAddress;
     }
 
-    public ArrayList<String> getBufferParameters()      {
+    public List<String> getBufferParameters()      {
         return bufferParameters;
     }
-
 }

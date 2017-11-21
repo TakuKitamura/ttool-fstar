@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
@@ -49,10 +46,10 @@ package tmltranslator.modelcompiler;
    * @version 1.0 09/02/2014
    * @author Andrea ENRICI
  */
-public class TMLModelCompilerMakefile	{
+public class TMLModelCompilerMakefile implements CCodeGenConstants {
 
-	private String CR = "\n";
-	private String CR2 = "\n\n";
+//	private String CR = "\n";
+//	private String CR2 = "\n\n";
 	private StringBuffer code = new StringBuffer();
 	
 	public TMLModelCompilerMakefile( String ApplicationName )	{
@@ -102,5 +99,4 @@ public class TMLModelCompilerMakefile	{
 	public String getCode()	{
 		return code.toString();
 	}
-
 } //End of class

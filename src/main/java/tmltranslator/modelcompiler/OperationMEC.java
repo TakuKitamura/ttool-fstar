@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 import java.util.ArrayList;
@@ -52,25 +49,25 @@ import java.util.List;
    * @version 1.0 05/02/2014
    * @author Andrea ENRICI
  */
-public abstract class OperationMEC	{
+public abstract class OperationMEC implements CCodeGenConstants {
 
-	public static final int MappOperationMEC = 0;
-	public static final int IntlOperationMEC = 1;
-	public static final int AdaifOperationMEC = 2;
-	public static final int CpuOperationMEC = 3;
-	public static final int FepOperationMEC = 4;
-	public static final int CwmMEC = FepOperationMEC + 1;
-	public static final int CwaMEC = FepOperationMEC + 2;
-	public static final int CwlMEC = FepOperationMEC + 3;
-	public static final int CwpMEC = FepOperationMEC + 4;
-	public static final int SumMEC = FepOperationMEC + 5;
-	public static final int FftMEC = FepOperationMEC + 6;
+	public static final int MAPP_OPERATION_MEC = 0;
+	public static final int INTL_OPERATION_MEC = 1;
+	public static final int ADAIF_OPERATION_MEC = 2;
+	public static final int CPU_OPERATION_MEC = 3;
+	public static final int FEP_OPERATION_MEC = 4;
+	public static final int CWM_MEC = FEP_OPERATION_MEC + 1;
+	public static final int CWA_MEC = FEP_OPERATION_MEC + 2;
+	public static final int CWL_MEC = FEP_OPERATION_MEC + 3;
+	public static final int CWP_MEC = FEP_OPERATION_MEC + 4;
+	public static final int SUM_MEC = FEP_OPERATION_MEC + 5;
+	public static final int FFT_MEC = FEP_OPERATION_MEC + 6;
 
-	private static final String[] contextArray = { "MAPPER_CONTEXT", "INTL_CONTEXT", "ADAIF_CONTEXT", "EMBB_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT" };
-	public static final List<String> ContextList = new ArrayList<String>( Arrays.asList( contextArray ) );
+	private static final String[] CONTEXTS = { "MAPPER_CONTEXT", "INTL_CONTEXT", "ADAIF_CONTEXT", "EMBB_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT" };
+	public static final List<String> CONTEXTS_LIST = new ArrayList<String>( Arrays.asList( CONTEXTS ) );
 
-	protected String CR = "\n";
-	protected String TAB = "\t";
+//	protected String CR = "\n";
+//	protected String TAB = "\t";
 	protected String name = new String();
 	protected String init_code = new String();
 	protected String exec_code = new String();
@@ -83,7 +80,7 @@ public abstract class OperationMEC	{
 
 	public ArchUnitMEC archUnitMEC;
 	
-	public OperationMEC()	{
+	public OperationMEC() {
 		name = "OperationMEC";
 	}
 
@@ -94,13 +91,13 @@ public abstract class OperationMEC	{
 	public String getInitCode()	{
 		return init_code;
 	}
+//
+//	public String getContext()	{
+//		return context;
+//	}
 
-	public String getContext()	{
-		return context;
-	}
-
+	@Override
 	public String toString()	{
 		return name;
 	}
-
 }	//End of class

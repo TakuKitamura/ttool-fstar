@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 import java.util.Arrays;
@@ -73,15 +70,17 @@ public abstract class ArchUnitMEC       {
     protected String initCtxRoutine;
     protected String ctxCleanupRoutine;
     protected String localMemoryPointer;
-    protected String context = "EMBB_CONTEXT";
+    
+    // Issue #98
+    public final static String CONTEXT = "EMBB_CONTEXT";
 
     public int getIndex()       {
         return index;
     }
-
-    public String getContext()  {
-        return context;
-    }
+//
+//    public static String getContext()  {
+//        return "EMBB_CONTEXT";
+//    }
 
     public String getCtxInitCode()      {
         return initCtxRoutine;
