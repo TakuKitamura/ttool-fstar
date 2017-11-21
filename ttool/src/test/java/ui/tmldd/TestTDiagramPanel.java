@@ -1,26 +1,29 @@
-package fr.tpt.ttool.tests.ui;
+package ui.tmldd;
 
-import org.junit.*;
-import ui.MainGUI;
-import ui.tmldd.TMLArchiBUSNode;
-import ui.tmldd.TMLArchiDiagramPanel;
-import ui.tmldd.TMLArchiDiagramToolBar;
-import junit.framework.TestCase;
-import myutil.PluginManager;
+import static org.junit.Assert.assertTrue;
 
-public class MoveComponentTest extends TestCase {
-	static MainGUI mgui;
+import org.junit.Before;
+import org.junit.Test;
+
+import ui.AbstractUITest;
+
+public class TestTDiagramPanel extends AbstractUITest {
+//	static MainGUI mgui;
 	static TMLArchiDiagramToolBar tb;
 	static TMLArchiDiagramPanel tdp;
 	static TMLArchiBUSNode tgc;
 	
+	public TestTDiagramPanel() {
+		super();
+	}
+	
 	@Before
     public void setUp() throws Exception {
-		mgui = new MainGUI(false, false, false, false, false, false, false, false, false, false, false, true);
-		mgui.build();	
-		PluginManager.pluginManager = new PluginManager();
-		tb = new TMLArchiDiagramToolBar(mgui);
-        tdp = new TMLArchiDiagramPanel(mgui, tb);
+//		mgui = new MainGUI(false, false, false, false, false, false, false, false, false, false, false, true);
+//		mgui.build();	
+		//PluginManager.pluginManager = new PluginManager();
+		tb = new TMLArchiDiagramToolBar( mainGui );
+        tdp = new TMLArchiDiagramPanel( mainGui, tb);
         tgc = new TMLArchiBUSNode(500, 500, 0, 1400, 0, 1900, true, null, tdp);
         tdp.setComponentPointed(null);
     }

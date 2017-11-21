@@ -1,4 +1,4 @@
-package fr.tpt.ttool.tests.util.remote;
+package launcher;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -24,9 +24,9 @@ public class TestRshClient {
 
     private static final String EXPECTED_COMMAND_OUTPUT = "!!!Hello World!!!" + System.lineSeparator();
     private static final String TEST_PROGRAM_NAME = "helloWorld";
-    private static final String TEST_COMMAND = "./resources/" + TEST_PROGRAM_NAME;
-    private static final String TEST_COMMAND_NON_STOP = "./resources/helloWorldNonStop";
-    private static final String TEST_FILE_NAME = "./resources/test.txt";
+    private static final String TEST_COMMAND = "./resources/launcher/" + TEST_PROGRAM_NAME;
+    private static final String TEST_COMMAND_NON_STOP = "./resources/launcher/helloWorldNonStop";
+    private static final String TEST_FILE_NAME = "./resources/launcher/test.txt";
     private static final String TEST_FILE_DATA = "testDatafhkenomrcg ,jgh o";
 
 

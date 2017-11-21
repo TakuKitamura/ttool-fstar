@@ -45,28 +45,34 @@
 
 package avatartranslator;
 
-import org.junit.Test;
-import org.junit.*;
-
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import ui.*;
-import ui.tmlcompd.*;
-
 import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
 
-import ui.tree.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ToolTipManager;
 
-import javax.swing.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import tmltranslator.*;
+import tmltranslator.SecurityPattern;
+import tmltranslator.TMLArchitecture;
+import tmltranslator.TMLExecC;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLModeling;
+import tmltranslator.TMLStartState;
+import tmltranslator.TMLTask;
 import tmltranslator.toavatar.TML2Avatar;
+import ui.MainGUI;
+import ui.TGComponent;
+import ui.TMLComponentDesignPanel;
+import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLComponentTaskDiagramPanel;
+import ui.tree.DiagramTreeRenderer;
+import ui.tree.JDiagramTree;
 
 public class AvatarSecurityTranslationTests {	
 	TMLMapping<TGComponent> map;
