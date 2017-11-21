@@ -51,8 +51,8 @@ package ui.util;
  */
 public class DefaultText  {
 
-    public static String BUILD = "12436";
-    public static String DATE = "2017/11/20 02:01:27 CET";
+    public static String BUILD = "12437";
+    public static String DATE = "2017/11/21 02:01:28 CET";
     
     public static StringBuffer sbAbout = makeAbout();
     
@@ -61,7 +61,7 @@ public class DefaultText  {
     }
     
     public static String getVersion() {
-        return "0.99"; /* Set new release Nov. 16th, 2017 */
+        return "1.0beta"; /* Set new release Nov. 16th, 2017 */
     }
     
     public static String getFullVersion() {
