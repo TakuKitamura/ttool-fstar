@@ -2977,7 +2977,7 @@ public class GTURTLEModeling {
         TraceManager.addDev("Searching for queries on " + mgui.getTabName(tp));
         ArrayList<TGComponent> list = new ArrayList<TGComponent>();
         ArrayList<TClass> tclasses;
-        tp.getAllCheckableTGComponent(list);
+        tp.getAllCheckedTGComponent(list);
         TGComponentAndUPPAALQuery tmpQ;
 
         ArrayList<TGComponentAndUPPAALQuery> listQ = new ArrayList<TGComponentAndUPPAALQuery>();
