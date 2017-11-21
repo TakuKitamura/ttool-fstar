@@ -55,6 +55,7 @@ public class CwlMEC extends FepOperationMEC	{
 			// Issue #98: Already defined
 			//"int status;" + CR + TAB +
 			
+			"fep_set_l(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->num_samples);" + CR + TAB +
 			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR + TAB +
 			"fep_set_bx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->base_address);" + CR + TAB +
 			"fep_set_tx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->data_type);" + CR + TAB +
