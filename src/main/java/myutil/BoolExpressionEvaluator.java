@@ -60,6 +60,7 @@ public class BoolExpressionEvaluator {
         public static final int BOOL_BINARY_OP = 4;
         public static final int BOOL_UNARY_OP = 5;
         public static final int OPEN_PARENTHESIS = 6;
+	public static final int UNKNOWN_TERM = 7;
 
         public int id = (int)(Math.ceil(Math.random() * 10000000));
         public int i = -18;
@@ -94,6 +95,12 @@ public class BoolExpressionEvaluator {
         public IntBoolRes(boolean _val, IntBoolRes _father) {
             b = _val;
             res = BOOL_TERM;
+            father = _father;
+        }
+
+	public IntBoolRes(String val, IntBoolRes _father) {
+	    symb = val;
+            res = UNKNOWN_TERM;
             father = _father;
         }
 
@@ -134,6 +141,21 @@ public class BoolExpressionEvaluator {
             }
             return news;
         }
+	
+	public IntBoolRes addTerminalUnknown(String val) {
+            if (isFull()) {
+                return null;
+            }
+
+            IntBoolRes news = new IntBoolRes(val, this);
+            if (left == null) {
+                left = news;
+            } else {
+                right = news;
+            }
+            return news;
+        }
+	
 
         public IntBoolRes addOpenParenthesis() {
             if ((left != null) && (right != null)) {
@@ -658,10 +680,15 @@ public class BoolExpressionEvaluator {
 
     private int nbOpen;
 
-    private IntBoolRes top;
+    private IntBoolRes top; // top of tree
+    private boolean supportUnknownTerminal = false;
 
 
     public BoolExpressionEvaluator() {
+    }
+
+    public void setSupportUnknownTerminal(boolean support) {
+	supportUnknownTerminal = support;
     }
 
 
@@ -1893,6 +1920,16 @@ public class BoolExpressionEvaluator {
             return father.father;
         }
 
+	if (supportUnknownTerminal) {
+	    TraceManager.addDev("Adding unknown term:" + token);
+	    newElt = current.addTerminalUnknown(token);
+	    
+	    if (newElt == null) {
+		errorMessage = "Badly placed unknown term:" + token;
+		return null;
+	    }
+	    return current;
+	}
 
         return null;
 
