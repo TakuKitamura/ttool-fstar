@@ -450,7 +450,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     // Assumes no after clause on composite relation
     public void removeCompositeStates(AvatarBlock _block) {
-        TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
+        //TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
 
         LinkedList <AvatarState> lists = removeAllInternalStartStates();
 
@@ -500,7 +500,7 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     public void removeCompositeStatesOld(AvatarBlock _block) {
-        TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
+        //TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
 
         // Contains in odd index: composite state
         // even index: new state replacing the start state
