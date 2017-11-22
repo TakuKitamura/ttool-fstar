@@ -521,7 +521,7 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public void makeRobustness() {
-        TraceManager.addDev("Make robustness");
+        //TraceManager.addDev("Make robustness");
         if (robustnessMade) {
             return;
         }
