@@ -42,24 +42,18 @@
  * @author Letitia LI
  */
 
+package avatartranslator;
 //I am adding safety tests because Ludovic said to
 
 import org.junit.Test;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.Vector;
 import java.util.List;
 import java.util.ArrayList;
 
-import ui.TAttribute;
-import avatartranslator.*;
 import ui.*;
 import ui.avatarbd.*;
-
-import myutil.*;
 
 public class AvatarSafetyTests {
 

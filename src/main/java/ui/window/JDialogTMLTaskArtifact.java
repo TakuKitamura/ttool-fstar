@@ -169,19 +169,19 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	int indexOp = 0;
     	TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
     	if( MECType instanceof FepMEC )	{
-    		operationsListS = FepMEC.operationsList;
+    		operationsListS = FepMEC.OPERATIONS_LIST;
     		indexOp = operationsListS.indexOf( operation );
     	}
     	else if( MECType instanceof MapperMEC )	{
-    		operationsListS.add( MapperMEC.Operation );
+    		operationsListS.add( MapperMEC.OPERATION );
     		indexOp = operationsListS.indexOf( operation );
     	}
     	else if( MECType instanceof InterleaverMEC )	{
-    		operationsListS.add( InterleaverMEC.Operation );
+    		operationsListS.add( InterleaverMEC.OPERATION );
     		indexOp = operationsListS.indexOf( operation );
     	}
     	else if( MECType instanceof AdaifMEC )	{
-    		operationsListS.add( AdaifMEC.Operation );
+    		operationsListS.add( AdaifMEC.OPERATION );
     		indexOp = operationsListS.indexOf( operation );
     	}
     	else if( MECType instanceof CpuMEC )	{

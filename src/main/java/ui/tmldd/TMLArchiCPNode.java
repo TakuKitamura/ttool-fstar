@@ -82,7 +82,9 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     private String cpMEC = "VOID";
     private int transferType1 = -1;
     private int transferType2 = -1;
-    private String completeName;
+    
+    // Derived attribute
+    //private String completeName;
 
     public TMLArchiCPNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -137,8 +139,12 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         g.setFont(f.deriveFont(Font.BOLD));
         g.drawString(ster, x + (width - w)/2, y + textY1);
         g.setFont(f);
-        String val = name + "::" + reference;
-        completeName = val;
+
+        // Complete name is derived
+        final String val = getCompleteName();
+
+//        String val = name + "::" + reference;
+//        completeName = val;
         w  = g.getFontMetrics().stringWidth(val);
         g.drawString(val, x + (width - w)/2, y + textY2);
 
@@ -433,35 +439,36 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 
     public int getCPMEC()       {
         if( cpMEC.equals( "Memory Copy" ) )     {
-            return CPMEC.CpuMemoryCopyMEC;
+            return CPMEC.CPU_MEMORY_COPY_MEC;
         }
         if( cpMEC.equals( "Single DMA" ) )      {
-            return CPMEC.SingleDmaMEC;
+            return CPMEC.SINGLE_DMA_MEC;
         }
         if( cpMEC.equals( "Double DMA" ) )      {
-            return CPMEC.DoubleDmaMEC;
+            return CPMEC.DOUBLE_DMA_MEC;
         }
         return -1;
     }
 
     public String getCompleteName()     {
-        return completeName;
+      return name + "::" + String.valueOf( reference );
+        //return completeName;
     }
 
     public Vector<String> getAssignedAttributes() throws java.lang.IllegalArgumentException {
         Vector<String> vectorToReturn;
         switch( cpMEC ) {
-        case CPMEC.MemoryCopy:
+        case CPMEC.MEMORY_COPY:
             //TraceManager.addDev( "**** ASSIGNED ATTRIBUTES ****\\" + assignedAttributes );
             vectorToReturn = CPMEC.getSortedAttributeValues( assignedAttributes, CpuMemoryCopyMEC.ORDERED_ATTRIBUTE_NAMES );
 
             break;
-        case CPMEC.SingleDMA:
+        case CPMEC.SINGLE_DMA:
             vectorToReturn = CPMEC.getSortedAttributeValues( assignedAttributes, SingleDmaMEC.ORDERED_ATTRIBUTE_NAMES );
             //vectorToReturn = SingleDmaMEC.sortAttributes( assignedAttributes );
 
             break;
-        case CPMEC.DoubleDMA:
+        case CPMEC.DOUBLE_DMA:
             vectorToReturn = CPMEC.getSortedAttributeValues( assignedAttributes, DoubleDmaMEC.ORDERED_ATTRIBUTE_NAMES );
             //vectorToReturn = DoubleDmaMEC.sortAttributes( assignedAttributes );
 

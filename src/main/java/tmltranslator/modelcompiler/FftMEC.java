@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
@@ -53,7 +50,10 @@ public class FftMEC extends FepOperationMEC	{
 	public FftMEC( String _ctxName, String inSignalName, String outSignalName )	{
 		name = "Fast Fourier Transform MEC";
 		exec_code = TAB + "/*firm instruction*/" + CR +
-			"int status;" + CR + TAB +
+
+			// Issue #98: Already defined
+			//"int status;" + CR + TAB +
+
 			"fep_set_l(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->num_samples);" + CR + TAB +
 			"fep_set_qx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->bank);" + CR + TAB +
 			"fep_set_bx(&" + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + inSignalName + "].pBuff)->base_address);" + CR + TAB +
@@ -66,40 +66,41 @@ public class FftMEC extends FepOperationMEC	{
 			"fep_ctx_init(&" + _ctxName.split("_ctx")[0] + ", (uintptr_t) fep_mss );" + CR + TAB +
 			"// initialize context" + CR + TAB +
 			"fep_set_op(&" + _ctxName + ", FEP_OP_FFT );" + CR + TAB +
-			"fep_set_r(&" + _ctxName + ", (uint64_t)/* USER TODO: VALUE */);" + CR + TAB +
+
+			// Issue #98: Provide default values for compilation
+			"fep_set_r(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
 			"// X vector configuration => Zk=Y[Xi]" + CR + TAB +
-			"fep_set_wx(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_sx(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_nx(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_mx(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_px(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_dx(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_vrx(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_vix(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"fep_set_wx(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_sx(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_nx(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_mx(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_px(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_dx(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_vrx(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_vix(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
 			"// Y vector configuration" + CR + TAB +
-			"fep_set_by(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_qy(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_my(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_ny(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_sy(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_py(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_wy(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_ty(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_vry(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_dy(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"fep_set_by(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_qy(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_my(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_ny(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_sy(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_py(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_wy(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_ty(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_vry(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_dy(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
 			"// Z vector addressing configuration" + CR + TAB +
 			"fep_set_qz(&" + _ctxName + ", (uint64_t) ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR + TAB +
 			"fep_set_bz(&" + _ctxName + ", (uint64_t) ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR + TAB +
 			"fep_set_tz(&" + _ctxName + ", (uint64_t) ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->data_type);" + CR + TAB +
-			"fep_set_wz(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_ri(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_sz(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_nz(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"fep_set_mz(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"fep_set_wz(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_ri(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_sz(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_nz(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"fep_set_mz(&" + _ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
 			"// Operation configuration" + CR + TAB +
-			"fep_set_sma(&" + _ctxName + ", (uint64_t) /* USER TODO: VALUE*/);" + CR + TAB +
+			"fep_set_sma(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
 			"}" + CR;
 		cleanup_code = "fep_ctx_cleanup(&" + _ctxName + "_ctx);";
 	}
-
 }	//End of class
