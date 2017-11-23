@@ -42,85 +42,96 @@
 
 package avatartranslator.modelchecker;
 
-import avatartranslator.AvatarAttribute;
-import avatartranslator.AvatarBlock;
+import avatartranslator.*;
 
-import java.util.Arrays;
-import java.util.LinkedList;
 
 /**
-   * Class SpecificationBlock
-   * Coding of a block
-   * Creation: 31/05/2016
-   * @version 1.0 31/05/2016
+   * Class SafetyProperty
+   * Coding of a ssafety property
+   * Creation: 22/11/2017
+   * @version 1.0 22/11/2017
    * @author Ludovic APVRILLE
  */
-public class SpecificationBlock  {
-    
-    public static final int HEADER_VALUES = 3;
-    
-    public static final int STATE_INDEX = 0;
-    public static final int CLOCKMIN_INDEX = 1;
-    public static final int CLOCKMAX_INDEX = 2;
-    public static final int ATTR_INDEX = 3;
-    
-    public int [] values; // state in block, clockmin, clockmax, variables
-    public int maxClock;
-    
-    public AvatarBlock block;
-    
+public class SafetyProperty  {
+    // Error on property
+    public static final int NO_ERROR = 0;
+    public static final int BAD_SAFETY_TYPE = 1;
+    public static final int BAD_PROPERTY_STRUCTURE = 1;
 
-    public SpecificationBlock() {
+    // Type of safety
+    public static final int ALLTRACES_ALLSTATES = 0;// A[]
+    public static final int ALLTRACES_ONESTATE = 1; // A<>
+    public static final int ONETRACE_ALLSTATES = 2; // E[]
+    public static final int ONETRACE_ONESTATE = 3;  // E<>
+
+    // Type of property
+    public static final int BLOCK_STATE = 0;
+    public static final int BOOL_EXPR = 1;
+    
+    
+    private String rawProperty;
+
+    private int safetyType;
+    private int propertyType;
+    private String p;
+
+    private boolean isBlockStateProperty;
+    private int blockIndex;
+    private int stateIndex;
+
+    private int errorOnProperty;
+
+
+    public SafetyProperty(String property, AvatarSpecification _spec) {
+	rawProperty = property.trim();
+	analyzeProperty(_spec);
     }
 
-    public int getHash() {
-	return Arrays.hashCode(values);
-    }
-
-    public void init(AvatarBlock _block, boolean _ignoreEmptyTransitions) {
+    public boolean analyzeProperty(AvatarSpecification _spec) {
+	String tmpP = rawProperty;
 	
-	LinkedList<AvatarAttribute> attrs = _block.getAttributes();
-	//TraceManager.addDev("Nb of attributes:" + attrs.size());
-	//TraceManager.addDev("in block=" + _block.toString());
-	values = new int[HEADER_VALUES+attrs.size()];
+	errorOnProperty = NO_ERROR;
 
-	// Initial state
-	if (_ignoreEmptyTransitions) {
-	    values[STATE_INDEX] = _block.getIndexOfRealStartState();
+	if (tmpP.startsWith("A[]")) {
+	    safetyType = ALLTRACES_ALLSTATES;
+	} else if (tmpP.startsWith("A<>")) {
+	    safetyType = ALLTRACES_ONESTATE;
+	} else if (tmpP.startsWith("E[]")) {
+	    safetyType = ONETRACE_ALLSTATES;
+	} else if (tmpP.startsWith("E<>")) {
+	    safetyType = ONETRACE_ONESTATE;
 	} else {
-	    values[STATE_INDEX] = _block.getIndexOfStartState();
+	    errorOnProperty = BAD_SAFETY_TYPE;
+	    return false;
 	}
-	
-	// Clock
-	values[CLOCKMIN_INDEX] = 0;
-	values[CLOCKMAX_INDEX] = 0;
 
-	// Attributes
-	int cpt = HEADER_VALUES;
-	String initial;
-	for(AvatarAttribute attr: attrs) {
-	    values[cpt++] = attr.getInitialValueInInt();
-	}	
+	p = tmpP.substring(3, tmpP.length()).trim();
+
+	if (p.length() == 0) {
+	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
+	    return false;
+	}
+
+	return (errorOnProperty == NO_ERROR);
     }
+
+    
+    public boolean hasError() {
+	return errorOnProperty != NO_ERROR;
+    }
+
+    public void setErrorOnP() {
+	errorOnProperty = BAD_PROPERTY_STRUCTURE;
+    }
+
+    public String getP() {
+	return p;
+    }
+    
 
     public String toString() {
-	StringBuffer sb = new StringBuffer("Hash=");
-	//sb.append(getHash());
-	for (int i=0; i<values.length; i++) {
-	    sb.append(" ");
-	    sb.append(values[i]);
-	}
-	return sb.toString();
+	return "prop: " + rawProperty;
     }
 
-    public SpecificationBlock advancedClone() {
-	SpecificationBlock sb = new SpecificationBlock();
-	sb.values = values.clone();
-	sb.maxClock = maxClock;
-	return sb;
-    }
-
-    public boolean hasTimedTransition() {
-	return true;
-    }
+    
 }

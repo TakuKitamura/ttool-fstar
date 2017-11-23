@@ -2975,10 +2975,18 @@ public class GTURTLEModeling {
     }
 
     public ArrayList<TGComponentAndUPPAALQuery> getUPPAALQueries(TURTLEPanel tp) {
+	return getUPPAALQueries(tp, false);
+    }
+
+    public ArrayList<TGComponentAndUPPAALQuery> getUPPAALQueries(TURTLEPanel tp, boolean considerAll) {
         TraceManager.addDev("Searching for queries on " + mgui.getTabName(tp));
         ArrayList<TGComponent> list = new ArrayList<TGComponent>();
         ArrayList<TClass> tclasses;
-        tp.getAllCheckedTGComponent(list);
+	if (considerAll) {
+	    tp.getAllCheckableTGComponent(list);
+	} else {
+	    tp.getAllCheckedTGComponent(list);
+	}
         TGComponentAndUPPAALQuery tmpQ;
 
         ArrayList<TGComponentAndUPPAALQuery> listQ = new ArrayList<TGComponentAndUPPAALQuery>();

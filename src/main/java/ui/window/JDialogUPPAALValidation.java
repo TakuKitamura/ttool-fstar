@@ -56,13 +56,7 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Map;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import avatartranslator.AvatarBlock;
 import avatartranslator.AvatarSpecification;
@@ -123,7 +117,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         }
     }
 
-    private static boolean deadlockAChecked/*, deadlockEChecked*/, generateTraceChecked, customChecked, stateAChecked, stateEChecked, stateLChecked, showDetailsChecked;//, translateChecked;
+    private static boolean deadlockAChecked/*, deadlockEChecked*/, generateTraceChecked, customChecked, stateR_NoneChecked, stateR_SelectedChecked, stateR_AllChecked, stateL_NoneChecked, stateL_SelectedChecked, stateL_AllChecked, stateLe_NoneChecked, stateLe_SelectedChecked, showDetailsChecked;//, translateChecked;
 
     protected MainGUI mgui;
 
@@ -149,7 +143,13 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected JButton close;
     protected JButton eraseAll;
 
-    protected JCheckBox deadlockE, deadlockA, generateTrace, custom, stateE, stateA, stateL, showDetails;
+    protected JCheckBox deadlockE, deadlockA, generateTrace, custom, showDetails;
+    protected JRadioButton stateR_None, stateR_Selected, stateR_All;
+    protected ButtonGroup reachabilities;
+    protected JRadioButton stateL_None, stateL_Selected, stateL_All;
+    protected ButtonGroup liveness;
+    protected JRadioButton stateLe_None, stateLe_Selected;
+    protected ButtonGroup leadsto;
     protected JTextField customText;
     protected JTextField translatedText;
     protected TURTLEPanel tp;
@@ -266,33 +266,117 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         c1.gridheight = 1;
 
 
-        deadlockA = new JCheckBox("Search for absence of deadock situations");
+        deadlockA = new JCheckBox("No deadlocks?");
         deadlockA.addActionListener(this);
         jp1.add(deadlockA, c1);
         deadlockA.setSelected(deadlockAChecked);
 
-        stateE = new JCheckBox("Reachability of selected states");
-        stateE.addActionListener(this);
-        stateE.setToolTipText("Study the fact that a given state may be reachable i.e. in at least one path");
-        jp1.add(stateE, c1);
-        stateE.setSelected(stateEChecked);
 
-        stateA = new JCheckBox("Liveness of selected states");
-        stateA.addActionListener(this);
-        stateA.setToolTipText("Study the fact that a given state is always reachable i.e. in all paths");
-        jp1.add(stateA, c1);
-        stateA.setSelected(stateAChecked);
+        // Reachability
+        c1.gridwidth = 1;
+        jp1.add(new JLabel("Reachability:"), c1);
+        stateR_None = new JRadioButton("None");
+        stateR_None.addActionListener(this);
+        stateR_None.setToolTipText("Won't study reachability properties");
+        jp1.add(stateR_None, c1);
 
-        stateL = new JCheckBox("Leads to");
+        stateR_Selected = new JRadioButton("Selected");
+        stateR_Selected.addActionListener(this);
+        stateR_Selected.setToolTipText("Study the fact that selected states may be reachable i.e. in at least one path");
+        jp1.add(stateR_Selected, c1);
+
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        stateR_All = new JRadioButton("All");
+        stateR_All.addActionListener(this);
+        stateR_All.setToolTipText("Study the fact that all states may be reachable i.e. in at least one path");
+        jp1.add(stateR_All, c1);
+
+
+        // Making the button group.
+        // then selecting the button according to the previous user selection
+        reachabilities = new ButtonGroup();
+        reachabilities.add(stateR_None);
+        reachabilities.add(stateR_Selected);
+        reachabilities.add(stateR_All);
+        stateR_Selected.setSelected(stateR_NoneChecked);
+        stateR_Selected.setSelected(stateR_SelectedChecked);
+        stateR_All.setSelected(stateR_AllChecked);
+
+        // Liveness
+        c1.gridwidth = 1;
+        jp1.add(new JLabel("Liveness:"), c1);
+        stateL_None = new JRadioButton("None");
+        stateL_None.addActionListener(this);
+        stateL_None.setToolTipText("Won't study liveness properties");
+        jp1.add(stateL_None, c1);
+
+        stateL_Selected = new JRadioButton("Selected");
+        stateL_Selected.addActionListener(this);
+        stateL_Selected.setToolTipText("Study the fact that selected states are always reachable i.e. in all possible paths");
+        jp1.add(stateL_Selected, c1);
+
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        stateL_All = new JRadioButton("All");
+        stateL_All.addActionListener(this);
+        stateL_All.setToolTipText("Study the fact that selected states are always reachable i.e. in all possible paths");
+        jp1.add(stateL_All, c1);
+
+
+        // Making the button group.
+        // then selecting the button according to the previous user selection
+        liveness = new ButtonGroup();
+        liveness.add(stateL_None);
+        liveness.add(stateL_Selected);
+        liveness.add(stateL_All);
+        stateL_None.setSelected(stateL_NoneChecked);
+        stateL_Selected.setSelected(stateL_SelectedChecked);
+        stateL_All.setSelected(stateL_AllChecked);
+
+	// LeadsTo
+        c1.gridwidth = 1;
+        jp1.add(new JLabel("Leads to:"), c1);
+        stateLe_None = new JRadioButton("None");
+        stateLe_None.addActionListener(this);
+        stateLe_None.setToolTipText("No leads to properties");
+        jp1.add(stateLe_None, c1);
+
+	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        stateLe_Selected = new JRadioButton("Selected");
+        stateLe_Selected.addActionListener(this);
+        stateLe_Selected.setToolTipText("Study the fact that selected states lead to one another");
+        jp1.add(stateLe_Selected, c1);
+
+        // Making the button group.
+        // then selecting the button according to the previous user selection
+        leadsto = new ButtonGroup();
+        leadsto.add(stateLe_None);
+        leadsto.add(stateLe_Selected);
+        stateLe_None.setSelected(stateLe_NoneChecked);
+        stateLe_Selected.setSelected(stateLe_SelectedChecked);
+
+
+
+        /*stateA = new JCheckBox("Liveness of selected states");
+          stateA.addActionListener(this);
+          stateA.setToolTipText("Study the fact that a given state is always reachable i.e. in all paths");
+          jp1.add(stateA, c1);
+          stateA.setSelected(stateAChecked);*/
+
+        /*stateL = new JCheckBox("Leads to");
         stateL.addActionListener(this);
         stateL.setToolTipText("Study the fact that, if accessed,  a given state is eventually followed by another one");
         jp1.add(stateL, c1);
-        stateL.setSelected(stateLChecked);
+        stateL.setSelected(stateLChecked);*/
+	
         c1.gridwidth = GridBagConstraints.REMAINDER;
-        custom = new JCheckBox("Custom verification");
+        custom = new JCheckBox("Safety pragmas");
         custom.addActionListener(this);
-        jp1.add(custom, c1);
-        custom.setSelected(customChecked);
+	if ((customQueries != null) && (customQueries.size() > 0)){
+	    jp1.add(custom, c1);
+	    custom.setSelected(customChecked);
+	}
+        //jp1.add(custom, c1);
+        //custom.setSelected(customChecked);
         if (customQueries != null) {
             for (String s: customQueries){
                 c1.gridwidth = GridBagConstraints.RELATIVE;
@@ -400,9 +484,16 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         }
         //deadlockEChecked = deadlockE.isSelected();
         deadlockAChecked = deadlockA.isSelected();
-        stateEChecked = stateE.isSelected();
-        stateAChecked = stateA.isSelected();
-        stateLChecked = stateL.isSelected();
+        stateR_NoneChecked = stateR_None.isSelected();
+        stateR_SelectedChecked = stateR_Selected.isSelected();
+        stateR_AllChecked = stateR_All.isSelected();
+        stateL_NoneChecked = stateL_None.isSelected();
+        stateL_SelectedChecked = stateL_Selected.isSelected();
+        stateL_AllChecked = stateL_All.isSelected();
+        //stateAChecked = stateA.isSelected();
+	stateLe_NoneChecked = stateLe_None.isSelected();
+        stateLe_SelectedChecked = stateLe_Selected.isSelected();
+        //stateLChecked = stateL_Selected.isSelected();
         customChecked = custom.isSelected();
         generateTraceChecked = generateTrace.isSelected();
         showDetailsChecked = showDetails.isSelected();
@@ -478,13 +569,13 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
             if (deadlockA.isSelected() && (mode != NOT_STARTED)) {
                 jta.append("\n\n--------------------------------------------\n");
-                jta.append("Searching for absence of deadlock situations\n");
+                jta.append("No deadlocks?\n");
                 workQuery("A[] not deadlock", fn, trace_id, rshc);
                 trace_id++;
             }
 
-            if (stateE.isSelected()&& (mode != NOT_STARTED)) {
-                java.util.List<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp);
+            if ((stateR_Selected.isSelected() || stateR_All.isSelected()) && (mode != NOT_STARTED)) {
+                java.util.List<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp, stateR_All.isSelected());
 
                 if ((list != null) && (list.size() > 0)){
                     for(TGComponentAndUPPAALQuery cq: list) {
@@ -510,7 +601,12 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                             }
                             trace_id++;
                         } else {
-                            jta.append("A component could not be studied (internal error)\n");
+                            if (mode == NOT_STARTED) {
+                                //jta.append("Process stopped\n");
+                                break;
+                            } else {
+                                jta.append("A property could not be studied (internal error)\n");
+                            }
                         }
                     }
                 } else {
@@ -518,8 +614,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 }
             }
 
-            if (stateA.isSelected() && (mode != NOT_STARTED)) {
-                java.util.List<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp);
+            if ((stateL_Selected.isSelected()|| stateL_All.isSelected()) && (mode != NOT_STARTED)) {
+                java.util.List<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp, stateL_All.isSelected());
                 if ((list != null) && (list.size() > 0)){
                     for(TGComponentAndUPPAALQuery cq: list) {
                         if (cq.tgc != null) {
@@ -542,14 +638,19 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                             }
                             trace_id++;
                         } else {
-                            jta.append("A component could not be studied (internal error)\n");
+                            if (mode == NOT_STARTED) {
+                                //jta.append("Process stopped\n");
+                                break;
+                            } else {
+                                jta.append("A property could not be studied (internal error)\n");
+                            }
                         }
                     }
                 } else {
                     jta.append("Liveness: No selected component found on diagrams\n\n");
                 }
             }
-            if (stateL.isSelected() && (mode != NOT_STARTED)) {
+            if (stateLe_Selected.isSelected() && (mode != NOT_STARTED)) {
                 java.util.List<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp);
                 String s1, s2, name1, name2, query1, query2;
                 int index1, index2;
@@ -587,8 +688,13 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                                     workQuery(query2 + " --> " + query1, fn, trace_id, rshc);
                                     trace_id++;
                                 }
-                            }else {
-                                jta.append("A component could not be studied (internal error)\n");
+                            } else {
+                                if (mode == NOT_STARTED) {
+                                    //jta.append("Process stopped\n");
+                                    break;
+                                } else {
+                                    jta.append("A property could not be studied (internal error)\n");
+                                }
                             }
                         }
                     }
@@ -651,6 +757,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         mode = NOT_STARTED;
         setButtons();
     }
+
+    
     private String translateCustomQuery(String query){
         UPPAALSpec spec = mgui.gtm.getLastUPPAALSpecification();
         AVATAR2UPPAAL avatar2uppaal = mgui.gtm.getAvatar2Uppaal();
@@ -689,27 +797,27 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         for (AvatarBlock block:blocks){
             UPPAALTemplate temp = spec.getTemplateByName(block.getName());
             if (temp !=null){
-            	if (finQuery.contains(block.getName()+".")){
-            		matches.add(block.getName());
-            	}
-	               
-    	        
+                if (finQuery.contains(block.getName()+".")){
+                    matches.add(block.getName());
+                }
+
+
             }
         }
 
-       
-       	for (String match: matches){
-       		boolean ignore=false;
-       		for (String posStrings: matches){
-       			if (!posStrings.equals(match) && posStrings.contains(match)){
-       				ignore=true;
-       			}
-       		}
-       		if (!ignore){
-		        UPPAALTemplate temp = spec.getTemplateByName(match);
-    		    int index = avatar2uppaal.getIndexOfTranslatedTemplate(temp);
-    		    finQuery = finQuery.replaceAll(match, match+"__"+index);
-    		}
+
+        for (String match: matches){
+            boolean ignore=false;
+            for (String posStrings: matches){
+                if (!posStrings.equals(match) && posStrings.contains(match)){
+                    ignore=true;
+                }
+            }
+            if (!ignore){
+                UPPAALTemplate temp = spec.getTemplateByName(match);
+                int index = avatar2uppaal.getIndexOfTranslatedTemplate(temp);
+                finQuery = finQuery.replaceAll(match, match+"__"+index);
+            }
         }
         //translatedText.setText(finQuery);
         return finQuery;
@@ -854,18 +962,41 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             custom.setEnabled(true);
             //deadlockE.setEnabled(true);
             deadlockA.setEnabled(true);
-            stateE.setEnabled(true);
-            stateA.setEnabled(true);
-            stateL.setEnabled(true);
+            stateR_None.setEnabled(true);
+            stateR_Selected.setEnabled(true);
+            stateR_All.setEnabled(true);
+            stateL_None.setEnabled(true);
+            stateL_Selected.setEnabled(true);
+            stateL_All.setEnabled(true);
+            //stateA.setEnabled(true);
+	    stateLe_None.setEnabled(true);
+            stateLe_Selected.setEnabled(true);
+	    
             generateTrace.setEnabled(true);
             showDetails.setEnabled(true);
             for (JCheckBox cb: customChecks){
                 cb.setEnabled(custom.isSelected());
             }
-            if (custom.isSelected() || /*deadlockE.isSelected() ||*/deadlockA.isSelected() || stateE.isSelected() || stateA.isSelected() || stateL.isSelected()) {
+            if (deadlockA.isSelected() || stateR_Selected.isSelected() || stateR_All.isSelected() || stateL_Selected.isSelected() || stateL_All.isSelected() || stateLe_Selected.isSelected()) {
                 start.setEnabled(true);
             } else {
-                start.setEnabled(false);
+		if (custom.isSelected()) {
+		    if (customChecks == null) {
+			start.setEnabled(false);
+		    } else {
+			boolean selected = false;
+			for(JCheckBox box: customChecks) {
+			    if (box.isSelected()) {
+				selected = true;
+				break;
+			    }
+			}
+			start.setEnabled(selected);
+		    }
+		    
+		} else {
+		    start.setEnabled(false);
+		}
             }
 
             stop.setEnabled(false);
@@ -879,9 +1010,15 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             custom.setEnabled(false);
             //deadlockE.setEnabled(false);
             deadlockA.setEnabled(false);
-            stateE.setEnabled(false);
-            stateA.setEnabled(false);
-            stateL.setEnabled(false);
+            stateR_None.setEnabled(false);
+            stateR_Selected.setEnabled(false);
+            stateR_All.setEnabled(false);
+            stateL_None.setEnabled(false);
+            stateL_Selected.setEnabled(false);
+            stateL_All.setEnabled(false);
+            //stateA.setEnabled(false);
+	    stateLe_None.setEnabled(false);
+            stateLe_Selected.setEnabled(false);
             generateTrace.setEnabled(false);
             showDetails.setEnabled(false);
             start.setEnabled(false);
@@ -898,9 +1035,15 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             custom.setEnabled(false);
             //deadlockE.setEnabled(false);
             deadlockA.setEnabled(false);
-            stateE.setEnabled(false);
-            stateA.setEnabled(false);
-            stateL.setEnabled(false);
+            stateR_None.setEnabled(false);
+            stateR_Selected.setEnabled(false);
+            stateR_All.setEnabled(false);
+            stateL_None.setEnabled(false);
+            stateL_Selected.setEnabled(false);
+            stateL_All.setEnabled(false);
+            //stateA.setEnabled(false);
+	    stateLe_None.setEnabled(false);
+            stateLe_Selected.setEnabled(false);
             generateTrace.setEnabled(false);
             showDetails.setEnabled(false);
             start.setEnabled(false);

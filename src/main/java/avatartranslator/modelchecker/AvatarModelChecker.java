@@ -1193,7 +1193,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	    //TraceManager.addDev("State:" + state.id);
 	     if (state.nexts != null) {
 		 for(SpecificationLink link: state.nexts) {
-                sb.append("(" + link.originState.id + ",\"" + link.action + "\"," + link.destinationState.id + ")\n");
+		     sb.append("(" + link.originState.id + ",\"" + link.action + "\"," + link.destinationState.id + ")\n");
 		 }
 	     }
         }
@@ -1261,6 +1261,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	    addState(newState);
 	}
 	return similar;
+    }
+
+    private Map<Integer, SpecificationState> getRG() {
+	return states;
     }
 
     

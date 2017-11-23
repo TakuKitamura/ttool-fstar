@@ -63,7 +63,7 @@ public class SpecificationState implements Comparable<SpecificationState>  {
     public int hashValue;
     public boolean hashComputed;
     public long id;
-    public LinkedList<SpecificationLink> nexts;
+    public LinkedList<SpecificationLink> nexts; // The RG is there
 
     public ArrayList<SpecificationTransition> transitions;
 
@@ -193,6 +193,23 @@ public class SpecificationState implements Comparable<SpecificationState>  {
 
     public int compareTo( SpecificationState _s ) {
 	return ((int)id) - (int)(_s.id);
+    }
+
+    // Returns false in case of invalid property
+    public boolean checkProperty(SafetyProperty _sp) {
+	if (_sp.hasError()) {
+	    return false;
+	}
+
+	// Two cases
+	// 1. block.state
+	// 2. bool expr
+	
+
+
+	
+	
+	return true;
     }
 
 }

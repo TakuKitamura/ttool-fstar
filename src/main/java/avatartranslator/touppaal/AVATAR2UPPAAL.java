@@ -214,9 +214,9 @@ public class AVATAR2UPPAAL {
             spec.optimize();
         }
 
-        TraceManager.addDev("Enhancing graphical representation ...");
+        //TraceManager.addDev("Enhancing graphical representation ...");
         spec.enhanceGraphics();
-        TraceManager.addDev("Enhancing graphical representation done");
+        //TraceManager.addDev("Enhancing graphical representation done");
 
         //System.out.println("relations:" + table.toString());
 
@@ -457,16 +457,16 @@ public class AVATAR2UPPAAL {
                     for(AvatarAttribute aa: sig1.getListOfAttributes()) {
                         listName = "list__" + name0 + "_" + (cpt_int+cpt_bool);
 
-                        TraceManager.addDev("* * * -> ATTRIBUTE: "+ aa.toStringType());
+                        //TraceManager.addDev("* * * -> ATTRIBUTE: "+ aa.toStringType());
 
                         if (aa.isInt()) {
-                            TraceManager.addDev("isInt");
+                            //TraceManager.addDev("isInt");
                             templateAsynchronous.addDeclaration("int " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
                             enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_INT + cpt_int + ";\n";
                             dequeue += "  " + ACTION_INT + cpt_int + " = " + listName +  "[head__" + name0 + "] " + ";\n";
                             cpt_int ++;
                         } else {
-                            TraceManager.addDev("isBool");
+                            //TraceManager.addDev("isBool");
                             templateAsynchronous.addDeclaration("bool " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
                             enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_BOOL + cpt_bool + ";\n";
                             dequeue += "  " + ACTION_BOOL + cpt_bool + " = " + listName +  "[head__" + name0 + "] " + ";\n";
@@ -544,17 +544,17 @@ public class AVATAR2UPPAAL {
         initXY();
         UPPAALLocation loc = makeBlockInit(_block, _template);
 
-        TraceManager.addDev("Nb of locations=" + _template.getNbOfLocations());
+        //TraceManager.addDev("Nb of locations=" + _template.getNbOfLocations());
 
 //	translateString.put(_block.getName(), _block.getName()+"__"+_template.getNbOfLocations());
 
         AvatarStartState ass = _block.getStateMachine().getStartState();
 
-        TraceManager.addDev("Making behaviour of " + _block.getName());
+        //TraceManager.addDev("Making behaviour of " + _block.getName());
 
         makeElementBehavior(_block, _template, ass, loc, null, null, false, false);
 
-        TraceManager.addDev("Nb of locations=" + _template.getNbOfLocations());
+        //TraceManager.addDev("Nb of locations=" + _template.getNbOfLocations());
 
     }
 
@@ -579,10 +579,10 @@ public class AVATAR2UPPAAL {
             if (_previous == null) {
                 TraceManager.addDev("************************* NULL PREVIOUS !!!!!!!*****************");
             }
-            TraceManager.addDev("Linking myself = " + _elt + " to " + loc);
+            //TraceManager.addDev("Linking myself = " + _elt + " to " + loc);
             UPPAALLocation locc = hashChecking.get(_elt);
             if (_elt != null) {
-                TraceManager.addDev("In hash:" + _elt + " in location:" + locc);
+                //TraceManager.addDev("In hash:" + _elt + " in location:" + locc);
             }
             tr = addTransition(_template, _previous, loc);
             _previous.setCommitted();
@@ -640,9 +640,9 @@ public class AVATAR2UPPAAL {
 
             // Avatar State
         } else if (_elt instanceof AvatarState) {
-            TraceManager.addDev("+ + + + + + + + + + + State " + _elt + ": first handling");
+            //TraceManager.addDev("+ + + + + + + + + + + State " + _elt + ": first handling");
             if (_elt.isCheckable() || unoptStates.contains(_block.getName()+"."+_elt.getName())) {
-                TraceManager.addDev("[CHECKING] State " + _elt + " is selected for checking previous=" + _previous);
+                //TraceManager.addDev("[CHECKING] State " + _elt + " is selected for checking previous=" + _previous);
                 _previous.unsetOptimizable();
                 _previous.setCommitted();
                 loc = addLocation(_template);
@@ -744,19 +744,19 @@ public class AVATAR2UPPAAL {
         addAssignment(tr, ss[1]);
 
 
-        TraceManager.addDev("* * * * * * * * * * * * * * * * Action on signal " + _aaos.getSignal().getName());
+        //TraceManager.addDev("* * * * * * * * * * * * * * * * Action on signal " + _aaos.getSignal().getName());
 
         if (_aaos.isCheckable()) {
-            TraceManager.addDev("[CHECKING] Action on signal ??? " + _aaos.getSignal().getName());
+            //TraceManager.addDev("[CHECKING] Action on signal ??? " + _aaos.getSignal().getName());
             if (hashChecking.get(_aaos) == null) {
                 UPPAALLocation loc1 = addLocation(_template);
                 /*UPPAALTransition tr1 =*/ addTransition(_template, loc, loc1);
-                TraceManager.addDev("[CHECKING] +-+-+-+- action on signal " + _aaos + " is selected for checking");
+                //TraceManager.addDev("[CHECKING] +-+-+-+- action on signal " + _aaos + " is selected for checking");
                 hashChecking.put(_aaos, loc);
                 loc.unsetOptimizable();
                 loc.setCommitted();
                 loc = loc1;
-                TraceManager.addDev("[CHECKING] Added");
+                //TraceManager.addDev("[CHECKING] Added");
                 //loc.unsetOptimizable();
                 /*} else {
                   UPPAALLocation loc1 = (UPPAALLocation)(hashChecking.get(_aaos));
@@ -794,7 +794,7 @@ public class AVATAR2UPPAAL {
             tr = addTransition(_template, _previous, loc1);
             tmps = convertGuard(_at.getGuard().toString ());
             setGuard(tr, tmps);
-            TraceManager.addDev("MAKE CHOICE from guard");
+            //TraceManager.addDev("MAKE CHOICE from guard");
             setSynchronization(tr, "makeChoice!");
             madeTheChoice = true;
             loc = loc1;
@@ -815,7 +815,7 @@ public class AVATAR2UPPAAL {
 
         if (_at.hasActions()) {
             for(i=0; i<_at.getNbOfAction(); i++) {
-                TraceManager.addDev("Adding Action :" + _at.getAction(i));
+                //TraceManager.addDev("Adding Action :" + _at.getAction(i));
                 tmps = _at.getAction(i).toString ();
 
                 AvatarAction tmpAction = AvatarTerm.createActionFromString (_block, tmps);
@@ -827,7 +827,7 @@ public class AVATAR2UPPAAL {
                     tr = addTransition(_template, loc, loc1);
                     setAssignment(tr, tmps);
                     if ((_severalTransitions) && (!madeTheChoice)) {
-                        TraceManager.addDev("MAKE CHOICE from var");
+                        //TraceManager.addDev("MAKE CHOICE from var");
                         setSynchronization(tr, "makeChoice!");
                     } else {
                         loc.setCommitted();
@@ -863,7 +863,7 @@ public class AVATAR2UPPAAL {
             if ((!madeTheChoice) && (_severalTransitions)) {
                 loc1 = addLocation(_template);
                 tr = addTransition(_template, loc, loc1);
-                TraceManager.addDev("MAKE CHOICE from end");
+                //TraceManager.addDev("MAKE CHOICE from end");
                 setSynchronization(tr, "makeChoice!");
                 loc = loc1;
             }
@@ -1041,7 +1041,7 @@ public class AVATAR2UPPAAL {
         int nbOfBool = 0;
     //    String tmps;
 
-        TraceManager.addDev("Making method call:" + action.toString ());
+        //TraceManager.addDev("Making method call:" + action.toString ());
 
         String mc = "";
         AvatarBlock block = _block;
@@ -1054,7 +1054,7 @@ public class AVATAR2UPPAAL {
             mc = block.getName() + "__" + method + "!";
         }
 
-        TraceManager.addDev("Method name:" + mc);
+        //TraceManager.addDev("Method name:" + mc);
 
         setSynchronization(_tr, mc);
         LinkedList<AvatarTerm> arguments = action.getArgs ().getComponents ();
