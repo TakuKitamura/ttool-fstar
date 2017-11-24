@@ -237,7 +237,6 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     // Returns the currentY position
     private int paintTopElements(Graphics g, int currentX, int currentY) {
         int w;
-
 		if (deviceTaskMap.keySet().size()==0){
 	        for(String name : entityNames) {
     	        g.drawLine(currentX + (spaceBetweenLifeLines/4), currentY, currentX + (3*spaceBetweenLifeLines/4), currentY);
@@ -253,6 +252,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
 					w = g.getFontMetrics().stringWidth(device);
 					g.drawString(device, currentX + (deviceTaskMap.get(device).size()-1)*((spaceBetweenLifeLines-w)/2), (currentY - spaceVerticalText)/2);
 					for(String name : deviceTaskMap.get(device)) {
+						addEntityNameIfApplicable(name);
 	    	        	g.drawLine(currentX + (spaceBetweenLifeLines/4), currentY, currentX + (3*spaceBetweenLifeLines/4), currentY);
 	    	        	g.drawLine(currentX + (spaceBetweenLifeLines/2), currentY, currentX + (spaceBetweenLifeLines/2), currentY + verticalSpaceUnderBlocks);
 	    	        	w = g.getFontMetrics().stringWidth(name);
@@ -999,7 +999,6 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
 
     public void run() {
         //TraceManager.addDev("Reading file");
-
         if (mode == NO_MODE) {
             return;
         }
@@ -1042,7 +1041,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     }
 
     private void addGenericTransaction(String trans) {
-	//	System.out.println("trans " + trans);
+		//System.out.println("trans " + trans);
         int index0;
         String tmp, tmp1, tmp2;
         long value;
@@ -1220,6 +1219,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     }
 
     private void addEntityNameIfApplicable(String _entityName) {
+    	//System.out.println("Names " + entityNames);
         for(String name: entityNames) {
             //TraceManager.addDev("Examining name= " + name + " entityName=" + _entityName);
             if (name.compareTo(_entityName) ==0) {
@@ -1232,6 +1232,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     }
 
     private int getIndexOfEntityName(String _entityName) {
+
         int cpt = 0;
         for(String name: entityNames) {
             if (name.compareTo(_entityName) ==0) {
