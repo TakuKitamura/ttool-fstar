@@ -107,19 +107,23 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 	}
 
 	private void initComponents() {
-		//These values are normalized to AES as 100
+		//These values are normalized to AES 128 bit as 100
+		//Based off of https://joneaves.wordpress.com/2004/04/18/ecc_and_rsa_speed_comparison/
+		//https://www.cryptopp.com/benchmarks.html
+		//http://www.cs.wustl.edu/~jain/cse567-06/ftp/encryption_perf/index.html
+		//https://automationrhapsody.com/md5-sha-1-sha-256-sha-512-speed-performance/
 		//Add list of sample security algorithms
-		secAlgs.add(new securityAlgorithm("AES", "0","100","10","128","Symmetric Encryption"));  
+		secAlgs.add(new securityAlgorithm("AES", "0","100","100","128","Symmetric Encryption"));  
 		secAlgs.add(new securityAlgorithm("Triple-DES", "0","200","200","128","Symmetric Encryption"));
 		
-		secAlgs.add(new securityAlgorithm("RSA", "0","100","100","128","Asymmetric Encryption"));    
-		secAlgs.add(new securityAlgorithm("ECC", "0","10","100","128","Asymmetric Encryption"));    
+		secAlgs.add(new securityAlgorithm("RSA", "0","250","150","128","Asymmetric Encryption"));    
+		secAlgs.add(new securityAlgorithm("ECC", "0","315","310","128","Asymmetric Encryption"));    
 		
-		secAlgs.add(new securityAlgorithm("SHA-256", "0","100","100","128","Hash"));    
-		secAlgs.add(new securityAlgorithm("Whirlpool", "0","100","100","128","Hash"));  
+		secAlgs.add(new securityAlgorithm("SHA-256", "0","370","370","128","Hash"));    
+		secAlgs.add(new securityAlgorithm("Whirlpool", "0","550","550","128","Hash"));  
 		
-		secAlgs.add(new securityAlgorithm("Poly-1305", "0","100","100","128","MAC"));    
-		secAlgs.add(new securityAlgorithm("HMAC", "0","100","100","128","MAC")); 
+		secAlgs.add(new securityAlgorithm("Poly-1305", "0","400","400","128","MAC"));    
+		secAlgs.add(new securityAlgorithm("HMAC", "0","800","800","128","MAC")); 
 		
 		for (securityAlgorithm secAlg: secAlgs){
 			algNames.add(secAlg.name);
