@@ -1378,6 +1378,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 
 	public void resetSimTrace(){
+		msgTimes.clear();
 		channelIDMap.clear();
 		simtraces.clear();
 	}
@@ -1385,6 +1386,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public void writeSimTrace(){
 		try {
 			tmlSimPanel = new JFrameTMLSimulationPanel(new Frame(), mgui, "Simulation Transactions");
+
 			HashMap<String, ArrayList<String>> deviceTaskMap = new HashMap<String, ArrayList<String>>();
 			for (HwNode node : tmap.getTMLArchitecture().getHwNodes()){
 				deviceTaskMap.put(node.getName(), new ArrayList<String>());
@@ -1395,18 +1397,21 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					deviceTaskMap.get(node.getName()).add(task.getName());
 				}
 			}
-			tmlSimPanel.getSDPanel().setDevices(deviceTaskMap);
 			pos = new PipedOutputStream();
 			pis = new PipedInputStream(pos, 4096);
 			tmlSimPanel.setFileReference(new BufferedReader(new InputStreamReader(pis)));
+			tmlSimPanel.getSDPanel().setDevices(deviceTaskMap);
+
 			bw = new BufferedWriter(new OutputStreamWriter(pos));	
 		/*	for (HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
 				simtraces.add("time=0 block="+ node.getName()+" type=state_entering state=start");
 				simIndex++;
 			}*/
 			for (TMLTask task : tmap.getTMLModeling().getTasks()){
-				simtraces.add("time=0 block="+ task.getName()+" type=state_entering state=startState");
-				simIndex++;
+				if (!simtraces.contains("time=0 block="+ task.getName()+" type=state_entering state=startState")){
+					simtraces.add("time=0 block="+ task.getName()+" type=state_entering state=startState");
+					simIndex++;
+				}
 			}
 			
 
@@ -1438,8 +1443,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	public void writeArchitectureSimTrace(){
 	}
-
+/*
 	public void processDeviceTraces(SimulationTransaction tran){
+		System.out.println("tran " + tran.command + " " + tran.channelName);
 		String command = tran.command;
 		if (command.contains(" ")){
 			command = command.split(" ")[0];
@@ -1516,11 +1522,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		} catch (Exception e){
 			System.out.println("Exception " + e);
 		}
-	}
+	}*/
     
 	protected void addTransactionToNode(SimulationTransaction tran){
-		//System.out.println("Command " + tran.command + " " + tran.deviceName);
+		//System.out.println("Command " + tran.command + " " + tran.deviceName + " " + tran.channelName);
 		String command = tran.command;
+
 		if (command.contains(" ")){
 			command = command.split(" ")[0];
 		}
@@ -1573,13 +1580,13 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					}
 				}
 			}
-			else if (command.equals("SelectEvent")){
-				String trace="time="+tran.endTime+ " block=" + tran.taskName + " type=state_entering state=SelectEvent";
-				if (!simtraces.contains(trace)){
-					simtraces.add(trace);
+			else if ((command.equals("Send") || command.equals("Wait") || command.equals("SelectEvent"))  && tran.deviceName.contains("CPU") && !tran.channelName.startsWith("reqChannel")){
+				if (command.equals("SelectEvent")){
+					String trace="time="+tran.endTime+ " block=" + tran.taskName + " type=state_entering state=SelectEvent";
+					if (!simtraces.contains(trace)){
+						simtraces.add(trace);
+					}
 				}
-			}
-			else if ((command.equals("Send") || command.equals("Wait"))  && tran.deviceName.contains("CPU")){
 				TMLEvent evt = tmap.getTMLModeling().getEventByShortName(tran.channelName);
 				if (evt!=null){
 					TMLTask originTask = evt.getOriginTask();
@@ -1626,8 +1633,23 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					}
 				}
 			}
-			else if ((command.equals("Request") || command.equals("Notified")) && tran.deviceName.contains("CPU")){
-				TMLRequest req = tmap.getTMLModeling().getRequestByShortName(tran.channelName);
+			else if ((command.equals("Request") || command.equals("Wait")) && tran.deviceName.contains("CPU") && tran.channelName.startsWith("reqChannel")){
+				TMLRequest req=null;
+				for (TMLRequest request: tmap.getTMLModeling().getRequests()){
+					if (tran.channelName.replaceAll("reqChannel_","").equals(request.getDestinationTask().getName())){						
+						if (command.equals("Request")){
+							for (TMLTask t: request.getOriginTasks()){
+								if (tran.taskName.equals(t.getName())){
+									req=request;
+								}
+							}
+						}
+						else {
+							req=request;
+						}
+					}
+				//	System.out.println(tran.channelName + " " + request.getDestinationTask().getName() + " " + tran.taskName + " " +  request.getOriginTasks().get(0).getName());
+				}
 
 				if (req!=null) {
 					TMLTask destTask = req.getDestinationTask();
