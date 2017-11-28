@@ -1059,6 +1059,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
         return list;
     }
+
+    public void expandToErrors() {
+	if (gtm != null) {
+	    gtm.expandToErrors();
+	}
+    }
+    
     public Vector<String> getTMLTasks(){
         TURTLEPanel tp;
         Vector<String> list = new Vector<String>();

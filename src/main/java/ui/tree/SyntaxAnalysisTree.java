@@ -68,6 +68,16 @@ public class SyntaxAnalysisTree implements GenericTree {
     public String toString() {
         return name;
     }
+
+    public SyntaxAnalysisErrorTree getSyntaxAnalysisErrorTree() {
+	return errort;
+    }
+
+    public SyntaxAnalysisWarningTree getSyntaxAnalysisWarningTree() {
+	return warningt;
+    }
+
+    
     
     public int getChildCount() {
         return 2;
