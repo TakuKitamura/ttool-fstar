@@ -3123,7 +3123,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     protected String translateNameValue() {
-        String s = "<infoparam name=\"" + name + "\" value=\"";
+        String s = "<infoparam name=\"";
+	s = s + GTURTLEModeling.transformString(name) + "\" value=\"";
         s = s + GTURTLEModeling.transformString(value);
         return s +  "\" />\n";
     }

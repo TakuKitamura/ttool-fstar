@@ -1,27 +1,27 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
- * 
+ *
  * ludovic.apvrille AT telecom-paristech.fr
  * andrea.enrici AT telecom-paritech.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -32,7 +32,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -57,11 +57,11 @@ import java.awt.*;
 
 
 /**
-   * Class SDInstance
-   * Fixed duration operator. To be used in sequence diagrams
-   * Creation: 04/10/2004
-   * @version 1.1 10/06/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
+ * Class SDInstance
+ * Fixed duration operator. To be used in sequence diagrams
+ * Creation: 04/10/2004
+ * @version 1.1 10/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
 public class SDInstance extends TGCScalableWithInternalComponent implements SwallowTGComponent, SpecificActionAfterAdd {
     //private int lineLength = 5;
@@ -77,23 +77,23 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     public SDInstance(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		width = (int)(10 * tdp.getZoom());
-	    height = (int)(500 * tdp.getZoom());
-	    minWidth = (int)(10 * tdp.getZoom());
-		maxWidth = (int)(10 * tdp.getZoom());
-		minHeight = (int)(250 * tdp.getZoom());
-		maxHeight = (int)(1500 * tdp.getZoom());
-		//TraceManager.addDev("Init tgc= " + this + " minHeight=" + minHeight);
-		//TraceManager.addDev("Init tgc= " + this + " maxHeight=" + maxHeight);
-		oldScaleFactor = tdp.getZoom();
+        width = (int)(10 * tdp.getZoom());
+        height = (int)(500 * tdp.getZoom());
+        minWidth = (int)(10 * tdp.getZoom());
+        maxWidth = (int)(10 * tdp.getZoom());
+        minHeight = (int)(250 * tdp.getZoom());
+        maxHeight = (int)(1500 * tdp.getZoom());
+        //TraceManager.addDev("Init tgc= " + this + " minHeight=" + minHeight);
+        //TraceManager.addDev("Init tgc= " + this + " maxHeight=" + maxHeight);
+        oldScaleFactor = tdp.getZoom();
 
-	
+
         //makeTGConnectingPoints();
         //addTGConnectingPointsComment();
 
         nbInternalTGComponent = 0;
 
-	//makePortMessage();
+        //makePortMessage();
 
         moveable = true;
         editable = true;
@@ -133,7 +133,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
         }
     }
 
-    
+
     public TGComponent isOnOnlyMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -173,81 +173,81 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     }
 
     public int spacePt() {
-    	return (int)(Math.floor(spacePt*tdp.getZoom()));
+        return (int)(Math.floor(spacePt*tdp.getZoom()));
     }
 
     public double spacePtDouble() {
-    	return spacePt*tdp.getZoom();
+        return spacePt*tdp.getZoom();
     }
 
     public void rescale(double scaleFactor){
-	//TraceManager.addDev("my rescale");
-	
-    	super.rescale(scaleFactor);
+        //TraceManager.addDev("my rescale");
 
-	// update TG Connecting Points
-	//int yh = spacePt();
-	/*for(int i=0; i<nbConnectingPoint; i++, yh+=spacePt()) {
-	    connectingPoint[i].setCdX(width/2);
-	    connectingPoint[i].setCdY(yh);
-	    }*/
+        super.rescale(scaleFactor);
 
-		//height = Math.max(getMinHeightSize(), height);
-		hasBeenResized();
+        // update TG Connecting Points
+        //int yh = spacePt();
+        /*for(int i=0; i<nbConnectingPoint; i++, yh+=spacePt()) {
+          connectingPoint[i].setCdX(width/2);
+          connectingPoint[i].setCdY(yh);
+          }*/
+
+        //height = Math.max(getMinHeightSize(), height);
+        hasBeenResized();
     }
 
     public void computeMinHeight() {
-    	height = Math.max(getMinHeightSize(), height);
+        height = Math.max(getMinHeightSize(), height);
     }
 
     public int getNbOfConnectingPoints() {
-    	return 100;
-	//return (int)(((height - (2 * spacePt())) / spacePt()));
+        return 100;
+        //return (int)(((height - (2 * spacePt())) / spacePt()));
     }
 
 
     public void makePortMessage() {
-    	int nbOfInternal = 30;
-    	
-    	for(int i=0; i<nbOfInternal; i ++) {
-    		double ratio = ((i)/(double)(nbOfInternal));//+(spacePt*tdp.getZoom()/height);
-    		SDPortForMessage port = new SDPortForMessage(100, 200+ (int)(y + ratio*height), tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+        int nbOfInternal = 30;
 
-    		//tdp.addComponent(port, x+width/2, y+100, true, true);
+        for(int i=0; i<nbOfInternal; i ++) {
+            double ratio = ((i)/(double)(nbOfInternal));//+(spacePt*tdp.getZoom()/height);
+            SDPortForMessage port = new SDPortForMessage(100, 200+ (int)(y + ratio*height), tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
 
-    		//TraceManager.addDev("Adding internal components");
-    		if (!addSwallowedTGComponent(port, x+width/2, (int)(5*spacePt*tdp.getZoom()) + (int)(y + ratio*height))) {
-    			TraceManager.addDev("Adding PortForMessage failed");
-    		} else {
-    			port.wasSwallowed();
-    		}
-    		port.setMoveCd(0, (int)(10*spacePt*tdp.getZoom()) + (int)(ratio*height), false);
-    		//TraceManager.addDev("Nb of internal components:" + nbInternalTGComponent);
-    	}
+            //tdp.addComponent(port, x+width/2, y+100, true, true);
+
+            //TraceManager.addDev("Adding internal components");
+            if (!addSwallowedTGComponent(port, x+width/2, (int)(5*spacePt*tdp.getZoom()) + (int)(y + ratio*height))) {
+                TraceManager.addDev("Adding PortForMessage failed");
+            } else {
+                port.wasSwallowed();
+            }
+            port.setMoveCd(0, (int)(10*spacePt*tdp.getZoom()) + (int)(ratio*height), false);
+            //TraceManager.addDev("Nb of internal components:" + nbInternalTGComponent);
+        }
     }
 
     /*private void makeTGConnectingPoints() {
-	//TraceManager.addDev("Making TG connecting points of " + name);
-        nbConnectingPoint = getNbOfConnectingPoints();
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    //TraceManager.addDev("Making TG connecting points of " + name);
+    nbConnectingPoint = getNbOfConnectingPoints();
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
 
-        //int yh = spacePt();
-	double div = 1.0/height - (nbConnectingPoint);
-	//TraceManager.addDev("Div=" + div);
+    //int yh = spacePt();
+    double div = 1.0/height - (nbConnectingPoint);
+    //TraceManager.addDev("Div=" + div);
 
-        for(int i=0; i<nbConnectingPoint; i ++) {
-	    double ratio = ((i)/(double)(nbConnectingPoint));//+(spacePt*tdp.getZoom()/height);
-	    //TraceManager.addDev("Ratio=" + ratio);
-            connectingPoint[i] = new TGConnectingPointMessageSD(this, 0, 0, true, true, 0.5, ratio);
-        }
+    for(int i=0; i<nbConnectingPoint; i ++) {
+    double ratio = ((i)/(double)(nbConnectingPoint));//+(spacePt*tdp.getZoom()/height);
+    //TraceManager.addDev("Ratio=" + ratio);
+    connectingPoint[i] = new TGConnectingPointMessageSD(this, 0, 0, true, true, 0.5, ratio);
+    }
 
-	}*/
+    }*/
 
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = name;
 
         JDialogSDInstance jdsdi = new JDialogSDInstance(frame, name, isActor, "Instance attributes");
-     //   jdsdi.setSize(300, 250);
+        //   jdsdi.setSize(300, 250);
         GraphicLib.centerOnParent(jdsdi, 300, 250);
         jdsdi.setVisible( true ); // blocked until dialog has been closed
 
@@ -306,12 +306,12 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-	//TraceManager.addDev("Element 0" + tgc + " added to SDInstance");
+        //TraceManager.addDev("Element 0" + tgc + " added to SDInstance");
         if (!acceptSwallowedTGComponent(tgc)) {
             return false;
         }
 
-	//TraceManager.addDev("Element 1" + tgc + " added to SDInstance");
+        //TraceManager.addDev("Element 1" + tgc + " added to SDInstance");
 
         //System.out.println("Add swallow component");
         // Choose its position
@@ -365,7 +365,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
         //add it
         addInternalComponent(tgc, 0);
-	TraceManager.addDev("Element " + tgc + " added to SDInstance");
+        TraceManager.addDev("Element " + tgc + " added to SDInstance");
 
         return true;
     }
@@ -455,71 +455,71 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     }
 
 
-    
+
     public Point modifyInHeight(int newy) {
-	((SequenceDiagramPanel)(tdp)).updateAllInstanceMinMaxSize();
-	return super.modifyInHeight(newy);
+        ((SequenceDiagramPanel)(tdp)).updateAllInstanceMinMaxSize();
+        return super.modifyInHeight(newy);
     }
 
 
     // Used when there is a rescale or a component added
     public int getMinHeightSize() {
-	int msize = (int)(250*tdp.getZoom());
+        int msize = (int)(250*tdp.getZoom());
         int i;
 
         /*for(i=0; i<connectingPoint.length ; i++) {
-            if (!(connectingPoint[i].isFree())) {
-		TraceManager.addDev("Found a non free connecting point y=" + connectingPoint[i].getY() + " heightOfPt=" + (connectingPoint[i].getY() - y + spacePt()));
-                msize = Math.max(msize, connectingPoint[i].getY() - y + spacePt() );
-            }
-	    }*/
+          if (!(connectingPoint[i].isFree())) {
+          TraceManager.addDev("Found a non free connecting point y=" + connectingPoint[i].getY() + " heightOfPt=" + (connectingPoint[i].getY() - y + spacePt()));
+          msize = Math.max(msize, connectingPoint[i].getY() - y + spacePt() );
+          }
+          }*/
 
         for(i=0; i<nbInternalTGComponent ; i++) {
             msize = Math.max(msize, tgcomponent[i].getY() + tgcomponent[i].getHeight()- y + spacePt());
         }
 
-	TraceManager.addDev("Min height size of " + name + " =" + msize + " height=" + height);
+        TraceManager.addDev("Min height size of " + name + " =" + msize + " height=" + height);
 
-	return msize;
+        return msize;
     }
 
     // Method called when there is a resize order
     public void setUserResize(int desired_x, int desired_y, int desired_width, int desired_height) {
         //System.out.println("newx = " + desired_x + " newy = " + desired_y + " minWidth = " + minWidth);
-	
+
         setCd(desired_x, desired_y);
         actionOnUserResize(desired_width, desired_height);
-	((SequenceDiagramPanel)tdp).instanceHasBeenResized(this,  desired_width, desired_height);
+        ((SequenceDiagramPanel)tdp).instanceHasBeenResized(this,  desired_width, desired_height);
     }
 
- 
+
     public void hasBeenResized(){
-	/*TraceManager.addDev("Has been resized: " + name + " height=" + height);
-        int i;
+        /*TraceManager.addDev("Has been resized: " + name + " height=" + height);
+          int i;
 
-	for (int k=0; k<nbConnectingPoint; k++) {
-	    if (!connectingPoint[k].isFree()) {
-		TraceManager.addDev("Non free TG point in " + name);
-	    }
-	}
+          for (int k=0; k<nbConnectingPoint; k++) {
+          if (!connectingPoint[k].isFree()) {
+          TraceManager.addDev("Non free TG point in " + name);
+          }
+          }
 
-        TGConnectingPoint [] connectingPointTmp = connectingPoint;
-	makeTGConnectingPoints();
-	//nbConnectingPoint = getNbOfConnectingPoints();
-	//connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        for(i=0; i<Math.min(connectingPointTmp.length, connectingPoint.length); i++) {
-            connectingPoint[i] = connectingPointTmp[i];
+          TGConnectingPoint [] connectingPointTmp = connectingPoint;
+          makeTGConnectingPoints();
+          //nbConnectingPoint = getNbOfConnectingPoints();
+          //connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+          for(i=0; i<Math.min(connectingPointTmp.length, connectingPoint.length); i++) {
+          connectingPoint[i] = connectingPointTmp[i];
 
-	    if (!connectingPoint[i].isFree()) {
-		TraceManager.addDev("Non free point in " + name);
-	    }
-        }
+          if (!connectingPoint[i].isFree()) {
+          TraceManager.addDev("Non free point in " + name);
+          }
+          }
 
-	for (int j=nbConnectingPoint; j<connectingPointTmp.length; j++) {
-	    if (!connectingPointTmp[j].isFree()) {
-		TraceManager.addDev("Non free TG point");
-	    }
-	    }*/
+          for (int j=nbConnectingPoint; j<connectingPointTmp.length; j++) {
+          if (!connectingPointTmp[j].isFree()) {
+          TraceManager.addDev("Non free TG point");
+          }
+          }*/
 
         // Increase tdp if necessary?
 
@@ -598,7 +598,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     }
 
     public void specificActionAfterAdd() {
-	makePortMessage();
+        makePortMessage();
     }
 
 }
