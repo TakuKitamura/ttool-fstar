@@ -38,6 +38,7 @@
 
 package ui;
 
+import ui.tree.*;
 import avatartranslator.*;
 import avatartranslator.toproverif.AVATAR2ProVerif;
 import avatartranslator.totpn.AVATAR2TPN;
@@ -139,6 +140,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
+import javax.swing.tree.*;
 
 // AVATAR
 // AVATAR
@@ -3604,6 +3606,18 @@ public class GTURTLEModeling {
 
     // TREE MANAGEMENT
 
+    public void expandToErrors() {
+	if (mcvdt != null) {
+	    SyntaxAnalysisErrorTree saet = mcvdt.getSyntaxAnalysisErrorTree();
+	    if (saet != null) {
+		Object []obj = new Object[2];
+		obj[0] = mcvdt;
+		obj[1] = saet;
+		mgui.dtree.expandPath(new TreePath(obj));
+	    }
+	}
+    }
+
     public String toString() {
         return mgui.getTitle();
     }
@@ -3624,7 +3638,6 @@ public class GTURTLEModeling {
         } else {
             return st;
         }
-
     }
 
     public int getIndexOfChild(Object child) {
