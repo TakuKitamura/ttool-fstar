@@ -596,6 +596,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     public void setActor(boolean b) {
         isActor = b;
     }
+    
 
     public void specificActionAfterAdd() {
         makePortMessage();
