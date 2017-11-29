@@ -51,8 +51,8 @@ package ui.util;
  */
 public class DefaultText  {
 
-    public static String BUILD = "12454";
-    public static String DATE = "2017/11/29 10:18:29 CET";
+    public static String BUILD = "12455";
+    public static String DATE = "2017/11/29 10:20:41 CET";
     
     public static StringBuffer sbAbout = makeAbout();
     
@@ -73,7 +73,8 @@ public class DefaultText  {
         sb.append("TTool version " + getFullVersion() + "\n");
 	sb.append("Copyright IMT - Telecom ParisTech / Ludovic Apvrille \n");
 	sb.append("\nContact: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\nProgrammers\n\tTelecom ParisTech: Ludovic Apvrille, Dominique Blouin, Fabien Tessier, \n\tDaniel Knorreck, Andrea Enrici, Florian Lugou, Letitia Li\n");
+        sb.append("\nProgrammers\n\tTelecom ParisTech: Ludovic Apvrille, Dominique Blouin, Fabien Tessier, \n\tDaniel Knorreck, Florian Lugou, Letitia Li\n");
+	sb.append("\n\tNokia: Andrea Enrici\n");
 	sb.append("\n\tLIP6: Daniela Genius\n");
         sb.append("\nFor more information:\n");
         sb.append("http://ttool.telecom-paristech.fr/\n\n");
