@@ -298,9 +298,9 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
     }
 
-    public void expandPath(TreePath tp) {
+    /*public void expandPath(TreePath tp) {
 	expandPath(tp);
-    }
+	}*/
 
     public void treeCollapsed(TreeExpansionEvent treeExpansionEvent) {
         m_expandedTreePaths.remove(treeExpansionEvent.getPath());
