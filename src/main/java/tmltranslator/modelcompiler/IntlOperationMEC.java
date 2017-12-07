@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
@@ -48,13 +45,15 @@ package tmltranslator.modelcompiler;
    * @version 1.0 05/02/2014
    * @author Andrea ENRICI
  */
-public class IntlOperationMEC extends OperationMEC	{
-
+public class IntlOperationMEC extends OperationMEC {
 
 	public IntlOperationMEC( String ctxName, String ID0, String OD0 )	{
 		name = "InterleaverOperationMEC";
 		exec_code = TAB + "/*start execution*/" + CR + TAB +
-								"int status;" + CR + TAB +
+
+								// Issue #98: Already defined
+								//"int status;" + CR + TAB +
+				
 								"intl_start(&" + ctxName + ");" + CR + TAB +
 								"status = intl_wait(&" + ctxName + ");" + CR;
 		
@@ -62,19 +61,21 @@ public class IntlOperationMEC extends OperationMEC	{
 			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +
 			"intl_ctx_init(&" + ctxName + ", (uintptr_t) intl_mss );" + CR + TAB +
 			"// initialize context" + CR + TAB +
-			"intl_set_sv(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_arm(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_arm(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_re(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_se(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_fe(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+
+			// Issue #98: Provide default values for compilation
+			"intl_set_sv(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"intl_set_arm(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"intl_set_arm(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"intl_set_re(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"intl_set_se(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"intl_set_fe(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
 			"intl_set_pbo(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->packed_binary_output_mode));" + CR + TAB +
 			"intl_set_pbi(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->packed_binary_input_mode));" + CR + TAB +
 			"intl_set_widm1(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->samples_width));" + CR + TAB +
 			"intl_set_biof(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->bit_input_offset));" + CR + TAB +
 			"intl_set_boof(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->bit_output_offset));" + CR + TAB +
-			"intl_set_fz(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
-			"intl_set_fo(&" + ctxName + ", (uint64_t) /* USER TODO: VALUE */);" + CR + TAB +
+			"intl_set_fz(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
+			"intl_set_fo(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
 			"intl_set_iof(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->output_offset));" + CR + TAB +
 			"intl_set_oof(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->input_offset));" + CR + TAB +
 			"intl_set_pof(&" + ctxName + ", (((INTERLEAVER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->permutation_offset));" + CR + TAB +

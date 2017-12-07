@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 import java.util.Collection;
@@ -53,10 +50,10 @@ import java.util.Vector;
    * @version 1.0 06/02/2014
    * @author Andrea ENRICI
  */
-public abstract class CPMEC	{
+public abstract class CPMEC	implements CCodeGenConstants {
 	
-	protected String CR = "\n";
-	protected String TAB = "\t";
+	//protected String CR = "\n";
+	//protected String TAB = "\t";
 
 	protected String init_code = new String();
 	protected String exec_code = new String();
@@ -65,24 +62,24 @@ public abstract class CPMEC	{
 	public static final String[] CP_TYPES = { "Memory Copy", "Single DMA", "Double DMA" };
 	public static final String[] TRANSFER_TYPES = { "memory to IP core", "IP core to IP core", "IP core to memory" };
 
-	public static final String SingleDMA = "Single DMA";
-	public static final String DoubleDMA = "Double DMA";
-	public static final String MemoryCopy = "Memory Copy";
+	public static final String SINGLE_DMA = "Single DMA";
+	public static final String DOUBLE_DMA = "Double DMA";
+	public static final String MEMORY_COPY = "Memory Copy";
 
 	//The number must be the same as the index in cpTypes
-	public static final int CpuMemoryCopyMEC = 0;
-	public static final int SingleDmaMEC = 1;
-	public static final int DoubleDmaMEC = 2;
+	public static final int CPU_MEMORY_COPY_MEC = 0;
+	public static final int SINGLE_DMA_MEC = 1;
+	public static final int DOUBLE_DMA_MEC = 2;
 
-	public static final int mem2IP = 0;
-	public static final int IP2IP = 1;
-	public static final int IP2mem = 2;
+	public static final int MEM_2_IP = 0;
+	public static final int IP_2_IP = 1;
+	public static final int IP_2_MEM = 2;
 
-	public static final String dmaController = "DMA_Controller";
-	public static final String sourceStorage = "Src_Storage_Instance";
-	public static final String destinationStorage = "Dst_Storage_Instance";
+	public static final String DMA_CONTROLLER = "DMA_Controller";
+	public static final String SOURCE_STORAGE = "Src_Storage_Instance";
+	public static final String DESTINATION_STORAGE = "Dst_Storage_Instance";
 
-	public static final String USER_TO_DO = "/* USER TO DO */";
+//	public static final String USER_TO_DO = "/* USER TO DO */";
 
 	protected static final String DEST_ADDRESS_ATTRIBUTE_NAME = "destinationAddress";
 	protected static final String SOURCE_ADDRESS_ATTRIBUTE_NAME = "sourceAddress";
@@ -121,12 +118,13 @@ public abstract class CPMEC	{
 		return cleanup_code;
 	}
 	
-	protected String getAttributeValue( final String key ) {
+	protected String getAttributeValue( final String key,
+										final String defaultValue ) {
 		if ( attributes.containsKey( key ) ) {
 			return attributes.get( key );
 		}
 		
-		return USER_TO_DO;
+		return defaultValue + USER_TO_DO;
 	}
 	// Get the value of an attribute from the TMLCP artifact string
 //	protected static String getAttributeValue( String assignement )	{
@@ -149,5 +147,25 @@ public abstract class CPMEC	{
 		}
 		
 		return values;
+	}
+	
+	protected String getMemoryBaseAddress( final int srcMemoryType ) {
+		switch( srcMemoryType )	{
+			case Buffer.FEP_BUFFER:
+				return "fep_mss";
+
+			case Buffer.ADAIF_BUFFER:
+				return "adaif_mss";
+
+			case Buffer.INTERLEAVER_BUFFER:
+				return "intl_mss";
+			
+			case Buffer.MAPPER_BUFFER:
+				return "mapper_mss";
+			
+			case Buffer.MAIN_MEMORY_BUFFER:
+			default:
+				return DEFAULT_NUM_VAL + USER_TO_DO;//"0";
+		}
 	}
 }	//End of class

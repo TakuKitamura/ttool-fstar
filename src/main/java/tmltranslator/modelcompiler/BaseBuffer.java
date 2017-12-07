@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 import tmltranslator.TMLTask;
@@ -50,17 +47,17 @@ import tmltranslator.TMLTask;
    * @version 1.0 11/02/2014
    * @author Andrea ENRICI
  */
-public class BaseBuffer extends Buffer	{
+public class BaseBuffer extends Buffer {
 
-	public static final int baseAddressIndex = 1;
-
-	protected String baseAddressValue = USER_TO_DO;
-	protected static final String baseAddressType = "uint32_t*";
-	
-	private String Context = "BASE_BUFFER_CONTEXT";
+	public static final int BASE_ADDRESS_INDEX = 1;
+	protected static final String BASE_ADDRESS_TYPE = "uint32_t*";
 
 	public static final String DECLARATION = "extern struct BASE_BUFFER_TYPE {" + CR + TAB +
-																						baseAddressType + SP + "base_address" + SC + CR + "};";
+																				BASE_ADDRESS_TYPE + SP + "base_address" + SC + CR + "};";
+
+	protected String baseAddressValue = DEFAULT_NUM_VAL + USER_TO_DO;
+	
+	//private String context = "BASE_BUFFER_CONTEXT";
 
 	public BaseBuffer( String _name, TMLTask _task )	{
 		type = "BASE_BUFFER_TYPE";
@@ -68,25 +65,26 @@ public class BaseBuffer extends Buffer	{
 		task = _task;
 	}
 
-	@Override public String getInitCode()	{
+	@Override
+	public String getInitCode()	{
 		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".base_address = " + "(" + baseAddressType + ")" + baseAddressValue + ";" + CR );
+		s.append( TAB + name + ".base_address = " + "(" + BASE_ADDRESS_TYPE + ")" + baseAddressValue + ";" + CR );
 		return s.toString();
 	}
 	
-	public String toString()	{
-
+	@Override
+	public String toString() {
 		StringBuffer s = new StringBuffer( super.toString() );
 		if( bufferParameters != null )	{
-			s.append( TAB2 + "base_address = " + bufferParameters.get( baseAddressIndex ) + SC + CR );
+			s.append( TAB2 + "base_address = " + bufferParameters.get( BASE_ADDRESS_INDEX ) + SC + CR );
 		}
 		else	{
-			s.append( TAB2 + "base_address = /* USER TO DO */;" + CR );
+			s.append( TAB2 + "base_address = " + DEFAULT_NUM_VAL + USER_TO_DO + ";" + CR );
 		}
 		return s.toString();
 	}
-
-	public String getContext()	{
-		return Context;
-	}
+//
+//	public String getContext()	{
+//		return context;
+//	}
 }	//End of class

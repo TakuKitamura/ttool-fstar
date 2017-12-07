@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 import tmltranslator.TMLCPLibArtifact;
@@ -54,10 +51,13 @@ import java.util.List;
    * @version 1.0 11/02/2014
    * @author Andrea ENRICI
  */
-public class Buffer	{
+public class Buffer	implements CCodeGenConstants {
 
-	public static final String[] memoryTypesList = { "FEP memory", "MAPPER memory", "ADAIF memory", "INTERLEAVER memory", "MAIN MEMORY memory" };
-	public static final String[] onOffVector = { "ON", "OFF" };
+	protected static final int NUM_SAMPLES_INDEX = 1;
+	protected static final int BASE_ADDRESS_INDEX = 2;
+
+	public static final String[] MEMORY_TYPES = { "FEP memory", "MAPPER memory", "ADAIF memory", "INTERLEAVER memory", "MAIN MEMORY memory" };
+	public static final String[] ON_OFF_VALUES = { "ON", "OFF" };
 	public static final int ANOMALY = -1;
 	public static final int FEP_BUFFER = 0;
 	public static final int MAPPER_BUFFER = 1;
@@ -68,30 +68,31 @@ public class Buffer	{
 
 	public static final int BUFFER_TYPE_INDEX = 0; // the index of the buffer type in bufferParameters. The latter is retrieved from the xml description of a design
 
-	public static String CR = "\n";
-	public static String CR2 = "\n\n";
-	public static String TAB = "\t";
-	public static String TAB2 = "\t\t";
-	public static String SP = " ";
-	public static String SC = ";";
+//	public static String CR = "\n";
+//	public static String CR2 = "\n\n";
+//	public static String TAB = "\t";
+//	public static String TAB2 = "\t\t";
+//	public static String SP = " ";
+//	public static String SC = ";";
 
-	protected static String USER_TO_DO = "/* USER TODO: VALUE */";
+	//protected static String USER_TO_DO = " 0 /* USER TODO: VALUE */";
 	protected String code = "VOID";
 	protected String name = "";
 	protected String type = "";
 	protected TMLTask task;
 	protected TMLPort port;
 	protected TMLCPLibArtifact artifact;
-	protected String baseAddress = "/* USER TODO: VALUE */";
-	protected String endAddress = "/* USER TODO: VALUE */";
+	protected String baseAddress = DEFAULT_NUM_VAL + USER_TO_DO;//" 0 /* USER TODO: VALUE */";
+	protected String endAddress = baseAddress;//" 0 /* USER TODO: VALUE */";
 	protected List<String> bufferParameters;
 	
-	private String Context = "";
+	//private String Context = "";
 
 	public Buffer()	{
 		code = "struct" + SP + name + TAB + "{" + CR + "}" + SC;
 	}
 
+	@Override
 	public String toString()	{
 		if( port != null )	{
 			if( artifact != null )	{
@@ -140,13 +141,12 @@ public class Buffer	{
 		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
 		return s.toString();
 	}
-
-	public String getContext()	{
-		return Context;
-	}
+//
+//	public String getContext()	{
+//		return Context;
+//	}
 
 	public void setMappingParameters( List<String> params )	{
 		bufferParameters = params;
 	}
-
 }	//End of class

@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
@@ -48,22 +45,21 @@ package tmltranslator.modelcompiler;
    * @version 1.0 09/02/2014
    * @author Andrea ENRICI
  */
-public class Scheduler	{
+public class Scheduler implements CCodeGenConstants {
 
 	public static final int JAIR = 0;
 
-	private String code = "";
-	private String CR = "\n";
+	private final String code;// = "";
+	//private String CR = "\n";
 //	private String CR2 = "\n\n";
-	private String TAB = "\t";
-	private String TAB2 = "\t\t";
-	private String TAB3 = "\t\t\t";
-	private String TAB4 = "\t\t\t\t";
+//	private String TAB = "\t";
+//	private String TAB2 = "\t\t";
+//	private String TAB3 = "\t\t\t";
+//	private String TAB4 = "\t\t\t\t";
 //	private String SP = " ";
 //	private String SC = ";";
 
 	public Scheduler( int type )	{
-
 		code =	TAB + "while( !exit_rule() )	{" + CR +
 						TAB2 + "for( int n_op = 0; n_op < NUM_OPS; ++n_op )	{" + CR +
 						TAB3 + "valid_signal = (*fire_rule[n_op])();" + CR +

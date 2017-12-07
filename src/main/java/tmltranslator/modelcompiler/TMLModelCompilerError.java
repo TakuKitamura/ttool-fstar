@@ -37,10 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package tmltranslator.modelcompiler;
 
 import tmltranslator.TMLActivityElement;

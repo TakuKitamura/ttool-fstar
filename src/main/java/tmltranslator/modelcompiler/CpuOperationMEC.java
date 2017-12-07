@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
@@ -50,15 +47,17 @@ package tmltranslator.modelcompiler;
  */
 public class CpuOperationMEC extends OperationMEC	{
 
-
 	public CpuOperationMEC( String ctxName, String ID0, String OD0 )	{
 		name = "CpuOperationMEC";
-		exec_code = TAB + CR + TAB + "/* USER TO DO */" + CR;
+		
+		// Issue #98: Provide default value for compilation
+		exec_code = TAB + CR + TAB + DEFAULT_NUM_VAL + USER_TO_DO + CR;
 		
 		init_code =	"/***** INIT " + ctxName.split("_ctx")[0] + " *******/" + CR +
-								"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB + "/* USER TO DO */" + CR + "}";
-		cleanup_code = "/* USER TO DO */";
+								"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB + USER_TO_DO + CR + "}";
+
+		// Issue #98: Provide default value for compilation
+		cleanup_code = DEFAULT_NUM_VAL + USER_TO_DO;
 		context = "EMBB_CONTEXT";
 	}
-
 }	//End of class

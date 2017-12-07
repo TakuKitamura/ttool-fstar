@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
@@ -50,16 +47,15 @@ package tmltranslator.modelcompiler;
  */
 public class MapperMEC extends ArchUnitMEC	{
 
-	public static final String Ctx_cleanup = "mapper_ctx_cleanup";
-	public static final String Operation = "Mapper operation";
+	public static final String CONTEXT_CLEANUP = "mapper_ctx_cleanup";
+	public static final String OPERATION = "Mapper operation";
+    public static final String CONTEXT = "MAPPER_CONTEXT";
 
 	public MapperMEC()	{
 
 		index = 3;
-		context = "MAPPER_CONTEXT";
 		initCtxRoutine = "mapper_ctx_init";
 		localMemoryPointer = "mapper_mss";
 		ctxCleanupRoutine = "mapper_ctx_cleanup";
 	}
-
 }	//End of class

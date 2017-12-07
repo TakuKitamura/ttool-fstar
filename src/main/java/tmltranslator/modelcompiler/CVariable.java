@@ -36,14 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
 package tmltranslator.modelcompiler;
-
-import java.util.HashSet;
 
 /**
  * Class CVariable
@@ -52,21 +45,19 @@ import java.util.HashSet;
  * @version 1.0 11/10/2016
  * @author Andrea ENRICI
  */
-public class CVariable {
+public class CVariable implements CCodeGenConstants {
     
     // type
-    private final static String SPACE = " ";
+    //private final static String SPACE = " ";
 
     public final static int NATURAL = 1;
     public final static int BOOLEAN = 2;
     public final static int ADDRESS = 3;
     public final static int OTHER = 4;
 
-    public final static String NATURAL_STRING = "int";
-    public final static String BOOLEAN_STRING = "bool";
     public final static String ADDRESS_STRING = "addr";
 
-    public final static HashSet<String> typesDataBase = new HashSet<String>();
+    //public final static HashSet<String> typesDataBase = new HashSet<String>();
         /*typesDataBase.add( "void" );
         typesDataBase.add( "float" );
         typesDataBase.add( "double" );
@@ -132,10 +123,10 @@ public class CVariable {
     
     public static String getStringType( String type )  {
         switch(type) {
-            case NATURAL_STRING:
+            case NATURAL_TYPE:
                 return "nat";
-            case BOOLEAN_STRING:
-                return "bool";
+            case BOOLEAN_TYPE:
+                return BOOLEAN_TYPE;
             case ADDRESS_STRING:
                 return "addr";
             default:
@@ -159,7 +150,7 @@ public class CVariable {
     }
     
     @Override public String toString() {
-        return type + SPACE + name;
+        return type + SP + name;
     }
 
 	@Override public boolean equals( Object o )	{
