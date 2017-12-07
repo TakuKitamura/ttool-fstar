@@ -83,12 +83,13 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
     }
 
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
-        dn.setValidationsNumber(4);
+        dn.setValidationsNumber(5);
         dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_ANIM_APP_DIPLO);
         dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.SIM_TRACE_APP_DIPLO);
         //dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.LOT_APP_DIPLO);
         dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.UPP_APP_DIPLO);
-        dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.TML_APP_DIPLO);
+	dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.PROVERIF_DIPLO);
+        dn.setValidationsInfo(4, DiplodocusMethodologyDiagramName.TML_APP_DIPLO);
     }
 
     public boolean makeCall(String diagramName, int index) {
@@ -146,7 +147,17 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
 
             }
             break;
-        case 3:
+	case 3:
+            if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+    			tdp.getMGUI().avatarProVerifVerification();
+    			return true;
+    		}
+                return false;
+
+            }
+            break;
+        case 4:
             if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
                 TraceManager.addDev("Generate TML");
                 tmp = tdp.getMGUI().generateTMLTxt();
