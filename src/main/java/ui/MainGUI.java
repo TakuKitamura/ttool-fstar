@@ -1626,11 +1626,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void closeTurtleModeling() {
         if (mode != NOT_OPENED) {
+            setMode(NOT_OPENED);
+
             // tabbed pane
             for(int i=0; i<tabs.size(); i++) {
                 tabs.elementAt(i).tabbedPane.removeAll();
             }
-            setMode(NOT_OPENED);
+
             tabs = null;
             mainTabbedPane = null;
             panelForTab.removeAll();
@@ -2381,10 +2383,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
 
-    
-    
-    
-    
     public void openProjectFromFile(File _f) {
     	if (FileUtils.getExtension(_f).equals("ttool")) {
     		dir = _f;
@@ -4319,7 +4317,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 		}
         JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, SpecConfigTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp,limit);
         // jgen.setSize(500, 450);
-        GraphicLib.centerOnParent(jgen, 500, 450);
+        GraphicLib.centerOnParent(jgen, 600, 800);
         jgen.setVisible(true);
         dtree.toBeUpdated();
     }
