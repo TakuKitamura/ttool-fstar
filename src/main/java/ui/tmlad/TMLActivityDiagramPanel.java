@@ -216,8 +216,14 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
     	for (TGComponent c: comps){
     		if (c instanceof TMLADEncrypt){
     			TMLADEncrypt en= (TMLADEncrypt) c;
-    			if (!en.securityContext.isEmpty() && (en.type.equals("Symmetric Encryption") || en.type.equals("Asymmetric Encryption") ||  en.type.equals("MAC"))){
-    				ns.add(en.securityContext);
+    			if (!en.securityContext.isEmpty()){
+    				if ((en.type.equals("Symmetric Encryption") || en.type.equals("MAC"))){
+	    				ns.add(en.securityContext);
+	    			}
+	    			else if (en.type.equals("Asymmetric Encryption")) {
+	    				ns.add(en.securityContext);
+	    				//ns.add("pubKey" + en.securityContext);
+	    			}
     			}
     		}
     	}

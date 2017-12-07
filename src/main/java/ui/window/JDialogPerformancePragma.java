@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- *
+ * 
  * ludovic.apvrille AT enst.fr
- *
+ * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- *
+ * 
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- *
+ * 
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- *
+ * 
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- *
+ * 
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -58,9 +58,9 @@ import java.util.HashMap;
  * @author Ludovic APVRILLE, Letitia LI
  */
 public class JDialogPerformancePragma extends JDialogBase implements ActionListener {
-
+    
     protected String text;
-
+    
     //components
     protected JTextArea textarea;
     protected JButton close;
@@ -68,21 +68,21 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
     protected JMenuBar menuBar;
     protected JMenu help;
     protected JPopupMenu helpPopup;
-    public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
+	public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
     /** Creates new form  */
     public JDialogPerformancePragma(Frame f, String title, String _text) {
         super(f, title, true);
         text = _text;
-
+        
         initComponents();
         pack();
     }
-    //Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
+//Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
 
     public class SuggestionPanel {
-        //Form list of all blocks
-        //For each block, create a list of all states and signals
-
+	//Form list of all blocks
+	//For each block, create a list of all states and signals
+	
         private JList list;
         private JPopupMenu popupMenu;
         private String subWord;
@@ -95,12 +95,12 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
             popupMenu.removeAll();
             popupMenu.setOpaque(false);
             popupMenu.setBorder(null);
-
+			
             popupMenu.add(list = createSuggestionList(linePosition ,position, subWord), BorderLayout.CENTER);
-            //Show popupMenu only if there are matching suggestions
-            if (list.getModel().getSize() >0){
+	    //Show popupMenu only if there are matching suggestions
+	    	if (list.getModel().getSize() >0){
                 popupMenu.show(textarea, location.x, textarea.getBaseline(0, 0) + location.y);
-            }
+	    	}
         }
 
         public void hide() {
@@ -110,53 +110,53 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
             }
         }
 
-        private JList createSuggestionList(int linePosition, final int position, final String subWord) {
-            ArrayList<String> matches = new ArrayList<String>();
-            if (linePosition<6){
-                matches.add("Latency(");
-            }
-
-            else if (!subWord.contains(".")){
-                for (String block: blockAttributeMap.keySet()){
-                    if (block.startsWith(subWord)){
-                        matches.add(block);
-                    }
-                }
-            }
-            else {
-                String block = subWord.split("\\.")[0];
-                if (blockAttributeMap.containsKey(block)){
-                    for (String attr: blockAttributeMap.get(block)){
-                        if (attr.startsWith(subWord.split("\\.")[1])){
-                            matches.add(block+"."+attr);
-                        }
-                    }
-                }
-            }
-            String[] data = new String[matches.size()];
+	private JList createSuggestionList(int linePosition, final int position, final String subWord) {
+	    ArrayList<String> matches = new ArrayList<String>();
+	    if (linePosition<6){
+	        matches.add("Latency(");
+	    }
+		
+		else if (!subWord.contains(".")){
+			for (String block: blockAttributeMap.keySet()){
+				if (block.startsWith(subWord)){
+					matches.add(block);
+				}
+			}
+		}
+		else {
+			String block = subWord.split("\\.")[0];
+			if (blockAttributeMap.containsKey(block)){
+				for (String attr: blockAttributeMap.get(block)){
+					if (attr.startsWith(subWord.split("\\.")[1])){
+						matches.add(block+"."+attr);
+					}
+				}
+			}
+		}
+	    String[] data = new String[matches.size()];
             data = matches.toArray(data);
             JList<String> list = new JList<>(data);
             list.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
             list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             list.setSelectedIndex(0);
             list.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        if (e.getClickCount() == 2) {
-                            insertSelection();
-                        }
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getClickCount() == 2) {
+                        insertSelection();
                     }
-                });
-
+                }
+            });
+	    
             return list;
         }
 
-
+	
         public boolean insertSelection() {
-            //Note that it will not add if the selection will not fit on the current line
-            if (!popupMenu.isVisible()){
-                return false;
-            }
+		//Note that it will not add if the selection will not fit on the current line
+	    if (!popupMenu.isVisible()){
+		return false;
+	    }
             if (list.getSelectedValue() != null) {
                 try {
                     final String selectedSuggestion = ((String) list.getSelectedValue()).substring(subWord.length());
@@ -184,22 +184,22 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
             final int position = textarea.getCaretPosition();
             list.setSelectedIndex(index);
             SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        textarea.setCaretPosition(position);
-                    }
-                });
-        }
-    }
-    private SuggestionPanel suggestion;
-    protected void showSuggestionLater() {
-        SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    showSuggestion();
+                    textarea.setCaretPosition(position);
                 }
-
             });
+        }
+    }
+     private SuggestionPanel suggestion;
+     protected void showSuggestionLater() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                showSuggestion();
+            }
+
+        });
     }
 
     protected void showSuggestion() {
@@ -231,23 +231,23 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
         if (subWord.length() < 1) {
             return;
         }
-        start=Math.max(0,position-1);
-        while (start>0){
-            //Find previous new line position
-            if (!String.valueOf(text.charAt(start)).matches(".")){
-                break;
-            }
-            else {
-                start--;
-            }
-        }
+		start=Math.max(0,position-1);
+		while (start>0){
+			//Find previous new line position
+			if (!String.valueOf(text.charAt(start)).matches(".")){
+				break;
+			}
+			else {
+				start--;
+			}
+		}
         suggestion = new SuggestionPanel(textarea, position, subWord, location, position-start-1);
         SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    textarea.requestFocusInWindow();
-                }
-            });
+            @Override
+            public void run() {
+                textarea.requestFocusInWindow();
+            }
+        });
     }
 
     private void hideSuggestion() {
@@ -257,12 +257,47 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
     }
 
     protected void initComponents() {
-
+        
         Container c = getContentPane();
         Font f = new Font("Helvetica", Font.PLAIN, 14);
         setFont(f);
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
+        
+        helpPopup = new JPopupMenu();
+		//JTextArea jft = new JTextArea("UPPAAL pragmas");
+		//helpPopup.add(jft);
+		JLabel t = new JLabel("");
+		JLabel header= new JLabel(" 	Performance Pragma");
+		Font headerFont=new Font(t.getFont().getName(),Font.BOLD,t.getFont().getSize()+2);
+		header.setFont(headerFont);
+		helpPopup.add(header);
+		//Text
+		helpPopup.add(new JLabel(" Performance Pragma allow us to query and record "));
+		helpPopup.add(new JLabel(" the latency (in cycles) between two events after simulation"));
+		helpPopup.add(new JLabel(" Depending on the format of the pragma, results can be the"));
+		helpPopup.add(new JLabel(" numeric average latency value or a verified true/false result"));		
+		
+		JLabel example =new JLabel(" Examples:");
+		example.setFont(headerFont);
+		helpPopup.add(example);
+		
+		Font exFont=new Font(t.getFont().getName(),Font.ITALIC,t.getFont().getSize());
+		JLabel t1 = new JLabel(" Latency(block1.state1, block2.s)<10:");
+		t1.setFont(exFont);
+		helpPopup.add(t1);
+		helpPopup.add(new JLabel(" Will be marked with a green check mark or "));
+		helpPopup.add(new JLabel(" red cross depending on simulation results"));		
+	
+		JLabel t2 = new JLabel(" Latency(block1.state1, block2.s)?:");
+		t2.setFont(exFont);
+		helpPopup.add(t2);
+		
+		helpPopup.add(new JLabel(" Will be marked with the average latency"));
+		helpPopup.add(new JLabel(" time after simulation"));	
+		helpPopup.setPreferredSize(new Dimension(600,250));
+        
+        
         textarea = new JTextArea();
 
         textarea.setEditable(true);
@@ -270,74 +305,74 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
         textarea.setTabSize(3);
         textarea.append(text);
         textarea.setFont(new Font("times", Font.PLAIN, 12));
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-        help = new JMenu("?");
-        menuBar.add(help);
-        setJMenuBar(menuBar);
-        textarea.addKeyListener(new KeyListener() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    if (e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB) {
-                        if (suggestion != null) {
-                            if (suggestion.insertSelection()) {
-                                e.consume();
-                                final int position = textarea.getCaretPosition();
-                                SwingUtilities.invokeLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                textarea.getDocument().remove(position - 1, 1);
-                                            } catch (BadLocationException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
-                            }
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		help = new JMenu("?");
+		menuBar.add(help);
+		setJMenuBar(menuBar);
+		textarea.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB) {
+                    if (suggestion != null) {
+                        if (suggestion.insertSelection()) {
+                            e.consume();
+                            final int position = textarea.getCaretPosition();
+                            SwingUtilities.invokeLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        textarea.getDocument().remove(position - 1, 1);
+                                    } catch (BadLocationException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                         }
                     }
                 }
+            }
 
-                @Override
-                public void keyReleased(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_DOWN && suggestion != null) {
-                        suggestion.moveDown();
-                    } else if (e.getKeyCode() == KeyEvent.VK_UP && suggestion != null) {
-                        suggestion.moveUp();
-                    } else if (Character.isWhitespace(e.getKeyChar())) {
-                        hideSuggestion();
-                    }
-                    else if (Character.isLetter(e.getKeyChar())){
-                        showSuggestionLater();
-                    }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_DOWN && suggestion != null) {
+                    suggestion.moveDown();
+                } else if (e.getKeyCode() == KeyEvent.VK_UP && suggestion != null) {
+                    suggestion.moveUp();
+                } else if (Character.isWhitespace(e.getKeyChar())) {
+                    hideSuggestion();
                 }
-
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_DOWN && suggestion != null) {
-                        e.consume();
-                    } else if (e.getKeyCode() == KeyEvent.VK_UP && suggestion != null) {
-                        e.consume();
-                    }
+		else if (Character.isLetter(e.getKeyChar())){
+                    showSuggestionLater();
                 }
-            });
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_DOWN && suggestion != null) {
+                   e.consume();
+                } else if (e.getKeyCode() == KeyEvent.VK_UP && suggestion != null) {
+                    e.consume();
+                } 
+            }
+        });
 
 
-
+	
         JScrollPane jsp = new JScrollPane(textarea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(300, 300));
         c.add(jsp, BorderLayout.CENTER);
-
+        
 
 
         close = new JButton("Ok", IconManager.imgic25);
         cancel = new JButton("Cancel", IconManager.imgic27);
-
-        help.setPreferredSize(new Dimension(30,30));
+        
+	help.setPreferredSize(new Dimension(30,30));
 
         close.setPreferredSize(new Dimension(150, 30));
         cancel.setPreferredSize(new Dimension(150, 30));
-
+        
         close.addActionListener(this);
         cancel.addActionListener(this);
         help.addMouseListener(new MouseAdapter() {
@@ -349,43 +384,42 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
         JPanel jp = new JPanel();
         jp.add(close);
         jp.add(cancel);
-
+        
         c.add(jp, BorderLayout.SOUTH);
-
+	
     }
-
-    public void actionPerformed(ActionEvent evt)  {
-        //String command = evt.getActionCommand();
-
+    
+    public void	actionPerformed(ActionEvent evt)  {
+        String command = evt.getActionCommand();
+        
         // Compare the action command to the known actions.
-        if (evt.getSource() == cancel)  {
+        if (command.equals("Cancel"))  {
             cancel();
-        } else if (evt.getSource() == close) {
+        } else if (command.equals("Ok")) {
             close();
         }
-
+	
     }
-
+    
     public void cancel() {
         dispose();
     }
-
+    
     public void close() {
         text = textarea.getText();
         dispose();
     }
     public void help(){
-        if (!helpPopup.isVisible()){
-            helpPopup.show(help, 20, 20);
-        }
-        else {
-            helpPopup.setVisible(false);
-        }
+	if (!helpPopup.isVisible()){
+	    helpPopup.show(help, 20, 20);
+	}
+	else {
+	    helpPopup.setVisible(false);
+	}
     }
-
     public String getText() {
         return text;
     }
-
-
+    
+    
 }
