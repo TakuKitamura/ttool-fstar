@@ -37,11 +37,7 @@
 <SystemCCodeCompileCommand data="make -C ../simulators/c++2/" />
 <SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
 <SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
-<<<<<<< Upstream, based on origin/project_manager
 <TMLCodeDirectory data="../tmlcode/" />
-=======
-<TMLCodeDirectory data="../simulators/c++2/tmlcode" />
->>>>>>> 4749348 Issue #98: Fixed default C Code generation directory
 <CCodeDirectory data="../CCode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
 <VCDPath data="../simulators/c++2/" />
@@ -69,11 +65,11 @@
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal ../uppaal/spec.xml"/>
 
 
-<LastOpenFile data="/home/satan/ZigBeeTutorial.ttool/ZigBeeTutorial.xml"/>
+<LastOpenFile data="/home/satan/TTool/modeling/AVATAR/CoffeeMachine_Avatar.ttool/CoffeeMachine_Avatar.xml"/>
 
 
 
-<LastWindowAttributes x="65" y="24" width="1301" height="744" max="true" />
+<LastWindowAttributes x="65" y="-4" width="1301" height="772" max="true" />
 
 
 <ProVerifHash data="1427594573"/>

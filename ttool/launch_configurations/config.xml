@@ -37,11 +37,7 @@
 <SystemCCodeCompileCommand data="make -C ../simulators/c++2/" />
 <SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
 <SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
-<<<<<<< Upstream, based on origin/project_manager
 <TMLCodeDirectory data="../tmlcode/" />
-=======
-<TMLCodeDirectory data="../simulators/c++2/tmlcode" />
->>>>>>> 4749348 Issue #98: Fixed default C Code generation directory
 <CCodeDirectory data="../CCode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
 <VCDPath data="../simulators/c++2/" />
