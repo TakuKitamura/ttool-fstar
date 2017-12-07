@@ -246,73 +246,79 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
               //connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
               TraceManager.addDev("Connection setup 1");*/
             BufferedReader in = URLManager.getBufferedReader(url);
-            jta.append("Connection established...\n");
-            String inputLine;
-            NetworkModel nm = null;
-            while ((inputLine = in.readLine()) != null) {
-                if (inputLine.startsWith("#FILE")) {
-                    nm = new NetworkModel(inputLine.substring(5, inputLine.length()).trim());
-                    listOfModels.add(nm);
-                }
+            if (in == null) {
+                jta.append("Could not establish a connection to the TTool server\n");
+            } else {
+                jta.append("Connection established...\n");
+                String inputLine = null;
+                NetworkModel nm = null;
+                while ((inputLine = in.readLine()) != null) {
+                    if (inputLine.startsWith("#FILE")) {
+                        nm = new NetworkModel(inputLine.substring(5, inputLine.length()).trim());
+                        listOfModels.add(nm);
+                    }
 
-                if (inputLine.startsWith("-FEATURES")) {
-                    if (nm != null) {
-                        String tmp = inputLine.substring(9, inputLine.length()).trim().toLowerCase();
-                        for (int i=1; i<FEATURES.length; i++) {
-                            nm.features[i] = tmp.indexOf(FEATURES[i]) != -1;
+                    if (inputLine.startsWith("-FEATURES")) {
+                        if (nm != null) {
+                            String tmp = inputLine.substring(9, inputLine.length()).trim().toLowerCase();
+                            for (int i=1; i<FEATURES.length; i++) {
+                                nm.features[i] = tmp.indexOf(FEATURES[i]) != -1;
+                            }
+                            //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
                         }
-                        //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
                     }
                 }
 
-                if (inputLine.startsWith("-PROPS")) {
-                    if (nm != null) {
-                        String tmp = inputLine.substring(6, inputLine.length()).trim().toLowerCase();
-                        for (int i=0; i<PROPS.length; i++) {
-                            nm.props[i] = tmp.indexOf(PROPS[i]) != -1;
+                    if (inputLine.startsWith("-PROPS")) {
+                        if (nm != null) {
+                            String tmp = inputLine.substring(6, inputLine.length()).trim().toLowerCase();
+                            for (int i=0; i<PROPS.length; i++) {
+                                nm.props[i] = tmp.indexOf(PROPS[i]) != -1;
+                            }
+                            //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
                         }
-                        //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
                     }
+
+                    if (inputLine.startsWith("-AUTHOR")) {
+                        if (nm != null) {
+                            nm.author = inputLine.substring(7, inputLine.length()).trim();
+                        }
+                    }
+
+
+                    if (inputLine.startsWith("-DESCRIPTION")) {
+                        if (nm != null) {
+                            nm.description = inputLine.substring(12, inputLine.length()).trim();
+                        }
+                    }
+
+                    if (inputLine.startsWith("-IMG")) {
+                        if (nm != null) {
+                            nm.image = inputLine.substring(4, inputLine.length()).trim();
+                            //TraceManager.addDev("Dealing with image:" + nm.image);
+                            //nm.bi = URLManager.getBufferedImageFromURL(URLManager.getBaseURL(url) + nm.image);
+                        }
+                    }
+
+                    //System.out.println(inputLine);
+
                 }
 
-                if (inputLine.startsWith("-AUTHOR")) {
-                    if (nm != null) {
-                        nm.author = inputLine.substring(7, inputLine.length()).trim();
-                    }
-                }
+                jta.append("\n" + listOfModels.size() + " remote models found.\nSelect a model to download it locally and open it.\n\n");
+                mode = LISTED;
+                panel.preparePanel(url);
+                panel.repaint();
+                in.close();
 
-
-                if (inputLine.startsWith("-DESCRIPTION")) {
-                    if (nm != null) {
-                        nm.description = inputLine.substring(12, inputLine.length()).trim();
-                    }
-                }
-
-                if (inputLine.startsWith("-IMG")) {
-                    if (nm != null) {
-                        nm.image = inputLine.substring(4, inputLine.length()).trim();
-                        //TraceManager.addDev("Dealing with image:" + nm.image);
-                        //nm.bi = URLManager.getBufferedImageFromURL(URLManager.getBaseURL(url) + nm.image);
-                    }
-                }
-
-                //System.out.println(inputLine);
-
+                // Wait 5seconds before refreshing panel
+                Thread.sleep(5000);
+                panel.repaint();
             }
-            jta.append("\n" + listOfModels.size() + " remote models found.\nSelect a model to download it locally and open it.\n\n");
-            mode = LISTED;
-            panel.preparePanel(url);
-            panel.repaint();
-            in.close();
-
-            // Wait 5seconds before refreshing panel
-            Thread.sleep(5000);
-            panel.repaint();
 
         } catch (Exception e) {
             jta.append("Error when retreiving file: " + url + "\n No internet connection?\n No right for the Java Virtual Machine to use http connections?\n\n");
-	    TraceManager.addDev("Exception trace in loading network model:");
-	    e.printStackTrace();
+            TraceManager.addDev("Exception trace in loading network model:");
+            e.printStackTrace();
         }
     }
 
