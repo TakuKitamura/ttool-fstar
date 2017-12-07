@@ -68,11 +68,15 @@
 
 <PLUGIN_JAVA_CODE_GENERATOR data="../plugins/CustomizerAvatarCodeGeneration.jar" />
 
+<<<<<<< HEAD
 <<<<<<< Upstream, based on origin/project_manager
 <LastOpenFile data="/home/satan/ZigBeeTutorial.ttool/ZigBeeTutorial.xml"/>
 =======
 <LastOpenFile data="/home/dblouin/Projets/TTool/git/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.xml"/>
 >>>>>>> 4749348 Issue #98: Fixed default C Code generation directory
+=======
+<LastOpenFile data="/home/dblouin/Projets/TTool/git/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.xml"/>
+>>>>>>> ac0a9cec52efa7fb18b9e7e8f72519b069f3c727
 
 
 

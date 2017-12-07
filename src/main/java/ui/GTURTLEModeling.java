@@ -487,6 +487,7 @@ public class GTURTLEModeling {
         
         try {
             if( directory.equals("") )  {
+
                 JOptionPane.showMessageDialog(  mgui.frame,
                                                 "No directory for C code generation found in config.xml. The C code cannot be generated.",
                                                 "Control code generation failed", JOptionPane.INFORMATION_MESSAGE );
