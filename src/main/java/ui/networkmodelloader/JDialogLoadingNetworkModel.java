@@ -314,7 +314,6 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
                 // Wait 5seconds before refreshing panel
                 Thread.sleep(5000);
                 panel.repaint();
-            }
 
         } catch (Exception e) {
             jta.append("Error when retreiving file: " + url + "\n No internet connection?\n No right for the Java Virtual Machine to use http connections?\n\n");

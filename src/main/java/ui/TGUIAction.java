@@ -67,7 +67,7 @@ public class TGUIAction extends AbstractAction {
 
     // Actions
     public static final int ACT_NEW = 0;
-    public static final int ACT_NEW_PROJECT = 464;
+    public static final int ACT_NEW_PROJECT = 465;
     public static final int ACT_NEW_DESIGN = 100;
     public static final int ACT_NEW_ANALYSIS = 101;
     public static final int ACT_OPEN = 1;
@@ -620,7 +620,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 465;
+    public static final int NB_ACTION = 466;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 

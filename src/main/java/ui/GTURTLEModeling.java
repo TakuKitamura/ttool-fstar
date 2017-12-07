@@ -486,15 +486,15 @@ public class GTURTLEModeling {
         CCode.toTextFormat();
         
         try {
-            if( SpecConfigTTool.CCodeDirectory.equals("") )  {
+            if( directory.equals("") )  {
                 JOptionPane.showMessageDialog(  mgui.frame,
                                                 "No directory for C code generation found in config.xml. The C code cannot be generated.",
                                                 "Control code generation failed", JOptionPane.INFORMATION_MESSAGE );
                 return true;
             }
             else {
-            	FileUtils.checkAndCreateCCodeDir(SpecConfigTTool.CCodeDirectory);
-                CCode.saveFile( SpecConfigTTool.CCodeDirectory + File.separator, applicationName );
+            	FileUtils.checkAndCreateCCodeDir(directory);
+                CCode.saveFile( directory + File.separator, applicationName );
             }
         }
         catch( Exception e ) {
