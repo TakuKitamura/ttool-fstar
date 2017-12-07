@@ -456,7 +456,7 @@ public class GTURTLEModeling {
         }
     }
 
-    public boolean generateCCode( String _title )          {
+    public boolean generateCCode( String directory ) {
 
         //CheckingError ce;
         //int type;
@@ -472,8 +472,8 @@ public class GTURTLEModeling {
         //List<TGComponent> components = mgui.getCurrentArchiPanel().tmlap.getComponentList();
         // Parse the PEC file and the library of code snippets for each DIPLODOCUS unit
         applicationName = tmap.getMappedTasks().get(0).getName().split("__")[0];        // Remember that it works only for one application
-        CCode = new TMLModelCompiler( _title, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
-        File dir = new File(ConfigurationTTool.CCodeDirectory + File.separator);
+        CCode = new TMLModelCompiler( directory, applicationName, mgui.frame, mgui.getAllTMLCP(), tmap );
+        File dir = new File(directory /*ConfigurationTTool.CCodeDirectory*/ + File.separator);
     	if (!dir.exists())
     		dir.mkdirs();
         CCode.toTextFormat();
@@ -9432,7 +9432,7 @@ public class GTURTLEModeling {
         int i=0;
         int diff=300;
         int ydiff=50;
-        int num = asme.nbOfNexts();
+        //int num = asme.nbOfNexts();
         if (!(asme instanceof AvatarTransition)){
             for (AvatarStateMachineElement el:asme.getNexts()){
                 if (!(el instanceof AvatarTransition)){
