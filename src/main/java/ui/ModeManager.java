@@ -123,10 +123,7 @@ public class ModeManager {
             actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS].setEnabled(true);
             actions[TGUIAction.ACT_DELETE].setEnabled(false);
             actions[TGUIAction.ACT_SUPPR].setEnabled(false);
-            actions[TGUIAction.ACT_UP].setEnabled(false);
-            actions[TGUIAction.ACT_DOWN].setEnabled(false);
-            actions[TGUIAction.ACT_LEFT].setEnabled(false);
-            actions[TGUIAction.ACT_RIGHT].setEnabled(false);
+            actions[TGUIAction.MOVE_ENABLED].setEnabled(false);
             
             if (mainBar != null) {
                 mainBar.activateSearch(true);
@@ -410,10 +407,7 @@ public class ModeManager {
             actions[TGUIAction.ACT_NC].setEnabled(true);
             break;
         case MainGUI.COMPONENT_SELECTED:
-        	actions[TGUIAction.ACT_UP].setEnabled(true);
-            actions[TGUIAction.ACT_DOWN].setEnabled(true);
-            actions[TGUIAction.ACT_LEFT].setEnabled(true);
-            actions[TGUIAction.ACT_RIGHT].setEnabled(true);
+        	actions[TGUIAction.MOVE_ENABLED].setEnabled(true);
             actions[TGUIAction.ACT_DELETE].setEnabled(true);
             actions[TGUIAction.ACT_SUPPR].setEnabled(true);
             break;
