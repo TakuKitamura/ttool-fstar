@@ -47,6 +47,7 @@ import translator.CheckingError;
 import tmltranslator.TMLCheckingError;
 import ui.*;
 import ui.graph.RG;
+import myutil.*;
 
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
@@ -162,6 +163,9 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
         int y = e.getY();
         JTree tree = (JTree)e.getSource();
         TreePath path = tree.getPathForLocation(x, y);
+
+	//TraceManager.addDev("Path=" + path);
+	
         if (path == null)
             return;
 
@@ -219,6 +223,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 //System.out.println("Path: " + l_path);
                 //System.out.println("Parent path: " + parent);
                 if ((l_path.getPathCount() == 2) || (m_expandedTreePaths.contains(parent))) {
+		    //TraceManager.addDev("Path=" + l_path);
                     expandPath(l_path);
                 }
             } catch (Exception e) {
@@ -298,9 +303,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
     }
 
-    /*public void expandPath(TreePath tp) {
+    public void expandMyPath(TreePath tp) {
+	//TraceManager.addDev("Path=" + tp);
 	expandPath(tp);
-	}*/
+     }
 
     public void treeCollapsed(TreeExpansionEvent treeExpansionEvent) {
         m_expandedTreePaths.remove(treeExpansionEvent.getPath());
@@ -314,6 +320,9 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
         }
 
         TreePath tp = treeSelectionEvent.getNewLeadSelectionPath();
+
+	//TraceManager.addDev("Expanded path=" + tp);
+	
         if (tp == null) {
             return;
         }
