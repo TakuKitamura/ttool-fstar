@@ -62,7 +62,7 @@
 <ExternalCommand1Host data="localhost"/>
 <ExternalCommand1 data="gtkwave ../simulators/c++2/vcddump.vcd"/>
 <ExternalCommand2Host data="localhost"/>
-<ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal ../uppaal/spec.xml"/>
+<ExternalCommand2 data="/packages/uppaal4.0.11/uppaal ../uppaal/spec.xml"/>
 
 
 <LastOpenFile data="/home/satan/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.ttool"/>
