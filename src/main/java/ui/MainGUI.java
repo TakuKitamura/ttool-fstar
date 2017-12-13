@@ -3495,6 +3495,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                       }
                     */
                 } else {
+		    expandToErrors();
                     if (!automatic) {
                         JOptionPane.showMessageDialog(frame,
                                                       "The Avatar modeling contains several errors",
