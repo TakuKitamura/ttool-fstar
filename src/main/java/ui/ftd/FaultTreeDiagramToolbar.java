@@ -39,7 +39,7 @@
 
 
 
-package ui.atd;
+package ui.ftd;
 
 import ui.MainGUI;
 import ui.TGUIAction;
@@ -51,16 +51,16 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
-   * Class AttackTreeDiagramToolBar
-   * Implements the toolbar to be used in conjunction with the panel of an attack tree diagram
+   * Class FaultTreeDiagramToolBar
+   * Implements the toolbar to be used in conjunction with the panel of a fault tree diagram
    * Creation: 03/11/2009
    * @version 1.0 03/11/2009
    * @author Ludovic APVRILLE
-   * @see ui.cd.TClassDiagramPanel
+   * @see ui.ftd.FaultTreeDiagramPanel
  */
-public class AttackTreeDiagramToolbar extends TToolBar {
+public class FaultTreeDiagramToolbar extends TToolBar {
 
-    public AttackTreeDiagramToolbar(MainGUI _mgui) {
+    public FaultTreeDiagramToolbar(MainGUI _mgui) {
         super(_mgui);
 
     }
@@ -76,20 +76,20 @@ public class AttackTreeDiagramToolbar extends TToolBar {
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
 
-        mgui.actions[TGUIAction.ATD_BLOCK].setEnabled(b);
-        mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.FTD_BLOCK].setEnabled(b);
+        mgui.actions[TGUIAction.FTD_COMPOSITION_CONNECTOR].setEnabled(b);
 
-        mgui.actions[TGUIAction.ATD_ATTACK].setEnabled(b);
+        mgui.actions[TGUIAction.FTD_ATTACK].setEnabled(b);
 
-        mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.FTD_ATTACK_CONNECTOR].setEnabled(b);
 
-        mgui.actions[TGUIAction.ATD_CONSTRAINT].setEnabled(b);
+        mgui.actions[TGUIAction.FTD_CONSTRAINT].setEnabled(b);
 
-	mgui.actions[TGUIAction.ATD_COUNTERMEASURE].setEnabled(b);
-	mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR].setEnabled(b);
+	mgui.actions[TGUIAction.FTD_COUNTERMEASURE].setEnabled(b);
+	mgui.actions[TGUIAction.FTD_COUNTERMEASURE_CONNECTOR].setEnabled(b);
 
         mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
-	mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+	//mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 
     }
 
@@ -109,31 +109,31 @@ public class AttackTreeDiagramToolbar extends TToolBar {
 
         this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.ATD_BLOCK]);
+        button = this.add(mgui.actions[TGUIAction.FTD_BLOCK]);
         button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.ATD_ATTACK]);
+        button = this.add(mgui.actions[TGUIAction.FTD_COMPOSITION_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
 
         this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.ATD_CONSTRAINT]);
+        button = this.add(mgui.actions[TGUIAction.FTD_ATTACK]);
         button.addMouseListener(mgui.mouseHandler);
 
         this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR]);
+        button = this.add(mgui.actions[TGUIAction.FTD_CONSTRAINT]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.FTD_ATTACK_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
 
 	this.addSeparator();
-	button = this.add(mgui.actions[TGUIAction.ATD_COUNTERMEASURE]);
+	button = this.add(mgui.actions[TGUIAction.FTD_COUNTERMEASURE]);
         button.addMouseListener(mgui.mouseHandler);
-	button = this.add(mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR]);
+	button = this.add(mgui.actions[TGUIAction.FTD_COUNTERMEASURE_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
 	
         this.addSeparator();

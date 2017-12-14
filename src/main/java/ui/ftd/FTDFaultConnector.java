@@ -39,7 +39,7 @@
 
 
 
-package ui.atd;
+package ui.ftd;
 
 
 import myutil.Conversion;
@@ -53,13 +53,13 @@ import java.awt.geom.Point2D;
 import java.util.Vector;
 
 /**
-   * Class ATDAttackConnector
+   * Class FTDFaultConnector
    * Connector used in Attack Tree Diagrams
-   * Creation: 09/12/2009
-   * @version 1.0 09/12/2009
+   * Creation: 14/12/2017
+   * @version 1.0 14/12/2017
    * @author Ludovic APVRILLE
  */
-public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
+public  class FTDFaultConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;
     //protected int widthValue, heightValue, maxWidthValue, h;
     protected int c = 5; //square length
@@ -67,7 +67,7 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
     protected int fontSize = 12;
 
 
-    public ATDAttackConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    public FTDFaultConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
         value = "";
@@ -187,7 +187,7 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
 
 
     public int getType() {
-        return TGComponentManager.ATD_ATTACK_CONNECTOR;
+        return TGComponentManager.FTD_FAULT_CONNECTOR;
     }
 
     public void rescale(double scaleFactor){

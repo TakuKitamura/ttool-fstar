@@ -39,7 +39,7 @@
 
 
 
-package ui.atd;
+package ui.ftd;
 
 import myutil.GraphicLib;
 import ui.*;
@@ -51,13 +51,13 @@ import java.util.Vector;
 
 
 /**
-   * Class ATDBlock
-   * Node. To be used in Attack Tree Diagrams
-   * Creation: 09/12/2009
-   * @version 1.1 09/12/2009
+   * Class FTDBlock
+   * Node. To be used in Fault Tree Diagrams
+   * Creation: 14/12/2017
+   * @version 1.1 14/12/2017
    * @author Ludovic APVRILLE
  */
-public class ATDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent {
+public class FTDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent {
     private int textY1 = 3;
     private String stereotype = "block";
 
@@ -68,7 +68,7 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
     private int textX = 1;
 
 
-    public ATDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public FTDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         width = 250;
@@ -79,23 +79,23 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
 
-        connectingPoint[0] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.0);
-        connectingPoint[1] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[2] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.0);
-        connectingPoint[3] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[4] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[5] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 1.0);
-        connectingPoint[6] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-        connectingPoint[7] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 1.0);
+        connectingPoint[0] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.0);
+        connectingPoint[1] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[2] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.0);
+        connectingPoint[3] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[4] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[5] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 1.0);
+        connectingPoint[6] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[7] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 1.0);
 
-        connectingPoint[8] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[9] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[10] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
-        connectingPoint[11] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[12] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[13] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
-        connectingPoint[14] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[15] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[8] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[9] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[10] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
+        connectingPoint[11] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
+        connectingPoint[12] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
+        connectingPoint[13] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+        connectingPoint[14] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+        connectingPoint[15] = new FTDCompositionConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
 
         addTGConnectingPointsComment();
 
@@ -167,7 +167,7 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
 
-        g.setColor(ColorManager.ATD_BLOCK);
+        g.setColor(ColorManager.FTD_BLOCK);
         g.fill3DRect(x+1, y+1, width-1, height-1, true);
         g.setColor(c);
 
@@ -269,16 +269,16 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
 
 
     public int getType() {
-        return TGComponentManager.ATD_BLOCK;
+        return TGComponentManager.FTD_BLOCK;
     }
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        return tgc instanceof ATDAttack;
+        return tgc instanceof FTDFault;
 
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-        if (tgc instanceof ATDAttack) {
+        if (tgc instanceof FTDFault) {
             tgc.setFather(this);
             tgc.setDrawingZone(true);
             tgc.resizeWithFather();
@@ -286,7 +286,7 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
             return true;
         }
 
-        if (tgc instanceof ATDConstraint) {
+        if (tgc instanceof FTDConstraint) {
             tgc.setFather(this);
             tgc.setDrawingZone(true);
             tgc.resizeWithFather();
@@ -302,11 +302,11 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
     }
 
 
-    public Vector<ATDAttack> getAttackList() {
-        Vector<ATDAttack> v = new Vector<>();
+    public Vector<FTDAttack> getAttackList() {
+        Vector<FTDAttack> v = new Vector<>();
         for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof ATDAttack) {
-                v.add((ATDAttack) tgcomponent[i]);
+            if (tgcomponent[i] instanceof FTDFault) {
+                v.add((FTDAttack) tgcomponent[i]);
             }
         }
         return v;
@@ -314,7 +314,7 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
 
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof ATDAttack) {
+            if (tgcomponent[i] instanceof FTDFault) {
                 tgcomponent[i].resizeWithFather();
             }
         }
@@ -322,7 +322,7 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
     }
 
     public int getDefaultConnector() {
-        return TGComponentManager.ATD_COMPOSITION_CONNECTOR;
+        return TGComponentManager.FTD_COMPOSITION_CONNECTOR;
     }
 
 }
