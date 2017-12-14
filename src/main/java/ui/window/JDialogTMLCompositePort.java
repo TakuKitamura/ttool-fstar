@@ -44,6 +44,7 @@ package ui.window;
 import ui.util.IconManager;
 import ui.TType;
 import ui.tmlcd.TMLDataFlowType;
+import ui.TGComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -82,19 +83,21 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
     // Panel1
     private JTextField nameText, maxText, widthText, associatedEventJT;
     private JComboBox<String> typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
-    private JComboBox<String> origin, finite, blocking, dfType, refReq;
+    private JComboBox<String> origin, finite, blocking, dfType;
+    private JComboBox<TGComponent> refReq;
 	private JLabel lossPercentageLabel, maxNbOfLossLabel;
 	private int portIndex;
     private Vector<String> origins, finites, blockings, portTypes, types1, types2, types3, types4, types5;
 	private Vector<String> types;
-    private Vector<String> refs;
-	private String referenceReq;
+    private Vector<TGComponent> refs;
+    private TGComponent reference;
+
 	// Robustness
 	private JCheckBox isLossyBox, isPrexCB, isPostexCB, confCheckBox, authCheckBox;
 	private JTextField lossPercentageText, maxNbOfLossText;
 
 
-	public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf, boolean _checkAuth, String _referenceReq, Vector<String> _refs) {
+	public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex , boolean _checkConf, boolean _checkAuth, TGComponent _reference, Vector<TGComponent> _refs) {
         super(f, title, true);
         frame = f;
         
@@ -122,7 +125,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
 		checkConf = _checkConf;
 		checkAuth = _checkAuth;
 		refs=_refs;
-		referenceReq= _referenceReq;
+		reference= _reference;
         myInitComponents();
         initComponents();
         checkMode();
@@ -295,14 +298,8 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
 		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 		refReq = new JComboBox<>(refs);
 		panel2.add(refReq,c2);
-		int index=-1;
-		for (int ind=0; ind<refs.size(); ind++) {
-			if (referenceReq.equals(refs.get(ind))){
-				index=ind;
-			}
-		}
-		if (index!=-1){
-			refReq.setSelectedIndex(index);
+		if (reference!=null){
+			refReq.setSelectedItem(reference);
 		}
 
         c2.gridwidth = 1;
@@ -616,8 +613,8 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
     public void cancelDialog() {
         dispose();
     }
-	public String getReferenceReq(){
-		return (String) refReq.getSelectedItem();
+	public TGComponent getReference(){
+		return (TGComponent) refReq.getSelectedItem();
 	}
     
     public void checkMode() {
