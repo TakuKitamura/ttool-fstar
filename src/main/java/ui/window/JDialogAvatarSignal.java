@@ -168,13 +168,14 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
         panel1.add(signal, c1);
         //panel1.setEditable(true);
 
-		//Reference to DIPLODOCUS signal
+		//Reference to DIPLODOCUS signal or Requirement
 		c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
 		panel1.add(new JLabel("Reference Requirement"),c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		refChecks = new JComboBox<TGComponent>(refs);
+		refChecks.insertItemAt(null, 0);
 		if (reference!=null){
 			refChecks.setSelectedItem(reference);
 		}

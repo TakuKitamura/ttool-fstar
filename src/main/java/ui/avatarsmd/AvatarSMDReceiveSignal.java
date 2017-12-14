@@ -200,93 +200,96 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 			Color c = g.getColor();
 			if (reference !=null){
 				//References must be in the form "The max delay between send/recieve signal:(signalname) and send/receive signal (signalname) is (less than/greater than) X.
-				String req= ((AvatarRDRequirement) reference).getText().trim();
-				if (req.contains("The max delay between")){
-					//Attempt to parse string
-					boolean lessThan= req.contains(" less than ");
-					String sig1 = req.split(" between ")[1].split(" and ")[0].trim();
-					String sig2 = req.split(" and ")[1].split(" is ")[0].trim();
-					String num = req.split(" than ")[1];
-
-					num = num.replaceAll("\\.","");
-					
-					int refNum = -1;
-					try { 
-						refNum = Integer.valueOf(num);
-					}
-					catch(Exception e){
-					}
-					
-					if (sig1.equals("receive signal: " + value.split("\\(")[0])){
-						if (sig2.replaceAll(": ","-").equalsIgnoreCase(s)){
-							//Compare times
-							int tActual=Integer.valueOf(latencyVals.get(s.split(":")[0]));
-							if (refNum>0){
-								if (lessThan){
-									if (tActual < refNum){
-										g.setColor(Color.GREEN);
+				if (reference instanceof AvatarRDRequirement){
+					String req= ((AvatarRDRequirement) reference).getText().trim();
+					if (req.contains("The max delay between")){
+						//Attempt to parse string
+						boolean lessThan= req.contains(" less than ");
+						String sig1 = req.split(" between ")[1].split(" and ")[0].trim();
+						String sig2 = req.split(" and ")[1].split(" is ")[0].trim();
+						String num = req.split(" than ")[1];
+	
+						num = num.replaceAll("\\.","");
+						
+						int refNum = -1;
+						try { 
+							refNum = Integer.valueOf(num);
+						}
+						catch(Exception e){
+						}
+						
+						if (sig1.equals("receive signal: " + value.split("\\(")[0])){
+							if (sig2.replaceAll(": ","-").equalsIgnoreCase(s)){
+								//Compare times
+								int tActual=Integer.valueOf(latencyVals.get(s.split(":")[0]));
+								if (refNum>0){
+									if (lessThan){
+										if (tActual < refNum){
+											g.setColor(Color.GREEN);
+										}
+										else {
+											g.setColor(Color.RED);	
+										}	
 									}
 									else {
-										g.setColor(Color.RED);	
-									}	
+										if (tActual> refNum){
+											g.setColor(Color.GREEN);
+										}
+										else {
+											g.setColor(Color.RED);	
+										}
+									}
 								}
-								else {
-									if (tActual> refNum){
-										g.setColor(Color.GREEN);
+							}
+						}
+						else if (sig2.equals("receive signal: " + value.split("\\(")[0])){
+							if (sig1.replaceAll(": ","-").trim().equalsIgnoreCase(s.split(":")[0].trim())){
+								//Compare times
+								int tActual=Integer.valueOf(latencyVals.get(s));
+								//System.out.println(refNum + " " + tActual);
+								if (refNum>0){
+									if (lessThan){
+										if (tActual < refNum){
+											g.setColor(Color.GREEN);
+										}
+										else {
+											g.setColor(Color.RED);	
+										}	
 									}
 									else {
-										g.setColor(Color.RED);	
+										if (tActual> refNum){
+											g.setColor(Color.GREEN);
+										}
+										else {
+											g.setColor(Color.RED);	
+										}
 									}
 								}
 							}
 						}
 					}
-					else if (sig2.equals("receive signal: " + value.split("\\(")[0])){
-						if (sig1.replaceAll(": ","-").trim().equalsIgnoreCase(s.split(":")[0].trim())){
-							//Compare times
-							int tActual=Integer.valueOf(latencyVals.get(s));
-							//System.out.println(refNum + " " + tActual);
-							if (refNum>0){
-								if (lessThan){
-									if (tActual < refNum){
-										g.setColor(Color.GREEN);
-									}
-									else {
-										g.setColor(Color.RED);	
-									}	
-								}
-								else {
-									if (tActual> refNum){
-										g.setColor(Color.GREEN);
-									}
-									else {
-										g.setColor(Color.RED);	
-									}
-								}
+				}
+				if (reference instanceof TMLADReadChannel){
+				//	System.out.println("ref " + reference.toString().split(": ")[1].split("\\(")[0] + " " + s.split("-")[1].split(":")[0]);
+					TMLADReadChannel rc = (TMLADReadChannel) reference;
+					ConcurrentHashMap<String, String> refLats =rc.getLatencyMap();
+					//System.out.println("referencelats " + refLats);
+					for (String checkpoint:refLats.keySet()){
+						if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split("channel:")[1].split(" ")[0])){
+							String time=refLats.get(checkpoint);
+							int tdip= Integer.valueOf(time);
+							int tav=Integer.valueOf(latencyVals.get(s));
+							if (Math.abs(tdip-tav)>tdip){
+								g.setColor(Color.RED);		
+							}
+							else {
+								g.setColor(Color.GREEN);
 							}
 						}
 					}
 				}
 			}
-			/*if (reference instanceof TMLADReadChannel){
-			//	System.out.println("ref " + reference.toString().split(": ")[1].split("\\(")[0] + " " + s.split("-")[1].split(":")[0]);
-				TMLADReadChannel rc = (TMLADReadChannel) reference;
-				ConcurrentHashMap<String, String> refLats =rc.getLatencyMap();
-				//System.out.println("referencelats " + refLats);
-				for (String checkpoint:refLats.keySet()){
-					if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split("channel:")[1].split(" ")[0])){
-						String time=refLats.get(checkpoint);
-						int tdip= Integer.valueOf(time);
-						int tav=Integer.valueOf(latencyVals.get(s));
-						if (Math.abs(tdip-tav)>tdip){
-							g.setColor(Color.RED);		
-						}
-						else {
-							g.setColor(Color.GREEN);
-						}
-					}
-				}
-			}*/
+			
 			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
 			g.setColor(c);
 			index++;
@@ -387,9 +390,9 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		}
 		
 		String val = jdas.getSignal();
-		if (jdas.getReference()!=null){
+		//if (jdas.getReference()!=null){
 			reference = jdas.getReference();
-		}
+		//}
 		if (val.indexOf('(') == -1) {
 			val += "()";
 		}
