@@ -8134,6 +8134,7 @@ public class GTURTLEModeling {
         Element elt1;
         TGComponent tgc = null;
         TGComponent father;
+        TGComponent reference;
 
         //
         try {
@@ -8154,6 +8155,7 @@ public class GTURTLEModeling {
             Point p;
             int i, x, y;
             int fatherId = -1, fatherNum = -1;
+            int referenceId=-1;
             String pre = "", post = "";
             String internalComment = "";
             boolean accessibility = false;
@@ -8197,6 +8199,8 @@ public class GTURTLEModeling {
                     } else if (elt.getTagName().equals("father")) {
                         fatherId = Integer.decode(elt.getAttribute("id")).intValue();
                         fatherNum = Integer.decode(elt.getAttribute("num")).intValue();
+                    } else if (elt.getTagName().equals("reference")) {
+                        referenceId = Integer.decode(elt.getAttribute("id")).intValue();
                     } else if (elt.getTagName().equals("prejavacode")) {
                         pre += elt.getAttribute("value") + "\n";
                     } else if (elt.getTagName().equals("postjavacode")) {
@@ -8223,6 +8227,8 @@ public class GTURTLEModeling {
 
             //TraceManager.addDev("Making TGComponent of type " + myType + " and of name " + myName);
             //TGComponent is ready to be built
+            
+
             if(fatherId != -1) {
                 fatherId += decId;
                 // internal component
@@ -8276,7 +8282,19 @@ public class GTURTLEModeling {
                 tgc.setName(myName);
             }
 
-            tgc.setHidden(hidden);
+
+            if (referenceId !=-1){
+            	referenceId += decId;
+            	for (TURTLEPanel turtlepanel: panels){
+            		for (TDiagramPanel tdpanel: turtlepanel.panels){
+            			if (tdpanel.findComponentWithId(referenceId) !=null){
+           					tgc.reference=tdpanel.findComponentWithId(referenceId);
+            				break;
+            			}
+            		}
+            	}
+            }
+
             tgc.setEnabled(enable);
 
             /*if (tgc instanceof TCDTObject) {

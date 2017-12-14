@@ -175,6 +175,9 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
 		panel1.add(new JLabel("Reference Requirement"),c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		refChecks = new JComboBox<TGComponent>(refs);
+		if (reference!=null){
+			refChecks.setSelectedItem(reference);
+		}
 		panel1.add(refChecks,c1);
 
 

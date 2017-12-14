@@ -1525,7 +1525,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}*/
     
 	protected void addTransactionToNode(SimulationTransaction tran){
-		//System.out.println("Command " + tran.command + " " + tran.deviceName + " " + tran.channelName);
+
 		String command = tran.command;
 
 		if (command.contains(" ")){
@@ -1703,6 +1703,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			}
 			else {
 				TraceManager.addDev("UNHANDLED COMMAND " + tran.command + " " + tran.deviceName + " " + tran.nodeType);
+//		System.out.println("Command " + tran.command + " " + tran.deviceName + " " + tran.channelName);
 			}
 			//System.out.println("Simulation command " + tran.command + " " + tran.channelName + " " + tran.length);
 

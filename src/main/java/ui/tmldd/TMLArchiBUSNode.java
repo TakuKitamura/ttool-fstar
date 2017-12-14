@@ -62,7 +62,7 @@ import java.util.Vector;
    * @version 1.0 31/10/2007
    * @author Ludovic APVRILLE
  */
-public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
+public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements SwallowTGComponent, LinkedReference, WithAttributes, TMLArchiElementInterface {
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;

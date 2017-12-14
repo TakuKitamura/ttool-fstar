@@ -65,7 +65,7 @@ import java.util.concurrent.ConcurrentHashMap;
    * @version 1.0 17/11/2005
    * @author Ludovic APVRILLE
  */
-public class TMLADWriteChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADWriteChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, LinkedReference, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
