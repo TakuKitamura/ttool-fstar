@@ -47,7 +47,7 @@
 <UPPAALPropertyVerifMessage data="Formula is satisfied"/>
 <UPPAALPropertyNotVerifMessage data="Formula is NOT satisfied"/>
 <ProVerifCodeDirectory data="../proverif/" />
-<ProVerifVerifierPath data="/packages/proverif/proverif" />
+<ProVerifVerifierPath data="../../proverif" />
 <ProVerifVerifierHost data="localhost" />
 <AVATARExecutableCodeDirectory data="../executablecode/" />
 <AVATARMPSoCCodeDirectory data="../MPSoC/" />

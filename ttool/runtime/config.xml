@@ -45,7 +45,7 @@
 <UPPAALVerifierPath data="/packages/uppaal-4.0.11/verifyta" />
 <UPPAALVerifierHost data="localhost" />
 <ProVerifCodeDirectory data="../proverif/" />
-<ProVerifVerifierPath data="/packages/proverif/proverif" />
+<ProVerifVerifierPath data="../../proverif" />
 <ProVerifVerifierHost data="localhost" />
 <AVATARExecutableCodeDirectory data="../executablecode/" />
 <AVATARMPSoCCodeDirectory data="../MPSoC/" />
@@ -65,7 +65,7 @@
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal ../uppaal/spec.xml"/>
 
 
-<LastOpenFile data="/home/satan/TTool/modeling/AVATAR/CoffeeMachine_Avatar.ttool/CoffeeMachine_Avatar.xml"/>
+<LastOpenFile data="/home/satan/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.ttool"/>
 
 
 

@@ -2289,6 +2289,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void updateLastOpenFile(File file) {
         if (ConfigurationTTool.LastOpenFileDefined) {
             ConfigurationTTool.LastOpenFile = file.getPath();
+            if (ConfigurationTTool.LastOpenFile.contains(".ttool" + File.separator)) {
+            	int last = 0;
+            	for (int i = 0;i < ConfigurationTTool.LastOpenFile.length(); i++) {
+            		if (ConfigurationTTool.LastOpenFile.charAt(i) == '/')
+            			last = i;
+            	}
+            	ConfigurationTTool.LastOpenFile = ConfigurationTTool.LastOpenFile.substring(0, last);
+            }
             // Change name of action
             actions[TGUIAction.ACT_OPEN_LAST].setName(TGUIAction.ACT_OPEN_LAST, ConfigurationTTool.LastOpenFile);
         }
@@ -2484,6 +2492,29 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         if(checkFileForOpen(file)) {
             String s = null;
+            
+            if (FileUtils.getExtension(file).equals("ttool")) {
+            	int last = 0;
+            	for (int i = 0;i < ConfigurationTTool.LastOpenFile.length(); i++) {
+            		if (ConfigurationTTool.LastOpenFile.charAt(i) == '/')
+            			last = i;
+            	}
+            	dir = file;
+            	String xml = ConfigurationTTool.LastOpenFile.substring(last, ConfigurationTTool.LastOpenFile.length()).replaceAll(".ttool", ".xml");
+            	file = new File(dir.getAbsolutePath() + File.separator + xml);
+            	SpecConfigTTool.setDirConfig(dir);
+            	config = new File(dir.getAbsolutePath() + "/project_config.xml");
+            	try {
+    				SpecConfigTTool.loadConfigFile(config);
+    			} catch (MalformedConfigurationException e) {
+    				System.err.println(e.getMessage() + " : Can't load config file.");
+    			}
+            }
+            else {
+            	dir = null;
+            	config = null;
+            	SpecConfigTTool.setBasicConfig(systemcOn);
+            }
 
             try {
                 FileInputStream fis = new FileInputStream(file);
@@ -2498,26 +2529,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 return;
             }
             
-            if (ConfigurationTTool.LastOpenFile.contains(".ttool/")) {
-            	int last = 0;
-            	for (int i = 0;i < ConfigurationTTool.LastOpenFile.length(); i++) {
-            		if (ConfigurationTTool.LastOpenFile.charAt(i) == '/')
-            			last = i;
-            	}
-            	dir = new File(ConfigurationTTool.LastOpenFile.substring(0, last));
-            	SpecConfigTTool.setDirConfig(dir);
-            	config = new File(dir.getAbsolutePath() + "/project_config.xml");
-            	try {
-    				SpecConfigTTool.loadConfigFile(config);
-    			} catch (MalformedConfigurationException e) {
-    				System.err.println(e.getMessage() + " : Can't load config file.");
-    			}
-            }
-            else {
-            	dir = null;
-            	config = null;
-            	SpecConfigTTool.setBasicConfig(systemcOn);
-            }
             // close current modeling
             closeTurtleModeling();
 
