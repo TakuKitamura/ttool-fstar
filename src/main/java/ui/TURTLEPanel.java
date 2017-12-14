@@ -335,6 +335,10 @@ public abstract class TURTLEPanel implements GenericTree {
         return false;
     }
 
+    public boolean isFTDEnabled() {
+        return false;
+    }
+
     public boolean isAvatarRDEnabled() {
         return false;
     }
