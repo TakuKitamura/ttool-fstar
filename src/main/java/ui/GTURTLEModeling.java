@@ -3610,10 +3610,13 @@ public class GTURTLEModeling {
 	if (mcvdt != null) {
 	    SyntaxAnalysisErrorTree saet = mcvdt.getSyntaxAnalysisErrorTree();
 	    if (saet != null) {
-		Object []obj = new Object[2];
-		obj[0] = mcvdt;
-		obj[1] = saet;
-		mgui.dtree.expandPath(new TreePath(obj));
+		Object []obj = new Object[3];
+		obj[0] = mgui.dtree.getModel().getRoot();
+		obj[1] = mcvdt;
+		obj[2] = saet;
+		TraceManager.addDev("Expanding Path because of errors");
+		mgui.dtree.expandMyPath(new TreePath(obj));
+		mgui.dtree.forceUpdate();
 	    }
 	}
     }
