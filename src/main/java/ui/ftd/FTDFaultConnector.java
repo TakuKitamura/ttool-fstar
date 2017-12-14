@@ -92,7 +92,7 @@ public  class FTDFaultConnector extends TGConnectorWithCommentConnectionPoints i
         int decX = 0;
         int decY = 0;
         // Origin = constraint?
-        if (comp instanceof ATDConstraint) {
+        if (comp instanceof FTDConstraint) {
             if (comp.getX() == cp.getX()) {
                 decX = 0;
             } else if (comp.getX() + comp.getWidth() == cp.getX()) {
@@ -113,7 +113,7 @@ public  class FTDFaultConnector extends TGConnectorWithCommentConnectionPoints i
         }
         cp = p2;
         comp = cp.getFather();
-        if (comp instanceof ATDConstraint) {
+        if (comp instanceof FTDConstraint) {
             if (comp.getX() == cp.getX()) {
                 decX = 0;
             } else if (comp.getX() + comp.getWidth() == cp.getX()) {
