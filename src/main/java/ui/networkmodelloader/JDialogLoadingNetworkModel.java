@@ -97,6 +97,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     private String url;
     private NetworkModelPanel panel;
     private String filePath;
+    private JFileChooser jfc;
 
 
     /** Creates new form  */
@@ -124,6 +125,13 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
 
     protected void myInitComponents() {
+    	
+    	if (ConfigurationTTool.DownloadedFILEPath.length() > 0) {
+            jfc = new JFileChooser(ConfigurationTTool.DownloadedFILEPath);
+        } else {
+            jfc = new JFileChooser();
+        }
+    	
         mode = NOT_LISTED;
         setButtons();
     }
@@ -356,14 +364,18 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         jta.append("Loading model: " + fileName);
         String urlToLoad = URLManager.getBaseURL(url) + fileName;
         URLManager urlm = new URLManager();
-	if ((ConfigurationTTool.DownloadedFILEPath == null) || (ConfigurationTTool.DownloadedFILEPath.length() == 0)) {
-	    filePath = fileName;
-	} else {
-	    filePath = ConfigurationTTool.DownloadedFILEPath + "/" + fileName;
-	}
-        boolean ok = urlm.downloadFile(filePath, urlToLoad,this);
-        if (!ok) {
-	    loadFailed();
+        jfc.setSelectedFile(new File(FileUtils.removeFileExtension(fileName)));
+        int returnVal = jfc.showSaveDialog(f);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        	filePath = jfc.getSelectedFile().getAbsolutePath();
+        	filePath = FileUtils.addFileExtensionIfMissing(filePath, "xml");
+        	boolean ok = urlm.downloadFile(filePath, urlToLoad,this);
+        	if (!ok) {
+        		loadFailed();
+        	}
+       }
+        else {
+        	panel.reactivateSelection();
         }
     }
 
