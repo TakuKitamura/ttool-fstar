@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Vector;
+import ui.avatarrd.AvatarRDRequirement;
 
 import ui.tmlad.TMLADWriteChannel;
 /**
@@ -63,7 +64,7 @@ import ui.tmlad.TMLADWriteChannel;
    * @version 1.0 12/04/2010
    * @author Ludovic APVRILLE
  */
-public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements CheckableAccessibility, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
+public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements CheckableAccessibility, LinkedReference, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -71,7 +72,6 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
     protected int linebreak = 10;
 
 	private ConcurrentHashMap<String, String> latencyVals;
-	private TGComponent reference;	
 
 	protected int latencyX=30;
 	protected int latencyY=25;
@@ -277,8 +277,15 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
         LinkedList<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
         //TraceManager.addDev("Nb of signals:" + signals.size());
 		ArrayList<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
+		
 		Vector<TGComponent> refs = new Vector<TGComponent>();
-		refs.add(null);
+		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
+            //System.out.println("req " + req);
+            if (req instanceof AvatarRDRequirement){
+                refs.add((AvatarRDRequirement) req);
+            }
+        }
+
 		for (TGComponent tg:comps){
 			if (tg instanceof TMLADWriteChannel){
 				refs.add(tg);

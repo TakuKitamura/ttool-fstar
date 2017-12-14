@@ -113,6 +113,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
     protected TGComponent father;
     private boolean moveWithFather = true;
 
+	protected TGComponent reference;
+
     private int id;
 
     // DIPLODOCUS ID
@@ -3016,6 +3018,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
         if (!b) {
             sb.append(translateFatherInformation());
         }
+        if (reference!=null){
+            sb.append(translateReferenceInformation());
+        }
         sb.append(translateCDParam());
         sb.append(translateSizeParam());
         sb.append(translateHidden());
@@ -3045,6 +3050,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
         return sb;
     }
+
+	protected String translateReferenceInformation(){
+		return "<reference id=\"" + reference.getId() + "\" />\n";
+	}
 
     protected String translateFatherInformation() {
         return  "<father id=\"" + father.getId() + "\" num=\"" + father.getMyNum(this) + "\" />\n";

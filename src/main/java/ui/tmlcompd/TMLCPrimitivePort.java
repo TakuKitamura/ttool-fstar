@@ -66,7 +66,7 @@ import java.util.Vector;
  * @version 1.0 12/03/2008
  * @author Ludovic APVRILLE
  */
-public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
+public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference, WithAttributes {
     protected Color myColor;
     protected int orientation;
     protected int oldx, oldy;
