@@ -10,6 +10,9 @@
     <content url="file://$MODULE_DIR$/../test/java">
       <sourceFolder url="file://$MODULE_DIR$/../test/java" isTestSource="true" />
     </content>
+    <content url="file://$MODULE_DIR$/../test/resources">
+      <sourceFolder url="file://$MODULE_DIR$/../test/resources" type="java-test-resource" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="shared" />
@@ -21,6 +24,15 @@
         <JAVADOC />
         <SOURCES />
         <jarDirectory url="file://$MODULE_DIR$/../../../libs" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../test/libs/fr.tpt.mem4csd.utils.compare_1.0.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
       </library>
     </orderEntry>
   </component>
