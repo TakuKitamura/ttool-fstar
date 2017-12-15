@@ -5505,7 +5505,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return;
         }
 
-        File file = selectSVGFileForCapture();
+        File file = selectSVGFileForCapture(true);
 
         if (file == null)
             return;
@@ -5593,7 +5593,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return;
         }
 
-        File file = selectSVGFileForCapture();
+        File file = selectSVGFileForCapture(false);
         if (file == null)
             return;
 
@@ -5611,7 +5611,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 tdp1 = tp.panels.elementAt(i);
                 tdp1.repaint();
 
-                tdp1.performMinimalCapture();
+                //tdp1.performMinimalCapture();
                 String svgImg = tdp1.svgCapture();
 
                 if (i < 10) {
@@ -5621,6 +5621,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 }
                 file1 = FileUtils.addFileExtensionIfMissing(file1, TSVGFilter.getExtension());
                 try {
+		    TraceManager.addDev("Saving in file:" + file1.getAbsolutePath());
                     FileUtils.saveFile(file1, svgImg);
                 } catch(Exception e) {
                     JOptionPane.showMessageDialog(frame,
@@ -5669,7 +5670,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return file;
     }
 
-    public File selectSVGFileForCapture() {
+    public File selectSVGFileForCapture(boolean checkForSave) {
         File file = null;
         jfcimgsvg.setCurrentDirectory(new File(SpecConfigTTool.IMGPath));
         int returnVal = jfcimgsvg.showSaveDialog(frame);
@@ -5681,15 +5682,18 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             file = FileUtils.addFileExtensionIfMissing(file, TSVGFilter.getExtension());
 
         }
-        if(!checkFileForSave(file)) {
-            JOptionPane.showMessageDialog(frame,
-                                          "The capture could not be performed: invalid file",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
-            return null;
-        }
+	if (checkForSave) {
+	    if(!checkFileForSave(file)) {
+		JOptionPane.showMessageDialog(frame,
+					      "The capture could not be performed: invalid file",
+					      "Error",
+					      JOptionPane.INFORMATION_MESSAGE);
+		return null;
+	    }
+	}
         return file;
     }
+    
 
     public void performScreenCapture(Rectangle rect, File file) {
         frame.paint(frame.getGraphics());
