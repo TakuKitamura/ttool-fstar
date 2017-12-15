@@ -66,7 +66,7 @@ import java.util.Vector;
  * @version 1.0 12/03/2008
  * @author Ludovic APVRILLE
  */
-public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
+public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference, WithAttributes {
     protected Color myColor;
     protected int orientation;
     protected int oldx, oldy;
@@ -112,7 +112,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected String conflictMessage;
     protected String dataFlowType = "VOID";
     protected String associatedEvent = "VOID";
-    public String referenceReq = "";
+
     public int verification;
     
     public TMLCPrimitivePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -549,15 +549,15 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             TMLCPrimitiveComponent tgc = (TMLCPrimitiveComponent)(getFather());
             otherTypes = tgc.getAllRecords();
         }
-        Vector<String> refs = new Vector<String>();
+        Vector<TGComponent> refs = new Vector<TGComponent>();
         for (TGComponent req: tdp.getMGUI().getAllRequirements()){
             //System.out.println("req " + req);
             if (req instanceof AvatarRDRequirement){
-                refs.add(((AvatarRDRequirement) req).getID()+ ":" + ((AvatarRDRequirement) req).getText().trim());
+                refs.add(req);
             }
         }
 
-        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth, referenceReq, refs);
+        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth, reference, refs);
         // jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda, 350, 700 );
         // jda.show(); // blocked until dialog has been closed
@@ -589,7 +589,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 oldTypep = typep;
                 typep = jda.getPortType();
                 checkConf = jda.checkConf;
-                referenceReq = jda.getReferenceReq();
+                reference = jda.getReference();
                 if (checkConf){
                     if (checkConfStatus==NOCHECK){
                         checkConfStatus=TOCHECK;
@@ -657,7 +657,6 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         sb.append("\" checkAuth=\"" + checkAuth);
         sb.append("\" checkWeakAuthStatus=\"" + checkWeakAuthStatus);
         sb.append("\" checkStrongAuthStatus=\"" + checkStrongAuthStatus);
-        sb.append("\" referenceReq=\"" + referenceReq);
         sb.append("\" />\n");
         for(int i=0; i<nbMaxAttribute; i++) {
             //System.out.println("Attribute:" + i);
@@ -718,7 +717,6 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
                             if (elt.getTagName().equals("Prop")) {
                                 commName = elt.getAttribute("commName");
-                                referenceReq = elt.getAttribute("referenceReq");
                                 try {
                                     //System.out.println("Setting type");
                                     typep = Integer.decode(elt.getAttribute("commType")).intValue();

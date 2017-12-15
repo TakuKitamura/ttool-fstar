@@ -56,6 +56,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
+import ui.avatarrd.AvatarRDRequirement;
 
 import ui.tmlad.TMLADReadChannel;
 /**
@@ -65,7 +66,7 @@ import ui.tmlad.TMLADReadChannel;
  * @version 1.0 12/04/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements CheckableAccessibility, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
+public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements CheckableAccessibility, LinkedReference, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -74,12 +75,13 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 	protected int textX1 = 2;
    
 	private ConcurrentHashMap<String, String> latencyVals;
-	private TGComponent reference;	
+
 
 	protected int latencyX=30;
 	protected int latencyY=25;
 	protected int textWidth=10;
 	protected int textHeight=20;
+	
 
 	protected int stateOfError = 0; // Not yet checked
     
@@ -181,7 +183,12 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 				drawLatencyInformation(g);
 			}
 		}
-		
+		if (reference!=null){
+			if (reference instanceof AvatarRDRequirement){
+				AvatarRDRequirement refReq = (AvatarRDRequirement) reference;
+				g.drawString("ref: "+ refReq.getValue(), x, y+height1+textY);
+			}
+		}
     }
 	public void drawLatencyInformation(Graphics g){
 		int index=1;
@@ -191,25 +198,98 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 			g.drawRect(x-latencyX-w, y-latencyY*index-textHeight, w+4, textHeight); 
 			g.drawLine(x,y,x-latencyX, y-latencyY*index);
 			Color c = g.getColor();
-			if (reference instanceof TMLADReadChannel){
-			//	System.out.println("ref " + reference.toString().split(": ")[1].split("\\(")[0] + " " + s.split("-")[1].split(":")[0]);
-				TMLADReadChannel rc = (TMLADReadChannel) reference;
-				ConcurrentHashMap<String, String> refLats =rc.getLatencyMap();
-				//System.out.println("referencelats " + refLats);
-				for (String checkpoint:refLats.keySet()){
-					if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split("channel:")[1].split(" ")[0])){
-						String time=refLats.get(checkpoint);
-						int tdip= Integer.valueOf(time);
-						int tav=Integer.valueOf(latencyVals.get(s));
-						if (Math.abs(tdip-tav)>tdip){
-							g.setColor(Color.RED);		
+			if (reference !=null){
+				//References must be in the form "The max delay between send/recieve signal:(signalname) and send/receive signal (signalname) is (less than/greater than) X.
+				if (reference instanceof AvatarRDRequirement){
+					String req= ((AvatarRDRequirement) reference).getText().trim();
+					if (req.contains("The max delay between")){
+						//Attempt to parse string
+						boolean lessThan= req.contains(" less than ");
+						String sig1 = req.split(" between ")[1].split(" and ")[0].trim();
+						String sig2 = req.split(" and ")[1].split(" is ")[0].trim();
+						String num = req.split(" than ")[1];
+	
+						num = num.replaceAll("\\.","");
+						
+						int refNum = -1;
+						try { 
+							refNum = Integer.valueOf(num);
 						}
-						else {
-							g.setColor(Color.GREEN);
+						catch(Exception e){
+						}
+						
+						if (sig1.equals("receive signal: " + value.split("\\(")[0])){
+							if (sig2.replaceAll(": ","-").equalsIgnoreCase(s)){
+								//Compare times
+								int tActual=Integer.valueOf(latencyVals.get(s.split(":")[0]));
+								if (refNum>0){
+									if (lessThan){
+										if (tActual < refNum){
+											g.setColor(Color.GREEN);
+										}
+										else {
+											g.setColor(Color.RED);	
+										}	
+									}
+									else {
+										if (tActual> refNum){
+											g.setColor(Color.GREEN);
+										}
+										else {
+											g.setColor(Color.RED);	
+										}
+									}
+								}
+							}
+						}
+						else if (sig2.equals("receive signal: " + value.split("\\(")[0])){
+							if (sig1.replaceAll(": ","-").trim().equalsIgnoreCase(s.split(":")[0].trim())){
+								//Compare times
+								int tActual=Integer.valueOf(latencyVals.get(s));
+								//System.out.println(refNum + " " + tActual);
+								if (refNum>0){
+									if (lessThan){
+										if (tActual < refNum){
+											g.setColor(Color.GREEN);
+										}
+										else {
+											g.setColor(Color.RED);	
+										}	
+									}
+									else {
+										if (tActual> refNum){
+											g.setColor(Color.GREEN);
+										}
+										else {
+											g.setColor(Color.RED);	
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				if (reference instanceof TMLADReadChannel){
+				//	System.out.println("ref " + reference.toString().split(": ")[1].split("\\(")[0] + " " + s.split("-")[1].split(":")[0]);
+					TMLADReadChannel rc = (TMLADReadChannel) reference;
+					ConcurrentHashMap<String, String> refLats =rc.getLatencyMap();
+					//System.out.println("referencelats " + refLats);
+					for (String checkpoint:refLats.keySet()){
+						if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split("channel:")[1].split(" ")[0])){
+							String time=refLats.get(checkpoint);
+							int tdip= Integer.valueOf(time);
+							int tav=Integer.valueOf(latencyVals.get(s));
+							if (Math.abs(tdip-tav)>tdip){
+								g.setColor(Color.RED);		
+							}
+							else {
+								g.setColor(Color.GREEN);
+							}
 						}
 					}
 				}
 			}
+			
 			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
 			g.setColor(c);
 			index++;
@@ -282,12 +362,19 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 	
     
     public boolean editOndoubleClick(JFrame frame) {
+    //	System.out.println("reference " + reference);
 		LinkedList<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
 		TraceManager.addDev("Nb of signals:" + signals.size());
 		
 
 		ArrayList<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
 		Vector<TGComponent> refs = new Vector<TGComponent>();
+		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
+            //System.out.println("req " + req);
+            if (req instanceof AvatarRDRequirement){
+                refs.add(((AvatarRDRequirement) req));
+            }
+        }
 		for (TGComponent tg:comps){
 			if (tg instanceof TMLADReadChannel){
 				refs.add(tg);
@@ -303,9 +390,9 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		}
 		
 		String val = jdas.getSignal();
-		if (jdas.getReference()!=null){
+		//if (jdas.getReference()!=null){
 			reference = jdas.getReference();
-		}
+		//}
 		if (val.indexOf('(') == -1) {
 			val += "()";
 		}

@@ -126,6 +126,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected int popupX, popupY;
     protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide,search, enableDisable, setAsCryptoBlock, setAsRegularBlock;
     protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex, checkLatency;
+    protected JMenuItem gotoReference;
     protected JMenuItem breakpoint;
     protected JMenuItem paste, insertLibrary, upX, upY, downX, downY, fitToContent, backToMainDiagram;
     protected JMenuItem cut, copy, saveAsLibrary, captureSelected;
@@ -1407,6 +1408,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         componentMenu.add(checkAccessibility);
         componentMenu.add(checkInvariant);
         componentMenu.add(checkLatency);
+        componentMenu.add(gotoReference);
         componentMenu.add(checkMasterMutex);
         componentMenu.add(breakpoint);
 
@@ -1520,6 +1522,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         breakpoint = new JMenuItem("Add / remove breakpoint");
         breakpoint.addActionListener(menuAL);
+
+		gotoReference = new JMenuItem("Go to reference");
+		gotoReference.addActionListener(menuAL);
 
         search = new JMenuItem("External Search");
         search.addActionListener(menuAL);
@@ -1783,6 +1788,23 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 componentPopup.setCheckLatency(!componentPopup.getCheckLatency());
             }
         }
+        
+        if (e.getSource() == gotoReference) {
+            if (componentPopup instanceof LinkedReference){
+                //Code for navigating to the diagram
+            	if (componentPopup.reference !=null){
+            		TDiagramPanel refTDP = componentPopup.reference.getTDiagramPanel();
+					if (refTDP!=null){
+	            		mgui.selectTab(refTDP.tp);
+	            		mgui.selectTab(refTDP);
+	            		refTDP.highlightTGComponent(componentPopup.reference);
+					}
+
+            	}
+
+            }
+        }
+        
         if (e.getSource() == checkMasterMutex) {
 
             if (componentPopup instanceof CheckableInvariant) {
@@ -2026,6 +2048,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             checkLatency.setEnabled(true);
         } else {
             checkLatency.setEnabled(false);
+
+        }
+
+
+        if (componentPointed instanceof LinkedReference){
+           	gotoReference.setEnabled(true);
+        } else {
+            gotoReference.setEnabled(false);
 
         }
 
