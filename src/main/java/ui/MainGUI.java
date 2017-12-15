@@ -5542,7 +5542,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (file == null)
             return;
 
-        TURTLEPanel tp = getCurrentTURTLEPanel();
+        TURTLEPanel tp;// = getCurrentTURTLEPanel();
         TDiagramPanel tdp1;
         BufferedImage image;
         File file1;
@@ -5550,32 +5550,35 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         name = name.substring(0, name.length() - 4);
 
         //boolean actions;
-        for(int i=0; i<tp.panels.size(); i++) {
-            tdp1 = tp.panels.elementAt(i);
-            tdp1.repaint();
-            image = tdp1.performMinimalCapture();
-            if (i < 10) {
-                file1 = new File(name + "0" + i);
-            } else {
-                file1 = new File(name + i);
-            }
-            file1 = FileUtils.addFileExtensionIfMissing(file1, TImgFilter.getExtension());
-            if (!writeImageCapture(image, file1, false)) {
-                JOptionPane.showMessageDialog(frame,
-                                              "Diagrams could NOT be captured in png format",
-                                              "Capture failed",
-                                              JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            if (i ==0) {
-                if (!writeImageCapture(image, file, false)) {
-                    JOptionPane.showMessageDialog(frame,
-                                                  "Diagrams could NOT be captured in png format",
-                                                  "Capture failed",
-                                                  JOptionPane.INFORMATION_MESSAGE);
-                    return;
-                }
-            }
+	for(int j=0; j<tabs.size(); j++) {
+            tp = tabs.get(j);
+	    for(int i=0; i<tp.panels.size(); i++) {
+		tdp1 = tp.panels.elementAt(i) ;
+		tdp1.repaint();
+		image = tdp1.performMinimalCapture();
+		if (i < 10) {
+		    file1 = new File(name + "0" + i + "__" + tdp1.getName());
+		} else {
+		    file1 = new File(name + i + "__" + tdp1.getName());
+		}
+		file1 = FileUtils.addFileExtensionIfMissing(file1, TImgFilter.getExtension());
+		if (!writeImageCapture(image, file1, false)) {
+		    JOptionPane.showMessageDialog(frame,
+						  "Diagrams could NOT be captured in png format",
+						  "Capture failed",
+						  JOptionPane.INFORMATION_MESSAGE);
+		    return;
+		}
+		if (i ==0) {
+		    if (!writeImageCapture(image, file, false)) {
+			JOptionPane.showMessageDialog(frame,
+						      "Diagrams could NOT be captured in png format",
+						      "Capture failed",
+						      JOptionPane.INFORMATION_MESSAGE);
+			return;
+		    }
+		}
+	    }
         }
 
         JOptionPane.showMessageDialog(frame,
@@ -5615,9 +5618,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 String svgImg = tdp1.svgCapture();
 
                 if (i < 10) {
-                    file1 = new File(name + j + "_" + "0" + i);
+                    file1 = new File(name + j + "_" + "0" + i + "__" + tdp1.getName());
                 } else {
-                    file1 = new File(name + j + "_" + i);
+                    file1 = new File(name + j + "_" + i + "__" + tdp1.getName());
                 }
                 file1 = FileUtils.addFileExtensionIfMissing(file1, TSVGFilter.getExtension());
                 try {
