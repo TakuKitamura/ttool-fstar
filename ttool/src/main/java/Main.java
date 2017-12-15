@@ -46,6 +46,7 @@
 
 import myutil.*;
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ui.*;
 import ui.util.DefaultText;
 import ui.util.IconManager;
@@ -253,6 +254,7 @@ public class Main implements ActionListener {
         //ConfigurationTTool.makeDefaultConfiguration();
         try {
             ConfigurationTTool.loadConfiguration(config, systemc);
+            SpecConfigTTool.setBasicConfigFile(config);
         } catch (Exception e) {
             System.out.println("Couldn't load configuration from file: " + config);
         }

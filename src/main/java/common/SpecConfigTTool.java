@@ -77,6 +77,8 @@ public class SpecConfigTTool {
 	public static int lastTab = -1;
 	public static String lastVCD="";
 	
+	private static String basicConfigPath="";
+	
 	public static void loadConfiguration() {
 		SystemCCodeDirectory = ConfigurationTTool.SystemCCodeDirectory;
 		SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand;
@@ -145,7 +147,7 @@ public class SpecConfigTTool {
 	
 	public static void setBasicConfig(boolean systemcOn) {
     	try {
-			ConfigurationTTool.loadConfiguration("./launch_configurations/config.xml", systemcOn);
+			ConfigurationTTool.loadConfiguration(basicConfigPath, systemcOn);
 		} catch (MalformedConfigurationException e) {
 			System.out.println("Couldn't load configuration from file: config.xml");
 		}
@@ -166,9 +168,9 @@ public class SpecConfigTTool {
 		File test = new File ("./");
 		File base;
 		if (test.getAbsolutePath().contains("TTool/bin/"))
-			base = new File("../ttool/launch_configurations/project_config.xml");
+			base = new File("../ttool/project_config.xml");
 		else
-			base = new File("./launch_configurations/project_config.xml");
+			base = new File("./project_config.xml");
 		try {
 			FileUtils.copyFileToDirectory(base, dir, false);
 			return new File(dir + File.separator + "project_config.xml");
@@ -300,6 +302,9 @@ public class SpecConfigTTool {
 	        } else {
 	            TraceManager.addError("Configuration could not be saved");
 	        }
-
+	 }
+	 
+	 public static void setBasicConfigFile(String file) {
+		 basicConfigPath = file;
 	 }
 }
