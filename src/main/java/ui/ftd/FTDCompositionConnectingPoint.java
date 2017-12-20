@@ -39,7 +39,7 @@
 
 
 
-package ui.atd;
+package ui.ftd;
 
 
 import ui.CDElement;
@@ -47,20 +47,20 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class ATDAttackConnectingPoint
+ * Class FTDCompositionConnectingPoint
  * Definition of connecting points on which composition connectors can be connected
- * Creation: 09/12/2009
- * @version 1.0 09/12/2009
+ * Creation: 14/12/2017
+ * @version 1.0 14/12/2017
  * @author Ludovic APVRILLE
  */
-public class ATDAttackConnectingPoint extends  TGConnectingPointWidthHeight {
+public class FTDCompositionConnectingPoint extends  TGConnectingPointWidthHeight {
     
-    public ATDAttackConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    public FTDCompositionConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
     public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.ATD_ATTACK_CONNECTOR;
+        return type == TGComponentManager.FTD_COMPOSITION_CONNECTOR;
     }
     
 }

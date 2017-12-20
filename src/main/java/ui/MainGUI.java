@@ -53,6 +53,7 @@ import translator.CheckingError;
 import translator.MasterGateManager;
 import ui.ad.TActivityDiagramPanel;
 import ui.atd.AttackTreeDiagramPanel;
+import ui.ftd.FaultTreeDiagramPanel;
 import ui.avatarad.AvatarADPanel;
 import ui.avatarbd.AvatarBDLibraryFunction;
 import ui.avatarbd.AvatarBDPortConnector;
@@ -790,6 +791,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return index;
     }
 
+    private int addFaultTreePanel(String name, int index) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+        FaultTreePanel ftp = new FaultTreePanel(this);
+        tabs.add(index, ftp); // should look for the first
+        mainTabbedPane.add(ftp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open fault tree diagrams");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic1074);
+        ftp.init();
+        return index;
+    }
+
     private int addRequirementPanel(String name, int index) {
         if (index == -1) {
             index = tabs.size();
@@ -1465,6 +1480,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return index;
     }
 
+    public int createFaultTree(String name) {
+        int index = addFaultTreePanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+
     public void setIODName(int analysisIndex, String name) {
         AnalysisPanel ap = (AnalysisPanel)(tabs.elementAt(analysisIndex));
         ap.tabbedPane.setTitleAt(0, name);
@@ -1857,6 +1878,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newAttackTree() {
         //TraceManager.addDev("NEW ANALYSIS");
         addAttackTreePanel("Attack Trees", 0);
+        //((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(0);
+        //paneAction(null);
+        //frame.repaint();
+    }
+
+    public void newFaultTree() {
+        //TraceManager.addDev("NEW ANALYSIS");
+        addFaultTreePanel("Fault Trees", 0);
         //((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
         //paneAction(null);
@@ -3821,6 +3851,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
 
+    public ArrayList<TGComponent> getAllFaults(){
+        TURTLEPanel tp;
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+
+        for(int i=0; i<tabs.size(); i++) {
+            tp = tabs.elementAt(i);
+            if (tp instanceof FaultTreePanel) {
+                for (TGComponent s:((FaultTreePanel)tp).getAllFaults()){
+                    list.add(s);
+                }
+            }
+        }
+        return list;
+
+    }
+
     public ArrayList<TGComponent> getAllRequirements(){
         TURTLEPanel tp;
         ArrayList<TGComponent> list = new ArrayList<TGComponent>();
@@ -5166,7 +5212,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return;
         }
 
-        File file = selectSVGFileForCapture();
+        File file = selectSVGFileForCapture(true);
 
         if (file == null)
             return;
@@ -5203,7 +5249,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         if (file == null)
             return;
 
-        TURTLEPanel tp = getCurrentTURTLEPanel();
+        TURTLEPanel tp;// = getCurrentTURTLEPanel();
         TDiagramPanel tdp1;
         BufferedImage image;
         File file1;
@@ -5211,32 +5257,35 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         name = name.substring(0, name.length() - 4);
 
         //boolean actions;
-        for(int i=0; i<tp.panels.size(); i++) {
-            tdp1 = tp.panels.elementAt(i);
-            tdp1.repaint();
-            image = tdp1.performMinimalCapture();
-            if (i < 10) {
-                file1 = new File(name + "0" + i);
-            } else {
-                file1 = new File(name + i);
-            }
-            file1 = FileUtils.addFileExtensionIfMissing(file1, TImgFilter.getExtension());
-            if (!writeImageCapture(image, file1, false)) {
-                JOptionPane.showMessageDialog(frame,
-                                              "Diagrams could NOT be captured in png format",
-                                              "Capture failed",
-                                              JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            if (i ==0) {
-                if (!writeImageCapture(image, file, false)) {
-                    JOptionPane.showMessageDialog(frame,
-                                                  "Diagrams could NOT be captured in png format",
-                                                  "Capture failed",
-                                                  JOptionPane.INFORMATION_MESSAGE);
-                    return;
-                }
-            }
+	for(int j=0; j<tabs.size(); j++) {
+            tp = tabs.get(j);
+	    for(int i=0; i<tp.panels.size(); i++) {
+		tdp1 = tp.panels.elementAt(i) ;
+		tdp1.repaint();
+		image = tdp1.performMinimalCapture();
+		if (i < 10) {
+		    file1 = new File(name + "0" + i + "__" + tdp1.getName());
+		} else {
+		    file1 = new File(name + i + "__" + tdp1.getName());
+		}
+		file1 = FileUtils.addFileExtensionIfMissing(file1, TImgFilter.getExtension());
+		if (!writeImageCapture(image, file1, false)) {
+		    JOptionPane.showMessageDialog(frame,
+						  "Diagrams could NOT be captured in png format",
+						  "Capture failed",
+						  JOptionPane.INFORMATION_MESSAGE);
+		    return;
+		}
+		if (i ==0) {
+		    if (!writeImageCapture(image, file, false)) {
+			JOptionPane.showMessageDialog(frame,
+						      "Diagrams could NOT be captured in png format",
+						      "Capture failed",
+						      JOptionPane.INFORMATION_MESSAGE);
+			return;
+		    }
+		}
+	    }
         }
 
         JOptionPane.showMessageDialog(frame,
@@ -5254,7 +5303,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return;
         }
 
-        File file = selectSVGFileForCapture();
+        File file = selectSVGFileForCapture(false);
         if (file == null)
             return;
 
@@ -5272,16 +5321,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 tdp1 = tp.panels.elementAt(i);
                 tdp1.repaint();
 
-                tdp1.performMinimalCapture();
+                //tdp1.performMinimalCapture();
                 String svgImg = tdp1.svgCapture();
 
                 if (i < 10) {
-                    file1 = new File(name + j + "_" + "0" + i);
+                    file1 = new File(name + j + "_" + "0" + i + "__" + tdp1.getName());
                 } else {
-                    file1 = new File(name + j + "_" + i);
+                    file1 = new File(name + j + "_" + i + "__" + tdp1.getName());
                 }
                 file1 = FileUtils.addFileExtensionIfMissing(file1, TSVGFilter.getExtension());
                 try {
+		    TraceManager.addDev("Saving in file:" + file1.getAbsolutePath());
                     FileUtils.saveFile(file1, svgImg);
                 } catch(Exception e) {
                     JOptionPane.showMessageDialog(frame,
@@ -5328,7 +5378,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return file;
     }
 
-    public File selectSVGFileForCapture() {
+    public File selectSVGFileForCapture(boolean checkForSave) {
         File file = null;
         int returnVal = jfcimgsvg.showSaveDialog(frame);
         if (returnVal == JFileChooser.CANCEL_OPTION)
@@ -5338,15 +5388,18 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             file = FileUtils.addFileExtensionIfMissing(file, TSVGFilter.getExtension());
 
         }
-        if(!checkFileForSave(file)) {
-            JOptionPane.showMessageDialog(frame,
-                                          "The capture could not be performed: invalid file",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
-            return null;
-        }
+	if (checkForSave) {
+	    if(!checkFileForSave(file)) {
+		JOptionPane.showMessageDialog(frame,
+					      "The capture could not be performed: invalid file",
+					      "Error",
+					      JOptionPane.INFORMATION_MESSAGE);
+		return null;
+	    }
+	}
         return file;
     }
+    
 
     public void performScreenCapture(Rectangle rect, File file) {
         frame.paint(frame.getGraphics());
@@ -6116,6 +6169,26 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
           return null;*/
     }
 
+    public FaultTreeDiagramPanel getFaultTreeDiagramPanel(int index, int indexTab, String s) {
+        //TraceManager.addDev("Searching for " + s);
+        TURTLEPanel tp = tabs.elementAt(index);
+        return getFaultTreeDiagramPanel(tp, indexTab, s);
+    }
+
+    public FaultTreeDiagramPanel getFaultTreeDiagramPanel(TURTLEPanel tp, int indexTab, String s) {
+        if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (FaultTreeDiagramPanel)(tp.panelAt(indexTab));
+        }
+        return null;
+        /*for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
+          if (tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+          if (tp.panelAt(i) instanceof AttackTreeDiagramPanel)
+          return  (AttackTreeDiagramPanel)(tp.panelAt(i));
+          }
+          }
+          return null;*/
+    }
+
 
     public TMLCPPanel getTMLCPDiagramPanel(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
@@ -6563,6 +6636,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
 
         ((AttackTreePanel)tp).addAttackTreeDiagram(s);
+        setPanelMode();
+        return true;
+    }
+
+    public boolean createFaultTreeDiagram(int index, String s) {
+        return createFaultTreeDiagram(tabs.elementAt(index), s);
+    }
+
+    public boolean createFaultTreeDiagram(TURTLEPanel tp, String s) {
+        if (!(tp instanceof FaultTreePanel)) {
+            return false;
+        }
+
+        ((FaultTreePanel)tp).addFaultTreeDiagram(s);
         setPanelMode();
         return true;
     }
@@ -7182,7 +7269,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 paneDeployAction(e);
             }
 
-            if ((getCurrentTURTLEPanel() instanceof AvatarDesignPanel) || (getCurrentTURTLEPanel() instanceof AvatarRequirementPanel) || (getCurrentTURTLEPanel() instanceof AttackTreePanel) || (getCurrentTURTLEPanel() instanceof ADDPanel)) {
+            if ((getCurrentTURTLEPanel() instanceof AvatarDesignPanel) || (getCurrentTURTLEPanel() instanceof AvatarRequirementPanel) || (getCurrentTURTLEPanel() instanceof AttackTreePanel) || (getCurrentTURTLEPanel() instanceof FaultTreePanel) || (getCurrentTURTLEPanel() instanceof ADDPanel)) {
                 mainBar.showAvatarActions(true);
             } else if ((getCurrentTURTLEPanel() instanceof TMLDesignPanel) || (getCurrentTURTLEPanel() instanceof TMLComponentDesignPanel) || (getCurrentTURTLEPanel() instanceof TMLArchiPanel)){
                 mainBar.showDiplodocusActions(true);
@@ -8230,7 +8317,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         private JPopupMenu menu;
 
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement/*, newTMLDesign*/, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
-            newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSystemCAMS;
+            newNCDesign, sort, clone, newAttackTree, newFaultTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSystemCAMS;
         private JMenuItem newAVATARAnalysis;
 
         public PopupListener(MainGUI _mgui) {
@@ -8275,6 +8362,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             newDeployment = createMenuItem("New TURTLE Deployment");
 
             newAttackTree = createMenuItem("New Attack Tree");
+	    newFaultTree = createMenuItem("New Fault Tree");
+
             newRequirement = createMenuItem("New TURTLE Requirement Diagram");
 
             newTMLMethodo = createMenuItem("New DIPLODOCUS Methodology");
@@ -8383,6 +8472,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 menu.add(newMAD);
                 menu.add(newAVATARRequirement);
                 menu.add(newAttackTree);
+		menu.add(newFaultTree);
                 menu.add(newAVATARAnalysis);
                 menu.add(newAVATARBD);
                 if (experimentalOn) {
@@ -8464,6 +8554,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                         mgui.newDeployment();
                     } else if (e.getSource() == newAttackTree) {
                         mgui.newAttackTree();
+		    } else if (e.getSource() == newFaultTree) {
+                        mgui.newFaultTree();
                     } else if (ac.equals("New TURTLE Requirement Diagram")) {
                         mgui.newRequirement();
                     }    else if (e.getSource() == newTMLMethodo) {

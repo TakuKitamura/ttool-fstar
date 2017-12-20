@@ -46,6 +46,7 @@ import translator.GroupOfGates;
 import ui.*;
 import ui.ad.TActivityDiagramPanel;
 import ui.atd.AttackTreeDiagramPanel;
+import ui.ftd.FaultTreeDiagramPanel;
 import ui.avatarad.AvatarADPanel;
 import ui.avatarbd.AvatarBDPanel;
 import ui.avatarcd.AvatarCDPanel;
@@ -185,7 +186,10 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
             setToolTipText("TURTLE Requirement");
         } else if (value instanceof AttackTreePanel) {
             setIcon(IconManager.imgic1074);
-            setToolTipText("TURTLE Requirement");
+            setToolTipText("Attack tree");
+	} else if (value instanceof FaultTreePanel) {
+            setIcon(IconManager.imgic1074);
+            setToolTipText("Fault tree");
         } else if (value instanceof TClassDiagramPanel) {
             setIcon(IconManager.imgic14);
             setToolTipText("TURTLE Class diagram");
@@ -219,6 +223,9 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof AttackTreeDiagramPanel) {
             setIcon(IconManager.imgic1074);
             setToolTipText("Attack Tree Diagram (SysML Parametric diagram)");
+	} else if (value instanceof FaultTreeDiagramPanel) {
+            setIcon(IconManager.imgic1074);
+            setToolTipText("Fault Tree Diagram (SysML Parametric diagram)");
         } else if (value instanceof EBRDDPanel) {
             setIcon(IconManager.imgic1058);
             setToolTipText("Event-Based Requirement Description Diagram");

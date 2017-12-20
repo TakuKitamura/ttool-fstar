@@ -39,28 +39,17 @@
 
 
 
-package ui.atd;
 
-
-import ui.CDElement;
-import ui.TGComponentManager;
-import ui.TGConnectingPointWidthHeight;
-
+package ui;
+import java.util.HashMap;
 /**
- * Class ATDAttackConnectingPoint
- * Definition of connecting points on which composition connectors can be connected
- * Creation: 09/12/2009
- * @version 1.0 09/12/2009
- * @author Ludovic APVRILLE
+ * Class LinkedReference
+ * Components which link a reference requirement or other component from another type of diagram (i.e: Public Buses link to Attacks from an Attack Tree)
+ * Creation: 14/12/2017
+ * @version 1.0 14/12/2017
+ * @author Letitia LI
  */
-public class ATDAttackConnectingPoint extends  TGConnectingPointWidthHeight {
-    
-    public ATDAttackConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.ATD_ATTACK_CONNECTOR;
-    }
-    
+public interface LinkedReference  {
+
+
 }

@@ -39,7 +39,7 @@
 
 
 
-package ui.atd;
+package ui.ftd;
 
 import myutil.GraphicLib;
 import myutil.TraceManager;
@@ -48,18 +48,18 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
-import ui.window.JDialogCountermeasure;
+import ui.window.JDialogFaultCountermeasure;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
-   * Class ATDCountermeasure
-   * Creation: 06/06/2017
-   * @version 1.0 06/06/2017
+   * Class FTDCountermeasure
+   * Creation: 14/12/2017
+   * @version 1.0 14/12/2017
    * @author Ludovic APVRILLE
  */
-public class ATDCountermeasure extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
+public class FTDCountermeasure extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
     private int textY1 = 3;
  //   private int textY2 = 3;
 
@@ -78,7 +78,7 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
     private boolean displayText = true;
     private int textX = 10;
 
-    public ATDCountermeasure(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public FTDCountermeasure(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         width = 125;
@@ -88,18 +88,18 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
 
-        connectingPoint[0] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[1] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0 - percentageDecPar/2, 0.5);
-        connectingPoint[2] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0 + percentageDecPar/2 , 0.5);
-        connectingPoint[3] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-        connectingPoint[4] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[5] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[6] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0 - percentageDecPar/4, 0.25);
-        connectingPoint[7] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0 + percentageDecPar * 0.75, 0.25);
-        connectingPoint[8] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0 - percentageDecPar * 0.75, 0.75);
-        connectingPoint[9] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0 + percentageDecPar * 0.25, 0.75);
-        connectingPoint[10] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[11] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[0] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[1] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0 - percentageDecPar/2, 0.5);
+        connectingPoint[2] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0 + percentageDecPar/2 , 0.5);
+        connectingPoint[3] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[4] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[5] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[6] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0 - percentageDecPar/4, 0.25);
+        connectingPoint[7] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0 + percentageDecPar * 0.75, 0.25);
+        connectingPoint[8] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0 - percentageDecPar * 0.75, 0.75);
+        connectingPoint[9] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0 + percentageDecPar * 0.25, 0.75);
+        connectingPoint[10] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+        connectingPoint[11] = new FTDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
 
         moveable = true;
@@ -145,7 +145,7 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         // Core of the countermeasure
         Color c = g.getColor();
 	Polygon p = getMyPolygon();
-	g.setColor(ColorManager.ATD_COUNTERMEASURE);
+	g.setColor(ColorManager.FTD_COUNTERMEASURE);
 	g.fillPolygon(p);
 	g.setColor(c);
         g.drawPolygon(p);
@@ -245,7 +245,7 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
     }
 
     public void resizeWithFather() {
-        if ((father != null) && (father instanceof ATDBlock)) {
+        if ((father != null) && (father instanceof FTDBlock)) {
             //System.out.println("cdRect comp");
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
@@ -258,7 +258,7 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         String tmp;
         boolean error = false;
 
-        JDialogCountermeasure dialog = new JDialogCountermeasure(frame, "Setting countermeasure attributes", this);
+        JDialogFaultCountermeasure dialog = new JDialogFaultCountermeasure(frame, "Setting countermeasure attributes", this);
    //     dialog.setSize(450, 350);
         GraphicLib.centerOnParent(dialog, 450, 350);
         dialog.setVisible( true ); // blocked until dialog has been closed
@@ -304,7 +304,7 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
     }
 
     public int getType() {
-        return TGComponentManager.ATD_COUNTERMEASURE;
+        return TGComponentManager.FTD_COUNTERMEASURE;
     }
 
     public String getDescription() {

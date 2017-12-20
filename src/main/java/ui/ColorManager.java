@@ -154,6 +154,13 @@ public class ColorManager {
     public static  Color ATD_CONSTRAINT = new Color(191, 153, 161);
     public static  Color ATD_COUNTERMEASURE = new Color(209, 218, 174);
 
+    public static  Color FTD_BLOCK = new Color(218, 218, 218);
+    public static  Color FTD_FAULT = new Color(214, 187, 158);
+    public static  Color FTD_FAULT_DISABLED = new Color(214, 206, 198);
+    public static  Color FTD_ROOT_FAULT = new Color(243, 131, 10);
+    public static  Color FTD_CONSTRAINT = new Color(191, 153, 161);
+    public static  Color FTD_COUNTERMEASURE = new Color(209, 218, 174);
+
     //public static final Color AVATAR_BLOCK = new Color(128, 180, 205);
     //public static final Color AVATAR_BLOCK = new Color(158, 218, 227);
     //public static final Color AVATAR_BLOCK = new Color(149, 193, 210);

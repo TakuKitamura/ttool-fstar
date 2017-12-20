@@ -39,7 +39,7 @@
 
 
 
-package ui.atd;
+package ui.ftd;
 
 import myutil.GraphicLib;
 import org.w3c.dom.Element;
@@ -53,17 +53,17 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
-   * Class ATDConstraint
-   * Constraint of SysML Parametric diagrams, adapted to attack trees
-   * Creation: 11/12/2009
-   * @version 1.0 11/12/2009
+   * Class FTDConstraint
+   * Constraint of SysML Parametric diagrams, adapted to fault trees
+   * Creation: 14/12/2017
+   * @version 1.0 14/12/2017
    * @author Ludovic APVRILLE
  */
-public class ATDConstraint extends TGCScalableWithInternalComponent implements  SwallowedTGComponent, ConstraintListInterface {
+public class FTDConstraint extends TGCScalableWithInternalComponent implements  SwallowedTGComponent, ConstraintListInterface {
     private int textY1 = 5;
     //private int textY2 = 30;
 
-    public static final String[] STEREOTYPES = {"<<OR>>", "<<XOR>>", "<<AND>>", "<<SEQUENCE>>", "<<BEFORE>>", "<<AFTER>>"};
+    public static final String[] STEREOTYPES = {"<<OR>>", "<<XOR>>", "<<AND>>", "<<NOT>>", "<<SEQUENCE>>", "<<AFTER>>", "<<BEFORE>>", "<<VOTE>>"};
 
     protected String oldValue = "";
 
@@ -77,7 +77,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 
     private String equation;
 
-    public ATDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public FTDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         width = (int)(150* tdp.getZoom());
@@ -87,18 +87,18 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
 
-        connectingPoint[0] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[1] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[2] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[3] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-        connectingPoint[4] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[5] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[6] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
-        connectingPoint[7] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[8] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[9] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
-        connectingPoint[10] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[11] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[0] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[1] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[2] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[3] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[4] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[5] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[6] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
+        connectingPoint[7] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
+        connectingPoint[8] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
+        connectingPoint[9] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+        connectingPoint[10] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+        connectingPoint[11] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
 
         moveable = true;
@@ -135,12 +135,12 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 
         Color c = g.getColor();
         //g.draw3DRect(x, y, width, height, true);
-        g.setColor(ColorManager.ATD_CONSTRAINT);
+        g.setColor(ColorManager.FTD_CONSTRAINT);
         g.fillRoundRect(x, y, width, height, arc, arc);
         g.setColor(c);
         g.drawRoundRect(x, y, width, height, arc, arc);
 
-        g.setColor(ColorManager.ATD_CONSTRAINT);
+        g.setColor(ColorManager.FTD_CONSTRAINT);
         //g.fill3DRect(x+1, y+1, width-1, height-1, true);
 
         g.setColor(c);
@@ -217,7 +217,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
     }
 
     public int getType() {
-        return TGComponentManager.ATD_CONSTRAINT;
+        return TGComponentManager.FTD_CONSTRAINT;
     }
 
     public String[] getConstraintList() {
@@ -301,7 +301,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
     }
 
     public void resizeWithFather() {
-        if ((father != null) && (father instanceof ATDBlock)) {
+        if ((father != null) && (father instanceof FTDBlock)) {
             //System.out.println("cdRect comp");
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
