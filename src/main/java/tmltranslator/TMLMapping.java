@@ -71,7 +71,7 @@ public class TMLMapping<E> {
     private List<HwCommunicationNode> oncommnodes;
     private List<TMLElement> mappedcommelts;
 
-	private CorrespondanceTGElement listE;
+    private CorrespondanceTGElement listE;
 
     // Security
     public boolean firewall = false;
@@ -149,13 +149,13 @@ public class TMLMapping<E> {
         return null;
     }
 
-	public CorrespondanceTGElement getCorrespondanceList(){
-		return listE;
-	}
+    public CorrespondanceTGElement getCorrespondanceList(){
+        return listE;
+    }
 
-	public void setCorrespondanceList(CorrespondanceTGElement cl){
-		listE=cl;
-	}
+    public void setCorrespondanceList(CorrespondanceTGElement cl){
+        listE=cl;
+    }
 
 
     public void addCustomValue(String custom) {
@@ -1501,8 +1501,8 @@ public class TMLMapping<E> {
         }
     }
 
-	public boolean channelAllowed(TMLChannel chan){
-		TMLTask orig = chan.getOriginTask();
+    public boolean channelAllowed(TMLChannel chan){
+        TMLTask orig = chan.getOriginTask();
         TMLTask dest = chan.getDestinationTask();
         List<HwNode> path = getPath(orig, dest);
         for (HwNode node:path){
@@ -1519,10 +1519,10 @@ public class TMLMapping<E> {
             }
         }
         return true;
-	}
+    }
 
 
-	public List<HwNode> getPath(TMLTask t1, TMLTask t2){
+    public List<HwNode> getPath(TMLTask t1, TMLTask t2){
         HwNode node1 = getHwNodeOf(t1);
         HwNode node2 = getHwNodeOf(t2);
         List<HwNode> path = new ArrayList<HwNode>();
@@ -1576,20 +1576,20 @@ public class TMLMapping<E> {
     }
 
 
-	public boolean isAttackerAccessible(TMLChannel chan){
-		TMLTask orig = chan.getSystemOriginTask();
+    public boolean isAttackerAccessible(TMLChannel chan){
+        TMLTask orig = chan.getSystemOriginTask();
         TMLTask dest = chan.getSystemDestinationTask();
         List<HwNode> path = getPath(orig, dest);
         for (HwNode node:path){
-			if (node instanceof HwBus){
-				HwBus bus = (HwBus) node;
-				if (bus.privacy==HwCommunicationNode.BUS_PUBLIC){
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+            if (node instanceof HwBus){
+                HwBus bus = (HwBus) node;
+                if (bus.privacy==HwCommunicationNode.BUS_PUBLIC){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public String toXML() {
         String s = "<TMLMAPPING>\n";
