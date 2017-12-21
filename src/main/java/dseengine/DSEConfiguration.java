@@ -83,11 +83,7 @@ public class DSEConfiguration implements Runnable  {
     private final String PATH_TO_CODE = "No directory selected for putting the generated code";
     private final String PATH_TO_RESULTS = "No directory selected for putting the results";
     private final String PATH_TO_SOURCE = "No source model selected";
-<<<<<<< Upstream, based on origin/63-implement-project-management-in-ttool
     private final String NO_OUTPUT_SELECTED = "No format for the output (TXT, HTML) has been selected";
-=======
-    private final String NO_OUTPUT_SELECTED = "No format ofr the output has been selected";
->>>>>>> a50bf94 Update on DSE engine
     private final String LOAD_MAPPING_FAILED = "Loading of the mapping failed";
     private final String LOAD_TASKMODEL_FAILED = "Loading of the task model failed";
     private final String SIMULATION_COMPILATION_COMMAND_NOT_SET = "Compilation command missing";
@@ -979,10 +975,7 @@ public class DSEConfiguration implements Runnable  {
         nbOfRemainingSimulation --;
         return tmp;
     }
-<<<<<<< Upstream, based on origin/63-implement-project-management-in-ttool
-    
-=======
->>>>>>> a50bf94 Update on DSE engine
+
     public int replaceTapValues(double[] tap){
         if (tap.length!=tapValues.length){
 
@@ -1652,15 +1645,9 @@ public class DSEConfiguration implements Runnable  {
             TMLArchitecture arch = map.getArch();
             List<HwNode> nodes =  arch.getCPUs();
             for (HwNode node:nodes){
-<<<<<<< Upstream, based on origin/63-implement-project-management-in-ttool
                 HwBus bus = new HwBus("bus" +node.getName());
                 bus.privacy=1;
                 HwMemory mem = new HwMemory("memory_" +node.getName());
-=======
-                HwBus bus = new HwBus("bus " +node.getName());
-                bus.privacy=1;
-                HwMemory mem = new HwMemory("memory " +node.getName());
->>>>>>> a50bf94 Update on DSE engine
                 HwLink hwlink = new HwLink("link_memory" +node.getName() + "_to_memorybus");
                 hwlink.bus=bus;
                 hwlink.hwnode=node;

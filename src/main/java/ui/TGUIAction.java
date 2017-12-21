@@ -67,11 +67,11 @@ public class TGUIAction extends AbstractAction {
 
     // Actions
     public static final int ACT_NEW = 0;
-    public static final int ACT_NEW_PROJECT = 465;
+    public static final int ACT_NEW_PROJECT = 471;
     public static final int ACT_NEW_DESIGN = 100;
     public static final int ACT_NEW_ANALYSIS = 101;
     public static final int ACT_OPEN = 1;
-    public static final int ACT_OPEN_PROJECT = 466;
+    public static final int ACT_OPEN_PROJECT = 472;
     public static final int ACT_OPEN_FROM_NETWORK = 455;
     public static final int ACT_OPEN_LAST = 154;
     public static final int ACT_MERGE = 228;
@@ -629,7 +629,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 471;
+    public static final int NB_ACTION = 473;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
