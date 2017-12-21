@@ -225,7 +225,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         boolean error = false;
 
         // Get the list of all other TMLArchiPortArtifact.java and retrieve the mapped ports
-		Vector<String> portsList = this.getTDiagramPanel().getMGUI().getAllTMLInputPorts();
+	Vector<String> portsList = this.getTDiagramPanel().getMGUI().getAllTMLInputPorts();
 
         //TraceManager.addDev( "bufferParameters before opening the window: " + bufferParameters.toString() );
         JDialogPortArtifact dialog = new JDialogPortArtifact( frame, "Setting port artifact attributes", this, mappedMemory, portsList, value );

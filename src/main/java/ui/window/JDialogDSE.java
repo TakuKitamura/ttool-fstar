@@ -780,7 +780,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 	    // Simulations
             if (simButton.isSelected()){
                 if (config.runParallelSimulation(Nbsim, true, true) != 0) {
-                    output+="Simulation Failed \n";
+                    output+="Simulation Failed:\n" + config.getErrorMessage() + " \n";
                     outputText.setText(output);
                     checkMode();
                     return;
