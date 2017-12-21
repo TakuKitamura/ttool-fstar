@@ -600,6 +600,10 @@ public class GTURTLEModeling {
 
         try {
             TraceManager.addDev("Saving specification in " + path + "\n");
+            
+            // DB: Moved from TURTLE2UPPAAL (introduced for project management)
+    		SpecConfigTTool.checkAndCreateUPPAALDir(path);
+    		
             turtle2uppaal.saveInFile(path);
             TraceManager.addDev("UPPAAL specification has been generated in " + path + "\n");
             return true;
@@ -8226,7 +8230,7 @@ public class GTURTLEModeling {
         Element elt1;
         TGComponent tgc = null;
         TGComponent father;
-        TGComponent reference;
+      //  TGComponent reference;
 
         //
         try {
