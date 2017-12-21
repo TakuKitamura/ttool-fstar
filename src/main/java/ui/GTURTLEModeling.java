@@ -495,7 +495,7 @@ public class GTURTLEModeling {
                 return true;
             }
             else {
-            	FileUtils.checkAndCreateCCodeDir(directory);
+            	SpecConfigTTool.checkAndCreateCCodeDir(directory);
                 CCode.saveFile( directory + File.separator, applicationName );
             }
         }

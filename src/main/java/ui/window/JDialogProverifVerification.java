@@ -45,6 +45,7 @@ import avatartranslator.AvatarPragma;
 import avatartranslator.AvatarPragmaAuthenticity;
 import avatartranslator.AvatarPragmaReachability;
 import avatartranslator.AvatarPragmaSecret;
+import common.SpecConfigTTool;
 import launcher.LauncherException;
 import launcher.RshClient;
 import launcher.RshClientReader;
@@ -803,7 +804,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                 pathCode += "pvspec";
             }
             
-            FileUtils.checkAndCreateProverifDir(pathCode);
+            SpecConfigTTool.checkAndCreateProverifDir(pathCode);
 
             pathCode += "pvspec";
             testFile = new File(pathCode);

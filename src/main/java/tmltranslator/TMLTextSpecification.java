@@ -53,6 +53,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 
+import common.SpecConfigTTool;
+
 /**
  * Class TMLTextSpecification
  * Import and export of TML textual specifications
@@ -106,7 +108,7 @@ public class TMLTextSpecification<E> {
     }
 
     public void saveFile(String path, String filename) throws FileException {
-    	FileUtils.checkAndCreateTMLDir(path);
+    	SpecConfigTTool.checkAndCreateTMLDir(path);
         TraceManager.addUser("Saving TML spec file in " + path + filename);
         FileUtils.saveFile(path + filename, spec);
     }

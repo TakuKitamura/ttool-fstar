@@ -42,6 +42,7 @@
 package avatartranslator.touppaal;
 
 import avatartranslator.*;
+import common.SpecConfigTTool;
 import myutil.Conversion;
 import myutil.FileException;
 import myutil.FileUtils;
@@ -144,7 +145,7 @@ public class AVATAR2UPPAAL {
 
 
     public void saveInFile(String path) throws FileException {
-    	FileUtils.checkAndCreateUPPAALDir(path);
+    	SpecConfigTTool.checkAndCreateUPPAALDir(path);
         FileUtils.saveFile(path + "spec.xml", spec.makeSpec());
         //System.out.println("spec.xml generated:\n" + spec.getFullSpec());
     }
