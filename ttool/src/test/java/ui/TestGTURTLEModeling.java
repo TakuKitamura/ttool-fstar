@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Vector;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fr.tpt.mem4csd.utils.compare.IComparator;
@@ -16,7 +17,13 @@ import myutil.FileUtils;
 
 public class TestGTURTLEModeling extends AbstractUITest {
 
-    private static final String RESOURCES_DIR = "resources/ui/generateccode/";
+    //private static final String RESOURCES_DIR = "resources/ui/generateccode/";
+
+    @BeforeClass
+    public static void setUpBeforeClass()
+    throws Exception {
+    	RESOURCES_DIR = getBaseResourcesDir() + "ui/generateccode/";
+    }
 
     private final IComparator textComparator;
 
