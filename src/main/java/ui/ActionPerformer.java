@@ -72,7 +72,9 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN_FROM_NETWORK].getActionCommand())) {
             mgui.openNetworkProject();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN].getActionCommand())) {
-            mgui.openProject();
+            mgui.openProject(false);
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN_PROJECT].getActionCommand())) {
+            mgui.openProject(true);
         } else if (command.equals(mgui.actions[TGUIAction.ACT_MERGE].getActionCommand())) {
             mgui.mergeProject();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN_LAST].getActionCommand())) {

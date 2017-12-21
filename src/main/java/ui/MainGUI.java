@@ -100,6 +100,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -450,7 +452,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         TFileFilter filter = new TFileFilter();
         jfc.setFileFilter(filter);
-        jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
         TTIFFilter filtertif = new TTIFFilter();
         jfctif.setFileFilter(filtertif);
@@ -2376,7 +2378,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
 
-    public void openProject() {
+    public void openProject(boolean isProject) {
     	if (config != null && activetdp != null)
 			saveConfig();
         // check if a current modeling is opened
@@ -2393,6 +2395,99 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
 
         //jfc.setApproveButtonText("Open");
+        if (isProject) {
+        	jfc.resetChoosableFileFilters();
+        	jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        	jfc.setAcceptAllFileFilterUsed(false);
+        	FileNameExtensionFilter filter = new FileNameExtensionFilter("TTool project", "ttool");
+        	jfc.setFileFilter(filter);
+        	/*jfc.addMouseListener(new MouseListener() {
+
+        	    @Override
+        	    public void mouseClicked(MouseEvent arg0) {
+
+        	        if(arg0.getClickCount() == 2) {
+        	            File file = jfc.getSelectedFile();
+        	            if(!FileUtils.getExtension(file).equals("ttool")) {
+        	                jfc.setCurrentDirectory(file);
+        	                jfc.rescanCurrentDirectory();
+        	            }
+        	            else {
+        	                jfc.approveSelection();
+        	            }
+        	        }
+        	    }
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}		
+        	});*/
+        }
+        else {
+        	jfc.resetChoosableFileFilters();
+        	jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        	jfc.setAcceptAllFileFilterUsed(false);
+        	FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
+        	jfc.setFileFilter(filter);
+        	/*jfc.addMouseListener(new MouseListener() {
+
+        	    @Override
+        	    public void mouseClicked(MouseEvent arg0) {
+
+        	        if(arg0.getClickCount() == 2) {
+        	            File file = jfc.getSelectedFile();
+        	            if(!FileUtils.getExtension(file).equals("ttool")) {
+        	                jfc.setCurrentDirectory(file);
+        	                jfc.rescanCurrentDirectory();
+        	            }
+        	        }
+        	    }
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}		
+        	});*/
+        }
         int returnVal = jfc.showOpenDialog(frame);
 
         if (returnVal == JFileChooser.CANCEL_OPTION) {

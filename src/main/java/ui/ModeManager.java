@@ -63,6 +63,7 @@ public class ModeManager {
             actions[TGUIAction.ACT_NEW].setEnabled(true);
             actions[TGUIAction.ACT_NEW_PROJECT].setEnabled(true);
             actions[TGUIAction.ACT_OPEN].setEnabled(true);
+            actions[TGUIAction.ACT_OPEN_PROJECT].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_FROM_NETWORK].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_TIF].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_SD].setEnabled(true);
