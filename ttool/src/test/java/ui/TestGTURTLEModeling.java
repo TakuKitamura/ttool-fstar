@@ -62,7 +62,7 @@ public class TestGTURTLEModeling extends AbstractUITest {
     
 =======
 
-    private static final String RESOURCES_DIR = "resources/test/ui/generateccode/";
+    private static final String RESOURCES_DIR = "resources/ui/generateccode/";
 
     private final IComparator textComparator;
 
