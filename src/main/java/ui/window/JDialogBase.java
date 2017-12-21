@@ -6,7 +6,6 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.Callable;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
