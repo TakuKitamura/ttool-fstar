@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -81,13 +81,13 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     int mode;
     JRadioButton dseButton;
     JRadioButton simButton;
-	JButton addConstraint;
+    JButton addConstraint;
     ButtonGroup group;
     //components
-    
-    
 
-	JCheckBox outputTXT, outputHTML;
+
+
+    JCheckBox outputTXT, outputHTML;
     protected JCheckBox secAnalysis;
     protected JTextField encTime2, decTime2, secOverhead2;
 
@@ -99,7 +99,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     protected JTextField tmlDirectory, mappingFile, modelFile, simulationThreads, resultsDirectory, simulationCycles, minCPU, maxCPU, simulationsPerMapping;
     protected JTextArea outputText;
     protected String output = "";
-    
+
     protected JSlider JSMinSimulationDuration, JSAverageSimulationDuration, JSMaxSimulationDuration, JSArchitectureComplexity, JSMinCPUUsage, JSAverageCPUUsage, JSMaxCPUUsage, JSMinBusUsage, JSAverageBusUsage, JSMaxBusUsage, JSMinBusContention, JSAverageBusContention, JSMaxBusContention;
     DSEConfiguration config;
 
@@ -118,17 +118,17 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     protected static boolean secAnalysisState = false;
     protected static boolean outputTXTState = false;
     protected static boolean outputHTMLState = false;
-   
-	JList<String> constraints;
-	JTextField constraintTextField;
+
+    JList<String> constraints;
+    JTextField constraintTextField;
     protected JTabbedPane jp1;
-	
+
     private Thread t;
     private boolean go = false;
- //   private boolean hasError = false;
+    //   private boolean hasError = false;
     //protected boolean startProcess = false;
-	JList<String> contraints;
-   // private String hostProVerif;
+    JList<String> contraints;
+    // private String hostProVerif;
 
     protected RshClient rshc;
 
@@ -141,7 +141,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         simulator=_simulator;
         tmlDir = dir+"/";
         resDirect = _simulator + "results/";
-		
+
         initComponents();
         myInitComponents();
 
@@ -163,7 +163,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
 
-        // Issue #41 Ordering of tabbed panes 
+        // Issue #41 Ordering of tabbed panes
         jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
 
@@ -221,7 +221,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
 
         secAnalysis = new JCheckBox("Security Analysis");
-	secAnalysis.setSelected(secAnalysisState);
+        secAnalysis.setSelected(secAnalysisState);
         jp03.add(secAnalysis,c03);
 
         jp03.add(new JLabel("Encryption Computational Complexity"),c03);
@@ -237,42 +237,42 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         jp03.add(secOverhead2,c03);
 
         outputTXT = new JCheckBox("Save text files?");
-	outputTXT.addActionListener(this);
-	outputTXT.setSelected(outputTXTState);
+        outputTXT.addActionListener(this);
+        outputTXT.setSelected(outputTXTState);
         jp03.add(outputTXT, c03);
 
         outputHTML = new JCheckBox("Save html files?");
-	outputHTML.addActionListener(this);
-	outputHTML.setSelected(outputHTMLState);
+        outputHTML.addActionListener(this);
+        outputHTML.setSelected(outputHTMLState);
         jp03.add(outputHTML, c03);
 
-		constraints = new JList<String>();
-		jp03.add(constraints, c03);
+        constraints = new JList<String>();
+        jp03.add(constraints, c03);
 
 
-		constraintTextField=new JTextField();
+        constraintTextField=new JTextField();
 
         addConstraint = new JButton("Add Constraint");
         addConstraint.addActionListener(this);
         addConstraint.setPreferredSize(new Dimension(50, 25));
         addConstraint.setActionCommand("addConstraint");
-		jp03.add(addConstraint, c03);
-		
-		
-		
+        jp03.add(addConstraint, c03);
+
+
+
 
         group = new ButtonGroup();
         dseButton = new JRadioButton("Run Design Space Exploration");
-	dseButton.addActionListener(this);
+        dseButton.addActionListener(this);
         jp03.add(dseButton,c03);
         simButton = new JRadioButton("Run Lots of Simulations");
-	simButton.addActionListener(this);
+        simButton.addActionListener(this);
         jp03.add(simButton,c03);
         group.add(dseButton);
         group.add(simButton);
 
 
-	
+
         jp1.add("Mapping Exploration", jp03);
 
         JPanel jp04 = new JPanel();
@@ -565,51 +565,51 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     }
 
     public void storeValues() {
-	tmlDir = tmlDirectory.getText();
-	mapFile = mappingFile.getText();
-	modFile = modelFile.getText();
-	simThreads = simulationThreads.getText();
-	simCycles = simulationCycles.getText();
-	resDirect = resultsDirectory.getText();
-	NbMinCPU = minCPU.getText();
-	NbMaxCPU = maxCPU.getText();
-	Nbsim = simulationsPerMapping.getText();
-	encCC = encTime2.getText();
-	decCC = decTime2.getText();
-	secAnalysisState = secAnalysis.isSelected();
-	secOv = secOverhead2.getText();
-	outputTXTState = outputTXT.isSelected();
-	outputHTMLState = outputHTML.isSelected();
-	
+        tmlDir = tmlDirectory.getText();
+        mapFile = mappingFile.getText();
+        modFile = modelFile.getText();
+        simThreads = simulationThreads.getText();
+        simCycles = simulationCycles.getText();
+        resDirect = resultsDirectory.getText();
+        NbMinCPU = minCPU.getText();
+        NbMaxCPU = maxCPU.getText();
+        Nbsim = simulationsPerMapping.getText();
+        encCC = encTime2.getText();
+        decCC = decTime2.getText();
+        secAnalysisState = secAnalysis.isSelected();
+        secOv = secOverhead2.getText();
+        outputTXTState = outputTXT.isSelected();
+        outputHTMLState = outputHTML.isSelected();
+
     }
 
 
 
     private void handleStartButton() {
-	if (mode != NOT_STARTED  && mode != NOT_SELECTED) {
-	    return;
-	}
-	if (jp1.getSelectedIndex() !=1){
-		mode = NOT_STARTED;
-		setButtons();
-		return;
-	}
-	boolean oneResult, oneAction;
-	oneResult = outputHTML.isSelected() || outputTXT.isSelected();
-	oneAction = dseButton.isSelected() || simButton.isSelected();
+        if (mode != NOT_STARTED  && mode != NOT_SELECTED) {
+            return;
+        }
+        if (jp1.getSelectedIndex() !=1){
+            mode = NOT_STARTED;
+            setButtons();
+            return;
+        }
+        boolean oneResult, oneAction;
+        oneResult = outputHTML.isSelected() || outputTXT.isSelected();
+        oneAction = dseButton.isSelected() || simButton.isSelected();
 
-	if (oneAction == false || oneResult == false) {
-	    mode = NOT_SELECTED;
-	} else {
-	    mode = NOT_STARTED;
-	}
-	setButtons();
-	
+        if (oneAction == false || oneResult == false) {
+            mode = NOT_SELECTED;
+        } else {
+            mode = NOT_STARTED;
+        }
+        setButtons();
+
     }
 
-	public void valueChanged(ListSelectionEvent e) {
-	}
-    
+    public void valueChanged(ListSelectionEvent e) {
+    }
+
 
     public void actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
@@ -620,9 +620,9 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         } else if (command.equals("Close")) {
             closeDialog();
         }
-		else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT) ){
-			handleStartButton();
-		}
+        else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT) ){
+            handleStartButton();
+        }
     }
 
     public void closeDialog() {
@@ -630,7 +630,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             stopProcess();
         }
         dispose();
-	storeValues();
+        storeValues();
     }
 
     public void stopProcess() {
@@ -653,20 +653,20 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         go = true;
         t.start();
     }
-//
-//    private void testGo() throws InterruptedException {
-//        if (go == false) {
-//            throw new InterruptedException("Stopped by user");
-//        }
-//    }
+    //
+    //    private void testGo() throws InterruptedException {
+    //        if (go == false) {
+    //            throw new InterruptedException("Stopped by user");
+    //        }
+    //    }
 
     public void run() {
-  //      String cmd;
-    //    String list, data;
-      //  int cycle = 0;
+        //      String cmd;
+        //    String list, data;
+        //  int cycle = 0;
         output="";
 
-      //  hasError = false;
+        //  hasError = false;
         //try {
         mapFile = mappingFile.getText();
         modFile = modelFile.getText();
@@ -678,8 +678,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         NbMaxCPU = maxCPU.getText();
         Nbsim = simulationsPerMapping.getText();
         TraceManager.addDev("Thread started");
-     //   File testFile;
-       
+        //   File testFile;
+
         if (jp1.getSelectedIndex()==0){
             encCC=encTime2.getText();
             decCC=decTime2.getText();
@@ -692,7 +692,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             config.decComp = decCC;
 
             config.mainGUI = mgui;
-           // TMLMapping map = mgui.gtm.getTMLMapping();
+            // TMLMapping map = mgui.gtm.getTMLMapping();
 
             if (config.setModelPath(tmlDir) != 0) {
                 TraceManager.addDev("TML Directory file at " + tmlDir + " error");
@@ -776,6 +776,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             config.setOutputTXT(outputTXT.isSelected()? "true": "false");
             config.setOutputHTML(outputHTML.isSelected()?"true": "false");
             config.setRecordResults("true");
+
+	    // Simulations
             if (simButton.isSelected()){
                 if (config.runParallelSimulation(Nbsim, true, true) != 0) {
                     output+="Simulation Failed \n";
@@ -787,14 +789,17 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
                     output+="Simulation Succeeded";
                     outputText.setText(output);
                 }
-            }
-            else if (dseButton.isSelected()){
+
+		// DSE
+            } else if (dseButton.isSelected()){
                 if (config.runDSE("", false, false)!=0){
                     TraceManager.addDev("Can't run DSE");
 
                 }
                 TraceManager.addDev("DSE run");
             }
+
+	    // Results
             if (config.printAllResults("", true, true)!=0){
                 TraceManager.addDev("Can't print all results");
                 output+="Can't print all results \n";
@@ -846,13 +851,13 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
     protected void setButtons() {
         switch(mode) {
-	case NOT_SELECTED:
-	    start.setEnabled(false);
+        case NOT_SELECTED:
+            start.setEnabled(false);
             stop.setEnabled(false);
             close.setEnabled(true);
             //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             getGlassPane().setVisible(false);
-	    break;
+            break;
         case NOT_STARTED:
             start.setEnabled(true);
             stop.setEnabled(false);
@@ -880,9 +885,9 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     public boolean hasToContinue() {
         return (go == true);
     }
-//
-//    public void setError() {
-//        hasError = true;
-//    }
-//
+    //
+    //    public void setError() {
+    //        hasError = true;
+    //    }
+    //
 }
