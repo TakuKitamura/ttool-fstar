@@ -262,43 +262,41 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
         Font f = new Font("Helvetica", Font.PLAIN, 14);
         setFont(f);
         c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
+        
         helpPopup = new JPopupMenu();
-        //JTextArea jft = new JTextArea("UPPAAL pragmas");
-        //helpPopup.add(jft);
-        JLabel t = new JLabel("");
-        JLabel header= new JLabel("     Performance Pragma");
-        Font headerFont=new Font(t.getFont().getName(),Font.BOLD,t.getFont().getSize()+2);
-        header.setFont(headerFont);
-        helpPopup.add(header);
-        //Text
-        helpPopup.add(new JLabel(" Performance Pragma allow us to query and record "));
-        helpPopup.add(new JLabel(" the latency (in cycles) between two events after simulation"));
-        helpPopup.add(new JLabel(" Depending on the format of the pragma, results can be the"));
-        helpPopup.add(new JLabel(" numeric average latency value or a verified true/false result"));
-
-        JLabel example =new JLabel(" Examples:");
-        example.setFont(headerFont);
-        helpPopup.add(example);
-
-        Font exFont=new Font(t.getFont().getName(),Font.ITALIC,t.getFont().getSize());
-        JLabel t1 = new JLabel(" Latency(block1.state1, block2.s)<10");
-        t1.setFont(exFont);
-        helpPopup.add(t1);
-        helpPopup.add(new JLabel(" Will be marked with a green check mark or "));
-        helpPopup.add(new JLabel(" red cross depending on simulation results"));
-
-        JLabel t2 = new JLabel(" Latency(block1.state1, block2.s)?");
-        t2.setFont(exFont);
-        helpPopup.add(t2);
-
-        helpPopup.add(new JLabel(" Will be marked with the average latency"));
-        helpPopup.add(new JLabel(" time after simulation"));
-        helpPopup.setPreferredSize(new Dimension(600,250));
-
-
-
+		//JTextArea jft = new JTextArea("UPPAAL pragmas");
+		//helpPopup.add(jft);
+		JLabel t = new JLabel("");
+		JLabel header= new JLabel(" 	Performance Pragma");
+		Font headerFont=new Font(t.getFont().getName(),Font.BOLD,t.getFont().getSize()+2);
+		header.setFont(headerFont);
+		helpPopup.add(header);
+		//Text
+		helpPopup.add(new JLabel(" Performance Pragma allow us to query and record "));
+		helpPopup.add(new JLabel(" the latency (in cycles) between two events after simulation"));
+		helpPopup.add(new JLabel(" Depending on the format of the pragma, results can be the"));
+		helpPopup.add(new JLabel(" numeric average latency value or a verified true/false result"));		
+		
+		JLabel example =new JLabel(" Examples:");
+		example.setFont(headerFont);
+		helpPopup.add(example);
+		
+		Font exFont=new Font(t.getFont().getName(),Font.ITALIC,t.getFont().getSize());
+		JLabel t1 = new JLabel(" Latency(block1.state1, block2.s)<10:");
+		t1.setFont(exFont);
+		helpPopup.add(t1);
+		helpPopup.add(new JLabel(" Will be marked with a green check mark or "));
+		helpPopup.add(new JLabel(" red cross depending on simulation results"));		
+	
+		JLabel t2 = new JLabel(" Latency(block1.state1, block2.s)?:");
+		t2.setFont(exFont);
+		helpPopup.add(t2);
+		
+		helpPopup.add(new JLabel(" Will be marked with the average latency"));
+		helpPopup.add(new JLabel(" time after simulation"));	
+		helpPopup.setPreferredSize(new Dimension(600,250));
+        
         textarea = new JTextArea();
 
         textarea.setEditable(true);

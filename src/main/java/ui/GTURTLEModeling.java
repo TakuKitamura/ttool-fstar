@@ -45,6 +45,7 @@ import avatartranslator.totpn.AVATAR2TPN;
 import avatartranslator.toturtle.AVATAR2TURTLE;
 import avatartranslator.touppaal.AVATAR2UPPAAL;
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ddtranslator.DDSyntaxException;
 import ddtranslator.DDTranslator;
 import launcher.LauncherException;
@@ -486,16 +487,16 @@ public class GTURTLEModeling {
         CCode.toTextFormat();
         
         try {
-            // Issue #98: Use the passed directory
-            if( directory/*ConfigurationTTool.CCodeDirectory*/.equals("") )  {
+            if( directory.equals("") )  {
+
                 JOptionPane.showMessageDialog(  mgui.frame,
                                                 "No directory for C code generation found in config.xml. The C code cannot be generated.",
                                                 "Control code generation failed", JOptionPane.INFORMATION_MESSAGE );
                 return true;
             }
-            else                {
-                // Issue #98: Use the passed directory
-                CCode.saveFile( directory/*ConfigurationTTool.CCodeDirectory*/ + File.separator, applicationName );
+            else {
+            	FileUtils.checkAndCreateCCodeDir(directory);
+                CCode.saveFile( directory + File.separator, applicationName );
             }
         }
         catch( Exception e ) {
@@ -506,8 +507,7 @@ public class GTURTLEModeling {
     }
 
     public boolean generateTMLTxt( String _title ) {
-
-
+    	
         //This branch is activated if doing the syntax check from the architecture panel.
         //It generates the text TML for the architecture and the application + mapping information
         if (tmap != null) {
@@ -515,7 +515,7 @@ public class GTURTLEModeling {
             spec.toTextFormat( tmap );    //TMLMapping
             try {
                 //TraceManager.addDev( "*** " + ConfigurationTTool.TMLCodeDirectory + File.separator );
-                spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
+                spec.saveFile( SpecConfigTTool.TMLCodeDirectory, "spec" );
             }
             catch( Exception e ) {
                 TraceManager.addError( "Files could not be saved: " + e.getMessage() );
@@ -558,7 +558,7 @@ public class GTURTLEModeling {
             // from which the button is pressed. If there are multiple CP panels this operation must be repeated for each panel. It
             // should be no difficult to implement.
             try {
-                specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
+                specCP.saveFile( SpecConfigTTool.TMLCodeDirectory, "spec.tmlcp" );
             }
             catch( Exception e ) {
                 TraceManager.addError( "Writing TMLText for CPs, file could not be saved: " + e.getMessage() );
@@ -572,7 +572,7 @@ public class GTURTLEModeling {
                 TMLTextSpecification<TGComponent> spec = new TMLTextSpecification<>( _title );
                 spec.toTextFormat( tmlm );        //TMLModeling
                 try {
-                    spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml" );
+                    spec.saveFile( SpecConfigTTool.TMLCodeDirectory, "spec.tml" );
                 }
                 catch( Exception e ) {
                     TraceManager.addError( "File could not be saved: " + e.getMessage() );
@@ -3276,7 +3276,7 @@ public class GTURTLEModeling {
 
     public String showRGDiplodocus() {
         //TraceManager.addDev("Show diplodocus graph located in " + ConfigurationTTool.GGraphPath + "/tree.dot");
-        RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, null, null, ConfigurationTTool.DOTTYPath + " " + ConfigurationTTool.GGraphPath + "/tree.dot");
+        RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, null, null, ConfigurationTTool.DOTTYPath + " " + SpecConfigTTool.GGraphPath + "/tree.dot");
         ret.start();
         return null;
     }
@@ -3571,7 +3571,7 @@ public class GTURTLEModeling {
     }
 
     public String getPathUPPAALFile() {
-        return ConfigurationTTool.UPPAALCodeDirectory;
+        return SpecConfigTTool.UPPAALCodeDirectory;
     }
 
     public String getUPPAALVerifierHost() {
@@ -9067,15 +9067,20 @@ public class GTURTLEModeling {
         } else {
             // Generate XML file
             try {
+            	if (SpecConfigTTool.NCDirectory != null) {
+            		File dir = new File(SpecConfigTTool.NCDirectory);
+            		if (!dir.exists())
+            			dir.mkdirs();
+            	}
                 String fileName = "network.xml";
-                if (ConfigurationTTool.NCDirectory != null) {
-                    fileName = ConfigurationTTool.NCDirectory + fileName;
+                if (SpecConfigTTool.NCDirectory != null) {
+                    fileName = SpecConfigTTool.NCDirectory + fileName;
                 }
                 TraceManager.addDev("Saving in network structure in file: " + fileName);
                 FileUtils.saveFile(fileName, ncs.toISAENetworkXML());
                 fileName = "traffics.xml";
-                if (ConfigurationTTool.NCDirectory != null) {
-                    fileName = ConfigurationTTool.NCDirectory + fileName;
+                if (SpecConfigTTool.NCDirectory != null) {
+                    fileName = SpecConfigTTool.NCDirectory + fileName;
                 }
                 TraceManager.addDev("Saving in traffics in file: " + fileName);
                 FileUtils.saveFile(fileName, ncs.toISAETrafficsXML());

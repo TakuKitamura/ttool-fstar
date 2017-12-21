@@ -42,6 +42,7 @@
 package ui;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 
 import javax.swing.*;
 //import javax.swing.event.*;
@@ -96,7 +97,11 @@ public  class JMenuBarTurtle extends JMenuBar   {
         // FILE
         menuItem = file.add(mgui.actions[TGUIAction.ACT_NEW]);
         menuItem.addMouseListener(mgui.mouseHandler);
+        menuItem = file.add(mgui.actions[TGUIAction.ACT_NEW_PROJECT]);
+        menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+        menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_PROJECT]);
         menuItem.addMouseListener(mgui.mouseHandler);
 	menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_FROM_NETWORK]);
         menuItem.addMouseListener(mgui.mouseHandler);
@@ -597,10 +602,10 @@ public  class JMenuBarTurtle extends JMenuBar   {
         menuItem = tool.add(mgui.actions[TGUIAction.ACT_GEN_DOC_REQ]);
         menuItem.addMouseListener(mgui.mouseHandler);
 
-        if ((ConfigurationTTool.ExternalCommand1.length() > 0) && (ConfigurationTTool.ExternalCommand1Host.length() > 0)) {
+        if ((SpecConfigTTool.ExternalCommand1.length() > 0) && (ConfigurationTTool.ExternalCommand1Host.length() > 0)) {
             menuItem = tool.add(mgui.actions[TGUIAction.EXTERNAL_ACTION_1]);
             menuItem.addMouseListener(mgui.mouseHandler);
-            menuItem.setToolTipText(ConfigurationTTool.ExternalCommand1);
+            menuItem.setToolTipText("Launch gtkwave with last vcd file");
         }
 
         if ((ConfigurationTTool.ExternalCommand2.length() > 0) && (ConfigurationTTool.ExternalCommand2Host.length() > 0)) {

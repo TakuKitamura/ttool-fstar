@@ -43,6 +43,7 @@
 package ui;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import myutil.TraceManager;
 
 /**
@@ -60,7 +61,9 @@ public class ModeManager {
         case MainGUI.NOT_OPENED:
             mgui.activeActions(false);
             actions[TGUIAction.ACT_NEW].setEnabled(true);
+            actions[TGUIAction.ACT_NEW_PROJECT].setEnabled(true);
             actions[TGUIAction.ACT_OPEN].setEnabled(true);
+            actions[TGUIAction.ACT_OPEN_PROJECT].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_FROM_NETWORK].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_TIF].setEnabled(true);
             actions[TGUIAction.ACT_OPEN_SD].setEnabled(true);
@@ -87,8 +90,8 @@ public class ModeManager {
             actions[TGUIAction.EXTERNAL_ACTION_1].setEnabled(true);
             actions[TGUIAction.EXTERNAL_ACTION_2].setEnabled(true);
             //actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(true);
-            actions[TGUIAction.ACT_VIEW_RG_DIPLODOCUS].setEnabled(ConfigurationTTool.GGraphPath != null);
-            actions[TGUIAction.ACT_VIEW_STAT_AUTDIPLODOCUS].setEnabled(ConfigurationTTool.GGraphPath != null);
+            actions[TGUIAction.ACT_VIEW_RG_DIPLODOCUS].setEnabled(SpecConfigTTool.GGraphPath != null);
+            actions[TGUIAction.ACT_VIEW_STAT_AUTDIPLODOCUS].setEnabled(SpecConfigTTool.GGraphPath != null);
             if (mainBar != null) {
                 mainBar.activateSearch(false);
             }

@@ -45,6 +45,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
+
+import common.ConfigurationTTool;
 
 
 /**
@@ -53,7 +56,7 @@ import java.io.FilenameFilter;
    * @version 1.1 01/12/2003
    * @author Ludovic APVRILLE
  */
-public class FileUtils {
+public class FileUtils extends org.apache.commons.io.FileUtils{
 
     public final static String xml = "xml";
     public final static String rtl = "lot";
@@ -72,7 +75,7 @@ public class FileUtils {
 
 
     public static String getExtension(File f) {
-        String ext = null;
+        String ext = "";
         String s = f.getName();
         int i = s.lastIndexOf('.');
 
@@ -87,6 +90,152 @@ public class FileUtils {
 	return new File(path).isDirectory();
     }
 
+    /**
+     * Check and create the directory for c++ code generation in DIPLODOCUS
+     * @author Fabien Tessier
+     * @param s directory path
+     * @return true if there's no error, false if the directory cannot be created
+     * @throws FileException
+     */
+    public static boolean checkAndCreateSystemCDir(String s) throws FileException {
+    	File f = new File(s);
+    	try {
+    		if (!f.exists())
+    			if(!f.mkdir())
+    					return false;
+    		if (!s.equals(ConfigurationTTool.SystemCCodeDirectory)) {
+    			File make = new File(ConfigurationTTool.SystemCCodeDirectory + "Makefile");
+    			File defs = new File(ConfigurationTTool.SystemCCodeDirectory + "Makefile.defs");
+    			File src = new File(ConfigurationTTool.SystemCCodeDirectory + "src_simulator");
+    			File lic = new File(ConfigurationTTool.SystemCCodeDirectory + "LICENSE");
+    			File liceng = new File(ConfigurationTTool.SystemCCodeDirectory + "LICENSE_CECILL_ENG");
+    			File licfr = new File(ConfigurationTTool.SystemCCodeDirectory + "LICENSE_CECILL_FR");
+    			
+    			FileUtils.copyFileToDirectory(make, f, false);
+    			FileUtils.copyFileToDirectory(defs, f, false);
+    			FileUtils.copyDirectoryToDirectory(src, f);
+    			FileUtils.copyFileToDirectory(lic, f, false);
+    			FileUtils.copyFileToDirectory(liceng, f, false);
+    			FileUtils.copyFileToDirectory(licfr, f, false);
+    		}
+    		return true;
+		} catch (Exception e) {
+			throw new FileException(e.getMessage());
+		}
+    }
+    
+    /**
+     * Check and create the directory for c code generation in AVATAR
+     * @author Fabien Tessier
+     * @param s directory path
+     * @return true if there's no error, false if the directory cannot be created
+     * @throws FileException
+     */
+    public static boolean checkAndCreateAVATARCodeDir(String s) throws FileException {
+    	File f = new File(s);
+    	try {
+    		if (!f.exists())
+    			if(!f.mkdir())
+					return false;
+    		if (!s.equals(ConfigurationTTool.AVATARExecutableCodeDirectory)) {
+    			File make = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile");
+    			File defs = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.defs");
+    			File soclib = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.forsoclib");
+    			File src = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "src");
+    			File lic = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE");
+    			File liceng = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE_CECILL_ENG");
+    			File licfr = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE_CECILL_FR");
+    			//File topcell = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "generated_topcell");
+    		
+				FileUtils.copyFileToDirectory(make, f, false);
+				FileUtils.copyFileToDirectory(defs, f,false);
+				FileUtils.copyFileToDirectory(soclib, f, false);
+				FileUtils.copyDirectoryToDirectory(src, f);
+				FileUtils.copyFileToDirectory(lic, f, false);
+    			FileUtils.copyFileToDirectory(liceng, f, false);
+    			FileUtils.copyFileToDirectory(licfr, f, false);
+				//FileUtils.copyDirectoryToDirectory(topcell, f);
+			}
+    		return true;
+    	}
+    	catch (IOException e) {
+			throw new FileException(e.getMessage());
+		}
+    	
+    }
+    
+    public static boolean checkAndCreateProverifDir(String s) throws FileException {
+    	File f = new File(s);
+    	try {
+    		if (!f.exists())
+    			if(!f.mkdir())
+					return false;
+    		if (!s.equals(ConfigurationTTool.ProVerifCodeDirectory)) {
+    			File readme = new File(ConfigurationTTool.ProVerifCodeDirectory + "README");
+    			if (readme.exists())
+    				FileUtils.copyFileToDirectory(readme, f, false);
+    		}
+    		return true;
+    	}
+    	catch (IOException e) {
+			throw new FileException(e.getMessage());
+		}
+    }
+    
+    public static boolean checkAndCreateTMLDir(String s) throws FileException {
+    	File f = new File(s);
+    	try {
+    		if (!f.exists())
+    			if(!f.mkdir())
+					return false;
+    		if (!s.equals(ConfigurationTTool.TMLCodeDirectory)) {
+    			File readme = new File(ConfigurationTTool.TMLCodeDirectory + "README_TML");
+    			if (readme.exists())
+    				FileUtils.copyFileToDirectory(readme, f, false);
+    		}
+    		return true;
+    	}
+    	catch (IOException e) {
+			throw new FileException(e.getMessage());
+		}
+    }
+    
+    public static boolean checkAndCreateCCodeDir(String s) throws FileException {
+    	File f = new File(s);
+    	try {
+    		if (!f.exists())
+    			if(!f.mkdir())
+					return false;
+    		if (!s.equals(ConfigurationTTool.CCodeDirectory)) {
+    			File readme = new File(ConfigurationTTool.CCodeDirectory + "README");
+    			if (readme.exists())
+    				FileUtils.copyFileToDirectory(readme, f, false);
+    		}
+    		return true;
+    	}
+    	catch (IOException e) {
+			throw new FileException(e.getMessage());
+		}
+    }
+    
+    public static boolean checkAndCreateUPPAALDir(String s) throws FileException {
+    	File f = new File(s);
+    	try {
+    		if (!f.exists())
+    			if(!f.mkdir())
+					return false;
+    		if (!s.equals(ConfigurationTTool.UPPAALCodeDirectory)) {
+    			File readme = new File(ConfigurationTTool.UPPAALCodeDirectory + "README");
+    			if (readme.exists())
+    				FileUtils.copyFileToDirectory(readme, f, false);
+    		}
+    		return true;
+    	}
+    	catch (IOException e) {
+			throw new FileException(e.getMessage());
+		}
+    }
+    
     public static boolean checkFileForSave(File file) throws FileException {
         //     boolean ok = true;
         //    String pb = "";

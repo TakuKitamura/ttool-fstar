@@ -48,6 +48,7 @@ import myutil.FileUtils;
 import myutil.TraceManager;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
@@ -105,6 +106,7 @@ public class TMLTextSpecification<E> {
     }
 
     public void saveFile(String path, String filename) throws FileException {
+    	FileUtils.checkAndCreateTMLDir(path);
         TraceManager.addUser("Saving TML spec file in " + path + filename);
         FileUtils.saveFile(path + filename, spec);
     }

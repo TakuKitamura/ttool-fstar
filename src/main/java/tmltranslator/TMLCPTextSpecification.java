@@ -48,6 +48,7 @@ import myutil.FileUtils;
 import myutil.TraceManager;
 import tmltranslator.tmlcp.*;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -137,6 +138,9 @@ public class TMLCPTextSpecification {
 //    }
 
     public void saveFile(String path, String filename) throws FileException {
+    	File dir = new File(path);
+    	if (!dir.exists())
+    		dir.mkdir();
         TraceManager.addUser("Saving TMLCP spec file in " + path + filename);
         FileUtils.saveFile(path + filename, spec);
     }

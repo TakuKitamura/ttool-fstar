@@ -114,6 +114,7 @@ public class TURTLE2UPPAAL {
 	
 	
 	public void saveInFile(String path) throws FileException {
+		FileUtils.checkAndCreateUPPAALDir(path);
 		FileUtils.saveFile(path + "spec.xml", spec.makeSpec());
 		
 		//System.out.println("spec.xml generated:\n" + spec.getFullSpec());

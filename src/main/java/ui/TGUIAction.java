@@ -67,9 +67,11 @@ public class TGUIAction extends AbstractAction {
 
     // Actions
     public static final int ACT_NEW = 0;
+    public static final int ACT_NEW_PROJECT = 471;
     public static final int ACT_NEW_DESIGN = 100;
     public static final int ACT_NEW_ANALYSIS = 101;
     public static final int ACT_OPEN = 1;
+    public static final int ACT_OPEN_PROJECT = 472;
     public static final int ACT_OPEN_FROM_NETWORK = 455;
     public static final int ACT_OPEN_LAST = 154;
     public static final int ACT_MERGE = 228;
@@ -627,7 +629,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 471;
+    public static final int NB_ACTION = 473;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -681,9 +683,11 @@ public class TGUIAction extends AbstractAction {
 
     public void init() {
         actions[ACT_NEW] = new TAction("new-command", "New", IconManager.imgic20, IconManager.imgic21, "New", "New modeling", 'N');
+        actions[ACT_NEW_PROJECT] = new TAction("new-project-command", "New project", IconManager.imgic20, IconManager.imgic21, "New project", "New project", 0);
         actions[ACT_NEW_DESIGN] = new TAction("new-command-design", "New design", IconManager.imgic14, IconManager.imgic14, "New design", "New TURTLE design", 0);
         actions[ACT_NEW_ANALYSIS] = new TAction("new-command-analysis", "New analysis", IconManager.imgic17, IconManager.imgic17, "New analysis", "New TURTLE analysis", 0);
         actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TTool model",'O', true);
+        actions[ACT_OPEN_PROJECT] = new TAction("open-project-command","Open project", IconManager.imgic22, IconManager.imgic23, "Open project", "Open an existing TTool project",'O', true);
         actions[ACT_OPEN_FROM_NETWORK] = new TAction("open-command-from-network","Open from TTool repository", IconManager.imgic22, IconManager.imgic23, "Open from TTool repository", "Open an existing TTool model from the TTool repository (TTool website)",'0', true);
         actions[ACT_OPEN_LAST] = new TAction("openlast-command","Open file: " + ConfigurationTTool.LastOpenFile, IconManager.imgic22, IconManager.imgic23, "Open: " + ConfigurationTTool.LastOpenFile, "Open the lastly saved TTool model", 0);
         actions[ACT_MERGE] = new TAction("merge-command","Merge", IconManager.imgic22, IconManager.imgic23, "Merge", "Merge the current TTool modeling with another one saved in a file ", 0);

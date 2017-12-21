@@ -43,6 +43,7 @@ package ui;
 
 import avatartranslator.AvatarSpecification;
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
 import launcher.RemoteExecutionThread;
@@ -100,6 +101,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -135,6 +138,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public static boolean experimentalOn;
     public static boolean avatarOnly;
     public static boolean turtleOn;
+    
+    public boolean isxml = false;
 
     public final static int LOTOS = 0;
     public final static int RT_LOTOS = 1;
@@ -283,6 +288,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     private Plugin pluginSelected;
 
     private File file;
+    private File dir;
+    private File config;
     private File lotosfile;
     private File simfile;
     private File dtafile;
@@ -352,7 +359,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //PluginManager.pluginManager = new PluginManager();
 
     }
-
+    
     public void setKey(String _sk) {
         sk = _sk;
         RshClient.sk = sk;
@@ -361,7 +368,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public String getKey() {
         return sk;
     }
-
+    
+    public File getDir() {
+    	return dir;
+    }
 
     public boolean isAvatarOn() {
         return avatarOn;
@@ -411,14 +421,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             jfclib = new JFileChooser();
         }
 
-        if (ConfigurationTTool.IMGPath.length() > 0) {
-            jfcimg = new JFileChooser(ConfigurationTTool.IMGPath);
+        if (SpecConfigTTool.IMGPath.length() > 0) {
+            jfcimg = new JFileChooser(SpecConfigTTool.IMGPath);
         } else {
             jfcimg = new JFileChooser();
         }
 
-        if (ConfigurationTTool.IMGPath.length() > 0) {
-            jfcimgsvg = new JFileChooser(ConfigurationTTool.IMGPath);
+        if (SpecConfigTTool.IMGPath.length() > 0) {
+            jfcimgsvg = new JFileChooser(SpecConfigTTool.IMGPath);
         } else {
             jfcimgsvg = new JFileChooser();
         }
@@ -429,20 +439,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             jfclot = new JFileChooser();
         }
 
-        if (ConfigurationTTool.GGraphPath.length() > 0) {
-            jfcggraph = new JFileChooser(ConfigurationTTool.GGraphPath);
+        if (SpecConfigTTool.GGraphPath.length() > 0) {
+            jfcggraph = new JFileChooser(SpecConfigTTool.GGraphPath);
         } else {
             jfcggraph = new JFileChooser();
         }
 
-        if (ConfigurationTTool.TGraphPath.length() > 0) {
-            jfctgraph = new JFileChooser(ConfigurationTTool.TGraphPath);
+        if (SpecConfigTTool.TGraphPath.length() > 0) {
+            jfctgraph = new JFileChooser(SpecConfigTTool.TGraphPath);
         } else {
             jfctgraph = new JFileChooser();
         }
 
         TFileFilter filter = new TFileFilter();
         jfc.setFileFilter(filter);
+        jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
         TTIFFilter filtertif = new TTIFFilter();
         jfctif.setFileFilter(filtertif);
@@ -1546,13 +1557,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void firstDiag() {
-        TURTLEPanel tp = getCurrentTURTLEPanel();
-        if (tp == null) {
-            return;
-        }
-        tp.tabbedPane.setSelectedIndex(0);
-    }
 
+	TURTLEPanel tp = getCurrentTURTLEPanel();
+	if (tp == null) {
+	    return;
+	}
+	tp.tabbedPane.setSelectedIndex(0);
+    }
     public String getTitleOf(TDiagramPanel _tdp) {
         TURTLEPanel panel;
         for(int i=0; i<tabs.size(); i++) {
@@ -1909,6 +1920,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             newTurtleModeling();
             //gtm.saveOperation(tcdp);
             file = null;
+            dir = null;
+            config = null;
             frame.setTitle("TTool: unsaved project");
         } else {
             //  check if previous modeling is saved
@@ -1949,7 +1962,52 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             frame.setTitle("TTool: unsaved project");
         }
     }
-
+    
+    public void newProjectDir() {
+    	if (mode == NOT_OPENED) {
+    		int val = createFileDialog();
+    		if (val == JFileChooser.APPROVE_OPTION) 
+    			createFile();      
+        }
+        else {
+            //  check if previous modeling is saved
+            boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
+            if (b) {
+                if (!saveBeforeAction("Save and Start New Modeling", "Start New modeling")) {
+                    return;
+                }
+                /*int back = JOptionPane.showConfirmDialog(frame, "Modeling has not been saved\nDo you really want to open a new one ?", "Attention: current modeling not saved ?", JOptionPane.OK_CANCEL_OPTION);
+                  if (back == JOptionPane.CANCEL_OPTION) {
+                  return;       */
+                /*}*/
+            }
+            int val = createFileDialog();
+            if (val == JFileChooser.APPROVE_OPTION) {
+            // close current modeling
+            	closeTurtleModeling();
+            	createFile();
+            }
+        }
+    }
+    
+    public void saveConfig() {
+        int i = 0;
+        for (; i < tabs.size(); i++) {
+        	if (tabs.get(i) == activetdp.tp)
+        		break;
+        }
+        int j = tabs.get(i).getIndexOfChild(activetdp);
+        SpecConfigTTool.lastTab = i;
+        SpecConfigTTool.lastPanel = j;
+        try {
+			SpecConfigTTool.saveConfiguration(config);
+			SpecConfigTTool.lastPanel = -1;
+			SpecConfigTTool.lastTab = -1;
+		} catch (MalformedConfigurationException e) {
+			System.err.println(e.getMessage() + " : Can't save config file.");
+		}
+    }
+    
     public String loadFile(File f) {
         String s = null;
 
@@ -2045,6 +2103,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         /* textual form */
         DTAFileFilter filter = new DTAFileFilter();
         jfctgraph.setFileFilter(filter);
+        jfctgraph.setCurrentDirectory(new File(SpecConfigTTool.TGraphPath));
 
         int returnVal = jfctgraph.showDialog(frame, "Save last DTA (textual form)");
         if(returnVal != JFileChooser.APPROVE_OPTION) {
@@ -2086,6 +2145,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         /* textual form */
         RGFileFilter filter = new RGFileFilter();
         jfctgraph.setFileFilter(filter);
+        jfctgraph.setCurrentDirectory(new File(SpecConfigTTool.TGraphPath));
 
         int returnVal = jfctgraph.showDialog(frame, "Save last RG (textual form)");
         if(returnVal != JFileChooser.APPROVE_OPTION) {
@@ -2213,6 +2273,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         /* textual form */
         AUTFileFilter filter = new AUTFileFilter();
         jfctgraph.setFileFilter(filter);
+        jfctgraph.setCurrentDirectory(new File(SpecConfigTTool.TGraphPath));
 
         int returnVal = jfctgraph.showDialog(frame, "Load AUT graph");
         if(returnVal != JFileChooser.APPROVE_OPTION) {
@@ -2232,10 +2293,42 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         ret[1] = spec;
         return ret;
     }
+    
+    public void loadAUTGraphsDir() {
+        File dir = new File(SpecConfigTTool.TGraphPath);
+        if (!dir.exists()) {
+        	System.err.println("Graphs directory doesn't exists !");
+        	return;
+        }
+        
+        for (File autfile: dir.listFiles()) {
+        	if (!FileUtils.getExtension(autfile).equals("aut"))
+        		continue;
+        	
+        	String spec = loadFile(autfile);
+        	if (spec == null) {
+        		continue;
+        	}
+
+        	RG rg = new RG(autfile.getName());
+        	rg.fileName = autfile.getName();
+        	rg.data = spec;
+        	addRG(rg);
+        }
+        
+    }
 
     public void updateLastOpenFile(File file) {
         if (ConfigurationTTool.LastOpenFileDefined) {
             ConfigurationTTool.LastOpenFile = file.getPath();
+            if (ConfigurationTTool.LastOpenFile.contains(".ttool" + File.separator)) {
+            	int last = 0;
+            	for (int i = 0;i < ConfigurationTTool.LastOpenFile.length(); i++) {
+            		if (ConfigurationTTool.LastOpenFile.charAt(i) == '/')
+            			last = i;
+            	}
+            	ConfigurationTTool.LastOpenFile = ConfigurationTTool.LastOpenFile.substring(0, last);
+            }
             // Change name of action
             actions[TGUIAction.ACT_OPEN_LAST].setName(TGUIAction.ACT_OPEN_LAST, ConfigurationTTool.LastOpenFile);
         }
@@ -2315,7 +2408,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
 
-    public void openProject() {
+    public void openProject(boolean isProject) {
+    	if (config != null && activetdp != null)
+			saveConfig();
         // check if a current modeling is opened
         boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
 
@@ -2330,6 +2425,99 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
 
         //jfc.setApproveButtonText("Open");
+        if (isProject) {
+        	jfc.resetChoosableFileFilters();
+        	jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        	jfc.setAcceptAllFileFilterUsed(false);
+        	FileNameExtensionFilter filter = new FileNameExtensionFilter("TTool project", "ttool");
+        	jfc.setFileFilter(filter);
+        	/*jfc.addMouseListener(new MouseListener() {
+
+        	    @Override
+        	    public void mouseClicked(MouseEvent arg0) {
+
+        	        if(arg0.getClickCount() == 2) {
+        	            File file = jfc.getSelectedFile();
+        	            if(!FileUtils.getExtension(file).equals("ttool")) {
+        	                jfc.setCurrentDirectory(file);
+        	                jfc.rescanCurrentDirectory();
+        	            }
+        	            else {
+        	                jfc.approveSelection();
+        	            }
+        	        }
+        	    }
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}		
+        	});*/
+        }
+        else {
+        	jfc.resetChoosableFileFilters();
+        	jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        	jfc.setAcceptAllFileFilterUsed(false);
+        	FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
+        	jfc.setFileFilter(filter);
+        	/*jfc.addMouseListener(new MouseListener() {
+
+        	    @Override
+        	    public void mouseClicked(MouseEvent arg0) {
+
+        	        if(arg0.getClickCount() == 2) {
+        	            File file = jfc.getSelectedFile();
+        	            if(!FileUtils.getExtension(file).equals("ttool")) {
+        	                jfc.setCurrentDirectory(file);
+        	                jfc.rescanCurrentDirectory();
+        	            }
+        	        }
+        	    }
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					return;
+				}		
+        	});*/
+        }
         int returnVal = jfc.showOpenDialog(frame);
 
         if (returnVal == JFileChooser.CANCEL_OPTION) {
@@ -2344,13 +2532,30 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void openProjectFromFile(File _f) {
-        file = _f;
-
-        if(checkFileForOpen(_f)) {
+    	if (FileUtils.getExtension(_f).equals("ttool")) {
+    		dir = _f;
+    		SpecConfigTTool.setDirConfig(dir);
+    		String filename = dir.getAbsolutePath() + "/" + dir.getName().replaceAll(".ttool", ".xml");
+    		file = new File(filename);
+    		config = new File(dir.getAbsolutePath() + "/project_config.xml");
+    		try {
+				SpecConfigTTool.loadConfigFile(config);
+			} catch (MalformedConfigurationException e) {
+				System.err.println(e.getMessage() + " : Can't load config file.");
+			}
+    	}
+    	else {
+    		dir = null;
+    		config = null;
+    		SpecConfigTTool.setBasicConfig(systemcOn);
+    		file = _f;
+    	}
+        
+    	if(checkFileForOpen(file)) {
             String s = null;
 
             try {
-                FileInputStream fis = new FileInputStream(_f);
+                FileInputStream fis = new FileInputStream(file);
                 int nb = fis.available();
 
                 byte [] ba = new byte[nb];
@@ -2371,7 +2576,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             //            gtm.enableUndo(false);
 
             // Update configuration
-            updateLastOpenFile(_f);
+            updateLastOpenFile(file);
 
             // Issue #41: Moved to common method
             loadModels( s, "loaded" );
@@ -2394,7 +2599,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             //            gtm.enableUndo(true);
             //            gtm.saveOperation(getCurrentSelectedPoint());
             //            dtree.forceUpdate();
-            getCurrentTDiagramPanel().repaint();
+            if (getCurrentTDiagramPanel() != null)
+              getCurrentTDiagramPanel().repaint();
         }
     }
 
@@ -2411,6 +2617,29 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         if(checkFileForOpen(file)) {
             String s = null;
+            
+            if (FileUtils.getExtension(file).equals("ttool")) {
+            	int last = 0;
+            	for (int i = 0;i < ConfigurationTTool.LastOpenFile.length(); i++) {
+            		if (ConfigurationTTool.LastOpenFile.charAt(i) == '/')
+            			last = i;
+            	}
+            	dir = file;
+            	String xml = ConfigurationTTool.LastOpenFile.substring(last, ConfigurationTTool.LastOpenFile.length()).replaceAll(".ttool", ".xml");
+            	file = new File(dir.getAbsolutePath() + File.separator + xml);
+            	SpecConfigTTool.setDirConfig(dir);
+            	config = new File(dir.getAbsolutePath() + "/project_config.xml");
+            	try {
+    				SpecConfigTTool.loadConfigFile(config);
+    			} catch (MalformedConfigurationException e) {
+    				System.err.println(e.getMessage() + " : Can't load config file.");
+    			}
+            }
+            else {
+            	dir = null;
+            	config = null;
+            	SpecConfigTTool.setBasicConfig(systemcOn);
+            }
 
             try {
                 FileInputStream fis = new FileInputStream(file);
@@ -2424,7 +2653,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-
+            
             // close current modeling
             closeTurtleModeling();
 
@@ -2489,6 +2718,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         gtm.enableUndo(true);
         gtm.saveOperation(getCurrentSelectedPoint());
         dtree.forceUpdate();
+        if (SpecConfigTTool.lastTab > -1 && SpecConfigTTool.lastPanel > -1 && mainTabbedPane.getTabCount() > 0) {
+        	mainTabbedPane.setSelectedIndex(SpecConfigTTool.lastTab);
+        	activetdp = tabs.get(SpecConfigTTool.lastTab).getPanels().elementAt(SpecConfigTTool.lastPanel);
+        	activetdp.selectTab(activetdp.name);
+        	basicActivateDrawing();
+        }
+        
+        if (dir != null)
+        	loadAUTGraphsDir();
     }
 
     public void saveAsLibrary(String data) {
@@ -2632,23 +2870,75 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     }
 
+    private int createFileDialog() {
+    	int returnVal = jfc.showSaveDialog(frame);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        	dir = jfc.getSelectedFile();
+        	dir = FileUtils.addFileExtensionIfMissing(dir, "ttool");
+        	dir.mkdir();
+        	SpecConfigTTool.setDirConfig(dir);
+        	config = SpecConfigTTool.createProjectConfig(dir);
+        	try {
+				SpecConfigTTool.loadConfigFile(config);
+			} catch (MalformedConfigurationException e) {
+				System.err.println(e.getMessage() + " : Can't load config file.");
+			}
+        	String newname = FileUtils.removeFileExtension(dir.getName());
+            file = new File(dir, newname);
+            file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
+        }
+        
+        return returnVal;
+    }
+    
+    private void createFile() {
+        newTurtleModeling();
+    	frame.setTitle(file.getName());
+    	try {
+    		if (gtm == null) {
+    			throw new Exception("Internal model Error 1");
+    		}
+    		String s = gtm.makeXMLFromTurtleModeling(-1);
+    		if (s == null) {
+    			throw new Exception("Internal model Error 2");
+    		}
+    		FileOutputStream fos = new FileOutputStream(file);
+    		fos.write(s.getBytes());
+    		fos.close();
+    		updateLastOpenFile(file);
+    		setMode(MODEL_SAVED);
+    		String title = "TTool: " + file.getAbsolutePath();
+    		if (!frame.getTitle().equals(title)) {
+    			frame.setTitle(title);
+    		}
+    		if (lotosfile == null) {
+    			makeLotosFile();
+    		}
+    	}
+        catch(Exception e) {
+            JOptionPane.showMessageDialog(frame, "File could not be saved because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    	
     protected boolean saveProject() {
         if (file == null) {
-            //jfc.setApproveButtonText("Save");
-            int returnVal = jfc.showSaveDialog(frame);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
-                file = jfc.getSelectedFile();
-                file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
-            }
+        	if (dir != null)
+        		createFileDialog();
+        	else {
+        		int returnVal = jfc.showSaveDialog(frame);
+                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                    file = jfc.getSelectedFile();
+                    file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
+                }
+        	}
         }
 
         if( checkFileForSave(file)) {
-            String s = gtm.makeXMLFromTurtleModeling(-1);
-
             try {
                 if (gtm == null) {
                     throw new Exception("Internal model Error 1");
                 }
+                String s = gtm.makeXMLFromTurtleModeling(-1);
                 if (s == null) {
                     throw new Exception("Internal model Error 2");
                 }
@@ -2857,6 +3147,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         try {
             if (ConfigurationTTool.LastOpenFileDefined) {
+            	if (dir != null)
+            		saveConfig();
                 ConfigurationTTool.saveConfiguration();
                 //TraceManager.addDev("Configuration written to file");
             }
@@ -4122,7 +4414,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void generateAUT() {
-        JDialogGenAUT jdgaut = new JDialogGenAUT(frame, this, "Generation of automata", ConfigurationTTool.BcgioPath, ConfigurationTTool.AldebaranHost, ConfigurationTTool.TGraphPath);
+        JDialogGenAUT jdgaut = new JDialogGenAUT(frame, this, "Generation of automata", ConfigurationTTool.BcgioPath, ConfigurationTTool.AldebaranHost, SpecConfigTTool.TGraphPath);
         //  jdgaut.setSize(450, 600);
         GraphicLib.centerOnParent(jdgaut, 450, 600);
         jdgaut.setVisible(true);
@@ -4143,7 +4435,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         JDialogGenAUTS jdgauts = new JDialogGenAUTS(frame, this, "Generation of automata via LOTOS", gtm.getPathCaesar(),
                                                     GTURTLEModeling.getPathBcgio(),
                                                     REMOTE_RTL_LOTOS_FILE,
-                                                    GTURTLEModeling.getCaesarHost(), ConfigurationTTool.TGraphPath);
+                                                    GTURTLEModeling.getCaesarHost(), SpecConfigTTool.TGraphPath);
         //  jdgauts.setSize(450, 600);
         GraphicLib.centerOnParent(jdgauts, 450, 600);
         jdgauts.setVisible(true);
@@ -4171,7 +4463,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarUPPAALVerification() {
         TraceManager.addDev("Avatar uppaal fv");
-        boolean result = gtm.generateUPPAALFromAVATAR(ConfigurationTTool.UPPAALCodeDirectory);
+        boolean result = gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
         if (result) {
             formalValidation(true);
         } else {
@@ -4190,9 +4482,9 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         AvatarDesignPanel adp = null;
         if (tp instanceof AvatarDesignPanel){
             adp = (AvatarDesignPanel) tp;
-            limit=false;
-        }
-        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp,limit, gtm.getCPUTaskMap());
+			limit=false;
+		}
+        JDialogProverifVerification jgen = new JDialogProverifVerification(frame, this, "Security verification with ProVerif", ConfigurationTTool.ProVerifVerifierHost, SpecConfigTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath, adp,limit, gtm.getCPUTaskMap());
         // jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 600, 800);
         jgen.setVisible(true);
@@ -4201,7 +4493,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void dse(){
         TraceManager.addDev("Design space exploration");
-        JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration", ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.TMLCodeDirectory);
+        JDialogDSE jdse= new JDialogDSE(frame, this, "Design Space Exploration", SpecConfigTTool.SystemCCodeDirectory, SpecConfigTTool.TMLCodeDirectory);
         //   jdse.setSize(600,800);
         GraphicLib.centerOnParent(jdse, 600,800);
         jdse.setVisible(true);
@@ -4219,7 +4511,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void avatarExecutableCodeGeneration() {
         TraceManager.addDev("Avatar code generation");
-        JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, ConfigurationTTool.AVATARExecutableCodeDirectory,  ConfigurationTTool.AVATARExecutableCodeCompileCommand, ConfigurationTTool.AVATARExecutableCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand, ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand,  ConfigurationTTool.AVATARExecutableSoclibTraceFile);
+        JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, SpecConfigTTool.AVATARExecutableCodeDirectory,  SpecConfigTTool.AVATARExecutableCodeCompileCommand, SpecConfigTTool.AVATARExecutableCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand, ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand,  ConfigurationTTool.AVATARExecutableSoclibTraceFile);
         //   jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);
@@ -4253,7 +4545,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             //TraceManager.addDev("4173");
             if (gtm.getTURTLEModelingState() == 3) {
                 //AVATAR
-                boolean result = gtm.generateUPPAALFromAVATAR(ConfigurationTTool.UPPAALCodeDirectory);
+                boolean result = gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
                 TraceManager.addDev("4177");
                 if (showWindow) {
                     TraceManager.addDev("4178");
@@ -4288,7 +4580,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                     boolean result = false;
 
                     if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
-                        result = gtm.generateUPPAALFromTML(ConfigurationTTool.UPPAALCodeDirectory, false, 1024, true);
+                        result = gtm.generateUPPAALFromTML(SpecConfigTTool.UPPAALCodeDirectory, false, 1024, true);
                     }
                     if (result != false) {
                         formalValidation();
@@ -4306,7 +4598,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TraceManager.addDev( "gtm.getTURTLEModelingState() <= 0)" );
         //TraceManager.addDev("After UPPAAL");
         if (showWindow) {
-            JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.TURTLE_MODE);
+            JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", SpecConfigTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.TURTLE_MODE);
             //jgen.setSize(450, 600);
             GraphicLib.centerOnParent(jgen, 450, 600);
             jgen.setVisible(true);
@@ -4321,7 +4613,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             TraceManager.addDev("Null avatar spec");
             return;
         }
-        JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), ConfigurationTTool.TGraphPath, experimentalOn);
+        JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), SpecConfigTTool.TGraphPath, experimentalOn);
         // jmc.setSize(550, 600);
         GraphicLib.centerOnParent(jmc, 550, 600);
         jmc.setVisible(true);
@@ -4378,8 +4670,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             avatarSimulation();
         } else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {
             JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation Code Generation and Compilation",
-                                                                         ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand,
-                                                                         ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, _mode);
+                                                                         ConfigurationTTool.SystemCHost, SpecConfigTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeCompileCommand,
+                                                                         SpecConfigTTool.SystemCCodeExecuteCommand, SpecConfigTTool.SystemCCodeInteractiveExecuteCommand, SpecConfigTTool.GGraphPath, _mode);
             //jgen.setSize(500, 750);
             GraphicLib.centerOnParent( jgen, 700, 750 );
             jgen.setVisible(true);
@@ -4392,7 +4684,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void interactiveSimulationSystemC() {
-        interactiveSimulationSystemC(ConfigurationTTool.SystemCCodeInteractiveExecuteCommand + " -gpath " + ConfigurationTTool.GGraphPath);
+        interactiveSimulationSystemC(SpecConfigTTool.SystemCCodeInteractiveExecuteCommand + " -gpath " + SpecConfigTTool.GGraphPath);
     }
 
     public void interactiveSimulationSystemC(String executePath) {
@@ -4491,8 +4783,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //            path = file.getAbsolutePath();
         //        }
         JDialogCCodeGeneration jgen = new JDialogCCodeGeneration( frame, this, "Application code generation and compilation",
-                                                                  ConfigurationTTool.CCodeDirectory,
-                                                                  "make -C " + ConfigurationTTool.CCodeDirectory,
+                                                                  SpecConfigTTool.CCodeDirectory,
+                                                                  "make -C " + SpecConfigTTool.CCodeDirectory,
                                                                   gtm );
         //   jgen.setSize(500, 750);
         GraphicLib.centerOnParent(jgen, 500, 750);
@@ -4869,7 +5161,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         // Loadng the graph
         // Adding RG to the tree on the left
         try {
-            String fileName = ConfigurationTTool.TGraphPath + "/" + graphName + ".aut";
+            String fileName = SpecConfigTTool.TGraphPath + "/" + graphName + ".aut";
             File f = new File(fileName);
             String spec = loadFile(f);
             RG rg = new RG(graphName);
@@ -5163,7 +5455,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //Select file
         File file = selectFileForCapture();
         if (file == null)
-            return;
+        	return;
+
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         Rectangle screenRect = new Rectangle(screenSize);
@@ -5360,9 +5653,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public File selectFileForCapture() {
         File file = null;
+        jfcimg.setCurrentDirectory(new File(SpecConfigTTool.IMGPath));
         int returnVal = jfcimg.showSaveDialog(frame);
         if (returnVal == JFileChooser.CANCEL_OPTION)
-            return null;
+        	return null;
+
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfcimg.getSelectedFile();
             file = FileUtils.addFileExtensionIfMissing(file, TImgFilter.getExtension());
@@ -5380,9 +5675,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public File selectSVGFileForCapture(boolean checkForSave) {
         File file = null;
+        jfcimgsvg.setCurrentDirectory(new File(SpecConfigTTool.IMGPath));
         int returnVal = jfcimgsvg.showSaveDialog(frame);
         if (returnVal == JFileChooser.CANCEL_OPTION)
-            return null;
+        	return null;
+
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfcimgsvg.getSelectedFile();
             file = FileUtils.addFileExtensionIfMissing(file, TSVGFilter.getExtension());
@@ -5445,7 +5742,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void generateDocumentation() {
         //TraceManager.addDev("Documentation");
-        ThreadGUIElement t = new ThreadGUIElement(frame, 1, tabs, mainTabbedPane, ConfigurationTTool.DocGenPath, file.getName(),"Documentation", "Generating documentation ... Please wait");
+        ThreadGUIElement t = new ThreadGUIElement(frame, 1, tabs, mainTabbedPane, SpecConfigTTool.DocGenPath, file.getName(),"Documentation", "Generating documentation ... Please wait");
         t.go();
         /*DocumentationGenerator docgen = new DocumentationGenerator(tabs, mainTabbedPane, ConfigurationTTool.IMGPath, file.getName());
           docgen.setFirstHeadingNumber(2);
@@ -7020,8 +7317,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void paneDiplodocusMethodologyAction(ChangeEvent e) {
         //TraceManager.addDev("Pane design action size=" + tabs.size());
         try {
-
-            TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
+        	TDiagramPanel tdp1 = getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex());
             //TraceManager.addDev("Pane design action 1");
             if (activetdp != null) {
 

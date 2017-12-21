@@ -109,9 +109,7 @@ public class JDialogUPPAALGeneration extends JDialog implements ActionListener, 
 
         mgui = _mgui;
 
-        if (pathCode == null) {
-            pathCode = _pathCode;
-        }
+        pathCode = _pathCode;
 
         editionMode = _mode;
 

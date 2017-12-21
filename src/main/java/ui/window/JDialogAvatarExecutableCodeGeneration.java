@@ -151,15 +151,12 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         f = _f;
         mgui = _mgui;
 
-        if (pathCode == null) {
-            pathCode = _pathCode;
-        }
 
-        if (pathCompiler == null)
-            pathCompiler = _pathCompiler;
+        pathCode = _pathCode;
+        
+        pathCompiler = _pathCompiler;
 
-        if (pathExecute == null)
-            pathExecute = _pathExecute;
+        pathExecute = _pathExecute;
 
         if (pathCompileSoclib == null) {
             pathCompileSoclib = _pathCompilerSoclib;
@@ -354,7 +351,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         exetrace.addActionListener(this);
         exegroup.add(exetrace);
         jp03.add(exetrace, c03);
-        exe3 = new JTextField(pathExecute +  " " + pathCode + File.separator + "trace.txt", 100);
+        exe3 = new JTextField(pathExecute + " " + pathCode + "trace.txt", 100);
         jp03.add(exe3, c03);
 
         exesoclib = new JRadioButton(textSysC6, false);
@@ -394,7 +391,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         viewgroup.add(viewtrace);
         viewtrace.addActionListener(this);
         jp04.add(viewtrace, c04);
-        simulationTraceFile = new JTextField(pathCode + File.separator + "trace.txt", 100);
+        simulationTraceFile = new JTextField(pathCode + "trace.txt", 100);
         jp04.add(simulationTraceFile, c04);
         viewtracesoclib = new JRadioButton(textSysC9, false);
         viewgroup.add(viewtracesoclib);

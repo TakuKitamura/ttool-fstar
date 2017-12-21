@@ -45,6 +45,7 @@ import myutil.FileException;
 import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ui.FormatManager;
 import ui.util.IconManager;
 import ui.StoppableGUIElement;
@@ -423,9 +424,11 @@ public	class JFramePowerManagementAnalysis extends JFrame implements ActionListe
 		if (ret == 0) {
 			jta.append("VCD generated... \n");
 			//System.out.println(generator.getVCDString());
-			jta.append("Saving VCD in " + ConfigurationTTool.VCDPath + "spec.vcd \n");
+			jta.append("Saving VCD in " + SpecConfigTTool.VCDPath + "spec.vcd \n");
 			try {
-				generator.saveInFile(ConfigurationTTool.VCDPath, "spec.vcd");
+				generator.saveInFile(SpecConfigTTool.VCDPath, "spec.vcd");
+				SpecConfigTTool.lastVCD = SpecConfigTTool.VCDPath + "spec.vcd";
+				SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
 			} catch (FileException fe) {
 				jta.append("Saving in file failed: " + fe.getMessage() + "\n");
 			}

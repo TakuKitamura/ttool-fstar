@@ -198,6 +198,7 @@ public class ConfigurationTTool {
         }
 
         loadConfigurationFromXML(data, systemcOn);
+        SpecConfigTTool.loadConfiguration();
     }
 
     public static void saveConfiguration() throws MalformedConfigurationException {

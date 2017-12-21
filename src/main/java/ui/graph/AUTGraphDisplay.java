@@ -47,6 +47,7 @@ import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.view.*;
 import org.graphstream.ui.view.Viewer;
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ui.util.IconManager;
 import ui.file.PNGFilter;
 
@@ -438,8 +439,8 @@ public class AUTGraphDisplay  implements MouseListener, ViewerListener, Runnable
         public void screenshot() {
             TraceManager.addDev("Screenshot");
             JFileChooser jfcggraph;
-            if (ConfigurationTTool.GGraphPath.length() > 0) {
-                jfcggraph = new JFileChooser(ConfigurationTTool.GGraphPath);
+            if (SpecConfigTTool.GGraphPath.length() > 0) {
+                jfcggraph = new JFileChooser(SpecConfigTTool.GGraphPath);
             } else {
                 jfcggraph = new JFileChooser();
             }
