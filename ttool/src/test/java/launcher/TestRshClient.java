@@ -25,7 +25,11 @@ public class TestRshClient {
     private static final String EXPECTED_COMMAND_OUTPUT = "!!!Hello World!!!" + System.lineSeparator();
     private static final String TEST_PROGRAM_NAME = "helloWorld";
     private static final String TEST_COMMAND = "./resources/launcher/" + TEST_PROGRAM_NAME;
+<<<<<<< Upstream, based on origin/63-implement-project-management-in-ttool
     private static final String TEST_COMMAND_NON_STOP = "./resources/launcher/helloWorldNonStop";
+=======
+    private static final String TEST_COMMAND_NON_STOP = "./resources//launcher/helloWorldNonStop";
+>>>>>>> 906d6ee Fixed problem due to change in structure of resources directory for tests
     private static final String TEST_FILE_NAME = "./resources/launcher/test.txt";
     private static final String TEST_FILE_DATA = "testDatafhkenomrcg ,jgh o";
 
