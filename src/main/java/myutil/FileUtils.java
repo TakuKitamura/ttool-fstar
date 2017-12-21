@@ -75,12 +75,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
 
 
     public static String getExtension(File f) {
+        return getExtension(f.getName());
+    }
+    
+    public static String getExtension(String name) {
         String ext = "";
-        String s = f.getName();
-        int i = s.lastIndexOf('.');
+        int i = name.lastIndexOf('.');
 
-        if (i > 0 &&  i < s.length() - 1) {
-            ext = s.substring(i+1).toLowerCase();
+        if (i > 0 &&  i < name.length() - 1) {
+            ext = name.substring(i+1).toLowerCase();
         }
         return ext;
     }
