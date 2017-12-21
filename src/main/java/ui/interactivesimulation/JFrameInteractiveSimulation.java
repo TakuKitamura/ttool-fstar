@@ -2487,9 +2487,10 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	        	else
 	        		filename = directory + filename;
 	        }
-	        
-	        SpecConfigTTool.ExternalCommand1 = SpecConfigTTool.ExternalCommand1.replace(SpecConfigTTool.lastVCD, filename);
-	        SpecConfigTTool.lastVCD = filename;
+	        if ("vcd".equals(FileUtils.getExtension(filename))) {
+	        	SpecConfigTTool.ExternalCommand1 = SpecConfigTTool.ExternalCommand1.replace(SpecConfigTTool.lastVCD, filename);
+	        	SpecConfigTTool.lastVCD = filename;
+	        }
 
 	        // DB: now useless check
 //	        if (param.length() >0) {

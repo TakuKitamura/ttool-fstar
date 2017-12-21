@@ -253,9 +253,13 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		String path;
 		if (SpecConfigTTool.DocGenPath.length() > 0) {
 			path = SpecConfigTTool.DocGenPath + "/";
+			File dir = new File(path);
+			if (!dir.exists())
+				dir.mkdirs();
 		} else {
 			path = "";
 		}
+		
 		path += DOC_GEN_NAME;//"tablereq.html";
 		
 		try {
