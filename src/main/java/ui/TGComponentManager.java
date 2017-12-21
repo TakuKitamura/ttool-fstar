@@ -46,6 +46,7 @@ package ui;
 
 import ui.ad.*;
 import ui.atd.*;
+import ui.ftd.*;
 import ui.avatarad.*;
 import ui.avatarbd.*;
 import ui.avatarcd.*;
@@ -154,6 +155,10 @@ public class TGComponentManager {
     public static final int ATD_COMPOSITION_CONNECTOR = 132;
     public static final int ATD_ATTACK_CONNECTOR = 133;
     public static final int ATD_COUNTERMEASURE_CONNECTOR = 137;
+
+    public static final int FTD_COMPOSITION_CONNECTOR = 6000;
+    public static final int FTD_FAULT_CONNECTOR = 6001;
+    public static final int FTD_COUNTERMEASURE_CONNECTOR = 6002;
 
     public static final int CONNECTOR_MESSAGE_ASYNC_SDZV = 134;
     public static final int CONNECTOR_MESSAGE_SYNC_SDZV = 135;
@@ -304,6 +309,11 @@ public class TGComponentManager {
     public static final int ATD_ATTACK = 1401;
     public static final int ATD_CONSTRAINT = 1402;
     public static final int ATD_COUNTERMEASURE = 1403;
+
+    public static final int FTD_BLOCK = 6100;
+    public static final int FTD_FAULT = 6101;
+    public static final int FTD_CONSTRAINT = 6102;
+    public static final int FTD_COUNTERMEASURE = 6103;
 
     // TML Communication patterns and TMLSD
     public static final int TMLCP_CHOICE = 1500;
@@ -1021,6 +1031,18 @@ public class TGComponentManager {
             break;
 	case ATD_COUNTERMEASURE:
             tgc = new ATDCountermeasure(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	case FTD_BLOCK:
+            tgc = new FTDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case FTD_FAULT:
+            tgc = new FTDFault(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+        case FTD_CONSTRAINT:
+            tgc = new FTDConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
+	case FTD_COUNTERMEASURE:
+            tgc = new FTDCountermeasure(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
         case DIPLODODUSMETHODOLOGY_REF_APPLICATION:
             tgc = new DiplodocusMethodologyDiagramReferenceToApplication(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1778,6 +1800,7 @@ public class TGComponentManager {
             return EBRDD_ESO;
         } else if (tgc instanceof EBRDDERB) {
             return EBRDD_ERB;
+	    
         } else if (tgc instanceof ATDBlock) {
             return ATD_BLOCK;
         } else if (tgc instanceof ATDAttack) {
@@ -1792,6 +1815,22 @@ public class TGComponentManager {
             return ATD_ATTACK_CONNECTOR;
 	} else if (tgc instanceof ATDCountermeasureConnector) {
             return ATD_COUNTERMEASURE_CONNECTOR;
+	    
+	} else if (tgc instanceof FTDBlock) {
+            return FTD_BLOCK;
+        } else if (tgc instanceof FTDFault) {
+            return FTD_FAULT;
+	} else if (tgc instanceof FTDCountermeasure) {
+            return FTD_COUNTERMEASURE;
+        } else if (tgc instanceof FTDConstraint) {
+            return FTD_CONSTRAINT;
+        } else if (tgc instanceof FTDCompositionConnector) {
+            return FTD_COMPOSITION_CONNECTOR;
+        } else if (tgc instanceof FTDFaultConnector) {
+            return FTD_FAULT_CONNECTOR;
+	} else if (tgc instanceof FTDCountermeasureConnector) {
+            return FTD_COUNTERMEASURE_CONNECTOR;
+	    
         } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToApplication) {
             return DIPLODODUSMETHODOLOGY_REF_APPLICATION;
         } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToCP) {
@@ -2255,6 +2294,16 @@ public class TGComponentManager {
             break;
 	case ATD_COUNTERMEASURE_CONNECTOR:
             tgc = new ATDCountermeasureConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            break;
+
+	case FTD_COMPOSITION_CONNECTOR:
+            tgc = new FTDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            break;
+        case FTD_FAULT_CONNECTOR:
+            tgc = new FTDFaultConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            break;
+	case FTD_COUNTERMEASURE_CONNECTOR:
+            tgc = new FTDCountermeasureConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             break;
 	    
 

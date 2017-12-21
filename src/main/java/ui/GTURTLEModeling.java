@@ -86,6 +86,7 @@ import translator.touppaal.RelationTIFUPPAAL;
 import translator.touppaal.TURTLE2UPPAAL;
 import ui.ad.TActivityDiagramPanel;
 import ui.atd.AttackTreeDiagramPanel;
+import ui.ftd.FaultTreeDiagramPanel;
 import ui.avatarad.AvatarADPanel;
 import ui.avatarbd.*;
 import ui.avatarcd.AvatarCDPanel;
@@ -3081,6 +3082,7 @@ public class GTURTLEModeling {
                 }
             }
         }
+		
 
         return listQ;
     }
@@ -5196,6 +5198,41 @@ public class GTURTLEModeling {
                         makePostLoading(atdp, beginIndex);
                     }
                 }
+
+		} else if (tdp instanceof FaultTreeDiagramPanel) {
+                nl = doc.getElementsByTagName("FaultTreeDiagramPanelCopy");
+
+                if (nl == null) {
+                    return;
+                }
+
+                FaultTreeDiagramPanel ftdp = (FaultTreeDiagramPanel)tdp;
+
+                for(i=0; i<nl.getLength(); i++) {
+                    adn = nl.item(i);
+                    if (adn.getNodeType() == Node.ELEMENT_NODE) {
+                        elt = (Element) adn;
+
+                        if (ftdp == null) {
+                            throw new MalformedModelingException();
+                        }
+
+                        //int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+                        //int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+                        //int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+                        //int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+                        decX = _decX;
+                        decY = _decY;
+
+                        makeXMLComponents(elt.getElementsByTagName("COMPONENT"), ftdp);
+                        makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), ftdp);
+                        makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), ftdp);
+                        connectConnectorsToRealPoints(ftdp);
+                        ftdp.structureChanged();
+                        makePostLoading(ftdp, beginIndex);
+                    }
+                }
             } else if (tdp instanceof TMLTaskDiagramPanel) {
                 nl = doc.getElementsByTagName("TMLTaskDiagramPanelCopy");
                 docCopy = doc;
@@ -6384,6 +6421,8 @@ public class GTURTLEModeling {
             loadRequirement(node);
         } else if (type.compareTo("AttackTree") == 0) {
             loadAttackTree(node);
+	} else if (type.compareTo("FaultTree") == 0) {
+            loadFaultTree(node);
         } else if (type.compareTo("Diplodocus Methodology") == 0) {
             loadDiplodocusMethodology(node);
         } else if (type.compareTo("Avatar Methodology") == 0) {
@@ -6527,6 +6566,33 @@ public class GTURTLEModeling {
                 elt = (Element)node;
                 if (elt.getTagName().compareTo("AttackTreeDiagramPanel") == 0) {
                     loadAttackTreeDiagram(elt, indexTree, cpttdp);
+                    cpttdp ++;
+                }
+            }
+        }
+    }
+
+    public void loadFaultTree(Node node) throws  MalformedModelingException, SAXException {
+        Element elt = (Element) node;
+        String nameTab;
+        NodeList diagramNl;
+        int indexTree;
+        int cpttdp = 0;
+
+
+        nameTab = elt.getAttribute("nameTab");
+
+        indexTree = mgui.createFaultTree(nameTab);
+
+        diagramNl = node.getChildNodes();
+
+        for(int j=0; j<diagramNl.getLength(); j++) {
+            //TraceManager.addDev("Deployment nodes: " + j);
+            node = diagramNl.item(j);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                elt = (Element)node;
+                if (elt.getTagName().compareTo("FaultTreeDiagramPanel") == 0) {
+                    loadFaultTreeDiagram(elt, indexTree, cpttdp);
                     cpttdp ++;
                 }
             }
@@ -7168,6 +7234,11 @@ public class GTURTLEModeling {
             ((AttackTreeDiagramPanel)tdp).setConnectorsToFront();
         }
 
+	if (tdp instanceof FaultTreeDiagramPanel) {
+            //TraceManager.addDev("Connectors...");
+            ((FaultTreeDiagramPanel)tdp).setConnectorsToFront();
+        }
+
         if (tdp instanceof AvatarBDPanel) {
             //TraceManager.addDev("Connectors...");
             ((AvatarBDPanel)tdp).setConnectorsToFront();
@@ -7665,6 +7736,24 @@ public class GTURTLEModeling {
         mgui.createAttackTreeDiagram(indexDiag, name);
 
         TDiagramPanel tdp = mgui.getAttackTreeDiagramPanel(indexDiag, indexTab, name);
+
+        if (tdp == null) {
+            throw new MalformedModelingException();
+        }
+        tdp.removeAll();
+
+        loadDiagram(elt, tdp);
+    }
+
+    public void loadFaultTreeDiagram(Element elt, int indexDiag, int indexTab) throws  MalformedModelingException, SAXException {
+        String name;
+
+        //TraceManager.addDev("indexDiag=" + indexDiag);
+
+        name = elt.getAttribute("name");
+        mgui.createFaultTreeDiagram(indexDiag, name);
+
+        TDiagramPanel tdp = mgui.getFaultTreeDiagramPanel(indexDiag, indexTab, name);
 
         if (tdp == null) {
             throw new MalformedModelingException();

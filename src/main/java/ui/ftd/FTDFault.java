@@ -39,16 +39,21 @@
 
 
 
-package ui.atd;
+package ui.ftd;
 
-//import java.awt.*;
 
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ui.*;
+import ui.util.IconManager;
+import ui.window.JDialogFault;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import javax.swing.*;
+import java.awt.*;
+
 
 //import org.w3c.dom.*;
 //import org.xml.sax.*;
@@ -71,8 +76,8 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
 
     protected String oldValue = "";
     protected String description = "";
-    private String stereotype = "attack";
-    private String rootStereotype = "root attack";
+    private String stereotype = "fault";
+    private String rootStereotype = "root fault";
     private boolean isRootFault = false;
 
     private static int maxFontSize = 14;

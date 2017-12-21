@@ -63,7 +63,7 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements  
     private int textY1 = 5;
     //private int textY2 = 30;
 
-    public static final String[] STEREOTYPES = {"<<OR>>", "<<XOR>>", "<<AND>>", "NOT", "<<SEQUENCE>>", "AFTER", "BEFORE", "VOTE"};
+    public static final String[] STEREOTYPES = {"<<OR>>", "<<XOR>>", "<<AND>>", "<<NOT>>", "<<SEQUENCE>>", "<<AFTER>>", "<<BEFORE>>", "<<VOTE>>"};
 
     protected String oldValue = "";
 
@@ -87,18 +87,18 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements  
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
 
-        connectingPoint[0] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[1] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[2] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[3] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-        connectingPoint[4] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[5] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[6] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
-        connectingPoint[7] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[8] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[9] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
-        connectingPoint[10] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[11] = new FTDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[0] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[1] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[2] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[3] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[4] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[5] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[6] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
+        connectingPoint[7] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
+        connectingPoint[8] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
+        connectingPoint[9] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+        connectingPoint[10] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+        connectingPoint[11] = new FTDFaultConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
 
         moveable = true;

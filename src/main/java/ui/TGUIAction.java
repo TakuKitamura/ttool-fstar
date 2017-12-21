@@ -365,6 +365,14 @@ public class TGUIAction extends AbstractAction {
     public static final int ATD_COUNTERMEASURE = 456;
     public static final int ATD_COUNTERMEASURE_CONNECTOR = 457;
 
+    public static final int FTD_BLOCK = 465;
+    public static final int FTD_FAULT = 466;
+    public static final int FTD_FAULT_CONNECTOR = 467;
+    public static final int FTD_COMPOSITION_CONNECTOR = 468;
+    public static final int FTD_CONSTRAINT = 469;
+    public static final int FTD_COUNTERMEASURE = 470;
+    public static final int FTD_COUNTERMEASURE_CONNECTOR = 470;
+
     // AVATAR Block Diagram
     public static final int ABD_BLOCK = 289;
     public static final int ABD_CRYPTOBLOCK = 332;
@@ -621,7 +629,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 467;
+    public static final int NB_ACTION = 471;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1114,9 +1122,18 @@ public class TGUIAction extends AbstractAction {
         actions[ATD_ATTACK] = new TAction("atd-attack", "Add an attack", IconManager.imgic1072, IconManager.imgic1072, "Attack", "Add an attack (i.e. a SysML value type) to the currently opened attack tree diagram", 0);
         actions[ATD_ATTACK_CONNECTOR] = new TAction("atd-attack-connector", "Add a connector between attacks /constraints", IconManager.imgic1080, IconManager.imgic1080, "Connector", "Add a connector between attacks / constraints of the currently opened attack tree diagram", 0);
         actions[ATD_COMPOSITION_CONNECTOR] = new TAction("atd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Composition connector", "Add a composition between blocks of the currently opened attack tree diagram", 0);
-        actions[ATD_CONSTRAINT] = new TAction("atd-constraint", "Add an constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened attack tree diagram", 0);
+        actions[ATD_CONSTRAINT] = new TAction("atd-constraint", "Add a constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened attack tree diagram", 0);
         actions[ATD_COUNTERMEASURE] = new TAction("atd-countermeasure", "Add a countermeasure", IconManager.imgic1082, IconManager.imgic1082, "Countermeasure", "Add a countermeasure to the currently opened attack tree diagram", 0);
         actions[ATD_COUNTERMEASURE_CONNECTOR] = new TAction("atd-countermeasure-connector", "Add a connector between attacks / countermeasures", IconManager.imgic1084, IconManager.imgic1084, "Connect countermeasure", "Add a connector between attacks / countermeasures of the currently opened attack tree diagram", 0);
+
+	// Fault Tree Diagrams
+        actions[FTD_BLOCK] = new TAction("ftd-block", "Add a block", IconManager.imgic1070, IconManager.imgic1070, "Block", "Add a SysML Block to the currently opened fault tree diagram", 0);
+        actions[FTD_FAULT] = new TAction("ftd-fault", "Add a fault", IconManager.imgic1072, IconManager.imgic1072, "Fault", "Add a fault (i.e. a SysML value type) to the currently opened fault tree diagram", 0);
+        actions[FTD_FAULT_CONNECTOR] = new TAction("ftd-fault-connector", "Add a connector between faults /constraints", IconManager.imgic1080, IconManager.imgic1080, "Connector", "Add a connector between faults / constraints of the currently opened fault tree diagram", 0);
+        actions[FTD_COMPOSITION_CONNECTOR] = new TAction("ftd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Composition connector", "Add a composition between blocks of the currently opened fault tree diagram", 0);
+        actions[FTD_CONSTRAINT] = new TAction("ftd-constraint", "Add a constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened fault tree diagram", 0);
+        actions[FTD_COUNTERMEASURE] = new TAction("ftd-countermeasure", "Add a countermeasure", IconManager.imgic1082, IconManager.imgic1082, "Countermeasure", "Add a countermeasure to the currently opened fault tree diagram", 0);
+        actions[FTD_COUNTERMEASURE_CONNECTOR] = new TAction("ftd-countermeasure-connector", "Add a connector between faults / countermeasures", IconManager.imgic1084, IconManager.imgic1084, "Connect countermeasures", "Add a connector between faults / countermeasures of the currently opened fault tree diagram", 0);
 
         // TURTLE-OS
         actions[TOS_TCLASS] = new TAction("add-tclass-os", "Add Tclass", IconManager.imgic104, IconManager.imgic104, "Tclass", "Add a TClass to the currently opened class diagram", 0);

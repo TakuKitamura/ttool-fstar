@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -52,12 +52,12 @@ import java.awt.event.MouseEvent;
 
 
 /**
-   * Class TURTLEPanelPopupListener
-   * Management of TURTLE panels
-   * Creation: 14/01/2005
-   * @version 1.0 14/01/2005
-   * @author Ludovic APVRILLE
-   * @see MainGUI
+ * Class TURTLEPanelPopupListener
+ * Management of TURTLE panels
+ * Creation: 14/01/2005
+ * @version 1.0 14/01/2005
+ * @author Ludovic APVRILLE
+ * @see MainGUI
  */
 public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto tabs */ {
     private TURTLEPanel tp;
@@ -66,7 +66,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 
     private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newsd, newsdzv, newsdfromucd, newreq,
         newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd, newavatarad, newavatarmad;
-    private JMenuItem newatd;
+    private JMenuItem newatd, newftd;
 
     public TURTLEPanelPopupListener(TURTLEPanel _tp, MainGUI _mgui) {
         tp = _tp;
@@ -75,20 +75,20 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     }
 
     public void mousePressed(MouseEvent e) {
-    	if (mgui.getCurrentTDiagramPanel() != null)
-    		mgui.getCurrentTDiagramPanel().getMouseManager().setSelection(-1, -1);
+        if (mgui.getCurrentTDiagramPanel() != null)
+            mgui.getCurrentTDiagramPanel().getMouseManager().setSelection(-1, -1);
         checkForPopup(e);
     }
-    
+
     public void mouseReleased(MouseEvent e) {
-    	if (mgui.getCurrentTDiagramPanel() != null)
-    		mgui.getCurrentTDiagramPanel().getMouseManager().setSelection(-1, -1);
+        if (mgui.getCurrentTDiagramPanel() != null)
+            mgui.getCurrentTDiagramPanel().getMouseManager().setSelection(-1, -1);
         checkForPopup(e);
     }
-    
+
     public void mouseClicked(MouseEvent e) {
-    	if (mgui.getCurrentTDiagramPanel() != null)
-    		mgui.getCurrentTDiagramPanel().getMouseManager().setSelection(-1, -1);
+        if (mgui.getCurrentTDiagramPanel() != null)
+            mgui.getCurrentTDiagramPanel().getMouseManager().setSelection(-1, -1);
         checkForPopup(e);
     }
 
@@ -114,6 +114,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         newebrdd = createMenuItem("New Event-Based Requirement Description Diagram");
         newprosmd = createMenuItem("New ProActive State Machine Diagram");
         newatd = createMenuItem("New Attack Tree Diagram");
+        newftd = createMenuItem("New Fault Tree Diagram");
         newavatarrd = createMenuItem("New AVATAR Requirement Diagram");
         newavatarpd = createMenuItem("New AVATAR Property Diagram");
         newavatarcd = createMenuItem("New Context Diagram");
@@ -130,19 +131,20 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         menu.add(sort);
         menu.addSeparator();
         menu.add(newucd);
-        
+
         if (mgui.isAvatarOn()) {
             menu.add(newavatarcd);
             menu.add(newavatarad);
         }
         menu.add(newsd);
         menu.add(newsdzv);
-	
+
         menu.add(newsdfromucd);
         menu.addSeparator();
         menu.add(newreq);
         menu.add(newebrdd);
         menu.add(newatd);
+	menu.add(newftd);
         menu.addSeparator();
         menu.add(newprosmd);
         if (mgui.isAvatarOn()) {
@@ -207,6 +209,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         newebrdd.setEnabled(tp.isReqEnabled());
         newprosmd.setEnabled(tp.isProSMDEnabled());
         newatd.setEnabled(tp.isATDEnabled());
+	newftd.setEnabled(tp.isFTDEnabled());
         newavatarrd.setEnabled(tp.isAvatarRDEnabled());
         newavatarpd.setEnabled(tp.isAvatarPDEnabled());
         newavatarcd.setEnabled(tp.isAvatarCDEnabled());
@@ -216,61 +219,64 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 
     private Action listener = new AbstractAction() {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JMenuItem item = (JMenuItem)e.getSource();
-            String ac = item.getActionCommand();
-            if(ac.equals("Rename")) {
-                tp.requestRenameTab(tp.tabbedPane.getSelectedIndex());
-            } else if (ac.equals("Remove")) {
-                tp.requestRemoveTab(tp.tabbedPane.getSelectedIndex());
-            } else if (ac.equals("Move to the left")) {
-                tp.requestMoveLeftTab(tp.tabbedPane.getSelectedIndex());
-            } else if (ac.equals("Move to the right")) {
-                tp.requestMoveRightTab(tp.tabbedPane.getSelectedIndex());
-            } else if (ac.equals("Sort")) {
-                GraphicLib.sortJTabbedPane(tp.tabbedPane, tp.panels, 1, tp.tabbedPane.getTabCount());
-                mgui.changeMade(null, -1);
-            } else if (ac.equals("New Use Case Diagram")) {
-                mgui.createUniqueUseCaseDiagram(tp, "Use Case Diagram");
-                mgui.changeMade(null, -1);
-            } else if (item == newsd) {
-                mgui.createUniqueSequenceDiagram(tp, "MyScenario");
-                mgui.changeMade(null, -1);
-            } else if (item == newsdzv) {
-                mgui.createUniqueSequenceDiagramZV(tp, "MyScenario");
-                mgui.changeMade(null, -1); 
-            } else if (item == newsdfromucd) {
-                mgui.createSequenceDiagramFromUCD(tp, "ScenarioFromUCD", (UseCaseDiagramPanel)(mgui.getCurrentTDiagramPanel()));
-                mgui.changeMade(null, -1);
-            } else if (ac.equals("New Requirement Diagram")) {
-                mgui.createRequirementDiagram(tp, "Requirement Diagram");
-                mgui.changeMade(null, -1);
-            } else if (ac.equals("New Attack Tree Diagram")) {
-                mgui.createAttackTreeDiagram(tp, "Attack Tree");
-                mgui.changeMade(null, -1);
-            } else if (ac.equals("New Event-Based Requirement Description Diagram")) {
-                mgui.createEBRDD(tp, "EBRDD");
-                mgui.changeMade(null, -1);
-            } else if (ac.equals("New ProActive State Machine Diagram")) {
-                mgui.createProActiveSMD(tp, "ProActive SMD");
-                mgui.changeMade(null, -1);
-            } else if (e.getSource() == newavatarrd) {
-                mgui.createAvatarRD(tp, "AVATAR RD");
-                mgui.changeMade(null, -1);
-            } else if (e.getSource() == newavatarpd) {
-                mgui.createAvatarPD(tp, "AVATAR PD");
-                mgui.changeMade(null, -1);
-            } else if (e.getSource() == newavatarcd) {
-                mgui.createUniqueAvatarCD(tp, "Context Diagram");
-                mgui.changeMade(null, -1);
-            } else if (e.getSource() == newavatarad) {
-                mgui.createUniqueAvatarAD(tp, "Activity Diagram");
-                mgui.changeMade(null, -1);
-            } else if (e.getSource() == newavatarmad) {
-                mgui.createAvatarMAD(tp, "Modeling Assumptions Diagram");
-                mgui.changeMade(null, -1);
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JMenuItem item = (JMenuItem)e.getSource();
+                String ac = item.getActionCommand();
+                if(ac.equals("Rename")) {
+                    tp.requestRenameTab(tp.tabbedPane.getSelectedIndex());
+                } else if (ac.equals("Remove")) {
+                    tp.requestRemoveTab(tp.tabbedPane.getSelectedIndex());
+                } else if (ac.equals("Move to the left")) {
+                    tp.requestMoveLeftTab(tp.tabbedPane.getSelectedIndex());
+                } else if (ac.equals("Move to the right")) {
+                    tp.requestMoveRightTab(tp.tabbedPane.getSelectedIndex());
+                } else if (ac.equals("Sort")) {
+                    GraphicLib.sortJTabbedPane(tp.tabbedPane, tp.panels, 1, tp.tabbedPane.getTabCount());
+                    mgui.changeMade(null, -1);
+                } else if (ac.equals("New Use Case Diagram")) {
+                    mgui.createUniqueUseCaseDiagram(tp, "Use Case Diagram");
+                    mgui.changeMade(null, -1);
+                } else if (item == newsd) {
+                    mgui.createUniqueSequenceDiagram(tp, "MyScenario");
+                    mgui.changeMade(null, -1);
+                } else if (item == newsdzv) {
+                    mgui.createUniqueSequenceDiagramZV(tp, "MyScenario");
+                    mgui.changeMade(null, -1);
+                } else if (item == newsdfromucd) {
+                    mgui.createSequenceDiagramFromUCD(tp, "ScenarioFromUCD", (UseCaseDiagramPanel)(mgui.getCurrentTDiagramPanel()));
+                    mgui.changeMade(null, -1);
+                } else if (ac.equals("New Requirement Diagram")) {
+                    mgui.createRequirementDiagram(tp, "Requirement Diagram");
+                    mgui.changeMade(null, -1);
+                } else if (ac.equals("New Attack Tree Diagram")) {
+                    mgui.createAttackTreeDiagram(tp, "Attack Tree");
+                    mgui.changeMade(null, -1);
+		} else if (e.getSource() == newftd) {
+                    mgui.createFaultTreeDiagram(tp, "Fault Tree");
+                    mgui.changeMade(null, -1);
+                } else if (ac.equals("New Event-Based Requirement Description Diagram")) {
+                    mgui.createEBRDD(tp, "EBRDD");
+                    mgui.changeMade(null, -1);
+                } else if (ac.equals("New ProActive State Machine Diagram")) {
+                    mgui.createProActiveSMD(tp, "ProActive SMD");
+                    mgui.changeMade(null, -1);
+                } else if (e.getSource() == newavatarrd) {
+                    mgui.createAvatarRD(tp, "AVATAR RD");
+                    mgui.changeMade(null, -1);
+                } else if (e.getSource() == newavatarpd) {
+                    mgui.createAvatarPD(tp, "AVATAR PD");
+                    mgui.changeMade(null, -1);
+                } else if (e.getSource() == newavatarcd) {
+                    mgui.createUniqueAvatarCD(tp, "Context Diagram");
+                    mgui.changeMade(null, -1);
+                } else if (e.getSource() == newavatarad) {
+                    mgui.createUniqueAvatarAD(tp, "Activity Diagram");
+                    mgui.changeMade(null, -1);
+                } else if (e.getSource() == newavatarmad) {
+                    mgui.createAvatarMAD(tp, "Modeling Assumptions Diagram");
+                    mgui.changeMade(null, -1);
+                }
             }
-        }
-    };
+        };
 }

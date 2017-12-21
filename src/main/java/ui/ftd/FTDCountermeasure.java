@@ -48,7 +48,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
-import ui.window.JDialogCountermeasure;
+import ui.window.JDialogFaultCountermeasure;
 
 import javax.swing.*;
 import java.awt.*;
@@ -258,7 +258,7 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         String tmp;
         boolean error = false;
 
-        JDialogCountermeasure dialog = new JDialogCountermeasure(frame, "Setting countermeasure attributes", this);
+        JDialogFaultCountermeasure dialog = new JDialogFaultCountermeasure(frame, "Setting countermeasure attributes", this);
    //     dialog.setSize(450, 350);
         GraphicLib.centerOnParent(dialog, 450, 350);
         dialog.setVisible( true ); // blocked until dialog has been closed

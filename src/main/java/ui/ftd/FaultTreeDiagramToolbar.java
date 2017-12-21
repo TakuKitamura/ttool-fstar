@@ -79,9 +79,9 @@ public class FaultTreeDiagramToolbar extends TToolBar {
         mgui.actions[TGUIAction.FTD_BLOCK].setEnabled(b);
         mgui.actions[TGUIAction.FTD_COMPOSITION_CONNECTOR].setEnabled(b);
 
-        mgui.actions[TGUIAction.FTD_ATTACK].setEnabled(b);
+        mgui.actions[TGUIAction.FTD_FAULT].setEnabled(b);
 
-        mgui.actions[TGUIAction.FTD_ATTACK_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.FTD_FAULT_CONNECTOR].setEnabled(b);
 
         mgui.actions[TGUIAction.FTD_CONSTRAINT].setEnabled(b);
 
@@ -117,7 +117,7 @@ public class FaultTreeDiagramToolbar extends TToolBar {
 
         this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.FTD_ATTACK]);
+        button = this.add(mgui.actions[TGUIAction.FTD_FAULT]);
         button.addMouseListener(mgui.mouseHandler);
 
         this.addSeparator();
@@ -127,7 +127,7 @@ public class FaultTreeDiagramToolbar extends TToolBar {
 
         this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.FTD_ATTACK_CONNECTOR]);
+        button = this.add(mgui.actions[TGUIAction.FTD_FAULT_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
 
 	this.addSeparator();
