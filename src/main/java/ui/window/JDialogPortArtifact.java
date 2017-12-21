@@ -38,9 +38,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import java.awt.Container;
@@ -51,7 +48,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -315,7 +311,7 @@ public class JDialogPortArtifact extends JDialogBase implements ActionListener  
 
     public void closeDialog() {
         regularClose = true;
-        //        mappedMemory = memoryCB.getItemAt( memoryCB.getSelectedIndex() );
+        mappedMemory = memoryCB.getItemAt( memoryCB.getSelectedIndex() );
         //        HALUnitName = getBufferTypeFromSelectedMemory(memoryCB.getItemAt( memoryCB.getSelectedIndex() ));
         //        switch ( HALUnitName )        {
         //                                      case "FEP_BUFFER":
