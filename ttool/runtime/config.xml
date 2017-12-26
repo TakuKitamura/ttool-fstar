@@ -37,7 +37,7 @@
 <SystemCCodeCompileCommand data="make -C ../simulators/c++2/" />
 <SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
 <SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
-<TMLCodeDirectory data="../simulators/c++2/tmlcode" />
+<TMLCodeDirectory data="../tmlcode/" />
 <CCodeDirectory data="../CCode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
 <VCDPath data="../simulators/c++2/" />
@@ -45,19 +45,19 @@
 <UPPAALVerifierPath data="/packages/uppaal-4.0.11/verifyta" />
 <UPPAALVerifierHost data="localhost" />
 <ProVerifCodeDirectory data="../proverif/" />
-<ProVerifVerifierPath data="/packages/proverif/proverif" />
+<ProVerifVerifierPath data="../../proverif" />
 <ProVerifVerifierHost data="localhost" />
 <AVATARExecutableCodeDirectory data="../executablecode/" />
 <AVATARMPSoCCodeDirectory data="../MPSoC/" />
-<AVATARMPSoCCompileCommand data="make -C ../MPSoC updateruntime updategeneratedcode compilesoclib" />
+<AVATARMPSoCCompileCommand data="make -C ../MPSoC/ updateruntime updategeneratedcode compilesoclib" />
 <AVATARExecutableCodeHost data="localhost"/>
-<AVATARExecutableCodeCompileCommand data="make -C ../executablecode" />
+<AVATARExecutableCodeCompileCommand data="make -C ../executablecode/" />
 <AVATARExecutableCodeExecuteCommand data="../executablecode/run.x" />
-<AVATARExecutableSoclibCodeCompileCommand data="make -C ../MPSoC updategeneratedcode compilesoclib" />
-<AVATARExecutableSoclibCodeExecuteCommand data="make -C ../MPSoC runsoclib" />
-<AVATARExecutableSoclibCodeTraceCommand data="make -C ../MPSoC runsoclib-trace" />
+<AVATARExecutableSoclibCodeCompileCommand data="make -C ../MPSoC/ updategeneratedcode compilesoclib" />
+<AVATARExecutableSoclibCodeExecuteCommand data="make -C ../MPSoC/ runsoclib" />
+<AVATARExecutableSoclibCodeTraceCommand data="make -C ../MPSoC/ runsoclib-trace" />
 <AVATARExecutableSoclibTraceFile data="../Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
-
+<NCDirectory data="../nc/"/>
 
 <ExternalCommand1Host data="localhost"/>
 <ExternalCommand1 data="gtkwave ../simulators/c++2/vcddump.vcd"/>
@@ -65,12 +65,12 @@
 <ExternalCommand2 data="/packages/uppaal4.0.11/uppaal ../uppaal/spec.xml"/>
 
 
-<LastOpenFile data=""/>
+<LastOpenFile data="/home/satan/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.ttool"/>
 
 
 
-<LastWindowAttributes x="65" y="24" width="1295" height="640" max="true" />
+<LastWindowAttributes x="65" y="-4" width="1301" height="772" max="true" />
 
 
-<ProVerifHash data=""/>
+<ProVerifHash data="1427594573"/>
 </TURTLECONFIGURATION>

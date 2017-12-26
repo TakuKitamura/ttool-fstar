@@ -57,6 +57,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import common.ConfigurationTTool;
+import common.SpecConfigTTool;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -155,31 +159,25 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         mgui = _mgui;
 
-        if (pathCode == null) {
-            pathCode = _pathCode;
+        pathCode = _pathCode;
+        
+        pathCompiler = _pathCompiler;
+
+        pathExecute = _pathExecute;
+
+        if (_graphPath != null) {
+            _pathInteractiveExecute += " -gpath " + _graphPath;
         }
+        pathInteractiveExecute = _pathInteractiveExecute;
+     
 
-        if (pathCompiler == null)
-            pathCompiler = _pathCompiler;
+        pathFormalExecute = pathInteractiveExecute;
 
-        if (pathExecute == null)
-            pathExecute = _pathExecute;
-
-        if (pathInteractiveExecute == null) {
-            if (_graphPath != null) {
-                _pathInteractiveExecute += " -gpath " + _graphPath;
-            }
-            pathInteractiveExecute = _pathInteractiveExecute;
-        }
-
-        if (pathFormalExecute == null) {
-            pathFormalExecute = pathInteractiveExecute;
-
-            int index = pathFormalExecute.indexOf("-server");
-            if (index != -1) {
-                pathFormalExecute = pathFormalExecute.substring(0, index) + pathFormalExecute.substring(index+7, pathFormalExecute.length());
-                pathFormalExecute += " -gname graph -explo";
-            }
+        int index = pathFormalExecute.indexOf("-server");
+        if (index != -1) {
+            pathFormalExecute = pathFormalExecute.substring(0, index) + pathFormalExecute.substring(index+7, pathFormalExecute.length());
+            pathFormalExecute += " -gname graph -explo";
+            
         }
 
         simulatorHost = _simulatorHost;
@@ -771,6 +769,8 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                 jta.append("Saving C++ files...\n");
 
                 pathCode = code1.getText();
+                if (!SpecConfigTTool.checkAndCreateSystemCDir(SpecConfigTTool.SystemCCodeDirectory))
+                	throw new Throwable();
                 tml2systc.saveFile(pathCode, "appmodel");
 
                 jta.append( "C++ files saved." + System.lineSeparator() );
@@ -874,6 +874,9 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         switch(toDo) {
         case ONE_TRACE:
             executeSimulationCmd(exe2.getText(), "Generating one simulation trace");
+            String[] tab = exe2.getText().split(" ");
+            SpecConfigTTool.lastVCD = tab[2];
+            SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
             break;
         case ANIMATION:
             dispose();

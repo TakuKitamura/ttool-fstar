@@ -39,6 +39,7 @@
 package ui.window;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import myutil.*;
 import ui.*;
 import ui.avatarrd.AvatarRDPanel;
@@ -214,7 +215,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		} else if (evt.getSource() == buttonGenerate) {
 			
 			// Issue #32 Improve document generation
-			final File genFile = new File( ConfigurationTTool.DocGenPath );
+			final File genFile = new File( SpecConfigTTool.DocGenPath );
 			String path;
 			
 			try {
@@ -250,11 +251,15 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		TraceManager.addDev("HTML code:" + s); 
 		
 		String path;
-		if (ConfigurationTTool.DocGenPath.length() > 0) {
-			path = ConfigurationTTool.DocGenPath + "/";
+		if (SpecConfigTTool.DocGenPath.length() > 0) {
+			path = SpecConfigTTool.DocGenPath + "/";
+			File dir = new File(path);
+			if (!dir.exists())
+				dir.mkdirs();
 		} else {
 			path = "";
 		}
+		
 		path += DOC_GEN_NAME;//"tablereq.html";
 		
 		try {

@@ -274,7 +274,7 @@
 <infoparam name="TGComponent" value="Event reset, pTS" />
 <TGConnectingPoint num="0" id="37" />
 <extraparam>
-<Prop commName="reset, pTS" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="reset, pTS" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -291,7 +291,7 @@
 <infoparam name="TGComponent" value="Event answerToReset, pTSConfirm" />
 <TGConnectingPoint num="0" id="39" />
 <extraparam>
-<Prop commName="answerToReset, pTSConfirm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="answerToReset, pTSConfirm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -308,7 +308,7 @@
 <infoparam name="TGComponent" value="Channel fromSCtoD" />
 <TGConnectingPoint num="0" id="41" />
 <extraparam>
-<Prop commName="fromSCtoD" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromSCtoD" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -325,7 +325,7 @@
 <infoparam name="TGComponent" value="Channel fromDtoSC" />
 <TGConnectingPoint num="0" id="43" />
 <extraparam>
-<Prop commName="fromDtoSC" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="null" />
+<Prop commName="fromDtoSC" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -342,7 +342,7 @@
 <infoparam name="TGComponent" value="Event data_Ready_SC" />
 <TGConnectingPoint num="0" id="45" />
 <extraparam>
-<Prop commName="data_Ready_SC" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="data_Ready_SC" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -359,7 +359,7 @@
 <infoparam name="TGComponent" value="Event data_Ready" />
 <TGConnectingPoint num="0" id="47" />
 <extraparam>
-<Prop commName="data_Ready" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="data_Ready" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="2" typeOther="" />
 <Type type="0" typeOther="" />
@@ -376,7 +376,7 @@
 <infoparam name="TGComponent" value="Request activation" />
 <TGConnectingPoint num="0" id="49" />
 <extraparam>
-<Prop commName="activation" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="activation" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -457,7 +457,7 @@
 <infoparam name="TGComponent" value="Request start_TCP_IP" />
 <TGConnectingPoint num="0" id="79" />
 <extraparam>
-<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -474,7 +474,7 @@
 <infoparam name="TGComponent" value="Channel fromTtoA" />
 <TGConnectingPoint num="0" id="81" />
 <extraparam>
-<Prop commName="fromTtoA" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromTtoA" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -491,7 +491,7 @@
 <infoparam name="TGComponent" value="Event send_TCP" />
 <TGConnectingPoint num="0" id="83" />
 <extraparam>
-<Prop commName="send_TCP" commType="1" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="send_TCP" commType="1" origin="true" finite="false" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -508,7 +508,7 @@
 <infoparam name="TGComponent" value="Event open, abort, close" />
 <TGConnectingPoint num="0" id="85" />
 <extraparam>
-<Prop commName="open, abort, close" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="open, abort, close" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -525,7 +525,7 @@
 <infoparam name="TGComponent" value="Event receive_Application" />
 <TGConnectingPoint num="0" id="87" />
 <extraparam>
-<Prop commName="receive_Application" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="receive_Application" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -542,7 +542,7 @@
 <infoparam name="TGComponent" value="Channel fromAtoT" />
 <TGConnectingPoint num="0" id="89" />
 <extraparam>
-<Prop commName="fromAtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromAtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -559,7 +559,7 @@
 <infoparam name="TGComponent" value="Request start_Application" />
 <TGConnectingPoint num="0" id="91" />
 <extraparam>
-<Prop commName="start_Application" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="start_Application" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -641,7 +641,7 @@
 <infoparam name="TGComponent" value="Event timeOut" />
 <TGConnectingPoint num="0" id="121" />
 <extraparam>
-<Prop commName="timeOut" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="timeOut" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -658,7 +658,7 @@
 <infoparam name="TGComponent" value="Request req_Timer" />
 <TGConnectingPoint num="0" id="123" />
 <extraparam>
-<Prop commName="req_Timer" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="req_Timer" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -675,7 +675,7 @@
 <infoparam name="TGComponent" value="Event stop" />
 <TGConnectingPoint num="0" id="125" />
 <extraparam>
-<Prop commName="stop" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="stop" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -718,7 +718,7 @@
 <infoparam name="TGComponent" value="Event send" />
 <TGConnectingPoint num="0" id="136" />
 <extraparam>
-<Prop commName="send" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="send" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -735,7 +735,7 @@
 <infoparam name="TGComponent" value="Event receive" />
 <TGConnectingPoint num="0" id="138" />
 <extraparam>
-<Prop commName="receive" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="receive" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -752,7 +752,7 @@
 <infoparam name="TGComponent" value="Channel fromPtoT" />
 <TGConnectingPoint num="0" id="140" />
 <extraparam>
-<Prop commName="fromPtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromPtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -769,7 +769,7 @@
 <infoparam name="TGComponent" value="Channel fromTtoP" />
 <TGConnectingPoint num="0" id="142" />
 <extraparam>
-<Prop commName="fromTtoP" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromTtoP" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -786,7 +786,7 @@
 <infoparam name="TGComponent" value="Request start_TCP_IP" />
 <TGConnectingPoint num="0" id="144" />
 <extraparam>
-<Prop commName="start_TCP_IP" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="start_TCP_IP" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -803,7 +803,7 @@
 <infoparam name="TGComponent" value="Event send_TCP" />
 <TGConnectingPoint num="0" id="146" />
 <extraparam>
-<Prop commName="send_TCP" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="send_TCP" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -820,7 +820,7 @@
 <infoparam name="TGComponent" value="Event open, abort, close" />
 <TGConnectingPoint num="0" id="148" />
 <extraparam>
-<Prop commName="open, abort, close" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="open, abort, close" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -837,7 +837,7 @@
 <infoparam name="TGComponent" value="Channel fromTtoA" />
 <TGConnectingPoint num="0" id="150" />
 <extraparam>
-<Prop commName="fromTtoA" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromTtoA" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -854,7 +854,7 @@
 <infoparam name="TGComponent" value="Channel fromAtoT" />
 <TGConnectingPoint num="0" id="152" />
 <extraparam>
-<Prop commName="fromAtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromAtoT" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -871,7 +871,7 @@
 <infoparam name="TGComponent" value="Event receive_Application" />
 <TGConnectingPoint num="0" id="154" />
 <extraparam>
-<Prop commName="receive_Application" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="receive_Application" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -888,7 +888,7 @@
 <infoparam name="TGComponent" value="Event timeOut" />
 <TGConnectingPoint num="0" id="156" />
 <extraparam>
-<Prop commName="timeOut" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="timeOut" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -905,7 +905,7 @@
 <infoparam name="TGComponent" value="Request req_Timer" />
 <TGConnectingPoint num="0" id="158" />
 <extraparam>
-<Prop commName="req_Timer" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="req_Timer" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -922,7 +922,7 @@
 <infoparam name="TGComponent" value="Channel temp" />
 <TGConnectingPoint num="0" id="160" />
 <extraparam>
-<Prop commName="temp" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="temp" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -939,7 +939,7 @@
 <infoparam name="TGComponent" value="Channel temp" />
 <TGConnectingPoint num="0" id="162" />
 <extraparam>
-<Prop commName="temp" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="temp" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -956,7 +956,7 @@
 <infoparam name="TGComponent" value="Event stop" />
 <TGConnectingPoint num="0" id="164" />
 <extraparam>
-<Prop commName="stop" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="stop" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1000,7 +1000,7 @@
 <infoparam name="TGComponent" value="Event send" />
 <TGConnectingPoint num="0" id="184" />
 <extraparam>
-<Prop commName="send" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="send" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1017,7 +1017,7 @@
 <infoparam name="TGComponent" value="Event reset, pTS" />
 <TGConnectingPoint num="0" id="186" />
 <extraparam>
-<Prop commName="reset, pTS" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="reset, pTS" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1034,7 +1034,7 @@
 <infoparam name="TGComponent" value="Event answerToReset, pTSConfirm" />
 <TGConnectingPoint num="0" id="188" />
 <extraparam>
-<Prop commName="answerToReset, pTSConfirm" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="answerToReset, pTSConfirm" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1051,7 +1051,7 @@
 <infoparam name="TGComponent" value="Channel fromSCtoD" />
 <TGConnectingPoint num="0" id="190" />
 <extraparam>
-<Prop commName="fromSCtoD" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromSCtoD" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1068,7 +1068,7 @@
 <infoparam name="TGComponent" value="Channel fromDtoSC" />
 <TGConnectingPoint num="0" id="192" />
 <extraparam>
-<Prop commName="fromDtoSC" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromDtoSC" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1085,7 +1085,7 @@
 <infoparam name="TGComponent" value="Event data_Ready_SC" />
 <TGConnectingPoint num="0" id="194" />
 <extraparam>
-<Prop commName="data_Ready_SC" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="data_Ready_SC" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1102,7 +1102,7 @@
 <infoparam name="TGComponent" value="Event data_Ready" />
 <TGConnectingPoint num="0" id="196" />
 <extraparam>
-<Prop commName="data_Ready" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="data_Ready" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="uint_16" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="2" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1119,7 +1119,7 @@
 <infoparam name="TGComponent" value="Channel fromTtoP" />
 <TGConnectingPoint num="0" id="198" />
 <extraparam>
-<Prop commName="fromTtoP" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromTtoP" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1136,7 +1136,7 @@
 <infoparam name="TGComponent" value="Channel fromPtoT" />
 <TGConnectingPoint num="0" id="200" />
 <extraparam>
-<Prop commName="fromPtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="fromPtoT" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1153,7 +1153,7 @@
 <infoparam name="TGComponent" value="Event receive" />
 <TGConnectingPoint num="0" id="202" />
 <extraparam>
-<Prop commName="receive" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="receive" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1170,7 +1170,7 @@
 <infoparam name="TGComponent" value="Request start_TCP_IP" />
 <TGConnectingPoint num="0" id="204" />
 <extraparam>
-<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="start_TCP_IP" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1187,7 +1187,7 @@
 <infoparam name="TGComponent" value="Request activation" />
 <TGConnectingPoint num="0" id="206" />
 <extraparam>
-<Prop commName="activation" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="activation" commType="2" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1204,7 +1204,7 @@
 <infoparam name="TGComponent" value="Request start_Application" />
 <TGConnectingPoint num="0" id="208" />
 <extraparam>
-<Prop commName="start_Application" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="start_Application" commType="2" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="-1" dataFlowType="VOID" associatedEvent="VOID" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -6460,10 +6460,10 @@ On prend b=1 comme exemple
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1545" >
 <father id="1570" num="0" />
-<cdparam x="167" y="445" />
-<sizeparam width="163" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="160" y="445" />
+<sizeparam width="172" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="2" minY="0" maxY="86" />
+<cdrectangleparam minX="0" maxX="-7" minY="0" maxY="86" />
 <infoparam name="TGComponent" value="AppC::InterfaceDevice" />
 <TGConnectingPoint num="0" id="1537" />
 <TGConnectingPoint num="1" id="1538" />
@@ -6516,9 +6516,9 @@ On prend b=1 comme exemple
 <SUBCOMPONENT type="1101" id="1579" >
 <father id="1622" num="0" />
 <cdparam x="486" y="303" />
-<sizeparam width="136" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="141" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="114" minY="0" maxY="106" />
+<cdrectangleparam minX="0" maxX="109" minY="0" maxY="106" />
 <infoparam name="TGComponent" value="AppC::SmartCard" />
 <TGConnectingPoint num="0" id="1571" />
 <TGConnectingPoint num="1" id="1572" />
@@ -6535,9 +6535,9 @@ On prend b=1 comme exemple
 <SUBCOMPONENT type="1101" id="1588" >
 <father id="1622" num="1" />
 <cdparam x="415" y="349" />
-<sizeparam width="139" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="144" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="111" minY="0" maxY="106" />
+<cdrectangleparam minX="0" maxX="106" minY="0" maxY="106" />
 <infoparam name="TGComponent" value="AppC::Application" />
 <TGConnectingPoint num="0" id="1580" />
 <TGConnectingPoint num="1" id="1581" />
@@ -6554,9 +6554,9 @@ On prend b=1 comme exemple
 <SUBCOMPONENT type="1101" id="1597" >
 <father id="1622" num="2" />
 <cdparam x="396" y="258" />
-<sizeparam width="108" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="109" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="142" minY="0" maxY="106" />
+<cdrectangleparam minX="0" maxX="141" minY="0" maxY="106" />
 <infoparam name="TGComponent" value="AppC::TCPIP" />
 <TGConnectingPoint num="0" id="1589" />
 <TGConnectingPoint num="1" id="1590" />

@@ -19,23 +19,26 @@ import launcher.RshClient;
 import launcher.RshServer;
 import myutil.FileException;
 import myutil.FileUtils;
+import test.AbstractTest;
 
-public class TestRshClient {
+public class TestRshClient extends AbstractTest {
 
     private static final String EXPECTED_COMMAND_OUTPUT = "!!!Hello World!!!" + System.lineSeparator();
-    private static final String TEST_PROGRAM_NAME = "helloWorld";
-    private static final String TEST_COMMAND = "./resources/test/launcher/" + TEST_PROGRAM_NAME;
-    private static final String TEST_COMMAND_NON_STOP = "./resources/test//launcher/helloWorldNonStop";
-    private static final String TEST_FILE_NAME = "./resources/test/launcher/test.txt";
     private static final String TEST_FILE_DATA = "testDatafhkenomrcg ,jgh o";
+    private static String TEST_COMMAND;
+    private static String TEST_COMMAND_NON_STOP;
+    private static String TEST_FILE_NAME;
 
-
-    private RshClient client = null;
-    private static Thread serverThread = null;
+    private static Thread SERVER_THREAD;
 
     @BeforeClass
     public static void setUpBeforeClass()
-        throws Exception {
+    throws Exception {
+    	RESOURCES_DIR = getBaseResourcesDir() + "launcher/";
+    	TEST_COMMAND = "./" + RESOURCES_DIR + "helloWorld";
+    	TEST_COMMAND_NON_STOP = "./" + RESOURCES_DIR + "helloWorldNonStop";
+    	TEST_FILE_NAME = RESOURCES_DIR + "test.txt";
+    	
         RshClient.PORT_NUMBER = 8080;
         RshServer.PORT_NUMBER = RshClient.PORT_NUMBER;
 
@@ -47,10 +50,12 @@ public class TestRshClient {
                 }
             };
 
-        serverThread = new Thread( runnable );
-        serverThread.start();
+        SERVER_THREAD = new Thread( runnable );
+        SERVER_THREAD.start();
         Thread.sleep( 500 );
     }
+
+    private RshClient client = null;
 
     @Before
     public void setUp()
@@ -67,7 +72,7 @@ public class TestRshClient {
     @AfterClass
     public static void tearDownAfterClass()
         throws Exception {
-        serverThread.interrupt();
+        SERVER_THREAD.interrupt();
     }
 
     private void handleException( final Throwable th ) {
@@ -181,7 +186,7 @@ public class TestRshClient {
 
     @Test
     public void testSendExecutePipedCommandsRequest() {
-        final String testFileName = "./resources/test_piped_commands.txt";
+        final String testFileName = "./" + RESOURCES_DIR + "test_piped_commands.txt";
         final String expectedData = "Test Passed!" + System.lineSeparator();
 
         try {
