@@ -51,6 +51,8 @@ import uppaaldesc.*;
 import java.util.Iterator;
 import java.util.Vector;
 
+import common.SpecConfigTTool;
+
 
 /**
  * Class TML2UPPAAL
@@ -95,6 +97,7 @@ public class TML2UPPAAL {
 
     // Returns a list of all file names ..
     public void saveInFile(String path) throws FileException {
+    	SpecConfigTTool.checkAndCreateUPPAALDir(path);
         FileUtils.saveFile(path + "spec.xml", spec.makeSpec());
         //System.out.println("spec.xml generated:\n" + spec.getFullSpec());
     }

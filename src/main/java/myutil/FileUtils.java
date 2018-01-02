@@ -53,7 +53,7 @@ import java.io.FilenameFilter;
    * @version 1.1 01/12/2003
    * @author Ludovic APVRILLE
  */
-public class FileUtils {
+public class FileUtils extends org.apache.commons.io.FileUtils{
 
     public final static String xml = "xml";
     public final static String rtl = "lot";
@@ -72,12 +72,15 @@ public class FileUtils {
 
 
     public static String getExtension(File f) {
-        String ext = null;
-        String s = f.getName();
-        int i = s.lastIndexOf('.');
+        return getExtension(f.getName());
+    }
+    
+    public static String getExtension(String name) {
+        String ext = "";
+        int i = name.lastIndexOf('.');
 
-        if (i > 0 &&  i < s.length() - 1) {
-            ext = s.substring(i+1).toLowerCase();
+        if (i > 0 &&  i < name.length() - 1) {
+            ext = name.substring(i+1).toLowerCase();
         }
         return ext;
     }
@@ -87,6 +90,8 @@ public class FileUtils {
 	return new File(path).isDirectory();
     }
 
+    
+    
     public static boolean checkFileForSave(File file) throws FileException {
         //     boolean ok = true;
         //    String pb = "";
@@ -210,7 +215,6 @@ public class FileUtils {
         filename = filename.substring(0, index);
         return filename;
     }
-
 
     public static boolean hasExtension(File f, String extension) {
         if (f == null) {

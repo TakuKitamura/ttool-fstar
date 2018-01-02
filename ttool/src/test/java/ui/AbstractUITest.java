@@ -3,8 +3,9 @@ package ui;
 import static org.junit.Assert.fail;
 
 import myutil.PluginManager;
+import test.AbstractTest;
 
-public abstract class AbstractUITest {
+public abstract class AbstractUITest extends AbstractTest {
 	
 	protected final MainGUI mainGui;
 	

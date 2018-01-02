@@ -41,8 +41,7 @@
 
 package ui.sysmlsecmethodology;
 
-
-import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import myutil.TraceManager;
 import ui.*;
 import ui.window.JDialogSystemCGeneration;
@@ -133,7 +132,7 @@ public class SysmlsecMethodologyReferenceToApplication extends SysmlsecMethodolo
         case 3:
             if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
                 tdp.getMGUI().generateUPPAAL(false);
-                boolean result = tdp.getMGUI().gtm.generateUPPAALFromTML(ConfigurationTTool.UPPAALCodeDirectory, false, 8, false);
+                boolean result = tdp.getMGUI().gtm.generateUPPAALFromTML(SpecConfigTTool.UPPAALCodeDirectory, false, 8, false);
                 if (!result) {
                     giveInformation("UPPAAL Generation failed");
                     return false;

@@ -810,6 +810,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
                         dbaddress=jTextaddressDB.getText().split(":")[0];
                         dbport=Integer.parseInt(jTextaddressDB.getText().split(":")[1]);
                         try {
+                        	if (tdmm.getTdp().getMainGUI().getDir() != null)
+                        		tdmm.getTdp().getMainGUI().saveConfig();
                             ConfigurationTTool.saveConfiguration();
                         } catch (MalformedConfigurationException e) {
                             e.printStackTrace();

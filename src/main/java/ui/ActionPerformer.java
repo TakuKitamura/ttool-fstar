@@ -43,6 +43,7 @@
 package ui;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -61,7 +62,9 @@ public class ActionPerformer {
 	
         // Compare the action command to the known actions.
         if (command.equals(mgui.actions[TGUIAction.ACT_NEW].getActionCommand()))  {
-            mgui.newProject();
+        	mgui.newProject();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_PROJECT].getActionCommand()))  {
+        	mgui.newProjectDir();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_DESIGN].getActionCommand())) {
             mgui.newDesign();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_ANALYSIS].getActionCommand())) {
@@ -69,7 +72,9 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN_FROM_NETWORK].getActionCommand())) {
             mgui.openNetworkProject();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN].getActionCommand())) {
-            mgui.openProject();
+            mgui.openProject(false);
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN_PROJECT].getActionCommand())) {
+            mgui.openProject(true);
         } else if (command.equals(mgui.actions[TGUIAction.ACT_MERGE].getActionCommand())) {
             mgui.mergeProject();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN_LAST].getActionCommand())) {
@@ -299,7 +304,7 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NC].getActionCommand())) {
             mgui.NC();
         } else if (command.equals(mgui.actions[TGUIAction.EXTERNAL_ACTION_1].getActionCommand())) {
-            mgui.executeUserCommand(ConfigurationTTool.ExternalCommand1Host, ConfigurationTTool.ExternalCommand1);
+            mgui.executeUserCommand(ConfigurationTTool.ExternalCommand1Host, SpecConfigTTool.ExternalCommand1);
         } else if (command.equals(mgui.actions[TGUIAction.EXTERNAL_ACTION_2].getActionCommand())) {
             mgui.executeUserCommand(ConfigurationTTool.ExternalCommand2Host, ConfigurationTTool.ExternalCommand2);
         } else if (command.equals(mgui.actions[TGUIAction.CONNECTOR_COMMENT].getActionCommand())) {
@@ -922,6 +927,22 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_ATTACK_CONNECTOR);
 	} else if (command.equals(mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_COUNTERMEASURE_CONNECTOR);
+
+	    // Fault Tree Diagrams
+        } else if (command.equals(mgui.actions[TGUIAction.FTD_BLOCK].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.FTD_BLOCK);
+        } else if (command.equals(mgui.actions[TGUIAction.FTD_FAULT].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.FTD_FAULT);
+	} else if (command.equals(mgui.actions[TGUIAction.FTD_COUNTERMEASURE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.FTD_COUNTERMEASURE);
+        } else if (command.equals(mgui.actions[TGUIAction.FTD_CONSTRAINT].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.FTD_CONSTRAINT);
+        } else if (command.equals(mgui.actions[TGUIAction.FTD_COMPOSITION_CONNECTOR].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.FTD_COMPOSITION_CONNECTOR);
+        } else if (command.equals(mgui.actions[TGUIAction.FTD_FAULT_CONNECTOR].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.FTD_FAULT_CONNECTOR);
+	} else if (command.equals(mgui.actions[TGUIAction.FTD_COUNTERMEASURE_CONNECTOR].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.FTD_COUNTERMEASURE_CONNECTOR);
 
             // TURTLE-OS
         } else if (command.equals(mgui.actions[TGUIAction.TOS_TCLASS].getActionCommand())) {

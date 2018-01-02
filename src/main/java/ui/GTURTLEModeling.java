@@ -45,6 +45,7 @@ import avatartranslator.totpn.AVATAR2TPN;
 import avatartranslator.toturtle.AVATAR2TURTLE;
 import avatartranslator.touppaal.AVATAR2UPPAAL;
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ddtranslator.DDSyntaxException;
 import ddtranslator.DDTranslator;
 import launcher.LauncherException;
@@ -85,6 +86,7 @@ import translator.touppaal.RelationTIFUPPAAL;
 import translator.touppaal.TURTLE2UPPAAL;
 import ui.ad.TActivityDiagramPanel;
 import ui.atd.AttackTreeDiagramPanel;
+import ui.ftd.FaultTreeDiagramPanel;
 import ui.avatarad.AvatarADPanel;
 import ui.avatarbd.*;
 import ui.avatarcd.AvatarCDPanel;
@@ -485,16 +487,16 @@ public class GTURTLEModeling {
         CCode.toTextFormat();
         
         try {
-            // Issue #98: Use the passed directory
-            if( directory/*ConfigurationTTool.CCodeDirectory*/.equals("") )  {
+            if( directory.equals("") )  {
+
                 JOptionPane.showMessageDialog(  mgui.frame,
                                                 "No directory for C code generation found in config.xml. The C code cannot be generated.",
                                                 "Control code generation failed", JOptionPane.INFORMATION_MESSAGE );
                 return true;
             }
-            else                {
-                // Issue #98: Use the passed directory
-                CCode.saveFile( directory/*ConfigurationTTool.CCodeDirectory*/ + File.separator, applicationName );
+            else {
+            	SpecConfigTTool.checkAndCreateCCodeDir(directory);
+                CCode.saveFile( directory + File.separator, applicationName );
             }
         }
         catch( Exception e ) {
@@ -505,8 +507,7 @@ public class GTURTLEModeling {
     }
 
     public boolean generateTMLTxt( String _title ) {
-
-
+    	
         //This branch is activated if doing the syntax check from the architecture panel.
         //It generates the text TML for the architecture and the application + mapping information
         if (tmap != null) {
@@ -514,7 +515,7 @@ public class GTURTLEModeling {
             spec.toTextFormat( tmap );    //TMLMapping
             try {
                 //TraceManager.addDev( "*** " + ConfigurationTTool.TMLCodeDirectory + File.separator );
-                spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
+                spec.saveFile( SpecConfigTTool.TMLCodeDirectory, "spec" );
             }
             catch( Exception e ) {
                 TraceManager.addError( "Files could not be saved: " + e.getMessage() );
@@ -557,7 +558,7 @@ public class GTURTLEModeling {
             // from which the button is pressed. If there are multiple CP panels this operation must be repeated for each panel. It
             // should be no difficult to implement.
             try {
-                specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
+                specCP.saveFile( SpecConfigTTool.TMLCodeDirectory, "spec.tmlcp" );
             }
             catch( Exception e ) {
                 TraceManager.addError( "Writing TMLText for CPs, file could not be saved: " + e.getMessage() );
@@ -571,7 +572,7 @@ public class GTURTLEModeling {
                 TMLTextSpecification<TGComponent> spec = new TMLTextSpecification<>( _title );
                 spec.toTextFormat( tmlm );        //TMLModeling
                 try {
-                    spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml" );
+                    spec.saveFile( SpecConfigTTool.TMLCodeDirectory, "spec.tml" );
                 }
                 catch( Exception e ) {
                     TraceManager.addError( "File could not be saved: " + e.getMessage() );
@@ -599,6 +600,10 @@ public class GTURTLEModeling {
 
         try {
             TraceManager.addDev("Saving specification in " + path + "\n");
+            
+            // DB: Moved from TURTLE2UPPAAL (introduced for project management)
+    		SpecConfigTTool.checkAndCreateUPPAALDir(path);
+    		
             turtle2uppaal.saveInFile(path);
             TraceManager.addDev("UPPAAL specification has been generated in " + path + "\n");
             return true;
@@ -3081,6 +3086,7 @@ public class GTURTLEModeling {
                 }
             }
         }
+		
 
         return listQ;
     }
@@ -3274,7 +3280,7 @@ public class GTURTLEModeling {
 
     public String showRGDiplodocus() {
         //TraceManager.addDev("Show diplodocus graph located in " + ConfigurationTTool.GGraphPath + "/tree.dot");
-        RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, null, null, ConfigurationTTool.DOTTYPath + " " + ConfigurationTTool.GGraphPath + "/tree.dot");
+        RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, null, null, ConfigurationTTool.DOTTYPath + " " + SpecConfigTTool.GGraphPath + "/tree.dot");
         ret.start();
         return null;
     }
@@ -3569,7 +3575,7 @@ public class GTURTLEModeling {
     }
 
     public String getPathUPPAALFile() {
-        return ConfigurationTTool.UPPAALCodeDirectory;
+        return SpecConfigTTool.UPPAALCodeDirectory;
     }
 
     public String getUPPAALVerifierHost() {
@@ -5196,6 +5202,41 @@ public class GTURTLEModeling {
                         makePostLoading(atdp, beginIndex);
                     }
                 }
+
+		} else if (tdp instanceof FaultTreeDiagramPanel) {
+                nl = doc.getElementsByTagName("FaultTreeDiagramPanelCopy");
+
+                if (nl == null) {
+                    return;
+                }
+
+                FaultTreeDiagramPanel ftdp = (FaultTreeDiagramPanel)tdp;
+
+                for(i=0; i<nl.getLength(); i++) {
+                    adn = nl.item(i);
+                    if (adn.getNodeType() == Node.ELEMENT_NODE) {
+                        elt = (Element) adn;
+
+                        if (ftdp == null) {
+                            throw new MalformedModelingException();
+                        }
+
+                        //int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+                        //int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+                        //int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+                        //int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+                        decX = _decX;
+                        decY = _decY;
+
+                        makeXMLComponents(elt.getElementsByTagName("COMPONENT"), ftdp);
+                        makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), ftdp);
+                        makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), ftdp);
+                        connectConnectorsToRealPoints(ftdp);
+                        ftdp.structureChanged();
+                        makePostLoading(ftdp, beginIndex);
+                    }
+                }
             } else if (tdp instanceof TMLTaskDiagramPanel) {
                 nl = doc.getElementsByTagName("TMLTaskDiagramPanelCopy");
                 docCopy = doc;
@@ -6384,6 +6425,8 @@ public class GTURTLEModeling {
             loadRequirement(node);
         } else if (type.compareTo("AttackTree") == 0) {
             loadAttackTree(node);
+	} else if (type.compareTo("FaultTree") == 0) {
+            loadFaultTree(node);
         } else if (type.compareTo("Diplodocus Methodology") == 0) {
             loadDiplodocusMethodology(node);
         } else if (type.compareTo("Avatar Methodology") == 0) {
@@ -6527,6 +6570,33 @@ public class GTURTLEModeling {
                 elt = (Element)node;
                 if (elt.getTagName().compareTo("AttackTreeDiagramPanel") == 0) {
                     loadAttackTreeDiagram(elt, indexTree, cpttdp);
+                    cpttdp ++;
+                }
+            }
+        }
+    }
+
+    public void loadFaultTree(Node node) throws  MalformedModelingException, SAXException {
+        Element elt = (Element) node;
+        String nameTab;
+        NodeList diagramNl;
+        int indexTree;
+        int cpttdp = 0;
+
+
+        nameTab = elt.getAttribute("nameTab");
+
+        indexTree = mgui.createFaultTree(nameTab);
+
+        diagramNl = node.getChildNodes();
+
+        for(int j=0; j<diagramNl.getLength(); j++) {
+            //TraceManager.addDev("Deployment nodes: " + j);
+            node = diagramNl.item(j);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                elt = (Element)node;
+                if (elt.getTagName().compareTo("FaultTreeDiagramPanel") == 0) {
+                    loadFaultTreeDiagram(elt, indexTree, cpttdp);
                     cpttdp ++;
                 }
             }
@@ -7168,6 +7238,11 @@ public class GTURTLEModeling {
             ((AttackTreeDiagramPanel)tdp).setConnectorsToFront();
         }
 
+	if (tdp instanceof FaultTreeDiagramPanel) {
+            //TraceManager.addDev("Connectors...");
+            ((FaultTreeDiagramPanel)tdp).setConnectorsToFront();
+        }
+
         if (tdp instanceof AvatarBDPanel) {
             //TraceManager.addDev("Connectors...");
             ((AvatarBDPanel)tdp).setConnectorsToFront();
@@ -7674,6 +7749,24 @@ public class GTURTLEModeling {
         loadDiagram(elt, tdp);
     }
 
+    public void loadFaultTreeDiagram(Element elt, int indexDiag, int indexTab) throws  MalformedModelingException, SAXException {
+        String name;
+
+        //TraceManager.addDev("indexDiag=" + indexDiag);
+
+        name = elt.getAttribute("name");
+        mgui.createFaultTreeDiagram(indexDiag, name);
+
+        TDiagramPanel tdp = mgui.getFaultTreeDiagramPanel(indexDiag, indexTab, name);
+
+        if (tdp == null) {
+            throw new MalformedModelingException();
+        }
+        tdp.removeAll();
+
+        loadDiagram(elt, tdp);
+    }
+
     public void loadSequenceDiagram(Element elt, int indexAnalysis) throws  MalformedModelingException, SAXException {
         String name;
 
@@ -8137,7 +8230,7 @@ public class GTURTLEModeling {
         Element elt1;
         TGComponent tgc = null;
         TGComponent father;
-        TGComponent reference;
+      //  TGComponent reference;
 
         //
         try {
@@ -8978,15 +9071,20 @@ public class GTURTLEModeling {
         } else {
             // Generate XML file
             try {
+            	if (SpecConfigTTool.NCDirectory != null) {
+            		File dir = new File(SpecConfigTTool.NCDirectory);
+            		if (!dir.exists())
+            			dir.mkdirs();
+            	}
                 String fileName = "network.xml";
-                if (ConfigurationTTool.NCDirectory != null) {
-                    fileName = ConfigurationTTool.NCDirectory + fileName;
+                if (SpecConfigTTool.NCDirectory != null) {
+                    fileName = SpecConfigTTool.NCDirectory + fileName;
                 }
                 TraceManager.addDev("Saving in network structure in file: " + fileName);
                 FileUtils.saveFile(fileName, ncs.toISAENetworkXML());
                 fileName = "traffics.xml";
-                if (ConfigurationTTool.NCDirectory != null) {
-                    fileName = ConfigurationTTool.NCDirectory + fileName;
+                if (SpecConfigTTool.NCDirectory != null) {
+                    fileName = SpecConfigTTool.NCDirectory + fileName;
                 }
                 TraceManager.addDev("Saving in traffics in file: " + fileName);
                 FileUtils.saveFile(fileName, ncs.toISAETrafficsXML());

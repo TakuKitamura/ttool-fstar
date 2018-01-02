@@ -45,7 +45,7 @@ import automata.Automata;
 import automata.State;
 import automata.Transition;
 import myutil.*;
-import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import ui.util.IconManager;
 import ui.StoppableGUIElement;
 import ui.ThreadGUIElement;
@@ -583,8 +583,8 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
     private void saveAutomata(Automata aut) {
         // Select file
         JFileChooser jfc;
-        if (ConfigurationTTool.TGraphPath.length() > 0) {
-            jfc = new JFileChooser(ConfigurationTTool.TGraphPath);
+        if (SpecConfigTTool.TGraphPath.length() > 0) {
+            jfc = new JFileChooser(SpecConfigTTool.TGraphPath);
         } else {
             jfc = new JFileChooser();
         }

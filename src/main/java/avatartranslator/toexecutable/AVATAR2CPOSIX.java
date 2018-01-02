@@ -42,6 +42,7 @@
 package avatartranslator.toexecutable;
 
 import avatartranslator.*;
+import common.SpecConfigTTool;
 import myutil.*;
 
 import java.io.File;
@@ -104,7 +105,12 @@ public class AVATAR2CPOSIX {
     public void saveInFiles(String path) throws FileException {
 
         TraceManager.addDev("Generating files");
-
+        if (!SpecConfigTTool.checkAndCreateAVATARCodeDir(path))
+        	throw new FileException("ERROR: Executable code directory cannot be created.");
+        File src_dir = new File(path + GENERATED_PATH);
+        if (!src_dir.exists()) {
+        	src_dir.mkdir();
+        }
         if (mainFile != null) {
             TraceManager.addDev("Generating main files in " + path + mainFile.getName() + ".h");
             FileUtils.saveFile(path + GENERATED_PATH + mainFile.getName() + ".h", Conversion.indentString(mainFile.getHeaderCode(), 2));

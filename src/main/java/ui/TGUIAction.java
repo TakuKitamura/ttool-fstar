@@ -67,9 +67,11 @@ public class TGUIAction extends AbstractAction {
 
     // Actions
     public static final int ACT_NEW = 0;
+    public static final int ACT_NEW_PROJECT = 471;
     public static final int ACT_NEW_DESIGN = 100;
     public static final int ACT_NEW_ANALYSIS = 101;
     public static final int ACT_OPEN = 1;
+    public static final int ACT_OPEN_PROJECT = 472;
     public static final int ACT_OPEN_FROM_NETWORK = 455;
     public static final int ACT_OPEN_LAST = 154;
     public static final int ACT_MERGE = 228;
@@ -363,6 +365,14 @@ public class TGUIAction extends AbstractAction {
     public static final int ATD_COUNTERMEASURE = 456;
     public static final int ATD_COUNTERMEASURE_CONNECTOR = 457;
 
+    public static final int FTD_BLOCK = 465;
+    public static final int FTD_FAULT = 466;
+    public static final int FTD_FAULT_CONNECTOR = 467;
+    public static final int FTD_COMPOSITION_CONNECTOR = 468;
+    public static final int FTD_CONSTRAINT = 469;
+    public static final int FTD_COUNTERMEASURE = 470;
+    public static final int FTD_COUNTERMEASURE_CONNECTOR = 470;
+
     // AVATAR Block Diagram
     public static final int ABD_BLOCK = 289;
     public static final int ABD_CRYPTOBLOCK = 332;
@@ -619,7 +629,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 465;
+    public static final int NB_ACTION = 473;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -673,9 +683,11 @@ public class TGUIAction extends AbstractAction {
 
     public void init() {
         actions[ACT_NEW] = new TAction("new-command", "New", IconManager.imgic20, IconManager.imgic21, "New", "New modeling", 'N');
+        actions[ACT_NEW_PROJECT] = new TAction("new-project-command", "New project", IconManager.imgic20, IconManager.imgic21, "New project", "New project", 0);
         actions[ACT_NEW_DESIGN] = new TAction("new-command-design", "New design", IconManager.imgic14, IconManager.imgic14, "New design", "New TURTLE design", 0);
         actions[ACT_NEW_ANALYSIS] = new TAction("new-command-analysis", "New analysis", IconManager.imgic17, IconManager.imgic17, "New analysis", "New TURTLE analysis", 0);
         actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TTool model",'O', true);
+        actions[ACT_OPEN_PROJECT] = new TAction("open-project-command","Open project", IconManager.imgic22, IconManager.imgic23, "Open project", "Open an existing TTool project",'O', true);
         actions[ACT_OPEN_FROM_NETWORK] = new TAction("open-command-from-network","Open from TTool repository", IconManager.imgic22, IconManager.imgic23, "Open from TTool repository", "Open an existing TTool model from the TTool repository (TTool website)",'0', true);
         actions[ACT_OPEN_LAST] = new TAction("openlast-command","Open file: " + ConfigurationTTool.LastOpenFile, IconManager.imgic22, IconManager.imgic23, "Open: " + ConfigurationTTool.LastOpenFile, "Open the lastly saved TTool model", 0);
         actions[ACT_MERGE] = new TAction("merge-command","Merge", IconManager.imgic22, IconManager.imgic23, "Merge", "Merge the current TTool modeling with another one saved in a file ", 0);
@@ -1110,9 +1122,18 @@ public class TGUIAction extends AbstractAction {
         actions[ATD_ATTACK] = new TAction("atd-attack", "Add an attack", IconManager.imgic1072, IconManager.imgic1072, "Attack", "Add an attack (i.e. a SysML value type) to the currently opened attack tree diagram", 0);
         actions[ATD_ATTACK_CONNECTOR] = new TAction("atd-attack-connector", "Add a connector between attacks /constraints", IconManager.imgic1080, IconManager.imgic1080, "Connector", "Add a connector between attacks / constraints of the currently opened attack tree diagram", 0);
         actions[ATD_COMPOSITION_CONNECTOR] = new TAction("atd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Composition connector", "Add a composition between blocks of the currently opened attack tree diagram", 0);
-        actions[ATD_CONSTRAINT] = new TAction("atd-constraint", "Add an constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened attack tree diagram", 0);
+        actions[ATD_CONSTRAINT] = new TAction("atd-constraint", "Add a constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened attack tree diagram", 0);
         actions[ATD_COUNTERMEASURE] = new TAction("atd-countermeasure", "Add a countermeasure", IconManager.imgic1082, IconManager.imgic1082, "Countermeasure", "Add a countermeasure to the currently opened attack tree diagram", 0);
         actions[ATD_COUNTERMEASURE_CONNECTOR] = new TAction("atd-countermeasure-connector", "Add a connector between attacks / countermeasures", IconManager.imgic1084, IconManager.imgic1084, "Connect countermeasure", "Add a connector between attacks / countermeasures of the currently opened attack tree diagram", 0);
+
+	// Fault Tree Diagrams
+        actions[FTD_BLOCK] = new TAction("ftd-block", "Add a block", IconManager.imgic1070, IconManager.imgic1070, "Block", "Add a SysML Block to the currently opened fault tree diagram", 0);
+        actions[FTD_FAULT] = new TAction("ftd-fault", "Add a fault", IconManager.imgic1072, IconManager.imgic1072, "Fault", "Add a fault (i.e. a SysML value type) to the currently opened fault tree diagram", 0);
+        actions[FTD_FAULT_CONNECTOR] = new TAction("ftd-fault-connector", "Add a connector between faults /constraints", IconManager.imgic1080, IconManager.imgic1080, "Connector", "Add a connector between faults / constraints of the currently opened fault tree diagram", 0);
+        actions[FTD_COMPOSITION_CONNECTOR] = new TAction("ftd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Composition connector", "Add a composition between blocks of the currently opened fault tree diagram", 0);
+        actions[FTD_CONSTRAINT] = new TAction("ftd-constraint", "Add a constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened fault tree diagram", 0);
+        actions[FTD_COUNTERMEASURE] = new TAction("ftd-countermeasure", "Add a countermeasure", IconManager.imgic1082, IconManager.imgic1082, "Countermeasure", "Add a countermeasure to the currently opened fault tree diagram", 0);
+        actions[FTD_COUNTERMEASURE_CONNECTOR] = new TAction("ftd-countermeasure-connector", "Add a connector between faults / countermeasures", IconManager.imgic1084, IconManager.imgic1084, "Connect countermeasures", "Add a connector between faults / countermeasures of the currently opened fault tree diagram", 0);
 
         // TURTLE-OS
         actions[TOS_TCLASS] = new TAction("add-tclass-os", "Add Tclass", IconManager.imgic104, IconManager.imgic104, "Tclass", "Add a TClass to the currently opened class diagram", 0);

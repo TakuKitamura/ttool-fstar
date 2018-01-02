@@ -114,6 +114,7 @@ public class TURTLE2UPPAAL {
 	
 	
 	public void saveInFile(String path) throws FileException {
+//		SpecConfigTTool.checkAndCreateUPPAALDir(path);
 		FileUtils.saveFile(path + "spec.xml", spec.makeSpec());
 		
 		//System.out.println("spec.xml generated:\n" + spec.getFullSpec());
@@ -544,9 +545,9 @@ public class TURTLE2UPPAAL {
 	
 	public void makeAttributeChoice(TClass t, int id1, int id2) {
 		Param p;
-		Vector params = t.getParamList();
+		Vector<Param> params = t.getParamList();
 		for(int i=0; i<params.size(); i++) {
-			p = (Param)(params.get(i));
+			p = params.get(i);
 			if (p.getType() == Param.NAT) {
 				spec.addGlobalDeclaration("int ");
 			} else {
