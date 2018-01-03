@@ -50,9 +50,9 @@ package avatartranslator;
 import java.util.List;
 
 public class AvatarPragmaLatency extends AvatarPragma {
-    private AvatarActionOnSignal state1;
+    private AvatarStateMachineElement state1;
     private AvatarBlock block1;
-	private AvatarActionOnSignal state2;
+	private AvatarStateMachineElement state2;
 	private AvatarBlock block2;
 	private int symbolType;
 	public static final int lessThan =1;
@@ -63,7 +63,7 @@ public class AvatarPragmaLatency extends AvatarPragma {
 	private List<String> id2;
 	private String pragmaString="";	
 
-    public AvatarPragmaLatency(String _name, Object _referenceObject, AvatarBlock block1, AvatarActionOnSignal state1, AvatarBlock block2, AvatarActionOnSignal state2,  int symbolType, int time, List<String> id1, List<String> id2, String pragmaString)
+    public AvatarPragmaLatency(String _name, Object _referenceObject, AvatarBlock block1, AvatarStateMachineElement state1, AvatarBlock block2, AvatarStateMachineElement state2,  int symbolType, int time, List<String> id1, List<String> id2, String pragmaString)
     {
         super(_name, _referenceObject);
         this.block1 = block1;
@@ -77,7 +77,7 @@ public class AvatarPragmaLatency extends AvatarPragma {
 		this.pragmaString=pragmaString;
     }
 
-    public AvatarActionOnSignal getState1()
+    public AvatarStateMachineElement getState1()
     {
         return this.state1;
     }
@@ -87,7 +87,7 @@ public class AvatarPragmaLatency extends AvatarPragma {
         return this.block1;
     }
 
-    public AvatarActionOnSignal getState2()
+    public AvatarStateMachineElement getState2()
     {
         return this.state2;
     }
