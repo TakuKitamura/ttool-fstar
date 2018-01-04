@@ -270,7 +270,7 @@ public class AvatarDesignPanelTranslator {
 		String block1 = p1.split("\\.")[0];
 		String state1 = p1.split("\\.")[1];
 		AvatarBlock bl1;
-		AvatarActionOnSignal st1=null;
+		AvatarStateMachineElement st1=null;
 		List<String> id1= new ArrayList<String>();
 		bl1 = as.getBlockWithName(block1);
 		if (bl1==null){
@@ -288,6 +288,14 @@ public class AvatarDesignPanelTranslator {
 				st1= aaos;
 			}
 		}
+		AvatarState astate1 = asm.getStateWithName(state1);
+		if (astate1!=null){
+			if (astate1.getCheckLatency()){
+				id1.add("State-"+state1 + ":"+ astate1.getID());
+				st1= astate1;
+			}
+		}
+		
 		if (id1.size()==0){
 			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Cannot find checkable state " + block1+ "." + state1 + " in pragma");
 		   	ce.setTDiagramPanel(adp.getAvatarBDPanel());
@@ -320,7 +328,7 @@ public class AvatarDesignPanelTranslator {
 
 
 		AvatarBlock bl2;
-		AvatarActionOnSignal st2=null;
+		AvatarStateMachineElement st2=null;
 
 		bl2 = as.getBlockWithName(block2);
 		if (bl2==null){
@@ -339,6 +347,14 @@ public class AvatarDesignPanelTranslator {
 			if (aaos.getCheckLatency()){
 				id2.add((aaos.getSignal().isIn() ? "Receive signal" : "Send signal")+"-"+ aaos.getSignal().getName()+":"+aaos.getID());
 				st2=aaos;	
+			}
+		}
+		
+		AvatarState astate2 = asm.getStateWithName(state2);
+		if (astate2!=null){
+			if (astate2.getCheckLatency()){
+				id2.add("State-"+state2 + ":"+ astate2.getID());
+				st2= astate2;
 			}
 		}
 		
@@ -1594,7 +1610,7 @@ public class AvatarDesignPanelTranslator {
         astate.addReferenceObject (tgc);
         tgc.setAVATARID (astate.getID());
 		if (tgc.getCheckLatency()){
-		//	astate.setCheckLatency(true);
+			astate.setCheckLatency(true);
 			_as.checkedIDs.add(tgc.getName()+"-"+tgc.getValue()+":"+astate.getID());
 		}
     }

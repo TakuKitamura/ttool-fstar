@@ -103,7 +103,11 @@ public class AvatarSafetyTests {
 
 		AvatarBlock C = new AvatarBlock("C", null, null);
 		AvatarStateMachine Casm = C.getStateMachine();
-		Casm.addElement(new AvatarState("c1", null));
+		AvatarState c1=	new AvatarState("c1", null);
+		c1.setCheckLatency(true);
+		Casm.addElement(c1);
+
+		
 		C.addAttribute(new AvatarAttribute("attr", AvatarType.INTEGER, C, null));
 		C.addAttribute(new AvatarAttribute("m__a", AvatarType.UNDEFINED, C, null));	
 		C.addAttribute(new AvatarAttribute("m__b", AvatarType.UNDEFINED, C, null));
@@ -139,8 +143,14 @@ public class AvatarSafetyTests {
 		assertEquals(pragma.getBlock1().getName(),"A");
 		assertEquals(pragma.getBlock2().getName(),"B");
 		//Check State names
-		assertEquals(pragma.getState1().getSignal().getName(),"sig");
-		assertEquals(pragma.getState2().getSignal().getName(),"sig2");
+		if (pragma.getState1() instanceof AvatarActionOnSignal){
+			AvatarActionOnSignal aos = (AvatarActionOnSignal) pragma.getState1();
+			assertEquals(aos.getSignal().getName(),"sig");
+		}
+		if (pragma.getState2() instanceof AvatarActionOnSignal){
+			AvatarActionOnSignal aos2 = (AvatarActionOnSignal) pragma.getState2();
+			assertEquals(aos2.getSignal().getName(),"sig2");
+		}
 		//Check ids not empty
 		assertEquals(pragma.getId1().size(),1);
 		assertEquals(pragma.getId2().size(),1);	
@@ -207,6 +217,34 @@ public class AvatarSafetyTests {
 		assertEquals(pragma.getId2().size(),2);	
 	
 	}
+    
+    @Test
+    public void testFormAvatarStatePragma(){
+    pragma = adpt.checkPerformancePragma("Latency(A.sig,C.c1)<1", blocks, as, null);
+		assertTrue(pragma !=null);
+		//Check Block names
+		assertEquals(pragma.getBlock1().getName(),"A");
+		assertEquals(pragma.getBlock2().getName(),"C");
+		//Check State names
+		assertTrue(pragma.getState1() instanceof AvatarActionOnSignal);
+		if (pragma.getState1() instanceof AvatarActionOnSignal){
+			AvatarActionOnSignal aos = (AvatarActionOnSignal) pragma.getState1();
+			assertEquals(aos.getSignal().getName(),"sig");
+		}
+		assertTrue(pragma.getState2() instanceof AvatarState);
+		if (pragma.getState2() instanceof AvatarState){
+			AvatarState st = (AvatarState) pragma.getState2();
+			assertEquals(st.getName(),"c1");
+		}	
+			
+		//Check ids not empty
+		assertEquals(pragma.getId1().size(),1);
+		assertEquals(pragma.getId2().size(),1);	
+		//Check symbol
+		assertEquals(pragma.getSymbolType(),AvatarPragmaLatency.lessThan);
+		//Check time
+		assertEquals(pragma.getTime(),1);
+    }
     
     public static void main(String[] args){
         AvatarSafetyTests ast = new AvatarSafetyTests ();
