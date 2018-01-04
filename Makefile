@@ -5,7 +5,7 @@ JAVADOC			= javadoc
 MAKE			= make -s
 TAR			= tar
 GZIP			= gzip
-GRADLE			= $(shell which gradle)
+GRADLE			= $(shell which gradle) -q
 GRADLE_VERSION_NEEDED	= 3.3
 ERROR_MSG		= printf "$(COLOR)\nBuild with gradle failed. Falling back to regular javac command...\n$(RESET)"
 
