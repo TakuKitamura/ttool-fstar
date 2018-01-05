@@ -438,7 +438,7 @@ int MultiCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const
   int total = 0;
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     if (cpt >= begining) {
-      (*i)->toXML(glob, 1, _name);
+      (*i)->toXML(glob, 0, _name);
       total ++;
     }
     cpt ++;
@@ -451,7 +451,7 @@ void MultiCoreCPU::latencies2XML(std::ostringstream& glob, int id1, int id2) {
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 	if ((*i)->getCommand() !=NULL){
 	if ((*i)->getCommand()->getID() == id1 || (*i)->getCommand()->getID() == id2){
-	    (*i)->toXML(glob, 1, _name);
+	    (*i)->toXML(glob, 0, _name);
 	}
 	}
   }

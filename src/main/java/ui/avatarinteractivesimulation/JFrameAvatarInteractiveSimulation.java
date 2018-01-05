@@ -927,8 +927,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         jspLatency = new JScrollPane(latTable);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
-        jspLatency.setMinimumSize(new Dimension(250, 50));
-        jspLatency.setPreferredSize(new Dimension(250, 50));
+        jspLatency.setMinimumSize(new Dimension(450, 100));
+        jspLatency.setPreferredSize(new Dimension(450, 100));
         latencyPanel.add(jspLatency, c0);
 
 

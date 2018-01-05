@@ -51,6 +51,7 @@ public class AvatarState extends AvatarStateElement {
     private String entryCode;
     private boolean hidden; // i.e, not present in the original state machine
     public int stateID; // to be used by code generator to more efficiently keep track of states.
+	private boolean checkLatency;
 
     public AvatarState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -81,6 +82,15 @@ public class AvatarState extends AvatarStateElement {
     public String getNiceName() {
         return "State " + getName();
     }
+    
+    public boolean getCheckLatency(){
+		return checkLatency;
+	}
+	
+	public void setCheckLatency(boolean b){
+		checkLatency=b;
+	}
+
 
     public int hasEmptyTransitionsOnItself(AvatarStateMachine _asm) {
         AvatarTransition at;
