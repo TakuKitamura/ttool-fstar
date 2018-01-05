@@ -20,8 +20,7 @@ public class TestGTURTLEModeling extends AbstractUITest {
     //private static final String RESOURCES_DIR = "resources/ui/generateccode/";
 
     @BeforeClass
-    public static void setUpBeforeClass()
-    throws Exception {
+    public static void setUpBeforeClass() throws Exception {
     	RESOURCES_DIR = getBaseResourcesDir() + "ui/generateccode/";
     }
 
@@ -48,6 +47,11 @@ public class TestGTURTLEModeling extends AbstractUITest {
         final String codeDirExpected = RESOURCES_DIR + mappingDiagName + File.separator + "expected" + File.separator;
 
         mainGui.gtm.generateCCode( codeDir );
+
+        /*try {
+            Thread.sleep(5000);
+        } catch (Exception ignored) {
+        }*/
 
         try {
             final IComparisonReport difference = textComparator.compare( new File( codeDir ), new File( codeDirExpected ) );
