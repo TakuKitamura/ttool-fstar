@@ -381,10 +381,17 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void build() {
         // Swing look and feel
 
+        //try {
         try {
-            UIManager.setLookAndFeel(
-                                     UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception e) { ErrorGUI.exit(ErrorGUI.GUI);}
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException e) {
+            ErrorGUI.exit(ErrorGUI.GUI);
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            ErrorGUI.exit(ErrorGUI.GUI);
+            e.printStackTrace();
+        }
+        //} catch (Exception e) { ErrorGUI.exit(ErrorGUI.GUI);}
 
         // Creating main container
         frame = new JFrame("TTool");
