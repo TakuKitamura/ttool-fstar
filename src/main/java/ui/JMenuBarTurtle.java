@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui;
 
 import common.ConfigurationTTool;
@@ -51,12 +49,13 @@ import javax.swing.*;
 
 
 /**
-   * Class JMenuBarTurtle
-   * Creation: 09/12/2003
-   * Version 1.0 09/12/2003
-   * @author Ludovic APVRILLE
+ * Class JMenuBarTurtle
+ * Creation: 09/12/2003
+ * Version 1.0 09/12/2003
+ *
+ * @author Ludovic APVRILLE
  */
-public  class JMenuBarTurtle extends JMenuBar   {
+public class JMenuBarTurtle extends JMenuBar {
     private JMenu menugraph;
 
     //Menu
@@ -81,7 +80,7 @@ public  class JMenuBarTurtle extends JMenuBar   {
 
 
     // Menus
-    private     void buildMenus(MainGUI mgui) {
+    private void buildMenus(MainGUI mgui) {
         // Main menu
         file = new JMenu("File");
         edit = new JMenu("Edit");
@@ -103,7 +102,7 @@ public  class JMenuBarTurtle extends JMenuBar   {
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_PROJECT]);
         menuItem.addMouseListener(mgui.mouseHandler);
-	menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_FROM_NETWORK]);
+        menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_FROM_NETWORK]);
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_SAVE]);
         menuItem.addMouseListener(mgui.mouseHandler);
@@ -420,7 +419,7 @@ public  class JMenuBarTurtle extends JMenuBar   {
 
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_RTLOTOS]);
         menuItem.addMouseListener(mgui.mouseHandler);
-	
+
 
         if (MainGUI.lotosOn) {
             menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
@@ -581,7 +580,7 @@ public  class JMenuBarTurtle extends JMenuBar   {
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE]);
         menuItem.addMouseListener(mgui.mouseHandler);
-	menuItem = capture.add(mgui.actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE_SVG]);
+        menuItem = capture.add(mgui.actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE_SVG]);
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_SELECTED_CAPTURE]);
         menuItem.addMouseListener(mgui.mouseHandler);

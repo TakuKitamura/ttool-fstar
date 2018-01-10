@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui;
 
 
@@ -49,7 +47,7 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public	class ErrorHighlight extends Exception {
-	public static final int UNCHECKED = 0;
+	//public static final int UNCHECKED = 0;
 	
 	public static final int OK = 1;
 	public static final int UNKNOWN = 2;

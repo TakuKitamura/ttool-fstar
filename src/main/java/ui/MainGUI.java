@@ -703,14 +703,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void minimizeRG(RG toBeMinimized) {
-        JFrameMinimize jfm = new JFrameMinimize(frame, this, "Graph minimization", toBeMinimized);
+        JFrameMinimize jfm = new JFrameMinimize(frame, this, "Graph minimization", toBeMinimized, SpecConfigTTool.TGraphPath);
         //jfm.setSize(900, 700);
         GraphicLib.centerOnParent(jfm, 900, 700);
         jfm.setVisible(true);
     }
 
     public void makeRefusalGraph(RG inputGraph) {
-        JFrameRefusalGraph jfm = new JFrameRefusalGraph(frame, this, "Test Sequences Construction", inputGraph);
+        JFrameRefusalGraph jfm = new JFrameRefusalGraph(frame, this, "Test Sequences Construction", inputGraph, SpecConfigTTool.TGraphPath);
         //jfm.setSize(900, 700);
         GraphicLib.centerOnParent(jfm, 900, 700);
         jfm.setVisible(true);
