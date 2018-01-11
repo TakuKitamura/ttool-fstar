@@ -1086,13 +1086,22 @@ public class AUTGraph implements myutil.Graph {
 
         //printConfiguration(partition, w);
 
-        int maxIte = 1000;
+        int maxIte = 1000; // With same nb of partitions
+        int nbOfPartitions = w.size();
+        int evolution = 10;
 
         AUTPartition currentP;
-        while ((w.size() > 0) && (maxIte > 0)) {
+        while ((w.size() > 0) && (maxIte > 0) && (evolution > 0)) {
+            if (w.size() == nbOfPartitions) {
+                evolution --;
+            } else {
+                evolution = 10;
+            }
+            nbOfPartitions = w.size();
             maxIte--;
             currentP = w.partitions.get(0);
             w.partitions.remove(0);
+
 
             // Simple splitter?
             if (currentP.blocks.size() == 1) {
