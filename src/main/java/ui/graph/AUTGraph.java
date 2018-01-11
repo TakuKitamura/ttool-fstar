@@ -40,7 +40,8 @@
 package ui.graph;
 
 import myutil.Conversion;
-import myutil.*;
+import myutil.DijkstraState;
+import myutil.GraphAlgorithms;
 import myutil.TraceManager;
 
 import java.io.BufferedReader;
@@ -1088,14 +1089,21 @@ public class AUTGraph implements myutil.Graph {
 
         int maxIte = 1000; // With same nb of partitions
         int nbOfPartitions = w.size();
-        int evolution = 10;
+        int evolution = 20;
+        int hashCode = -1;
 
         AUTPartition currentP;
         while ((w.size() > 0) && (maxIte > 0) && (evolution > 0)) {
+
+            int newHash = w.getHashCode();
+            if (newHash == hashCode) {
+                break;
+            }
+
             if (w.size() == nbOfPartitions) {
-                evolution --;
+                evolution--;
             } else {
-                evolution = 10;
+                evolution = 20;
             }
             nbOfPartitions = w.size();
             maxIte--;
@@ -1258,7 +1266,7 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
-        //TraceManager.addDev("\nAll done:\n---------");
+        TraceManager.addDev("\nAll done: it: " + maxIte + "\n---------");
         //printConfiguration(partition, w);
         //TraceManager.addDev("------------------");
 

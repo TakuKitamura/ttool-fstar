@@ -66,6 +66,13 @@ public class AUTBlock  implements Comparable<AUTBlock> {
         states.add(_st);
     }
 
+    public int getHashValue() {
+        if (!hashComputed) {
+            computeHash();
+        }
+        return hashValue;
+    }
+
 
     public String toString() {
         boolean first = true;
