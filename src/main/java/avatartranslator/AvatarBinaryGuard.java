@@ -37,9 +37,6 @@
  */
 
 
-
-
-
 package avatartranslator;
 
 import java.util.HashMap;

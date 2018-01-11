@@ -54,12 +54,14 @@ import org.graphstream.stream.file.FileSinkImages.OutputType;
 import ui.file.PNGFilter;
 import ui.util.IconManager;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -332,6 +334,7 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
     class BasicFrame extends JFrame implements ActionListener {
         protected MultiGraph vGraph;
         protected Viewer viewer;
+        protected JPanel viewerPanel;
         protected AUTGraph graph;
         protected ArrayList<AbstractEdge> edges;
 
@@ -362,11 +365,12 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
         }
 
         public void makeComponents() {
-            add(viewer.addDefaultView(false), BorderLayout.CENTER);
+            viewerPanel = viewer.addDefaultView(false);
+            add(viewerPanel, BorderLayout.CENTER);
             //add(viewer, BorderLayout.CENTER );
             close = new JButton("Close", IconManager.imgic27);
             close.addActionListener(this);
-            screenshot = new JButton("Screenshot in png", IconManager.imgic28);
+            screenshot = new JButton("Save in png", IconManager.imgic28);
             screenshot.addActionListener(this);
             close.addActionListener(this);
             help = new JLabel("Zoom with PageUp/PageDown, move with cursor keys");
@@ -439,6 +443,24 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
             dispose();
         }
 
+        public void takeScreenshot(Component component, File file) {
+            BufferedImage image = new BufferedImage(
+                    component.getWidth(),
+                    component.getHeight(),
+                    BufferedImage.TYPE_INT_RGB
+            );
+            // call the Component's paint method, using
+            // the Graphics object of the image.
+            component.paint( image.getGraphics() ); // alternately use .printAll(..)
+
+            try {
+                // save captured image to PNG file
+                ImageIO.write(image, "png", file);
+            } catch (Exception e) {
+            }
+
+        }
+
         public void screenshot()  {
             TraceManager.addDev("Screenshot");
             JFileChooser jfcggraph;
@@ -455,16 +477,22 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
             }
             File pngFile = jfcggraph.getSelectedFile();
             TraceManager.addDev("Making the screenshot in " + pngFile.getAbsolutePath());
+
+
             //vGraph.addAttribute("ui.screenshot", pngFile.getAbsolutePath());
             //vGraph.addAttribute("ui.screenshot", "/homes/apvrille/tmp/toto.png");
 
-            FileSinkImages pic = new FileSinkImages(OutputType.PNG, Resolutions.UXGA);
-            pic.setLayoutPolicy(LayoutPolicy.COMPUTED_FULLY_AT_NEW_IMAGE);
+            takeScreenshot(viewerPanel, pngFile);
+
+            /*FileSinkImages pic = new FileSinkImages(OutputType.PNG, Resolutions.UXGA);
+            //pic.setQuality();
+            //pic.setLayoutPolicy(LayoutPolicy.COMPUTED_FULLY_AT_NEW_IMAGE);
+            pic.setLayoutPolicy(LayoutPolicy.COMPUTED_IN_LAYOUT_RUNNER);
             try {
                 pic.writeAll(vGraph, pngFile.getAbsolutePath());
             } catch (IOException e) {
                 TraceManager.addDev("Capture could not be performed: " + e.getMessage());
-            }
+            }*/
 
             //vGraph.addAttribute("ui.screenshot", "/tmp/toto.png");
             TraceManager.addDev("Screenshot performed");
