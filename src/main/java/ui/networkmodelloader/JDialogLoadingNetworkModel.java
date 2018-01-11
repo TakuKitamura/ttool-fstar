@@ -230,14 +230,13 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         }
     }
 
-    public void featureSelectionMade() {
+    private void featureSelectionMade() {
         panel.setFeatureSelectedIndex(featureList.getSelectedIndex());
     }
 
     public void cancel() {
         if (panel != null) panel.stopLoading(); dispose();
     }
-
 
     public void run() {
         // Loading main file describing models, giving information on this, and filling the array of models

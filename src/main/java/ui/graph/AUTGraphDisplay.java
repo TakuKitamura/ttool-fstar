@@ -47,10 +47,6 @@ import org.graphstream.graph.implementations.MultiNode;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerListener;
 import org.graphstream.ui.view.ViewerPipe;
-import org.graphstream.stream.file.FileSinkImages;
-import org.graphstream.stream.file.FileSinkImages.LayoutPolicy;
-import org.graphstream.stream.file.FileSinkImages.Resolutions;
-import org.graphstream.stream.file.FileSinkImages.OutputType;
 import ui.file.PNGFilter;
 import ui.util.IconManager;
 
@@ -63,7 +59,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 

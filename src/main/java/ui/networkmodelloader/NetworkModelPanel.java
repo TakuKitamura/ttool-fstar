@@ -98,7 +98,7 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
     private boolean go = true;
 
 
-    public NetworkModelPanel(LoaderFacilityInterface _loader, ArrayList<NetworkModel> _listOfModels, ActionListener _listener, JTextArea _jta, JLabel _infoModels) {
+    NetworkModelPanel(LoaderFacilityInterface _loader, ArrayList<NetworkModel> _listOfModels, ActionListener _listener, JTextArea _jta, JLabel _infoModels) {
         loader = _loader;
         listOfModels = _listOfModels;
         listener = _listener;
@@ -124,24 +124,24 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
         addMouseListener(this);
     }
 
-    public void setJSP(JScrollPane _jsp) {
+    void setJSP(JScrollPane _jsp) {
         jsp = _jsp;
         jsp.setViewportView(this);
     }
 
-    public void setFeatureSelectedIndex(int _index) {
+    void setFeatureSelectedIndex(int _index) {
         featureSelectedIndex = _index;
         indexOfSelected = -1;
         repaint();
     }
 
-    public void setProperty(int _index, boolean _mode) {
+    void setProperty(int _index, boolean _mode) {
         props[_index] = _mode;
         indexOfSelected = -1;
         repaint();
     }
 
-    public void stopLoading() {
+    void stopLoading() {
         go = false;
     }
 
