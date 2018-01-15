@@ -37,36 +37,39 @@
  */
 
 
-
-
 package ui.networkmodelloader;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-import java.io.*;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
-import ui.*;
-import ui.file.TFileFilter;
 import myutil.*;
+import ui.JTextAreaWriter;
+import ui.MainGUI;
+import ui.file.TFileFilter;
 import ui.util.IconManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Class JDialogNetworkModelPanel
  * Dialog for managing the loading of network models
  * Creation: 28/05/2017
- * @version 1.1 28/05/2017
+ *
  * @author Ludovic APVRILLE
  * @author Ludovic Apvrille
+ * @version 1.1 28/05/2017
  */
-public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable, LoaderFacilityInterface, CallbackLoaderInterface  {
+public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements ActionListener, Runnable, LoaderFacilityInterface, CallbackLoaderInterface {
 
-    public final static String [] FEATURES = {"all",  "diplodocus", "avatar", "sysml-sec", "assumptions", "requirements", "attacktrees", "properties", "partitioning", "analysis", "design", "prototyping", "securityprotocol", "codegeneration"};
+    public final static String[] FEATURES = {"all", "diplodocus", "avatar", "sysml-sec", "assumptions", "requirements", "attacktrees", "properties", "partitioning", "analysis", "design", "prototyping", "securityprotocol", "codegeneration"};
 
-    public final static String [] PROPS = {"safety", "security", "performance"};
+    public final static String[] PROPS = {"safety", "security", "performance"};
 
     private ArrayList<NetworkModel> listOfModels;
 
@@ -85,7 +88,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     protected JButton start;
     protected JButton stop;
     protected JComboBox<String> featureList;
-    protected JCheckBox [] props;
+    protected JCheckBox[] props;
 
     protected JScrollPane jsp;
 
@@ -100,8 +103,10 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     private JFileChooser jfc;
 
 
-    /** Creates new form  */
-    public JDialogLoadingNetworkModel(Frame _f, MainGUI _mgui, String title, String _url)  {
+    /**
+     * Creates new form
+     */
+    public JDialogLoadingNetworkModel(Frame _f, MainGUI _mgui, String title, String _url) {
         super(title);
 
         f = _f;
@@ -125,13 +130,13 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
 
 
     protected void myInitComponents() {
-    	
-    	if (ConfigurationTTool.DownloadedFILEPath.length() > 0) {
+
+        if (ConfigurationTTool.DownloadedFILEPath.length() > 0) {
             jfc = new JFileChooser(ConfigurationTTool.DownloadedFILEPath);
         } else {
             jfc = new JFileChooser();
         }
-    	
+
         mode = NOT_LISTED;
         setButtons();
     }
@@ -144,7 +149,6 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 
-
         JPanel lowPart = new JPanel(new BorderLayout());
 
         jta = new ScrolledJTextArea();
@@ -155,7 +159,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         jta.append("Connecting to " + url + ".\n Please wait ...\n\n");
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
-        textAreaWriter = new JTextAreaWriter( jta );
+        textAreaWriter = new JTextAreaWriter(jta);
 
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(400, 200));
@@ -170,7 +174,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         options.add(featureList);
 
         props = new JCheckBox[PROPS.length];
-        for (int i=0; i<props.length; i++) {
+        for (int i = 0; i < props.length; i++) {
             props[i] = new JCheckBox(PROPS[i]);
             props[i].addActionListener(this);
             props[i].setSelected(true);
@@ -206,19 +210,19 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         c.add(jsp, BorderLayout.CENTER);
     }
 
-    public void actionPerformed(ActionEvent evt)  {
+    public void actionPerformed(ActionEvent evt) {
         //String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
         if (evt.getSource() == stop) {
             cancel();
-            return ;
+            return;
         } else if (evt.getSource() == featureList) {
             featureSelectionMade();
             return;
         }
 
-        for (int i = 0; i<props.length; i++) {
+        for (int i = 0; i < props.length; i++) {
             if (evt.getSource() == props[i]) {
                 panel.setProperty(i, props[i].isSelected());
                 return;
@@ -226,18 +230,17 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         }
     }
 
-    public void featureSelectionMade() {
+    private void featureSelectionMade() {
         panel.setFeatureSelectedIndex(featureList.getSelectedIndex());
     }
 
     public void cancel() {
-        dispose();
+        if (panel != null) panel.stopLoading(); dispose();
     }
-
 
     public void run() {
         // Loading main file describing models, giving information on this, and filling the array of models
-        // Accsing the main file
+        // Accessing the main file
         try {
             /*HttpURLConnection connection;
               TraceManager.addDev("URL: going to create it to: " + url);
@@ -256,7 +259,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
             BufferedReader in = URLManager.getBufferedReader(url);
             if (in == null) {
                 jta.append("Could not establish a connection to the TTool server\n");
-		jta.append("Error when retreiving file: " + url + "\n No internet connection?\n No right for the Java Virtual Machine to use http connections?\n\n");
+                jta.append("Error when retreiving file: " + url + "\n No internet connection?\n No right for the Java Virtual Machine to use http connections?\n\n");
             } else {
                 jta.append("Connection established...\n");
                 String inputLine = null;
@@ -270,7 +273,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
                     if (inputLine.startsWith("-FEATURES")) {
                         if (nm != null) {
                             String tmp = inputLine.substring(9, inputLine.length()).trim().toLowerCase();
-                            for (int i=1; i<FEATURES.length; i++) {
+                            for (int i = 1; i < FEATURES.length; i++) {
                                 nm.features[i] = tmp.indexOf(FEATURES[i]) != -1;
                             }
                             //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
@@ -280,7 +283,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
                     if (inputLine.startsWith("-PROPS")) {
                         if (nm != null) {
                             String tmp = inputLine.substring(6, inputLine.length()).trim().toLowerCase();
-                            for (int i=0; i<PROPS.length; i++) {
+                            for (int i = 0; i < PROPS.length; i++) {
                                 nm.props[i] = tmp.indexOf(PROPS[i]) != -1;
                             }
                             //nm.type = NetworkModel.stringToNetworkModelType(inputLine.substring(5, inputLine.length()).trim());
@@ -335,25 +338,25 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     }
 
     protected void setButtons() {
-        switch(mode) {
-        case NOT_LISTED:
-            start.setEnabled(false);
-            stop.setEnabled(true);
-            //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            getGlassPane().setVisible(false);
-            break;
-        case LISTED:
-            start.setEnabled(false);
-            stop.setEnabled(true);
-            getGlassPane().setVisible(true);
-            //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            break;
-        case SELECTED:
-        default:
-            start.setEnabled(true);
-            stop.setEnabled(true);
-            getGlassPane().setVisible(false);
-            break;
+        switch (mode) {
+            case NOT_LISTED:
+                start.setEnabled(false);
+                stop.setEnabled(true);
+                //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                getGlassPane().setVisible(false);
+                break;
+            case LISTED:
+                start.setEnabled(false);
+                stop.setEnabled(true);
+                getGlassPane().setVisible(true);
+                //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                break;
+            case SELECTED:
+            default:
+                start.setEnabled(true);
+                stop.setEnabled(true);
+                getGlassPane().setVisible(false);
+                break;
         }
     }
 
@@ -361,55 +364,55 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     // LoaderFacilityInterface
     public void load(int index) {
         String fileName = listOfModels.get(index).fileName;
+        if (panel != null) panel.stopLoading();
         jta.append("Loading model: " + fileName);
         String urlToLoad = URLManager.getBaseURL(url) + fileName;
         URLManager urlm = new URLManager();
         jfc.setSelectedFile(new File(FileUtils.removeFileExtension(fileName)));
         int returnVal = jfc.showSaveDialog(f);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-        	filePath = jfc.getSelectedFile().getAbsolutePath();
-        	filePath = FileUtils.addFileExtensionIfMissing(filePath, "xml");
-        	boolean ok = urlm.downloadFile(filePath, urlToLoad,this);
-        	if (!ok) {
-        		loadFailed();
-        	}
-       }
-        else {
-        	panel.reactivateSelection();
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            filePath = jfc.getSelectedFile().getAbsolutePath();
+            filePath = FileUtils.addFileExtensionIfMissing(filePath, "xml");
+            boolean ok = urlm.downloadFile(filePath, urlToLoad, this);
+            if (!ok) {
+                loadFailed();
+            }
+        } else {
+            panel.reactivateSelection();
         }
     }
 
     // CallbackLoaderInterface
     public void loadDone() {
-        jta.append("Model transfered, opening it in TTool\n");
+        jta.append("Model transferred, opening it in TTool\n");
         this.dispose();
 
-	SwingUtilities.invokeLater(new Runnable() {
-		public void run() {
-			File dir = new File(filePath.replace(".xml", ""));
-        	dir = FileUtils.addFileExtensionIfMissing(dir, "ttool");
-        	dir.mkdir();
-        	SpecConfigTTool.setDirConfig(dir);
-        	File config = SpecConfigTTool.createProjectConfig(dir);
-        	try {
-				SpecConfigTTool.loadConfigFile(config);
-			} catch (MalformedConfigurationException e) {
-				System.err.println(e.getMessage() + " : Can't load config file.");
-			}
-            File file = new File(filePath);
-            file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
-            try {
-				FileUtils.moveFileToDirectory(file, dir, false);
-			} catch (IOException e) {
-				System.err.println(e.getMessage() + " : Network loading failed");
-			}
-		    mgui.openProjectFromFile(dir);
-		    // Here, we can safely update the GUI
-		    // because we'll be called from the
-		    // event dispatch thread
-		    //statusLabel.setText("Query: " + queryNo);
-		}
-	    });
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                File dir = new File(filePath.replace(".xml", ""));
+                dir = FileUtils.addFileExtensionIfMissing(dir, "ttool");
+                dir.mkdir();
+                SpecConfigTTool.setDirConfig(dir);
+                File config = SpecConfigTTool.createProjectConfig(dir);
+                try {
+                    SpecConfigTTool.loadConfigFile(config);
+                } catch (MalformedConfigurationException e) {
+                    System.err.println(e.getMessage() + " : Can't load config file.");
+                }
+                File file = new File(filePath);
+                file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
+                try {
+                    FileUtils.moveFileToDirectory(file, dir, false);
+                } catch (IOException e) {
+                    System.err.println(e.getMessage() + " : Network loading failed");
+                }
+                mgui.openProjectFromFile(dir);
+                // Here, we can safely update the GUI
+                // because we'll be called from the
+                // event dispatch thread
+                //statusLabel.setText("Query: " + queryNo);
+            }
+        });
         //mgui.openProjectFromFile(new File(filePath));
     }
 

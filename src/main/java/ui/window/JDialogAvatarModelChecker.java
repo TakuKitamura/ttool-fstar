@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.window;
 
 import avatartranslator.AvatarSpecification;
@@ -67,21 +65,22 @@ import java.util.concurrent.TimeUnit;
  * Class JDialogAvatarModelChecker
  * Dialog for managing the model checking of avatar specifications
  * Creation: 1/06/2016
- * @version 1.1 1/06/2016
+ *
  * @author Ludovic APVRILLE
+ * @version 1.1 1/06/2016
  */
-public class JDialogAvatarModelChecker extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
-    private final static String [] INFOS = {"Not started", "Running", "Stopped by user", "Finished"};
-    private final static Color []  COLORS = {Color.darkGray, Color.magenta, Color.red, Color.blue};
+public class JDialogAvatarModelChecker extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface {
+    private final static String[] INFOS = {"Not started", "Running", "Stopped by user", "Finished"};
+    private final static Color[] COLORS = {Color.darkGray, Color.magenta, Color.red, Color.blue};
 
 
-    public final static int REACHABILITY_ALL        = 1;
-    public final static int REACHABILITY_SELECTED   = 2;
-    public final static int REACHABILITY_NONE       = 3;
+    public final static int REACHABILITY_ALL = 1;
+    public final static int REACHABILITY_SELECTED = 2;
+    public final static int REACHABILITY_NONE = 3;
 
-    public final static int LIVENESS_ALL        = 4;
-    public final static int LIVENESS_SELECTED   = 5;
-    public final static int LIVENESS_NONE       = 6;
+    public final static int LIVENESS_ALL = 4;
+    public final static int LIVENESS_SELECTED = 5;
+    public final static int LIVENESS_NONE = 6;
 
 
     protected static String graphDir;
@@ -145,15 +144,15 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
     private Thread t;
     private boolean go = false;
-  //  private boolean hasError = false;
+    //  private boolean hasError = false;
     private java.util.Timer timer;
     //protected boolean startProcess = false;
 
 
-
-
-    /** Creates new form  */
-    public JDialogAvatarModelChecker(Frame f, MainGUI _mgui, String title, AvatarSpecification _spec, String _graphDir, boolean _showLiveness)  {
+    /**
+     * Creates new form
+     */
+    public JDialogAvatarModelChecker(Frame f, MainGUI _mgui, String title, AvatarSpecification _spec, String _graphDir, boolean _showLiveness) {
         super(title);
 
         mgui = _mgui;
@@ -167,13 +166,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         }
 
         showLiveness = _showLiveness;
-	
+
         initComponents();
         myInitComponents();
         pack();
 
 	/*if ((mgui != null) && (spec != null)) {
-	    mgui.drawAvatarSpecification(spec);
+        mgui.drawAvatarSpecification(spec);
 	    }*/
 
         //getGlassPane().addMouseListener( new MouseAdapter() {});
@@ -241,9 +240,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         jp01.add(reachabilityAllStates, c01);
         reachabilities.add(reachabilityAllStates);
 
-        noReachability.setSelected(reachabilitySelected ==  REACHABILITY_NONE);
-        reachabilityCheckable.setSelected(reachabilitySelected ==  REACHABILITY_SELECTED);
-        reachabilityAllStates.setSelected(reachabilitySelected ==  REACHABILITY_ALL);
+        noReachability.setSelected(reachabilitySelected == REACHABILITY_NONE);
+        reachabilityCheckable.setSelected(reachabilitySelected == REACHABILITY_SELECTED);
+        reachabilityAllStates.setSelected(reachabilitySelected == REACHABILITY_ALL);
 
 
         // Liveness
@@ -251,39 +250,44 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         noLiveness = new JRadioButton("No liveness");
         noLiveness.addActionListener(this);
-        if (showLiveness) {jp01.add(noLiveness, c01);}
+        if (showLiveness) {
+            jp01.add(noLiveness, c01);
+        }
         liveness.add(noLiveness);
 
         livenessCheckable = new JRadioButton("Liveness of selected states");
         livenessCheckable.addActionListener(this);
-        if (showLiveness) {jp01.add(livenessCheckable, c01);}
+        if (showLiveness) {
+            jp01.add(livenessCheckable, c01);
+        }
         liveness.add(livenessCheckable);
 
         livenessAllStates = new JRadioButton("Liveness of all states");
         livenessAllStates.addActionListener(this);
-        if (showLiveness){jp01.add(livenessAllStates, c01);}
+        if (showLiveness) {
+            jp01.add(livenessAllStates, c01);
+        }
         liveness.add(livenessAllStates);
 
-        noLiveness.setSelected(livenessSelected ==  LIVENESS_NONE);
-        livenessCheckable.setSelected(livenessSelected ==  LIVENESS_SELECTED);
-        livenessAllStates.setSelected(livenessSelected ==  LIVENESS_ALL);
+        noLiveness.setSelected(livenessSelected == LIVENESS_NONE);
+        livenessCheckable.setSelected(livenessSelected == LIVENESS_SELECTED);
+        livenessAllStates.setSelected(livenessSelected == LIVENESS_ALL);
 
 
         // RG
         saveGraphAUT = new JCheckBox("Reachability Graph Generation", graphSelected);
         saveGraphAUT.addActionListener(this);
-	//saveGraphAUT.addSelectionListener(this);
+        //saveGraphAUT.addSelectionListener(this);
         jp01.add(saveGraphAUT, c01);
         graphPath = new JTextField(graphDir);
         jp01.add(graphPath, c01);
         saveGraphDot = new JCheckBox("Save RG in dotty:", graphSelectedDot);
         saveGraphDot.addActionListener(this);
-	//saveGraphDot.setEnebaled(false);
+        //saveGraphDot.setEnebaled(false);
         jp01.add(saveGraphDot, c01);
         graphPathDot = new JTextField(graphDirDot);
         jp01.add(graphPathDot, c01);
         c.add(jp01, BorderLayout.NORTH);
-
 
 
         jta = new ScrolledJTextArea();
@@ -388,7 +392,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         jpinfo.add(elapsedTime, c02);
 
 
-
         JPanel jp2 = new JPanel();
         jp2.add(start);
         jp2.add(stop);
@@ -400,10 +403,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
     }
 
-    public void actionPerformed(ActionEvent evt)  {
+    public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
-        if (command.equals("Start"))  {
+        if (command.equals("Start")) {
             startProcess();
         } else if (command.equals("Stop")) {
             stopProcess();
@@ -445,7 +448,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         if (amc != null) {
             amc.stopModelChecking();
         }
-        mode =  STOPPED;
+        mode = STOPPED;
         setButtons();
         go = false;
         if (timer != null) {
@@ -476,26 +479,26 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     }
 
     public void run() {
- //       String cmd;
-   //     String list, data;
-     //   int cycle = 0;
+        //       String cmd;
+        //     String list, data;
+        //   int cycle = 0;
 
-     //   hasError = false;
+        //   hasError = false;
 
         TraceManager.addDev("Thread started");
-     //   File testFile;
+        //   File testFile;
         try {
             reinitValues();
             jta.append("Starting the model checker\n");
 
-	    if (generateDesignSelected) {
+            if (generateDesignSelected) {
                 TraceManager.addDev("Drawing non modified avatar spec");
                 if ((mgui != null) && (spec != null)) {
                     mgui.drawAvatarSpecification(spec);
                 }
             }
 
-	    
+
             amc = new AvatarModelChecker(spec);
             endDate = null;
             previousNbOfStates = 0;
@@ -510,11 +513,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
             // Reachability
             int res;
-            if (reachabilitySelected ==  REACHABILITY_SELECTED) {
+            if (reachabilitySelected == REACHABILITY_SELECTED) {
                 res = amc.setReachabilityOfSelected();
                 jta.append("Reachability of " + res + " selected elements activated\n");
 
-                for(SpecificationReachability sr: amc.getReachabilities()){
+                for (SpecificationReachability sr : amc.getReachabilities()) {
                     handleReachability(sr.ref1, sr.result);
                     if (sr.ref2 != sr.ref1) {
                         handleReachability(sr.ref2, sr.result);
@@ -522,10 +525,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 }
             }
 
-            if (reachabilitySelected ==  REACHABILITY_ALL) {
+            if (reachabilitySelected == REACHABILITY_ALL) {
                 res = amc.setReachabilityOfAllStates();
-                jta.append("Reachability of " + res +  " states activated\n");
-                for(SpecificationReachability sr: amc.getReachabilities()){
+                jta.append("Reachability of " + res + " states activated\n");
+                for (SpecificationReachability sr : amc.getReachabilities()) {
                     handleReachability(sr.ref1, sr.result);
                     if (sr.ref2 != sr.ref1) {
                         handleReachability(sr.ref2, sr.result);
@@ -544,7 +547,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
             amc.startModelChecking();
             TraceManager.addDev("Model checking done");
-	    //TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
+            //TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
 
             if (generateDesignSelected) {
                 TraceManager.addDev("Drawing modified avatar spec");
@@ -561,12 +564,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
             jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
 
-            if ((reachabilitySelected ==  REACHABILITY_SELECTED) || (reachabilitySelected ==  REACHABILITY_ALL)) {
+            if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL)) {
                 jta.append("\nReachabilities found:\n");
                 jta.append(amc.reachabilityToString());
 
                 // Back annotation on diagrams
-                for(SpecificationReachability sr: amc.getReachabilities()){
+                for (SpecificationReachability sr : amc.getReachabilities()) {
                     //TraceManager.addDev("Handing reachability of " + sr);
                     handleReachability(sr.ref1, sr.result);
                     if (sr.ref2 != sr.ref1) {
@@ -577,28 +580,28 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
             //TraceManager.addDev(amc.toString());
             //TraceManager.addDev(amc.toString());
-	    DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
-	    Date date = new Date();
-	    String dateAndTime=dateFormat.format(date);
+            DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+            Date date = new Date();
+            String dateAndTime = dateFormat.format(date);
 
             if (saveGraphAUT.isSelected()) {
-		graphAUT = amc.toAUT();
-		graphMode = GRAPH_OK;
-		//TraceManager.addDev("graph AUT=\n" + graph);
-		
-		String autfile;
-		if (graphPath.getText().indexOf("$") != -1) {
-		    autfile = Conversion.replaceAllChar(graphPath.getText(), '$', dateAndTime);
-		} else {
-		    autfile = graphPath.getText();
-		} 
-		
-		try {
+                graphAUT = amc.toAUT();
+                graphMode = GRAPH_OK;
+                //TraceManager.addDev("graph AUT=\n" + graph);
+
+                String autfile;
+                if (graphPath.getText().indexOf("$") != -1) {
+                    autfile = Conversion.replaceAllChar(graphPath.getText(), '$', dateAndTime);
+                } else {
+                    autfile = graphPath.getText();
+                }
+
+                try {
                     RG rg = new RG(autfile);
-                    rg.data = graphAUT;		   
+                    rg.data = graphAUT;
                     rg.fileName = autfile;
-		    rg.nbOfStates = amc.getNbOfStates();
-		    rg.nbOfTransitions = amc.getNbOfLinks();
+                    rg.nbOfStates = amc.getNbOfStates();
+                    rg.nbOfTransitions = amc.getNbOfLinks();
                     mgui.addRG(rg);
                     FileUtils.saveFile(autfile, graphAUT);
                     jta.append("Graph saved in " + autfile + "\n");
@@ -607,12 +610,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 }
             }
             if (saveGraphDot.isSelected()) {
-		String dotfile;
-		if (graphPathDot.getText().indexOf("$") != -1) {
-		    dotfile = Conversion.replaceAllChar(graphPathDot.getText(), '$', dateAndTime);
-		} else {
-		    dotfile = graphPathDot.getText();
-		} 
+                String dotfile;
+                if (graphPathDot.getText().indexOf("$") != -1) {
+                    dotfile = Conversion.replaceAllChar(graphPathDot.getText(), '$', dateAndTime);
+                } else {
+                    dotfile = graphPathDot.getText();
+                }
                 try {
                     String graph = amc.toDOT();
                     //TraceManager.addDev("graph AUT=\n" + graph);
@@ -637,22 +640,22 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
     protected void handleReachability(Object _o, SpecificationReachabilityType _res) {
         if (_o instanceof AvatarStateMachineElement) {
-            Object o = ((AvatarStateMachineElement)_o).getReferenceObject();
+            Object o = ((AvatarStateMachineElement) _o).getReferenceObject();
             if (o instanceof TGComponent) {
-                TGComponent tgc = (TGComponent)(o);
+                TGComponent tgc = (TGComponent) (o);
                 TraceManager.addDev("Reachability of tgc=" + tgc + " value=" + tgc.getValue() + " class=" + tgc.getClass());
-                switch(_res) {
-                case NOTCOMPUTED:
-                    tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
-                    tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
-                    break;
-                case REACHABLE:
-                    tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
-                    break;
-                case NONREACHABLE:
-                    tgc.setReachability(TGComponent.ACCESSIBILITY_KO);
-                    tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
-                    break;
+                switch (_res) {
+                    case NOTCOMPUTED:
+                        tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
+                        tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
+                        break;
+                    case REACHABLE:
+                        tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
+                        break;
+                    case NONREACHABLE:
+                        tgc.setReachability(TGComponent.ACCESSIBILITY_KO);
+                        tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
+                        break;
                 }
                 tgc.getTDiagramPanel().repaint();
             }
@@ -667,7 +670,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         graphSelected = saveGraphAUT.isSelected();
         graphPath.setEnabled(saveGraphAUT.isSelected());
         graphSelectedDot = saveGraphDot.isSelected();
-	saveGraphDot.setEnabled(saveGraphAUT.isSelected());
+        saveGraphDot.setEnabled(saveGraphAUT.isSelected());
         graphPathDot.setEnabled(saveGraphDot.isSelected() && saveGraphAUT.isSelected());
         if (generateDesign != null) {
             generateDesignSelected = generateDesign.isSelected();
@@ -677,38 +680,38 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         if (noReachability.isSelected()) {
             reachabilitySelected = REACHABILITY_NONE;
-        } else if ( reachabilityCheckable.isSelected()) {
+        } else if (reachabilityCheckable.isSelected()) {
             reachabilitySelected = REACHABILITY_SELECTED;
         } else {
             reachabilitySelected = REACHABILITY_ALL;
         }
 
-        switch(mode) {
-        case NOT_STARTED:
-            if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL)  || graphSelected || graphSelectedDot) {
-                start.setEnabled(true);
-            } else {
+        switch (mode) {
+            case NOT_STARTED:
+                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || graphSelected || graphSelectedDot) {
+                    start.setEnabled(true);
+                } else {
+                    start.setEnabled(false);
+                }
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                getGlassPane().setVisible(false);
+                break;
+            case STARTED:
                 start.setEnabled(false);
-            }
-            stop.setEnabled(false);
-            close.setEnabled(true);
-            //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            getGlassPane().setVisible(false);
-            break;
-        case STARTED:
-            start.setEnabled(false);
-            stop.setEnabled(true);
-            close.setEnabled(false);
-            getGlassPane().setVisible(true);
-            //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            break;
-        case STOPPED:
-        default:
-            start.setEnabled(false);
-            stop.setEnabled(false);
-            close.setEnabled(true);
-            getGlassPane().setVisible(false);
-            break;
+                stop.setEnabled(true);
+                close.setEnabled(false);
+                getGlassPane().setVisible(true);
+                //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                break;
+            case STOPPED:
+            default:
+                start.setEnabled(false);
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                getGlassPane().setVisible(false);
+                break;
         }
 
         show.setEnabled(graphMode == GRAPH_OK);
@@ -732,8 +735,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         try {
             if (amc != null) {
                 int nbOfStatess = amc.getNbOfStates();
-                nbOfStates.setText(""+nbOfStatess);
-                nbOfLinks.setText(""+amc.getNbOfLinks());
+                nbOfStates.setText("" + nbOfStatess);
+                nbOfLinks.setText("" + amc.getNbOfLinks());
 
                 // Reachability and deadlocks
                 int nb = amc.getNbOfReachabilities();
@@ -746,10 +749,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 nbOfReachabilitiesNotFound.setText("" + nb);
 
 
-                nbOfDeadlocks.setText(""+amc.getNbOfDeadlocks());
+                nbOfDeadlocks.setText("" + amc.getNbOfDeadlocks());
 
 
-                nbOfPendingStates.setText(""+amc.getNbOfPendingStates());
+                nbOfPendingStates.setText("" + amc.getNbOfPendingStates());
                 Date d;
                 previousDate = new Date();
                 if (endDate != null) {
@@ -757,12 +760,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 } else {
                     d = previousDate;
                 }
-                long duration  = d.getTime() - startDate.getTime();
-		long durationMn = TimeUnit.MILLISECONDS.toMinutes(duration);
-		long durationSec = TimeUnit.MILLISECONDS.toSeconds(duration) - durationMn*60;
-		long durationMs = duration - 1000*(durationSec - durationMn*60);
+                long duration = d.getTime() - startDate.getTime();
+                long durationMn = TimeUnit.MILLISECONDS.toMinutes(duration);
+                long durationSec = TimeUnit.MILLISECONDS.toSeconds(duration) - durationMn * 60;
+                long durationMs = duration - 1000 * (durationSec - durationMn * 60);
 
-		//TraceManager.addDev("mn=" + durationMn + " sec=" + durationSec + " ms=" + durationMs + " raw=" + duration);
+                //TraceManager.addDev("mn=" + durationMn + " sec=" + durationSec + " ms=" + durationMs + " raw=" + duration);
 
                 String t = String.format("%02d min %02d sec %03d msec", durationMn, durationSec, durationMs);
 
@@ -780,7 +783,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 //if (diff == 0) {
 
 
-                nbOfStatesPerSecond.setText(""+1000*diff/duration);
+                nbOfStatesPerSecond.setText("" + 1000 * diff / duration);
 
                 updateInfo();
                 //}
@@ -821,6 +824,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
     private class ModelCheckerMonitor extends TimerTask {
         private JDialogAvatarModelChecker jdamc;
+
         public ModelCheckerMonitor(JDialogAvatarModelChecker _jdamc) {
             jdamc = _jdamc;
         }

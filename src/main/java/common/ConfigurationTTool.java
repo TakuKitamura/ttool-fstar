@@ -493,12 +493,12 @@ public class ConfigurationTTool {
         sb.append("LastOpenFile: " + LastOpenFile + "\n");
         sb.append("LastWindowAttributesX: " + LastWindowAttributesX + "\n");
         sb.append("LastWindowAttributesY: " + LastWindowAttributesY + "\n");
-        sb.append("LastWindowAttributesWidth: " + LastWindowAttributesWidth + "\n");
-        sb.append("LastWindowAttributesHeight: " + LastWindowAttributesHeight + "\n");
-        sb.append("LastWindowAttributesMax: " + LastWindowAttributesMax + "\n");
+        sb.append("LastWindowAttributesWidth: ").append(LastWindowAttributesWidth).append("\n");
+        sb.append("LastWindowAttributesHeight: ").append(LastWindowAttributesHeight).append("\n");
+        sb.append("LastWindowAttributesMax: ").append(LastWindowAttributesMax).append("\n");
 
         //Huy Truong
-        sb.append("ExternalServer " + ExternalServer + "\n");
+        sb.append("ExternalServer ").append(ExternalServer).append("\n");
 
         return sb.toString();
 

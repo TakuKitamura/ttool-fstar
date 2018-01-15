@@ -42,6 +42,7 @@
 package ui.graph;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
    * Class AUTSplitter
@@ -72,6 +73,16 @@ public class AUTSplitter  {
 
     public int size() {
 	return partitions.size();
+    }
+
+    public int getHashCode() {
+        int[] values = new int[partitions.size()];
+        int cpt = 0;
+        for (AUTPartition p : partitions) {
+            values[cpt] = p.getHashCode();
+            cpt++;
+        }
+        return Arrays.hashCode(values);
     }
 
 

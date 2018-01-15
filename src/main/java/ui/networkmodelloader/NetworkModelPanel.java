@@ -37,29 +37,32 @@
  */
 
 
-
-
 package ui.networkmodelloader;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import myutil.GraphicLib;
+import myutil.ImageManager;
+import myutil.LoaderFacilityInterface;
+import myutil.URLManager;
+import ui.ColorManager;
+
 import javax.swing.*;
-import javax.swing.border.*;
-import java.util.*;
-
-import myutil.*;
-import ui.*;
-
+import javax.swing.border.BevelBorder;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 
 /**
  * Class NetworkModel
  * Dialog for managing the loading of network models
  * Creation: 30/05/2017
+ *
+ * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE
  * @version 1.1 30/05/2017
- * @author Ludovic APVRILLE
- * @author Ludovic APVRILLE
  */
 public class NetworkModelPanel extends JPanel implements Runnable, MouseListener, MouseMotionListener {
 
@@ -92,14 +95,15 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
 
     private String url;
 
+    private boolean go = true;
 
 
-    public NetworkModelPanel(LoaderFacilityInterface _loader, ArrayList<NetworkModel> _listOfModels, ActionListener _listener, JTextArea _jta, JLabel _infoModels) {
+    NetworkModelPanel(LoaderFacilityInterface _loader, ArrayList<NetworkModel> _listOfModels, ActionListener _listener, JTextArea _jta, JLabel _infoModels) {
         loader = _loader;
         listOfModels = _listOfModels;
         listener = _listener;
         jta = _jta;
-	infoModels = _infoModels;
+        infoModels = _infoModels;
 
         //Dimension pSize = new Dimension(500, 400);
         Dimension mSize = new Dimension(400, 300);
@@ -111,7 +115,7 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
 
         // properties
         props = new boolean[JDialogLoadingNetworkModel.PROPS.length];
-        for (int i=0; i<props.length; i++) {
+        for (int i = 0; i < props.length; i++) {
             props[i] = true;
         }
 
@@ -120,25 +124,30 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
         addMouseListener(this);
     }
 
-    public void setJSP(JScrollPane _jsp) {
+    void setJSP(JScrollPane _jsp) {
         jsp = _jsp;
         jsp.setViewportView(this);
     }
 
-    public void setFeatureSelectedIndex(int _index) {
+    void setFeatureSelectedIndex(int _index) {
         featureSelectedIndex = _index;
         indexOfSelected = -1;
         repaint();
     }
 
-    public void setProperty(int _index, boolean _mode) {
+    void setProperty(int _index, boolean _mode) {
         props[_index] = _mode;
         indexOfSelected = -1;
         repaint();
     }
 
+    void stopLoading() {
+        go = false;
+    }
+
     public void run() {
-        for(NetworkModel button: listOfModels) {
+        for (NetworkModel button : listOfModels) {
+            if (go == false) return;
             //Dimension d = new Dimension(buttonSizeX, buttonSizeY);
             //button.setPreferredSize(d);
             //int tmpX = cptColumn * (buttonSizeX + spaceBetweenButtons);
@@ -167,14 +176,14 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
 
 
     public void preparePanel(String _url) {
-	url = _url;
+        url = _url;
         Thread t = new Thread(this);
         t.start();
     }
 
 
     private boolean hasAtLeastOneSelectedProperty(NetworkModel _nm) {
-        for (int i=0; i<props.length; i++) {
+        for (int i = 0; i < props.length; i++) {
             if (props[i]) {
                 if (_nm.props[i]) {
                     return true;
@@ -192,10 +201,10 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
         int cptRow = 0;
 
         int index = 0;
-	int modelsDrawn = 0;
-	
-        for(NetworkModel button: listOfModels) {
-            if ((button.features[featureSelectedIndex]) && hasAtLeastOneSelectedProperty(button)){
+        int modelsDrawn = 0;
+
+        for (NetworkModel button : listOfModels) {
+            if ((button.features[featureSelectedIndex]) && hasAtLeastOneSelectedProperty(button)) {
                 Color c = g.getColor();
                 int tmpX = cptColumn * (buttonSizeX + spaceBetweenButtons) + marginX;
                 int tmpY = cptRow * (buttonSizeY + spaceBetweenButtons) + marginY;
@@ -205,17 +214,16 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
                     g.setColor(ColorManager.AVATAR_BLOCK);
                     g.fillRect(tmpX, tmpY, buttonSizeX, buttonSizeY);
                     g.setColor(c);
-                    GraphicLib.centerString(g, "No picture", tmpX, tmpY + buttonSizeY/2, buttonSizeX);
+                    GraphicLib.centerString(g, "No picture", tmpX, tmpY + buttonSizeY / 2, buttonSizeX);
                 }
-		modelsDrawn ++;
+                modelsDrawn++;
 
                 GraphicLib.centerString(g, button.fileName, tmpX, tmpY + buttonSizeY + 15, buttonSizeX);
 
 
-
-                cptColumn ++;
+                cptColumn++;
                 if (cptColumn == nbOfButtonsPerColumn) {
-                    cptRow ++;
+                    cptRow++;
                     cptColumn = 0;
                 }
 
@@ -231,10 +239,10 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
                     } else {
                         g.setColor(ColorManager.POINTER_ON_ME_0);
                     }
-                    Graphics2D g2 = (Graphics2D)g;
+                    Graphics2D g2 = (Graphics2D) g;
                     Stroke oldStroke = g2.getStroke();
                     g2.setStroke(new BasicStroke(5));
-                    g2.drawRect(button.x-10, button.y-10, button.width+20, button.height+20);
+                    g2.drawRect(button.x - 10, button.y - 10, button.width + 20, button.height + 20);
                     g2.setStroke(oldStroke);
                     g.setColor(c);
                 }
@@ -245,11 +253,11 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
                 button.height = -1;
             }
 
-            index ++;
+            index++;
         }
 
         Dimension currentPSize = getPreferredSize();
-        Dimension pSize = new Dimension(400, Math.max(300, (cptRow+1)*(buttonSizeY +spaceBetweenButtons) + 2* marginY));
+        Dimension pSize = new Dimension(400, Math.max(300, (cptRow + 1) * (buttonSizeY + spaceBetweenButtons) + 2 * marginY));
         setPreferredSize(pSize);
 
         if (!((currentPSize.getWidth() == pSize.getWidth()) && (currentPSize.getHeight() == pSize.getHeight()))) {
@@ -261,10 +269,10 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
             }
         }
 
-	if ((modelsDrawn != nbOfModels) && (infoModels != null)) {
-	    nbOfModels = modelsDrawn;
-	    infoModels.setText(nbOfModels + " model(s)");
-	}
+        if ((modelsDrawn != nbOfModels) && (infoModels != null)) {
+            nbOfModels = modelsDrawn;
+            infoModels.setText(nbOfModels + " model(s)");
+        }
 
 
         //g.drawString(listOfModels.size() + " model(s) available", 20, 20);
@@ -277,19 +285,19 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
     }
 
     public void mouseMoved(MouseEvent e) {
-        if (!selectedModel)  {
+        if (!selectedModel) {
             int previousIndex = indexOfSelected;
             boolean found = false;
             int index = 0;
-            for(NetworkModel button: listOfModels) {
+            for (NetworkModel button : listOfModels) {
                 if ((button.features[featureSelectedIndex]) && hasAtLeastOneSelectedProperty(button)) {
-                    if ((e.getX() > button.x) && (e.getX() < button.x + button.width) &&  (e.getY() > button.y) && (e.getY() < button.y + button.height)) {
+                    if ((e.getX() > button.x) && (e.getX() < button.x + button.width) && (e.getY() > button.y) && (e.getY() < button.y + button.height)) {
                         indexOfSelected = index;
                         found = true;
                         break;
                     }
                 }
-                index ++;
+                index++;
             }
             if (!found) {
                 indexOfSelected = -1;
@@ -331,7 +339,6 @@ public class NetworkModelPanel extends JPanel implements Runnable, MouseListener
         selectedModel = false;
         repaint();
     }
-
 
 
 }

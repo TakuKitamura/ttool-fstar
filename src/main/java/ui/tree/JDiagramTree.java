@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.tree;
 
 //import java.awt.*;
@@ -71,10 +69,11 @@ import java.util.Set;
  * Class JDiagramTree
  * Dialog for managing attributes
  * Creation: 14/12/2003
- * @version 1.0 14/12/2003
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 14/12/2003
  */
-public class JDiagramTree extends javax.swing.JTree implements ActionListener, MouseListener, TreeExpansionListener, TreeSelectionListener, Runnable   {
+public class JDiagramTree extends javax.swing.JTree implements ActionListener, MouseListener, TreeExpansionListener, TreeSelectionListener, Runnable {
     private boolean toUpdate = false;
     private MainGUI mgui;
     private DiagramTreeModel dtm;
@@ -97,8 +96,9 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     protected GraphTree selectedGT;
 
 
-
-    /** Creates new form  */
+    /**
+     * Creates new form
+     */
     public JDiagramTree(MainGUI _mgui) {
         super(new DiagramTreeModel(_mgui));
 
@@ -122,7 +122,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     }
 
     public void updateNow() {
-        if(toUpdate) {
+        if (toUpdate) {
             forceUpdate();
         }
     }
@@ -135,7 +135,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     }
 
     public void mousePressed(MouseEvent e) {
-        if(SwingUtilities.isRightMouseButton(e)){
+        if (SwingUtilities.isRightMouseButton(e)) {
             if (e.isPopupTrigger()) myPopupEvent(e);
         }
     }
@@ -161,11 +161,11 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     private void myPopupEvent(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        JTree tree = (JTree)e.getSource();
+        JTree tree = (JTree) e.getSource();
         TreePath path = tree.getPathForLocation(x, y);
 
-	//TraceManager.addDev("Path=" + path);
-	
+        //TraceManager.addDev("Path=" + path);
+
         if (path == null)
             return;
 
@@ -175,8 +175,8 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
         //TraceManager.addDev("Adding popup menu to " + obj.getClass() + "/" + obj);
 
-        if (obj instanceof GraphTree){
-            selectedGT = (GraphTree)obj;
+        if (obj instanceof GraphTree) {
+            selectedGT = (GraphTree) obj;
             if (popupGraphTree == null) {
                 popupGraphTree = new JPopupMenu();
                 jmiAddFromFile = new JMenuItem("Add graph from file (.aut)");
@@ -188,7 +188,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
 
         if (obj instanceof RG) {
-            selectedRG = (RG)obj;
+            selectedRG = (RG) obj;
             if (popupTree == null) {
                 popupTree = new JPopupMenu();
                 jmiAnalyze = new JMenuItem("Analyze");
@@ -212,18 +212,18 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
         }
     }
 
-    public synchronized void run(){
+    public synchronized void run() {
         checkPaths();
         Iterator<TreePath> l_keys = m_expandedTreePaths.iterator();
         TreePath l_path = null;
-        while(l_keys.hasNext()){
+        while (l_keys.hasNext()) {
             try {
                 l_path = l_keys.next();
                 TreePath parent = l_path.getParentPath();
                 //System.out.println("Path: " + l_path);
                 //System.out.println("Parent path: " + parent);
                 if ((l_path.getPathCount() == 2) || (m_expandedTreePaths.contains(parent))) {
-		    //TraceManager.addDev("Path=" + l_path);
+                    //TraceManager.addDev("Path=" + l_path);
                     expandPath(l_path);
                 }
             } catch (Exception e) {
@@ -240,7 +240,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     private void checkPaths() {
         TreePath l_path = null;
         Iterator<TreePath> l_keys = m_expandedTreePaths.iterator();
-        while(l_keys.hasNext()){
+        while (l_keys.hasNext()) {
             l_path = l_keys.next();
             if (!isAPathOf(l_path)) {
                 m_expandedTreePaths.remove(l_path);
@@ -250,11 +250,11 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     }
 
     private boolean isAPathOf(TreePath tp) {
-        if ((dtm ==null) || (tp == null)) {
+        if ((dtm == null) || (tp == null)) {
             return false;
         }
 
-        Object [] objs = tp.getPath();
+        Object[] objs = tp.getPath();
 
         if (objs.length == 0) {
             return false;
@@ -266,8 +266,8 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
         int index;
 
-        for(int i=0; i<objs.length - 2; i++) {
-            index = dtm.getIndexOfChild(objs[i], objs[i+1]);
+        for (int i = 0; i < objs.length - 2; i++) {
+            index = dtm.getIndexOfChild(objs[i], objs[i + 1]);
             if (index == -1) {
                 return false;
             }
@@ -277,18 +277,17 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
     }
 
-    public synchronized void update(){
+    public synchronized void update() {
         SwingUtilities.invokeLater(this);
     }
 
     public void treeExpanded(TreeExpansionEvent treeExpansionEvent) {
         TreePath tp = treeExpansionEvent.getPath();
         m_expandedTreePaths.add(tp);
-        Iterator<TreePath> l_keys = m_expandedTreePaths.iterator();
-        while(l_keys.hasNext()){
+        for (TreePath m_expandedTreePath : m_expandedTreePaths) {
             TreePath l_path = null;
             try {
-                l_path = l_keys.next();
+                l_path = m_expandedTreePath;
                 TreePath parent = l_path.getParentPath();
                 if ((l_path.getPathCount() == 1) || (m_expandedTreePaths.contains(parent))) {
                     expandPath(l_path);
@@ -304,9 +303,9 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     }
 
     public void expandMyPath(TreePath tp) {
-	//TraceManager.addDev("Path=" + tp);
-	expandPath(tp);
-     }
+        //TraceManager.addDev("Path=" + tp);
+        expandPath(tp);
+    }
 
     public void treeCollapsed(TreeExpansionEvent treeExpansionEvent) {
         m_expandedTreePaths.remove(treeExpansionEvent.getPath());
@@ -315,14 +314,14 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
         //TraceManager.addDev("Value changed");
 
-        if(getSelectionPaths() != null && getSelectionPaths().length >0 ){
+        if (getSelectionPaths() != null && getSelectionPaths().length > 0) {
             m_selectedTreePaths = getSelectionModel().getSelectionPaths();
         }
 
         TreePath tp = treeSelectionEvent.getNewLeadSelectionPath();
 
-	//TraceManager.addDev("Expanded path=" + tp);
-	
+        //TraceManager.addDev("Expanded path=" + tp);
+
         if (tp == null) {
             return;
         }
@@ -331,18 +330,18 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
         Object o;
 
         if (nodeInfo instanceof TDiagramPanel) {
-            mgui.selectTab((TDiagramPanel)nodeInfo);
+            mgui.selectTab((TDiagramPanel) nodeInfo);
         } else if (nodeInfo instanceof TURTLEPanel) {
-            mgui.selectTab((TURTLEPanel)nodeInfo);
+            mgui.selectTab((TURTLEPanel) nodeInfo);
         } else if (nodeInfo instanceof TGComponent) {
             TGComponent tgc = (TGComponent) nodeInfo;
             mgui.selectTab(tgc.getTDiagramPanel());
             tgc.getTDiagramPanel().highlightTGComponent(tgc);
         } else if (nodeInfo instanceof Invariant) {
             //TraceManager.addDev("Click on invariant");
-            Invariant inv = (Invariant)nodeInfo;
+            Invariant inv = (Invariant) nodeInfo;
             mgui.setCurrentInvariant(inv);
-            for(int i=2; i< inv.getChildCount(); i++) {
+            for (int i = 2; i < inv.getChildCount(); i++) {
                 o = inv.getChild(i);
                 if (o instanceof TGComponent) {
                     TGComponent tgc1 = (TGComponent) (o);
@@ -350,14 +349,14 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 }
 
                 if (o instanceof InvariantSynchro) {
-                    InvariantSynchro is = (InvariantSynchro)o;
+                    InvariantSynchro is = (InvariantSynchro) o;
                     is.getFrom().getTDiagramPanel().repaint();
                     is.getTo().getTDiagramPanel().repaint();
                 }
 
             }
         } else if (nodeInfo instanceof CheckingError) {
-            CheckingError ce = (CheckingError)nodeInfo;
+            CheckingError ce = (CheckingError) nodeInfo;
             TDiagramPanel tdp = null;
             if (ce instanceof UICheckingError) {
                 tdp = ((UICheckingError) ce).getTDiagramPanel();
@@ -371,7 +370,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 mgui.selectTDiagramPanel(tdp);
             } else if (ce.getTClass() != null) {
                 mgui.selectTab(ce.getTClass().getName());
-            } else if(ce.getRelation() != null) {
+            } else if (ce.getRelation() != null) {
                 mgui.selectTab("Class diagram");
             } else if (ce instanceof TMLCheckingError && ((TMLCheckingError) ce).getTMLActivityElement() != null) {
                 TGComponent tgc = (TGComponent) ((TMLCheckingError) ce).getTMLActivityElement().getReferenceObject();
@@ -422,7 +421,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
             if (ae.getSource() == jmiAddFromFile) {
 
                 //TraceManager.addDev("Adding graph from file");
-                String [] graph = mgui.loadAUTGraph();
+                String[] graph = mgui.loadAUTGraph();
                 if (graph != null) {
                     RG rg = new RG(graph[0]);
                     rg.fileName = graph[0];
