@@ -74,7 +74,7 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
     protected JTextField nodeName;
 
     // Panel2
-    protected JTextField byteDataSize, monitored, clockRatio;
+    protected JTextField byteDataSize, memorySize, monitored, clockRatio;
 
     //Panel3: code generation
     protected int bufferType = 0;       //it is the index in the ArrayList of String
@@ -176,6 +176,12 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         bufferTypesCB.setSelectedIndex( bufferType  );
         panel3.add( bufferTypesCB, c3 );
 
+        c3.gridwidth = 1;
+        panel3.add( new JLabel( "Memory size (in byte):" ), c3 );
+        c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+        memorySize = new JTextField( "" + node.getMemorySize(), 15 );
+        panel3.add( memorySize, c3 );
+
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
@@ -238,6 +244,10 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
 
     public String getByteDataSize() {
         return byteDataSize.getText();
+    }
+
+    public String getMemorySize() {
+        return memorySize.getText();
     }
 
     public int getMonitored() {

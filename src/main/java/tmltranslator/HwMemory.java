@@ -50,10 +50,12 @@ package tmltranslator;
 public class HwMemory extends HwCommunicationNode  {
 
     public static final int DEFAULT_BYTE_DATA_SIZE = 4;
+    public static final int DEFAULT_MEMORY_SIZE = 1024;
     public static final int DEFAULT_BUFFER_TYPE = 0;
 
     public int bufferType = DEFAULT_BUFFER_TYPE;
     public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+    public int memorySize = DEFAULT_MEMORY_SIZE; // In bytes. Should more than 0
 
     public HwMemory(String _name) {
         super(_name);
@@ -61,7 +63,7 @@ public class HwMemory extends HwCommunicationNode  {
 
     
     public String toXML() {
-	String s = "<MEMORY name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\"  bufferType=\"" + bufferType + "\" />\n";
+	String s = "<MEMORY name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" memorySize=\"" + memorySize + "\"  bufferType=\"" + bufferType + "\" />\n";
 	return s;
     }
     
