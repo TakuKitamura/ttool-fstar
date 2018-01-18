@@ -715,6 +715,25 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         jfm.setVisible(true);
     }
 
+    public void showInFinder(RG inputGraph) {
+        TraceManager.addDev("in show in finder");
+        if (inputGraph.fileName == null) {
+            return;
+        }
+        if (!Desktop.isDesktopSupported()) {
+            return;
+        }
+        File file = new File (SpecConfigTTool.TGraphPath );
+        TraceManager.addDev("Getting desktop");
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            TraceManager.addDev("opening in desktop");
+            desktop.open(file);
+        } catch (Exception e) {
+            TraceManager.addDev("Exception in opening explorer: " + e.getMessage());
+        }
+    }
+
 
     public void setCurrentInvariant(Invariant inv) {
         currentInvariant = inv;
