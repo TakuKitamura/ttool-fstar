@@ -70,6 +70,7 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
     private int bufferType = 0;
 
     private int byteDataSize = HwMemory.DEFAULT_BYTE_DATA_SIZE;
+    private int memorySize = HwMemory.DEFAULT_MEMORY_SIZE;
 
     public TMLArchiMemoryNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -226,6 +227,21 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
             }
         }
 
+        if (dialog.getMemorySize().length() != 0) {
+            try {
+                tmp = memorySize;
+                memorySize = Integer.decode(dialog.getMemorySize()).intValue();
+                if (memorySize <= 0) {
+                    memorySize = tmp;
+                    error = true;
+                    errors += "Data size  ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "Memory size  ";
+            }
+        }
+
         if (dialog.getClockRatio().length() != 0) {
             try {
                 tmp = clockRatio;
@@ -291,6 +307,7 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
         sb.append("\" />\n");
         sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
+        sb.append(" memorySize=\"" + memorySize + "\" ");
         sb.append(" clockRatio=\"" + clockRatio + "\" ");
         sb.append(" bufferType=\"" + bufferType + "\" ");
         sb.append("/>\n");
@@ -332,6 +349,9 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
 
                             if (elt.getTagName().equals("attributes")) {
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
+                                if ((elt.getAttribute("memorySize") != null) &&  (elt.getAttribute("memorySize").length() > 0)) {
+                                    memorySize = Integer.decode(elt.getAttribute("memorySize")).intValue();
+                                }
                                 if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
@@ -354,9 +374,14 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
         return byteDataSize;
     }
 
+    public int getMemorySize(){
+        return memorySize;
+    }
+
     public String getAttributes() {
         String attr = "";
         attr += "Data size (in byte) = " + byteDataSize + "\n";
+        attr += "Memory size (in byte) = " + memorySize + "\n";
         attr += "Clock divider = " + clockRatio + "\n";
         return attr;
     }
