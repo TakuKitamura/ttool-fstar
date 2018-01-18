@@ -49,7 +49,6 @@ import myutil.*;
  * @author Ludovic APVRILLE
  */
 public class RG {
-
     public String name;
     public AUTGraph graph;
     public String fileName;
