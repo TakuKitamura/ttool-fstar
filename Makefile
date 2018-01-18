@@ -225,7 +225,6 @@ RELEASE_STD_FILES_XML 	= $(patsubst %,$(TTOOL_MODELING)/%,\
 			  TURTLE/BasicExchange.xml \
 			  DIPLODOCUS/SmartCardProtocol.xml \
 			  TURTLE/ProtocolPatterns.xml \
-			  CTTool/COCOME_V50.xml \
 			  AVATAR/CoffeeMachine_Avatar.xml \
 			  AVATAR/Network_Avatar.xml \
 			  AVATAR/MicroWaveOven_SafetySecurity_fullMethodo.xml)
