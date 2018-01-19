@@ -164,6 +164,9 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         pathCode = _pathCode;
 
         pathCompiler = _pathCompiler;
+        if (!(pathCompiler.contains("-C "))) {
+            pathCompiler = pathCompiler + " -C " + pathCode;
+        }
 
         pathExecute = _pathExecute;
 
