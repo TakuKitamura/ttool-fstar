@@ -265,7 +265,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         if ((SpecConfigTTool.ExternalCommand1.length() > 0) && (ConfigurationTTool.ExternalCommand1Host.length() > 0)) {
             button = add(mgui.actions[TGUIAction.EXTERNAL_ACTION_1]);
             button.addMouseListener(mgui.mouseHandler);
-            button.setToolTipText("Launch gtkwave with last vcd file");
+            button.setToolTipText(ConfigurationTTool.ExternalCommand1);
             addSeparator();
         }
 
