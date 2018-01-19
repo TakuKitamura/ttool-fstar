@@ -693,11 +693,22 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void addRG(RG _newGraph) {
         gtm.addRG(_newGraph);
+        expandToGraphs();
         dtree.toBeUpdated();
     }
 
     public void removeRG(RG _toBeRemoved) {
         gtm.removeRG(_toBeRemoved);
+        if (_toBeRemoved.fileName != null) {
+            TraceManager.addDev("Filename=" + _toBeRemoved.fileName);
+            File toBeDeleted = new File(_toBeRemoved.fileName);
+            try {
+                toBeDeleted.delete();
+                TraceManager.addDev("File of RG was deleted on disk");
+            } catch (Exception e) {
+
+            }
+        }
         dtree.toBeUpdated();
     }
 
@@ -1109,6 +1120,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void expandToWarnings() {
         if (gtm != null) {
             gtm.expandToWarnings();
+        }
+    }
+
+    public void expandToGraphs() {
+        if (gtm != null) {
+            gtm.expandToGraphs();
         }
     }
 
@@ -2339,7 +2356,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
 
             RG rg = new RG(autfile.getName());
-            rg.fileName = autfile.getName();
+            rg.fileName = autfile.getAbsolutePath();
             rg.data = spec;
             addRG(rg);
         }

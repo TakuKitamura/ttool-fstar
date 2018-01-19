@@ -418,7 +418,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         jp02.add(cpus, c01);
 
         c01.gridwidth = 1;
-        jp02.add(new JLabel("Busses: "), c01);
+        jp02.add(new JLabel("Buses: "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         if (busIDs == null) {
             busses = new JComboBox<String>();

@@ -170,7 +170,12 @@ public class SpecConfigTTool {
 		VCDPath = dir.getAbsolutePath() + ProjectVCDDirectory;
 		NCDirectory = dir.getAbsolutePath() + ProjectNCDirectory;
 
-		SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
+		TraceManager.addDev("Before replace SystemCCodeCompileCommand:" + SystemCCodeCompileCommand + " with " + ConfigurationTTool.SystemCCodeDirectory +
+				" to " + SystemCCodeDirectory);
+
+		SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(
+				ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
+		TraceManager.addDev("After replace SystemCCodeCompileCommand:" + SystemCCodeCompileCommand);
 		SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
 		SystemCCodeInteractiveExecuteCommand = ConfigurationTTool.SystemCCodeInteractiveExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
 

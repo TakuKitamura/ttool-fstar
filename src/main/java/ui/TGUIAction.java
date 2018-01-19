@@ -673,12 +673,23 @@ public class TGUIAction extends AbstractAction {
             }
         }
         putValue(Action.ACTION_COMMAND_KEY, actions[id].ACTION_COMMAND_KEY);
+        if (ConfigurationTTool.ExternalCommand1 != null && ConfigurationTTool.ExternalCommand1.length() > 0) {
+            setLongDescription(EXTERNAL_ACTION_1, ConfigurationTTool.ExternalCommand1);
+        }
+        if (ConfigurationTTool.ExternalCommand2 != null && ConfigurationTTool.ExternalCommand2.length() > 0) {
+            setLongDescription(EXTERNAL_ACTION_2, ConfigurationTTool.ExternalCommand2);
+        }
 
     }
 
     public void setName(int index, String name) {
         actions[index].NAME = name;
         putValue(Action.NAME, actions[index].NAME);
+    }
+
+    public void setLongDescription(int index, String description) {
+        actions[index].LONG_DESCRIPTION = description;
+        putValue(Action.LONG_DESCRIPTION, actions[index].LONG_DESCRIPTION);
     }
 
     public void init() {
@@ -927,7 +938,9 @@ public class TGUIAction extends AbstractAction {
         actions[SD_COREGION] = new TAction("add-sd-coregion", "Coregion", IconManager.imgic520, IconManager.imgic520, "Coregion", "Add a coregion to the currently opened sequence diagram", 0);
         actions[SD_ALIGN_INSTANCES] = new TAction("add-sd-align_instances", "Align instances", IconManager.imgic522, IconManager.imgic522, "Align instances", "align instances of the currently opened sequence diagram", 0);
 
-        actions[SDZV_EDIT] = new TAction("edit-sdzv-diagram", "Edit sequence diagram", IconManager.imgic100, IconManager.imgic101, "Edit sequence diagram", "Make it possible to edit the currently opened sequence diagram", 0);
+        actions[SDZV_EDIT] = new TAction("edit-sdzv-diagram", "Edit sequence diagram", IconManager
+
+.imgic100, IconManager.imgic101, "Edit sequence diagram", "Make it possible to edit the currently opened sequence diagram", 0);
         actions[SDZV_INSTANCE] = new TAction("add-sdzv-instance", "Add an instance", IconManager.imgic500, IconManager.imgic500, "Instance", "Add a new instance  to the currently opened sequence diagram", 0);
         actions[SDZV_CONNECTOR_MESSAGE_ASYNC] = new TAction("add-sdzv-connector-message-async", "Add asynchronous message", IconManager.imgic504, IconManager.imgic504, "Asynchronous message", "Add an asynchronous message between two instances of the currently opened sequence diagram", 0);
         actions[SDZV_CONNECTOR_MESSAGE_SYNC] = new TAction("add-sdzv-connector-message-sync", "Add synchronous message", IconManager.imgic502, IconManager.imgic502, "Synchronous message", "Add an synchronous message between two instances of the currently opened sequence diagram", 0);

@@ -3550,7 +3550,7 @@ public class GTURTLEModeling {
 
     // TREE MANAGEMENT
     public void expandToErrors() {
-        if ((mcvdt != null) && (checkingErrors != null) && (checkingErrors.size() > 0)){
+        if ((mcvdt != null) && (checkingErrors != null) && (checkingErrors.size() > 0)) {
             SyntaxAnalysisErrorTree saet = mcvdt.getSyntaxAnalysisErrorTree();
             if (saet != null) {
                 Object[] obj = new Object[3];
@@ -3576,6 +3576,18 @@ public class GTURTLEModeling {
                 mgui.dtree.expandMyPath(new TreePath(obj));
                 mgui.dtree.forceUpdate();
             }
+        }
+    }
+
+    public void expandToGraphs() {
+        if ((gt != null) && (graphs != null) && (graphs.size() > 0)) {
+            Object[] obj = new Object[2];
+            obj[0] = mgui.dtree.getModel().getRoot();
+            obj[1] = gt;
+            TraceManager.addDev("Expanding Path because of graphs");
+            mgui.dtree.expandMyPath(new TreePath(obj));
+            mgui.dtree.forceUpdate();
+
         }
     }
 
