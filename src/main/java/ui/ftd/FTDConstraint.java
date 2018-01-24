@@ -65,9 +65,9 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
 
     public static final String[] STEREOTYPES = {"<<OR>>", "<<XOR>>", "<<AND>>", "<<NOT>>", "<<SEQUENCE>>", "<<AFTER>>",
             "<<BEFORE>>", "<<VOTE>>"};
-    public static final Image[] ICONS = {IconManager.img1400, IconManager.img1400, IconManager.img1400,
+    public static final Image[] ICONS = {IconManager.img1410, IconManager.img1412, IconManager.img1400,
             IconManager.img1408, IconManager.img1402, IconManager.img1404
-            , IconManager.img1406, IconManager.img1400};
+            , IconManager.img1406, IconManager.img1414};
 
     protected String oldValue = "";
 

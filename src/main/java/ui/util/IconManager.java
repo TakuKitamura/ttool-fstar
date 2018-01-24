@@ -121,7 +121,9 @@ public class IconManager {
 
     // Fault Tree Diagrams
     public static ImageIcon imgic1400, imgic1402, imgic1404, imgic1406, imgic1408;
+    public static ImageIcon imgic1410, imgic1412, imgic1414;
     public static Image img1400, img1402, img1404, img1406, img1408;
+    public static Image img1410, img1412, img1414;
 
     // TMLDD
     public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106, imgic1108;
@@ -497,6 +499,9 @@ public class IconManager {
     private static String icon1404 = "AfterFT.png";
     private static String icon1406 = "BeforeFT.png";
     private static String icon1408 = "NotFT.png";
+    private static String icon1410 = "OrFT.png";
+    private static String icon1412 = "XorFT.png";
+    private static String icon1414 = "VoteFT.png";
 
     // DIPLODOCUS architecture
     private static String icon1100 = "tmlcpunode.gif";
@@ -955,6 +960,19 @@ public class IconManager {
         if (imgic1406 != null) {
             img1406 = imgic1406.getImage();
         }
+        imgic1410 = getIcon(icon1410);
+        if (imgic1410 != null) {
+            img1410 = imgic1410.getImage();
+        }
+        imgic1412 = getIcon(icon1412);
+        if (imgic1412 != null) {
+            img1412 = imgic1412.getImage();
+        }
+        imgic1414 = getIcon(icon1414);
+        if (imgic1414 != null) {
+            img1414 = imgic1414.getImage();
+        }
+
         imgic1100 = getIcon(icon1100);
         imgic1102 = getIcon(icon1102);
         imgic1104 = getIcon(icon1104);
