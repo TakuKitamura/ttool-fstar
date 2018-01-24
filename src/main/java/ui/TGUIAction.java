@@ -371,7 +371,7 @@ public class TGUIAction extends AbstractAction {
     public static final int FTD_COMPOSITION_CONNECTOR = 468;
     public static final int FTD_CONSTRAINT = 469;
     public static final int FTD_COUNTERMEASURE = 470;
-    public static final int FTD_COUNTERMEASURE_CONNECTOR = 470;
+    public static final int FTD_COUNTERMEASURE_CONNECTOR = 473;
 
     // AVATAR Block Diagram
     public static final int ABD_BLOCK = 289;
@@ -629,7 +629,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 473;
+    public static final int NB_ACTION = 474;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
