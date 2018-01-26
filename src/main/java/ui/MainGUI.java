@@ -3504,6 +3504,29 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
 
             // AttackTree
+        } else if (tp instanceof FaultTreePanel) {
+            FaultTreePanel atp = (FaultTreePanel) tp;
+            b = gtm.translateFaultTreePanel(atp);
+            expandToWarnings();
+            expandToErrors();
+            if (b) {
+                setMode(MainGUI.ATTACKTREE_SYNTAXCHECKING_OK);
+                ret = true;
+                if (!automatic) {
+                    JOptionPane.showMessageDialog(frame,
+                            "0 error, " + getCheckingWarnings().size() + " warning(s)",
+                            "Syntax analysis successful on attack tree",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                if (!automatic) {
+                    JOptionPane.showMessageDialog(frame,
+                            "The Attack tree contains several errors",
+                            "Syntax analysis failed",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+
         } else if (tp instanceof AttackTreePanel) {
             AttackTreePanel atp = (AttackTreePanel) tp;
             b = gtm.translateAttackTreePanel(atp);

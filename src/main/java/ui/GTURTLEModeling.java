@@ -9003,6 +9003,20 @@ public class GTURTLEModeling {
         return true;
     }
 
+    public boolean translateFaultTreePanel(FaultTreePanel atp) {
+        FaultTreePanelTranslator att = new FaultTreePanelTranslator(atp);
+        /*attackTree =*/
+        att.translateToFaultTreeDataStructure();
+        checkingErrors = att.getCheckingErrors();
+        warnings = att.getWarnings();
+        if ((checkingErrors != null) && (checkingErrors.size() > 0)) {
+            return false;
+        }
+        avatarspec = att.generateAvatarSpec();
+        TraceManager.addDev("Avatar spec:" + avatarspec);
+        return true;
+    }
+
     public boolean translateNC(NCPanel ncp) {
         TraceManager.addDev("Translating NC");
         checkingErrors = new LinkedList<CheckingError>();
