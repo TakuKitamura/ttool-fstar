@@ -54,8 +54,8 @@ public abstract class AvatarStateElement extends AvatarStateMachineElement {
         super(_name, _referenceObject);
     }
 
-    public AvatarStateElement(String _name, Object _referenceObject, boolean _isCheckable) {
-        super(_name, _referenceObject, _isCheckable);
+    public AvatarStateElement(String _name, Object _referenceObject, boolean _isCheckable, boolean _isChecked) {
+        super(_name, _referenceObject, _isCheckable, _isChecked);
     }
 
 }

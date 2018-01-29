@@ -406,11 +406,15 @@ outerloop:
 				TMLSendRequest sr= (TMLSendRequest) ae;
 				TMLRequest req = sr.getRequest();
 				AvatarSignal sig;
-				boolean checkAcc=false;
-				if (ae.getReferenceObject()!=null){
+				boolean checkAcc = false;
+				if (ae.getReferenceObject() != null){
 					checkAcc=((TGComponent)ae.getReferenceObject()).getCheckableAccessibility();
 				}
-				AvatarState signalState = new AvatarState("signalstate_"+ae.getName().replaceAll(" ","")+"_"+req.getName().replaceAll(" ",""),ae.getReferenceObject(), checkAcc);
+				boolean checked = false;
+				if (ae.getReferenceObject()!= null){
+					checked = ((TGComponent)ae.getReferenceObject()).hasCheckedAccessibility();
+				}
+				AvatarState signalState = new AvatarState("signalstate_"+ae.getName().replaceAll(" ","")+"_"+req.getName().replaceAll(" ",""),ae.getReferenceObject(), checkAcc, checked);
 				AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+req.getName(), ae.getReferenceObject());
 				if (!signalOutMap.containsKey(req.getName())){
 					sig = new AvatarSignal(getName(req.getName()), AvatarSignal.OUT, req.getReferenceObject());
@@ -596,7 +600,11 @@ outerloop:
 				if (ae.getReferenceObject()!=null){
 					checkAcc =((TGComponent) ae.getReferenceObject()).getCheckableAccessibility();
 				}
-				AvatarState signalState = new AvatarState("signalstate_"+ae.getName().replaceAll(" ","")+"_"+evt.getName(),ae.getReferenceObject(), checkAcc);
+				boolean checked = false;
+				if (ae.getReferenceObject()!=null){
+					checked =((TGComponent) ae.getReferenceObject()).hasCheckedAccessibility();
+				}
+				AvatarState signalState = new AvatarState("signalstate_"+ae.getName().replaceAll(" ","")+"_"+evt.getName(),ae.getReferenceObject(), checkAcc, checked);
 				AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+evt.getName(), ae.getReferenceObject());
 				if (ae instanceof TMLSendEvent){
 					AvatarSignal sig;
@@ -1122,7 +1130,11 @@ outerloop:
 				if (ae.getReferenceObject()!=null){
 					checkAcc=((TGComponent)ae.getReferenceObject()).getCheckableAccessibility();
 				}
-				AvatarState signalState = new AvatarState("signalstate_"+ae.getName().replaceAll(" ","")+"_"+ch.getName(),ae.getReferenceObject(), checkAcc);
+				boolean checked = false;
+				if (ae.getReferenceObject()!=null){
+					checked = ((TGComponent)ae.getReferenceObject()).hasCheckedAccessibility();
+				}
+				AvatarState signalState = new AvatarState("signalstate_"+ae.getName().replaceAll(" ","")+"_"+ch.getName(),ae.getReferenceObject(), checkAcc, checked);
 				AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_"+ae.getName()+"_"+ch.getName(), ae.getReferenceObject());
 				if (ae instanceof TMLReadChannel){
 					//Create signal if it does not already exist
@@ -2190,7 +2202,7 @@ outerloop:
 		}
 		public AvatarBlock createFifo(String name){
 			AvatarBlock fifo = new AvatarBlock("FIFO__FIFO"+name, avspec, null);
-			AvatarState root = new AvatarState("root",null, false);
+			AvatarState root = new AvatarState("root",null, false, false);
 			AvatarSignal read = new AvatarSignal("readSignal", AvatarSignal.IN, null);
 			AvatarAttribute data = new AvatarAttribute("data", AvatarType.INTEGER, fifo, null);
 			fifo.addAttribute(data); 
