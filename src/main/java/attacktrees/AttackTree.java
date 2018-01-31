@@ -37,8 +37,6 @@
  */
 
 
-
-
 package attacktrees;
 
 import java.util.ArrayList;
@@ -47,47 +45,48 @@ import java.util.ArrayList;
 /**
  * Class AttackTree
  * Creation: 10/04/2015
- * @version 1.0 10/04/2015
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 10/04/2015
  */
-public class AttackTree {
+public class AttackTree extends AttackElement {
     private ArrayList<AttackNode> nodes;
     private ArrayList<Attack> attacks;
-    private String name;
-    Object reference;
-    
- 
+
+    public AttackElement faultyElement;
+    public String errorOfFaultyElement;
+
+
     public AttackTree(String _name, Object _reference) {
-	name = _name;
-	reference = _reference;
-	nodes = new ArrayList<AttackNode>();
-	attacks = new ArrayList<Attack>();
+        super(_name, _reference);
+        nodes = new ArrayList<AttackNode>();
+        attacks = new ArrayList<Attack>();
     }
-    
+
     public void addNode(AttackNode _node) {
-	nodes.add(_node);
+        nodes.add(_node);
     }
 
     public void addAttack(Attack _attack) {
-	attacks.add(_attack);
+        attacks.add(_attack);
     }
-    
+
 
     public String toString() {
-	StringBuffer sb = new StringBuffer();
-	sb.append("List of nodes:");
-	for(AttackNode an: nodes) {
-	    sb.append("  " + an.toString() + "\n");
-	}
-	return sb.toString();
+        StringBuffer sb = new StringBuffer();
+        sb.append("List of nodes:");
+        for (AttackNode an : nodes) {
+            sb.append("  " + an.toString() + "\n");
+        }
+        return sb.toString();
     }
 
     public ArrayList<Attack> getAttacks() {
-	return attacks;
+        return attacks;
     }
 
     public ArrayList<AttackNode> getAttackNodes() {
-	return nodes;
+        return nodes;
     }
 
     // Checks:
@@ -96,7 +95,22 @@ public class AttackTree {
     // Attack name is unique
     // Node name is unique
     public boolean checkSyntax() {
-	return true;
+        // Attack name is unique
+        for(int i=0; i<attacks.size()-1; i++) {
+            Attack atti = attacks.get(i);
+            for(int j=i+1; j<attacks.size(); j++) {
+                //myutil.TraceManager.addDev("i=" + i + " j=" + j + " size=" + attacks.size());
+                Attack attj = attacks.get(j);
+                //myutil.TraceManager.addDev("i=" + atti.getName() + " j=" + attj.getName() + " size=" + attacks.size());
+                if (atti.getName().compareTo(attj.getName()) == 0) {
+                    faultyElement = atti;
+                    errorOfFaultyElement = "Duplicate name for attack: " + atti.getName();
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
- 
+
 }

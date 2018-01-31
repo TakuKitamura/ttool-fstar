@@ -37,8 +37,6 @@
  */
 
 
-
-
 package attacktrees;
 
 import java.util.ArrayList;
@@ -48,87 +46,84 @@ import java.util.Collections;
 /**
  * Class AttackNode
  * Creation: 10/04/2015
- * @version 1.0 10/04/2015
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 10/04/2015
  */
-public abstract class AttackNode { 
+public abstract class AttackNode extends AttackElement {
     private Attack resultingAttack; // If no resulting attack -> error!
     private ArrayList<Attack> inputAttacks;
     private ArrayList<Integer> inputValues;
-    private String name;
     protected String type = "";
-    protected Object referenceObject;
-    
+
     public AttackNode(String _name, Object _referenceObject) {
-	name = _name;
-	referenceObject = _referenceObject;
-	inputAttacks = new ArrayList<Attack>();
-	inputValues = new ArrayList<Integer>();
+        super(_name, _referenceObject);
+        inputAttacks = new ArrayList<Attack>();
+        inputValues = new ArrayList<Integer>();
     }
 
     // At least one input and one output
     public boolean isWellFormed() {
-	if (resultingAttack == null) {
-	    return false;
-	}
+        if (resultingAttack == null) {
+            return false;
+        }
 
         return inputAttacks.size() >= 1;
 
     }
 
-    public String getName() { return name;}
-    
+
     public void setResultingAttack(Attack _attack) {
-	resultingAttack = _attack;
+        resultingAttack = _attack;
     }
 
     public Attack getResultingAttack() {
-	return resultingAttack;
+        return resultingAttack;
     }
 
     public ArrayList<Attack> getInputAttacks() {
-	return inputAttacks;
+        return inputAttacks;
     }
 
     public void addInputAttack(Attack _attack, Integer _val) {
-	inputAttacks.add(_attack);
-	inputValues.add(_val);
+        inputAttacks.add(_attack);
+        inputValues.add(_val);
     }
 
     public String toString() {
-	String ret = name + "/" + type + " Incoming attacks: ";
-	for (Attack att: inputAttacks) {
-	    ret += att.getName() + " ";
-	}
+        String ret = name + "/" + type + " Incoming attacks: ";
+        for (Attack att : inputAttacks) {
+            ret += att.getName() + " ";
+        }
 
-	if (resultingAttack == null) {
-	    ret += " No resulting attack";
-	} else {
-	    ret += " Resulting attack:" + resultingAttack.getName();
-	}
-	
-	return ret;
+        if (resultingAttack == null) {
+            ret += " No resulting attack";
+        } else {
+            ret += " Resulting attack:" + resultingAttack.getName();
+        }
+
+        return ret;
     }
 
     // Order attacks according to the Integer value
     public void orderAttacks() {
-	ArrayList<Attack> newAttacks = new ArrayList<Attack>();
-	ArrayList<Integer> newInputValues = new ArrayList<Integer>();
+        ArrayList<Attack> newAttacks = new ArrayList<Attack>();
+        ArrayList<Integer> newInputValues = new ArrayList<Integer>();
 
-	for(Integer i: inputValues) {
-	    newInputValues.add(i);
-	}
+        for (Integer i : inputValues) {
+            newInputValues.add(i);
+        }
 
-	// sort newInputValues
-	Collections.sort(newInputValues);
+        // sort newInputValues
+        Collections.sort(newInputValues);
 
-	for(Integer i: newInputValues) {
-	    int index = inputValues.indexOf(i);
-	    newAttacks.add(inputAttacks.get(index));
-	}
+        for (Integer i : newInputValues) {
+            int index = inputValues.indexOf(i);
+            newAttacks.add(inputAttacks.get(index));
+        }
 
-	inputAttacks = newAttacks;
-	inputValues = newInputValues;	
+        inputAttacks = newAttacks;
+        inputValues = newInputValues;
     }
-    
+
 }

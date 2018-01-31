@@ -37,8 +37,6 @@
  */
 
 
-
-
 package attacktrees;
 
 import java.util.ArrayList;
@@ -47,59 +45,54 @@ import java.util.ArrayList;
 /**
  * Class Attack
  * Creation: 10/04/2015
- * @version 1.0 10/04/2015
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 10/04/2015
  */
-public class Attack { 
+public class Attack extends AttackElement {
     private AttackNode originNode; // If no origin node -> leaf attack
     private ArrayList<AttackNode> destinationNodes;
-    private String name;
-    private Object referenceObject;
     private boolean isRoot;
     private boolean isEnabled = true;
-    
-    
+
+
     public Attack(String _name, Object _referenceObject) {
-	name = _name;
-	referenceObject = _referenceObject;
-	destinationNodes = new ArrayList<AttackNode>();
+        super(_name, _referenceObject);
+        destinationNodes = new ArrayList<AttackNode>();
     }
 
     public boolean isRoot() {
-	return isRoot;
+        return isRoot;
     }
 
     public void setRoot(boolean _root) {
-	isRoot = _root;
+        isRoot = _root;
     }
 
     public boolean isEnabled() {
-	return isEnabled;
+        return isEnabled;
     }
 
     public void setEnabled(boolean _enabled) {
-	isEnabled = _enabled;
+        isEnabled = _enabled;
     }
-    
+
     public void setOriginNode(AttackNode _node) {
-	originNode = _node;
+        originNode = _node;
     }
 
     public void addDestinationNode(AttackNode _node) {
-	destinationNodes.add(_node);
+        destinationNodes.add(_node);
     }
 
-    public String getName() {
-	return name;
-    }
 
     public boolean isLeaf() {
-	return (originNode == null);
+        return (originNode == null);
     }
 
     public boolean isFinal() {
         return destinationNodes.size() == 0;
 
     }
-    
+
 }
