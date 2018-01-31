@@ -583,7 +583,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
          * reachability of state in a function for a particular invocation of this
          * function.
          */
-        AvatarState asme = new AvatarState (this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject, false);
+        AvatarState asme = new AvatarState (this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject, false, false);
         asme.setHidden (true);
         asme.addEntryCode (_asme.getEntryCode ());
 

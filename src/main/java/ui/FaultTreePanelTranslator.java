@@ -39,31 +39,31 @@
 
 package ui;
 
-import attacktrees.*;
+import faulttrees.*;
 import avatartranslator.*;
 import translator.CheckingError;
-import ui.atd.*;
+import ui.ftd.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Class AvatarTreePanelTranslator
- * Creation: 13/04/2015
+ * Class FaultTreePanelTranslator
+ * Creation: 24/01/2018
  *
  * @author Ludovic APVRILLE
  */
-public class AttackTreePanelTranslator {
+public class FaultTreePanelTranslator {
 
-    protected AttackTree at;
-    protected AttackTreePanel atp;
+    protected FaultTree at;
+    protected FaultTreePanel atp;
     protected LinkedList<CheckingError> checkingErrors, warnings;
     protected CorrespondanceTGElement listE; // usual list
     //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
     protected LinkedList<TDiagramPanel> panels;
 
 
-    public AttackTreePanelTranslator(AttackTreePanel _atp) {
+    public FaultTreePanelTranslator(FaultTreePanel _atp) {
         atp = _atp;
         reinit();
     }
@@ -87,14 +87,14 @@ public class AttackTreePanelTranslator {
         return listE;
     }
 
-    public AttackTree translateToAttackTreeDataStructure() {
+    public FaultTree translateToFaultTreeDataStructure() {
 
-        at = new AttackTree("AttackTree", atp);
+        at = new FaultTree("FaultTree", atp);
 
 
         for (TDiagramPanel panel : atp.panels) {
-            if (panel instanceof AttackTreeDiagramPanel) {
-                translate((AttackTreeDiagramPanel) panel);
+            if (panel instanceof FaultTreeDiagramPanel) {
+                translate((FaultTreeDiagramPanel) panel);
             }
         }
 
@@ -104,31 +104,31 @@ public class AttackTreePanelTranslator {
 
     }
 
-    public void translate(AttackTreeDiagramPanel atdp) {
+    public void translate(FaultTreeDiagramPanel atdp) {
         List<TGComponent> allComponents = atdp.getAllComponentList();
 
         int nodeID = 0;
         TGComponent father;
 
-        //Create attacks, nodes
+        //Create Faults, nodes
         for (TGComponent comp : allComponents) {
-            if (comp instanceof ATDAttack) {
-                ATDAttack atdatt = (ATDAttack) comp;
-                Attack att;
+            if (comp instanceof FTDFault) {
+                FTDFault atdatt = (FTDFault) comp;
+                Fault att;
                 String value = atdatt.getValue();
                 father = atdatt.getFather();
-                if ((father != null) && (father instanceof ATDBlock)) {
-                    value = ((ATDBlock) father).getNodeName() + "__" + value;
+                if ((father != null) && (father instanceof FTDBlock)) {
+                    value = ((FTDBlock) father).getNodeName() + "__" + value;
 
                 }
-                att = new Attack(value, atdatt);
-                att.setRoot(atdatt.isRootAttack());
+                att = new Fault(value, atdatt);
+                att.setRoot(atdatt.isRootFault());
                 att.setEnabled(atdatt.isEnabled());
-                at.addAttack(att);
+                at.addFault(att);
                 listE.addCor(att, comp);
             }
-            if (comp instanceof ATDConstraint) {
-                ATDConstraint cons = (ATDConstraint) comp;
+            if (comp instanceof FTDConstraint) {
+                FTDConstraint cons = (FTDConstraint) comp;
                 nodeID++;
 
                 //OR
@@ -188,7 +188,7 @@ public class AttackTreePanelTranslator {
                     }
 
                 } else {
-                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Invalid attack node");
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Invalid Fault node");
                     ce.setTGComponent(comp);
                     ce.setTDiagramPanel(atdp);
                     addCheckingError(ce);
@@ -196,87 +196,87 @@ public class AttackTreePanelTranslator {
             }
         }
 
-        // Making connections between nodes&attacks
+        // Making connections between nodes&Faults
         TGComponent tgc1, tgc2;
         for (TGComponent comp : allComponents) {
-            if (comp instanceof ATDAttackConnector) {
-                ATDAttackConnector con = (ATDAttackConnector) (comp);
+            if (comp instanceof FTDFaultConnector) {
+                FTDFaultConnector con = (FTDFaultConnector) (comp);
                 tgc1 = atdp.getComponentToWhichBelongs(con.getTGConnectingPointP1());
                 tgc2 = atdp.getComponentToWhichBelongs(con.getTGConnectingPointP2());
-                if (((tgc1 instanceof ATDAttack) || (tgc1 instanceof ATDConstraint)) &&
-                        ((tgc2 instanceof ATDAttack) || (tgc2 instanceof ATDConstraint))) {
+                if (((tgc1 instanceof FTDFault) || (tgc1 instanceof FTDConstraint)) &&
+                        ((tgc2 instanceof FTDFault) || (tgc2 instanceof FTDConstraint))) {
                     try {
-                        // We must transpose this into attack -> node or node -> attack
+                        // We must transpose this into Fault -> node or node -> Fault
 
-                        // Attack -> attack
-                        if ((tgc1 instanceof ATDAttack) && (tgc2 instanceof ATDAttack)) {
-                            // We link the two attacks with an "and" node
-                            Attack at1 = (Attack) (listE.getObject(tgc1));
-                            Attack at2 = (Attack) (listE.getObject(tgc2));
+                        // Fault -> Fault
+                        if ((tgc1 instanceof FTDFault) && (tgc2 instanceof FTDFault)) {
+                            // We link the two Faults with an "and" node
+                            Fault at1 = (Fault) (listE.getObject(tgc1));
+                            Fault at2 = (Fault) (listE.getObject(tgc2));
                             nodeID++;
-                            ANDNode andnode = new ANDNode("ANDBetweenAttacks__" + nodeID + "__" + at1.getName() + "__" + at2.getName(), tgc1);
+                            ANDNode andnode = new ANDNode("ANDBetweenFaults__" + nodeID + "__" + at1.getName() + "__" + at2.getName(), tgc1);
                             at.addNode(andnode);
                             listE.addCor(andnode, comp);
                             at1.addDestinationNode(andnode);
                             at2.setOriginNode(andnode);
-                            andnode.addInputAttack(at1, new Integer("0"));
-                            andnode.setResultingAttack(at2);
+                            andnode.addInputFault(at1, new Integer("0"));
+                            andnode.setResultingFault(at2);
 
 
-                            // Attack -> node
-                        } else if ((tgc1 instanceof ATDAttack) && (tgc2 instanceof ATDConstraint)) {
-                            Attack at1 = (Attack) (listE.getObject(tgc1));
-                            AttackNode node1 = (AttackNode) (listE.getObject(tgc2));
+                            // Fault -> node
+                        } else if ((tgc1 instanceof FTDFault) && (tgc2 instanceof FTDConstraint)) {
+                            Fault at1 = (Fault) (listE.getObject(tgc1));
+                            FaultNode node1 = (FaultNode) (listE.getObject(tgc2));
                             at1.addDestinationNode(node1);
                             String val = comp.getValue().trim();
                             if (val.length() == 0) {
                                 val = "0";
                             }
-                            node1.addInputAttack(at1, new Integer(val));
+                            node1.addInputFault(at1, new Integer(val));
 
-                            // Node -> attack
-                        } else if ((tgc1 instanceof ATDConstraint) && (tgc2 instanceof ATDAttack)) {
-                            Attack at1 = (Attack) (listE.getObject(tgc2));
-                            AttackNode node1 = (AttackNode) (listE.getObject(tgc1));
+                            // Node -> Fault
+                        } else if ((tgc1 instanceof FTDConstraint) && (tgc2 instanceof FTDFault)) {
+                            Fault at1 = (Fault) (listE.getObject(tgc2));
+                            FaultNode node1 = (FaultNode) (listE.getObject(tgc1));
                             at1.setOriginNode(node1);
-                            if (node1.getResultingAttack() != null) {
-                                // Already a resulting attack -> error
-                                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Too many resulting attacks");
+                            if (node1.getResultingFault() != null) {
+                                // Already a resulting Fault -> error
+                                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Too many resulting Faults");
                                 ce.setTGComponent(tgc1);
                                 ce.setTDiagramPanel(atdp);
                                 addCheckingError(ce);
                             } else {
-                                node1.setResultingAttack(at1);
+                                node1.setResultingFault(at1);
                             }
 
                             // Node -> Node
-                        } else if ((tgc1 instanceof ATDConstraint) && (tgc2 instanceof ATDConstraint)) {
-                            AttackNode node1 = (AttackNode) (listE.getObject(tgc1));
-                            AttackNode node2 = (AttackNode) (listE.getObject(tgc2));
-                            // Make fake attack
-                            Attack att = new Attack("Attack__from_" + node1.getName() + "_to_" + node2.getName(), tgc1);
+                        } else if ((tgc1 instanceof FTDConstraint) && (tgc2 instanceof FTDConstraint)) {
+                            FaultNode node1 = (FaultNode) (listE.getObject(tgc1));
+                            FaultNode node2 = (FaultNode) (listE.getObject(tgc2));
+                            // Make fake Fault
+                            Fault att = new Fault("Fault__from_" + node1.getName() + "_to_" + node2.getName(), tgc1);
                             att.setRoot(false);
-                            at.addAttack(att);
+                            at.addFault(att);
                             listE.addCor(att, comp);
 
                             att.setOriginNode(node1);
                             att.addDestinationNode(node2);
 
-                            if (node1.getResultingAttack() != null) {
-                                // Already a resulting attack -> error
-                                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Too many resulting attacks");
+                            if (node1.getResultingFault() != null) {
+                                // Already a resulting Fault -> error
+                                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Too many resulting Faults");
                                 ce.setTGComponent(tgc1);
                                 ce.setTDiagramPanel(atdp);
                                 addCheckingError(ce);
                             } else {
-                                node1.setResultingAttack(att);
+                                node1.setResultingFault(att);
                             }
 
                             String val = comp.getValue().trim();
                             if (val.length() == 0) {
                                 val = "0";
                             }
-                            node2.addInputAttack(att, new Integer(val));
+                            node2.addInputFault(att, new Integer(val));
                         }
 
                     } catch (Exception e) {
@@ -293,9 +293,9 @@ public class AttackTreePanelTranslator {
 
 
     public AvatarSpecification generateAvatarSpec() {
-        AvatarSpecification as = new AvatarSpecification("spec from attack trees", atp);
-        // One block per attacknode to receive the attack
-        // One block per attack -> syncho
+        AvatarSpecification as = new AvatarSpecification("spec from Fault trees", atp);
+        // One block per Faultnode to receive the Fault
+        // One block per Fault -> syncho
         // One mast block with all channels declared at that level
         AvatarBlock mainBlock = new AvatarBlock("MainBlock", as, null);
         AvatarStartState ass = new AvatarStartState("StartStateOfMainBlock", null);
@@ -303,85 +303,85 @@ public class AttackTreePanelTranslator {
         mainBlock.getStateMachine().addElement(ass);
         as.addBlock(mainBlock);
 
-        // Declare all attacks
-        declareAllAttacks(as, mainBlock);
+        // Declare all Faults
+        declareAllFaults(as, mainBlock);
 
-        // Make block for attacks
-        makeAttackBlocks(as, mainBlock);
+        // Make block for Faults
+        makeFaultBlocks(as, mainBlock);
 
         // Make blocks for nodes
-        makeAttackNodeBlocks(as, mainBlock);
+        makeFaultNodeBlocks(as, mainBlock);
 
 
         return as;
     }
 
-    private void declareAllAttacks(AvatarSpecification _as, AvatarBlock _main) {
+    private void declareAllFaults(AvatarSpecification _as, AvatarBlock _main) {
         AvatarRelation ar = new AvatarRelation("MainRelation", _main, _main, null);
         ar.setAsynchronous(false);
         ar.setPrivate(true);
         ar.setBroadcast(false);
 
         _as.addRelation(ar);
-        for (Attack attack : at.getAttacks()) {
-            avatartranslator.AvatarSignal makeAttack = new avatartranslator.AvatarSignal("make__" + attack.getName(), AvatarSignal.OUT, listE.getTG(attack));
-            _main.addSignal(makeAttack);
-            avatartranslator.AvatarSignal stopMakeAttack = new avatartranslator.AvatarSignal("makeStop__" + attack.getName(), AvatarSignal.IN, listE.getTG(attack));
-            _main.addSignal(stopMakeAttack);
-            avatartranslator.AvatarSignal acceptAttack = new avatartranslator.AvatarSignal("accept__" + attack.getName(), AvatarSignal.IN, listE.getTG(attack));
-            _main.addSignal(acceptAttack);
-            avatartranslator.AvatarSignal stopAcceptAttack = new avatartranslator.AvatarSignal("acceptStop__" + attack.getName(), AvatarSignal.OUT, listE.getTG(attack));
-            _main.addSignal(stopAcceptAttack);
-            ar.addSignals(makeAttack, acceptAttack);
-            ar.addSignals(stopMakeAttack, stopAcceptAttack);
+        for (Fault Fault : at.getFaults()) {
+            avatartranslator.AvatarSignal makeFault = new avatartranslator.AvatarSignal("make__" + Fault.getName(), AvatarSignal.OUT, listE.getTG(Fault));
+            _main.addSignal(makeFault);
+            avatartranslator.AvatarSignal stopMakeFault = new avatartranslator.AvatarSignal("makeStop__" + Fault.getName(), AvatarSignal.IN, listE.getTG(Fault));
+            _main.addSignal(stopMakeFault);
+            avatartranslator.AvatarSignal acceptFault = new avatartranslator.AvatarSignal("accept__" + Fault.getName(), AvatarSignal.IN, listE.getTG(Fault));
+            _main.addSignal(acceptFault);
+            avatartranslator.AvatarSignal stopAcceptFault = new avatartranslator.AvatarSignal("acceptStop__" + Fault.getName(), AvatarSignal.OUT, listE.getTG(Fault));
+            _main.addSignal(stopAcceptFault);
+            ar.addSignals(makeFault, acceptFault);
+            ar.addSignals(stopMakeFault, stopAcceptFault);
 
-            // If attack is not leaf: add the intermediate action to activate the intermediate leaf
-            if (!attack.isLeaf()) {
-                avatartranslator.AvatarSignal nodeDone = new avatartranslator.AvatarSignal("nodeDone__" + attack.getName(), AvatarSignal.OUT, listE.getTG(attack));
+            // If Fault is not leaf: add the intermediate action to activate the intermediate leaf
+            if (!Fault.isLeaf()) {
+                avatartranslator.AvatarSignal nodeDone = new avatartranslator.AvatarSignal("nodeDone__" + Fault.getName(), AvatarSignal.OUT, listE.getTG(Fault));
                 _main.addSignal(nodeDone);
-                avatartranslator.AvatarSignal activateAttack = new avatartranslator.AvatarSignal("activate__" + attack.getName(), AvatarSignal.IN, listE.getTG(attack));
-                _main.addSignal(activateAttack);
-                ar.addSignals(nodeDone, activateAttack);
+                avatartranslator.AvatarSignal activateFault = new avatartranslator.AvatarSignal("activate__" + Fault.getName(), AvatarSignal.IN, listE.getTG(Fault));
+                _main.addSignal(activateFault);
+                ar.addSignals(nodeDone, activateFault);
 
             }
 
         }
     }
 
-    private void makeAttackBlocks(AvatarSpecification _as, AvatarBlock _main) {
-        for (Attack attack : at.getAttacks()) {
-            if (attack.isLeaf()) {
+    private void makeFaultBlocks(AvatarSpecification _as, AvatarBlock _main) {
+        for (Fault Fault : at.getFaults()) {
+            if (Fault.isLeaf()) {
                 // Make the block
-                AvatarBlock ab = new AvatarBlock(attack.getName(), _as, listE.getTG(attack));
+                AvatarBlock ab = new AvatarBlock(Fault.getName(), _as, listE.getTG(Fault));
                 _as.addBlock(ab);
                 ab.setFather(_main);
 
-                avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + attack.getName());
-                avatartranslator.AvatarSignal stopAttack = _main.getAvatarSignalWithName("makeStop__" + attack.getName());
+                avatartranslator.AvatarSignal sigFault = _main.getAvatarSignalWithName("make__" + Fault.getName());
+                avatartranslator.AvatarSignal stopFault = _main.getAvatarSignalWithName("makeStop__" + Fault.getName());
 
-                if ((sigAttack != null) && (stopAttack != null)) {
-                    makeAttackBlockSMD(ab, sigAttack, stopAttack, attack.isEnabled(), listE.getTG(attack));
+                if ((sigFault != null) && (stopFault != null)) {
+                    makeFaultBlockSMD(ab, sigFault, stopFault, Fault.isEnabled(), listE.getTG(Fault));
                 }
 
             } else {
                 // Make the block
-                AvatarBlock ab = new AvatarBlock(attack.getName(), _as, listE.getTG(attack));
+                AvatarBlock ab = new AvatarBlock(Fault.getName(), _as, listE.getTG(Fault));
                 _as.addBlock(ab);
                 ab.setFather(_main);
 
-                avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("make__" + attack.getName());
-                avatartranslator.AvatarSignal stopAttack = _main.getAvatarSignalWithName("makeStop__" + attack.getName());
-                avatartranslator.AvatarSignal activateAttack = _main.getAvatarSignalWithName("activate__" + attack.getName());
+                avatartranslator.AvatarSignal sigFault = _main.getAvatarSignalWithName("make__" + Fault.getName());
+                avatartranslator.AvatarSignal stopFault = _main.getAvatarSignalWithName("makeStop__" + Fault.getName());
+                avatartranslator.AvatarSignal activateFault = _main.getAvatarSignalWithName("activate__" + Fault.getName());
 
-                makeIntermediateAttackBlockSMD(ab, sigAttack, stopAttack, activateAttack, attack.isEnabled(), listE.getTG(attack));
+                makeIntermediateFaultBlockSMD(ab, sigFault, stopFault, activateFault, Fault.isEnabled(), listE.getTG(Fault));
 
-                // Intermediate attack
+                // Intermediate Fault
             }
         }
     }
 
 
-    private void makeAttackBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigAttack, avatartranslator.AvatarSignal _sigStop, boolean isEnabled, Object _ref) {
+    private void makeFaultBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigFault, avatartranslator.AvatarSignal _sigStop, boolean isEnabled, Object _ref) {
         Object _ref1 = _ref;
         _ref = null;
 
@@ -395,7 +395,6 @@ public class AttackTreePanelTranslator {
             if (_ref1 instanceof TGComponent) {
                 isCheckable = ((TGComponent) (_ref1)).hasCheckableAccessibility();
             }
-
             if (_ref1 instanceof TGComponent) {
                 isChecked = ((TGComponent) (_ref1)).hasCheckedAccessibility();
             }
@@ -405,7 +404,7 @@ public class AttackTreePanelTranslator {
             AvatarState performedState = new AvatarState("main", _ref1, isCheckable, isChecked);
             performedState.setAsVerifiable(true);
             AvatarState mainStop = new AvatarState("stop", _ref, false, false);
-            AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref1);
+            AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingFault", _sigFault, _ref1);
             AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
 
             asm.addElement(start);
@@ -477,7 +476,7 @@ public class AttackTreePanelTranslator {
 
     }
 
-    private void makeIntermediateAttackBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigAttack, avatartranslator.AvatarSignal _sigStop, avatartranslator.AvatarSignal _sigActivate, boolean isEnabled, Object _ref) {
+    private void makeIntermediateFaultBlockSMD(AvatarBlock _ab, avatartranslator.AvatarSignal _sigFault, avatartranslator.AvatarSignal _sigStop, avatartranslator.AvatarSignal _sigActivate, boolean isEnabled, Object _ref) {
         Object _ref1 = _ref;
         _ref = null;
         AvatarStateMachine asm = _ab.getStateMachine();
@@ -495,13 +494,13 @@ public class AttackTreePanelTranslator {
             AvatarState activateState = new AvatarState("activate", _ref, false, false);
             AvatarState mainState = new AvatarState("main", _ref, false, false);
             AvatarState activatedState = new AvatarState("activated", _ref1, isCheckable, isChecked);
-            if (_ref1 instanceof ATDAttack) {
+            if (_ref1 instanceof FTDFault) {
                 activatedState.setAsVerifiable(true);
             }
             AvatarState performedState = new AvatarState("performed", _ref, false, false);
             AvatarState mainStop = new AvatarState("stop", _ref, false, false);
             AvatarState stopBeforeActivate = new AvatarState("stopBeforeActivate", _ref, false, false);
-            AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingAttack", _sigAttack, _ref1);
+            AvatarActionOnSignal getMake = new AvatarActionOnSignal("GettingFault", _sigFault, _ref1);
             AvatarActionOnSignal getStop = new AvatarActionOnSignal("GettingStop", _sigStop, _ref);
             AvatarActionOnSignal getStopInitial = new AvatarActionOnSignal("GettingInitialStop", _sigStop, _ref);
             AvatarActionOnSignal getActivate = new AvatarActionOnSignal("GettingActivate", _sigActivate, _ref1);
@@ -667,10 +666,10 @@ public class AttackTreePanelTranslator {
     }
 
 
-    private void makeAttackNodeBlocks(AvatarSpecification _as, AvatarBlock _main) {
-        //Attack att;
+    private void makeFaultNodeBlocks(AvatarSpecification _as, AvatarBlock _main) {
+        //Fault att;
 
-        for (AttackNode node : at.getAttackNodes()) {
+        for (FaultNode node : at.getFaultNodes()) {
             if (node.isWellFormed()) {
                 // Make the block
                 AvatarBlock ab = new AvatarBlock(node.getName(), _as, listE.getTG(node));
@@ -716,7 +715,7 @@ public class AttackTreePanelTranslator {
         atF.addNext(mainState);
         atF.setHidden(true);
         String finalGuard = "";
-        for (Attack att : _node.getInputAttacks()) {
+        for (Fault att : _node.getInputFaults()) {
             AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ab, _ref);
             if (finalGuard.length() == 0) {
                 finalGuard += "(" + att.getName() + "__performed == true)";
@@ -728,39 +727,39 @@ public class AttackTreePanelTranslator {
 
 
             avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
-            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
-            asm.addElement(acceptAttack);
-            AvatarTransition at = new AvatarTransition(_ab, "at_toInputAttack", _ref);
+            AvatarActionOnSignal acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
+            AvatarTransition at = new AvatarTransition(_ab, "at_toInputFault", _ref);
             asm.addElement(at);
             mainState.addNext(at);
-            at.addNext(acceptAttack);
+            at.addNext(acceptFault);
             at.setGuard(new AvatarSimpleGuardDuo(aa, AvatarConstant.FALSE, "=="));
-            at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
+            at = new AvatarTransition(_ab, "at_fromInputFault", _ref);
             at.addAction(att.getName() + "__performed = true");
             asm.addElement(at);
-            acceptAttack.addNext(at);
+            acceptFault.addNext(at);
             at.addNext(mainState);
             at.setHidden(true);
         }
 
-        // Adding resulting attack
+        // Adding resulting Fault
         AvatarTransition at = new AvatarTransition(_ab, "at_toEnd", _ref);
         asm.addElement(at);
         mainState.addNext(at);
         at.addNext(endState);
         at.setGuard("[" + finalGuard + "]");
 
-        Attack resulting = _node.getResultingAttack();
-        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
-        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
-        asm.addElement(resultingAttack);
-        at = new AvatarTransition(_ab, "at_toResultingAttack", _ref);
+        Fault resulting = _node.getResultingFault();
+        avatartranslator.AvatarSignal sigFault = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
+        AvatarActionOnSignal resultingFault = new AvatarActionOnSignal("ResultingFault", sigFault, _ref1);
+        asm.addElement(resultingFault);
+        at = new AvatarTransition(_ab, "at_toResultingFault", _ref);
         asm.addElement(at);
         endState.addNext(at);
-        at.addNext(resultingAttack);
+        at.addNext(resultingFault);
         at = new AvatarTransition(_ab, "at_Overall", _ref);
         asm.addElement(at);
-        resultingAttack.addNext(at);
+        resultingFault.addNext(at);
         at.addNext(overallState);
     }
 
@@ -786,7 +785,7 @@ public class AttackTreePanelTranslator {
         start.addNext(atF);
         atF.addNext(mainState);
         AvatarGuard finalGuard = null;
-        for (Attack att : _node.getInputAttacks()) {
+        for (Fault att : _node.getInputFaults()) {
             AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ab, _ref);
             if (finalGuard == null)
                 finalGuard = new AvatarSimpleGuardDuo(aa, AvatarConstant.TRUE, "==");
@@ -798,69 +797,69 @@ public class AttackTreePanelTranslator {
 
             // From Main
             avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
-            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
-            asm.addElement(acceptAttack);
-            AvatarTransition at = new AvatarTransition(_ab, "at_toInputAttack", _ref);
+            AvatarActionOnSignal acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
+            AvatarTransition at = new AvatarTransition(_ab, "at_toInputFault", _ref);
             asm.addElement(at);
             mainState.addNext(at);
-            at.addNext(acceptAttack);
+            at.addNext(acceptFault);
             at.setGuard(new AvatarSimpleGuardDuo(aa, AvatarConstant.FALSE, "=="));
-            at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
+            at = new AvatarTransition(_ab, "at_fromInputFault", _ref);
             at.addAction(new AvatarActionAssignment(aa, AvatarConstant.TRUE));
             asm.addElement(at);
-            acceptAttack.addNext(at);
+            acceptFault.addNext(at);
             at.addNext(mainState);
 
             // Link from End
-            acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
-            asm.addElement(acceptAttack);
-            at = new AvatarTransition(_ab, "at_toInputAttack", _ref);
+            acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
+            at = new AvatarTransition(_ab, "at_toInputFault", _ref);
             asm.addElement(at);
             endState.addNext(at);
-            at.addNext(acceptAttack);
+            at.addNext(acceptFault);
             at.setGuard(new AvatarSimpleGuardDuo(aa, AvatarConstant.FALSE, "=="));
-            at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
+            at = new AvatarTransition(_ab, "at_fromInputFault", _ref);
             at.addAction(new AvatarActionAssignment(aa, AvatarConstant.TRUE));
             asm.addElement(at);
-            acceptAttack.addNext(at);
+            acceptFault.addNext(at);
             at.addNext(endState);
 
             // Link from Overall
-            acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
-            asm.addElement(acceptAttack);
-            at = new AvatarTransition(_ab, "at_toInputAttack", _ref);
+            acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
+            at = new AvatarTransition(_ab, "at_toInputFault", _ref);
             asm.addElement(at);
             overallState.addNext(at);
-            at.addNext(acceptAttack);
+            at.addNext(acceptFault);
             at.setGuard(new AvatarSimpleGuardDuo(aa, AvatarConstant.FALSE, "=="));
-            at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
+            at = new AvatarTransition(_ab, "at_fromInputFault", _ref);
             at.addAction(new AvatarActionAssignment(aa, AvatarConstant.TRUE));
             asm.addElement(at);
-            acceptAttack.addNext(at);
+            acceptFault.addNext(at);
             at.addNext(overallState);
 
 
         }
 
 
-        // Adding resulting attack
+        // Adding resulting Fault
         AvatarTransition at = new AvatarTransition(_ab, "at_toEnd", _ref);
         asm.addElement(at);
         mainState.addNext(at);
         at.addNext(endState);
         at.setGuard(finalGuard);
 
-        Attack resulting = _node.getResultingAttack();
-        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
-        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
-        asm.addElement(resultingAttack);
-        at = new AvatarTransition(_ab, "at_toResultingAttack", _ref);
+        Fault resulting = _node.getResultingFault();
+        avatartranslator.AvatarSignal sigFault = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
+        AvatarActionOnSignal resultingFault = new AvatarActionOnSignal("ResultingFault", sigFault, _ref1);
+        asm.addElement(resultingFault);
+        at = new AvatarTransition(_ab, "at_toResultingFault", _ref);
         asm.addElement(at);
         endState.addNext(at);
-        at.addNext(resultingAttack);
+        at.addNext(resultingFault);
         at = new AvatarTransition(_ab, "at_Overall", _ref);
         asm.addElement(at);
-        resultingAttack.addNext(at);
+        resultingFault.addNext(at);
         at.addNext(overallState);
 
     }
@@ -895,7 +894,7 @@ public class AttackTreePanelTranslator {
         AvatarGuard toEndGuard = null;
         _ab.addAttribute(oneDone);
         atF.addAction("oneDone = false");
-        for (Attack att : _node.getInputAttacks()) {
+        for (Fault att : _node.getInputFaults()) {
             AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ab, _ref);
             _ab.addAttribute(aa);
             atF.addAction(new AvatarActionAssignment(aa, AvatarConstant.FALSE));
@@ -906,44 +905,44 @@ public class AttackTreePanelTranslator {
 
             // From Main
             avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
-            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
-            asm.addElement(acceptAttack);
-            AvatarTransition at = new AvatarTransition(_ab, "at_toInputAttack", _ref);
+            AvatarActionOnSignal acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
+            AvatarTransition at = new AvatarTransition(_ab, "at_toInputFault", _ref);
             asm.addElement(at);
             mainState.addNext(at);
-            at.addNext(acceptAttack);
+            at.addNext(acceptFault);
             at.setGuard(new AvatarBinaryGuard(
                     new AvatarSimpleGuardDuo(aa, AvatarConstant.FALSE, "=="),
                     new AvatarSimpleGuardDuo(oneDone, AvatarConstant.FALSE, "=="),
                     "&&"));
-            at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
+            at = new AvatarTransition(_ab, "at_fromInputFault", _ref);
             at.addAction(new AvatarActionAssignment(aa, AvatarConstant.TRUE));
             at.setHidden(true);
             at.addAction(new AvatarActionAssignment(oneDone, AvatarConstant.TRUE));
             asm.addElement(at);
-            acceptAttack.addNext(at);
+            acceptFault.addNext(at);
             at.addNext(mainState);
 
             // Link from stoppingAll
             //           if (att.isLeaf()) {
-            // Leaf attack -> must make a stop
+            // Leaf Fault -> must make a stop
             sigAtt = _main.getAvatarSignalWithName("acceptStop__" + att.getName());
-            acceptAttack = new AvatarActionOnSignal("StopAttack", sigAtt, _ref1);
-            asm.addElement(acceptAttack);
-            at = new AvatarTransition(_ab, "at_toInputAttack_leaf", _ref);
+            acceptFault = new AvatarActionOnSignal("StopFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
+            at = new AvatarTransition(_ab, "at_toInputFault_leaf", _ref);
             asm.addElement(at);
             stoppingAll.addNext(at);
-            at.addNext(acceptAttack);
+            at.addNext(acceptFault);
             at.setGuard(new AvatarSimpleGuardDuo(aa, AvatarConstant.FALSE, "=="));
-            at = new AvatarTransition(_ab, "at_fromInputAttack", _ref);
+            at = new AvatarTransition(_ab, "at_fromInputFault", _ref);
             at.addAction(new AvatarActionAssignment(aa, AvatarConstant.TRUE));
             at.setHidden(true);
             asm.addElement(at);
-            acceptAttack.addNext(at);
+            acceptFault.addNext(at);
             at.addNext(stoppingAll);
             //           } else {
-            // Generated attack-> must set performed to true.
-            /*          at = new AvatarTransition("at_toInputAttack", _ref);
+            // Generated Fault-> must set performed to true.
+            /*          at = new AvatarTransition("at_toInputFault", _ref);
                         stoppingAll.addNext(at);
                         asm.addElement(at);
                         at.addNext(stoppingAll);
@@ -962,24 +961,24 @@ public class AttackTreePanelTranslator {
         at.setGuard(finalGuard);
 
 
-        // Adding resulting attack
+        // Adding resulting Fault
         at = new AvatarTransition(_ab, "at_toEnd", _ref);
         asm.addElement(at);
         stoppingAll.addNext(at);
         at.addNext(endState);
         at.setGuard(toEndGuard);
 
-        Attack resulting = _node.getResultingAttack();
-        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
-        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
-        asm.addElement(resultingAttack);
-        at = new AvatarTransition(_ab, "at_toResultingAttack", _ref);
+        Fault resulting = _node.getResultingFault();
+        avatartranslator.AvatarSignal sigFault = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
+        AvatarActionOnSignal resultingFault = new AvatarActionOnSignal("ResultingFault", sigFault, _ref1);
+        asm.addElement(resultingFault);
+        at = new AvatarTransition(_ab, "at_toResultingFault", _ref);
         asm.addElement(at);
         endState.addNext(at);
-        at.addNext(resultingAttack);
+        at.addNext(resultingFault);
         at = new AvatarTransition(_ab, "at_Overall", _ref);
         asm.addElement(at);
-        resultingAttack.addNext(at);
+        resultingFault.addNext(at);
         at.addNext(overallState);
 
     }
@@ -989,7 +988,7 @@ public class AttackTreePanelTranslator {
         Object _ref1 = _ref;
         _ref = null;
         AvatarStateMachine asm = _ab.getStateMachine();
-        _node.orderAttacks();
+        _node.orderFaults();
 
         // Basic machine
         AvatarStartState start = new AvatarStartState("start", _ref);
@@ -1010,21 +1009,21 @@ public class AttackTreePanelTranslator {
 
         AvatarState previousState = mainState;
 
-        // Chaining accept attacks
-        for (Attack att : _node.getInputAttacks()) {
+        // Chaining accept Faults
+        for (Fault att : _node.getInputFaults()) {
             AvatarState state = new AvatarState("state__" + att.getName(), _ref);
             asm.addElement(state);
             avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
-            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
-            asm.addElement(acceptAttack);
+            AvatarActionOnSignal acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
 
             at = new AvatarTransition(_ab, "at", _ref);
             asm.addElement(at);
             previousState.addNext(at);
-            at.addNext(acceptAttack);
+            at.addNext(acceptFault);
             at = new AvatarTransition(_ab, "at", _ref);
             asm.addElement(at);
-            acceptAttack.addNext(at);
+            acceptFault.addNext(at);
             at.addNext(state);
             previousState = state;
         }
@@ -1035,18 +1034,18 @@ public class AttackTreePanelTranslator {
         at.addNext(endState);
 
 
-        // Performing resulting attack
-        Attack resulting = _node.getResultingAttack();
-        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
-        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
-        asm.addElement(resultingAttack);
-        at = new AvatarTransition(_ab, "at_toResultingAttack", _ref);
+        // Performing resulting Fault
+        Fault resulting = _node.getResultingFault();
+        avatartranslator.AvatarSignal sigFault = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
+        AvatarActionOnSignal resultingFault = new AvatarActionOnSignal("ResultingFault", sigFault, _ref1);
+        asm.addElement(resultingFault);
+        at = new AvatarTransition(_ab, "at_toResultingFault", _ref);
         asm.addElement(at);
         endState.addNext(at);
-        at.addNext(resultingAttack);
+        at.addNext(resultingFault);
         at = new AvatarTransition(_ab, "at_Overall", _ref);
         asm.addElement(at);
-        resultingAttack.addNext(at);
+        resultingFault.addNext(at);
         at.addNext(overallState);
     }
 
@@ -1054,7 +1053,7 @@ public class AttackTreePanelTranslator {
         Object _ref1 = _ref;
         _ref = null;
         AvatarStateMachine asm = _ab.getStateMachine();
-        _node.orderAttacks();
+        _node.orderFaults();
 
         // Basic machine
         AvatarStartState start = new AvatarStartState("start", _ref);
@@ -1075,25 +1074,25 @@ public class AttackTreePanelTranslator {
 
         AvatarState previousState = mainState;
 
-        // Chaining accept attacks
+        // Chaining accept Faults
         int cpt = 0;
-        for (Attack att : _node.getInputAttacks()) {
+        for (Fault att : _node.getInputFaults()) {
             AvatarState state = new AvatarState("state__" + att.getName(), _ref);
             asm.addElement(state);
             avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
-            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
-            asm.addElement(acceptAttack);
+            AvatarActionOnSignal acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
 
             at = new AvatarTransition(_ab, "at", _ref);
             asm.addElement(at);
             previousState.addNext(at);
-            at.addNext(acceptAttack);
+            at.addNext(acceptFault);
             if (cpt > 0) {
                 at.setDelays("" + _node.getTime(), "" + _node.getTime());
             }
             at = new AvatarTransition(_ab, "at", _ref);
             asm.addElement(at);
-            acceptAttack.addNext(at);
+            acceptFault.addNext(at);
             at.addNext(state);
             previousState = state;
             cpt++;
@@ -1105,18 +1104,18 @@ public class AttackTreePanelTranslator {
         at.addNext(endState);
 
 
-        // Performing resulting attack
-        Attack resulting = _node.getResultingAttack();
-        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
-        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
-        asm.addElement(resultingAttack);
-        at = new AvatarTransition(_ab, "at_toResultingAttack", _ref);
+        // Performing resulting Fault
+        Fault resulting = _node.getResultingFault();
+        avatartranslator.AvatarSignal sigFault = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
+        AvatarActionOnSignal resultingFault = new AvatarActionOnSignal("ResultingFault", sigFault, _ref1);
+        asm.addElement(resultingFault);
+        at = new AvatarTransition(_ab, "at_toResultingFault", _ref);
         asm.addElement(at);
         endState.addNext(at);
-        at.addNext(resultingAttack);
+        at.addNext(resultingFault);
         at = new AvatarTransition(_ab, "at_Overall", _ref);
         asm.addElement(at);
-        resultingAttack.addNext(at);
+        resultingFault.addNext(at);
         at.addNext(overallState);
     }
 
@@ -1124,7 +1123,7 @@ public class AttackTreePanelTranslator {
         Object _ref1 = _ref;
         _ref = null;
         AvatarStateMachine asm = _ab.getStateMachine();
-        _node.orderAttacks();
+        _node.orderFaults();
 
         // Basic machine
         AvatarStartState start = new AvatarStartState("start", _ref);
@@ -1147,19 +1146,19 @@ public class AttackTreePanelTranslator {
 
         AvatarState previousState = mainState;
 
-        // Chaining accept attacks
+        // Chaining accept Faults
         int cpt = 0;
-        for (Attack att : _node.getInputAttacks()) {
+        for (Fault att : _node.getInputFaults()) {
             AvatarState state = new AvatarState("state__" + att.getName(), _ref);
             asm.addElement(state);
             avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
-            AvatarActionOnSignal acceptAttack = new AvatarActionOnSignal("AcceptAttack", sigAtt, _ref1);
-            asm.addElement(acceptAttack);
+            AvatarActionOnSignal acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
 
             at = new AvatarTransition(_ab, "at", _ref);
             asm.addElement(at);
             previousState.addNext(at);
-            at.addNext(acceptAttack);
+            at.addNext(acceptFault);
             if (cpt > 0) {
                 at = new AvatarTransition(_ab, "at_totimeout", _ref);
                 asm.addElement(at);
@@ -1169,7 +1168,7 @@ public class AttackTreePanelTranslator {
             }
             at = new AvatarTransition(_ab, "at", _ref);
             asm.addElement(at);
-            acceptAttack.addNext(at);
+            acceptFault.addNext(at);
             at.addNext(state);
             previousState = state;
             cpt++;
@@ -1181,18 +1180,18 @@ public class AttackTreePanelTranslator {
         at.addNext(endState);
 
 
-        // Performing resulting attack
-        Attack resulting = _node.getResultingAttack();
-        avatartranslator.AvatarSignal sigAttack = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
-        AvatarActionOnSignal resultingAttack = new AvatarActionOnSignal("ResultingAttack", sigAttack, _ref1);
-        asm.addElement(resultingAttack);
-        at = new AvatarTransition(_ab, "at_toResultingAttack", _ref);
+        // Performing resulting Fault
+        Fault resulting = _node.getResultingFault();
+        avatartranslator.AvatarSignal sigFault = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
+        AvatarActionOnSignal resultingFault = new AvatarActionOnSignal("ResultingFault", sigFault, _ref1);
+        asm.addElement(resultingFault);
+        at = new AvatarTransition(_ab, "at_toResultingFault", _ref);
         asm.addElement(at);
         endState.addNext(at);
-        at.addNext(resultingAttack);
+        at.addNext(resultingFault);
         at = new AvatarTransition(_ab, "at_Overall", _ref);
         asm.addElement(at);
-        resultingAttack.addNext(at);
+        resultingFault.addNext(at);
         at.addNext(overallState);
     }
 

@@ -61,8 +61,8 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
         values = new LinkedList<String>();
     }
 
-    public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject, boolean _isCheckable) {
-        super(_name, _referenceObject, _isCheckable);
+    public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject, boolean _isCheckable, boolean _isChecked) {
+        super(_name, _referenceObject, _isCheckable, _isChecked);
         signal = _signal;
         values = new LinkedList<String>();
     }
@@ -107,7 +107,7 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
         //TraceManager.addDev("I HAVE BEEN CLONED: " + this);
 	AvatarSignal sig = _block.getAvatarSignalWithName(getSignal().getName());
 	if (sig != null) {
-	    AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "__clone", sig, getReferenceObject(), isCheckable());
+	    AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "__clone", sig, getReferenceObject(), isCheckable(), isChecked());
 	    for(int i=0; i<getNbOfValues(); i++) {
 		aaos.addValue(getValue(i));
 	    }

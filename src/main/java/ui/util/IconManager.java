@@ -119,6 +119,12 @@ public class IconManager {
     public static ImageIcon imgic1070, imgic1072, imgic1074, imgic1076, imgic1078;
     public static ImageIcon imgic1080, imgic1082, imgic1084;
 
+    // Fault Tree Diagrams
+    public static ImageIcon imgic1400, imgic1402, imgic1404, imgic1406, imgic1408;
+    public static ImageIcon imgic1410, imgic1412, imgic1414;
+    public static Image img1400, img1402, img1404, img1406, img1408;
+    public static Image img1410, img1412, img1414;
+
     // TMLDD
     public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106, imgic1108;
     public static ImageIcon imgic1110, imgic1112, imgic1114, imgic1116, imgic1118;
@@ -487,6 +493,16 @@ public class IconManager {
     private static String icon1082 = "atdcountermeasure.gif";
     private static String icon1084 = "atdcountermeasureconnector.gif";
 
+    // Fault trees
+    private static String icon1400 = "AndFT.png";
+    private static String icon1402 = "SequenceFT.png";
+    private static String icon1404 = "AfterFT.png";
+    private static String icon1406 = "BeforeFT.png";
+    private static String icon1408 = "NotFT.png";
+    private static String icon1410 = "OrFT.png";
+    private static String icon1412 = "XorFT.png";
+    private static String icon1414 = "VoteFT.png";
+
     // DIPLODOCUS architecture
     private static String icon1100 = "tmlcpunode.gif";
     private static String icon1102 = "tmlbusnode.gif";
@@ -624,8 +640,11 @@ public class IconManager {
 
 	//Attacker Scenarios
     private static String icon7008 = "attacker.gif";
-
 	private static String icon7009 = "uppaal.gif";
+
+	//
+
+
 
     public IconManager() {
 
@@ -920,6 +939,39 @@ public class IconManager {
         imgic1080 = getIcon(icon1080);
         imgic1082 = getIcon(icon1082);
         imgic1084 = getIcon(icon1084);
+
+        imgic1400 = getIcon(icon1400);
+        if (imgic1400 != null) {
+            img1400 = imgic1400.getImage();
+        }
+        imgic1402 = getIcon(icon1402);
+        if (imgic1402 != null) {
+            img1402 = imgic1402.getImage();
+        }
+        imgic1404 = getIcon(icon1404);
+        if (imgic1404 != null) {
+            img1404 = imgic1404.getImage();
+        }
+        imgic1408 = getIcon(icon1408);
+        if (imgic1408 != null) {
+            img1408 = imgic1408.getImage();
+        }
+        imgic1406 = getIcon(icon1406);
+        if (imgic1406 != null) {
+            img1406 = imgic1406.getImage();
+        }
+        imgic1410 = getIcon(icon1410);
+        if (imgic1410 != null) {
+            img1410 = imgic1410.getImage();
+        }
+        imgic1412 = getIcon(icon1412);
+        if (imgic1412 != null) {
+            img1412 = imgic1412.getImage();
+        }
+        imgic1414 = getIcon(icon1414);
+        if (imgic1414 != null) {
+            img1414 = imgic1414.getImage();
+        }
 
         imgic1100 = getIcon(icon1100);
         imgic1102 = getIcon(icon1102);

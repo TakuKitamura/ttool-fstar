@@ -354,7 +354,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
                 }
             }
         }
-
         return false;
     }
 

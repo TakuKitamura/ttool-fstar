@@ -1270,8 +1270,11 @@ public class AvatarDesignPanelTranslator {
         }
 	
         AvatarActionOnSignal aaos = new AvatarActionOnSignal ("action_on_signal", atas, asmdss);
-        if (asmdss.hasCheckableAccessibility())
+        if (asmdss.hasCheckedAccessibility())
             aaos.setCheckable();
+
+        if (asmdss.hasCheckedAccessibility())
+            aaos.setChecked();
 
         if (aaos.isReceiving ())
             throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "A receiving signal is used for sending: " + asmdss.getValue());
@@ -1552,6 +1555,9 @@ public class AvatarDesignPanelTranslator {
         if (asmdrs.hasCheckableAccessibility())
             aaos.setCheckable();
 
+        if (asmdrs.hasCheckedAccessibility())
+            aaos.setChecked();
+
         if (aaos.isSending())
             throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "A sending signal is used for receiving: " + asmdrs.getValue());
 
@@ -1602,6 +1608,9 @@ public class AvatarDesignPanelTranslator {
 
         if (tgc.hasCheckableAccessibility ())
             astate.setCheckable ();
+
+        if (tgc.hasCheckedAccessibility())
+            astate.setChecked();
 
         // Executable code
         astate.addEntryCode(tgc.getEntryCode());

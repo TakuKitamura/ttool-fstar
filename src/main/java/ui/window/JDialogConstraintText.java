@@ -171,6 +171,10 @@ public class JDialogConstraintText extends JDialogBase implements ActionListener
         return (String)(stereotype.getSelectedItem());
     }
 
+    public int getSelectedIndex() {
+        return stereotype.getSelectedIndex();
+    }
+
 
     public String getText() {
         return textEdition.getText();

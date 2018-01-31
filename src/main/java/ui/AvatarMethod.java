@@ -37,49 +37,47 @@
  */
 
 
-
-
-
 package ui;
 
 import myutil.Conversion;
 import myutil.TraceManager;
-import translator.RTLOTOSKeyword;
 import translator.JKeyword;
+import translator.RTLOTOSKeyword;
 
 import java.util.Vector;
 
 /**
-   * Class AvatarMethod
-   * Method in Avatar ...
-   * Creation: 08/04/2010
-   * @version 1.0 08/04/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarMethod
+ * Method in Avatar ...
+ * Creation: 08/04/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 08/04/2010
  */
 public class AvatarMethod {
 
     public static final String[] cryptoMethods = {
-        "Message aencrypt(Message msg, Key k)",
-        "Message adecrypt(Message msg, Key k)",
-        "Key pk(Key k)",
-        "Message sign(Message msg, Key k)",
-        "bool verifySign(Message msg1, Message sig, Key k)",
-        "Message cert(Key k, Message msg)",
-        "bool verifyCert(Message cert, Key k)",
-        "Key getpk(Message cert)",
-        "Message sencrypt(Message msg, Key k)",
-        "Message sdecrypt(Message msg, Key k)",
-        "Key DH(Key pubK, Key privK)",
-        "Message hash(Message msg)",
-        "Message MAC(Message msg, Key k)",
-        "bool verifyMAC(Message msg, Key k, Message macmsg)",
-        "Message concat2(Message msg1, Message msg2)",
-        "Message concat3(Message msg1, Message msg2, Message msg3)",
-        "Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)",
-        "get2(Message msg, Message msg1, Message msg2)",
-        "get3(Message msg, Message msg1, Message msg2, Message msg3)",
-        "get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)"};
-        
+            "Message aencrypt(Message msg, Key k)",
+            "Message adecrypt(Message msg, Key k)",
+            "Key pk(Key k)",
+            "Message sign(Message msg, Key k)",
+            "bool verifySign(Message msg1, Message sig, Key k)",
+            "Message cert(Key k, Message msg)",
+            "bool verifyCert(Message cert, Key k)",
+            "Key getpk(Message cert)",
+            "Message sencrypt(Message msg, Key k)",
+            "Message sdecrypt(Message msg, Key k)",
+            "Key DH(Key pubK, Key privK)",
+            "Message hash(Message msg)",
+            "Message MAC(Message msg, Key k)",
+            "bool verifyMAC(Message msg, Key k, Message macmsg)",
+            "Message concat2(Message msg1, Message msg2)",
+            "Message concat3(Message msg1, Message msg2, Message msg3)",
+            "Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)",
+            "get2(Message msg, Message msg1, Message msg2)",
+            "get3(Message msg, Message msg1, Message msg2, Message msg3)",
+            "get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)"};
+
     // Types of parameters
     public final static int NATURAL = 0;
     public final static int BOOLEAN = 1;
@@ -156,11 +154,10 @@ public class AvatarMethod {
         if (index0 != -1) {
             if (index0 == 0) {
                 return null;
-            } else if (method.charAt(index0-1) == ' ') {
-                method = method.substring(0, index0-1) + method.substring(index0, method.length());
+            } else if (method.charAt(index0 - 1) == ' ') {
+                method = method.substring(0, index0 - 1) + method.substring(index0, method.length());
             }
         }
-
 
 
         // Check whether there is a return type or not
@@ -171,7 +168,7 @@ public class AvatarMethod {
             if ((tmp.indexOf('(') == -1) && (tmp.indexOf(')') == -1)) {
                 // So, there is a return type!
                 rt = tmp.trim();
-                method = method.substring(index2+1, method.length()).trim();
+                method = method.substring(index2 + 1, method.length()).trim();
                 if (!isAValidId(rt, false, false, false)) {
                     TraceManager.addDev("Unvalid type: " + rt);
                     return null;
@@ -198,7 +195,7 @@ public class AvatarMethod {
         // No parenthesis at all
         if ((index0 == -1) && (index1 == -1)) {
             if (isAValidId(method, true, true, true)) {
-                return new AvatarMethod(method, new String [0], new String[0], rt);
+                return new AvatarMethod(method, new String[0], new String[0], rt);
             } else {
                 return null;
             }
@@ -210,11 +207,11 @@ public class AvatarMethod {
         }
 
         // Check that only one parenthesis of each type
-        tmp = method.substring(Math.min(index0+1, method.length()), method.length());
+        tmp = method.substring(Math.min(index0 + 1, method.length()), method.length());
         if (tmp.indexOf('(') > -1) {
             return null;
         }
-        tmp = method.substring(Math.min(index1+1, method.length()), method.length());
+        tmp = method.substring(Math.min(index1 + 1, method.length()), method.length());
         if (tmp.indexOf(')') > -1) {
             return null;
         }
@@ -233,11 +230,11 @@ public class AvatarMethod {
 
         // Between parenthesis: parameters of the form: String space String comma
         // We replace double space by spaces and then spaces by commas
-        tmp = method.substring(index0+1, index1).trim();
+        tmp = method.substring(index0 + 1, index1).trim();
 
         // no parameter?
         if (tmp.length() == 0) {
-            return new AvatarMethod(id, new String [0], new String[0], rt);
+            return new AvatarMethod(id, new String[0], new String[0], rt);
         }
 
         // Has parameters...
@@ -249,7 +246,7 @@ public class AvatarMethod {
         //TraceManager.addDev("tmp=" + tmp);
 
         String splitted[] = tmp.split(",");
-        int size = splitted.length/2;
+        int size = splitted.length / 2;
         // TraceManager.addDev("Nb of parameters=" + size);
         String types[] = new String[size];
         String typeIds[] = new String[size];
@@ -262,24 +259,24 @@ public class AvatarMethod {
         //}
 
         try {
-            for(i=0; i<splitted.length; i = i + 2){
+            for (i = 0; i < splitted.length; i = i + 2) {
                 if (splitted[i].length() == 0) {
                     return null;
                 }
-                if (splitted[i+1].length() == 0) {
+                if (splitted[i + 1].length() == 0) {
                     return null;
                 }
                 if (!isAValidId(splitted[i], false, false, false)) {
                     TraceManager.addDev("Unvalid type: " + splitted[i]);
                     return null;
                 }
-                if (!isAValidId(splitted[i+1], true, true, true)) {
-                    TraceManager.addDev("Unvalid id of parameter " + splitted[i+1]);
+                if (!isAValidId(splitted[i + 1], true, true, true)) {
+                    TraceManager.addDev("Unvalid id of parameter " + splitted[i + 1]);
                     return null;
                 }
                 //TraceManager.addDev("Adding parameter: " + splitted[i] + " " + splitted[i+1]);
-                types[i/2] = splitted[i];
-                typeIds[i/2] = splitted[i+1];
+                types[i / 2] = splitted[i];
+                typeIds[i / 2] = splitted[i + 1];
             }
         } catch (Exception e) {
             TraceManager.addDev("AvatarMethod Exception:" + e.getMessage());
@@ -291,20 +288,31 @@ public class AvatarMethod {
         return new AvatarMethod(id, types, typeIds, rt);
     }
 
-    public String getId() { return id;}
-    public String[] getTypes(){ return types;}
-    public String[] getTypeIds(){ return typeIds;}
-    public String getReturnType() { return returnType;}
+    public String getId() {
+        return id;
+    }
+
+    public String[] getTypes() {
+        return types;
+    }
+
+    public String[] getTypeIds() {
+        return typeIds;
+    }
+
+    public String getReturnType() {
+        return returnType;
+    }
 
     public String getType(int _index) {
-        if ((_index <0) || (_index>=types.length)) {
+        if ((_index < 0) || (_index >= types.length)) {
             return null;
         }
         return types[_index];
     }
 
     public String getTypeId(int _index) {
-        if ((_index <0) || (_index>=typeIds.length)) {
+        if ((_index < 0) || (_index >= typeIds.length)) {
             return null;
         }
         return typeIds[_index];
@@ -320,7 +328,7 @@ public class AvatarMethod {
 
         String lowerid = id.toLowerCase();
         boolean b1, b2, b3, b4, b5;
-        b1 = (id.substring(0,1)).matches("[a-zA-Z]");
+        b1 = (id.substring(0, 1)).matches("[a-zA-Z]");
         b2 = id.matches("\\w*");
         if (checkKeyword) {
             b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
@@ -349,9 +357,9 @@ public class AvatarMethod {
 
         AvatarMethod am;
 
-        for(int i= 0; i<forbidden.size(); i++) {
-            am = (AvatarMethod)(forbidden.elementAt(i));
-            if (s.compareTo(am.getId()) ==0) {
+        for (int i = 0; i < forbidden.size(); i++) {
+            am = (AvatarMethod) (forbidden.elementAt(i));
+            if (s.compareTo(am.getId()) == 0) {
                 return false;
             }
         }
@@ -361,25 +369,25 @@ public class AvatarMethod {
 
     public static int getType(String s) {
         if (s.equals("nat")) {
-            return      NATURAL;
+            return NATURAL;
         } else if (s.equals("bool")) {
-            return      BOOLEAN;
+            return BOOLEAN;
         } else if (s.equals("int")) {
-            return      INTEGER;
+            return INTEGER;
         } else if (s.equals("Integer")) {
-            return      INTEGER;
+            return INTEGER;
         }
         return OTHER;
     }
 
     public static String getStringType(int type) {
-        switch(type) {
-        case NATURAL:
-            return "nat";
-        case BOOLEAN:
-            return "bool";
-        case INTEGER:
-            return "int";
+        switch (type) {
+            case NATURAL:
+                return "nat";
+            case BOOLEAN:
+                return "bool";
+            case INTEGER:
+                return "int";
         }
         return "";
     }
@@ -393,9 +401,9 @@ public class AvatarMethod {
         }
 
         method += id + "(";
-        for (int i=0; i<types.length; i++) {
+        for (int i = 0; i < types.length; i++) {
             method += types[i] + " " + typeIds[i];
-            if (i<(types.length - 1)) {
+            if (i < (types.length - 1)) {
                 method += ", ";
             }
         }
@@ -418,7 +426,7 @@ public class AvatarMethod {
             return false;
         }
 
-        AvatarMethod am = (AvatarMethod)o;
+        AvatarMethod am = (AvatarMethod) o;
         return getId().equals(am.getId());
 
     }
@@ -426,7 +434,7 @@ public class AvatarMethod {
 
     public String getUseDescription() {
         String s = getId() + "(";
-        for(int i=0; i<typeIds.length; i++) {
+        for (int i = 0; i < typeIds.length; i++) {
             s += typeIds[i];
             if (i < (typeIds.length - 1)) {
                 s += ", ";

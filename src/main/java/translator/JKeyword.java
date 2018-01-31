@@ -50,7 +50,7 @@ package translator;
 public class JKeyword {
     private final static String [] words = {"abstract", "default", "goto", "package", "synchronized", "boolean", "do", "if", "private", "this", "break", "double", "implements", 
 	"protected", "throw", "byte", "else", "import", "public", "throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char", "final",
-         "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float", "native", "super", "while", "continue", "for", "new", "switch"};
+         "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float", "native", "super", "while", "continue", "for", "new", "switch", "select"};
 
    public final static String INDENT = "    ";
    public final static String END_OP = ";";
