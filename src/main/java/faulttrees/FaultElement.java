@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- *
+ * 
  * ludovic.apvrille AT enst.fr
- *
+ * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- *
+ * 
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- *
+ * 
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- *
+ * 
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- *
+ * 
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -43,56 +43,26 @@ import java.util.ArrayList;
 
 
 /**
- * Class Fault
- * Creation: 24/01/2018
+ * Class AttackElement
+ * Creation: 31/01/2018
  *
  * @author Ludovic APVRILLE
- * @version 1.0 24/01/2018
+ * @version 1.0 31/01/2018
  */
-public class Fault extends FaultElement {
-    private FaultNode originNode; // If no origin node -> leaf attack
-    private ArrayList<FaultNode> destinationNodes;
-    private boolean isRoot;
-    private boolean isEnabled = true;
+public abstract class FaultElement {
+    protected String name;
+    protected Object referenceObject;
 
+    public FaultElement(String _name, Object _referenceObject) {
 
-    public Fault(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        destinationNodes = new ArrayList<FaultNode>();
+        name = _name;
+        referenceObject = _referenceObject;
     }
 
-    public boolean isRoot() {
-        return isRoot;
+    public String getName() {
+        return name;
     }
 
-    public void setRoot(boolean _root) {
-        isRoot = _root;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean _enabled) {
-        isEnabled = _enabled;
-    }
-
-    public void setOriginNode(FaultNode _node) {
-        originNode = _node;
-    }
-
-    public void addDestinationNode(FaultNode _node) {
-        destinationNodes.add(_node);
-    }
-
-
-    public boolean isLeaf() {
-        return (originNode == null);
-    }
-
-    public boolean isFinal() {
-        return destinationNodes.size() == 0;
-
-    }
+    public Object getReferenceObject() { return referenceObject; }
 
 }

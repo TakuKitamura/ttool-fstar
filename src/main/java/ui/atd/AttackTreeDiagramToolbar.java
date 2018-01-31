@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.atd;
 
 import ui.MainGUI;
@@ -51,12 +49,13 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
-   * Class AttackTreeDiagramToolBar
-   * Implements the toolbar to be used in conjunction with the panel of an attack tree diagram
-   * Creation: 03/11/2009
-   * @version 1.0 03/11/2009
-   * @author Ludovic APVRILLE
-   * @see ui.cd.TClassDiagramPanel
+ * Class AttackTreeDiagramToolBar
+ * Implements the toolbar to be used in conjunction with the panel of an attack tree diagram
+ * Creation: 03/11/2009
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 03/11/2009
+ * @see ui.cd.TClassDiagramPanel
  */
 public class AttackTreeDiagramToolbar extends TToolBar {
 
@@ -85,11 +84,11 @@ public class AttackTreeDiagramToolbar extends TToolBar {
 
         mgui.actions[TGUIAction.ATD_CONSTRAINT].setEnabled(b);
 
-	mgui.actions[TGUIAction.ATD_COUNTERMEASURE].setEnabled(b);
-	mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.ATD_COUNTERMEASURE].setEnabled(b);
+        mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR].setEnabled(b);
 
         mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
-	mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 
     }
 
@@ -130,12 +129,12 @@ public class AttackTreeDiagramToolbar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
 
-	this.addSeparator();
-	button = this.add(mgui.actions[TGUIAction.ATD_COUNTERMEASURE]);
+        this.addSeparator();
+        button = this.add(mgui.actions[TGUIAction.ATD_COUNTERMEASURE]);
         button.addMouseListener(mgui.mouseHandler);
-	button = this.add(mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR]);
+        button = this.add(mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
-	
+
         this.addSeparator();
         this.addSeparator();
 

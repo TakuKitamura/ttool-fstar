@@ -3022,6 +3022,19 @@ public class GTURTLEModeling {
                     TraceManager.addDev("Could not make query for " + tgc);
                 }
             }
+        } else if ((avatar2uppaal != null) && (tp instanceof FaultTreePanel)) {
+            TraceManager.addDev("Making UPPAAL queries");
+            for (TGComponent tgc : list) {
+                TraceManager.addDev("Making UPPAAL query for " + tgc);
+                String s = avatar2uppaal.getUPPAALIdentification(tgc);
+                TraceManager.addDev("Query: " + s);
+                if ((s != null) && (s.length() > 0)) {
+                    AvatarBlock block = avatar2uppaal.getBlockFromReferenceObject(tgc);
+                    listQ.add(new TGComponentAndUPPAALQuery(tgc, s + "$" + block.getName() + "." + tgc));
+                } else {
+                    TraceManager.addDev("Could not make query for " + tgc);
+                }
+            }
         }
 
 

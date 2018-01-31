@@ -1141,7 +1141,7 @@ public class TGUIAction extends AbstractAction {
 
 	// Fault Tree Diagrams
         actions[FTD_BLOCK] = new TAction("ftd-block", "Add a block", IconManager.imgic1070, IconManager.imgic1070, "Block", "Add a SysML Block to the currently opened fault tree diagram", 0);
-        actions[FTD_FAULT] = new TAction("ftd-fault", "Add a fault", IconManager.imgic1072, IconManager.imgic1072, "Fault", "Add a fault (i.e. a SysML value type) to the currently opened fault tree diagram", 0);
+        actions[FTD_FAULT] = new TAction("ftd-fault", "Add a fault", IconManager.imgic1416, IconManager.imgic1416, "Fault", "Add a fault (i.e. a SysML value type) to the currently opened fault tree diagram", 0);
         actions[FTD_FAULT_CONNECTOR] = new TAction("ftd-fault-connector", "Add a connector between faults /constraints", IconManager.imgic1080, IconManager.imgic1080, "Connector", "Add a connector between faults / constraints of the currently opened fault tree diagram", 0);
         actions[FTD_COMPOSITION_CONNECTOR] = new TAction("ftd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Composition connector", "Add a composition between blocks of the currently opened fault tree diagram", 0);
         actions[FTD_CONSTRAINT] = new TAction("ftd-constraint", "Add a constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened fault tree diagram", 0);

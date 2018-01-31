@@ -81,7 +81,6 @@ public class AttackTreePanel extends TURTLEPanel {
             };
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-
     }
 
     public void init() {

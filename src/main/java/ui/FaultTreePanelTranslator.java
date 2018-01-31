@@ -95,6 +95,13 @@ public class FaultTreePanelTranslator {
         for (TDiagramPanel panel : atp.panels) {
             if (panel instanceof FaultTreeDiagramPanel) {
                 translate((FaultTreeDiagramPanel) panel);
+                boolean b = at.checkSyntax();
+                if (!b) {
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, at.errorOfFaultyElement);
+                    ce.setTGComponent((TGComponent) (at.faultyElement.getReferenceObject()));
+                    ce.setTDiagramPanel(panel);
+                    addCheckingError(ce);
+                }
             }
         }
 

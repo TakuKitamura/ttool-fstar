@@ -88,7 +88,7 @@ public class FaultTreeDiagramToolbar extends TToolBar {
         mgui.actions[TGUIAction.FTD_COUNTERMEASURE_CONNECTOR].setEnabled(b);
 
         mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
-        //mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 
     }
 

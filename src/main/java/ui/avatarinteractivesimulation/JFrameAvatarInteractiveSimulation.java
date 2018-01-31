@@ -1359,6 +1359,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         } else if (avspec.getReferenceObject() instanceof AttackTreePanel) {
             ((AttackTreePanel)(avspec.getReferenceObject())).resetMetElements();
+        } else if (avspec.getReferenceObject() instanceof FaultTreePanel) {
+            ((FaultTreePanel)(avspec.getReferenceObject())).resetMetElements();
         }
 
         if (coverage != null) {
