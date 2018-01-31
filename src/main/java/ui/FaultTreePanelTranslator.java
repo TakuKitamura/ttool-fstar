@@ -39,8 +39,8 @@
 
 package ui;
 
-import faulttrees.*;
 import avatartranslator.*;
+import faulttrees.*;
 import translator.CheckingError;
 import ui.ftd.*;
 
@@ -156,6 +156,11 @@ public class FaultTreePanelTranslator {
                     at.addNode(xornode);
                     listE.addCor(xornode, comp);
 
+                } else if (cons.isNOT()) {
+                    NOTNode notnode = new NOTNode("NOT__" + nodeID, cons);
+                    at.addNode(notnode);
+                    listE.addCor(notnode, comp);
+
                     //SEQUENCE
                 } else if (cons.isSequence()) {
                     SequenceNode seqnode = new SequenceNode("SEQUENCE__" + nodeID, cons);
@@ -193,6 +198,11 @@ public class FaultTreePanelTranslator {
                         ce.setTDiagramPanel(atdp);
                         addCheckingError(ce);
                     }
+
+                } else if (cons.isVote()) {
+                    VoteNode voteNode = new VoteNode("VOTE__" + nodeID, cons);
+                    at.addNode(voteNode);
+                    listE.addCor(voteNode, comp);
 
                 } else {
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Invalid Fault node");
@@ -504,6 +514,7 @@ public class FaultTreePanelTranslator {
             if (_ref1 instanceof FTDFault) {
                 activatedState.setAsVerifiable(true);
             }
+
             AvatarState performedState = new AvatarState("performed", _ref, false, false);
             AvatarState mainStop = new AvatarState("stop", _ref, false, false);
             AvatarState stopBeforeActivate = new AvatarState("stopBeforeActivate", _ref, false, false);
@@ -695,6 +706,8 @@ public class FaultTreePanelTranslator {
                     makeAfterNode(_as, _main, ab, (AfterNode) node, listE.getTG(node));
                 } else if (node instanceof BeforeNode) {
                     makeBeforeNode(_as, _main, ab, (BeforeNode) node, listE.getTG(node));
+                } else if (node instanceof VoteNode) {
+                    makeVoteNode(_as, _main, ab, (VoteNode) node, listE.getTG(node));
                 }
             }
         }
@@ -743,6 +756,84 @@ public class FaultTreePanelTranslator {
             at.setGuard(new AvatarSimpleGuardDuo(aa, AvatarConstant.FALSE, "=="));
             at = new AvatarTransition(_ab, "at_fromInputFault", _ref);
             at.addAction(att.getName() + "__performed = true");
+            asm.addElement(at);
+            acceptFault.addNext(at);
+            at.addNext(mainState);
+            at.setHidden(true);
+        }
+
+        // Adding resulting Fault
+        AvatarTransition at = new AvatarTransition(_ab, "at_toEnd", _ref);
+        asm.addElement(at);
+        mainState.addNext(at);
+        at.addNext(endState);
+        at.setGuard("[" + finalGuard + "]");
+
+        Fault resulting = _node.getResultingFault();
+        avatartranslator.AvatarSignal sigFault = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
+        AvatarActionOnSignal resultingFault = new AvatarActionOnSignal("ResultingFault", sigFault, _ref1);
+        asm.addElement(resultingFault);
+        at = new AvatarTransition(_ab, "at_toResultingFault", _ref);
+        asm.addElement(at);
+        endState.addNext(at);
+        at.addNext(resultingFault);
+        at = new AvatarTransition(_ab, "at_Overall", _ref);
+        asm.addElement(at);
+        resultingFault.addNext(at);
+        at.addNext(overallState);
+    }
+
+    private void makeVoteNode(AvatarSpecification _as, AvatarBlock _main, AvatarBlock _ab, VoteNode _node, Object _ref) {
+        Object _ref1 = _ref;
+        _ref = null;
+        AvatarStateMachine asm = _ab.getStateMachine();
+
+        // Basic machine
+        AvatarStartState start = new AvatarStartState("start", _ref);
+        AvatarState mainState = new AvatarState("main", _ref, false, false);
+        AvatarState endState = new AvatarState("end", _ref, false, false);
+        AvatarState overallState = new AvatarState("overall", _ref, false, false);
+        asm.addElement(start);
+        asm.setStartState(start);
+        asm.addElement(mainState);
+        asm.addElement(endState);
+        asm.addElement(overallState);
+        AvatarTransition atF = new AvatarTransition(_ab, "at1", _ref);
+        asm.addElement(atF);
+        start.addNext(atF);
+        atF.addNext(mainState);
+        atF.setHidden(true);
+        String finalGuard = "";
+
+        AvatarAttribute aCount = new AvatarAttribute("__nbOfPerformed", AvatarType.INTEGER, _ab, _ref);
+        _ab.addAttribute(aCount);
+
+        double nbOfVoters = _node.getInputFaults().size() / 2.0;
+        int thres = (int) (Math.ceil(nbOfVoters));
+        finalGuard = "( __nbOfPerformed >= " + thres + ")";
+        for (Fault att : _node.getInputFaults()) {
+            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ab, _ref);
+
+            /*if (finalGuard.length() == 0) {
+                finalGuard += "(" + att.getName() + "__performed == true)";
+            } else {
+                finalGuard += " && (" + att.getName() + "__performed == true)";
+            }*/
+            _ab.addAttribute(aa);
+            atF.addAction(att.getName() + "__performed = false");
+
+
+            avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
+            AvatarActionOnSignal acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
+            AvatarTransition at = new AvatarTransition(_ab, "at_toInputFault", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(acceptFault);
+            at.setGuard(new AvatarSimpleGuardDuo(aa, AvatarConstant.FALSE, "=="));
+            at = new AvatarTransition(_ab, "at_fromInputFault", _ref);
+            at.addAction(att.getName() + "__performed = true");
+            at.addAction(aCount.getName() + " = " + aCount.getName() + " + 1" );
             asm.addElement(at);
             acceptFault.addNext(at);
             at.addNext(mainState);

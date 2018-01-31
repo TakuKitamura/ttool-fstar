@@ -49,7 +49,8 @@ import ui.window.JDialogConstraintText;
 
 import javax.swing.*;
 import java.awt.*;
-import myutil.*;;
+
+;
 
 /**
  * Class FTDConstraint
@@ -258,16 +259,24 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
         return (value.compareTo(STEREOTYPES[2]) == 0);
     }
 
-    public boolean isSequence() {
+    public boolean isNOT() {
         return (value.compareTo(STEREOTYPES[3]) == 0);
     }
 
-    public boolean isBefore() {
+    public boolean isSequence() {
         return (value.compareTo(STEREOTYPES[4]) == 0);
     }
 
-    public boolean isAfter() {
+    public boolean isBefore() {
         return (value.compareTo(STEREOTYPES[5]) == 0);
+    }
+
+    public boolean isAfter() {
+        return (value.compareTo(STEREOTYPES[6]) == 0);
+    }
+
+    public boolean isVote() {
+        return (value.compareTo(STEREOTYPES[7]) == 0);
     }
 
     protected String translateExtraParam() {
