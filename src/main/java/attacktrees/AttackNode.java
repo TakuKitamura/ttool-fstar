@@ -105,6 +105,31 @@ public abstract class AttackNode extends AttackElement {
         return ret;
     }
 
+    public int hasNegativeAttackNumber() {
+        for(int i=0; i<inputValues.size(); i++) {
+            int atti = inputValues.get(i).intValue();
+            if (atti < 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int hasUniqueAttackNumber() {
+        for(int i=0; i<inputValues.size()-1; i++) {
+            int atti = inputValues.get(i).intValue();
+            for (int j = i + 1; j < inputValues.size(); j++) {
+                //myutil.TraceManager.addDev("i=" + i + " j=" + j + " size=" + attacks.size());
+                int attj = inputValues.get(j).intValue();
+                //myutil.TraceManager.addDev("i=" + atti.getName() + " j=" + attj.getName() + " size=" + attacks.size());
+                if (atti == attj) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
     // Order attacks according to the Integer value
     public void orderAttacks() {
         ArrayList<Attack> newAttacks = new ArrayList<Attack>();

@@ -71,7 +71,6 @@ public class AttackTree extends AttackElement {
         attacks.add(_attack);
     }
 
-
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("List of nodes:");
@@ -90,15 +89,54 @@ public class AttackTree extends AttackElement {
     }
 
     // Checks:
-    // Sequence nodes have attacks which are ordered
+    // Sequence/after/before nodes have attacks which are ordered (i.e. unique positive number)
     // Time value is positive in before and after
     // Attack name is unique
-    // Node name is unique
+    // Node name is unique -> by construction, no need to check this
     public boolean checkSyntax() {
+        // Negative order for attacks
+        for (AttackNode an : nodes) {
+            int faulty = an.hasNegativeAttackNumber();
+            if (faulty >= 0) {
+                faultyElement = an;
+                errorOfFaultyElement = "Negative sequence number for node: " + an.getName() +
+                        " and attack: " + an.getInputAttacks().get(faulty).getName();
+                return false;
+            }
+        }
+
+
+        // Order of input attacks : in sequence / after / before
+        for (AttackNode an : nodes) {
+
+            if ((an instanceof SequenceNode) || (an instanceof TimeNode)) {
+                int faulty = an.hasUniqueAttackNumber();
+                if (faulty >= 0) {
+                    faultyElement = an;
+                    errorOfFaultyElement = "Identical sequence number for node: " + an.getName() +
+                            " and attack: " + an.getInputAttacks().get(faulty).getName();
+                    return false;
+                }
+            }
+
+        }
+
+        // Time value is positive
+        for (AttackNode an : nodes) {
+            if (an instanceof TimeNode) {
+                int t = ((TimeNode) an).getTime();
+                if (t < 0) {
+                    faultyElement = an;
+                    errorOfFaultyElement = "Time value must be positive in: " + an.getName();
+                    return false;
+                }
+            }
+        }
+
         // Attack name is unique
-        for(int i=0; i<attacks.size()-1; i++) {
+        for (int i = 0; i < attacks.size() - 1; i++) {
             Attack atti = attacks.get(i);
-            for(int j=i+1; j<attacks.size(); j++) {
+            for (int j = i + 1; j < attacks.size(); j++) {
                 //myutil.TraceManager.addDev("i=" + i + " j=" + j + " size=" + attacks.size());
                 Attack attj = attacks.get(j);
                 //myutil.TraceManager.addDev("i=" + atti.getName() + " j=" + attj.getName() + " size=" + attacks.size());

@@ -37,26 +37,24 @@
  */
 
 
-
-
 package attacktrees;
 
 /**
  * Class TimeNode
  * Creation: 13/04/2015
- * @version 1.0 13/04/2015
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 13/04/2015
  */
-public abstract class TimeNode extends AttackNode{
+public abstract class TimeNode extends AttackNode {
     protected int time;
 
     public TimeNode(String _name, Object _objectReference, int _time) {
-	super(_name, _objectReference);
-	time = _time;
+        super(_name, _objectReference);
+        time = _time;
     }
 
     public int getTime() {
-	return time;
+        return time;
     }
-    
 }

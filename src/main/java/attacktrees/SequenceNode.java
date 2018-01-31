@@ -37,21 +37,20 @@
  */
 
 
-
-
 package attacktrees;
 
 /**
  * Class SequenceNode
  * Creation: 13/04/2015
- * @version 1.0 13/04/2015
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 13/04/2015
  */
 public class SequenceNode extends AttackNode {
-    
+
     public SequenceNode(String _name, Object _referenceObject) {
-	super(_name, _referenceObject);
-	type = "SEQUENCE";
+        super(_name, _referenceObject);
+        type = "SEQUENCE";
     }
-    
+
 }
