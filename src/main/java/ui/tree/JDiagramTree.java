@@ -136,13 +136,19 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     }
 
     public void mousePressed(MouseEvent e) {
+        //TraceManager.addDev("Mouse event");
         if (SwingUtilities.isRightMouseButton(e)) {
+            //TraceManager.addDev("right mouse event. popup trigger? " + e.isPopupTrigger());
             if (e.isPopupTrigger()) myPopupEvent(e);
         }
     }
 
     public void mouseReleased(MouseEvent e) {
-        //if (e.isPopupTrigger()) myPopupEvent(e);
+        //TraceManager.addDev("Mouse event");
+        if (SwingUtilities.isRightMouseButton(e)) {
+            //TraceManager.addDev("right mouse event. popup trigger? " + e.isPopupTrigger());
+            if (e.isPopupTrigger()) myPopupEvent(e);
+        }
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -160,6 +166,9 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
 
     private void myPopupEvent(MouseEvent e) {
+
+         //TraceManager.addDev("myPopupEvent");
+
         int x = e.getX();
         int y = e.getY();
         JTree tree = (JTree) e.getSource();
@@ -167,8 +176,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
         //TraceManager.addDev("Path=" + path);
 
-        if (path == null)
+        if (path == null) {
+            //TraceManager.addDev("Null path");
             return;
+        }
 
         tree.setSelectionPath(path);
 
@@ -189,6 +200,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
 
         if (obj instanceof RG) {
+            //TraceManager.addDev("RG object");
             selectedRG = (RG) obj;
             if (popupTree == null) {
                 popupTree = new JPopupMenu();

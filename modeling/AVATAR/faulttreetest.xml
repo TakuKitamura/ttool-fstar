@@ -109,7 +109,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="55" />
-<P1  x="459" y="361" id="166" />
+<P1  x="523" y="388" id="166" />
 <P2  x="352" y="292" id="160" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -127,8 +127,8 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="59" />
-<P1  x="534" y="370" id="181" />
-<P2  x="580" y="401" id="137" />
+<P1  x="598" y="397" id="181" />
+<P2  x="692" y="397" id="137" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="6101" id="85" >
@@ -241,7 +241,7 @@
 </COMPONENT>
 
 <COMPONENT type="6103" id="148" >
-<cdparam x="592" y="382" />
+<cdparam x="704" y="378" />
 <sizeparam width="164" height="39" minWidth="78" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1601" minY="10" maxY="962" />
@@ -284,7 +284,7 @@
 </COMPONENT>
 
 <COMPONENT type="6101" id="186" >
-<cdparam x="435" y="361" />
+<cdparam x="499" y="388" />
 <sizeparam width="99" height="39" minWidth="99" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
