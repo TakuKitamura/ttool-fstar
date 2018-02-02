@@ -60,7 +60,7 @@ import java.util.ArrayList;
  * @version 1.0 17/10/2016
  * @author Letitia LI
  */
-public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes {
+public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiSecurityInterface {
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;

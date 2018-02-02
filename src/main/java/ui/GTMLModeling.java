@@ -2833,8 +2833,8 @@ public class GTMLModeling  {
                     ce.setTGComponent(firewallnode);
                     checkingErrors.add(ce);
                 } else {
-                    names.add("CPU__"+firewallnode.getName());
-                    bridge = new HwBridge("CPU__"+firewallnode.getName());
+                    names.add(firewallnode.getName());
+                    bridge = new HwBridge(firewallnode.getName());
                     bridge.isFirewall=true;
                     bridge.firewallRules = ((TMLArchiFirewallNode) tgc).getRules();
                     bridge.latency = ((TMLArchiFirewallNode) tgc).getLatency();

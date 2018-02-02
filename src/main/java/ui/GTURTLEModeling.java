@@ -740,7 +740,7 @@ public class GTURTLEModeling {
     }
 
     public TMLMapping<TGComponent> drawFirewall(TMLMapping<TGComponent> map) {
-        System.out.println("DRAWING FIREWALL");
+      //  System.out.println("DRAWING FIREWALL");
         TGComponent comp = map.getTMLModeling().getTGComponent();
         TMLComponentDesignPanel tmlcdp = (TMLComponentDesignPanel) comp.getTDiagramPanel().tp;
         // TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
