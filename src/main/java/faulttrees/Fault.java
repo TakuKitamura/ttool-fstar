@@ -49,18 +49,15 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  * @version 1.0 24/01/2018
  */
-public class Fault {
+public class Fault extends FaultElement {
     private FaultNode originNode; // If no origin node -> leaf attack
     private ArrayList<FaultNode> destinationNodes;
-    private String name;
-    private Object referenceObject;
     private boolean isRoot;
     private boolean isEnabled = true;
 
 
     public Fault(String _name, Object _referenceObject) {
-        name = _name;
-        referenceObject = _referenceObject;
+        super(_name, _referenceObject);
         destinationNodes = new ArrayList<FaultNode>();
     }
 
@@ -88,9 +85,6 @@ public class Fault {
         destinationNodes.add(_node);
     }
 
-    public String getName() {
-        return name;
-    }
 
     public boolean isLeaf() {
         return (originNode == null);

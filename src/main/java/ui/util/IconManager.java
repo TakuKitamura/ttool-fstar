@@ -121,7 +121,7 @@ public class IconManager {
 
     // Fault Tree Diagrams
     public static ImageIcon imgic1400, imgic1402, imgic1404, imgic1406, imgic1408;
-    public static ImageIcon imgic1410, imgic1412, imgic1414;
+    public static ImageIcon imgic1410, imgic1412, imgic1414, imgic1416;
     public static Image img1400, img1402, img1404, img1406, img1408;
     public static Image img1410, img1412, img1414;
 
@@ -502,6 +502,7 @@ public class IconManager {
     private static String icon1410 = "OrFT.png";
     private static String icon1412 = "XorFT.png";
     private static String icon1414 = "VoteFT.png";
+    private static String icon1416 = "ftdfault.gif";
 
     // DIPLODOCUS architecture
     private static String icon1100 = "tmlcpunode.gif";
@@ -972,6 +973,7 @@ public class IconManager {
         if (imgic1414 != null) {
             img1414 = imgic1414.getImage();
         }
+        imgic1416 = getIcon(icon1416);
 
         imgic1100 = getIcon(icon1100);
         imgic1102 = getIcon(icon1102);

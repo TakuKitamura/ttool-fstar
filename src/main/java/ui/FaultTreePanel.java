@@ -170,6 +170,7 @@ public class FaultTreePanel extends TURTLEPanel {
         return list;
 
     }
+
     public void resetMetElements() {
         //TraceManager.addDev("Reset met elements");
         TGComponent tgc;

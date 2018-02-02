@@ -238,6 +238,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public final static byte AVATAR_SYNTAXCHECKING_OK = 47;
     public final static byte PANEL_CHANGED = 48;
     public final static byte ATTACKTREE_SYNTAXCHECKING_OK = 49;
+    public final static byte FAULTTREE_SYNTAXCHECKING_OK = 51;
     public final static byte COMPONENT_SELECTED = 50;
 
     public final static int INCREMENT = 10;
@@ -3503,25 +3504,25 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 }
             }
 
-            // AttackTree
+            // FaultTree
         } else if (tp instanceof FaultTreePanel) {
             FaultTreePanel atp = (FaultTreePanel) tp;
             b = gtm.translateFaultTreePanel(atp);
             expandToWarnings();
             expandToErrors();
             if (b) {
-                setMode(MainGUI.ATTACKTREE_SYNTAXCHECKING_OK);
+                setMode(MainGUI.FAULTTREE_SYNTAXCHECKING_OK);
                 ret = true;
                 if (!automatic) {
                     JOptionPane.showMessageDialog(frame,
                             "0 error, " + getCheckingWarnings().size() + " warning(s)",
-                            "Syntax analysis successful on attack tree",
+                            "Syntax analysis successful on fault tree",
                             JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
                 if (!automatic) {
                     JOptionPane.showMessageDialog(frame,
-                            "The Attack tree contains several errors",
+                            "The fault tree contains several errors",
                             "Syntax analysis failed",
                             JOptionPane.INFORMATION_MESSAGE);
                 }

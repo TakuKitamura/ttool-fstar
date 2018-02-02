@@ -37,8 +37,6 @@
  */
 
 
-
-
 package attacktrees;
 
 import java.util.ArrayList;
@@ -47,56 +45,110 @@ import java.util.ArrayList;
 /**
  * Class AttackTree
  * Creation: 10/04/2015
- * @version 1.0 10/04/2015
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 10/04/2015
  */
-public class AttackTree {
+public class AttackTree extends AttackElement {
     private ArrayList<AttackNode> nodes;
     private ArrayList<Attack> attacks;
-    private String name;
-    Object reference;
-    
- 
+
+    public AttackElement faultyElement;
+    public String errorOfFaultyElement;
+
+
     public AttackTree(String _name, Object _reference) {
-	name = _name;
-	reference = _reference;
-	nodes = new ArrayList<AttackNode>();
-	attacks = new ArrayList<Attack>();
+        super(_name, _reference);
+        nodes = new ArrayList<AttackNode>();
+        attacks = new ArrayList<Attack>();
     }
-    
+
     public void addNode(AttackNode _node) {
-	nodes.add(_node);
+        nodes.add(_node);
     }
 
     public void addAttack(Attack _attack) {
-	attacks.add(_attack);
+        attacks.add(_attack);
     }
-    
 
     public String toString() {
-	StringBuffer sb = new StringBuffer();
-	sb.append("List of nodes:");
-	for(AttackNode an: nodes) {
-	    sb.append("  " + an.toString() + "\n");
-	}
-	return sb.toString();
+        StringBuffer sb = new StringBuffer();
+        sb.append("List of nodes:");
+        for (AttackNode an : nodes) {
+            sb.append("  " + an.toString() + "\n");
+        }
+        return sb.toString();
     }
 
     public ArrayList<Attack> getAttacks() {
-	return attacks;
+        return attacks;
     }
 
     public ArrayList<AttackNode> getAttackNodes() {
-	return nodes;
+        return nodes;
     }
 
     // Checks:
-    // Sequence nodes have attacks which are ordered
+    // Sequence/after/before nodes have attacks which are ordered (i.e. unique positive number)
     // Time value is positive in before and after
     // Attack name is unique
-    // Node name is unique
+    // Node name is unique -> by construction, no need to check this
     public boolean checkSyntax() {
-	return true;
+        // Negative order for attacks
+        for (AttackNode an : nodes) {
+            int faulty = an.hasNegativeAttackNumber();
+            if (faulty >= 0) {
+                faultyElement = an;
+                errorOfFaultyElement = "Negative sequence number for node: " + an.getName() +
+                        " and attack: " + an.getInputAttacks().get(faulty).getName();
+                return false;
+            }
+        }
+
+
+        // Order of input attacks : in sequence / after / before
+        for (AttackNode an : nodes) {
+
+            if ((an instanceof SequenceNode) || (an instanceof TimeNode)) {
+                int faulty = an.hasUniqueAttackNumber();
+                if (faulty >= 0) {
+                    faultyElement = an;
+                    errorOfFaultyElement = "Identical sequence number for node: " + an.getName() +
+                            " and attack: " + an.getInputAttacks().get(faulty).getName();
+                    return false;
+                }
+            }
+
+        }
+
+        // Time value is positive
+        for (AttackNode an : nodes) {
+            if (an instanceof TimeNode) {
+                int t = ((TimeNode) an).getTime();
+                if (t < 0) {
+                    faultyElement = an;
+                    errorOfFaultyElement = "Time value must be positive in: " + an.getName();
+                    return false;
+                }
+            }
+        }
+
+        // Attack name is unique
+        for (int i = 0; i < attacks.size() - 1; i++) {
+            Attack atti = attacks.get(i);
+            for (int j = i + 1; j < attacks.size(); j++) {
+                //myutil.TraceManager.addDev("i=" + i + " j=" + j + " size=" + attacks.size());
+                Attack attj = attacks.get(j);
+                //myutil.TraceManager.addDev("i=" + atti.getName() + " j=" + attj.getName() + " size=" + attacks.size());
+                if (atti.getName().compareTo(attj.getName()) == 0) {
+                    faultyElement = atti;
+                    errorOfFaultyElement = "Duplicate name for attack: " + atti.getName();
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
- 
+
 }

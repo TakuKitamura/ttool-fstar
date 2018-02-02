@@ -50,17 +50,14 @@ import java.util.Collections;
  * @author Ludovic APVRILLE
  * @version 1.0 24/01/2018
  */
-public abstract class FaultNode {
+public abstract class FaultNode extends FaultElement {
     private Fault resultingFault; // If no resulting attack -> error!
     private ArrayList<Fault> inputFaults;
     private ArrayList<Integer> inputValues;
-    private String name;
     protected String type = "";
-    protected Object referenceObject;
 
     public FaultNode(String _name, Object _referenceObject) {
-        name = _name;
-        referenceObject = _referenceObject;
+        super(_name, _referenceObject);
         inputFaults = new ArrayList<Fault>();
         inputValues = new ArrayList<Integer>();
     }
@@ -73,10 +70,6 @@ public abstract class FaultNode {
 
         return inputFaults.size() >= 1;
 
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setResultingFault(Fault _fault) {
@@ -96,6 +89,32 @@ public abstract class FaultNode {
         inputValues.add(_val);
     }
 
+    public int hasNegativeAttackNumber() {
+        for(int i=0; i<inputValues.size(); i++) {
+            int atti = inputValues.get(i).intValue();
+            if (atti < 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int hasUniqueAttackNumber() {
+        for(int i=0; i<inputValues.size()-1; i++) {
+            int atti = inputValues.get(i).intValue();
+            for (int j = i + 1; j < inputValues.size(); j++) {
+                //myutil.TraceManager.addDev("i=" + i + " j=" + j + " size=" + attacks.size());
+                int attj = inputValues.get(j).intValue();
+                //myutil.TraceManager.addDev("i=" + atti.getName() + " j=" + attj.getName() + " size=" + attacks.size());
+                if (atti == attj) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    @Override
     public String toString() {
         String ret = name + "/" + type + " Incoming faults: ";
         for (Fault att : inputFaults) {

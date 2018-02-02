@@ -49,16 +49,17 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  * @version 1.0 24/01/2018
  */
-public class FaultTree {
+public class FaultTree extends FaultElement {
     private ArrayList<FaultNode> nodes;
     private ArrayList<Fault> faults;
     private String name;
-    Object reference;
+
+    public FaultElement faultyElement;
+    public String errorOfFaultyElement;
 
 
     public FaultTree(String _name, Object _reference) {
-        name = _name;
-        reference = _reference;
+        super(_name, _reference);
         nodes = new ArrayList<FaultNode>();
         faults = new ArrayList<Fault>();
     }
@@ -71,7 +72,7 @@ public class FaultTree {
         faults.add(_attack);
     }
 
-
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("List of nodes:");
@@ -90,12 +91,70 @@ public class FaultTree {
     }
 
     // Checks:
-    // Sequence nodes have attacks which are ordered
+    // Sequence/after/before nodes have attacks which are ordered (i.e. unique positive number)
     // Time value is positive in before and after
     // Attack name is unique
-    // Node name is unique
+    // Node name is unique -> by construction, no need to check this
     public boolean checkSyntax() {
+        // Negative order for attacks
+        for (FaultNode an : nodes) {
+            int faulty = an.hasNegativeAttackNumber();
+            if (faulty >= 0) {
+                faultyElement = an;
+                errorOfFaultyElement = "Negative sequence number for node: " + an.getName() +
+                        " and attack: " + an.getInputFaults().get(faulty).getName();
+                return false;
+            }
+        }
+
+
+        // Order of input attacks : in sequence / after / before
+        for (FaultNode an : nodes) {
+
+            if ((an instanceof SequenceNode) || (an instanceof TimeNode)) {
+                int faulty = an.hasUniqueAttackNumber();
+                if (faulty >= 0) {
+                    faultyElement = an;
+                    errorOfFaultyElement = "Identical sequence number for node: " + an.getName() +
+                            " and attack: " + an.getInputFaults().get(faulty).getName();
+                    return false;
+                }
+            }
+
+        }
+
+        // Time value is positive
+        for (FaultNode an : nodes) {
+            if (an instanceof TimeNode) {
+                int t = ((TimeNode) an).getTime();
+                if (t < 0) {
+                    faultyElement = an;
+                    errorOfFaultyElement = "Time value must be positive in: " + an.getName();
+                    return false;
+                }
+            }
+        }
+
+        // Attack name is unique
+        for (int i = 0; i < faults.size() - 1; i++) {
+            Fault atti = faults.get(i);
+            for (int j = i + 1; j < faults.size(); j++) {
+                //myutil.TraceManager.addDev("i=" + i + " j=" + j + " size=" + attacks.size());
+                Fault attj = faults.get(j);
+                //myutil.TraceManager.addDev("i=" + atti.getName() + " j=" + attj.getName() + " size=" + attacks.size());
+                if (atti.getName().compareTo(attj.getName()) == 0) {
+                    faultyElement = atti;
+                    errorOfFaultyElement = "Duplicate name for fault: " + atti.getName();
+                    return false;
+                }
+            }
+        }
+
         return true;
+
+
+
+
     }
 
 }
