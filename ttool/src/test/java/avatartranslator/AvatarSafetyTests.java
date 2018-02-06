@@ -129,8 +129,18 @@ public class AvatarSafetyTests {
 		//Fail if does not contain 'Latency()'
 		pragma = adpt.checkPerformancePragma("Lat(b,s)<1", blocks, as, null);
 		assertNull(pragma);
+		//Fail if missing comma
+		pragma = adpt.checkPerformancePragma("Latency(bs)<1", blocks, as, null);
+		assertNull(pragma);
 		//Fail if unmatched ')'
 		pragma = adpt.checkPerformancePragma("Latency(b,s<1", blocks, as, null);
+		assertNull(pragma);
+		//Fail if invalid comparison sign
+		pragma = adpt.checkPerformancePragma("Latency(b,s)-1", blocks, as, null);
+		assertNull(pragma);
+		pragma = adpt.checkPerformancePragma("Latency(b,s)*1", blocks, as, null);
+		assertNull(pragma);
+		pragma = adpt.checkPerformancePragma("Latency(b<s),1", blocks, as, null);
 		assertNull(pragma);
 	}
 
@@ -217,6 +227,18 @@ public class AvatarSafetyTests {
 		assertEquals(pragma.getId2().size(),2);	
 	
 	}
+   
+    @Test
+    public void testFailInvalidStateFormatPerformancePragma(){
+       	pragma = adpt.checkPerformancePragma("Latency(A,C.c1)<1", blocks, as, null);
+		assertTrue(pragma ==null);
+    	pragma = adpt.checkPerformancePragma("Latency(A.,C.c1)<1", blocks, as, null);
+		assertTrue(pragma ==null);
+		pragma = adpt.checkPerformancePragma("Latency(B.sig2,C)<1", blocks, as, null);
+		assertTrue(pragma ==null);
+		pragma = adpt.checkPerformancePragma("Latency(B.sig2,C.)<1", blocks, as, null);
+		assertTrue(pragma ==null);
+    }
     
     @Test
     public void testFormAvatarStatePragma(){

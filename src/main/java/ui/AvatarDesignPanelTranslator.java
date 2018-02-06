@@ -241,7 +241,7 @@ public class AvatarDesignPanelTranslator {
     }
 	
 	public AvatarPragmaLatency checkPerformancePragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc){	
-		if (_pragma.contains("=") || (!_pragma.contains(">") && !_pragma.contains("<") && !_pragma.contains("?")) || !_pragma.contains("Latency")){
+		if (_pragma.contains("=") || (!_pragma.contains(">") && !_pragma.contains("<") && !_pragma.contains("?")) || !_pragma.contains("Latency(")){
 			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "No latency expression found in pragma "+ _pragma);
 		   	ce.setTDiagramPanel(adp.getAvatarBDPanel());
 		   	ce.setTGComponent(tgc);
@@ -256,7 +256,6 @@ public class AvatarDesignPanelTranslator {
 		
 
 		String p1 = pragma.split(",")[0];
-
 		//Throw error if lack of '.' in block.signal
 		if (!p1.contains(".")){
 			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Invalid block.signal format in pragma " + _pragma);
@@ -266,9 +265,8 @@ public class AvatarDesignPanelTranslator {
 			TraceManager.addDev("Invalid block.signal format in pragma " + _pragma);
 			return null;
 		}
-
 		String block1 = p1.split("\\.")[0];
-		String state1 = p1.split("\\.")[1];
+		String state1 = p1.split("\\.",-1)[1];
 		AvatarBlock bl1;
 		AvatarStateMachineElement st1=null;
 		List<String> id1= new ArrayList<String>();
@@ -323,7 +321,7 @@ public class AvatarDesignPanelTranslator {
 		}
 
 		String block2 = p2.split("\\.")[0];
-		String state2 = p2.split("\\.")[1];
+		String state2 = p2.split("\\.",-1)[1];
 
 
 
