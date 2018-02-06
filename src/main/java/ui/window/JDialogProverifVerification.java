@@ -736,8 +736,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         LinkedList<AvatarPragma> results;
         JList<AvatarPragma> jlist;
 
-        ProVerifResultSection(String title, LinkedList<AvatarPragma> results)
-        {
+        ProVerifResultSection(String title, LinkedList<AvatarPragma> results) {
             this.title = title;
             this.results = results;
         }

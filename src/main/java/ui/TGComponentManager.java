@@ -877,9 +877,9 @@ public class TGComponentManager {
         case PERFORMANCE_PRAGMA:
             tgc = new AvatarBDPerformancePragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;
-            //        case AVATAR_FIREWALL:
-            //            tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            //            break;
+        case AVATAR_FIREWALL:
+            tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            break;
         case IOD_CHOICE:
             tgc = new IODChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             break;

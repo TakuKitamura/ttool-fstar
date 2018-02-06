@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.window;
 
 import launcher.LauncherException;
@@ -49,8 +47,8 @@ import tmatrix.RequirementModeling;
 import tmatrix.Requirements;
 import ui.FormatManager;
 import ui.GTURTLEModeling;
-import ui.util.IconManager;
 import ui.MainGUI;
+import ui.util.IconManager;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -65,16 +63,17 @@ import java.util.Vector;
  * Class JDialogTMatrixManagement
  * Dialog for managing remote processes call on traceability matrices
  * Creation: 16/08/2006
- * @version 1.0 16/08/2006
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 16/08/2006
  */
-public class JDialogTMatrixManagement extends JFrame implements ActionListener, Runnable  {
-    
+public class JDialogTMatrixManagement extends JFrame implements ActionListener, Runnable {
+
     protected MainGUI mgui;
     protected RequirementModeling rm;
     protected TMatrixTableModel tm;
     protected TableSorter sorter;
-    
+
     protected String cmdRTL;
     protected String cmdDTA2DOT;
     protected String cmdRGSTRAP;
@@ -87,12 +86,12 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
     protected int mode;
     protected RshClient rshc;
     protected Thread t;
-    
+
     protected final static int NO_OPTIONS = 0;
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
     protected final static int STOPPED = 3;
-    
+
     //components
     protected JTable jtable;
     protected JScrollPane jsp;
@@ -100,56 +99,58 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
     protected JButton start;
     protected JButton stop;
     protected JButton close;
-    
+
     protected Vector<Requirements> toBeChecked;
-    
-    /** Creates new form  */
+
+    /**
+     * Creates new form
+     */
     public JDialogTMatrixManagement(Frame f, MainGUI _mgui, String title, RequirementModeling _rm, String _cmdRTL, String _cmdDTA2DOT, String _cmdRGSTRAP, String _cmdRG2TLSA, String _fileName, String _host, String _aldebaranHost, String _bcgioPath) {
         super(title);
         //super(f, title, true);
-        
+
         mgui = _mgui;
         rm = _rm;
-        
+
         cmdRTL = _cmdRTL;
         cmdDTA2DOT = _cmdDTA2DOT;
         cmdRGSTRAP = _cmdRGSTRAP;
         cmdRG2TLSA = _cmdRG2TLSA;
         fileName = _fileName;
         host = _host;
-        
+
         hostAldebaran = _aldebaranHost;
         bcgioPath = _bcgioPath;
-        
+
         initComponents();
         myInitComponents();
         pack();
-        
+
         //getGlassPane().addMouseListener( new MouseAdapter() {});
         getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
-    
-    
+
+
     protected void myInitComponents() {
         mode = NOT_STARTED;
         setButtons();
     }
-    
+
     protected void initComponents() {
-        
+
         Container c = getContentPane();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+
         JPanel jp1 = new JPanel();
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagConstraints c1 = new GridBagConstraints();
-        
+
         jp1.setLayout(gridbag1);
         jp1.setBorder(new javax.swing.border.TitledBorder("Current matrix"));
         jp1.setPreferredSize(new Dimension(400, 150));
-        
+
         // first line panel1
         //c1.gridwidth = 3;
         c1.gridheight = 1;
@@ -158,7 +159,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         c1.fill = GridBagConstraints.BOTH;
         c1.gridheight = 1;
-        
+
         tm = new TMatrixTableModel(rm);
         sorter = new TableSorter(tm);
         jtable = new JTable(sorter);
@@ -172,11 +173,11 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
         jsp = new JScrollPane(jtable);
         jsp.setWheelScrollingEnabled(true);
         jsp.getVerticalScrollBar().setUnitIncrement(10);
-        
+
         jp1.add(jsp, c1);
-        
+
         c.add(jp1, BorderLayout.NORTH);
-        
+
         jta = new ScrolledJTextArea();
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
@@ -185,37 +186,37 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
         JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        
+
         JSplitPane jsplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, jp1, jsp);
         c.add(jsplit, BorderLayout.CENTER);
-        
+
         start = new JButton("Check", IconManager.imgic53);
         stop = new JButton("Stop", IconManager.imgic55);
         close = new JButton("Close", IconManager.imgic27);
-        
+
         start.setPreferredSize(new Dimension(150, 30));
         stop.setPreferredSize(new Dimension(150, 30));
         close.setPreferredSize(new Dimension(150, 30));
-        
+
         start.addActionListener(this);
         stop.addActionListener(this);
         close.addActionListener(this);
-        
+
         JPanel jp2 = new JPanel();
         jp2.add(start);
         jp2.add(stop);
         jp2.add(close);
-         
+
         c.add(jp2, BorderLayout.SOUTH);
-        
+
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
+
+    public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
         //System.out.println("Actions");
-        
+
         // Compare the action command to the known actions.
-        if (command.equals("Check"))  {
+        if (command.equals("Check")) {
             fillCheckVector();
             startProcess();
         } else if (command.equals("Stop")) {
@@ -224,7 +225,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
             closeDialog();
         }
     }
-    
+
     public void fillCheckVector() {
         toBeChecked = new Vector<>();
         if (jtable.getSelectedRowCount() == 0) {
@@ -232,50 +233,49 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
             toBeChecked.addAll(rm.getMatrix());
         } else {
             // Checking only selected ones
-            int [] tab = jtable.getSelectedRows();
-            for(int i=0; i<tab.length; i++) {
+            int[] tab = jtable.getSelectedRows();
+            for (int i = 0; i < tab.length; i++) {
                 toBeChecked.add(rm.getRequirements(sorter.modelIndex(i)));
             }
-            
+
         }
-        
+
     }
-    
-    
-    
+
+
     public void closeDialog() {
         if (mode == STARTED) {
             stopProcess();
         }
         dispose();
     }
-    
+
     public void stopProcess() {
         try {
             rshc.stopCommand();
         } catch (LauncherException le) {
-            
+
         }
         rshc = null;
-        mode = 	STOPPED;
+        mode = STOPPED;
         setButtons();
     }
-    
+
     public void startProcess() {
         t = new Thread(this);
         mode = STARTED;
         setButtons();
         t.start();
     }
-    
+
     public JTable getJTable() {
         return jtable;
     }
-    
+
     public Requirements getRequirements(int index) {
         return rm.getRequirements(sorter.modelIndex(index));
     }
-    
+
     public void run() {
         Requirements reqs;
         String cmd1;
@@ -288,36 +288,36 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
         //String fileTLSA = baseFileName + ".tlsa";
         //String fileTLSADOT = fileTLSA + ".dot";
         String data;
-        
+
         rshc = new RshClient(host);
         Point p;
-        
+
         try {
             jta.append("Checking requirements with observers\n");
-            
-            for(int i=0; i<toBeChecked.size(); i++) {
+
+            for (int i = 0; i < toBeChecked.size(); i++) {
                 reqs = toBeChecked.get(i);
                 jta.append("#" + i + ": Dealing with observer " + reqs.ro.getValue() + "\n");
-                
-                
+
+
                 if (reqs.formalSpec == null) {
                     jta.append("Property #" + i + "has no formal specification. Skipping.\n");
                 } else {
-                    
+
                     rshc.deleteFile(fileName);
                     rshc.deleteFile(fileDTA);
                     rshc.deleteFile(fileDTADOT);
-                    
+
                     rshc.sendFileData(fileName, reqs.formalSpec);
                     jta.append("Data sent\n");
-                    
+
                     rshc.deleteFile(fileName + ".rg0.aut");
                     rshc.deleteFile(fileName + ".rg0.aut.dot");
                     cmd1 = cmdRTL + " -ATG -AUT";
                     cmd1 += " -TG2 " + fileName;
                     //cmd3 = "cat " + fileRG;
                     //cmd4 = cmdDTA2DOT;
-                    
+
                     //.RG
                     jta.append("Making RG format AUT\n");
                     processCmd(cmd1);
@@ -325,13 +325,13 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
                     //mgui.gtm.setRGAut(data);
                     //mgui.saveRGAut();
                     jta.append("RG Done\n");
-                    
+
                     // removing useless files
                     rshc.deleteFile(fileName + ".tg0.aut");
                     rshc.deleteFile(fileName + "tg0.fc2");
                     rshc.deleteFile(fileName + ".rg0.fc2");
                     rshc.deleteFile(fileName + ".rg0.ren");
-                    
+
                     jta.append("Getting data from " + fileName + ".rg0.aut" + "\n");
                     // Getting data
                     data = rshc.getFileData(fileName + ".rg0.aut");
@@ -340,7 +340,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
                     jta.append("" + p.x + " state(s), " + p.y + " transition(s)\n");
                     //jta.append(data);
                     reqs.graphAut = data;
-                    
+
                     // AUT  dot
                     jta.append("Converting to dotty format\n");
                     rshc = new RshClient(hostAldebaran);
@@ -350,16 +350,16 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
                         rshc.sendFileData(fileName + ".rg0.aut", data);
                         jta.append("Sending data to aldebaran host\n");
                     }
-                    
+
                     // Bcgio command
                     cmd1 = bcgioPath + " -aldebaran " + fileName + ".rg0.aut" + " -graphviz " + fileName + ".rg0.aut.dot";
                     data = processCmd(cmd1);
                     data = rshc.getFileData(fileName + ".rg0.aut.dot");
                     reqs.graphDot = data;
                 }
-                
+
                 rshc.deleteFile(fileName);
-                
+
                 // Satisfiability
                 reqs.setGraphAut(reqs.graphAut);
                 if (reqs.satisfied) {
@@ -371,23 +371,23 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
                 jtable.repaint();
             }
             jta.append("\nAll Done\n");
-            
+
         } catch (LauncherException le) {
             jta.append("Error: " + le.getMessage() + "\n");
-            mode = 	NOT_STARTED;
+            mode = NOT_STARTED;
             setButtons();
             return;
         } catch (Exception e) {
             jta.append("Error: " + e.getMessage() + "\n");
-            mode = 	NOT_STARTED;
+            mode = NOT_STARTED;
             setButtons();
             return;
         }
-        
+
         mode = NOT_STARTED;
         setButtons();
     }
-    
+
     protected String processCmd(String cmd) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
@@ -402,14 +402,14 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
 //        s = rshc.getDataFromProcess();
 //        return s;
 //    }
-    
+
     protected void checkMode() {
-        
+
         mode = NOT_STARTED;
     }
-    
+
     protected void setButtons() {
-        switch(mode) {
+        switch (mode) {
             case NOT_STARTED:
                 jtable.setEnabled(true);
                 start.setEnabled(true);
@@ -436,114 +436,116 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
                 break;
         }
     }
-    
+
     private int maxLengthColumn(Component c, AbstractTableModel tm, int index) {
         int w = 0, wtmp;
         FontMetrics fm = c.getFontMetrics(c.getFont());
         if (fm == null) {
             return 0;
         }
-        
+
         String s;
-        
-        for(int i=0; i<tm.getRowCount(); i++) {
+
+        for (int i = 0; i < tm.getRowCount(); i++) {
             s = tm.getValueAt(i, index).toString();
             wtmp = fm.stringWidth(s);
             w = Math.max(w, wtmp);
         }
         return w;
     }
-    
+
     public void drawRequirements(Requirements reqs) {
         if (reqs != null) {
             mgui.gtm.generateDesign(reqs.tm);
         }
     }
-    
+
     public void viewRequirementsFormalSpecification(Requirements reqs) {
         if (reqs != null) {
             mgui.showFormalSpecification(reqs.ro.getValue() + "'s formal specification", reqs.formalSpec);
         }
     }
-    
+
     public void viewRG(Requirements reqs) {
         if (reqs != null) {
             GTURTLEModeling.runDOTTY(reqs.graphDot);
         }
     }
-    
-     public void check(Requirements reqs) {
+
+    public void check(Requirements reqs) {
         if (reqs != null) {
             toBeChecked = new Vector<>();
             toBeChecked.add(reqs);
             startProcess();
         }
     }
-    
-    
-    private  class PopupListener extends MouseAdapter /* popup menus onto tabs */ {
+
+
+    private class PopupListener extends MouseAdapter /* popup menus onto tabs */ {
         private JDialogTMatrixManagement jdtmm;
         private JPopupMenu menu;
         private Requirements reqs;
-        
+
         private JMenuItem draw, viewfs, viewg, check;
-        
+
         public PopupListener(JDialogTMatrixManagement _jdtmm) {
             jdtmm = _jdtmm;
             createMenu();
         }
-        
+
         public void mousePressed(MouseEvent e) {
             checkForPopup(e);
         }
+
         public void mouseReleased(MouseEvent e) {
             checkForPopup(e);
         }
+
         public void mouseClicked(MouseEvent e) {
             checkForPopup(e);
         }
-        
+
         private void checkForPopup(MouseEvent e) {
-            if(e.isPopupTrigger()) {
+            if (e.isPopupTrigger()) {
                 Component c = e.getComponent();
                 //System.out.println("e =" + e + " Component=" + c);
                 updateMenu(e.getPoint());
                 menu.show(c, e.getX(), e.getY());
             }
         }
-        
+
         private void createMenu() {
             draw = createMenuItem("Draw corresponding design");
             viewfs = createMenuItem("View formal specification");
             viewg = createMenuItem("View reachability graph");
             check = createMenuItem("Check for satisfiability");
-            
+
             menu = new JPopupMenu("TMatrix management");
             menu.add(draw);
             menu.add(viewfs);
             menu.add(viewg);
-            
+
             menu.addSeparator();
-            
+
             menu.add(check);
         }
-        
-        
+
+
         private JMenuItem createMenuItem(String s) {
             JMenuItem item = new JMenuItem(s);
             item.setActionCommand(s);
             item.addActionListener(listener);
             return item;
         }
-        
-        
+
+
         private void updateMenu(Point p) {
             //System.out.println("UpdateMenu index=" + index);
             jtable = jdtmm.getJTable();
             // None is selected -> everything is set to pointed row
-            
+
             reqs = jdtmm.getRequirements(jtable.rowAtPoint(p));
-            
+
             if (reqs == null) {
                 draw.setEnabled(false);
                 viewfs.setEnabled(false);
@@ -551,26 +553,26 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
                 check.setEnabled(false);
                 return;
             }
-            
-            draw.setEnabled(reqs.tm!=null);
+
+            draw.setEnabled(reqs.tm != null);
             viewfs.setEnabled(reqs.formalSpec != null);
             viewg.setEnabled(reqs.graphDot != null);
             check.setEnabled(true);
-            
+
         }
-        
+
         private Action listener = new AbstractAction() {
-            
+
             public void actionPerformed(ActionEvent e) {
-                JMenuItem item = (JMenuItem)e.getSource();
+                JMenuItem item = (JMenuItem) e.getSource();
                 String ac = item.getActionCommand();
-                if(ac.equals("Draw corresponding design")) {
+                if (ac.equals("Draw corresponding design")) {
                     jdtmm.drawRequirements(reqs);
-                } else if(ac.equals("View formal specification")) {
+                } else if (ac.equals("View formal specification")) {
                     jdtmm.viewRequirementsFormalSpecification(reqs);
-                } else if(ac.equals("View reachability graph")) {
+                } else if (ac.equals("View reachability graph")) {
                     jdtmm.viewRG(reqs);
-                } else if(ac.equals("Check for satisfiability")) {
+                } else if (ac.equals("Check for satisfiability")) {
                     jdtmm.check(reqs);
                 }
             }
