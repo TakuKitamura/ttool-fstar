@@ -65,6 +65,7 @@ public class IconManager {
 
     public static ImageIcon imgic13, imgic14, imgic15, imgic16, imgic17, imgic18, imgic19;
     public static ImageIcon imgic20, imgic21, imgic22, imgic23, imgic24, imgic25, imgic26, imgic27, imgic28, imgic29;
+    public static ImageIcon imgic20_proj, imgic21_proj;
 
     public static ImageIcon imgic30, imgic31, imgic32, imgic33, imgic34, imgic35, imgic36, imgic37, imgic38, imgic39;
 
@@ -206,8 +207,10 @@ public class IconManager {
     private static String icon18 = "sd.gif";
     private static String icon19 = "ucd.gif";
 
-    private static String icon20 = "toolbarButtonGraphics/general/New16.gif";
-    private static String icon21 = "toolbarButtonGraphics/general/New24.gif";
+    private static String icon20 = "New16.gif";
+    private static String icon21 = "New24.gif";
+    private static String icon20_proj = "NewP16.gif";
+    private static String icon21_proj = "NewP24.gif";
     private static String icon22 = "toolbarButtonGraphics/general/Open16.gif";
     private static String icon23 = "toolbarButtonGraphics/general/Open24.gif";
     private static String icon24 = "toolbarButtonGraphics/general/Save16.gif";
@@ -473,7 +476,9 @@ public class IconManager {
     private static String icon1016 = "reqref.gif";
     private static String icon1018 = "reqsatisfy.gif";
 
+ties can even contribute by pushing commits if they want to.
 
+Currently there are no changes in this merge request's source branch. Please push new commits or use a different branch. 
 
     // EBRDD
     private static String icon1050 = "ebrdderc.gif";
@@ -703,6 +708,8 @@ public class IconManager {
 
         imgic20 = getIcon(icon20);
         imgic21 = getIcon(icon21);
+        imgic20_proj = getIcon(icon20_proj);
+        imgic21_proj = getIcon(icon21_proj);
         imgic22 = getIcon(icon22);
         imgic23 = getIcon(icon23);
         imgic24 = getIcon(icon24);

@@ -693,11 +693,11 @@ public class TGUIAction extends AbstractAction {
     }
 
     public void init() {
-        actions[ACT_NEW] = new TAction("new-command", "New", IconManager.imgic20, IconManager.imgic21, "New", "New modeling", 'N');
-        actions[ACT_NEW_PROJECT] = new TAction("new-project-command", "New project", IconManager.imgic20, IconManager.imgic21, "New project", "New project", 0);
+        actions[ACT_NEW] = new TAction("new-command", "New Model", IconManager.imgic20, IconManager.imgic21, "New Model" , "New model", 'N');
+        actions[ACT_NEW_PROJECT] = new TAction("new-project-command", "New project", IconManager.imgic20_proj, IconManager.imgic21_proj, "New project", "New project", 0);
         actions[ACT_NEW_DESIGN] = new TAction("new-command-design", "New design", IconManager.imgic14, IconManager.imgic14, "New design", "New TURTLE design", 0);
         actions[ACT_NEW_ANALYSIS] = new TAction("new-command-analysis", "New analysis", IconManager.imgic17, IconManager.imgic17, "New analysis", "New TURTLE analysis", 0);
-        actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TTool model",'O', true);
+        actions[ACT_OPEN] = new TAction("open-command","Open Model", IconManager.imgic22, IconManager.imgic23, "Open Model", "Open an existing TTool model",'O', true);
         actions[ACT_OPEN_PROJECT] = new TAction("open-project-command","Open project", IconManager.imgic22, IconManager.imgic23, "Open project", "Open an existing TTool project",'O', true);
         actions[ACT_OPEN_FROM_NETWORK] = new TAction("open-command-from-network","Open project from TTool repository", IconManager.imgic22, IconManager.imgic23, "Open project from TTool repository", "Open an existing TTool model from the TTool repository (TTool website)",'0', true);
         actions[ACT_OPEN_LAST] = new TAction("openlast-command","Open file: " + ConfigurationTTool.LastOpenFile, IconManager.imgic22, IconManager.imgic23, "Open: " + ConfigurationTTool.LastOpenFile, "Open the lastly saved TTool model", 0);
