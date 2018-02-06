@@ -8427,6 +8427,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void resetReachability() {
+        //TraceManager.addDev("Reset reachability");
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp != null) {
             tp.resetReachability();

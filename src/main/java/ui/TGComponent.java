@@ -439,8 +439,27 @@ public abstract class TGComponent implements CDElement, GenericTree {
         reachability = reach;
     }
 
+    public void setHierarchyReachability(int reach) {
+        reachability = reach;
+        if (nbInternalTGComponent > 0) {
+            for(int i=0; i<tgcomponent.length; i++) {
+                tgcomponent[i].setHierarchyReachability(reach);
+            }
+        }
+    }
+
     public void setLiveness(int live) {
         liveness = live;
+    }
+
+    public void setHierarchyLiveness(int live) {
+        liveness = live;
+        if (nbInternalTGComponent > 0) {
+            for(int i=0; i<tgcomponent.length; i++) {
+                tgcomponent[i].setHierarchyLiveness(live);
+            }
+        }
+
     }
 
     public boolean getCheckLatency(){

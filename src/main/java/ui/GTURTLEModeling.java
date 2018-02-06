@@ -9012,7 +9012,7 @@ public class GTURTLEModeling {
             return false;
         }
         avatarspec = att.generateAvatarSpec();
-        TraceManager.addDev("Avatar spec:" + avatarspec);
+        //TraceManager.addDev("Avatar spec:" + avatarspec);
         return true;
     }
 
@@ -9026,7 +9026,7 @@ public class GTURTLEModeling {
             return false;
         }
         avatarspec = att.generateAvatarSpec();
-        TraceManager.addDev("Avatar spec:" + avatarspec);
+        //TraceManager.addDev("Avatar spec:" + avatarspec);
         return true;
     }
 

@@ -37,10 +37,6 @@
  */
 
 
-
-
-
-
 package avatartranslator;
 
 import myutil.TraceManager;
@@ -49,16 +45,16 @@ import java.util.*;
 
 
 /**
-* Class AvatarStateMachine
-* State machine, with composite states
-* Creation: 20/05/2010
-* @version 1.0 20/05/2010
-* @author Ludovic APVRILLE
-*/
+ * Class AvatarStateMachine
+ * State machine, with composite states
+ * Creation: 20/05/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 20/05/2010
+ */
 public class AvatarStateMachine extends AvatarElement {
     // to be used by code generator for fast access to states
-    public AvatarStateElement [] allStates;
-
+    public AvatarStateElement[] allStates;
 
 
     protected LinkedList<AvatarStateMachineElement> elements;
@@ -86,23 +82,22 @@ public class AvatarStateMachine extends AvatarElement {
 
     public int getNbOfStatesElement() {
         int cpt = 0;
-        for(AvatarStateMachineElement asme: elements) {
+        for (AvatarStateMachineElement asme : elements) {
             if (asme instanceof AvatarStateElement) {
-                cpt ++;
+                cpt++;
             }
         }
         return cpt;
     }
 
     public void addElement(AvatarStateMachineElement _element) {
-		if (_element!=null){
-        elements.add(_element);
-		//TraceManager.addDev("Adding element " + _element);
-        states = null;
-		}
-		else {
-		TraceManager.addDev("NULL element found " + _element);
-		}
+        if (_element != null) {
+            elements.add(_element);
+            //TraceManager.addDev("Adding element " + _element);
+            states = null;
+        } else {
+            TraceManager.addDev("NULL element found " + _element);
+        }
     }
 
     public void removeElement(AvatarStateMachineElement _element) {
@@ -116,7 +111,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     private void makeStates() {
         states = new LinkedList<AvatarStateMachineElement>();
-        for(AvatarStateMachineElement asme: elements) {
+        for (AvatarStateMachineElement asme : elements) {
             if (asme instanceof AvatarState) {
                 states.add(asme);
             }
@@ -126,10 +121,10 @@ public class AvatarStateMachine extends AvatarElement {
     public void makeAllStates() {
         int cpt = 0;
         allStates = new AvatarStateElement[getNbOfStatesElement()];
-        for(AvatarStateMachineElement asme: elements) {
+        for (AvatarStateMachineElement asme : elements) {
             if (asme instanceof AvatarStateElement) {
-                allStates[cpt] = (AvatarStateElement)asme;
-                cpt ++;
+                allStates[cpt] = (AvatarStateElement) asme;
+                cpt++;
             }
         }
     }
@@ -144,9 +139,9 @@ public class AvatarStateMachine extends AvatarElement {
 
     public int getNbOfASMGraphicalElements() {
         int cpt = 0;
-        for(AvatarElement elt: elements) {
+        for (AvatarElement elt : elements) {
             if (elt.getReferenceObject() != null) {
-                cpt ++;
+                cpt++;
             }
         }
         return cpt;
@@ -158,43 +153,42 @@ public class AvatarStateMachine extends AvatarElement {
         }
 
         try {
-            return (AvatarState)(states.get(index));
+            return (AvatarState) (states.get(index));
         } catch (Exception e) {
         }
         return null;
     }
 
-    private int getSimplifiedElementsAux (HashMap<AvatarStateMachineElement, Integer> simplifiedElements, HashSet<AvatarStateMachineElement> visited, AvatarStateMachineElement root, int counter) {
-        if (visited.contains (root)) {
-            Integer name = simplifiedElements.get (root);
+    private int getSimplifiedElementsAux(HashMap<AvatarStateMachineElement, Integer> simplifiedElements, HashSet<AvatarStateMachineElement> visited, AvatarStateMachineElement root, int counter) {
+        if (visited.contains(root)) {
+            Integer name = simplifiedElements.get(root);
             if (name == null) {
                 if (root == this.startState)
-                    simplifiedElements.put (root, new Integer (0));
+                    simplifiedElements.put(root, new Integer(0));
                 else {
-                    counter ++;
-                    simplifiedElements.put (root, new Integer (counter));
+                    counter++;
+                    simplifiedElements.put(root, new Integer(counter));
                 }
             }
-        }
-        else {
-            visited.add (root);
-            for (AvatarStateMachineElement asme: root.nexts)
-                counter = this.getSimplifiedElementsAux (simplifiedElements, visited, asme, counter);
+        } else {
+            visited.add(root);
+            for (AvatarStateMachineElement asme : root.nexts)
+                counter = this.getSimplifiedElementsAux(simplifiedElements, visited, asme, counter);
         }
 
         return counter;
     }
 
-    public HashMap<AvatarStateMachineElement, Integer> getSimplifiedElements () {
-        HashMap<AvatarStateMachineElement, Integer> simplifiedElements = new HashMap<AvatarStateMachineElement, Integer> ();
-        this.getSimplifiedElementsAux (simplifiedElements, new HashSet<AvatarStateMachineElement> (), startState, 0);
+    public HashMap<AvatarStateMachineElement, Integer> getSimplifiedElements() {
+        HashMap<AvatarStateMachineElement, Integer> simplifiedElements = new HashMap<AvatarStateMachineElement, Integer>();
+        this.getSimplifiedElementsAux(simplifiedElements, new HashSet<AvatarStateMachineElement>(), startState, 0);
         return simplifiedElements;
     }
 
     public String toString() {
         StringBuffer sb = new StringBuffer("State machine Id=" + getID() + "\n");
 
-        for(AvatarStateMachineElement element: elements) {
+        for (AvatarStateMachineElement element : elements) {
             sb.append(element.toString() + "\n");
         }
 
@@ -204,7 +198,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     // Add missing implicit states.
     public void makeFullStates(AvatarBlock _block) {
-	addStatesToEmptyNonTerminalEmptyNext(_block);
+        addStatesToEmptyNonTerminalEmptyNext(_block);
         addStatesToTransitionsBetweenTwoNonStates(_block);
         addStatesToActionTransitions(_block);
         addStatesToNonEmptyTransitionsBetweenNonStateToState(_block);
@@ -212,27 +206,27 @@ public class AvatarStateMachine extends AvatarElement {
 
 
     private void addStatesToEmptyNonTerminalEmptyNext(AvatarBlock _b) {
-	ArrayList<AvatarStateMachineElement> toConsider = new ArrayList<AvatarStateMachineElement>();
-	for(AvatarStateMachineElement elt: elements) {
+        ArrayList<AvatarStateMachineElement> toConsider = new ArrayList<AvatarStateMachineElement>();
+        for (AvatarStateMachineElement elt : elements) {
             if (!(elt instanceof AvatarStopState)) {
-		if (elt.getNext(0) == null) {
-		    // Missing state
-		    toConsider.add(elt);
-		}
-	    }
-	}
-	
-	for(AvatarStateMachineElement elt: toConsider) {
-	    AvatarStopState stopMe = new AvatarStopState("stopCreated", elt.getReferenceObject());
-	    addElement(stopMe);
-	    AvatarTransition tr = new AvatarTransition(_b, "trForStopCreated", elt.getReferenceObject());
-	    addElement(tr);
-	    elt.addNext(tr);
-	    tr.addNext(stopMe);
-	}
-	
+                if (elt.getNext(0) == null) {
+                    // Missing state
+                    toConsider.add(elt);
+                }
+            }
+        }
+
+        for (AvatarStateMachineElement elt : toConsider) {
+            AvatarStopState stopMe = new AvatarStopState("stopCreated", elt.getReferenceObject());
+            addElement(stopMe);
+            AvatarTransition tr = new AvatarTransition(_b, "trForStopCreated", elt.getReferenceObject());
+            addElement(tr);
+            elt.addNext(tr);
+            tr.addNext(stopMe);
+        }
+
     }
-    
+
 
     private void addStatesToNonEmptyTransitionsBetweenNonStateToState(AvatarBlock _block) {
         AvatarStateMachineElement next;
@@ -240,11 +234,11 @@ public class AvatarStateMachine extends AvatarElement {
         ArrayList<AvatarStateMachineElement> toAdd = new ArrayList<AvatarStateMachineElement>();
         int id = 0;
 
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             if (elt instanceof AvatarTransition) {
-                AvatarTransition tr = (AvatarTransition)elt;
+                AvatarTransition tr = (AvatarTransition) elt;
 
-                if (tr.hasDelay()  || tr.isGuarded()  || tr.hasAction()) {
+                if (tr.hasDelay() || tr.isGuarded() || tr.hasAction()) {
                     previous = getPreviousElementOf(elt);
                     next = elt.getNext(0);
 
@@ -259,10 +253,10 @@ public class AvatarStateMachine extends AvatarElement {
 
                             previous.removeAllNexts();
                             previous.addNext(at1);
-			    at1.addNext(state);
+                            at1.addNext(state);
                             state.addNext(tr);
 
-                            id ++;
+                            id++;
                         }
                     }
                 }
@@ -270,7 +264,7 @@ public class AvatarStateMachine extends AvatarElement {
             }
         }
 
-        for(AvatarStateMachineElement add: toAdd) {
+        for (AvatarStateMachineElement add : toAdd) {
             elements.add(add);
         }
 
@@ -282,9 +276,9 @@ public class AvatarStateMachine extends AvatarElement {
         ArrayList<AvatarStateMachineElement> toAdd = new ArrayList<AvatarStateMachineElement>();
         int id = 0;
 
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             if (elt instanceof AvatarTransition) {
-                AvatarTransition tr = (AvatarTransition)elt;
+                AvatarTransition tr = (AvatarTransition) elt;
                 previous = getPreviousElementOf(elt);
                 next = elt.getNext(0);
 
@@ -300,17 +294,17 @@ public class AvatarStateMachine extends AvatarElement {
 
                         previous.removeAllNexts();
                         previous.addNext(at1);
-			at1.addNext(state);
+                        at1.addNext(state);
                         state.addNext(tr);
 
-                        id ++;
+                        id++;
                     }
                 }
 
             }
         }
 
-        for(AvatarStateMachineElement add: toAdd) {
+        for (AvatarStateMachineElement add : toAdd) {
             elements.add(add);
         }
 
@@ -327,12 +321,12 @@ public class AvatarStateMachine extends AvatarElement {
         AvatarStateMachineElement previous;
         ArrayList<AvatarStateMachineElement> toAdd = new ArrayList<AvatarStateMachineElement>();
         int id = 0;
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             if (elt instanceof AvatarTransition) {
-                AvatarTransition tr = (AvatarTransition)elt;
+                AvatarTransition tr = (AvatarTransition) elt;
 
                 // tr with actions?
-                if (tr.getNbOfAction() > 0){
+                if (tr.getNbOfAction() > 0) {
                     previous = getPreviousElementOf(elt);
                     next = elt.getNext(0);
 
@@ -348,21 +342,21 @@ public class AvatarStateMachine extends AvatarElement {
                         state.addNext(at1);
                         at1.addNext(next);
 
-                        id ++;
+                        id++;
                     }
                 }
             }
 
         }
 
-        for(AvatarStateMachineElement add: toAdd) {
+        for (AvatarStateMachineElement add : toAdd) {
             elements.add(add);
         }
         toAdd.clear();
 
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             if (elt instanceof AvatarTransition) {
-                AvatarTransition tr = (AvatarTransition)elt;
+                AvatarTransition tr = (AvatarTransition) elt;
 
                 // tr with actions?
                 if (tr.getNbOfAction() > 0) {
@@ -378,19 +372,17 @@ public class AvatarStateMachine extends AvatarElement {
                         previous.addNext(at1);
                         at1.addNext(state);
                         state.addNext(tr);
-                        id ++;
+                        id++;
                     }
                 }
             }
         }
 
-        for(AvatarStateMachineElement add: toAdd) {
+        for (AvatarStateMachineElement add : toAdd) {
             elements.add(add);
         }
 
     }
-
-
 
 
     public void removeRandoms(AvatarBlock _block) {
@@ -400,15 +392,15 @@ public class AvatarStateMachine extends AvatarElement {
         AvatarStateMachineElement next;
         AvatarStateMachineElement previous;
 
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             if (elt instanceof AvatarRandom) {
-                AvatarRandom random = (AvatarRandom)elt;
+                AvatarRandom random = (AvatarRandom) elt;
                 previous = getPreviousElementOf(elt);
                 next = elt.getNext(0);
                 toRemove.add(elt);
 
                 // Creating elements
-                AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom__ "+ elt.getName() + "__" + id, elt.getReferenceObject());
+                AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom__ " + elt.getName() + "__" + id, elt.getReferenceObject());
                 at1.addAction(random.getVariable() + "=" + random.getMinValue());
                 AvatarState randomState = new AvatarState("StateForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
                 AvatarState beforeRandom = new AvatarState("StateBeforeRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
@@ -433,16 +425,16 @@ public class AvatarStateMachine extends AvatarElement {
                 randomState.addNext(next);
                 at2.addNext(randomState);
 
-                id ++;
+                id++;
 
             }
         }
 
-        for(AvatarStateMachineElement trash: toRemove) {
+        for (AvatarStateMachineElement trash : toRemove) {
             elements.remove(trash);
         }
 
-        for(AvatarStateMachineElement newOnes: toAdd) {
+        for (AvatarStateMachineElement newOnes : toAdd) {
             elements.add(newOnes);
         }
     }
@@ -452,7 +444,7 @@ public class AvatarStateMachine extends AvatarElement {
     public void removeCompositeStates(AvatarBlock _block) {
         //TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
 
-        LinkedList <AvatarState> lists = removeAllInternalStartStates();
+        LinkedList<AvatarState> lists = removeAllInternalStartStates();
 
         AvatarTransition at = getAvatarCompositeTransition();
 
@@ -461,17 +453,17 @@ public class AvatarStateMachine extends AvatarElement {
         }
 
         // We modify all composite states with intermediate states
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             AvatarStateMachineElement element = elements.get(i);
             if (element instanceof AvatarState) {
-                modifyStateForCompositeSupport((AvatarState)element);
+                modifyStateForCompositeSupport((AvatarState) element);
             }
         }
 
         // For each composite transition: Welink it to all the substates of the current state
         AvatarState src;
-        while(((at = getAvatarCompositeTransition()) != null)) {
-            src = (AvatarState)(getPreviousElementOf(at));
+        while (((at = getAvatarCompositeTransition()) != null)) {
+            src = (AvatarState) (getPreviousElementOf(at));
             elements.remove(at);
 
             // Add a new state after the transition
@@ -487,8 +479,8 @@ public class AvatarStateMachine extends AvatarElement {
 
             // Link a clone of the transition  to all internal states
 
-            for(int j=0; j<elements.size(); j++) {
-                AvatarStateMachineElement elt =  elements.get(j);
+            for (int j = 0; j < elements.size(); j++) {
+                AvatarStateMachineElement elt = elements.get(j);
                 if ((elt instanceof AvatarState) && (elt.hasInUpperState(src))) {
                     AvatarTransition att = cloneCompositeTransition(at);
                     elt.addNext(att);
@@ -505,17 +497,17 @@ public class AvatarStateMachine extends AvatarElement {
         // Contains in odd index: composite state
         // even index: new state replacing the start state
 
-        LinkedList <AvatarState> lists = removeAllInternalStartStates();
-        ArrayList <AvatarTransition> ats;
-        ArrayList <AvatarStateMachineElement> toRemove = new ArrayList<AvatarStateMachineElement>();
-        ArrayList <AvatarState> states = new ArrayList<AvatarState>();
+        LinkedList<AvatarState> lists = removeAllInternalStartStates();
+        ArrayList<AvatarTransition> ats;
+        ArrayList<AvatarStateMachineElement> toRemove = new ArrayList<AvatarStateMachineElement>();
+        ArrayList<AvatarState> states = new ArrayList<AvatarState>();
 
         AvatarTransition at;
 
         //ats = getAllAvatarCompositeTransitions();
 
         //at = getCompositeTransition();
-        while(((at = getAvatarCompositeTransition()) != null) && (!(toRemove.contains(at)))){
+        while (((at = getAvatarCompositeTransition()) != null) && (!(toRemove.contains(at)))) {
             TraceManager.addDev("*********************************** Found composite transition: " + at.toString());
             //TraceManager.addDev(_block.toString());
             if (!(toRemove.contains(getPreviousElementOf(at)))) {
@@ -523,7 +515,7 @@ public class AvatarStateMachine extends AvatarElement {
             }
             toRemove.add(at);
             AvatarTransition at2 = removeAfter(at, _block);
-            AvatarState state = (AvatarState)(getPreviousElementOf(at2));
+            AvatarState state = (AvatarState) (getPreviousElementOf(at2));
 
             if (!states.contains(state)) {
                 TraceManager.addDev("Working on internal elements of " + state);
@@ -532,7 +524,7 @@ public class AvatarStateMachine extends AvatarElement {
             }
 
 
-            for(int i=0; i<elements.size(); i++) {
+            for (int i = 0; i < elements.size(); i++) {
                 AvatarStateMachineElement element = elements.get(i);
                 if (element instanceof AvatarState) {
                     if (element.hasInUpperState(state) == true) {
@@ -547,7 +539,7 @@ public class AvatarStateMachine extends AvatarElement {
 
         }
 
-        for(AvatarStateMachineElement asme: toRemove) {
+        for (AvatarStateMachineElement asme : toRemove) {
             removeElement(asme);
         }
 
@@ -617,11 +609,11 @@ public class AvatarStateMachine extends AvatarElement {
         // Each time there is a transition with an after or more than one action, we must rework the transition
         // We first gather all transitions internal to that state
 
-        Vector <AvatarStateMachineElement> v = new Vector<AvatarStateMachineElement>();
+        Vector<AvatarStateMachineElement> v = new Vector<AvatarStateMachineElement>();
 
-        for(AvatarStateMachineElement element: elements) {
+        for (AvatarStateMachineElement element : elements) {
             if (element instanceof AvatarTransition) {
-                AvatarTransition at = (AvatarTransition)element;
+                AvatarTransition at = (AvatarTransition) element;
                 //TraceManager.addDev("at? element=" + element);
                 // Transition fully in the internal state?
                 if (element.getNext(0).hasInUpperState(_state) == true) {
@@ -635,14 +627,12 @@ public class AvatarStateMachine extends AvatarElement {
             }
         }
 
-        for(AvatarStateMachineElement element: v) {
+        for (AvatarStateMachineElement element : v) {
             TraceManager.addDev(">" + element + "<");
-            splitAvatarTransition((AvatarTransition)element, _state);
+            splitAvatarTransition((AvatarTransition) element, _state);
         }
 
     }
-
-
 
 
     private void splitAvatarTransition(AvatarTransition _at, AvatarState _currentState) {
@@ -651,12 +641,12 @@ public class AvatarStateMachine extends AvatarElement {
             if (element.hasInUpperState(_currentState) == true) {
                 if (!(element instanceof AvatarState)) {
                     // Must add an intermediate state
-                    String  tmp = findUniqueStateName("splitstate_after__");
+                    String tmp = findUniqueStateName("splitstate_after__");
                     AvatarState as = new AvatarState(tmp, _currentState.getReferenceObject());
                     addElement(as);
                     as.setHidden(true);
                     as.setState(_currentState);
-                    AvatarTransition atn = new AvatarTransition(_at.getBlock (), "splittransition_after", null);
+                    AvatarTransition atn = new AvatarTransition(_at.getBlock(), "splittransition_after", null);
                     addElement(atn);
                     element.removeNext(_at);
                     element.addNext(atn);
@@ -669,11 +659,11 @@ public class AvatarStateMachine extends AvatarElement {
 
             if (_at.getNbOfAction() > 1) {
                 TraceManager.addDev("New split state");
-                String  tmp = findUniqueStateName("splitstate_action__");
+                String tmp = findUniqueStateName("splitstate_action__");
                 AvatarState as = new AvatarState(tmp, null);
                 as.setHidden(true);
                 as.setState(_currentState);
-                AvatarTransition at = (AvatarTransition)(_at.basicCloneMe(block));
+                AvatarTransition at = (AvatarTransition) (_at.basicCloneMe(block));
                 _at.removeAllActionsButTheFirstOne();
                 at.removeFirstAction();
                 at.addNext(_at.getNext(0));
@@ -689,13 +679,12 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
 
-
     private ArrayList<AvatarTransition> getAllAvatarCompositeTransitions() {
-        ArrayList <AvatarTransition> ats = new ArrayList<AvatarTransition>();
-        for(AvatarStateMachineElement element: elements) {
+        ArrayList<AvatarTransition> ats = new ArrayList<AvatarTransition>();
+        for (AvatarStateMachineElement element : elements) {
             if (element instanceof AvatarTransition) {
-                if ((isACompositeTransition((AvatarTransition)element))) {
-                    ats.add((AvatarTransition)element);
+                if ((isACompositeTransition((AvatarTransition) element))) {
+                    ats.add((AvatarTransition) element);
                 }
             }
         }
@@ -704,12 +693,11 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
 
-
     private void addFullInternalStates(AvatarState state, AvatarTransition _at) {
         // First:split internal transitions
-        Vector <AvatarStateMachineElement> v = new Vector<AvatarStateMachineElement>();
+        Vector<AvatarStateMachineElement> v = new Vector<AvatarStateMachineElement>();
 
-        for(AvatarStateMachineElement element: elements) {
+        for (AvatarStateMachineElement element : elements) {
             //TraceManager.addDev("\nIs in composite state " + state + ": >" + element + "< ???");
             if (element instanceof AvatarTransition) {
                 //TraceManager.addDev("at? element=" + element);
@@ -728,20 +716,20 @@ public class AvatarStateMachine extends AvatarElement {
 
         //TraceManager.addDev("*** Analyzing components in state " + state);
         // Split avatar transitions
-        for(AvatarStateMachineElement element: v) {
+        for (AvatarStateMachineElement element : v) {
             TraceManager.addDev(">" + element + "<");
             if (element instanceof AvatarTransition) {
-                splitAvatarTransition((AvatarTransition)element, state);
+                splitAvatarTransition((AvatarTransition) element, state);
             }
         }
     }
 
     private AvatarTransition getAvatarCompositeTransition() {
 
-        for(AvatarStateMachineElement element: elements) {
+        for (AvatarStateMachineElement element : elements) {
             if (element instanceof AvatarTransition) {
-                if ((isACompositeTransition((AvatarTransition)element))) {
-                    return (AvatarTransition)element;
+                if ((isACompositeTransition((AvatarTransition) element))) {
+                    return (AvatarTransition) element;
 
                 }
             }
@@ -761,12 +749,12 @@ public class AvatarStateMachine extends AvatarElement {
             return false;
         }
 
-        AvatarState state = (AvatarState)element;
+        AvatarState state = (AvatarState) element;
         return hasInternalComponents(state);
     }
 
     private boolean hasInternalComponents(AvatarState _state) {
-        for(AvatarStateMachineElement element: elements) {
+        for (AvatarStateMachineElement element : elements) {
             if (element.getState() == _state) {
                 return true;
             }
@@ -913,7 +901,7 @@ public class AvatarStateMachine extends AvatarElement {
             AvatarState as = new AvatarState("splitstate", null);
             as.setHidden(true);
             as.setState(_currentState);
-            AvatarTransition at = (AvatarTransition)(_at.basicCloneMe(block));
+            AvatarTransition at = (AvatarTransition) (_at.basicCloneMe(block));
             _at.removeAllActionsButTheFirstOne();
             at.removeFirstAction();
             at.addNext(_at.getNext(0));
@@ -931,7 +919,7 @@ public class AvatarStateMachine extends AvatarElement {
             if (element.hasInUpperState(_currentState) == true) {
                 if (!(element instanceof AvatarState)) {
                     // Must add an intermediate state
-                    String  tmp = findUniqueStateName("internalstate__");
+                    String tmp = findUniqueStateName("internalstate__");
                     AvatarState as = new AvatarState(tmp, _currentState.getReferenceObject());
                     addElement(as);
                     as.setHidden(true);
@@ -958,14 +946,14 @@ public class AvatarStateMachine extends AvatarElement {
         if (_element instanceof AvatarActionOnSignal) {
             AvatarStateMachineElement element = _element.getNext(0);
             if (element instanceof AvatarTransition) {
-                if (!(((AvatarTransition)element).isEmpty())) {
+                if (!(((AvatarTransition) element).isEmpty())) {
                     //We need to create a new state
                     tmp = findUniqueStateName("internalstate__");
                     TraceManager.addDev("Creating state with name=" + tmp);
                     as = new AvatarState(tmp, null);
                     addElement(as);
                     as.setHidden(true);
-                    at = new AvatarTransition(_at.getBlock (), "internaltransition", null);
+                    at = new AvatarTransition(_at.getBlock(), "internaltransition", null);
                     addElement(at);
                     //_element -> at -> as -> element
 
@@ -987,7 +975,7 @@ public class AvatarStateMachine extends AvatarElement {
                         as = new AvatarState(tmp, null);
                         addElement(as);
                         as.setHidden(true);
-                        at = new AvatarTransition(_at.getBlock (), "internaltransition", null);
+                        at = new AvatarTransition(_at.getBlock(), "internaltransition", null);
                         addElement(at);
                         //_element -> at -> as -> element
 
@@ -1048,7 +1036,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     // Return the first previous element met. Shall be used preferably only for transitions
     private AvatarStateMachineElement getPreviousElementOf(AvatarStateMachineElement _elt) {
-        for(AvatarStateMachineElement element: elements) {
+        for (AvatarStateMachineElement element : elements) {
             if (element.hasNext(_elt)) {
                 return element;
             }
@@ -1059,7 +1047,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     private LinkedList<AvatarStateMachineElement> getPreviousElementsOf(AvatarStateMachineElement _elt) {
         LinkedList<AvatarStateMachineElement> ll = new LinkedList<AvatarStateMachineElement>();
-        for(AvatarStateMachineElement element: elements) {
+        for (AvatarStateMachineElement element : elements) {
             if (element.hasNext(_elt)) {
                 ll.add(element);
             }
@@ -1069,10 +1057,10 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     public AvatarState getStateWithName(String _name) {
-        for(AvatarStateMachineElement element: elements) {
+        for (AvatarStateMachineElement element : elements) {
             if (element instanceof AvatarState) {
                 if (element.getName().compareTo(_name) == 0) {
-                    return (AvatarState)element;
+                    return (AvatarState) element;
                 }
             }
         }
@@ -1080,18 +1068,18 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
 
-	public List<AvatarActionOnSignal> getAllAOSWithName(String _name){
-		List<AvatarActionOnSignal> list = new ArrayList<AvatarActionOnSignal>();
-		for(AvatarStateMachineElement element: elements) {
+    public List<AvatarActionOnSignal> getAllAOSWithName(String _name) {
+        List<AvatarActionOnSignal> list = new ArrayList<AvatarActionOnSignal>();
+        for (AvatarStateMachineElement element : elements) {
             if (element instanceof AvatarActionOnSignal) {
-				AvatarActionOnSignal aaos = (AvatarActionOnSignal) element;
+                AvatarActionOnSignal aaos = (AvatarActionOnSignal) element;
                 if (aaos.getSignal().getName().compareTo(_name) == 0) {
                     list.add(aaos);
                 }
             }
         }
         return list;
-	}
+    }
 
     // All transitions reaching a state that has an internal start state
     // shall in fact go directly to the nexts of the start state
@@ -1101,16 +1089,16 @@ public class AvatarStateMachine extends AvatarElement {
 
         LinkedList<AvatarState> removedinfos = new LinkedList<AvatarState>();
 
-        for(AvatarStateMachineElement element: elements) {
+        for (AvatarStateMachineElement element : elements) {
             if ((element instanceof AvatarStartState) && (element.getState() != null)) {
                 //TraceManager.addDev("-> -> found an internal state state");
-                ll.add((AvatarStartState)element);
+                ll.add((AvatarStartState) element);
             }
         }
 
         AvatarState as0;
         LinkedList<AvatarStateMachineElement> le;
-        for(AvatarStartState as: ll) {
+        for (AvatarStartState as : ll) {
             AvatarState astate = as.getState();
             if (as != null) {
                 le = getPreviousElementsOf(astate);
@@ -1119,7 +1107,7 @@ public class AvatarStateMachine extends AvatarElement {
                     as0.addNext(as.getNext(0));
                     as0.setHidden(true);
                     as0.setState(astate);
-                    for(AvatarStateMachineElement element: le) {
+                    for (AvatarStateMachineElement element : le) {
                         if (element instanceof AvatarTransition) {
                             element.removeAllNexts();
                             element.addNext(as0);
@@ -1147,14 +1135,14 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     public void removeAllSuperStates() {
-        for(AvatarStateMachineElement element: elements) {
+        for (AvatarStateMachineElement element : elements) {
             element.setState(null);
         }
     }
 
     public AvatarStateMachineElement getStateMachineElementFromReferenceObject(Object _o) {
-        for(AvatarStateMachineElement element: elements) {
-            if(element.hasReferenceObject(_o)) {
+        for (AvatarStateMachineElement element : elements) {
+            if (element.hasReferenceObject(_o)) {
                 return element;
             }
         }
@@ -1162,8 +1150,8 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     public Object getReferenceObjectFromID(int _ID) {
-        for(AvatarStateMachineElement element: elements) {
-            if(element.getID() == _ID) {
+        for (AvatarStateMachineElement element : elements) {
+            if (element.getID() == _ID) {
                 return element.getReferenceObject();
             }
         }
@@ -1179,10 +1167,10 @@ public class AvatarStateMachine extends AvatarElement {
         LinkedList<AvatarStateMachineElement> news = new LinkedList<AvatarStateMachineElement>();
 
 
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             // Set timer...
             if (elt instanceof AvatarSetTimer) {
-                ast = (AvatarSetTimer)elt;
+                ast = (AvatarSetTimer) elt;
                 AvatarActionOnSignal aaos = new AvatarActionOnSignal(elt.getName(), _block.getAvatarSignalWithName("set__" + ast.getTimer().getName()), elt.getReferenceObject());
                 aaos.addValue(timerAttributeName);
                 olds.add(elt);
@@ -1192,8 +1180,8 @@ public class AvatarStateMachine extends AvatarElement {
                 LinkedList<AvatarStateMachineElement> previous = getPreviousElementsOf(ast);
                 if (previous.size() == 1) {
                     if (previous.get(0) instanceof AvatarTransition) {
-                        AvatarTransition at = (AvatarTransition)(previous.get(0));
-                        TraceManager.addDev("Timer value setting=" +  ast.getTimerValue());
+                        AvatarTransition at = (AvatarTransition) (previous.get(0));
+                        TraceManager.addDev("Timer value setting=" + ast.getTimerValue());
                         at.addAction(timerAttributeName + " = " + ast.getTimerValue());
                     } else {
                         TraceManager.addError("The element before a set time is not a transition!");
@@ -1204,14 +1192,14 @@ public class AvatarStateMachine extends AvatarElement {
 
                 // Reset timer
             } else if (elt instanceof AvatarResetTimer) {
-                ato = (AvatarTimerOperator)elt;
+                ato = (AvatarTimerOperator) elt;
                 AvatarActionOnSignal aaos = new AvatarActionOnSignal(elt.getName(), _block.getAvatarSignalWithName("reset__" + ato.getTimer().getName()), elt.getReferenceObject());
                 olds.add(elt);
                 news.add(aaos);
 
                 // Expire timer
             } else if (elt instanceof AvatarExpireTimer) {
-                ato = (AvatarTimerOperator)elt;
+                ato = (AvatarTimerOperator) elt;
                 AvatarActionOnSignal aaos = new AvatarActionOnSignal(elt.getName(), _block.getAvatarSignalWithName("expire__" + ato.getTimer().getName()), elt.getReferenceObject());
                 olds.add(elt);
                 news.add(aaos);
@@ -1220,7 +1208,7 @@ public class AvatarStateMachine extends AvatarElement {
 
         // Replacing old elements with new ones
         AvatarStateMachineElement oldelt, newelt;
-        for(int i = 0; i<olds.size(); i++) {
+        for (int i = 0; i < olds.size(); i++) {
             oldelt = olds.get(i);
             newelt = news.get(i);
             replace(oldelt, newelt);
@@ -1238,12 +1226,12 @@ public class AvatarStateMachine extends AvatarElement {
 
         // Previous elements
         LinkedList<AvatarStateMachineElement> previous = getPreviousElementsOf(oldone);
-        for(AvatarStateMachineElement elt: previous) {
+        for (AvatarStateMachineElement elt : previous) {
             elt.replaceAllNext(oldone, newone);
         }
 
         // Next elements
-        for(int i=0; i<oldone.nbOfNexts(); i++) {
+        for (int i = 0; i < oldone.nbOfNexts(); i++) {
             AvatarStateMachineElement elt = oldone.getNext(i);
             newone.addNext(elt);
         }
@@ -1263,13 +1251,13 @@ public class AvatarStateMachine extends AvatarElement {
         //TraceManager.addDev("ADDING TIMER: " + aa.getName());
 
         // Timer is set at the entrance in the composite state
-        LinkedList<AvatarTransition> ll = findEntranceTransitionElements((AvatarState)(getPreviousElementOf(_at)));
+        LinkedList<AvatarTransition> ll = findEntranceTransitionElements((AvatarState) (getPreviousElementOf(_at)));
 
         AvatarTransition newat0, newat1;
         AvatarSetTimer ast;
         AvatarRandom ar;
         AvatarState as;
-        for(AvatarTransition att: ll) {
+        for (AvatarTransition att : ll) {
             //TraceManager.addDev(" ------------------ Dealing with an entrance transition");
             ar = new AvatarRandom("randomfortimer", _block.getReferenceObject());
             ar.setVariable(val.getName());
@@ -1314,7 +1302,7 @@ public class AvatarStateMachine extends AvatarElement {
 
         LinkedList<AvatarStateMachineElement> elts = getElementsLeadingTo(_at);
 
-        for(AvatarStateMachineElement elt: elts) {
+        for (AvatarStateMachineElement elt : elts) {
             elt.removeNext(_at);
             elt.addNext(newat0);
         }
@@ -1328,13 +1316,13 @@ public class AvatarStateMachine extends AvatarElement {
         //TraceManager.addDev("Searching for transitions entering:" + _state.getName());
         LinkedList<AvatarTransition> ll = new LinkedList<AvatarTransition>();
 
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             if (elt instanceof AvatarTransition) {
                 AvatarStateMachineElement element = getPreviousElementOf(elt);
                 if (elt.getNext(0) == _state) {
-                    ll.add((AvatarTransition)elt);
+                    ll.add((AvatarTransition) elt);
                 } else if (element.inAnUpperStateOf(_state) && (elt.getNext(0).getState() == _state)) {
-                    ll.add((AvatarTransition)elt);
+                    ll.add((AvatarTransition) elt);
                 }
             }
         }
@@ -1345,7 +1333,7 @@ public class AvatarStateMachine extends AvatarElement {
     public LinkedList<AvatarStateMachineElement> getElementsLeadingTo(AvatarStateMachineElement _elt) {
         LinkedList<AvatarStateMachineElement> elts = new LinkedList<AvatarStateMachineElement>();
 
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             if (elt.hasNext(_elt)) {
                 elts.add(elt);
             }
@@ -1371,9 +1359,9 @@ public class AvatarStateMachine extends AvatarElement {
 
             AvatarState myState = new AvatarState("statefortransition__" + ID_ELT, _at.getReferenceObject());
             myState.setHidden(true);
-            AvatarTransition at2 = new AvatarTransition(_at.getBlock (), "transitionfortransition__" + ID_ELT, _at.getReferenceObject());
-            ID_ELT ++;
-            AvatarTransition at1 = (AvatarTransition)(next.getNext(0));
+            AvatarTransition at2 = new AvatarTransition(_at.getBlock(), "transitionfortransition__" + ID_ELT, _at.getReferenceObject());
+            ID_ELT++;
+            AvatarTransition at1 = (AvatarTransition) (next.getNext(0));
 
             next.removeAllNexts();
             next.addNext(at2);
@@ -1386,14 +1374,14 @@ public class AvatarStateMachine extends AvatarElement {
             return;
         } else {
             AvatarState myState = new AvatarState("statefortransition__" + ID_ELT, _at.getReferenceObject());
-            AvatarTransition at = new AvatarTransition(_at.getBlock (), "transitionfortransition__", _at.getReferenceObject());
+            AvatarTransition at = new AvatarTransition(_at.getBlock(), "transitionfortransition__", _at.getReferenceObject());
             at.addNext(_at.getNext(0));
             _at.removeAllNexts();
             _at.addNext(myState);
             myState.addNext(at);
             addElement(myState);
             addElement(at);
-            return ;
+            return;
         }
     }
 
@@ -1402,13 +1390,13 @@ public class AvatarStateMachine extends AvatarElement {
         // We clone elements until we find a state!
         AvatarStateMachineElement tomake, current;
         AvatarStateMachineElement tmp;
-        AvatarTransition at = (AvatarTransition)(_at.basicCloneMe(block));
+        AvatarTransition at = (AvatarTransition) (_at.basicCloneMe(block));
         addElement(at);
 
         current = _at.getNext(0);
         tomake = at;
 
-        while((current != null) && !(current instanceof AvatarState)) {
+        while ((current != null) && !(current instanceof AvatarState)) {
             TraceManager.addDev("Cloning: " + current);
             tmp = current.basicCloneMe(block);
             addElement(tmp);
@@ -1482,15 +1470,15 @@ public class AvatarStateMachine extends AvatarElement {
     public void removeStopStatesOf(AvatarState _as) {
         LinkedList<AvatarStopState> ll = new LinkedList<AvatarStopState>();
 
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             if (elt instanceof AvatarStopState) {
                 if (elt.getState() == _as) {
-                    ll.add((AvatarStopState)elt);
+                    ll.add((AvatarStopState) elt);
                 }
             }
         }
 
-        for(AvatarStopState ass: ll) {
+        for (AvatarStopState ass : ll) {
             TraceManager.addDev("Removed a stop state");
             AvatarState astate = new AvatarState("OldStopState", ass.getReferenceObject());
             astate.setState(ass.getState());
@@ -1503,11 +1491,11 @@ public class AvatarStateMachine extends AvatarElement {
         int id = 0;
         boolean found;
 
-        while(id < 10000) {
+        while (id < 10000) {
             found = false;
-            for(AvatarStateMachineElement elt: elements) {
+            for (AvatarStateMachineElement elt : elements) {
                 if (elt instanceof AvatarState) {
-                    if (elt.getName().compareTo(name+id) == 0) {
+                    if (elt.getName().compareTo(name + id) == 0) {
                         found = true;
                         break;
                     }
@@ -1516,7 +1504,7 @@ public class AvatarStateMachine extends AvatarElement {
             if (!found) {
                 return name + id;
             }
-            id ++;
+            id++;
         }
         return name + id;
     }
@@ -1535,67 +1523,66 @@ public class AvatarStateMachine extends AvatarElement {
     /**
      * Removes all function calls by inlining them.
      *
-     * @param block
-     *      The block from which library function calls should be removed.
+     * @param block The block from which library function calls should be removed.
      */
-    public void removeLibraryFunctionCalls (AvatarBlock block) {
+    public void removeLibraryFunctionCalls(AvatarBlock block) {
         /* Perform BFS for AvatarLibraryFunctionCall elements. When one is found, replace it by the state machine and fix the links */
-        LinkedList<AvatarStateMachineElement> toVisit = new LinkedList<AvatarStateMachineElement> ();
-        toVisit.add (this.startState);
-        HashSet<AvatarStateMachineElement> visited = new HashSet<AvatarStateMachineElement> ();
-        HashMap<AvatarLibraryFunctionCall, AvatarStateMachineElement> callsTranslated = new HashMap<AvatarLibraryFunctionCall, AvatarStateMachineElement> ();
+        LinkedList<AvatarStateMachineElement> toVisit = new LinkedList<AvatarStateMachineElement>();
+        toVisit.add(this.startState);
+        HashSet<AvatarStateMachineElement> visited = new HashSet<AvatarStateMachineElement>();
+        HashMap<AvatarLibraryFunctionCall, AvatarStateMachineElement> callsTranslated = new HashMap<AvatarLibraryFunctionCall, AvatarStateMachineElement>();
 
-        while (!toVisit.isEmpty ()) {
+        while (!toVisit.isEmpty()) {
             /* Get the first element of the queue */
-            AvatarStateMachineElement curAsme = toVisit.remove ();
-            if (visited.contains (curAsme))
+            AvatarStateMachineElement curAsme = toVisit.remove();
+            if (visited.contains(curAsme))
                 continue;
 
             if (curAsme instanceof AvatarLibraryFunctionCall) {
                 AvatarLibraryFunctionCall alfc = (AvatarLibraryFunctionCall) curAsme;
                 /* Create a state that will be used as an entry point for the sub-state machine */
-                AvatarState firstState = new AvatarState ("entry_" + alfc.getLibraryFunction().getName () + "_" + alfc.getCounter(), curAsme.getReferenceObject ());
+                AvatarState firstState = new AvatarState("entry_" + alfc.getLibraryFunction().getName() + "_" + alfc.getCounter(), curAsme.getReferenceObject());
 
                 /* Add this state to the mapping so that future state can use it to replace their next element */
-                callsTranslated.put (alfc, firstState);
+                callsTranslated.put(alfc, firstState);
 
                 /* inline the function call */
-                AvatarStateMachineElement lastState = alfc.inlineFunctionCall (block, firstState);
+                AvatarStateMachineElement lastState = alfc.inlineFunctionCall(block, firstState);
 
                 /* Add the next elements to the newly created last state */
-                for (AvatarStateMachineElement asme: curAsme.getNexts ())
-                    lastState.addNext (asme);
+                for (AvatarStateMachineElement asme : curAsme.getNexts())
+                    lastState.addNext(asme);
 
                 /* Use the translated function call's first element as current element */
                 curAsme = firstState;
             }
 
             /* Add current element to the visited set */
-            visited.add (curAsme);
+            visited.add(curAsme);
 
             /* Loop through the next elements */
-            int i=0;
+            int i = 0;
             if (curAsme.getNexts() != null) {
-                for (AvatarStateMachineElement asme: curAsme.getNexts ()) {
+                for (AvatarStateMachineElement asme : curAsme.getNexts()) {
                     /* Check if it is a function call */
                     if (asme instanceof AvatarLibraryFunctionCall) {
-                        AvatarStateMachineElement replaceBy = callsTranslated.get (asme);
+                        AvatarStateMachineElement replaceBy = callsTranslated.get(asme);
                         /* Check if function call has already been translated */
                         if (replaceBy != null) {
                             /* replace by the translated function call */
-                            curAsme.removeNext (i);
-                            curAsme.addNext (replaceBy);
+                            curAsme.removeNext(i);
+                            curAsme.addNext(replaceBy);
 
                             /* new next element has been added at the end of the list so we need to fix i */
                             i--;
                         } else {
                             /* mark the function call and the current state to be visited */
-                            toVisit.add (asme);
-                            toVisit.add (curAsme);
-                            visited.remove (curAsme);
+                            toVisit.add(asme);
+                            toVisit.add(curAsme);
+                            visited.remove(curAsme);
                         }
                     } else
-                        toVisit.add (asme);
+                        toVisit.add(asme);
 
                     i++;
                 }
@@ -1608,31 +1595,30 @@ public class AvatarStateMachine extends AvatarElement {
      * This concerns also the start state, and end states.
      * DO NOT take into account code of states, and start states
      *
-     * @param block
-     *      The block containing the state machine
+     * @param block The block containing the state machine
      */
-    public void removeEmptyTransitions (AvatarBlock block, boolean _canOptimize) {
+    public void removeEmptyTransitions(AvatarBlock block, boolean _canOptimize) {
 
-	TraceManager.addDev("Remove empty transitions with optimize=" + _canOptimize);
+        //TraceManager.addDev("Remove empty transitions with optimize=" + _canOptimize);
 
-	// Look for such a transition
+        // Look for such a transition
         // states -> tr -> state with tr is empty
         // a tr is empty when it has no action or guard
-        AvatarStateElement foundState1 = null, foundState2=null;
-        AvatarTransition foundAt=null;
+        AvatarStateElement foundState1 = null, foundState2 = null;
+        AvatarTransition foundAt = null;
 
 
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             if ((elt instanceof AvatarStateElement) && (!(elt instanceof AvatarStartState))) {
                 if (elt.getNexts().size() == 1) {
-                    AvatarTransition at = (AvatarTransition)(elt.getNext(0));
+                    AvatarTransition at = (AvatarTransition) (elt.getNext(0));
                     if (at.getNext(0) instanceof AvatarStateElement) {
                         if (at.isEmpty() && at.hasNonDeterministicGuard()) {
-                            if ((_canOptimize) && (!(elt.isCheckable()))){
-				TraceManager.addDev("State found:" + elt);
+                            if ((_canOptimize) && (!(elt.isCheckable()))) {
+                                TraceManager.addDev("State found:" + elt);
                                 foundState1 = (AvatarStateElement) elt;
                                 foundAt = at;
-                                foundState2 = (AvatarStateElement)(at.getNext(0));
+                                foundState2 = (AvatarStateElement) (at.getNext(0));
                                 break;
                             }
 
@@ -1644,7 +1630,7 @@ public class AvatarStateMachine extends AvatarElement {
 
         // Found?
         if (foundState1 != null) {
-            if( foundState1 == foundState2) {
+            if (foundState1 == foundState2) {
                 // We simply remove the transition
                 TraceManager.addDev("Found same state -> removing the transitions");
                 removeElement(foundAt);
@@ -1654,7 +1640,7 @@ public class AvatarStateMachine extends AvatarElement {
             } else {
                 // Must remove state1 and at, and link all previous of state 1 to state2
                 TraceManager.addDev("Found 2 states state1=" + foundState1.getName() + " state2=" + foundState2.getName());
-                for(AvatarStateMachineElement elt:  getPreviousElementsOf(foundState1)) {
+                for (AvatarStateMachineElement elt : getPreviousElementsOf(foundState1)) {
                     elt.replaceAllNext(foundState1, foundState2);
                 }
                 removeElement(foundAt);
@@ -1671,7 +1657,7 @@ public class AvatarStateMachine extends AvatarElement {
             return -1;
         }
 
-        for(int i=0; i<allStates.length; i++) {
+        for (int i = 0; i < allStates.length; i++) {
             if (allStates[i] instanceof AvatarStartState) {
                 return i;
             }
@@ -1685,7 +1671,7 @@ public class AvatarStateMachine extends AvatarElement {
             return -1;
         }
 
-        for(int i=0; i<allStates.length; i++) {
+        for (int i = 0; i < allStates.length; i++) {
             if (allStates[i] == _ase) {
                 return i;
             }
@@ -1700,7 +1686,7 @@ public class AvatarStateMachine extends AvatarElement {
     public void advancedClone(AvatarStateMachine _newAsm, AvatarStateMachineOwner _newBlock) {
         // Elements
         HashMap<AvatarStateMachineElement, AvatarStateMachineElement> correspondenceMap = new HashMap<AvatarStateMachineElement, AvatarStateMachineElement>();
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             AvatarStateMachineElement ae;
             ae = elt.basicCloneMe(_newBlock);
 
@@ -1713,7 +1699,7 @@ public class AvatarStateMachine extends AvatarElement {
         }
 
         // Other attributes
-        for(AvatarStateMachineElement elt: elements) {
+        for (AvatarStateMachineElement elt : elements) {
             AvatarStateMachineElement ae = correspondenceMap.get(elt);
             if (ae != null) {
                 elt.fillAdvancedValues(ae, correspondenceMap);

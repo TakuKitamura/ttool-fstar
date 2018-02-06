@@ -3343,14 +3343,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public void resetReachability () {
         for (TGComponent tgc: this.componentList)
-            tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);;
+            tgc.setHierarchyReachability(TGComponent.ACCESSIBILITY_UNKNOWN);;
     }
 
     public void resetLiveness () {
         for (TGComponent tgc: this.componentList)
-            tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);;
+            tgc.setHierarchyLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);;
     }
-
 
 
     public void getListOfBreakPoints( java.util.List<Point> points, int taskID) {

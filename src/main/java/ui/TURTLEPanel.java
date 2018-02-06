@@ -40,6 +40,7 @@
 package ui;
 
 import myutil.GenericTree;
+import myutil.TraceManager;
 import ui.tmlcp.TMLCPRefAD;
 import ui.tmlcp.TMLCPRefSD;
 import ui.util.IconManager;
@@ -375,6 +376,7 @@ public abstract class TURTLEPanel implements GenericTree {
 
     public void resetReachability() {
         for (int i = 0; i < panels.size(); i++) {
+            //TraceManager.addDev("Reset reachability of " + panels.get(i));
             panelAt(i).resetReachability();
         }
     }
