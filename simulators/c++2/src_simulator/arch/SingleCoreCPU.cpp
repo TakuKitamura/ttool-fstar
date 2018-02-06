@@ -278,6 +278,7 @@ bool SingleCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
     std::cout << "CPU:addt: " << _name << " finalizing transaction " << _nextTransaction->toString() << std::endl;
 #endif
     //_nextTransaction->getCommand()->execute();  //NEW!!!!
+    //std::cout << "CPU:addt: to be started" << std::endl;
     _endSchedule=_nextTransaction->getEndTime();
     //std::cout << "set end schedule CPU: " << _endSchedule << "\n";
     _simulatedTime=max(_simulatedTime,_endSchedule);
@@ -297,7 +298,7 @@ bool SingleCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
     _nextTransaction=0;
     //std::cout << "this is not the reason\n";
     return true;
-  }else return false;
+  } else return false;
 }
 
 void SingleCoreCPU::schedule(){

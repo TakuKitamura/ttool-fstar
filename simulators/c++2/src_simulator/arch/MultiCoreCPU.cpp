@@ -50,20 +50,20 @@
 
 MultiCoreCPU::MultiCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler, WorkloadSource* iScheduler2, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iScheduler), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle)
 #ifdef PENALTIES_ENABLED
-                                                                                                                                                                                                                                                                                                                                                                      , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
-                                                                                                                                                                                                                                                                                                                                                                      , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
+                                                                                                                                                                                                                                                                                                                                                                                                 , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
+                                                                                                                                                                                                                                                                                                                                                                                                 , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
 #endif
-                                                                                                                                                                                                                                                                                                                                                                      , _cyclesPerExeci(iCyclesPerExeci) /*, _busyCycles(0)*/
+                                                                                                                                                                                                                                                                                                                                                                                                 , _cyclesPerExeci(iCyclesPerExeci) /*, _busyCycles(0)*/
 #ifdef PENALTIES_ENABLED
-                                                                                                                                                                                                                                                                                                                                                                      , _timePerExeci(_cyclesPerExeci * _timePerCycle * (_pipelineSize *  _brachingMissrate + 100 - _brachingMissrate) /100.0)
-                                                                                                                                                                                                                                                                                                                                                                      ,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle)
-                                                                                                                                                                                                                                                                                                                                                                      , _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle)
-                                                                                                                                                                                                                                                                                                                                                                      , _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle)
+                                                                                                                                                                                                                                                                                                                                                                                                 , _timePerExeci(_cyclesPerExeci * _timePerCycle * (_pipelineSize *  _brachingMissrate + 100 - _brachingMissrate) /100.0)
+                                                                                                                                                                                                                                                                                                                                                                                                 ,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle)
+                                                                                                                                                                                                                                                                                                                                                                                                 , _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle)
+                                                                                                                                                                                                                                                                                                                                                                                                 , _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle)
 #else
-                                                                                                                                                                                                                                                                                                                                                                      , _timePerExeci(_cyclesPerExeci*_timePerCycle)
+                                                                                                                                                                                                                                                                                                                                                                                                 , _timePerExeci(_cyclesPerExeci*_timePerCycle)
 #endif
-                                                                                                                                                                                                                                                                                                                                                                        //, _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci)
-                                                                                                                                                                                                                                                                                                                                                                        //,_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize)
+                                                                                                                                                                                                                                                                                                                                                                                                   //, _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci)
+                                                                                                                                                                                                                                                                                                                                                                                                   //,_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize)
 {
   //std::cout << "Time per EXECIiiiiiiiiiiiiiiiiiiiiii: " << _timePerExeci << "\n";
   //_transactList.reserve(BLOCK_SIZE);
@@ -129,7 +129,7 @@ void MultiCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
   TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
   TMLTime aReminder = aStartTime % _timePerCycle;
   if (aReminder!=0) aStartTime+=_timePerCycle - aReminder;
-  //std::cout << "CPU: set starttime in CPU=" << aStartTime << "\n"; 
+  //std::cout << "CPU: set starttime in CPU=" << aStartTime << "\n";
 
   _nextTransaction->setStartTime(aStartTime);
 
@@ -151,7 +151,7 @@ void MultiCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
     _nextTransaction->setTaskSwitchingPenalty(_taskSwitchingTime);
   }
 
-  //std::cout << "starttime=" <<  _nextTransaction->getStartTime() << "\n"; 
+  //std::cout << "starttime=" <<  _nextTransaction->getStartTime() << "\n";
   if ((_nextTransaction->getStartTime()-_endSchedule) >=_timeBeforeIdle){
     _nextTransaction->setIdlePenalty(_changeIdleModeTime);
   }
@@ -282,16 +282,17 @@ bool MultiCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
   }
   if (aFinish){
 #ifdef DEBUG_CPU
-    std::cout << "CPU:addt: " << _name << " finalizing transaction " << _nextTransaction->toString() << std::endl;
+    std::cout << "CPU:addt: " << _name << " finalizing transaction next:" << _nextTransaction->toString() << " (enf of next) " << std::endl;
 #endif
     //_nextTransaction->getCommand()->execute();  //NEW!!!!
+    //std::cout << "CPU:addt: to be started" << std::endl;
     _endSchedule=_nextTransaction->getEndTime();
     //std::cout << "set end schedule CPU: " << _endSchedule << "\n";
     _simulatedTime=max(_simulatedTime,_endSchedule);
     _overallTransNo++; //NEW!!!!!!!!
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
     //std::cout << "lets crash execute\n";
-    _nextTransaction->getCommand()->execute();  //NEW!!!!
+    _nextTransaction->getCommand()->execute();
     //std::cout << "not crashed\n";
 #ifdef TRANSLIST_ENABLED
     _transactList.push_back(_nextTransaction);
@@ -392,9 +393,14 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
   for(aLength=0;aLength<aCurrTime;aLength+=5) myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
   myfile << "</tr>\n</table>\n<table>\n<tr>";
   for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
-    aColor=(*j)->getInstanceNo() & 15;
-    myfile << "<td class=\"t"<< aColor <<"\"></td><td>"<< (*j)->toString() << "</td><td class=\"space\"></td>\n";
+    if ((*j) != NULL) {
+      aColor=(*j)->getInstanceNo() & 15;
+	std::cout << "multicore  tohtml 1" << std::endl;
+      myfile << "<td class=\"t"<< aColor <<"\"></td><td>"<< (*j)->toString() << "</td><td class=\"space\"></td>\n";
+
+    }
   }
+
   myfile << "</tr>";
 #ifdef ADD_COMMENTS
   bool aMoreComments=true, aInit=true;
@@ -449,11 +455,11 @@ int MultiCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const
 void MultiCoreCPU::latencies2XML(std::ostringstream& glob, int id1, int id2) {
 
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
-	if ((*i)->getCommand() !=NULL){
-	if ((*i)->getCommand()->getID() == id1 || (*i)->getCommand()->getID() == id2){
-	    (*i)->toXML(glob, 0, _name);
-	}
-	}
+    if ((*i)->getCommand() !=NULL){
+      if ((*i)->getCommand()->getID() == id1 || (*i)->getCommand()->getID() == id2){
+        (*i)->toXML(glob, 0, _name);
+      }
+    }
   }
   return;
 }
