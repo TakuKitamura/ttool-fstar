@@ -475,10 +475,7 @@ public class IconManager {
     private static String icon1014 = "ebrddobs.gif";
     private static String icon1016 = "reqref.gif";
     private static String icon1018 = "reqsatisfy.gif";
-
-ties can even contribute by pushing commits if they want to.
-
-Currently there are no changes in this merge request's source branch. Please push new commits or use a different branch. 
+    
 
     // EBRDD
     private static String icon1050 = "ebrdderc.gif";
