@@ -3341,6 +3341,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             tgc.setDIPLOID(-1);
     }
 
+    public void resetReachability () {
+        for (TGComponent tgc: this.componentList)
+            tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);;
+    }
+
+    public void resetLiveness () {
+        for (TGComponent tgc: this.componentList)
+            tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);;
+    }
+
+
+
     public void getListOfBreakPoints( java.util.List<Point> points, int taskID) {
         for (TGComponent tgc: this.componentList)
             if (tgc.getBreakpoint() && (tgc.getDIPLOID() != -1)) {
