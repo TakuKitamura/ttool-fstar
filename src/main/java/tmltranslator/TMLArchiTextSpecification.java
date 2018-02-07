@@ -37,9 +37,6 @@
  */
 
 
-
-
-
 package tmltranslator;
 
 import myutil.Conversion;
@@ -55,8 +52,9 @@ import java.util.List;
  * Class TMLArchiTextSpecification
  * Import and export of TML architecture textual specifications
  * Creation: 21/09/2007
- * @version 1.0 21/09/2007
- * @author Ludovic APVRILLE
+ *
+ * @author Ludovic APVRILLE, Matteo Bertolino
+ * @version 1.1 07/02/2018
  */
 public class TMLArchiTextSpecification {
     public final static String CR = "\n";
@@ -65,21 +63,22 @@ public class TMLArchiTextSpecification {
     public final static String SC = ";";
 
     private String spec;
-  //  private String title;
+    //  private String title;
 
     private TMLArchitecture tmla;
     private ArrayList<TMLTXTError> errors;
     private ArrayList<TMLTXTError> warnings;
 
-    private String keywords[] = {"NODE", "CPU", "SET", "BUS", "LINK", "BRIDGE", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
-    private String nodetypes[] = {"CPU", "BUS", "LINK", "BRIDGE", "MEMORY", "HWA", "DMA"};
+    private String keywords[] = {"NODE", "CPU", "FPGA", "SET", "BUS", "LINK", "BRIDGE", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
+    private String nodetypes[] = {"CPU", "FPGA", "BUS", "LINK", "BRIDGE", "MEMORY", "HWA", "DMA"};
     private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime", "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime"};
+    private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime", "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime"};
     private String linkparameters[] = {"bus", "node", "priority"};
     private String hwaparameters[] = {"byteDataSize", "execiTime"};
     private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
     private String bridgeparameters[] = {"bufferByteSize"};
     private String memoryparameters[] = {"byteDataSize"};
-  //  private String dmaparameters[] = {"byteDataSize", "nbOfChannels"};
+    //  private String dmaparameters[] = {"byteDataSize", "nbOfChannels"};
 
 
 
@@ -142,20 +141,21 @@ public class TMLArchiTextSpecification {
         String set;
         List<HwNode> hwnodes = tmla.getHwNodes();
         HwCPU cpu;
+        HwFPGA fpga;
         HwA hwa;
         HwBus bus;
         HwBridge bridge;
         HwMemory memory;
         HwDMA dma;
 
-        for(HwNode node: hwnodes) {
+        for (HwNode node : hwnodes) {
 
             // CPU
             if (node instanceof HwCPU) {
-                cpu = (HwCPU)node;
+                cpu = (HwCPU) node;
                 name = prepareString(node.getName());
                 set = "SET " + name + " ";
-                code += "NODE CPU " +  name + CR;
+                code += "NODE CPU " + name + CR;
                 code += set + "nbOfCores " + cpu.nbOfCores + CR;
                 code += set + "byteDataSize " + cpu.byteDataSize + CR;
                 code += set + "pipelineSize " + cpu.pipelineSize + CR;
@@ -170,12 +170,28 @@ public class TMLArchiTextSpecification {
                 code += set + "execcTime " + cpu.execcTime + CR;
             }
 
-            //HWA
-            if (node instanceof HwA) {
-                hwa = (HwA)node;
+            // FPGA
+            if (node instanceof HwFPGA) {
+                fpga = (HwFPGA) node;
                 name = prepareString(node.getName());
                 set = "SET " + name + " ";
-                code += "NODE HWA " +  name + CR;
+                code += "NODE FPGA " + name + CR;
+                code += set + "capacity " + fpga.capacity + CR;
+                code += set + "byteDataSize " + fpga.byteDataSize + CR;
+                code += set + "mappingPenalty " + fpga.mappingPenalty + CR;
+                code += set + "goIdleTime " + fpga.goIdleTime + CR;
+                code += set + "maxConsecutiveIdleCycles " + fpga.maxConsecutiveIdleCycles + CR;
+                code += set + "reconfigurationTime " + fpga.reconfigurationTime + CR;
+                code += set + "execiTime " + fpga.execiTime + CR;
+                code += set + "execcTime " + fpga.execcTime + CR;
+            }
+
+            //HWA
+            if (node instanceof HwA) {
+                hwa = (HwA) node;
+                name = prepareString(node.getName());
+                set = "SET " + name + " ";
+                code += "NODE HWA " + name + CR;
                 code += set + "byteDataSize " + hwa.byteDataSize + CR;
                 code += set + "execiTime " + hwa.execiTime + CR;
                 code += set + "execcTime " + hwa.execcTime + CR;
@@ -183,10 +199,10 @@ public class TMLArchiTextSpecification {
 
             // BUS
             if (node instanceof HwBus) {
-                bus = (HwBus)node;
+                bus = (HwBus) node;
                 name = prepareString(node.getName());
                 set = "SET " + name + " ";
-                code += "NODE BUS " +  name + CR;
+                code += "NODE BUS " + name + CR;
                 code += set + "byteDataSize " + bus.byteDataSize + CR;
                 code += set + "pipelineSize " + bus.pipelineSize + CR;
                 code += set + "arbitration " + bus.arbitration + CR;
@@ -195,28 +211,28 @@ public class TMLArchiTextSpecification {
 
             // Bridge
             if (node instanceof HwBridge) {
-                bridge = (HwBridge)node;
+                bridge = (HwBridge) node;
                 name = prepareString(node.getName());
                 set = "SET " + name + " ";
-                code += "NODE BRIDGE " +  name + CR;
+                code += "NODE BRIDGE " + name + CR;
                 code += set + "bufferByteSize " + bridge.bufferByteSize + CR;
             }
 
             // Memory
             if (node instanceof HwMemory) {
-                memory = (HwMemory)node;
+                memory = (HwMemory) node;
                 name = prepareString(node.getName());
                 set = "SET " + name + " ";
-                code += "NODE MEMORY " +  name + CR;
+                code += "NODE MEMORY " + name + CR;
                 code += set + "byteDataSize " + memory.byteDataSize + CR;
             }
 
             // DMA
             if (node instanceof HwDMA) {
-                dma = (HwDMA)node;
+                dma = (HwDMA) node;
                 name = prepareString(node.getName());
                 set = "SET " + name + " ";
-                code += "NODE DMA " +  name + CR;
+                code += "NODE DMA " + name + CR;
                 code += set + "byteDataSize " + dma.byteDataSize + CR;
                 code += set + "nbOfChannels " + dma.nbOfChannels + CR;
             }
@@ -234,13 +250,13 @@ public class TMLArchiTextSpecification {
         List<HwLink> hwlinks = tmla.getHwLinks();
 
         //System.out.println("Making links");
-        for(HwLink link: hwlinks) {
+        for (HwLink link : hwlinks) {
             //System.out.println("Link");
             if (link instanceof HwLink) {
                 if ((link.hwnode != null) && (link.bus != null)) {
                     name = prepareString(link.getName());
                     set = "SET " + name + " ";
-                    code += "NODE LINK " +  name + CR;
+                    code += "NODE LINK " + name + CR;
                     code += set + "node " + prepareString(link.hwnode.getName()) + CR;
                     code += set + "bus " + prepareString(link.bus.getName()) + CR;
                     code += set + "priority " + link.getPriority() + CR;
@@ -251,8 +267,6 @@ public class TMLArchiTextSpecification {
 
         return code;
     }
-
-
 
 
     // FROM Text file to TML ARCHITECTURE
@@ -272,7 +286,7 @@ public class TMLArchiTextSpecification {
 
     public String printErrors() {
         String ret = "";
-        for(TMLTXTError error: errors) {
+        for (TMLTXTError error : errors) {
             ret += "ERROR at line " + error.lineNb + ": " + error.message + CR;
             try {
                 ret += "->" + spec.split("\n")[error.lineNb] + CR2;
@@ -285,7 +299,7 @@ public class TMLArchiTextSpecification {
 
     public String printWarnings() {
         String ret = "";
-        for(TMLTXTError error: warnings) {
+        for (TMLTXTError error : warnings) {
             ret += "WARNING at line " + error.lineNb + CR;
             ret += error.message + CR;
         }
@@ -301,7 +315,7 @@ public class TMLArchiTextSpecification {
         } else {
             ret += printErrors() + CR + printWarnings() + CR;
             ret += "Compilation failed" + CR;
-            ret += errors.size() + " error(s), "+ warnings.size() + " warning(s)" + CR;
+            ret += errors.size() + " error(s), " + warnings.size() + " warning(s)" + CR;
         }
 
         return ret;
@@ -316,13 +330,13 @@ public class TMLArchiTextSpecification {
         BufferedReader br = new BufferedReader(sr);
         String s;
         String s1;
-        String [] split;
+        String[] split;
         int lineNb = 0;
 
-     //   String instruction;
+        //   String instruction;
 
         try {
-            while((s = br.readLine()) != null) {
+            while ((s = br.readLine()) != null) {
                 if (s != null) {
                     s = s.trim();
                     //System.out.println("s=" + s);
@@ -364,10 +378,10 @@ public class TMLArchiTextSpecification {
 
 
         // Master clock frequency
-        if(isInstruction("MASTERCLOCKFREQUENCY", _split[0])) {
+        if (isInstruction("MASTERCLOCKFREQUENCY", _split[0])) {
 
             if (_split.length != 2) {
-                error = "A master clock frequency must be declared with 1 parameter, and not " + (_split.length - 1) ;
+                error = "A master clock frequency must be declared with 1 parameter, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -396,10 +410,10 @@ public class TMLArchiTextSpecification {
             tmla.setMasterClockFrequency(value);
 
             // NODE
-        } else if(isInstruction("NODE", _split[0])) {
+        } else if (isInstruction("NODE", _split[0])) {
 
             if (_split.length != 3) {
-                error = "A node must be declared with 3 parameters, and not " + (_split.length - 1) ;
+                error = "A node must be declared with 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -415,6 +429,9 @@ public class TMLArchiTextSpecification {
             if (_split[1].equals("CPU")) {
                 HwCPU cpu = new HwCPU(_split[2]);
                 tmla.addHwNode(cpu);
+            } else if (_split[1].equals("FPGA")) {
+                HwFPGA fpga = new HwFPGA(_split[2]);
+                tmla.addHwNode(fpga);
             } else if (_split[1].equals("BUS")) {
                 HwBus bus = new HwBus(_split[2]);
                 tmla.addHwNode(bus);
@@ -438,10 +455,10 @@ public class TMLArchiTextSpecification {
         } // NODE
 
         // SET
-        if(isInstruction("SET", _split[0])) {
+        if (isInstruction("SET", _split[0])) {
 
             if (_split.length != 4) {
-                error = "A set instruction must be used with 3 parameters, and not " + (_split.length - 1) ;
+                error = "A set instruction must be used with 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -456,7 +473,7 @@ public class TMLArchiTextSpecification {
             if (node == null) {
                 link = tmla.getHwLinkByName(_split[1]);
                 if (link == null) {
-                    error = "Unknown node: " + _split[1] ;
+                    error = "Unknown node: " + _split[1];
                     addError(0, _lineNb, 0, error);
                     return -1;
                 } else {
@@ -473,7 +490,7 @@ public class TMLArchiTextSpecification {
                         if (_split[2].toUpperCase().equals("NODE")) {
                             HwNode node0 = tmla.getHwNodeByName(_split[3]);
                             if (node0 == null) {
-                                error = "Unknown node: " + _split[3] ;
+                                error = "Unknown node: " + _split[3];
                                 addError(0, _lineNb, 0, error);
                                 return -1;
                             } else {
@@ -484,7 +501,7 @@ public class TMLArchiTextSpecification {
                         if (_split[2].toUpperCase().equals("BUS")) {
                             HwBus bus0 = tmla.getHwBusByName(_split[3]);
                             if (bus0 == null) {
-                                error = "Unknown bus: " + _split[3] ;
+                                error = "Unknown bus: " + _split[3];
                                 addError(0, _lineNb, 0, error);
                                 return -1;
                             } else {
@@ -499,7 +516,7 @@ public class TMLArchiTextSpecification {
                 }
             } else {
                 if (node instanceof HwCPU) {
-                    HwCPU cpu = (HwCPU)node;
+                    HwCPU cpu = (HwCPU) node;
 
                     if (!checkParameter("SET", _split, 2, 3, _lineNb)) {
                         return -1;
@@ -558,8 +575,53 @@ public class TMLArchiTextSpecification {
                     }
                 }
 
+                if (node instanceof HwFPGA) {
+                    HwFPGA fpga = (HwFPGA) node;
+
+                    if (!checkParameter("SET", _split, 2, 3, _lineNb)) {
+                        return -1;
+                    }
+
+                    if (!checkParameter("SET", _split, 3, 1, _lineNb)) {
+                        return -1;
+                    }
+
+                    if (_split[2].toUpperCase().equals("CAPACITY")) {
+                        fpga.capacity = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("BYTEDATASIZE")) {
+                        fpga.byteDataSize = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("MAPPINGPENALTY")) {
+                        fpga.mappingPenalty = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("GOIDLETIME")) {
+                        fpga.goIdleTime = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("MAXCONSECUTIVEIDLECYCLES")) {
+                        fpga.maxConsecutiveIdleCycles = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("RECONFIGURATIONTIME")) {
+                        fpga.reconfigurationTime = Integer.decode(_split[3]).intValue();
+                    }
+
+
+                    if (_split[2].toUpperCase().equals("EXECITIME")) {
+                        fpga.execiTime = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("EXECCTIME")) {
+                        fpga.execcTime = Integer.decode(_split[3]).intValue();
+                    }
+                }
+
                 if (node instanceof HwA) {
-                    HwA hwa = (HwA)node;
+                    HwA hwa = (HwA) node;
 
                     if (!checkParameter("SET", _split, 2, 10, _lineNb)) {
                         return -1;
@@ -579,7 +641,7 @@ public class TMLArchiTextSpecification {
                 }
 
                 if (node instanceof HwBus) {
-                    HwBus bus = (HwBus)node;
+                    HwBus bus = (HwBus) node;
 
                     if (!checkParameter("SET", _split, 2, 9, _lineNb)) {
                         return -1;
@@ -603,7 +665,7 @@ public class TMLArchiTextSpecification {
                 }
 
                 if (node instanceof HwBridge) {
-                    HwBridge bridge = (HwBridge)node;
+                    HwBridge bridge = (HwBridge) node;
 
                     if (!checkParameter("SET", _split, 2, 11, _lineNb)) {
                         return -1;
@@ -619,7 +681,7 @@ public class TMLArchiTextSpecification {
                 }
 
                 if (node instanceof HwMemory) {
-                    HwMemory memory = (HwMemory)node;
+                    HwMemory memory = (HwMemory) node;
 
                     if (!checkParameter("SET", _split, 2, 12, _lineNb)) {
                         return -1;
@@ -635,7 +697,7 @@ public class TMLArchiTextSpecification {
                 }
 
                 if (node instanceof HwDMA) {
-                    HwDMA dma = (HwDMA)node;
+                    HwDMA dma = (HwDMA) node;
 
                     if (!checkParameter("SET", _split, 2, 12, _lineNb)) {
                         return -1;
@@ -659,7 +721,7 @@ public class TMLArchiTextSpecification {
 
         // Other command
         //System.out.println("ERROR hm hm");
-        if((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
+        if ((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
             error = "Syntax error: unrecognized instruction: " + _split[0];
             addError(0, _lineNb, 0, error);
             return -1;
@@ -686,85 +748,85 @@ public class TMLArchiTextSpecification {
         boolean err = false;
         String error;
 
-        if(_parameter < _split.length) {
-            switch(_type) {
-            case 0:
-                if (!isAValidId(_split[_parameter])) {
-                    err = true;
-                }
-                break;
-            case 1:
-                if (!isANumeral(_split[_parameter])) {
-                    err = true;
-                }
-                break;
-            case 2:
-                if (!isIncluded(_split[_parameter], nodetypes)) {
-                    err = true;
-                }
-                break;
-            case 3:
-                if (!isIncluded(_split[_parameter], cpuparameters)) {
-                    err = true;
-                }
-                break;
-            case 4:
-                if (!isAValidId(getEvtId(_split[_parameter]))) {
-                    err = true;
-                    //System.out.println("Unvalid id");
-                } else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
-                    //System.out.println("Unvalid param");
-                    err = true;
-                }
-                break;
-            case 5:
-                if (!(_split[_parameter].equals("="))) {
-                    System.out.println("Error of =");
-                    err = true;
-                }
-                break;
-            case 6:
-                if (_inst.equals("BOOL")) {
-                    String tmp = _split[_parameter].toUpperCase();
-                    if (!(tmp.equals("TRUE") || tmp.equals("FALSE"))) {
+        if (_parameter < _split.length) {
+            switch (_type) {
+                case 0:
+                    if (!isAValidId(_split[_parameter])) {
                         err = true;
                     }
-                } else {
+                    break;
+                case 1:
                     if (!isANumeral(_split[_parameter])) {
                         err = true;
                     }
-                }
-                break;
-            case 7:
-                if (!isAValidId(_split[_parameter]) && !isANumeral(_split[_parameter])) {
-                    err = true;
-                }
-                break;
-            case 8:
-                if (!isIncluded(_split[_parameter], linkparameters)) {
-                    err = true;
-                }
-                break;
-            case 9:
-                if (!isIncluded(_split[_parameter], busparameters)) {
-                    err = true;
-                }
-                break;
-            case 10:
-                if (!isIncluded(_split[_parameter], hwaparameters)) {
-                    err = true;
-                }
-                break;
-            case 11:
-                if (!isIncluded(_split[_parameter], bridgeparameters)) {
-                    err = true;
-                }
-                break;
-            case 12:
-                if (!isIncluded(_split[_parameter], memoryparameters)) {
-                    err = true;
-                }
-                break;
+                    break;
+                case 2:
+                    if (!isIncluded(_split[_parameter], nodetypes)) {
+                        err = true;
+                    }
+                    break;
+                case 3:
+                    if (!isIncluded(_split[_parameter], cpuparameters)) {
+                        err = true;
+                    }
+                    break;
+                case 4:
+                    if (!isAValidId(getEvtId(_split[_parameter]))) {
+                        err = true;
+                        //System.out.println("Unvalid id");
+                    } else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
+                        //System.out.println("Unvalid param");
+                        err = true;
+                    }
+                    break;
+                case 5:
+                    if (!(_split[_parameter].equals("="))) {
+                        System.out.println("Error of =");
+                        err = true;
+                    }
+                    break;
+                case 6:
+                    if (_inst.equals("BOOL")) {
+                        String tmp = _split[_parameter].toUpperCase();
+                        if (!(tmp.equals("TRUE") || tmp.equals("FALSE"))) {
+                            err = true;
+                        }
+                    } else {
+                        if (!isANumeral(_split[_parameter])) {
+                            err = true;
+                        }
+                    }
+                    break;
+                case 7:
+                    if (!isAValidId(_split[_parameter]) && !isANumeral(_split[_parameter])) {
+                        err = true;
+                    }
+                    break;
+                case 8:
+                    if (!isIncluded(_split[_parameter], linkparameters)) {
+                        err = true;
+                    }
+                    break;
+                case 9:
+                    if (!isIncluded(_split[_parameter], busparameters)) {
+                        err = true;
+                    }
+                    break;
+                case 10:
+                    if (!isIncluded(_split[_parameter], hwaparameters)) {
+                        err = true;
+                    }
+                    break;
+                case 11:
+                    if (!isIncluded(_split[_parameter], bridgeparameters)) {
+                        err = true;
+                    }
+                    break;
+                case 12:
+                    if (!isIncluded(_split[_parameter], memoryparameters)) {
+                        err = true;
+                    }
+                    break;
             }
         } else {
             err = true;
@@ -790,7 +852,7 @@ public class TMLArchiTextSpecification {
             return false;
         }
 
-        boolean b1 = (_id.substring(0,1)).matches("[a-zA-Z]");
+        boolean b1 = (_id.substring(0, 1)).matches("[a-zA-Z]");
         boolean b2 = _id.matches("\\w*");
         boolean b3 = checkKeywords(_id);
 
@@ -803,7 +865,7 @@ public class TMLArchiTextSpecification {
 
     public boolean checkKeywords(String _id) {
         String id = _id.toUpperCase();
-        for(int i=0; i<keywords.length; i++) {
+        for (int i = 0; i < keywords.length; i++) {
             if (id.compareTo(keywords[i]) == 0) {
                 return false;
             }
@@ -813,7 +875,7 @@ public class TMLArchiTextSpecification {
 
     public boolean isIncluded(String _id, String[] _list) {
         String id = _id.toUpperCase();
-        for(int i=0; i<_list.length; i++) {
+        for (int i = 0; i < _list.length; i++) {
             if (id.compareTo(_list[i].toUpperCase()) == 0) {
                 return true;
             }

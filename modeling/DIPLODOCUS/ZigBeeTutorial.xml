@@ -14103,12 +14103,12 @@ sequence diagram.
 
 <Modeling type="TML Architecture" nameTab="Mapping_2" >
 <TMLArchiDiagramPanel name="DIPLODOCUS architecture and mapping Diagram" minX="10" maxX="1900" minY="10" maxY="1900" attributes="1" masterClockFrequency="200" >
-<COMPONENT type="1116" id="6737" >
-<cdparam x="250" y="16" />
-<sizeparam width="250" height="200" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1100" id="6737" >
+<cdparam x="560" y="807" />
+<sizeparam width="150" height="100" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="FPGA0" value="name" />
+<infoparam name="INTL_DMA" value="name" />
 <TGConnectingPoint num="0" id="6713" />
 <TGConnectingPoint num="1" id="6714" />
 <TGConnectingPoint num="2" id="6715" />
@@ -14134,17 +14134,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="6735" />
 <TGConnectingPoint num="23" id="6736" />
 <extraparam>
-<info stereotype="FPGA" nodeName="FPGA0" />
-<attributes capacity="101" byteDataSize="4"  mappingPenalty="1"  reconfigurationTime="50"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  execiTime="1" execcTime="1" clockRatio="1"/>
+<info stereotype="CPURR" nodeName="INTL_DMA" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
 <COMPONENT type="1100" id="6762" >
-<cdparam x="560" y="807" />
+<cdparam x="543" y="422" />
 <sizeparam width="150" height="100" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="INTL_DMA" value="name" />
+<infoparam name="ADAIF_DMA" value="name" />
 <TGConnectingPoint num="0" id="6738" />
 <TGConnectingPoint num="1" id="6739" />
 <TGConnectingPoint num="2" id="6740" />
@@ -14170,17 +14170,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="6760" />
 <TGConnectingPoint num="23" id="6761" />
 <extraparam>
-<info stereotype="CPURR" nodeName="INTL_DMA" />
+<info stereotype="CPURR" nodeName="ADAIF_DMA" />
 <attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1100" id="6787" >
-<cdparam x="543" y="422" />
-<sizeparam width="150" height="100" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1105" id="6787" >
+<cdparam x="354" y="243" />
+<sizeparam width="200" height="152" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="ADAIF_DMA" value="name" />
+<infoparam name="ADAIF_MSS" value="name" />
 <TGConnectingPoint num="0" id="6763" />
 <TGConnectingPoint num="1" id="6764" />
 <TGConnectingPoint num="2" id="6765" />
@@ -14206,17 +14206,53 @@ sequence diagram.
 <TGConnectingPoint num="22" id="6785" />
 <TGConnectingPoint num="23" id="6786" />
 <extraparam>
-<info stereotype="CPURR" nodeName="ADAIF_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+<info stereotype="MEMORY" nodeName="ADAIF_MSS" />
+<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="2" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1105" id="6812" >
-<cdparam x="354" y="243" />
-<sizeparam width="200" height="152" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1100" id="6821" >
+<cdparam x="29" y="215" />
+<sizeparam width="211" height="170" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="ADAIF_MSS" value="name" />
+<infoparam name="ADAIF_PSS" value="name" />
+<TGConnectingPoint num="0" id="6797" />
+<TGConnectingPoint num="1" id="6798" />
+<TGConnectingPoint num="2" id="6799" />
+<TGConnectingPoint num="3" id="6800" />
+<TGConnectingPoint num="4" id="6801" />
+<TGConnectingPoint num="5" id="6802" />
+<TGConnectingPoint num="6" id="6803" />
+<TGConnectingPoint num="7" id="6804" />
+<TGConnectingPoint num="8" id="6805" />
+<TGConnectingPoint num="9" id="6806" />
+<TGConnectingPoint num="10" id="6807" />
+<TGConnectingPoint num="11" id="6808" />
+<TGConnectingPoint num="12" id="6809" />
+<TGConnectingPoint num="13" id="6810" />
+<TGConnectingPoint num="14" id="6811" />
+<TGConnectingPoint num="15" id="6812" />
+<TGConnectingPoint num="16" id="6813" />
+<TGConnectingPoint num="17" id="6814" />
+<TGConnectingPoint num="18" id="6815" />
+<TGConnectingPoint num="19" id="6816" />
+<TGConnectingPoint num="20" id="6817" />
+<TGConnectingPoint num="21" id="6818" />
+<TGConnectingPoint num="22" id="6819" />
+<TGConnectingPoint num="23" id="6820" />
+<extraparam>
+<info stereotype="CPURR" nodeName="ADAIF_PSS" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="4" encryption="0"/>
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1101" id="6796" >
+<father id="6821" num="0" />
+<cdparam x="70" y="279" />
+<sizeparam width="146" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="65" minY="0" maxY="130" />
+<infoparam name="TGComponent" value="Zigbee_TX::X_Sink" />
 <TGConnectingPoint num="0" id="6788" />
 <TGConnectingPoint num="1" id="6789" />
 <TGConnectingPoint num="2" id="6790" />
@@ -14225,34 +14261,17 @@ sequence diagram.
 <TGConnectingPoint num="5" id="6793" />
 <TGConnectingPoint num="6" id="6794" />
 <TGConnectingPoint num="7" id="6795" />
-<TGConnectingPoint num="8" id="6796" />
-<TGConnectingPoint num="9" id="6797" />
-<TGConnectingPoint num="10" id="6798" />
-<TGConnectingPoint num="11" id="6799" />
-<TGConnectingPoint num="12" id="6800" />
-<TGConnectingPoint num="13" id="6801" />
-<TGConnectingPoint num="14" id="6802" />
-<TGConnectingPoint num="15" id="6803" />
-<TGConnectingPoint num="16" id="6804" />
-<TGConnectingPoint num="17" id="6805" />
-<TGConnectingPoint num="18" id="6806" />
-<TGConnectingPoint num="19" id="6807" />
-<TGConnectingPoint num="20" id="6808" />
-<TGConnectingPoint num="21" id="6809" />
-<TGConnectingPoint num="22" id="6810" />
-<TGConnectingPoint num="23" id="6811" />
 <extraparam>
-<info stereotype="MEMORY" nodeName="ADAIF_MSS" />
-<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="2" />
+<info value="Zigbee_TX::X_Sink" taskName="X_Sink" referenceTaskName="Zigbee_TX" priority="0" operation="Adaif operation" fatherComponentMECType="4" />
 </extraparam>
-</COMPONENT>
+</SUBCOMPONENT>
 
-<COMPONENT type="1100" id="6846" >
-<cdparam x="29" y="215" />
-<sizeparam width="211" height="170" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1106" id="6846" >
+<cdparam x="306" y="545" />
+<sizeparam width="100" height="35" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="ADAIF_PSS" value="name" />
+<infoparam name="ADAIF_Bridge" value="name" />
 <TGConnectingPoint num="0" id="6822" />
 <TGConnectingPoint num="1" id="6823" />
 <TGConnectingPoint num="2" id="6824" />
@@ -14278,36 +14297,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="6844" />
 <TGConnectingPoint num="23" id="6845" />
 <extraparam>
-<info stereotype="CPURR" nodeName="ADAIF_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="4" encryption="0"/>
+<info stereotype="BRIDGE" nodeName="ADAIF_Bridge" />
+<attributes bufferByteDataSize="4"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1101" id="6821" >
-<father id="6846" num="0" />
-<cdparam x="33" y="275" />
-<sizeparam width="146" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="65" minY="0" maxY="130" />
-<infoparam name="TGComponent" value="Zigbee_TX::X_Sink" />
-<TGConnectingPoint num="0" id="6813" />
-<TGConnectingPoint num="1" id="6814" />
-<TGConnectingPoint num="2" id="6815" />
-<TGConnectingPoint num="3" id="6816" />
-<TGConnectingPoint num="4" id="6817" />
-<TGConnectingPoint num="5" id="6818" />
-<TGConnectingPoint num="6" id="6819" />
-<TGConnectingPoint num="7" id="6820" />
-<extraparam>
-<info value="Zigbee_TX::X_Sink" taskName="X_Sink" referenceTaskName="Zigbee_TX" priority="0" operation="Adaif operation" fatherComponentMECType="4" />
-</extraparam>
-</SUBCOMPONENT>
 
-<COMPONENT type="1106" id="6871" >
-<cdparam x="306" y="545" />
-<sizeparam width="100" height="35" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1105" id="6871" >
+<cdparam x="1544" y="737" />
+<sizeparam width="216" height="140" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="ADAIF_Bridge" value="name" />
+<infoparam name="MainMemory" value="name" />
 <TGConnectingPoint num="0" id="6847" />
 <TGConnectingPoint num="1" id="6848" />
 <TGConnectingPoint num="2" id="6849" />
@@ -14333,17 +14333,53 @@ sequence diagram.
 <TGConnectingPoint num="22" id="6869" />
 <TGConnectingPoint num="23" id="6870" />
 <extraparam>
-<info stereotype="BRIDGE" nodeName="ADAIF_Bridge" />
-<attributes bufferByteDataSize="4"  clockRatio="1" />
+<info stereotype="MEMORY" nodeName="MainMemory" />
+<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="4" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1105" id="6896" >
-<cdparam x="1544" y="737" />
-<sizeparam width="216" height="140" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1100" id="6968" >
+<cdparam x="1444" y="293" />
+<sizeparam width="417" height="293" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="MainMemory" value="name" />
+<infoparam name="MainCPU" value="name" />
+<TGConnectingPoint num="0" id="6944" />
+<TGConnectingPoint num="1" id="6945" />
+<TGConnectingPoint num="2" id="6946" />
+<TGConnectingPoint num="3" id="6947" />
+<TGConnectingPoint num="4" id="6948" />
+<TGConnectingPoint num="5" id="6949" />
+<TGConnectingPoint num="6" id="6950" />
+<TGConnectingPoint num="7" id="6951" />
+<TGConnectingPoint num="8" id="6952" />
+<TGConnectingPoint num="9" id="6953" />
+<TGConnectingPoint num="10" id="6954" />
+<TGConnectingPoint num="11" id="6955" />
+<TGConnectingPoint num="12" id="6956" />
+<TGConnectingPoint num="13" id="6957" />
+<TGConnectingPoint num="14" id="6958" />
+<TGConnectingPoint num="15" id="6959" />
+<TGConnectingPoint num="16" id="6960" />
+<TGConnectingPoint num="17" id="6961" />
+<TGConnectingPoint num="18" id="6962" />
+<TGConnectingPoint num="19" id="6963" />
+<TGConnectingPoint num="20" id="6964" />
+<TGConnectingPoint num="21" id="6965" />
+<TGConnectingPoint num="22" id="6966" />
+<TGConnectingPoint num="23" id="6967" />
+<extraparam>
+<info stereotype="CPURR" nodeName="MainCPU" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1101" id="6880" >
+<father id="6968" num="0" />
+<cdparam x="1465" y="339" />
+<sizeparam width="164" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="253" minY="0" maxY="253" />
+<infoparam name="TGComponent" value="Zigbee_TX::F_Source" />
 <TGConnectingPoint num="0" id="6872" />
 <TGConnectingPoint num="1" id="6873" />
 <TGConnectingPoint num="2" id="6874" />
@@ -14352,34 +14388,150 @@ sequence diagram.
 <TGConnectingPoint num="5" id="6877" />
 <TGConnectingPoint num="6" id="6878" />
 <TGConnectingPoint num="7" id="6879" />
-<TGConnectingPoint num="8" id="6880" />
-<TGConnectingPoint num="9" id="6881" />
-<TGConnectingPoint num="10" id="6882" />
-<TGConnectingPoint num="11" id="6883" />
-<TGConnectingPoint num="12" id="6884" />
-<TGConnectingPoint num="13" id="6885" />
-<TGConnectingPoint num="14" id="6886" />
-<TGConnectingPoint num="15" id="6887" />
-<TGConnectingPoint num="16" id="6888" />
-<TGConnectingPoint num="17" id="6889" />
-<TGConnectingPoint num="18" id="6890" />
-<TGConnectingPoint num="19" id="6891" />
-<TGConnectingPoint num="20" id="6892" />
-<TGConnectingPoint num="21" id="6893" />
-<TGConnectingPoint num="22" id="6894" />
-<TGConnectingPoint num="23" id="6895" />
 <extraparam>
-<info stereotype="MEMORY" nodeName="MainMemory" />
-<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="4" />
+<info value="Zigbee_TX::F_Source" taskName="F_Source" referenceTaskName="Zigbee_TX" priority="0" operation="F_Source" fatherComponentMECType="0" />
 </extraparam>
-</COMPONENT>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="6889" >
+<father id="6968" num="1" />
+<cdparam x="1466" y="395" />
+<sizeparam width="164" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="253" minY="0" maxY="253" />
+<infoparam name="TGComponent" value="Zigbee_TX::X_Source" />
+<TGConnectingPoint num="0" id="6881" />
+<TGConnectingPoint num="1" id="6882" />
+<TGConnectingPoint num="2" id="6883" />
+<TGConnectingPoint num="3" id="6884" />
+<TGConnectingPoint num="4" id="6885" />
+<TGConnectingPoint num="5" id="6886" />
+<TGConnectingPoint num="6" id="6887" />
+<TGConnectingPoint num="7" id="6888" />
+<extraparam>
+<info value="Zigbee_TX::X_Source" taskName="X_Source" referenceTaskName="Zigbee_TX" priority="0" operation="X_Source" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="6898" >
+<father id="6968" num="2" />
+<cdparam x="1466" y="456" />
+<sizeparam width="223" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="194" minY="0" maxY="253" />
+<infoparam name="TGComponent" value="Zigbee_TX::F_Symbol2ChipSeq" />
+<TGConnectingPoint num="0" id="6890" />
+<TGConnectingPoint num="1" id="6891" />
+<TGConnectingPoint num="2" id="6892" />
+<TGConnectingPoint num="3" id="6893" />
+<TGConnectingPoint num="4" id="6894" />
+<TGConnectingPoint num="5" id="6895" />
+<TGConnectingPoint num="6" id="6896" />
+<TGConnectingPoint num="7" id="6897" />
+<extraparam>
+<info value="Zigbee_TX::F_Symbol2ChipSeq" taskName="F_Symbol2ChipSeq" referenceTaskName="Zigbee_TX" priority="0" operation="F_Symbol2ChipSeq" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="6907" >
+<father id="6968" num="3" />
+<cdparam x="1466" y="518" />
+<sizeparam width="189" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="228" minY="0" maxY="253" />
+<infoparam name="TGComponent" value="Zigbee_TX::F_Chip2Octet" />
+<TGConnectingPoint num="0" id="6899" />
+<TGConnectingPoint num="1" id="6900" />
+<TGConnectingPoint num="2" id="6901" />
+<TGConnectingPoint num="3" id="6902" />
+<TGConnectingPoint num="4" id="6903" />
+<TGConnectingPoint num="5" id="6904" />
+<TGConnectingPoint num="6" id="6905" />
+<TGConnectingPoint num="7" id="6906" />
+<extraparam>
+<info value="Zigbee_TX::F_Chip2Octet" taskName="F_Chip2Octet" referenceTaskName="Zigbee_TX" priority="0" operation="F_Chip2Octet" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="6916" >
+<father id="6968" num="4" />
+<cdparam x="1688" y="405" />
+<sizeparam width="146" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="271" minY="0" maxY="253" />
+<infoparam name="TGComponent" value="Zigbee_TX::F_Sink" />
+<TGConnectingPoint num="0" id="6908" />
+<TGConnectingPoint num="1" id="6909" />
+<TGConnectingPoint num="2" id="6910" />
+<TGConnectingPoint num="3" id="6911" />
+<TGConnectingPoint num="4" id="6912" />
+<TGConnectingPoint num="5" id="6913" />
+<TGConnectingPoint num="6" id="6914" />
+<TGConnectingPoint num="7" id="6915" />
+<extraparam>
+<info value="Zigbee_TX::F_Sink" taskName="F_Sink" referenceTaskName="Zigbee_TX" priority="0" operation="F_Sink" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="6925" >
+<father id="6968" num="5" />
+<cdparam x="1691" y="345" />
+<sizeparam width="145" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="272" minY="0" maxY="253" />
+<infoparam name="TGComponent" value="Zigbee_TX::F_CWL" />
+<TGConnectingPoint num="0" id="6917" />
+<TGConnectingPoint num="1" id="6918" />
+<TGConnectingPoint num="2" id="6919" />
+<TGConnectingPoint num="3" id="6920" />
+<TGConnectingPoint num="4" id="6921" />
+<TGConnectingPoint num="5" id="6922" />
+<TGConnectingPoint num="6" id="6923" />
+<TGConnectingPoint num="7" id="6924" />
+<extraparam>
+<info value="Zigbee_TX::F_CWL" taskName="F_CWL" referenceTaskName="Zigbee_TX" priority="0" operation="F_CWL" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="6934" >
+<father id="6968" num="6" />
+<cdparam x="1685" y="459" />
+<sizeparam width="162" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="255" minY="0" maxY="253" />
+<infoparam name="TGComponent" value="Zigbee_TX::F_CWP_Q" />
+<TGConnectingPoint num="0" id="6926" />
+<TGConnectingPoint num="1" id="6927" />
+<TGConnectingPoint num="2" id="6928" />
+<TGConnectingPoint num="3" id="6929" />
+<TGConnectingPoint num="4" id="6930" />
+<TGConnectingPoint num="5" id="6931" />
+<TGConnectingPoint num="6" id="6932" />
+<TGConnectingPoint num="7" id="6933" />
+<extraparam>
+<info value="Zigbee_TX::F_CWP_Q" taskName="F_CWP_Q" referenceTaskName="Zigbee_TX" priority="0" operation="F_CWP_Q" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="6943" >
+<father id="6968" num="7" />
+<cdparam x="1686" y="522" />
+<sizeparam width="156" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="261" minY="0" maxY="253" />
+<infoparam name="TGComponent" value="Zigbee_TX::F_CWP_I" />
+<TGConnectingPoint num="0" id="6935" />
+<TGConnectingPoint num="1" id="6936" />
+<TGConnectingPoint num="2" id="6937" />
+<TGConnectingPoint num="3" id="6938" />
+<TGConnectingPoint num="4" id="6939" />
+<TGConnectingPoint num="5" id="6940" />
+<TGConnectingPoint num="6" id="6941" />
+<TGConnectingPoint num="7" id="6942" />
+<extraparam>
+<info value="Zigbee_TX::F_CWP_I" taskName="F_CWP_I" referenceTaskName="Zigbee_TX" priority="0" operation="F_CWP_I" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
 
-<COMPONENT type="1100" id="6993" >
-<cdparam x="1444" y="293" />
-<sizeparam width="417" height="293" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1102" id="6993" >
+<cdparam x="1527" y="635" />
+<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="MainCPU" value="name" />
+<infoparam name="MainBus" value="name" />
 <TGConnectingPoint num="0" id="6969" />
 <TGConnectingPoint num="1" id="6970" />
 <TGConnectingPoint num="2" id="6971" />
@@ -14405,169 +14557,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="6991" />
 <TGConnectingPoint num="23" id="6992" />
 <extraparam>
-<info stereotype="CPURR" nodeName="MainCPU" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+<info stereotype="BUS-RR" nodeName="MainBus" />
+<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1101" id="6905" >
-<father id="6993" num="0" />
-<cdparam x="1465" y="339" />
-<sizeparam width="164" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="253" minY="0" maxY="253" />
-<infoparam name="TGComponent" value="Zigbee_TX::F_Source" />
-<TGConnectingPoint num="0" id="6897" />
-<TGConnectingPoint num="1" id="6898" />
-<TGConnectingPoint num="2" id="6899" />
-<TGConnectingPoint num="3" id="6900" />
-<TGConnectingPoint num="4" id="6901" />
-<TGConnectingPoint num="5" id="6902" />
-<TGConnectingPoint num="6" id="6903" />
-<TGConnectingPoint num="7" id="6904" />
-<extraparam>
-<info value="Zigbee_TX::F_Source" taskName="F_Source" referenceTaskName="Zigbee_TX" priority="0" operation="F_Source" fatherComponentMECType="0" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1101" id="6914" >
-<father id="6993" num="1" />
-<cdparam x="1466" y="395" />
-<sizeparam width="164" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="253" minY="0" maxY="253" />
-<infoparam name="TGComponent" value="Zigbee_TX::X_Source" />
-<TGConnectingPoint num="0" id="6906" />
-<TGConnectingPoint num="1" id="6907" />
-<TGConnectingPoint num="2" id="6908" />
-<TGConnectingPoint num="3" id="6909" />
-<TGConnectingPoint num="4" id="6910" />
-<TGConnectingPoint num="5" id="6911" />
-<TGConnectingPoint num="6" id="6912" />
-<TGConnectingPoint num="7" id="6913" />
-<extraparam>
-<info value="Zigbee_TX::X_Source" taskName="X_Source" referenceTaskName="Zigbee_TX" priority="0" operation="X_Source" fatherComponentMECType="0" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1101" id="6923" >
-<father id="6993" num="2" />
-<cdparam x="1466" y="456" />
-<sizeparam width="223" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="194" minY="0" maxY="253" />
-<infoparam name="TGComponent" value="Zigbee_TX::F_Symbol2ChipSeq" />
-<TGConnectingPoint num="0" id="6915" />
-<TGConnectingPoint num="1" id="6916" />
-<TGConnectingPoint num="2" id="6917" />
-<TGConnectingPoint num="3" id="6918" />
-<TGConnectingPoint num="4" id="6919" />
-<TGConnectingPoint num="5" id="6920" />
-<TGConnectingPoint num="6" id="6921" />
-<TGConnectingPoint num="7" id="6922" />
-<extraparam>
-<info value="Zigbee_TX::F_Symbol2ChipSeq" taskName="F_Symbol2ChipSeq" referenceTaskName="Zigbee_TX" priority="0" operation="F_Symbol2ChipSeq" fatherComponentMECType="0" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1101" id="6932" >
-<father id="6993" num="3" />
-<cdparam x="1466" y="518" />
-<sizeparam width="189" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="228" minY="0" maxY="253" />
-<infoparam name="TGComponent" value="Zigbee_TX::F_Chip2Octet" />
-<TGConnectingPoint num="0" id="6924" />
-<TGConnectingPoint num="1" id="6925" />
-<TGConnectingPoint num="2" id="6926" />
-<TGConnectingPoint num="3" id="6927" />
-<TGConnectingPoint num="4" id="6928" />
-<TGConnectingPoint num="5" id="6929" />
-<TGConnectingPoint num="6" id="6930" />
-<TGConnectingPoint num="7" id="6931" />
-<extraparam>
-<info value="Zigbee_TX::F_Chip2Octet" taskName="F_Chip2Octet" referenceTaskName="Zigbee_TX" priority="0" operation="F_Chip2Octet" fatherComponentMECType="0" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1101" id="6941" >
-<father id="6993" num="4" />
-<cdparam x="1688" y="405" />
-<sizeparam width="146" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="271" minY="0" maxY="253" />
-<infoparam name="TGComponent" value="Zigbee_TX::F_Sink" />
-<TGConnectingPoint num="0" id="6933" />
-<TGConnectingPoint num="1" id="6934" />
-<TGConnectingPoint num="2" id="6935" />
-<TGConnectingPoint num="3" id="6936" />
-<TGConnectingPoint num="4" id="6937" />
-<TGConnectingPoint num="5" id="6938" />
-<TGConnectingPoint num="6" id="6939" />
-<TGConnectingPoint num="7" id="6940" />
-<extraparam>
-<info value="Zigbee_TX::F_Sink" taskName="F_Sink" referenceTaskName="Zigbee_TX" priority="0" operation="F_Sink" fatherComponentMECType="0" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1101" id="6950" >
-<father id="6993" num="5" />
-<cdparam x="1691" y="345" />
-<sizeparam width="145" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="272" minY="0" maxY="253" />
-<infoparam name="TGComponent" value="Zigbee_TX::F_CWL" />
-<TGConnectingPoint num="0" id="6942" />
-<TGConnectingPoint num="1" id="6943" />
-<TGConnectingPoint num="2" id="6944" />
-<TGConnectingPoint num="3" id="6945" />
-<TGConnectingPoint num="4" id="6946" />
-<TGConnectingPoint num="5" id="6947" />
-<TGConnectingPoint num="6" id="6948" />
-<TGConnectingPoint num="7" id="6949" />
-<extraparam>
-<info value="Zigbee_TX::F_CWL" taskName="F_CWL" referenceTaskName="Zigbee_TX" priority="0" operation="F_CWL" fatherComponentMECType="0" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1101" id="6959" >
-<father id="6993" num="6" />
-<cdparam x="1685" y="459" />
-<sizeparam width="162" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="255" minY="0" maxY="253" />
-<infoparam name="TGComponent" value="Zigbee_TX::F_CWP_Q" />
-<TGConnectingPoint num="0" id="6951" />
-<TGConnectingPoint num="1" id="6952" />
-<TGConnectingPoint num="2" id="6953" />
-<TGConnectingPoint num="3" id="6954" />
-<TGConnectingPoint num="4" id="6955" />
-<TGConnectingPoint num="5" id="6956" />
-<TGConnectingPoint num="6" id="6957" />
-<TGConnectingPoint num="7" id="6958" />
-<extraparam>
-<info value="Zigbee_TX::F_CWP_Q" taskName="F_CWP_Q" referenceTaskName="Zigbee_TX" priority="0" operation="F_CWP_Q" fatherComponentMECType="0" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1101" id="6968" >
-<father id="6993" num="7" />
-<cdparam x="1686" y="522" />
-<sizeparam width="156" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="261" minY="0" maxY="253" />
-<infoparam name="TGComponent" value="Zigbee_TX::F_CWP_I" />
-<TGConnectingPoint num="0" id="6960" />
-<TGConnectingPoint num="1" id="6961" />
-<TGConnectingPoint num="2" id="6962" />
-<TGConnectingPoint num="3" id="6963" />
-<TGConnectingPoint num="4" id="6964" />
-<TGConnectingPoint num="5" id="6965" />
-<TGConnectingPoint num="6" id="6966" />
-<TGConnectingPoint num="7" id="6967" />
-<extraparam>
-<info value="Zigbee_TX::F_CWP_I" taskName="F_CWP_I" referenceTaskName="Zigbee_TX" priority="0" operation="F_CWP_I" fatherComponentMECType="0" />
-</extraparam>
-</SUBCOMPONENT>
 
-<COMPONENT type="1102" id="7018" >
-<cdparam x="1527" y="635" />
-<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1106" id="7018" >
+<cdparam x="1367" y="610" />
+<sizeparam width="100" height="100" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="MainBus" value="name" />
+<infoparam name="MainBridge" value="name" />
 <TGConnectingPoint num="0" id="6994" />
 <TGConnectingPoint num="1" id="6995" />
 <TGConnectingPoint num="2" id="6996" />
@@ -14593,17 +14593,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7016" />
 <TGConnectingPoint num="23" id="7017" />
 <extraparam>
-<info stereotype="BUS-RR" nodeName="MainBus" />
-<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="" />
+<info stereotype="BRIDGE" nodeName="MainBridge" />
+<attributes bufferByteDataSize="4"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1106" id="7043" >
-<cdparam x="1367" y="610" />
-<sizeparam width="100" height="100" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1102" id="7043" >
+<cdparam x="231" y="635" />
+<sizeparam width="845" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="MainBridge" value="name" />
+<infoparam name="Crossbar" value="name" />
 <TGConnectingPoint num="0" id="7019" />
 <TGConnectingPoint num="1" id="7020" />
 <TGConnectingPoint num="2" id="7021" />
@@ -14629,17 +14629,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7041" />
 <TGConnectingPoint num="23" id="7042" />
 <extraparam>
-<info stereotype="BRIDGE" nodeName="MainBridge" />
-<attributes bufferByteDataSize="4"  clockRatio="1" />
+<info stereotype="BUS-RR" nodeName="Crossbar" />
+<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1102" id="7068" >
-<cdparam x="231" y="635" />
-<sizeparam width="845" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1106" id="7068" >
+<cdparam x="306" y="737" />
+<sizeparam width="100" height="51" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="Crossbar" value="name" />
+<infoparam name="INTL_Bridge" value="name" />
 <TGConnectingPoint num="0" id="7044" />
 <TGConnectingPoint num="1" id="7045" />
 <TGConnectingPoint num="2" id="7046" />
@@ -14665,17 +14665,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7066" />
 <TGConnectingPoint num="23" id="7067" />
 <extraparam>
-<info stereotype="BUS-RR" nodeName="Crossbar" />
-<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="" />
+<info stereotype="BRIDGE" nodeName="INTL_Bridge" />
+<attributes bufferByteDataSize="4"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1106" id="7093" >
-<cdparam x="306" y="737" />
-<sizeparam width="100" height="51" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1105" id="7093" >
+<cdparam x="376" y="949" />
+<sizeparam width="331" height="135" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="INTL_Bridge" value="name" />
+<infoparam name="INTL_MSS" value="name" />
 <TGConnectingPoint num="0" id="7069" />
 <TGConnectingPoint num="1" id="7070" />
 <TGConnectingPoint num="2" id="7071" />
@@ -14701,17 +14701,53 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7091" />
 <TGConnectingPoint num="23" id="7092" />
 <extraparam>
-<info stereotype="BRIDGE" nodeName="INTL_Bridge" />
-<attributes bufferByteDataSize="4"  clockRatio="1" />
+<info stereotype="MEMORY" nodeName="INTL_MSS" />
+<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="3" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1105" id="7118" >
-<cdparam x="376" y="949" />
-<sizeparam width="331" height="135" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1100" id="7127" >
+<cdparam x="91" y="938" />
+<sizeparam width="234" height="140" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="INTL_MSS" value="name" />
+<infoparam name="INTL_PSS" value="name" />
+<TGConnectingPoint num="0" id="7103" />
+<TGConnectingPoint num="1" id="7104" />
+<TGConnectingPoint num="2" id="7105" />
+<TGConnectingPoint num="3" id="7106" />
+<TGConnectingPoint num="4" id="7107" />
+<TGConnectingPoint num="5" id="7108" />
+<TGConnectingPoint num="6" id="7109" />
+<TGConnectingPoint num="7" id="7110" />
+<TGConnectingPoint num="8" id="7111" />
+<TGConnectingPoint num="9" id="7112" />
+<TGConnectingPoint num="10" id="7113" />
+<TGConnectingPoint num="11" id="7114" />
+<TGConnectingPoint num="12" id="7115" />
+<TGConnectingPoint num="13" id="7116" />
+<TGConnectingPoint num="14" id="7117" />
+<TGConnectingPoint num="15" id="7118" />
+<TGConnectingPoint num="16" id="7119" />
+<TGConnectingPoint num="17" id="7120" />
+<TGConnectingPoint num="18" id="7121" />
+<TGConnectingPoint num="19" id="7122" />
+<TGConnectingPoint num="20" id="7123" />
+<TGConnectingPoint num="21" id="7124" />
+<TGConnectingPoint num="22" id="7125" />
+<TGConnectingPoint num="23" id="7126" />
+<extraparam>
+<info stereotype="CPURR" nodeName="INTL_PSS" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="2" encryption="0"/>
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1101" id="7102" >
+<father id="7127" num="0" />
+<cdparam x="105" y="993" />
+<sizeparam width="189" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="45" minY="0" maxY="100" />
+<infoparam name="TGComponent" value="Zigbee_TX::X_Chip2Octet" />
 <TGConnectingPoint num="0" id="7094" />
 <TGConnectingPoint num="1" id="7095" />
 <TGConnectingPoint num="2" id="7096" />
@@ -14720,34 +14756,17 @@ sequence diagram.
 <TGConnectingPoint num="5" id="7099" />
 <TGConnectingPoint num="6" id="7100" />
 <TGConnectingPoint num="7" id="7101" />
-<TGConnectingPoint num="8" id="7102" />
-<TGConnectingPoint num="9" id="7103" />
-<TGConnectingPoint num="10" id="7104" />
-<TGConnectingPoint num="11" id="7105" />
-<TGConnectingPoint num="12" id="7106" />
-<TGConnectingPoint num="13" id="7107" />
-<TGConnectingPoint num="14" id="7108" />
-<TGConnectingPoint num="15" id="7109" />
-<TGConnectingPoint num="16" id="7110" />
-<TGConnectingPoint num="17" id="7111" />
-<TGConnectingPoint num="18" id="7112" />
-<TGConnectingPoint num="19" id="7113" />
-<TGConnectingPoint num="20" id="7114" />
-<TGConnectingPoint num="21" id="7115" />
-<TGConnectingPoint num="22" id="7116" />
-<TGConnectingPoint num="23" id="7117" />
 <extraparam>
-<info stereotype="MEMORY" nodeName="INTL_MSS" />
-<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="3" />
+<info value="Zigbee_TX::X_Chip2Octet" taskName="X_Chip2Octet" referenceTaskName="Zigbee_TX" priority="0" operation="Interleaver operation" fatherComponentMECType="2" />
 </extraparam>
-</COMPONENT>
+</SUBCOMPONENT>
 
-<COMPONENT type="1100" id="7152" >
-<cdparam x="91" y="938" />
-<sizeparam width="234" height="140" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1102" id="7152" >
+<cdparam x="231" y="832" />
+<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="INTL_PSS" value="name" />
+<infoparam name="INTL_Bus" value="name" />
 <TGConnectingPoint num="0" id="7128" />
 <TGConnectingPoint num="1" id="7129" />
 <TGConnectingPoint num="2" id="7130" />
@@ -14773,36 +14792,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7150" />
 <TGConnectingPoint num="23" id="7151" />
 <extraparam>
-<info stereotype="CPURR" nodeName="INTL_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="2" encryption="0"/>
+<info stereotype="BUS-RR" nodeName="INTL_Bus" />
+<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1101" id="7127" >
-<father id="7152" num="0" />
-<cdparam x="105" y="993" />
-<sizeparam width="189" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="45" minY="0" maxY="100" />
-<infoparam name="TGComponent" value="Zigbee_TX::X_Chip2Octet" />
-<TGConnectingPoint num="0" id="7119" />
-<TGConnectingPoint num="1" id="7120" />
-<TGConnectingPoint num="2" id="7121" />
-<TGConnectingPoint num="3" id="7122" />
-<TGConnectingPoint num="4" id="7123" />
-<TGConnectingPoint num="5" id="7124" />
-<TGConnectingPoint num="6" id="7125" />
-<TGConnectingPoint num="7" id="7126" />
-<extraparam>
-<info value="Zigbee_TX::X_Chip2Octet" taskName="X_Chip2Octet" referenceTaskName="Zigbee_TX" priority="0" operation="Interleaver operation" fatherComponentMECType="2" />
-</extraparam>
-</SUBCOMPONENT>
 
 <COMPONENT type="1102" id="7177" >
-<cdparam x="231" y="832" />
+<cdparam x="231" y="447" />
 <sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="INTL_Bus" value="name" />
+<infoparam name="ADAIF_Bus" value="name" />
 <TGConnectingPoint num="0" id="7153" />
 <TGConnectingPoint num="1" id="7154" />
 <TGConnectingPoint num="2" id="7155" />
@@ -14828,17 +14828,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7175" />
 <TGConnectingPoint num="23" id="7176" />
 <extraparam>
-<info stereotype="BUS-RR" nodeName="INTL_Bus" />
+<info stereotype="BUS-RR" nodeName="ADAIF_Bus" />
 <attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1102" id="7202" >
-<cdparam x="231" y="447" />
-<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1100" id="7202" >
+<cdparam x="1147" y="408" />
+<sizeparam width="150" height="100" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="ADAIF_Bus" value="name" />
+<infoparam name="FEP_DMA" value="name" />
 <TGConnectingPoint num="0" id="7178" />
 <TGConnectingPoint num="1" id="7179" />
 <TGConnectingPoint num="2" id="7180" />
@@ -14864,17 +14864,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7200" />
 <TGConnectingPoint num="23" id="7201" />
 <extraparam>
-<info stereotype="BUS-RR" nodeName="ADAIF_Bus" />
-<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="" />
+<info stereotype="CPURR" nodeName="FEP_DMA" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1100" id="7227" >
-<cdparam x="1147" y="408" />
-<sizeparam width="150" height="100" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1105" id="7227" >
+<cdparam x="895" y="193" />
+<sizeparam width="255" height="183" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="FEP_DMA" value="name" />
+<infoparam name="FEP_MSS" value="name" />
 <TGConnectingPoint num="0" id="7203" />
 <TGConnectingPoint num="1" id="7204" />
 <TGConnectingPoint num="2" id="7205" />
@@ -14900,17 +14900,53 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7225" />
 <TGConnectingPoint num="23" id="7226" />
 <extraparam>
-<info stereotype="CPURR" nodeName="FEP_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+<info stereotype="MEMORY" nodeName="FEP_MSS" />
+<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="0" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1105" id="7252" >
-<cdparam x="895" y="193" />
-<sizeparam width="255" height="183" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1100" id="7279" >
+<cdparam x="619" y="199" />
+<sizeparam width="238" height="185" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="FEP_MSS" value="name" />
+<infoparam name="FEP_PSS" value="name" />
+<TGConnectingPoint num="0" id="7255" />
+<TGConnectingPoint num="1" id="7256" />
+<TGConnectingPoint num="2" id="7257" />
+<TGConnectingPoint num="3" id="7258" />
+<TGConnectingPoint num="4" id="7259" />
+<TGConnectingPoint num="5" id="7260" />
+<TGConnectingPoint num="6" id="7261" />
+<TGConnectingPoint num="7" id="7262" />
+<TGConnectingPoint num="8" id="7263" />
+<TGConnectingPoint num="9" id="7264" />
+<TGConnectingPoint num="10" id="7265" />
+<TGConnectingPoint num="11" id="7266" />
+<TGConnectingPoint num="12" id="7267" />
+<TGConnectingPoint num="13" id="7268" />
+<TGConnectingPoint num="14" id="7269" />
+<TGConnectingPoint num="15" id="7270" />
+<TGConnectingPoint num="16" id="7271" />
+<TGConnectingPoint num="17" id="7272" />
+<TGConnectingPoint num="18" id="7273" />
+<TGConnectingPoint num="19" id="7274" />
+<TGConnectingPoint num="20" id="7275" />
+<TGConnectingPoint num="21" id="7276" />
+<TGConnectingPoint num="22" id="7277" />
+<TGConnectingPoint num="23" id="7278" />
+<extraparam>
+<info stereotype="CPURR" nodeName="FEP_PSS" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="2" execcTime="1" clockRatio="1" MECType="1" encryption="0"/>
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1101" id="7236" >
+<father id="7279" num="0" />
+<cdparam x="671" y="289" />
+<sizeparam width="156" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="82" minY="0" maxY="145" />
+<infoparam name="TGComponent" value="Zigbee_TX::X_CWP_I" />
 <TGConnectingPoint num="0" id="7228" />
 <TGConnectingPoint num="1" id="7229" />
 <TGConnectingPoint num="2" id="7230" />
@@ -14919,34 +14955,55 @@ sequence diagram.
 <TGConnectingPoint num="5" id="7233" />
 <TGConnectingPoint num="6" id="7234" />
 <TGConnectingPoint num="7" id="7235" />
-<TGConnectingPoint num="8" id="7236" />
-<TGConnectingPoint num="9" id="7237" />
-<TGConnectingPoint num="10" id="7238" />
-<TGConnectingPoint num="11" id="7239" />
-<TGConnectingPoint num="12" id="7240" />
-<TGConnectingPoint num="13" id="7241" />
-<TGConnectingPoint num="14" id="7242" />
-<TGConnectingPoint num="15" id="7243" />
-<TGConnectingPoint num="16" id="7244" />
-<TGConnectingPoint num="17" id="7245" />
-<TGConnectingPoint num="18" id="7246" />
-<TGConnectingPoint num="19" id="7247" />
-<TGConnectingPoint num="20" id="7248" />
-<TGConnectingPoint num="21" id="7249" />
-<TGConnectingPoint num="22" id="7250" />
-<TGConnectingPoint num="23" id="7251" />
 <extraparam>
-<info stereotype="MEMORY" nodeName="FEP_MSS" />
-<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="0" />
+<info value="Zigbee_TX::X_CWP_I" taskName="X_CWP_I" referenceTaskName="Zigbee_TX" priority="0" operation="CWP" fatherComponentMECType="1" />
 </extraparam>
-</COMPONENT>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="7245" >
+<father id="7279" num="1" />
+<cdparam x="640" y="335" />
+<sizeparam width="162" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="76" minY="0" maxY="145" />
+<infoparam name="TGComponent" value="Zigbee_TX::X_CWP_Q" />
+<TGConnectingPoint num="0" id="7237" />
+<TGConnectingPoint num="1" id="7238" />
+<TGConnectingPoint num="2" id="7239" />
+<TGConnectingPoint num="3" id="7240" />
+<TGConnectingPoint num="4" id="7241" />
+<TGConnectingPoint num="5" id="7242" />
+<TGConnectingPoint num="6" id="7243" />
+<TGConnectingPoint num="7" id="7244" />
+<extraparam>
+<info value="Zigbee_TX::X_CWP_Q" taskName="X_CWP_Q" referenceTaskName="Zigbee_TX" priority="0" operation="CWP" fatherComponentMECType="1" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="7254" >
+<father id="7279" num="2" />
+<cdparam x="639" y="239" />
+<sizeparam width="145" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="93" minY="0" maxY="145" />
+<infoparam name="TGComponent" value="Zigbee_TX::X_CWL" />
+<TGConnectingPoint num="0" id="7246" />
+<TGConnectingPoint num="1" id="7247" />
+<TGConnectingPoint num="2" id="7248" />
+<TGConnectingPoint num="3" id="7249" />
+<TGConnectingPoint num="4" id="7250" />
+<TGConnectingPoint num="5" id="7251" />
+<TGConnectingPoint num="6" id="7252" />
+<TGConnectingPoint num="7" id="7253" />
+<extraparam>
+<info value="Zigbee_TX::X_CWL" taskName="X_CWL" referenceTaskName="Zigbee_TX" priority="0" operation="CWL" fatherComponentMECType="1" />
+</extraparam>
+</SUBCOMPONENT>
 
-<COMPONENT type="1100" id="7304" >
-<cdparam x="619" y="199" />
-<sizeparam width="238" height="185" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1106" id="7304" >
+<cdparam x="910" y="531" />
+<sizeparam width="100" height="35" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="FEP_PSS" value="name" />
+<infoparam name="FEP_Bridge" value="name" />
 <TGConnectingPoint num="0" id="7280" />
 <TGConnectingPoint num="1" id="7281" />
 <TGConnectingPoint num="2" id="7282" />
@@ -14972,74 +15029,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7302" />
 <TGConnectingPoint num="23" id="7303" />
 <extraparam>
-<info stereotype="CPURR" nodeName="FEP_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="2" execcTime="1" clockRatio="1" MECType="1" encryption="0"/>
+<info stereotype="BRIDGE" nodeName="FEP_Bridge" />
+<attributes bufferByteDataSize="4"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1101" id="7261" >
-<father id="7304" num="0" />
-<cdparam x="671" y="289" />
-<sizeparam width="156" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="82" minY="0" maxY="145" />
-<infoparam name="TGComponent" value="Zigbee_TX::X_CWP_I" />
-<TGConnectingPoint num="0" id="7253" />
-<TGConnectingPoint num="1" id="7254" />
-<TGConnectingPoint num="2" id="7255" />
-<TGConnectingPoint num="3" id="7256" />
-<TGConnectingPoint num="4" id="7257" />
-<TGConnectingPoint num="5" id="7258" />
-<TGConnectingPoint num="6" id="7259" />
-<TGConnectingPoint num="7" id="7260" />
-<extraparam>
-<info value="Zigbee_TX::X_CWP_I" taskName="X_CWP_I" referenceTaskName="Zigbee_TX" priority="0" operation="CWP" fatherComponentMECType="1" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1101" id="7270" >
-<father id="7304" num="1" />
-<cdparam x="640" y="335" />
-<sizeparam width="162" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="76" minY="0" maxY="145" />
-<infoparam name="TGComponent" value="Zigbee_TX::X_CWP_Q" />
-<TGConnectingPoint num="0" id="7262" />
-<TGConnectingPoint num="1" id="7263" />
-<TGConnectingPoint num="2" id="7264" />
-<TGConnectingPoint num="3" id="7265" />
-<TGConnectingPoint num="4" id="7266" />
-<TGConnectingPoint num="5" id="7267" />
-<TGConnectingPoint num="6" id="7268" />
-<TGConnectingPoint num="7" id="7269" />
-<extraparam>
-<info value="Zigbee_TX::X_CWP_Q" taskName="X_CWP_Q" referenceTaskName="Zigbee_TX" priority="0" operation="CWP" fatherComponentMECType="1" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1101" id="7279" >
-<father id="7304" num="2" />
-<cdparam x="639" y="239" />
-<sizeparam width="145" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="93" minY="0" maxY="145" />
-<infoparam name="TGComponent" value="Zigbee_TX::X_CWL" />
-<TGConnectingPoint num="0" id="7271" />
-<TGConnectingPoint num="1" id="7272" />
-<TGConnectingPoint num="2" id="7273" />
-<TGConnectingPoint num="3" id="7274" />
-<TGConnectingPoint num="4" id="7275" />
-<TGConnectingPoint num="5" id="7276" />
-<TGConnectingPoint num="6" id="7277" />
-<TGConnectingPoint num="7" id="7278" />
-<extraparam>
-<info value="Zigbee_TX::X_CWL" taskName="X_CWL" referenceTaskName="Zigbee_TX" priority="0" operation="CWL" fatherComponentMECType="1" />
-</extraparam>
-</SUBCOMPONENT>
 
-<COMPONENT type="1106" id="7329" >
-<cdparam x="910" y="531" />
-<sizeparam width="100" height="35" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1102" id="7329" >
+<cdparam x="835" y="433" />
+<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="FEP_Bridge" value="name" />
+<infoparam name="FEP_Bus" value="name" />
 <TGConnectingPoint num="0" id="7305" />
 <TGConnectingPoint num="1" id="7306" />
 <TGConnectingPoint num="2" id="7307" />
@@ -15065,17 +15065,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7327" />
 <TGConnectingPoint num="23" id="7328" />
 <extraparam>
-<info stereotype="BRIDGE" nodeName="FEP_Bridge" />
-<attributes bufferByteDataSize="4"  clockRatio="1" />
+<info stereotype="BUS-RR" nodeName="FEP_Bus" />
+<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1102" id="7354" >
-<cdparam x="835" y="433" />
-<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1100" id="7354" >
+<cdparam x="1174" y="850" />
+<sizeparam width="150" height="100" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="FEP_Bus" value="name" />
+<infoparam name="MAPPER_DMA" value="name" />
 <TGConnectingPoint num="0" id="7330" />
 <TGConnectingPoint num="1" id="7331" />
 <TGConnectingPoint num="2" id="7332" />
@@ -15101,17 +15101,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7352" />
 <TGConnectingPoint num="23" id="7353" />
 <extraparam>
-<info stereotype="BUS-RR" nodeName="FEP_Bus" />
-<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="" />
+<info stereotype="CPURR" nodeName="MAPPER_DMA" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1100" id="7379" >
-<cdparam x="1174" y="850" />
-<sizeparam width="150" height="100" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1106" id="7379" >
+<cdparam x="920" y="780" />
+<sizeparam width="100" height="51" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="MAPPER_DMA" value="name" />
+<infoparam name="MAPPER_Bridge" value="name" />
 <TGConnectingPoint num="0" id="7355" />
 <TGConnectingPoint num="1" id="7356" />
 <TGConnectingPoint num="2" id="7357" />
@@ -15137,17 +15137,17 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7377" />
 <TGConnectingPoint num="23" id="7378" />
 <extraparam>
-<info stereotype="CPURR" nodeName="MAPPER_DMA" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+<info stereotype="BRIDGE" nodeName="MAPPER_Bridge" />
+<attributes bufferByteDataSize="4"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1106" id="7404" >
-<cdparam x="920" y="780" />
-<sizeparam width="100" height="51" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1105" id="7404" >
+<cdparam x="1043" y="978" />
+<sizeparam width="314" height="125" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="MAPPER_Bridge" value="name" />
+<infoparam name="MAPPER_MSS" value="name" />
 <TGConnectingPoint num="0" id="7380" />
 <TGConnectingPoint num="1" id="7381" />
 <TGConnectingPoint num="2" id="7382" />
@@ -15173,17 +15173,53 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7402" />
 <TGConnectingPoint num="23" id="7403" />
 <extraparam>
-<info stereotype="BRIDGE" nodeName="MAPPER_Bridge" />
-<attributes bufferByteDataSize="4"  clockRatio="1" />
+<info stereotype="MEMORY" nodeName="MAPPER_MSS" />
+<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="1" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1105" id="7429" >
-<cdparam x="1043" y="978" />
-<sizeparam width="314" height="125" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1100" id="7438" >
+<cdparam x="759" y="981" />
+<sizeparam width="219" height="158" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="MAPPER_MSS" value="name" />
+<infoparam name="MAPPER_PSS" value="name" />
+<TGConnectingPoint num="0" id="7414" />
+<TGConnectingPoint num="1" id="7415" />
+<TGConnectingPoint num="2" id="7416" />
+<TGConnectingPoint num="3" id="7417" />
+<TGConnectingPoint num="4" id="7418" />
+<TGConnectingPoint num="5" id="7419" />
+<TGConnectingPoint num="6" id="7420" />
+<TGConnectingPoint num="7" id="7421" />
+<TGConnectingPoint num="8" id="7422" />
+<TGConnectingPoint num="9" id="7423" />
+<TGConnectingPoint num="10" id="7424" />
+<TGConnectingPoint num="11" id="7425" />
+<TGConnectingPoint num="12" id="7426" />
+<TGConnectingPoint num="13" id="7427" />
+<TGConnectingPoint num="14" id="7428" />
+<TGConnectingPoint num="15" id="7429" />
+<TGConnectingPoint num="16" id="7430" />
+<TGConnectingPoint num="17" id="7431" />
+<TGConnectingPoint num="18" id="7432" />
+<TGConnectingPoint num="19" id="7433" />
+<TGConnectingPoint num="20" id="7434" />
+<TGConnectingPoint num="21" id="7435" />
+<TGConnectingPoint num="22" id="7436" />
+<TGConnectingPoint num="23" id="7437" />
+<extraparam>
+<info stereotype="CPURR" nodeName="MAPPER_PSS" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="3" encryption="0"/>
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1101" id="7413" >
+<father id="7438" num="0" />
+<cdparam x="755" y="1028" />
+<sizeparam width="223" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="-4" minY="0" maxY="118" />
+<infoparam name="TGComponent" value="Zigbee_TX::X_Symbol2ChipSeq" />
 <TGConnectingPoint num="0" id="7405" />
 <TGConnectingPoint num="1" id="7406" />
 <TGConnectingPoint num="2" id="7407" />
@@ -15192,34 +15228,17 @@ sequence diagram.
 <TGConnectingPoint num="5" id="7410" />
 <TGConnectingPoint num="6" id="7411" />
 <TGConnectingPoint num="7" id="7412" />
-<TGConnectingPoint num="8" id="7413" />
-<TGConnectingPoint num="9" id="7414" />
-<TGConnectingPoint num="10" id="7415" />
-<TGConnectingPoint num="11" id="7416" />
-<TGConnectingPoint num="12" id="7417" />
-<TGConnectingPoint num="13" id="7418" />
-<TGConnectingPoint num="14" id="7419" />
-<TGConnectingPoint num="15" id="7420" />
-<TGConnectingPoint num="16" id="7421" />
-<TGConnectingPoint num="17" id="7422" />
-<TGConnectingPoint num="18" id="7423" />
-<TGConnectingPoint num="19" id="7424" />
-<TGConnectingPoint num="20" id="7425" />
-<TGConnectingPoint num="21" id="7426" />
-<TGConnectingPoint num="22" id="7427" />
-<TGConnectingPoint num="23" id="7428" />
 <extraparam>
-<info stereotype="MEMORY" nodeName="MAPPER_MSS" />
-<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="1" />
+<info value="Zigbee_TX::X_Symbol2ChipSeq" taskName="X_Symbol2ChipSeq" referenceTaskName="Zigbee_TX" priority="0" operation="Mapper operation" fatherComponentMECType="3" />
 </extraparam>
-</COMPONENT>
+</SUBCOMPONENT>
 
-<COMPONENT type="1100" id="7463" >
-<cdparam x="759" y="981" />
-<sizeparam width="219" height="158" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="1102" id="7463" >
+<cdparam x="845" y="875" />
+<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="MAPPER_PSS" value="name" />
+<infoparam name="MAPPER_Bus" value="name" />
 <TGConnectingPoint num="0" id="7439" />
 <TGConnectingPoint num="1" id="7440" />
 <TGConnectingPoint num="2" id="7441" />
@@ -15245,80 +15264,25 @@ sequence diagram.
 <TGConnectingPoint num="22" id="7461" />
 <TGConnectingPoint num="23" id="7462" />
 <extraparam>
-<info stereotype="CPURR" nodeName="MAPPER_PSS" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="3" encryption="0"/>
-</extraparam>
-</COMPONENT>
-<SUBCOMPONENT type="1101" id="7438" >
-<father id="7463" num="0" />
-<cdparam x="755" y="1028" />
-<sizeparam width="223" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="-4" minY="0" maxY="118" />
-<infoparam name="TGComponent" value="Zigbee_TX::X_Symbol2ChipSeq" />
-<TGConnectingPoint num="0" id="7430" />
-<TGConnectingPoint num="1" id="7431" />
-<TGConnectingPoint num="2" id="7432" />
-<TGConnectingPoint num="3" id="7433" />
-<TGConnectingPoint num="4" id="7434" />
-<TGConnectingPoint num="5" id="7435" />
-<TGConnectingPoint num="6" id="7436" />
-<TGConnectingPoint num="7" id="7437" />
-<extraparam>
-<info value="Zigbee_TX::X_Symbol2ChipSeq" taskName="X_Symbol2ChipSeq" referenceTaskName="Zigbee_TX" priority="0" operation="Mapper operation" fatherComponentMECType="3" />
-</extraparam>
-</SUBCOMPONENT>
-
-<COMPONENT type="1102" id="7488" >
-<cdparam x="845" y="875" />
-<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
-<infoparam name="MAPPER_Bus" value="name" />
-<TGConnectingPoint num="0" id="7464" />
-<TGConnectingPoint num="1" id="7465" />
-<TGConnectingPoint num="2" id="7466" />
-<TGConnectingPoint num="3" id="7467" />
-<TGConnectingPoint num="4" id="7468" />
-<TGConnectingPoint num="5" id="7469" />
-<TGConnectingPoint num="6" id="7470" />
-<TGConnectingPoint num="7" id="7471" />
-<TGConnectingPoint num="8" id="7472" />
-<TGConnectingPoint num="9" id="7473" />
-<TGConnectingPoint num="10" id="7474" />
-<TGConnectingPoint num="11" id="7475" />
-<TGConnectingPoint num="12" id="7476" />
-<TGConnectingPoint num="13" id="7477" />
-<TGConnectingPoint num="14" id="7478" />
-<TGConnectingPoint num="15" id="7479" />
-<TGConnectingPoint num="16" id="7480" />
-<TGConnectingPoint num="17" id="7481" />
-<TGConnectingPoint num="18" id="7482" />
-<TGConnectingPoint num="19" id="7483" />
-<TGConnectingPoint num="20" id="7484" />
-<TGConnectingPoint num="21" id="7485" />
-<TGConnectingPoint num="22" id="7486" />
-<TGConnectingPoint num="23" id="7487" />
-<extraparam>
 <info stereotype="BUS-RR" nodeName="MAPPER_Bus" />
 <attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="1108" id="7506" >
+<COMPONENT type="1108" id="7481" >
 <cdparam x="103" y="1267" />
 <sizeparam width="419" height="85" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="CP_Symbol2ChipSeq_Chips2Octet" value="CP0" />
-<TGConnectingPoint num="0" id="7498" />
-<TGConnectingPoint num="1" id="7499" />
-<TGConnectingPoint num="2" id="7500" />
-<TGConnectingPoint num="3" id="7501" />
-<TGConnectingPoint num="4" id="7502" />
-<TGConnectingPoint num="5" id="7503" />
-<TGConnectingPoint num="6" id="7504" />
-<TGConnectingPoint num="7" id="7505" />
+<TGConnectingPoint num="0" id="7473" />
+<TGConnectingPoint num="1" id="7474" />
+<TGConnectingPoint num="2" id="7475" />
+<TGConnectingPoint num="3" id="7476" />
+<TGConnectingPoint num="4" id="7477" />
+<TGConnectingPoint num="5" id="7478" />
+<TGConnectingPoint num="6" id="7479" />
+<TGConnectingPoint num="7" id="7480" />
 <extraparam>
 <info stereotype="CP" nodeName="CP_Symbol2ChipSeq_Chips2Octet" cpMEC="Single DMA" transferType1="0" transferType2="0" />
 <attributes reference="DMA_transfer" />
@@ -15335,40 +15299,40 @@ sequence diagram.
 <mappedAttributes type="int" name="counter" value="123" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1110" id="7497" >
-<father id="7506" num="0" />
+<SUBCOMPONENT type="1110" id="7472" >
+<father id="7481" num="0" />
 <cdparam x="292" y="1303" />
 <sizeparam width="212" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="207" minY="0" maxY="45" />
 <infoparam name="TGComponent" value="Zigbee_TX::chip2octet_ch_in" />
-<TGConnectingPoint num="0" id="7489" />
-<TGConnectingPoint num="1" id="7490" />
-<TGConnectingPoint num="2" id="7491" />
-<TGConnectingPoint num="3" id="7492" />
-<TGConnectingPoint num="4" id="7493" />
-<TGConnectingPoint num="5" id="7494" />
-<TGConnectingPoint num="6" id="7495" />
-<TGConnectingPoint num="7" id="7496" />
+<TGConnectingPoint num="0" id="7464" />
+<TGConnectingPoint num="1" id="7465" />
+<TGConnectingPoint num="2" id="7466" />
+<TGConnectingPoint num="3" id="7467" />
+<TGConnectingPoint num="4" id="7468" />
+<TGConnectingPoint num="5" id="7469" />
+<TGConnectingPoint num="6" id="7470" />
+<TGConnectingPoint num="7" id="7471" />
 <extraparam>
 <info value="Zigbee_TX::chip2octet_ch_in" portName="chip2octet_ch_in" referenceCommunicationName="Zigbee_TX" typeName="port" mappedMemory="INTL_MSS" bufferType="3" packedBinaryIn="" width="" bitInOffset="" inputOffset="" packedBinaryOut="" bitOutOffset="" outputOffset="" offsetPerm="" lengthPerm="" />
 </extraparam>
 </SUBCOMPONENT>
 
-<COMPONENT type="1108" id="7524" >
+<COMPONENT type="1108" id="7499" >
 <cdparam x="105" y="1396" />
 <sizeparam width="405" height="88" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="CP_Chip2Octet_CWL" value="CP0" />
-<TGConnectingPoint num="0" id="7516" />
-<TGConnectingPoint num="1" id="7517" />
-<TGConnectingPoint num="2" id="7518" />
-<TGConnectingPoint num="3" id="7519" />
-<TGConnectingPoint num="4" id="7520" />
-<TGConnectingPoint num="5" id="7521" />
-<TGConnectingPoint num="6" id="7522" />
-<TGConnectingPoint num="7" id="7523" />
+<TGConnectingPoint num="0" id="7491" />
+<TGConnectingPoint num="1" id="7492" />
+<TGConnectingPoint num="2" id="7493" />
+<TGConnectingPoint num="3" id="7494" />
+<TGConnectingPoint num="4" id="7495" />
+<TGConnectingPoint num="5" id="7496" />
+<TGConnectingPoint num="6" id="7497" />
+<TGConnectingPoint num="7" id="7498" />
 <extraparam>
 <info stereotype="CP" nodeName="CP_Chip2Octet_CWL" cpMEC="Single DMA" transferType1="0" transferType2="0" />
 <attributes reference="DMA_transfer" />
@@ -15382,40 +15346,40 @@ sequence diagram.
 <mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, INTL_Bridge, INTL_Bus" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1110" id="7515" >
-<father id="7524" num="0" />
+<SUBCOMPONENT type="1110" id="7490" >
+<father id="7499" num="0" />
 <cdparam x="327" y="1437" />
 <sizeparam width="164" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="241" minY="0" maxY="48" />
 <infoparam name="TGComponent" value="Zigbee_TX::cwl_ch_in" />
-<TGConnectingPoint num="0" id="7507" />
-<TGConnectingPoint num="1" id="7508" />
-<TGConnectingPoint num="2" id="7509" />
-<TGConnectingPoint num="3" id="7510" />
-<TGConnectingPoint num="4" id="7511" />
-<TGConnectingPoint num="5" id="7512" />
-<TGConnectingPoint num="6" id="7513" />
-<TGConnectingPoint num="7" id="7514" />
+<TGConnectingPoint num="0" id="7482" />
+<TGConnectingPoint num="1" id="7483" />
+<TGConnectingPoint num="2" id="7484" />
+<TGConnectingPoint num="3" id="7485" />
+<TGConnectingPoint num="4" id="7486" />
+<TGConnectingPoint num="5" id="7487" />
+<TGConnectingPoint num="6" id="7488" />
+<TGConnectingPoint num="7" id="7489" />
 <extraparam>
 <info value="Zigbee_TX::cwl_ch_in" portName="cwl_ch_in" referenceCommunicationName="Zigbee_TX" typeName="port" mappedMemory="FEP_MSS" bufferType="0" baseAddress="0x123" numSamples="1234" bank="0" dataType="int8" />
 </extraparam>
 </SUBCOMPONENT>
 
-<COMPONENT type="1108" id="7542" >
+<COMPONENT type="1108" id="7517" >
 <cdparam x="627" y="1252" />
 <sizeparam width="295" height="145" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="CP_sink" value="CP0" />
-<TGConnectingPoint num="0" id="7534" />
-<TGConnectingPoint num="1" id="7535" />
-<TGConnectingPoint num="2" id="7536" />
-<TGConnectingPoint num="3" id="7537" />
-<TGConnectingPoint num="4" id="7538" />
-<TGConnectingPoint num="5" id="7539" />
-<TGConnectingPoint num="6" id="7540" />
-<TGConnectingPoint num="7" id="7541" />
+<TGConnectingPoint num="0" id="7509" />
+<TGConnectingPoint num="1" id="7510" />
+<TGConnectingPoint num="2" id="7511" />
+<TGConnectingPoint num="3" id="7512" />
+<TGConnectingPoint num="4" id="7513" />
+<TGConnectingPoint num="5" id="7514" />
+<TGConnectingPoint num="6" id="7515" />
+<TGConnectingPoint num="7" id="7516" />
 <extraparam>
 <info stereotype="CP" nodeName="CP_sink" cpMEC="Double DMA" transferType1="0" transferType2="0" />
 <attributes reference="Double_DMA_transfer" />
@@ -15437,40 +15401,40 @@ sequence diagram.
 <mappingInfo CPname="Double_DMA_transfer" instanceName="Transfer_Instance_7" architectureUnit="ADAIF_Bridge, Crossbar, ADAIF_Bus, FEP_Bridge, FEP_Bus" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1110" id="7533" >
-<father id="7542" num="0" />
+<SUBCOMPONENT type="1110" id="7508" >
+<father id="7517" num="0" />
 <cdparam x="701" y="1315" />
 <sizeparam width="170" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="125" minY="0" maxY="105" />
 <infoparam name="TGComponent" value="Zigbee_TX::sink_ch_in" />
-<TGConnectingPoint num="0" id="7525" />
-<TGConnectingPoint num="1" id="7526" />
-<TGConnectingPoint num="2" id="7527" />
-<TGConnectingPoint num="3" id="7528" />
-<TGConnectingPoint num="4" id="7529" />
-<TGConnectingPoint num="5" id="7530" />
-<TGConnectingPoint num="6" id="7531" />
-<TGConnectingPoint num="7" id="7532" />
+<TGConnectingPoint num="0" id="7500" />
+<TGConnectingPoint num="1" id="7501" />
+<TGConnectingPoint num="2" id="7502" />
+<TGConnectingPoint num="3" id="7503" />
+<TGConnectingPoint num="4" id="7504" />
+<TGConnectingPoint num="5" id="7505" />
+<TGConnectingPoint num="6" id="7506" />
+<TGConnectingPoint num="7" id="7507" />
 <extraparam>
 <info value="Zigbee_TX::sink_ch_in" portName="sink_ch_in" referenceCommunicationName="Zigbee_TX" typeName="port" mappedMemory="ADAIF_MSS" bufferType="2" numSamples="" baseAddress="" />
 </extraparam>
 </SUBCOMPONENT>
 
-<COMPONENT type="1108" id="7560" >
+<COMPONENT type="1108" id="7535" >
 <cdparam x="106" y="1143" />
 <sizeparam width="421" height="85" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="CP_Source_to_Bits2Symbol" value="CP0" />
-<TGConnectingPoint num="0" id="7552" />
-<TGConnectingPoint num="1" id="7553" />
-<TGConnectingPoint num="2" id="7554" />
-<TGConnectingPoint num="3" id="7555" />
-<TGConnectingPoint num="4" id="7556" />
-<TGConnectingPoint num="5" id="7557" />
-<TGConnectingPoint num="6" id="7558" />
-<TGConnectingPoint num="7" id="7559" />
+<TGConnectingPoint num="0" id="7527" />
+<TGConnectingPoint num="1" id="7528" />
+<TGConnectingPoint num="2" id="7529" />
+<TGConnectingPoint num="3" id="7530" />
+<TGConnectingPoint num="4" id="7531" />
+<TGConnectingPoint num="5" id="7532" />
+<TGConnectingPoint num="6" id="7533" />
+<TGConnectingPoint num="7" id="7534" />
 <extraparam>
 <info stereotype="CP" nodeName="CP_Source_to_Bits2Symbol" cpMEC="Memory Copy" transferType1="0" transferType2="0" />
 <attributes reference="DMA_transfer" />
@@ -15485,32 +15449,332 @@ sequence diagram.
 <mappedAttributes type="addr" name="sourceAddress" value="0x123" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1110" id="7551" >
-<father id="7560" num="0" />
+<SUBCOMPONENT type="1110" id="7526" >
+<father id="7535" num="0" />
 <cdparam x="280" y="1181" />
 <sizeparam width="247" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="174" minY="0" maxY="45" />
 <infoparam name="TGComponent" value="Zigbee_TX::symbol2ChipSeq_ch_in" />
-<TGConnectingPoint num="0" id="7543" />
-<TGConnectingPoint num="1" id="7544" />
-<TGConnectingPoint num="2" id="7545" />
-<TGConnectingPoint num="3" id="7546" />
-<TGConnectingPoint num="4" id="7547" />
-<TGConnectingPoint num="5" id="7548" />
-<TGConnectingPoint num="6" id="7549" />
-<TGConnectingPoint num="7" id="7550" />
+<TGConnectingPoint num="0" id="7518" />
+<TGConnectingPoint num="1" id="7519" />
+<TGConnectingPoint num="2" id="7520" />
+<TGConnectingPoint num="3" id="7521" />
+<TGConnectingPoint num="4" id="7522" />
+<TGConnectingPoint num="5" id="7523" />
+<TGConnectingPoint num="6" id="7524" />
+<TGConnectingPoint num="7" id="7525" />
 <extraparam>
 <info value="Zigbee_TX::symbol2ChipSeq_ch_in" portName="symbol2ChipSeq_ch_in" referenceCommunicationName="Zigbee_TX" typeName="port" mappedMemory="MAPPER_MSS" bufferType="1" numSamplesDataIn="" baseAddressDataIn="" bitsPerSymbolDataIn="" symmetricalValueDataIn="OFF" baseAddressDataOut="0x123" baseAddressLUT="0x123" />
 </extraparam>
 </SUBCOMPONENT>
 
-<CONNECTOR type="125" id="7561" >
+<CONNECTOR type="125" id="7536" >
 <cdparam x="1367" y="660" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="1367" y="660" id="7022" />
-<P2  x="1076" y="660" id="7048" />
+<P1  x="1367" y="660" id="6997" />
+<P2  x="1076" y="660" id="7023" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7537" >
+<cdparam x="1147" y="508" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="1147" y="508" id="7183" />
+<P2  x="1076" y="635" id="7021" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7538" >
+<cdparam x="1298" y="875" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="1249" y="850" id="7331" />
+<P2  x="1076" y="685" id="7026" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7539" >
+<cdparam x="1019" y="805" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="970" y="780" id="7356" />
+<P2  x="864" y="685" id="7034" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7540" >
+<cdparam x="1004" y="531" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="960" y="566" id="7286" />
+<P2  x="864" y="635" id="7028" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7541" >
+<cdparam x="1185" y="660" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="1467" y="660" id="6998" />
+<P2  x="1527" y="660" id="6972" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7542" >
+<cdparam x="356" y="788" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="356" y="788" id="7050" />
+<P2  x="356" y="832" id="7129" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7543" >
+<cdparam x="554" y="806" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="560" y="807" id="6713" />
+<P2  x="442" y="685" id="7033" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7544" >
+<cdparam x="559" y="863" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="560" y="857" id="6716" />
+<P2  x="481" y="857" id="7132" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7545" >
+<cdparam x="586" y="970" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="541" y="949" id="7070" />
+<P2  x="418" y="882" id="7143" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7546" >
+<cdparam x="165" y="927" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="208" y="938" id="7104" />
+<P2  x="293" y="882" id="7142" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7547" >
+<cdparam x="355" y="576" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="356" y="580" id="6828" />
+<P2  x="231" y="635" id="7019" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7548" >
+<cdparam x="355" y="541" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="356" y="545" id="6823" />
+<P2  x="356" y="497" id="7159" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7549" >
+<cdparam x="543" y="522" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="543" y="522" id="6743" />
+<P2  x="442" y="635" id="7027" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7550" >
+<cdparam x="536" y="475" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="543" y="472" id="6741" />
+<P2  x="481" y="472" id="7157" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7551" >
+<cdparam x="549" y="337" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="454" y="395" id="6769" />
+<P2  x="418" y="447" id="7162" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7552" >
+<cdparam x="155" y="323" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="134" y="385" id="6803" />
+<P2  x="293" y="447" id="7161" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7553" >
+<cdparam x="357" y="778" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="356" y="737" id="7045" />
+<P2  x="231" y="685" id="7024" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7554" >
+<cdparam x="1654" y="758" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="1652" y="737" id="6848" />
+<P2  x="1652" y="685" id="6975" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7555" >
+<cdparam x="1651" y="573" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="1652" y="586" id="6950" />
+<P2  x="1652" y="635" id="6970" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7556" >
+<cdparam x="959" y="527" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="960" y="531" id="7281" />
+<P2  x="960" y="483" id="7311" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7557" >
+<cdparam x="1140" y="461" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="1147" y="458" id="7181" />
+<P2  x="1085" y="458" id="7309" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7558" >
+<cdparam x="1189" y="374" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="1022" y="376" id="7209" />
+<P2  x="1022" y="433" id="7314" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7559" >
+<cdparam x="795" y="360" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="738" y="384" id="7261" />
+<P2  x="897" y="433" id="7313" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7560" >
+<cdparam x="970" y="831" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="970" y="831" id="7361" />
+<P2  x="970" y="875" id="7440" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="125" id="7561" >
+<cdparam x="1173" y="906" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="1174" y="900" id="7333" />
+<P2  x="1095" y="900" id="7443" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
@@ -15518,11 +15782,11 @@ sequence diagram.
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="7562" >
-<cdparam x="1147" y="508" />
+<cdparam x="1200" y="1013" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="1147" y="508" id="7208" />
-<P2  x="1076" y="635" id="7046" />
+<P1  x="1200" y="978" id="7381" />
+<P2  x="1032" y="925" id="7454" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
@@ -15530,311 +15794,11 @@ sequence diagram.
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="7563" >
-<cdparam x="1298" y="875" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="1249" y="850" id="7356" />
-<P2  x="1076" y="685" id="7051" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7564" >
-<cdparam x="1019" y="805" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="970" y="780" id="7381" />
-<P2  x="864" y="685" id="7059" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7565" >
-<cdparam x="1004" y="531" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="960" y="566" id="7311" />
-<P2  x="864" y="635" id="7053" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7566" >
-<cdparam x="1185" y="660" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="1467" y="660" id="7023" />
-<P2  x="1527" y="660" id="6997" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7567" >
-<cdparam x="356" y="788" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="356" y="788" id="7075" />
-<P2  x="356" y="832" id="7154" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7568" >
-<cdparam x="554" y="806" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="560" y="807" id="6738" />
-<P2  x="442" y="685" id="7058" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7569" >
-<cdparam x="559" y="863" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="560" y="857" id="6741" />
-<P2  x="481" y="857" id="7157" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7570" >
-<cdparam x="586" y="970" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="541" y="949" id="7095" />
-<P2  x="418" y="882" id="7168" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7571" >
-<cdparam x="165" y="927" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="208" y="938" id="7129" />
-<P2  x="293" y="882" id="7167" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7572" >
-<cdparam x="355" y="576" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="356" y="580" id="6853" />
-<P2  x="231" y="635" id="7044" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7573" >
-<cdparam x="355" y="541" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="356" y="545" id="6848" />
-<P2  x="356" y="497" id="7184" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7574" >
-<cdparam x="543" y="522" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="543" y="522" id="6768" />
-<P2  x="442" y="635" id="7052" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7575" >
-<cdparam x="536" y="475" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="543" y="472" id="6766" />
-<P2  x="481" y="472" id="7182" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7576" >
-<cdparam x="549" y="337" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="454" y="395" id="6794" />
-<P2  x="418" y="447" id="7187" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7577" >
-<cdparam x="155" y="323" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="134" y="385" id="6828" />
-<P2  x="293" y="447" id="7186" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7578" >
-<cdparam x="357" y="778" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="356" y="737" id="7070" />
-<P2  x="231" y="685" id="7049" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7579" >
-<cdparam x="1654" y="758" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="1652" y="737" id="6873" />
-<P2  x="1652" y="685" id="7000" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7580" >
-<cdparam x="1651" y="573" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="1652" y="586" id="6975" />
-<P2  x="1652" y="635" id="6995" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7581" >
-<cdparam x="959" y="527" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="960" y="531" id="7306" />
-<P2  x="960" y="483" id="7336" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7582" >
-<cdparam x="1140" y="461" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="1147" y="458" id="7206" />
-<P2  x="1085" y="458" id="7334" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7583" >
-<cdparam x="1189" y="374" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="1022" y="376" id="7234" />
-<P2  x="1022" y="433" id="7339" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7584" >
-<cdparam x="795" y="360" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="738" y="384" id="7286" />
-<P2  x="897" y="433" id="7338" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7585" >
-<cdparam x="970" y="831" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="970" y="831" id="7386" />
-<P2  x="970" y="875" id="7465" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7586" >
-<cdparam x="1173" y="906" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="1174" y="900" id="7358" />
-<P2  x="1095" y="900" id="7468" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7587" >
-<cdparam x="1200" y="1013" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="{info}" />
-<P1  x="1200" y="978" id="7406" />
-<P2  x="1032" y="925" id="7479" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-<spy value="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="125" id="7588" >
 <cdparam x="779" y="970" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="868" y="981" id="7440" />
-<P2  x="907" y="925" id="7478" />
+<P1  x="868" y="981" id="7415" />
+<P2  x="907" y="925" id="7453" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
