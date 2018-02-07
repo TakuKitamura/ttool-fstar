@@ -67,7 +67,7 @@ public class JDialogFault extends JDialogBase implements ActionListener  {
     private Frame frame;
 
     //protected JTextField taskName;
-    protected JTextField name, description;
+    protected JTextField name, description, probability;
     protected JCheckBox isRootFault;
 
     private FTDFault fault;
@@ -114,6 +114,13 @@ public class JDialogFault extends JDialogBase implements ActionListener  {
         isRootFault = new JCheckBox("root fault");
         isRootFault.setSelected(fault.isRootFault());
         panel2.add(isRootFault, c1);
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Probability (<1):"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        probability = new JTextField(""+fault.getProbability());
+        panel2.add(probability, c1);
 
         c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
@@ -169,6 +176,10 @@ public class JDialogFault extends JDialogBase implements ActionListener  {
 
     public String getDescription() {
         return description.getText();
+    }
+
+    public String getProbability() {
+        return probability.getText();
     }
 
     public String getName() {

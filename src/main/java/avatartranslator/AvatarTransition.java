@@ -37,11 +37,7 @@
  */
 
 
-
-
 package avatartranslator;
-
-import myutil.TraceManager;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -50,25 +46,28 @@ import java.util.LinkedList;
 /**
  * Class AvatarTransition
  * Creation: 20/05/2010
- * @version 1.0 20/05/2010
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 20/05/2010
  */
 public class AvatarTransition extends AvatarStateMachineElement {
 
     // Type management: to be used by code generators
     public static final int UNDEFINED = -1;
-    
+
     public static final int TYPE_SEND_SYNC = 0;
     public static final int TYPE_RECV_SYNC = 1;
-    
+
     public static final int TYPE_ACTIONONLY = 2;
     public static final int TYPE_EMPTY = 3;
     public static final int TYPE_METHODONLY = 4;
     public static final int TYPE_ACTION_AND_METHOD = 5;
 
+    public static final double DEFAULT_PROBABILITY = 0.5;
+
     public int type = UNDEFINED;
 
-    
+    private double probability = DEFAULT_PROBABILITY;
     private AvatarGuard guard;
     private String minDelay = "", maxDelay = "";
     private String minCompute = "", maxCompute = "";
@@ -76,10 +75,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     private LinkedList<AvatarAction> actions; // actions on variable, or method call
 
-    public AvatarTransition (AvatarStateMachineOwner _block, String _name, Object _referenceObject) {
+    public AvatarTransition(AvatarStateMachineOwner _block, String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         actions = new LinkedList<AvatarAction>();
-        this.guard = new AvatarGuardEmpty ();
+        this.guard = new AvatarGuardEmpty();
         this.block = _block;
     }
 
@@ -91,15 +90,19 @@ public class AvatarTransition extends AvatarStateMachineElement {
         this.guard = _guard;
     }
 
-    public void setGuard (String _guard) {
-        this.guard = AvatarGuard.createFromString (this.block, _guard);
-	//TraceManager.addDev("Setting guard = " + guard);
+    public void setGuard(String _guard) {
+        this.guard = AvatarGuard.createFromString(this.block, _guard);
+        //TraceManager.addDev("Setting guard = " + guard);
+    }
+
+    public void setProbability(double _probability) {
+        probability = _probability;
     }
 
     public void addGuard(String _g) {
-        AvatarGuard guard = AvatarGuard.createFromString (this.block, _g);
-	//TraceManager.addDev("Adding guard = " + guard);
-        this.guard = AvatarGuard.addGuard (this.guard, guard, "and");
+        AvatarGuard guard = AvatarGuard.createFromString(this.block, _g);
+        //TraceManager.addDev("Adding guard = " + guard);
+        this.guard = AvatarGuard.addGuard(this.guard, guard, "and");
     }
 
     public int getNbOfAction() {
@@ -107,53 +110,53 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public static boolean isActionType(int _type) {
-	return ((_type == TYPE_ACTIONONLY) || (_type == TYPE_METHODONLY) || (_type == TYPE_ACTION_AND_METHOD));
+        return ((_type == TYPE_ACTIONONLY) || (_type == TYPE_METHODONLY) || (_type == TYPE_ACTION_AND_METHOD));
     }
 
     public boolean hasMethod() {
-	for(AvatarAction aa: actions) {
-	    if (aa.containsAMethodCall()) {
-		return true;
-	    }
-	}
-	return false;
+        for (AvatarAction aa : actions) {
+            if (aa.containsAMethodCall()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean hasAction() {
-	for(AvatarAction aa: actions) {
-	    if (!(aa.containsAMethodCall())) {
-		return true;
-	    }
-	}
-	return false;
+        for (AvatarAction aa : actions) {
+            if (!(aa.containsAMethodCall())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public LinkedList<AvatarAction> getActions () {
+    public LinkedList<AvatarAction> getActions() {
         return this.actions;
     }
 
-    public AvatarStateMachineOwner getBlock () {
+    public AvatarStateMachineOwner getBlock() {
         return this.block;
     }
 
-    private <T extends AvatarAction> Iterable<T> getIterableForClass (final Class<T> childClass) {
-        return new Iterable<T> () {
+    private <T extends AvatarAction> Iterable<T> getIterableForClass(final Class<T> childClass) {
+        return new Iterable<T>() {
             @Override
-            public Iterator<T> iterator () {
-                return new Iterator<T> () {
-                    private Iterator<AvatarAction> actions = AvatarTransition.this.actions.iterator ();
+            public Iterator<T> iterator() {
+                return new Iterator<T>() {
+                    private Iterator<AvatarAction> actions = AvatarTransition.this.actions.iterator();
                     private boolean hasCached = false;
                     private T cached;
 
                     @Override
-                    public boolean hasNext () {
+                    public boolean hasNext() {
                         if (this.hasCached)
                             return true;
-                        while (this.actions.hasNext ()) {
-                            AvatarAction action = this.actions.next ();
-                            if (childClass.isInstance (action)) {
+                        while (this.actions.hasNext()) {
+                            AvatarAction action = this.actions.next();
+                            if (childClass.isInstance(action)) {
                                 this.hasCached = true;
-                                this.cached = childClass.cast (action);
+                                this.cached = childClass.cast(action);
                                 return true;
                             }
                         }
@@ -161,36 +164,36 @@ public class AvatarTransition extends AvatarStateMachineElement {
                     }
 
                     @Override
-                    public T next () {
+                    public T next() {
                         if (this.hasCached) {
                             this.hasCached = false;
                             return this.cached;
                         }
 
-                        while (this.actions.hasNext ()) {
-                            AvatarAction action = this.actions.next ();
-                            if (childClass.isInstance (action))
-                                return childClass.cast (action);
+                        while (this.actions.hasNext()) {
+                            AvatarAction action = this.actions.next();
+                            if (childClass.isInstance(action))
+                                return childClass.cast(action);
                         }
 
                         return null;
                     }
 
                     @Override
-                    public void remove () {
-                        throw new UnsupportedOperationException ();
+                    public void remove() {
+                        throw new UnsupportedOperationException();
                     }
                 };
             }
         };
     }
 
-    public Iterable<AvatarTermFunction> getFunctionCalls () {
-        return this.getIterableForClass (AvatarTermFunction.class);
+    public Iterable<AvatarTermFunction> getFunctionCalls() {
+        return this.getIterableForClass(AvatarTermFunction.class);
     }
 
-    public Iterable<AvatarActionAssignment> getAssignments () {
-        return this.getIterableForClass (AvatarActionAssignment.class);
+    public Iterable<AvatarActionAssignment> getAssignments() {
+        return this.getIterableForClass(AvatarActionAssignment.class);
     }
 
     public AvatarAction getAction(int _index) {
@@ -198,15 +201,15 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public void addAction(String _action) {
-        AvatarAction aa = AvatarTerm.createActionFromString (block, _action);
-	//TraceManager.addDev("****************************  Avatar action : " + aa);
+        AvatarAction aa = AvatarTerm.createActionFromString(block, _action);
+        //TraceManager.addDev("****************************  Avatar action : " + aa);
         if (aa != null)
             actions.add(aa);
     }
 
-    public void addAction (AvatarAction _action) {
+    public void addAction(AvatarAction _action) {
         if (_action != null)
-            this.actions.add (_action);
+            this.actions.add(_action);
     }
 
     public void setDelays(String _minDelay, String _maxDelay) {
@@ -224,7 +227,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public String getMaxDelay() {
-        if (maxDelay.trim().length() ==0) {
+        if (maxDelay.trim().length() == 0) {
             return getMinDelay();
         }
         return maxDelay;
@@ -235,10 +238,11 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public String getMaxCompute() {
-        if (maxCompute.trim().length() ==0) {
+        if (maxCompute.trim().length() == 0) {
             return getMinCompute();
         }
-        return maxCompute; }
+        return maxCompute;
+    }
 
     public boolean hasElseGuard() {
         if (guard == null) {
@@ -252,7 +256,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         if (guard == null)
             return false;
 
-        return !guard.isGuarded ();
+        return !guard.isGuarded();
     }
 
     public boolean isEmpty() {
@@ -260,9 +264,8 @@ public class AvatarTransition extends AvatarStateMachineElement {
             return false;
         }
 
-        return (actions.size()  == 0);
+        return (actions.size() == 0);
     }
-
 
 
     public AvatarTransition cloneMe() {
@@ -271,13 +274,13 @@ public class AvatarTransition extends AvatarStateMachineElement {
         at.setDelays(getMinDelay(), getMaxDelay());
         at.setComputes(getMinCompute(), getMaxCompute());
 
-	//TraceManager.addDev("-------------- Cloning actions of " + this);
-        for(int i=0; i<getNbOfAction(); i++) {
-	    //TraceManager.addDev("-------------- Cloning actions:" + getAction(i));
+        //TraceManager.addDev("-------------- Cloning actions of " + this);
+        for (int i = 0; i < getNbOfAction(); i++) {
+            //TraceManager.addDev("-------------- Cloning actions:" + getAction(i));
             at.addAction(getAction(i));
         }
 
-        for(int i=0; i<nbOfNexts(); i++) {
+        for (int i = 0; i < nbOfNexts(); i++) {
             at.addNext(getNext(i));
         }
 
@@ -285,25 +288,25 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-	 AvatarTransition at = new AvatarTransition(_block, getName() + "_clone", getReferenceObject());
+        AvatarTransition at = new AvatarTransition(_block, getName() + "_clone", getReferenceObject());
 
         at.setGuard(getGuard());
 
-	//TraceManager.addDev("Cloning actions of " + this);
-        for(int i=0; i<getNbOfAction(); i++) {
-	    //TraceManager.addDev("-------------- Cloning actions:" + getAction(i));
+        //TraceManager.addDev("Cloning actions of " + this);
+        for (int i = 0; i < getNbOfAction(); i++) {
+            //TraceManager.addDev("-------------- Cloning actions:" + getAction(i));
             at.addAction(getAction(i));
         }
 
         at.setComputes(getMinCompute(), getMaxCompute());
-	at.setDelays(getMinDelay(), getMaxDelay());
+        at.setDelays(getMinDelay(), getMaxDelay());
 
         return at;
     }
 
     /*public AvatarStateMachineElement basicCloneMe() {
       }*/
- 
+
     public void removeAllActionsButTheFirstOne() {
         if (actions.size() < 2) {
             return;
@@ -329,7 +332,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         if (guard == null)
             return false;
 
-        return guard.isGuarded ();
+        return guard.isGuarded();
     }
 
     public boolean hasDelay() {
@@ -345,8 +348,8 @@ public class AvatarTransition extends AvatarStateMachineElement {
             return false;
         }
 
-        for(AvatarAction a: actions) {
-            if (a.toString ().trim().length() > 0) {
+        for (AvatarAction a : actions) {
+            if (a.toString().trim().length() > 0) {
                 return true;
             }
         }
@@ -364,16 +367,16 @@ public class AvatarTransition extends AvatarStateMachineElement {
             ret += "minCompute=" + getMinCompute() + " maxcompute=" + getMaxCompute() + "\n";
         }
 
-        for(AvatarAction a: actions) {
-            String s = a.toString ();
+        for (AvatarAction a : actions) {
+            String s = a.toString();
             if (s.trim().length() > 0) {
                 ret += s.trim() + " / ";
             }
         }
-	String s = guard.toString ();
-	if (s.trim().length() > 0) {
-           ret +="guard " + s.trim() + " / ";
-    	}
+        String s = guard.toString();
+        if (s.trim().length() > 0) {
+            ret += "guard " + s.trim() + " / ";
+        }
         if (ret.length() > 0) {
             ret = "\n" + ret;
         }
@@ -385,7 +388,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     // Assumes actions are correctly formatted
     public boolean hasMethodCall() {
 
-        for(AvatarAction action: actions)
+        for (AvatarAction action : actions)
             if (action.isAMethodCall())
                 return true;
 
@@ -393,7 +396,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public String toString() {
-	return toString(getNiceName());
+        return toString(getNiceName());
     }
 
     public String getNiceName() {
@@ -410,7 +413,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         return "Empty transition";
     }
 
-    public void translate (AvatarTranslator translator, Object arg) {
-        translator.translateTransition (this, arg);
+    public void translate(AvatarTranslator translator, Object arg) {
+        translator.translateTransition(this, arg);
     }
 }

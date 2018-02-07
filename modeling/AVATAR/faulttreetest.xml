@@ -143,7 +143,7 @@
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="70" />
 <P1  x="315" y="244" id="179" />
-<P2  x="297" y="135" id="144" />
+<P2  x="315" y="180" id="144" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="6001" id="73" >
@@ -170,7 +170,7 @@
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="76" />
 <P1  x="615" y="383" id="211" />
-<P2  x="692" y="397" id="167" />
+<P2  x="733" y="380" id="167" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="6102" id="90" >
@@ -228,7 +228,7 @@
 <TGConnectingPoint num="22" id="113" />
 <TGConnectingPoint num="23" id="114" />
 <extraparam>
-<info description="blah blah blah" root="false" />
+<info description="blah blah blah" root="false" probability="0.5" />
 </extraparam>
 </COMPONENT>
 
@@ -264,12 +264,12 @@
 <TGConnectingPoint num="22" id="138" />
 <TGConnectingPoint num="23" id="139" />
 <extraparam>
-<info description="blah blah blah" root="false" />
+<info description="blah blah blah" root="false" probability="0.5" />
 </extraparam>
 </COMPONENT>
 
 <COMPONENT type="6101" id="165" >
-<cdparam x="238" y="95" />
+<cdparam x="256" y="140" />
 <sizeparam width="118" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
@@ -301,12 +301,12 @@
 <TGConnectingPoint num="23" id="164" />
 <accessibility />
 <extraparam>
-<info description="blah blah blah" root="true" />
+<info description="blah blah blah" root="true" probability="0.5" />
 </extraparam>
 </COMPONENT>
 
 <COMPONENT type="6103" id="178" >
-<cdparam x="704" y="378" />
+<cdparam x="745" y="361" />
 <sizeparam width="164" height="39" minWidth="78" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1601" minY="10" maxY="962" />
@@ -335,7 +335,7 @@
 <sizeparam width="148" height="48" minWidth="99" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1601" minY="10" maxY="962" />
-<infoparam name="TGComponent" value="&lt;&lt;AND&gt;&gt;" />
+<infoparam name="TGComponent" value="&lt;&lt;VOTE&gt;&gt;" />
 <TGConnectingPoint num="0" id="179" />
 <TGConnectingPoint num="1" id="180" />
 <TGConnectingPoint num="2" id="181" />
@@ -349,7 +349,7 @@
 <TGConnectingPoint num="10" id="189" />
 <TGConnectingPoint num="11" id="190" />
 <extraparam>
-<info equation="" index="2" />
+<info equation="" index="7" />
 </extraparam>
 </COMPONENT>
 
@@ -386,7 +386,7 @@
 <TGConnectingPoint num="23" id="215" />
 <accessibility />
 <extraparam>
-<info description="blah blah blah" root="false" />
+<info description="blah blah blah" root="false" probability="0.4" />
 </extraparam>
 </COMPONENT>
 
