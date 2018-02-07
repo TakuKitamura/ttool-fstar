@@ -54,6 +54,7 @@ public class Fault extends FaultElement {
     private ArrayList<FaultNode> destinationNodes;
     private boolean isRoot;
     private boolean isEnabled = true;
+    private double probability;
 
 
     public Fault(String _name, Object _referenceObject) {
@@ -79,6 +80,10 @@ public class Fault extends FaultElement {
 
     public void setOriginNode(FaultNode _node) {
         originNode = _node;
+    }
+
+    public void setProbability(double probability) {
+        this.probability = probability;
     }
 
     public void addDestinationNode(FaultNode _node) {
