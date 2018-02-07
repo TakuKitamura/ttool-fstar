@@ -59,7 +59,6 @@ public class FaultTreePanelTranslator {
     protected FaultTreePanel atp;
     protected LinkedList<CheckingError> checkingErrors, warnings;
     protected CorrespondanceTGElement listE; // usual list
-    //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
     protected LinkedList<TDiagramPanel> panels;
 
 
@@ -708,6 +707,8 @@ public class FaultTreePanelTranslator {
                     makeBeforeNode(_as, _main, ab, (BeforeNode) node, listE.getTG(node));
                 } else if (node instanceof VoteNode) {
                     makeVoteNode(_as, _main, ab, (VoteNode) node, listE.getTG(node));
+                } else if (node instanceof NOTNode) {
+                    makeNOTNode(_as, _main, ab, (NOTNode) node, listE.getTG(node));
                 }
             }
         }
@@ -741,6 +742,75 @@ public class FaultTreePanelTranslator {
                 finalGuard += "(" + att.getName() + "__performed == true)";
             } else {
                 finalGuard += " && (" + att.getName() + "__performed == true)";
+            }
+            _ab.addAttribute(aa);
+            atF.addAction(att.getName() + "__performed = false");
+
+
+            avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
+            AvatarActionOnSignal acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
+            asm.addElement(acceptFault);
+            AvatarTransition at = new AvatarTransition(_ab, "at_toInputFault", _ref);
+            asm.addElement(at);
+            mainState.addNext(at);
+            at.addNext(acceptFault);
+            at.setGuard(new AvatarSimpleGuardDuo(aa, AvatarConstant.FALSE, "=="));
+            at = new AvatarTransition(_ab, "at_fromInputFault", _ref);
+            at.addAction(att.getName() + "__performed = true");
+            asm.addElement(at);
+            acceptFault.addNext(at);
+            at.addNext(mainState);
+            at.setHidden(true);
+        }
+
+        // Adding resulting Fault
+        AvatarTransition at = new AvatarTransition(_ab, "at_toEnd", _ref);
+        asm.addElement(at);
+        mainState.addNext(at);
+        at.addNext(endState);
+        at.setGuard("[" + finalGuard + "]");
+
+        Fault resulting = _node.getResultingFault();
+        avatartranslator.AvatarSignal sigFault = _main.getAvatarSignalWithName("nodeDone__" + resulting.getName());
+        AvatarActionOnSignal resultingFault = new AvatarActionOnSignal("ResultingFault", sigFault, _ref1);
+        asm.addElement(resultingFault);
+        at = new AvatarTransition(_ab, "at_toResultingFault", _ref);
+        asm.addElement(at);
+        endState.addNext(at);
+        at.addNext(resultingFault);
+        at = new AvatarTransition(_ab, "at_Overall", _ref);
+        asm.addElement(at);
+        resultingFault.addNext(at);
+        at.addNext(overallState);
+    }
+
+    private void makeNOTNode(AvatarSpecification _as, AvatarBlock _main, AvatarBlock _ab, NOTNode _node, Object _ref) {
+        Object _ref1 = _ref;
+        _ref = null;
+        AvatarStateMachine asm = _ab.getStateMachine();
+
+        // Basic machine
+        AvatarStartState start = new AvatarStartState("start", _ref);
+        AvatarState mainState = new AvatarState("main", _ref, false, false);
+        AvatarState endState = new AvatarState("end", _ref, false, false);
+        AvatarState overallState = new AvatarState("overall", _ref, false, false);
+        asm.addElement(start);
+        asm.setStartState(start);
+        asm.addElement(mainState);
+        asm.addElement(endState);
+        asm.addElement(overallState);
+        AvatarTransition atF = new AvatarTransition(_ab, "at1", _ref);
+        asm.addElement(atF);
+        start.addNext(atF);
+        atF.addNext(mainState);
+        atF.setHidden(true);
+        String finalGuard = "";
+        for (Fault att : _node.getInputFaults()) {
+            AvatarAttribute aa = new AvatarAttribute(att.getName() + "__performed", AvatarType.BOOLEAN, _ab, _ref);
+            if (finalGuard.length() == 0) {
+                finalGuard += "(" + att.getName() + "__performed == false)";
+            } else {
+                finalGuard += " && (" + att.getName() + "__performed == false)";
             }
             _ab.addAttribute(aa);
             atF.addAction(att.getName() + "__performed = false");

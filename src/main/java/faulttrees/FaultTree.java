@@ -52,7 +52,6 @@ import java.util.ArrayList;
 public class FaultTree extends FaultElement {
     private ArrayList<FaultNode> nodes;
     private ArrayList<Fault> faults;
-    private String name;
 
     public FaultElement faultyElement;
     public String errorOfFaultyElement;

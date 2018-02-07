@@ -8441,7 +8441,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void resetLiveness() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp != null) {
-            tp.resetReachability();
+            tp.resetLiveness();
         }
     }
 
