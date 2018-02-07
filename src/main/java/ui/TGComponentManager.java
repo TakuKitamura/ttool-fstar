@@ -38,15 +38,12 @@
  */
 
 
-
-
 package ui;
 
 //import java.awt.*;
 
 import ui.ad.*;
 import ui.atd.*;
-import ui.ftd.*;
 import ui.avatarad.*;
 import ui.avatarbd.*;
 import ui.avatarcd.*;
@@ -62,6 +59,10 @@ import ui.dd.TDDNode;
 import ui.dd.TGConnectorLinkNode;
 import ui.diplodocusmethodology.*;
 import ui.ebrdd.*;
+import ui.ftd.*;
+import ui.het.CAMSBlock;
+import ui.het.CAMSBlockConnector;
+import ui.het.CAMSConnectingPoint;
 import ui.iod.*;
 import ui.ncdd.*;
 import ui.osad.*;
@@ -76,7 +77,6 @@ import ui.tmlcompd.*;
 import ui.tmlcp.*;
 import ui.tmldd.*;
 import ui.tmlsd.*;
-import ui.het.*;
 import ui.ucd.*;
 
 import java.awt.*;
@@ -89,8 +89,9 @@ import java.util.Vector;
  * Class TGComponentManager
  * Definition and creation of all possible graphical components of TTool
  * Creation: 21/12/2003
- * @version 1.3 27/01/2016
+ *
  * @author Ludovic APVRILLE, Andrea ENRICI
+ * @version 1.3 27/01/2016
  */
 public class TGComponentManager {
 
@@ -202,7 +203,7 @@ public class TGComponentManager {
     public static final int SD_TIME_INTERVAL = 608;
     public static final int SD_COREGION = 600;
 
-    
+
     public static final int SDZV_INSTANCE = 620;
     public static final int SDZV_ABSOLUTE_TIME_CONSTRAINT = 621;
     public static final int SDZV_RELATIVE_TIME_CONSTRAINT = 622;
@@ -279,6 +280,7 @@ public class TGComponentManager {
     public static final int TMLARCHI_VGMNNODE = 1112;
     public static final int TMLARCHI_CROSSBARNODE = 1113;
     public static final int TMLARCHI_FIREWALL = 1114;
+    public static final int TMLARCHI_FPGANODE = 1116;
 
     public static final int TMLCTD_CCOMPONENT = 1200;
     public static final int TMLCTD_CPORT = 1201;
@@ -335,19 +337,19 @@ public class TGComponentManager {
 
     // SystemC-AMS
     public static final int CAMS_CONNECTOR = 1601;
-    public static final int CAMS_BLOCK = 1602 ;
+    public static final int CAMS_BLOCK = 1602;
 
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
     public static final int PROSMD_STOP_STATE = 2001;
     public static final int PROSMD_SENDMSG = 2002;
     public static final int PROSMD_GETMSG = 2004;
-    public static final int PROSMD_CHOICE=2006;
-    public static final int PROSMD_JUNCTION=2008;
-    public static final int PROSMD_SUBMACHINE=2010;
-    public static final int PROSMD_ACTION=2012;
-    public static final int PROSMD_PARALLEL=2014;
-    public static final int PROSMD_STATE=2016;
+    public static final int PROSMD_CHOICE = 2006;
+    public static final int PROSMD_JUNCTION = 2008;
+    public static final int PROSMD_SUBMACHINE = 2010;
+    public static final int PROSMD_ACTION = 2012;
+    public static final int PROSMD_PARALLEL = 2014;
+    public static final int PROSMD_STATE = 2016;
     // CSD diagram
     public static final int PROCSD_COMPONENT = 2100;
     //No more delegate ports, by Solange
@@ -512,10 +514,10 @@ public class TGComponentManager {
     public static final int CONNECTOR = 1;
 
 
-    public  static LinkedList<ADDConnector> addconnectors = new LinkedList<ADDConnector>(); //DG 21.02.
+    public static LinkedList<ADDConnector> addconnectors = new LinkedList<ADDConnector>(); //DG 21.02.
 
 
-    public static LinkedList<ADDConnector> getAllADDConnectors(){
+    public static LinkedList<ADDConnector> getAllADDConnectors() {
         return addconnectors;
     }//DG 21.02.
 
@@ -523,870 +525,872 @@ public class TGComponentManager {
         TGComponent tgc = null;
         switch (id) {
             // PLUGIN
-	case COMPONENT_PLUGIN:
-            tgc = new TGComponentPlugin(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-	    // AVATAR
-        case AVATARBD_BLOCK:
-            tgc = new AvatarBDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARBD_CRYPTOBLOCK:
-            tgc = new AvatarBDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            ((AvatarBDBlock)tgc).addCryptoElements();
-            break;
-        case AVATARBD_DATATYPE:
-            tgc = new AvatarBDDataType(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARBD_LIBRARYFUNCTION:
-            tgc = new AvatarBDLibraryFunction (x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARBD_CRYPTOLIBRARYFUNCTION:
-            tgc = new AvatarBDLibraryFunction (x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            ((AvatarBDLibraryFunction)tgc).addCryptoElements();
-            break;
-        case AVATARSMD_START_STATE:
-            tgc = new AvatarSMDStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_STOP_STATE:
-            tgc = new AvatarSMDStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_SEND_SIGNAL:
-            tgc = new AvatarSMDSendSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_LIBRARY_FUNCTION_CALL:
-            tgc = new AvatarSMDLibraryFunctionCall (x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_RECEIVE_SIGNAL:
-            tgc = new AvatarSMDReceiveSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_PARALLEL:
-            tgc = new AvatarSMDParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_STATE:
-            tgc = new AvatarSMDState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_CHOICE:
-            tgc = new AvatarSMDChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_RANDOM:
-            tgc = new AvatarSMDRandom(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_SET_TIMER:
-            tgc = new AvatarSMDSetTimer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_RESET_TIMER:
-            tgc = new AvatarSMDResetTimer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARSMD_EXPIRE_TIMER:
-            tgc = new AvatarSMDExpireTimer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case COMPONENT_PLUGIN:
+                tgc = new TGComponentPlugin(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            // AVATAR
+            case AVATARBD_BLOCK:
+                tgc = new AvatarBDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARBD_CRYPTOBLOCK:
+                tgc = new AvatarBDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                ((AvatarBDBlock) tgc).addCryptoElements();
+                break;
+            case AVATARBD_DATATYPE:
+                tgc = new AvatarBDDataType(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARBD_LIBRARYFUNCTION:
+                tgc = new AvatarBDLibraryFunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARBD_CRYPTOLIBRARYFUNCTION:
+                tgc = new AvatarBDLibraryFunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                ((AvatarBDLibraryFunction) tgc).addCryptoElements();
+                break;
+            case AVATARSMD_START_STATE:
+                tgc = new AvatarSMDStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_STOP_STATE:
+                tgc = new AvatarSMDStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_SEND_SIGNAL:
+                tgc = new AvatarSMDSendSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_LIBRARY_FUNCTION_CALL:
+                tgc = new AvatarSMDLibraryFunctionCall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_RECEIVE_SIGNAL:
+                tgc = new AvatarSMDReceiveSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_PARALLEL:
+                tgc = new AvatarSMDParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_STATE:
+                tgc = new AvatarSMDState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_CHOICE:
+                tgc = new AvatarSMDChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_RANDOM:
+                tgc = new AvatarSMDRandom(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_SET_TIMER:
+                tgc = new AvatarSMDSetTimer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_RESET_TIMER:
+                tgc = new AvatarSMDResetTimer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_EXPIRE_TIMER:
+                tgc = new AvatarSMDExpireTimer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
-        case AVATARRD_REQUIREMENT:
-            tgc = new AvatarRDRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARRD_PROPERTY:
-            tgc = new AvatarRDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARRD_ELEMENT_REFERENCE:
-            tgc = new AvatarRDElementReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case AVATARRD_REQUIREMENT:
+                tgc = new AvatarRDRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARRD_PROPERTY:
+                tgc = new AvatarRDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARRD_ELEMENT_REFERENCE:
+                tgc = new AvatarRDElementReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
-        case AVATARMAD_ASSUMPTION:
-            tgc = new AvatarMADAssumption(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARMAD_DIAGRAM_REFERENCE:
-            tgc = new AvatarMADDiagramReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARMAD_ELEMENT_REFERENCE:
-            tgc = new AvatarMADElementReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case AVATARMAD_ASSUMPTION:
+                tgc = new AvatarMADAssumption(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARMAD_DIAGRAM_REFERENCE:
+                tgc = new AvatarMADDiagramReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARMAD_ELEMENT_REFERENCE:
+                tgc = new AvatarMADElementReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
             // AVATAR PD
-        case APD_BLOCK:
-            tgc = new AvatarPDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case APD_LOGICAL_CONSTRAINT:
-            tgc = new AvatarPDLogicalConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case APD_TEMPORAL_CONSTRAINT:
-            tgc = new AvatarPDTemporalConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case APD_ATTRIBUTE:
-            tgc = new AvatarPDAttribute(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case APD_SIGNAL:
-            tgc = new AvatarPDSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case APD_ALIAS:
-            tgc = new AvatarPDAlias(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case APD_BOOLEQ:
-            tgc = new AvatarPDBoolEq(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case APD_ATTRIBUTE_SETTING:
-            tgc = new AvatarPDAttributeSetting(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case APD_PROPERTY:
-            tgc = new AvatarPDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case APD_PROPERTY_RELATION:
-            tgc = new AvatarPDPropertyRelation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case APD_BLOCK:
+                tgc = new AvatarPDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case APD_LOGICAL_CONSTRAINT:
+                tgc = new AvatarPDLogicalConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case APD_TEMPORAL_CONSTRAINT:
+                tgc = new AvatarPDTemporalConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case APD_ATTRIBUTE:
+                tgc = new AvatarPDAttribute(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case APD_SIGNAL:
+                tgc = new AvatarPDSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case APD_ALIAS:
+                tgc = new AvatarPDAlias(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case APD_BOOLEQ:
+                tgc = new AvatarPDBoolEq(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case APD_ATTRIBUTE_SETTING:
+                tgc = new AvatarPDAttributeSetting(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case APD_PROPERTY:
+                tgc = new AvatarPDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case APD_PROPERTY_RELATION:
+                tgc = new AvatarPDPropertyRelation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
             // AVATAR CD
-        case ACD_BLOCK:
-            tgc = new AvatarCDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ACD_ACTOR_STICKMAN:
-            tgc = new AvatarCDActorStickman(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ACD_ACTOR_BOX:
-            tgc = new AvatarCDActorBox(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case ACD_BLOCK:
+                tgc = new AvatarCDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ACD_ACTOR_STICKMAN:
+                tgc = new AvatarCDActorStickman(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ACD_ACTOR_BOX:
+                tgc = new AvatarCDActorBox(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
             // AVATAR AD
-        case AAD_START_STATE:
-            tgc = new AvatarADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AAD_STOP_STATE:
-            tgc = new AvatarADStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AAD_CHOICE:
-            tgc = new AvatarADChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AAD_JUNCTION:
-            tgc = new AvatarADJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AAD_PARALLEL:
-            tgc = new AvatarADParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AAD_ACTION:
-            tgc = new AvatarADAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AAD_ACTIVITY:
-            tgc = new AvatarADActivity(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AAD_STOP_FLOW:
-            tgc = new AvatarADStopFlow(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AAD_SEND_SIGNAL_ACTION:
-            tgc = new AvatarADSendSignalAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AAD_ACCEPT_EVENT_ACTION:
-            tgc = new AvatarADAcceptEventAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AAD_PARTITION:
-            tgc = new AvatarADPartition(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case AAD_START_STATE:
+                tgc = new AvatarADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_STOP_STATE:
+                tgc = new AvatarADStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_CHOICE:
+                tgc = new AvatarADChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_JUNCTION:
+                tgc = new AvatarADJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_PARALLEL:
+                tgc = new AvatarADParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_ACTION:
+                tgc = new AvatarADAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_ACTIVITY:
+                tgc = new AvatarADActivity(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_STOP_FLOW:
+                tgc = new AvatarADStopFlow(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_SEND_SIGNAL_ACTION:
+                tgc = new AvatarADSendSignalAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_ACCEPT_EVENT_ACTION:
+                tgc = new AvatarADAcceptEventAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_PARTITION:
+                tgc = new AvatarADPartition(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
             //AVATAR DD
-        case ADD_CPUNODE:
-            tgc = new ADDCPUNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_BUSNODE:
-            tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_VGMNNODE:
-            tgc = new ADDVgmnNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_CROSSBARNODE:
-            tgc = new ADDCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_TTYNODE:
-            tgc = new ADDTTYNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_BRIDGENODE:
-            tgc = new ADDBridgeNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_RAMNODE:
-            tgc = new ADDRAMNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_ROMNODE:
-            tgc = new ADDROMNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_DMANODE:
-            tgc = new ADDDMANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_ICUNODE:
-            tgc = new ADDICUNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_COPROMWMRNODE:
-            tgc = new ADDCoproMWMRNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_TIMERNODE:
-            tgc = new ADDTimerNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_ARTIFACT:
-            tgc = new ADDBlockArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ADD_CHANNELARTIFACT:
-            tgc = new ADDChannelArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case ADD_CPUNODE:
+                tgc = new ADDCPUNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_BUSNODE:
+                tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_VGMNNODE:
+                tgc = new ADDVgmnNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_CROSSBARNODE:
+                tgc = new ADDCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_TTYNODE:
+                tgc = new ADDTTYNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_BRIDGENODE:
+                tgc = new ADDBridgeNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_RAMNODE:
+                tgc = new ADDRAMNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_ROMNODE:
+                tgc = new ADDROMNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_DMANODE:
+                tgc = new ADDDMANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_ICUNODE:
+                tgc = new ADDICUNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_COPROMWMRNODE:
+                tgc = new ADDCoproMWMRNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_TIMERNODE:
+                tgc = new ADDTimerNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_ARTIFACT:
+                tgc = new ADDBlockArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_CHANNELARTIFACT:
+                tgc = new ADDChannelArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
             //AVATAR Methodology
-        case AVATARMETHODOLOGY_REF_ASSUMPTIONS:
-            tgc = new AvatarMethodologyReferenceToAssumptions(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARMETHODOLOGY_REF_REQUIREMENT:
-            tgc = new AvatarMethodologyReferenceToRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARMETHODOLOGY_REF_ANALYSIS:
-            tgc = new AvatarMethodologyReferenceToAnalysis(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARMETHODOLOGY_REF_DESIGN:
-            tgc = new AvatarMethodologyReferenceToDesign(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARMETHODOLOGY_REF_PROPERTIES:
-            tgc = new AvatarMethodologyReferenceToProperties(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARMETHODOLOGY_REF_PROTOTYPE:
-            tgc = new AvatarMethodologyReferenceToPrototype(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATARMETHODOLOGY_DIAGRAM_NAME:
-            tgc = new AvatarMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case AVATARMETHODOLOGY_REF_ASSUMPTIONS:
+                tgc = new AvatarMethodologyReferenceToAssumptions(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARMETHODOLOGY_REF_REQUIREMENT:
+                tgc = new AvatarMethodologyReferenceToRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARMETHODOLOGY_REF_ANALYSIS:
+                tgc = new AvatarMethodologyReferenceToAnalysis(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARMETHODOLOGY_REF_DESIGN:
+                tgc = new AvatarMethodologyReferenceToDesign(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARMETHODOLOGY_REF_PROPERTIES:
+                tgc = new AvatarMethodologyReferenceToProperties(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARMETHODOLOGY_REF_PROTOTYPE:
+                tgc = new AvatarMethodologyReferenceToPrototype(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARMETHODOLOGY_DIAGRAM_NAME:
+                tgc = new AvatarMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
             //SysML-Sec Methodology
-        case SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS:
-            tgc = new SysmlsecMethodologyReferenceToAssumptions(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_REF_REQUIREMENT:
-            tgc = new SysmlsecMethodologyReferenceToRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_REF_ANALYSIS:
-            tgc = new SysmlsecMethodologyReferenceToAnalysis(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_REF_DESIGN:
-            tgc = new SysmlsecMethodologyReferenceToDesign(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_REF_PROPERTIES:
-            tgc = new SysmlsecMethodologyReferenceToProperties(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_REF_PROTOTYPE:
-            tgc = new SysmlsecMethodologyReferenceToPrototype(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW:
-            tgc = new SysmlsecMethodologyReferenceToApplication(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW:
-            tgc = new SysmlsecMethodologyReferenceToArchitecture(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW:
-            tgc = new SysmlsecMethodologyReferenceToMapping(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_REF_CP_VIEW:
-            tgc = new SysmlsecMethodologyReferenceToCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_REF_ATTACK:
-            tgc = new SysmlsecMethodologyReferenceToAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SYSMLSEC_METHODOLOGY_DIAGRAM_NAME:
-            tgc = new SysmlsecMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-
+            case SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS:
+                tgc = new SysmlsecMethodologyReferenceToAssumptions(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_REQUIREMENT:
+                tgc = new SysmlsecMethodologyReferenceToRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_ANALYSIS:
+                tgc = new SysmlsecMethodologyReferenceToAnalysis(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_DESIGN:
+                tgc = new SysmlsecMethodologyReferenceToDesign(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_PROPERTIES:
+                tgc = new SysmlsecMethodologyReferenceToProperties(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_PROTOTYPE:
+                tgc = new SysmlsecMethodologyReferenceToPrototype(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW:
+                tgc = new SysmlsecMethodologyReferenceToApplication(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW:
+                tgc = new SysmlsecMethodologyReferenceToArchitecture(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW:
+                tgc = new SysmlsecMethodologyReferenceToMapping(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_CP_VIEW:
+                tgc = new SysmlsecMethodologyReferenceToCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_ATTACK:
+                tgc = new SysmlsecMethodologyReferenceToAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_DIAGRAM_NAME:
+                tgc = new SysmlsecMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
 
             // Others
-        case TAD_DETERMINISTIC_DELAY:
-            tgc = new TADDeterministicDelay(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_PARALLEL:
-            tgc = new TADParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_SEQUENCE:
-            tgc = new TADSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_PREEMPTION:
-            tgc = new TADPreemption(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_STOP_STATE:
-            tgc = new TADStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_START_STATE:
-            tgc = new TADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_ACTION_STATE:
-            tgc = new TADActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_ARRAY_GET:
-            tgc = new TADArrayGetState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_ARRAY_SET:
-            tgc = new TADArraySetState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_TIME_LIMITED_OFFER:
-            tgc = new TADTimeLimitedOffer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_JUNCTION:
-            tgc = new TADJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_NON_DETERMINISTIC_DELAY:
-            tgc = new TADNonDeterministicDelay(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_DELAY_NON_DETERMINISTIC_DELAY:
-            tgc = new TADTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_TIME_LIMITED_OFFER_WITH_LATENCY:
-            tgc = new TADTimeLimitedOfferWithLatency(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_TIME_CAPTURE:
-            tgc = new TADTimeCapture(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TAD_CHOICE:
-            tgc = new TADChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TCD_TCLASS:
-            tgc = new TCDTClass(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TCD_TOBJECT:
-            tgc = new TCDTObject(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TCD_TDATA:
-            tgc = new TCDTData(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TCD_PARALLEL_OPERATOR:
-            tgc = new TCDParallelOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TCD_SEQUENCE_OPERATOR:
-            tgc = new TCDSequenceOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TCD_PREEMPTION_OPERATOR:
-            tgc = new TCDPreemptionOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TCD_SYNCHRO_OPERATOR:
-            tgc = new TCDSynchroOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TCD_INVOCATION_OPERATOR:
-            tgc = new TCDInvocationOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TCD_WATCHDOG_OPERATOR:
-            tgc = new TCDWatchdogOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case UML_NOTE:
-            tgc = new TGCNote(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case INFO_PANEL:
-            tgc = new TGCPanelInfo(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PRAGMA:
-            tgc = new AvatarBDPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SAFETY_PRAGMA:
-            tgc = new AvatarBDSafetyPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PERFORMANCE_PRAGMA:
-            tgc = new AvatarBDPerformancePragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case AVATAR_FIREWALL:
-            tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case IOD_CHOICE:
-            tgc = new IODChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case IOD_START_STATE:
-            tgc = new IODStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case IOD_STOP_STATE:
-            tgc = new IODStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case IOD_JUNCTION:
-            tgc = new IODJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case IOD_PARALLEL:
-            tgc = new IODParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case IOD_REF_SD:
-            tgc = new IODRefSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case IOD_REF_IOD:
-            tgc = new IODRefIOD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case IOD_PREEMPTION:
-            tgc = new IODPreemption(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case IOD_SEQUENCE:
-            tgc = new IODSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SD_INSTANCE:
-            tgc = new ui.sd.SDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SD_ABSOLUTE_TIME_CONSTRAINT:
-            tgc = new ui.sd.SDAbsoluteTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SD_RELATIVE_TIME_CONSTRAINT:
-            tgc = new ui.sd.SDRelativeTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SD_ACTION_STATE:
-            tgc = new ui.sd.SDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SD_GUARD:
-            tgc = new ui.sd.SDGuard(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SD_TIME_INTERVAL:
-            tgc = new ui.sd.SDTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SD_TIMER_SETTING:
-            tgc = new ui.sd.SDTimerSetting(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SD_TIMER_EXPIRATION:
-            tgc = new ui.sd.SDTimerExpiration(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SD_TIMER_CANCELLATION:
-            tgc = new ui.sd.SDTimerCancellation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SD_COREGION:
-            tgc = new ui.sd.SDCoregion(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-	    
-	case SDZV_INSTANCE:
-            tgc = new ui.sd2.SDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SDZV_PORT_MESSAGE:
-            tgc = new ui.sd2.SDPortForMessage(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SDZV_ABSOLUTE_TIME_CONSTRAINT:
-            tgc = new ui.sd2.SDAbsoluteTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SDZV_RELATIVE_TIME_CONSTRAINT:
-            tgc = new ui.sd2.SDRelativeTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SDZV_ACTION_STATE:
-            tgc = new ui.sd2.SDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SDZV_GUARD:
-            tgc = new ui.sd2.SDGuard(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SDZV_TIME_INTERVAL:
-            tgc = new ui.sd2.SDTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SDZV_TIMER_SETTING:
-            tgc = new ui.sd2.SDTimerSetting(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SDZV_TIMER_EXPIRATION:
-            tgc = new ui.sd2.SDTimerExpiration(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SDZV_TIMER_CANCELLATION:
-            tgc = new ui.sd2.SDTimerCancellation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case SDZV_COREGION:
-            tgc = new ui.sd2.SDCoregion(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-	    
-        case UCD_ACTOR:
-            tgc = new UCDActor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case UCD_ACTORBOX:
-            tgc = new UCDActorBox(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case UCD_USECASE:
-            tgc = new UCDUseCase(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case UCD_BORDER:
-            tgc = new UCDBorder(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TDD_NODE:
-            tgc = new TDDNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TDD_ARTIFACT:
-            tgc = new TDDArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case EBRDD_START_STATE:
-            tgc = new EBRDDStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case EBRDD_STOP_STATE:
-            tgc = new EBRDDStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case EBRDD_CHOICE:
-            tgc = new EBRDDChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case EBRDD_ERC:
-            tgc = new EBRDDERC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case EBRDD_ACTION:
-            tgc = new EBRDDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case EBRDD_FOR_LOOP:
-            tgc = new EBRDDForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case EBRDD_VARIABLE_DECLARATION:
-            tgc = new EBRDDAttributeBox(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case EBRDD_SEQUENCE:
-            tgc = new EBRDDSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case EBRDD_ESO:
-            tgc = new EBRDDESO(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case EBRDD_ERB:
-            tgc = new EBRDDERB(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ATD_BLOCK:
-            tgc = new ATDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ATD_ATTACK:
-            tgc = new ATDAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case ATD_CONSTRAINT:
-            tgc = new ATDConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-	case ATD_COUNTERMEASURE:
-            tgc = new ATDCountermeasure(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-	case FTD_BLOCK:
-            tgc = new FTDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case FTD_FAULT:
-            tgc = new FTDFault(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case FTD_CONSTRAINT:
-            tgc = new FTDConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-	case FTD_COUNTERMEASURE:
-            tgc = new FTDCountermeasure(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case DIPLODODUSMETHODOLOGY_REF_APPLICATION:
-            tgc = new DiplodocusMethodologyDiagramReferenceToApplication(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case DIPLODODUSMETHODOLOGY_REF_CP:
-            tgc = new DiplodocusMethodologyDiagramReferenceToCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE:
-            tgc = new DiplodocusMethodologyDiagramReferenceToArchitecture(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case DIPLODODUSMETHODOLOGY_REF_MAPPING:
-            tgc = new DiplodocusMethodologyDiagramReferenceToMapping(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case DIPLODODUSMETHODOLOGY_REF_REQUIREMENT:
-            tgc = new DiplodocusMethodologyDiagramReferenceToRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case DIPLODODUSMETHODOLOGY_DIAGRAM_NAME:
-            tgc = new DiplodocusMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case TAD_DETERMINISTIC_DELAY:
+                tgc = new TADDeterministicDelay(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_PARALLEL:
+                tgc = new TADParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_SEQUENCE:
+                tgc = new TADSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_PREEMPTION:
+                tgc = new TADPreemption(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_STOP_STATE:
+                tgc = new TADStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_START_STATE:
+                tgc = new TADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_ACTION_STATE:
+                tgc = new TADActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_ARRAY_GET:
+                tgc = new TADArrayGetState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_ARRAY_SET:
+                tgc = new TADArraySetState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_TIME_LIMITED_OFFER:
+                tgc = new TADTimeLimitedOffer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_JUNCTION:
+                tgc = new TADJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_NON_DETERMINISTIC_DELAY:
+                tgc = new TADNonDeterministicDelay(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_DELAY_NON_DETERMINISTIC_DELAY:
+                tgc = new TADTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_TIME_LIMITED_OFFER_WITH_LATENCY:
+                tgc = new TADTimeLimitedOfferWithLatency(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_TIME_CAPTURE:
+                tgc = new TADTimeCapture(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TAD_CHOICE:
+                tgc = new TADChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TCD_TCLASS:
+                tgc = new TCDTClass(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TCD_TOBJECT:
+                tgc = new TCDTObject(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TCD_TDATA:
+                tgc = new TCDTData(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TCD_PARALLEL_OPERATOR:
+                tgc = new TCDParallelOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TCD_SEQUENCE_OPERATOR:
+                tgc = new TCDSequenceOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TCD_PREEMPTION_OPERATOR:
+                tgc = new TCDPreemptionOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TCD_SYNCHRO_OPERATOR:
+                tgc = new TCDSynchroOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TCD_INVOCATION_OPERATOR:
+                tgc = new TCDInvocationOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TCD_WATCHDOG_OPERATOR:
+                tgc = new TCDWatchdogOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case UML_NOTE:
+                tgc = new TGCNote(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case INFO_PANEL:
+                tgc = new TGCPanelInfo(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PRAGMA:
+                tgc = new AvatarBDPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SAFETY_PRAGMA:
+                tgc = new AvatarBDSafetyPragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PERFORMANCE_PRAGMA:
+                tgc = new AvatarBDPerformancePragma(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATAR_FIREWALL:
+                tgc = new AvatarBDFirewall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case IOD_CHOICE:
+                tgc = new IODChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case IOD_START_STATE:
+                tgc = new IODStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case IOD_STOP_STATE:
+                tgc = new IODStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case IOD_JUNCTION:
+                tgc = new IODJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case IOD_PARALLEL:
+                tgc = new IODParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case IOD_REF_SD:
+                tgc = new IODRefSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case IOD_REF_IOD:
+                tgc = new IODRefIOD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case IOD_PREEMPTION:
+                tgc = new IODPreemption(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case IOD_SEQUENCE:
+                tgc = new IODSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SD_INSTANCE:
+                tgc = new ui.sd.SDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SD_ABSOLUTE_TIME_CONSTRAINT:
+                tgc = new ui.sd.SDAbsoluteTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SD_RELATIVE_TIME_CONSTRAINT:
+                tgc = new ui.sd.SDRelativeTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SD_ACTION_STATE:
+                tgc = new ui.sd.SDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SD_GUARD:
+                tgc = new ui.sd.SDGuard(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SD_TIME_INTERVAL:
+                tgc = new ui.sd.SDTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SD_TIMER_SETTING:
+                tgc = new ui.sd.SDTimerSetting(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SD_TIMER_EXPIRATION:
+                tgc = new ui.sd.SDTimerExpiration(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SD_TIMER_CANCELLATION:
+                tgc = new ui.sd.SDTimerCancellation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SD_COREGION:
+                tgc = new ui.sd.SDCoregion(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
-        case TMLAD_START_STATE:
-            tgc = new TMLADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_STOP_STATE:
-            tgc = new TMLADStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_WRITE_CHANNEL:
-            tgc = new TMLADWriteChannel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_READ_CHANNEL:
-            tgc = new TMLADReadChannel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_SEND_REQUEST:
-            tgc = new TMLADSendRequest(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_SEND_EVENT:
-            tgc = new TMLADSendEvent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_WAIT_EVENT:
-            tgc = new TMLADWaitEvent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_NOTIFIED_EVENT:
-            tgc = new TMLADNotifiedEvent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLTD_TASK:
-            tgc = new TMLTaskOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLTD_CHANNEL_OPERATOR:
-            tgc = new TMLChannelOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLTD_EVENT_OPERATOR:
-            tgc = new TMLEventOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLTD_REQUEST_OPERATOR:
-            tgc = new TMLRequestOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_ACTION_STATE:
-            tgc = new TMLADActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_CHOICE:
-            tgc = new TMLADChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_EXECI:
-            tgc = new TMLADExecI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_EXECI_INTERVAL:
-            tgc = new TMLADExecIInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_EXECC:
-            tgc = new TMLADExecC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_EXECC_INTERVAL:
-            tgc = new TMLADExecCInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_DELAY:
-            tgc = new TMLADDelay(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_INTERVAL_DELAY:
-            tgc = new TMLADDelayInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_FOR_LOOP:
-            tgc = new TMLADForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_FOR_STATIC_LOOP:
-            tgc = new TMLADForStaticLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_FOR_EVER_LOOP:
-            tgc = new TMLADForEverLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_READ_REQUEST_ARG:
-            tgc = new TMLADReadRequestArg(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_SEQUENCE:
-            tgc = new TMLADSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_UNORDERED_SEQUENCE:
-            tgc = new TMLADUnorderedSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_SELECT_EVT:
-            tgc = new TMLADSelectEvt(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_RANDOM:
-            tgc = new TMLADRandom(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_ENCRYPT:
-            tgc = new TMLADEncrypt(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLAD_DECRYPT:
-            tgc = new TMLADDecrypt(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCTD_CCOMPONENT:
-            tgc = new TMLCCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCTD_CREMOTECOMPONENT:
-            tgc = new TMLCRemoteCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCTD_CREMOTEPORTCOMPONENT:
-            tgc = new TMLCRemotePortCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCTD_CPORT:
-            tgc = new TMLCCompositePort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCTD_JOIN:
-            tgc = new TMLCJoin(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCTD_FORK:
-            tgc = new TMLCFork(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCTD_PCOMPONENT:
-            tgc = new TMLCPrimitiveComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCTD_RCOMPONENT:
-            tgc = new TMLCRecordComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCTD_COPORT:
-            tgc = new TMLCChannelOutPort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_CPUNODE:
-            tgc = new TMLArchiCPUNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_BUSNODE:
-            tgc = new TMLArchiBUSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_VGMNNODE:
-            tgc = new TMLArchiVGMNNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_CROSSBARNODE:
-            tgc = new TMLArchiCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_CPNODE:
-            tgc = new TMLArchiCPNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_BRIDGENODE:
-            tgc = new TMLArchiBridgeNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_FIREWALL:
-            tgc = new TMLArchiFirewallNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_HWANODE:
-            tgc = new TMLArchiHWANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-	case TMLARCHI_CAMSNODE:
-            tgc = new TMLArchiCAMSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_MEMORYNODE:
-            tgc = new TMLArchiMemoryNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_DMANODE:
-            tgc = new TMLArchiDMANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_ARTIFACT:
-            tgc = new TMLArchiArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_COMMUNICATION_ARTIFACT:
-            tgc = new TMLArchiCommunicationArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_PORT_ARTIFACT:
-            tgc = new TMLArchiPortArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_EVENT_ARTIFACT:
-            tgc = new TMLArchiEventArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLARCHI_KEY:
-            tgc = new TMLArchiKey(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-	case CAMS_BLOCK:
-	    tgc = new CAMSBlock(x,y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-	    break;
+            case SDZV_INSTANCE:
+                tgc = new ui.sd2.SDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SDZV_PORT_MESSAGE:
+                tgc = new ui.sd2.SDPortForMessage(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SDZV_ABSOLUTE_TIME_CONSTRAINT:
+                tgc = new ui.sd2.SDAbsoluteTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SDZV_RELATIVE_TIME_CONSTRAINT:
+                tgc = new ui.sd2.SDRelativeTimeConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SDZV_ACTION_STATE:
+                tgc = new ui.sd2.SDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SDZV_GUARD:
+                tgc = new ui.sd2.SDGuard(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SDZV_TIME_INTERVAL:
+                tgc = new ui.sd2.SDTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SDZV_TIMER_SETTING:
+                tgc = new ui.sd2.SDTimerSetting(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SDZV_TIMER_EXPIRATION:
+                tgc = new ui.sd2.SDTimerExpiration(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SDZV_TIMER_CANCELLATION:
+                tgc = new ui.sd2.SDTimerCancellation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SDZV_COREGION:
+                tgc = new ui.sd2.SDCoregion(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+
+            case UCD_ACTOR:
+                tgc = new UCDActor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case UCD_ACTORBOX:
+                tgc = new UCDActorBox(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case UCD_USECASE:
+                tgc = new UCDUseCase(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case UCD_BORDER:
+                tgc = new UCDBorder(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TDD_NODE:
+                tgc = new TDDNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TDD_ARTIFACT:
+                tgc = new TDDArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_START_STATE:
+                tgc = new EBRDDStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_STOP_STATE:
+                tgc = new EBRDDStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_CHOICE:
+                tgc = new EBRDDChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_ERC:
+                tgc = new EBRDDERC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_ACTION:
+                tgc = new EBRDDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_FOR_LOOP:
+                tgc = new EBRDDForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_VARIABLE_DECLARATION:
+                tgc = new EBRDDAttributeBox(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_SEQUENCE:
+                tgc = new EBRDDSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_ESO:
+                tgc = new EBRDDESO(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_ERB:
+                tgc = new EBRDDERB(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ATD_BLOCK:
+                tgc = new ATDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ATD_ATTACK:
+                tgc = new ATDAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ATD_CONSTRAINT:
+                tgc = new ATDConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ATD_COUNTERMEASURE:
+                tgc = new ATDCountermeasure(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case FTD_BLOCK:
+                tgc = new FTDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case FTD_FAULT:
+                tgc = new FTDFault(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case FTD_CONSTRAINT:
+                tgc = new FTDConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case FTD_COUNTERMEASURE:
+                tgc = new FTDCountermeasure(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case DIPLODODUSMETHODOLOGY_REF_APPLICATION:
+                tgc = new DiplodocusMethodologyDiagramReferenceToApplication(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case DIPLODODUSMETHODOLOGY_REF_CP:
+                tgc = new DiplodocusMethodologyDiagramReferenceToCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE:
+                tgc = new DiplodocusMethodologyDiagramReferenceToArchitecture(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case DIPLODODUSMETHODOLOGY_REF_MAPPING:
+                tgc = new DiplodocusMethodologyDiagramReferenceToMapping(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case DIPLODODUSMETHODOLOGY_REF_REQUIREMENT:
+                tgc = new DiplodocusMethodologyDiagramReferenceToRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case DIPLODODUSMETHODOLOGY_DIAGRAM_NAME:
+                tgc = new DiplodocusMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+
+            case TMLAD_START_STATE:
+                tgc = new TMLADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_STOP_STATE:
+                tgc = new TMLADStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_WRITE_CHANNEL:
+                tgc = new TMLADWriteChannel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_READ_CHANNEL:
+                tgc = new TMLADReadChannel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_SEND_REQUEST:
+                tgc = new TMLADSendRequest(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_SEND_EVENT:
+                tgc = new TMLADSendEvent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_WAIT_EVENT:
+                tgc = new TMLADWaitEvent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_NOTIFIED_EVENT:
+                tgc = new TMLADNotifiedEvent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLTD_TASK:
+                tgc = new TMLTaskOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLTD_CHANNEL_OPERATOR:
+                tgc = new TMLChannelOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLTD_EVENT_OPERATOR:
+                tgc = new TMLEventOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLTD_REQUEST_OPERATOR:
+                tgc = new TMLRequestOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_ACTION_STATE:
+                tgc = new TMLADActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_CHOICE:
+                tgc = new TMLADChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_EXECI:
+                tgc = new TMLADExecI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_EXECI_INTERVAL:
+                tgc = new TMLADExecIInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_EXECC:
+                tgc = new TMLADExecC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_EXECC_INTERVAL:
+                tgc = new TMLADExecCInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_DELAY:
+                tgc = new TMLADDelay(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_INTERVAL_DELAY:
+                tgc = new TMLADDelayInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_FOR_LOOP:
+                tgc = new TMLADForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_FOR_STATIC_LOOP:
+                tgc = new TMLADForStaticLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_FOR_EVER_LOOP:
+                tgc = new TMLADForEverLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_READ_REQUEST_ARG:
+                tgc = new TMLADReadRequestArg(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_SEQUENCE:
+                tgc = new TMLADSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_UNORDERED_SEQUENCE:
+                tgc = new TMLADUnorderedSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_SELECT_EVT:
+                tgc = new TMLADSelectEvt(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_RANDOM:
+                tgc = new TMLADRandom(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_ENCRYPT:
+                tgc = new TMLADEncrypt(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_DECRYPT:
+                tgc = new TMLADDecrypt(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCTD_CCOMPONENT:
+                tgc = new TMLCCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCTD_CREMOTECOMPONENT:
+                tgc = new TMLCRemoteCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCTD_CREMOTEPORTCOMPONENT:
+                tgc = new TMLCRemotePortCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCTD_CPORT:
+                tgc = new TMLCCompositePort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCTD_JOIN:
+                tgc = new TMLCJoin(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCTD_FORK:
+                tgc = new TMLCFork(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCTD_PCOMPONENT:
+                tgc = new TMLCPrimitiveComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCTD_RCOMPONENT:
+                tgc = new TMLCRecordComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCTD_COPORT:
+                tgc = new TMLCChannelOutPort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_CPUNODE:
+                tgc = new TMLArchiCPUNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_FPGANODE:
+                tgc = new TMLArchiFPGANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_BUSNODE:
+                tgc = new TMLArchiBUSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_VGMNNODE:
+                tgc = new TMLArchiVGMNNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_CROSSBARNODE:
+                tgc = new TMLArchiCrossbarNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_CPNODE:
+                tgc = new TMLArchiCPNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_BRIDGENODE:
+                tgc = new TMLArchiBridgeNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_FIREWALL:
+                tgc = new TMLArchiFirewallNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_HWANODE:
+                tgc = new TMLArchiHWANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_CAMSNODE:
+                tgc = new TMLArchiCAMSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_MEMORYNODE:
+                tgc = new TMLArchiMemoryNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_DMANODE:
+                tgc = new TMLArchiDMANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_ARTIFACT:
+                tgc = new TMLArchiArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_COMMUNICATION_ARTIFACT:
+                tgc = new TMLArchiCommunicationArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_PORT_ARTIFACT:
+                tgc = new TMLArchiPortArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_EVENT_ARTIFACT:
+                tgc = new TMLArchiEventArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLARCHI_KEY:
+                tgc = new TMLArchiKey(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case CAMS_BLOCK:
+                tgc = new CAMSBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
             // Communication patterns + SD
-        case TMLCP_CHOICE:
-            tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCP_FORK:
-            tgc = new TMLCPFork(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCP_JOIN:
-            tgc = new TMLCPJoin(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCP_REF_CP:
-            tgc = new TMLCPRefAD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCP_REF_SD:
-            tgc = new TMLCPRefSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCP_START_STATE:
-            tgc = new TMLCPStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCP_STOP_STATE:
-            tgc = new TMLCPStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCP_JUNCTION:
-            tgc = new TMLCPJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLCP_FOR_LOOP:
-            tgc = new TMLCPForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLSD_ACTION_STATE:
-            tgc = new TMLSDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLSD_STORAGE_INSTANCE:
-            tgc = new TMLSDStorageInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLSD_CONTROLLER_INSTANCE:
-            tgc = new TMLSDControllerInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TMLSD_TRANSFER_INSTANCE:
-            tgc = new TMLSDTransferInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case TMLCP_CHOICE:
+                tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_FORK:
+                tgc = new TMLCPFork(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_JOIN:
+                tgc = new TMLCPJoin(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_REF_CP:
+                tgc = new TMLCPRefAD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_REF_SD:
+                tgc = new TMLCPRefSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_START_STATE:
+                tgc = new TMLCPStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_STOP_STATE:
+                tgc = new TMLCPStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_JUNCTION:
+                tgc = new TMLCPJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_FOR_LOOP:
+                tgc = new TMLCPForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLSD_ACTION_STATE:
+                tgc = new TMLSDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLSD_STORAGE_INSTANCE:
+                tgc = new TMLSDStorageInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLSD_CONTROLLER_INSTANCE:
+                tgc = new TMLSDControllerInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLSD_TRANSFER_INSTANCE:
+                tgc = new TMLSDTransferInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
             // Requirements
-        case TREQ_REQUIREMENT:
-            tgc = new Requirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TREQ_OBSERVER:
-            tgc = new RequirementObserver(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TREQ_EBRDD:
-            tgc = new EBRDDObserver(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case NCDD_EQNODE:
-            tgc = new NCEqNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case NCDD_SWITCHNODE:
-            tgc = new NCSwitchNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case NCDD_TRAFFIC_ARTIFACT:
-            tgc = new NCTrafficArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case NCDD_ROUTE_ARTIFACT:
-            tgc = new NCRouteArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROSMD_START_STATE:
-            tgc = new ProSMDStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROSMD_STOP_STATE:
-            tgc = new ProSMDStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROSMD_SENDMSG:
-            tgc = new ProSMDSendMsg(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROSMD_GETMSG:
-            tgc = new ProSMDGetMsg(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROSMD_CHOICE:
-            tgc = new ProSMDChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROSMD_JUNCTION:
-            tgc = new ProSMDJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROSMD_SUBMACHINE:
-            tgc = new ProSMDSubmachine(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROSMD_ACTION:
-            tgc = new ProSMDAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROSMD_PARALLEL:
-            tgc = new ProSMDParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROSMD_STATE:
-            tgc = new ProSMDState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROCSD_COMPONENT:
-            tgc = new ProCSDComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
+            case TREQ_REQUIREMENT:
+                tgc = new Requirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TREQ_OBSERVER:
+                tgc = new RequirementObserver(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TREQ_EBRDD:
+                tgc = new EBRDDObserver(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case NCDD_EQNODE:
+                tgc = new NCEqNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case NCDD_SWITCHNODE:
+                tgc = new NCSwitchNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case NCDD_TRAFFIC_ARTIFACT:
+                tgc = new NCTrafficArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case NCDD_ROUTE_ARTIFACT:
+                tgc = new NCRouteArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROSMD_START_STATE:
+                tgc = new ProSMDStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROSMD_STOP_STATE:
+                tgc = new ProSMDStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROSMD_SENDMSG:
+                tgc = new ProSMDSendMsg(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROSMD_GETMSG:
+                tgc = new ProSMDGetMsg(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROSMD_CHOICE:
+                tgc = new ProSMDChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROSMD_JUNCTION:
+                tgc = new ProSMDJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROSMD_SUBMACHINE:
+                tgc = new ProSMDSubmachine(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROSMD_ACTION:
+                tgc = new ProSMDAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROSMD_PARALLEL:
+                tgc = new ProSMDParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROSMD_STATE:
+                tgc = new ProSMDState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROCSD_COMPONENT:
+                tgc = new ProCSDComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             /* No more delegate ports, by Solange
                case PROCSD_DELEGATE_PORT:
                tgc = new ProCSDDelegatePort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                break; */
-        case PROCSD_IN_PORT:
-            tgc = new ProCSDInPort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROCSD_OUT_PORT:
-            tgc = new ProCSDOutPort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case PROCSD_INTERFACE:
-            tgc = new ProCSDInterface(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TOSCD_TCLASS:
-            tgc = new TOSClass(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TOSCD_CALL_OPERATOR:
-            tgc = new TOSCallOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TOSCD_EVT_OPERATOR:
-            tgc = new TOSEvtOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TOSAD_ACTION_STATE:
-            tgc = new TOSADActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TOSAD_CHOICE:
-            tgc = new TOSADChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TOSAD_START_STATE:
-            tgc = new TOSADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TOSAD_STOP_STATE:
-            tgc = new TOSADStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TOSAD_JUNCTION:
-            tgc = new TOSADJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TOSAD_TIME_INTERVAL:
-            tgc = new TOSADTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        case TOSAD_INT_TIME_INTERVAL:
-            tgc = new TOSADIntTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            break;
-        default:
-            break;
+            case PROCSD_IN_PORT:
+                tgc = new ProCSDInPort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROCSD_OUT_PORT:
+                tgc = new ProCSDOutPort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case PROCSD_INTERFACE:
+                tgc = new ProCSDInterface(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TOSCD_TCLASS:
+                tgc = new TOSClass(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TOSCD_CALL_OPERATOR:
+                tgc = new TOSCallOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TOSCD_EVT_OPERATOR:
+                tgc = new TOSEvtOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TOSAD_ACTION_STATE:
+                tgc = new TOSADActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TOSAD_CHOICE:
+                tgc = new TOSADChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TOSAD_START_STATE:
+                tgc = new TOSADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TOSAD_STOP_STATE:
+                tgc = new TOSADStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TOSAD_JUNCTION:
+                tgc = new TOSADJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TOSAD_TIME_INTERVAL:
+                tgc = new TOSADTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TOSAD_INT_TIME_INTERVAL:
+                tgc = new TOSADIntTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            default:
+                break;
         }
         return tgc;
     }
 
 
     public final static int getType(TGComponent tgc) {
-	// PLUGIN
+        // PLUGIN
         if (tgc instanceof TGComponentPlugin) {
             return COMPONENT_PLUGIN;
 
-	    // AVATAR BD    
+            // AVATAR BD
         } else if (tgc instanceof AvatarBDBlock) {
             return AVATARBD_BLOCK;
-	} else if (tgc instanceof AvatarBDDataType) {
+        } else if (tgc instanceof AvatarBDDataType) {
             return AVATARBD_DATATYPE;
         } else if (tgc instanceof AvatarBDCompositionConnector) {
             return AVATARBD_COMPOSITION_CONNECTOR;
@@ -1394,7 +1398,6 @@ public class TGComponentManager {
             return AVATARBD_PORT_CONNECTOR;
         } else if (tgc instanceof AvatarBDLibraryFunction) {
             return AVATARBD_LIBRARYFUNCTION;
-
 
 
             // AVATAR SMD
@@ -1481,30 +1484,29 @@ public class TGComponentManager {
         } else if (tgc instanceof SysmlsecMethodologyReferenceToAssumptions) {
             return SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToRequirement) {
-            return  SYSMLSEC_METHODOLOGY_REF_REQUIREMENT;
+            return SYSMLSEC_METHODOLOGY_REF_REQUIREMENT;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToAnalysis) {
-            return  SYSMLSEC_METHODOLOGY_REF_ANALYSIS;
+            return SYSMLSEC_METHODOLOGY_REF_ANALYSIS;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToDesign) {
-            return  SYSMLSEC_METHODOLOGY_REF_DESIGN;
+            return SYSMLSEC_METHODOLOGY_REF_DESIGN;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToProperties) {
-            return  SYSMLSEC_METHODOLOGY_REF_PROPERTIES;
+            return SYSMLSEC_METHODOLOGY_REF_PROPERTIES;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToPrototype) {
-            return  SYSMLSEC_METHODOLOGY_REF_PROTOTYPE;
+            return SYSMLSEC_METHODOLOGY_REF_PROTOTYPE;
         } else if (tgc instanceof SysmlsecMethodologyDiagramName) {
-            return  SYSMLSEC_METHODOLOGY_DIAGRAM_NAME;
+            return SYSMLSEC_METHODOLOGY_DIAGRAM_NAME;
         } else if (tgc instanceof SysmlsecMethodologyConnector) {
-            return  SYSMLSEC_METHODOLOGY_CONNECTOR;
+            return SYSMLSEC_METHODOLOGY_CONNECTOR;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToApplication) {
-            return  SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW;
+            return SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToArchitecture) {
-            return  SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW;
+            return SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToCP) {
-            return  SYSMLSEC_METHODOLOGY_REF_CP_VIEW;
+            return SYSMLSEC_METHODOLOGY_REF_CP_VIEW;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToMapping) {
-            return  SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW;
+            return SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToAttack) {
-            return  SYSMLSEC_METHODOLOGY_REF_ATTACK;
-
+            return SYSMLSEC_METHODOLOGY_REF_ATTACK;
 
 
             // AVATAR MAD
@@ -1584,100 +1586,100 @@ public class TGComponentManager {
             return ACD_ACTOR_BOX;
         } else if (tgc instanceof AvatarCDCompositionConnector) {
             return ACD_COMPOSITION_CONNECTOR;
-        }  else if (tgc instanceof AvatarCDAssociationConnector) {
+        } else if (tgc instanceof AvatarCDAssociationConnector) {
             return ACD_ASSOCIATION_CONNECTOR;
 
             // AVATAR CD
-        }  else if (tgc instanceof AvatarADStartState) {
+        } else if (tgc instanceof AvatarADStartState) {
             return AAD_START_STATE;
-        }  else if (tgc instanceof AvatarADStopState) {
+        } else if (tgc instanceof AvatarADStopState) {
             return AAD_STOP_STATE;
-        }  else if (tgc instanceof AvatarADChoice) {
+        } else if (tgc instanceof AvatarADChoice) {
             return AAD_CHOICE;
-        }  else if (tgc instanceof AvatarADJunction) {
+        } else if (tgc instanceof AvatarADJunction) {
             return AAD_JUNCTION;
-        }  else if (tgc instanceof AvatarADParallel) {
+        } else if (tgc instanceof AvatarADParallel) {
             return AAD_PARALLEL;
-        }  else if (tgc instanceof AvatarADAction) {
+        } else if (tgc instanceof AvatarADAction) {
             return AAD_ACTION;
-        }  else if (tgc instanceof AvatarADActivity) {
+        } else if (tgc instanceof AvatarADActivity) {
             return AAD_ACTIVITY;
-        }  else if (tgc instanceof AvatarADStopFlow) {
+        } else if (tgc instanceof AvatarADStopFlow) {
             return AAD_STOP_FLOW;
-        }  else if (tgc instanceof AvatarADSendSignalAction) {
+        } else if (tgc instanceof AvatarADSendSignalAction) {
             return AAD_SEND_SIGNAL_ACTION;
-        }  else if (tgc instanceof AvatarADAcceptEventAction) {
+        } else if (tgc instanceof AvatarADAcceptEventAction) {
             return AAD_ACCEPT_EVENT_ACTION;
-        }  else if (tgc instanceof AvatarADPartition) {
+        } else if (tgc instanceof AvatarADPartition) {
             return AAD_PARTITION;
-        }  else if (tgc instanceof AvatarADAssociationConnector) {
+        } else if (tgc instanceof AvatarADAssociationConnector) {
             return AAD_ASSOCIATION_CONNECTOR;
 
-	    //SystemC-AMS -----mark
-	} else if (tgc instanceof CAMSBlockConnector) {
-	    return CAMS_CONNECTOR;
+            //SystemC-AMS -----mark
+        } else if (tgc instanceof CAMSBlockConnector) {
+            return CAMS_CONNECTOR;
 
             // Others
-        } else if (tgc instanceof       TADDeterministicDelay) {
-            return      TAD_DETERMINISTIC_DELAY;
+        } else if (tgc instanceof TADDeterministicDelay) {
+            return TAD_DETERMINISTIC_DELAY;
         } else if (tgc instanceof TADParallel) {
             return TAD_PARALLEL;
         } else if (tgc instanceof TADStopState) {
-            return      TAD_STOP_STATE;
+            return TAD_STOP_STATE;
         } else if (tgc instanceof TADStartState) {
-            return      TAD_START_STATE;
+            return TAD_START_STATE;
         } else if (tgc instanceof TADActionState) {
-            return      TAD_ACTION_STATE;
+            return TAD_ACTION_STATE;
         } else if (tgc instanceof TADArrayGetState) {
-            return      TAD_ARRAY_GET;
+            return TAD_ARRAY_GET;
         } else if (tgc instanceof TADArraySetState) {
-            return      TAD_ARRAY_SET;
+            return TAD_ARRAY_SET;
         } else if (tgc instanceof TADTimeLimitedOffer) {
-            return      TAD_TIME_LIMITED_OFFER;
+            return TAD_TIME_LIMITED_OFFER;
         } else if (tgc instanceof TADJunction) {
-            return      TAD_JUNCTION;
+            return TAD_JUNCTION;
         } else if (tgc instanceof TADNonDeterministicDelay) {
-            return      TAD_NON_DETERMINISTIC_DELAY;
+            return TAD_NON_DETERMINISTIC_DELAY;
         } else if (tgc instanceof TADTimeInterval) {
-            return      TAD_DELAY_NON_DETERMINISTIC_DELAY;
+            return TAD_DELAY_NON_DETERMINISTIC_DELAY;
         } else if (tgc instanceof TADTimeLimitedOfferWithLatency) {
-            return      TAD_TIME_LIMITED_OFFER_WITH_LATENCY;
+            return TAD_TIME_LIMITED_OFFER_WITH_LATENCY;
         } else if (tgc instanceof TADTimeCapture) {
-            return      TAD_TIME_CAPTURE;
+            return TAD_TIME_CAPTURE;
         } else if (tgc instanceof TADChoice) {
-            return      TAD_CHOICE;
+            return TAD_CHOICE;
         } else if (tgc instanceof TCDTClass) {
-            return      TCD_TCLASS;
+            return TCD_TCLASS;
         } else if (tgc instanceof TCDTObject) {
-            return      TCD_TOBJECT;
+            return TCD_TOBJECT;
         } else if (tgc instanceof TCDTData) {
-            return      TCD_TDATA;
+            return TCD_TDATA;
         } else if (tgc instanceof TCDParallelOperator) {
-            return      TCD_PARALLEL_OPERATOR;
+            return TCD_PARALLEL_OPERATOR;
         } else if (tgc instanceof TCDSequenceOperator) {
-            return      TCD_SEQUENCE_OPERATOR;
+            return TCD_SEQUENCE_OPERATOR;
         } else if (tgc instanceof TCDPreemptionOperator) {
-            return      TCD_PREEMPTION_OPERATOR;
+            return TCD_PREEMPTION_OPERATOR;
         } else if (tgc instanceof TCDSynchroOperator) {
-            return      TCD_SYNCHRO_OPERATOR;
-        }  else if (tgc instanceof TCDInvocationOperator) {
-            return      TCD_INVOCATION_OPERATOR;
+            return TCD_SYNCHRO_OPERATOR;
+        } else if (tgc instanceof TCDInvocationOperator) {
+            return TCD_INVOCATION_OPERATOR;
         } else if (tgc instanceof TCDWatchdogOperator) {
-            return      TCD_WATCHDOG_OPERATOR;
+            return TCD_WATCHDOG_OPERATOR;
         } else if (tgc instanceof TGConnectorFullArrow) {
-            return      CONNECTOR_AD_DIAGRAM;
+            return CONNECTOR_AD_DIAGRAM;
         } else if (tgc instanceof TGConnectorAssociation) {
-            return      CONNECTOR_ASSOCIATION;
+            return CONNECTOR_ASSOCIATION;
         } else if (tgc instanceof TGConnectorAssociationWithNavigation) {
-            return      CONNECTOR_ASSOCIATION_NAVIGATION;
+            return CONNECTOR_ASSOCIATION_NAVIGATION;
         } else if (tgc instanceof TGConnectorAttribute) {
-            return      CONNECTOR_ATTRIBUTE;
+            return CONNECTOR_ATTRIBUTE;
         } else if (tgc instanceof TGConnectorInteraction) {
-            return      CONNECTOR_INTERACTION;
+            return CONNECTOR_INTERACTION;
         } else if (tgc instanceof TGCNote) {
-            return      UML_NOTE;
+            return UML_NOTE;
         } else if (tgc instanceof TGCPanelInfo) {
-            return      INFO_PANEL;
+            return INFO_PANEL;
         } else if (tgc instanceof IODChoice) {
             return IOD_CHOICE;
         } else if (tgc instanceof IODStartState) {
@@ -1723,7 +1725,7 @@ public class TGComponentManager {
         } else if (tgc instanceof ui.sd.SDCoregion) {
             return SD_COREGION;
 
-	} else if (tgc instanceof ui.sd2.TGConnectorMessageAsyncSD) {
+        } else if (tgc instanceof ui.sd2.TGConnectorMessageAsyncSD) {
             return CONNECTOR_MESSAGE_ASYNC_SDZV;
         } else if (tgc instanceof ui.sd2.TGConnectorMessageSyncSD) {
             return CONNECTOR_MESSAGE_SYNC_SDZV;
@@ -1751,7 +1753,7 @@ public class TGComponentManager {
             return SDZV_TIMER_CANCELLATION;
         } else if (tgc instanceof ui.sd2.SDCoregion) {
             return SDZV_COREGION;
-	    
+
         } else if (tgc instanceof UCDActor) {
             return UCD_ACTOR;
         } else if (tgc instanceof UCDActorBox) {
@@ -1800,12 +1802,12 @@ public class TGComponentManager {
             return EBRDD_ESO;
         } else if (tgc instanceof EBRDDERB) {
             return EBRDD_ERB;
-	    
+
         } else if (tgc instanceof ATDBlock) {
             return ATD_BLOCK;
         } else if (tgc instanceof ATDAttack) {
             return ATD_ATTACK;
-	} else if (tgc instanceof ATDCountermeasure) {
+        } else if (tgc instanceof ATDCountermeasure) {
             return ATD_COUNTERMEASURE;
         } else if (tgc instanceof ATDConstraint) {
             return ATD_CONSTRAINT;
@@ -1813,14 +1815,14 @@ public class TGComponentManager {
             return ATD_COMPOSITION_CONNECTOR;
         } else if (tgc instanceof ATDAttackConnector) {
             return ATD_ATTACK_CONNECTOR;
-	} else if (tgc instanceof ATDCountermeasureConnector) {
+        } else if (tgc instanceof ATDCountermeasureConnector) {
             return ATD_COUNTERMEASURE_CONNECTOR;
-	    
-	} else if (tgc instanceof FTDBlock) {
+
+        } else if (tgc instanceof FTDBlock) {
             return FTD_BLOCK;
         } else if (tgc instanceof FTDFault) {
             return FTD_FAULT;
-	} else if (tgc instanceof FTDCountermeasure) {
+        } else if (tgc instanceof FTDCountermeasure) {
             return FTD_COUNTERMEASURE;
         } else if (tgc instanceof FTDConstraint) {
             return FTD_CONSTRAINT;
@@ -1828,9 +1830,9 @@ public class TGComponentManager {
             return FTD_COMPOSITION_CONNECTOR;
         } else if (tgc instanceof FTDFaultConnector) {
             return FTD_FAULT_CONNECTOR;
-	} else if (tgc instanceof FTDCountermeasureConnector) {
+        } else if (tgc instanceof FTDCountermeasureConnector) {
             return FTD_COUNTERMEASURE_CONNECTOR;
-	    
+
         } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToApplication) {
             return DIPLODODUSMETHODOLOGY_REF_APPLICATION;
         } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToCP) {
@@ -1932,6 +1934,8 @@ public class TGComponentManager {
             return CONNECTOR_NODE_TMLARCHI;
         } else if (tgc instanceof TMLArchiCPUNode) {
             return TMLARCHI_CPUNODE;
+        } else if (tgc instanceof TMLArchiFPGANode) {
+            return TMLARCHI_FPGANODE;
         } else if (tgc instanceof TMLArchiBUSNode) {
             return TMLARCHI_BUSNODE;
         } else if (tgc instanceof TMLArchiVGMNNode) {
@@ -1944,12 +1948,12 @@ public class TGComponentManager {
             return TMLARCHI_BRIDGENODE;
         } else if (tgc instanceof TMLArchiFirewallNode) {
             return TMLARCHI_FIREWALL;
-	} else if (tgc instanceof AvatarBDFirewall) {
-	    return AVATAR_FIREWALL;
+        } else if (tgc instanceof AvatarBDFirewall) {
+            return AVATAR_FIREWALL;
         } else if (tgc instanceof TMLArchiHWANode) {
             return TMLARCHI_HWANODE;
-	} else if (tgc instanceof TMLArchiCAMSNode) {
-	    return TMLARCHI_CAMSNODE;
+        } else if (tgc instanceof TMLArchiCAMSNode) {
+            return TMLARCHI_CAMSNODE;
         } else if (tgc instanceof TMLArchiMemoryNode) {
             return TMLARCHI_MEMORYNODE;
         } else if (tgc instanceof TMLArchiDMANode) {
@@ -1998,8 +2002,6 @@ public class TGComponentManager {
             return CONNECTOR_MESSAGE_ASYNC_TMLSD;
 
 
-
-
         } else if (tgc instanceof TGConnectorComment) {
             return CONNECTOR_COMMENT;
         } else if (tgc instanceof Requirement) {
@@ -2042,12 +2044,9 @@ public class TGComponentManager {
             return PROSMD_PARALLEL;
         } else if (tgc instanceof ProSMDState) {
             return PROSMD_STATE;
-        }
-        else if (tgc instanceof TGConnectorPortInterface) {
+        } else if (tgc instanceof TGConnectorPortInterface) {
             return CONNECTOR_PROCSD_PORT_INTERFACE;
-        }
-
-        else if (tgc instanceof ProCSDComponent) {
+        } else if (tgc instanceof ProCSDComponent) {
             return PROCSD_COMPONENT;
 
             /* No more delegate ports, by Solange
@@ -2102,262 +2101,262 @@ public class TGComponentManager {
     public final static TGConnector addConnector(int x, int y, int id, TDiagramPanel tdp, TGConnectingPoint p1, TGConnectingPoint p2, Vector<Point> listPoint) {
         TGConnector tgc = null;
 
-        switch(id) {
+        switch (id) {
             // AVATAR
             // AVATAR BD
-        case AVATARBD_COMPOSITION_CONNECTOR:
-            tgc = new AvatarBDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case AVATARBD_PORT_CONNECTOR:
-            tgc = new AvatarBDPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case AVATARBD_COMPOSITION_CONNECTOR:
+                tgc = new AvatarBDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARBD_PORT_CONNECTOR:
+                tgc = new AvatarBDPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
             // AVATAR SMD
-        case AVATARSMD_CONNECTOR:
-            tgc = new AvatarSMDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case AVATARSMD_CONNECTOR:
+                tgc = new AvatarSMDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
 
             // AVATAR Methodology
-        case AVATARMETHODOLOGY_CONNECTOR:
-            tgc = new AvatarMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case AVATARMETHODOLOGY_CONNECTOR:
+                tgc = new AvatarMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
             // SysML-Sec Methodology
-        case SYSMLSEC_METHODOLOGY_CONNECTOR:
-            tgc = new SysmlsecMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case SYSMLSEC_METHODOLOGY_CONNECTOR:
+                tgc = new SysmlsecMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
-	//     // System C-AMS
-	// case CAMS_CONNECTOR:
-	//     tgc = new CAMSBlockConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-	//     break;
+            //     // System C-AMS
+            // case CAMS_CONNECTOR:
+            //     tgc = new CAMSBlockConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            //     break;
 
             // AVATAR MAD
-        case AVATARMAD_COMPOSITION_CONNECTOR:
-            tgc = new AvatarMADCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case AVATARMAD_VERSIONING_CONNECTOR:
-            tgc = new AvatarMADVersioningConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case AVATARMAD_IMPACT_CONNECTOR:
-            tgc = new AvatarMADImpactConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case AVATARMAD_MEET_CONNECTOR:
-            tgc = new AvatarMADMeetConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR:
-            tgc = new AvatarMADBelongsToCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case AVATARMAD_COMPOSITION_CONNECTOR:
+                tgc = new AvatarMADCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARMAD_VERSIONING_CONNECTOR:
+                tgc = new AvatarMADVersioningConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARMAD_IMPACT_CONNECTOR:
+                tgc = new AvatarMADImpactConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARMAD_MEET_CONNECTOR:
+                tgc = new AvatarMADMeetConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR:
+                tgc = new AvatarMADBelongsToCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
             // AVATAR RD
-        case AVATARRD_DERIVE_CONNECTOR:
-            tgc = new AvatarRDDeriveConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case AVATARRD_SATISFY_CONNECTOR:
-            tgc = new AvatarRDSatisfyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case AVATARRD_REFINE_CONNECTOR:
-            tgc = new AvatarRDRefineConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case AVATARRD_VERIFY_CONNECTOR:
-            tgc = new AvatarRDVerifyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case AVATARRD_COPY_CONNECTOR:
-            tgc = new AvatarRDCopyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case AVATARRD_COMPOSITION_CONNECTOR:
-            tgc = new AvatarRDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case AVATARRD_DERIVE_CONNECTOR:
+                tgc = new AvatarRDDeriveConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARRD_SATISFY_CONNECTOR:
+                tgc = new AvatarRDSatisfyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARRD_REFINE_CONNECTOR:
+                tgc = new AvatarRDRefineConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARRD_VERIFY_CONNECTOR:
+                tgc = new AvatarRDVerifyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARRD_COPY_CONNECTOR:
+                tgc = new AvatarRDCopyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARRD_COMPOSITION_CONNECTOR:
+                tgc = new AvatarRDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
             // AVATAR CD
-        case ACD_COMPOSITION_CONNECTOR:
-            tgc = new AvatarCDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case ACD_ASSOCIATION_CONNECTOR:
-            tgc = new AvatarCDAssociationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case ACD_COMPOSITION_CONNECTOR:
+                tgc = new AvatarCDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case ACD_ASSOCIATION_CONNECTOR:
+                tgc = new AvatarCDAssociationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
             // AVATAR AD
-        case AAD_ASSOCIATION_CONNECTOR:
-            tgc = new AvatarADAssociationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case AAD_ASSOCIATION_CONNECTOR:
+                tgc = new AvatarADAssociationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
             // AVATAR DD
-        case ADD_CONNECTOR:
-            tgc = new ADDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            //DG 21.02.
+            case ADD_CONNECTOR:
+                tgc = new ADDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                //DG 21.02.
 
-            addconnectors.add((ADDConnector)tgc);//DG 21.02.
-            break;
+                addconnectors.add((ADDConnector) tgc);//DG 21.02.
+                break;
 
             // AVATAR PD
-        case APD_ATTRIBUTE_CONNECTOR:
-            tgc = new AvatarPDAttributeConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case APD_SIGNAL_CONNECTOR:
-            tgc = new AvatarPDSignalConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case APD_PROPERTY_CONNECTOR:
-            tgc = new AvatarPDPropertyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case APD_COMPOSITION_CONNECTOR:
-            tgc = new AvatarPDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case APD_ATTRIBUTE_CONNECTOR:
+                tgc = new AvatarPDAttributeConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case APD_SIGNAL_CONNECTOR:
+                tgc = new AvatarPDSignalConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case APD_PROPERTY_CONNECTOR:
+                tgc = new AvatarPDPropertyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case APD_COMPOSITION_CONNECTOR:
+                tgc = new AvatarPDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
             // Others
-        case CONNECTOR_AD_DIAGRAM:
-            tgc = new TGConnectorFullArrow(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_ASSOCIATION:
-            tgc = new TGConnectorAssociation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_ASSOCIATION_NAVIGATION:
-            tgc = new TGConnectorAssociationWithNavigation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_ATTRIBUTE:
-            tgc = new TGConnectorAttribute(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_INTERACTION:
-            tgc = new TGConnectorInteraction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            //System.out.println("Connector interaction");
-            break;
-        case CONNECTOR_MESSAGE_ASYNC_SD:
-            tgc = new ui.sd.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            //System.out.println("Connector interaction");
-            break;
-        case CONNECTOR_MESSAGE_SYNC_SD:
-            tgc = new ui.sd.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            //System.out.println("Connector interaction");
-            break;
-        case CONNECTOR_RELATIVE_TIME_SD:
-            tgc = new ui.sd.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            //System.out.println("Connector interaction");
-            break;
-	case CONNECTOR_MESSAGE_ASYNC_SDZV:
-            tgc = new ui.sd2.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            //System.out.println("Connector interaction");
-            break;
-        case CONNECTOR_MESSAGE_SYNC_SDZV:
-            tgc = new ui.sd2.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            //System.out.println("Connector interaction");
-            break;
-        case CONNECTOR_RELATIVE_TIME_SDZV:
-            tgc = new ui.sd2.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            //System.out.println("Connector interaction");
-            break;
-	    
-        case CONNECTOR_ACTOR_UCD:
-            tgc = new TGConnectorUseCase(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_INCLUDE_UCD:
-            tgc = new TGConnectorInclude(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_EXTEND_UCD:
-            tgc = new TGConnectorExtend(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_SPECIA_UCD:
-            tgc = new TGConnectorSpecialization(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_NODE_DD:
-            tgc = new TGConnectorLinkNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_NODE_NC:
-            tgc = new NCConnectorNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_COMMENT:
-            tgc = new TGConnectorComment(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case TOS_CONNECTOR_ASSOCIATION:
-            tgc = new TOSConnectorAssociation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case TOS_CONNECTOR_ASSOCIATION_NAVIGATION:
-            tgc = new TOSConnectorAssociationWithNavigation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case TOS_CONNECTOR_ATTRIBUTE:
-            tgc = new TOSConnectorCompositionOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case TOSAD_CONNECTOR:
-            tgc = new TOSADConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_EBRDD:
-            tgc = new TGConnectorEBRDD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_EBRDD_ERC:
-            tgc = new TGConnectorEBRDDERC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case ATD_COMPOSITION_CONNECTOR:
-            tgc = new ATDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case ATD_ATTACK_CONNECTOR:
-            tgc = new ATDAttackConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-	case ATD_COUNTERMEASURE_CONNECTOR:
-            tgc = new ATDCountermeasureConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case CONNECTOR_AD_DIAGRAM:
+                tgc = new TGConnectorFullArrow(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_ASSOCIATION:
+                tgc = new TGConnectorAssociation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_ASSOCIATION_NAVIGATION:
+                tgc = new TGConnectorAssociationWithNavigation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_ATTRIBUTE:
+                tgc = new TGConnectorAttribute(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_INTERACTION:
+                tgc = new TGConnectorInteraction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                //System.out.println("Connector interaction");
+                break;
+            case CONNECTOR_MESSAGE_ASYNC_SD:
+                tgc = new ui.sd.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                //System.out.println("Connector interaction");
+                break;
+            case CONNECTOR_MESSAGE_SYNC_SD:
+                tgc = new ui.sd.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                //System.out.println("Connector interaction");
+                break;
+            case CONNECTOR_RELATIVE_TIME_SD:
+                tgc = new ui.sd.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                //System.out.println("Connector interaction");
+                break;
+            case CONNECTOR_MESSAGE_ASYNC_SDZV:
+                tgc = new ui.sd2.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                //System.out.println("Connector interaction");
+                break;
+            case CONNECTOR_MESSAGE_SYNC_SDZV:
+                tgc = new ui.sd2.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                //System.out.println("Connector interaction");
+                break;
+            case CONNECTOR_RELATIVE_TIME_SDZV:
+                tgc = new ui.sd2.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                //System.out.println("Connector interaction");
+                break;
 
-	case FTD_COMPOSITION_CONNECTOR:
-            tgc = new FTDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case FTD_FAULT_CONNECTOR:
-            tgc = new FTDFaultConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-	case FTD_COUNTERMEASURE_CONNECTOR:
-            tgc = new FTDCountermeasureConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-	    
+            case CONNECTOR_ACTOR_UCD:
+                tgc = new TGConnectorUseCase(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_INCLUDE_UCD:
+                tgc = new TGConnectorInclude(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_EXTEND_UCD:
+                tgc = new TGConnectorExtend(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_SPECIA_UCD:
+                tgc = new TGConnectorSpecialization(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_NODE_DD:
+                tgc = new TGConnectorLinkNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_NODE_NC:
+                tgc = new NCConnectorNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_COMMENT:
+                tgc = new TGConnectorComment(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case TOS_CONNECTOR_ASSOCIATION:
+                tgc = new TOSConnectorAssociation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case TOS_CONNECTOR_ASSOCIATION_NAVIGATION:
+                tgc = new TOSConnectorAssociationWithNavigation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case TOS_CONNECTOR_ATTRIBUTE:
+                tgc = new TOSConnectorCompositionOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case TOSAD_CONNECTOR:
+                tgc = new TOSADConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_EBRDD:
+                tgc = new TGConnectorEBRDD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_EBRDD_ERC:
+                tgc = new TGConnectorEBRDDERC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case ATD_COMPOSITION_CONNECTOR:
+                tgc = new ATDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case ATD_ATTACK_CONNECTOR:
+                tgc = new ATDAttackConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case ATD_COUNTERMEASURE_CONNECTOR:
+                tgc = new ATDCountermeasureConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
-        case DIPLODOCUSMETHODOLOGY_CONNECTOR:
-            tgc = new DiplodocusMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-
-        case CONNECTOR_TMLAD:
-            tgc = new TGConnectorTMLAD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_PORT_TMLC:
-            tgc = new TMLCPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_NODE_TMLARCHI:
-            tgc = new TMLArchiConnectorNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_TML_ASSOCIATION_NAV:
-            tgc = new TGConnectorTMLAssociationNav(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_TML_COMPOSITION_OPERATOR:
-            tgc = new TGConnectorTMLCompositionOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-
-        case CONNECTOR_TMLCP:
-            tgc = new TGConnectorTMLCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_MESSAGE_ASYNC_TMLSD:
-            tgc = new TGConnectorMessageAsyncTMLSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
+            case FTD_COMPOSITION_CONNECTOR:
+                tgc = new FTDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case FTD_FAULT_CONNECTOR:
+                tgc = new FTDFaultConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case FTD_COUNTERMEASURE_CONNECTOR:
+                tgc = new FTDCountermeasureConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
 
 
-        case CONNECTOR_DERIVE_REQ:
-            tgc = new TGConnectorDerive(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_COPY_REQ:
-            tgc = new TGConnectorCopy(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_COMPOSITION_REQ:
-            tgc = new TGConnectorComposition(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_VERIFY_REQ:
-            tgc = new TGConnectorVerify(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_PROSMD:
-            tgc = new TGConnectorProSMD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_PROCSD:
-            tgc = new TGConnectorProCSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_DELEGATE_PROCSD:
-            tgc = new TGConnectorDelegateProCSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            break;
-        case CONNECTOR_PROCSD_PORT_INTERFACE:
-            tgc = new TGConnectorPortInterface(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            case DIPLODOCUSMETHODOLOGY_CONNECTOR:
+                tgc = new DiplodocusMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+
+            case CONNECTOR_TMLAD:
+                tgc = new TGConnectorTMLAD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_PORT_TMLC:
+                tgc = new TMLCPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_NODE_TMLARCHI:
+                tgc = new TMLArchiConnectorNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_TML_ASSOCIATION_NAV:
+                tgc = new TGConnectorTMLAssociationNav(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_TML_COMPOSITION_OPERATOR:
+                tgc = new TGConnectorTMLCompositionOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+
+            case CONNECTOR_TMLCP:
+                tgc = new TGConnectorTMLCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_MESSAGE_ASYNC_TMLSD:
+                tgc = new TGConnectorMessageAsyncTMLSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+
+
+            case CONNECTOR_DERIVE_REQ:
+                tgc = new TGConnectorDerive(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_COPY_REQ:
+                tgc = new TGConnectorCopy(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_COMPOSITION_REQ:
+                tgc = new TGConnectorComposition(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_VERIFY_REQ:
+                tgc = new TGConnectorVerify(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_PROSMD:
+                tgc = new TGConnectorProSMD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_PROCSD:
+                tgc = new TGConnectorProCSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_DELEGATE_PROCSD:
+                tgc = new TGConnectorDelegateProCSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_PROCSD_PORT_INTERFACE:
+                tgc = new TGConnectorPortInterface(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
 
         }
 
@@ -2367,8 +2366,8 @@ public class TGComponentManager {
 
     public final static CAMSBlockConnector addCAMSConnector(int x, int y, int id, TDiagramPanel tdp, CAMSConnectingPoint p1, CAMSConnectingPoint p2, Vector<Point> listPoint) {
         CAMSBlockConnector cbc = null;
-	cbc = new CAMSBlockConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-	return cbc;
+        cbc = new CAMSBlockConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+        return cbc;
     }
 
 } // Class
