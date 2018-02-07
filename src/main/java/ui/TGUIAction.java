@@ -674,13 +674,13 @@ public class TGUIAction extends AbstractAction {
             }
         }
         putValue(Action.ACTION_COMMAND_KEY, actions[id].ACTION_COMMAND_KEY);
-        if (ConfigurationTTool.ExternalCommand1 != null && ConfigurationTTool.ExternalCommand1.length() > 0) {
+
+        if ((id == EXTERNAL_ACTION_1) && (ConfigurationTTool.ExternalCommand1 != null) && (ConfigurationTTool.ExternalCommand1.length()) > 0) {
             setLongDescription(EXTERNAL_ACTION_1, ConfigurationTTool.ExternalCommand1);
         }
-        if (ConfigurationTTool.ExternalCommand2 != null && ConfigurationTTool.ExternalCommand2.length() > 0) {
+        if ((id == EXTERNAL_ACTION_2) && (ConfigurationTTool.ExternalCommand2 != null) && (ConfigurationTTool.ExternalCommand2.length()) > 0) {
             setLongDescription(EXTERNAL_ACTION_2, ConfigurationTTool.ExternalCommand2);
         }
-
     }
 
     public void setName(int index, String name) {
