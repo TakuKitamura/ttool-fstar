@@ -394,7 +394,7 @@ public class TMLCP extends TMLElement {
         for( i = 0; i < CPlist.size(); i++ )    {
             tempCP = CPlist.get(i);
             System.out.printf( "Activity Diagram n. %d: %s\n", i+1, tempCP.getName() );
-            /*listAttributes = tempCP.getAttributes();
+            /*listAttributes = tempCP.getAttributeList();
 
             //Print attributes
             System.out.printf( "\tAttributes:\n");

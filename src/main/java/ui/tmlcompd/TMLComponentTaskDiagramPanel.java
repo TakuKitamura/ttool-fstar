@@ -1403,7 +1403,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
             if( tgc instanceof TMLCCompositeComponent ) {
                 for( TMLCPrimitiveComponent primComp: ((TMLCCompositeComponent)tgc).getAllPrimitiveComponents() ) {
-                    for( Object o: primComp.getAttributes() )   {
+                    for( Object o: primComp.getAttributeList() )   {
                         String s = o.toString();
                         list.add( primComp.getValue() + "." + s.substring( 2, s.length()-1 ) );
                     }

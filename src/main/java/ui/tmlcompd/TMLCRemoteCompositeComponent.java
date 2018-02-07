@@ -734,10 +734,10 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 	/*public void drawWithAttributes(Graphics g) {
 		if (this instanceof WithAttributes) {
 			if (tdp.getAttributeState() == 2) {
-				drawAttributes(g, ((WithAttributes)this).getAttributes(), true, 0, 0);
+				drawAttributes(g, ((WithAttributes)this).getAttributeList(), true, 0, 0);
 			} else {
 				if((state == TGState.POINTER_ON_ME) && (tdp.getAttributeState() == 1)){
-					drawAttributes(g, ((WithAttributes)this).getAttributes(), false, tdp.currentX, tdp.currentY);
+					drawAttributes(g, ((WithAttributes)this).getAttributeList(), false, tdp.currentX, tdp.currentY);
 				}
 			}
 		}
@@ -769,7 +769,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 				GraphicLib.dashedLine(g, xp, yp, xp+s2, yp);
 				GraphicLib.dashedLine(g, xp+s2, yp, xp+s2+s3, yp+s3);
 				
-				Point p1 = drawCode(g, port.getAttributes(), xp+s2+s3, yp+s3, true, false, 4);
+				Point p1 = drawCode(g, port.getAttributeList(), xp+s2+s3, yp+s3, true, false, 4);
 			
 				int w = p1.x;
 				int h = p1.y-yp+s3;

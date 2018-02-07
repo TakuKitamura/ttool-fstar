@@ -38,8 +38,6 @@
  */
 
 
-
-
 package ui;
 
 import myutil.Conversion;
@@ -75,6 +73,7 @@ import java.util.Vector;
  * @version 1.0 21/12/2003
  * @author Ludovic APVRILLE
  */
+
 public abstract class TGComponent implements CDElement, GenericTree {
 
     protected final static String XML_HEAD = "<COMPONENT type=\"";
@@ -310,6 +309,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public String getStatusInformation() {
+
+        if (this instanceof WithAttributes)
+            return ((WithAttributes)(this)).getAttributes().replaceAll("\n", " / ");
+
         return " ";
     }
 

@@ -1514,7 +1514,7 @@ public class GTMLModeling  {
     }
 
     private void addAttributesTo(TMLTask tmltask, TMLCPrimitiveComponent tmlcpc) {
-        List<TAttribute> attributes = tmlcpc.getAttributes();
+        List<TAttribute> attributes = tmlcpc.getAttributeList();
         addAttributesTo(tmlcpc, tmltask, attributes);
     }
 
@@ -3021,7 +3021,7 @@ public class GTMLModeling  {
           TraceManager.addDev( "**********" );
           TraceManager.addDev( "DIAGRAM " + seqDiag.getName() );
           for( tmltranslator.tmlcp.TMLSDInstance instance: seqDiag.getInstances() )   {
-          TraceManager.addDev( "INSTANCE: " + instance.getName() + "\n" + instance.getAttributes() );
+          TraceManager.addDev( "INSTANCE: " + instance.getName() + "\n" + instance.getAttributeList() );
           }
           }*/
 

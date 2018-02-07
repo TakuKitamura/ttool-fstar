@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.avatarrd;
 
 
@@ -58,11 +56,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
-   * Class AvatarRDRequirement
-   * Avatar requirement: to be used in requirement diagram of AVATAR
-   * Creation: 20/04/2010
-   * @version 1.0 20/04/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarRDRequirement
+ * Avatar requirement: to be used in requirement diagram of AVATAR
+ * Creation: 20/04/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 20/04/2010
  */
 public class AvatarRDRequirement extends TGCScalableWithInternalComponent implements WithAttributes, TGAutoAdjust {
     public String oldValue;
@@ -77,7 +76,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     //protected int iconSize = 30;
 
     private Font myFont, myFontB;
-   // private int maxFontSize = 30;
+    // private int maxFontSize = 30;
     private int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
@@ -94,7 +93,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     public final static int LOW = 2;
 
     protected String text;
-    protected String []texts;
+    protected String[] texts;
     protected String kind = "";
     protected String criticality = "";
     protected int reqType = 0;
@@ -113,19 +112,19 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     private JMenuItem menuSatisfied = null;
     private JMenuItem menuNonVerified = null;
     private JMenuItem menuVerified = null;
-    JMenuItem editAttributes = null;
+    private JMenuItem editAttributes = null;
 
 
     // Icon
     private int iconSize = 18;
- //   private boolean iconIsDrawn = false;
+    //   private boolean iconIsDrawn = false;
 
-    public AvatarRDRequirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarRDRequirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         initScaling(200, 120);
         oldScaleFactor = tdp.getZoom();
         dlineHeight = lineHeight * oldScaleFactor;
-        lineHeight = (int)dlineHeight;
+        lineHeight = (int) dlineHeight;
         dlineHeight = dlineHeight - lineHeight;
 
         minWidth = 1;
@@ -161,19 +160,19 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         connectingPoint[25] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
         connectingPoint[26] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
         connectingPoint[27] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
-	int i = 28;
-	connectingPoint[0+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.0, 0.25);
-        connectingPoint[1+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[2+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.0, 0.75);
-        connectingPoint[3+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 1.0, 0.25);
-        connectingPoint[4+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 1.0, 0.5);
-        connectingPoint[5+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 1.0, 0.75);
-        connectingPoint[6+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.25, 0.0);
-        connectingPoint[7+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.5, 0.0);
-        connectingPoint[8+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.75, 0.0);
-        connectingPoint[9+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.25, 1.0);
-        connectingPoint[10+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.5, 1.0);
-        connectingPoint[11+i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.75, 1.0);
+        int i = 28;
+        connectingPoint[0 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.0, 0.25);
+        connectingPoint[1 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.0, 0.5);
+        connectingPoint[2 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.0, 0.75);
+        connectingPoint[3 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 1.0, 0.25);
+        connectingPoint[4 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 1.0, 0.5);
+        connectingPoint[5 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 1.0, 0.75);
+        connectingPoint[6 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.25, 0.0);
+        connectingPoint[7 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.5, 0.0);
+        connectingPoint[8 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.75, 0.0);
+        connectingPoint[9 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.25, 1.0);
+        connectingPoint[10 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.5, 1.0);
+        connectingPoint[11 + i] = new AvatarRDConnectingPointSatisfy(this, 0, 0, true, false, 0.75, 1.0);
 
         addTGConnectingPointsCommentTop();
 
@@ -197,7 +196,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         // Name of the requirement
         name = "Requirement";
-        id  = tdp.findAvatarRequirementID(id);
+        id = tdp.findAvatarRequirementID(id);
         try {
             value = tdp.findAvatarRequirementName("Requirement_", Integer.decode(id).intValue());
         } catch (Exception e) {
@@ -218,8 +217,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
-    //    Font fold = f;
-      //  int w, c;
+        //    Font fold = f;
+        //  int w, c;
         int size;
 
         if (texts == null) {
@@ -233,7 +232,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
             currentFontSize = tdp.getFontSize();
             //System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
-            myFont = f.deriveFont((float)currentFontSize);
+            myFont = f.deriveFont((float) currentFontSize);
             myFontB = myFont.deriveFont(Font.BOLD);
 
             if (rescaled) {
@@ -243,29 +242,29 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         displayText = currentFontSize >= minFontSize;
 
-     //   int h  = g.getFontMetrics().getHeight();
+        //   int h  = g.getFontMetrics().getHeight();
 
         g.drawRect(x, y, width, height);
 
-        g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
+        g.drawLine(x, y + lineHeight, x + width, y + lineHeight);
         g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
-        g.fillRect(x+1, y+1, width-1, lineHeight-1);
+        g.fillRect(x + 1, y + 1, width - 1, lineHeight - 1);
         g.setColor(ColorManager.AVATAR_REQUIREMENT_ATTRIBUTES);
-        g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
+        g.fillRect(x + 1, y + 1 + lineHeight, width - 1, height - 1 - lineHeight);
         ColorManager.setColor(g, getState(), 0);
-        if ((lineHeight > 23) && (width > 23)){
+        if ((lineHeight > 23) && (width > 23)) {
             g.drawImage(IconManager.img5100, x + width - iconSize + 1, y + 3, Color.yellow, null);
         }
 
         if (displayText) {
             size = currentFontSize - 2;
-            g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
+            g.setFont(myFont.deriveFont((float) (myFont.getSize() - 2)));
 
             drawLimitedString(g, REQ_TYPE_STR[reqType], x, y + size, width, 1);
 
             size += currentFontSize;
             g.setFont(myFontB);
-          //  w = g.getFontMetrics().stringWidth(value);
+            //  w = g.getFontMetrics().stringWidth(value);
             drawLimitedString(g, value, x, y + size, width, 1);
 
         }
@@ -275,8 +274,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                 Color tmp = g.getColor();
                 GraphicLib.setMediumStroke(g);
                 g.setColor(Color.green);
-                g.drawLine(x+width-2, y-6+lineHeight, x+width-6, y-2+lineHeight);
-                g.drawLine(x+width-6, y-3+lineHeight, x+width-8, y-6+lineHeight);
+                g.drawLine(x + width - 2, y - 6 + lineHeight, x + width - 6, y - 2 + lineHeight);
+                g.drawLine(x + width - 6, y - 3 + lineHeight, x + width - 8, y - 6 + lineHeight);
                 g.setColor(tmp);
                 GraphicLib.setNormalStroke(g);
             } else {
@@ -284,8 +283,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                 Color tmp = g.getColor();
                 GraphicLib.setMediumStroke(g);
                 g.setColor(Color.red);
-                g.drawLine(x+width-2, y-2+lineHeight, x+width-8, y-8+lineHeight);
-                g.drawLine(x+width-8, y-2+lineHeight, x+width-2, y-8+lineHeight);
+                g.drawLine(x + width - 2, y - 2 + lineHeight, x + width - 8, y - 8 + lineHeight);
+                g.drawLine(x + width - 8, y - 2 + lineHeight, x + width - 2, y - 8 + lineHeight);
                 g.setColor(tmp);
                 GraphicLib.setNormalStroke(g);
             }
@@ -293,7 +292,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         g.setFont(myFont);
         String texti = "Text";
-        String s ;
+        String s;
         int i;
         size = lineHeight + currentFontSize;
 
@@ -304,7 +303,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         size += currentFontSize;
 
         //text
-        for(i=0; i<texts.length; i++) {
+        for (i = 0; i < texts.length; i++) {
             if (size < (height - 2)) {
                 s = texts[i];
                 if (i == 0) {
@@ -357,26 +356,26 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             if (hasFather()) {
                 text = getTopLevelName() + " / " + text;
             }
-            String s = (String)JOptionPane.showInputDialog(frame, text,
-                                                           "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                                                           null,
-                                                           getValue());
+            String s = (String) JOptionPane.showInputDialog(frame, text,
+                    "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+                    null,
+                    getValue());
 
             if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
                 //boolean b;
                 if (!TAttribute.isAValidId(s, false, false)) {
                     JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the Requirement: the new name is not a valid name",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+                            "Could not change the name of the Requirement: the new name is not a valid name",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
                     return false;
                 }
 
                 if (!tdp.isRequirementNameUnique(s)) {
                     JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the Requirement: the new name is already in use",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+                            "Could not change the name of the Requirement: the new name is already in use",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
                     return false;
                 }
 
@@ -392,9 +391,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                     return true;
                 } else {
                     JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the Requirement: this name is already in use",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+                            "Could not change the name of the Requirement: this name is already in use",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
                     setValue(oldValue);
                 }
             }
@@ -420,9 +419,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         }
 
         JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id, text, kind, criticality, va, reqType, atn, referenceElements);
-       // jdr.setSize(750, 400);
+        // jdr.setSize(750, 400);
         GraphicLib.centerOnParent(jdr, 750, 400);
-        jdr.setVisible( true );
+        jdr.setVisible(true);
 
         if (!jdr.isRegularClose()) {
             return false;
@@ -445,9 +444,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         return true;
     }
 
-    public void rescale(double scaleFactor){
+    public void rescale(double scaleFactor) {
         dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
-        lineHeight = (int)(dlineHeight);
+        lineHeight = (int) (dlineHeight);
         dlineHeight = dlineHeight - lineHeight;
 
         minHeight = lineHeight;
@@ -487,7 +486,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         return verified;
     }
 
-    public  int getType() {
+    public int getType() {
         return TGComponentManager.AVATARRD_REQUIREMENT;
     }
 
@@ -537,7 +536,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     }
 
     public boolean eventOnPopup(ActionEvent e) {
-     //   String s = e.getActionCommand();
+        //   String s = e.getActionCommand();
 
         if (e.getSource() == menuNonSatisfied) {
             satisfied = false;
@@ -562,7 +561,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     }
 
     public String toString() {
-        String ret =  getValue();
+        String ret = getValue();
 
         ret += "ID=" + id;
 
@@ -576,7 +575,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         StringBuffer sb = new StringBuffer("<extraparam>\n");
 
         if (texts != null) {
-            for(int i=0; i<texts.length; i++) {
+            for (int i = 0; i < texts.length; i++) {
                 //value = value + texts[i] + "\n";
                 sb.append("<textline data=\"");
                 sb.append(GTURTLEModeling.transformString(texts[i]));
@@ -616,7 +615,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         try {
             NodeList nli;
             Node n1, n2;
@@ -628,11 +627,11 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             //System.out.println("Loading tclass " + getValue());
             //System.out.println(nl.toString());
 
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
@@ -657,7 +656,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                 }
                             } else if (elt.getTagName().equals("violatedAction")) {
                                 //System.out.println("Analyzing line2");
-                                violatedAction  = elt.getAttribute("data");
+                                violatedAction = elt.getAttribute("data");
                                 if (violatedAction.equals("null")) {
                                     violatedAction = "";
                                 }
@@ -685,7 +684,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                         reqType = REGULAR_REQ;
                                     }
                                 }
-                                if (reqType > (NB_REQ_TYPE-1)) {
+                                if (reqType > (NB_REQ_TYPE - 1)) {
                                     reqType = REGULAR_REQ;
                                 }
 
@@ -789,9 +788,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         }
 
         Font f = graphics.getFont();
-        Font f0 = f.deriveFont((float)currentFontSize);
+        Font f0 = f.deriveFont((float) currentFontSize);
         Font f1 = f0.deriveFont(Font.BOLD);
-        Font f2 = f.deriveFont((float)(currentFontSize - 2));
+        Font f2 = f.deriveFont((float) (currentFontSize - 2));
 
         // Must find for both modes which width is desirable
         String s0, s1;
@@ -808,11 +807,11 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         int w3, w4 = w2;
         int i;
 
-        if(texts.length == 1) {
+        if (texts.length == 1) {
             w3 = graphics.getFontMetrics().stringWidth(s1 + "=\"" + texts[0] + "\"");
             w4 = Math.max(w4, w3);
         } else {
-            for(i=0; i<texts.length; i++) {
+            for (i = 0; i < texts.length; i++) {
                 if (i == 0) {
                     w3 = graphics.getFontMetrics().stringWidth(s1 + "=\"" + texts[i]);
                 } else if (i == (texts.length - 1)) {
@@ -821,7 +820,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                     w3 = graphics.getFontMetrics().stringWidth(texts[i]);
                 }
 
-                w4 = Math.max(w4, w3+2);
+                w4 = Math.max(w4, w3 + 2);
             }
         }
         w3 = graphics.getFontMetrics().stringWidth("Kind=\"" + kind + "\"") + 2;

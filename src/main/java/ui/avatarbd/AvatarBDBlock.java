@@ -65,7 +65,7 @@ import java.util.LinkedList;
  * @author Ludovic APVRILLE
  * @version 1.1 06/04/2010
  */
-public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree, AvatarBDStateMachineOwner {
+public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree, AvatarBDStateMachineOwner, WithAttributes {
 
     private static String GLOBAL_CODE_INFO = "(block code)";
 
@@ -640,7 +640,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                 tab = 2;
             }
         }
-	
+
         /*if (limitAttr != -1) {
             if (_y > limitAttr) {
                 if (limitMethod == -1) {
@@ -1339,7 +1339,6 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             a.setConfidentialityVerification(TAttribute.NOT_VERIFIED);
     }
 
-    @Override
     public String getOwnerName() {
         return this.getBlockName();
     }
@@ -1347,5 +1346,24 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     public String toString() {
         return "Block: " + getValue();
     }
+
+
+    public String getAttributes() {
+        String attr = "";
+        for (TAttribute a: myAttributes) {
+            attr +=  a.toAvatarString() + "\n";
+        }
+        for (AvatarMethod m: myMethods) {
+            attr +=  m.toString() + "\n";
+        }
+        for (AvatarSignal s: mySignals) {
+            attr +=  s.toString() + "\n";
+        }
+        return attr;
+    }
+
+
+
+
 
 }
