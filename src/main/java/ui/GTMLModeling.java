@@ -78,8 +78,8 @@ import java.awt.Point;
  * Class GTMLModeling
  * Use to translate graphical TML modeling to  "tmlmodeling"
  * Creation: 23/11/2005
- * @version 1.1 30/05/2014
- * @author Ludovic APVRILLE, Andrea ENRICI
+ * @version 1.2 07/02/2018
+ * @author Ludovic APVRILLE, Andrea ENRICI, Matteo Bertolino
  */
 public class GTMLModeling  {
     private TMLDesignPanel tmldp;
@@ -1514,7 +1514,7 @@ public class GTMLModeling  {
     }
 
     private void addAttributesTo(TMLTask tmltask, TMLCPrimitiveComponent tmlcpc) {
-        List<TAttribute> attributes = tmlcpc.getAttributes();
+        List<TAttribute> attributes = tmlcpc.getAttributeList();
         addAttributesTo(tmlcpc, tmltask, attributes);
     }
 
@@ -2661,6 +2661,7 @@ public class GTMLModeling  {
         TGComponent tgc;
 
         TMLArchiCPUNode node;
+        TMLArchiFPGANode fpgaNode;
         TMLArchiHWANode hwanode;
         TMLArchiBUSNode busnode;
         TMLArchiVGMNNode vgmnnode;
@@ -2670,6 +2671,7 @@ public class GTMLModeling  {
         TMLArchiDMANode dmanode;
         TMLArchiFirewallNode firewallnode;
         HwCPU cpu;
+        HwFPGA fpga;
         HwA hwa;
         HwBus bus;
         HwVGMN vgmn;
@@ -2712,6 +2714,33 @@ public class GTMLModeling  {
                     listE.addCor(cpu, node);
                     archi.addHwNode(cpu);
                     TraceManager.addDev("CPU node added: " + cpu.getName());
+                }
+            }
+
+            if (tgc instanceof TMLArchiFPGANode) {
+                fpgaNode = (TMLArchiFPGANode)tgc;
+                if (nameInUse(names, fpgaNode.getName())) {
+                    // Node with the same name
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + fpgaNode.getName());
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(fpgaNode);
+                    checkingErrors.add(ce);
+                } else {
+                    names.add(fpgaNode.getName());
+                    fpga = new HwFPGA(fpgaNode.getName());
+                    fpga.capacity = fpgaNode.getCapacity();
+                    fpga.byteDataSize = fpgaNode.getByteDataSize();
+                    fpga.mappingPenalty = fpgaNode.getMappingPenalty();
+                    fpga.goIdleTime = fpgaNode.getGoIdleTime();
+                    fpga.maxConsecutiveIdleCycles = fpgaNode.getMaxConsecutiveIdleCycles();
+                    fpga.reconfigurationTime = fpgaNode.getReconfigurationTime();
+                    fpga.execiTime = fpgaNode.getExeciTime();
+                    fpga.execcTime = fpgaNode.getExeccTime();
+                    fpga.clockRatio = fpgaNode.getClockRatio();
+
+                    listE.addCor(fpga, fpgaNode);
+                    archi.addHwNode(fpga);
+                    TraceManager.addDev("FPGA node added: " + fpgaNode.getName());
                 }
             }
 
@@ -2992,7 +3021,7 @@ public class GTMLModeling  {
           TraceManager.addDev( "**********" );
           TraceManager.addDev( "DIAGRAM " + seqDiag.getName() );
           for( tmltranslator.tmlcp.TMLSDInstance instance: seqDiag.getInstances() )   {
-          TraceManager.addDev( "INSTANCE: " + instance.getName() + "\n" + instance.getAttributes() );
+          TraceManager.addDev( "INSTANCE: " + instance.getName() + "\n" + instance.getAttributeList() );
           }
           }*/
 

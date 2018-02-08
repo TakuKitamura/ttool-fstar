@@ -928,7 +928,7 @@ public class TMLCPTextSpecification {
     //                  ArrayList<tmltranslator.tmlcp.TMLSDInstance> listInstances = SD.getInstances();
     //                  ArrayList<TMLSDMessage> listMessages = SD.getMessages();
     //                  ArrayList<TMLSDAction> listActions = SD.getActions();
-    //                  ArrayList<TMLAttribute> listAttributes = SD.getAttributes();
+    //                  ArrayList<TMLAttribute> listAttributes = SD.getAttributeList();
     //                  for( tmltranslator.tmlcp.TMLSDInstance inst: listInstances )    {
     //                          sb += inst.getType() + " " + inst.getName() + CR + TAB;
     //                  }
@@ -957,7 +957,7 @@ public class TMLCPTextSpecification {
     //                                  sb += CR + TAB + TAB;
     //                          }
     //                          else    {       //The item is a message
-    //                                  ArrayList<TMLSDAttribute> listAttr = item.getAttributes();
+    //                                  ArrayList<TMLSDAttribute> listAttr = item.getAttributeList();
     //                                  if( listAttr.size() == 0 )      {       //message with no parameters
     //                                          sb += item.getSenderName() + "." + item.getName() + "(" + item.getReceiverName() + ")";
     //                                  }
@@ -1228,7 +1228,7 @@ public class TMLCPTextSpecification {
         String sb = "";
         sb += "//Local variables" + CR;
 
-        for(TMLAttribute attr: task.getAttributes()) {
+        for(TMLAttribute attr: task.getAttributeList()) {
         sb += TMLType.getStringType(attr.getType().getType()) + SP + attr.getName();
         if ((attr.getInitialValue() != null) && (attr.getInitialValue().length() > 0)){
         sb += " = " + attr.getInitialValue();

@@ -52,6 +52,10 @@ import ui.avatarmad.AvatarMADAssumption;
 import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
 import ui.cd.*;
+import ui.het.CAMSBlock;
+import ui.het.CAMSBlockConnector;
+import ui.het.CAMSBlockDiagramPanel;
+import ui.het.CAMSConnectingPoint;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
 import ui.ncdd.NCSwitchNode;
@@ -62,7 +66,6 @@ import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLCRecordComponent;
-import ui.het.*;
 import ui.window.JDialogCode;
 import ui.window.JDialogNote;
 import ui.window.JDialogSearchBox;
@@ -78,11 +81,12 @@ import java.util.List;
 // AVATAR
 
 /**
-   * Class TDiagramPanel
-   * High level panel for all kind of TURTLE diagrams
-   * Creation: 21/12/2003
-   * @version 1.0 21/12/2003
-   * @author Ludovic APVRILLE
+ * Class TDiagramPanel
+ * High level panel for all kind of TURTLE diagrams
+ * Creation: 21/12/2003
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 21/12/2003
  */
 public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
@@ -124,7 +128,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JPopupMenu componentMenu;
     protected JPopupMenu selectedMenu;
     protected int popupX, popupY;
-    protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide,search, enableDisable, setAsCryptoBlock, setAsRegularBlock;
+    protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide, search, enableDisable, setAsCryptoBlock, setAsRegularBlock;
     protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex, checkLatency;
     protected JMenuItem gotoReference;
     protected JMenuItem breakpoint;
@@ -147,7 +151,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     private int maxX = 2500;
     private int maxY = 1500;
     private final int limit = 10;
-// Issue #14 Useless data
+    // Issue #14 Useless data
 //    private final int minimumXSize = 900;
 //    private final int minimumYSize = 900;
     protected final int increment = 500;
@@ -237,7 +241,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public boolean drawable = true;
     public static final int MOVE_SPEED = 1; //Speed of component moving with arrow keys
-    
 
 
     // Constructor
@@ -247,7 +250,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //setMinimumSize(new Dimension(1000, 1000));
         //setMaximumSize(new Dimension(1000, 1000));
         setPreferredSize(new Dimension(maxX + limit, maxY + limit));
-        componentList = new LinkedList<> ();
+        componentList = new LinkedList<>();
         mgui = _mgui;
         ttb = _ttb;
         mode = NORMAL;
@@ -255,25 +258,34 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
         addMouseMotionListener(tdmm);
-        
+
         pkl = new PanelKeyListener(this);
         addKeyListener(pkl);
-        
+
         setFocusable(true);
 
         buildPopupMenus();
     }
-    
+
     // Abstract operations
     public abstract boolean actionOnDoubleClick(TGComponent tgc);
+
     public abstract boolean actionOnAdd(TGComponent tgc);
+
     public abstract boolean actionOnRemove(TGComponent tgc);
+
     public abstract boolean actionOnValueChanged(TGComponent tgc);
+
     public abstract String getXMLHead();
+
     public abstract String getXMLTail();
+
     public abstract String getXMLSelectedHead();
+
     public abstract String getXMLSelectedTail();
+
     public abstract String getXMLCloneHead();
+
     public abstract String getXMLCloneTail();
 
     public void setName(String _name) {
@@ -289,19 +301,20 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
       }*/
 
     public int getFontSize() {
-        return (int)(Math.round(12*zoom));
+        return (int) (Math.round(12 * zoom));
     }
 
     private FontMetrics savedFontMetrics = null;
-    public int stringWidth (Graphics g, String str) {
+
+    public int stringWidth(Graphics g, String str) {
         if (this.savedFontMetrics == null)
-            this.savedFontMetrics = g.getFontMetrics (new Font (Font.SANS_SERIF, Font.PLAIN, this.getFontSize ()));
-        return this.savedFontMetrics.stringWidth (str);
+            this.savedFontMetrics = g.getFontMetrics(new Font(Font.SANS_SERIF, Font.PLAIN, this.getFontSize()));
+        return this.savedFontMetrics.stringWidth(str);
     }
 
     public void setZoom(double _zoom) {
-    	final double zoomChange = _zoom / zoom;
-    	
+        final double zoomChange = _zoom / zoom;
+
         if (_zoom < zoom) {
             if (zoom > 0.199) {
                 zoom = _zoom;
@@ -313,19 +326,19 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 this.savedFontMetrics = null;
             }
         }
-        
+
         // Issue #14: We need to resize the diagram as well
         final int maxXPrev = maxX;
         final int maxYPrev = maxY;
-    	maxX = (int) Math.round( zoomChange * maxX );
-    	maxY = (int) Math.round( zoomChange * maxY );
-        
-    	if ( maxXPrev != maxX || maxYPrev != maxY ) {
-            mgui.changeMade(this, DIAGRAM_RESIZED );
-        	updateSize();
-    	}
+        maxX = (int) Math.round(zoomChange * maxX);
+        maxY = (int) Math.round(zoomChange * maxY);
 
-    	updateComponentsAfterZoom();
+        if (maxXPrev != maxX || maxYPrev != maxY) {
+            mgui.changeMade(this, DIAGRAM_RESIZED);
+            updateSize();
+        }
+
+        updateComponentsAfterZoom();
     }
 
     public boolean isDrawingMain() {
@@ -336,9 +349,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //TraceManager.addDev("Zoom factor=" + zoom);
         boolean change = false;
 
-        for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             if (tgc instanceof ScalableTGComponent) {
-                ((ScalableTGComponent)tgc).rescale(zoom);
+                ((ScalableTGComponent) tgc).rescale(zoom);
                 change = true;
             }
         }
@@ -346,7 +359,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (change) {
             mgui.changeMade(this, MOVE_COMPONENT);
 
-        	repaint();
+            repaint();
         }
     }
 
@@ -359,9 +372,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void removeAll() {
-        this.componentList = new LinkedList<> ();
+        this.componentList = new LinkedList<>();
     }
-
 
 
     public void setInternalCommentVisible(int mode) {
@@ -373,7 +385,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void structureChanged() {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             tgc.TDPStructureChanged();
     }
 
@@ -386,12 +398,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void valueChanged() {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             tgc.TDPvalueChanged();
     }
 
     public int makeLovelyIds(int id) {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             id = tgc.makeLovelyIds(id);
 
         return id;
@@ -413,32 +425,31 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public void basicPaintMyComponents(Graphics g) {
         TGComponent tgc;
-        for(int i=componentList.size()-1; i>=0; i--) {
+        for (int i = componentList.size() - 1; i >= 0; i--) {
             tgc = this.componentList.get(i);
             if (!tgc.isHidden()) {
                 //TraceManager.addDev("Painting " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
                 tgc.draw(g);
-            }
-            else {
+            } else {
                 //TraceManager.addDev("Ignoring " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
             }
         }
     }
 
     private Font fontToUse = null;
-    
+
     public void paintMycomponents(Graphics g, boolean b, double w, double h) {
-		if (!drawable) {
-		    return;
-		}
+        if (!drawable) {
+            return;
+        }
 
-	
+
         if (this.fontToUse == null)
-            this.fontToUse = g.getFont ();
+            this.fontToUse = g.getFont();
         else
-            g.setFont (fontToUse);
+            g.setFont(fontToUse);
 
-       // this.lastGraphics = g;
+        // this.lastGraphics = g;
         this.drawingMain = b;
 
         if (!this.overcomeShowing && !this.isShowing()) {
@@ -447,7 +458,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         try {
-            super.paintComponent (g);
+            super.paintComponent(g);
         } catch (Exception e) {
             TraceManager.addDev("Got exception: " + e.getMessage());
             return;
@@ -458,7 +469,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         // Draw Components
         if (w != 1.0 || h != 1.0) {
-            ((Graphics2D) g).scale (w, h);
+            ((Graphics2D) g).scale(w, h);
             this.isScaled = true;
         } else {
             this.isScaled = false;
@@ -466,32 +477,32 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         // Draw every non hidden component
         TGComponent tgc;
-        for(int i=this.componentList.size()-1; i>=0; i--) {
+        for (int i = this.componentList.size() - 1; i >= 0; i--) {
             tgc = this.componentList.get(i);
             if (tgc.isHidden())
                 continue;
 
-            tgc.draw (g);
+            tgc.draw(g);
 
             // CONNECTING POINTS
-            if (this.mgui.getTypeButtonSelected () != TGComponentManager.EDIT)
-                tgc.drawTGConnectingPoint (g, this.mgui.getIdButtonSelected());
+            if (this.mgui.getTypeButtonSelected() != TGComponentManager.EDIT)
+                tgc.drawTGConnectingPoint(g, this.mgui.getIdButtonSelected());
 
             if (this.mode == MOVE_CONNECTOR_HEAD)
-                tgc.drawTGConnectingPoint (g, this.type);
+                tgc.drawTGConnectingPoint(g, this.type);
 
-            if (this.javaVisible && (tgc.hasPostJavaCode () || tgc.hasPreJavaCode ()))
-                tgc.drawJavaCode (g);
+            if (this.javaVisible && (tgc.hasPostJavaCode() || tgc.hasPreJavaCode()))
+                tgc.drawJavaCode(g);
 
-	    if (this instanceof CAMSBlockDiagramPanel) //Connecting points should always be visible in System-C AMS panels
-		tgc.drawTGConnectingPoint (g, this.type);
+            if (this instanceof CAMSBlockDiagramPanel) //Connecting points should always be visible in System-C AMS panels
+                tgc.drawTGConnectingPoint(g, this.type);
         }
 
         // Draw name of component selected
         if (this.componentPointed != null) {
-            String name1 = this.componentPointed.getName ();
-            if (this.componentPointed.hasFather ())
-                name1 = this.componentPointed.getTopLevelName () + ": " + name1;
+            String name1 = this.componentPointed.getName();
+            if (this.componentPointed.hasFather())
+                name1 = this.componentPointed.getTopLevelName() + ": " + name1;
         }
 
         //Draw component being added
@@ -504,11 +515,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         if (this.mode == SELECTING_COMPONENTS) {
             g.setColor(Color.black);
-            GraphicLib.dashedRect (g,
-                                   Math.min(this.initSelectX, this.currentSelectX),
-                                   Math.min(this.initSelectY, this.currentSelectY),
-                                   Math.abs(this.currentSelectX - this.initSelectX),
-                                   Math.abs(this.currentSelectY - this.initSelectY));
+            GraphicLib.dashedRect(g,
+                    Math.min(this.initSelectX, this.currentSelectX),
+                    Math.min(this.initSelectY, this.currentSelectY),
+                    Math.abs(this.currentSelectX - this.initSelectX),
+                    Math.abs(this.currentSelectY - this.initSelectY));
         }
 
         if ((this.mode == SELECTED_COMPONENTS || this.mode == MOVING_SELECTED_COMPONENTS) && this.selectedTemp) {
@@ -523,10 +534,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 g.setColor(ColorManager.NORMAL_0);
             }
             GraphicLib.dashedRect(g, xSel, ySel, widthSel, heightSel);
-            g.fillRect(xSel - sel, ySel - sel, 2*sel, 2*sel);
-            g.fillRect(xSel - sel + widthSel, ySel - sel, 2*sel, 2*sel);
-            g.fillRect(xSel - sel, ySel - sel + heightSel, 2*sel, 2*sel);
-            g.fillRect(xSel - sel + widthSel, ySel - sel + heightSel, 2*sel, 2*sel);
+            g.fillRect(xSel - sel, ySel - sel, 2 * sel, 2 * sel);
+            g.fillRect(xSel - sel + widthSel, ySel - sel, 2 * sel, 2 * sel);
+            g.fillRect(xSel - sel, ySel - sel + heightSel, 2 * sel, 2 * sel);
+            g.fillRect(xSel - sel + widthSel, ySel - sel + heightSel, 2 * sel, 2 * sel);
             if (showSelectionZone) {
                 GraphicLib.setNormalStroke(g);
             }
@@ -538,9 +549,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             GraphicLib.dashedLine(g, x1, y1, x2, y2);
         }
 
-        if ((this instanceof TDPWithAttributes) && (getAttributeState() != 0))  {
+        if ((this instanceof TDPWithAttributes) && (getAttributeState() != 0)) {
             //TraceManager.addDev("Tdp with attributes");
-            for(int i=this.componentList.size()-1; i>=0; i--) {
+            for (int i = this.componentList.size() - 1; i >= 0; i--) {
                 tgc = this.componentList.get(i);
                 if (!tgc.isHidden()) {
                     tgc.drawWithAttributes(g);
@@ -562,9 +573,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (s > 0) {
             p3 = listPoint.elementAt(0);
             g.drawLine(p1.getX(), p1.getY(), p3.x, p3.y);
-            for (int i=0; i< s - 1; i++) {
+            for (int i = 0; i < s - 1; i++) {
                 p3 = listPoint.elementAt(i);
-                p4 = listPoint.elementAt(i+1);
+                p4 = listPoint.elementAt(i + 1);
                 g.drawLine(p3.x, p3.y, p4.x, p4.y);
             }
         }
@@ -643,7 +654,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //Added by Solange to see the components in the list
         //    LinkedList<TGComponent> ruteoList = this.componentList;
         //
-        for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             if ((selected == false) || (tgc.isSelected())) {
                 s = tgc.saveInXML();
                 if (s == null) {
@@ -667,11 +678,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //TraceManager.addDev("x=" + x + " y=" + y + " width=" +width + " height=" + height);
         int cpt = 0;
 
-        for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             if (tgc.areAllInRectangle(x, y, width, height)) {
                 tgc.select(true);
                 tgc.setState(TGState.SELECTED);
-                cpt ++;
+                cpt++;
             } else {
                 tgc.select(false);
                 tgc.setState(TGState.NORMAL);
@@ -697,7 +708,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         TGComponent tmp = componentHovered;
         componentHovered = null;
 
-        for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             //state = tgc.getState();
             tgcTmp = tgc.isOnMeHL(x, y);
             if (tgcTmp != null) {
@@ -715,14 +726,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         if (tmp != componentHovered) {
-            info ++;
+            info++;
         }
 
         return info;
     }
 
     //author:huytruong
-    public TGComponent componentHovered(){
+    public TGComponent componentHovered() {
         return componentHovered;
     }
     //--
@@ -744,36 +755,38 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         TGComponent tmp = componentPointed;
         componentPointed = null;
         this.setToolTipText(null);
-        for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             //state = tgc.getState();
             tgcTmp = tgc.isOnMeHL(x, y);
             if ((tgcTmp != null && (!select || tgcTmp.isClickSelected())) || tgc.isClickSelected()) {
                 if (!pointedElementFound) {
                     componentPointed = tgcTmp;
                     if (componentPointed == null)
-                    	componentPointed = tgc;
+                        componentPointed = tgc;
                     tgc.setState(TGState.POINTED);
                     String tooltip = componentPointed.getToolTipText();
-                    if (tooltip!=null && tooltip.length()>0){
+                    if (tooltip != null && tooltip.length() > 0) {
                         this.setToolTipText(tooltip);
                     }
                     String tmpinfo = componentPointed.getStatusInformation();
-                    if (tmpinfo != null) { mgui.setStatusBarText(tmpinfo);}
+                    if (tmpinfo != null) {
+                        mgui.setStatusBarText(tmpinfo);
+                    }
                     pointedElementFound = true;
                     info = 2;
                 } else {
                     tgc.setState(TGState.NORMAL);
                 }
             } else {
-            	if (tgcTmp != null && tgcTmp.father != null)
-            		tgc.setState(TGState.POINTED);
-            	else
-            		tgc.setState(TGState.NORMAL);
+                if (tgcTmp != null && tgcTmp.father != null)
+                    tgc.setState(TGState.POINTED);
+                else
+                    tgc.setState(TGState.NORMAL);
             }
         }
 
         if (tmp != componentPointed) {
-            info ++;
+            info++;
         }
 
         return info;
@@ -812,7 +825,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public TGConnectingPoint findConnectingPoint(int id) {
         TGConnectingPoint p;
 
-        for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             p = tgc.findConnectingPoint(id);
             if (p != null) {
                 return p;
@@ -823,7 +836,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public TGComponent findComponentWithId(int id) {
-        for (TGComponent tgc1: this.componentList) {
+        for (TGComponent tgc1 : this.componentList) {
             TGComponent tgc2 = tgc1.containsLoadedId(id);
             if (tgc2 != null)
                 return tgc2;
@@ -833,7 +846,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public TGConnector findTGConnectorStartingAt(CDElement c) {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc instanceof TGConnector) {
                 TGConnector tgco = (TGConnector) tgc;
                 if (tgco.isP1(c))
@@ -844,7 +857,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public TGConnector findTGConnectorEndingAt(CDElement c) {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc instanceof TGConnector) {
                 TGConnector tgco = (TGConnector) tgc;
                 if (tgco.isP2(c))
@@ -856,7 +869,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
 
     public TGConnector findTGConnectorUsing(CDElement c) {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc instanceof TGConnector) {
                 TGConnector tgco = (TGConnector) tgc;
                 if (tgco.isP1(c))
@@ -873,18 +886,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         boolean pointedElementFound = false;
         selectedConnectingPoint = null;
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (pointedElementFound)
-                b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
+                b = tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
             else {
-                b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
+                b = tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
                 TGConnectingPoint cp = tgc.getFreeTGConnectingPointAtAndCompatible(x, y, type);
                 if ((cp != null) && (cp.isOut()) && (cp.isFree()) && (cp.isCompatibleWith(type))) {
                     selectedConnectingPoint = cp;
                     pointedElementFound = true;
                     b = cp.setState(TGConnectingPoint.SELECTED) || b;
                 } else
-                    b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
+                    b = tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
             }
 
         return b;
@@ -897,9 +910,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         boolean pointedElementFound = false;
         selectedConnectingPoint = null;
 
-        for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             if (pointedElementFound == true) {
-                b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
+                b = tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
             }
             if (pointedElementFound == false) {
                 cp = tgc.getFreeTGConnectingPointAtAndCompatible(x, y, type);
@@ -908,7 +921,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     pointedElementFound = true;
                     b = cp.setState(TGConnectingPoint.SELECTED) || b;
                 } else {
-                    b =  tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
+                    b = tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
                 }
             }
         }
@@ -920,18 +933,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return selectedConnectingPoint;
     }
 
-    public CAMSConnectingPoint getSelectedCAMSConnectingPoint(){
-	return selectedCAMSConnectingPoints;
+    public CAMSConnectingPoint getSelectedCAMSConnectingPoint() {
+        return selectedCAMSConnectingPoints;
     }
 
     // Adding component
     public TGComponent addComponent(int x, int y, boolean swallow) {
-	//TraceManager.addDev("Add component");
+        //TraceManager.addDev("Add component");
         TGComponent tgc = addComponent(x, y, mgui.getIdButtonSelected(), swallow);
-	if (tgc instanceof ComponentPluginInterface) {
-	    ((ComponentPluginInterface)tgc).setPlugin(mgui.getPluginSelected());
-	}
-	return tgc;
+        if (tgc instanceof ComponentPluginInterface) {
+            ((ComponentPluginInterface) tgc).setPlugin(mgui.getPluginSelected());
+        }
+        return tgc;
     }
 
     public TGComponent addComponent(int x, int y, int id, boolean swallow) {
@@ -970,7 +983,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         if (tgc instanceof SpecificActionAfterAdd) {
-            ((SpecificActionAfterAdd)tgc).specificActionAfterAdd();
+            ((SpecificActionAfterAdd) tgc).specificActionAfterAdd();
         }
 
         return ret;
@@ -981,9 +994,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public SwallowTGComponent findSwallowTGComponent(int x, int y, TGComponent tgcdiff) {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if ((tgc instanceof SwallowTGComponent) && (tgc.isOnMeHL(x, y) != null) && (tgc != tgcdiff))
-                return ((SwallowTGComponent)tgc);
+                return ((SwallowTGComponent) tgc);
 
         return null;
     }
@@ -1006,10 +1019,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public List<TGComponent> getAllComponentList() {
 
-        List<TGComponent> ll = new LinkedList<TGComponent> ();
+        List<TGComponent> ll = new LinkedList<TGComponent>();
         ll.addAll(this.componentList);
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             ll.addAll(tgc.getRecursiveAllInternalComponent());
 
         return ll;
@@ -1019,12 +1032,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void addingTGConnector() {
         listPoint = new Vector<Point>();
         p1 = getSelectedTGConnectingPoint();
-        x1 = p1.getX(); y1 = p1.getY();
+        x1 = p1.getX();
+        y1 = p1.getY();
         selectedConnectingPoint.setFree(false);
     }
 
     public void setAddingTGConnector(int _x2, int _y2) {
-        x2 = _x2; y2 = _y2;
+        x2 = _x2;
+        y2 = _y2;
     }
 
     public void addPointToTGConnector(int x, int y) {
@@ -1040,7 +1055,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             p2.setFree(false);
             this.componentList.add(0, tgco);
             if (tgco instanceof SpecificActionAfterAdd) {
-                ((SpecificActionAfterAdd)tgco).specificActionAfterAdd();
+                ((SpecificActionAfterAdd) tgco).specificActionAfterAdd();
             }
             stopAddingConnector(false);
             p1.setFree(false);
@@ -1059,19 +1074,24 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (p1 != null) {
             p1.setFree(true);
         }
-        x1 = -1; x2= -1; y1 = -1; y2 = -1;
+        x1 = -1;
+        x2 = -1;
+        y1 = -1;
+        y2 = -1;
         listPoint = null;
     }
 
     public void addingCAMSConnector() {
         listPoint = new Vector<Point>();
         cp1 = getSelectedCAMSConnectingPoint();
-        x1 = cp1.getX(); y1 = cp1.getY();
+        x1 = cp1.getX();
+        y1 = cp1.getY();
         selectedConnectingPoint.setFree(false);
     }
 
     public void setAddingCAMSConnector(int _x2, int _y2) {
-        x2 = _x2; y2 = _y2;
+        x2 = _x2;
+        y2 = _y2;
     }
 
     public void addPointToCAMSConnector(int x, int y) {
@@ -1087,7 +1107,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             cp2.setFree(false);
             this.componentList.add(0, camsco);
             if (camsco instanceof SpecificActionAfterAdd) {
-                ((SpecificActionAfterAdd)camsco).specificActionAfterAdd();
+                ((SpecificActionAfterAdd) camsco).specificActionAfterAdd();
             }
             stopAddingConnector(false);
             cp1.setFree(false);
@@ -1105,8 +1125,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
 
     public void setMovingHead(int _x1, int _y1, int _x2, int _y2) {
-        x1 = _x1; y1 = _y1;
-        x2 = _x2; y2 = _y2;
+        x1 = _x1;
+        y1 = _y1;
+        x2 = _x2;
+        y2 = _y2;
     }
 
     public void setConnectorHead(TGComponent tgc) {
@@ -1118,8 +1140,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // Multi-select
     public void setSelectingComponents(int x, int y) {
-        x = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), x), (int)(Math.ceil(maxX*zoom)));
-        y = Math.min(Math.max( (int)(Math.floor(minLimit*zoom)), y), (int)(Math.ceil(maxY*zoom)));
+        x = Math.min(Math.max((int) (Math.floor(minLimit * zoom)), x), (int) (Math.ceil(maxX * zoom)));
+        y = Math.min(Math.max((int) (Math.floor(minLimit * zoom)), y), (int) (Math.ceil(maxY * zoom)));
         //        x = Math.min(Math.max(minLimit*zoom, x), maxX*zoom);
         //y = Math.min(Math.max(minLimit*zoom, y), maxY*zoom);
         initSelectX = x;
@@ -1129,8 +1151,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void updateSelectingComponents(int x, int y) {
-        x = Math.min(Math.max( (int) Math.floor(minLimit*zoom), x), (int) Math.ceil(maxX*zoom) );
-        y = Math.min(Math.max( (int) Math.floor(minLimit*zoom), y), (int) Math.ceil(maxY*zoom) );
+        x = Math.min(Math.max((int) Math.floor(minLimit * zoom), x), (int) Math.ceil(maxX * zoom));
+        y = Math.min(Math.max((int) Math.floor(minLimit * zoom), y), (int) Math.ceil(maxY * zoom));
         //x = Math.min(Math.max(minLimit, x), maxX);
         //y = Math.min(Math.max(minLimit, y), maxY);
         currentSelectX = x;
@@ -1162,23 +1184,24 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void unselectSelectedComponents() {
-        for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             tgc.select(false);
             tgc.setState(TGState.NORMAL);
         }
     }
-    
+
     /**
      * Unselect all components (triggered when a single click is done)
+     *
      * @author Fabien Tessier
      */
     public void unselectClickSelectedComponents() {
-    	for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             tgc.select(false);
             tgc.clickSelect(false);
             tgc.setState(TGState.NORMAL);
-            for (TGComponent tgcTmp: tgc.getRecursiveAllInternalComponent()) {
-            	tgcTmp.select(false);
+            for (TGComponent tgcTmp : tgc.getRecursiveAllInternalComponent()) {
+                tgcTmp.select(false);
                 tgcTmp.clickSelect(false);
                 tgcTmp.setState(TGState.NORMAL);
             }
@@ -1204,13 +1227,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void setMovingSelectedComponents() {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc.isSelected())
                 tgc.setState(TGState.MOVING);
     }
 
     public void setStopMovingSelectedComponents() {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc.isSelected())
                 tgc.setState(TGState.SELECTED);
     }
@@ -1235,13 +1258,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         int oldY = ySel;
         xSel = x;
         ySel = y;
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc.isSelected())
                 tgc.forceMove(xSel - oldX, ySel - oldY);
     }
 
     public TGComponent nextSelectedComponent() {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc.isSelected())
                 return tgc;
 
@@ -1251,10 +1274,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public Vector<TCDTClass> selectedTclasses() {
         Vector<TCDTClass> v = null;
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if ((tgc.isSelected()) && (tgc instanceof TCDTClass)) {
                 if (v == null)
-                    v = new Vector<TCDTClass> ();
+                    v = new Vector<TCDTClass>();
 
                 v.addElement((TCDTClass) tgc);
             }
@@ -1265,10 +1288,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public Vector<TOSClass> selectedTURTLEOSClasses() {
         Vector<TOSClass> v = null;
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if ((tgc.isSelected()) && (tgc instanceof TOSClass)) {
                 if (v == null)
-                    v = new Vector<TOSClass> ();
+                    v = new Vector<TOSClass>();
                 v.addElement((TOSClass) tgc);
             }
 
@@ -1278,10 +1301,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public Vector<TMLTaskOperator> selectedTMLTasks() {
         Vector<TMLTaskOperator> v = null;
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if ((tgc.isSelected()) && (tgc instanceof TMLTaskOperator)) {
                 if (v == null)
-                    v = new Vector<TMLTaskOperator> ();
+                    v = new Vector<TMLTaskOperator>();
                 v.addElement((TMLTaskOperator) tgc);
             }
 
@@ -1291,10 +1314,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public Vector<AvatarBDBlock> selectedAvatarBDBlocks() {
         Vector<AvatarBDBlock> v = null;
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if ((tgc.isSelected()) && (tgc instanceof AvatarBDBlock)) {
                 if (v == null)
-                    v = new Vector<AvatarBDBlock> ();
+                    v = new Vector<AvatarBDBlock>();
                 v.addElement((AvatarBDBlock) tgc);
                 v.addAll(((AvatarBDBlock) tgc).getFullBlockList());
             }
@@ -1305,17 +1328,17 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public Vector<TMLCPrimitiveComponent> selectedCPrimitiveComponent() {
         Vector<TMLCPrimitiveComponent> v = null;
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc.isSelected()) {
                 if (tgc instanceof TMLCPrimitiveComponent) {
                     if (v == null)
-                        v = new Vector<TMLCPrimitiveComponent> ();
+                        v = new Vector<TMLCPrimitiveComponent>();
                     v.addElement((TMLCPrimitiveComponent) tgc);
                 }
 
                 if (tgc instanceof TMLCCompositeComponent) {
                     if (v == null)
-                        v = new Vector<TMLCPrimitiveComponent> ();
+                        v = new Vector<TMLCPrimitiveComponent>();
                     v.addAll(((TMLCCompositeComponent) (tgc)).getAllPrimitiveComponents());
                 }
             }
@@ -1357,11 +1380,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         TGConnectorAttribute tgca;
         TGComponent tgc;
 
-        for(i=0; i<coi.getNbConnectingPoint(); i++) {
+        for (i = 0; i < coi.getNbConnectingPoint(); i++) {
             p1 = coi.tgconnectingPointAtIndex(i);
             tgco = getConnectorConnectedTo(p1);
-            if ((tgco != null) && (tgco instanceof TGConnectorAttribute)){
-                tgca = (TGConnectorAttribute)tgco;
+            if ((tgco != null) && (tgco instanceof TGConnectorAttribute)) {
+                tgca = (TGConnectorAttribute) tgco;
                 if (p1 == tgca.getTGConnectingPointP1()) {
                     p2 = tgca.getTGConnectingPointP2();
                 } else {
@@ -1371,7 +1394,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 // p2 now contains the connecting point of a association
                 tgc = getComponentToWhichBelongs(p2);
                 if ((tgc != null) && (!p2.isFree()) && (tgc instanceof TGConnectorAssociation)) {
-                    return (TGConnectorAssociation)tgc;
+                    return (TGConnectorAssociation) tgc;
                 }
             }
         }
@@ -1446,12 +1469,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
 
-
     private void buildPopupMenus() {
         menuAL = new ActionListener() {
-        	
-        	@Override
-        	public void actionPerformed(ActionEvent e){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 popupAction(e);
             }
         };
@@ -1523,8 +1545,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         breakpoint = new JMenuItem("Add / remove breakpoint");
         breakpoint.addActionListener(menuAL);
 
-		gotoReference = new JMenuItem("Go to reference");
-		gotoReference.addActionListener(menuAL);
+        gotoReference = new JMenuItem("Go to reference");
+        gotoReference.addActionListener(menuAL);
 
         search = new JMenuItem("External Search");
         search.addActionListener(menuAL);
@@ -1550,22 +1572,22 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         downY.addActionListener(menuAL);
 
         fitToContent = new JMenuItem("Adjust diagram size to content");
-        fitToContent.addActionListener( new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fitDiagramSizeToContent();
-			}
-		});
-        
+        fitToContent.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fitDiagramSizeToContent();
+            }
+        });
+
         //Issue #62: Provide quick navigation to main diagram
         backToMainDiagram = new JMenuItem("Back to main diagram");
         backToMainDiagram.addActionListener(new ActionListener() {
-        	
-        	@Override
-        	public void actionPerformed(ActionEvent e) {
-        		tp.tabbedPane.setSelectedIndex(0);        	
-        	}
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tp.tabbedPane.setSelectedIndex(0);
+            }
         });
 
         // Selected Menu
@@ -1588,50 +1610,50 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // Issue #14
     private void fitDiagramSizeToContent() {
-    	maxX = getRealMaxX();
-    	maxY = getRealMaxY();
-        mgui.changeMade(this, DIAGRAM_RESIZED );
-    	updateSize();
+        maxX = getRealMaxX();
+        maxY = getRealMaxY();
+        mgui.changeMade(this, DIAGRAM_RESIZED);
+        updateSize();
     }
-    
+
     private boolean canFitDiagramSizeToContent() {
-    	return maxX != getRealMaxX() || maxY != getRealMaxY();
+        return maxX != getRealMaxX() || maxY != getRealMaxY();
     }
-   
+
     private void increaseDiagramWidth() {
-    	maxX += increment;
-        mgui.changeMade(this, DIAGRAM_RESIZED );
-    	updateSize();
+        maxX += increment;
+        mgui.changeMade(this, DIAGRAM_RESIZED);
+        updateSize();
     }
-    
+
     private void increaseDiagramHeight() {
-    	maxY += increment;
-        mgui.changeMade(this, DIAGRAM_RESIZED );
-    	updateSize();
+        maxY += increment;
+        mgui.changeMade(this, DIAGRAM_RESIZED);
+        updateSize();
     }
-    
+
     private boolean canDecreaseMaxX() {
-    	return maxX - increment >= getRealMaxX();
+        return maxX - increment >= getRealMaxX();
     }
-    
+
     private void decreaseDiagramWidth() {
-    	if ( canDecreaseMaxX() ) {
-    		maxX -= increment;
-            mgui.changeMade(this, DIAGRAM_RESIZED );
-    		updateSize();
-    	}
+        if (canDecreaseMaxX()) {
+            maxX -= increment;
+            mgui.changeMade(this, DIAGRAM_RESIZED);
+            updateSize();
+        }
     }
-    
+
     private boolean canDecreaseMaxY() {
-    	return maxY - increment >= getRealMaxY();
+        return maxY - increment >= getRealMaxY();
     }
 
     private void decreaseDiagramHeight() {
-    	if ( canDecreaseMaxY() ) {
-    		maxY -= increment;
-            mgui.changeMade(this, DIAGRAM_RESIZED );
-    		updateSize();
-    	}
+        if (canDecreaseMaxY()) {
+            maxY -= increment;
+            mgui.changeMade(this, DIAGRAM_RESIZED);
+            updateSize();
+        }
     }
 
     private void popupAction(ActionEvent e) {
@@ -1679,7 +1701,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         if (e.getSource() == makeSquare) {
-            ((TGConnector)componentPopup).makeSquareWithoutMovingTGComponents();
+            ((TGConnector) componentPopup).makeSquareWithoutMovingTGComponents();
             mgui.changeMade(this, MOVE_CONNECTOR);
             repaint();
             return;
@@ -1719,7 +1741,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             post = (componentPopup instanceof PostJavaCode);
             JDialogCode jdc = new JDialogCode(mgui.getFrame(), "Setting java code", componentPopup.getPreJavaCode(), pre, componentPopup.getPostJavaCode(), post);
             GraphicLib.centerOnParent(jdc);
-            jdc.setVisible( true ); // blocked until dialog has been closed
+            jdc.setVisible(true); // blocked until dialog has been closed
 
             componentPopup.setPreJavaCode(jdc.getPreCode());
             componentPopup.setPostJavaCode(jdc.getPostCode());
@@ -1734,7 +1756,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 AvatarBDBlock bd = (AvatarBDBlock) componentPopup;
                 if (bd.isCryptoBlock()) {
                     bd.removeCryptoElements();
-                } else  {
+                } else {
                     bd.addCryptoElements();
                 }
                 repaint();
@@ -1754,7 +1776,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (e.getSource() == setInternalComment) {
             JDialogNote jdn = new JDialogNote(mgui.getFrame(), "Setting an internal comment", componentPopup.getInternalComment());
             GraphicLib.centerOnParent(jdn);
-            jdn.setVisible( true ); // blocked until dialog has been closed
+            jdn.setVisible(true); // blocked until dialog has been closed
             componentPopup.setInternalComment(jdn.getText());
             mgui.changeMade(this, CHANGE_VALUE_COMPONENT);
             repaint();
@@ -1784,34 +1806,34 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         }
         if (e.getSource() == checkLatency) {
-            if (componentPopup instanceof CheckableLatency){
+            if (componentPopup instanceof CheckableLatency) {
                 componentPopup.setCheckLatency(!componentPopup.getCheckLatency());
             }
         }
-        
-        if (e.getSource() == gotoReference) {
-            if (componentPopup instanceof LinkedReference){
-                //Code for navigating to the diagram
-            	if (componentPopup.reference !=null){
-            		TDiagramPanel refTDP = componentPopup.reference.getTDiagramPanel();
-					if (refTDP!=null){
-	            		mgui.selectTab(refTDP.tp);
-	            		mgui.selectTab(refTDP);
-	            		refTDP.highlightTGComponent(componentPopup.reference);
-					}
 
-            	}
+        if (e.getSource() == gotoReference) {
+            if (componentPopup instanceof LinkedReference) {
+                //Code for navigating to the diagram
+                if (componentPopup.reference != null) {
+                    TDiagramPanel refTDP = componentPopup.reference.getTDiagramPanel();
+                    if (refTDP != null) {
+                        mgui.selectTab(refTDP.tp);
+                        mgui.selectTab(refTDP);
+                        refTDP.highlightTGComponent(componentPopup.reference);
+                    }
+
+                }
 
             }
         }
-        
+
         if (e.getSource() == checkMasterMutex) {
 
             if (componentPopup instanceof CheckableInvariant) {
 
                 TGComponent tmptgc = mgui.hasCheckableMasterMutex();
                 TraceManager.addDev("Element with Master mutex: " + tmptgc);
-                if ((tmptgc != null) && (tmptgc != componentPopup)){
+                if ((tmptgc != null) && (tmptgc != componentPopup)) {
                     tmptgc.setMasterMutex(false);
                 }
                 mgui.removeAllMutualExclusionWithMasterMutex();
@@ -1819,7 +1841,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 componentPopup.setMutexWith(TGComponent.MUTEX_NOT_YET_STUDIED);
             }
         }
-
 
 
         if (e.getSource() == breakpoint) {
@@ -1837,39 +1858,39 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         //author: huytruong
         //event for selecting "search" option in popup menu
-        if (e.getSource() == search){
+        if (e.getSource() == search) {
             mgui.showExternalSearch();
             return;
         }
         //--
 
         if (e.getSource() == upX) {
-        	increaseDiagramWidth();
+            increaseDiagramWidth();
 //            maxX += increment;
 //            updateSize();
             return;
         }
 
         if (e.getSource() == upY) {
-        	increaseDiagramHeight();
+            increaseDiagramHeight();
 //            maxY += increment;
 //            updateSize();
             return;
         }
 
         if (e.getSource() == downX) {
-        	
-        	// Issue #14
-        	decreaseDiagramWidth();
+
+            // Issue #14
+            decreaseDiagramWidth();
 //        	maxX -= increment;
 //            updateSize();
             return;
         }
 
         if (e.getSource() == downY) {
-        	
-        	// Issue #14
-        	decreaseDiagramHeight();
+
+            // Issue #14
+            decreaseDiagramHeight();
 //            maxY -= increment;
 //            updateSize();
             return;
@@ -1993,7 +2014,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         if (componentPointed instanceof HiddenInternalComponents) {
-            boolean hidden = ((HiddenInternalComponents)componentPointed).areInternalsHidden();
+            boolean hidden = ((HiddenInternalComponents) componentPointed).areInternalsHidden();
             hide.setEnabled(!hidden);
             unhide.setEnabled(hidden);
         } else {
@@ -2011,7 +2032,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             makeSquare.setEnabled(false);
         }
 
-        if ((componentPointed instanceof PreJavaCode) || (componentPointed instanceof PostJavaCode)){
+        if ((componentPointed instanceof PreJavaCode) || (componentPointed instanceof PostJavaCode)) {
             setJavaCode.setEnabled(true);
             removeJavaCode.setEnabled(true);
         } else {
@@ -2020,7 +2041,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         if (componentPointed instanceof AvatarBDBlock) {
-            AvatarBDBlock block = (AvatarBDBlock)componentPointed;
+            AvatarBDBlock block = (AvatarBDBlock) componentPointed;
             setAsCryptoBlock.setEnabled(!block.isCryptoBlock());
             setAsRegularBlock.setEnabled(block.isCryptoBlock());
         } else {
@@ -2037,14 +2058,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             removeInternalComment.setEnabled(false);
         }
 
-        if (componentPointed instanceof CheckableAccessibility){
+        if (componentPointed instanceof CheckableAccessibility) {
             checkAccessibility.setEnabled(true);
         } else {
             checkAccessibility.setEnabled(false);
 
         }
 
-        if (componentPointed instanceof CheckableLatency){
+        if (componentPointed instanceof CheckableLatency) {
             checkLatency.setEnabled(true);
         } else {
             checkLatency.setEnabled(false);
@@ -2052,14 +2073,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
 
-        if (componentPointed instanceof LinkedReference){
-           	gotoReference.setEnabled(true);
+        if (componentPointed instanceof LinkedReference) {
+            gotoReference.setEnabled(true);
         } else {
             gotoReference.setEnabled(false);
 
         }
 
-        if (componentPointed instanceof CheckableInvariant){
+        if (componentPointed instanceof CheckableInvariant) {
             checkInvariant.setEnabled(true);
             checkMasterMutex.setEnabled(true);
         } else {
@@ -2067,7 +2088,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             checkMasterMutex.setEnabled(false);
         }
 
-        if (componentPointed instanceof AllowedBreakpoint){
+        if (componentPointed instanceof AllowedBreakpoint) {
             breakpoint.setEnabled(true);
         } else {
             breakpoint.setEnabled(false);
@@ -2077,23 +2098,23 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     private void setDiagramPopupMenu() {
         paste.setEnabled(copyData != null);
         insertLibrary.setEnabled(true);
-        
+
 //        if (maxX < minimumXSize + increment) {
 //            downX.setEnabled(false);
 //        } else {
         // Issue #14
-        downX.setEnabled( canDecreaseMaxX() );
+        downX.setEnabled(canDecreaseMaxX());
 //        }
 
 //        if (maxY < minimumYSize + increment) {
 //            downY.setEnabled(false);
 //        } else {
         // Issue #14
-        downY.setEnabled( canDecreaseMaxY() );
+        downY.setEnabled(canDecreaseMaxY());
 //        }
-        
-        fitToContent.setEnabled( canFitDiagramSizeToContent() );
-        
+
+        fitToContent.setEnabled(canFitDiagramSizeToContent());
+
         //Issue #62: Provide quick navigation to main diagram 
         backToMainDiagram.setEnabled(tp.tabbedPane.getSelectedIndex() != 0);
     }
@@ -2172,7 +2193,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             repaint();
             // Added by Solange. It fills the lists of components, interfaces, etc
             if (tp instanceof ProactiveDesignPanel)
-                mgui.gtm.generateLists((ProactiveDesignPanel)tp);
+                mgui.gtm.generateLists((ProactiveDesignPanel) tp);
             //
         }
     }
@@ -2207,7 +2228,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     private void removeAllSelectedComponents() {
         TGComponent tgc = nextSelectedComponent();
-        while(tgc != null) {
+        while (tgc != null) {
             removeComponent(tgc);
             tgc = nextSelectedComponent();
         }
@@ -2217,7 +2238,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void removeComponent(TGComponent tgc) {
         fatherOfRemoved = tgc.getFather();
 
-        for (TGComponent t: this.componentList)
+        for (TGComponent t : this.componentList)
             if (t == tgc) {
                 removeConnectors(tgc);
                 if (tgc instanceof TGConnector) {
@@ -2240,43 +2261,43 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     private void removeConnectors(TGComponent tgc) {
-        for (int i = 0; i<tgc.getNbConnectingPoint(); i++) {
+        for (int i = 0; i < tgc.getNbConnectingPoint(); i++) {
             TGConnectingPoint cp = tgc.tgconnectingPointAtIndex(i);
-            Iterator<TGComponent> iterator = this.componentList.iterator ();
-            while (iterator.hasNext ()) {
-                TGComponent t = iterator.next ();
+            Iterator<TGComponent> iterator = this.componentList.iterator();
+            while (iterator.hasNext()) {
+                TGComponent t = iterator.next();
                 if (t instanceof TGConnector) {
-                    TGConnector tgcon = (TGConnector)t;
+                    TGConnector tgcon = (TGConnector) t;
                     if ((cp == tgcon.getTGConnectingPointP1()) || (cp == tgcon.getTGConnectingPointP2())) {
-                        iterator.remove ();
+                        iterator.remove();
                         actionOnRemove(t);
                         tgcon.getTGConnectingPointP1().setFree(true);
                         tgcon.getTGConnectingPointP2().setFree(true);
-                        for(int k=0; k<tgcon.getNbConnectingPoint(); k++)
+                        for (int k = 0; k < tgcon.getNbConnectingPoint(); k++)
                             removeOneConnector(tgcon.tgconnectingPointAtIndex(k));
                     }
                 }
             }
         }
 
-        for(int i=0; i<tgc.getNbInternalTGComponent(); i++)
+        for (int i = 0; i < tgc.getNbInternalTGComponent(); i++)
             removeConnectors(tgc.getInternalTGComponent(i));
     }
 
     public void removeOneConnector(TGConnectingPoint cp) {
-        Iterator<TGComponent> iterator = this.componentList.iterator ();
-        while (iterator.hasNext ()) {
-            TGComponent t = iterator.next ();
+        Iterator<TGComponent> iterator = this.componentList.iterator();
+        while (iterator.hasNext()) {
+            TGComponent t = iterator.next();
             if (t instanceof TGConnector) {
-                TGConnector tgcon = (TGConnector)t;
+                TGConnector tgcon = (TGConnector) t;
                 if ((cp == tgcon.getTGConnectingPointP1()) || (cp == tgcon.getTGConnectingPointP2())) {
-                    iterator.remove ();
+                    iterator.remove();
                     actionOnRemove(t);
                     tgcon.getTGConnectingPointP1().setFree(true);
                     tgcon.getTGConnectingPointP2().setFree(true);
-					System.out.println("removing...");
+                    System.out.println("removing...");
                     TraceManager.addDev("Removed one connector!");
-                    for(int k=0; k<tgcon.getNbConnectingPoint(); k++)
+                    for (int k = 0; k < tgcon.getNbConnectingPoint(); k++)
                         removeOneConnector(tgcon.tgconnectingPointAtIndex(k));
                 }
             }
@@ -2328,11 +2349,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public int getMinX() {
-        return (int) Math.floor(minLimit*zoom);
+        return (int) Math.floor(minLimit * zoom);
     }
 
     public int getMinY() {
-        return (int) Math.floor(minLimit*zoom);
+        return (int) Math.floor(minLimit * zoom);
         //return minLimit*zoom;
     }
 
@@ -2364,14 +2385,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void attach(TGComponent tgc) {
-        if (tgc instanceof SwallowedTGComponent && tgc.tdp.addComponent (tgc, tgc.getX(), tgc.getY(), true, false))
+        if (tgc instanceof SwallowedTGComponent && tgc.tdp.addComponent(tgc, tgc.getX(), tgc.getY(), true, false))
             // Component was attached -> must be removed from the list
             this.componentList.remove(tgc);
     }
 
     public void detach(TGComponent tgc) {
         if ((tgc instanceof SwallowedTGComponent) && (tgc.getFather() != null)) {
-            ((SwallowTGComponent)tgc.getFather()).removeSwallowedTGComponent(tgc);
+            ((SwallowTGComponent) tgc.getFather()).removeSwallowedTGComponent(tgc);
             tgc.setFather(null);
             this.componentList.add(tgc);
             tgc.wasUnswallowed();
@@ -2381,7 +2402,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public void hide(TGComponent tgc, boolean hide) {
         if (tgc instanceof HiddenInternalComponents) {
-            ((HiddenInternalComponents)tgc).setInternalsHidden(hide);
+            ((HiddenInternalComponents) tgc).setInternalsHidden(hide);
         }
     }
 
@@ -2401,7 +2422,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     //returns the highest id amongst its components
     public int getMaxId() {
         int ret = 0;
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             ret = Math.max(ret, tgc.getMaxId());
 
         return ret;
@@ -2409,7 +2430,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public int getMaxIdSelected() {
         int ret = 0;
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc.isSelected())
                 ret = Math.max(ret, tgc.getMaxId());
 
@@ -2430,7 +2451,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // tell the other component connected to this connecting point
     public TGConnector getConnectorConnectedTo(TGConnectingPoint p) {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc instanceof TGConnector) {
                 TGConnector tgco = (TGConnector) tgc;
                 if ((tgco.getTGConnectingPointP1() == p) || (tgco.getTGConnectingPointP2() == p))
@@ -2480,7 +2501,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public TGComponent getComponentToWhichBelongs(TGConnectingPoint p) {
-        for (TGComponent tgc1: this.componentList) {
+        for (TGComponent tgc1 : this.componentList) {
             TGComponent tgc2 = tgc1.belongsToMeOrSon(p);
             if (tgc2 != null)
                 return tgc2;
@@ -2489,8 +2510,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return null;
     }
 
-    public static TGComponent getComponentToWhichBelongs ( List<TGComponent> components, TGConnectingPoint p) {
-        for (TGComponent tgc1: components) {
+    public static TGComponent getComponentToWhichBelongs(List<TGComponent> components, TGConnectingPoint p) {
+        for (TGComponent tgc1 : components) {
             TGComponent tgc2 = tgc1.belongsToMeOrSon(p);
             if (tgc2 != null)
                 return tgc2;
@@ -2499,28 +2520,28 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return null;
     }
 
-    public void getAllLatencyChecks(ArrayList<TGComponent> _list){
-        for (TGComponent tgc: this.componentList) {
-            if (tgc.getCheckLatency()){
+    public void getAllLatencyChecks(ArrayList<TGComponent> _list) {
+        for (TGComponent tgc : this.componentList) {
+            if (tgc.getCheckLatency()) {
                 _list.add(tgc);
             }
         }
     }
-    
+
     public void getAllCheckedTGComponent(ArrayList<TGComponent> _list) {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc.hasCheckedAccessibility())
-                _list.addAll(tgc.getAllCheckedAccessibility ());
+                _list.addAll(tgc.getAllCheckedAccessibility());
     }
 
     public void getAllCheckableTGComponent(ArrayList<TGComponent> _list) {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc instanceof CheckableAccessibility)
-                _list.addAll(tgc.getAllCheckableAccessibility ());
+                _list.addAll(tgc.getAllCheckableAccessibility());
     }
 
     public void getAllCheckableInvariantTGComponent(ArrayList<TGComponent> _list) {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc.hasCheckableInvariant())
                 _list.addAll(tgc.getAllCheckableInvariant());
     }
@@ -2540,67 +2561,126 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     //Tclass
     private class NameChecker {
-        public boolean isNameAlreadyTaken (TGComponent o, String name) {
+        public boolean isNameAlreadyTaken(TGComponent o, String name) {
             // Must deal with the case where mutliple the tested component
             // inherit from multiple classes / interfaces.
             // In such case we execute all check*** functions until one
             // returns true, in which case we can return true;
-            return (o instanceof TClassInterface        && this.checkTClassInterface ((TClassInterface) o, name))
-                || (o instanceof TCDTData               && this.checkTCDTData ((TCDTData) o, name))
-                || (o instanceof TCDTObject             && this.checkTCDTObject ((TCDTObject) o, name))
-                || (o instanceof TOSClass               && this.checkTOSClass ((TOSClass) o, name))
-                || (o instanceof Requirement            && this.checkRequirement ((Requirement) o, name))
-                || (o instanceof TMLCPrimitiveComponent && this.checkTMLCPrimitiveComponent ((TMLCPrimitiveComponent) o, name))
-                || (o instanceof TMLCRecordComponent    && this.checkTMLCRecordComponent ((TMLCRecordComponent) o, name))
-                || (o instanceof TMLCCompositeComponent && this.checkTMLCCompositeComponent ((TMLCCompositeComponent) o, name))
-                || (o instanceof TMLTaskInterface       && this.checkTMLTaskInterface ((TMLTaskInterface) o, name))
-                || (o instanceof ATDBlock               && this.checkATDBlock ((ATDBlock) o, name))
-                || (o instanceof AvatarBDBlock          && this.checkAvatarBDBlock ((AvatarBDBlock) o, name))
-                || (o instanceof AvatarCDBlock          && this.checkAvatarCDBlock ((AvatarCDBlock) o, name))
-                || (o instanceof AvatarSMDState         && this.checkAvatarSMDState ((AvatarSMDState) o, name))
-                || (o instanceof AvatarADActivity       && this.checkAvatarADActivity ((AvatarADActivity) o, name))
-                || (o instanceof AvatarMADAssumption    && this.checkAvatarMADAssumption ((AvatarMADAssumption) o, name))
-                || (o instanceof AvatarRDRequirement    && this.checkAvatarRDRequirement ((AvatarRDRequirement) o, name))
-                || (o instanceof NCEqNode               && this.checkNCEqNode ((NCEqNode) o, name))
-                || (o instanceof NCSwitchNode           && this.checkNCSwitchNode ((NCSwitchNode) o, name))
-                || (o instanceof AvatarBDDataType       && this.checkAvatarBDDataType ((AvatarBDDataType) o, name))
-                || (o instanceof AvatarBDLibraryFunction && this.checkAvatarBDLibraryFunction ((AvatarBDLibraryFunction) o, name));
+            return (o instanceof TClassInterface && this.checkTClassInterface((TClassInterface) o, name))
+                    || (o instanceof TCDTData && this.checkTCDTData((TCDTData) o, name))
+                    || (o instanceof TCDTObject && this.checkTCDTObject((TCDTObject) o, name))
+                    || (o instanceof TOSClass && this.checkTOSClass((TOSClass) o, name))
+                    || (o instanceof Requirement && this.checkRequirement((Requirement) o, name))
+                    || (o instanceof TMLCPrimitiveComponent && this.checkTMLCPrimitiveComponent((TMLCPrimitiveComponent) o, name))
+                    || (o instanceof TMLCRecordComponent && this.checkTMLCRecordComponent((TMLCRecordComponent) o, name))
+                    || (o instanceof TMLCCompositeComponent && this.checkTMLCCompositeComponent((TMLCCompositeComponent) o, name))
+                    || (o instanceof TMLTaskInterface && this.checkTMLTaskInterface((TMLTaskInterface) o, name))
+                    || (o instanceof ATDBlock && this.checkATDBlock((ATDBlock) o, name))
+                    || (o instanceof AvatarBDBlock && this.checkAvatarBDBlock((AvatarBDBlock) o, name))
+                    || (o instanceof AvatarCDBlock && this.checkAvatarCDBlock((AvatarCDBlock) o, name))
+                    || (o instanceof AvatarSMDState && this.checkAvatarSMDState((AvatarSMDState) o, name))
+                    || (o instanceof AvatarADActivity && this.checkAvatarADActivity((AvatarADActivity) o, name))
+                    || (o instanceof AvatarMADAssumption && this.checkAvatarMADAssumption((AvatarMADAssumption) o, name))
+                    || (o instanceof AvatarRDRequirement && this.checkAvatarRDRequirement((AvatarRDRequirement) o, name))
+                    || (o instanceof NCEqNode && this.checkNCEqNode((NCEqNode) o, name))
+                    || (o instanceof NCSwitchNode && this.checkNCSwitchNode((NCSwitchNode) o, name))
+                    || (o instanceof AvatarBDDataType && this.checkAvatarBDDataType((AvatarBDDataType) o, name))
+                    || (o instanceof AvatarBDLibraryFunction && this.checkAvatarBDLibraryFunction((AvatarBDLibraryFunction) o, name));
         }
 
-        public boolean checkTClassInterface (TClassInterface o, String name) { return false; }
-        public boolean checkTCDTData (TCDTData o, String name) { return false; }
-        public boolean checkTCDTObject (TCDTObject o, String name) { return false; }
-        public boolean checkTOSClass (TOSClass o, String name) { return false; }
-        public boolean checkRequirement (Requirement o, String name) { return false; }
-        public boolean checkTMLCPrimitiveComponent (TMLCPrimitiveComponent o, String name) { return false; }
-        public boolean checkTMLCRecordComponent (TMLCRecordComponent o, String name) { return false; }
-        public boolean checkTMLCCompositeComponent (TMLCCompositeComponent o, String name) { return false; }
-        public boolean checkTMLTaskInterface (TMLTaskInterface o, String name) { return false; }
-        public boolean checkATDBlock (ATDBlock o, String name) { return false; }
-        public boolean checkAvatarBDBlock (AvatarBDBlock o, String name) { return false; }
-        public boolean checkAvatarCDBlock (AvatarCDBlock o, String name) { return false; }
-        public boolean checkAvatarSMDState (AvatarSMDState o, String name) { return false; }
-        public boolean checkAvatarADActivity (AvatarADActivity o, String name) { return false; }
-        public boolean checkAvatarMADAssumption (AvatarMADAssumption o, String name) { return false; }
-        public boolean checkAvatarRDRequirement (AvatarRDRequirement o, String name) { return false; }
-        public boolean checkNCEqNode (NCEqNode o, String name) { return false; }
-        public boolean checkNCSwitchNode (NCSwitchNode o, String name) { return false; }
-        public boolean checkAvatarBDDataType (AvatarBDDataType o, String name) { return false; }
-        public boolean checkAvatarBDLibraryFunction (AvatarBDLibraryFunction o, String name) { return false; }
+        public boolean checkTClassInterface(TClassInterface o, String name) {
+            return false;
+        }
+
+        public boolean checkTCDTData(TCDTData o, String name) {
+            return false;
+        }
+
+        public boolean checkTCDTObject(TCDTObject o, String name) {
+            return false;
+        }
+
+        public boolean checkTOSClass(TOSClass o, String name) {
+            return false;
+        }
+
+        public boolean checkRequirement(Requirement o, String name) {
+            return false;
+        }
+
+        public boolean checkTMLCPrimitiveComponent(TMLCPrimitiveComponent o, String name) {
+            return false;
+        }
+
+        public boolean checkTMLCRecordComponent(TMLCRecordComponent o, String name) {
+            return false;
+        }
+
+        public boolean checkTMLCCompositeComponent(TMLCCompositeComponent o, String name) {
+            return false;
+        }
+
+        public boolean checkTMLTaskInterface(TMLTaskInterface o, String name) {
+            return false;
+        }
+
+        public boolean checkATDBlock(ATDBlock o, String name) {
+            return false;
+        }
+
+        public boolean checkAvatarBDBlock(AvatarBDBlock o, String name) {
+            return false;
+        }
+
+        public boolean checkAvatarCDBlock(AvatarCDBlock o, String name) {
+            return false;
+        }
+
+        public boolean checkAvatarSMDState(AvatarSMDState o, String name) {
+            return false;
+        }
+
+        public boolean checkAvatarADActivity(AvatarADActivity o, String name) {
+            return false;
+        }
+
+        public boolean checkAvatarMADAssumption(AvatarMADAssumption o, String name) {
+            return false;
+        }
+
+        public boolean checkAvatarRDRequirement(AvatarRDRequirement o, String name) {
+            return false;
+        }
+
+        public boolean checkNCEqNode(NCEqNode o, String name) {
+            return false;
+        }
+
+        public boolean checkNCSwitchNode(NCSwitchNode o, String name) {
+            return false;
+        }
+
+        public boolean checkAvatarBDDataType(AvatarBDDataType o, String name) {
+            return false;
+        }
+
+        public boolean checkAvatarBDLibraryFunction(AvatarBDLibraryFunction o, String name) {
+            return false;
+        }
     }
 
-    private boolean isNameUnique (String name, NameChecker checker) {
-        for (TGComponent o: this.componentList)
-            if (checker.isNameAlreadyTaken (o, name))
+    private boolean isNameUnique(String name, NameChecker checker) {
+        for (TGComponent o : this.componentList)
+            if (checker.isNameAlreadyTaken(o, name))
                 return false;
         return true;
     }
 
-    private String findGoodName (String name, NameChecker checker) {
+    private String findGoodName(String name, NameChecker checker) {
         // index >= 0 catch overflows
-        for (int index=0; index>=0; index++) {
+        for (int index = 0; index >= 0; index++) {
             String tryName = name + index;
-            if (this.isNameUnique (tryName, checker))
+            if (this.isNameUnique(tryName, checker))
                 return tryName;
         }
 
@@ -2608,147 +2688,152 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public String findTClassName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkTClassInterface (TClassInterface o, String name) {
-                    return o.getClassName ().equals (name);
-                }
-                public boolean checkTCDTData (TCDTData o, String name) {
-                    return o.getValue ().equals (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkTClassInterface(TClassInterface o, String name) {
+                return o.getClassName().equals(name);
+            }
+
+            public boolean checkTCDTData(TCDTData o, String name) {
+                return o.getValue().equals(name);
+            }
+        });
     }
 
     public String findTOSClassName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkTOSClass (TOSClass o, String name) {
-                    return o.getClassName ().equals (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkTOSClass(TOSClass o, String name) {
+                return o.getClassName().equals(name);
+            }
+        });
     }
 
     public String findRequirementName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkRequirement (Requirement o, String name) {
-                    return o.getRequirementName ().equals (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkRequirement(Requirement o, String name) {
+                return o.getRequirementName().equals(name);
+            }
+        });
     }
 
     public String findTMLPrimitiveComponentName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkTMLCPrimitiveComponent (TMLCPrimitiveComponent o, String name) {
-                    return o.getValue ().equals (name);
-                }
-                public boolean checkTMLCRecordComponent (TMLCRecordComponent o, String name) {
-                    return o.getValue ().equals (name);
-                }
-                public boolean checkTMLCCompositeComponent (TMLCCompositeComponent o, String name) {
-                    for (int i=0; i<o.getNbInternalTGComponent (); i++)
-                        if (this.isNameAlreadyTaken (o.getInternalTGComponent (i), name))
-                            return true;
-                    return false;
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkTMLCPrimitiveComponent(TMLCPrimitiveComponent o, String name) {
+                return o.getValue().equals(name);
+            }
+
+            public boolean checkTMLCRecordComponent(TMLCRecordComponent o, String name) {
+                return o.getValue().equals(name);
+            }
+
+            public boolean checkTMLCCompositeComponent(TMLCCompositeComponent o, String name) {
+                for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+                    if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+                        return true;
+                return false;
+            }
+        });
     }
 
     public String findTMLRecordComponentName(String name) {
-        return this.findTMLPrimitiveComponentName (name);
+        return this.findTMLPrimitiveComponentName(name);
     }
 
     public String findTMLTaskName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkTMLTaskInterface (TMLTaskInterface o, String name) {
-                    return o.getTaskName ().equals (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkTMLTaskInterface(TMLTaskInterface o, String name) {
+                return o.getTaskName().equals(name);
+            }
+        });
     }
 
     public String findBlockName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkATDBlock (ATDBlock o, String name) {
-                    return o.getName ().equals (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkATDBlock(ATDBlock o, String name) {
+                return o.getName().equals(name);
+            }
+        });
     }
 
     public String findAvatarBDBlockName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkAvatarBDBlock (AvatarBDBlock o, String name) {
-                    if (o.getValue ().equals (name))
-                        return true;
-                    return o.hasInternalBlockWithName (name);
-                }
-                public boolean checkAvatarBDLibraryFunction (AvatarBDLibraryFunction o, String name) {
-                    return o.getFunctionName ().equals (name);
-                }
-                public boolean checkAvatarBDDataType (AvatarBDDataType o, String name) {
-                    return o.getDataTypeName ().equals (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkAvatarBDBlock(AvatarBDBlock o, String name) {
+                if (o.getValue().equals(name))
+                    return true;
+                return o.hasInternalBlockWithName(name);
+            }
+
+            public boolean checkAvatarBDLibraryFunction(AvatarBDLibraryFunction o, String name) {
+                return o.getFunctionName().equals(name);
+            }
+
+            public boolean checkAvatarBDDataType(AvatarBDDataType o, String name) {
+                return o.getDataTypeName().equals(name);
+            }
+        });
     }
 
     public String findAvatarCDBlockName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkAvatarCDBlock (AvatarCDBlock o, String name) {
-                    if (o.getValue ().equals (name))
-                        return true;
-                    return o.hasInternalBlockWithName (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkAvatarCDBlock(AvatarCDBlock o, String name) {
+                if (o.getValue().equals(name))
+                    return true;
+                return o.hasInternalBlockWithName(name);
+            }
+        });
     }
 
-   public String findCAMSBlockName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkCAMSBlock (CAMSBlock o, String name) {
-                    if (o.getValue ().equals (name))
-                        return true;
-		    return o.hasBlockWithName();
-                }
-            });
+    public String findCAMSBlockName(String name) {
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkCAMSBlock(CAMSBlock o, String name) {
+                if (o.getValue().equals(name))
+                    return true;
+                return o.hasBlockWithName();
+            }
+        });
     }
 
     public String findAvatarSMDStateName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkAvatarSMDState (AvatarSMDState o, String name) {
-                    if (o.getValue ().equals (name))
-                        return true;
-                    return o.hasInternalStateWithName (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkAvatarSMDState(AvatarSMDState o, String name) {
+                if (o.getValue().equals(name))
+                    return true;
+                return o.hasInternalStateWithName(name);
+            }
+        });
     }
 
     public String findAvatarADActivityName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkAvatarADActivity (AvatarADActivity o, String name) {
-                    if (o.getValue ().equals (name))
-                        return true;
-                    return o.hasInternalActivityWithName (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkAvatarADActivity(AvatarADActivity o, String name) {
+                if (o.getValue().equals(name))
+                    return true;
+                return o.hasInternalActivityWithName(name);
+            }
+        });
     }
 
     public String findAvatarAssumptionName(String name, int start) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkAvatarMADAssumption (AvatarMADAssumption o, String name) {
-                    return o.getValue ().equals (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkAvatarMADAssumption(AvatarMADAssumption o, String name) {
+                return o.getValue().equals(name);
+            }
+        });
     }
 
     public String findAvatarRequirementName(String name, int start) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkAvatarRDRequirement (AvatarRDRequirement o, String name) {
-                    return o.getValue ().equals (name);
-                }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkAvatarRDRequirement(AvatarRDRequirement o, String name) {
+                return o.getValue().equals(name);
+            }
+        });
     }
 
     public String findAvatarRequirementID(String id) {
         try {
             // intid >= 0 catch overflows
-            for (int intid = Integer.decode(id).intValue(); intid >=0; intid++) {
+            for (int intid = Integer.decode(id).intValue(); intid >= 0; intid++) {
                 boolean ok = true;
-                for (TGComponent o: this.componentList)
+                for (TGComponent o : this.componentList)
                     if (o instanceof AvatarRDRequirement) {
                         AvatarRDRequirement areq = (AvatarRDRequirement) o;
                         int otherid = Integer.decode(areq.getID()).intValue();
@@ -2769,27 +2854,27 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public String findTObjectName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkTCDTObject (TCDTObject o, String name) {
-                    return o.getObjectName ().equals (name);
-                }
-                //            public boolean checkTCDTClass (TCDTClass o, String name) {
-                //                return o.getClassName ().startsWith (name);
-                //            }
-            });
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkTCDTObject(TCDTObject o, String name) {
+                return o.getObjectName().equals(name);
+            }
+            //            public boolean checkTCDTClass (TCDTClass o, String name) {
+            //                return o.getClassName ().startsWith (name);
+            //            }
+        });
     }
 
     public String findTObjectName(String name1, String name2) {
         // index >= 0 catch overflows
-        for (int index=0; index>=0; index++) {
+        for (int index = 0; index >= 0; index++) {
             boolean ok = true;
             String tryName = name1 + index;
 
-            for (TGComponent o: this.componentList)
+            for (TGComponent o : this.componentList)
                 if (o instanceof TCDTObject && ((TCDTObject) o).getObjectName().equals(tryName))
                     ok = false;
 
-            if (ok && this.isTObjectNameUnique(tryName+name2))
+            if (ok && this.isTObjectNameUnique(tryName + name2))
                 return tryName;
         }
 
@@ -2798,177 +2883,184 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public String findNodeName(String name) {
-        return this.findGoodName (name, new NameChecker () {
-                public boolean checkNCEqNode (NCEqNode o, String name) {
-                    if (o.getName ().equals (name))
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkNCEqNode(NCEqNode o, String name) {
+                if (o.getName().equals(name))
+                    return true;
+                for (NCTrafficArtifact arti : o.getArtifactList())
+                    if (arti.getValue().equals(name))
                         return true;
-                    for (NCTrafficArtifact arti: o.getArtifactList ())
-                        if (arti.getValue ().equals (name))
-                            return true;
-                    return false;
-                }
-                public boolean checkNCSwitchNode (NCSwitchNode o, String name) {
-                    if (o.getName ().equals (name))
+                return false;
+            }
+
+            public boolean checkNCSwitchNode(NCSwitchNode o, String name) {
+                if (o.getName().equals(name))
+                    return true;
+                for (NCRouteArtifact arti : o.getArtifactList())
+                    if (arti.getValue().equals(name))
                         return true;
-                    for (NCRouteArtifact arti: o.getArtifactList ())
-                        if (arti.getValue ().equals (name))
-                            return true;
-                    return false;
-                }
-                //            public boolean checkNCConnectorNode (NCConnectorNode o, String name) {
-                //                return o.getInterfaceName ().equals (name);
-                //            }
-            });
+                return false;
+            }
+            //            public boolean checkNCConnectorNode (NCConnectorNode o, String name) {
+            //                return o.getInterfaceName ().equals (name);
+            //            }
+        });
     }
 
     public String findInterfaceName(String name) {
-        return this.findNodeName (name);
+        return this.findNodeName(name);
     }
 
-    public boolean isAlreadyATClassName (String name) {
-        return !this.isTClassNameUnique (name);
+    public boolean isAlreadyATClassName(String name) {
+        return !this.isTClassNameUnique(name);
     }
 
     public boolean isAlreadyATMLTaskName(String name) {
-        return !this.isTMLTaskNameUnique (name);
+        return !this.isTMLTaskNameUnique(name);
     }
 
     public boolean isAlreadyAnAvatarBDBlockName(String name) {
-        return !this.isAvatarBlockNameUnique (name);
+        return !this.isAvatarBlockNameUnique(name);
     }
 
     public boolean isAlreadyATMLPrimitiveComponentName(String name) {
-        return !this.isNameUnique (name, new NameChecker () {
-                public boolean checkTMLCPrimitiveComponent (TMLCPrimitiveComponent o, String name) {
-                    return o.getValue ().equals (name);
-                }
-                public boolean checkTMLCRecordComponent (TMLCRecordComponent o, String name) {
-                    return o.getValue ().equals (name);
-                }
-                public boolean checkTMLCCompositeComponent (TMLCCompositeComponent o, String name) {
-                    for (int i=0; i<o.getNbInternalTGComponent (); i++)
-                        if (this.isNameAlreadyTaken (o.getInternalTGComponent (i), name))
-                            return true;
-                    return false;
-                }
-            });
+        return !this.isNameUnique(name, new NameChecker() {
+            public boolean checkTMLCPrimitiveComponent(TMLCPrimitiveComponent o, String name) {
+                return o.getValue().equals(name);
+            }
+
+            public boolean checkTMLCRecordComponent(TMLCRecordComponent o, String name) {
+                return o.getValue().equals(name);
+            }
+
+            public boolean checkTMLCCompositeComponent(TMLCCompositeComponent o, String name) {
+                for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+                    if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+                        return true;
+                return false;
+            }
+        });
     }
 
     public boolean isAlreadyATOSClassName(String name) {
-        return !this.isTOSClassNameUnique (name);
+        return !this.isTOSClassNameUnique(name);
     }
 
     public boolean isTClassNameUnique(String name) {
-        return this.isNameUnique (name, new NameChecker () {
-                public boolean checkTClassInterface (TClassInterface o, String name) {
-                    return o.getClassName ().equals (name);
-                }
-                public boolean checkTCDTData (TCDTData o, String name) {
-                    return o.getValue ().equals (name);
-                }
-            });
+        return this.isNameUnique(name, new NameChecker() {
+            public boolean checkTClassInterface(TClassInterface o, String name) {
+                return o.getClassName().equals(name);
+            }
+
+            public boolean checkTCDTData(TCDTData o, String name) {
+                return o.getValue().equals(name);
+            }
+        });
     }
 
     public boolean isTOSClassNameUnique(String name) {
-        return this.isNameUnique (name, new NameChecker () {
-                public boolean checkTOSClass (TOSClass o, String name) {
-                    return o.getClassName ().equals (name);
-                }
-            });
+        return this.isNameUnique(name, new NameChecker() {
+            public boolean checkTOSClass(TOSClass o, String name) {
+                return o.getClassName().equals(name);
+            }
+        });
     }
 
     public boolean isTMLTaskNameUnique(String name) {
-        return this.isNameUnique (name, new NameChecker () {
-                public boolean checkTMLTaskInterface (TMLTaskInterface o, String name) {
-                    return o.getTaskName ().equals (name);
-                }
-            });
+        return this.isNameUnique(name, new NameChecker() {
+            public boolean checkTMLTaskInterface(TMLTaskInterface o, String name) {
+                return o.getTaskName().equals(name);
+            }
+        });
     }
 
     public boolean isBlockNameUnique(String name) {
-        return this.isNameUnique (name, new NameChecker () {
-                public boolean checkATDBlock (ATDBlock o, String name) {
-                    return o.getName ().equals (name);
-                }
-            });
+        return this.isNameUnique(name, new NameChecker() {
+            public boolean checkATDBlock(ATDBlock o, String name) {
+                return o.getName().equals(name);
+            }
+        });
     }
 
     /**
      * Check if any other <b>block, library function or data type</b>
      * (contrary to what the name suggests) has this name.
      *
-     * @param name
-     *      The name to check.
-     *
+     * @param name The name to check.
      * @return true if the name is unique, false otherwise.
      */
-    public boolean isAvatarBlockNameUnique (String name) {
-        return this.isNameUnique (name, new NameChecker () {
-                public boolean checkAvatarBDBlock (AvatarBDBlock o, String name) {
-                    if (o.getValue ().equals (name))
-                        return true;
-                    return o.hasInternalBlockWithName (name);
-                }
-                public boolean checkAvatarBDLibraryFunction (AvatarBDLibraryFunction o, String name) {
-                    return o.getFunctionName ().equals (name);
-                }
-                public boolean checkAvatarBDDataType (AvatarBDDataType o, String name) {
-                    return o.getDataTypeName ().equals (name);
-                }
-            });
+    public boolean isAvatarBlockNameUnique(String name) {
+        return this.isNameUnique(name, new NameChecker() {
+            public boolean checkAvatarBDBlock(AvatarBDBlock o, String name) {
+                if (o.getValue().equals(name))
+                    return true;
+                return o.hasInternalBlockWithName(name);
+            }
+
+            public boolean checkAvatarBDLibraryFunction(AvatarBDLibraryFunction o, String name) {
+                return o.getFunctionName().equals(name);
+            }
+
+            public boolean checkAvatarBDDataType(AvatarBDDataType o, String name) {
+                return o.getDataTypeName().equals(name);
+            }
+        });
     }
 
     public boolean isNCNameUnique(String name) {
-        return this.isNameUnique (name, new NameChecker () {
-                public boolean checkNCEqNode (NCEqNode o, String name) {
-                    if (o.getName ().equals (name))
+        return this.isNameUnique(name, new NameChecker() {
+            public boolean checkNCEqNode(NCEqNode o, String name) {
+                if (o.getName().equals(name))
+                    return true;
+                for (NCTrafficArtifact arti : o.getArtifactList())
+                    if (arti.getValue().equals(name))
                         return true;
-                    for (NCTrafficArtifact arti: o.getArtifactList ())
-                        if (arti.getValue ().equals (name))
-                            return true;
-                    return false;
-                }
-                public boolean checkNCSwitchNode (NCSwitchNode o, String name) {
-                    if (o.getName ().equals (name))
+                return false;
+            }
+
+            public boolean checkNCSwitchNode(NCSwitchNode o, String name) {
+                if (o.getName().equals(name))
+                    return true;
+                for (NCRouteArtifact arti : o.getArtifactList())
+                    if (arti.getValue().equals(name))
                         return true;
-                    for (NCRouteArtifact arti: o.getArtifactList ())
-                        if (arti.getValue ().equals (name))
-                            return true;
-                    return false;
-                }
-                //            public boolean checkNCConnectorNode (NCConnectorNode o, String name) {
-                //                return o.getInterfaceName ().equals (name);
-                //            }
-            });
+                return false;
+            }
+            //            public boolean checkNCConnectorNode (NCConnectorNode o, String name) {
+            //                return o.getInterfaceName ().equals (name);
+            //            }
+        });
     }
 
     public boolean isRequirementNameUnique(String name) {
-        return this.isNameUnique (name, new NameChecker () {
-                public boolean checkRequirement (Requirement o, String name) {
-                    return o.getRequirementName ().equals (name);
-                }
-            });
+        return this.isNameUnique(name, new NameChecker() {
+            public boolean checkRequirement(Requirement o, String name) {
+                return o.getRequirementName().equals(name);
+            }
+        });
     }
 
     public boolean isTObjectNameUnique(String name) {
         // FIXME: this is not coherent with findTObjectName !!!
-        return this.isNameUnique (name, new NameChecker () {
-                public boolean checkTClassInterface (TClassInterface o, String name) {
-                    return o.getClassName ().equals (name);
-                }
-            });
+        return this.isNameUnique(name, new NameChecker() {
+            public boolean checkTClassInterface(TClassInterface o, String name) {
+                return o.getClassName().equals(name);
+            }
+        });
     }
-    public void setMaxPanelSize(int x, int y){
-        maxX=x;
-        maxY=y;
+
+    public void setMaxPanelSize(int x, int y) {
+        maxX = x;
+        maxY = y;
         updateSize();
     }
+
     // For compatibility with ttool v0.41
     // Assumes no internal duplicate id
     public void checkForDuplicateId() {
-        for(int i=0; i<componentList.size(); i++) {
+        for (int i = 0; i < componentList.size(); i++) {
             TGComponent tgc1 = componentList.get(i);
-            for(int j=0; j<componentList.size(); j++)
+            for (int j = 0; j < componentList.size(); j++)
                 if (j != i) {
                     TGComponent tgc2 = componentList.get(j);
                     tgc2 = tgc2.getIfId(tgc1.getId());
@@ -2990,9 +3082,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
       }*/
 
     public Vector<TCDTClass> getTClasses() {
-        Vector<TCDTClass> v = new Vector<TCDTClass> ();
+        Vector<TCDTClass> v = new Vector<TCDTClass>();
 
-        for (TGComponent o: this.componentList)
+        for (TGComponent o : this.componentList)
             if (o instanceof TCDTClass)
                 v.add((TCDTClass) o);
 
@@ -3002,35 +3094,35 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public Vector<String> getAllDataTypes() {
         Vector<String> v = new Vector<String>();
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc instanceof AvatarBDDataType)
-                v.add(((AvatarBDDataType)(tgc)).getDataTypeName());
+                v.add(((AvatarBDDataType) (tgc)).getDataTypeName());
 
         return v;
     }
 
-    public void removeSynchronizedGates(List<TAttribute> v, TClassInterface t, TCDSynchroGateList tcdsgl ) {
-        for (TGComponent tgc: this.componentList)
+    public void removeSynchronizedGates(List<TAttribute> v, TClassInterface t, TCDSynchroGateList tcdsgl) {
+        for (TGComponent tgc : this.componentList)
             if (tgc instanceof TCDCompositionOperatorWithSynchro) {
-                TCDCompositionOperatorWithSynchro tgso = (TCDCompositionOperatorWithSynchro)tgc;
+                TCDCompositionOperatorWithSynchro tgso = (TCDCompositionOperatorWithSynchro) tgc;
 
                 if (((tgso.getT1() == t) || (tgso.getT2() == t)) && tgso.getSynchroGateList() != tcdsgl) {
                     LinkedList<TTwoAttributes> ttwoattrib = tgso.getSynchroGateList().getGates();
-                    for (TTwoAttributes tt: ttwoattrib)
+                    for (TTwoAttributes tt : ttwoattrib)
                         if (tt.t1 == t)
-                            v.remove (tt.ta1);
+                            v.remove(tt.ta1);
                         else
-                            v.remove (tt.ta2);
+                            v.remove(tt.ta2);
                 }
             }
     }
 
     public boolean isASynchronizedGate(TAttribute ta) {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc instanceof TCDCompositionOperatorWithSynchro) {
-                TCDCompositionOperatorWithSynchro tgso = (TCDCompositionOperatorWithSynchro)tgc;
+                TCDCompositionOperatorWithSynchro tgso = (TCDCompositionOperatorWithSynchro) tgc;
                 LinkedList<TTwoAttributes> ttwoattrib = tgso.getSynchroGateList().getGates();
-                for (TTwoAttributes tt: ttwoattrib)
+                for (TTwoAttributes tt : ttwoattrib)
                     if ((tt.ta1 == ta) || (tt.ta2 == ta))
                         return true;
             }
@@ -3039,9 +3131,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public boolean hasAlreadyAnInstance(TCDTObject to) {
-        for (TGComponent o: this.componentList)
-            if ((o instanceof TClassInterface)  && (!o.equals(to))){
-                TClassInterface t = (TClassInterface)o;
+        for (TGComponent o : this.componentList)
+            if ((o instanceof TClassInterface) && (!o.equals(to))) {
+                TClassInterface t = (TClassInterface) o;
                 if (t.getClassName().compareTo(to.getClassName()) == 0)
                     return true;
             }
@@ -3051,9 +3143,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // updates attributes and gates
     public void updateInstances(TCDTClass tc) {
-        for (TGComponent o: this.componentList)
+        for (TGComponent o : this.componentList)
             if (o instanceof TCDTObject) {
-                TCDTObject to = (TCDTObject)o;
+                TCDTObject to = (TCDTObject) o;
                 if (to.getMasterTClass() == tc) {
                     to.updateAttributes(tc.getAttributes());
                     to.updateGates(tc.getGates());
@@ -3062,18 +3154,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void resetAllInstancesOf(TCDTClass tc) {
-        for (TGComponent o: this.componentList)
-            if (o instanceof TCDTObject){
-                TCDTObject to = (TCDTObject)o;
+        for (TGComponent o : this.componentList)
+            if (o instanceof TCDTObject) {
+                TCDTObject to = (TCDTObject) o;
                 if (to.getMasterTClass() == tc)
                     to.reset();
             }
     }
 
     public TCDTClass findTClassByName(String name) {
-        for (TGComponent o: this.componentList)
-            if (o instanceof TCDTClass){
-                TCDTClass tc = (TCDTClass)o;
+        for (TGComponent o : this.componentList)
+            if (o instanceof TCDTClass) {
+                TCDTClass tc = (TCDTClass) o;
                 if (tc.getClassName().compareTo(name) == 0)
                     return tc;
             }
@@ -3091,7 +3183,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         boolean b = draw;
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
-        g.setFont( getGraphics().getFont() );
+        g.setFont(getGraphics().getFont());
 //        if (lastGraphics != null) {
 //            g.setFont(lastGraphics.getFont());
 //        }
@@ -3108,7 +3200,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         h = getRealMaxY() - y;
         //TraceManager.addDev("x=" + x + " y=" + y + " w=" + w + " h=" + h + " getWidth = " + this.getWidth() + " getHeight = " + this.getHeight());
         x = x - 5;
-        y = y -5;
+        y = y - 5;
         w = w + 10;
         h = h + 10;
         w = Math.max(0, w);
@@ -3129,9 +3221,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         int h = this.getHeight();
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
-        
+
         // Issue #14 point 10: Always use the current graphics
-        g.setFont( getGraphics().getFont() );
+        g.setFont(getGraphics().getFont());
 //        if (lastGraphics != null) {
 //            g.setFont(lastGraphics.getFont());
 //        }
@@ -3149,7 +3241,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     private int getRealMinX() {
         int res = maxX;
 
-        for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             int cur = tgc.getCurrentMinX();
             //TraceManager.addDev("cur=" + cur + " res=" + res + " tgc=" + tgc.getName());
             if (cur < res)
@@ -3168,7 +3260,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     private int getRealMinY() {
         int res = maxY;
 
-        for (TGComponent tgc: this.componentList) {
+        for (TGComponent tgc : this.componentList) {
             int cur = tgc.getCurrentMinY();
             if (cur < res)
                 res = cur;
@@ -3186,27 +3278,27 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public int getRealMaxX() {
         int res = limit;
 
-        for (TGComponent tgc: this.componentList) {
-            res = Math.max( res, tgc.getCurrentMaxX() );
+        for (TGComponent tgc : this.componentList) {
+            res = Math.max(res, tgc.getCurrentMaxX());
 //            
 //            if (cur > res) {
 //                res = cur;
 //            }
         }
-        
+
         return res;
     }
 
     public int getRealMaxY() {
         int res = limit;
 
-        for (TGComponent tgc: this.componentList) {
-            res = Math.max( res, tgc.getCurrentMaxY() );
+        for (TGComponent tgc : this.componentList) {
+            res = Math.max(res, tgc.getCurrentMaxY());
 //            int cur = tgc.getCurrentMaxY();
 //            if (cur > res)
 //                res = cur;
         }
-        
+
         return res;
     }
 
@@ -3217,7 +3309,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public TGComponent getSecondTGComponent(TGConnector tgco) {
         TGConnectingPoint p = tgco.getTGConnectingPointP2();
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc.belongsToMe(p))
                 return tgc;
 
@@ -3242,7 +3334,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void checkAllMySize() {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             tgc.checkAllMySize();
     }
 
@@ -3250,11 +3342,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void autoAdjust() {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             if (tgc instanceof TGAutoAdjust)
-                ((TGAutoAdjust)tgc).autoAdjust(adjustMode);
+                ((TGAutoAdjust) tgc).autoAdjust(adjustMode);
 
-        adjustMode = (adjustMode + 1)% 2;
+        adjustMode = (adjustMode + 1) % 2;
 
         repaint();
     }
@@ -3290,7 +3382,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         TGConnector tgco;
 
-        for(i=0; i<added.getNbConnectingPoint(); i++) {
+        for (i = 0; i < added.getNbConnectingPoint(); i++) {
 
             tgcp = added.getTGConnectingPointAtIndex(i);
             if (tgcp.isFree() && tgcp.isCompatibleWith(added.getDefaultConnector())) {
@@ -3299,16 +3391,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 found = null;
                 distance = 100;
 
-                for (TGComponent tgc: this.componentList)
+                for (TGComponent tgc : this.componentList)
                     if (tgc != added) {
-                        for(j=0; j<tgc.getNbConnectingPoint(); j++) {
+                        for (j = 0; j < tgc.getNbConnectingPoint(); j++) {
                             tgcp1 = tgc.getTGConnectingPointAtIndex(j);
                             if ((tgcp1 != null) && tgcp1.isFree()) {
                                 if (tgcp1.isCompatibleWith(added.getDefaultConnector())) {
                                     cd1 = tgcp1.isIn() && tgcp.isOut() && (tgcp1.getY() > tgcp.getY());
                                     cd2 = tgcp.isIn() && tgcp1.isOut() && (tgcp1.getY() < tgcp.getY());
                                     if (cd1 || cd2) {
-                                        distanceTmp = (int)(Math.sqrt(   Math.pow(tgcp1.getX() - tgcp.getX(), 2) + Math.pow(tgcp1.getY() - tgcp.getY(), 2)));
+                                        distanceTmp = (int) (Math.sqrt(Math.pow(tgcp1.getX() - tgcp.getX(), 2) + Math.pow(tgcp1.getY() - tgcp.getY(), 2)));
                                         if (distanceTmp < distance) {
                                             distance = distanceTmp;
                                             found = tgcp1;
@@ -3337,15 +3429,28 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void resetAllDIPLOIDs() {
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             tgc.setDIPLOID(-1);
     }
 
-    public void getListOfBreakPoints( java.util.List<Point> points, int taskID) {
-        for (TGComponent tgc: this.componentList)
+    public void resetReachability() {
+        for (TGComponent tgc : this.componentList)
+            tgc.setHierarchyReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
+        ;
+    }
+
+    public void resetLiveness() {
+        for (TGComponent tgc : this.componentList)
+            tgc.setHierarchyLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
+        ;
+    }
+
+
+    public void getListOfBreakPoints(java.util.List<Point> points, int taskID) {
+        for (TGComponent tgc : this.componentList)
             if (tgc.getBreakpoint() && (tgc.getDIPLOID() != -1)) {
                 boolean found = false;
-                for(int i=0; i<points.size(); i++)
+                for (int i = 0; i < points.size(); i++)
                     if (points.get(i).y == tgc.getDIPLOID()) {
                         found = true;
                         break;
@@ -3367,7 +3472,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         h = getRealMaxY() - y;
         //TraceManager.addDev("x=" + x + " y=" + y + " w=" + w + " h=" + h + " getWidth = " + this.getWidth() + " getHeight = " + this.getHeight());
         x = x - 5;
-        y = y -5;
+        y = y - 5;
         w = w + 10;
         h = h + 10;
         w = Math.max(0, w);
@@ -3382,11 +3487,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
         //sb.append(" width=\"" + (w+x) + "\" height=\"" + (h+y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"");
-        sb.append(" width=\"" + (w+x) + "\" height=\"" + (h+y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
+        sb.append(" width=\"" + (w + x) + "\" height=\"" + (h + y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
 
         // Issue #14 point 10: Somehow the last graphics that was used is different than the actual one leading
         // to an error in calculating string lengths
-        final SVGGraphics svgg = new SVGGraphics( (Graphics2D) getGraphics() );
+        final SVGGraphics svgg = new SVGGraphics((Graphics2D) getGraphics());
 //      SVGGraphics svgg = new SVGGraphics((Graphics2D)lastGraphics);
 
         RepaintManager.currentManager(this).setDoubleBufferingEnabled(false);
@@ -3409,24 +3514,24 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
-    public boolean changeStateMachineTabName (String oldValue, String newValue) {
+    public boolean changeStateMachineTabName(String oldValue, String newValue) {
         int stateMachineTab = -1;
-        for(int i = 0; i<this.tp.tabbedPane.getTabCount(); i++) {
-            if (this.tp.tabbedPane.getTitleAt (i).equals (newValue))
+        for (int i = 0; i < this.tp.tabbedPane.getTabCount(); i++) {
+            if (this.tp.tabbedPane.getTitleAt(i).equals(newValue))
                 return false;
 
-            if (this.tp.tabbedPane.getTitleAt (i).equals (oldValue))
+            if (this.tp.tabbedPane.getTitleAt(i).equals(oldValue))
                 stateMachineTab = i;
         }
 
         if (stateMachineTab < 0)
             return false;
 
-        this.tp.tabbedPane.setTitleAt (stateMachineTab, newValue);
-        this.tp.tabbedPane.setToolTipTextAt (stateMachineTab, "Opens the state machine of " + newValue);
+        this.tp.tabbedPane.setTitleAt(stateMachineTab, newValue);
+        this.tp.tabbedPane.setToolTipTextAt(stateMachineTab, "Opens the state machine of " + newValue);
 
         //change panel name
-        for (int j=0; j<this.tp.panels.size(); j++) {
+        for (int j = 0; j < this.tp.panels.size(); j++) {
             TDiagramPanel tdp = this.tp.panels.elementAt(j);
             if (tdp.getName().equals(oldValue))
                 tdp.setName(newValue);
@@ -3438,79 +3543,79 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void searchForText(String text, Vector<Object> elements) {
         TraceManager.addDev("Searching for " + text + " in " + this);
 
-        for (TGComponent tgc: this.componentList)
+        for (TGComponent tgc : this.componentList)
             tgc.searchForText(text, elements);
     }
 
-    public MainGUI getMainGUI(){ //Ajout CD pour creation d'un panel depuis un block
-	return mgui;
+    public MainGUI getMainGUI() { //Ajout CD pour creation d'un panel depuis un block
+        return mgui;
     }
-    
+
     public boolean isSelect() {
-    	return select;
+        return select;
     }
-    
+
     public void setSelect(boolean b) {
-    	select = b;
+        select = b;
     }
-    
+
     public void upComponent() {
-    	TGComponent tgc = componentPointed;
-    	if (tgc != null && tgc.moveable) {
-    		tgc.setMoveCd(tgc.x, tgc.y - MOVE_SPEED);
-    		repaint();
-    	}
+        TGComponent tgc = componentPointed;
+        if (tgc != null && tgc.moveable) {
+            tgc.setMoveCd(tgc.x, tgc.y - MOVE_SPEED);
+            repaint();
+        }
     }
-    
+
     public void downComponent() {
-    	TGComponent tgc = componentPointed;
-    	if (tgc != null && tgc.moveable) {
-    		tgc.setMoveCd(tgc.x, tgc.y + MOVE_SPEED);
-    		repaint();
-    	}
+        TGComponent tgc = componentPointed;
+        if (tgc != null && tgc.moveable) {
+            tgc.setMoveCd(tgc.x, tgc.y + MOVE_SPEED);
+            repaint();
+        }
     }
-    
+
     public void leftComponent() {
-    	TGComponent tgc = componentPointed;
-    	if (tgc != null && tgc.moveable) {
-    		tgc.setMoveCd(tgc.x - MOVE_SPEED, tgc.y);
-    		repaint();
-    	}
+        TGComponent tgc = componentPointed;
+        if (tgc != null && tgc.moveable) {
+            tgc.setMoveCd(tgc.x - MOVE_SPEED, tgc.y);
+            repaint();
+        }
     }
-    
+
     public void rightComponent() {
-    	TGComponent tgc = componentPointed;
-    	if (tgc != null && tgc.moveable) {
-    		tgc.setMoveCd(tgc.x + MOVE_SPEED, tgc.y);
-    		repaint();
-    	}
+        TGComponent tgc = componentPointed;
+        if (tgc != null && tgc.moveable) {
+            tgc.setMoveCd(tgc.x + MOVE_SPEED, tgc.y);
+            repaint();
+        }
     }
-    
+
     public void upComponents() {
-    	moveSelected(xSel, ySel - MOVE_SPEED);
-    	repaint();
+        moveSelected(xSel, ySel - MOVE_SPEED);
+        repaint();
     }
-    
+
     public void downComponents() {
-    	moveSelected(xSel, ySel + MOVE_SPEED);
-    	repaint();
+        moveSelected(xSel, ySel + MOVE_SPEED);
+        repaint();
     }
-    
+
     public void leftComponents() {
-    	moveSelected(xSel - MOVE_SPEED, ySel);
-    	repaint();
+        moveSelected(xSel - MOVE_SPEED, ySel);
+        repaint();
     }
-    
+
     public void rightComponents() {
-    	moveSelected(xSel + MOVE_SPEED, ySel);
-    	repaint();
+        moveSelected(xSel + MOVE_SPEED, ySel);
+        repaint();
     }
-    
+
     public void setComponentPointed(TGComponent tgc) {
-    	componentPointed = tgc;
+        componentPointed = tgc;
     }
-    
+
     public TDiagramMouseManager getMouseManager() {
-    	return tdmm;
+        return tdmm;
     }
 }

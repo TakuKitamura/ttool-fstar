@@ -253,6 +253,7 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLARCHI_BRIDGENODE = 225;
     public static final int TMLARCHI_KEY = 435;
     public static final int TMLARCHI_FIREWALL = 436;
+    public static final int TMLARCHI_FPGANODE = 474;
 
     public static final int TMLCP_EDIT = 378;
     public static final int TMLCP_CONNECTOR = 379;
@@ -629,7 +630,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 474;
+    public static final int NB_ACTION = 475;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -673,13 +674,13 @@ public class TGUIAction extends AbstractAction {
             }
         }
         putValue(Action.ACTION_COMMAND_KEY, actions[id].ACTION_COMMAND_KEY);
-        if (ConfigurationTTool.ExternalCommand1 != null && ConfigurationTTool.ExternalCommand1.length() > 0) {
+
+        if ((id == EXTERNAL_ACTION_1) && (ConfigurationTTool.ExternalCommand1 != null) && (ConfigurationTTool.ExternalCommand1.length()) > 0) {
             setLongDescription(EXTERNAL_ACTION_1, ConfigurationTTool.ExternalCommand1);
         }
-        if (ConfigurationTTool.ExternalCommand2 != null && ConfigurationTTool.ExternalCommand2.length() > 0) {
+        if ((id == EXTERNAL_ACTION_2) && (ConfigurationTTool.ExternalCommand2 != null) && (ConfigurationTTool.ExternalCommand2.length()) > 0) {
             setLongDescription(EXTERNAL_ACTION_2, ConfigurationTTool.ExternalCommand2);
         }
-
     }
 
     public void setName(int index, String name) {
@@ -693,13 +694,13 @@ public class TGUIAction extends AbstractAction {
     }
 
     public void init() {
-        actions[ACT_NEW] = new TAction("new-command", "New", IconManager.imgic20, IconManager.imgic21, "New", "New modeling", 'N');
-        actions[ACT_NEW_PROJECT] = new TAction("new-project-command", "New project", IconManager.imgic20, IconManager.imgic21, "New project", "New project", 0);
+        actions[ACT_NEW] = new TAction("new-command", "New Model", IconManager.imgic20, IconManager.imgic21, "New Model" , "New model", 'N');
+        actions[ACT_NEW_PROJECT] = new TAction("new-project-command", "New project", IconManager.imgic20_proj, IconManager.imgic21_proj, "New project", "New project", 0);
         actions[ACT_NEW_DESIGN] = new TAction("new-command-design", "New design", IconManager.imgic14, IconManager.imgic14, "New design", "New TURTLE design", 0);
         actions[ACT_NEW_ANALYSIS] = new TAction("new-command-analysis", "New analysis", IconManager.imgic17, IconManager.imgic17, "New analysis", "New TURTLE analysis", 0);
-        actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TTool model",'O', true);
-        actions[ACT_OPEN_PROJECT] = new TAction("open-project-command","Open project", IconManager.imgic22, IconManager.imgic23, "Open project", "Open an existing TTool project",'O', true);
-        actions[ACT_OPEN_FROM_NETWORK] = new TAction("open-command-from-network","Open project from TTool repository", IconManager.imgic22, IconManager.imgic23, "Open project from TTool repository", "Open an existing TTool model from the TTool repository (TTool website)",'0', true);
+        actions[ACT_OPEN] = new TAction("open-command","Open Model", IconManager.imgic22, IconManager.imgic23, "Open Model", "Open an existing TTool model",'O', true);
+        actions[ACT_OPEN_PROJECT] = new TAction("open-project-command","Open project", IconManager.imgic22_proj, IconManager.imgic23_proj, "Open project", "Open an existing TTool project",'O', true);
+        actions[ACT_OPEN_FROM_NETWORK] = new TAction("open-command-from-network","Open project from TTool repository", IconManager.imgic22_net, IconManager.imgic23_net, "Open project from TTool repository", "Open an existing TTool model from the TTool repository (TTool website)",'0', true);
         actions[ACT_OPEN_LAST] = new TAction("openlast-command","Open file: " + ConfigurationTTool.LastOpenFile, IconManager.imgic22, IconManager.imgic23, "Open: " + ConfigurationTTool.LastOpenFile, "Open the lastly saved TTool model", 0);
         actions[ACT_MERGE] = new TAction("merge-command","Merge", IconManager.imgic22, IconManager.imgic23, "Merge", "Merge the current TTool modeling with another one saved in a file ", 0);
         actions[ACT_SAVE] = new TAction("save-command", "Save",IconManager.imgic24, IconManager.imgic25, "Save", "Save an opened or a new TTool modeling", 'S', true);
@@ -1051,6 +1052,7 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_EDIT] = new TAction("edit-tmlarchi-diagram", "Edit DIPLODOCUS architecture diagram", IconManager.imgic100, IconManager.imgic101, "Edit DIPLODOCUS architecture diagram", "Make it possible to edit the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_LINK] = new TAction("add-tmlarchi-link", "Add a link", IconManager.imgic202, IconManager.imgic202, "Link", "Add a link between two nodes of the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_CPUNODE] = new TAction("add-tmlarchi-cpunode", "Add a CPU node", IconManager.imgic1100, IconManager.imgic1100, "CPU node", "Add a cpu node to the currently opened DIPLODOCUS architecture diagram", 0);
+        actions[TMLARCHI_FPGANODE] = new TAction("add-tmlarchi-fpganode", "Add a FPGA node", IconManager.imgic1120, IconManager.imgic1120, "FPGA node", "Add a fpga node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_BUSNODE] = new TAction("add-tmlarchi-busnode", "Add a Bus node", IconManager.imgic1102, IconManager.imgic1102, "Bus node", "Add a bus node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_CPNODE] = new TAction("add-tmlarchi-cpnode", "Add a Communication pattern node", IconManager.imgic1102, IconManager.imgic1102, "CP node", "Add a communication pattern node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_ARTIFACT] = new TAction("add-tmlarchi-artifact", "Map a task", IconManager.imgic702, IconManager.imgic702, "Map a task", "Map a task onto a node in the currently opened DIPLODOCUS architecture diagram", 0);

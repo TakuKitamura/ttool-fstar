@@ -299,7 +299,7 @@ public class TMLCPSyntaxChecking {
 //                    localListOfSDDiagrams = new ArrayList<String>();
 //                    variableList = new HashSet<String>();
 //                    /*for( TMLCPSequenceDiagram diagram: listSDDiagrams )       {
-//                      ArrayList<TMLAttribute> listAttributes = diagram.getAttributes();
+//                      ArrayList<TMLAttribute> listAttributes = diagram.getAttributeList();
 //                      for( TMLAttribute attr: listAttributes )  {
 //                      if( !variableList.contains( attr.getName() ) )    {
 //                      addError( "Variable <<" + attr.getName() + ">> is not declared in any diagram of <<" + diag.getName() + ">>",
@@ -573,7 +573,7 @@ public class TMLCPSyntaxChecking {
             parseCmd = "natnumeral";
         }
 
-        /*for(TMLAttribute attr: t.getAttributes()) {
+        /*for(TMLAttribute attr: t.getAttributeList()) {
           modif = tmlm.putAttributeValueInString(modif, attr);
           }*/
         parser = new TMLExprParser(new StringReader(parseCmd + " " + modif));

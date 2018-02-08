@@ -1098,7 +1098,7 @@ public class GTURTLEModeling {
             Map<String, HSMChannel> hsmChannels = new HashMap<String, HSMChannel>();
             TMLCPrimitiveComponent hsm = new TMLCPrimitiveComponent(0, 500, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxY(), false, null, tcdp);
             TAttribute isEnc = new TAttribute(2, "isEnc", "true", 4);
-            hsm.getAttributes().add(isEnc);
+            hsm.getAttributeList().add(isEnc);
             tcdp.addComponent(hsm, 0, 500, false, true);
             hsm.setValueWithChange("HSM_" + cpuName);
             //Find all associated components
@@ -1140,7 +1140,7 @@ public class GTURTLEModeling {
                 Set<TGComponent> channelInstances = new HashSet<TGComponent>();
                 Set<TGComponent> secOperators = new HashSet<TGComponent>();
                 isEnc = new TAttribute(2, "isEnc", "true", 4);
-                comp.getAttributes().add(isEnc);
+                comp.getAttributeList().add(isEnc);
                 //Find all unsecured channels
                 //For previously secured channels, relocate encryption to the hsm
 
@@ -9012,7 +9012,7 @@ public class GTURTLEModeling {
             return false;
         }
         avatarspec = att.generateAvatarSpec();
-        TraceManager.addDev("Avatar spec:" + avatarspec);
+        //TraceManager.addDev("Avatar spec:" + avatarspec);
         return true;
     }
 
@@ -9026,7 +9026,7 @@ public class GTURTLEModeling {
             return false;
         }
         avatarspec = att.generateAvatarSpec();
-        TraceManager.addDev("Avatar spec:" + avatarspec);
+        //TraceManager.addDev("Avatar spec:" + avatarspec);
         return true;
     }
 

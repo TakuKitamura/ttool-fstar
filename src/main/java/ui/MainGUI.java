@@ -642,6 +642,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return file.getAbsolutePath();
     }
 
+    public boolean isExperimentalOn() {
+        return experimentalOn;
+    }
+
     public void periodicAction() {
         //TraceManager.addDev("Autosaving ");
         if (file == null) {
@@ -8426,6 +8430,22 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return null;
     }
 
+    public void resetReachability() {
+        //TraceManager.addDev("Reset reachability");
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp != null) {
+            tp.resetReachability();
+        }
+    }
+
+    public void resetLiveness() {
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp != null) {
+            tp.resetLiveness();
+        }
+    }
+
+
     public synchronized void resetRunningID() {
         if (runningIDs != null) {
             runningIDs.clear();
@@ -8904,6 +8924,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
 
         }
+
+
 
 
         private JMenuItem createMenuItem(String s) {

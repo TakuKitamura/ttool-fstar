@@ -37,9 +37,6 @@
  */
 
 
-
-
-
 package ui.util;
 
 import javax.swing.*;
@@ -48,11 +45,12 @@ import java.net.URL;
 
 
 /**
-* Class IconManager
-* Creation: 15/12/2003
-* @version 1.1 15/12/2003
-* @author Ludovic APVRILLE
-*/
+ * Class IconManager
+ * Creation: 15/12/2003
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.1 15/12/2003
+ */
 public class IconManager {
 
     public static ImageIcon imgic8, imgic9;
@@ -65,6 +63,7 @@ public class IconManager {
 
     public static ImageIcon imgic13, imgic14, imgic15, imgic16, imgic17, imgic18, imgic19;
     public static ImageIcon imgic20, imgic21, imgic22, imgic23, imgic24, imgic25, imgic26, imgic27, imgic28, imgic29;
+    public static ImageIcon imgic20_proj, imgic21_proj, imgic22_proj, imgic23_proj, imgic22_net, imgic23_net;
 
     public static ImageIcon imgic30, imgic31, imgic32, imgic33, imgic34, imgic35, imgic36, imgic37, imgic38, imgic39;
 
@@ -112,8 +111,8 @@ public class IconManager {
     public static ImageIcon imgic920, imgic922, imgic924, imgic926, imgic928, imgic930;
     public static ImageIcon imgic940, imgic941;
     // Requirement diagrams
-    public static ImageIcon imgic1000, imgic1002, imgic1004,imgic1006,imgic1008, imgic1010, imgic1012, imgic1014, imgic1016, imgic1018;
-    public static ImageIcon imgic1050, imgic1052, imgic1054,imgic1056, imgic1058, imgic1060;
+    public static ImageIcon imgic1000, imgic1002, imgic1004, imgic1006, imgic1008, imgic1010, imgic1012, imgic1014, imgic1016, imgic1018;
+    public static ImageIcon imgic1050, imgic1052, imgic1054, imgic1056, imgic1058, imgic1060;
 
     // Attack Tree Diagrams
     public static ImageIcon imgic1070, imgic1072, imgic1074, imgic1076, imgic1078;
@@ -128,6 +127,7 @@ public class IconManager {
     // TMLDD
     public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106, imgic1108;
     public static ImageIcon imgic1110, imgic1112, imgic1114, imgic1116, imgic1118;
+    public static ImageIcon imgic1120;
 
     // TML component task diagram
     public static ImageIcon imgic1200, imgic1202, imgic1204, imgic1206, imgic1208;
@@ -139,10 +139,10 @@ public class IconManager {
 
 
     // SMD diagram
-    public static ImageIcon imgic2000, imgic2002, imgic2004,imgic2006,imgic2008,imgic2010, imgic2012;
+    public static ImageIcon imgic2000, imgic2002, imgic2004, imgic2006, imgic2008, imgic2010, imgic2012;
 
     // CSD diagram
-    public static ImageIcon imgic2100, imgic2104, imgic2106,imgic2108,imgic2110;
+    public static ImageIcon imgic2100, imgic2104, imgic2106, imgic2108, imgic2110;
 
 
     // NC
@@ -159,21 +159,21 @@ public class IconManager {
     public static ImageIcon imgic5070;
 
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
-    public static ImageIcon imgic5110, imgic5112, imgic5113,imgic5114;
+    public static ImageIcon imgic5110, imgic5112, imgic5113, imgic5114;
     public static ImageIcon imgic5200;
 
-	//pragmas
-	public static ImageIcon imgic6000, imgic6001, imgic6002, imgic6003, imgic6004, imgic6005;
+    //pragmas
+    public static ImageIcon imgic6000, imgic6001, imgic6002, imgic6003, imgic6004, imgic6005;
 
     //Security
     public static ImageIcon imgic7000, imgic7001;
     //Safety
     public static ImageIcon imgic7002, imgic7003, imgic7004, imgic7005, imgic7006;
-	//Show traces
+    //Show traces
     public static ImageIcon imgic7007;
-	//Attacker Scenarios
+    //Attacker Scenarios
     public static ImageIcon imgic7008;
-	//UPPAAL Help popup
+    //UPPAAL Help popup
     public static ImageIcon imgic7009;
     // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
@@ -186,11 +186,11 @@ public class IconManager {
     private static String icon8 = "turtle_16.gif";
     private static String icon9 = "diplodocus2_16.gif";
     //Added by Solange
-    private static String icon0= "hideifce.gif";
+    private static String icon0 = "hideifce.gif";
     //Added by Solange, the component icon
-    private static String icon1= "procomp.gif";
+    private static String icon1 = "procomp.gif";
     //root for the image of the help icon, created by Solange
-    private static String icon2111= "sole.gif";
+    private static String icon2111 = "sole.gif";
 
     //private static String icon10 = "toolbarButtonGraphics/general/Add24.gif";
     //private static String icon11 = "toolbarButtonGraphics/general/Save16.gif";
@@ -206,10 +206,16 @@ public class IconManager {
     private static String icon18 = "sd.gif";
     private static String icon19 = "ucd.gif";
 
-    private static String icon20 = "toolbarButtonGraphics/general/New16.gif";
-    private static String icon21 = "toolbarButtonGraphics/general/New24.gif";
-    private static String icon22 = "toolbarButtonGraphics/general/Open16.gif";
-    private static String icon23 = "toolbarButtonGraphics/general/Open24.gif";
+    private static String icon20 = "New16.gif";
+    private static String icon21 = "New24.gif";
+    private static String icon20_proj = "NewP16.gif";
+    private static String icon21_proj = "NewP24.gif";
+    private static String icon22 = "Open16.gif";
+    private static String icon23 = "Open24.gif";
+    private static String icon22_proj = "OpenP16.gif";
+    private static String icon23_proj = "OpenP24.gif";
+    private static String icon22_net = "OpenN16.gif";
+    private static String icon23_net = "OpenN24.gif";
     private static String icon24 = "toolbarButtonGraphics/general/Save16.gif";
     private static String icon25 = "toolbarButtonGraphics/general/Save24.gif";
     private static String icon26 = "toolbarButtonGraphics/general/Stop16.gif";
@@ -430,7 +436,6 @@ public class IconManager {
     // Deployment diagrams
     private static String icon700 = "ddnode.gif";
     private static String icon702 = "ddartifact.gif";
-    
 
 
     // TML
@@ -474,7 +479,6 @@ public class IconManager {
     private static String icon1018 = "reqsatisfy.gif";
 
 
-
     // EBRDD
     private static String icon1050 = "ebrdderc.gif";
     private static String icon1052 = "ercconnector.gif";
@@ -512,6 +516,9 @@ public class IconManager {
     private static String icon1108 = "tmlmemorynode.gif";
     private static String icon1110 = "tmldmanode.gif";
     private static String icon1118 = "tmlkey.gif";
+    private static String icon1120 = "tmlfpganode.gif";
+
+
     // For ADD
     private static String icon1112 = "tmlicunode.gif";
     private static String icon1114 = "tmlcopromwmrnode.gif";
@@ -548,8 +555,8 @@ public class IconManager {
     private static String icon2004 = "adchoice.gif";
     private static String icon2006 = "adjonction.gif"; //junction
     private static String icon2008 = "prosmdsubmachine1.gif"; //
-    private static String icon2010= "actionstate.gif";
-    private static String icon2012= "prosmdstate.gif";
+    private static String icon2010 = "actionstate.gif";
+    private static String icon2012 = "prosmdstate.gif";
 
 
     //CSD diagrams
@@ -561,7 +568,7 @@ public class IconManager {
     private static String icon2108 = "proCSDOutPort.gif";
     private static String icon2110 = "ProCSDConector.gif";
 
-    private static String icon3000= "nc.gif";
+    private static String icon3000 = "nc.gif";
 
 
     // AVATAR
@@ -619,8 +626,8 @@ public class IconManager {
 
     // Avatar DD
     private static String icon5200 = "search-ideogram-25px.png";
-   
-	//Dfferent Pragma
+
+    //Dfferent Pragma
     private static String icon6000 = "toolbarButtonGraphics/general/pragma16.gif";
     private static String icon6001 = "toolbarButtonGraphics/general/pragma24.gif";
     private static String icon6002 = "toolbarButtonGraphics/general/safepragma16.gif";
@@ -635,16 +642,15 @@ public class IconManager {
     private static String icon7003 = "A2.gif";
     private static String icon7004 = "E1.gif";
     private static String icon7005 = "E2.gif";
-    private static String icon7006 = "imply.gif";	
-	//Show traces
+    private static String icon7006 = "imply.gif";
+    //Show traces
     private static String icon7007 = "toolbarButtonGraphics/general/showTrace.gif";
 
-	//Attacker Scenarios
+    //Attacker Scenarios
     private static String icon7008 = "attacker.gif";
-	private static String icon7009 = "uppaal.gif";
+    private static String icon7009 = "uppaal.gif";
 
-	//
-
+    //
 
 
     public IconManager() {
@@ -652,10 +658,10 @@ public class IconManager {
 
     }
 
-    public ImageIcon getIcon(String s){
+    public ImageIcon getIcon(String s) {
         URL url = this.getClass().getResource(s);
 
-        if (url != null)  {
+        if (url != null) {
             return new ImageIcon(url);
         } else {
             System.out.println("Could not load " + s);
@@ -703,8 +709,14 @@ public class IconManager {
 
         imgic20 = getIcon(icon20);
         imgic21 = getIcon(icon21);
+        imgic20_proj = getIcon(icon20_proj);
+        imgic21_proj = getIcon(icon21_proj);
         imgic22 = getIcon(icon22);
         imgic23 = getIcon(icon23);
+        imgic22_proj = getIcon(icon22_proj);
+        imgic23_proj = getIcon(icon23_proj);
+        imgic22_net = getIcon(icon22_net);
+        imgic23_net = getIcon(icon23_net);
         imgic24 = getIcon(icon24);
         imgic25 = getIcon(icon25);
         imgic26 = getIcon(icon26);
@@ -752,7 +764,7 @@ public class IconManager {
         imgic64 = getIcon(icon64);
         imgic65 = getIcon(icon65);
         imgic66 = getIcon(icon66);
-	imgic68 = getIcon(icon68);
+        imgic68 = getIcon(icon68);
 
         imgic70 = getIcon(icon70);
         imgic71 = getIcon(icon71);
@@ -799,8 +811,8 @@ public class IconManager {
         imgic134 = getIcon(icon134);
         imgic136 = getIcon(icon136);
         imgic138 = getIcon(icon138);
-	imgic140 = getIcon(icon140);
-	imgic142 = getIcon(icon142);
+        imgic140 = getIcon(icon140);
+        imgic142 = getIcon(icon142);
 
         imgic200 = getIcon(icon200);
         imgic201 = getIcon(icon201);
@@ -911,8 +923,8 @@ public class IconManager {
         imgic926 = getIcon(icon926);
         imgic928 = getIcon(icon928);
         imgic930 = getIcon(icon930);
-	imgic940 = getIcon(icon940);
-	imgic941 = getIcon(icon941);
+        imgic940 = getIcon(icon940);
+        imgic941 = getIcon(icon941);
 
         imgic1000 = getIcon(icon1000);
         imgic1002 = getIcon(icon1002);
@@ -923,7 +935,7 @@ public class IconManager {
         imgic1012 = getIcon(icon1012);
         imgic1014 = getIcon(icon1014);
         imgic1016 = getIcon(icon1016);
-	imgic1018 = getIcon(icon1018);
+        imgic1018 = getIcon(icon1018);
 
         imgic1050 = getIcon(icon1050);
         imgic1052 = getIcon(icon1052);
@@ -985,6 +997,7 @@ public class IconManager {
         imgic1114 = getIcon(icon1114);
         imgic1116 = getIcon(icon1116);
         imgic1118 = getIcon(icon1118);
+        imgic1120 = getIcon(icon1120);
 
         imgic1200 = getIcon(icon1200);
         imgic1202 = getIcon(icon1202);
@@ -1009,7 +1022,7 @@ public class IconManager {
         imgic1324 = getIcon(icon1324);
         imgic1326 = getIcon(icon1326);
         imgic1328 = getIcon(icon1328);
-	imgic1330 = getIcon(icon1330);
+        imgic1330 = getIcon(icon1330);
 
         imgic2000 = getIcon(icon2000);
         imgic2002 = getIcon(icon2002);
@@ -1067,8 +1080,8 @@ public class IconManager {
         imgic5062 = getIcon(icon5062);
         imgic5064 = getIcon(icon5064);
         imgic5066 = getIcon(icon5066);
-	imgic5068 = getIcon(icon5068);
-	imgic5070 = getIcon(icon5070);
+        imgic5068 = getIcon(icon5068);
+        imgic5070 = getIcon(icon5070);
 
         imgic5100 = getIcon(icon5100);
         imgic5102 = getIcon(icon5102);
@@ -1087,29 +1100,29 @@ public class IconManager {
         imgic5113 = getIcon(icon5113);
         imgic5114 = getIcon(icon5114);
 
-	imgic5200 = getIcon(icon5200);
-	if (imgic5200 != null) {
+        imgic5200 = getIcon(icon5200);
+        if (imgic5200 != null) {
             img5200 = imgic5200.getImage();
         }
 
-	imgic6000 = getIcon(icon6000);
-	imgic6001 = getIcon(icon6001);
-	imgic6002 = getIcon(icon6002);
-	imgic6003 = getIcon(icon6003);
-	imgic6004 = getIcon(icon6004);
-	imgic6005 = getIcon(icon6005);
+        imgic6000 = getIcon(icon6000);
+        imgic6001 = getIcon(icon6001);
+        imgic6002 = getIcon(icon6002);
+        imgic6003 = getIcon(icon6003);
+        imgic6004 = getIcon(icon6004);
+        imgic6005 = getIcon(icon6005);
 
 
-	imgic7000 = getIcon(icon7000);
-	imgic7001 = getIcon(icon7001);
-	imgic7002 = getIcon(icon7002);
-	imgic7003 = getIcon(icon7003);
-	imgic7004 = getIcon(icon7004);
-	imgic7005 = getIcon(icon7005);
-	imgic7006 = getIcon(icon7006);
-	imgic7007 = getIcon(icon7007);
-	imgic7008 = getIcon(icon7008);
-	imgic7009 = getIcon(icon7009);
+        imgic7000 = getIcon(icon7000);
+        imgic7001 = getIcon(icon7001);
+        imgic7002 = getIcon(icon7002);
+        imgic7003 = getIcon(icon7003);
+        imgic7004 = getIcon(icon7004);
+        imgic7005 = getIcon(icon7005);
+        imgic7006 = getIcon(icon7006);
+        imgic7007 = getIcon(icon7007);
+        imgic7008 = getIcon(icon7008);
+        imgic7009 = getIcon(icon7009);
     }
 
 } // Class

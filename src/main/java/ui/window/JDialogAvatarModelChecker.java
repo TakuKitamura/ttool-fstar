@@ -514,6 +514,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             // Reachability
             int res;
             if (reachabilitySelected == REACHABILITY_SELECTED) {
+                mgui.resetReachability();
                 res = amc.setReachabilityOfSelected();
                 jta.append("Reachability of " + res + " selected elements activated\n");
 
@@ -526,6 +527,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             }
 
             if (reachabilitySelected == REACHABILITY_ALL) {
+                mgui.resetReachability();
                 res = amc.setReachabilityOfAllStates();
                 jta.append("Reachability of " + res + " states activated\n");
                 for (SpecificationReachability sr : amc.getReachabilities()) {
@@ -645,7 +647,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             Object o = ((AvatarStateMachineElement) _o).getReferenceObject();
             if (o instanceof TGComponent) {
                 TGComponent tgc = (TGComponent) (o);
-                TraceManager.addDev("Reachability of tgc=" + tgc + " value=" + tgc.getValue() + " class=" + tgc.getClass());
+                //TraceManager.addDev("Reachability of tgc=" + tgc + " value=" + tgc.getValue() + " class=" + tgc.getClass());
                 switch (_res) {
                     case NOTCOMPUTED:
                         tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);

@@ -68,6 +68,8 @@ import java.awt.*;
  */
 
 public class FTDFault extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility, CanBeDisabled {
+    public static double DEFAULT_PROBABILITY = 0.5;
+
     private int textY1 = 3;
     //   private int textY2 = 3;
 
@@ -76,6 +78,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
 
     protected String oldValue = "";
     protected String description = "";
+    protected double probability = DEFAULT_PROBABILITY;
     private String stereotype = "fault";
     private String rootStereotype = "root fault";
     private boolean isRootFault = false;
@@ -316,10 +319,15 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
             }
         }
 
-
         if (dialog.getDescription() != null) {
             description = dialog.getDescription();
         }
+
+        if (dialog.getProbability() != null) {
+            probability = new Double(dialog.getProbability()).doubleValue();
+        }
+
+
 
         isRootFault = dialog.isRootFault();
 
@@ -348,7 +356,8 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info description=\"" + description);
-        sb.append("\" root=\"" +isRootFault);
+        sb.append("\" root=\"" + isRootFault);
+        sb.append("\" probability=\"" + probability);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -366,6 +375,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
             String sdescription = null;
             //     String prio;
             String isRoot = null;
+            String sproba = null;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -380,12 +390,26 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
                             if (elt.getTagName().equals("info")) {
                                 sdescription = elt.getAttribute("description");
                                 isRoot = elt.getAttribute("root");
+                                try {
+                                    sproba = elt.getAttribute("probability");
+                                } catch (Exception e) {
+                                    probability = DEFAULT_PROBABILITY;
+                                    sproba = null;
+                                }
                             }
                             if (sdescription != null) {
                                 description = sdescription;
                             }
                             if (isRoot != null) {
                                 isRootFault = isRoot.toUpperCase().compareTo("TRUE") == 0;
+                            }
+                            if (sproba != null) {
+                                try {
+                                    probability = new Double(sproba).doubleValue();
+                                } catch (Exception e) {
+                                    probability = DEFAULT_PROBABILITY;
+                                    sproba = null;
+                                }
                             }
                         }
                     }
@@ -397,6 +421,10 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         }
     }
 
+
+    public double getProbability() {
+        return probability;
+    }
 
     public String getDescription() {
         return description;

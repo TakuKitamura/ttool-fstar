@@ -63,7 +63,7 @@ import java.util.Vector;
    * @version 1.0 12/03/2008
    * @author Ludovic APVRILLE
  */
-public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
+public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, WithAttributes {
     private int maxFontSize = 14;
     private int minFontSize = 4;
     private int currentFontSize = -1;
@@ -584,7 +584,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return currentFontSize;
     }
 
-    public java.util.List<TAttribute> getAttributes() {
+    public java.util.List<TAttribute> getAttributeList() {
         return myAttributes;
     }
 
@@ -643,6 +643,15 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return list;
     }
 
+    public String getAttributes() {
+        String attr = "";
+        for (TAttribute a: myAttributes) {
+            attr +=  a.toAvatarString() + "\n";
+        }
+
+        return attr;
+    }
+
 
     /*public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
@@ -650,7 +659,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
 
 
-    /*public String getAttributes() {
+    /*public String getAttributeList() {
       String attr = "";
       attr += "Data size (in byte) = " + byteDataSize + "\n";
       attr += "Pipeline size = " + pipelineSize + "\n";

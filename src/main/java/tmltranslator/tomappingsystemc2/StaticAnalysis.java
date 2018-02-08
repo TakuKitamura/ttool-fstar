@@ -162,7 +162,7 @@ public class StaticAnalysis{
 		String anEvalFunc="";
 		//= "unsigned long getStateHash(const char* iLiveVarList) const{\n";
 		int aSeq=0;
-		for(TMLAttribute att: _task.getAttributes()) {
+		for(TMLAttribute att: _task.getAttributeList()) {
 			anEvalFunc += "if (iLiveVarList[" + (aSeq >>> 3) + "] && " + (1 << (aSeq & 0x7)) + "!=0) iHash->addValue(" + att.getName() + ");\n";
 			aSeq++;
 		}
@@ -182,7 +182,7 @@ public class StaticAnalysis{
 //
 //	private void printLiveVarNode(LiveVariableNode iNode){
 //		int aSeq=0;
-//		for(TMLAttribute att: _task.getAttributes()) {
+//		for(TMLAttribute att: _task.getAttributeList()) {
 //			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
 //				TraceManager.addDev(att.getName() + ": significant");
 //			aSeq++;
@@ -343,7 +343,7 @@ public class StaticAnalysis{
 			TraceManager.addDev("No checkpoint candidates");
 		else{
 			TraceManager.addDev("a: " + _task.getAttributes().size() + " c: " + _channels.size() + " e: " + _events.size());
-			//int aNbOfLiveElements = _task.getAttributes().size() + _channels.size() + _events.size();
+			//int aNbOfLiveElements = _task.getAttributeList().size() + _channels.size() + _events.size();
 			int nbOfVars=0, nbOfChannels=0, nbOfEvents=0;
 			for(int i=0; i<_task.getAttributes().size(); i++)
 				nbOfVars += aStatistics[i];
@@ -372,8 +372,8 @@ public class StaticAnalysis{
 				iStatistics[5] += _events.size() * aNbOfCandidates - nbOfEvents;
 				TraceManager.addDev("Events Gain: " + aEvtGain);
 			}
-			//TraceManager.addDev("Request Checks: " + aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()] + "  Candidates: " + aNbOfCandidates);
-			//if (_task.isRequested()) TraceManager.addDev("Saved Requests: " + (100* (aNbOfCandidates - aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()]) / aNbOfCandidates));
+			//TraceManager.addDev("Request Checks: " + aStatistics[_task.getAttributeList().size() + _channels.size() + _events.size()] + "  Candidates: " + aNbOfCandidates);
+			//if (_task.isRequested()) TraceManager.addDev("Saved Requests: " + (100* (aNbOfCandidates - aStatistics[_task.getAttributeList().size() + _channels.size() + _events.size()]) / aNbOfCandidates));
 			//TraceManager.addDev("Checkpoints: " + aNbOfCheckPoints + "  Candidates: " + aNbOfCandidates);
 			iStatistics[6] += aNbOfCandidates;
 			iStatistics[7] += aNbOfCandidates - aNbOfCheckPoints;

@@ -131,10 +131,10 @@ public class AvatarBDToolBar extends TToolBar {
 
         button = this.add(mgui.actions[TGUIAction.ABD_CRYPTOBLOCK]);
         button.addMouseListener(mgui.mouseHandler);
-
-        button = this.add(mgui.actions[TGUIAction.AVATAR_FIREWALL]);
-        button.addMouseListener(mgui.mouseHandler);
-
+        if (MainGUI.experimentalOn) {
+        	button = this.add(mgui.actions[TGUIAction.AVATAR_FIREWALL]);
+        	button.addMouseListener(mgui.mouseHandler);
+		}
         this.addSeparator();
 
         button = this.add(mgui.actions[TGUIAction.ABD_DATATYPE]);

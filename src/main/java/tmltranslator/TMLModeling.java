@@ -817,7 +817,7 @@ public class TMLModeling<E> {
                 if (t.getReferenceObject() instanceof TMLCPrimitiveComponent && t.getName().equals(attr.getBlock().getName())){
                     TMLCPrimitiveComponent comp = (TMLCPrimitiveComponent) t.getReferenceObject();
                     comp.mappingName=mappingName;
-                    for (TAttribute a: comp.getAttributes ())
+                    for (TAttribute a: comp.getAttributeList ())
                         if (a.getId().equals(attr.getName()))
                             a.setConfidentialityVerification(result.isSatisfied() ? TAttribute.CONFIDENTIALITY_OK : TAttribute.CONFIDENTIALITY_KO);
                 }

@@ -67,7 +67,8 @@ public class JDialogCountermeasure extends JDialogBase implements ActionListener
     private Frame frame;
 
     //protected JTextField taskName;
-    protected JTextField name, description;
+    protected JTextField name;
+    protected JTextArea description;
 
     private ATDCountermeasure countermeasure;
 
@@ -103,7 +104,7 @@ public class JDialogCountermeasure extends JDialogBase implements ActionListener
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Attack attributes"));
-        panel2.setPreferredSize(new Dimension(350, 250));
+        panel2.setPreferredSize(new Dimension(450, 300));
 
         c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -116,12 +117,26 @@ public class JDialogCountermeasure extends JDialogBase implements ActionListener
         name = new JTextField(countermeasure.getCountermeasureName());
         panel2.add(name, c1);
 
-        c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Description:"), c2);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        description = new JTextField(countermeasure.getDescription());
-        panel2.add(description, c1);
+
+        c1.gridheight = 5;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+
+        description = new JTextArea();
+        description.setEditable(true);
+        description.setMargin(new Insets(10, 10, 10, 10));
+        description.setTabSize(3);
+        description.append(countermeasure.getDescription());
+        description.setFont(new Font("times", Font.PLAIN, 12));
+
+        JScrollPane jsp = new JScrollPane(description, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp.setPreferredSize(new Dimension(300, 200));
+
+        panel2.add(jsp, c1);
+
 
         // main panel;
         c0.gridheight = 10;

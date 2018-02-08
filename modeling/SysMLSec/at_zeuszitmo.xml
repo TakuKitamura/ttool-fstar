@@ -18,7 +18,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="3" />
-<P1  x="290" y="937" id="53" />
+<P1  x="280" y="983" id="53" />
 <P2  x="280" y="906" id="216" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -254,7 +254,7 @@
 </COMPONENT>
 <SUBCOMPONENT type="1401" id="73" >
 <father id="98" num="0" />
-<cdparam x="256" y="937" />
+<cdparam x="246" y="983" />
 <sizeparam width="137" height="35" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
@@ -1109,7 +1109,6 @@
 <TGConnectingPoint num="21" id="647" />
 <TGConnectingPoint num="22" id="648" />
 <TGConnectingPoint num="23" id="649" />
-<latencyCheck />
 <extraparam>
 <info description="blah blah blah" root="false" />
 </extraparam>

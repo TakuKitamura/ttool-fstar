@@ -620,7 +620,7 @@ public class AvatarSpecification extends AvatarElement {
 				if (nb != null) {
 				    AvatarBlock nf = spec.getBlockWithName(father.getName());
 				    if (nf != null) {
-						TraceManager.addDev("Setting "+ nf.getName() + " as the father of " + nb.getName());
+						//TraceManager.addDev("Setting "+ nf.getName() + " as the father of " + nb.getName());
 						nb.setFather(nf);
 				    }
 				}

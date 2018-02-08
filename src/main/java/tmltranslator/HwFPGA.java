@@ -37,67 +37,50 @@
  */
 
 
-package faulttrees;
+package tmltranslator;
 
-import java.util.ArrayList;
+import tmltranslator.modelcompiler.ArchUnitMEC;
 
 
 /**
- * Class Fault
- * Creation: 24/01/2018
+ * Class HwFPGA
+ * Creation: 07/02/2018
  *
  * @author Ludovic APVRILLE
- * @version 1.0 24/01/2018
+ * @version 1.0 07/02/2018
  */
-public class Fault extends FaultElement {
-    private FaultNode originNode; // If no origin node -> leaf attack
-    private ArrayList<FaultNode> destinationNodes;
-    private boolean isRoot;
-    private boolean isEnabled = true;
-    private double probability;
+public class HwFPGA extends HwExecutionNode {
 
 
-    public Fault(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        destinationNodes = new ArrayList<FaultNode>();
+    public static final int DEFAULT_BYTE_DATA_SIZE = 4;
+    public static final int DEFAULT_GO_IDLE_TIME = 10;
+    public static final int DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES = 10;
+    public static final int DEFAULT_CAPACITY = 100;
+    public static final int DEFAULT_MAPPING_PENALTY = 0;
+    public static final int DEFAULT_RECONFIGURATION_TIME = 50;
+
+
+
+    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // Should be greater than 0
+    public int goIdleTime = DEFAULT_GO_IDLE_TIME; // Should be greater or equal to 0
+    public int maxConsecutiveIdleCycles = DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES; // Should be greater or equal to 0
+    public int capacity = HwFPGA.DEFAULT_CAPACITY;
+    public int mappingPenalty = HwFPGA.DEFAULT_MAPPING_PENALTY;
+    public int reconfigurationTime = HwFPGA.DEFAULT_RECONFIGURATION_TIME;
+
+    public HwFPGA(String _name) {
+        super(_name);
     }
 
-    public boolean isRoot() {
-        return isRoot;
+    public String getType() {
+        return "FPGA";
     }
 
-    public void setRoot(boolean _root) {
-        isRoot = _root;
+    public String toXML() {
+        String s = "<FPGA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
+        s +=  "\" capacity=\"" + capacity + "\" mappingPenalty=\"" + mappingPenalty + "\" reconfigurationTime=\"" + reconfigurationTime + "\" />\n";
+        return s;
     }
 
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean _enabled) {
-        isEnabled = _enabled;
-    }
-
-    public void setOriginNode(FaultNode _node) {
-        originNode = _node;
-    }
-
-    public void setProbability(double probability) {
-        this.probability = probability;
-    }
-
-    public void addDestinationNode(FaultNode _node) {
-        destinationNodes.add(_node);
-    }
-
-
-    public boolean isLeaf() {
-        return (originNode == null);
-    }
-
-    public boolean isFinal() {
-        return destinationNodes.size() == 0;
-
-    }
 
 }

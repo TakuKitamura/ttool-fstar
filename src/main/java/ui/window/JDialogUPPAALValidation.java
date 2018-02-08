@@ -367,7 +367,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         stateL.setToolTipText("Study the fact that, if accessed,  a given state is eventually followed by another one");
         jp1.add(stateL, c1);
         stateL.setSelected(stateLChecked);*/
-	
+
         c1.gridwidth = GridBagConstraints.REMAINDER;
         custom = new JCheckBox("Safety pragmas");
         custom.addActionListener(this);
@@ -575,6 +575,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             }
 
             if ((stateR_Selected.isSelected() || stateR_All.isSelected()) && (mode != NOT_STARTED)) {
+                mgui.resetReachability();
                 java.util.List<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp, stateR_All.isSelected());
 
                 if ((list != null) && (list.size() > 0)){
@@ -615,6 +616,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             }
 
             if ((stateL_Selected.isSelected()|| stateL_All.isSelected()) && (mode != NOT_STARTED)) {
+                mgui.resetLiveness();
                 java.util.List<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp, stateL_All.isSelected());
                 if ((list != null) && (list.size() > 0)){
                     for(TGComponentAndUPPAALQuery cq: list) {
@@ -650,6 +652,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                     jta.append("Liveness: No selected component found on diagrams\n\n");
                 }
             }
+
             if (stateLe_Selected.isSelected() && (mode != NOT_STARTED)) {
                 java.util.List<TGComponentAndUPPAALQuery> list = mgui.gtm.getUPPAALQueries(tp);
                 String s1, s2, name1, name2, query1, query2;
@@ -758,7 +761,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         setButtons();
     }
 
-    
+
     private String translateCustomQuery(String query){
         UPPAALSpec spec = mgui.gtm.getLastUPPAALSpecification();
         AVATAR2UPPAAL avatar2uppaal = mgui.gtm.getAvatar2Uppaal();
@@ -971,7 +974,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             //stateA.setEnabled(true);
 	    stateLe_None.setEnabled(true);
             stateLe_Selected.setEnabled(true);
-	    
+
             generateTrace.setEnabled(true);
             showDetails.setEnabled(true);
             for (JCheckBox cb: customChecks){
@@ -993,7 +996,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 			}
 			start.setEnabled(selected);
 		    }
-		    
+
 		} else {
 		    start.setEnabled(false);
 		}

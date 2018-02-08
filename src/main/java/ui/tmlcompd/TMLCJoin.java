@@ -150,21 +150,21 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
 
 
 
-    /*public String getAttributes() {
+    /*public String getAttributeList() {
       if (conflict) {
       return conflictMessage;
       }
 
       String s = "";
       if (inp != null) {
-      s = s + inp.getAttributes();
+      s = s + inp.getAttributeList();
       if (outp != null) {
       s = s + "\n";
       }
       }
 
       if (outp != null) {
-      s = s + outp.getAttributes();
+      s = s + outp.getAttributeList();
       }
 
       return s;

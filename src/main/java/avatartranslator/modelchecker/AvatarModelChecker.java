@@ -372,7 +372,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         while (go) {
             // Pickup a state
             if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
-                TraceManager.addDev("In Avatar modelchecher thread: stopped before end or terminated");
+                //TraceManager.addDev("In Avatar modelchecher thread: stopped before end or terminated");
                 return;
             }
 
