@@ -4639,7 +4639,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         TraceManager.addDev("Avatar code generation");
         JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, SpecConfigTTool.AVATARExecutableCodeDirectory, SpecConfigTTool.AVATARExecutableCodeCompileCommand, SpecConfigTTool.AVATARExecutableCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand, ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibTraceFile);
         //   jgen.setSize(500, 450);
-        GraphicLib.centerOnParent(jgen, 500, 600);
+        GraphicLib.centerOnParent(jgen, 700, 600);
         jgen.setVisible(true);
         dtree.toBeUpdated();
     }
