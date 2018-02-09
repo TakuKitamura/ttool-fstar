@@ -171,7 +171,7 @@ class ExecutionThread extends Thread {
         try {
             final Socket socket = server.accept();
 
-            TraceManager.addDev( "Processe # " + port + " got client." );
+            TraceManager.addDev( "Process # " + port + " got client." );
 
             return socket;
         }

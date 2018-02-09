@@ -40,9 +40,8 @@ package common;
 
 import myutil.FileUtils;
 import myutil.MalformedConfigurationException;
-import myutil.TraceManager;
 import myutil.PluginManager;
-
+import myutil.TraceManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -58,6 +57,7 @@ import java.io.FileOutputStream;
  * Class ConfigurationTTool
  * Creation: 21/12/2003
  * Version 1.0
+ *
  * @author Ludovic APVRILLE
  */
 public class ConfigurationTTool {
@@ -110,12 +110,12 @@ public class ConfigurationTTool {
     public static String UPPAALCodeDirectory = "";
     public static String UPPAALVerifierPath = "";
     public static String UPPAALVerifierHost = "";
-    
+
     // Issue #35: UPPAAL change in property verification message
     public static String UPPAALPropertyVerifMessage = "";
     public static String UPPAALPropertyNotVerifMessage = "";
-    
-    
+
+
     public static String ProVerifCodeDirectory = "";
     public static String ProVerifVerifierPath = "";
     public static String ProVerifVerifierHost = "";
@@ -163,14 +163,15 @@ public class ConfigurationTTool {
     public static String LastOpenFile = "";
     public static boolean LastOpenFileDefined = false;
 
-    public static String LastWindowAttributesX="",  LastWindowAttributesY= "";
-    public static String LastWindowAttributesWidth="",  LastWindowAttributesHeight= "";
-    public static String LastWindowAttributesMax="";
+    public static String LastWindowAttributesX = "", LastWindowAttributesY = "";
+    public static String LastWindowAttributesWidth = "", LastWindowAttributesHeight = "";
+    public static String LastWindowAttributesMax = "";
 
     public static String fileName = "";
 
-    public static String ExternalServer="";
-    public static String ProVerifHash="";
+    public static String ExternalServer = "";
+    public static String ProVerifHash = "";
+
     public static void makeDefaultConfiguration() {
         //System.out.println(Paths.get("").toAbsolutePath().toString());
         //System.out.println("User.dir path:" + System.getProperty("user.dir"));
@@ -228,7 +229,7 @@ public class ConfigurationTTool {
                 index2 = data.indexOf('"', index1 + 1);
                 if (index2 > -1) {
                     tmp = data.substring(index2, data.length());
-                    data = data.substring(0, index1+1) + ConfigurationTTool.LastOpenFile+ tmp;
+                    data = data.substring(0, index1 + 1) + ConfigurationTTool.LastOpenFile + tmp;
                     //sb.append("data = " + data);
                     write = true;
                     /*try {
@@ -252,7 +253,7 @@ public class ConfigurationTTool {
                 index2 = data.indexOf('"', index1 + 1);
                 if (index2 > -1) {
                     tmp = data.substring(index2, data.length());
-                    data = data.substring(0, index1+1) + ConfigurationTTool.ExternalServer+ tmp;
+                    data = data.substring(0, index1 + 1) + ConfigurationTTool.ExternalServer + tmp;
                     //sb.append("data = " + data);
                     write = true;
                     /*try {
@@ -269,8 +270,8 @@ public class ConfigurationTTool {
 
         index0 = data.indexOf("LastWindowAttributes");
         if (index0 > -1) {
-            tmp1 = data.substring(0, index0+20);
-            tmp2 = data.substring(index0+20, data.length());
+            tmp1 = data.substring(0, index0 + 20);
+            tmp2 = data.substring(index0 + 20, data.length());
             index1 = tmp2.indexOf("/>");
             if (index1 > -1) {
                 tmp2 = tmp2.substring(index1, tmp2.length());
@@ -283,7 +284,7 @@ public class ConfigurationTTool {
                 write = true;
             }
         } else {
-            index1= data.indexOf("</TURTLECONFIGURATION>");
+            index1 = data.indexOf("</TURTLECONFIGURATION>");
             if (index1 > -1) {
                 location = "<LastWindowAttributes x=\"" + LastWindowAttributesX;
                 location += "\" y=\"" + LastWindowAttributesY;
@@ -301,13 +302,12 @@ public class ConfigurationTTool {
                 index2 = data.indexOf('"', index1 + 1);
                 if (index2 > -1) {
                     tmp = data.substring(index2, data.length());
-                    data = data.substring(0, index1+1) + ConfigurationTTool.ProVerifHash + tmp;
+                    data = data.substring(0, index1 + 1) + ConfigurationTTool.ProVerifHash + tmp;
                     write = true;
                 }
             }
-        }
-        else {
-            index1= data.indexOf("</TURTLECONFIGURATION>");
+        } else {
+            index1 = data.indexOf("</TURTLECONFIGURATION>");
             if (index1 > -1) {
                 location = "<ProVerifHash data=\"" + ConfigurationTTool.ProVerifHash + "\"/>\n\n";
                 data = data.substring(0, index1) + location + data.substring(index1, data.length());
@@ -321,7 +321,7 @@ public class ConfigurationTTool {
                 fos.write(data.getBytes());
                 fos.close();
             } catch (Exception e) {
-                throw new  MalformedConfigurationException("Saving file failed");
+                throw new MalformedConfigurationException("Saving file failed");
             }
         } else {
             TraceManager.addError("Configuration could not be saved");
@@ -364,9 +364,9 @@ public class ConfigurationTTool {
         sb.append("\nCADP:\n");
         sb.append("AldebaranHost: " + AldebaranHost + "\n");
         sb.append("AldebaranPath: " + AldebaranPath + "\n");
-        sb.append("BcgioPath: " + BcgioPath + "\n" );
-        sb.append("BcgminPath: " + BcgminPath + "\n" );
-        sb.append("BisimulatorPath: " + BisimulatorPath + "\n" );
+        sb.append("BcgioPath: " + BcgioPath + "\n");
+        sb.append("BcgminPath: " + BcgminPath + "\n");
+        sb.append("BisimulatorPath: " + BisimulatorPath + "\n");
         sb.append("BcgmergePath: " + BcgmergePath + "\n");
         sb.append("CaesarPath: " + CaesarPath + "\n");
         sb.append("CaesarOpenPath: " + CaesarOpenPath + "\n");
@@ -378,7 +378,7 @@ public class ConfigurationTTool {
         sb.append("UPPAALCodeDirectory: " + UPPAALCodeDirectory + "\n");
         sb.append("UPPAALVerifierPATH: " + UPPAALVerifierPath + "\n");
         sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
-        
+
         // Issue #35
         sb.append("UPPAALPropertyVerifMessage: " + UPPAALPropertyVerifMessage + "\n");
         sb.append("UPPAALPropertyNotVerifMessage: " + UPPAALPropertyNotVerifMessage + "\n");
@@ -392,7 +392,7 @@ public class ConfigurationTTool {
         sb.append("\nAVATAR (simulation):\n");
         sb.append("AVATARSimulationHost: " + AVATARSimulationHost + "\n");
         sb.append("AVATARCPPSIMCodeDirectory: " + AVATARCPPSIMCodeDirectory + "\n");*/
-        
+
         // Issue #35: Moved with other UPPAAL properties
 //        sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
 
@@ -436,7 +436,7 @@ public class ConfigurationTTool {
         sb.append("JavaExecutePath: " + JavaExecutePath + "\n");
         sb.append("SimuJavaCodeDirectory: " + SimuJavaCodeDirectory + "\n");
         sb.append("TToolSimuClassPath: " + TToolSimuClassPath + "\n");
-        
+
         sb.append("\nDIPLODOCUS:\n");
         if (systemcOn) {
             sb.append("SystemCCodeDirectory: " + SystemCCodeDirectory + "\n");
@@ -453,7 +453,6 @@ public class ConfigurationTTool {
         }
 
 
-
         // VCD
         sb.append("VCDPath: " + VCDPath + "\n");
 
@@ -467,21 +466,21 @@ public class ConfigurationTTool {
         sb.append("Requirement ontology website: " + RequirementOntologyWebsite + "\n");
         sb.append("Attack ontology website: " + AttackOntologyWebsite + "\n");*/
 
-	// Plugins
-	sb.append("\nPlugins:\n");
-	//sb.append("Plugin path: " + PLUGIN_PKG + "\n");
-	sb.append("Plugin path: " + PLUGIN_PATH + "\n");
-	/*sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
+        // Plugins
+        sb.append("\nPlugins:\n");
+        //sb.append("Plugin path: " + PLUGIN_PKG + "\n");
+        sb.append("Plugin path: " + PLUGIN_PATH + "\n");
+    /*sb.append("Plugin for java code generation: " + PLUGIN_JAVA_CODE_GENERATOR + "\n");
 	for (int i=0; i<PLUGIN_GRAPHICAL_COMPONENT.length; i++) {
 	    sb.append("Plugin for graphical component: " + PLUGIN_GRAPHICAL_COMPONENT[i] + "\n");
 	    }*/
-	for (int i=0; i<PLUGIN.length; i++) {
-	    sb.append("Plugin: " + PLUGIN[i] + " package:" + PLUGIN_PKG[i] + "\n");
-	}
+        for (int i = 0; i < PLUGIN.length; i++) {
+            sb.append("Plugin: " + PLUGIN[i] + " package:" + PLUGIN_PKG[i] + "\n");
+        }
 
-	// URL
-	sb.append("\nURLs:\n");
-	sb.append("URL for loading models from network: " + URL_MODEL + "\n");
+        // URL
+        sb.append("\nURLs:\n");
+        sb.append("URL for loading models from network: " + URL_MODEL + "\n");
 
         sb.append("\nCustom external commands:\n");
         sb.append("ExternalCommand1Host: " + ExternalCommand1Host + "\n");
@@ -580,7 +579,7 @@ public class ConfigurationTTool {
                 IMGPath(nl);
             nl = doc.getElementsByTagName("DocGenPath");
             if (nl.getLength() > 0)
-            	DocGenPath(nl);
+                DocGenPath(nl);
             nl = doc.getElementsByTagName("GGraphPath");
             if (nl.getLength() > 0)
                 GGraphPath(nl);
@@ -720,12 +719,12 @@ public class ConfigurationTTool {
 
             nl = doc.getElementsByTagName("UPPAALPropertyVerifMessage");
             if (nl.getLength() > 0) {
-            	UPPAALPropertyVerifMessage(nl);
+                UPPAALPropertyVerifMessage(nl);
             }
 
             nl = doc.getElementsByTagName("UPPAALPropertyNotVerifMessage");
             if (nl.getLength() > 0) {
-            	UPPAALPropertyNotVerifMessage(nl);
+                UPPAALPropertyNotVerifMessage(nl);
             }
 
             nl = doc.getElementsByTagName("ProVerifCodeDirectory");
@@ -770,11 +769,11 @@ public class ConfigurationTTool {
             if (nl.getLength() > 0)
                 ExternalCommand2(nl);
 
-	    nl = doc.getElementsByTagName("PLUGIN_PATH");
+            nl = doc.getElementsByTagName("PLUGIN_PATH");
             if (nl.getLength() > 0)
                 PluginPath(nl);
 
-	    nl = doc.getElementsByTagName("PLUGIN");
+            nl = doc.getElementsByTagName("PLUGIN");
             if (nl.getLength() > 0)
                 Plugin(nl);
 
@@ -786,7 +785,7 @@ public class ConfigurationTTool {
             if (nl.getLength() > 0)
 	    PluginGraphicalComponent(nl);*/
 
-	    nl = doc.getElementsByTagName("URL_MODEL");
+            nl = doc.getElementsByTagName("URL_MODEL");
             if (nl.getLength() > 0)
                 URLModel(nl);
 
@@ -799,7 +798,7 @@ public class ConfigurationTTool {
                 LastWindowAttributes(nl);
 
             nl = doc.getElementsByTagName("ExternalServer");
-            if (nl.getLength() >0)
+            if (nl.getLength() > 0)
                 ExternalServer(nl);
 
 
@@ -810,7 +809,7 @@ public class ConfigurationTTool {
 
     private static void LauncherPort(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             LauncherPort = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -819,7 +818,7 @@ public class ConfigurationTTool {
 
     private static void RTLHOST(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             RTLHost = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -828,7 +827,7 @@ public class ConfigurationTTool {
 
     private static void RTLPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             RTLPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -837,7 +836,7 @@ public class ConfigurationTTool {
 
     private static void DTA2DOTPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             DTA2DOTPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -846,7 +845,7 @@ public class ConfigurationTTool {
 
     private static void RG2TLSAPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             RG2TLSAPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -855,7 +854,7 @@ public class ConfigurationTTool {
 
     private static void RGSTRAPPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             RGSTRAPPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -864,7 +863,7 @@ public class ConfigurationTTool {
 
     private static void AldebaranPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AldebaranPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -873,7 +872,7 @@ public class ConfigurationTTool {
 
     private static void AldebaranHost(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AldebaranHost = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -882,7 +881,7 @@ public class ConfigurationTTool {
 
     private static void BcgioPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             BcgioPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -891,7 +890,7 @@ public class ConfigurationTTool {
 
     private static void BcgmergePath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             BcgmergePath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -900,7 +899,7 @@ public class ConfigurationTTool {
 
     private static void BcgminPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             BcgminPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -909,7 +908,7 @@ public class ConfigurationTTool {
 
     private static void BisimulatorPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             BisimulatorPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -918,7 +917,7 @@ public class ConfigurationTTool {
 
     private static void CaesarPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             CaesarPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -927,7 +926,7 @@ public class ConfigurationTTool {
 
     private static void CaesarOpenPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             CaesarOpenPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -936,7 +935,7 @@ public class ConfigurationTTool {
 
     private static void DOTTYHost(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             DOTTYHost = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -945,7 +944,7 @@ public class ConfigurationTTool {
 
     private static void DOTTYPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             DOTTYPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -954,7 +953,7 @@ public class ConfigurationTTool {
 
     private static void FILEPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             FILEPath = elt.getAttribute("data");
             if (DownloadedFILEPath.isEmpty())
                 DownloadedFILEPath = FILEPath;
@@ -965,7 +964,7 @@ public class ConfigurationTTool {
 
     private static void DownloadedFILEPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             DownloadedFILEPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -974,7 +973,7 @@ public class ConfigurationTTool {
 
     private static void LOTOSPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             LOTOSPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -983,7 +982,7 @@ public class ConfigurationTTool {
 
     private static void LIBPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             LIBPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -992,7 +991,7 @@ public class ConfigurationTTool {
 
     private static void IMGPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             IMGPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1001,7 +1000,7 @@ public class ConfigurationTTool {
 
     private static void DocGenPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             DocGenPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1010,7 +1009,7 @@ public class ConfigurationTTool {
 
     private static void GGraphPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             GGraphPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1019,7 +1018,7 @@ public class ConfigurationTTool {
 
     private static void TGraphPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             TGraphPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1028,7 +1027,7 @@ public class ConfigurationTTool {
 
     private static void TToolUpdateURL(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             TToolUpdateURL = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1037,7 +1036,7 @@ public class ConfigurationTTool {
 
     private static void TToolUpdateProxy(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             TToolUpdateProxy = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1046,7 +1045,7 @@ public class ConfigurationTTool {
 
     private static void TToolUpdateProxyPort(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             TToolUpdateProxyPort = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1055,7 +1054,7 @@ public class ConfigurationTTool {
 
     private static void TToolUpdateProxyHost(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             TToolUpdateProxyHost = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1064,7 +1063,7 @@ public class ConfigurationTTool {
 
     private static void JavaCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             JavaCodeDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1073,7 +1072,7 @@ public class ConfigurationTTool {
 
     private static void JavaHeader(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             JavaHeader = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1082,7 +1081,7 @@ public class ConfigurationTTool {
 
     private static void JavaCompilerPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             JavaCompilerPath = elt.getAttribute("data");
             if (JavaCompilerPath.startsWith("[")) {
                 JavaCompilerPath = "\"" + JavaCompilerPath.substring(1, JavaCompilerPath.length()) + "\"";
@@ -1094,7 +1093,7 @@ public class ConfigurationTTool {
 
     private static void TToolClassPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             TToolClassPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1103,7 +1102,7 @@ public class ConfigurationTTool {
 
     private static void SimuJavaCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             SimuJavaCodeDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1112,7 +1111,7 @@ public class ConfigurationTTool {
 
     private static void TToolSimuClassPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             TToolSimuClassPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1121,7 +1120,7 @@ public class ConfigurationTTool {
 
     private static void JavaExecutePath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             JavaExecutePath = elt.getAttribute("data");
             if (JavaExecutePath.startsWith("[")) {
                 JavaExecutePath = "\"" + JavaExecutePath.substring(1, JavaExecutePath.length()) + "\"";
@@ -1133,7 +1132,7 @@ public class ConfigurationTTool {
 
     private static void NCDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             NCDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1142,7 +1141,7 @@ public class ConfigurationTTool {
 
     private static void SystemCCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             SystemCCodeDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1151,7 +1150,7 @@ public class ConfigurationTTool {
 
     private static void SystemCHost(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             SystemCHost = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1160,7 +1159,7 @@ public class ConfigurationTTool {
 
     private static void SystemCCodeCompileCommand(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             SystemCCodeCompileCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1169,7 +1168,7 @@ public class ConfigurationTTool {
 
     private static void SystemCCodeExecuteCommand(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             SystemCCodeExecuteCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1178,7 +1177,7 @@ public class ConfigurationTTool {
 
     private static void SystemCCodeInteractiveExecuteCommand(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             SystemCCodeInteractiveExecuteCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1187,7 +1186,7 @@ public class ConfigurationTTool {
 
     private static void GTKWavePath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             GTKWavePath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1196,7 +1195,7 @@ public class ConfigurationTTool {
 
     private static void TMLCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             TMLCodeDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1205,7 +1204,7 @@ public class ConfigurationTTool {
 
     private static void CCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             CCodeDirectory = elt.getAttribute("data") + "/";
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1214,7 +1213,7 @@ public class ConfigurationTTool {
 
     private static void VCDPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             VCDPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1223,7 +1222,7 @@ public class ConfigurationTTool {
 
     private static void UPPAALCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             UPPAALCodeDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1232,7 +1231,7 @@ public class ConfigurationTTool {
 
     private static void UPPAALVerifierPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             UPPAALVerifierPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1241,7 +1240,7 @@ public class ConfigurationTTool {
 
     private static void UPPAALVerifierHost(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             UPPAALVerifierHost = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1250,7 +1249,7 @@ public class ConfigurationTTool {
 
     private static void UPPAALPropertyVerifMessage(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             UPPAALPropertyVerifMessage = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1259,7 +1258,7 @@ public class ConfigurationTTool {
 
     private static void UPPAALPropertyNotVerifMessage(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             UPPAALPropertyNotVerifMessage = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1313,7 +1312,7 @@ public class ConfigurationTTool {
 
     private static void AVATARExecutableCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AVATARExecutableCodeDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1322,16 +1321,17 @@ public class ConfigurationTTool {
 
     private static void AVATARMPSoCCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AVATARMPSoCCodeDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
     }
+
     private static void AVATARMPSoCCompileCommand(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
-            AVATARMPSoCCompileCommand= elt.getAttribute("data");
+            Element elt = (Element) (nl.item(0));
+            AVATARMPSoCCompileCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
@@ -1340,7 +1340,7 @@ public class ConfigurationTTool {
 
     private static void AVATARExecutableCodeHost(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AVATARExecutableCodeHost = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1349,7 +1349,7 @@ public class ConfigurationTTool {
 
     private static void AVATARExecutableCodeCompileCommand(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AVATARExecutableCodeCompileCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1358,7 +1358,7 @@ public class ConfigurationTTool {
 
     private static void AVATARExecutableCodeExecuteCommand(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AVATARExecutableCodeExecuteCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1367,7 +1367,7 @@ public class ConfigurationTTool {
 
     private static void AVATARExecutableSoclibCodeCompileCommand(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AVATARExecutableSoclibCodeCompileCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1376,7 +1376,7 @@ public class ConfigurationTTool {
 
     private static void AVATARExecutableSoclibCodeExecuteCommand(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AVATARExecutableSoclibCodeExecuteCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1385,7 +1385,7 @@ public class ConfigurationTTool {
 
     private static void AVATARExecutableSoclibCodeTraceCommand(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AVATARExecutableSoclibCodeTraceCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1394,7 +1394,7 @@ public class ConfigurationTTool {
 
     private static void AVATARExecutableSoclibTraceFile(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             AVATARExecutableSoclibTraceFile = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1403,7 +1403,7 @@ public class ConfigurationTTool {
 
     private static void ProVerifCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             ProVerifCodeDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1412,7 +1412,7 @@ public class ConfigurationTTool {
 
     private static void ProVerifHash(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             ProVerifHash = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1421,7 +1421,7 @@ public class ConfigurationTTool {
 
     private static void ProVerifVerifierPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             ProVerifVerifierPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1430,7 +1430,7 @@ public class ConfigurationTTool {
 
     private static void ProVerifVerifierHost(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             ProVerifVerifierHost = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1457,7 +1457,7 @@ public class ConfigurationTTool {
 
     private static void ExternalCommand1Host(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             ExternalCommand1Host = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1466,7 +1466,7 @@ public class ConfigurationTTool {
 
     private static void ExternalCommand1(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             ExternalCommand1 = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1475,7 +1475,7 @@ public class ConfigurationTTool {
 
     private static void ExternalCommand2Host(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             ExternalCommand2Host = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1484,7 +1484,7 @@ public class ConfigurationTTool {
 
     private static void ExternalCommand2(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             ExternalCommand2 = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1493,23 +1493,23 @@ public class ConfigurationTTool {
 
     private static void PluginPath(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             PLUGIN_PATH = elt.getAttribute("data");
-	    PluginManager.PLUGIN_PATH = PLUGIN_PATH;
+            PluginManager.PLUGIN_PATH = PLUGIN_PATH;
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
     }
 
     private static void Plugin(NodeList nl) throws MalformedConfigurationException {
-	PLUGIN = new String[nl.getLength()];
-	PLUGIN_PKG = new String[nl.getLength()];
+        PLUGIN = new String[nl.getLength()];
+        PLUGIN_PKG = new String[nl.getLength()];
         try {
-	    for (int i=0; i<nl.getLength(); i++) {
-		Element elt = (Element)(nl.item(i));
-		PLUGIN[i] = elt.getAttribute("file");
-		PLUGIN_PKG[i] = elt.getAttribute("package");
-	    }
+            for (int i = 0; i < nl.getLength(); i++) {
+                Element elt = (Element) (nl.item(i));
+                PLUGIN[i] = elt.getAttribute("file");
+                PLUGIN_PKG[i] = elt.getAttribute("package");
+            }
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
@@ -1538,7 +1538,7 @@ public class ConfigurationTTool {
 
     private static void URLModel(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             URL_MODEL = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
@@ -1548,7 +1548,7 @@ public class ConfigurationTTool {
 
     private static void LastOpenFile(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             LastOpenFile = elt.getAttribute("data");
             LastOpenFileDefined = true;
         } catch (Exception e) {
@@ -1558,7 +1558,7 @@ public class ConfigurationTTool {
 
     private static void LastWindowAttributes(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element)(nl.item(0));
+            Element elt = (Element) (nl.item(0));
             LastWindowAttributesX = elt.getAttribute("x");
             LastWindowAttributesY = elt.getAttribute("y");
             LastWindowAttributesWidth = elt.getAttribute("width");
@@ -1581,7 +1581,7 @@ public class ConfigurationTTool {
         }
     }
 
-    public static boolean  isConfigured(String s) {
+    public static boolean isConfigured(String s) {
         return ((s != null) && (s.trim().length() > 0));
     }
 

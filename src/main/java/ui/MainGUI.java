@@ -3323,7 +3323,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void showTToolConfiguration() {
-        JFrameBasicText jft = new JFrameBasicText("Your configuration of TTool ...", ConfigurationTTool.getConfiguration(systemcOn), IconManager.imgic76);
+        JFrameBasicText jft = new JFrameBasicText("Your configuration of TTool ...",
+                "Default configuration:\n-----------------------\n" + ConfigurationTTool.getConfiguration(systemcOn)
+                + "\nProject configuration:\n-----------------------\n" + SpecConfigTTool.getConfiguration(systemcOn),
+                IconManager.imgic76);
         jft.setIconImage(IconManager.img8);
         //jft.setSize(700, 800);
         GraphicLib.centerOnParent(jft, 700, 800);

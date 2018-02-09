@@ -34,8 +34,8 @@
 <AVATARExecutableCodeDirectory data="../executablecode/" />
 <AVATARMPSoCCodeDirectory data="../MPSoC/" />
 <AVATARExecutableCodeHost data="localhost"/>
-<AVATARExecutableCodeCompileCommand data="make -C ../executablecode" />
-<AVATARExecutableCodeExecuteCommand data="../executablecode/run.x" />
+<AVATARExecutableCodeCompileCommand data="make" />
+<AVATARExecutableCodeExecuteCommand data="run.x" />
 <AVATARExecutableSoclibCodeCompileCommand data="make -C ../executablecode updategeneratedcode compilesoclib" />
 <AVATARExecutableSoclibCodeExecuteCommand data="make -C ../executablecode runsoclib" />
 
