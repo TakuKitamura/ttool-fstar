@@ -365,9 +365,18 @@ public class TMLSyntaxChecking {
                     elseg = choice.getElseGuard();
                     afterg = choice.getAfterGuard();
                     for(j=0; j<choice.getNbGuard(); j++) {
+                        /*if (action.length() == 1) {
+                            if ((action.compareTo("[") == 0) || (action.compareTo("]") == 0)) {
+                                addError(t, elt, SYNTAX_ERROR  + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                            }
+
+                        }*/
+                        //TraceManager.addDev("Testing guard: " + choice.getGuard(j));
                         if (!choice.isNonDeterministicGuard(j) && !choice.isStochasticGuard(j)) {
                             if ((j!= elseg) && (j!=afterg)) {
                                 action = choice.getGuard(j);
+                                action = action.trim();
+
                                 parsing(t, elt, "guard", action);
                             }
                         }

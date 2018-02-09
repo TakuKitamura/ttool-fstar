@@ -78,13 +78,12 @@ public class TMLChoice extends TMLActivityElement{
     public boolean isNonDeterministicGuard(int i) {
         if (i < getNbGuard()) {
             String guard = guards.get(i);
-            guard = getGuard(i);
-            guard = Conversion.replaceAllChar(guard, '[', " ");
-            guard = Conversion.replaceAllChar(guard, ']', " ");
             guard = guard.trim();
             if (guard.length() == 0) {
                 return true;
             }
+            guard = Conversion.replaceAllChar(guard, ' ', "");
+            return (guard.compareTo("[]") == 0);
         }
         return false;
     }
