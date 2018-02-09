@@ -129,6 +129,7 @@ public class FaultTreePanelTranslator {
                 }
                 att = new Fault(value, atdatt);
                 att.setRoot(atdatt.isRootFault());
+                att.setProbability(atdatt.getProbability());
                 att.setEnabled(atdatt.isEnabled());
                 at.addFault(att);
                 listE.addCor(att, comp);
@@ -746,11 +747,11 @@ public class FaultTreePanelTranslator {
             _ab.addAttribute(aa);
             atF.addAction(att.getName() + "__performed = false");
 
-
             avatartranslator.AvatarSignal sigAtt = _main.getAvatarSignalWithName("accept__" + att.getName());
             AvatarActionOnSignal acceptFault = new AvatarActionOnSignal("AcceptFault", sigAtt, _ref1);
             asm.addElement(acceptFault);
             AvatarTransition at = new AvatarTransition(_ab, "at_toInputFault", _ref);
+            at.setProbability(att.getProbability());
             asm.addElement(at);
             mainState.addNext(at);
             at.addNext(acceptFault);
