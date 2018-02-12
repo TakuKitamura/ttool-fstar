@@ -64,6 +64,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.math.BigInteger;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -1382,6 +1383,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		msgTimes.clear();
 		channelIDMap.clear();
 		simtraces.clear();
+		simIndex=0;
 	}
 
 	public void writeSimTrace(){
@@ -1420,17 +1422,30 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			Collections.sort(simtraces, new Comparator<String>() {
     			@Override
     			public int compare(String o1, String o2) {
-       				int i = Integer.valueOf((o1.split(" ")[0]).split("=")[1]);
-					int j = Integer.valueOf((o2.split(" ")[0]).split("=")[1]);
-					return i-j;
+       				BigInteger i = new BigInteger((o1.split(" ")[0]).split("=")[1]);
+					BigInteger j = new BigInteger((o2.split(" ")[0]).split("=")[1]);
+					return i.compareTo(j);
     			}
 			});
 			//System.out.println(simtraces);
-			for (String s: simtraces){
-				bw.write("#"+simIndex+ " "+s);
-				bw.newLine();
-				bw.flush();
-				simIndex++;
+			//System.out.println(simtraces.size());
+			if (simtraces.size()>2000){
+				//Only write last 2000 simulations
+				int numTraces = simtraces.size();
+				for (int i=0; i<2000; i++){
+					bw.write("#" + simIndex+ " " +simtraces.get(numTraces-2000+i));
+					bw.newLine();
+					bw.flush();
+					simIndex++;
+				}
+			}
+			else {
+				for (String s: simtraces){
+					bw.write("#"+simIndex+ " "+s);
+					bw.newLine();
+					bw.flush();
+					simIndex++;
+				}
 			}
 			bw.close();
 			pos.close();
@@ -1438,7 +1453,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 		}
 		catch (Exception e){
-			System.out.println("Could not write sim trace " + e + " " + simtraces + " " +simIndex);
+			System.out.println("Could not write sim trace " + e + " " + simtraces.get(simIndex) + " " +simIndex);
 		}
 	}
 	
@@ -2680,7 +2695,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     private void processLatency(){
 
-        TraceManager.addDev(transTimes.toString());
+//        TraceManager.addDev(transTimes.toString());
 		//System.out.println(transTimes.toString());
 		//System.out.println(checkTable.toString());
         for (Object o: latencies){
