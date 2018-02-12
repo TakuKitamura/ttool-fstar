@@ -86,6 +86,10 @@ public class Fault extends FaultElement {
         this.probability = probability;
     }
 
+    public double getProbability() {
+        return probability;
+    }
+
     public void addDestinationNode(FaultNode _node) {
         destinationNodes.add(_node);
     }

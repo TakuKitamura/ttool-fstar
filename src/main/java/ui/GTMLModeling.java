@@ -2405,7 +2405,7 @@ public class GTMLModeling  {
                 int nbNonDeter = tmlchoice.nbOfNonDeterministicGuard();
                 int nbStocha = tmlchoice.nbOfStochasticGuard();
                 if ((nbNonDeter > 0) && (nbStocha > 0)) {
-                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted choice: it has both non-determinitic and stochastic guards");
+                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted choice: it has both non-deterministic and stochastic guards");
                     ce.setTDiagramPanel(tadp);
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
@@ -2414,7 +2414,7 @@ public class GTMLModeling  {
                 if (nb > 0) {
                     nb = nb + tmlchoice.nbOfElseAndAfterGuards();
                     if (nb != tmlchoice.getNbGuard()) {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted choice: it has both non-determinitic/ stochastic and regular guards)");
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted choice: it has both non-deterministic/ stochastic and regular guards");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);

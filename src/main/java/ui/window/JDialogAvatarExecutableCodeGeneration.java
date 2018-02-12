@@ -123,13 +123,14 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     protected JTextField code1, code2, compiler1, compiler2, exe1, exe2, exe3, exe4, exe2int, simulationTraceFile, simulationsoclibTraceFile;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode, putUserCode;
+    protected JCheckBox removeCFiles, removeOFiles, removeXFiles, debugmode, tracemode, optimizemode, putUserCode;
     protected JComboBox<String> versionCodeGenerator, units;
     protected JButton showSimulationTrace;
 
     private static int selectedUnit = 2;
     private static boolean removeCFilesValue = true;
     private static boolean removeXFilesValue = true;
+    private static boolean removeOFilesValue = false;
     private static boolean debugValue = false;
     private static boolean tracingValue = true;
     //private static boolean optimizeValue = true;
@@ -145,7 +146,9 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     protected RshClient rshc;
 
     /** Creates new form  */
-    public JDialogAvatarExecutableCodeGeneration(Frame _f, MainGUI _mgui, String title, String _hostExecute, String _pathCode, String _pathCompiler, String _pathExecute, String _pathCompilerSoclib, String _pathExecuteSoclib, String _pathSoclibTraceFile) {
+    public JDialogAvatarExecutableCodeGeneration(Frame _f, MainGUI _mgui, String title, String _hostExecute, String _pathCode,
+                                                 String _pathCompiler, String _pathExecute, String _pathCompilerSoclib,
+                                                 String _pathExecuteSoclib, String _pathSoclibTraceFile) {
         super(title);
 
         f = _f;
@@ -255,6 +258,10 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         removeXFiles.setSelected(removeXFilesValue);
         jp01.add(removeXFiles, c01);
 
+        removeOFiles = new JCheckBox("Remove .o files");
+        removeOFiles.setSelected(removeOFilesValue);
+        jp01.add(removeOFiles, c01);
+
         debugmode = new JCheckBox("Put debug information in generated code");
         debugmode.setSelected(debugValue);
         jp01.add(debugmode, c01);
@@ -312,7 +319,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
         //jp02.add(new JLabel("with"), c02);
 
-        compiler1 = new JTextField(pathCompiler, 100);
+        compiler1 = new JTextField(pathCompiler + " -C " + pathCode, 100);
         jp02.add(compiler1, c02);
 
         jp02.add(new JLabel(" "), c02);
@@ -343,7 +350,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         exe.addActionListener(this);
         exegroup.add(exe);
         jp03.add(exe, c03);
-        exe2 = new JTextField(pathExecute, 100);
+        exe2 = new JTextField(pathCode + "/" + pathExecute, 100);
         jp03.add(exe2, c03);
         exegroup.add(exe);
 
@@ -351,7 +358,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         exetrace.addActionListener(this);
         exegroup.add(exetrace);
         jp03.add(exetrace, c03);
-        exe3 = new JTextField(pathExecute + " " + pathCode + "trace.txt", 100);
+        exe3 = new JTextField(pathCode + "/" + pathExecute + " " + pathCode + "trace.txt", 100);
         jp03.add(exe3, c03);
 
         exesoclib = new JRadioButton(textSysC6, false);
@@ -479,6 +486,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         optimizeModeSelected = optimizemode.isSelected();
         removeCFilesValue = removeCFiles.isSelected();
         removeXFilesValue = removeXFiles.isSelected();
+        removeOFilesValue = removeOFiles.isSelected();
         debugValue = debugmode.isSelected();
         tracingValue = tracemode.isSelected();
         static_putUserCode = putUserCode.isSelected();
@@ -588,6 +596,28 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
                     if (removeXFiles.isSelected()) {
                         jta.append("Removing all .x files\n");
                         list = FileUtils.deleteFiles(code1.getText() , ".x");
+                        if (list.length() == 0) {
+                            jta.append("No files were deleted\n");
+                        } else {
+                            jta.append("Files deleted:\n" + list + "\n");
+                        }
+                    }
+
+
+                    if (removeOFiles.isSelected()) {
+                        String pathTmp = code1.getText() + "/lib/generated_src/";
+                        jta.append("Removing all .o files in " + pathTmp + "\n");
+                        list = FileUtils.deleteFiles(pathTmp , ".o");
+                        if (list.length() == 0) {
+                            jta.append("No files were deleted\n");
+                        } else {
+                            jta.append("Files deleted:\n" + list + "\n");
+                        }
+
+                        pathTmp = code1.getText() + "/lib/src/";
+                        jta.append("Removing all .o files in " + pathTmp + "\n");
+                        list = FileUtils.deleteFiles(pathTmp , ".o");
+
                         if (list.length() == 0) {
                             jta.append("No files were deleted\n");
                         } else {

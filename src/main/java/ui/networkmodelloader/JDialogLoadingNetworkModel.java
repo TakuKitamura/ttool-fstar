@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 /**
  * Class JDialogNetworkModelPanel
  * Dialog for managing the loading of network models
@@ -235,32 +236,34 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     }
 
     public void cancel() {
-        if (panel != null) panel.stopLoading(); dispose();
+        if (panel != null) panel.stopLoading();
+        dispose();
+    }
+
+    public void alertMessage() {
+        jta.append("Could not establish a connection to the TTool server\n");
+        jta.append("Error when retrieving file: " + url + "\n No internet connection?\n Certificates not installed on your computer?\n\n");
     }
 
     public void run() {
         // Loading main file describing models, giving information on this, and filling the array of models
         // Accessing the main file
         try {
-            /*HttpURLConnection connection;
-              TraceManager.addDev("URL: going to create it to: " + url);
-              URL mainFile = new URL(url);
-              TraceManager.addDev("URL creation");
-              connection = (HttpURLConnection)(mainFile.openConnection());
-              TraceManager.addDev("Connection setup 0");
-              String redirect = connection.getHeaderField("Location");
-              if (redirect != null){
-              TraceManager.addDev("Redirection found");
-              connection = (HttpURLConnection)(new URL(redirect).openConnection());
-              }
-              //connection.setRequestMethod("GET");
-              //connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
-              TraceManager.addDev("Connection setup 1");*/
+            int delay = 10000; //milliseconds
+            ActionListener taskPerformer = new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    alertMessage();
+                }
+            };
+            javax.swing.Timer timer = new javax.swing.Timer(delay, taskPerformer);
+            timer.start();
+
             BufferedReader in = URLManager.getBufferedReader(url);
             if (in == null) {
-                jta.append("Could not establish a connection to the TTool server\n");
-                jta.append("Error when retreiving file: " + url + "\n No internet connection?\n No right for the Java Virtual Machine to use http connections?\n\n");
+                //alertMessage();
+
             } else {
+                timer.stop();
                 jta.append("Connection established...\n");
                 String inputLine = null;
                 NetworkModel nm = null;
@@ -327,7 +330,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
             }
 
         } catch (Exception e) {
-            jta.append("Error when retreiving file: " + url + "\n No internet connection?\n No right for the Java Virtual Machine to use http connections?\n\n");
+            alertMessage();
             TraceManager.addDev("Exception trace in loading network model:");
             e.printStackTrace();
         }
