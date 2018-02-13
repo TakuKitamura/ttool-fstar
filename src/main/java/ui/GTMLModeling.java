@@ -294,7 +294,7 @@ public class GTMLModeling  {
                 addTMLEvents();
                 addTMLRequests();
                 //addTMLPragmas();
-
+                //TraceManager.addDev("At line 151");
                 generateTasksActivityDiagrams();
                 removeActionsWithDollars();
                 removeActionsWithRecords();
@@ -931,7 +931,7 @@ public class GTMLModeling  {
                                     channel.setPorts( tmlport1, tmlport2 );
                                     tmlm.addChannel(channel);
                                     listE.addCor(channel, tgc);
-                                    //TraceManager.addDev("Adding channel " + channel.getName());
+                                    TraceManager.addDev("Adding channel " + channel.getName());
                                 }
                             }
                         } else {
@@ -966,7 +966,7 @@ public class GTMLModeling  {
                                 name += "__" + portstome.get(j).getPortName();
                             }
 
-                            // Correspondance table
+                            // Correspondence table
                             alreadyConsidered.add(port1);
                             addToTable(makeName(port1, port1.getFather().getValue()) + "/" + port1.getPortName(), name);
                             for(j=0; j<portstome.size(); j++) {
@@ -1077,9 +1077,9 @@ public class GTMLModeling  {
                         portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                         //TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
                         Iterator<?> ite = portstome.listIterator();
-                        while(ite.hasNext()) {
-                            //TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
-                        }
+                        /*while(ite.hasNext()) {
+                            TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
+                        }*/
 
                         if (portstome.size() < 1) {
                             String msg = "port " + port1.getPortName() + " is not correctly connected";
@@ -1176,7 +1176,7 @@ public class GTMLModeling  {
                                             checkingErrors.add(ce);
                                             throw new MalformedTMLDesignException(msg);
                                         } else {
-                                            TraceManager.addDev("Same evt : not added");
+                                            //TraceManager.addDev("Same evt : not added");
                                         }
                                     } else {
                                         tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
@@ -1514,7 +1514,7 @@ public class GTMLModeling  {
     }
 
     private void addAttributesTo(TMLTask tmltask, TMLCPrimitiveComponent tmlcpc) {
-        List<TAttribute> attributes = tmlcpc.getAttributeList();
+        java.util.List<TAttribute> attributes = tmlcpc.getAttributeList();
         addAttributesTo(tmlcpc, tmltask, attributes);
     }
 
@@ -2077,7 +2077,7 @@ public class GTMLModeling  {
                         }
                     }
                     if (request.getNbOfParams() != tmlsendrequest.getNbOfParams()) {
-                       //TraceManager.addDev("ERROR : request#:" + request.getNbOfParams() + " sendrequest#:" + tmlsendrequest.getNbOfParams());
+                        //TraceManager.addDev("ERROR : request#:" + request.getNbOfParams() + " sendrequest#:" + tmlsendrequest.getNbOfParams());
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendRequest)tgc).getRequestName() + ": wrong number of parameters");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
@@ -2405,7 +2405,7 @@ public class GTMLModeling  {
                 int nbNonDeter = tmlchoice.nbOfNonDeterministicGuard();
                 int nbStocha = tmlchoice.nbOfStochasticGuard();
                 if ((nbNonDeter > 0) && (nbStocha > 0)) {
-                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted choice: it has both non-deterministic and stochastic guards");
+                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted choice: it has both non-determinitic and stochastic guards");
                     ce.setTDiagramPanel(tadp);
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
@@ -2414,7 +2414,7 @@ public class GTMLModeling  {
                 if (nb > 0) {
                     nb = nb + tmlchoice.nbOfElseAndAfterGuards();
                     if (nb != tmlchoice.getNbGuard()) {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted choice: it has both non-deterministic/ stochastic and regular guards");
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted choice: it has both non-determinitic/ stochastic and regular guards)");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
@@ -2806,7 +2806,7 @@ public class GTMLModeling  {
                          vgmn.privacy = vgmnnode.getPrivacy();*/
                     listE.addCor(vgmn, vgmnnode);
                     archi.addHwNode(vgmn);
-                    TraceManager.addDev("VGMN node added:" + vgmn.getName());
+                    //TraceManager.addDev("VGMN node added:" + vgmn.getName());
                 }
             }
 
@@ -3773,7 +3773,7 @@ public class GTMLModeling  {
                             }
                         }
                         else {
-                            TraceManager.addDev("Can't map key " + key.getValue());
+                            //System.out.println("Can't map key " + key.getValue());
                         }
                     }
                 }
