@@ -835,13 +835,6 @@ public class GTMLModeling  {
                     port1 = li.next();
                     if (!(alreadyConsidered.contains(port1))) {
                         portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
-                        //TraceManager.addDev("******** Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
-
-                        Iterator<TMLCPrimitivePort> ite = portstome.listIterator();
-                        while(ite.hasNext()) {
-                            //TraceManager.addDev("port=" + ite.next().getPortName());
-                            ite.next();
-                        }
 
                         if (portstome.size() < 1) {
                             String msg = "port " + port1.getPortName() + " is not correctly connected";
