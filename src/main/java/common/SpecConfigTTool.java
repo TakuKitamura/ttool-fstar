@@ -359,30 +359,41 @@ public class SpecConfigTTool {
      * @author Fabien Tessier
      */
     public static boolean checkAndCreateSystemCDir(String s) throws FileException {
+        TraceManager.addDev("Diplodocus simulation code to be generated in dir:" + s);
         File f = new File(s);
         try {
             if (!f.exists())
-                if (!f.mkdir())
+                if (!f.mkdir()) {
+                    TraceManager.addDev("Could not create the directory");
                     return false;
-            if (!s.equals(ConfigurationTTool.SystemCCodeDirectory)) {
-                File make = new File(ConfigurationTTool.SystemCCodeDirectory + "Makefile");
-                File defs = new File(ConfigurationTTool.SystemCCodeDirectory + "Makefile.defs");
-                File src = new File(ConfigurationTTool.SystemCCodeDirectory + "src_simulator");
-                File lic = new File(ConfigurationTTool.SystemCCodeDirectory + "LICENSE");
-                File liceng = new File(ConfigurationTTool.SystemCCodeDirectory + "LICENSE_CECILL_ENG");
-                File licfr = new File(ConfigurationTTool.SystemCCodeDirectory + "LICENSE_CECILL_FR");
 
-                FileUtils.copyFileToDirectory(make, f, false);
-                FileUtils.copyFileToDirectory(defs, f, false);
-                FileUtils.copyDirectoryToDirectory(src, f);
-                FileUtils.copyFileToDirectory(lic, f, false);
-                FileUtils.copyFileToDirectory(liceng, f, false);
-                FileUtils.copyFileToDirectory(licfr, f, false);
-            }
-            return true;
+                }
         } catch (Exception e) {
+            TraceManager.addDev("Exception file creation for simulator: " + e.getMessage());
             throw new FileException(e.getMessage());
         }
+
+        try {
+            File make = new File(ConfigurationTTool.SystemCCodeDirectory + "/Makefile");
+            File defs = new File(ConfigurationTTool.SystemCCodeDirectory + "/Makefile.defs");
+            File src = new File(ConfigurationTTool.SystemCCodeDirectory + "/src_simulator");
+            File lic = new File(ConfigurationTTool.SystemCCodeDirectory + "/LICENSE");
+            File liceng = new File(ConfigurationTTool.SystemCCodeDirectory + "/LICENSE_CECILL_ENG");
+            File licfr = new File(ConfigurationTTool.SystemCCodeDirectory + "/LICENSE_CECILL_FR");
+
+            FileUtils.copyFileToDirectory(make, f, false);
+            FileUtils.copyFileToDirectory(defs, f, false);
+            FileUtils.copyDirectoryToDirectory(src, f);
+            FileUtils.copyFileToDirectory(lic, f, false);
+            FileUtils.copyFileToDirectory(liceng, f, false);
+            FileUtils.copyFileToDirectory(licfr, f, false);
+
+
+        } catch (Exception e) {
+            //TraceManager.addDev("Exception file creation for simulator: " + e.getMessage());
+            //throw new FileException(e.getMessage());
+        }
+        return true;
     }
 
     /**

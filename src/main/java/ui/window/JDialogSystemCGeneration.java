@@ -758,14 +758,15 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                     testGo();
                     jta.append("Simulator code generation done\n");
 
-                    for (final TEPE tep : alTepe) {
+                    for (final TEPE tep: alTepe) {
                         TraceManager.addDev(tep.toString());
                     }
 
                     jta.append("Saving C++ files...\n");
 
                     pathCode = code1.getText();
-                    if (!SpecConfigTTool.checkAndCreateSystemCDir(SpecConfigTTool.SystemCCodeDirectory))
+                    TraceManager.addDev("SystemC code generated in" + pathCode);
+                    if (!SpecConfigTTool.checkAndCreateSystemCDir(pathCode))
                         throw new Throwable();
                     tml2systc.saveFile(pathCode, "appmodel");
 

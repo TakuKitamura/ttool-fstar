@@ -30,6 +30,10 @@
 \pagestyle{fancy}
 \fancyhf{}
 \rfoot{Page \thepage}
+
+\lstset{language=C,basicstyle=\footnotesize,keywordstyle=\color{red}\bfseries,  commentstyle=\color{blue}\textit,stringstyle=\color{green}\ttfamily, showspaces=false,showstringspaces=false}
+
+
 \begin{document}
 \sloppy 
 
@@ -44,7 +48,7 @@
 \large
 \centering
 \begin{adjustbox}{width=\textwidth}
-\begin{tabular}{ |p{1.6cm}|p{6.0cm}|p{4.2cm}|p{4.2cm}| }
+\begin{tabular}{ |p{1.6cm}|p{6.0cm}|p{4.4cm}|p{4.2cm}| }
 \hhline{----}
  & \textbf{Document Manager} & \textbf{Contributors}  & \textbf{Checked by}  \\ 
 \hhline{----}
@@ -53,7 +57,7 @@
 \hhline{--~~}
 \textbf{Contact} & dominique.blouin@telecom-paristech.fr &  &  \\ 
 \hhline{--~~}
-\textbf{Date} & \today &  &  \\ 
+\textbf{Date} & \today & Matteo BERTOLINO &  \\ 
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -891,5 +895,162 @@ TODO
 
 \section{Installing}
 TODO
+
+\section{Adding a graphical operator to a diagram}
+This section addresses the adding of a specific graphical component to a diagram. To better show how to do this, we use the example on how we have added a FPGA component to the DIPLODOCUS deployment diagram. A FPGA is a \textit{computation unit}, just like a CPU, but the steps listed are valid for any kind of graphical component like memories or communication nodes, of for any other diagram of TTool. A few things to remember:
+\begin{itemize}
+\item Add each new file (e.g. java file) that you create to the git repository, e.g.:
+\begin{lstlisting}[showspaces=true, language=bash, commentstyle=\color{pgreen},
+keywordstyle=\color{pblue}, stringstyle=\color{pred}, basicstyle=\ttfamily]
+$git add myNewJavaFile
+\end{lstlisting}
+\item Remember also to change properly the \texttt{import} at the beginning of a java file if necessary. 
+\end{itemize}
+Adding a new component requires a serie of steps listed as follows: 
+
+\paragraph{Deployment diagram:} The complete list of diagrams is located in \texttt{.src/ui} directory. In order to add a graphical component to the diagram we are interested in (e.g., \textit{TML Deployment Diagrams}), we first need to locate the corresponding sub-directory, in our case:  \texttt{tmldd}. Since our FPGA component is very similar to  the CPU component, we duplicated the class \textit{TMLArchiCPUNode.java} naming it \textit{TMLArchiFPGANode.java}. The main changes to do in this new class are: 
+\begin{itemize}
+\item \textbf{Stereotype}. Change the \texttt{String stereotype} value
+
+\item \textbf{List of attributes}. Modify the list of attributes by adding or removing items: for example, we do not need the parameter \textit{number of cores} to describe the FPGA, so we removed \texttt{private int nbOfCores = HwCPU.DEFAULT\_NB\_OF\_CORES;}. Similarly, we need  a parameter that expresses the \textit{capacity} of the FPGA in terms of logical gates, so we added a new attribute.
+
+\item \textbf{Manipulating attributes}. In order to manipulate the attributes, we weed to add/remove the corresponding setter/getter methods.
+\texttt{private int capacity = HwCPU.DEFAULT\_CAPACITY;}
+
+\item \textbf{Graphical connection and manipulation}. You can update graphic parameters such as: the connecting points (to connectors, including connectors for comments), the fact to make the diagrams editable, movable, removable, \ldots 
+
+\item \textbf{Update the edition of the components' parameters}. Handle the lines like \texttt{if (dialog.getNbOfCores().length() != 0)} according with your previous modifications on the parameters' list. You can notice the usage of the \texttt{tmp} variable to recover the values in the case that the user closes the window or enters a non valid data (e.g., a word instead of a number).
+
+\item \textbf{Unique identifier}. The method \texttt{public int getType()} returns a unique ID, defined in \texttt{TGComponentManager.java}. You thus need to update the two classes accordingly e.g., \texttt{public static final int TMLARCHI\_FPGANODE = 1116;} in \texttt{TGComponentManager.java} and  \texttt{public int getType()}. You have to choose an available number, and be sure to complete the switch/case in  \texttt{TGComponentManager.java}: one to create the component when the identifier is given, and one to obtain the identifier from a component:
+
+In \texttt{TGComponentManager.java} you have also to add the new value that the \texttt{tgc} variable (that represents the graphical component) can take:
+\begin{lstlisting}
+ case TMLARCHI_FPGANODE:
+                tgc = new TMLArchiFPGANode(x, y, tdp.getMinX(),
+                      tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(),
+                      false, null, tdp);
+                break;
+\end{lstlisting}
+
+and 
+
+\begin{lstlisting}
+else if (tgc instanceof TMLArchiFPGANode) {
+            return TMLARCHI_FPGANODE;
+\end{lstlisting}
+
+
+
+\item \textbf{Saving and loading the component}. TTool handles the saving and loading of default component attributes. Yet, for the specific attributes (e.g., the capacity of a FPGA), you need to explain to TTool how to save and load them. To save extra attributes, you can use the  \texttt{protected String translateExtraParam()} method e.g. add:
+\texttt{sb.append("<attributes capacity=\"" + capacity + "\" byteDataSize=\"" + byteDataSize + "\" ");}
+
+\item \textbf{Information on the component}. If the component implements the \texttt{WithAttributes} interface, then modify the \texttt{getAttribute()} method according to the new parameters. These methods are useful for the action \textit{Show/Hide element attributes} triggered by an icon in the architectural diagram, and for displaying an information in the status bar of TTool when the mouse is brought over the component.
+
+\end{itemize}
+
+\paragraph{Icon:} 
+\begin{itemize}
+\item Icons are stored in \texttt{./src/main/resources/ui/util}. You can easily use GIMP to create one of them, modifying an existing one to be sure to fit the proper dimensions. Don't forget to add the new icons to the git.
+
+\item The class \texttt{.src/main/java/ui/util/IconManager.java} is responsible to load the icons when TTool starts. Let's assign a number to our icon. The convention is: an odd number for the \textit{big} sized icons, an even number for the \textit{small} sized icon. So, we assigned number 1120 to our new fpga icon: \texttt{private static String icon1120 = "tmlfpganode.gif";}
+
+\item Next to the \texttt{//TDD} comment, create an object icon: \texttt{public static ImageIcon imgic1120;}
+
+\item Associate the icon object to the previously defined string value: \texttt{imgic1120 = getIcon(icon1120);} 
+\end{itemize}
+
+\paragraph{Associate an action to the icon: } Actions list is contained in the file \texttt{.src/main/java/ui/TGUIAction.java}.
+\begin{itemize}
+\item The first step is to associate a unique number to the action that we aim to create. Let's search in the code for the parameter \texttt{public static final int NB\_ACTION = 474;}. All the actions are in a table named \texttt{private static final TAction [] actions = new TAction[NB\_ACTION];}. So, the number associated to our action should be equal to the number present in \texttt{NB\_ACTION}. Moreover, we need to reserve one more space for the action in the table, so we increment \texttt{NB\_ACTION} by one. In this case, \texttt{public static final int NB\_ACTION = 475;}.
+
+\item Declare the action: taking inspiration from \texttt{public static final int TMLARCHI\_CPUNODE = 218;}, we similarly  create \texttt{public static final int TMLARCHI\_FPGANODE = 474;}
+
+\item Then, add the action to the table, with the previously defined icon and a short description: 
+
+\begin{lstlisting}
+actions[TMLARCHI_FPGANODE] = new TAction("add-tmlarchi-fpganode", 
+       "Add a FPGA node", IconManager.imgic1120, 
+       IconManager.imgic1120, "FPGA node", "Add a fpga node to the 
+       currently opened DIPLODOCUS architecture diagram", 0);
+\end{lstlisting}
+
+\item Finally, it is necessary to create the graphical component of such ID when this action on a FPGA node is triggered. To do that, open \texttt{.src/main/java/ui/ActionPerformer.java} and search for the string \texttt{CPUNode}. Then, similarly add:
+ \begin{lstlisting}
+else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_FPGANODE]
+		.getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, 
+            TGComponentManager.TMLARCHI_FPGANODE);
+\end{lstlisting}
+
+\end{itemize}
+
+\paragraph{Show and enable the icon in the diagram toolbar: }
+\begin{itemize}
+\item Open \texttt{.src/main/java/ui/tmldd/TMLArchiDiagramToolBar.java}
+\item \textbf{Set the FPGA action as active} when the corresponding diagram is opened:
+\begin{lstlisting}
+protected void setActive(boolean b) {
+     //[...]
+     mgui.actions[TGUIAction.TMLARCHI_CPUNODE].setEnabled(b);
+     mgui.actions[TGUIAction.TMLARCHI_FPGANODE].setEnabled(b);
+     mgui.actions[TGUIAction.TMLARCHI_HWANODE].setEnabled(b);		
+     //[...]
+}		
+\end{lstlisting}
+\item\textbf{ Adding the FPGA icon to the toolbar}. 
+Now, we are going to add the icon to the toolbar. 
+Notice that the order is important! For example, we aim to place the FPGA icon before the HWACC icon and after the CPU node. Let's notice also that in order to add the icon we do not manipulate the icon object, but the action that contains the icon.
+ 
+Since the implementation of the FPGA block was not still not supported by the DIPLODOCUS simulator when we created the graphical component, we hide the icon to regular users, and make it available only running TTool with the command line option \texttt{-experimental}. So, within the same class we can add the condition:
+\begin{lstlisting}
+if (mgui.isExperimentalOn()) {
+            button = this.add(mgui.actions[TGUIAction.
+                     TMLARCHI_FPGANODE]);
+            button.addMouseListener(mgui.mouseHandler);
+}
+\end{lstlisting}
+\end{itemize}
+
+\paragraph{Dialog window:} Since the FPGA component is "editable", a double-click on it should open a dialog window in order to be able to edit the attribute of the corresponding component. The classes that handle the dialog box are usually located in \texttt{./src/main/java/ui/window}. Some complex components have these classes in their own subdirectories. 
+\begin{itemize}
+\item Let's have a look to \texttt{JDialogCPUNode.java}, copy/paste it, git add and modify the import.
+\item Let's modify properly this new JDialog class. For example, we modified the JText fields and the getters in accordance to the declared parameters, we modified the constructor and we removed the stuff in which we're not interested on. The latter includes the things related to the MEC (useful for the code generation), tracemode, the useless grids, everything after the getters. 
+\end{itemize}
+
+\paragraph{Pivot language}.  TTool contains an internal pivot language that is used as an entry point to generate formal or textual specifications (e.g., C code). We therefore need to enhance the pivot language with the FPGA component.
+
+\begin{itemize}
+\item Let's have a look to \texttt{src/main/java/tmltranslator/HwCPU.java} and copy/paste it renaming the file \texttt{src/main/java/tmltranslator/HwFPGA.java} (don't forget to change the imports, and to add the new file to the git, as usual).
+
+\item Modify the class according to your previous modifications. In particular, ensure the coherency between the list of attributes of your graphical component and of your pivot component. Then set their default value. Modify \texttt{toXML()} (useful for plugins) and \texttt{getType()} methods as well. 
+
+\item Some attributes seems to be absent from the class  (e.g., \texttt{EXECI} and \texttt{EXECC}), but they are actually inherited from  \texttt{HwExecutionNode.java}, in the same package.
+
+\item We also need to update the translation from the graphical DIPLODOCUs diagram to the pivot language. This translation is performed by the \texttt{.src/main/java/ui/GTMLModeling.java} class. In this class, we do quite exactly as for  \texttt{HwCPU cpu} and \texttt{TMLArchiCPUNode node}.
+\end{itemize}
+
+
+\paragraph{Textual representation (TML)} All the graphical components of DIPLODOCUS have a correspondence in  a textual format called TML. We thus need to add the FPGA component to the textual format as well, and to update the save and load functions to/from TML.
+
+\begin{itemize}
+\item Open \texttt{./tmltranslator/TMLArchiTextSpecification.java}.
+
+\item Modify the string \texttt{private String keywords[] = {"NODE", "CPU", "FPGA", "SET", "BUS", "LINK", "BRIDGE", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};} adding the FPGA word.
+
+\item Exactly like for \texttt{private String cpuparameters[]}, declare \texttt{private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime", "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime"};}. 
+
+\item In the method \texttt{public String makeNodes(TMLArchitecture tmla)} let's declare \texttt{HwFPGA fpga;} variable, then have a look to \texttt{if (node instanceof HwCPU)} and handle similarly the corresponding FPGA case.
+
+\item To load FPGA nodes from TML specification, consider the following method \texttt{public int analyseInstruction(String \_line, int \_lineNb, String[] \_split)}:
+ \begin{lstlisting}
+if (_split[1].equals("CPU")) {
+                HwCPU cpu = new HwCPU(_split[2]);
+                tmla.addHwNode(cpu);
+            }
+\end{lstlisting}
+and do the same for the FPGA component.
+
+\item Finally, in the same method, have a look to the case \texttt{if (node instanceof HwCPU)} and do the same for FPGA. To make the comparison easier, capitalize the name of the FPGA's parameters. 
+\end{itemize}   
 
 \end{document}
