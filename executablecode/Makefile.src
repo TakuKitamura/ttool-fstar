@@ -1,1 +1,1 @@
-SRCS = generated_src/main.c generated_src/ResqueTeam.c generated_src/SoftwareOfRoverRobot.c generated_src/RobotWebsite.c generated_src/RobotApplication.c generated_src/Sensors.c 
+SRCS = generated_src/main.c generated_src/AlarmActuator.c generated_src/PressureSensor.c generated_src/PressureController.c generated_src/AlarmManager.c generated_src/MainController.c generated_src/Timer__alarmTimer__AlarmManager.c 

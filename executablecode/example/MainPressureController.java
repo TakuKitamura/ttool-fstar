@@ -10,7 +10,7 @@ import java.util.*;
 
 public class MainPressureController extends JFrame implements Feeder, ChangeListener {
 
-    static final int PRESSURE_MIN = 1;
+    static final int PRESSURE_MIN = 5;
     static final int PRESSURE_MAX = 30;
     static final int PRESSURE_INIT = 15;    //initial pressure
 
@@ -24,13 +24,16 @@ public class MainPressureController extends JFrame implements Feeder, ChangeList
 
     public MainPressureController() {
         super("Pressure Controller demonstration");
-        setSize(400, 150);
-        setVisible(true);
+        
         ds = new DatagramServer();
         ds.setFeeder(this);
 
         initComponents();
         ds.runServer();
+
+	setSize(400, 150);
+        setVisible(true);
+	
     }
 
     public void initComponents() {
@@ -83,7 +86,13 @@ public class MainPressureController extends JFrame implements Feeder, ChangeList
     public void stateChanged(ChangeEvent e) {
 	System.out.println("Value of pressure changed:" + pressureValue.getValue());
 	if (ds != null) {
-	    ds.sendDatagramTo("PRESSURE=" + pressureValue.getValue());
+	    String tmp = "" + pressureValue.getValue();
+	    if (tmp.length() < 1) {
+		tmp = "00";
+	    } else if (tmp.length() < 2) {
+		tmp = "0" + tmp;
+	    }
+	    ds.sendDatagramTo("PRESSURE=" + tmp);
 	}
     }
 
