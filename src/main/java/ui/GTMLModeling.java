@@ -840,6 +840,7 @@ public class GTMLModeling  {
                         Iterator<TMLCPrimitivePort> ite = portstome.listIterator();
                         while(ite.hasNext()) {
                             //TraceManager.addDev("port=" + ite.next().getPortName());
+                            ite.next();
                         }
 
                         if (portstome.size() < 1) {
@@ -931,7 +932,7 @@ public class GTMLModeling  {
                                     channel.setPorts( tmlport1, tmlport2 );
                                     tmlm.addChannel(channel);
                                     listE.addCor(channel, tgc);
-                                    TraceManager.addDev("Adding channel " + channel.getName());
+                                    //TraceManager.addDev("Adding channel " + channel.getName());
                                 }
                             }
                         } else {
@@ -2066,7 +2067,7 @@ public class GTMLModeling  {
                         Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
                         if (allVariables.size() > 0) {
                             for(int k=0; k<allVariables.size(); k++) {
-                                //TraceManager.addDev("Adding record: " + allVariables.get(k));
+                                TraceManager.addDev("Adding record: " + allVariables.get(k));
                                 tmlsendrequest.addParam(allVariables.get(k));
                                 request.addParamName(allVariables.get(k));
                             }

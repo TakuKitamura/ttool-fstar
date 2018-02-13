@@ -31,7 +31,8 @@ define HELP_message
 Compilation targets:
 --------------------
 make all                Build TTool and the jar of companion software.
-make ttool		Build TTool only.
+make ttool		Build TTool only
+
 
 Usual targets:
 --------------
@@ -47,6 +48,9 @@ make install		Install TTool, the jar of companion software and the runtime
 			$(TTOOL_PATH)/bin.
 make clean              Clean the repository from compilation artifacts.
 make ultraclean         Clean the repository from binaries and compilation artifacts.
+
+make ttooljavac		Build TTool only with javac
+
 
 Other targets:
 --------------
@@ -121,6 +125,9 @@ ttool: $(TTOOL_BINARY)
 
 $(TTOOL_BINARY): FORCE
 	@($(GRADLE) :ttool:build) || ($(ERROR_MSG) && $(MAKE) -C $(TTOOL_DIR) -e $@)
+
+ttooljavac:
+	$(MAKE) -C $(TTOOL_DIR)
 
 launcher: $(LAUNCHER_BINARY)
 
