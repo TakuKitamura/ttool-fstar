@@ -310,8 +310,11 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
     public String getStatusInformation() {
 
-        if (this instanceof WithAttributes)
-            return ((WithAttributes)(this)).getAttributes().replaceAll("\n", " / ");
+        if (this instanceof WithAttributes) {
+            String tmp = ((WithAttributes) (this)).getAttributes();
+            if (tmp != null)
+                return tmp.replaceAll("\n", " / ");
+        }
 
         return " ";
     }

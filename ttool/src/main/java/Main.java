@@ -242,8 +242,7 @@ public class Main implements ActionListener {
         if (splashFrame != null) {
             splashFrame.setMessage("Loading images");
         }
-        IconManager icma = new IconManager();
-        icma.loadImg();
+        IconManager.loadImg();
 
         // Loading configuration
         if (splashFrame != null) {

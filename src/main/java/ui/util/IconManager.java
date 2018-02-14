@@ -658,8 +658,8 @@ public class IconManager {
 
     }
 
-    public ImageIcon getIcon(String s) {
-        URL url = this.getClass().getResource(s);
+    public static ImageIcon getIcon(String s) {
+        URL url = IconManager.class.getResource(s);
 
         if (url != null) {
             return new ImageIcon(url);
@@ -680,7 +680,7 @@ public class IconManager {
         }
     }
 
-    public void loadImg() {
+    public static void loadImg() {
         imgic8 = getIcon(icon8);
         imgic9 = getIcon(icon9);
         if (imgic8 != null) {
