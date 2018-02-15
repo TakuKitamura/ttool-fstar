@@ -417,6 +417,7 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@mkdir -p $(TTOOL_TARGET)/executablecode/src
 	@mkdir -p $(TTOOL_TARGET)/executablecode/generated_src
 	@mkdir -p $(TTOOL_TARGET)/executablecode/example
+	@cp $(TTOOL_EXECUTABLECODE)/LICENSE* $(TTOOL_TARGET)/executablecode/
 	@cp $(TTOOL_EXECUTABLECODE)/Makefile $(TTOOL_TARGET)/executablecode/
 	@cp $(TTOOL_EXECUTABLECODE)/Makefile.defs $(TTOOL_TARGET)/executablecode/
 	@cp $(TTOOL_EXECUTABLECODE)/Makefile.forsoclib $(TTOOL_TARGET)/executablecode/

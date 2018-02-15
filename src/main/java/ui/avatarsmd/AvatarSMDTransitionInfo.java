@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,12 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
 
 
 package ui.avatarsmd;
@@ -58,17 +56,18 @@ import java.util.Vector;
 //import java.awt.geom.*;
 
 /**
-   * Class AvatarSMDTransitionInfo
-   * Internal component that represents a set of parameter for a transition
-   * e.g., guard, after, compute, set of actions
-   * Creation: 12/04/2010
-   * @version 1.0 12/04/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarSMDTransitionInfo
+ * Internal component that represents a set of parameter for a transition
+ * e.g., guard, after, compute, set of actions
+ * Creation: 12/04/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 12/04/2010
  */
 public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 
 //    private static String FILE_INFO = "(user files specified)";
- //   private static String CODE_INFO = "(user code specified)";
+    //   private static String CODE_INFO = "(user code specified)";
 
 
     protected String guard;
@@ -76,10 +75,11 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
     protected String afterMax;
     protected String computeMin;
     protected String computeMax;
+    protected String probability = "";
     protected Vector<String> listOfActions;
 
-    protected String [] filesToInclude;
-    protected String [] codeToInclude;
+    protected String[] filesToInclude;
+    protected String[] codeToInclude;
 
     protected int minWidth = 10;
     protected int minHeight = 15;
@@ -88,7 +88,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
     protected String defaultValue;
 
     public AvatarSMDTransitionInfo(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         moveable = true;
         editable = true;
@@ -118,18 +118,25 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
     public Vector<String> getListOfActions() {
         return listOfActions;
     }
-    public void setGuard(String s){
-	guard=s;
+
+    public void setGuard(String s) {
+        guard = s;
     }
-    public void addAction(String s){
-	listOfActions.add(s);
+
+    public void setProbability(String s) {
+        probability = s;
     }
+
+    public void addAction(String s) {
+        listOfActions.add(s);
+    }
+
     public void internalDrawing(Graphics g) {
         int step = 0;
         String s;
-        h  = g.getFontMetrics().getHeight();
-        for (int j=0; j<nbConnectingPoint; j++) {
-            connectingPoint[j].setCdY(-h+1);
+        h = g.getFontMetrics().getHeight();
+        for (int j = 0; j < nbConnectingPoint; j++) {
+            connectingPoint[j].setCdY(-h + 1);
         }
 
         ColorManager.setColor(g, getState(), 0);
@@ -139,9 +146,9 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 
         g.setColor(ColorManager.AVATAR_GUARD);
 
-	if (tdp.isDrawingMain()) {
-	    width = minWidth;
-	}
+        if (tdp.isDrawingMain()) {
+            width = minWidth;
+        }
 
         if (guard.length() > 0) {
             if (guard.replaceAll("\\s+", "").compareTo("[]") != 0) {
@@ -201,9 +208,20 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
             }
         }
 
+        if ((probability != null) && (probability.length() > 0)) {
+            s = "p=" + probability;
+            g.drawString(s, x, y + step);
+            atLeastOneThing = true;
+            if (tdp.isDrawingMain()) {
+                width = Math.max(g.getFontMetrics().stringWidth(s), width);
+                width = Math.max(minWidth, width);
+            }
+            step += inc;
+        }
+
         g.setColor(ColorManager.AVATAR_ACTION);
 
-        for(int i=0; i<listOfActions.size(); i++) {
+        for (int i = 0; i < listOfActions.size(); i++) {
             s = listOfActions.get(i);
             if (s.length() > 0) {
                 g.drawString(s, x, y + step);
@@ -239,22 +257,19 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
           }*/
 
 
-
-
         if (tdp.isDrawingMain()) {
             height = Math.max(step, minHeight);
         }
 
         if (!atLeastOneThing) {
-            width=minWidth;
+            width = minWidth;
         }
 
         ColorManager.setColor(g, state, 0);
-        if ((getState() == TGState.POINTER_ON_ME) ||  (getState() == TGState.POINTED)||  (getState() == TGState.MOVING)){
-            g.drawRoundRect(x-1, y-h+2, width+2, height+2, 5, 5);
+        if ((getState() == TGState.POINTER_ON_ME) || (getState() == TGState.POINTED) || (getState() == TGState.MOVING)) {
+            g.drawRoundRect(x - 1, y - h + 2, width + 2, height + 2, 5, 5);
         }
     }
-
 
 
     public TGComponent isOnMe(int _x, int _y) {
@@ -271,10 +286,10 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
     public boolean editOndoubleClick(JFrame frame) {
         LinkedList<TAttribute> attributes = tdp.getMGUI().getAllAttributes();
         LinkedList<AvatarMethod> methods = tdp.getMGUI().getAllMethods();
-        JDialogAvatarTransition jdat = new JDialogAvatarTransition(frame, "Setting transition parameters", guard, afterMin, afterMax, computeMin, computeMax, listOfActions, attributes, methods, filesToInclude, codeToInclude);
-      //  jdat.setSize(600, 550);
+        JDialogAvatarTransition jdat = new JDialogAvatarTransition(frame, "Setting transition parameters", guard, afterMin, afterMax, computeMin, computeMax, listOfActions, attributes, methods, filesToInclude, codeToInclude, probability);
+        //  jdat.setSize(600, 550);
         GraphicLib.centerOnParent(jdat, 600, 550);
-        jdat.setVisible( true ); // blocked until dialog has been closed
+        jdat.setVisible(true); // blocked until dialog has been closed
 
 
         if (jdat.hasBeenCancelled()) {
@@ -293,7 +308,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
         computeMin = jdat.getComputeMin().trim();
         computeMax = jdat.getComputeMax().trim();
         filesToInclude = jdat.getFilesToInclude();
-        codeToInclude =  jdat.getCodeToInclude();
+        codeToInclude = jdat.getCodeToInclude();
+        probability = jdat.getProbability();
         return true;
     }
 
@@ -319,14 +335,18 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
         sb.append(GTURTLEModeling.transformString(computeMax));
         sb.append("\" />\n");
 
-        for(int i=0; i<listOfActions.size(); i++) {
+        sb.append("<probability value=\"");
+        sb.append(GTURTLEModeling.transformString(probability));
+        sb.append("\" />\n");
+
+        for (int i = 0; i < listOfActions.size(); i++) {
             sb.append("<actions value=\"");
             sb.append(GTURTLEModeling.transformString(listOfActions.get(i)));
             sb.append("\" />\n");
         }
 
         if (filesToInclude != null) {
-            for(int i=0; i<filesToInclude.length; i++) {
+            for (int i = 0; i < filesToInclude.length; i++) {
                 sb.append("<filesToIncludeLine value=\"");
                 sb.append(GTURTLEModeling.transformString(filesToInclude[i]));
                 sb.append("\" />\n");
@@ -334,7 +354,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
         }
 
         if (codeToInclude != null) {
-            for(int i=0; i<codeToInclude.length; i++) {
+            for (int i = 0; i < codeToInclude.length; i++) {
                 sb.append("<codeToIncludeLine value=\"");
                 sb.append(GTURTLEModeling.transformString(codeToInclude[i]));
                 sb.append("\" />\n");
@@ -346,7 +366,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         //System.out.println("*** load extra synchro *** " + getId());
         String tmpFilesToInclude = "";
         String tmpCodeToInclude = "";
@@ -358,18 +378,18 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
             Node n1, n2;
             Element elt;
             String s;
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
 
                     // Issue #17 copy-paste error on j index
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element)n2;
+                            elt = (Element) n2;
                             if (elt.getTagName().equals("guard")) {
                                 s = elt.getAttribute("value");
                                 if (s != null) {
@@ -398,6 +418,12 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
                                 s = elt.getAttribute("value");
                                 if (s != null) {
                                     computeMax = s;
+                                }
+                            }
+                            if (elt.getTagName().equals("probability")) {
+                                s = elt.getAttribute("value");
+                                if (s != null) {
+                                    probability = s;
                                 }
                             }
                             if (elt.getTagName().equals("actions")) {
@@ -465,12 +491,17 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
     public String getComputeMaxDelay() {
         return computeMax;
     }
-	public void setTimes(String minDelay, String maxDelay, String minCompute, String maxCompute){
-		computeMin= minCompute;
-		computeMax = maxCompute;
-		afterMin= minDelay;
-		afterMax=maxDelay;
-	}
+
+    public String getProbability() {
+        return probability;
+    }
+
+    public void setTimes(String minDelay, String maxDelay, String minCompute, String maxCompute) {
+        computeMin = minCompute;
+        computeMax = maxCompute;
+        afterMin = minDelay;
+        afterMax = maxDelay;
+    }
 
     public Vector<String> getActions() {
         return listOfActions;
@@ -489,17 +520,18 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
             return null;
         }
         String ret = "";
-        for(int i=0; i<filesToInclude.length; i++) {
+        for (int i = 0; i < filesToInclude.length; i++) {
             ret += filesToInclude[i] + "\n";
         }
         return ret;
     }
+
     public String getCodeToInclude() {
         if (codeToInclude == null) {
             return null;
         }
         String ret = "";
-        for(int i=0; i<codeToInclude.length; i++) {
+        for (int i = 0; i < codeToInclude.length; i++) {
             ret += codeToInclude[i] + "\n";
         }
         return ret;
