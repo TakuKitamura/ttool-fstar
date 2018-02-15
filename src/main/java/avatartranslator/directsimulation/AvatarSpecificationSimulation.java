@@ -167,7 +167,7 @@ public class AvatarSpecificationSimulation {
         // remove FIFOs
         //avspec.removeFIFOs(2);
 
-        TraceManager.addDev("-------Spec:" + avspec.toString() + "--------");
+        //TraceManager.addDev("-------Spec:" + avspec.toString() + "--------");
     }
 
     public void reset() {
@@ -918,7 +918,30 @@ public class AvatarSpecificationSimulation {
         // Random select the first index if none has been selected
         if (indexSelectedTransaction == -1) {
             //TraceManager.addDev("No transition selected");
-            indexSelectedTransaction = (int) (Math.floor(Math.random() * _pendingTransactions.size()));
+            // Consider probabilities
+            double sumProb = 0.0;
+            int selectedIndex = -1;
+            for (AvatarSimulationPendingTransaction pt: _pendingTransactions) {
+                sumProb += pt.probability;
+            }
+
+            double rand2 = Math.random() * sumProb;
+            //TraceManager.addDev("Nb of pending:" + ll.size() + " total prob=" + sumProb +  " rand=" + rand2);
+
+
+            double prob = 0.0;
+            int index = 0;
+            for (AvatarSimulationPendingTransaction pt: _pendingTransactions) {
+                prob += pt.probability;
+                //TraceManager.addDev("rand=" + rand2 + " prob=" + prob + " pt.probability=" + pt.probability);
+                if (rand2 < prob) {
+                    selectedIndex = index;
+                    break;
+                }
+                index ++;
+            }
+            //indexSelectedTransaction = (int) (Math.floor(Math.random() * _pendingTransactions.size()));
+            indexSelectedTransaction = selectedIndex;
         }
 
         AvatarSimulationPendingTransaction currentTransaction = _pendingTransactions.get(indexSelectedTransaction);

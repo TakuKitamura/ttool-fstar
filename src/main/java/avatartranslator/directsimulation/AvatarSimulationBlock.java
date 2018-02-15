@@ -169,6 +169,7 @@ public class AvatarSimulationBlock {
         AvatarSimulationPendingTransaction aspt;
         AvatarStateMachineElement asme;
         boolean guardOk;
+        //double prob = 0.5;
         for (int i = 0; i < lastTransaction.executedElement.nbOfNexts(); i++) {
             asme = lastTransaction.executedElement.getNext(i);
 
@@ -179,6 +180,7 @@ public class AvatarSimulationBlock {
             // Guard on transition ? -> must evaluate the guard!
             if (asme instanceof AvatarTransition) {
                 AvatarTransition at = (AvatarTransition) (asme);
+                //prob = at.getProbability();
                 if (at.isGuarded()) {
                     // Must evaluate the guard
                     String guard = at.getGuard().toString();
@@ -192,6 +194,7 @@ public class AvatarSimulationBlock {
             if (guardOk) {
                 aspt = new AvatarSimulationPendingTransaction();
                 aspt.asb = this;
+                //aspt.probability = prob;
                 aspt.elementToExecute = lastTransaction.executedElement.getNext(i);
                 aspt.previouslyExecutedElement = lastTransaction.executedElement;
                 if ((aspt.elementToExecute instanceof AvatarTransition) && (lastTransaction.executedElement instanceof AvatarState)) {
@@ -212,6 +215,7 @@ public class AvatarSimulationBlock {
 
                 if (aspt.elementToExecute instanceof AvatarTransition) {
                     AvatarTransition trans = (AvatarTransition) (aspt.elementToExecute);
+                    aspt.probability = trans.getProbability();
                     if (trans.hasDelay()) {
                         aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
@@ -222,7 +226,7 @@ public class AvatarSimulationBlock {
                                 aspt.elapsedTime = (int) (_clockValue - lastTransaction.clockValueWhenFinished);
                             }
                         }
-                        aspt.probability = trans.getProbability();
+
                     }
                 } else if (aspt.involvedElement instanceof AvatarTransition) {
                     AvatarTransition trans = (AvatarTransition) (aspt.involvedElement);
