@@ -4,6 +4,7 @@
 <DOTTYPath data="/bin/dotty" />
 <DOTTYHost data="localhost" />
 <FILEPath data="../modeling/" />
+<DownloadedFILEPath data="../modeling/" />
 <LIBPath data="../lib" />
 <IMGPath data="../figures" />
 <LOTOSPath data="../lotos/" />
