@@ -601,6 +601,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                     }
                 }
                 checkAuth=jda.checkAuth;
+                if (checkStrongAuthStatus<2){
+                	checkStrongAuthStatus=1;
+                	checkWeakAuthStatus=1;
+                }
                 for(int i=0; i<nbMaxAttribute; i++) {
                     //TraceManager.addDev("Getting string type: " + jda.getStringType(i));
                     list[i].setType(jda.getStringType(i));
