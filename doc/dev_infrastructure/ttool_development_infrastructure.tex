@@ -510,33 +510,6 @@ Note that these tool windows are movable from the different panes and that the
 toolbar that enables to select which tool window to display can be shown/hidden
 by clicking on the icon on the lower-left side of the IntelliJ window.
 
-\subsection{Adding and running JUnit tests}
-
-When you are editing a Java class, you can jump to the corresponding test class
-by right-clicking on the editor window (on a specific method or anywhere in the
-class), and select \emph{Go To -> Test}.
-IntelliJ will look for a corresponding test class and will propose to create a
-new one. If you decide to create a new test class, select \emph{JUnit4} as the
-testing library and pick the methods for which you want to add tests. Once the
-test is written, you will have a green arrow in the left margin of the editor
-next to each test method. You can either click on the arrow corresponding to a
-specific method to run the corresponding test, or click on the arrow next to the
-class name to run all the tests in this class.
-
-In some cases, the tests need to use resources. You need to add these resources
-to the \emph{test resources} root folder (see section
-\ref{sec:intellij:subprojects} to see how this root folder is configured) and
-to ensure that the test is running from the correct directory. To do this, run
-the test once. You will see in the right section of the navigation bar a
-shortcut to run the previous test. Expand the configuration selection list and
-click on \emph{Edit Configurations...}. You can see all the available
-configurations and modify options for each of them. In particular, you can
-change the \emph{Working directory} (which should probably be
-\texttt{ttool/build}) or require actions to do before running this
-configuration (at the bottom of the window). You can share your configurations
-so that other can use them but be careful not to share something with absolute
-paths.
-
 \subsection{Debugging TTool}
 
 IntelliJ integrates a debugger that is helpful to find some bugs. You can either
@@ -865,6 +838,13 @@ When using the Eclipse IDE, test classes can be automatically generated for a
 given class to be tested and will include annotated methods for the selected
 methods of the class to be tested.
 
+With IntelliJ, when you are editing a Java class, you can jump to the corresponding test class
+by right-clicking on the editor window (on a specific method or anywhere in the
+class), and select \emph{Go To -> Test}.
+IntelliJ will look for a corresponding test class and will propose to create a
+new one. If you decide to create a new test class, select \emph{JUnit4} as the
+testing library and pick the methods for which you want to add tests.
+
 See folder $test/fr.tpt.ttool.tests.util$ of the TTool source code repository
 for an example test class $TestRshClient$ providing test cases for the TTool
 utility class $RshClient$ used for client-server remote communications.
@@ -943,6 +923,29 @@ the tests (passed of failed) as shown in figure~\ref{fig:image14}.
 \caption{}
 \label{fig:image14}
 \end{figure}
+
+\textbf{\emph{Within the IntelliJ IDE}}
+
+Once the
+test is written, you will have a green arrow in the left margin of the editor
+next to each test method. You can either click on the arrow corresponding to a
+specific method to run the corresponding test, or click on the arrow next to the
+class name to run all the tests in this class.
+
+In some cases, the tests need to use resources. You need to add these resources
+to the \emph{test resources} root folder (see section
+\ref{sec:intellij:subprojects} to see how this root folder is configured) and
+to ensure that the test is running from the correct directory. To do this, run
+the test once. You will see in the right section of the navigation bar a
+shortcut to run the previous test. Expand the configuration selection list and
+click on \emph{Edit Configurations...}. You can see all the available
+configurations and modify options for each of them. In particular, you can
+change the \emph{Working directory} (which should probably be
+\texttt{ttool/build}) or require actions to do before running this
+configuration (at the bottom of the window). You can share your configurations
+so that other can use them but be careful not to share something with absolute
+paths.
+
 
 \subsection{C++}
 
