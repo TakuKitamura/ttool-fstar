@@ -1,17 +1,10 @@
 package ui.window;
 
-import java.awt.Container;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 import ui.util.IconManager;
 
@@ -68,4 +61,30 @@ public class JDialogBase extends JDialog {
         //Add closeButton's behaviour on Enter key
         this.getRootPane().setDefaultButton(closeButton);
 	}
+
+	protected void initButtons(Container c,
+							   ActionListener al) {
+
+
+		JPanel p = new JPanel(new FlowLayout());
+
+		//Close Button
+		closeButton = new JButton("Save and Close", IconManager.imgic25);
+		closeButton.addActionListener(al);
+		p.add(closeButton);
+
+
+
+		//Cancel Button
+		cancelButton = new JButton("Cancel", IconManager.imgic27);
+		cancelButton.addActionListener(al);
+		p.add(cancelButton);
+
+		c.add(p, BorderLayout.SOUTH);
+
+		//Add closeButton's behaviour on Enter key
+		this.getRootPane().setDefaultButton(closeButton);
+	}
+
+
 }
