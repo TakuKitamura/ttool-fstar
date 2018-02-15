@@ -98,6 +98,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
     public void setProbability(double _probability) {
         probability = _probability;
     }
+    public double getProbability() {
+        return probability;
+    }
+
 
     public void addGuard(String _g) {
         AvatarGuard guard = AvatarGuard.createFromString(this.block, _g);
@@ -300,6 +304,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
         at.setComputes(getMinCompute(), getMaxCompute());
         at.setDelays(getMinDelay(), getMaxDelay());
+        at.setProbability(getProbability());
 
         return at;
     }

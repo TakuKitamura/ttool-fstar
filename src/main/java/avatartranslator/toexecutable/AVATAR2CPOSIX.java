@@ -37,8 +37,6 @@
  */
 
 
-
-
 package avatartranslator.toexecutable;
 
 import avatartranslator.*;
@@ -52,8 +50,9 @@ import java.util.Vector;
 /**
  * Class AVATAR2CPOSIX
  * Creation: 29/03/2011
- * @version 1.2 24/03/2016
+ *
  * @author Ludovic APVRILLE
+ * @version 1.2 24/03/2016
  */
 public class AVATAR2CPOSIX {
 
@@ -104,24 +103,32 @@ public class AVATAR2CPOSIX {
 
     public void saveInFiles(String path) throws FileException {
 
-        TraceManager.addDev("Generating files");
-        if (!SpecConfigTTool.checkAndCreateAVATARCodeDir(path))
-        	throw new FileException("ERROR: Executable code directory cannot be created.");
+        //TraceManager.addDev("save In Files AVATAR2CPOSIX");
+        if (!SpecConfigTTool.checkAndCreateAVATARCodeDir(path)) {
+            TraceManager.addDev("Directory cannot be created: " + path);
+            throw new FileException("ERROR: Executable code directory cannot be created.");
+        }
+        //TraceManager.addDev("Creating dir for saving generated code");
         File src_dir = new File(path + GENERATED_PATH);
         if (!src_dir.exists()) {
-        	src_dir.mkdir();
+            TraceManager.addDev("Creating: " + src_dir.getAbsolutePath());
+            src_dir.mkdir();
         }
+
+        //TraceManager.addDev("Generating main file");
         if (mainFile != null) {
             TraceManager.addDev("Generating main files in " + path + mainFile.getName() + ".h");
             FileUtils.saveFile(path + GENERATED_PATH + mainFile.getName() + ".h", Conversion.indentString(mainFile.getHeaderCode(), 2));
             FileUtils.saveFile(path + GENERATED_PATH + mainFile.getName() + ".c", Conversion.indentString(mainFile.getMainCode(), 2));
         }
 
-        for(TaskFile taskFile: taskFiles) {
+        //TraceManager.addDev("Generating task files");
+        for (TaskFile taskFile : taskFiles) {
             FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".h", Conversion.indentString(taskFile.getFullHeaderCode(), 2));
             FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".c", Conversion.indentString(taskFile.getMainCode(), 2));
         }
 
+        //TraceManager.addDev("Making Makefiles");
         // Standard Makefile
         makeMakefileSrc(GENERATED_PATH);
         FileUtils.saveFile(path + "Makefile.src", makefile_src);
@@ -137,16 +144,15 @@ public class AVATAR2CPOSIX {
     }
 
 
-
     public void generateCPOSIX(boolean _debug, boolean _tracing) {
         debug = _debug;
         tracing = _tracing;
-	
+
         mainFile = new MainFile("main", plugin);
         taskFiles = new Vector<TaskFile>();
 
         avspec.removeCompositeStates();
-        avspec.removeLibraryFunctionCalls ();
+        avspec.removeLibraryFunctionCalls();
         avspec.removeTimers();
 
 
@@ -185,10 +191,10 @@ public class AVATAR2CPOSIX {
         mainFile.appendToHCode("/* Synchronous channels */" + CR);
         mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
         mainFile.appendToMainCode("/* Synchronous channels */" + CR);
-        for(AvatarRelation ar: avspec.getRelations()) {
+        for (AvatarRelation ar : avspec.getRelations()) {
             if (!ar.isAsynchronous()) {
-                for(int i=0; i<ar.nbOfSignals(); i++) {
-                    mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i)  + ";" + CR);
+                for (int i = 0; i < ar.nbOfSignals(); i++) {
+                    mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i) + ";" + CR);
                     mainFile.appendToBeforeMainCode("syncchannel __" + getChannelName(ar, i) + ";" + CR);
                     mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
                     mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
@@ -209,10 +215,10 @@ public class AVATAR2CPOSIX {
         mainFile.appendToHCode("/* Asynchronous channels */" + CR);
         mainFile.appendToBeforeMainCode("/* Asynchronous channels */" + CR);
         mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
-        for(AvatarRelation ar: avspec.getRelations()) {
+        for (AvatarRelation ar : avspec.getRelations()) {
             if (ar.isAsynchronous()) {
-                for(int i=0; i<ar.nbOfSignals(); i++) {
-                    mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i)  + ";" + CR);
+                for (int i = 0; i < ar.nbOfSignals(); i++) {
+                    mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i) + ";" + CR);
                     mainFile.appendToBeforeMainCode("asyncchannel __" + getChannelName(ar, i) + ";" + CR);
                     mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
                     mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
@@ -231,7 +237,7 @@ public class AVATAR2CPOSIX {
     }
 
     public void makeTasks() {
-        for(AvatarBlock block: avspec.getListOfBlocks()) {
+        for (AvatarBlock block : avspec.getListOfBlocks()) {
             makeTask(block);
         }
     }
@@ -264,10 +270,10 @@ public class AVATAR2CPOSIX {
 
         _taskFile.addToMainCode("#define STATE__START__STATE 0" + CR);
 
-        for (AvatarStateMachineElement asme: _block.getStateMachine().getListOfElements()) {
+        for (AvatarStateMachineElement asme : _block.getStateMachine().getListOfElements()) {
             if (asme instanceof AvatarState) {
                 _taskFile.addToMainCode("#define STATE__" + asme.getName() + " " + id + CR);
-                id ++;
+                id++;
             }
         }
         _taskFile.addToMainCode("#define STATE__STOP__STATE " + id + CR);
@@ -276,7 +282,7 @@ public class AVATAR2CPOSIX {
 
     public void defineAllMethods(AvatarBlock _block, TaskFile _taskFile) {
         Vector<String> allNames = new Vector<String>();
-        for (AvatarMethod am: _block.getMethods()) {
+        for (AvatarMethod am : _block.getMethods()) {
             makeMethod(_block, am, allNames, _taskFile);
         }
 
@@ -289,7 +295,7 @@ public class AVATAR2CPOSIX {
             return;
         }
 
-        for (AvatarMethod am: _currentBlock.getFather().getMethods()) {
+        for (AvatarMethod am : _currentBlock.getFather().getMethods()) {
             makeMethod(_originBlock, am, _allNames, _taskFile);
         }
 
@@ -302,9 +308,9 @@ public class AVATAR2CPOSIX {
         LinkedList<AvatarAttribute> list;
         LinkedList<AvatarAttribute> listA;
 
-        String nameMethod = _block.getName() + "__" +_am.getName();
+        String nameMethod = _block.getName() + "__" + _am.getName();
 
-        for(String s: _allNames) {
+        for (String s : _allNames) {
             if (s.compareTo(nameMethod) == 0) {
                 return;
             }
@@ -320,12 +326,12 @@ public class AVATAR2CPOSIX {
         ret += " " + nameMethod + "(";
         list = _am.getListOfAttributes();
         int cpt = 0;
-        for(AvatarAttribute aa: list) {
+        for (AvatarAttribute aa : list) {
             if (cpt != 0) {
                 ret += ", ";
             }
             ret += getCTypeOf(aa) + " " + aa.getName();
-            cpt ++;
+            cpt++;
         }
 
         ret += ") {" + CR;
@@ -336,18 +342,18 @@ public class AVATAR2CPOSIX {
             if (list.size() > 0) {
                 ret += "char my__attr[CHAR_ALLOC_SIZE];" + CR;
                 ret += "sprintf(my__attr, \"";
-                for(AvatarAttribute aa: list) {
+                for (AvatarAttribute aa : list) {
                     if (cpt != 0) {
                         tr += ",";
                         ret += ",";
                     }
                     tr += aa.getName();
                     ret += "%d";
-                    cpt ++;
+                    cpt++;
                 }
                 ret += "\"," + tr + ");" + CR;
                 ret += traceFunctionCall(_block.getName(), _am.getName(), "my__attr");
-            }  else {
+            } else {
                 ret += traceFunctionCall(_block.getName(), _am.getName(), null);
             }
         }
@@ -357,7 +363,7 @@ public class AVATAR2CPOSIX {
 
             list = _am.getListOfAttributes();
             cpt = 0;
-            for(AvatarAttribute aa: list) {
+            for (AvatarAttribute aa : list) {
                 ret += "debugInt(\"Attribute " + aa.getName() + " = \"," + aa.getName() + ");" + CR;
             }
         }
@@ -371,19 +377,19 @@ public class AVATAR2CPOSIX {
             if (_am.isImplementationProvided()) {
                 ret += "return __userImplemented__" + nameMethod + "(";
                 cpt = 0;
-                for(AvatarAttribute aaa: listA) {
+                for (AvatarAttribute aaa : listA) {
                     if (cpt != 0) {
                         ret += ", ";
                     }
                     ret += aaa.getName();
-                    cpt ++;
+                    cpt++;
                 }
-                ret+= ");" + CR;
+                ret += ");" + CR;
                 //TraceManager.addDev("Adding a call to the method");
 
             } else {
 
-                if (listA.size() >0) {
+                if (listA.size() > 0) {
                     ret += "return " + listA.get(0).getName() + ";" + CR;
                 } else {
                     ret += "return 0;" + CR;
@@ -393,14 +399,14 @@ public class AVATAR2CPOSIX {
             if (_am.isImplementationProvided()) {
                 ret += "__userImplemented__" + nameMethod + "(";
                 cpt = 0;
-                for(AvatarAttribute aaa: listA) {
+                for (AvatarAttribute aaa : listA) {
                     if (cpt != 0) {
                         ret += ", ";
                     }
                     ret += aaa.getName();
-                    cpt ++;
+                    cpt++;
                 }
-                ret+= ");" + CR;
+                ret += ");" + CR;
 
             }
         }
@@ -411,7 +417,7 @@ public class AVATAR2CPOSIX {
 
     public void makeMainHeader() {
         mainFile.appendToBeforeMainCode(CR);
-        for(TaskFile taskFile: taskFiles) {
+        for (TaskFile taskFile : taskFiles) {
             mainFile.appendToBeforeMainCode("#include \"" + taskFile.getName() + ".h\"" + CR);
         }
         mainFile.appendToBeforeMainCode(CR);
@@ -423,37 +429,37 @@ public class AVATAR2CPOSIX {
 
         String s = "void *mainFunc__" + _block.getName() + "(void *arg)";
         String sh = "extern " + s + ";" + CR;
-        s+= "{" + CR;
+        s += "{" + CR;
 
         s += makeAttributesDeclaration(_block, _taskFile);
 
-        s+= CR + "int __currentState = STATE__START__STATE;" + CR;
+        s += CR + "int __currentState = STATE__START__STATE;" + CR;
 
         int nbOfMaxParams = _block.getMaxNbOfParams();
         //s+= "request *__req;" + CR;
-        for(i=0; i<_block.getMaxNbOfMultipleBranches(); i++) {
-            s+= UNUSED_ATTR + " request __req" + i + ";" + CR;
-            s+= UNUSED_ATTR + "int *__params" + i + "[" + nbOfMaxParams + "];" + CR;
+        for (i = 0; i < _block.getMaxNbOfMultipleBranches(); i++) {
+            s += UNUSED_ATTR + " request __req" + i + ";" + CR;
+            s += UNUSED_ATTR + "int *__params" + i + "[" + nbOfMaxParams + "];" + CR;
         }
-        s+= UNUSED_ATTR + "setOfRequests __list;" + CR;
+        s += UNUSED_ATTR + "setOfRequests __list;" + CR;
 
-        s+= UNUSED_ATTR + "pthread_cond_t __myCond;" + CR;
-        s+= UNUSED_ATTR + "request *__returnRequest;" + CR;
+        s += UNUSED_ATTR + "pthread_cond_t __myCond;" + CR;
+        s += UNUSED_ATTR + "request *__returnRequest;" + CR;
 
-        s+= CR + "char * __myname = (char *)arg;" + CR;
+        s += CR + "char * __myname = (char *)arg;" + CR;
 
         /*if (tracing) {
           s+= CR + "char __value[CHAR_ALLOC_SIZE];" + CR;
           }*/
 
-        s+= CR + "pthread_cond_init(&__myCond, NULL);" + CR;
+        s += CR + "pthread_cond_init(&__myCond, NULL);" + CR;
 
-        s+= CR + "fillListOfRequests(&__list, __myname, &__myCond, &__mainMutex);" + CR;
+        s += CR + "fillListOfRequests(&__list, __myname, &__myCond, &__mainMutex);" + CR;
 
-        s+= "//printf(\"my name = %s\\n\", __myname);" + CR;
+        s += "//printf(\"my name = %s\\n\", __myname);" + CR;
 
-        s+= CR + "/* Main loop on states */" + CR;
-        s+= "while(__currentState != STATE__STOP__STATE) {" + CR;
+        s += CR + "/* Main loop on states */" + CR;
+        s += "while(__currentState != STATE__STOP__STATE) {" + CR;
 
         s += "switch(__currentState) {" + CR;
 
@@ -466,13 +472,13 @@ public class AVATAR2CPOSIX {
 
         String tmp;
         // Making other states
-        for(AvatarStateMachineElement asme: asm.getListOfElements()) {
+        for (AvatarStateMachineElement asme : asm.getListOfElements()) {
             if (asme instanceof AvatarState) {
                 s += "case STATE__" + asme.getName() + ": " + CR;
                 s += traceStateEntering("__myname", asme.getName());
 
                 if (includeUserCode) {
-                    tmp = ((AvatarState)asme).getEntryCode();
+                    tmp = ((AvatarState) asme).getEntryCode();
                     if (tmp != null) {
                         if (tmp.trim().length() > 0) {
                             s += "/* Entry code */\n" + tmp + "\n/* End of entry code */\n\n";
@@ -489,8 +495,8 @@ public class AVATAR2CPOSIX {
 
         s += "}" + CR;
 
-        s+= "//printf(\"Exiting = %s\\n\", __myname);" + CR;
-        s+= "return NULL;" + CR;
+        s += "//printf(\"Exiting = %s\\n\", __myname);" + CR;
+        s += "return NULL;" + CR;
         s += "}" + CR;
         _taskFile.addToMainCode(s + CR);
         _taskFile.addToHeaderCode(sh + CR);
@@ -512,10 +518,10 @@ public class AVATAR2CPOSIX {
         }
 
         if (_asme instanceof AvatarTransition) {
-            AvatarTransition at = (AvatarTransition)_asme;
+            AvatarTransition at = (AvatarTransition) _asme;
 
             if (at.isGuarded()) {
-                String g = modifyGuard(at.getGuard().toString ());
+                String g = modifyGuard(at.getGuard().toString());
 
                 ret += "if (!" + g + ") {" + CR;
                 if (debug) {
@@ -527,7 +533,7 @@ public class AVATAR2CPOSIX {
             }
 
             if (at.hasDelay()) {
-                ret+= "waitFor(" + reworkDelay(at.getMinDelay()) + ", " + reworkDelay(at.getMaxDelay()) + ");" + CR;
+                ret += "waitFor(" + reworkDelay(at.getMinDelay()) + ", " + reworkDelay(at.getMaxDelay()) + ");" + CR;
             }
 
             String act;
@@ -566,9 +572,9 @@ public class AVATAR2CPOSIX {
 
 
                 // 1) Only immediatly executable transitions
-                for(i=0; i<_asme.nbOfNexts(); i++) {
+                for (i = 0; i < _asme.nbOfNexts(); i++) {
                     if (_asme.getNext(i) instanceof AvatarTransition) {
-                        AvatarTransition at = (AvatarTransition)(_asme.getNext(i));
+                        AvatarTransition at = (AvatarTransition) (_asme.getNext(i));
 
                         if (at.hasActions()) {
                             ret += makeImmediateAction(at, i);
@@ -592,15 +598,15 @@ public class AVATAR2CPOSIX {
                 ret += "}" + CR;
 
                 ret += "__returnRequest = executeListOfRequests(&__list);" + CR;
-                ret += "clearListOfRequests(&__list);" + CR ;
+                ret += "clearListOfRequests(&__list);" + CR;
                 ret += traceRequest();
 
                 // Resulting requests
-                for(i=0; i<_asme.nbOfNexts(); i++) {
+                for (i = 0; i < _asme.nbOfNexts(); i++) {
                     if (i != 0) {
                         ret += "else ";
                     }
-                    AvatarTransition at = (AvatarTransition)(_asme.getNext(i));
+                    AvatarTransition at = (AvatarTransition) (_asme.getNext(i));
                     if (at.hasActions()) {
                         ret += " if (__returnRequest == &__req" + i + ") {" + CR;
                         ret += makeActionsOfTransaction(_block, at);
@@ -614,7 +620,7 @@ public class AVATAR2CPOSIX {
 
                           }*/
                         ret += makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
-                    }  else {
+                    } else {
                         if (at.getNext(0) instanceof AvatarActionOnSignal) {
                             ret += " if (__returnRequest == &__req" + i + ") {" + CR + makeBehaviourFromElement(_block, at.getNext(0).getNext(0), false) + CR + "}";
                         } else {
@@ -634,13 +640,13 @@ public class AVATAR2CPOSIX {
         }
 
         if (_asme instanceof AvatarRandom) {
-            AvatarRandom ar = (AvatarRandom)_asme;
+            AvatarRandom ar = (AvatarRandom) _asme;
             ret += ar.getVariable() + " = computeRandom(" + ar.getMinValue() + ", " + ar.getMaxValue() + ");" + CR;
             return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
         }
 
         if (_asme instanceof AvatarActionOnSignal) {
-            AvatarActionOnSignal aaos = (AvatarActionOnSignal)_asme;
+            AvatarActionOnSignal aaos = (AvatarActionOnSignal) _asme;
             ret += makeSignalAction(aaos, 0, false, "", "");
             AvatarSignal as = aaos.getSignal();
             AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
@@ -660,10 +666,10 @@ public class AVATAR2CPOSIX {
             return "";
         }
 
-        aaos = (AvatarActionOnSignal)(_at.getNext(0));
+        aaos = (AvatarActionOnSignal) (_at.getNext(0));
 
         if (_at.isGuarded()) {
-            String g = modifyGuard(_at.getGuard().toString ());
+            String g = modifyGuard(_at.getGuard().toString());
             ret += "if (" + g + ") {" + CR;
         }
 
@@ -701,26 +707,26 @@ public class AVATAR2CPOSIX {
             // Sending
             if (_aaos.isSending()) {
                 // Putting params
-                for(i=0; i<_aaos.getNbOfValues() ;i++) {
-                    ret += "__params" + _index + "[" + i + "] = &" +  _aaos.getValue(i) + ";" + CR;
+                for (i = 0; i < _aaos.getNbOfValues(); i++) {
+                    ret += "__params" + _index + "[" + i + "] = &" + _aaos.getValue(i) + ";" + CR;
                 }
                 if (ar.isAsynchronous()) {
                     ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_ASYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
                     ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                 } else {
                     if (ar.isBroadcast()) {
-                        ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_BROADCAST_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+                        ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_BROADCAST_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
                         ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     } else {
-                        ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+                        ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
                         ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     }
                 }
 
                 // Receiving
             } else {
-                for(i=0; i<_aaos.getNbOfValues() ;i++) {
-                    ret += "__params" + _index + "[" + i + "] = &" +  _aaos.getValue(i) + ";" + CR;
+                for (i = 0; i < _aaos.getNbOfValues(); i++) {
+                    ret += "__params" + _index + "[" + i + "] = &" + _aaos.getValue(i) + ";" + CR;
                 }
                 if (ar.isAsynchronous()) {
                     ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_ASYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
@@ -743,7 +749,7 @@ public class AVATAR2CPOSIX {
     private String makeImmediateAction(AvatarTransition _at, int _index) {
         String ret = "";
         if (_at.isGuarded()) {
-            String g = modifyGuard(_at.getGuard().toString ());
+            String g = modifyGuard(_at.getGuard().toString());
             ret += "if (" + g + ") {" + CR;
         }
 
@@ -770,7 +776,7 @@ public class AVATAR2CPOSIX {
 
     public String makeAttributesDeclaration(AvatarBlock _block, TaskFile _taskFile) {
         String ret = "";
-        for(AvatarAttribute aa: _block.getAttributes()) {
+        for (AvatarAttribute aa : _block.getAttributes()) {
             ret += getCTypeOf(aa) + " " + aa.getName() + " = " + aa.getInitialValue() + ";" + CR;
         }
         return ret;
@@ -778,7 +784,7 @@ public class AVATAR2CPOSIX {
 
     public void makeThreadsInMain(boolean _debug) {
         mainFile.appendToMainCode(CR + "/* Threads of tasks */" + CR);
-        for(TaskFile taskFile: taskFiles) {
+        for (TaskFile taskFile : taskFiles) {
             mainFile.appendToMainCode("pthread_t thread__" + taskFile.getName() + ";" + CR);
         }
 
@@ -788,7 +794,6 @@ public class AVATAR2CPOSIX {
             mainFile.appendToMainCode("/* Activating debug messages */" + CR);
             mainFile.appendToMainCode("activeDebug();" + CR);
         }
-
 
 
         mainFile.appendToMainCode("/* Activating randomness */" + CR);
@@ -801,19 +806,19 @@ public class AVATAR2CPOSIX {
         mainFile.appendToMainCode("initMessages();" + CR);
 
 
-        if (avspec.hasApplicationCode()&& includeUserCode) {
+        if (avspec.hasApplicationCode() && includeUserCode) {
             mainFile.appendToMainCode("/* User initialization */" + CR);
             mainFile.appendToMainCode("__user_init();" + CR);
         }
 
 
         mainFile.appendToMainCode(CR + CR + mainDebugMsg("Starting tasks"));
-        for(TaskFile taskFile: taskFiles) {
+        for (TaskFile taskFile : taskFiles) {
             mainFile.appendToMainCode("pthread_create(&thread__" + taskFile.getName() + ", NULL, mainFunc__" + taskFile.getName() + ", (void *)\"" + taskFile.getName() + "\");" + CR);
         }
 
         mainFile.appendToMainCode(CR + CR + mainDebugMsg("Joining tasks"));
-        for(TaskFile taskFile: taskFiles) {
+        for (TaskFile taskFile : taskFiles) {
             mainFile.appendToMainCode("pthread_join(thread__" + taskFile.getName() + ", NULL);" + CR);
         }
 
@@ -834,7 +839,7 @@ public class AVATAR2CPOSIX {
     public void makeMakefileSrc(String _path) {
         makefile_src = "SRCS = ";
         makefile_src += _path + "main.c ";
-        for(TaskFile taskFile: taskFiles) {
+        for (TaskFile taskFile : taskFiles) {
             makefile_src += _path + taskFile.getName() + ".c ";
         }
 
@@ -843,7 +848,7 @@ public class AVATAR2CPOSIX {
     public void makeMakefileSocLib() {
         makefile_SocLib = "objs = ";
         makefile_SocLib += "main.o ";
-        for(TaskFile taskFile: taskFiles) {
+        for (TaskFile taskFile : taskFiles) {
             makefile_SocLib += taskFile.getName() + ".o ";
         }
 
@@ -879,13 +884,13 @@ public class AVATAR2CPOSIX {
 
     public String reworkDelay(String _delay) {
 
-        switch(timeUnit) {
-        case USEC:
-            return _delay;
-        case MSEC:
-            return "(" + _delay + ")*1000";
-        case SEC:
-            return "(" + _delay + ")*1000000";
+        switch (timeUnit) {
+            case USEC:
+                return _delay;
+            case MSEC:
+                return "(" + _delay + ")*1000";
+            case SEC:
+                return "(" + _delay + ")*1000000";
         }
 
         return _delay;
@@ -893,33 +898,33 @@ public class AVATAR2CPOSIX {
 
     private String modifyMethodName(AvatarBlock _ab, AvatarTerm term) {
         if (term instanceof AvatarAttribute)
-            return term.getName ();
+            return term.getName();
         if (term instanceof AvatarConstant)
-            return term.getName ();
+            return term.getName();
         if (term instanceof AvatarTermRaw)
-            return term.getName ();
+            return term.getName();
         if (term instanceof AvatarArithmeticOp) {
             AvatarArithmeticOp aop = (AvatarArithmeticOp) term;
-            return this.modifyMethodName (_ab, aop.getTerm1 ())
-                + aop.getOperator ()
-                + this.modifyMethodName (_ab, aop.getTerm2 ());
+            return this.modifyMethodName(_ab, aop.getTerm1())
+                    + aop.getOperator()
+                    + this.modifyMethodName(_ab, aop.getTerm2());
         }
         if (term instanceof AvatarTuple) {
             boolean first = true;
             String res = "(";
-            for (AvatarTerm tterm: ((AvatarTuple) term).getComponents ()) {
+            for (AvatarTerm tterm : ((AvatarTuple) term).getComponents()) {
                 if (first)
                     first = false;
                 else
                     res += ", ";
-                res += this.modifyMethodName (_ab, tterm);
+                res += this.modifyMethodName(_ab, tterm);
             }
 
             return res + ")";
         }
         if (term instanceof AvatarTermFunction)
-            return  _ab.getName () + "__" + ((AvatarTermFunction) term).getMethod ().getName ()
-                + this.modifyMethodName (_ab, ((AvatarTermFunction) term).getArgs ());
+            return _ab.getName() + "__" + ((AvatarTermFunction) term).getMethod().getName()
+                    + this.modifyMethodName(_ab, ((AvatarTermFunction) term).getArgs());
         return "";
     }
 
@@ -974,20 +979,20 @@ public class AVATAR2CPOSIX {
     public String makeActionsOfTransaction(AvatarBlock _block, AvatarTransition _at) {
         String ret = "";
         String type;
-        for(int i=0; i<_at.getNbOfAction(); i++) {
+        for (int i = 0; i < _at.getNbOfAction(); i++) {
             // Must know whether this is an action or a method call
 
             AvatarAction act = _at.getAction(i);
             TraceManager.addDev("Action=" + act);
             if (act.isAMethodCall()) {
                 TraceManager.addDev("Method call");
-                String actModified = modifyMethodName (_block, (AvatarTermFunction) act);
-                ret +=  actModified + ";" + CR;
+                String actModified = modifyMethodName(_block, (AvatarTermFunction) act);
+                ret += actModified + ";" + CR;
             } else {
                 TraceManager.addDev("Else");
-                String actModified = modifyMethodName (_block, ((AvatarActionAssignment) act).getLeftHand ())
-                    + " = " + modifyMethodName (_block, ((AvatarActionAssignment) act).getRightHand ());
-                AvatarLeftHand leftHand = ((AvatarActionAssignment) act).getLeftHand ();
+                String actModified = modifyMethodName(_block, ((AvatarActionAssignment) act).getLeftHand())
+                        + " = " + modifyMethodName(_block, ((AvatarActionAssignment) act).getRightHand());
+                AvatarLeftHand leftHand = ((AvatarActionAssignment) act).getLeftHand();
                 ret += actModified + ";" + CR;
                 if (leftHand instanceof AvatarAttribute) {
                     if (((AvatarAttribute) leftHand).isInt()) {
@@ -995,7 +1000,7 @@ public class AVATAR2CPOSIX {
                     } else {
                         type = "1";
                     }
-                    ret += traceVariableModification(_block.getName(), leftHand.getName (), type);
+                    ret += traceVariableModification(_block.getName(), leftHand.getName(), type);
                 }
 
             }

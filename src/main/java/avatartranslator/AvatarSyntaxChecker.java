@@ -126,6 +126,28 @@ public class AvatarSyntaxChecker  {
 
     }
 
+    public static int isAValidProbabilityExpr(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _expr) {
+        if (_expr.trim().length() == 0) {
+            return 0;
+        }
+
+        String tmp = _expr.replaceAll(" ", "").trim();
+        double prob = 0.5;
+
+        try {
+            prob = new Double(tmp).doubleValue();
+        } catch (Exception e) {
+            return -1;
+        }
+
+        if ((prob <0) || (prob > 1)) {
+            return -1;
+        }
+
+        return 0;
+
+    }
+
     public static int isAValidBoolExpr(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _expr) {
         if (_expr.trim().length() == 0) {
             return 0;

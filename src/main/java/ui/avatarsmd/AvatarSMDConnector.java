@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,12 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
 
 
 package ui.avatarsmd;
@@ -51,23 +49,24 @@ import java.awt.geom.Point2D;
 import java.util.Vector;
 
 /**
-   * Class AvatarSMDConnector
-   * Basic connector with a full arrow at the end. Used in state machine
-   * Creation: 06/04/2010
-   * @version 1.0 06/04/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarSMDConnector
+ * Basic connector with a full arrow at the end. Used in state machine
+ * Creation: 06/04/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 06/04/2010
  */
-public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints {
+public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints {
     protected int arrowLength = 10;
     //protected AvatarSMDTransitionInfo myTransitionInfo;
 
     public AvatarSMDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
         //nbInternalTGComponent = 1;
         //tgcomponent = new TGComponent[nbInternalTGComponent];
-		
-        AvatarSMDTransitionInfo tgc = new AvatarSMDTransitionInfo((_p1.getX()+_p2.getX())/2, (_p1.getY()+_p2.getY())/2, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this, _tdp);
+
+        AvatarSMDTransitionInfo tgc = new AvatarSMDTransitionInfo((_p1.getX() + _p2.getX()) / 2, (_p1.getY() + _p2.getY()) / 2, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this, _tdp);
         tgc.setValue("");
         tgc.setName("List of all parameters of an Avatar SMD transition");
         tgc.setMoveWithFather(false);
@@ -111,20 +110,22 @@ public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints 
        }*/
 
 
-    public void setTransitionInfo(String guard, String action){
-	AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);
-	if (!guard.isEmpty()){	
-	    tgc.setGuard(guard);
-	}
-	if (!action.isEmpty()){
-	    tgc.addAction(action);
-	}
+    public void setTransitionInfo(String guard, String action) {
+        AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);
+        if (!guard.isEmpty()) {
+            tgc.setGuard(guard);
+        }
+        if (!action.isEmpty()) {
+            tgc.addAction(action);
+        }
     }
-	public void setTransitionTime(String minDelay, String maxDelay, String minCompute, String maxCompute){
-		AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);
-		tgc.setTimes(minDelay, maxDelay, minCompute, maxCompute);
-	}
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
+
+    public void setTransitionTime(String minDelay, String maxDelay, String minCompute, String maxCompute) {
+        AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);
+        tgc.setTimes(minDelay, maxDelay, minCompute, maxCompute);
+    }
+
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
         if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
             g.drawLine(x1, y1, x2, y2);
         } else {
@@ -133,10 +134,10 @@ public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints 
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-	AvatarSMDTransitionInfo info = getAvatarSMDTransitionInfo();
-	if (info == null) {
-	    return false;
-	}
+        AvatarSMDTransitionInfo info = getAvatarSMDTransitionInfo();
+        if (info == null) {
+            return false;
+        }
         return info.editOndoubleClick(frame);
     }
 
@@ -145,9 +146,9 @@ public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints 
     }
 
     public AvatarSMDTransitionInfo getAvatarSMDTransitionInfo() {
-        for(int i=0; i<tgcomponent.length; i++) {
+        for (int i = 0; i < tgcomponent.length; i++) {
             if (tgcomponent[i] instanceof AvatarSMDTransitionInfo) {
-                return (AvatarSMDTransitionInfo)(tgcomponent[i]);
+                return (AvatarSMDTransitionInfo) (tgcomponent[i]);
             }
         }
         return null;
@@ -200,6 +201,12 @@ public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints 
     public String getComputeMaxDelay() {
         return getAvatarSMDTransitionInfo().getComputeMaxDelay();
     }
+
+    public String getProbability() {
+        return getAvatarSMDTransitionInfo().getProbability();
+    }
+
+
 
 
     public String getFilesToInclude() {

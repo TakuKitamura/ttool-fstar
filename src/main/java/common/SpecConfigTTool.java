@@ -405,11 +405,15 @@ public class SpecConfigTTool {
      * @author Fabien Tessier
      */
     public static boolean checkAndCreateAVATARCodeDir(String s) throws FileException {
+        //TraceManager.addDev("Trying to create the dir:" + s);
         File f = new File(s);
         try {
-            if (!f.exists())
-                if (!f.mkdir())
+            if (!f.exists()) {
+                //TraceManager.addDev("Does not exist");
+                if (!f.mkdir()) {
                     return false;
+                }
+            }
             if (!s.equals(ConfigurationTTool.AVATARExecutableCodeDirectory)) {
                 File make = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile");
                 File defs = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.defs");
