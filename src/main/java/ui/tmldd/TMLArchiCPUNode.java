@@ -622,9 +622,11 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     public int getSliceTime(){
         return sliceTime;
     }
+
     public int getEncryption(){
         return encryption;
     }
+
     public String getAttributes() {
         String attr = "";
         attr += "Nb of cores = " + nbOfCores + "\n";

@@ -62,7 +62,7 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
         addMouseListener(tdmm);
         addMouseMotionListener(tdmm);*/
         
-        attributesOn = PARTIAL;
+        attributesOn = NORMAL;
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {

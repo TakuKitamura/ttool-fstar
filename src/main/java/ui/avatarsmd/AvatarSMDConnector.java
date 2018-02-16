@@ -56,7 +56,7 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  * @version 1.0 06/04/2010
  */
-public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints {
+public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints implements WithAttributes {
     protected int arrowLength = 10;
     //protected AvatarSMDTransitionInfo myTransitionInfo;
 
@@ -215,5 +215,9 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints {
 
     public String getCodeToInclude() {
         return getAvatarSMDTransitionInfo().getCodeToInclude();
+    }
+
+    public String getAttributes() {
+        return getAvatarSMDTransitionInfo().getAttributes();
     }
 }

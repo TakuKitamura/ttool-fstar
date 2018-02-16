@@ -64,7 +64,7 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  * @version 1.0 12/04/2010
  */
-public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
+public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent implements WithAttributes {
 
 //    private static String FILE_INFO = "(user files specified)";
     //   private static String CODE_INFO = "(user code specified)";
@@ -535,5 +535,21 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
             ret += codeToInclude[i] + "\n";
         }
         return ret;
+    }
+
+    public String getAttributes() {
+        String attr = "";
+        if (guard.length() > 0)
+            attr += " guard: " + getGuard();
+        if (afterMin.length() > 0 || afterMax.length()>0)
+            attr += " delay: [" + afterMin + "," + afterMax + "] ";
+        if (probability.length() > 0)
+            attr += " weight:" + probability;
+
+        for(String s: listOfActions)
+            attr += " / " + s;
+
+        return attr;
+
     }
 }

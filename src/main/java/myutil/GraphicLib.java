@@ -529,6 +529,7 @@ public final class GraphicLib {
 
         Window parent = w.getOwner();
         if (parent == null) {
+            //TraceManager.addDev("Centering on screen");
             centerOnScreen(w);
             return;
         }

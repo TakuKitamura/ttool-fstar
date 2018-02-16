@@ -139,7 +139,8 @@ public class IconManager {
 
 
     // SMD diagram
-    public static ImageIcon imgic2000, imgic2002, imgic2004, imgic2006, imgic2008, imgic2010, imgic2012;
+    public static ImageIcon imgic2000, imgic2002, imgic2004, imgic2006, imgic2008, imgic2010, imgic2012, imgic2014,
+    imgic2016, imgic2018;
 
     // CSD diagram
     public static ImageIcon imgic2100, imgic2104, imgic2106, imgic2108, imgic2110;
@@ -557,7 +558,9 @@ public class IconManager {
     private static String icon2008 = "prosmdsubmachine1.gif"; //
     private static String icon2010 = "actionstate.gif";
     private static String icon2012 = "prosmdstate.gif";
-
+    private static String icon2014 = "sendsignal.gif";
+    private static String icon2016 = "receivesignal.gif";
+    private static String icon2018 = "functioncall.gif";
 
     //CSD diagrams
     private static String icon2100 = "procsdcomponent.gif";
@@ -1031,6 +1034,9 @@ public class IconManager {
         imgic2008 = getIcon(icon2008);
         imgic2010 = getIcon(icon2010);
         imgic2012 = getIcon(icon2012);
+        imgic2014 = getIcon(icon2014);
+        imgic2016 = getIcon(icon2016);
+        imgic2018 = getIcon(icon2018);
 
         imgic2100 = getIcon(icon2100);
         //Delegate Ports removed, by Solange
