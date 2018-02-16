@@ -98,6 +98,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
     public void setProbability(double _probability) {
         probability = _probability;
     }
+    public double getProbability() {
+        return probability;
+    }
+
 
     public void addGuard(String _g) {
         AvatarGuard guard = AvatarGuard.createFromString(this.block, _g);
@@ -273,6 +277,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         at.setGuard(getGuard());
         at.setDelays(getMinDelay(), getMaxDelay());
         at.setComputes(getMinCompute(), getMaxCompute());
+        at.setProbability(getProbability());
 
         //TraceManager.addDev("-------------- Cloning actions of " + this);
         for (int i = 0; i < getNbOfAction(); i++) {
@@ -300,6 +305,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
         at.setComputes(getMinCompute(), getMaxCompute());
         at.setDelays(getMinDelay(), getMaxDelay());
+        at.setProbability(getProbability());
 
         return at;
     }
@@ -367,6 +373,8 @@ public class AvatarTransition extends AvatarStateMachineElement {
             ret += "minCompute=" + getMinCompute() + " maxcompute=" + getMaxCompute() + "\n";
         }
 
+        ret += "prob=" + getProbability() + "\n";
+
         for (AvatarAction a : actions) {
             String s = a.toString();
             if (s.trim().length() > 0) {
@@ -400,17 +408,18 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public String getNiceName() {
+        String s = " prob:" + getProbability();
         if (isGuarded())
-            return "Transition (guard=" + guard + ", ...)";
+            return "Transition (guard=" + guard + ", ...)" + s;
 
         if (hasDelay())
-            return "Transition (delay=(" + minDelay + ", " + maxDelay + "), ...)";
+            return "Transition (delay=(" + minDelay + ", " + maxDelay + "), ...)" + s;
 
         if (actions.size() > 0) {
-            return "Transition (" + actions.get(0) + ", ...)";
+            return "Transition (" + actions.get(0) + ", ...)" + s;
         }
 
-        return "Empty transition";
+        return "Empty transition" + s;
     }
 
     public void translate(AvatarTranslator translator, Object arg) {

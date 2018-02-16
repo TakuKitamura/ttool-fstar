@@ -117,13 +117,13 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
 
     private void initComponents() {
         Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
+        //GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
+        //GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
 
         setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
+        c.setLayout(new BorderLayout());
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -132,7 +132,7 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
 
         panel1.setBorder(new javax.swing.border.TitledBorder("Signals"));
 
-        panel1.setPreferredSize(new Dimension(500, 250));
+        //panel1.setPreferredSize(new Dimension(500, 250));
 
         // first line panel1
         c1.weighty = 1.0;
@@ -183,22 +183,22 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
 
 
         // main panel;
-        c0.gridwidth = 1;
+        /*c0.gridwidth = 1;
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c0.gridwidth = GridBagConstraints.REMAINDER; //end row*/
 
-        c.add(panel1, c0);
-
-
+        c.add(panel1, BorderLayout.CENTER);
 
 
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
 
-        initButtons(c0, c, this);
+
+        //c0.gridwidth = 1;
+        //c0.gridheight = 1;
+        //c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c, this);
     }
 
     public void	actionPerformed(ActionEvent evt)  {

@@ -61,6 +61,10 @@ import java.io.IOException;
  * @version 1.0
  */
 public class SpecConfigTTool {
+
+    public static String DEFAULT_CONFIG = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n\n<PROJECTCONFIGURATION>\n<LastVCD data=\"\"/>\n<LastOpenDiagram tab=\"0\" panel=\"0\"/>\n</PROJECTCONFIGURATION>\n";
+
+
     public static String SystemCCodeDirectory = "";
     public static String SystemCCodeCompileCommand = "";
     public static String SystemCCodeExecuteCommand = "";
@@ -168,12 +172,12 @@ public class SpecConfigTTool {
         VCDPath = dir.getAbsolutePath() + ProjectVCDDirectory;
         NCDirectory = dir.getAbsolutePath() + ProjectNCDirectory;
 
-        TraceManager.addDev("Before replace SystemCCodeCompileCommand:" + SystemCCodeCompileCommand + " with " + ConfigurationTTool.SystemCCodeDirectory +
-                " to " + SystemCCodeDirectory);
+        //TraceManager.addDev("Before replace SystemCCodeCompileCommand:" + SystemCCodeCompileCommand + " with " + ConfigurationTTool.SystemCCodeDirectory +
+         //       " to " + SystemCCodeDirectory);
 
         SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand.replace(
                 ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
-        TraceManager.addDev("After replace SystemCCodeCompileCommand:" + SystemCCodeCompileCommand);
+        //TraceManager.addDev("After replace SystemCCodeCompileCommand:" + SystemCCodeCompileCommand);
         SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
         SystemCCodeInteractiveExecuteCommand = ConfigurationTTool.SystemCCodeInteractiveExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
 
@@ -207,7 +211,15 @@ public class SpecConfigTTool {
             TGraph.mkdir();
         }
 
-        File test = new File("./");
+        File projectConfig = new File(dir + File.separator + "project_config.xml");
+        try {
+            FileUtils.saveFile(projectConfig, DEFAULT_CONFIG);
+            return projectConfig;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
+        /*File test = new File("./");
         File base;
         if (test.getAbsolutePath().contains("TTool/bin/"))
             base = new File("../ttool/project_config.xml");
@@ -218,19 +230,19 @@ public class SpecConfigTTool {
             return new File(dir + File.separator + "project_config.xml");
         } catch (IOException e) {
             System.err.println(e.getMessage());
-        }
+        }*/
         return null;
     }
 
     public static void loadConfigFile(File f) throws MalformedConfigurationException {
         if (!FileUtils.checkFileForOpen(f)) {
-            throw new MalformedConfigurationException("Filepb");
+            throw new MalformedConfigurationException("Filepb 1");
         }
 
         String data = FileUtils.loadFileData(f);
 
         if (data == null) {
-            throw new MalformedConfigurationException("Filepb");
+            throw new MalformedConfigurationException("Filepb 2");
         }
 
         loadConfigurationFromXML(data);
@@ -286,13 +298,13 @@ public class SpecConfigTTool {
         boolean write = false;
 
         if (!FileUtils.checkFileForOpen(f)) {
-            throw new MalformedConfigurationException("Filepb");
+            throw new MalformedConfigurationException("Filepb 3");
         }
 
         String data = FileUtils.loadFileData(f);
 
         if (data == null) {
-            throw new MalformedConfigurationException("Filepb");
+            throw new MalformedConfigurationException("Filepb 4");
         }
 
         index0 = data.indexOf("LastVCD");
@@ -405,11 +417,15 @@ public class SpecConfigTTool {
      * @author Fabien Tessier
      */
     public static boolean checkAndCreateAVATARCodeDir(String s) throws FileException {
+        //TraceManager.addDev("Trying to create the dir:" + s);
         File f = new File(s);
         try {
-            if (!f.exists())
-                if (!f.mkdir())
+            if (!f.exists()) {
+                //TraceManager.addDev("Does not exist");
+                if (!f.mkdir()) {
                     return false;
+                }
+            }
             if (!s.equals(ConfigurationTTool.AVATARExecutableCodeDirectory)) {
                 File make = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile");
                 File defs = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.defs");

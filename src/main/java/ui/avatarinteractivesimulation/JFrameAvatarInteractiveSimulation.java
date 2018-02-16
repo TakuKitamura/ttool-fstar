@@ -294,10 +294,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         nbOfAllExecutedElements = 0;
         resetMetElements();
         ass = new AvatarSpecificationSimulation(avspec, this);
+
+
+
         //ass.initialize();
         simulationRunning = false;
         simulationThread = new Thread(this);
         simulationThread.start();
+
         TraceManager.addDev("Init simulation done");
     }
 
@@ -326,8 +330,37 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             selectedComponentForTransaction2 = null;
             if (ll != null) {
                 listPendingTransactions.setListData(ll);
-                int random = (int)(Math.floor((Math.random()*ll.size())));
-                listPendingTransactions.setSelectedIndex(random);
+
+                //int random = (int)(Math.floor((Math.random()*ll.size())));
+                //listPendingTransactions.setSelectedIndex(random);
+
+                // Use probabilities
+                double sumProb = 0.0;
+                for (AvatarSimulationPendingTransaction pt: ll) {
+                    //TraceManager.addDev("prob=" + pt.probability);
+                    sumProb += pt.probability;
+                }
+
+
+
+                double rand2 = Math.random() * sumProb;
+                //TraceManager.addDev("Nb of pending:" + ll.size() + " total prob=" + sumProb +  " rand=" + rand2);
+
+
+                double prob = 0.0;
+                int index = 0;
+                for (AvatarSimulationPendingTransaction pt: ll) {
+                    prob += pt.probability;
+                    //TraceManager.addDev("rand=" + rand2 + " prob=" + prob + " pt.probability=" + pt.probability);
+                    if (rand2 < prob) {
+                        listPendingTransactions.setSelectedIndex(index);
+                        break;
+                    }
+                    index ++;
+                }
+
+
+
             } else {
                 listPendingTransactions.setListData(new Vector<AvatarSimulationPendingTransaction>());
             }

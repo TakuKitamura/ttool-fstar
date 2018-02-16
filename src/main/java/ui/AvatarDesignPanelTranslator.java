@@ -1902,6 +1902,19 @@ public class AvatarDesignPanelTranslator {
                         if (tmp1 != null && tmp2 != null)
                             at.setComputes(tmp1, tmp2);
 
+                        // Probability
+                        tmp1 = asmdco.getProbability ();
+                        if ((tmp1 != null) && (tmp1.length()>0)) {
+                            error = AvatarSyntaxChecker.isAValidProbabilityExpr(_as, _ab, tmp1);
+                            if (error < 0) {
+                                this.makeError(error, tdp, _ab, tgc, "probability ", tmp1);
+                                tmp1 = null;
+                            }
+                            if (tmp1 != null) {
+                                at.setProbability(new Double(tmp1).doubleValue());
+                            }
+                        }
+
                         // Actions
                         for(String s: asmdco.getActions())
                             if (s.trim().length() > 0) {

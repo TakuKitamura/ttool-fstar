@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,13 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
-
 
 
 package avatartranslator.directsimulation;
@@ -51,13 +48,14 @@ import java.util.Vector;
 
 
 /**
-   * Class AvatarSpecification
-   * Avatar specification
-   * Creation: 13/12/2010
-   * @version 1.0 13/12/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarSpecification
+ * Avatar specification
+ * Creation: 13/12/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 13/12/2010
  */
-public class AvatarSpecificationSimulation  {
+public class AvatarSpecificationSimulation {
     public static int MAX_TRANSACTION_IN_A_ROW = 1000;
 
     public static int MAX_TRANSACTIONS = 100000;
@@ -128,7 +126,7 @@ public class AvatarSpecificationSimulation  {
 
     public void computeSelectedSimulationBlocks() {
         selectedBlocks = new Vector<AvatarSimulationBlock>();
-        for (AvatarSimulationBlock block: blocks) {
+        for (AvatarSimulationBlock block : blocks) {
             if (block.selected) {
                 selectedBlocks.add(block);
             }
@@ -156,9 +154,9 @@ public class AvatarSpecificationSimulation  {
 
         // Remove composite states
         avspec.removeCompositeStates();
-        
+
         // Remove library function calls
-        avspec.removeLibraryFunctionCalls ();
+        avspec.removeLibraryFunctionCalls();
 
         // Remove timers
         avspec.removeTimers();
@@ -166,10 +164,10 @@ public class AvatarSpecificationSimulation  {
         // Robustness
         avspec.makeRobustness();
 
-	// remove FIFOs
-	//avspec.removeFIFOs(2);
+        // remove FIFOs
+        //avspec.removeFIFOs(2);
 
-        TraceManager.addDev("-------Spec:" + avspec.toString() + "--------");
+        //TraceManager.addDev("-------Spec:" + avspec.toString() + "--------");
     }
 
     public void reset() {
@@ -191,14 +189,14 @@ public class AvatarSpecificationSimulation  {
         int cpt = 0;
         Vector<AvatarSimulationBlock> tmpblocks = blocks;
         blocks = new Vector<AvatarSimulationBlock>();
-        for(AvatarBlock block: avspec.getListOfBlocks()) {
+        for (AvatarBlock block : avspec.getListOfBlocks()) {
             if (block.hasARealBehaviour()) {
                 AvatarSimulationBlock asb = new AvatarSimulationBlock(block);
                 blocks.add(asb);
                 if (tmpblocks != null) {
                     asb.selected = tmpblocks.get(cpt).selected;
                 }
-                cpt ++;
+                cpt++;
             }
         }
         //TraceManager.addDev("Nb of simulated blocks :" + blocks.size() + "\n");
@@ -233,135 +231,134 @@ public class AvatarSpecificationSimulation  {
 
         //boolean executeNextState;
 
-        while(true) {
+        while (true) {
             //TraceManager.addDev("State=" + state);
-            switch(state) {
-            case INITIALIZE:
-                //TraceManager.addDev("-> -> INITIALIZE");
-                initialize();
-                setState(RESET);
-                break;
+            switch (state) {
+                case INITIALIZE:
+                    //TraceManager.addDev("-> -> INITIALIZE");
+                    initialize();
+                    setState(RESET);
+                    break;
 
-            case RESET:
-                //TraceManager.addDev("-> -> RESET");
-                reset();
-                // Execute silent transactions if necessary
-                setState(FIRST);
-                break;
+                case RESET:
+                    //TraceManager.addDev("-> -> RESET");
+                    reset();
+                    // Execute silent transactions if necessary
+                    setState(FIRST);
+                    break;
 
-            case FIRST:
-                //TraceManager.addDev("-> -> FIRST");
-                //stopped = false;
-                AvatarSimulationPendingTransaction silent;
-                int maxNb = 0;
-                while(maxNb < 50) {
-                    gatherPendingTransactions();
-                    //TraceManager.addDev("Gather done");
-                    silent = getSilentTransactionToExecute(pendingTransactions);
-                    if (silent == null) {
-                        setState(GATHER);
-                        break;
+                case FIRST:
+                    //TraceManager.addDev("-> -> FIRST");
+                    //stopped = false;
+                    AvatarSimulationPendingTransaction silent;
+                    int maxNb = 0;
+                    while (maxNb < 50) {
+                        gatherPendingTransactions();
+                        //TraceManager.addDev("Gather done");
+                        silent = getSilentTransactionToExecute(pendingTransactions);
+                        if (silent == null) {
+                            setState(GATHER);
+                            break;
 
-                    } else {
-                        //TraceManager.addDev("Second option");
-                        maxNb ++;
-                        // Must execute the silent pending transactions until none available
-                        Vector<AvatarSimulationPendingTransaction> vect=new Vector<AvatarSimulationPendingTransaction>();
-                        vect.add(silent);
-                        performSelectedTransactions(vect);
-                        //nbOfCommands = 1;
-                        //nbOfCommandsActivated = true;
-                        //TraceManager.addDev("Second option done");
-                        setState(EXECUTE);
-                    }
-                }
-                break;
-
-
-
-            case GATHER:
-                //TraceManager.addDev("-> -> GATHER");
-                gatherPendingTransactions();
-                if (pendingTransactions.size() == 0) {
-                    setState(TERMINATED);
-                    //TraceManager.addDev("No more pending transactions");
-                } else {
-                    //TraceManager.addDev("pending transactions");
-                    if ((nbOfCommandsActivated) && (nbOfCommands < 1)) {
-                        //TraceManager.addDev("1. pending transactions");
-                        if (getSilentTransactionToExecute(pendingTransactions) == null) {
-                            //TraceManager.addDev("Dont execute");
-                            setState(DONT_EXECUTE);
                         } else {
-                            //TraceManager.addDev("Execute");
+                            //TraceManager.addDev("Second option");
+                            maxNb++;
+                            // Must execute the silent pending transactions until none available
+                            Vector<AvatarSimulationPendingTransaction> vect = new Vector<AvatarSimulationPendingTransaction>();
+                            vect.add(silent);
+                            performSelectedTransactions(vect);
+                            //nbOfCommands = 1;
+                            //nbOfCommandsActivated = true;
+                            //TraceManager.addDev("Second option done");
                             setState(EXECUTE);
-                            stopped = false;
                         }
-                    } else {
-                        //TraceManager.addDev("2. pending transactions");
-                        setState(EXECUTE);
                     }
-                }
+                    break;
 
-                break;
 
-            case EXECUTE:
-                //TraceManager.addDev("-> -> EXECUTE");
-                silentTransactionExecuted = false;
-                selectedTransactions = selectTransactions(pendingTransactions);
-
-                if (selectedTransactions.size() == 0) {
-                    setState(TERMINATED);
-                    TraceManager.addDev("Deadlock: no transaction can be selected");
-                } else {
-                    //TraceManager.addDev("performSelectedTrans?");
-                    if (performSelectedTransactions(selectedTransactions)) {
-                        if (!silentTransactionExecuted) {
-                            if (nbOfCommandsActivated) {
-                                nbOfCommands --;
+                case GATHER:
+                    //TraceManager.addDev("-> -> GATHER");
+                    gatherPendingTransactions();
+                    if (pendingTransactions.size() == 0) {
+                        setState(TERMINATED);
+                        //TraceManager.addDev("No more pending transactions");
+                    } else {
+                        //TraceManager.addDev("pending transactions");
+                        if ((nbOfCommandsActivated) && (nbOfCommands < 1)) {
+                            //TraceManager.addDev("1. pending transactions");
+                            if (getSilentTransactionToExecute(pendingTransactions) == null) {
+                                //TraceManager.addDev("Dont execute");
+                                setState(DONT_EXECUTE);
+                            } else {
+                                //TraceManager.addDev("Execute");
+                                setState(EXECUTE);
+                                stopped = false;
                             }
+                        } else {
+                            //TraceManager.addDev("2. pending transactions");
+                            setState(EXECUTE);
                         }
-                        // If breakpoint at the end of selectTransactions -> set the nb of commands to 0
-                        for (AvatarSimulationPendingTransaction tr: selectedTransactions) {
-                            AvatarStateMachineElement elt = tr.elementToExecute.getNext(0);
-                            if (elt != null) {
-                                if (elt.hasBreakpoint()) {
-                                    nbOfCommands = 0;
-                                    TraceManager.addDev("Brk reached");
+                    }
+
+                    break;
+
+                case EXECUTE:
+                    //TraceManager.addDev("-> -> EXECUTE");
+                    silentTransactionExecuted = false;
+                    selectedTransactions = selectTransactions(pendingTransactions);
+
+                    if (selectedTransactions.size() == 0) {
+                        setState(TERMINATED);
+                        TraceManager.addDev("Deadlock: no transaction can be selected");
+                    } else {
+                        //TraceManager.addDev("performSelectedTrans?");
+                        if (performSelectedTransactions(selectedTransactions)) {
+                            if (!silentTransactionExecuted) {
+                                if (nbOfCommandsActivated) {
+                                    nbOfCommands--;
                                 }
                             }
-                        }
+                            // If breakpoint at the end of selectTransactions -> set the nb of commands to 0
+                            for (AvatarSimulationPendingTransaction tr : selectedTransactions) {
+                                AvatarStateMachineElement elt = tr.elementToExecute.getNext(0);
+                                if (elt != null) {
+                                    if (elt.hasBreakpoint()) {
+                                        nbOfCommands = 0;
+                                        TraceManager.addDev("Brk reached");
+                                    }
+                                }
+                            }
 
-                        if (asi != null) {
-                            asi.updateTransactionAndTime(allTransactions.size(), clockValue);
+                            if (asi != null) {
+                                asi.updateTransactionAndTime(allTransactions.size(), clockValue);
+                            }
+                            setState(GATHER);
+                        } else {
+                            setState(TERMINATED);
+                            TraceManager.addDev("Error when executing transaction");
                         }
-                        setState(GATHER);
-                    } else {
-                        setState(TERMINATED);
-                        TraceManager.addDev("Error when executing transaction");
                     }
-                }
-                break;
+                    break;
 
-            case DONT_EXECUTE:
-                //TraceManager.addDev("-> -> WAIT FOR EXECUTE");
-                waitForExecute();
-                break;
+                case DONT_EXECUTE:
+                    //TraceManager.addDev("-> -> WAIT FOR EXECUTE");
+                    waitForExecute();
+                    break;
 
-            case TERMINATED:
-                TraceManager.addDev("-> -> TERMINATED");
-                waitForResetOrNewState();
-                break;
+                case TERMINATED:
+                    TraceManager.addDev("-> -> TERMINATED");
+                    waitForResetOrNewState();
+                    break;
 
-            case KILLED:
-                TraceManager.addDev("-> -> KILLED");
-                TraceManager.addDev("Simulation killed");
-                return;
+                case KILLED:
+                    TraceManager.addDev("-> -> KILLED");
+                    TraceManager.addDev("Simulation killed");
+                    return;
 
-            default:
-                TraceManager.addDev("-> -> UNKNOWN");
-                TraceManager.addDev("Unknown state");
-                setState(KILLED);
+                default:
+                    TraceManager.addDev("-> -> UNKNOWN");
+                    TraceManager.addDev("Unknown state");
+                    setState(KILLED);
             }
 
             computeExternalCommands();
@@ -371,22 +368,24 @@ public class AvatarSpecificationSimulation  {
     }
 
     public synchronized void waitForExecute() {
-        while(!reset && !newState && !killed && !go) {
+        while (!reset && !newState && !killed && !go) {
             try {
                 wait();
-            } catch(Exception e){}
+            } catch (Exception e) {
+            }
         }
     }
 
     public synchronized void waitForResetOrNewState() {
-        while(!reset && !newState && !killed) {
+        while (!reset && !newState && !killed) {
             try {
                 wait();
-            } catch(Exception e){}
+            } catch (Exception e) {
+            }
         }
     }
 
-    public synchronized void  computeExternalCommands() {
+    public synchronized void computeExternalCommands() {
         //TraceManager.addDev("Computing external command");
 
         if (state == KILLED) {
@@ -426,7 +425,7 @@ public class AvatarSpecificationSimulation  {
             setState(DONT_EXECUTE);
         }
 
-        if (go && (state  == DONT_EXECUTE)) {
+        if (go && (state == DONT_EXECUTE)) {
             go = false;
             setState(EXECUTE);
         }
@@ -498,7 +497,7 @@ public class AvatarSpecificationSimulation  {
 
         pendingTransactions.clear();
         // Gather all pending transactions from blocks
-        for(AvatarSimulationBlock asb: blocks) {
+        for (AvatarSimulationBlock asb : blocks) {
             pendingTransactions.addAll(asb.getPendingTransactions(allTransactions, clockValue, MAX_TRANSACTION_IN_A_ROW, bunchid));
         }
 
@@ -516,7 +515,7 @@ public class AvatarSpecificationSimulation  {
         String res;
         AvatarBlock ab;
         int i;
-        for(AvatarSimulationPendingTransaction  aspt: pendingTransactions) {
+        for (AvatarSimulationPendingTransaction aspt : pendingTransactions) {
             if (aspt.hasDelay) {
                 aspt.myMinDuration = aspt.myMinDelay;
                 aspt.myMaxDuration = aspt.myMaxDelay;
@@ -531,9 +530,9 @@ public class AvatarSpecificationSimulation  {
         }
 
         // Work on signals
-        for(AvatarSimulationPendingTransaction  aspt: pendingTransactions) {
+        for (AvatarSimulationPendingTransaction aspt : pendingTransactions) {
             if (aspt.elementToExecute instanceof AvatarActionOnSignal) {
-                workOnAvatarActionOnSignalTransaction(ll, aspt, (AvatarActionOnSignal)(aspt.elementToExecute));
+                workOnAvatarActionOnSignalTransaction(ll, aspt, (AvatarActionOnSignal) (aspt.elementToExecute));
             } else {
                 ll.add(aspt);
             }
@@ -550,9 +549,9 @@ public class AvatarSpecificationSimulation  {
         ll = new Vector<AvatarSimulationPendingTransaction>();
 
         int nbOfPureLogicalTransitions = 0;
-        for(AvatarSimulationPendingTransaction  aspt: pendingTransactions) {
+        for (AvatarSimulationPendingTransaction aspt : pendingTransactions) {
             if (!(aspt.hasDelay)) {
-                nbOfPureLogicalTransitions ++;
+                nbOfPureLogicalTransitions++;
             }
         }
 
@@ -563,9 +562,9 @@ public class AvatarSpecificationSimulation  {
           }*/
 
         boolean hasSilentTransaction = false;
-        if (nbOfPureLogicalTransitions >0) {
+        if (nbOfPureLogicalTransitions > 0) {
             //TraceManager.addDev("Pure logical transaction");
-            for(AvatarSimulationPendingTransaction      aspt: pendingTransactions) {
+            for (AvatarSimulationPendingTransaction aspt : pendingTransactions) {
                 if (!aspt.hasDelay) {
                     if (isASilentTransaction(aspt, pendingTransactions)) {
                         hasSilentTransaction = true;
@@ -580,7 +579,7 @@ public class AvatarSpecificationSimulation  {
                 // Must keep only silent transactions
                 //TraceManager.addDev("has silent logical transaction");
                 ll = new Vector<AvatarSimulationPendingTransaction>();
-                for(AvatarSimulationPendingTransaction aspt: pendingTransactions) {
+                for (AvatarSimulationPendingTransaction aspt : pendingTransactions) {
                     if (isASilentTransaction(aspt, pendingTransactions)) {
                         ll.add(aspt);
                     }
@@ -598,7 +597,7 @@ public class AvatarSpecificationSimulation  {
         int maxDuration = Integer.MAX_VALUE;
         int min, max;
 
-        for(AvatarSimulationPendingTransaction  aspt: pendingTransactions) {
+        for (AvatarSimulationPendingTransaction aspt : pendingTransactions) {
             if (aspt.hasDelay) {
                 if (aspt.myMinDuration < minMin) {
                     minMin = aspt.myMinDuration;
@@ -623,7 +622,7 @@ public class AvatarSpecificationSimulation  {
             // Must compute the min index, and the max duration
             // We put in ll all transactions that are between the min and the max of the selected index
             AvatarSimulationPendingTransaction aspt_tmp = pendingTransactions.get(indexMin);
-            for(AvatarSimulationPendingTransaction      aspt1: pendingTransactions) {
+            for (AvatarSimulationPendingTransaction aspt1 : pendingTransactions) {
                 //TraceManager.addDev("aspt1 min=" + aspt1.myMinDuration + " max autre=" + aspt_tmp.myMaxDuration);
                 if (aspt1.myMinDuration <= aspt_tmp.myMaxDuration) {
                     ll.add(aspt1);
@@ -646,8 +645,8 @@ public class AvatarSpecificationSimulation  {
 
     public boolean isASilentTransaction(AvatarSimulationPendingTransaction aspt, Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
         if (aspt.elementToExecute instanceof AvatarTransition) {
-            AvatarTransition atr = (AvatarTransition)(aspt.elementToExecute);
-            if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
+            AvatarTransition atr = (AvatarTransition) (aspt.elementToExecute);
+            if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())) {
                 if ((aspt.previouslyExecutedElement != null) && (aspt.previouslyExecutedElement.nbOfNexts() < 2)) {
                     //TraceManager.addDev("Stage 1");
                     if (nbOfTransactions(aspt.asb, _pendingTransactions) < 2) {
@@ -657,7 +656,7 @@ public class AvatarSpecificationSimulation  {
                 }
             }
             // State entering?
-        } else if (((aspt.elementToExecute instanceof AvatarState) ||  (aspt.elementToExecute instanceof AvatarStopState))) {
+        } else if (((aspt.elementToExecute instanceof AvatarState) || (aspt.elementToExecute instanceof AvatarStopState))) {
             if (nbOfTransactions(aspt.asb, _pendingTransactions) < 2) {
                 return true;
             }
@@ -704,9 +703,9 @@ public class AvatarSpecificationSimulation  {
                     //TraceManager.addDev("Found a synchronous signal");
                     transactions.add(_aspt);
                     _aspt.isBroadcast = true;
-                    for(AvatarSimulationPendingTransaction      otherTransaction: pendingTransactions) {
-                        if ((otherTransaction != _aspt) && (otherTransaction.elementToExecute instanceof AvatarActionOnSignal)){
-                            AvatarSignal sig = ((AvatarActionOnSignal)(otherTransaction.elementToExecute)).getSignal();
+                    for (AvatarSimulationPendingTransaction otherTransaction : pendingTransactions) {
+                        if ((otherTransaction != _aspt) && (otherTransaction.elementToExecute instanceof AvatarActionOnSignal)) {
+                            AvatarSignal sig = ((AvatarActionOnSignal) (otherTransaction.elementToExecute)).getSignal();
                             AvatarRelation rel = avspec.getAvatarRelationWithSignal(sig);
                             if (rel == ar) {
                                 int index1 = rel.getIndexOfSignal(sig);
@@ -730,11 +729,11 @@ public class AvatarSpecificationSimulation  {
                     // Synchronous -> must find a corresponding synchronous one
                     // Each time one is found, a new pending transaction is added, linked with the receiving action
                     //TraceManager.addDev("Found a synchronous signal");
-                    for(AvatarSimulationPendingTransaction      otherTransaction: pendingTransactions) {
+                    for (AvatarSimulationPendingTransaction otherTransaction : pendingTransactions) {
                         if (otherTransaction != _aspt) {
                             if (otherTransaction.elementToExecute instanceof AvatarActionOnSignal) {
                                 //TraceManager.addDev("step 2");
-                                AvatarSignal sig = ((AvatarActionOnSignal)(otherTransaction.elementToExecute)).getSignal();
+                                AvatarSignal sig = ((AvatarActionOnSignal) (otherTransaction.elementToExecute)).getSignal();
                                 AvatarRelation rel = avspec.getAvatarRelationWithSignal(sig);
                                 if (rel == ar) {
                                     int index1 = rel.getIndexOfSignal(sig);
@@ -787,7 +786,7 @@ public class AvatarSpecificationSimulation  {
     }
 
     public synchronized AvatarSimulationAsynchronousTransaction getAsynchronousMessage(AvatarRelation _ar, AvatarSignal _as) {
-        for(AvatarSimulationAsynchronousTransaction asat: asynchronousMessages) {
+        for (AvatarSimulationAsynchronousTransaction asat : asynchronousMessages) {
             if (asat.getRelation() == _ar) {
                 if (_ar.getIndexOfSignal(_as) == asat.getIndex()) {
                     return asat;
@@ -799,9 +798,9 @@ public class AvatarSpecificationSimulation  {
 
     public synchronized int getNbOfAsynchronousMessages(AvatarRelation _ar) {
         int cpt = 0;
-        for(AvatarSimulationAsynchronousTransaction asat: asynchronousMessages) {
+        for (AvatarSimulationAsynchronousTransaction asat : asynchronousMessages) {
             if (asat.getRelation() == _ar) {
-                cpt ++;
+                cpt++;
             }
         }
         return cpt;
@@ -809,7 +808,7 @@ public class AvatarSpecificationSimulation  {
 
     public AvatarSimulationPendingTransaction getSilentTransactionToExecute(Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
         //TraceManager.addDev("executeEmptyTransition=" + executeEmptyTransition + " executeStateEntering=" + executeStateEntering);
-        if(!executeEmptyTransition && !executeStateEntering) {
+        if (!executeEmptyTransition && !executeStateEntering) {
             return null;
         }
 
@@ -818,12 +817,12 @@ public class AvatarSpecificationSimulation  {
             return null;
         }
 
-        for(AvatarSimulationPendingTransaction tr: _pendingTransactions) {
+        for (AvatarSimulationPendingTransaction tr : _pendingTransactions) {
 
             // Empty transition?
             if ((tr.elementToExecute instanceof AvatarTransition) && (executeEmptyTransition)) {
-                AvatarTransition atr = (AvatarTransition)(tr.elementToExecute);
-                if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
+                AvatarTransition atr = (AvatarTransition) (tr.elementToExecute);
+                if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())) {
                     if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
                         //TraceManager.addDev("Setting to silent: " + tr);
                         tr.isSilent = true;
@@ -834,7 +833,7 @@ public class AvatarSpecificationSimulation  {
                     return tr;
                 }
                 // State entering?
-            } else if (((tr.elementToExecute instanceof AvatarState) ||  (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
+            } else if (((tr.elementToExecute instanceof AvatarState) || (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
                 if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
                     //TraceManager.addDev("Setting to silent");
                     tr.isSilent = true;
@@ -850,7 +849,7 @@ public class AvatarSpecificationSimulation  {
     }
 
     public AvatarSimulationPendingTransaction getRandomSilentTransactionToExecute(Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
-        if(!executeEmptyTransition && !executeStateEntering) {
+        if (!executeEmptyTransition && !executeStateEntering) {
             return null;
         }
 
@@ -858,15 +857,15 @@ public class AvatarSpecificationSimulation  {
             return null;
         }
 
-        int index = (int)(Math.floor(Math.random()*_pendingTransactions.size()));
+        int index = (int) (Math.floor(Math.random() * _pendingTransactions.size()));
 
         AvatarSimulationPendingTransaction tr;
-        for(int i=0; i<_pendingTransactions.size(); i++) {
-            tr = _pendingTransactions.get((i+index)%pendingTransactions.size());
+        for (int i = 0; i < _pendingTransactions.size(); i++) {
+            tr = _pendingTransactions.get((i + index) % pendingTransactions.size());
             // Empty transition?
             if ((tr.elementToExecute instanceof AvatarTransition) && (executeEmptyTransition)) {
-                AvatarTransition atr = (AvatarTransition)(tr.elementToExecute);
-                if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
+                AvatarTransition atr = (AvatarTransition) (tr.elementToExecute);
+                if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())) {
                     //TraceManager.addDev("Empty transition?");
                     if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
                         tr.isSilent = true;
@@ -875,7 +874,7 @@ public class AvatarSpecificationSimulation  {
                     }
                 }
                 // State entering?
-            } else if (((tr.elementToExecute instanceof AvatarState) ||  (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
+            } else if (((tr.elementToExecute instanceof AvatarState) || (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
                 //TraceManager.addDev("Empty state enter?");
                 if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
                     tr.isSilent = true;
@@ -891,18 +890,16 @@ public class AvatarSpecificationSimulation  {
     public int nbOfTransactions(AvatarSimulationBlock _asb, Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
         int cpt = 0;
         //TraceManager.addDev("Nb of pending transactions:" + _pendingTransactions.size());
-        for(AvatarSimulationPendingTransaction tr: _pendingTransactions) {
+        for (AvatarSimulationPendingTransaction tr : _pendingTransactions) {
             //TraceManager.addDev("tr=" + tr + " _asb=" + _asb + " tr.asb=" + tr.asb);
             if (tr.hasBlock(_asb)) {
-                cpt ++;
+                cpt++;
                 //TraceManager.addDev("cpt++");
             }
         }
         //TraceManager.addDev("cpt=" + cpt);
         return cpt;
     }
-
-
 
 
     public Vector<AvatarSimulationPendingTransaction> selectTransactions(Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
@@ -921,7 +918,30 @@ public class AvatarSpecificationSimulation  {
         // Random select the first index if none has been selected
         if (indexSelectedTransaction == -1) {
             //TraceManager.addDev("No transition selected");
-            indexSelectedTransaction = (int)(Math.floor(Math.random()*_pendingTransactions.size()));
+            // Consider probabilities
+            double sumProb = 0.0;
+            int selectedIndex = -1;
+            for (AvatarSimulationPendingTransaction pt: _pendingTransactions) {
+                sumProb += pt.probability;
+            }
+
+            double rand2 = Math.random() * sumProb;
+            //TraceManager.addDev("Nb of pending:" + ll.size() + " total prob=" + sumProb +  " rand=" + rand2);
+
+
+            double prob = 0.0;
+            int index = 0;
+            for (AvatarSimulationPendingTransaction pt: _pendingTransactions) {
+                prob += pt.probability;
+                //TraceManager.addDev("rand=" + rand2 + " prob=" + prob + " pt.probability=" + pt.probability);
+                if (rand2 < prob) {
+                    selectedIndex = index;
+                    break;
+                }
+                index ++;
+            }
+            //indexSelectedTransaction = (int) (Math.floor(Math.random() * _pendingTransactions.size()));
+            indexSelectedTransaction = selectedIndex;
         }
 
         AvatarSimulationPendingTransaction currentTransaction = _pendingTransactions.get(indexSelectedTransaction);
@@ -958,7 +978,7 @@ public class AvatarSpecificationSimulation  {
             if (_pendingTransactions.get(0).linkedTransactions != null) {
                 //TraceManager.addDev("BROADCAST");
                 tempo_clock_Value = clockValue;
-                for(AvatarSimulationPendingTransaction aspt: _pendingTransactions.get(0).linkedTransactions) {
+                for (AvatarSimulationPendingTransaction aspt : _pendingTransactions.get(0).linkedTransactions) {
                     TraceManager.addDev("Executing broadcast transactions");
                     preExecutedTransaction(aspt);
                     aspt.asb.runSoloPendingTransaction(aspt, allTransactions, tempo_clock_Value, MAX_TRANSACTION_IN_A_ROW, bunchid);
@@ -982,7 +1002,7 @@ public class AvatarSpecificationSimulation  {
 
     public void preExecutedTransaction(AvatarSimulationPendingTransaction _aspt) {
         if (_aspt.elementToExecute instanceof AvatarActionOnSignal) {
-            AvatarSignal sig = ((AvatarActionOnSignal)(_aspt.elementToExecute)).getSignal();
+            AvatarSignal sig = ((AvatarActionOnSignal) (_aspt.elementToExecute)).getSignal();
             AvatarRelation rel = avspec.getAvatarRelationWithSignal(sig);
             _aspt.isSending = sig.isOut();
             if (rel.isAsynchronous()) {
@@ -994,7 +1014,7 @@ public class AvatarSpecificationSimulation  {
                     _aspt.linkedAsynchronousMessage = asat;
                     // Testing whether the message can be lost or not
                     if (rel.isLossy()) {
-                        int ra = ((int)(Math.random()*100))%2;
+                        int ra = ((int) (Math.random() * 100)) % 2;
                         if (ra == 0) {
                             _aspt.isLost = true;
                         } else {
@@ -1047,7 +1067,7 @@ public class AvatarSpecificationSimulation  {
             // Must select a value for the duration!
             if (_aspt.linkedTransaction != null) {
                 if (_aspt.durationOnCurrent) {
-                    _aspt.selectedDuration = _aspt.myMinDuration + (int)(Math.floor(Math.random()*(_aspt.maxDuration-_aspt.myMinDuration)));
+                    _aspt.selectedDuration = _aspt.myMinDuration + (int) (Math.floor(Math.random() * (_aspt.maxDuration - _aspt.myMinDuration)));
                     //TraceManager.addDev("Selected duration:" + _aspt.selectedDuration + " myMinDuration=" + _aspt.myMinDuration + " maxDuration=" + _aspt.maxDuration);
                     if (_aspt.durationOnOther) {
                         _aspt.linkedTransaction.durationSelected = true;
@@ -1057,7 +1077,7 @@ public class AvatarSpecificationSimulation  {
                     }
                 }
             } else {
-                _aspt.selectedDuration = _aspt.myMinDuration + (int)(Math.floor(Math.random()*(_aspt.maxDuration-_aspt.myMinDuration)));
+                _aspt.selectedDuration = _aspt.myMinDuration + (int) (Math.floor(Math.random() * (_aspt.maxDuration - _aspt.myMinDuration)));
                 //TraceManager.addDev("Selected duration:" + _aspt.selectedDuration + " myMinDuration=" + _aspt.myMinDuration + " maxDuration=" + _aspt.maxDuration);
             }
         }
@@ -1072,7 +1092,7 @@ public class AvatarSpecificationSimulation  {
     }
 
     public synchronized void backOneTransactionBunch(boolean _rec) {
-        if ( (state != DONT_EXECUTE) && (state != TERMINATED)) {
+        if ((state != DONT_EXECUTE) && (state != TERMINATED)) {
             return;
         }
 
@@ -1085,13 +1105,13 @@ public class AvatarSpecificationSimulation  {
         // Remove one transaction
         // Getting last transaction
 
-        AvatarSimulationTransaction ast = allTransactions.get(allTransactions.size()-1);
+        AvatarSimulationTransaction ast = allTransactions.get(allTransactions.size() - 1);
         long bunchid_tmp = ast.bunchid;
 
         boolean isAllSilent = true;
 
-        while((ast != null) && (ast.bunchid == bunchid_tmp)) {
-            allTransactions.removeElementAt(allTransactions.size()-1);
+        while ((ast != null) && (ast.bunchid == bunchid_tmp)) {
+            allTransactions.removeElementAt(allTransactions.size() - 1);
             AvatarSimulationTransaction.removeExecutedElement(ast.executedElement);
             if (ast.asb != null) {
                 ast.asb.removeLastTransaction(ast);
@@ -1111,7 +1131,7 @@ public class AvatarSpecificationSimulation  {
             }
 
             if (allTransactions.size() > 0) {
-                ast = allTransactions.get(allTransactions.size()-1);
+                ast = allTransactions.get(allTransactions.size() - 1);
             } else {
                 ast = null;
             }
@@ -1128,11 +1148,11 @@ public class AvatarSpecificationSimulation  {
         //TraceManager.addDev("Backward size="+ allTransactions.size());
 
         if (allTransactions.size() > 0) {
-            bunchid = (allTransactions.get(allTransactions.size()-1).bunchid) + 1;
-            clockValue = (allTransactions.get(allTransactions.size()-1)).clockValueWhenFinished;
+            bunchid = (allTransactions.get(allTransactions.size() - 1).bunchid) + 1;
+            clockValue = (allTransactions.get(allTransactions.size() - 1)).clockValueWhenFinished;
         } else {
             bunchid = 0;
-            clockValue =  0;
+            clockValue = 0;
         }
 
         AvatarSimulationTransaction.setID(allTransactions.size());
@@ -1145,14 +1165,14 @@ public class AvatarSpecificationSimulation  {
     }
 
     public void printExecutedTransactions() {
-        for(AvatarSimulationTransaction ast: allTransactions) {
+        for (AvatarSimulationTransaction ast : allTransactions) {
             //TraceManager.addDev(ast.toString() + "\n");
         }
     }
 
     public String getStringExecutedTransactions() {
         StringBuffer sb = new StringBuffer("");
-        for(AvatarSimulationTransaction ast: allTransactions) {
+        for (AvatarSimulationTransaction ast : allTransactions) {
             sb.append(ast.toString() + "\n");
         }
         return sb.toString();
@@ -1166,10 +1186,10 @@ public class AvatarSpecificationSimulation  {
         AvatarSimulationPendingTransaction asptfound, newaspt;
         Point p;
 
-        while(true) {
+        while (true) {
             asptfound = null;
             p = null;
-            for(AvatarSimulationPendingTransaction aspt: _transactions) {
+            for (AvatarSimulationPendingTransaction aspt : _transactions) {
                 if ((aspt.isBroadcast) && (aspt.linkedTransactions != null)) {
                     if ((p = aspt.hasDuplicatedBlockTransaction()) != null) {
                         TraceManager.addDev("FOUND DUPLICATED BLOCK");
@@ -1191,7 +1211,7 @@ public class AvatarSpecificationSimulation  {
     private void workOnABroadcastTransaction(Vector<AvatarSimulationPendingTransaction> _oldTransactions, Vector<AvatarSimulationPendingTransaction> _newTransactions, AvatarSimulationPendingTransaction _aspt) {
         boolean isMet = false;
         // Other transactions?
-        for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+        for (AvatarSimulationPendingTransaction aspt : _oldTransactions) {
             if ((aspt.elementToExecute == _aspt.elementToExecute) && (aspt != _aspt)) {
                 isMet = true;
                 break;
@@ -1207,7 +1227,7 @@ public class AvatarSpecificationSimulation  {
         // Searching for a timed broadcast transaction
         isMet = false;
         AvatarSimulationPendingTransaction untimedTransaction = null;
-        for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+        for (AvatarSimulationPendingTransaction aspt : _oldTransactions) {
             if (aspt.elementToExecute == _aspt.elementToExecute) {
                 if (aspt.hasConfiguredDurationMoreThan0()) {
                     isMet = true;
@@ -1221,7 +1241,7 @@ public class AvatarSpecificationSimulation  {
         if (!isMet) {
             // At least one untimed transaction: We only aggregate all untimed transactions to untimedTransaction
             untimedTransaction.linkedTransactions = new Vector<AvatarSimulationPendingTransaction>();
-            for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+            for (AvatarSimulationPendingTransaction aspt : _oldTransactions) {
                 if ((aspt != untimedTransaction) && (aspt.elementToExecute == untimedTransaction.elementToExecute)) {
                     if (!(aspt.hasConfiguredDurationMoreThan0())) {
                         untimedTransaction.linkedTransactions.add(aspt);
@@ -1244,7 +1264,7 @@ public class AvatarSpecificationSimulation  {
         // higher than this max are removed
         int max = Integer.MAX_VALUE;
         Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
-        for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+        for (AvatarSimulationPendingTransaction aspt : _oldTransactions) {
             if (aspt.myMaxDuration < max) {
                 max = aspt.myMaxDuration;
             }
@@ -1254,7 +1274,7 @@ public class AvatarSpecificationSimulation  {
             return;
         }
 
-        for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+        for (AvatarSimulationPendingTransaction aspt : _oldTransactions) {
             if (aspt.myMinDuration <= max) {
                 ll.add(aspt);
             }
@@ -1277,7 +1297,7 @@ public class AvatarSpecificationSimulation  {
 
         AvatarSimulationPendingTransaction a0;
         AvatarSimulationPendingTransaction tmp;
-        for(int i=0; i<ll.size(); i++) {
+        for (int i = 0; i < ll.size(); i++) {
             a0 = ll.get(i);
             // We compute all possible sets of transactions that are before a0
             // a0 is then cloned with all possibilities
@@ -1296,7 +1316,7 @@ public class AvatarSpecificationSimulation  {
         }
 
         // Dont add the current one to the list
-        makeRandom(mainTransaction, index+1, indexMax, _transactions, _newTransactions);
+        makeRandom(mainTransaction, index + 1, indexMax, _transactions, _newTransactions);
 
         // Add the current one to the list
         AvatarSimulationPendingTransaction aspt = _transactions.get(index);
@@ -1308,7 +1328,7 @@ public class AvatarSpecificationSimulation  {
 
         asptnew.linkedTransactions.add(aspt);
         _newTransactions.add(asptnew);
-        makeRandom(asptnew, index+1, indexMax, _transactions, _newTransactions);
+        makeRandom(asptnew, index + 1, indexMax, _transactions, _newTransactions);
 
     }
 
@@ -1327,16 +1347,16 @@ public class AvatarSpecificationSimulation  {
         int cpt = 0;
 
 
-        while(_vector.size() >0) {
+        while (_vector.size() > 0) {
             min = Integer.MAX_VALUE;
             index = 0;
             cpt = 0;
-            for(AvatarSimulationPendingTransaction aspt: _vector) {
-                if(aspt.myMinDuration < min) {
+            for (AvatarSimulationPendingTransaction aspt : _vector) {
+                if (aspt.myMinDuration < min) {
                     index = cpt;
                     min = aspt.myMinDuration;
                 }
-                cpt ++;
+                cpt++;
             }
 
             ll.add(_vector.get(index));
@@ -1440,7 +1460,7 @@ public class AvatarSpecificationSimulation  {
     // value: -1 -> not forcing
     // other value: random is forced to that value
     public void forceRandom(int value) {
-        for(AvatarSimulationBlock block: blocks) {
+        for (AvatarSimulationBlock block : blocks) {
             block.forceRandom(value);
         }
     }
@@ -1459,21 +1479,21 @@ public class AvatarSpecificationSimulation  {
 
     // Asynchronous messages manipulation
     public synchronized boolean removeAsyncMessage(AvatarRelation ar, int index) {
-        if ((ar != null) && (index >-1)) {
+        if ((ar != null) && (index > -1)) {
             int realIndex = 0;
             boolean found = false;
             AvatarSimulationAsynchronousTransaction mesg = null;
-            for(AvatarSimulationAsynchronousTransaction msg: asynchronousMessages) {
+            for (AvatarSimulationAsynchronousTransaction msg : asynchronousMessages) {
                 if (msg.getRelation() == ar) {
                     if (index == 0) {
                         found = true;
                         mesg = msg;
                         break;
                     } else {
-                        index --;
+                        index--;
                     }
                 }
-                realIndex ++;
+                realIndex++;
             }
             if (found) {
                 //TraceManager.addDev("Removing at index: " + realIndex);
@@ -1489,27 +1509,27 @@ public class AvatarSpecificationSimulation  {
         //TraceManager.addDev("Moving from  index: " + oldIndex + " to: " + newIndex);
         /*int back1 = oldIndex;
           int back2 = newIndex;*/
-        if ((ar != null) && (oldIndex >-1) && (newIndex >-1) && (oldIndex != newIndex)) {
+        if ((ar != null) && (oldIndex > -1) && (newIndex > -1) && (oldIndex != newIndex)) {
             int oldRealIndex = -1;
             int newRealIndex = -1;
             int realIndex = 0;
             boolean found = false;
             AvatarSimulationAsynchronousTransaction mesg = null;
-            for(AvatarSimulationAsynchronousTransaction msg: asynchronousMessages) {
+            for (AvatarSimulationAsynchronousTransaction msg : asynchronousMessages) {
                 if (msg.getRelation() == ar) {
-                    if ((oldIndex == 0) && (oldRealIndex == -1)){
+                    if ((oldIndex == 0) && (oldRealIndex == -1)) {
                         oldRealIndex = realIndex;
                         mesg = msg;
                     } else {
-                        oldIndex --;
+                        oldIndex--;
                     }
                     if ((newIndex == 0) && (newRealIndex == -1)) {
                         newRealIndex = realIndex;
                     } else {
-                        newIndex --;
+                        newIndex--;
                     }
                 }
-                realIndex ++;
+                realIndex++;
             }
             if ((newRealIndex != -1) && (mesg != null)) {
                 //TraceManager.addDev("Moving from: " + oldRealIndex + " to: "+ newRealIndex);
@@ -1531,8 +1551,7 @@ public class AvatarSpecificationSimulation  {
     }
 
 
-
-    public synchronized  boolean removeAsyncMsgFromPendingTransactions(AvatarSimulationAsynchronousTransaction msg) {
+    public synchronized boolean removeAsyncMsgFromPendingTransactions(AvatarSimulationAsynchronousTransaction msg) {
         if (msg == null) {
             return false;
         }
@@ -1540,7 +1559,7 @@ public class AvatarSpecificationSimulation  {
         boolean found = false;
         Vector<AvatarSimulationPendingTransaction> vect = new Vector<AvatarSimulationPendingTransaction>();
         if ((pendingTransactions != null) && (pendingTransactions.size() > 0)) {
-            for(AvatarSimulationPendingTransaction tr: pendingTransactions) {
+            for (AvatarSimulationPendingTransaction tr : pendingTransactions) {
                 if (tr.linkedAsynchronousMessage == msg) {
                     //TraceManager.addDev("Msg to remove from pending transaction");
                     vect.add(tr);
@@ -1549,8 +1568,8 @@ public class AvatarSpecificationSimulation  {
             }
         }
 
-        if (vect.size()>0) {
-            for(AvatarSimulationPendingTransaction toRem: vect) {
+        if (vect.size() > 0) {
+            for (AvatarSimulationPendingTransaction toRem : vect) {
                 //TraceManager.addDev("Removing pending transaction");
                 pendingTransactions.remove(toRem);
             }

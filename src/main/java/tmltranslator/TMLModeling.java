@@ -848,7 +848,7 @@ public class TMLModeling<E> {
                 TMLChannel channel = getChannelByShortName(signalName);
                 if (channel!=null){
                     for (TMLCPrimitivePort port:channel.ports){
-                        if (port.checkAuth && port.checkStrongAuthStatus==1){
+                        if (port.checkAuth){
                             port.checkStrongAuthStatus = 3;
                             port.mappingName= mappingName;
                         }

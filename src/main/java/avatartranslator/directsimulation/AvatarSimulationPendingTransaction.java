@@ -100,6 +100,9 @@ public class AvatarSimulationPendingTransaction  {
     // Lost
     public boolean isLost;
 
+    // Probability of this transaction
+    public double probability = 0.5;
+
 
 
     public AvatarSimulationPendingTransaction() {

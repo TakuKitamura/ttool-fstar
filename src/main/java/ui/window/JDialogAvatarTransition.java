@@ -64,7 +64,7 @@ import java.util.Vector;
 public class JDialogAvatarTransition extends JDialogBase implements ActionListener  {
 
     private Vector<String> actions;
-    private String guard, afterMin, afterMax, computeMin, computeMax;
+    private String guard, afterMin, afterMax, computeMin, computeMax, probability;
     private LinkedList<TAttribute> myAttributes;
     private LinkedList<AvatarMethod> myMethods;
     private Vector<String> allElements, insertElements;
@@ -78,7 +78,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
     private JPanel panel2;
 
     // Panel1
-    private JTextField guardT, afterMinT, afterMaxT, computeMinT, computeMaxT;
+    private JTextField guardT, afterMinT, afterMaxT, computeMinT, computeMaxT, probabilityT;
     private JTextArea actionsT;
     private JComboBox<String> elements;
     private JButton insertElement;
@@ -89,7 +89,10 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 
     /** Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogAvatarTransition(Frame _f, String _title, String _guard, String _afterMin, String _afterMax, String _computeMin, String _computeMax, Vector<String> _actions, LinkedList<TAttribute> _myAttributes, LinkedList<AvatarMethod> _myMethods, String[] _filesToInclude, String[] _codeToInclude) {
+    public JDialogAvatarTransition(Frame _f, String _title, String _guard, String _afterMin, String _afterMax,
+								   String _computeMin, String _computeMax, Vector<String> _actions,
+								   LinkedList<TAttribute> _myAttributes, LinkedList<AvatarMethod> _myMethods,
+								   String[] _filesToInclude, String[] _codeToInclude, String _probability) {
 
         super(_f, _title, true);
 
@@ -99,6 +102,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
         computeMin = _computeMin;
         computeMax = _computeMax;
         actions = _actions;
+        probability = _probability;
 
         myAttributes = _myAttributes;
         myMethods = _myMethods;
@@ -185,7 +189,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
     	panel1.add(new JLabel(")"), c1);
 
     	// Compute
-    	c1.gridwidth = 1;
+    	/*c1.gridwidth = 1;
     	c1.gridheight = 1;
     	c1.weighty = 1.0;
     	c1.weightx = 1.0;
@@ -196,8 +200,19 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
     	computeMaxT = new JTextField(computeMax, 10);
     	panel1.add(computeMaxT, c1);
     	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	panel1.add(new JLabel(")"), c1);
+    	panel1.add(new JLabel(")"), c1);*/
 
+		// probability
+		c1.weighty = 1.0;
+		c1.weightx = 1.0;
+		c1.gridwidth = 1;
+		c1.gridheight = 1;
+		c1.fill = GridBagConstraints.BOTH;
+		c1.gridheight = 1;
+		panel1.add(new JLabel("probability in [0...1] = "), c1);
+		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		probabilityT = new JTextField(probability);
+		panel1.add(probabilityT, c1);
 
     	// actions
 
@@ -359,12 +374,23 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
     }
 
     public String getComputeMin() {
-        return computeMinT.getText();
+        if (computeMinT == null) {
+        	return "";
+		}
+
+    	return computeMinT.getText();
     }
 
     public String getComputeMax() {
-        return computeMaxT.getText();
+		if (computeMaxT == null) {
+			return "";
+		}
+    	return computeMaxT.getText();
     }
+
+	public String getProbability() {
+		return probabilityT.getText();
+	}
 
     public boolean hasBeenCancelled() {
         return cancelled;

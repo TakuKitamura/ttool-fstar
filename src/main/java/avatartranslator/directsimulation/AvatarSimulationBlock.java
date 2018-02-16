@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,13 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
-
 
 
 package avatartranslator.directsimulation;
@@ -51,20 +48,21 @@ import myutil.TraceManager;
 import java.util.Vector;
 
 /**
-   * Class AvatarSimulationBlock
-   * Avatar: notion of block in simulation
-   * Creation: 14/12/2010
-   * @version 1.0 14/12/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarSimulationBlock
+ * Avatar: notion of block in simulation
+ * Creation: 14/12/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 14/12/2010
  */
-public class AvatarSimulationBlock  {
+public class AvatarSimulationBlock {
     public final static int NOT_STARTED = 0;
     public final static int STARTED = 1;
     public final static int COMPLETED = 2;
 
     private AvatarBlock block;
     private AvatarSimulationTransaction lastTransaction;
-    private Vector <AvatarSimulationTransaction> transactions;
+    private Vector<AvatarSimulationTransaction> transactions;
     private boolean completed;
     public boolean selected; // Free use for graphic purpose
     private int forcedRandom = -1;
@@ -107,7 +105,7 @@ public class AvatarSimulationBlock  {
     }
 
     public String toString() {
-	return "AvatarSimulationBlock:" + getName();
+        return "AvatarSimulationBlock:" + getName();
     }
 
     public int getID() {
@@ -171,7 +169,8 @@ public class AvatarSimulationBlock  {
         AvatarSimulationPendingTransaction aspt;
         AvatarStateMachineElement asme;
         boolean guardOk;
-        for(int i=0; i<lastTransaction.executedElement.nbOfNexts(); i++) {
+        //double prob = 0.5;
+        for (int i = 0; i < lastTransaction.executedElement.nbOfNexts(); i++) {
             asme = lastTransaction.executedElement.getNext(i);
 
             if (asme == null) {
@@ -180,10 +179,11 @@ public class AvatarSimulationBlock  {
             guardOk = true;
             // Guard on transition ? -> must evaluate the guard!
             if (asme instanceof AvatarTransition) {
-                AvatarTransition at = (AvatarTransition)(asme);
+                AvatarTransition at = (AvatarTransition) (asme);
+                //prob = at.getProbability();
                 if (at.isGuarded()) {
                     // Must evaluate the guard
-                    String guard = at.getGuard().toString ();
+                    String guard = at.getGuard().toString();
                     String s = Conversion.replaceAllString(guard, "[", "").trim();
                     s = Conversion.replaceAllString(s, "]", "").trim();
                     guardOk = evaluateBoolExpression(s, lastTransaction.attributeValues);
@@ -191,29 +191,31 @@ public class AvatarSimulationBlock  {
                 }
             }
 
-            if(guardOk) {
+            if (guardOk) {
                 aspt = new AvatarSimulationPendingTransaction();
                 aspt.asb = this;
+                //aspt.probability = prob;
                 aspt.elementToExecute = lastTransaction.executedElement.getNext(i);
                 aspt.previouslyExecutedElement = lastTransaction.executedElement;
                 if ((aspt.elementToExecute instanceof AvatarTransition) && (lastTransaction.executedElement instanceof AvatarState)) {
-                    AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
-                    if (trans.getNbOfAction() == 0){
+                    AvatarTransition trans = (AvatarTransition) (aspt.elementToExecute);
+                    if (trans.getNbOfAction() == 0) {
                         // empty transition, "empty" is the meaning of actions -> look for an action after
-                        if(trans.getNext(0) != null) {
+                        if (trans.getNext(0) != null) {
                             if (trans.getNext(0) instanceof AvatarActionOnSignal) {
                                 aspt.involvedElement = trans;
                                 aspt.elementToExecute = trans.getNext(0);
                             } else if (trans.getNext(0) instanceof AvatarRandom) {
-				aspt.involvedElement = trans;
+                                aspt.involvedElement = trans;
                                 aspt.elementToExecute = trans.getNext(0);
-			    }
+                            }
                         }
                     }
                 }
 
                 if (aspt.elementToExecute instanceof AvatarTransition) {
-                    AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
+                    AvatarTransition trans = (AvatarTransition) (aspt.elementToExecute);
+                    aspt.probability = trans.getProbability();
                     if (trans.hasDelay()) {
                         aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
@@ -221,12 +223,13 @@ public class AvatarSimulationBlock  {
                         if (lastTransaction != null) {
                             if (lastTransaction.clockValueWhenFinished < _clockValue) {
                                 aspt.hasElapsedTime = true;
-                                aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenFinished);
+                                aspt.elapsedTime = (int) (_clockValue - lastTransaction.clockValueWhenFinished);
                             }
                         }
+
                     }
                 } else if (aspt.involvedElement instanceof AvatarTransition) {
-                    AvatarTransition trans = (AvatarTransition)(aspt.involvedElement);
+                    AvatarTransition trans = (AvatarTransition) (aspt.involvedElement);
                     if (trans.hasDelay()) {
                         aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
@@ -237,7 +240,7 @@ public class AvatarSimulationBlock  {
                         if (lastTransaction != null) {
                             if (lastTransaction.clockValueWhenFinished < _clockValue) {
                                 aspt.hasElapsedTime = true;
-                                aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenFinished);
+                                aspt.elapsedTime = (int) (_clockValue - lastTransaction.clockValueWhenFinished);
                             }
                         }
                     }
@@ -245,8 +248,8 @@ public class AvatarSimulationBlock  {
                 aspt.clockValue = _clockValue;
 
                 if (aspt.hasElapsedTime) {
-                    aspt.myMinDelay = aspt.myMinDelay -aspt.elapsedTime;
-                    aspt.myMaxDelay = aspt.myMaxDelay -aspt.elapsedTime;
+                    aspt.myMinDelay = aspt.myMinDelay - aspt.elapsedTime;
+                    aspt.myMaxDelay = aspt.myMaxDelay - aspt.elapsedTime;
                 }
 
                 if (aspt.hasDelay) {
@@ -276,7 +279,7 @@ public class AvatarSimulationBlock  {
     }
 
 
-    public void executeElement(Vector<AvatarSimulationTransaction>_allTransactions, AvatarStateMachineElement _elt, long _clockValue, AvatarSimulationPendingTransaction _aspt, long _bunchid) {
+    public void executeElement(Vector<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue, AvatarSimulationPendingTransaction _aspt, long _bunchid) {
         // Stop state
         if (_elt instanceof AvatarStopState) {
             makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
@@ -330,12 +333,12 @@ public class AvatarSimulationBlock  {
         if (_aspt != null) {
             _aspt.clockValueAtEnd = _clockValue;
             if (_aspt.hasClock) {
-                if(_aspt.hasElapsedTime) {
+                if (_aspt.hasElapsedTime) {
                     ast.duration = _aspt.elapsedTime + _aspt.selectedDuration;
                 } else {
                     ast.duration = _aspt.selectedDuration;
-                    ast.duration = Math.min(_aspt.myMaxDuration+_aspt.elapsedTime, ast.duration);
-                    ast.duration = Math.max(_aspt.myMinDuration+_aspt.elapsedTime, ast.duration);
+                    ast.duration = Math.min(_aspt.myMaxDuration + _aspt.elapsedTime, ast.duration);
+                    ast.duration = Math.max(_aspt.myMinDuration + _aspt.elapsedTime, ast.duration);
                 }
                 ast.clockValueWhenFinished = _aspt.selectedDuration + _clockValue;
                 _aspt.clockValueAtEnd = ast.clockValueWhenFinished;
@@ -348,23 +351,23 @@ public class AvatarSimulationBlock  {
         Vector<String> attributeValues = new Vector<String>();
         String s;
         if (lastTransaction == null) {
-            for(AvatarAttribute aa: block.getAttributes()) {
+            for (AvatarAttribute aa : block.getAttributes()) {
                 s = new String(aa.getInitialValue());
                 attributeValues.add(s);
             }
         } else {
             // Recopy of previous values
-            for(String ss: lastTransaction.attributeValues) {
-                attributeValues.add(""+ss);
+            for (String ss : lastTransaction.attributeValues) {
+                attributeValues.add("" + ss);
             }
             // Transition?
             if (_elt instanceof AvatarTransition) {
-                at = (AvatarTransition)(_elt);
+                at = (AvatarTransition) (_elt);
                 // Must compute new values of attributes
                 if (at.hasActions()) {
                     actions = new Vector<String>();
-                    for(i=0; i<at.getNbOfAction(); i++) {
-                        action = at.getAction(i).toString ();
+                    for (i = 0; i < at.getNbOfAction(); i++) {
+                        action = at.getAction(i).toString();
                         //TraceManager.addDev("action #" + i  + " = " + action);
                         makeAction(action, attributeValues, actions);
                     }
@@ -374,18 +377,18 @@ public class AvatarSimulationBlock  {
 
             // Random?
             if (_elt instanceof AvatarRandom) {
-                AvatarRandom random = (AvatarRandom)(_elt);
+                AvatarRandom random = (AvatarRandom) (_elt);
                 index = block.getIndexOfAvatarAttributeWithName(random.getVariable());
-                if (index >-1) {
+                if (index > -1) {
                     int valMin = evaluateIntExpression(random.getMinValue(), attributeValues);
                     int valMax = evaluateIntExpression(random.getMaxValue(), attributeValues);
 
-                    if ((forcedRandom > -1) && (forcedRandom >= valMin) && (forcedRandom <= valMax)){
+                    if ((forcedRandom > -1) && (forcedRandom >= valMin) && (forcedRandom <= valMax)) {
                         // Use provided value as random value
                         valMin = forcedRandom;
                     } else {
                         // randomnly select a value
-                        valMin = (int)(Math.floor((Math.random()) * (valMax - valMin + 1))) + valMin;
+                        valMin = (int) (Math.floor((Math.random()) * (valMax - valMin + 1))) + valMin;
                     }
                     attributeValues.remove(index);
                     attributeValues.add(index, "" + valMin);
@@ -396,17 +399,17 @@ public class AvatarSimulationBlock  {
 
             // Action on signal?
             if (_elt instanceof AvatarActionOnSignal) {
-                AvatarActionOnSignal aaos = (AvatarActionOnSignal)_elt;
+                AvatarActionOnSignal aaos = (AvatarActionOnSignal) _elt;
                 if (_aspt != null) {
                     // Must put the right parameters
                     if (_aspt.isSynchronous) {
                         // Synchronous call
-                        if ((_aspt.isSending) && ((_aspt.linkedTransaction != null ) || (_aspt.linkedTransactions != null))){
+                        if ((_aspt.isSending) && ((_aspt.linkedTransaction != null) || (_aspt.linkedTransactions != null))) {
                             // Synchronous Sending!
                             // Must be in the receiving transaction the right parameters
                             Vector<String> parameters = new Vector<String>();
                             //TraceManager.addDev("Adding value in :" + aaos);
-                            for(i=0; i<aaos.getNbOfValues(); i++) {
+                            for (i = 0; i < aaos.getNbOfValues(); i++) {
                                 value = aaos.getValue(i);
                                 // Must get the type of the value
                                 //TraceManager.addDev("Sending aaos: " + aaos + " block=" + block.getName());
@@ -432,16 +435,16 @@ public class AvatarSimulationBlock  {
                             }
 
                             if (_aspt.linkedTransactions != null) {
-                                for(AvatarSimulationPendingTransaction aspt0: _aspt.linkedTransactions) {
+                                for (AvatarSimulationPendingTransaction aspt0 : _aspt.linkedTransactions) {
                                     aspt0.parameters = parameters;
                                 }
                             }
                             //}
-                        } else if ((!(_aspt.isSending))  && (_aspt.parameters != null)){
+                        } else if ((!(_aspt.isSending)) && (_aspt.parameters != null)) {
                             //TraceManager.addDev("Reading value " + aaos);
                             // Synchronous Receiving
                             String myAction = "";
-                            for(i=0; i<aaos.getNbOfValues(); i++) {
+                            for (i = 0; i < aaos.getNbOfValues(); i++) {
                                 //TraceManager.addDev("Reading value #" + i);
                                 param = _aspt.parameters.get(i);
                                 name = aaos.getValue(i);
@@ -467,13 +470,13 @@ public class AvatarSimulationBlock  {
 
                     } else {
                         // Asynchronous call
-                        if ((_aspt.isSending) && (_aspt.linkedAsynchronousMessage != null)){
+                        if ((_aspt.isSending) && (_aspt.linkedAsynchronousMessage != null)) {
 
                             // Asynchronous Sending
                             String myAction = "";
                             _aspt.linkedAsynchronousMessage.firstTransaction = ast;
                             ast.sentMessage = _aspt.linkedAsynchronousMessage;
-                            for(i=0; i<aaos.getNbOfValues(); i++) {
+                            for (i = 0; i < aaos.getNbOfValues(); i++) {
                                 value = aaos.getValue(i);
                                 // Must get the type of the value
                                 avat = aaos.getSignal().getListOfAttributes().get(i);
@@ -507,7 +510,7 @@ public class AvatarSimulationBlock  {
                             if (_aspt.linkedAsynchronousMessage.firstTransaction == null) {
                                 TraceManager.addDev("NULL FIRST TRANSACTION !!!");
                             }
-                            for(i=0; i<aaos.getNbOfValues(); i++) {
+                            for (i = 0; i < aaos.getNbOfValues(); i++) {
                                 param = _aspt.linkedAsynchronousMessage.getParameters().get(i);
                                 name = aaos.getValue(i);
                                 index = block.getIndexOfAvatarAttributeWithName(name);
@@ -547,9 +550,9 @@ public class AvatarSimulationBlock  {
         String nameOfMethod;
         int ind;
 
-        AvatarAction action = AvatarTerm.createActionFromString (block, _action);
+        AvatarAction action = AvatarTerm.createActionFromString(block, _action);
         // TODO: use the new AvatarAction class instead of re-parsing
-        if (action.isAMethodCall ()) {
+        if (action.isAMethodCall()) {
             // Evaluate all elements of the method call!
             ind = _action.indexOf("(");
             if (ind == -1) {
@@ -557,17 +560,17 @@ public class AvatarSimulationBlock  {
             }
             nameOfVar = _action.substring(0, ind).trim();
 
-            act = _action.substring(ind+1, _action.length()).trim();
+            act = _action.substring(ind + 1, _action.length()).trim();
 
             ind = act.lastIndexOf(")");
-            if(ind == -1) {
+            if (ind == -1) {
                 return;
             }
             act = act.substring(0, ind);
 
             ind = nameOfVar.indexOf("=");
             if (ind != -1) {
-                nameOfMethod = nameOfVar.substring(ind+1, nameOfVar.length());
+                nameOfMethod = nameOfVar.substring(ind + 1, nameOfVar.length());
             } else {
                 nameOfMethod = nameOfVar;
             }
@@ -577,13 +580,13 @@ public class AvatarSimulationBlock  {
             String s;
             int indexAtt;
             int cpt = 0;
-            for(int i=0; i<params.length; i++) {
+            for (int i = 0; i < params.length; i++) {
                 s = params[i].trim();
                 if (s.length() > 0) {
                     indexAtt = block.getIndexOfAvatarAttributeWithName(s);
                     //TraceManager.addDev("indexAtt=" + indexAtt + " s=" + s);
                     if (indexAtt > -1) {
-                        if (cpt>0) {
+                        if (cpt > 0) {
                             parameters += ", ";
                         }
                         parameters += _attributeValues.get(indexAtt);
@@ -602,11 +605,10 @@ public class AvatarSimulationBlock  {
             return;
         }
 
-        nameOfVar= _action.substring(0, ind).trim();
-        act = _action.substring(ind+1, _action.length());
+        nameOfVar = _action.substring(0, ind).trim();
+        act = _action.substring(ind + 1, _action.length());
 
         //TraceManager.addDev("1- Working on attribute =" + nameOfVar + " action=" + _action);
-
 
 
         // Variable
@@ -619,19 +621,18 @@ public class AvatarSimulationBlock  {
                 int result = evaluateIntExpression(act, _attributeValues);
                 _actions.add(nameOfVar + " = " + result);
                 _attributeValues.remove(indexVar);
-                _attributeValues.add(indexVar, ""+result);
+                _attributeValues.add(indexVar, "" + result);
             } else if (type == AvatarType.BOOLEAN) {
                 boolean bool = evaluateBoolExpression(act, _attributeValues);
                 _actions.add(nameOfVar + " = " + bool);
                 _attributeValues.remove(indexVar);
-                _attributeValues.add(indexVar, ""+bool);
+                _attributeValues.add(indexVar, "" + bool);
             }
         }
 
         // find the index of the attribute, and put its new value
         return;
     }
-
 
 
     public void addExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarSimulationTransaction _ast) {
@@ -642,9 +643,9 @@ public class AvatarSimulationBlock  {
 
     public void removeLastTransaction(AvatarSimulationTransaction _ast) {
         if (lastTransaction == _ast) {
-            transactions.removeElementAt(transactions.size()-1);
+            transactions.removeElementAt(transactions.size() - 1);
             if (transactions.size() > 0) {
-                lastTransaction = transactions.get(transactions.size()-1);
+                lastTransaction = transactions.get(transactions.size() - 1);
             } else {
                 lastTransaction = null;
             }
@@ -666,28 +667,28 @@ public class AvatarSimulationBlock  {
     public int evaluateIntExpression(String _expr, Vector<String> _attributeValues) {
         String act = _expr;
         int cpt = 0;
-        for(String attrValue: _attributeValues) {
+        for (String attrValue : _attributeValues) {
             if (attrValue.trim().startsWith("-")) {
                 attrValue = "(0" + attrValue + ")";
             }
             act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, getAttributeName(cpt), attrValue);
-            cpt ++;
+            cpt++;
         }
 
         //TraceManager.addDev("Evaluating expression: " + act);
 
-        return (int)(new IntExpressionEvaluator().getResultOf(act));
+        return (int) (new IntExpressionEvaluator().getResultOf(act));
     }
 
     public boolean evaluateBoolExpression(String _expr, Vector<String> _attributeValues) {
         String act = _expr;
         int cpt = 0;
-        for(String attrValue: _attributeValues) {
+        for (String attrValue : _attributeValues) {
             if (attrValue.trim().startsWith("-")) {
                 attrValue = "(0" + attrValue + ")";
             }
             act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, getAttributeName(cpt), attrValue);
-            cpt ++;
+            cpt++;
         }
 
         BoolExpressionEvaluator bee = new BoolExpressionEvaluator();

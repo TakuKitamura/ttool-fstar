@@ -471,7 +471,121 @@ can be changed by editing the debug launch configuration.
 
 \section{Development with IntelliJ}
 
-TODO
+IntelliJ IDEA is another Integrated Development Environment popular especially
+among Java developers. It can be used to work on TTool and provides
+functionalities globally similar to Eclipse.
+
+\subsection{Installing and configuring IntelliJ}
+
+Download IntelliJ IDEA here: \url{https://www.jetbrains.com/idea/}.
+
+Unzip IntelliJ folder where you want to keep the executable. Launch it by using
+the \texttt{idea.sh} script under the \texttt{bin} folder. Click on \emph{Open}
+and navigate to the root of the TTool git repository.
+
+\subsection{The IDE window layout}
+
+A quick presentation of the user interface is given here:
+\url{https://www.jetbrains.com/help/idea/guided-tour-around-the-user-interface.html}.
+IntelliJ consists of an editor window and multiple tool windows. Some of the
+important tool windows are:
+\begin{itemize}
+    \item \textbf{Project}. Show the structure of the project. In the case of
+        TTool it displays the different sub-projects and the source folders
+        (code, test, resource, etc.) for each sub-project. It can be used in
+        addition to the navigation bar to navigate between files.
+    \item \textbf{TODO}. List TODOs in the project files.
+    \item \textbf{Structure}. Show the structure of a class (methods, fields,
+        etc.).
+    \item \textbf{Version control}. Show information related to the versioning
+        system used (git in our case). This enables to see the commits that have
+        modified the current file, the state of the various branches, the files
+        that have been modified since the last commit or to directly make a
+        commit.
+    \item \textbf{Terminal}. This opens a pseudo-terminal window that can be
+        used directly from IntelliJ.
+\end{itemize}
+
+Note that these tool windows are movable from the different panes and that the
+toolbar that enables to select which tool window to display can be shown/hidden
+by clicking on the icon on the lower-left side of the IntelliJ window.
+
+\subsection{Debugging TTool}
+
+IntelliJ integrates a debugger that is helpful to find some bugs. You can either
+launch TTool in debug mode by clicking on the bug icon in the right part of the
+navigation bar when the \emph{TTool} configuration is selected, or debug a
+specific test by selecting \emph{debug} in the drop-down menu that appears when
+clicking on the arrow for this test.
+
+You can add breakpoints by clicking in the editor's left margin. You can the
+right click on the breakpoint to modify it (log something, do not interrupt, add
+a condition to the breakpoint, etc.). During debugging, when a breakpoint is
+reached or the program was paused, you can see the current value of the
+variables, see the stack frames, see the existing threads, add a watch point to
+see how an expression evaluates, resume the program, execute step-by-step, etc.
+
+\subsection{Configuring new sub-projects}
+\label{sec:intellij:subprojects}
+
+As described in section \ref{sec:code_orga}, TTool is composed of multiple
+sub-projects. In IntelliJ, this is achieved by using \emph{modules}. You can see
+the existing modules in the \emph{File -> Project structure...} menu. On the
+left pane, click on \emph{Modules}. In particular, the \texttt{shared} module
+consists of all the code used by other modules and the \texttt{ttool} module is
+the main TTool application.
+
+For each of these modules, you can add \emph{content roots} (path that will
+contain sub-folders for sources, tests, resources and test resources). Then you
+can select a sub-folder for a content root and mark it either as a source, test,
+resource or test resource folder.
+
+On the second tab, it is possible to modify the compile path. Note that if you
+had a module then it must be compiled with gradle without requiring IntelliJ.
+This is why you will need to update the compile path in order to generate the
+output into the sub-project's build directory.
+
+Finally, you can add dependencies in the third tab. This is useful in particular
+if a sub-project requires an external library.
+
+In the project structure window, on the left pane, you can select
+\emph{Artifacts} to see the final results that can be built from the application
+(the \texttt{ttool.jar} file for instance). As of today (February 2018), these
+artifacts are:
+\begin{itemize}
+    \item some files needed by TTool during its execution
+    \item the external libraries that TTool depends on
+    \item the \texttt{ttool.jar} archive
+\end{itemize}
+
+\subsection{Configuration of code inspection and indentation rules}
+
+IntelliJ enables to improve coding practice by providing warnings (e.g., unused
+variable) that are
+visible in the editor and by enabling to automatically correct them. These
+warnings have different levels (error, warning, weak warning, etc.) and they are
+fully configurable. In order to configure them, you can click on the icon at the
+extreme right of the status bar and click on \emph{configure inspections}. You
+can choose which inspection should be enabled and which warning level should be
+raised when code does not follow these inspections. In order to provide a
+common coding standard among TTool developers, the configuration of these
+inspections is stored in a profile that is versioned by Git. You should thus not
+modify this profile without asking other developers.
+
+Similarly to these warnings, IntelliJ enables to harmonize code style by
+defining a profile that is shared between all developers. To see the code style
+options, go to \emph{File -> Settings} and navigate to \emph{Editor -> Code
+Style}. As for warnings, do not modify this shared profile except if you know
+what you are doing.
+
+Finally, IntelliJ enables to correct code style issues and some warnings
+automatically. To do that, right click on the file in the project tool window
+and select \emph{Reformat code}.
+
+\subsection{Tips and tricks}
+
+Note that there is a vim plugin available in IntelliJ that supports some of vim
+commands.
 
 \section{Coding Information}
 Here are gathered all tricks on how TTool source codes are organized, and what function is coded where, and also how to extend TTool, e.g. adding a new diagram.
@@ -605,6 +719,7 @@ make documentation
 and make sure no warning is printed.
 
 \subsection{Code organization}
+\label{sec:code_orga}
 The TTool repository actually hosts the source code of different standalone
 projects. Here is a description of these sub-projects:
 \begin{itemize}
@@ -723,6 +838,13 @@ When using the Eclipse IDE, test classes can be automatically generated for a
 given class to be tested and will include annotated methods for the selected
 methods of the class to be tested.
 
+With IntelliJ, when you are editing a Java class, you can jump to the corresponding test class
+by right-clicking on the editor window (on a specific method or anywhere in the
+class), and select \emph{Go To -> Test}.
+IntelliJ will look for a corresponding test class and will propose to create a
+new one. If you decide to create a new test class, select \emph{JUnit4} as the
+testing library and pick the methods for which you want to add tests.
+
 See folder $test/fr.tpt.ttool.tests.util$ of the TTool source code repository
 for an example test class $TestRshClient$ providing test cases for the TTool
 utility class $RshClient$ used for client-server remote communications.
@@ -801,6 +923,29 @@ the tests (passed of failed) as shown in figure~\ref{fig:image14}.
 \caption{}
 \label{fig:image14}
 \end{figure}
+
+\textbf{\emph{Within the IntelliJ IDE}}
+
+Once the
+test is written, you will have a green arrow in the left margin of the editor
+next to each test method. You can either click on the arrow corresponding to a
+specific method to run the corresponding test, or click on the arrow next to the
+class name to run all the tests in this class.
+
+In some cases, the tests need to use resources. You need to add these resources
+to the \emph{test resources} root folder (see section
+\ref{sec:intellij:subprojects} to see how this root folder is configured) and
+to ensure that the test is running from the correct directory. To do this, run
+the test once. You will see in the right section of the navigation bar a
+shortcut to run the previous test. Expand the configuration selection list and
+click on \emph{Edit Configurations...}. You can see all the available
+configurations and modify options for each of them. In particular, you can
+change the \emph{Working directory} (which should probably be
+\texttt{ttool/build}) or require actions to do before running this
+configuration (at the bottom of the window). You can share your configurations
+so that other can use them but be careful not to share something with absolute
+paths.
+
 
 \subsection{C++}
 

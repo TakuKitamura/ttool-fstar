@@ -249,6 +249,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
         // Loading main file describing models, giving information on this, and filling the array of models
         // Accessing the main file
         try {
+
+
             int delay = 10000; //milliseconds
             ActionListener taskPerformer = new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
