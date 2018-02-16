@@ -140,7 +140,7 @@ public class AvatarSyntaxChecker  {
             return -1;
         }
 
-        if ((prob <0) || (prob > 1)) {
+        if ((prob <0) || (prob > 1000)) {
             return -1;
         }
 

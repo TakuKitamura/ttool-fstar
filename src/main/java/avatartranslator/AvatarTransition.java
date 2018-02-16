@@ -373,7 +373,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
             ret += "minCompute=" + getMinCompute() + " maxcompute=" + getMaxCompute() + "\n";
         }
 
-        ret += "prob=" + getProbability() + "\n";
+        ret += "weight=" + getProbability() + "\n";
 
         for (AvatarAction a : actions) {
             String s = a.toString();
@@ -408,7 +408,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public String getNiceName() {
-        String s = " prob:" + getProbability();
+        String s = " weight:" + getProbability();
         if (isGuarded())
             return "Transition (guard=" + guard + ", ...)" + s;
 

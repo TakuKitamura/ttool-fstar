@@ -209,7 +209,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 		c1.gridheight = 1;
 		c1.fill = GridBagConstraints.BOTH;
 		c1.gridheight = 1;
-		panel1.add(new JLabel("probability in [0...1] = "), c1);
+		panel1.add(new JLabel("weight in [0...1000] (default = 0.5) = "), c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		probabilityT = new JTextField(probability);
 		panel1.add(probabilityT, c1);

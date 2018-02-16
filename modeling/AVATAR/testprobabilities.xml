@@ -230,8 +230,8 @@
 </SUBCOMPONENT>
 
 <COMPONENT type="5104" id="92" >
-<cdparam x="387" y="324" />
-<sizeparam width="50" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="385" y="324" />
+<sizeparam width="55" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Receive signal" value="get(y)" />
@@ -331,7 +331,7 @@
 <SUBCOMPONENT type="-1" id="141" >
 <father id="144" num="1" />
 <cdparam x="494" y="178" />
-<sizeparam width="38" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="59" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -345,7 +345,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<probability value="0.1" />
+<probability value="1" />
 <actions value="y = 1" />
 </extraparam>
 </SUBCOMPONENT>
@@ -361,7 +361,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="149" >
 <father id="151" num="0" />
 <cdparam x="302" y="169" />
-<sizeparam width="38" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="67" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -375,7 +375,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<probability value="0.9" />
+<probability value="10" />
 <actions value="y = 0" />
 </extraparam>
 </SUBCOMPONENT>
@@ -518,8 +518,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="224" >
-<cdparam x="271" y="330" />
-<sizeparam width="43" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="269" y="330" />
+<sizeparam width="47" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Send signal" value="put(y)" />

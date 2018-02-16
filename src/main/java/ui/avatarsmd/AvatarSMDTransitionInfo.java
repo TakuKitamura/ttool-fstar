@@ -209,7 +209,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
         }
 
         if ((probability != null) && (probability.length() > 0)) {
-            s = "p=" + probability;
+            s = "weight=" + probability;
             g.drawString(s, x, y + step);
             atLeastOneThing = true;
             if (tdp.isDrawingMain()) {
