@@ -464,7 +464,6 @@ public class TMLChannel extends TMLCommunicationElement {
         return s;
     }
 
-    // We assume the channel is a basic channel
     public String toXML() {
 	TraceManager.addDev("Channel:" + this.toString());
 	String s = "<TMLCHANNEL ";
@@ -474,6 +473,7 @@ public class TMLChannel extends TMLCommunicationElement {
 	    s += "originport=\"" +  originPort.getName() + "\" ";
 	    s += "destinationtask=\"" + destinationTask.getName() + "\" ";
 	    s += "destinationport=\"" + destinationPort.getName() + "\" ";
+    	s += "dataFlowType=\"" + originPort.getDataFlowType() + "\" ";
 	}
 	if( isAForkChannel() )  {
 	    s += "origintask=\"" +  originTasks.get(0).getName() + "\" ";
@@ -486,6 +486,7 @@ public class TMLChannel extends TMLCommunicationElement {
 	    }
 	    s += "destinationtask=\"" + destTask + "\" ";
 	    s += "destinationport=\"" +  destPort + "\" ";
+    	s += "dataFlowType=\"" + originPort.getDataFlowType() + "\" ";
 	}
 	if (isAJoinChannel()) {
 	    s += "destinationtask=\"" + destinationTasks.get(0).getName() + "\" ";
@@ -500,10 +501,11 @@ public class TMLChannel extends TMLCommunicationElement {
 	    }
 	    s += "origintask=\"" + oriTask + "\" ";
 	    s += "originport=\"" +  oriPort + "\" ";
+    	s += "dataFlowType=\"" + originPorts.get(0).getDataFlowType() + "\" ";
 	}
 	
 	s += "isLossy=\"" + isLossy + "\" ";
-        s += "lossPercentage=\"" + lossPercentage + "\" ";
+    s += "lossPercentage=\"" + lossPercentage + "\" ";
 	s += "maxNbOfLoss=\"" + maxNbOfLoss + "\" ";
 	switch(type) {
 	case BRBW:
@@ -518,7 +520,6 @@ public class TMLChannel extends TMLCommunicationElement {
 	}
 	s += "size=\"" + size + "\" ";
 	s += "max=\"" + max + "\" ";
-	
 	s += " />\n";
 	return s;
     }

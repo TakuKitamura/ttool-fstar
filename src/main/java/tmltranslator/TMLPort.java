@@ -1,6 +1,8 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ * Andrea ENRICI, Nokia Bell Labs France
+ *
  * ludovic.apvrille AT enst.fr
+ * andrea.enrici AT nokia-bell-labs.com
  * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -37,47 +39,73 @@
  */
 
 
-
-
-package tmltranslator;
-
 /**
    * Class TMLPort
    * Creation: 16/02/2015
    * @version 1.0 16/02/2015
-   * @author Ludovic APVRILLE
+   * @author Ludovic APVRILLE, Andrea ENRICI
  */
+
+
+package tmltranslator;
+
+
+import ui.tmlcompd.TMLCPrimitivePort;
+
+
 public class TMLPort extends TMLElement {
 
     private boolean prex;
     private boolean postex;
-		private String associatedEvent;
+    private String associatedEvent;
+    private String dataFlowType;
 
-    public TMLPort(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
+    public TMLPort( String _name, Object _referenceObject ) {
+
+        super( _name, _referenceObject );
+        dataFlowType = ( (TMLCPrimitivePort)referenceObject ).getDataFlowType();
+
     }
 
     public void setPrex( boolean _prex )        {
+
         prex = _prex;
+
     }
 
     public boolean isPrex()     {
+
         return prex;
+
     }
 
     public void setPostex( boolean _postex )    {
+
         postex = _postex;
+
     }
 
     public boolean isPostex()   {
+
         return postex;
+
     }
 
-		public void setAssociatedEvent( String _eventName )	{
-			associatedEvent = _eventName;
-		}
+    public void setAssociatedEvent( String _eventName )	{
 
-		public String getAssociatedEvent()	{
-			return associatedEvent;
-		}
+        associatedEvent = _eventName;
+
+    }
+
+    public String getAssociatedEvent()	{
+
+        return associatedEvent;
+
+	}
+
+    public String getDataFlowType() {
+
+        return dataFlowType;
+
+    }
 }
