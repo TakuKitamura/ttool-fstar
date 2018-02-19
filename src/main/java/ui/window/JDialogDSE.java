@@ -59,6 +59,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
+
+
 /**
  * Class JDialogDSE
  * Dialog for managing the generation of ProVerif code and execution of
