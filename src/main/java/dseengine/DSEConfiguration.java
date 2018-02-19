@@ -62,6 +62,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.List;
+import org.apache.commons.math3.util.CombinatoricsUtils;
 
 //import tmltranslator.touppaal.*;
 //import tmltranslator.tomappingsystemc.*;
@@ -145,7 +146,7 @@ public class DSEConfiguration implements Runnable  {
     private int minNbOfCPUs = 1;
     private int maxNbOfCPUs = 2;
     private int minNbOfCoresPerCPU = 1;
-    private int maxNbOfCoresPerCPU = 2;
+    private int maxNbOfCoresPerCPU = 1;
     private int nbOfSimulationsPerMapping = 1;
     private TMLModeling<TGComponent> taskModel = null;
     //  private TMLModeling secModel = null;
@@ -1128,7 +1129,7 @@ public class DSEConfiguration implements Runnable  {
 
             rankMappings(dsemapresults);
 
-            sb.append("\nGrades: (Mapping#, grade)\n");
+            //sb.append("\nGrades: (Mapping#, grade)\n");
             int[] grades = dsemapresults.getGrades().clone();
             int j;
             for(j=0; j<grades.length; j++) {
@@ -1136,24 +1137,24 @@ public class DSEConfiguration implements Runnable  {
             }
             sb.append("\n");
 
-            TraceManager.addDev("Ranking");
+            //TraceManager.addDev("Ranking");
             sb.append("\nRanking (Rank, mapping, grade)\n");
             int[] index = new int[grades.length];
             for(j=0; j<grades.length; j++) {
                 index[j] = j;
             }
 
-            TraceManager.addDev("Ranking 0");
+            //TraceManager.addDev("Ranking 0");
 
             Conversion.quickSort(grades, 0, grades.length-1, index);
 
-            TraceManager.addDev("Ranking 1");
+            //TraceManager.addDev("Ranking 1");
 
             for(j=grades.length-1; j>=0; j--) {
                 sb.append("(#" + (grades.length-j) + ", " + index[j] + ", " + grades[j]+ ") ");
             }
 
-            TraceManager.addDev("Ranking done");
+            //TraceManager.addDev("Ranking done");
 
 
             try {
@@ -1323,7 +1324,10 @@ public class DSEConfiguration implements Runnable  {
             return -1;
         }
 
-        TraceManager.addDev("Task model loaded");
+        TraceManager.addDev("runDSE. Going to give info on CPUs and mappings");
+        TraceManager.addDev("runDSE. Task model loaded. Nb of cpus=" + minNbOfCPUs + "-> " + maxNbOfCPUs);
+
+
 
         mappings = generateAllMappings(taskModel);
 
@@ -1603,6 +1607,16 @@ public class DSEConfiguration implements Runnable  {
         return 0;
     }
 
+    public long getNbOfPossibleMappings(TMLModeling tl) {
+        long nb = 0;
+        int nbOfTasks = tl.getTasks().size();
+        for (int i=minNbOfCPUs; i<=maxNbOfCPUs; i++) {
+
+            nb += CombinatoricsUtils.stirlingS2(nbOfTasks, i);
+        }
+        return nb;
+    }
+
     public Vector<TMLMapping<TGComponent>> generateAllMappings(TMLModeling<TGComponent> _tmlm) {
         TraceManager.addDev("Generate all mappings");
         if (_tmlm == null) {
@@ -1618,12 +1632,16 @@ public class DSEConfiguration implements Runnable  {
             return null;
         }
 
+
+
         int min = Math.max(1, minNbOfCPUs);
         int max = Math.min(nbOfTasks, maxNbOfCPUs);
 
-        if (max <= min) {
+        if (max < min) {
             max = min + 1;
         }
+
+        TraceManager.addDev("runDSE. Task model loaded. Nb of possible mappings:" + getNbOfPossibleMappings(_tmlm));
 
         Vector<TMLMapping<TGComponent>> maps = new  Vector<>();
 
@@ -1696,6 +1714,7 @@ public class DSEConfiguration implements Runnable  {
     private void computeMappings(Vector<TMLTask> remainingTasks, CPUWithTasks[] cpus_tasks,  Vector<TMLMapping<TGComponent>> maps, TMLModeling<TGComponent> _tmlm) {
         if (remainingTasks.size() == 0) {
             // Can generate the mapping from cpus_tasks
+            TraceManager.addDev("Making mapping");
             makeMapping(cpus_tasks, maps, _tmlm);
             return;
         }
@@ -1708,9 +1727,9 @@ public class DSEConfiguration implements Runnable  {
         TraceManager.addDev("Mapping task: " + t.getName());
 
         // Two solutions: either it is mapped on the first free CPU, or it is mapped on an already occupied CPU
-        // Memo: all cpus must have at least on task at the end
+        // Memo: all cpus must have at least one task at the end
 
-        // Must it be mapped a free CPU?
+        // Must it be mapped to a free CPU?
         if (nbOfFreeCPUs(cpus_tasks) >= (remainingTasks.size()+1)) {
             // The task must be mapped on a free CPU
             // Search for the first free CPU
@@ -1727,7 +1746,7 @@ public class DSEConfiguration implements Runnable  {
             TraceManager.addDev("Task could not be mapped on a free CPU: " + t.getName());
         }
 
-        TraceManager.addDev("Regular mapping of: " + t.getName());
+        TraceManager.addDev("Regular mapping of: " + t.getName() + " length=" + cpus_tasks.length);
         // It can be mapped on whatever CPU, until the first free one has been met (the first free CPU is inclusive)
         remainingTasks.remove(t);
         for(int i=0; i<cpus_tasks.length; i++) {

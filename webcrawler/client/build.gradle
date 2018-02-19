@@ -15,7 +15,6 @@ dependencies {
     compileOnly name: 'commons-codec-1.10'
     compileOnly name: 'jsoup-1.8.1'
     compileOnly name: 'commons-io-2.5'
-    compileOnly name: 'commons-io-2.5-javadoc'
     compileOnly name: 'derbyclient-10.9.1.0'
     compileOnly name: 'derbynet'
     compileOnly name: 'dom4j-1.6.1'

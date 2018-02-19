@@ -23,7 +23,7 @@ dependencies {
     compile name: 'JavaPlot'
     compile name: 'derbynet'
     compile name: 'commons-codec-1.10'
-    compile name: 'commons-io-2.5-javadoc'
+    compile name: 'commons-math3-3.6.1'
     compile name: 'commons-io-2.5'
     compile name: 'jsoup-1.8.1'
     compile name: 'gs-core-1.3'

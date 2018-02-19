@@ -404,17 +404,17 @@ public class TMLArchitecture {
             if (node instanceof HwCPU) {
                 HwCPU cpu = (HwCPU)node;
                 complexity += cpu.nbOfCores * cpu.byteDataSize * cpu.pipelineSize;
-                TraceManager.addDev("complexity CPU= " + complexity);
+                //TraceManager.addDev("complexity CPU= " + complexity);
             }
 
             if (node instanceof HwBus) {
                 HwBus bus = (HwBus)node;
                 complexity += bus.byteDataSize * bus.pipelineSize;
-                TraceManager.addDev("complexity bus= " + complexity);
+                //TraceManager.addDev("complexity bus= " + complexity);
             }
         }
 
-        TraceManager.addDev("Complexity = " + complexity);
+        //TraceManager.addDev("Complexity = " + complexity);
 
         return complexity;
     }

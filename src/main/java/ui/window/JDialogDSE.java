@@ -764,10 +764,14 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
                 output+="Simulation execution error \n";
                 return;
             }
+
+            TraceManager.addDev("Setting min nb of CPUs to:" + NbMinCPU);
             if (config.setMinNbOfCPUs(NbMinCPU) != 0) {
                 TraceManager.addDev("Can't set Min # CPUS to " + NbMinCPU);
                 output+="Can't set Min # CPUS to " + NbMinCPU+"\n";
             }
+
+            TraceManager.addDev("Setting max nb of CPUs to:" + NbMaxCPU);
             if (config.setMaxNbOfCPUs(NbMaxCPU) != 0) {
                 TraceManager.addDev("Can't set Max # CPUS to " + NbMaxCPU);
                 output+="Can't set Max # CPUS to " + NbMaxCPU +"\n";
@@ -804,12 +808,12 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
                 TraceManager.addDev("Can't print all results");
                 output+="Can't print all results \n";
             }
-            System.out.println("Results printed");
+            //System.out.println("Results printed");
             if (config.printResultsSummary("", true, true)!=0){
                 TraceManager.addDev("Can't print result summary");
                 output+="Can't print result summary \n";
             }
-            System.out.println("Results summary printed");
+            //System.out.println("Results summary printed");
             jp1.setSelectedIndex(1);
             outputText.setText(output + "\n" + config.overallResults);
         }
@@ -824,7 +828,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             if (config.replaceTapValues(tap)<0){
                 output+="Error changing values";
             }
-            System.out.println(tap[0]);
+            //System.out.println(tap[0]);
             if (config.printResultsSummary("", true, true)!=0){
                 TraceManager.addDev("Can't print result summary");
                 output+="Can't print result summary \n";

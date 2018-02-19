@@ -61,9 +61,9 @@ public class TMLPort extends TMLElement {
     private String dataFlowType;
 
     public TMLPort( String _name, Object _referenceObject ) {
-
         super( _name, _referenceObject );
-        dataFlowType = ( (TMLCPrimitivePort)referenceObject ).getDataFlowType();
+        if (referenceObject instanceof TMLCPrimitivePort)
+            dataFlowType = ( (TMLCPrimitivePort)referenceObject ).getDataFlowType();
 
     }
 

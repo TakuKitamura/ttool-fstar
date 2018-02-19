@@ -94,23 +94,23 @@ public class CPUWholeResult  {
 		BusContentionWholeResult bcwr;
 		
 		if (rescpu.contentions != null) {
-			TraceManager.addDev("Working on contentions");
+			//TraceManager.addDev("Working on contentions");
 			for(BusContentionResult ct: rescpu.contentions) {
-				TraceManager.addDev("One contention");
+				//TraceManager.addDev("One contention");
 				o = contentionTable.get(ct.id);
 				if (o == null) {
 					bcwr = new BusContentionWholeResult(ct);
 					contentionTable.put(ct.id, bcwr);
 					addContentionOnBus(bcwr);
-					TraceManager.addDev("adding contention");
+					//TraceManager.addDev("adding contention");
 				} else {
 					bcwr = (BusContentionWholeResult)o;
 					bcwr.updateResults(ct);
-					TraceManager.addDev("updating contention");
+					//TraceManager.addDev("updating contention");
 				}
 			}
 		} else {
-			TraceManager.addDev("null contention");
+			//TraceManager.addDev("null contention");
 		}
 	}
 	
@@ -138,7 +138,7 @@ public class CPUWholeResult  {
 		double average = 0;
 		
 		if (contentions == null) {
-			TraceManager.addDev("No contention");
+			//TraceManager.addDev("No contention");
 			return 0;
 		}
 		
@@ -153,7 +153,7 @@ public class CPUWholeResult  {
 		long max = 0;
 		
 		if (contentions == null) {
-			TraceManager.addDev("No contention");
+			//TraceManager.addDev("No contention");
 			return 0;
 		}
 		
@@ -168,7 +168,7 @@ public class CPUWholeResult  {
 		long min = 10000000;
 		
 		if (contentions == null) {
-			TraceManager.addDev("No contention");
+			//TraceManager.addDev("No contention");
 			return 0;
 		}
 		

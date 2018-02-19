@@ -23,7 +23,7 @@
 <SystemCCodeCompileCommand data="make" />
 <SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
 <SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
-<TMLCodeDirectory data="../tmlcode" />
+<TMLCodeDirectory data="../tmlcode/" />
 <GTKWavePath data="/usr/bin/gtkwave" />
 <VCDPath data="../vcd/" />
 <UPPAALCodeDirectory data="../uppaal/" />
