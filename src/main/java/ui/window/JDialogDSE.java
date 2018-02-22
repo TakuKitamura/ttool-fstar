@@ -93,6 +93,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     protected JCheckBox secAnalysis;
     protected JTextField encTime2, decTime2, secOverhead2;
 
+    protected JButton next, previous;
     protected JButton start;
     protected JButton stop;
     protected JButton close;
@@ -148,6 +149,14 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         myInitComponents();
 
         pack();
+
+        /*TraceManager.addDev("Nb of tabs:" + jp1.getTabCount());
+        for(int i=0; i<jp1.getTabCount(); i++) {
+            TraceManager.addDev("Title at: " + i + ": " + jp1.getTitleAt(i));
+        }*/
+        if (jp1.getTabCount() > 5) {
+            jp1.setSelectedIndex(5);
+        }
 
 
         //getGlassPane().addMouseListener( new MouseAdapter() {});
@@ -592,38 +601,48 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         outputText.setEditable(false);
         outputText.setMargin(new Insets(10, 10, 10, 10));
         outputText.setTabSize(3);
-        outputText.append("Select options. What is mandatory:" +
-                "\n - an output format\n - a exploration way (DSE, intensive simulation)");
+        outputText.append("What is mandatory to start:" +
+                "\n - Selecting at least one output format (txt, html)\n - Selecting an exploration way (DSE, intensive simulation)");
         JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(300,300));
         Font f = new Font("Courrier", Font.BOLD, 12);
         outputText.setFont(f);
         jp04.add(jsp, c04);
-        jp1.add("Results", jp04);
-
+        //jp1.add("Results", jp04);
 
         c.add(jp1, BorderLayout.NORTH);
-
+        c.add(jp04, BorderLayout.CENTER);
 
         start = new JButton("Start", IconManager.imgic53);
         stop = new JButton("Stop", IconManager.imgic55);
         close = new JButton("Close", IconManager.imgic27);
+        next = new JButton("Next", IconManager.imgic49);
+        previous = new JButton("Prev", IconManager.imgic47);
 
         start.setPreferredSize(new Dimension(100, 30));
         stop.setPreferredSize(new Dimension(100, 30));
         close.setPreferredSize(new Dimension(120, 30));
+        next.setPreferredSize(new Dimension(100, 30));
+        previous.setPreferredSize(new Dimension(100, 30));
 
         start.addActionListener(this);
         stop.addActionListener(this);
         close.addActionListener(this);
+        next.addActionListener(this);
+        previous.addActionListener(this);
 
         JPanel jp2 = new JPanel();
+
+        jp2.add(previous);
         jp2.add(start);
         jp2.add(stop);
         jp2.add(close);
+        jp2.add(next);
 
         c.add(jp2, BorderLayout.SOUTH);
+
+
 
     }
 
@@ -676,16 +695,31 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
     public void actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
-        if (command.equals("Start"))  {
+        if (evt.getSource() == start)  {
             startProcess();
-        } else if (command.equals("Stop")) {
+        } else if (evt.getSource() == stop) {
             stopProcess();
-        } else if (command.equals("Close")) {
+        } else if (evt.getSource() == close) {
             closeDialog();
-        }
-        else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT) ){
+        } else if (evt.getSource() == previous) {
+            previousTab();
+        }  else if (evt.getSource() == next) {
+            nextTab();
+        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == outputHTML) || (evt.getSource() == outputTXT) ){
             handleStartButton();
         }
+    }
+
+    public void nextTab() {
+        try {
+            jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
+        } catch (Exception e) {}
+    }
+
+    public void previousTab() {
+        if (jp1.getSelectedIndex() > 0)
+            jp1.setSelectedIndex(jp1.getSelectedIndex() - 1);
+
     }
 
     public void closeDialog() {
@@ -743,7 +777,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         TraceManager.addDev("Thread started");
         //   File testFile;
 
-        if (jp1.getSelectedIndex()==0){
+        //if (jp1.getSelectedIndex()==0){
             encCC=encTime2.getText();
             decCC=decTime2.getText();
             secOv = secOverhead2.getText();
@@ -879,7 +913,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             //System.out.println("Results summary printed");
             jp1.setSelectedIndex(1);
             outputText.setText(output + "\n" + config.overallResults);
-        }
+        //}
         //} catch (Exception e){
         //    System.out.println(e);
         //}
