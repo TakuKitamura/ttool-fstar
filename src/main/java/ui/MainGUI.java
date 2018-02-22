@@ -4884,6 +4884,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return points;
     }
 
+
     // Returns null if failed
     // Otherwise the path of the generated file
     public String generateTMLTxt() {
@@ -4891,13 +4892,14 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         if (file != null) {
             path = file.getAbsolutePath();
         }
-        //TraceManager.addDev("Generating TML code: "+file.getAbsolutePath());
+        TraceManager.addDev("Generating TML code: "+file.getAbsolutePath());
         if (gtm.generateTMLTxt(path)) {
+            TraceManager.addDev("Done TML generation");
             return ConfigurationTTool.TMLCodeDirectory;
         }
 
         return null;
-        //TraceManager.addDev("Done");
+
     }
 
     public String generateCCode() {
