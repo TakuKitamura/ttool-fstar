@@ -63,7 +63,6 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.List;
 import org.apache.commons.math3.util.CombinatoricsUtils;
-
 //import tmltranslator.touppaal.*;
 //import tmltranslator.tomappingsystemc.*;
 //import tmltranslator.toturtle.*;
@@ -1607,10 +1606,10 @@ public class DSEConfiguration implements Runnable  {
         return 0;
     }
 
-    public long getNbOfPossibleMappings(TMLModeling tl) {
+    public static long getNbOfPossibleMappings(int minNbOfCPUs, int maxNbOfCPUs, TMLModeling tl) {
         long nb = 0;
         int nbOfTasks = tl.getTasks().size();
-        for (int i=minNbOfCPUs; i<=maxNbOfCPUs; i++) {
+        for (int i=minNbOfCPUs; i<maxNbOfCPUs; i++) {
 
             nb += CombinatoricsUtils.stirlingS2(nbOfTasks, i);
         }
@@ -1641,7 +1640,8 @@ public class DSEConfiguration implements Runnable  {
             max = min + 1;
         }
 
-        TraceManager.addDev("runDSE. Task model loaded. Nb of possible mappings:" + getNbOfPossibleMappings(_tmlm));
+        TraceManager.addDev("runDSE. Task model loaded. Nb of possible mappings:" +
+                getNbOfPossibleMappings(minNbOfCPUs, maxNbOfCPUs, _tmlm));
 
         Vector<TMLMapping<TGComponent>> maps = new  Vector<>();
 
@@ -1714,7 +1714,7 @@ public class DSEConfiguration implements Runnable  {
     private void computeMappings(Vector<TMLTask> remainingTasks, CPUWithTasks[] cpus_tasks,  Vector<TMLMapping<TGComponent>> maps, TMLModeling<TGComponent> _tmlm) {
         if (remainingTasks.size() == 0) {
             // Can generate the mapping from cpus_tasks
-            TraceManager.addDev("Making mapping");
+            //TraceManager.addDev("Making mapping");
             makeMapping(cpus_tasks, maps, _tmlm);
             return;
         }
@@ -1724,7 +1724,7 @@ public class DSEConfiguration implements Runnable  {
         TMLTask t = remainingTasks.get(0);
         remainingTasks.remove(t);
 
-        TraceManager.addDev("Mapping task: " + t.getName());
+        //TraceManager.addDev("Mapping task: " + t.getName());
 
         // Two solutions: either it is mapped on the first free CPU, or it is mapped on an already occupied CPU
         // Memo: all cpus must have at least one task at the end
@@ -1733,7 +1733,7 @@ public class DSEConfiguration implements Runnable  {
         if (nbOfFreeCPUs(cpus_tasks) >= (remainingTasks.size()+1)) {
             // The task must be mapped on a free CPU
             // Search for the first free CPU
-            TraceManager.addDev("The following task must be mapped on a free CPU: " + t.getName());
+            //TraceManager.addDev("The following task must be mapped on a free CPU: " + t.getName());
             for(int i=0; i<cpus_tasks.length; i++) {
                 if (cpus_tasks[i].getNbOfTasks() == 0) {
                     cpus_tasks[i].addTask(t);
@@ -1743,20 +1743,20 @@ public class DSEConfiguration implements Runnable  {
                     return;
                 }
             }
-            TraceManager.addDev("Task could not be mapped on a free CPU: " + t.getName());
+            //TraceManager.addDev("Task could not be mapped on a free CPU: " + t.getName());
         }
 
-        TraceManager.addDev("Regular mapping of: " + t.getName() + " length=" + cpus_tasks.length);
+        //TraceManager.addDev("Regular mapping of: " + t.getName() + " length=" + cpus_tasks.length);
         // It can be mapped on whatever CPU, until the first free one has been met (the first free CPU is inclusive)
         remainingTasks.remove(t);
         for(int i=0; i<cpus_tasks.length; i++) {
             cpus_tasks[i].addTask(t);
-            TraceManager.addDev("Mapping " + t.getName() + " on CPU #" + i);
+            //TraceManager.addDev("Mapping " + t.getName() + " on CPU #" + i);
             computeMappings(remainingTasks, cpus_tasks, maps, _tmlm);
-            TraceManager.addDev("Removing  " + t.getName() + " from CPU #" + i);
+            //TraceManager.addDev("Removing  " + t.getName() + " from CPU #" + i);
             cpus_tasks[i].removeTask(t);
             if (cpus_tasks[i].getNbOfTasks() == 0) {
-                TraceManager.addDev("Stopping mapping since  of" + t.getName() + " since CPU #" + i +  " is free");
+                //TraceManager.addDev("Stopping mapping since  of" + t.getName() + " since CPU #" + i +  " is free");
                 remainingTasks.add(t);
                 return;
             }

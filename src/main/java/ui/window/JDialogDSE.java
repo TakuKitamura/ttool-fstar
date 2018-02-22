@@ -81,10 +81,10 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     protected final static int STARTED = 2;
     protected final static int STOPPED = 3;
     int mode;
-    JRadioButton dseButton;
-    JRadioButton simButton;
-    JButton addConstraint;
-    ButtonGroup group;
+    protected JRadioButton dseButton;
+    protected JRadioButton simButton;
+    protected JButton addConstraint;
+    protected ButtonGroup group;
     //components
 
 
@@ -253,12 +253,13 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
 
         constraintTextField=new JTextField();
-
         addConstraint = new JButton("Add Constraint");
         addConstraint.addActionListener(this);
         addConstraint.setPreferredSize(new Dimension(50, 25));
         addConstraint.setActionCommand("addConstraint");
-        jp03.add(addConstraint, c03);
+        /*if (mgui.isExperimentalOn()) {
+            jp03.add(addConstraint, c03);
+        }*/
 
 
 
@@ -298,7 +299,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         outputText.setMargin(new Insets(10, 10, 10, 10));
         outputText.setTabSize(3);
         outputText.append("Output results");
-        JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(300,300));
         Font f = new Font("Courrier", Font.BOLD, 12);
         outputText.setFont(f);

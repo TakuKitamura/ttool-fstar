@@ -8,8 +8,8 @@
 <cdparam x="522" y="390" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="522" y="390" id="200" />
-<P2  x="468" y="336" id="47" />
+<P1  x="535" y="377" id="200" />
+<P2  x="455" y="323" id="47" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2" >
@@ -24,16 +24,16 @@
 <cdparam x="652" y="444" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="816" y="554" id="179" />
-<P2  x="971" y="502" id="107" />
+<P1  x="805" y="544" id="179" />
+<P2  x="971" y="481" id="107" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="4" >
 <cdparam x="652" y="418" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="816" y="522" id="181" />
-<P2  x="922" y="482" id="105" />
+<P1  x="805" y="512" id="181" />
+<P2  x="932" y="472" id="105" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="5" >
@@ -41,134 +41,134 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="752" y="408" id="189" />
-<P2  x="831" y="376" id="150" />
+<P2  x="844" y="363" id="150" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="6" >
 <cdparam x="685" y="310" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="857" y="376" id="154" />
-<P2  x="922" y="368" id="115" />
+<P1  x="844" y="389" id="154" />
+<P2  x="932" y="358" id="115" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="7" >
 <cdparam x="652" y="395" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="816" y="493" id="185" />
-<P2  x="922" y="459" id="113" />
+<P1  x="805" y="483" id="185" />
+<P2  x="932" y="449" id="113" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="8" >
 <cdparam x="652" y="369" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="816" y="461" id="183" />
-<P2  x="922" y="432" id="111" />
+<P1  x="805" y="451" id="183" />
+<P2  x="932" y="422" id="111" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="9" >
 <cdparam x="737" y="314" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="922" y="403" id="109" />
-<P2  x="816" y="432" id="187" />
+<P1  x="932" y="393" id="109" />
+<P2  x="805" y="422" id="187" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="10" >
 <cdparam x="735" y="260" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="919" y="336" id="117" />
-<P2  x="749" y="284" id="70" />
+<P1  x="932" y="323" id="117" />
+<P2  x="736" y="271" id="70" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="11" >
 <cdparam x="641" y="230" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="749" y="248" id="68" />
-<P2  x="919" y="297" id="119" />
+<P1  x="736" y="235" id="68" />
+<P2  x="932" y="284" id="119" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="12" >
 <cdparam x="641" y="195" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="749" y="204" id="66" />
-<P2  x="919" y="254" id="121" />
+<P1  x="736" y="191" id="66" />
+<P2  x="932" y="241" id="121" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="13" >
 <cdparam x="740" y="353" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="831" y="376" id="149" />
-<P2  x="749" y="315" id="64" />
+<P1  x="844" y="363" id="149" />
+<P2  x="736" y="302" id="64" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="14" >
 <cdparam x="460" y="270" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="522" y="304" id="74" />
-<P2  x="468" y="304" id="41" />
+<P1  x="535" y="291" id="74" />
+<P2  x="455" y="291" id="41" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="15" >
 <cdparam x="387" y="129" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="466" y="127" id="37" />
-<P2  x="525" y="127" id="62" />
+<P1  x="455" y="117" id="37" />
+<P2  x="535" y="117" id="62" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="16" >
 <cdparam x="389" y="200" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="468" y="216" id="43" />
-<P2  x="522" y="216" id="76" />
+<P1  x="455" y="203" id="43" />
+<P2  x="535" y="203" id="76" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="17" >
 <cdparam x="460" y="236" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="522" y="261" id="78" />
-<P2  x="468" y="261" id="45" />
+<P1  x="535" y="248" id="78" />
+<P2  x="455" y="248" id="45" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="18" >
 <cdparam x="460" y="296" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="536" y="349" id="80" />
-<P2  x="548" y="390" id="205" />
+<P1  x="536" y="323" id="80" />
+<P2  x="535" y="403" id="205" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="19" >
 <cdparam x="389" y="163" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="468" y="170" id="39" />
-<P2  x="522" y="170" id="72" />
+<P1  x="455" y="157" id="39" />
+<P2  x="535" y="157" id="72" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="20" >
 <cdparam x="967" y="190" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="919" y="204" id="123" />
-<P2  x="749" y="125" id="84" />
+<P1  x="932" y="191" id="123" />
+<P2  x="736" y="112" id="84" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="21" >
 <cdparam x="1028" y="535" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="630" y="347" id="60" />
+<P1  x="630" y="326" id="60" />
 <P2  x="671" y="408" id="177" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -176,24 +176,24 @@
 <cdparam x="1304" y="321" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="1224" y="379" id="138" />
-<P2  x="1180" y="386" id="103" />
+<P1  x="1234" y="369" id="138" />
+<P2  x="1169" y="376" id="103" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="23" >
 <cdparam x="1168" y="455" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="1180" y="421" id="101" />
-<P2  x="1224" y="414" id="136" />
+<P1  x="1169" y="411" id="101" />
+<P2  x="1234" y="404" id="136" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="26" >
 <cdparam x="1037" y="180" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="1180" y="214" id="99" />
-<P2  x="1180" y="282" id="97" />
+<P1  x="1169" y="204" id="99" />
+<P2  x="1169" y="272" id="97" />
 <Point x="1224" y="226" />
 <Point x="1224" y="266" />
 <AutomaticDrawing  data="true" />
@@ -218,8 +218,8 @@
 <cdparam x="873" y="361" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="Connector between ports" />
-<P1  x="1180" y="461" id="95" />
-<P2  x="1224" y="442" id="134" />
+<P1  x="1169" y="451" id="95" />
+<P2  x="1234" y="432" id="134" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="1205" id="36" >
@@ -6393,7 +6393,7 @@ the smart card and the terminal
 <Modeling type="TML Architecture" nameTab="Mapping2" >
 <TMLArchiDiagramPanel name="DIPLODOCUS architecture and mapping Diagram" minX="10" maxX="1400" minY="10" maxY="900" attributes="0" masterClockFrequency="200" >
 <COMPONENT type="1105" id="1529" >
-<cdparam x="420" y="527" />
+<cdparam x="309" y="358" />
 <sizeparam width="189" height="131" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -6429,7 +6429,7 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1102" id="1554" >
-<cdparam x="389" y="438" />
+<cdparam x="278" y="269" />
 <sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -6465,7 +6465,7 @@ the smart card and the terminal
 </COMPONENT>
 
 <COMPONENT type="1100" id="1588" >
-<cdparam x="685" y="396" />
+<cdparam x="574" y="227" />
 <sizeparam width="174" height="135" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -6501,7 +6501,7 @@ the smart card and the terminal
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1563" >
 <father id="1588" num="0" />
-<cdparam x="715" y="448" />
+<cdparam x="604" y="279" />
 <sizeparam width="109" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="65" minY="0" maxY="95" />
@@ -6520,7 +6520,7 @@ the smart card and the terminal
 </SUBCOMPONENT>
 
 <COMPONENT type="1100" id="1622" >
-<cdparam x="167" y="400" />
+<cdparam x="56" y="231" />
 <sizeparam width="165" height="126" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -6556,7 +6556,7 @@ the smart card and the terminal
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1597" >
 <father id="1622" num="0" />
-<cdparam x="160" y="445" />
+<cdparam x="49" y="276" />
 <sizeparam width="172" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="-7" minY="0" maxY="86" />
@@ -6575,8 +6575,8 @@ the smart card and the terminal
 </SUBCOMPONENT>
 
 <COMPONENT type="1100" id="1674" >
-<cdparam x="389" y="243" />
-<sizeparam width="250" height="146" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="278" y="74" />
+<sizeparam width="272" height="167" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="CPU0" value="name" />
@@ -6611,10 +6611,10 @@ the smart card and the terminal
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1631" >
 <father id="1674" num="0" />
-<cdparam x="396" y="258" />
+<cdparam x="288" y="105" />
 <sizeparam width="109" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="141" minY="0" maxY="106" />
+<cdrectangleparam minX="0" maxX="163" minY="0" maxY="127" />
 <infoparam name="TGComponent" value="AppC::TCPIP" />
 <TGConnectingPoint num="0" id="1623" />
 <TGConnectingPoint num="1" id="1624" />
@@ -6630,10 +6630,10 @@ the smart card and the terminal
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1640" >
 <father id="1674" num="1" />
-<cdparam x="415" y="349" />
+<cdparam x="304" y="180" />
 <sizeparam width="144" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="106" minY="0" maxY="106" />
+<cdrectangleparam minX="0" maxX="128" minY="0" maxY="127" />
 <infoparam name="TGComponent" value="AppC::Application" />
 <TGConnectingPoint num="0" id="1632" />
 <TGConnectingPoint num="1" id="1633" />
@@ -6649,10 +6649,10 @@ the smart card and the terminal
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1649" >
 <father id="1674" num="2" />
-<cdparam x="486" y="303" />
+<cdparam x="386" y="136" />
 <sizeparam width="141" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="109" minY="0" maxY="106" />
+<cdrectangleparam minX="0" maxX="131" minY="0" maxY="127" />
 <infoparam name="TGComponent" value="AppC::SmartCard" />
 <TGConnectingPoint num="0" id="1641" />
 <TGConnectingPoint num="1" id="1642" />
@@ -6668,11 +6668,11 @@ the smart card and the terminal
 </SUBCOMPONENT>
 
 <CONNECTOR type="125" id="1675" >
-<cdparam x="513" y="536" />
+<cdparam x="402" y="367" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Memory0 to Bus0" value="{info}" />
-<P1  x="514" y="527" id="1506" />
-<P2  x="514" y="488" id="1536" />
+<P1  x="403" y="358" id="1506" />
+<P2  x="403" y="319" id="1536" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
@@ -6680,11 +6680,11 @@ the smart card and the terminal
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="1676" >
-<cdparam x="301" y="469" />
+<cdparam x="190" y="300" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from CPU1 to Bus0" value="{info}" />
-<P1  x="332" y="463" id="1602" />
-<P2  x="389" y="463" id="1533" />
+<P1  x="221" y="294" id="1602" />
+<P2  x="278" y="294" id="1533" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
@@ -6692,11 +6692,11 @@ the smart card and the terminal
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="1677" >
-<cdparam x="773" y="479" />
+<cdparam x="662" y="310" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from CPU2 to Bus0" value="{info}" />
-<P1  x="685" y="463" id="1567" />
-<P2  x="639" y="463" id="1534" />
+<P1  x="574" y="294" id="1567" />
+<P2  x="528" y="294" id="1534" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
@@ -6704,11 +6704,11 @@ the smart card and the terminal
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="125" id="1678" >
-<cdparam x="499" y="331" />
+<cdparam x="388" y="162" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from CPU0 to Bus0" value="{info}" />
-<P1  x="514" y="389" id="1656" />
-<P2  x="514" y="438" id="1531" />
+<P1  x="414" y="241" id="1656" />
+<P2  x="403" y="269" id="1531" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
