@@ -168,12 +168,13 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         // Issue #41 Ordering of tabbed panes
         jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
+        //JPanel mainP = new JPanel();
 
         JPanel jp03 = new JPanel();
         GridBagLayout gridbag03 = new GridBagLayout();
         GridBagConstraints c03 = new GridBagConstraints();
         jp03.setLayout(gridbag03);
-        jp03.setBorder(new javax.swing.border.TitledBorder("Mapping Exploration"));
+        //jp03.setBorder(new javax.swing.border.TitledBorder("Directories and files"));
 
 
 
@@ -195,19 +196,46 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         modelFile = new JTextField(modFile);
         jp03.add(modelFile,c03);
 
-
-        jp03.add(new JLabel("Number of Simulation Threads"),c03);
-        simulationThreads = new JTextField(simThreads);
-        jp03.add(simulationThreads, c03);
-
         jp03.add(new JLabel("Results Directory"),c03);
         resultsDirectory = new JTextField(resDirect);
         jp03.add(resultsDirectory, c03);
 
-        jp03.add(new JLabel("Number of Simulation Cycles"),c03);
-        simulationCycles = new JTextField(simCycles);
-        jp03.add(simulationCycles, c03);
+        JPanel jp03_sim = new JPanel();
+        GridBagLayout gridbag03_sim = new GridBagLayout();
+        GridBagConstraints c03_sim = new GridBagConstraints();
+        jp03_sim.setLayout(gridbag03);
+        jp03_sim.setBorder(new javax.swing.border.TitledBorder("Simulation options"));
 
+        c03_sim.weighty = 1.0;
+        c03_sim.weightx = 1.0;
+        c03_sim.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c03_sim.fill = GridBagConstraints.BOTH;
+        c03_sim.gridheight = 1;
+
+        jp03_sim.add(new JLabel("Number of Simulation Threads"),c03_sim);
+        simulationThreads = new JTextField(simThreads);
+        jp03_sim.add(simulationThreads, c03_sim);
+
+        jp03_sim.add(new JLabel("Number of Simulations Per Mapping"),c03_sim);
+        simulationsPerMapping = new JTextField(Nbsim);
+        jp03_sim.add(simulationsPerMapping, c03_sim);
+
+        jp03_sim.add(new JLabel("Max. Number of Simulation Cycles"),c03_sim);
+        simulationCycles = new JTextField(simCycles);
+        jp03_sim.add(simulationCycles, c03_sim);
+
+        jp1.add("Directories",jp03);
+        jp1.add("Simulation options", jp03_sim);
+
+        jp03 = new JPanel();
+        gridbag03 = new GridBagLayout();
+        c03 = new GridBagConstraints();
+        jp03.setLayout(gridbag03);
+        c03.weighty = 1.0;
+        c03.weightx = 1.0;
+        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c03.fill = GridBagConstraints.BOTH;
+        c03.gridheight = 1;
 
         jp03.add(new JLabel("Minimum Number of CPUs"),c03);
         minCPU = new JTextField(NbMinCPU);
@@ -217,95 +245,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         maxCPU = new JTextField(NbMaxCPU);
         jp03.add(maxCPU, c03);
 
-        jp03.add(new JLabel("Number of Simulations Per Mapping"),c03);
-        simulationsPerMapping = new JTextField(Nbsim);
-        jp03.add(simulationsPerMapping, c03);
+        jp1.add("HW Platform", jp03);
 
-
-        secAnalysis = new JCheckBox("Security Analysis");
-        secAnalysis.setSelected(secAnalysisState);
-        jp03.add(secAnalysis,c03);
-
-        jp03.add(new JLabel("Encryption Computational Complexity"),c03);
-        encTime2 = new JTextField(encCC);
-        jp03.add(encTime2,c03);
-
-        jp03.add(new JLabel("Decryption Computational Complexity"),c03);
-        decTime2 = new JTextField(decCC);
-        jp03.add(decTime2,c03);
-
-        jp03.add(new JLabel("Data Overhead (bits)"),c03);
-        secOverhead2 = new JTextField(secOv);
-        jp03.add(secOverhead2,c03);
-
-        outputTXT = new JCheckBox("Save text files?");
-        outputTXT.addActionListener(this);
-        outputTXT.setSelected(outputTXTState);
-        jp03.add(outputTXT, c03);
-
-        outputHTML = new JCheckBox("Save html files?");
-        outputHTML.addActionListener(this);
-        outputHTML.setSelected(outputHTMLState);
-        jp03.add(outputHTML, c03);
-
-        constraints = new JList<String>();
-        jp03.add(constraints, c03);
-
-
-        constraintTextField=new JTextField();
-        addConstraint = new JButton("Add Constraint");
-        addConstraint.addActionListener(this);
-        addConstraint.setPreferredSize(new Dimension(50, 25));
-        addConstraint.setActionCommand("addConstraint");
-        /*if (mgui.isExperimentalOn()) {
-            jp03.add(addConstraint, c03);
-        }*/
-
-
-
-
-        group = new ButtonGroup();
-        dseButton = new JRadioButton("Run Design Space Exploration");
-        dseButton.addActionListener(this);
-        jp03.add(dseButton,c03);
-        simButton = new JRadioButton("Run Lots of Simulations");
-        simButton.addActionListener(this);
-        jp03.add(simButton,c03);
-        group.add(dseButton);
-        group.add(simButton);
-
-
-
-        jp1.add("Mapping Exploration", jp03);
-
-        JPanel jp04 = new JPanel();
-
-        GridBagLayout gridbag04 = new GridBagLayout();
-        GridBagConstraints c04 = new GridBagConstraints();
-        jp04.setLayout(gridbag04);
-
-        c04.weighty = 1.0;
-        c04.weightx = 1.0;
-        c04.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c04.fill = GridBagConstraints.BOTH;
-        c04.gridheight = 1;
-
-        jp04.setBorder(new javax.swing.border.TitledBorder("DSE Output"));
-        jp04.add(new JLabel("Design Space Exploration Output"), c04);
-
-
-        outputText = new ScrolledJTextArea();
-        outputText.setEditable(false);
-        outputText.setMargin(new Insets(10, 10, 10, 10));
-        outputText.setTabSize(3);
-        outputText.append("Output results");
-        JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jsp.setPreferredSize(new Dimension(300,300));
-        Font f = new Font("Courrier", Font.BOLD, 12);
-        outputText.setFont(f);
-        jp04.add(jsp, c04);
-        jp1.add("DSE Output", jp04);
 
         JPanel jp05 = new JPanel();
         GridBagLayout gridbag05 = new GridBagLayout();
@@ -409,7 +350,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
 
         c05.gridwidth = GridBagConstraints.RELATIVE;
-        jp05.add(new JLabel("Average CP UUsage"),c05);
+        jp05.add(new JLabel("Average CPU Usage"),c05);
         c05.gridwidth = GridBagConstraints.REMAINDER;
         JSAverageCPUUsage = new JSlider(-10,10);
         JSAverageCPUUsage.setMinorTickSpacing(5);
@@ -541,7 +482,125 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         JSMaxBusContention.setPaintLabels(true);
         jp05.add(JSMaxBusContention, c05);
 
-        jp1.add("DSE Custom", jp05);
+        jp1.add("Weights", jp05);
+
+
+        jp03 = new JPanel();
+        gridbag03 = new GridBagLayout();
+        c03 = new GridBagConstraints();
+        jp03.setLayout(gridbag03);
+        c03.weighty = 1.0;
+        c03.weightx = 1.0;
+        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c03.fill = GridBagConstraints.BOTH;
+        c03.gridheight = 1;
+
+
+        secAnalysis = new JCheckBox("Security Analysis");
+        secAnalysis.setSelected(secAnalysisState);
+        jp03.add(secAnalysis,c03);
+
+        jp03.add(new JLabel("Encryption Computational Complexity"),c03);
+        encTime2 = new JTextField(encCC);
+        jp03.add(encTime2,c03);
+
+        jp03.add(new JLabel("Decryption Computational Complexity"),c03);
+        decTime2 = new JTextField(decCC);
+        jp03.add(decTime2,c03);
+
+        jp03.add(new JLabel("Data Overhead (bits)"),c03);
+        secOverhead2 = new JTextField(secOv);
+        jp03.add(secOverhead2,c03);
+
+        jp1.add("Security", jp03);
+
+
+        jp03 = new JPanel();
+        gridbag03 = new GridBagLayout();
+        c03 = new GridBagConstraints();
+        jp03.setLayout(gridbag03);
+        c03.weighty = 1.0;
+        c03.weightx = 1.0;
+        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c03.fill = GridBagConstraints.BOTH;
+        c03.gridheight = 1;
+
+        outputTXT = new JCheckBox("Save text files?");
+        outputTXT.addActionListener(this);
+        outputTXT.setSelected(outputTXTState);
+        jp03.add(outputTXT, c03);
+
+        outputHTML = new JCheckBox("Save html files?");
+        outputHTML.addActionListener(this);
+        outputHTML.setSelected(outputHTMLState);
+        jp03.add(outputHTML, c03);
+
+        //constraints = new JList<String>();
+        //jp03.add(constraints, c03);
+
+
+        //constraintTextField=new JTextField();
+        addConstraint = new JButton("Add Constraint");
+        addConstraint.addActionListener(this);
+        addConstraint.setPreferredSize(new Dimension(50, 25));
+        addConstraint.setActionCommand("addConstraint");
+        /*if (mgui.isExperimentalOn()) {
+            jp03.add(addConstraint, c03);
+        }*/
+
+
+
+        group = new ButtonGroup();
+        dseButton = new JRadioButton("Run Design Space Exploration");
+        dseButton.addActionListener(this);
+        jp03.add(dseButton,c03);
+        simButton = new JRadioButton("Run Lots of Simulations");
+        simButton.addActionListener(this);
+        jp03.add(simButton,c03);
+        group.add(dseButton);
+        group.add(simButton);
+
+        jp1.add("Outputs", jp03);
+
+        //mainP.add(jp03);
+        //mainP.add(jp03_sim);
+
+
+
+
+
+
+
+
+        JPanel jp04 = new JPanel();
+
+        GridBagLayout gridbag04 = new GridBagLayout();
+        GridBagConstraints c04 = new GridBagConstraints();
+        jp04.setLayout(gridbag04);
+
+        c04.weighty = 1.0;
+        c04.weightx = 1.0;
+        c04.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c04.fill = GridBagConstraints.BOTH;
+        c04.gridheight = 1;
+
+        //jp04.setBorder(new javax.swing.border.TitledBorder("DSE Output"));
+        //jp04.add(new JLabel("Design Space Exploration Output"), c04);
+
+
+        outputText = new ScrolledJTextArea();
+        outputText.setEditable(false);
+        outputText.setMargin(new Insets(10, 10, 10, 10));
+        outputText.setTabSize(3);
+        outputText.append("Select options. What is mandatory:" +
+                "\n - an output format\n - a exploration way (DSE, intensive simulation)");
+        JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp.setPreferredSize(new Dimension(300,300));
+        Font f = new Font("Courrier", Font.BOLD, 12);
+        outputText.setFont(f);
+        jp04.add(jsp, c04);
+        jp1.add("Results", jp04);
 
 
         c.add(jp1, BorderLayout.NORTH);
