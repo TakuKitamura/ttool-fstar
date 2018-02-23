@@ -113,7 +113,7 @@ public class DSEConfiguration implements Runnable  {
     private boolean showSimulatorRawOutput = false;
 
     public TMLComponentDesignPanel tmlcdp;
-    public TMLArchiPanel tmlap;
+    //public TMLArchiPanel tmlap;
 
     private TMLMapping<TGComponent> tmap;
     private TMLModeling<TGComponent> tmlm;
@@ -147,6 +147,12 @@ public class DSEConfiguration implements Runnable  {
     private int minNbOfCoresPerCPU = 1;
     private int maxNbOfCoresPerCPU = 1;
     private int nbOfSimulationsPerMapping = 1;
+
+    // Randomness in DSE
+    private boolean isRandom;
+    private int nbOfRandomsAtMost;
+    private double probability;
+
     private TMLModeling<TGComponent> taskModel = null;
     //  private TMLModeling secModel = null;
     private Vector<TMLMapping<TGComponent>> mappings;
@@ -349,6 +355,25 @@ public class DSEConfiguration implements Runnable  {
             nbOfSimulationThreads = 1;
             errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
             return -1;
+        }
+
+        return 0;
+    }
+
+    public int setRandomness(boolean b, String nbOfRandoms) {
+        isRandom = b;
+        try {
+            nbOfRandomsAtMost = Integer.parseInt(nbOfRandoms);
+        } catch (Exception e) {
+            nbOfRandomsAtMost = -1;
+            errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+            if (isRandom) {
+                return -1;
+            }
+        }
+
+        if (nbOfRandomsAtMost < 0) {
+            isRandom = true;
         }
 
         return 0;
@@ -1337,6 +1362,11 @@ public class DSEConfiguration implements Runnable  {
             return -1;
         }
 
+        if (mappings.size() == 0) {
+            TraceManager.addDev("No mapping were selected");
+            return -1;
+        }
+
         int cpt = 0;
         /*for(TMLMapping tmla: mappings) {
           TraceManager.addDev("map " + cpt + ": " + tmla.getSummaryTaskMapping());
@@ -1609,7 +1639,7 @@ public class DSEConfiguration implements Runnable  {
     public static long getNbOfPossibleMappings(int minNbOfCPUs, int maxNbOfCPUs, TMLModeling tl) {
         long nb = 0;
         int nbOfTasks = tl.getTasks().size();
-        for (int i=minNbOfCPUs; i<maxNbOfCPUs; i++) {
+        for (int i=minNbOfCPUs; i<=maxNbOfCPUs; i++) {
 
             nb += CombinatoricsUtils.stirlingS2(nbOfTasks, i);
         }
@@ -1640,8 +1670,14 @@ public class DSEConfiguration implements Runnable  {
             max = min + 1;
         }
 
+        long totalNumber = getNbOfPossibleMappings(minNbOfCPUs, maxNbOfCPUs, _tmlm);
+
+        // If limited nb of mappings: we must  compute the probability of a given mapping
+        if (isRandom) {
+            probability = (0.0 + nbOfRandomsAtMost) / totalNumber;
+        }
         TraceManager.addDev("runDSE. Task model loaded. Nb of possible mappings:" +
-                getNbOfPossibleMappings(minNbOfCPUs, maxNbOfCPUs, _tmlm));
+                totalNumber);
 
         Vector<TMLMapping<TGComponent>> maps = new  Vector<>();
 
@@ -1766,6 +1802,24 @@ public class DSEConfiguration implements Runnable  {
     }
 
     private void makeMapping(CPUWithTasks[] cpus_tasks,  Vector<TMLMapping<TGComponent>> maps, TMLModeling<TGComponent> _tmlm) {
+        // If randomness is on, we can decide to make this mapping, or not
+        if (isRandom) {
+            // Enough mappings?
+            if (maps.size() >= nbOfRandomsAtMost) {
+                return;
+            }
+
+            // We always consider the first mapping to be sure to have one!
+            if (maps.size() > 0) {
+                double rand = Math.random();
+                //TraceManager.addDev("Probability=" + probability + " rand=" + rand);
+                if (rand > probability) {
+                    // This mapping is not selected
+                    return;
+                }
+            }
+        }
+
         TMLArchitecture tmla = new TMLArchitecture();
         TMLMapping<TGComponent> tmap = new TMLMapping<>(_tmlm, tmla, true);
         DIPLOElement.setGeneralID(_tmlm.computeMaxID() + 1);

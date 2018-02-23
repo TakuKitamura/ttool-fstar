@@ -37,11 +37,7 @@
  */
 
 
-
-
 package tmltranslator;
-
-
 
 /**
  * Class TMLExecCInterval
@@ -54,7 +50,5 @@ public class TMLExecCInterval extends TMLActivityElementWithIntervalAction {
     public TMLExecCInterval(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
-    
-  
-    
+
 }
