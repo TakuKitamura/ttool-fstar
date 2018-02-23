@@ -548,10 +548,13 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         jp1.add("Security", jp03);
 
 
+        JPanel select = new JPanel(new BorderLayout());
+
         jp03 = new JPanel();
         gridbag03 = new GridBagLayout();
         c03 = new GridBagConstraints();
         jp03.setLayout(gridbag03);
+        jp03.setBorder(new javax.swing.border.TitledBorder("Which formats for outputs?"));
         c03.weighty = 1.0;
         c03.weightx = 1.0;
         c03.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -568,6 +571,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         outputHTML.setSelected(outputHTMLState);
         jp03.add(outputHTML, c03);
 
+        select.add(jp03, BorderLayout.SOUTH);
+
         //constraints = new JList<String>();
         //jp03.add(constraints, c03);
 
@@ -581,6 +586,16 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             jp03.add(addConstraint, c03);
         }*/
 
+        jp03 = new JPanel();
+        gridbag03 = new GridBagLayout();
+        c03 = new GridBagConstraints();
+        jp03.setLayout(gridbag03);
+        jp03.setBorder(new javax.swing.border.TitledBorder("What do you want to do?"));
+        c03.weighty = 1.0;
+        c03.weightx = 1.0;
+        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c03.fill = GridBagConstraints.BOTH;
+        c03.gridheight = 1;
 
         group = new ButtonGroup();
         dseButton = new JRadioButton("Run Design Space Exploration");
@@ -597,7 +612,9 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         group.add(newResultsButton);
         newResultsButton.setEnabled(false);
 
-        jp1.add("Outputs", jp03);
+        select.add(jp03, BorderLayout.CENTER);
+
+        jp1.add("Outputs", select);
 
         //mainP.add(jp03);
         //mainP.add(jp03_sim);
