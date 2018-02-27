@@ -188,14 +188,9 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
 		int i;
 		
 		Vector<String> dataFlowTypes = new Vector<>();
-		dataFlowTypes.add( TMLDataFlowType.UINT_16 );
-		dataFlowTypes.add( TMLDataFlowType.UINT_32 );
-		dataFlowTypes.add( TMLDataFlowType.UINT_64 );
 		dataFlowTypes.add( TMLDataFlowType.INT_16 );
 		dataFlowTypes.add( TMLDataFlowType.INT_32 );
 		dataFlowTypes.add( TMLDataFlowType.INT_64 );
-		dataFlowTypes.add( TMLDataFlowType.CPX_32 );
-		dataFlowTypes.add( TMLDataFlowType.CPX_64 );
 
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
