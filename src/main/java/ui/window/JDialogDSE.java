@@ -86,9 +86,13 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
 
     // Action
+    protected boolean isFunctionalModel;
     protected JRadioButton dseButton;
+    protected JRadioButton dseButtonFromFile;
     protected JRadioButton simButton;
+    protected JRadioButton simButtonFromFile;
     protected JRadioButton newResultsButton;
+    protected JPanel dseOptions;
     protected JLabel nbOfMappings;
     protected JLabel infoNbOfMappings;
     protected JCheckBox randomMappingBox;
@@ -146,6 +150,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     protected static boolean outputTXTState = false;
     protected static boolean outputHTMLState = false;
 
+
+
     //JList<String> constraints;
     //JTextField constraintTextField;
     //JList<String> contraints;
@@ -172,6 +178,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         simulator = _simulator;
         tmlDir = dir + "/";
         resDirect = _simulator + "results/";
+
+        isFunctionalModel = mgui.gtm.getTMLMapping() == null;
 
         initComponents();
         myInitComponents();
@@ -218,10 +226,10 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         c03.fill = GridBagConstraints.BOTH;
         c03.gridheight = 1;
 
-        defaultFiles = new JRadioButton("Use current model");
-        specificFiles = new JRadioButton("Use textual specification");
-        jp03.add(defaultFiles, c03);
-        jp03.add(specificFiles, c03);
+        //defaultFiles = new JRadioButton("Use current model");
+        //specificFiles = new JRadioButton("Use textual specification");
+        //jp03.add(defaultFiles, c03);
+        //jp03.add(specificFiles, c03);
 
 
         jp03.add(new JLabel("Directory of TML specification files"), c03);
@@ -240,13 +248,13 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         resultsDirectory = new JTextField(resDirect);
         jp03.add(resultsDirectory, c03);
 
-        groupOfFiles = new ButtonGroup();
+        /*groupOfFiles = new ButtonGroup();
         groupOfFiles.add(defaultFiles);
         groupOfFiles.add(specificFiles);
         defaultFiles.addActionListener(this);
         specificFiles.addActionListener(this);
         defaultFiles.setSelected(true);
-        defaultFileIsSelected(true);
+        defaultFileIsSelected(true);*/
 
 
         // Simulation
@@ -254,7 +262,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         GridBagLayout gridbag03_sim = new GridBagLayout();
         GridBagConstraints c03_sim = new GridBagConstraints();
         jp03_sim.setLayout(gridbag03);
-        jp03_sim.setBorder(new javax.swing.border.TitledBorder("Simulation options"));
+        jp03_sim.setBorder(new javax.swing.border.TitledBorder("Performance options"));
 
         c03_sim.weighty = 1.0;
         c03_sim.weightx = 1.0;
@@ -590,7 +598,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         outputHTML.setSelected(outputHTMLState);
         jp03.add(outputHTML, c03);
 
-        select.add(jp03, BorderLayout.SOUTH);
+        JPanel jp033 = new JPanel(new BorderLayout());
+        jp033.add(jp03, BorderLayout.SOUTH);
 
         //constraints = new JList<String>();
         //jp03.add(constraints, c03);
@@ -618,9 +627,51 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         //c03.anchor = GridBagConstraints.WEST;
 
         group = new ButtonGroup();
-        dseButton = new JRadioButton("Run Design Space Exploration");
-        dseButton.addActionListener(this);
-        jp03.add(dseButton, c03);
+        dseButton = new JRadioButton("Run Design Space Exploration from current model");
+        if (isFunctionalModel) {
+            dseButton.addActionListener(this);
+            jp03.add(dseButton, c03);
+            group.add(dseButton);
+        }
+
+        dseButtonFromFile = new JRadioButton("Run Design Space Exploration from TML file");
+        dseButtonFromFile.addActionListener(this);
+        jp03.add(dseButtonFromFile, c03);
+
+        simButton = new JRadioButton("Run Lots of Simulations");
+        if (!isFunctionalModel) {
+            simButton.addActionListener(this);
+            jp03.add(simButton, c03);
+            group.add(simButton);
+        }
+
+        simButtonFromFile = new JRadioButton("Run Lots of Simulations from mapping file");
+        simButtonFromFile.addActionListener(this);
+
+        jp03.add(simButtonFromFile, c03);
+
+        newResultsButton = new JRadioButton("Update results with new weights");
+        newResultsButton.addActionListener(this);
+        jp03.add(newResultsButton, c03);
+
+
+        group.add(dseButtonFromFile);
+        group.add(simButtonFromFile);
+        group.add(newResultsButton);
+        newResultsButton.setEnabled(false);
+
+        select.add(jp03, BorderLayout.CENTER);
+
+        jp03 = new JPanel();
+        gridbag03 = new GridBagLayout();
+        c03 = new GridBagConstraints();
+        jp03.setLayout(gridbag03);
+        jp03.setBorder(new javax.swing.border.TitledBorder("DSE options"));
+        c03.weighty = 1.0;
+        c03.weightx = 1.0;
+        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c03.fill = GridBagConstraints.BOTH;
+        c03.gridheight = 1;
 
         int anchor = c03.anchor;
         int fill = c03.fill;
@@ -647,23 +698,16 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
         c03.anchor = GridBagConstraints.WEST;
         c03.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c03.fill = GridBagConstraints.HORIZONTAL;
         randomMappingNb = new JTextField(randomMappingsSelected);
         jp03.add(randomMappingNb, c03);
 
         c03.anchor = anchor;
+        dseOptions = jp03;
 
-        simButton = new JRadioButton("Run Lots of Simulations");
-        simButton.addActionListener(this);
-        jp03.add(simButton, c03);
-        newResultsButton = new JRadioButton("Update results with new weights");
-        newResultsButton.addActionListener(this);
-        jp03.add(newResultsButton, c03);
-        group.add(dseButton);
-        group.add(simButton);
-        group.add(newResultsButton);
-        newResultsButton.setEnabled(false);
 
-        select.add(jp03, BorderLayout.CENTER);
+        jp033.add(jp03, BorderLayout.NORTH);
+        select.add(jp033, BorderLayout.SOUTH);
 
         jp1.add("Outputs", select);
 
@@ -692,7 +736,9 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         outputText.setMargin(new Insets(10, 10, 10, 10));
         outputText.setTabSize(3);
         outputText.append("How to start?" +
-                "\n - Select at least one output format (txt, html)\n - Select an exploration way (DSE, intensive simulation)");
+                "\n - Select at least one output format (txt, html)\n - Select an exploration way (DSE, intensive simulation)" +
+                "\nNote that DSE works only for functional models, " +
+                "\nand intensive simulation works only for mapping models");
         JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(300, 300));
@@ -776,11 +822,14 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
 
     private void handleStartButton() {
+        //TraceManager.addDev("Handle start button");
 
-        nbOfMappings.setEnabled(dseButton.isSelected());
-        infoNbOfMappings.setEnabled(dseButton.isSelected());
-        randomMappingBox.setEnabled(dseButton.isSelected());
-        randomMappingNb.setEnabled(dseButton.isSelected());
+        boolean b = dseButton.isSelected() || dseButtonFromFile.isSelected();
+        nbOfMappings.setEnabled(b);
+        infoNbOfMappings.setEnabled(b);
+        randomMappingBox.setEnabled(b);
+        randomMappingNb.setEnabled(b);
+        //dseOptions.repaint();
 
         if (mode != NOT_STARTED && mode != NOT_SELECTED) {
             return;
@@ -788,7 +837,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
         boolean oneResult, oneAction;
         oneResult = outputHTML.isSelected() || outputTXT.isSelected();
-        oneAction = dseButton.isSelected() || simButton.isSelected() || newResultsButton.isSelected();
+        oneAction = dseButton.isSelected()  || dseButtonFromFile.isSelected() || simButton.isSelected()
+                || simButtonFromFile.isSelected() || newResultsButton.isSelected();
 
         if (oneAction == false || oneResult == false) {
             mode = NOT_SELECTED;
@@ -815,8 +865,10 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             previousTab();
         } else if (evt.getSource() == next) {
             nextTab();
-        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) || (evt.getSource() == newResultsButton)|| (evt.getSource() ==
-                outputHTML) || (evt.getSource() == outputTXT)) {
+        } else if ((evt.getSource() == dseButton) || (evt.getSource() == simButton) ||
+                (evt.getSource() == newResultsButton)|| (evt.getSource() ==
+                outputHTML) || (evt.getSource() == outputTXT) || (evt.getSource() == dseButtonFromFile)
+                ||  (evt.getSource() == simButtonFromFile )) {
             handleStartButton();
         } else if (evt.getSource() == defaultFiles) {
             defaultFileIsSelected(true);
@@ -826,9 +878,9 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     }
 
     private void defaultFileIsSelected(boolean b) {
-        tmlDirectory.setEnabled(!b);
+        /*tmlDirectory.setEnabled(!b);
         mappingFile.setEnabled(!b);
-        modelFile.setEnabled(!b);
+        modelFile.setEnabled(!b);*/
     }
 
     public void nextTab() {
@@ -902,7 +954,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         TraceManager.addDev("Thread started");
         //   File testFile;
 
-        if (simButton.isSelected() || dseButton.isSelected()) {
+        if (simButton.isSelected() || dseButton.isSelected() || simButtonFromFile.isSelected() ||
+                dseButtonFromFile.isSelected()) {
             encCC = encTime2.getText();
             decCC = decTime2.getText();
             secOv = secOverhead2.getText();
@@ -926,7 +979,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
                 TraceManager.addDev("Randomness set to " + randomMappingsSelected);
             }
 
-            if (defaultFiles.isSelected()) {
+            if (simButton.isSelected() || dseButton.isSelected()) {
                 mgui.generateTMLTxt();
                 tmlDir = SpecConfigTTool.TMLCodeDirectory;
                 mapFile = "spec.tmap";
@@ -943,6 +996,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             } else {
                 TraceManager.addDev("Set directory to " + tmlDir);
             }
+
             if (!mapFile.isEmpty()) {
                 if (config.setMappingFile(mapFile) < 0) {
                     TraceManager.addDev("Mapping at " + mapFile + " error");
