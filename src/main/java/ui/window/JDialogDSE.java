@@ -119,7 +119,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     protected JRadioButton specificFiles;
     protected ButtonGroup groupOfFiles;
 
-    protected JTextField simulationThreads, simulationCycles, minCPU, maxCPU, simulationsPerMapping;
+    protected JTextField simulationThreads, simulationCycles, minCPU, maxCPU, simulationsPerMapping,
+        nbOfIntensiveSimulations;
     protected JTextArea outputText;
     protected String output = "";
 
@@ -137,12 +138,13 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     protected static String simThreads = "10";
     protected static String simCycles = "10000";
     protected static String nbMinCPU = "1";
-    protected static String nbMaxCPU = "1";
-    protected static String nbSim = "100";
+    protected static String nbMaxCPU = "2";
+    protected static String nbSim = "10";
+    protected static String nbSimIntensive = "10";
     protected static String encCC = "100";
     protected static String decCC = "100";
     protected static String secOv = "100";
-    protected static String randomMappingsSelected = "100";
+    protected static String randomMappingsSelected = "10";
     protected static boolean useRandomMappings = false;
     protected static boolean secAnalysisState = false;
 
@@ -273,20 +275,24 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         c03_sim.fill = GridBagConstraints.BOTH;
         c03_sim.gridheight = 1;
 
-        jp03_sim.add(new JLabel("Number of Simulation Threads"), c03_sim);
+        jp03_sim.add(new JLabel("Number of Threads"), c03_sim);
         simulationThreads = new JTextField(simThreads);
         jp03_sim.add(simulationThreads, c03_sim);
 
-        jp03_sim.add(new JLabel("Number of Simulations Per Mapping"), c03_sim);
+        jp03_sim.add(new JLabel("Number of Intensive Simulations"), c03_sim);
+        nbOfIntensiveSimulations = new JTextField(nbSimIntensive);
+        jp03_sim.add(nbOfIntensiveSimulations, c03_sim);
+
+        jp03_sim.add(new JLabel("Number of Simulations per Mapping"), c03_sim);
         simulationsPerMapping = new JTextField(nbSim);
         jp03_sim.add(simulationsPerMapping, c03_sim);
 
-        jp03_sim.add(new JLabel("Max. Number of Simulation Cycles"), c03_sim);
+        jp03_sim.add(new JLabel("Max. Nb. of Execution Cycles per Simulation or Mapping "), c03_sim);
         simulationCycles = new JTextField(simCycles);
         jp03_sim.add(simulationCycles, c03_sim);
 
         jp1.add("Directories", jp03);
-        jp1.add("Simulation options", jp03_sim);
+        jp1.add("Execution engine", jp03_sim);
 
         jp03 = new JPanel();
         gridbag03 = new GridBagLayout();
@@ -298,17 +304,79 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         c03.fill = GridBagConstraints.BOTH;
         c03.gridheight = 1;
 
-        jp03.add(new JLabel("Minimum Number of CPUs"), c03);
+        c03.fill = GridBagConstraints.NONE;
+        c03.anchor = GridBagConstraints.EAST;
+        c03.gridwidth = 1;
+        jp03.add(new JLabel("Minimum Number of CPUs: "), c03);
+        c03.anchor = GridBagConstraints.WEST;
+        c03.fill = GridBagConstraints.HORIZONTAL;
+        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
         minCPU = new JTextField(nbMinCPU);
         minCPU.getDocument().addDocumentListener(this);
         jp03.add(minCPU, c03);
 
-        jp03.add(new JLabel("Maximum Number of CPUs"), c03);
+        c03.fill = GridBagConstraints.NONE;
+        c03.anchor = GridBagConstraints.EAST;
+        c03.gridwidth = 1;
+        jp03.add(new JLabel("Maximum Number of CPUs: "), c03);
+        c03.anchor = GridBagConstraints.WEST;
+        c03.fill = GridBagConstraints.HORIZONTAL;
+        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
         maxCPU = new JTextField(nbMaxCPU);
         maxCPU.getDocument().addDocumentListener(this);
         jp03.add(maxCPU, c03);
 
-        jp1.add("HW Platform", jp03);
+        int anchor = c03.anchor;
+        int fill = c03.fill;
+        c03.fill = GridBagConstraints.NONE;
+        c03.anchor = GridBagConstraints.EAST;
+        c03.gridwidth = 1;
+        infoNbOfMappings = new JLabel("Nb of mappings to be explored: ");
+        jp03.add(infoNbOfMappings, c03);
+
+        c03.fill = fill;
+        c03.anchor = GridBagConstraints.WEST;
+        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nbOfMappings = new JLabel("" + getNbOfPossibleMappings());
+        jp03.add(nbOfMappings, c03);
+
+        c03.gridwidth = 1;
+        c03.fill = GridBagConstraints.NONE;
+        c03.anchor = GridBagConstraints.EAST;
+        randomMappingBox = new JCheckBox("Use Random mappings, at most: ");
+        randomMappingBox.setSelected(useRandomMappings);
+        jp03.add(randomMappingBox, c03);
+
+
+        c03.fill = fill;
+
+        c03.anchor = GridBagConstraints.WEST;
+        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c03.fill = GridBagConstraints.HORIZONTAL;
+        randomMappingNb = new JTextField(randomMappingsSelected);
+        jp03.add(randomMappingNb, c03);
+
+        c03.fill = GridBagConstraints.NONE;
+        c03.anchor = GridBagConstraints.WEST;
+
+        outputTML = new JCheckBox("Save mappings as .tml/.tmap files?");
+        outputTML.setSelected(outputTMLState);
+        outputTML.addActionListener(this);
+        outputTML.setSelected(outputTMLState);
+        jp03.add(outputTML, c03);
+
+        outputGUI = new JCheckBox("Draw mappings");
+        outputGUI.setSelected(outputGUIState);
+        outputGUI.addActionListener(this);
+        outputGUI.setSelected(outputGUIState);
+        jp03.add(outputGUI, c03);
+
+        c03.anchor = anchor;
+
+
+        dseOptions = jp03;
+
+        jp1.add("DSE Options", jp03);
 
 
         JPanel jp05 = new JPanel();
@@ -680,60 +748,10 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         c03.fill = GridBagConstraints.BOTH;
         c03.gridheight = 1;
 
-        int anchor = c03.anchor;
-        int fill = c03.fill;
-        c03.fill = GridBagConstraints.NONE;
-        c03.anchor = GridBagConstraints.EAST;
-        c03.gridwidth = 1;
-        infoNbOfMappings = new JLabel("Nb of mappings to be explored: ");
-        jp03.add(infoNbOfMappings, c03);
-
-        c03.fill = fill;
-        c03.anchor = GridBagConstraints.WEST;
-        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nbOfMappings = new JLabel("" + getNbOfPossibleMappings());
-        jp03.add(nbOfMappings, c03);
-
-        c03.gridwidth = 1;
-        c03.fill = GridBagConstraints.NONE;
-        c03.anchor = GridBagConstraints.EAST;
-        randomMappingBox = new JCheckBox("Use Random mappings, at most: ");
-        randomMappingBox.setSelected(useRandomMappings);
-        jp03.add(randomMappingBox, c03);
 
 
 
-
-        c03.fill = fill;
-
-        c03.anchor = GridBagConstraints.WEST;
-        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c03.fill = GridBagConstraints.HORIZONTAL;
-        randomMappingNb = new JTextField(randomMappingsSelected);
-        jp03.add(randomMappingNb, c03);
-
-        c03.fill = GridBagConstraints.NONE;
-        c03.anchor = GridBagConstraints.CENTER;
-
-        outputTML = new JCheckBox("Save mappings as .tml/.tmap files?");
-        outputTML.setSelected(outputTMLState);
-        outputTML.addActionListener(this);
-        outputTML.setSelected(outputTMLState);
-        jp03.add(outputTML, c03);
-
-        outputGUI = new JCheckBox("Draw mappings");
-        outputGUI.setSelected(outputGUIState);
-        outputGUI.addActionListener(this);
-        outputGUI.setSelected(outputGUIState);
-        jp03.add(outputGUI, c03);
-
-        c03.anchor = anchor;
-
-
-        dseOptions = jp03;
-
-
-        jp033.add(jp03, BorderLayout.NORTH);
+        //jp033.add(jp03, BorderLayout.NORTH);
         select.add(jp033, BorderLayout.SOUTH);
 
         jp1.add("Outputs", select);
@@ -837,6 +855,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         nbMinCPU = minCPU.getText();
         nbMaxCPU = maxCPU.getText();
         nbSim = simulationsPerMapping.getText();
+        nbSimIntensive = simulationsPerMapping.getText();
         encCC = encTime2.getText();
         decCC = decTime2.getText();
         secAnalysisState = secAnalysis.isSelected();
@@ -853,13 +872,13 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     private void handleStartButton() {
         //TraceManager.addDev("Handle start button");
 
-        boolean b = dseButton.isSelected() || dseButtonFromFile.isSelected();
+        /*boolean b = dseButton.isSelected() || dseButtonFromFile.isSelected();
         nbOfMappings.setEnabled(b);
         infoNbOfMappings.setEnabled(b);
         randomMappingBox.setEnabled(b);
         randomMappingNb.setEnabled(b);
         outputTML.setEnabled(b);
-        outputGUI.setEnabled(b);
+        outputGUI.setEnabled(b);*/
         //dseOptions.repaint();
 
         if (mode != NOT_STARTED && mode != NOT_SELECTED) {
@@ -1010,6 +1029,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         nbMinCPU = minCPU.getText();
         nbMaxCPU = maxCPU.getText();
         nbSim = simulationsPerMapping.getText();
+        nbSimIntensive = simulationsPerMapping.getText();
         randomMappingsSelected = randomMappingNb.getText();
         useRandomMappings = randomMappingBox.isSelected();
 
@@ -1120,11 +1140,22 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
                 return;
             }
 
-            if (config.setNbOfSimulationsPerMapping(nbSim) != 0) {
-                TraceManager.addDev("Simulations per mapping error: " + nbSim);
-                stopErrorProcess();
-                output += "Simulation per mapping error: " + nbSim + "\n";
-                return;
+            if (dseButton.isSelected() || dseButtonFromFile.isSelected()) {
+                if (config.setNbOfSimulationsPerMapping(nbSim) != 0) {
+                    TraceManager.addDev("Simulations per mapping error: " + nbSim);
+                    stopErrorProcess();
+                    output += "Simulation per mapping error: " + nbSim + "\n";
+                    return;
+                }
+            }
+
+            if (simButton.isSelected() || simButtonFromFile.isSelected()) {
+                if (config.setNbOfSimulationsPerMapping(nbSimIntensive) != 0) {
+                    TraceManager.addDev("Nb of Intensive Simulations : " + nbSimIntensive);
+                    stopErrorProcess();
+                    output += "Nb of Intensive Simulation: " + nbSimIntensive + "\n";
+                    return;
+                }
             }
 
             if (config.setSimulationCompilationCommand("make -j9 -C") != 0) {

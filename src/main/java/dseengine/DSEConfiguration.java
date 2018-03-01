@@ -1753,7 +1753,7 @@ public class DSEConfiguration implements Runnable  {
             HwBus main = new HwBus("mainbus");
             main.privacy = HwBus.BUS_PUBLIC;
             arch.addHwNode(main);
-            
+
             List<HwNode> nodes =  arch.getCPUs();
             for (HwNode node:nodes){
                 // connect the CPU to the main bus
