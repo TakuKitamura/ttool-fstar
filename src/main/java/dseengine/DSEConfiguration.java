@@ -44,6 +44,7 @@
 package dseengine;
 
 import myutil.Conversion;
+import myutil.FileException;
 import myutil.FileUtils;
 import myutil.TraceManager;
 import tmltranslator.*;
@@ -107,6 +108,8 @@ public class DSEConfiguration implements Runnable  {
     private boolean outputHTML = true;
     private boolean outputTXT = false;
     private boolean outputXML = false;
+    private boolean outputTML = false;
+    private boolean outputGUI = false;
 
     private boolean recordResults = false;
 
@@ -210,8 +213,15 @@ public class DSEConfiguration implements Runnable  {
         // Trying to read the file
         modelPath = _path;
         optionChanged = true;
-
         return 0;
+    }
+
+    public void setOutputTML(boolean b) {
+        outputTML = b;
+    }
+
+    public void setOutputGUI(boolean b) {
+        outputGUI = b;
     }
 
     public int setMappingFile(String _fileName) {
@@ -1404,7 +1414,25 @@ public class DSEConfiguration implements Runnable  {
         }
 
         for(TMLMapping<TGComponent> tmla: mappings) {
-            TraceManager.addDev("Handling mapping #" + cpt);
+            //TraceManager.addDev("Handling mapping #" + cpt);
+
+            if (outputTML) {
+                TraceManager.addDev("Generating mapping files for mapping #" + cpt);
+                TMLMappingTextSpecification<TGComponent> tmap = new
+                        TMLMappingTextSpecification<TGComponent>("Computed mapping " + cpt);
+                String data = tmap.toTextFormat(tmla);
+                try {
+                    tmap.saveFile(pathToResults, "mapping" + cpt);
+                } catch (FileException e) {
+                    TraceManager.addDev("File could not be saved:");
+                }
+            }
+
+            if (outputGUI) {
+                TraceManager.addDev("Generating graphical mapping #" + cpt);
+                TMLArchiPanel newArch = drawMapping(tmla, "GUI Mapping" + cpt);
+            }
+
             progression = cpt * 100 / (mappings.size());
 
             cpt ++;
@@ -1446,7 +1474,7 @@ public class DSEConfiguration implements Runnable  {
                 TraceManager.addDev("ADDING SECURITY TO MAPPING " +(cpt-1));
 
                 TMLArchiPanel newArch = drawMapping(tmla, "securedMapping"+(cpt-1));
-                GTMLModeling gtml =new GTMLModeling(newArch, true);
+                GTMLModeling gtml = new GTMLModeling(newArch, true);
                 tmla = gtml.translateToTMLMapping();
                 //                   tmla.tmlap = tmlap;
                 //              tmlcdp = (TMLComponentDesignPanel) mainGUI.tabs.get(0);
@@ -1528,7 +1556,8 @@ public class DSEConfiguration implements Runnable  {
         for (HwNode node:hwnodes){
             if (node instanceof HwBus){
                 HwBus hwbus = (HwBus) node;
-                TMLArchiBUSNode bus = new TMLArchiBUSNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(), false, null, ap);
+                TMLArchiBUSNode bus = new TMLArchiBUSNode(x, y, ap.getMinX(), ap.getMaxX(), ap.getMinY(), ap.getMaxY(),
+                        false, null, ap);
                 bus.setPrivacy(hwbus.privacy);
                 x+=300;
                 bus.setName(node.getName());
@@ -1719,15 +1748,28 @@ public class DSEConfiguration implements Runnable  {
     }
     private void addMemories(Vector<TMLMapping<TGComponent>> maps){
         for (TMLMapping<TGComponent> map: maps){
+            // Add a bus that connects all CPUs together
             TMLArchitecture arch = map.getArch();
+            HwBus main = new HwBus("mainbus");
+            main.privacy = HwBus.BUS_PUBLIC;
+            arch.addHwNode(main);
+            
             List<HwNode> nodes =  arch.getCPUs();
             for (HwNode node:nodes){
+                // connect the CPU to the main bus
+                HwLink hwlink = new HwLink("link_tomainbus_of_" + node.getName());
+                hwlink.bus =  main;
+                hwlink.hwnode = node;
+
+                arch.addHwLink(hwlink);
+
+                // connect the CPU to an internal private bus with one memory
                 HwBus bus = new HwBus("bus" +node.getName());
-                bus.privacy=1;
+                bus.privacy = HwBus.BUS_PRIVATE;
                 HwMemory mem = new HwMemory("memory_" +node.getName());
-                HwLink hwlink = new HwLink("link_memory" +node.getName() + "_to_memorybus");
-                hwlink.bus=bus;
-                hwlink.hwnode=node;
+                hwlink = new HwLink("link_memory" +node.getName() + "_to_memorybus");
+                hwlink.bus = bus;
+                hwlink.hwnode = node;
                 HwLink hwlink2 = new HwLink("link_" +node.getName() + "_to_memorybus");
                 hwlink2.bus=bus;
                 hwlink2.hwnode=mem;
@@ -1735,8 +1777,9 @@ public class DSEConfiguration implements Runnable  {
                 arch.addHwNode(bus);
                 arch.addHwLink(hwlink);
                 arch.addHwLink(hwlink2);
-
             }
+
+
         }
     }
     private void generateMappings(TMLModeling<TGComponent> _tmlm, Vector<TMLMapping<TGComponent>> maps, int nbOfCPUs) {

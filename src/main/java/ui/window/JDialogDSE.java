@@ -103,7 +103,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     //protected JButton addConstraint;
 
 
-    JCheckBox outputTXT, outputHTML;
+    protected JCheckBox outputTXT, outputHTML, outputTML, outputGUI;
     protected JCheckBox secAnalysis;
     protected JTextField encTime2, decTime2, secOverhead2;
 
@@ -147,6 +147,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     protected static boolean secAnalysisState = false;
 
     // Outputs
+    protected static boolean outputTMLState = false;
+    protected static boolean outputGUIState = false;
     protected static boolean outputTXTState = false;
     protected static boolean outputHTMLState = false;
 
@@ -200,6 +202,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
     protected void myInitComponents() {
         mode = NOT_STARTED;
+        selectSecurityEnable();
         setButtons();
         handleStartButton();
     }
@@ -557,7 +560,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
 
         secAnalysis = new JCheckBox("Security Analysis");
-        secAnalysis.setSelected(secAnalysisState);
+        secAnalysis.addActionListener(this);
+
         jp03.add(secAnalysis, c03);
 
         jp03.add(new JLabel("Encryption Computational Complexity"), c03);
@@ -571,6 +575,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         jp03.add(new JLabel("Data Overhead (bits)"), c03);
         secOverhead2 = new JTextField(secOv);
         jp03.add(secOverhead2, c03);
+
+        secAnalysis.setSelected(secAnalysisState);
 
         jp1.add("Security", jp03);
 
@@ -597,6 +603,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         outputHTML.addActionListener(this);
         outputHTML.setSelected(outputHTMLState);
         jp03.add(outputHTML, c03);
+
 
         JPanel jp033 = new JPanel(new BorderLayout());
         jp033.add(jp03, BorderLayout.SOUTH);
@@ -693,8 +700,11 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         randomMappingBox = new JCheckBox("Use Random mappings, at most: ");
         randomMappingBox.setSelected(useRandomMappings);
         jp03.add(randomMappingBox, c03);
-        c03.fill = fill;
 
+
+
+
+        c03.fill = fill;
 
         c03.anchor = GridBagConstraints.WEST;
         c03.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -702,7 +712,24 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         randomMappingNb = new JTextField(randomMappingsSelected);
         jp03.add(randomMappingNb, c03);
 
+        c03.fill = GridBagConstraints.NONE;
+        c03.anchor = GridBagConstraints.CENTER;
+
+        outputTML = new JCheckBox("Save mappings as .tml/.tmap files?");
+        outputTML.setSelected(outputTMLState);
+        outputTML.addActionListener(this);
+        outputTML.setSelected(outputTMLState);
+        jp03.add(outputTML, c03);
+
+        outputGUI = new JCheckBox("Draw mappings");
+        outputGUI.setSelected(outputGUIState);
+        outputGUI.addActionListener(this);
+        outputGUI.setSelected(outputGUIState);
+        jp03.add(outputGUI, c03);
+
         c03.anchor = anchor;
+
+
         dseOptions = jp03;
 
 
@@ -814,6 +841,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         decCC = decTime2.getText();
         secAnalysisState = secAnalysis.isSelected();
         secOv = secOverhead2.getText();
+        outputTMLState = outputTML.isSelected();
+        outputGUIState = outputGUI.isSelected();
         outputTXTState = outputTXT.isSelected();
         outputHTMLState = outputHTML.isSelected();
         randomMappingsSelected = randomMappingNb.getText();
@@ -829,6 +858,8 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         infoNbOfMappings.setEnabled(b);
         randomMappingBox.setEnabled(b);
         randomMappingNb.setEnabled(b);
+        outputTML.setEnabled(b);
+        outputGUI.setEnabled(b);
         //dseOptions.repaint();
 
         if (mode != NOT_STARTED && mode != NOT_SELECTED) {
@@ -854,7 +885,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
 
     public void actionPerformed(ActionEvent evt) {
-        String command = evt.getActionCommand();
+
         if (evt.getSource() == start) {
             startProcess();
         } else if (evt.getSource() == stop) {
@@ -874,7 +905,15 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             defaultFileIsSelected(true);
         } else if (evt.getSource() == specificFiles) {
             defaultFileIsSelected(false);
+        } else if (evt.getSource() == secAnalysis) {
+            selectSecurityEnable();
         }
+    }
+
+    private void selectSecurityEnable() {
+        encTime2.setEnabled(secAnalysis.isSelected());
+        decTime2.setEnabled(secAnalysis.isSelected());
+        secOverhead2.setEnabled(secAnalysis.isSelected());
     }
 
     private void defaultFileIsSelected(boolean b) {
@@ -1138,6 +1177,11 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
                 // DSE
             } else if (dseButton.isSelected() || (dseButtonFromFile.isSelected())) {
+
+                // Setting TML Output
+                config.setOutputTML(true);
+                config.setOutputGUI(true);
+
                 if (config.runDSE("", false, false) != 0) {
                     TraceManager.addDev("Can't run DSE");
                     stopErrorProcess();
