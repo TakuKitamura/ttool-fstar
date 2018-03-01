@@ -294,7 +294,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
                 //   if (p.getFather() != null) {
                 if (p.getFather() instanceof TMLCPrimitiveComponent) {
                     if (componentsToTakeIntoAccount.contains(p.getFather())) {
-                        TraceManager.addDev("-> port " + _port + " is connected to " + o);
+                        //TraceManager.addDev("-> port " + _port + " is connected to " + o);
                         ret.add( p );
                     }
                 }

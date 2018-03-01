@@ -485,25 +485,25 @@ public class TMLTranslator  {
           System.out.println("toto=" + s);*/
 
         switch(conversionType) {
-        case 0:
-            if (tmap == null) {
-                convert = convertToLOTOS();
-            } else {
-                convert = convertToLOTOSFromMapping();
-            }
-            break;
-        case 1:
-            convert = convertToUPPAAL();
-            break;
-        case 2:
-            convert = convertToSystemC();
-            break;
-        case 3:
-            convert = convertToSystemC2();
-            break;
-        case 4:
-            convert = convertToTML();
-            break;
+            case 0:
+                if (tmap == null) {
+                    convert = convertToLOTOS();
+                } else {
+                    convert = convertToLOTOSFromMapping();
+                }
+                break;
+            case 1:
+                convert = convertToUPPAAL();
+                break;
+            case 2:
+                convert = convertToSystemC();
+                break;
+            case 3:
+                convert = convertToSystemC2();
+                break;
+            case 4:
+                convert = convertToTML();
+                break;
 	    /*case 5:
 	      convert = convertToSystemC3();*/
         }

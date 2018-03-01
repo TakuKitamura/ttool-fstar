@@ -204,16 +204,16 @@ public class TMLSyntaxChecking {
                 if (elt instanceof TMLWaitEvent) {
                     evt = ((TMLWaitEvent)elt).getEvent();
                     if (evt.isBasicEvent()) {
-                        try {
+                        /*try {
                             TraceManager.addDev("wait evt= " + evt.getName());
                         } catch (Exception e) {
                             TraceManager.addDev("Error on evt = " + evt);
                         }
                         if (evt.getDestinationTask() == null) {
                             TraceManager.addDev("Null destination task");
-                        }
+                        }*/
 
-                        TraceManager.addDev("wait evt= " + evt.getName() + " task=" + t.getName() + " destination=" + evt.getDestinationTask().getName());
+                        //TraceManager.addDev("wait evt= " + evt.getName() + " task=" + t.getName() + " destination=" + evt.getDestinationTask().getName());
                         if (evt.getDestinationTask() != t) {
                             addError(t, elt, evt.getName() + ": " + WRONG_DESTINATION_EVENT, TMLError.ERROR_BEHAVIOR);
                         }

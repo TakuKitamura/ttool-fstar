@@ -157,7 +157,7 @@ public class DSEConfiguration implements Runnable  {
     //  private TMLModeling secModel = null;
     private Vector<TMLMapping<TGComponent>> mappings;
     private DSEMappingSimulationResults dsemapresults;
-    List<Integer[]> latencyIds =new ArrayList<Integer[]>();
+    private List<Integer[]> latencyIds =new ArrayList<Integer[]>();
     public MainGUI mainGUI;
     // Taps
     private static String[] taps = {"MinSimulationDuration",  "AverageSimulationDuration",
@@ -225,6 +225,14 @@ public class DSEConfiguration implements Runnable  {
 
 
         return 0;
+    }
+
+    public void setMappingModel(TMLMapping<TGComponent> _tmap) {
+        tmap = _tmap;
+    }
+
+    public void setTaskModel(TMLModeling<TGComponent> _tmlm) {
+        tmlm = _tmlm;
     }
 
     public int setTaskModelFile(String _fileName) {
@@ -545,46 +553,56 @@ public class DSEConfiguration implements Runnable  {
     private boolean loadTaskModel(boolean _optimize) {
         boolean ret = false;
         //System.out.println("load");
-        String inputData = FileUtils.loadFileData(taskModelFile);
-        TMLTextSpecification<TGComponent> tmlts = new TMLTextSpecification<>("LoadedTaskModel");
-        ret = tmlts.makeTMLModeling(inputData);
-        TraceManager.addDev("Load of task model done");
         List<TMLError> warnings;
+        if (tmlm == null) {
+            String inputData = FileUtils.loadFileData(taskModelFile);
+            TMLTextSpecification<TGComponent> tmlts = new TMLTextSpecification<>("LoadedTaskModel");
+            ret = tmlts.makeTMLModeling(inputData);
+            TraceManager.addDev("Load of task model done");
 
-        if (!ret) {
-            TraceManager.addDev("Compilation:\n" + tmlts.printSummary());
-        }
 
-        if (ret) {
-            //System.out.println("Format OK");
-            taskModel = tmlts.getTMLModeling();
-            //System.out.println("\n\n*** TML Modeling *** \n");
-            //TMLTextSpecification textspec = new TMLTextSpecification("toto");
-            //String s = textspec.toTextFormat(tmlm);
-            //System.out.println(s);
-
-            // Checking syntax
-            TraceManager.addDev("--- Checking syntax of the whole specification (TML, TARCHI, TMAP)---");
-            TMLSyntaxChecking syntax = new TMLSyntaxChecking(taskModel);
-            syntax.checkSyntax();
-            if (syntax.hasErrors() > 0) {
-                TraceManager.addDev("Printing errors:");
-                TraceManager.addDev(syntax.printErrors());
-                return false;
+            if (!ret) {
+                TraceManager.addDev("Compilation:\n" + tmlts.printSummary());
             }
 
+            if (ret) {
+                //System.out.println("Format OK");
+                taskModel = tmlts.getTMLModeling();
+                //System.out.println("\n\n*** TML Modeling *** \n");
+                //TMLTextSpecification textspec = new TMLTextSpecification("toto");
+                //String s = textspec.toTextFormat(tmlm);
+                //System.out.println(s);
 
-            TraceManager.addDev("Compilation:\n" + syntax.printSummary());
+                // Checking syntax
+                TraceManager.addDev("--- Checking syntax of the whole specification (TML, TARCHI, TMAP)---");
+                TMLSyntaxChecking syntax = new TMLSyntaxChecking(taskModel);
+                syntax.checkSyntax();
+                if (syntax.hasErrors() > 0) {
+                    TraceManager.addDev("Printing errors:");
+                    TraceManager.addDev(syntax.printErrors());
+                    return false;
+                }
 
-            TraceManager.addDev("Compilation:\n" + tmlts.printSummary());
+
+                //TraceManager.addDev("Compilation:\n" + syntax.printSummary());
+
+                //TraceManager.addDev("Compilation:\n" + tmlts.printSummary());
 
 
+                if (_optimize) {
+                    warnings = tmlm.optimize();
+                    TraceManager.addDev(taskModel.printSummary(warnings));
+                }
+                //spec.toTextFormat(tmlm);
+                //System.out.println("TMLModeling=" + spec);
+            }
+        } else {
+            taskModel = tmlm;
             if (_optimize) {
                 warnings = tmlm.optimize();
                 TraceManager.addDev(taskModel.printSummary(warnings));
             }
-            //spec.toTextFormat(tmlm);
-            //System.out.println("TMLModeling=" + spec);
+            TraceManager.addDev("No need to make the TMLModeling from file: we use the current model");
         }
 
         return true;
@@ -675,7 +693,7 @@ public class DSEConfiguration implements Runnable  {
             return -1;
         }
 
-        if (mappingFile == null) {
+        if ((mappingFile == null) && (tmap == null)) {
             errorMessage = PATH_TO_SOURCE;
             return -1;
         }
@@ -701,11 +719,13 @@ public class DSEConfiguration implements Runnable  {
 
     public int loadingModel(boolean _debug, boolean _optimize) {
         if (optionChanged) {
-            TraceManager.addDev("Loading mapping");
-            if (!loadMapping(_optimize)) {
-                errorMessage = LOAD_MAPPING_FAILED;
-                TraceManager.addDev("Loading of the mapping failed!!!!");
-                return -1;
+            if (tmap == null) {
+                TraceManager.addDev("Loading mapping");
+                if (!loadMapping(_optimize)) {
+                    errorMessage = LOAD_MAPPING_FAILED;
+                    TraceManager.addDev("Loading of the mapping failed!!!!");
+                    return -1;
+                }
             }
 
             // Generating code
@@ -730,8 +750,8 @@ public class DSEConfiguration implements Runnable  {
         return 0;
     }
 
-    public int loadingTaskModel(boolean _debug, boolean _optimize) {
-        if (optionChanged) {
+    /*public int loadingTaskModel(boolean _debug, boolean _optimize) {
+        if ((optionChanged) && (tmlm != null)){
             TraceManager.addDev("Loading mapping");
             if (!loadTaskModel(_optimize)) {
                 errorMessage = LOAD_TASKMODEL_FAILED;
@@ -740,10 +760,12 @@ public class DSEConfiguration implements Runnable  {
             }
         }
         return 0;
-    }
-    public int generateSecMapping(){
+    }*/
+
+    /*public int generateSecMapping(){
         return 0;
-    }
+    }*/
+
     public int generateAndCompileMappingCode(TMLMapping<TGComponent> _tmlmap, boolean _debug, boolean _optimize) {
 
         // Generating code
@@ -1421,7 +1443,7 @@ public class DSEConfiguration implements Runnable  {
             }
 
             if (addSecurity){
-                System.out.println("ADDING SECURITY TO MAPPING " +(cpt-1));
+                TraceManager.addDev("ADDING SECURITY TO MAPPING " +(cpt-1));
 
                 TMLArchiPanel newArch = drawMapping(tmla, "securedMapping"+(cpt-1));
                 GTMLModeling gtml =new GTMLModeling(newArch, true);
@@ -1436,7 +1458,7 @@ public class DSEConfiguration implements Runnable  {
 
                 //Run simulations on this mapping
                 if (generateAndCompileMappingCode(secMapping, _debug, _optimize)  >= 0) {
-                    System.out.println("GENERATING>>>");
+                    TraceManager.addDev("GENERATING>>>");
                     if (recordResults) {
                         results = new DSESimulationResult();
                         resultsID ++;
@@ -1472,6 +1494,7 @@ public class DSEConfiguration implements Runnable  {
         }
         return 0;
     }
+
     public TMLArchiPanel drawMapping(TMLMapping<TGComponent> map, String name){
         //Map<HwNode, TGConnectingPoint> connectMap;
         Map<HwNode, TMLArchiNode> objMap = new HashMap<HwNode, TMLArchiNode>();

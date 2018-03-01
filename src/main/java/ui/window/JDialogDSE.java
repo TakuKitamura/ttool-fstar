@@ -638,7 +638,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         dseButtonFromFile.addActionListener(this);
         jp03.add(dseButtonFromFile, c03);
 
-        simButton = new JRadioButton("Run Lots of Simulations");
+        simButton = new JRadioButton("Run Lots of Simulations from current model");
         if (!isFunctionalModel) {
             simButton.addActionListener(this);
             jp03.add(simButton, c03);
@@ -915,6 +915,29 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         mode = STOPPED;
         setButtons();
         go = false;
+
+    }
+
+    public void stopErrorProcess() {
+        TraceManager.addDev("Stop error process (1)");
+
+        if (rshc != null) {
+            try {
+                rshc.stopCommand();
+            } catch (LauncherException le) {
+            }
+        }
+        TraceManager.addDev("Stop error process (2)");
+        rshc = null;
+        outputText.append("\n\n" + output + "\n");
+
+        checkMode();
+        setButtons();
+        //TraceManager.addDev("Unselecting radio buttons");
+        group.clearSelection();
+        handleStartButton();
+
+        go = false;
     }
 
     public void startProcess() {
@@ -973,52 +996,70 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             if (config.setRandomness(useRandomMappings, randomMappingsSelected) != 0) {
                 TraceManager.addDev("Randomness error " + randomMappingsSelected + " error");
                 output += "Randomness error " + randomMappingsSelected + "\n";
-                checkMode();
+                stopErrorProcess();
                 return;
             } else {
                 TraceManager.addDev("Randomness set to " + randomMappingsSelected);
             }
 
-            if (simButton.isSelected() || dseButton.isSelected()) {
+            /*if (simButton.isSelected() || dseButton.isSelected()) {
                 mgui.generateTMLTxt();
                 tmlDir = SpecConfigTTool.TMLCodeDirectory;
                 mapFile = "spec.tmap";
                 modFile = "spec.tml";
+            }*/
+
+            if (simButton.isSelected()) {
+                config.setMappingModel(mgui.gtm.getTMLMapping());
+            }
+
+            if (dseButton.isSelected()) {
+                if (mgui.gtm.getTMLModeling() == null)
+                    TraceManager.addDev("Null Modeling ...");
+                config.setTaskModel(mgui.gtm.getTMLModeling());
             }
 
 
-
-            if (config.setModelPath(tmlDir) != 0) {
-                TraceManager.addDev("TML Directory file at " + tmlDir + " error");
-                output += "TML Directory file at " + tmlDir + " error \n";
-                checkMode();
-                return;
-            } else {
-                TraceManager.addDev("Set directory to " + tmlDir);
-            }
-
-            if (!mapFile.isEmpty()) {
-                if (config.setMappingFile(mapFile) < 0) {
-                    TraceManager.addDev("Mapping at " + mapFile + " error");
-                    output += "Mapping at " + mapFile + " error";
-                    mode = STOPPED;
+            if (simButtonFromFile.isSelected() || dseButtonFromFile.isSelected()) {
+                if (config.setModelPath(tmlDir) != 0) {
+                    TraceManager.addDev("TML Directory file at " + tmlDir + " error");
+                    output += "Error with the Directory: " + tmlDir + "\n";
+                    stopErrorProcess();
                     return;
                 } else {
-                    TraceManager.addDev("Set mapping file to " + mapFile);
+                    TraceManager.addDev("Set directory to " + tmlDir);
                 }
             }
-            if (config.setTaskModelFile(modFile) != 0) {
-                TraceManager.addDev("Model File " + modFile + " error");
-                output += "Model File " + modFile + " error \n";
-                checkMode();
-                return;
-            } else {
-                TraceManager.addDev("Set model file to " + modFile);
+
+            if (simButtonFromFile.isSelected()) {
+                if (!mapFile.isEmpty()) {
+                    if (config.setMappingFile(mapFile) < 0) {
+                        TraceManager.addDev("Mapping at " + mapFile + " error (file is not present?)");
+                        output += "Error: mapping file " + mapFile + " could not be loaded";
+                        stopErrorProcess();
+                        return;
+                    } else {
+                        TraceManager.addDev("Set mapping file to " + mapFile);
+                    }
+                }
             }
+
+            if (dseButtonFromFile.isSelected()) {
+                if (config.setTaskModelFile(modFile) != 0) {
+                    TraceManager.addDev("Model File " + modFile + " error");
+                    output += "Model File " + modFile + " error \n";
+                    stopErrorProcess();
+                    return;
+                } else {
+                    TraceManager.addDev("Set model file to " + modFile);
+                }
+            }
+
             if (config.setPathToSimulator(simulator) != 0) {
                 TraceManager.addDev("Simulator at " + mapFile + " error");
                 output += "Simulator at " + mapFile + " error \n";
-                checkMode();
+                stopErrorProcess();
+
                 return;
             } else {
                 TraceManager.addDev("Simulator set");
@@ -1027,6 +1068,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             if (config.setPathToResults(resDirect) != 0) {
                 TraceManager.addDev("Results Directory at " + resDirect + " error");
                 output += "Results Directory at " + resDirect + " error \n";
+                stopErrorProcess();
                 return;
             } else {
                 TraceManager.addDev("Results Directory set");
@@ -1034,12 +1076,14 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
             if (config.setNbOfSimulationThreads(simThreads) != 0) {
                 TraceManager.addDev("Simulation threads error: " + simThreads);
+                stopErrorProcess();
                 output += "Simulation threads error: " + simThreads + "\n";
                 return;
             }
 
             if (config.setNbOfSimulationsPerMapping(nbSim) != 0) {
                 TraceManager.addDev("Simulations per mapping error: " + nbSim);
+                stopErrorProcess();
                 output += "Simulation per mapping error: " + nbSim + "\n";
                 return;
             }
@@ -1047,11 +1091,13 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             if (config.setSimulationCompilationCommand("make -j9 -C") != 0) {
                 TraceManager.addDev("Simulation compilation error");
                 output += "Simulation compilation error" + "\n";
+                stopErrorProcess();
                 return;
             }
             if (config.setSimulationExecutionCommand("run.x") != 0) {
                 TraceManager.addDev("Simulation execution error");
                 output += "Simulation execution error \n";
+                stopErrorProcess();
                 return;
             }
 
@@ -1059,12 +1105,16 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             if (config.setMinNbOfCPUs(nbMinCPU) != 0) {
                 TraceManager.addDev("Can't set Min # CPUS to " + nbMinCPU);
                 output += "Can't set Min # CPUS to " + nbMinCPU + "\n";
+                stopErrorProcess();
+                return;
             }
 
             TraceManager.addDev("Setting max nb of CPUs to:" + nbMaxCPU);
             if (config.setMaxNbOfCPUs(nbMaxCPU) != 0) {
                 TraceManager.addDev("Can't set Max # CPUS to " + nbMaxCPU);
                 output += "Can't set Max # CPUS to " + nbMaxCPU + "\n";
+                stopErrorProcess();
+                return;
             }
 
             config.setOutputTXT(outputTXT.isSelected() ? "true" : "false");
@@ -1074,22 +1124,24 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
 
             // Simulations
-            if (simButton.isSelected()) {
+            if (simButton.isSelected() || simButtonFromFile.isSelected()) {
                 if (config.runParallelSimulation(nbSim, true, true) != 0) {
                     output += "Simulation Failed:\n" + config.getErrorMessage() + " \n";
                     outputText.setText(output);
-                    checkMode();
+                    stopErrorProcess();
                     return;
+
                 } else {
                     output += "Simulation Succeeded";
                     outputText.setText(output);
                 }
 
                 // DSE
-            } else if (dseButton.isSelected()) {
+            } else if (dseButton.isSelected() || (dseButtonFromFile.isSelected())) {
                 if (config.runDSE("", false, false) != 0) {
                     TraceManager.addDev("Can't run DSE");
-
+                    stopErrorProcess();
+                     return;
                 }
                 TraceManager.addDev("DSE run");
             }
@@ -1120,6 +1172,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
             }
             if (config.replaceTapValues(tap) < 0) {
                 output += "Error changing values";
+
             }
             //System.out.println(tap[0]);
             if (config.printResultsSummary("", true, true) != 0) {

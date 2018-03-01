@@ -9094,8 +9094,8 @@ public class GTURTLEModeling {
         gtmlm.setTasks(tasksToTakeIntoAccount);
         tmlm = gtmlm.translateToTMLModeling(true);
         //tmlm.removeAllRandomSequences();
-        TraceManager.addDev("New TML Modeling:" + tmlm.toString());
-        mgui.generateTMLTxt();
+        //TraceManager.addDev("New TML Modeling:" + tmlm.toString());
+        //mgui.generateTMLTxt();
         artificialtmap = tmlm.getDefaultMapping();
         tmap = null;
         listE = gtmlm.getCorrespondanceTable();
@@ -9147,7 +9147,7 @@ public class GTURTLEModeling {
         gctmlm.putPrefixName(true);
         gctmlm.setComponents(componentsToTakeIntoAccount);
         tmlm = gctmlm.translateToTMLModeling(true);
-        mgui.generateTMLTxt();
+        //mgui.generateTMLTxt();
         artificialtmap = tmlm.getDefaultMapping();
         tmap = null;
         listE = gctmlm.getCorrespondanceTable();
