@@ -265,12 +265,13 @@ public class Plugin {
 	return (boolean)(method.invoke(instance));
     }
     
-    public static boolean executeBoolStringMethod(Object instance, String value, String _methodName) throws Exception {
-	Class[] cArg = new Class[1];
+    public static boolean executeBoolStringMethod(Object instance, String value, String _methodName, String options) throws Exception {
+	Class[] cArg = new Class[2];
 	cArg[0] = String.class;
+	cArg[1] = String.class;
 	//TraceManager.addDev("Looking for method=" + _methodName + " in instance " + instance);
 	Method method = instance.getClass().getMethod(_methodName, cArg);
-	return (boolean)(method.invoke(instance, value));
+	return (boolean)(method.invoke(instance, value, options));
     }
     
 
