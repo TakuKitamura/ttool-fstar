@@ -209,7 +209,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         opt = new JLabel(textSysC3);
-        jp01.add(gen, c01);
+        jp01.add(opt, c01);
         codeOpt = new JTextField(compilerOptions, 100);
         jp01.add(codeOpt, c01);
 
