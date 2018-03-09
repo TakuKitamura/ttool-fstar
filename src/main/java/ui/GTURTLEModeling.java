@@ -748,6 +748,7 @@ public class GTURTLEModeling {
         TMLArchitecture archi = map.getArch();
         TURTLEPanel tmlap = map.getCorrespondanceList().getTG(archi.getFirstCPU()).getTDiagramPanel().tp;
         TMLActivityDiagramPanel firewallADP = null;
+        TMLComponentDesignPanel tcp = tmlcdp;
         TMLComponentTaskDiagramPanel tcdp = tmlcdp.tmlctdp;
         if (TraceManager.devPolicy == TraceManager.TO_CONSOLE) {
             MainGUI gui = tmlcdp.getMainGUI();
@@ -758,7 +759,7 @@ public class GTURTLEModeling {
             int ind = gui.tabs.indexOf(tmlcdp);
             String tabName = gui.getTitleAt(tmlcdp);
             gui.cloneRenameTab(ind, "firewallDesign");
-            //  TMLComponentDesignPanel tcp = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-1);
+            tcp = (TMLComponentDesignPanel) gui.tabs.get(gui.tabs.size()-1);
             newarch.renameMapping(tabName, tabName + "_firewallDesign");
 
         }
@@ -768,31 +769,32 @@ public class GTURTLEModeling {
             TMLADStartState adStart = null;
             TMLADForEverLoop adLoop = null;
             TMLADChoice adChoice = null;
+            TMLADChoice adChoice2 = null;
             TMLADReadChannel adRC = null;
             TMLADExecI exec = null;
             TMLADWriteChannel adWC = null;
             TMLADStopState adStop = null;
-
+            TMLADStopState adStop2= null;
 
             int links = map.getArch().getLinkByHwNode(firewallNode).size();
             TraceManager.addDev("Links " + links);
 
             HwCPU cpu = new HwCPU(firewallNode.getName());
             map.getTMLArchitecture().replaceFirewall(firewallNode, cpu);
-            for (int link = 0; link < links / 2; link++) {
+          //  for (int link = 0; link < links / 2; link++) {
                 HashMap<TMLChannel, TMLChannel> inChans = new HashMap<TMLChannel, TMLChannel>();
                 HashMap<TMLChannel, TMLChannel> outChans = new HashMap<TMLChannel, TMLChannel>();
                 if (TraceManager.devPolicy == TraceManager.TO_CONSOLE) {
-                    firewallComp = new TMLCPrimitiveComponent(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxY(), false, null, tmlcdp.tmlctdp);
-                    tmlcdp.tmlctdp.addComponent(firewallComp, 0, 0, false, true);
-                    firewallComp.setValueWithChange(firewallNode.getName() + link);
-                    firewallADP = tmlcdp.getTMLActivityDiagramPanel(firewallNode.getName() + link);
+                    firewallComp = new TMLCPrimitiveComponent(tmlcdp.tmlctdp.getMaxX()-100, tmlcdp.tmlctdp.getMaxY()-100, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxY(), false, null, tcp.tmlctdp);
+                    tcp.tmlctdp.addComponent(firewallComp, 0, 0, false, true);
+                    firewallComp.setValueWithChange(firewallNode.getName());
+                    firewallADP = tcp.getTMLActivityDiagramPanel(firewallNode.getName());
                 }
 
                 List<TMLChannel> channelsCopy = tmlm.getChannels();
                 List<TMLChannel> toAdd = new ArrayList<TMLChannel>();
 
-                TMLTask firewall = new TMLTask("TASK__" + firewallNode.getName() + "_" + link, firewallComp, firewallADP);
+                TMLTask firewall = new TMLTask("TASK__" + firewallNode.getName(), firewallComp, firewallADP);
 
 
                 tmlm.addTask(firewall);
@@ -805,7 +807,7 @@ public class GTURTLEModeling {
                     TMLTask dest = chan.getDestinationTask();
                     TMLPort origPort = chan.getOriginPort();
                     TMLPort destPort = chan.getDestinationPort();
-                    TMLChannel wr = new TMLChannel(chan.getName() + "_firewallIn" + link, chan.getReferenceObject());
+                    TMLChannel wr = new TMLChannel(chan.getName() + "_firewallIn", chan.getReferenceObject());
                     //Specify new channel attributes
                     wr.setSize(chan.getSize());
                     wr.setMax(chan.getMax());
@@ -813,7 +815,7 @@ public class GTURTLEModeling {
                     wr.setType(TMLChannel.BRBW);
                     wr.setPriority(chan.getPriority());
                     wr.setTasks(orig, firewall);
-                    TMLChannel rd = new TMLChannel(chan.getName() + "_firewallOut" + link, chan.getReferenceObject());
+                    TMLChannel rd = new TMLChannel(chan.getName() + "_firewallOut", chan.getReferenceObject());
                     rd.setTasks(firewall, dest);
                     rd.setSize(chan.getSize());
                     rd.setMax(chan.getMax());
@@ -849,47 +851,63 @@ public class GTURTLEModeling {
                     tmp = new TGConnectorTMLAD(adChoice.getX(), adChoice.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, adLoop.getTGConnectingPointAtIndex(1), adChoice.getTGConnectingPointAtIndex(0), new Vector<Point>());
                     firewallADP.addComponent(tmp, adChoice.getX(), adChoice.getY(), false, true);
                     for (TMLChannel chan : inChans.keySet()) {
+
                         TMLChannel newChan = inChans.get(chan);
-                        TMLCChannelOutPort originPort = new TMLCChannelOutPort(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp);
-                        TMLCChannelOutPort destPort = new TMLCChannelOutPort(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp);
-                        for (TGComponent tg : tcdp.getComponentList()) {
+                        TMLCChannelOutPort originPort = new TMLCChannelOutPort(0, 0, tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, null, tcp.tmlctdp);
+                        TMLCChannelOutPort destPort = new TMLCChannelOutPort(0, 0, tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, null, tcp.tmlctdp);
+                        for (TGComponent tg : tcp.tmlctdp.getComponentList()) {
                             if (tg instanceof TMLCPrimitiveComponent) {
                                 if (tg.getValue().equals(newChan.getOriginTask().getName().split("__")[1])) {
-                                    originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
+                                	System.out.println(newChan.getName() + " " + tg.getValue());
+                                    originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, tg, tcp.tmlctdp);
                                     originPort.commName = newChan.getName();
-                                    tcdp.addComponent(originPort, tg.getX(), tg.getY(), true, true);
+                                    tcp.tmlctdp.addComponent(originPort, tg.getX(), tg.getY(), true, true);
                                 } else if (tg.getValue().equals(firewallNode.getName())) {
-                                    destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
+                                	System.out.println(newChan.getName() + tg.getValue());
+                                    destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, tg, tcp.tmlctdp);
                                     destPort.isOrigin = false;
                                     destPort.commName = newChan.getName();
-                                    tcdp.addComponent(destPort, tg.getX(), tg.getY(), true, true);
+                                    tcp.tmlctdp.addComponent(destPort, tg.getX(), tg.getY(), true, true);
                                 }
                             }
                         }
-                        TMLCPortConnector conn = new TMLCPortConnector(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector<Point>());
-                        tcdp.addComponent(conn, 0, 0, false, true);
-
+                        System.out.println("Ports " + originPort + " " + destPort);
+                        TMLCPortConnector conn = new TMLCPortConnector(0, 0, tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, null, tcp.tmlctdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                        tcp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                        
+                        
+                        originPort = new TMLCChannelOutPort(0, 0, tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, null, tcp.tmlctdp);
+						destPort = new TMLCChannelOutPort(0, 0, tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, null, tcp.tmlctdp);
+						
                         TMLChannel wrChan = outChans.get(chan);
-                        for (TGComponent tg : tcdp.getComponentList()) {
+                        for (TGComponent tg : tcp.tmlctdp.getComponentList()) {
                             if (tg instanceof TMLCPrimitiveComponent) {
                                 if (tg.getValue().equals(firewallNode.getName())) {
-                                    originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
+                                    System.out.println(newChan.getName() + tg.getValue());
+                                    originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, tg, tcp.tmlctdp);
                                     originPort.commName = wrChan.getName();
-                                    tcdp.addComponent(originPort, tg.getX(), tg.getY(), true, true);
+                                    tcp.tmlctdp.addComponent(originPort, tg.getX(), tg.getY(), true, true);
                                 } else if (tg.getValue().equals(wrChan.getDestinationTask().getName().split("__")[1])) {
-                                    destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, tg, tcdp);
+                                    System.out.println(wrChan.getName() + " "+ tg.getValue());
+                                    destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, tg, tcp.tmlctdp);
                                     destPort.isOrigin = false;
                                     destPort.commName = wrChan.getName();
-                                    tcdp.addComponent(destPort, tg.getX(), tg.getY(), true, true);
+                                    tcp.tmlctdp.addComponent(destPort, tg.getX(), tg.getY(), true, true);
                                 }
                             }
                         }
-                        conn = new TMLCPortConnector(0, 0, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxX(), true, null, tcdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector<Point>());
-                        tcdp.addComponent(conn, 0, 0, false, true);
+                        
+                        System.out.println("Ports " + originPort + " " + destPort);
+                        conn = new TMLCPortConnector(0, 0, tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, null, tcp.tmlctdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                        tcp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                        
                     }
                     int xpos = 200;
                     int i = 1;
                     for (TMLChannel chan : inChans.keySet()) {
+                    	if (i>3){
+                    		break;
+                    	}
                         TMLChannel newChan = inChans.get(chan);
                         adRC = new TMLADReadChannel(xpos, 350, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
                         adRC.setChannelName(newChan.getName());
@@ -904,37 +922,48 @@ public class GTURTLEModeling {
                         exec = new TMLADExecI(xpos, 400, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
 
                         exec.setDelayValue(Integer.toString(firewallNode.latency));
-                        firewallADP.addComponent(exec, 400, 200, false, true);
+                        firewallADP.addComponent(exec, xpos, 400, false, true);
 
                         tmp = new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, adRC.getTGConnectingPointAtIndex(1), exec.getTGConnectingPointAtIndex(0), new Vector<Point>());
                         firewallADP.addComponent(tmp, exec.getX(), exec.getY(), false, true);
+                        
+                        
+                        
 
-                        if (channelAllowed(map, chan)) {
+						adChoice2 = new TMLADChoice(xpos, 500, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
+		                firewallADP.addComponent(adChoice2, 500, 300, false, true);
+
+						tmp = new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, exec.getTGConnectingPointAtIndex(1), adChoice2.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                        firewallADP.addComponent(tmp, exec.getX(), exec.getY(), false, true);
+
+
+  //                      if (channelAllowed(map, chan)) {
                             TMLChannel wrChan = outChans.get(chan);
 
-                            adWC = new TMLADWriteChannel(xpos, 400, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
+                            adWC = new TMLADWriteChannel(xpos, 600, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
                             adWC.setChannelName(wrChan.getName());
-                            adWC.setSamples("1");
-                            firewallADP.addComponent(adWC, xpos, 400, false, true);
+                            adWC.setSamples("1");                                              
+                            firewallADP.addComponent(adWC, xpos, 600, false, true);
 
-                            tmp = new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, exec.getTGConnectingPointAtIndex(1), adWC.getTGConnectingPointAtIndex(0), new Vector<Point>());
+
+                            tmp = new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, adChoice2.getTGConnectingPointAtIndex(1), adWC.getTGConnectingPointAtIndex(0), new Vector<Point>());
                             firewallADP.addComponent(tmp, exec.getX(), exec.getY(), false, true);
 
-                            adStop = new TMLADStopState(xpos, 500, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
-                            firewallADP.addComponent(adStop, xpos, 500, false, true);
+                            adStop = new TMLADStopState(xpos, 650, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
+                            firewallADP.addComponent(adStop, xpos, 650, false, true);
                             tmp = new TGConnectorTMLAD(adStop.getX(), adStop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, adWC.getTGConnectingPointAtIndex(1), adStop.getTGConnectingPointAtIndex(0), new Vector<Point>());
                             firewallADP.addComponent(tmp, adStop.getX(), adStop.getY(), false, true);
-                        } else {
-                            adStop = new TMLADStopState(xpos, 500, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
-                            firewallADP.addComponent(adStop, xpos, 500, false, true);
+                    //    } else {
+                            adStop2 = new TMLADStopState(xpos, 650, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
+                            firewallADP.addComponent(adStop2, xpos, 650, false, true);
 
-                            tmp = new TGConnectorTMLAD(adStop.getX(), adStop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, exec.getTGConnectingPointAtIndex(1), adStop.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                            tmp = new TGConnectorTMLAD(adStop.getX(), adStop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, adChoice2.getTGConnectingPointAtIndex(2), adStop2.getTGConnectingPointAtIndex(0), new Vector<Point>());
                             firewallADP.addComponent(tmp, adStop.getX(), adStop.getY(), false, true);
-                        }
+                     //   }
                         xpos += 100;
                         i++;
                     }
-                }
+               // }
 
                 TMLStartState start = new TMLStartState("start", adStart);
                 act.setFirst(start);
@@ -1097,8 +1126,8 @@ public class GTURTLEModeling {
         for (String cpuName : selectedCpuTasks.keySet()) {
             Map<String, HSMChannel> hsmChannels = new HashMap<String, HSMChannel>();
             TMLCPrimitiveComponent hsm = new TMLCPrimitiveComponent(0, 500, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxY(), false, null, tcdp);
-            TAttribute isEnc = new TAttribute(2, "isEnc", "true", 4);
-            hsm.getAttributeList().add(isEnc);
+            //TAttribute isEnc = new TAttribute(2, "isEnc", "true", 4);
+            //hsm.getAttributeList().add(isEnc);
             tcdp.addComponent(hsm, 0, 500, false, true);
             hsm.setValueWithChange("HSM_" + cpuName);
             //Find all associated components
@@ -1139,8 +1168,8 @@ public class GTURTLEModeling {
                 TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(compName);
                 Set<TGComponent> channelInstances = new HashSet<TGComponent>();
                 Set<TGComponent> secOperators = new HashSet<TGComponent>();
-                isEnc = new TAttribute(2, "isEnc", "true", 4);
-                comp.getAttributeList().add(isEnc);
+              //  isEnc = new TAttribute(2, "isEnc", "true", 4);
+                //comp.getAttributeList().add(isEnc);
                 //Find all unsecured channels
                 //For previously secured channels, relocate encryption to the hsm
 
@@ -1248,7 +1277,7 @@ public class GTURTLEModeling {
                     if (!hsmChan.isChan) {
                         originPort.typep = 2;
                         destPort.typep = 2;
-                        originPort.setParam(0, new TType(2));
+                    //    originPort.setParam(0, new TType(2));
                     }
                     destPort.isOrigin = !hsmChan.isOrigin;
 
@@ -1289,12 +1318,11 @@ public class GTURTLEModeling {
                     fromStart = tad.findTGConnectorEndingAt(chan.getTGConnectingPointAtIndex(0));
                     TGConnectingPoint point = fromStart.getTGConnectingPointP2();
 
-                    //set isEnc to true
                     int yShift = 50;
 
                     TMLADSendRequest req = new TMLADSendRequest(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     req.setRequestName("startHSM_" + cpuName);
-                    req.setParam(0, "isEnc");
+                   // req.setParam(0, "isEnc");
                     tad.addComponent(req, xpos, ypos + yShift, false, true);
 
                     fromStart.setP2(req.getTGConnectingPointAtIndex(0));
@@ -1374,10 +1402,10 @@ public class GTURTLEModeling {
 
                     //Set isEnc to false
                     int yShift = 50;
-                    TMLADActionState act = new TMLADActionState(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-                    act.setValue("isEnc=false");
-                    tad.addComponent(act, xpos, ypos + yShift, false, true);
-                    fromStart.setP2(act.getTGConnectingPointAtIndex(0));
+              //      TMLADActionState act = new TMLADActionState(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+                //    act.setValue("isEnc=false");
+                  //  tad.addComponent(act, xpos, ypos + yShift, false, true);
+                    //fromStart.setP2(act.getTGConnectingPointAtIndex(0));
 
 
                     //Add send request operator
@@ -1385,16 +1413,16 @@ public class GTURTLEModeling {
                     yShift += 50;
                     TMLADSendRequest req = new TMLADSendRequest(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     req.setRequestName("startHSM_" + cpuName);
-                    req.setParam(0, "isEnc");
+                  //  req.setParam(0, "isEnc");
                     req.makeValue();
                     tad.addComponent(req, xpos, ypos + yShift, false, true);
 
 
                     //Add connection
-                    fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
-                    fromStart.setP1(act.getTGConnectingPointAtIndex(1));
+                   // fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
+                  //  fromStart.setP1(act.getTGConnectingPointAtIndex(1));
                     fromStart.setP2(req.getTGConnectingPointAtIndex(0));
-                    tad.addComponent(fromStart, xpos, ypos, false, true);
+                  //  tad.addComponent(fromStart, xpos, ypos, false, true);
 
 
                     yShift += 50;
@@ -1437,7 +1465,7 @@ public class GTURTLEModeling {
 
                     //Shift components down to make room for the added ones, and add security contexts to write channels
                     for (TGComponent tg : tad.getComponentList()) {
-                        if (tg.getY() >= ypos && tg != wr && tg != req && tg != rd && tg != chan && tg != act) {
+                        if (tg.getY() >= ypos && tg != wr && tg != req && tg != rd && tg != chan) {
                             tg.setCd(tg.getX(), tg.getY() + yShift);
                         }
                     }
@@ -1461,7 +1489,7 @@ public class GTURTLEModeling {
             fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 
 
-            TMLADReadRequestArg req = new TMLADReadRequestArg(300, 100, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+/*            TMLADReadRequestArg req = new TMLADReadRequestArg(300, 100, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
             tad.addComponent(req, 300, 100, false, true);
             req.setParam(0, "isEnc");
             req.makeValue();
@@ -1471,14 +1499,14 @@ public class GTURTLEModeling {
             fromStart.setP2(req.getTGConnectingPointAtIndex(0));
             tad.addComponent(fromStart, 300, 200, false, true);
 
-
+*/
             TMLADChoice choice = new TMLADChoice(300, 200, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
             tad.addComponent(choice, 300, 200, false, true);
 
 
             //Connect readrequest and choice
             fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
-            fromStart.setP1(req.getTGConnectingPointAtIndex(1));
+            fromStart.setP1(start.getTGConnectingPointAtIndex(0));
             fromStart.setP2(choice.getTGConnectingPointAtIndex(0));
             tad.addComponent(fromStart, 300, 200, false, true);
 
@@ -1567,6 +1595,17 @@ public class GTURTLEModeling {
                         fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
                         fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
                         tad.addComponent(fromStart, 300, 200, false, true);
+                        
+                        //Add Stop
+                        TMLADStopState stop = new TMLADStopState(xc, 600, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+                        tad.addComponent(stop, xc, 700, false, true);
+
+
+						//Connext stop and write channel
+                        fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
+                        fromStart.setP1(wr.getTGConnectingPointAtIndex(1));
+                        fromStart.setP2(stop.getTGConnectingPointAtIndex(0));
+                        tad.addComponent(fromStart, 300, 200, false, true);
 
                     }
                     xc += 300;
@@ -1639,6 +1678,17 @@ public class GTURTLEModeling {
                         fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
                         fromStart.setP1(enc.getTGConnectingPointAtIndex(1));
                         fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
+                        tad.addComponent(fromStart, 300, 200, false, true);
+                        
+                        //Add Stop
+                        TMLADStopState stop = new TMLADStopState(xc, 600, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+                        tad.addComponent(stop, xc, 700, false, true);
+
+
+						//Connext stop and write channel
+                        fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
+                        fromStart.setP1(wr.getTGConnectingPointAtIndex(1));
+                        fromStart.setP2(stop.getTGConnectingPointAtIndex(0));
                         tad.addComponent(fromStart, 300, 200, false, true);
 
 

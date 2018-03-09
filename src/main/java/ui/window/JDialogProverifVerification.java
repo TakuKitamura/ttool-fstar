@@ -143,8 +143,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     //security generation buttons
     ButtonGroup secGroup;
 	
-    protected JCheckBox autoSec, autoConf, autoWeakAuth, autoStrongAuth, autoMapKeys, custom, addHSM;
-
+    protected JCheckBox autoConf, autoWeakAuth, autoStrongAuth, custom;
+	protected JRadioButton autoSec, autoMapKeys, addHSM;
     protected JTextField encTime, decTime, secOverhead;
 	protected JComboBox<String> addtoCPU;
 
@@ -282,7 +282,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
         //genJava.addActionListener(this);
 		secGroup=new ButtonGroup(); 
-        autoSec= new JCheckBox("Add security");
+        autoSec= new JRadioButton("Add security");
 		jp02.add(autoSec, c01);
 		autoSec.addActionListener(this);
 		secGroup.add(autoSec);
@@ -299,11 +299,11 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 		autoStrongAuth.setEnabled(false);
         jp02.add(autoStrongAuth, c01);
 		autoStrongAuth.addActionListener(this);
-        autoMapKeys= new JCheckBox("Add Keys");
+        autoMapKeys= new JRadioButton("Add Keys");
 		autoMapKeys.addActionListener(this);
         jp02.add(autoMapKeys, c01);
 		secGroup.add(autoMapKeys);
-        addHSM = new JCheckBox("Add HSM");
+        addHSM = new JRadioButton("Add HSM");
         jp02.add(addHSM,c01);
 		addHSM.addActionListener(this);
 		secGroup.add(addHSM);
