@@ -53,7 +53,7 @@ import java.io.FilenameFilter;
    * @version 1.1 01/12/2003
    * @author Ludovic APVRILLE
  */
-public class FileUtils extends org.apache.commons.io.FileUtils{
+public class FileUtils extends org.apache.commons.io.FileUtils {
 
     public final static String xml = "xml";
     public final static String rtl = "lot";
