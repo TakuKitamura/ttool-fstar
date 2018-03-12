@@ -46,7 +46,8 @@ public class TestGTURTLEModeling extends AbstractUITest {
 
         final String codeDirExpected = RESOURCES_DIR + mappingDiagName + File.separator + "expected" + File.separator;
 
-        mainGui.gtm.generateCCode( codeDir );
+        // Test code generation with no compilation option
+        mainGui.gtm.generateCCode( codeDir, "" );
 
         /*try {
             Thread.sleep(5000);
