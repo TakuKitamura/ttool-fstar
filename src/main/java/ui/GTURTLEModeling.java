@@ -452,7 +452,7 @@ public class GTURTLEModeling {
         }
     }
 
-    public boolean generateCCode(String directory) {
+    public boolean generateCCode(String directory, String compilationOptions) {
 
         //CheckingError ce;
         //int type;

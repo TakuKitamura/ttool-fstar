@@ -70,6 +70,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
 
     private static String textSysC1 = "Generate C code in";
     private static String textSysC2 = "Compile C code in";
+    private static String textSysC3 = "Model compilation options";
     //private static String textSysC4 = "Run simulation to completion:";
     //private static String textSysC5 = "Run interactive simulation:";
     //private static String textSysC6 = "Run formal verification:";
@@ -85,6 +86,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
 
     protected static String pathCode;
     protected static String pathCompiler;
+    protected static String compilerOptions;
     //protected static String pathExecute;
     //protected static String pathInteractiveExecute;
     //  protected static String pathFormalExecute;
@@ -104,8 +106,8 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     protected JButton stop;
     protected JButton close;
 
-    protected JLabel gen, comp;
-    protected JTextField code1, code2, compiler1;
+    protected JLabel gen, comp, opt;
+    protected JTextField code1, code2, compiler1, codeOpt;
     //exe1, exe2, exe3, exe2int, exe2formal;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
@@ -201,6 +203,15 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         // Issue #57: code generation directory field is not editable
         //code1.setEnabled(false);
         jp01.add(code1, c01);
+
+
+        // JLabel for compilation options
+        jp01.add(new JLabel(" "), c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        opt = new JLabel(textSysC3);
+        jp01.add(opt, c01);
+        codeOpt = new JTextField(compilerOptions, 100);
+        jp01.add(codeOpt, c01);
 
 
         jp01.add(new JLabel(" "), c01);
@@ -461,7 +472,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         }
         testGo();
         if (generatorsBox.getSelectedIndex() == 0) {
-            error = gtm.generateCCode( code1.getText() );
+            error = gtm.generateCCode( code1.getText(), codeOpt.getText() );
             if( !error )    {
                 File dir = new File( code1.getText() );
                 StringBuffer s = new StringBuffer();
@@ -514,7 +525,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
                         if (instance == null) {
                             jta.append("Invalid plugin: could not create an instance\n");
                         } else {
-                            boolean ret = Plugin.executeBoolStringMethod(instance, XML, "generateCode");
+                            boolean ret = Plugin.executeBoolStringMethod(instance, XML, "generateCode", codeOpt.getText());
                         }
                     } catch (Exception e) {
                         jta.append("Exception when calling plugin:" + e.getMessage());
