@@ -65,6 +65,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import java.io.File;
+
 /**
  * Class JDialogSystemCGeneration
  * Dialog for managing the generation and compilation of SystemC code
@@ -161,6 +163,11 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         mgui = _mgui;
 
+        // Must first create all directories
+        new File(_pathCode).mkdirs();
+        new File(_graphPath).mkdirs();
+
+
         pathCode = _pathCode;
 
         pathCompiler = _pathCompiler;
@@ -178,12 +185,15 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         pathFormalExecute = pathInteractiveExecute;
 
+
         int index = pathFormalExecute.indexOf("-server");
         if (index != -1) {
-            pathFormalExecute = pathFormalExecute.substring(0, index) + pathFormalExecute.substring(index + 7, pathFormalExecute.length());
+            pathFormalExecute = pathFormalExecute.substring(0, index) +
+                    pathFormalExecute.substring(index + 7, pathFormalExecute.length());
             pathFormalExecute += " -gname graph -explo";
-
         }
+
+
 
         simulatorHost = _simulatorHost;
 
