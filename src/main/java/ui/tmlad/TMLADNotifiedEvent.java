@@ -166,6 +166,11 @@ public class TMLADNotifiedEvent extends TGCWithoutInternalComponent implements E
     public String getEventName() {
         return eventName;
     }
+
+    public void setEventName(String _name) {
+        eventName = _name;
+        makeValue();
+    }
     
     public String getVariable() {
         return result;

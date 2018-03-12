@@ -220,6 +220,11 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
         return eventName;
     }
 
+    public void setEventName(String _name) {
+        eventName = _name;
+        makeValue();
+    }
+
     public String getParamValue(int i) {
         return params[i];
     }
