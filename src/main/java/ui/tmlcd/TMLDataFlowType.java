@@ -50,13 +50,8 @@ package ui.tmlcd;
  */
 public abstract class TMLDataFlowType	{
 
-    public static final String UINT_16 = "uint_16";
-    public static final String UINT_32 = "uint_32";
-    public static final String UINT_64 = "uint_64";
-    public static final String INT_16 = "int_16";
-    public static final String INT_32 = "int_32";
-    public static final String INT_64 = "int_64";
-    public static final String CPX_32 = "cpx_32";
-    public static final String CPX_64 = "cpx_64";
+    public static final String INT_16 = "int16_t";
+    public static final String INT_32 = "int32_t";
+    public static final String INT_64 = "int64_t";
 
 }
