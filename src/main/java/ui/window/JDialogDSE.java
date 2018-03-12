@@ -1011,7 +1011,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
                 start.setEnabled(false);
                 stop.setEnabled(false);
                 close.setEnabled(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                //setCursor(CursoretPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 getGlassPane().setVisible(false);
                 break;
             case NOT_STARTED:
