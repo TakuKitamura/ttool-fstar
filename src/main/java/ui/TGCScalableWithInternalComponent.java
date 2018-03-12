@@ -38,6 +38,8 @@
 
 package ui;
 
+import myutil.TraceManager;
+
 /**
    * Class TGCScalableWithInternalComponent
    * Graphical component that contains one or more internal components, and which is scalable
@@ -55,6 +57,9 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
 
     @Override
     public void rescale(double scaleFactor){
+        TraceManager.addDev("rescaling with oldScaleFactor=" + oldScaleFactor +
+                " new scale factor = " + scaleFactor + " dx=" + dx + " dy=" + dy +
+                " x=" + x + " y=" + y);
         rescaled = true;
 
         dwidth = (width + dwidth) / oldScaleFactor * scaleFactor;
@@ -87,6 +92,8 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         y = (int)(dy);
         dy = dy - y;
 
+        TraceManager.addDev("x=" + x + " y=" + y);
+
         oldScaleFactor = scaleFactor;
 
         if (father != null) {
@@ -96,6 +103,8 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         }
 
         setMoveCd(x, y);
+
+        TraceManager.addDev("x=" + x + " y=" + y);
 
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof ScalableTGComponent) {
