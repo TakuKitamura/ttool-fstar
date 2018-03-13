@@ -2457,15 +2457,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
      *
      *
      */
-    public final void fatherHasMoved(int dx, int dy)
-    {  //System.out.println("father has moved");
+    public final void fatherHasMoved(int dx, int dy)  {  //System.out.println("father has moved");
         TGComponent tgc;
-        int oldX=x;
-        int oldY=y;
-        x = x+dx;
-        y = y+dy;
+        int oldX = x;
+        int oldY = y;
+        x = x + dx;
+        y = y + dy;
 
-        for(int i=0; i<nbInternalTGComponent; i++) {
+        for (int i=0; i<nbInternalTGComponent; i++) {
             tgc = tgcomponent[i];
             if (tgc.moveWithFather()) {
                 tgc.fatherHasMoved(x-oldX, y-oldY);

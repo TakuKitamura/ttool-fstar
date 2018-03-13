@@ -358,6 +358,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         boolean change = false;
 
         for (TGComponent tgc : this.componentList) {
+            //TraceManager.addDev("Testing for " + tgc.getClass());
+
             if (tgc instanceof ScalableTGComponent) {
                 ((ScalableTGComponent) tgc).rescale(zoom);
                 change = true;

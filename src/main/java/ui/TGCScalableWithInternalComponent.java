@@ -57,7 +57,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
 
     @Override
     public void rescale(double scaleFactor){
-        /*TraceManager.addDev("rescaling with oldScaleFactor=" + oldScaleFactor +
+        /*TraceManager.addDev("rescaling for " + this.getClass() + " with oldScaleFactor=" + oldScaleFactor +
                 " new scale factor = " + scaleFactor + " dx=" + dx + " dy=" + dy +
                 " x=" + x + " y=" + y + " width=" + width + " height=" + height);*/
         rescaled = true;
