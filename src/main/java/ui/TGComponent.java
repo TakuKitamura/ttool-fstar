@@ -2415,8 +2415,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
         int oldY = y;
        
        // if ( father != null && drawingZoneRelativeToFather ) {
-        	x = verifyMoveCdX(_x);
-        	y = verifyMoveCdY(_y);
+        if (!forceMove) {
+            x = verifyMoveCdX(_x);
+            y = verifyMoveCdY(_y);
+        }
         /*}
         
         else {

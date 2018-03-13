@@ -57,9 +57,9 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
 
     @Override
     public void rescale(double scaleFactor){
-        TraceManager.addDev("rescaling with oldScaleFactor=" + oldScaleFactor +
+        /*TraceManager.addDev("rescaling with oldScaleFactor=" + oldScaleFactor +
                 " new scale factor = " + scaleFactor + " dx=" + dx + " dy=" + dy +
-                " x=" + x + " y=" + y);
+                " x=" + x + " y=" + y + " width=" + width + " height=" + height);*/
         rescaled = true;
 
         dwidth = (width + dwidth) / oldScaleFactor * scaleFactor;
@@ -92,19 +92,18 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         y = (int)(dy);
         dy = dy - y;
 
-        TraceManager.addDev("x=" + x + " y=" + y);
+        //TraceManager.addDev("x=" + x + " y=" + y + " width=" + width + " height=" + height);
 
         oldScaleFactor = scaleFactor;
 
         if (father != null) {
             // Must rescale my zone...
             resizeWithFather();
-
         }
 
-        setMoveCd(x, y);
+        setMoveCd(x, y, true);
 
-        TraceManager.addDev("x=" + x + " y=" + y);
+        //TraceManager.addDev("x=" + x + " y=" + y + " width=" + width + " height=" + height);
 
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof ScalableTGComponent) {

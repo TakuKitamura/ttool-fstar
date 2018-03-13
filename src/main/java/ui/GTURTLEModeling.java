@@ -7139,7 +7139,7 @@ public class GTURTLEModeling {
             tdp.updateSize();
             zoom = Double.parseDouble(elt.getAttribute("zoom"));
             if (zoom != 0) {
-                tdp.setZoom(zoom);
+                tdp.forceZoom(zoom);
                 mgui.updateZoomInfo();
             }
         } catch (Exception e) {
@@ -7857,7 +7857,7 @@ public class GTURTLEModeling {
             tdp.updateSize();
             zoom = Double.parseDouble(elt.getAttribute("zoom"));
             if (zoom != 0) {
-                tdp.setZoom(zoom);
+                tdp.forceZoom(zoom);
                 mgui.updateZoomInfo();
             }
         } catch (Exception e) {

@@ -312,7 +312,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return this.savedFontMetrics.stringWidth(str);
     }
 
+    public void forceZoom(double _zoom) {
+        zoom = _zoom;
+    }
+
     public void setZoom(double _zoom) {
+        //TraceManager.addDev("Begin Setting zoom of " + getName() + " to " + zoom + " current zoom=" + zoom + " maxX=" + maxX + " maxY=" + maxY);
+
         final double zoomChange = _zoom / zoom;
 
         if (_zoom < zoom) {
@@ -339,6 +345,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         updateComponentsAfterZoom();
+
+        //TraceManager.addDev("end Setting zoom of " + getName() + " to " + zoom + " maxX=" + maxX + " maxY=" + maxY);
     }
 
     public boolean isDrawingMain() {
@@ -358,7 +366,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         if (change) {
             mgui.changeMade(this, MOVE_COMPONENT);
-
             repaint();
         }
     }
@@ -520,6 +527,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     Math.min(this.initSelectY, this.currentSelectY),
                     Math.abs(this.currentSelectX - this.initSelectX),
                     Math.abs(this.currentSelectY - this.initSelectY));
+            if (mgui.isExperimentalOn()) {
+                g.drawString("" + currentSelectX, this.currentSelectX, initSelectY + 10);
+                g.drawString("" + currentSelectY, initSelectX, currentSelectY);
+            }
         }
 
         if ((this.mode == SELECTED_COMPONENTS || this.mode == MOVING_SELECTED_COMPONENTS) && this.selectedTemp) {
@@ -1151,10 +1162,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void updateSelectingComponents(int x, int y) {
-        x = Math.min(Math.max((int) Math.floor(minLimit * zoom), x), (int) Math.ceil(maxX * zoom));
-        y = Math.min(Math.max((int) Math.floor(minLimit * zoom), y), (int) Math.ceil(maxY * zoom));
-        //x = Math.min(Math.max(minLimit, x), maxX);
-        //y = Math.min(Math.max(minLimit, y), maxY);
+        //x = Math.min(Math.max((int) Math.floor(minLimit * zoom), x), (int) Math.ceil(maxX * zoom));
+        //y = Math.min(Math.max((int) Math.floor(minLimit * zoom), y), (int) Math.ceil(maxY * zoom));
+        x = Math.min(Math.max(minLimit, x), maxX);
+        y = Math.min(Math.max(minLimit, y), maxY);
         currentSelectX = x;
         currentSelectY = y;
 
