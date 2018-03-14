@@ -967,12 +967,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     }
 
     public void setPortName(String s) {
-        for (TURTLEPanel tp: tdp.getMainGUI().tabs)
-            for (TDiagramPanel t: tp.getPanels()) {
-                for (TGComponent t2: t.getComponentList()) {
+        for (TURTLEPanel tp : tdp.getMainGUI().tabs) {
+            for (TDiagramPanel t : tp.getPanels()) {
+                for (TGComponent t2 : t.getComponentList()) {
                     if (t2 instanceof TMLArchiCPNode) {
                         TMLArchiCPNode tacn = (TMLArchiCPNode) t2;
-                        for (TGComponent tgc: tacn.getRecursiveAllInternalComponent()) {
+                        for (TGComponent tgc : tacn.getRecursiveAllInternalComponent()) {
                             if (tgc instanceof TMLArchiPortArtifact) {
                                 TMLArchiPortArtifact tapi = (TMLArchiPortArtifact) tgc;
                                 String tmp = tapi.getValue().replaceAll("(?i)" + commName + "$", s);
@@ -980,48 +980,61 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                             }
                         }
                     }
-
-                    if (t2 instanceof TMLADWriteChannel) {
-                        TMLADWriteChannel twc = (TMLADWriteChannel) t2;
-                        if (twc.getChannelName().equals(commName))
-                            twc.setChannelName(s);
-                    }
-
-                    if (t2 instanceof TMLADReadChannel) {
-                        TMLADReadChannel trc = (TMLADReadChannel) t2;
-                        if (trc.getChannelName().equals(commName))
-                            trc.setChannelName(s);
-                    }
-
-
-                    if (t2 instanceof TMLADSendEvent) {
-
-                        TMLADSendEvent tse = (TMLADSendEvent) t2;
-                        TraceManager.addDev("Send event with event=" + tse.getEventName() + " vs " + commName);
-                        if (tse.getEventName().equals(commName))
-                            tse.setEventName(s);
-                    }
-
-                    if (t2 instanceof TMLADSendRequest) {
-                        TMLADSendRequest tsr = (TMLADSendRequest) t2;
-                        if (tsr.getRequestName().equals(commName))
-                            tsr.setRequestName(s);
-                    }
-
-                    if (t2 instanceof TMLADWaitEvent) {
-                        TMLADWaitEvent twe = (TMLADWaitEvent) t2;
-                        if (twe.getEventName().equals(commName))
-                            twe.setEventName(s);
-                    }
-
-                    if (t2 instanceof TMLADNotifiedEvent) {
-                        TMLADNotifiedEvent tne = (TMLADNotifiedEvent) t2;
-                        if (tne.getEventName().equals(commName))
-                            tne.setEventName(s);
-                    }
                 }
-                t.repaint();
             }
+        }
+
+        if ( (father != null) && (father instanceof TMLCPrimitiveComponent)) {
+            String name = father.getValue();
+            //TraceManager.addDev("Looking for diagram with AD name=" + name + " of class=" + father.getClass());
+            TURTLEPanel tp = tdp.getMainGUI().getCurrentTURTLEPanel();
+            for (TDiagramPanel t : tp.getPanels()) {
+                if (t.getName().compareTo(name) == 0) {
+                    //TraceManager.addDev("Renaming operators in AD=" + name);
+                    for (TGComponent t2 : t.getComponentList()) {
+                        if (t2 instanceof TMLADWriteChannel) {
+                            TMLADWriteChannel twc = (TMLADWriteChannel) t2;
+                            if (twc.getChannelName().equals(commName))
+                                twc.setChannelName(s);
+                        }
+
+                        if (t2 instanceof TMLADReadChannel) {
+                            TMLADReadChannel trc = (TMLADReadChannel) t2;
+                            if (trc.getChannelName().equals(commName))
+                                trc.setChannelName(s);
+                        }
+
+
+                        if (t2 instanceof TMLADSendEvent) {
+                            TMLADSendEvent tse = (TMLADSendEvent) t2;
+                            //TraceManager.addDev("Send event with event=" + tse.getEventName() + " vs " + commName);
+                            if (tse.getEventName().equals(commName))
+                                tse.setEventName(s);
+                        }
+
+                        if (t2 instanceof TMLADSendRequest) {
+                            TMLADSendRequest tsr = (TMLADSendRequest) t2;
+                            if (tsr.getRequestName().equals(commName))
+                                tsr.setRequestName(s);
+                        }
+
+                        if (t2 instanceof TMLADWaitEvent) {
+                            TMLADWaitEvent twe = (TMLADWaitEvent) t2;
+                            if (twe.getEventName().equals(commName))
+                                twe.setEventName(s);
+                        }
+
+                        if (t2 instanceof TMLADNotifiedEvent) {
+                            TMLADNotifiedEvent tne = (TMLADNotifiedEvent) t2;
+                            if (tne.getEventName().equals(commName))
+                                tne.setEventName(s);
+                        }
+                    }
+                    t.repaint();
+                }
+            }
+        }
     }
+
 
 }
