@@ -68,44 +68,35 @@ public class TMLPort extends TMLElement {
     }
 
     public void setPrex( boolean _prex )        {
-
         prex = _prex;
 
     }
 
     public boolean isPrex()     {
-
         return prex;
-
     }
 
     public void setPostex( boolean _postex )    {
-
         postex = _postex;
 
     }
 
     public boolean isPostex()   {
-
         return postex;
 
     }
 
     public void setAssociatedEvent( String _eventName )	{
-
         associatedEvent = _eventName;
 
     }
 
     public String getAssociatedEvent()	{
-
         return associatedEvent;
 
 	}
 
     public String getDataFlowType() {
-
         return dataFlowType;
-
     }
 }

@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,13 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
-
 
 
 package tmltranslator;
@@ -51,14 +48,16 @@ import myutil.TraceManager;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
  * Class TMLSyntaxChecking
  * Used verifying the syntax of a TML specification
  * Creation: 12/09/2007
- * @version 1.0 12/09/2007
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 12/09/2007
  */
 public class TMLSyntaxChecking {
 
@@ -74,6 +73,7 @@ public class TMLSyntaxChecking {
     private final String SYNTAX_ERROR_VARIABLE_EXPECTED = "syntax error (variable expected)";
     private final String TIME_UNIT_ERROR = "unknown time unit";
     private final String NO_NEXT_OPERATOR_ERROR = "No next operator";
+    private final String SAME_PORT_NAME = "Two ports have the same name";
 
 
     private ArrayList<TMLError> errors;
@@ -96,24 +96,26 @@ public class TMLSyntaxChecking {
         errors = new ArrayList<TMLError>();
         warnings = new ArrayList<TMLError>();
 
-        //System.out.println("Checking syntax");
+        TraceManager.addDev("Checking syntax of TML Mapping/ Modeling");
 
         checkReadAndWriteInChannelsEventsAndRequests();
 
         checkActionSyntax();
 
-	checkNextActions();
+        checkNextActions();
+
+        checkPortName();
     }
 
     public int hasErrors() {
-        if (errors  == null) {
+        if (errors == null) {
             return 0;
         }
         return errors.size();
     }
 
     public int hasWarnings() {
-        if (warnings  == null) {
+        if (warnings == null) {
             return 0;
         }
         return warnings.size();
@@ -137,18 +139,89 @@ public class TMLSyntaxChecking {
 
 
     public void checkNextActions() {
-	for(TMLTask t: tmlm.getTasks()) {
+        for (TMLTask t : tmlm.getTasks()) {
             TMLActivity tactivity = t.getActivityDiagram();
-	    int n = tactivity.nElements();
-	     for(int i=0; i<n; i++) {
+            int n = tactivity.nElements();
+            for (int i = 0; i < n; i++) {
                 TMLActivityElement elt = tactivity.get(i);
-		if (!(elt instanceof TMLStopState)) {
-		    if(elt.getNbNext() == 0) {
-			addError(t, elt, elt.getName() + ": " + NO_NEXT_OPERATOR_ERROR, TMLError.ERROR_BEHAVIOR);
-		    }
-		}
-	     }
-	}
+                if (!(elt instanceof TMLStopState)) {
+                    if (elt.getNbNext() == 0) {
+                        addError(t, elt, elt.getName() + ": " + NO_NEXT_OPERATOR_ERROR, TMLError.ERROR_BEHAVIOR);
+                    }
+                }
+            }
+        }
+    }
+
+    public void checkPortName() {
+        // checks if two ports with the same type (origin, destination) have the same name
+        HashMap<String, TMLPort> origin = new HashMap<String, TMLPort>();
+        HashMap<String, TMLPort> destination = new HashMap<String, TMLPort>();
+
+        // Channels
+        for(TMLChannel tmlc: tmlm.getChannels()) {
+            TMLPort p = tmlc.getOriginPort();
+            tryToAddPort(p, origin, "origin");
+            p = tmlc.getDestinationPort();
+            tryToAddPort(p, destination, "destination");
+
+            for(TMLPort po: tmlc.getOriginPorts()) {
+                tryToAddPort(po, origin, "origin");
+            }
+
+            for(TMLPort po: tmlc.getDestinationPorts()) {
+                tryToAddPort(po, destination, "destination");
+            }
+        }
+
+        // Events
+        for(TMLEvent tmle: tmlm.getEvents()) {
+            TMLPort p = tmle.getOriginPort();
+            tryToAddPort(p, origin, "origin");
+            p = tmle.getDestinationPort();
+            tryToAddPort(p, destination, "destination");
+
+            for(TMLPort po: tmle.getOriginPorts()) {
+                tryToAddPort(po, origin, "origin");
+            }
+
+            for(TMLPort po: tmle.getDestinationPorts()) {
+                tryToAddPort(po, destination, "destination");
+            }
+        }
+
+        // Request
+
+        /*for(TMLRequest tmlr: tmlm.getRequests()) {
+            TMLPort p = tmlr.getOriginPort();
+            tryToAddPort(p, origin, "origin");
+            p = tmlr.getDestinationPort();
+            tryToAddPort(p, destination, "destination");
+
+            for(TMLPort po: tmlr.getOriginPorts()) {
+                tryToAddPort(po, origin, "origin");
+            }
+
+            for(TMLPort po: tmlr.getDestinationPorts()) {
+                tryToAddPort(po, destination, "destination");
+            }
+        }*/
+
+    }
+
+    private void tryToAddPort(TMLPort _p, HashMap<String, TMLPort> map, String origin) {
+        if (_p == null) {
+            return;
+        }
+
+        TMLPort inP = map.get(_p.getName());
+
+        if (inP != null) {
+            addError(null, null,SAME_PORT_NAME + ": " + _p.getName() + "(" + origin + " ports)", TMLError.ERROR_STRUCTURE);
+        } else {
+            TraceManager.addDev("Adding port with name=" + _p.getName() + " for kind=" + origin);
+            map.put(_p.getName(), _p);
+        }
     }
 
     public void checkReadAndWriteInChannelsEventsAndRequests() {
@@ -156,23 +229,23 @@ public class TMLSyntaxChecking {
         TMLEvent evt;
         TMLRequest request;
 
-        for(TMLTask t: tmlm.getTasks()) {
+        for (TMLTask t : tmlm.getTasks()) {
             TMLActivity tactivity = t.getActivityDiagram();
             TMLActivityElement elt;
             int n = tactivity.nElements();
-            for(int i=0; i<n; i++) {
+            for (int i = 0; i < n; i++) {
                 elt = tactivity.get(i);
                 //System.out.println("Task= " + t.getName() + " element=" + elt);
 
                 if (elt instanceof TMLWriteChannel) {
-                    for(int j=0; j<((TMLWriteChannel)elt).getNbOfChannels(); j++) {
-                        ch = ((TMLWriteChannel)elt).getChannel(j);
+                    for (int j = 0; j < ((TMLWriteChannel) elt).getNbOfChannels(); j++) {
+                        ch = ((TMLWriteChannel) elt).getChannel(j);
                         if (ch.isBasicChannel()) {
                             //System.out.println("Write in channel" + ch.getName());
                             if (ch.getOriginTask() != t) {
                                 //System.out.println("Origin task=" + ch.getOriginTask().getName() + " / task = " + t.getName() + "tch=" + ch.getOriginTask() + " t=" + t);
                                 //System.out.println("tml:" + tmlm.toString());
-                              //  TMLTextSpecification  tmlt = new TMLTextSpecification("toto");
+                                //  TMLTextSpecification  tmlt = new TMLTextSpecification("toto");
                                 //System.out.println("tml:" + tmlt.toTextFormat(tmlm));
                                 addError(t, elt, ch.getName() + ": " + WRONG_ORIGIN_CHANNEL, TMLError.ERROR_BEHAVIOR);
                             }
@@ -181,7 +254,7 @@ public class TMLSyntaxChecking {
                 }
 
                 if (elt instanceof TMLReadChannel) {
-                    ch = ((TMLReadChannel)elt).getChannel(0);
+                    ch = ((TMLReadChannel) elt).getChannel(0);
                     if (ch.isBasicChannel()) {
                         //System.out.println("Read channel");
                         if (ch.getDestinationTask() != t) {
@@ -192,7 +265,7 @@ public class TMLSyntaxChecking {
 
                 if (elt instanceof TMLSendEvent) {
 
-                    evt = ((TMLSendEvent)elt).getEvent();
+                    evt = ((TMLSendEvent) elt).getEvent();
                     if (evt.isBasicEvent()) {
                         //TraceManager.addDev("send evt= " + evt.getName() + " task=" + t.getName() + " origin=" + evt.getOriginTask().getName());
                         if (evt.getOriginTask() != t) {
@@ -202,7 +275,7 @@ public class TMLSyntaxChecking {
                 }
 
                 if (elt instanceof TMLWaitEvent) {
-                    evt = ((TMLWaitEvent)elt).getEvent();
+                    evt = ((TMLWaitEvent) elt).getEvent();
                     if (evt.isBasicEvent()) {
                         /*try {
                             TraceManager.addDev("wait evt= " + evt.getName());
@@ -221,7 +294,7 @@ public class TMLSyntaxChecking {
                 }
 
                 if (elt instanceof TMLNotifiedEvent) {
-                    evt = ((TMLNotifiedEvent)elt).getEvent();
+                    evt = ((TMLNotifiedEvent) elt).getEvent();
                     //System.out.println("Write channel");
                     if (evt.getDestinationTask() != t) {
                         addError(t, elt, evt.getName() + ": " + WRONG_DESTINATION_EVENT, TMLError.ERROR_BEHAVIOR);
@@ -229,7 +302,7 @@ public class TMLSyntaxChecking {
                 }
 
                 if (elt instanceof TMLSendRequest) {
-                    request = ((TMLSendRequest)elt).getRequest();
+                    request = ((TMLSendRequest) elt).getRequest();
                     //System.out.println("Write channel");
                     if (!request.isAnOriginTask(t)) {
                         addError(t, elt, request.getName() + ": " + WRONG_ORIGIN_REQUEST, TMLError.ERROR_BEHAVIOR);
@@ -253,45 +326,44 @@ public class TMLSyntaxChecking {
         int elseg, afterg;
         TMLAttribute attr;
 
-      //  StringReader toParse;
+        //  StringReader toParse;
         String action;
 
 
-        for(TMLTask t: tmlm.getTasks()) {
+        for (TMLTask t : tmlm.getTasks()) {
             TMLActivity tactivity = t.getActivityDiagram();
             TMLActivityElement elt;
 
             // Checking names of atrributes
-            for(TMLAttribute attri: t.getAttributes()) {
+            for (TMLAttribute attri : t.getAttributes()) {
                 if (!TMLTextSpecification.isAValidId(attri.getName())) {
                     addError(t, null, WRONG_VARIABLE_IDENTIFIER + ": invalid identifier", TMLError.ERROR_STRUCTURE);
                 }
             }
 
 
-
             int n = tactivity.nElements();
             //System.out.println("Task" + t.getName());
-            for(int i=0; i<n; i++) {
+            for (int i = 0; i < n; i++) {
                 elt = tactivity.get(i);
                 //System.out.println("elt=" + elt);
                 if (elt instanceof TMLActionState) {
-                    action = ((TMLActivityElementWithAction)elt).getAction();
+                    action = ((TMLActivityElementWithAction) elt).getAction();
                     parsingAssignment(t, elt, action);
 
                 } else if (elt instanceof TMLActivityElementWithAction) {
-                    action = ((TMLActivityElementWithAction)elt).getAction();
+                    action = ((TMLActivityElementWithAction) elt).getAction();
                     parsing(t, elt, "actionnat", action);
 
                 } else if (elt instanceof TMLActivityElementWithIntervalAction) {
                     //System.out.println("Parsing TMLActivityElementWithIntervalAction");
-                    action = ((TMLActivityElementWithIntervalAction)elt).getMinDelay();
+                    action = ((TMLActivityElementWithIntervalAction) elt).getMinDelay();
                     parsing(t, elt, "actionnat", action);
-                    action = ((TMLActivityElementWithIntervalAction)elt).getMaxDelay();
+                    action = ((TMLActivityElementWithIntervalAction) elt).getMaxDelay();
                     parsing(t, elt, "actionnat", action);
 
                     if (elt instanceof TMLDelay) {
-                        action = ((TMLDelay)elt).getUnit().trim();
+                        action = ((TMLDelay) elt).getUnit().trim();
 
                         if (!(TMLDelay.isAValidUnit(action))) {
                             addError(t, elt, TIME_UNIT_ERROR + "in expression " + action, TMLError.ERROR_BEHAVIOR);
@@ -299,15 +371,15 @@ public class TMLSyntaxChecking {
                     }
 
                 } else if (elt instanceof TMLActivityElementChannel) {
-                    action = ((TMLActivityElementChannel)elt).getNbOfSamples();
+                    action = ((TMLActivityElementChannel) elt).getNbOfSamples();
                     parsing(t, elt, "actionnat", action);
 
                 } else if (elt instanceof TMLSendEvent) {
-                    tmlase = (TMLSendEvent)elt;
+                    tmlase = (TMLSendEvent) elt;
                     evt = tmlase.getEvent();
-                    for(j=0; j<tmlase.getNbOfParams(); j++) {
+                    for (j = 0; j < tmlase.getNbOfParams(); j++) {
                         action = tmlase.getParam(j);
-                        if ((action != null) && (action.length() > 0)){
+                        if ((action != null) && (action.length() > 0)) {
                             type = evt.getType(j);
                             if ((type == null) || (type.getType() == TMLType.NATURAL)) {
                                 parsing(t, elt, "actionnat", action);
@@ -318,10 +390,10 @@ public class TMLSyntaxChecking {
                     }
 
                 } else if (elt instanceof TMLWaitEvent) {
-                    tmlwe = (TMLWaitEvent)elt;
+                    tmlwe = (TMLWaitEvent) elt;
                     evt = tmlwe.getEvent();
                     //System.out.println("Nb of params of wait event:" + tmlwe.getNbOfParams());
-                    for(j=0; j<tmlwe.getNbOfParams(); j++) {
+                    for (j = 0; j < tmlwe.getNbOfParams(); j++) {
                         action = tmlwe.getParam(j).trim();
                         if ((action != null) && (action.length() > 0)) {
                             if (!(Conversion.isId(action))) {
@@ -329,7 +401,7 @@ public class TMLSyntaxChecking {
                             } else {
                                 // Declared variable?
                                 attr = t.getAttributeByName(action);
-                                if (attr == null ) {
+                                if (attr == null) {
                                     addError(t, elt, UNDECLARED_VARIABLE + " :" + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
                                 } else {
                                     //System.out.println("Nb of params:" + tmlwe.getEvent().getNbOfParams() + " j:" + j);
@@ -346,11 +418,11 @@ public class TMLSyntaxChecking {
                     }
 
                 } else if (elt instanceof TMLSendRequest) {
-                    tmlsr = (TMLSendRequest)elt;
+                    tmlsr = (TMLSendRequest) elt;
                     req = tmlsr.getRequest();
-                    for(j=0; j<tmlsr.getNbOfParams(); j++) {
+                    for (j = 0; j < tmlsr.getNbOfParams(); j++) {
                         action = tmlsr.getParam(j);
-                        if ((action != null) && (action.length() > 0)){
+                        if ((action != null) && (action.length() > 0)) {
                             type = req.getType(j);
                             if ((type == null) || (type.getType() == TMLType.NATURAL)) {
                                 parsing(t, elt, "actionnat", action);
@@ -361,10 +433,10 @@ public class TMLSyntaxChecking {
                     }
 
                 } else if (elt instanceof TMLChoice) {
-                    choice = (TMLChoice)elt;
+                    choice = (TMLChoice) elt;
                     elseg = choice.getElseGuard();
                     afterg = choice.getAfterGuard();
-                    for(j=0; j<choice.getNbGuard(); j++) {
+                    for (j = 0; j < choice.getNbGuard(); j++) {
                         /*if (action.length() == 1) {
                             if ((action.compareTo("[") == 0) || (action.compareTo("]") == 0)) {
                                 addError(t, elt, SYNTAX_ERROR  + " in expression " + action, TMLError.ERROR_BEHAVIOR);
@@ -373,7 +445,7 @@ public class TMLSyntaxChecking {
                         }*/
                         //TraceManager.addDev("Testing guard: " + choice.getGuard(j));
                         if (!choice.isNonDeterministicGuard(j) && !choice.isStochasticGuard(j)) {
-                            if ((j!= elseg) && (j!=afterg)) {
+                            if ((j != elseg) && (j != afterg)) {
                                 action = choice.getGuard(j);
                                 action = action.trim();
 
@@ -383,7 +455,7 @@ public class TMLSyntaxChecking {
                     }
 
                 } else if (elt instanceof TMLForLoop) {
-                    loop = (TMLForLoop)elt;
+                    loop = (TMLForLoop) elt;
                     if (loop.getInit().trim().length() > 0) {
                         parsing(t, elt, "assnat", loop.getInit());
                     }
@@ -395,11 +467,11 @@ public class TMLSyntaxChecking {
                     }
 
                 } else if (elt instanceof TMLRandom) {
-                    random = (TMLRandom)elt;
+                    random = (TMLRandom) elt;
                     parsing(t, elt, "actionnat", random.getMinValue());
                     parsing(t, elt, "actionnat", random.getMaxValue());
                     parsing(t, elt, "natid", random.getVariable());
-                    parsing(t, elt, "natnumeral", ""+random.getFunctionId());
+                    parsing(t, elt, "natnumeral", "" + random.getFunctionId());
                 }
             }
         }
@@ -415,7 +487,7 @@ public class TMLSyntaxChecking {
 
         String var = action.substring(0, index).trim();
         TMLAttribute attrFound = null;
-        for(TMLAttribute attr: t.getAttributes()) {
+        for (TMLAttribute attr : t.getAttributes()) {
             if (attr.getName().compareTo(var) == 0) {
                 attrFound = attr;
                 break;
@@ -443,7 +515,7 @@ public class TMLSyntaxChecking {
      * The second parsing is performed iff the first one succeeds
      */
     public void parsing(TMLTask t, TMLActivityElement elt, String parseCmd, String action) {
-        if (action==null){
+        if (action == null) {
             return;
         }
         TMLExprParser parser;
@@ -460,7 +532,7 @@ public class TMLSyntaxChecking {
             //System.out.println("ParseException --------> Parse error in :" + parseCmd + " " + action);
             addError(t, elt, SYNTAX_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
             return;
-        } catch (TokenMgrError tke ) {
+        } catch (TokenMgrError tke) {
             //System.out.println("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
             addError(t, elt, SYNTAX_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
             return;
@@ -474,12 +546,12 @@ public class TMLSyntaxChecking {
         int index = action.indexOf('=');
         String modif = action;
 
-        if ((parseCmd.compareTo("assnat") ==0) || (parseCmd.compareTo("assbool") ==0)) {
+        if ((parseCmd.compareTo("assnat") == 0) || (parseCmd.compareTo("assbool") == 0)) {
             if (index != -1) {
-                modif = action.substring(index+1, action.length());
+                modif = action.substring(index + 1, action.length());
             }
 
-            if (parseCmd.compareTo("assnat") ==0) {
+            if (parseCmd.compareTo("assnat") == 0) {
                 parseCmd = "actionnat";
             } else {
                 parseCmd = "actionbool";
@@ -490,7 +562,7 @@ public class TMLSyntaxChecking {
             parseCmd = "natnumeral";
         }
 
-        for(TMLAttribute attr: t.getAttributes()) {
+        for (TMLAttribute attr : t.getAttributes()) {
             modif = tmlm.putAttributeValueInString(modif, attr);
         }
         parser = new TMLExprParser(new StringReader(parseCmd + " " + modif));
@@ -503,7 +575,7 @@ public class TMLSyntaxChecking {
             //System.out.println("ParseException --------> Parse error in :" + parseCmd + " " + action);
             addError(t, elt, VARIABLE_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
             return;
-        } catch (TokenMgrError tke ) {
+        } catch (TokenMgrError tke) {
             //System.out.println("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
             addError(t, elt, VARIABLE_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
             return;
@@ -511,7 +583,7 @@ public class TMLSyntaxChecking {
 
         // Tree analysis: if the tree contains a variable, then, this variable has not been declared
         ArrayList<String> vars = root.getVariables();
-        for(String s: vars) {
+        for (String s : vars) {
             addError(t, elt, UNDECLARED_VARIABLE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
         }
 
@@ -526,7 +598,7 @@ public class TMLSyntaxChecking {
         } else {
             ret += printErrors() + printWarnings();
             ret += "Syntax checking: failed\n";
-            ret += errors.size() + " error(s), "+ warnings.size() + " warning(s)\n";
+            ret += errors.size() + " error(s), " + warnings.size() + " warning(s)\n";
         }
 
         return ret;
@@ -534,7 +606,7 @@ public class TMLSyntaxChecking {
 
     public String printErrors() {
         String ret = "*** ERRORS:";
-        for(TMLError error: errors) {
+        for (TMLError error : errors) {
             ret += "ERROR / task " + error.task.getName() + " / element " + error.element.getName() + ": " + error.message + "\n";
         }
         return ret;
@@ -542,7 +614,7 @@ public class TMLSyntaxChecking {
 
     public String printWarnings() {
         String ret = "";
-        for(TMLError error: warnings) {
+        for (TMLError error : warnings) {
             ret += "ERROR / task " + error.task.getName() + " / element: " + error.element.getName() + ": " + error.message + "\n";
         }
         return ret;

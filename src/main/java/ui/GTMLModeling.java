@@ -912,7 +912,7 @@ public class GTMLModeling  {
                                         channel.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
                                     }
 
-                                    //complex channels are used only for transformation towards the simulator
+                                    // Complex channels are used only for transformation towards the simulator
                                     TMLPort tmlport1, tmlport2;
                                     tmlport1 = new TMLPort( port1.getPortName(), port1 );
                                     tmlport1.setPrex( port1.isPrex() );
