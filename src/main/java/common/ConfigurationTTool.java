@@ -160,6 +160,8 @@ public class ConfigurationTTool {
     public static String URL_MODEL = "http://ttool.telecom-paristech.fr/networkmodels/models.txt";
 
     // Others
+    public static String RGStyleSheet = "";
+
     public static String LastOpenFile = "";
     public static boolean LastOpenFileDefined = false;
 
@@ -171,6 +173,8 @@ public class ConfigurationTTool {
 
     public static String ExternalServer = "";
     public static String ProVerifHash = "";
+
+
 
     public static void makeDefaultConfiguration() {
         //System.out.println(Paths.get("").toAbsolutePath().toString());
@@ -496,6 +500,8 @@ public class ConfigurationTTool {
         sb.append("LastWindowAttributesHeight: ").append(LastWindowAttributesHeight).append("\n");
         sb.append("LastWindowAttributesMax: ").append(LastWindowAttributesMax).append("\n");
 
+        sb.append("\nRG stylesheet configuration:").append(RGStyleSheet).append("\n");
+
         //Huy Truong
         sb.append("ExternalServer ").append(ExternalServer).append("\n");
 
@@ -796,6 +802,10 @@ public class ConfigurationTTool {
             nl = doc.getElementsByTagName("LastWindowAttributes");
             if (nl.getLength() > 0)
                 LastWindowAttributes(nl);
+
+            nl = doc.getElementsByTagName("RGStyleSheet");
+            if (nl.getLength() > 0)
+                RGStyleSheet(nl);
 
             nl = doc.getElementsByTagName("ExternalServer");
             if (nl.getLength() > 0)
@@ -1569,6 +1579,14 @@ public class ConfigurationTTool {
         }
     }
 
+    private static void RGStyleSheet(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element) (nl.item(0));
+            RGStyleSheet = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
 
     private static void ExternalServer(NodeList nl) throws MalformedConfigurationException {
         try {
