@@ -37,8 +37,6 @@
  */
 
 
-
-
 package myutil;
 
 import java.io.File;
@@ -48,10 +46,11 @@ import java.io.FilenameFilter;
 
 
 /**
-   * Class FileUtils
-   * Creation: 01/12/2003
-   * @version 1.1 01/12/2003
-   * @author Ludovic APVRILLE
+ * Class FileUtils
+ * Creation: 01/12/2003
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.1 01/12/2003
  */
 public class FileUtils extends org.apache.commons.io.FileUtils {
 
@@ -74,24 +73,23 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     public static String getExtension(File f) {
         return getExtension(f.getName());
     }
-    
+
     public static String getExtension(String name) {
         String ext = "";
         int i = name.lastIndexOf('.');
 
-        if (i > 0 &&  i < name.length() - 1) {
-            ext = name.substring(i+1).toLowerCase();
+        if (i > 0 && i < name.length() - 1) {
+            ext = name.substring(i + 1).toLowerCase();
         }
         return ext;
     }
 
 
     public static boolean checkPath(String path) {
-	return new File(path).isDirectory();
+        return new File(path).isDirectory();
     }
 
-    
-    
+
     public static boolean checkFileForSave(File file) throws FileException {
         //     boolean ok = true;
         //    String pb = "";
@@ -148,7 +146,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
             ba = new byte[nb];
             fis.read(ba);
             fis.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             return null;
         }
         return new String(ba);
@@ -187,7 +185,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         int index = filename.indexOf(".");
 
         if (index == -1) {
-            return filename+tobeadded;
+            return filename + tobeadded;
         }
 
         filename = filename.substring(0, index) + tobeadded + filename.substring(index, filename.length());
@@ -198,7 +196,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         int index = filename.indexOf(".");
 
         if (index == -1) {
-            return filename+"." + extension;
+            return filename + "." + extension;
         }
 
         filename = filename.substring(0, index) + "." + extension;
@@ -229,16 +227,16 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         File f = new File(name);
         String s = null;
 
-        if(checkFileForOpen(f)) {
+        if (checkFileForOpen(f)) {
             try {
                 FileInputStream fis = new FileInputStream(f);
                 int nb = fis.available();
 
-                byte [] ba = new byte[nb];
+                byte[] ba = new byte[nb];
                 fis.read(ba);
                 fis.close();
                 s = new String(ba);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new FileException(e.getMessage());
             }
         } else {
@@ -255,7 +253,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
     public static void saveFile(File f, String data) throws FileException {
 
-        if(checkFileForSave(f)) {
+        if (checkFileForSave(f)) {
             try {
                 if (data == null) {
                     return;
@@ -264,7 +262,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
                 fos.write(data.getBytes());
                 fos.close();
                 return;
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new FileException("Pb when saving file");
             }
         } else {
@@ -272,22 +270,21 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         }
     }
 
-    public static String deleteFiles( String d ) {
-    	return deleteFiles( d, null );
+    public static String deleteFiles(String d) {
+        return deleteFiles(d, null);
     }
 
     // d: directory, e : extension
-    public static String deleteFiles(String d, String e ) {
+    public static String deleteFiles(String d, String e) {
         File dir = new File(d);
-        final String[] list; 
+        final String[] list;
 
-        if ( e == null ) {
-        	list = dir.list();
-    	}
-    	else {
-    		final ExtensionFilter filter = new ExtensionFilter(e);
-    		list = dir.list(filter);
-    	}
+        if (e == null) {
+            list = dir.list();
+        } else {
+            final ExtensionFilter filter = new ExtensionFilter(e);
+            list = dir.list(filter);
+        }
 
         File file;
         boolean isDeleted;
@@ -309,11 +306,24 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         return files;
     }
 
+    public static void mkdir(String path) throws SecurityException {
+        File theDir = new File(path);
+
+        // if the directory does not exist, create it
+        if (!theDir.exists()) {
+                theDir.mkdir();
+        }
+
+    }
+
+
     static class ExtensionFilter implements FilenameFilter {
         private String extension;
-        public ExtensionFilter( String extension ) {
+
+        public ExtensionFilter(String extension) {
             this.extension = extension;
         }
+
         public boolean accept(File dir, String name) {
             return (name.endsWith(extension));
         }

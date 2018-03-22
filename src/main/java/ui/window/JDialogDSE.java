@@ -1211,7 +1211,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
 
                 // Setting TML Output
                 config.setOutputTML(true);
-                config.setOutputGUI(true);
+                config.setOutputGUI(outputGUI.isSelected());
 
                 if (config.runDSE("", false, false) != 0) {
                     TraceManager.addDev("Can't run DSE");

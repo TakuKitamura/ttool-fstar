@@ -779,10 +779,12 @@ public class DSEConfiguration implements Runnable  {
     public int generateAndCompileMappingCode(TMLMapping<TGComponent> _tmlmap, boolean _debug, boolean _optimize) {
 
         // Generating code
-        TraceManager.addDev("\n\n\n**** Generating simulation code from mapping...");
+        TraceManager.addDev("\n\n\n**** Generating simulation code from mapping in directory:" + pathToSimulator);
         final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( _tmlmap );
 
         try {
+            TraceManager.addDev("Making directory:" + pathToSimulator);
+            FileUtils.mkdir(pathToSimulator);
             map.generateSystemC(_debug, _optimize);
             map.saveFile(pathToSimulator, "appmodel");
         } catch (Exception e) {
