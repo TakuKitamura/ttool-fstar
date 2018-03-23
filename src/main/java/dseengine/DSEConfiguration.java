@@ -728,7 +728,7 @@ public class DSEConfiguration implements Runnable  {
         return 0;
     }
 
-    public int loadingModel(boolean _debug, boolean _optimize) {
+    public int loadingModelAndGeneratingCode(boolean _debug, boolean _optimize) {
         if (optionChanged) {
             if (tmap == null) {
                 TraceManager.addDev("Loading mapping");
@@ -739,12 +739,19 @@ public class DSEConfiguration implements Runnable  {
                 }
             }
 
+
+
             // Generating code
             TraceManager.addDev("\n\n\n**** Generating simulation code...");
             final IDiploSimulatorCodeGenerator map = DiploSimulatorFactory.INSTANCE.createCodeGenerator( tmap );
             //                  TML2MappingSystemC map = new TML2MappingSystemC(tmap);
 
             try {
+                TraceManager.addDev("Making directory:" + pathToSimulator);
+                FileUtils.mkdir(pathToSimulator);
+                if (!SpecConfigTTool.checkAndCreateSystemCDir(pathToSimulator)) {
+                    return -1;
+                }
                 map.generateSystemC(_debug, _optimize);
                 map.saveFile(pathToSimulator, "appmodel");
             } catch (Exception e) {
@@ -789,6 +796,7 @@ public class DSEConfiguration implements Runnable  {
             if (!SpecConfigTTool.checkAndCreateSystemCDir(pathToSimulator)) {
                 return -1;
             }
+            FileUtils.mkdir(pathToResults);
 
             map.generateSystemC(_debug, _optimize);
             map.saveFile(pathToSimulator, "appmodel");
@@ -818,7 +826,7 @@ public class DSEConfiguration implements Runnable  {
             v.add("7 1 " + pathToResults + "output$.html");
         }
         if (outputTXT) {
-            v.add("7 2 " +pathToResults + "output$.txt");
+            v.add("7 2 " + pathToResults + "output$.txt");
         }
 
         if (simulationMaxCycles > -1) {
@@ -886,7 +894,7 @@ public class DSEConfiguration implements Runnable  {
         }
 
         // Loading model
-        ret = loadingModel(_debug, _optimize);
+        ret = loadingModelAndGeneratingCode(_debug, _optimize);
         if (ret != 0) {
             return ret;
         }
@@ -908,6 +916,7 @@ public class DSEConfiguration implements Runnable  {
             makeCommand(tmp);
 
             if (recordResults) {
+                FileUtils.mkdir(pathToResults);
                 if (loadSimulationResult(simulationID) <0) {
                     return -1;
                 }
@@ -951,16 +960,19 @@ public class DSEConfiguration implements Runnable  {
         }
 
         // Loading model
-        ret = loadingModel(_debug, _optimize);
+        ret = loadingModelAndGeneratingCode(_debug, _optimize);
         if (ret != 0) {
             return ret;
         }
 
         // Preparing results
         if (recordResults) {
+            // Making the results directory
+            FileUtils.mkdir(pathToResults);
             if (results == null) {
                 results = new DSESimulationResult();
             }
+
         }
 
         // Executing the simulation

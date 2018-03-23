@@ -402,7 +402,7 @@ public class SpecConfigTTool {
 
 
         } catch (Exception e) {
-            //TraceManager.addDev("Exception file creation for simulator: " + e.getMessage());
+            TraceManager.addDev("Exception file creation for simulator: " + e.getMessage());
             //throw new FileException(e.getMessage());
         }
         return true;

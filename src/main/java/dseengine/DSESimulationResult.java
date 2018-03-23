@@ -37,8 +37,6 @@
  */
 
 
-
-
 package dseengine;
 
 import myutil.FileUtils;
@@ -64,10 +62,11 @@ import java.util.Vector;
  * Class DSESimulationResult
  * Object for storing a simulation result
  * Creation: 06/09/2011
- * @version 1.0 06/09/2011
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 06/09/2011
  */
-public class DSESimulationResult  {
+public class DSESimulationResult {
 
     protected static final String SIMULATION_GLOBAL = "global";
     protected static final String SIMULATION_HEADER = "siminfo";
@@ -89,7 +88,7 @@ public class DSESimulationResult  {
     private Vector<CPUWholeResult> wcpus;
     private Vector<BusWholeResult> wbusses;
     private Vector<TaskWholeResult> wtasks;
-    private int addedSecurity=0;
+    private int addedSecurity = 0;
 
 
     public DSESimulationResult() {
@@ -109,12 +108,14 @@ public class DSESimulationResult  {
         comments.add(_comment);
     }
 
-    public int getAddedSecurity(){
+    public int getAddedSecurity() {
         return addedSecurity;
     }
-    public void setAddedSecurity(int i){
+
+    public void setAddedSecurity(int i) {
         addedSecurity = i;
     }
+
     public int loadResultFromXMLFile(String pathToFile) {
         File f = new File(pathToFile);
         String data = FileUtils.loadFileData(f);
@@ -145,7 +146,7 @@ public class DSESimulationResult  {
 
         if (index0 != -1) {
             //System.out.println("toto3");
-            ssxml = ssxml.substring(0, index0+10);
+            ssxml = ssxml.substring(0, index0 + 10);
             loadXMLInfoFromServer(ssxml);
             ssxml = "";
         }
@@ -195,7 +196,7 @@ public class DSESimulationResult  {
                 return false;
             }
 
-            for(i=0; i<nl.getLength(); i++) {
+            for (i = 0; i < nl.getLength(); i++) {
                 node = nl.item(i);
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     // create design, and get an index for it
@@ -225,7 +226,7 @@ public class DSESimulationResult  {
         NodeList nl, nl0;
 
         try {
-            for(int j=0; j<diagramNl.getLength(); j++) {
+            for (int j = 0; j < diagramNl.getLength(); j++) {
                 //System.out.println("Ndes: " + j);
                 node = diagramNl.item(j);
 
@@ -235,11 +236,11 @@ public class DSESimulationResult  {
                 }
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    elt = (Element)node;
+                    elt = (Element) node;
 
                     //TraceManager.addDev("Found tag:" + elt.getTagName());
 
-                    if (elt.getTagName().compareTo(SIMULATION_GLOBAL) ==0) {
+                    if (elt.getTagName().compareTo(SIMULATION_GLOBAL) == 0) {
                         loadGlobalConfiguration(node);
                     }
 
@@ -282,7 +283,7 @@ public class DSESimulationResult  {
         int k, l;
 
         try {
-            for(int j=0; j<diagramNl.getLength(); j++) {
+            for (int j = 0; j < diagramNl.getLength(); j++) {
                 //System.out.println("Ndes: " + j);
                 node = diagramNl.item(j);
 
@@ -292,7 +293,7 @@ public class DSESimulationResult  {
                 }
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    elt = (Element)node;
+                    elt = (Element) node;
 
                     //TraceManager.addDev("Found tag tag:" + elt.getTagName());
 
@@ -302,7 +303,7 @@ public class DSESimulationResult  {
                         //System.out.println("Simulation duration=" + simdur);
                         simulationDurations.add(new Long(simdur));
                     }
-                    if (elt.getTagName().compareTo("EndTime")==0){
+                    if (elt.getTagName().compareTo("EndTime") == 0) {
                         String end = elt.getTextContent();
                         cycleDurations.add(new Long(end));
                     }
@@ -331,7 +332,7 @@ public class DSESimulationResult  {
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 nl = elt.getElementsByTagName("contdel");
                                 node0 = nl.item(0);
-                                elt0 = (Element)node0;
+                                elt0 = (Element) node0;
                                 busid = elt0.getAttribute("busID");
                                 busname = elt0.getAttribute("busName");
                                 //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
@@ -458,7 +459,7 @@ public class DSESimulationResult  {
     }
 
 
-    public static String decodeString(String s)  {
+    public static String decodeString(String s) {
         if (s == null)
             return s;
         byte b[] = null;
@@ -479,7 +480,7 @@ public class DSESimulationResult  {
         TaskWholeResult taskwr;
 
         // Durations
-        for(Long l: simulationDurations) {
+        for (Long l : simulationDurations) {
             if (sdwr == null) {
                 sdwr = new SimulationDurationWholeResult(l.longValue());
             } else {
@@ -487,7 +488,7 @@ public class DSESimulationResult  {
             }
         }
 
-        for(Long l: cycleDurations) {
+        for (Long l : cycleDurations) {
             if (cdwr == null) {
                 cdwr = new SimulationDurationWholeResult(l.longValue());
             } else {
@@ -496,7 +497,7 @@ public class DSESimulationResult  {
         }
         // CPUs
         wcpus = new Vector<CPUWholeResult>();
-        for(CPUResult rescpu: cpus) {
+        for (CPUResult rescpu : cpus) {
             o = resultsTable.get(rescpu.id);
             //TraceManager.addDev("Got o=" + o);
             if (o == null) {
@@ -505,13 +506,13 @@ public class DSESimulationResult  {
                 wcpus.add(cpuwr);
 
             } else {
-                cpuwr = (CPUWholeResult)o;
+                cpuwr = (CPUWholeResult) o;
                 cpuwr.updateResults(rescpu);
             }
         }
 
         wbusses = new Vector<BusWholeResult>();
-        for(BusResult resbus: busses) {
+        for (BusResult resbus : busses) {
             o = resultsTable.get(resbus.id);
             //TraceManager.addDev("Got o=" + o);
             if (o == null) {
@@ -520,13 +521,13 @@ public class DSESimulationResult  {
                 wbusses.add(buswr);
 
             } else {
-                buswr = (BusWholeResult)o;
+                buswr = (BusWholeResult) o;
                 buswr.updateResults(resbus);
             }
         }
 
         wtasks = new Vector<TaskWholeResult>();
-        for(TaskResult restask: tasks) {
+        for (TaskResult restask : tasks) {
             o = resultsTable.get(restask.id);
             //TraceManager.addDev("Got o=" + o);
             if (o == null) {
@@ -535,7 +536,7 @@ public class DSESimulationResult  {
                 wtasks.add(taskwr);
 
             } else {
-                taskwr = (TaskWholeResult)o;
+                taskwr = (TaskWholeResult) o;
                 taskwr.updateResults(restask);
             }
         }
@@ -548,17 +549,35 @@ public class DSESimulationResult  {
         StringBuffer sb = new StringBuffer("");
 
         //      sb.append(sdwr.toStringResult() + "\n");
-        sb.append("CYCLE "+cdwr.toStringResult() + "\n");
-        for(CPUWholeResult reswcpu: wcpus) {
-            sb.append(reswcpu.toStringResult() + "\n");
+        try {
+            sb.append("CYCLE " + cdwr.toStringResult() + "\n");
+        } catch (Exception e) {
+            TraceManager.addDev("Exception on reading CYCLE in results");
         }
 
-        for(BusWholeResult reswbus: wbusses) {
-            sb.append(reswbus.toStringResult() + "\n");
+
+        for (CPUWholeResult reswcpu : wcpus) {
+            try {
+                sb.append(reswcpu.toStringResult() + "\n");
+            } catch (Exception e) {
+                TraceManager.addDev("Exception on reading WPUS in results");
+            }
         }
 
-        for(TaskWholeResult reswtask: wtasks) {
-            sb.append(reswtask.toStringResult() + "\n");
+        for (BusWholeResult reswbus : wbusses) {
+            try {
+                sb.append(reswbus.toStringResult() + "\n");
+            } catch (Exception e) {
+                TraceManager.addDev("Exception on reading WBUS in results");
+            }
+        }
+
+        for (TaskWholeResult reswtask : wtasks) {
+            try {
+                sb.append(reswtask.toStringResult() + "\n");
+            } catch (Exception e) {
+                TraceManager.addDev("Exception on reading WTASKS in results");
+            }
         }
 
         return sb.toString();
@@ -567,22 +586,22 @@ public class DSESimulationResult  {
     public String getAllResults() {
         StringBuffer sb = new StringBuffer("");
 
-        for(Long l: simulationDurations) {
+        for (Long l : simulationDurations) {
             sb.append("DURATION " + l + "\n");
         }
-        for(Long l: cycleDurations) {
+        for (Long l : cycleDurations) {
             sb.append("CYCLES " + l + "\n");
         }
 
-        for(CPUResult rescpu: cpus) {
+        for (CPUResult rescpu : cpus) {
             sb.append(rescpu.toStringResult() + "\n");
         }
 
-        for(BusResult resbus: busses) {
+        for (BusResult resbus : busses) {
             sb.append(resbus.toStringResult() + "\n");
         }
 
-        for(TaskResult restask: tasks) {
+        for (TaskResult restask : tasks) {
             sb.append(restask.toStringResult() + "\n");
         }
 
@@ -592,8 +611,8 @@ public class DSESimulationResult  {
     public String getAllComments() {
         String s = "";
 
-        for(String st: comments) {
-            s+= "#" + st + "\n";
+        for (String st : comments) {
+            s += "#" + st + "\n";
         }
 
         return s;
@@ -609,7 +628,7 @@ public class DSESimulationResult  {
         s += "# Busses: BUS ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
         s += "# Tasks: TASK ID Name nbOfResults minExecutedCycles averageExecutedCycles maxExecutedCycles nbOfRunnable nbOfRunning nbOfsuspended nbOfTerminated\n";
 
-        s+= "\n";
+        s += "\n";
 
         return s;
     }
@@ -628,7 +647,7 @@ public class DSESimulationResult  {
     public double getAverageCPUUsage() {
         double average = 0;
 
-        for(CPUWholeResult wcpu: wcpus) {
+        for (CPUWholeResult wcpu : wcpus) {
             average += wcpu.averageUtilization;
         }
 
@@ -638,7 +657,7 @@ public class DSESimulationResult  {
     public double getMaxCPUUsage() {
         double max = 0;
 
-        for(CPUWholeResult wcpu: wcpus) {
+        for (CPUWholeResult wcpu : wcpus) {
             max = Math.max(max, wcpu.maxUtilization);
         }
 
@@ -648,8 +667,8 @@ public class DSESimulationResult  {
     public double getMinCPUUsage() {
         double min = 1.1;
 
-        for(CPUWholeResult wcpu: wcpus) {
-            min= Math.min(min, wcpu.minUtilization);
+        for (CPUWholeResult wcpu : wcpus) {
+            min = Math.min(min, wcpu.minUtilization);
         }
 
         return min;
@@ -660,7 +679,7 @@ public class DSESimulationResult  {
     public double getAverageBusUsage() {
         double average = 0;
 
-        for(BusWholeResult wbus: wbusses) {
+        for (BusWholeResult wbus : wbusses) {
             average += wbus.averageUtilization;
         }
 
@@ -670,7 +689,7 @@ public class DSESimulationResult  {
     public double getMaxBusUsage() {
         double max = 0;
 
-        for(BusWholeResult wbus: wbusses) {
+        for (BusWholeResult wbus : wbusses) {
             max = Math.max(max, wbus.maxUtilization);
         }
 
@@ -680,8 +699,8 @@ public class DSESimulationResult  {
     public double getMinBusUsage() {
         double min = 1.1;
 
-        for(BusWholeResult wbus: wbusses) {
-            min= Math.min(min, wbus.minUtilization);
+        for (BusWholeResult wbus : wbusses) {
+            min = Math.min(min, wbus.minUtilization);
         }
 
         return min;
@@ -693,7 +712,7 @@ public class DSESimulationResult  {
     public double getAverageBusContention() {
         double average = 0;
 
-        for(CPUWholeResult wcpu: wcpus) {
+        for (CPUWholeResult wcpu : wcpus) {
             average += wcpu.getAverageBusContention();
         }
 
@@ -703,7 +722,7 @@ public class DSESimulationResult  {
     public long getMaxBusContention() {
         long max = 0;
 
-        for(CPUWholeResult wcpu: wcpus) {
+        for (CPUWholeResult wcpu : wcpus) {
             max = Math.max(max, wcpu.getMaxBusContention());
         }
 
@@ -713,8 +732,8 @@ public class DSESimulationResult  {
     public long getMinBusContention() {
         long min = 0;
 
-        for(CPUWholeResult wcpu: wcpus) {
-            min= Math.min(min, wcpu.getMinBusContention());
+        for (CPUWholeResult wcpu : wcpus) {
+            min = Math.min(min, wcpu.getMinBusContention());
         }
 
         return min;
@@ -723,9 +742,11 @@ public class DSESimulationResult  {
     public double getAverageSimulationDuration() {
         return sdwr.averageDuration;
     }
-    public double getAverageCycleDuration(){
+
+    public double getAverageCycleDuration() {
         return cdwr.averageDuration;
     }
+
     public long getMaxSimulationDuration() {
         return sdwr.maxDuration;
     }
@@ -741,8 +762,6 @@ public class DSESimulationResult  {
     public long getMinCycleDuration() {
         return cdwr.minDuration;
     }
-
-
 
 
 } // Class DSEConfiguration

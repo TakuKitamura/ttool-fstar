@@ -404,7 +404,7 @@ public class MappedSystemCTask {
         }
 
         if (currElem instanceof TMLStartState) {
-            if (debug) TraceManager.addDev("Checking Start\n");
+            //if (debug) TraceManager.addDev("Checking Start\n");
             return makeCommands(currElem.getNextElement(0), false, retElement, null);
 
         } else if (currElem instanceof TMLStopState) {
@@ -614,7 +614,7 @@ public class MappedSystemCTask {
             nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "))" + SCCR;
 
         } else if (currElem instanceof TMLSendEvent) {
-            if (debug) TraceManager.addDev("Checking Send\n");
+            //if (debug) TraceManager.addDev("Checking Send\n");
             // TMLSendEvent sendEvt=(TMLSendEvent)currElem;
             cmdName = "_send" + currElem.getID();
             hcode += "TMLSendCommand " + cmdName + SCCR;
@@ -622,7 +622,7 @@ public class MappedSystemCTask {
             nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "))" + SCCR;
 
         } else if (currElem instanceof TMLSendRequest) {
-            if (debug) TraceManager.addDev("Checking Request\n");
+            //if (debug) TraceManager.addDev("Checking Request\n");
             //TMLSendRequest sendReq=(TMLSendRequest)currElem;
             cmdName = "_request" + currElem.getID();
             hcode += "TMLRequestCommand " + cmdName + SCCR;
@@ -630,7 +630,7 @@ public class MappedSystemCTask {
             nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "))" + SCCR;
 
         } else if (currElem instanceof TMLWaitEvent) {
-            if (debug) TraceManager.addDev("Checking Wait\n");
+            //if (debug) TraceManager.addDev("Checking Wait\n");
             // TMLWaitEvent waitEvt = (TMLWaitEvent)currElem;
             cmdName = "_wait" + currElem.getID();
             hcode += "TMLWaitCommand " + cmdName + SCCR;
@@ -638,7 +638,7 @@ public class MappedSystemCTask {
             nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "))" + SCCR;
 
         } else if (currElem instanceof TMLNotifiedEvent) {
-            if (debug) TraceManager.addDev("Checking Notified\n");
+            //if (debug) TraceManager.addDev("Checking Notified\n");
             cmdName = "_notified" + currElem.getID();
             hcode += "TMLNotifiedCommand " + cmdName + SCCR;
             initCommand += "," + cmdName + "(" + currElem.getID() + ",this," + ((TMLNotifiedEvent) currElem).getEvent().getExtendedName() + ",&" + ((TMLNotifiedEvent) currElem).getVariable() + ",\"" + ((TMLNotifiedEvent) currElem).getVariable() + "\"," + getFormattedLiveVarStr(currElem) + ")" + CR;

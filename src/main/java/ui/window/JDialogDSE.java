@@ -1164,6 +1164,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
                 stopErrorProcess();
                 return;
             }
+
             if (config.setSimulationExecutionCommand("run.x") != 0) {
                 TraceManager.addDev("Simulation execution error");
                 output += "Simulation execution error \n";
