@@ -43,6 +43,7 @@
 
 package dseengine;
 
+import common.SpecConfigTTool;
 import myutil.Conversion;
 import myutil.FileException;
 import myutil.FileUtils;
@@ -785,6 +786,10 @@ public class DSEConfiguration implements Runnable  {
         try {
             TraceManager.addDev("Making directory:" + pathToSimulator);
             FileUtils.mkdir(pathToSimulator);
+            if (!SpecConfigTTool.checkAndCreateSystemCDir(pathToSimulator)) {
+                return -1;
+            }
+
             map.generateSystemC(_debug, _optimize);
             map.saveFile(pathToSimulator, "appmodel");
         } catch (Exception e) {

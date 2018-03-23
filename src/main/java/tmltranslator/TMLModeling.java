@@ -2285,9 +2285,9 @@ public class TMLModeling<E> {
         writes[nb-1].addNext(stop);
     }
 
-    // Channels with severals origins and one destination
+    // Channels with several origins and one destination
     // Add a task at receiving side
-    // Channel is tranformed into something else ...
+    // Channel is transformed into something else ...
     // Same for events.
     public void removeJoins() {
         // Create new basic channels and tasks
@@ -2305,7 +2305,7 @@ public class TMLModeling<E> {
         // Create new basic events and tasks
         ArrayList<TMLEvent> newEvents = new ArrayList<TMLEvent>();
         for(TMLEvent evt: events) {
-            TraceManager.addDev("Event:" + evt);
+            //TraceManager.addDev("Event:" + evt);
             if (evt.isAJoinEvent()) {
                 TraceManager.addDev("Removing join of this event");
                 removeJoinEvent(evt, newEvents);

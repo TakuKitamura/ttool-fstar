@@ -61,11 +61,10 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
-import java.io.File;
 
 /**
  * Class JDialogSystemCGeneration
@@ -192,7 +191,6 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                     pathFormalExecute.substring(index + 7, pathFormalExecute.length());
             pathFormalExecute += " -gname graph -explo";
         }
-
 
 
         simulatorHost = _simulatorHost;
@@ -672,8 +670,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         setButtons();
     }
 
-    private void generateCode()
-            throws InterruptedException {
+    private void generateCode() throws InterruptedException {
         String list;
 
         jta.append("Generating simulator C++ code\n");
@@ -768,8 +765,8 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                     testGo();
                     jta.append("Simulator code generation done\n");
 
-                    for (final TEPE tep: alTepe) {
-                        TraceManager.addDev(tep.toString());
+                    for (final TEPE tep : alTepe) {
+                        //TraceManager.addDev(tep.toString());
                     }
 
                     jta.append("Saving C++ files...\n");

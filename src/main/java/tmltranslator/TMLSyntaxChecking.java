@@ -219,7 +219,7 @@ public class TMLSyntaxChecking {
         if (inP != null) {
             addError(null, null,SAME_PORT_NAME + ": " + _p.getName() + "(" + origin + " ports)", TMLError.ERROR_STRUCTURE);
         } else {
-            TraceManager.addDev("Adding port with name=" + _p.getName() + " for kind=" + origin);
+            //TraceManager.addDev("Adding port with name=" + _p.getName() + " for kind=" + origin);
             map.put(_p.getName(), _p);
         }
     }

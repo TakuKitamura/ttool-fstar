@@ -193,7 +193,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
                     //tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime
                     //declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)exNode.execiTime)*(1+((float)exNode.branchingPredictionPenalty)/100)) + " ) " + SCCR;
                     declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime) + ", " + (int) Math.ceil((float) (exNode.clockRatio * Math.max(exNode.execiTime, exNode.execcTime) * (exNode.branchingPredictionPenalty * exNode.pipelineSize + 100 - exNode.branchingPredictionPenalty)) / 100) + " ) " + SCCR;
-                TraceManager.addDev("cores " + exNode.nbOfCores);
+                //TraceManager.addDev("cores " + exNode.nbOfCores);
                 for (int cores = 0; cores < exNode.nbOfCores; cores++) {
                     //for(int cores=0; cores<1; cores++){
                     //if (tmlmapping.isAUsedHwNode(node)) {
@@ -344,7 +344,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
             }
             //param += "," + evt.getNbOfParams();
             if (tmlmapping.isCommNodeMappedOn(evt, null)) {
-                TraceManager.addDev("Evt: " + evt.getName());
+                //TraceManager.addDev("Evt: " + evt.getName());
                 declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt) + param;
 
             } else {
@@ -363,7 +363,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
                 TMLRequest req = task.getRequest();
                 if (tmlmapping.isCommNodeMappedOn(req, null)) {
                     //declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" +
-                    TraceManager.addDev("Request: " + req.getName());
+                    //TraceManager.addDev("Request: " + req.getName());
                     declaration += "TMLEventBChannel<ParamType," + req.getNbOfParams() + ">* reqChannel_" + task.getName() + " = new TMLEventBChannel<ParamType," + req.getNbOfParams() + ">(" +
                             req.getID() + ",\"reqChannel" + task.getName() + "\"," +
                             determineRouting(tmlmapping.getHwNodeOf(req.getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0," + req.getNbOfParams() + ",true)" + SCCR;
@@ -497,12 +497,12 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         declaration += "}\n};\n\n" + tepeTranslator.getEqFuncs();
         declaration += "#include <main.h>\n";
 
-        if (aStatistics[0] != 0) TraceManager.addDev("Global gain variables " + 100 * aStatistics[1] / aStatistics[0]);
-        if (aStatistics[2] != 0) TraceManager.addDev("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
-        if (aStatistics[4] != 0) TraceManager.addDev("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);
-        if (aStatistics[6] != 0)
+        //if (aStatistics[0] != 0) TraceManager.addDev("Global gain variables " + 100 * aStatistics[1] / aStatistics[0]);
+        //if (aStatistics[2] != 0) TraceManager.addDev("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
+        //if (aStatistics[4] != 0) TraceManager.addDev("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);
+        /*if (aStatistics[6] != 0)
             TraceManager.addDev("Global gain checkpoints " + 100 * aStatistics[7] / aStatistics[6]);
-
+        */
         //Declaration of EBRDDs
         /*declaration += "//Declaration of EBRDDs" + CR;
           for(EBRDD ebrdd: ebrdds){
@@ -605,38 +605,38 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         if ((hopNum = extractPath(path, masters, slaves, startNode, destNode, false)) < 0) {
             hopNum = extractPath(path, masters, slaves, destNode, destNode, true) - hopNum;
         }
-        TraceManager.addDev(commElemToRoute.getName() + " is mapped on:");
+        //TraceManager.addDev(commElemToRoute.getName() + " is mapped on:");
         for (HwCommunicationNode commElem : path) {
             TraceManager.addDev(commElem.getName());
         }
-        TraceManager.addDev("number of elements: " + hopNum);
-        TraceManager.addDev("masters: " + masters.str);
-        TraceManager.addDev("slaves: " + slaves.str);
+        //TraceManager.addDev("number of elements: " + hopNum);
+        //TraceManager.addDev("masters: " + masters.str);
+        //TraceManager.addDev("slaves: " + slaves.str);
         return hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")";
     }
 
     private boolean exploreBuses(int depth, LinkedList<HwCommunicationNode> commNodes, LinkedList<HwCommunicationNode> path, HwNode startNode, HwNode destNode, TMLElement commElemToRoute) {
         //first called with Maping:getCommunicationNodes
         LinkedList<HwCommunicationNode> nodesToExplore;
-        TraceManager.addDev("No of comm nodes " + commNodes.size());
-        TraceManager.addDev("startNode=" + startNode);
+        //TraceManager.addDev("No of comm nodes " + commNodes.size());
+        //TraceManager.addDev("startNode=" + startNode);
         boolean busExploreMode = ((depth & 1) == 0);
         //if (depth % 2 == 0){
         if (busExploreMode) {
-            TraceManager.addDev("search for buses connected to " + startNode.getName());
+            //TraceManager.addDev("search for buses connected to " + startNode.getName());
             nodesToExplore = getBusesConnectedToNode(commNodes, startNode);
         } else {
-            TraceManager.addDev("search for bridges connected to: " + startNode.getName());
+            //TraceManager.addDev("search for bridges connected to: " + startNode.getName());
             nodesToExplore = getBridgesConnectedToBus(commNodes, (HwBus) startNode);
         }
         //HwMemory memory = null;
-        TraceManager.addDev("no of elements found: " + nodesToExplore.size());
+        //TraceManager.addDev("no of elements found: " + nodesToExplore.size());
         for (HwCommunicationNode currNode : nodesToExplore) {
             //memory = null;
             if (busExploreMode) {
                 //memory = getMemConnectedToBusChannelMapped(commNodes, (HwBus)currNode, commElemToRoute);
                 if (isBusConnectedToNode(currNode, destNode)) {
-                    TraceManager.addDev(currNode.getName() + " is last node");
+                    //TraceManager.addDev(currNode.getName() + " is last node");
                     path.add(currNode);
                     //if (memory!=null) path.add(memory);
                     commNodes.remove(currNode);
@@ -644,7 +644,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
                 }
             }
             if (tmlmapping.isCommNodeMappedOn(commElemToRoute, currNode)) {
-                TraceManager.addDev(currNode.getName() + " mapping found for " + commElemToRoute.getName());
+                //TraceManager.addDev(currNode.getName() + " mapping found for " + commElemToRoute.getName());
                 path.add(currNode);
                 //if (memory!=null) path.add(memory);
                 commNodes.remove(currNode);
@@ -660,7 +660,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
             //if (memory!=null) path.add(memory);
             commNodes.remove(currNode);
             //for (int i=0; i<path.size(); i++) System.out.print("  ");
-            TraceManager.addDev(currNode.getName());
+            //TraceManager.addDev(currNode.getName());
             if (exploreBuses(depth + 1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
             path.remove(currNode);
             //if (memory!=null) path.remove(memory);
@@ -672,9 +672,10 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
     private HwMemory getMemConnectedToBusChannelMapped(LinkedList<HwCommunicationNode> _commNodes, HwBus _bus, TMLElement _channel) {
         for (HwCommunicationNode commNode : _commNodes) {
             if (commNode instanceof HwMemory) {
-                if (_bus != null)
-                    TraceManager.addDev(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
-                TraceManager.addDev(_channel.getName() + " is mapped onto " + commNode.getName() + ": " + tmlmapping.isCommNodeMappedOn(_channel, commNode));
+                if (_bus != null) {
+                    //TraceManager.addDev(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
+                }
+                //TraceManager.addDev(_channel.getName() + " is mapped onto " + commNode.getName() + ": " + tmlmapping.isCommNodeMappedOn(_channel, commNode));
                 if ((_bus == null || tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus))
                         && tmlmapping.isCommNodeMappedOn(_channel, commNode)) {
                     return (HwMemory) commNode;
