@@ -740,7 +740,7 @@ public class GTURTLEModeling {
     }
 
     public TMLMapping<TGComponent> drawFirewall(TMLMapping<TGComponent> map) {
-      //  System.out.println("DRAWING FIREWALL");
+        //  System.out.println("DRAWING FIREWALL");
         TGComponent comp = map.getTMLModeling().getTGComponent();
         TMLComponentDesignPanel tmlcdp = (TMLComponentDesignPanel) comp.getTDiagramPanel().tp;
         // TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
@@ -1931,7 +1931,8 @@ public class GTURTLEModeling {
         return autoSecure(gui, name, map, newarch, "100", "0", "100", true, false, false);
     }
 
-    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth) {
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, boolean autoConf,
+                                              boolean autoWeakAuth, boolean autoStrongAuth) {
         return autoSecure(gui, name, map, newarch, "100", "0", "100", autoConf, autoWeakAuth, autoStrongAuth);
     }
 
@@ -1946,7 +1947,8 @@ public class GTURTLEModeling {
         return autoSecure(gui, "enc", tmap, newarch, encComp, overhead, decComp, true, false, false);
     }
 
-    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth) {
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth,
+                                              boolean autoStrongAuth) {
         if (tmap == null) {
             return null;
         }
@@ -1957,7 +1959,8 @@ public class GTURTLEModeling {
         return autoSecure(gui, "enc", tmap, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth);
     }
 
-    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp) {
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String
+            overhead, String decComp) {
         return autoSecure(gui, name, tmap, newarch, encComp, overhead, decComp, true, false, false);
     }
 
