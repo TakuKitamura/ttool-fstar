@@ -185,7 +185,7 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
 		     xStr += width/2 - w/2; yStr += marginY + currentFontSize; break;
 		}
 	
-		TraceManager.addDev("Color=" + c);
+		//TraceManager.addDev("Color=" + c);
 		if (!(c == ColorManager.POINTER_ON_ME_0)) {
 		    g.setColor(textColor);
 		}
