@@ -2418,6 +2418,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
         if (!forceMove) {
             x = verifyMoveCdX(_x);
             y = verifyMoveCdY(_y);
+        } else {
+            x = _x;
+            y = _y;
         }
         /*}
         

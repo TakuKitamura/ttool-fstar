@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -688,15 +688,17 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // Selecting components
     public int selectComponentInRectangle(int x, int y, int width, int height) {
-        //TraceManager.addDev("x=" + x + " y=" + y + " width=" +width + " height=" + height);
+        //TraceManager.addDev("select components in rectangle x=" + x + " y=" + y + " width=" +width + " height=" + height);
         int cpt = 0;
 
         for (TGComponent tgc : this.componentList) {
             if (tgc.areAllInRectangle(x, y, width, height)) {
                 tgc.select(true);
+                //TraceManager.addDev("Selection of " + tgc);
                 tgc.setState(TGState.SELECTED);
                 cpt++;
             } else {
+                //TraceManager.addDev("unselection of " + tgc);
                 tgc.select(false);
                 tgc.setState(TGState.NORMAL);
             }
@@ -1183,6 +1185,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             mgui.actions[TGUIAction.MOVE_ENABLED].setEnabled(false);
             mgui.actions[TGUIAction.ACT_DELETE].setEnabled(false);
         } else {
+            TraceManager.addDev("Number of selected components:" + nb);
             mode = SELECTED_COMPONENTS;
             mgui.setMode(MainGUI.CUTCOPY_OK);
             mgui.setMode(MainGUI.EXPORT_LIB_OK);
@@ -1272,8 +1275,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         xSel = x;
         ySel = y;
         for (TGComponent tgc : this.componentList)
-            if (tgc.isSelected())
+            if (tgc.isSelected()) {
+                if ((xSel-oldX != 0 ) || (ySel-oldY != 0 )) {
+                    /*TraceManager.addDev("" + tgc + " is selected oldX=" + xSel +
+                            " oldY=" + oldY + " xSel=" + xSel + " ySel=" + ySel);*/
+                }
                 tgc.forceMove(xSel - oldX, ySel - oldY);
+
+            }
     }
 
     public TGComponent nextSelectedComponent() {
@@ -1845,7 +1854,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             if (componentPopup instanceof CheckableInvariant) {
 
                 TGComponent tmptgc = mgui.hasCheckableMasterMutex();
-                TraceManager.addDev("Element with Master mutex: " + tmptgc);
+                //TraceManager.addDev("Element with Master mutex: " + tmptgc);
                 if ((tmptgc != null) && (tmptgc != componentPopup)) {
                     tmptgc.setMasterMutex(false);
                 }
@@ -3078,9 +3087,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     TGComponent tgc2 = componentList.get(j);
                     tgc2 = tgc2.getIfId(tgc1.getId());
                     if (tgc2 != null) {
-                        TraceManager.addDev("*** Same ID ***");
-                        TraceManager.addDev("tgc1" + tgc1.getClass());
-                        TraceManager.addDev("tgc2" + tgc2.getClass());
+                        //TraceManager.addDev("*** Same ID ***");
+                        //TraceManager.addDev("tgc1" + tgc1.getClass());
+                        //TraceManager.addDev("tgc2" + tgc2.getClass());
                     }
                 }
         }
@@ -3509,9 +3518,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         RepaintManager.currentManager(this).setDoubleBufferingEnabled(false);
         //this.paint(svgg);
-        TraceManager.addDev("Painting for svg");
+        //TraceManager.addDev("Painting for svg");
         basicPaintMyComponents(svgg);
-        TraceManager.addDev("Painting for svg done");
+        //TraceManager.addDev("Painting for svg done");
         sb.append(svgg.getSVGString());
         RepaintManager.currentManager(this).setDoubleBufferingEnabled(true);
 
