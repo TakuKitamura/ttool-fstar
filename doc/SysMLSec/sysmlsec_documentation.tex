@@ -1,0 +1,648 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{txfonts}
+\usepackage{wasysym}
+\usepackage{adjustbox}
+\usepackage{ragged2e}
+\usepackage{tabularx}
+\usepackage{hhline}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{fancyhdr}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,bindingoffset=0.2in,headsep=0.5cm,left=1in,right=1in,bottom=3cm,top=2cm,headheight=2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+
+\lstset{language=C,basicstyle=\scriptsize\ttfamily,keywordstyle=\bfseries, commentstyle=\textit,stringstyle=\ttfamily, showspaces=false,showstringspaces=false, frame=single,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+\everymath{\displaystyle}
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{Page \thepage}
+\begin{document}
+\sloppy 
+
+\begin{center}
+
+\includegraphics[width=0.2\textwidth]{figures/logotpt}
+\vspace{10 pt}\\
+\Huge TTool \\
+\vspace{10 pt}
+\Large \url{ttool.telecom-paristech.fr}
+\vspace{20 pt}\\
+\underline{\Large SysML-Sec Tutorial}
+\vspace{30 pt}
+\end{center}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{1.6cm}|p{6.0cm}|p{4.2cm}|p{4.2cm}| }
+\hhline{----}
+ & \textbf{Document Manager} & \textbf{Contributors}  & \textbf{Checked by}  \\ 
+\hhline{----}
+\textbf{Name}   & Ludovic APVRILLE & \multirow{2}{*}{Ludovic APVRILLE} &
+\multirow{2}{*}{Ludovic APVRILLE} \\
+\hhline{--~~}
+\textbf{Contact} & ludovic.apvrille@telecom-paristech.fr &  &  \\ 
+\hhline{--~~}
+\textbf{Date} & \today &  &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\newpage
+\tableofcontents
+
+% \newpage
+% \listoffigures
+
+\newpage
+\section{Preface}
+
+\subsection{Table of Versions}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{1.5cm}|p{2.5cm}|p{9.0cm}|p{3.0cm}| }
+\hhline{----}
+\textbf{Version} & \textbf{Date} & \textbf{Description  $  \&  $  Rationale of
+Modifications} & \textbf{Sections Modified} \\
+\hhline{----}
+1.0 & April 3rd, 2018 & First draft &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Table of References and Applicable Documents}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{2.66in}|p{2.66in}|p{0.95in}|p{0.43in}| }
+\hhline{----}
+\textbf{Reference} & \textbf{Title  $  \&  $  Edition} & \textbf{Author or
+Editor} & \textbf{Year}
+\\
+\hhline{----}
+ &  &  &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Acronyms and glossary}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{1.24in}|p{5.45in}| }
+\hhline{--}
+\textbf{Term} & \textbf{Description} \\ 
+\hhline{--}
+ &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Summary}
+
+This document describes how to use SysML-Sec using simple examples\footnote{This document has been started in the scope of the AQUAS european project}. In particular, it covers requirements, attack trees, HW/SW partitioning and  software design.
+
+\newpage
+
+\section{Configuration}\label{sec:conf}
+\subsection{TTool configuration}
+At first, if not already configured\footnote{You version of TTool should be already configured}, you must open the configuration file of TTool. The default file is located in:
+\begin{verbatim}
+TTool/bin/config.xml
+\end{verbatim}
+Open your configuration file, and set the following lines accordingly with your TTool and ProVerif installation:
+\begin{itemize}
+\item Directory in which formal specifications for security proofs are generated:
+\begin{verbatim}
+<ProVerifCodeDirectory data="../proverif/" />
+\end{verbatim}
+\item Path to the proverif executable file:
+\begin{verbatim}
+<ProVerifVerifierPath data="/opt/proverif/proverif" />
+\end{verbatim}
+\item Host on which the proof will be started (for example, you could execute this proof on a dedicated machine if the "ProVerifCodeDirectory" is reachable from that dedicated machine):
+\begin{verbatim}
+<ProVerifVerifierHost data="localhost" />
+\end{verbatim}
+\end{itemize}
+We also assume that the DIPLODOCUS simulator correctly works.
+
+
+\subsection{External tools}
+The  configuration for the DIPLODOCUS simulator assumes that a \textbf{C compiler}, referenced by the provided Makefile (default = "gcc"\footnote{\url{https://gcc.gnu.org/}}) is installed on your machine, as well as the \textbf{POSIX-1 librairies}. Also, a Makefile utility must be installed (e.g., "GNU make"\footnote{\url{https://www.gnu.org/software/make/}}).
+
+\newpage
+\section{A toy example}\label{sec:example}
+This very first example explains how to use the main capabilities of SysML-Sec
+
+\subsection{Getting the example}
+Be sure to get the latest version of TTool including the remote loading of models (March 2018 and after). Do: File, Open from TTool repository, and select "SysMLSecTutorial.xml".
+
+\subsection{Understanding the model}
+The first tab of the model presents an overview of the SysML-Sec methodology ;(see Figure \ref{fig:method}). Each stage of the method is represented with a rectangle that contains a link to the corresponding diagrams. 
+
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[scale=0.65]{figures/bdhelloworld.pdf}
+\hspace{1cm}
+\includegraphics[scale=0.65]{figures/smdhelloworld.pdf}
+\caption{Hello world model} \label{fig:printhelloworld}
+\end{figure*}
+
+You may then check the syntax of the diagram, and select the "interactive simulation icon". From the window that opens, make a step-by-step simulation, and observe the behaviour of the system. This behaviour is simulated, that is, there is no executable code that is generated to simulate the model.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{figures/simulationhelloworld}
+\caption{Functional simulation of the Hello world model} \label{fig:simuhelloworld}
+\end{figure*}
+
+\subsection{Generating executable code}
+To generate executable code, click on the "check syntax" icon, and then click on the "code generation" icon representing a gear. The following window should open (see Figure \ref{fig:codegenhelloworld}).
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/codegenhelloworld}
+\caption{Generating C/POSIX code for the Hello world model} \label{fig:codegenhelloworld}
+\end{figure*}
+
+\begin{itemize}
+\item You can add debugging information to the generating code ("Put debug information \ldots") if you wish the generated code to print information in the default output when executing. Typical debugging information is: state entering/exiting and send / receive of signals.
+\item Tracing capabilities enable to draw a sequence diagram representing the execution of the code.
+\item User defined code can be included (or not). \textbf{Uncheck this option first}.
+\item The time unit manipulated by TTool can be set to seconds, milliseconds or microseconds. For example, if "sec" is selected, it means that  "after(2)" will be transformed as a waiting of two seconds. Default is "sec", keep it like this for the incoming tutorial.
+\end{itemize}
+
+\subsection{Compiling the generated code}
+Once the code has been generated, the dialog window should automatically switch to the "Compile" tab (see Figure \ref{fig:compilehelloworld}). There, you should notice two alternative possibilities:
+\begin{itemize}
+\item Compile the code for your localhost (\textbf{You should select this option}).
+\item Compile the code for the SoCLib platform. This option is not addressed in this document.
+\end{itemize}
+If the compilation fails, you can try to remove all old .o files using the first tab of the dialog window: "Generate Code", "Remove .o files". If the compilation still fails, it could be due to a bad installation of a C compiler. We strongly recommend to use the GNU C Compiler (\textit{gcc}). You could also edit the Makefile you have selected (see section \ref{sec:conf}) to adapt it to your localhost particularities.  Note that the compilation process also compiles the Avatar runtime C sources\footnote{These sources are located in: TTool/executablecode/src or in your project directory: AVATAR_executablecode}, and links all resulting object files together.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/compilehelloworld}
+\caption{Compiling the Hello world model generated C code} \label{fig:compilehelloworld}
+\end{figure}
+
+You may obvisouly try to compile the code from a terminal. e.g.:
+\begin{lstlisting}
+$ cd TTool/executablecode
+$ make
+echo Making directories
+Making directories
+mkdir -p ./lib
+mkdir -p ./lib/generated_src/
+mkdir -p ./lib/src/ 
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/generated_src/main.o -c generated_src/main.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/generated_src/MainBlock.o -c generated_src/MainBlock.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/request.o -c src/request.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/message.o -c src/message.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/myerrors.o -c src/myerrors.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/debug.o -c src/debug.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/syncchannel.o -c src/syncchannel.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/asyncchannel.o -c src/asyncchannel.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/request_manager.o -c src/request_manager.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/random.o -c src/random.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/mytimelib.o -c src/mytimelib.c
+/usr/bin/gcc -O1 -pthread -Wall  -I. -I. -Isrc/  -Igenerated_src/ -o lib/src/tracemanager.o -c src/tracemanager.c
+/usr/bin/gcc -O1 -pthread -ldl -lrt -Wall  -I. -I. -Isrc/  -Igenerated_src/ -L. -L..  -o run.x lib/generated_src/main.o lib/generated_src/MainBlock.o lib/src/request.o lib/src/message.o lib/src/myerrors.o lib/src/debug.o lib/src/syncchannel.o lib/src/asyncchannel.o lib/src/request_manager.o lib/src/random.o lib/src/mytimelib.o lib/src/tracemanager.o -lm  2>&1 | c++filt
+\end{lstlisting}
+
+\subsection{Executing the generated code}
+Once the generated code has been successfully compiled and linked, the execution tab is selected (see Figure \ref{fig:executehelloworld}). There are three possible options to execute the compiled program:
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/executehelloworld}
+\caption{Executing the Hello world program} \label{fig:executehelloworld}
+\end{figure}
+
+\begin{itemize}
+\item Running the program ("Run code")
+\item Running the program and activating the backtracing
+\item Running the program in the SoCLib environment (no covered in this document).
+\end{itemize}
+Select the second option. An execution trace should be displayed in the console of the dialog window.
+
+\subsection{Backtracing}
+After you have started the program, switch to the "Results" tab. You should see a window similar to the one display in Figure \ref{fig:resultshelloworld}. There are two options:
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/resultshelloworld}
+\caption{Backtracing dialog window} \label{fig:resultshelloworld}
+\end{figure}
+\begin{itemize}
+\item Displaying the execution trace of the localhost program
+\item Displaying the execution trace of the SoCLib program (option is not covered in this manual)
+\end{itemize}
+Select the first option, and click on the "show simulation trace" button. A new window should open, displaying the execution of the model under the form of a UML Sequence Diagram (see Figure \ref{fig:backtracinghelloworld})
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/backtracinghelloworld}
+\caption{Executing the Hello world program} \label{fig:backtracinghelloworld}
+\end{figure}
+
+\newpage
+\section{Enhancing model with user code}\label{sec:custom}
+
+\subsection{Principle}
+A user of TTool can provide its own C code within an AVATAR design diagram. When a model is enhanced with custom C code, the custom C code may prevent the compilation process to succeed: if the compilation fails, you need to reconsider the code you have inserted according to the errors provided by the compiler.\\
+Basically, there are two types of custom code as show in the "prototyping" window (see Figure \ref{fig:customhelloworld}). To open this window, simply double-click in the attributes/methods/signal/code part of a given block.
+\begin{itemize}
+\item \textbf{The global code of the model}
+\item \textbf{The local code of a given block}. This code is itself split into two sub parts:
+\begin{itemize}
+\item The global code of the block.
+\item The code implementing methods of the block.
+\end{itemize}
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/customhelloworld}
+\caption{Global code of an application and global code of a block} \label{fig:customhelloworld}
+\end{figure}
+
+\subsection{Global code}
+The global code typically contains the declaration of global variables. Also, one specific method can be used to execute code when the application starts. The function prototype is: 
+\begin{verbatim}
+void __user_init()
+\end{verbatim}
+For instance, the global code of the HelloWorld example is as follows:
+\begin{lstlisting}
+void __user_init() {
+  printf("Initialializing\n");
+}
+\end{lstlisting}
+
+\subsection{Block code}
+The block code typically contains variables that are not declared as block attributes. Block attributes can indeed be directly used in the custom code. The block code can also provide an implementation for the block methods. For a method called "method" of the block "block", the function must be declared as "\_\_userImplemented\_\_block\_\_method" and \textbf{you must ensure to check the "Implementation provided by the user" option} in the method definition window (see Figure \ref{fig:methodhelloworld}). For instance, the following code correesponds to the block code of "MainBlock". It implements the method \textit{printHelloWorld()} referenced in the model (see Figure \ref{fig:printhelloworld}).
+\begin{lstlisting}
+void __userImplemented__MainBlock__printHelloWorld() {
+  printf("Hello world from generated code\n");
+}
+\end{lstlisting}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/methodhelloworld}
+\caption{Selecting a method for which the user provides an implementation}\label{fig:methodhelloworld}
+\end{figure}
+
+\subsection{Code generation and execution with custom code}
+
+Be sure to \textbf{check the "Include user code" option} on the code generation tab of the code generation window. You may also uncheck the "Put tracing capabilities in generated code" since we won't use this in this example. Then, follow the usual stages: compile, and then execute the program. You should now see the effect of the printf command in the console. It should like this:
+\begin{lstlisting}
+Initializing...
+Hello world from generated code
+Hello world from generated code
+Hello world from generated code
+\end{lstlisting}
+
+\newpage
+\section{Advanced model enhancement with user code}\label{sec:advanced}
+To follow this section, you have to use another TTool model called "MicroWaveOven\_SafetySecurity\_fullMethodo.xml", available on the network repository of TTool (File, Open from TTool repository).\\
+This section explains how a code generated from TTool can be linked with an external software, e.g. to animate a graphical user interface. The provided example relies on datagrams and sockets to echange information between the Microwave Software (fully generated from TTool) and its graphical user interface (programmed "by hand"). We will now call these two software MS and GUI, respectively
+
+\subsection{GUI}
+The TTool distribution includes an external software which represents a graphical user interface of a microwave system. The source code (in Java) of this software is located in "TTool/executablecode/example":
+\begin{lstlisting}
+$cd TTool/executablecode/example
+$ls
+DatagramServer.java  MainMicrowave.java           MicrowavePanel.java
+Feeder.java          MainPressureController.java  README
+\end{lstlisting}
+This directory contains the java sources as well as a README file. First compile the java source code, and then execute the GUI, as follows:
+\begin{lstlisting}
+$javac *.java
+$java MainMicrowave
+\end{lstlisting}
+A window similar to the one of Figure \ref{fig:gui1} should open. This window is not yet animated. To do so, we need to build the MS.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/gui1}
+\caption{Window of the Graphical User Interface} \label{fig:gui1}
+\end{figure}
+
+\subsection{Microwave Software (MS)}
+Open the model in TTool, then double-click on a block method, and finally select the "Prototyping" tab. You can now review the global and local code.
+\subsubsection{Global code}
+The goal of the global code is to setup the communication infrastructure to the GUI. To do so, the global code is as follows.
+\begin{itemize}
+\item It declares headers.
+\begin{lstlisting}
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <strings.h>
+#include <errno.h>
+\end{lstlisting}
+
+\item It defines the global constants and variables, including the hostname to use, and the port.
+\begin{lstlisting}
+const char* hostname="localhost";
+const char* portname="8374";
+int fd;
+struct addrinfo* res;
+#define MAX_DGRAM_SIZE  549
+\end{lstlisting}
+
+\item It defines the global constants and variables used to be able to interact from the GUI to MS, and the functions to send datagrams to the MS. For example, when you click on the "start" button, a datagram is sent from GUI to MS. This part is explained in more details in section {\ref{sec:GUIActions}}
+\begin{lstlisting}
+pthread_t thread__Datagram;
+
+// Handling start datagrams
+int start = 0;
+pthread_mutex_t startMutex ;
+pthread_cond_t  noStart;
+
+
+
+void startDatagram() {
+  pthread_mutex_lock(&startMutex);
+  start = 1;
+  pthread_cond_signal(&noStart);
+  pthread_mutex_unlock(&startMutex);
+}
+
+// Assumes fd is valid
+void* receiveDatagram(void *arg) {
+  printf("Thread receive datagram started\n");
+
+  char buffer[MAX_DGRAM_SIZE];
+  struct sockaddr_storage src_addr;
+  socklen_t src_addr_len=sizeof(src_addr);
+
+  while(1) {
+    printf("Waiting for datagram packet\n");
+    ssize_t count=recvfrom(fd,buffer,sizeof(buffer),0,(struct sockaddr*)&src_addr,&src_addr_len);
+    if (count==-1) {
+      perror("recv failed");
+    } else if (count==sizeof(buffer)) {
+      perror("datagram too large for buffer: truncated");
+    } else {
+      //printf("Datagram size: %d.\n", (int)(count));
+      if (strncmp(buffer, "START", 5) == 0) {
+	//printf("+++++++++++++++++++++++ START\n");
+	startDatagram();
+      }
+    }
+  }
+}
+\end{lstlisting}
+
+
+\item It defines a function to send a datagram.
+\begin{lstlisting}
+void sendDatagram(char * data, int size) {
+  if (sendto(fd,data,size, 0, res->ai_addr,res->ai_addrlen)==-1) {
+        printf("Error when sending datagram");
+        exit(-1);
+    }
+}
+\end{lstlisting}
+\item It defines the user initialization function. This function puts in an "addinfo struct" information for sending the datagram. Then, it gets the target IP address. Following this, it creates a reference to the right socket. Finally, it tries to send a test packet ("salut"). Whenever a failure is encountered, the application exits. When the C code is generated from the model, all the global code is integrated into a file called "main.c".
+\begin{lstlisting}
+void __user_init() { 
+  const char* content = "salut";
+  struct addrinfo hints;
+
+  memset(&hints,0,sizeof(hints));
+  hints.ai_family=AF_UNSPEC;
+  hints.ai_socktype=SOCK_DGRAM;
+  hints.ai_protocol=0;
+  hints.ai_flags=AI_ADDRCONFIG;
+ 
+  int err=getaddrinfo(hostname,portname,&hints,&res);
+  if (err!=0) {
+    printf("failed to resolve remote socket address (err=%d)",err);
+    exit(-1);
+  }
+  fd=socket(res->ai_family,res->ai_socktype,res->ai_protocol);
+  if (fd==-1) {
+    printf("%s",strerror(errno));
+    exit(-1);
+  }
+  if (sendto(fd,content,sizeof(content),0,
+      res->ai_addr,res->ai_addrlen)==-1) {
+    printf("%s",strerror(errno));
+    exit(-1);
+  }
+
+  // Start a thread to receive datagrams
+  pthread_create(&thread__Datagram, NULL, receiveDatagram, NULL);
+}
+\end{lstlisting}
+\end{itemize}
+Note: the network code of the GUI application is located in \textit{DatagramServer.java}.
+
+\subsubsection{Local code}
+The local code associates the call to a method of a block to the sending (or receiving) of a datagram packet. Let's take the example of the "Door" block. The GUI should be informed about door opening or closing operations. In the model, each time the door is closed, the \textit{openM()} method is closed. Also, each time the door is closed, the \textit{closeM() }method is called (see Figure \ref{fig:door}).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{figures/door}
+\caption{State Machine Diagram of the Door block} \label{fig:door}
+\end{figure}
+
+In the local code, we first need to state that a \textit{sendDatagram()} function is externally defined.
+ \begin{lstlisting}
+extern void sendDatagram(char *data, int size);
+\end{lstlisting}
+Then, we need to define the user defined C code for both \textit{openM()} and \textit{closeM()}.  We also define constant strings in order to uniquely identifiydatagram packets sent to the GUI. In the code, "10" corresponds to the length of the datagram. 
+
+\begin{lstlisting}
+const char* openD = "Open Door";
+const char* closeD = "Close Door";
+
+void __userImplemented__Door__openM() {
+  sendDatagram(openD, 10);
+}
+
+void __userImplemented__Door__closeM() {
+   sendDatagram(closeD, 10);
+}
+\end{lstlisting}
+
+The corresponding packets are also defined in the GUI application e.g. see \textit{MainMicrowave.java}. 
+
+\subsection{GUI animation}
+Generate the C code from TTool (be sure to check the "Include user code" option). Start the GUI from a terminal, and then, start the MS application from TTool (you can also start MS from a terminal). You should see the animations of the GUI while the generated application executes. For example, Figure \ref{fig:animopen} shows the microwave when the door opened, and Figure \ref{fig:animcooking} shows the microwave in heating mode.
+
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/animopen}
+\caption{GUI when the door is opened} \label{fig:animopen}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/animcooking}
+\caption{GUI when the microwave is cooking} \label{fig:animcooking}
+\end{figure}
+
+\subsection{GUI actions}\label{sec:GUIActions}
+\subsubsection{GUI side}
+The GUI contains a "start" button.  When the user clicks on this button, the GUI sends a "START" datagram packet to the MS. The GUI is indeed programmed as follows:
+\begin{itemize}
+\item In MainMicrowave.java:
+\begin{lstlisting}
+public void mouseClicked(MouseEvent e){
+        int x = e.getX();
+        int y = e.getY();
+
+        System.out.println("Mouse clicked!!!");
+
+        // START?
+        if ((x>630)&&(x<720)&&(y>335)&&(y<365)) {
+            System.out.println("Mouse clicked on start");
+            if (ds != null) {
+                ds.sendDatagramTo("START");
+            }
+            System.out.println("Action on start sent");
+        }
+}
+\end{lstlisting}
+\textit{ds.sendDatagram(..)} calls a DatagramServer object that sends a datagram to the destination from which it got its first packet.
+\end{itemize}
+\subsubsection{MS side}
+On MS side, the global code starts in  \textit{user\_init()} a thread that handles datagram receiving :
+\begin{lstlisting}
+pthread_create(&thread__Datagram, NULL, receiveDatagram, NULL);
+\end{lstlisting}
+\textit{receiveDatagram()} waits for datagram packets. When it gets a packet, it checks if it contains the "START" string. If so, it calls \textit{startDatagram()}.  This function works as follows:
+\begin{enumerate}
+\item A lock is put on a mutex ("startMutex")
+\item The "start" variable is set to 1
+\item A call is made on the condition variable "noStart"
+\item The mutex is unlock
+\end{enumerate}
+The \textit{ControlPanel} block defines a \textit{start()} method called before it sends the "startButton" signal, see Figure \ref{fig:controlpanel}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.25\textwidth]{figures/controlpanel}
+\caption{Window of the Graphical User Interface} \label{fig:controlpanel}
+\end{figure}
+
+Thus, when calling start(), the MS wants to wait for the "START" datagram. To do so, the \textit{ControlPanel} block implements "start()" as follows. First, it refers to externally defined elements: the start variable ("start"), the mutex (startMutex) and the condition variable ("startMutex").
+\begin{lstlisting}
+extern int start;
+extern pthread_mutex_t startMutex ;
+extern pthread_cond_t  noStart;
+\end{lstlisting}
+The method itself works as follows:
+\begin{enumerate}
+\item It puts a lock on the mutex.
+\item It waits untils "start" is equal to at least 1. Meanwhile, it waits on the "noStart" condition variable.
+\item When "start" is finally equal to 1 or more, it sets "start" to 0.
+\item It unlocks the mutex
+\end{enumerate}
+
+Then, the execution of the \textit{ControlPanel} block can continue with the sending of the "startButton" signal. Note that  this is thanks to the mutex facility that the datagram receinving facility and the \textit{ControlPanel} block cannot modify "start" at the same time.\\
+
+\begin{lstlisting}
+void __userImplemented__ControlPanel__start() {
+  pthread_mutex_lock(&startMutex);
+  printf("Waiting for next start");
+  while(start < 1) {
+    pthread_cond_wait(&noStart, &startMutex);
+  }
+  start = 0;
+  pthread_mutex_unlock(&startMutex);
+  printf("****** MW can start cooking\n");
+}
+\end{lstlisting}
+
+\newpage
+\section{Another exampe of advanced model enhancement with user code}\label{sec:otheradvanced}
+We now consider a PressureController (PC) system. This xml TTool model is available via the TTool model repository.
+\subsection{GUI}
+The TTool distribution includes an external software which represents a graphical user interface of the pressure controller environment: pressure sensor and alarm. The source code (in Java) of this software is located in "TTool/executablecode/example": \textit{MainPressureController.java}.
+ First compile the java source code, and then execute the GUI, as follows:
+\begin{lstlisting}
+$javac MainPressureController.java
+$java MainPressureController
+\end{lstlisting}
+A window similar to the one of Figure \ref{fig:guipc} should open. This window is not yet animated. To do so, we need to build the PC. The GUI and Pc exchange UDP packets to inform each other about modifications:
+\begin{itemize}
+\item Each time the slider is moved, a datagram packet with the pressure value is sent by GUI to PC.
+\item Each time the alarm actuator is triggered, a datagram packet is sent by PC to GUI. This packet contains "+" when the alarm must be activated, and "-" when it must be deactivated.
+\end{itemize}
+
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/guipc}
+\caption{Graphical User Interface of the Pressure Controller System} \label{fig:guipc}
+\end{figure}
+
+\subsection{Pressure Controller (PC)}
+The Pressure Controller is build upon a set of blocks representing the system itself, and two blocks representing the environment (the pressure sensor, and the alarm actuator), see Figure \ref{fig:pc}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=1\textwidth]{figures/PressureController}
+\caption{Pressure Controller System: Avatar Design} \label{fig:pc}
+\end{figure}
+
+Since we would like the pressure controller to interact with its environment, we have customized the methods of \textit{PressureSensor} and \textit{AlarmActuator}. 
+
+\subsubsection{PressureSensor}
+The pressure sensor (see Figure \ref{fig:ps}) monitors the pressure with a period of 1 unit of time. The model does not act the same when simulating the model or executing its code. To do this, we have a "IsInCode" method that is \textbf{not} executed when the model is considered for functional simulation or formal verification. Indeed, the "branch" boolean is set to false by default, so the random command is executed (and not the \textit{readingPressure()} method). On the contrary, when executing the C code of this model, \textit{IsIncode()} returns true, so \textit{branch} is equal to true, so the left branch is executed, and the pressure is read (\textit{readingPressure()}).  
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/pressuresensor}
+\caption{State Machine Diagram of Pressure Sensor} \label{fig:ps}
+\end{figure}
+
+\subsubsection{AlarmActuator}
+The alarm actuator (see Figure \ref{fig:aa}) waits for an oder to activate or deactivate the alarm. In both case, it calls a user implement method \textit{setAlarm()} with a different parameter ("true", "false").
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/alarmactuator}
+\caption{State Machine Diagram of Pressure Sensor} \label{fig:aa}
+\end{figure}
+
+
+\newpage
+\section{Customizing the code generator}\label{sec:customgenerator}
+We are currently working on a plug-in facility in order to be able to customize the AVATAR-to-C code generator. Send us an email to be informed about updates, or stay connected to \url{https://twitter.com/TTool_UML_SysML}
+\end{document}

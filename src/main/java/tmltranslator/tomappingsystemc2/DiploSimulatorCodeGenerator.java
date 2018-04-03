@@ -137,6 +137,9 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     }
 
     public void generateSystemC(boolean _debug, boolean _optimize) {
+
+        TraceManager.addDev("Generate SystemC code from DiploSimulatorCodeGenerator");
+
         debug = _debug;
         optimize = _optimize;
         tmlmapping.removeAllRandomSequences();

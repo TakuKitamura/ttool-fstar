@@ -1,0 +1,103 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1471" height="705" viewbox="45 58 1426 647">
+<line  x1="410" y1="270" x2="410" y2="400" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="410" y1="400" x2="405" y2="391" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="410" y1="400" x2="414" y2="391" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="470" y1="400" x2="470" y2="270" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="470" y1="270" x2="474" y2="278" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="470" y1="270" x2="465" y2="278" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="960" y1="470" x2="960" y2="525" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="960" y1="525" x2="1000" y2="533" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1000" y1="533" x2="990" y2="536" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1000" y1="533" x2="992" y2="526" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1058" y1="570" x2="1060" y2="625" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1060" y1="625" x2="1100" y2="635" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1100" y1="635" x2="1090" y2="637" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1100" y1="635" x2="1092" y2="628" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="550" y1="235" x2="595" y2="235" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="595" y1="235" x2="595" y2="450" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="595" y1="450" x2="740" y2="500" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="740" y1="500" x2="730" y2="501" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="740" y1="500" x2="733" y2="492" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="762" y1="170" x2="938" y2="227" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="938" y1="227" x2="928" y2="229" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="938" y1="227" x2="931" y2="219" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1000" y1="170" x2="1022" y2="227" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1022" y1="227" x2="1014" y2="220" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1022" y1="227" x2="1023" y2="217" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1299" y1="170" x2="1105" y2="227" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1105" y1="227" x2="1111" y2="219" stroke="#000000" stroke-width="1" fill="none"/>
+<line  x1="1105" y1="227" x2="1114" y2="229" stroke="#000000" stroke-width="1" fill="none"/>
+<rect  x="330" y="169" width="240" height="339" fill="#c0c0c0"/>
+<rect  x="330" y="169" width="241" height="340" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="393" y="186" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#ffffff">Req and attacks</text>
+<rect  x="630" y="375" width="749" height="324" fill="#c0c0c0"/>
+<rect  x="630" y="375" width="750" height="325" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="967" y="392" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#ffffff">SW Design</text>
+<rect  x="630" y="63" width="835" height="251" fill="#c0c0c0"/>
+<rect  x="630" y="63" width="836" height="252" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="979" y="80" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#ffffff">SW/HW Partitioning</text>
+<rect  x="50" y="300" width="199" height="69" fill="#e4f1f2"/>
+<rect  x="50" y="300" width="200" height="70" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="104" y="313" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Assumptions</text>
+<rect  x="350" y="200" width="199" height="69" fill="#e4f1f2"/>
+<rect  x="350" y="200" width="200" height="70" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="400" y="213" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Requirements</text>
+<text  x="355" y="240" style="font-size:12; font-family:SansSerif.plain; fill=#000000">SecurityRequirements</text>
+<rect  x="350" y="400" width="199" height="69" fill="#e4f1f2"/>
+<rect  x="350" y="400" width="200" height="70" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="423" y="413" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Attacks</text>
+<text  x="355" y="440" style="font-size:12; font-family:SansSerif.plain; fill=#000000">RetrieveData</text>
+<text  x="521" y="440" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">upp</text>
+<text  x="488" y="440" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">simu</text>
+<rect  x="650" y="100" width="223" height="69" fill="#e4f1f2"/>
+<rect  x="650" y="100" width="224" height="70" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="707" y="113" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Functional view</text>
+<text  x="655" y="140" style="font-size:12; font-family:SansSerif.plain; fill=#000000">NonSecureFV</text>
+<text  x="859" y="140" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">fv</text>
+<text  x="835" y="140" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">tml</text>
+<text  x="814" y="140" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">lot</text>
+<text  x="785" y="140" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">upp</text>
+<text  x="655" y="155" style="font-size:12; font-family:SansSerif.plain; fill=#000000">SecureFV</text>
+<text  x="859" y="155" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">fv</text>
+<text  x="835" y="155" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">tml</text>
+<text  x="814" y="155" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">lot</text>
+<text  x="785" y="155" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">upp</text>
+<text  x="723" y="155" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">sim-trace</text>
+<rect  x="1150" y="101" width="298" height="68" fill="#e4f1f2"/>
+<rect  x="1150" y="101" width="299" height="69" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="1238" y="114" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Architecture view</text>
+<text  x="1155" y="141" style="font-size:12; font-family:SansSerif.plain; fill=#000000">NonSecureArchitectureWithNonSecureFV</text>
+<text  x="1155" y="156" style="font-size:12; font-family:SansSerif.plain; fill=#000000">SecureArchitectureWithNonSecureFV</text>
+<rect  x="813" y="227" width="417" height="67" fill="#e4f1f2"/>
+<rect  x="813" y="227" width="418" height="68" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="991" y="240" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Mapping</text>
+<text  x="818" y="267" style="font-size:12; font-family:SansSerif.plain; fill=#000000">NonSecureArchitectureWithNonSecureFV</text>
+<text  x="1172" y="267" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">sim-anim</text>
+<text  x="1110" y="267" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">sim-trace</text>
+<text  x="818" y="282" style="font-size:12; font-family:SansSerif.plain; fill=#000000">SecureArchitectureWithNonSecureFV</text>
+<text  x="1172" y="282" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">sim-anim</text>
+<text  x="1110" y="282" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">sim-trace</text>
+<text  x="1073" y="282" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">tmap</text>
+<rect  x="887" y="100" width="226" height="69" fill="#e4f1f2"/>
+<rect  x="887" y="100" width="227" height="70" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="917" y="113" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Communication pattern</text>
+<rect  x="900" y="400" width="199" height="69" fill="#e4f1f2"/>
+<rect  x="900" y="400" width="200" height="70" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="970" y="413" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Analysis</text>
+<rect  x="1000" y="497" width="289" height="72" fill="#e4f1f2"/>
+<rect  x="1000" y="497" width="290" height="73" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="1120" y="510" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Design</text>
+<text  x="1005" y="537" style="font-size:12; font-family:SansSerif.plain; fill=#000000">SecurityProtocolDesign</text>
+<text  x="1268" y="537" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">inv</text>
+<text  x="1216" y="537" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">proverif</text>
+<text  x="1187" y="537" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">upp</text>
+<text  x="1154" y="537" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000">simu</text>
+<rect  x="1100" y="600" width="199" height="69" fill="#e4f1f2"/>
+<rect  x="1100" y="600" width="200" height="70" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="1158" y="613" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Prototyping</text>
+<rect  x="650" y="500" width="179" height="69" fill="#e4f1f2"/>
+<rect  x="650" y="500" width="180" height="70" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="702" y="513" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">Properties</text>
+</svg>
