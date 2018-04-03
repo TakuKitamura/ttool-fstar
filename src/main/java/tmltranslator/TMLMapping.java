@@ -48,6 +48,7 @@ import tmltranslator.toproverif.TML2ProVerif;
 import ui.TMLArchiPanel;
 import ui.TMLComponentDesignPanel;
 import ui.CorrespondanceTGElement;
+import automata.*;
 
 import java.util.*;
 
@@ -87,6 +88,12 @@ public class TMLMapping<E> {
     private boolean optimized = false;
     private int hashCode;
     private boolean hashCodeComputed = false;
+
+    // Automata to verify the mapping of channels
+    // and make minimal hardware
+    private Automata aut;
+    private HashMap<HwNode, State> nodesToStates;
+
 
 
 
@@ -1614,5 +1621,32 @@ public class TMLMapping<E> {
         s += "</TMLMAPPING>\n";
         //s = myutil.Conversion.transformToXMLString(s);
         return s;
+    }
+
+
+    public void makeAutomata() {
+        aut = new Automata();
+        nodesToStates = new HashMap<HwNode, State>();
+
+        // Make a state for each hardware node
+        for(HwNode node: tmla.getHwNodes()) {
+            State st = new State(node.getName());
+            st.referenceObject = node;
+            nodesToStates.put(node, st);
+        }
+
+        // Making links
+        for(HwLink link: tmla.getHwLinks()) {
+            HwNode node1 = link.bus;
+            HwNode node2 = link.hwnode;
+
+            State st1 = nodesToStates.get(node1);
+            State st2 = nodesToStates.get(node2);
+
+            if ((st1 != null) && (st2 != null)) {
+                Transition t = new Transition(link.getName(), st2);
+                st1.addTransition(t);
+            }
+        }
     }
 }
