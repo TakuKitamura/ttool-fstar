@@ -229,7 +229,7 @@ RunXCommands::~RunXCommands(){
 
 void RunXCommands::commandFinished(TMLCommand* iComm, ID iID){
 	_count++;
-	if (_count>=_commandsToExecute){
+	if (_count >= _commandsToExecute){
 		std::ostringstream aOut;
 		aOut << MSG_RUNXCOMMANDS << ": " << _commandsToExecute;
 		_simComp->setStopFlag(true, aOut.str());
@@ -240,7 +240,7 @@ void RunXCommands::commandFinished(TMLCommand* iComm, ID iID){
 }
 
 void RunXCommands::setCmdsToExecute(unsigned int iCommandsToExecute){
-	_commandsToExecute=iCommandsToExecute;
+	_commandsToExecute = iCommandsToExecute;
 }
 
 

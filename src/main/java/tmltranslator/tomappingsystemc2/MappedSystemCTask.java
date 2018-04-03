@@ -150,9 +150,9 @@ public class MappedSystemCTask {
         code += "#include <TMLbrbwChannel.h>\n#include <TMLbrnbwChannel.h>\n#include <TMLnbrnbwChannel.h>\n\n";
         code += "#include <TMLEventBChannel.h>\n#include <TMLEventFChannel.h>\n#include <TMLEventFBChannel.h>\n\n";
         code += "#include <TMLActionCommand.h>\n#include <TMLChoiceCommand.h>\n#include <TMLRandomChoiceCommand.h>\n#include <TMLExeciCommand.h>\n";
-        code += "#include <TMLSelectCommand.h>\n#include <TMLReadCommand.h>\n#include <TMLNotifiedCommand.h>\n#include<TMLExeciRangeCommand.h>\n";
+        code += "#include <TMLSelectCommand.h>\n#include <TMLReadCommand.h>\n#include <TMLNotifiedCommand.h>\n#include <TMLExeciRangeCommand.h>\n";
         code += "#include <TMLRequestCommand.h>\n#include <TMLSendCommand.h>\n#include <TMLWaitCommand.h>\n";
-        code += "#include <TMLWriteCommand.h>\n#include <TMLStopCommand.h>\n#include<TMLWriteMultCommand.h>\n#include <TMLRandomCommand.h>\n\n";
+        code += "#include <TMLWriteCommand.h>\n#include <TMLStopCommand.h>\n#include <TMLWriteMultCommand.h>\n#include <TMLRandomCommand.h>\n\n";
         code += "extern \"C\" bool condFunc(TMLTask* _ioTask_);\n";
         return code;
     }

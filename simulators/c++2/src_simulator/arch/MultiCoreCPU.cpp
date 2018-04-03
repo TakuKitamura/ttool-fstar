@@ -78,7 +78,7 @@ MultiCoreCPU::~MultiCoreCPU(){
 
 TMLTransaction* MultiCoreCPU::getNextTransaction(){
 #ifdef BUS_ENABLED
-  if (_masterNextTransaction==0 || _nextTransaction==0){
+  if (_masterNextTransaction == 0 || _nextTransaction == 0){
     return _nextTransaction;
   }else{
 #ifdef DEBUG_CPU
@@ -111,14 +111,14 @@ void MultiCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
   //std::cout << "get channel " << std::endl;
   TMLChannel* aChannel=_nextTransaction->getCommand()->getChannel(0);
   //std::cout << "after get channel " << std::endl;
-  if(aChannel==0){
+  if(aChannel == 0){
     //std::cout << "no channel " << std::endl;
     _masterNextTransaction=0;
   }else{
     //std::cout << "get bus " << std::endl;
-    _masterNextTransaction= getMasterForBus(aChannel->getFirstMaster(_nextTransaction));
+    _masterNextTransaction = getMasterForBus(aChannel->getFirstMaster(_nextTransaction));
     //std::cout << "after get first bus " << std::endl;
-    if (_masterNextTransaction!=0){
+    if (_masterNextTransaction !=0 ){
       //std::cout << "before register transaction at bus " << std::endl;
       _masterNextTransaction->registerTransaction(_nextTransaction);
       //std::cout << "Transaction registered at bus " << std::endl;
@@ -129,7 +129,7 @@ void MultiCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
   TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
   TMLTime aReminder = aStartTime % _timePerCycle;
   if (aReminder!=0) aStartTime+=_timePerCycle - aReminder;
-  //std::cout << "CPU: set starttime in CPU=" << aStartTime << "\n";
+  std::cout << "CPU: set starttime in CPU=" << aStartTime << "\n";
 
   _nextTransaction->setStartTime(aStartTime);
 
@@ -285,9 +285,9 @@ bool MultiCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
     std::cout << "CPU:addt: " << _name << " finalizing transaction next:" << _nextTransaction->toString() << " (enf of next) " << std::endl;
 #endif
     //_nextTransaction->getCommand()->execute();  //NEW!!!!
-    //std::cout << "CPU:addt: to be started" << std::endl;
+    std::cout << "CPU:addt: to be started" << std::endl;
     _endSchedule=_nextTransaction->getEndTime();
-    //std::cout << "set end schedule CPU: " << _endSchedule << "\n";
+    std::cout << "set end schedule CPU: " << _endSchedule << "\n";
     _simulatedTime=max(_simulatedTime,_endSchedule);
     _overallTransNo++; //NEW!!!!!!!!
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
@@ -321,7 +321,7 @@ void MultiCoreCPU::schedule(){
   //_scheduler->transWasScheduled(this); //NEW 05/05/11
 
   //if (aOldTransaction!=0){
-  if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction){ //NEW
+  if (aOldTransaction!=0 && aOldTransaction != _nextTransaction){ //NEW
     //std::cout << "3\n";
     //aOldTransaction->getCommand()->getTask()->resetScheduledFlag();  TO BE OMITTED????????????????????????????????
     //std::cout << "4\n";
@@ -358,13 +358,16 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
     aCurrTrans=*i;
     //if (aCurrTrans->getVirtualLength()==0) continue;
     aBlanks=aCurrTrans->getStartTime()-aCurrTime;
+    
     if (aBlanks>0){
       if (aBlanks==1)
         myfile << "<td title=\"idle time\" class=\"not\"></td>\n";
       else
         myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
     }
+    
     aLength=aCurrTrans->getPenalties();
+    
     if (aLength!=0){
       if (aLength==1){
         //myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t15\"></td>\n";
