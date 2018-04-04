@@ -44,7 +44,7 @@ package ui.tree;
 import translator.CheckingError;
 import tmltranslator.TMLCheckingError;
 import ui.*;
-import ui.graph.RG;
+import graph.RG;
 import myutil.*;
 
 import javax.swing.*;

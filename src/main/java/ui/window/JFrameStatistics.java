@@ -50,7 +50,7 @@ import ui.util.IconManager;
 import ui.StoppableGUIElement;
 import ui.ThreadGUIElement;
 import ui.file.AUTFileFilter;
-import ui.graph.AUTGraph;
+import graph.AUTGraph;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

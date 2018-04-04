@@ -37,82 +37,41 @@
  */
 
 
-package ui.graph;
 
-import myutil.*;
+
+package graph;
 
 /**
- * Class RG
- * Creation : 07/12/2016
- * * @version 1.0 07/12/2016
- *
- * @author Ludovic APVRILLE
+* Class CorePowerConsumption
+* Creation : 15/07/2009
+** @version 1.0 15/07/2009
+* @author Ludovic APVRILLE
  */
-public class RG {
-    public String name;
-    public AUTGraph graph;
-    public String fileName;
-    public String data;
-    public int nbOfStates = -1;
-    public int nbOfTransitions = -1;
-
-    public RG(String _name) {
-        name = _name;
+public class CorePowerConsumption  {
+    
+	private int nbOfModes;
+    private long ticks[];
+	private long powerConsumptionPerTick[];
+    
+    public CorePowerConsumption(int _nbOfModes) {
+		nbOfModes = _nbOfModes;
+		ticks = new long[nbOfModes];
+		powerConsumptionPerTick = new long[nbOfModes];
     }
-
-    public String getToolTip() {
-        return name;
-    }
-
-    public String toString() {
-        if (nbOfStates == -1) {
-            return name;
-        }
-        return name + " " + nbOfStates + " states, " + nbOfTransitions + " transitions";
-    }
-
-    public RG generateRefusalGraph() {
-        if (graph == null) {
-            if (data == null) {
-                return null;
-            }
-            graph = new AUTGraph();
-            graph.buildGraph(data);
-        }
-
-        TraceManager.addDev("Making Ref. G");
-        AUTGraph refusalGraph = graph.generateRefusalGraph();
-        //TraceManager.addDev("Null graph?");
-        if (refusalGraph == null) {
-            TraceManager.addDev("Null graph...");
-            return null;
-        }
-
-        RG ret = new RG(name + "_RF");
-        ret.graph = refusalGraph;
-        return ret;
-    }
-
-    public RG generateTestSequences() {
-        if (graph == null) {
-            if (data == null) {
-                return null;
-            }
-            graph = new AUTGraph();
-            graph.buildGraph(data);
-        }
-
-        TraceManager.addDev("Making Test sequences");
-        AUTGraph testSequencesGraph = graph.makeTestSequencesFromRefusalGraph();
-        //TraceManager.addDev("Null graph?");
-        if (testSequencesGraph == null) {
-            TraceManager.addDev("Null graph...");
-            return null;
-        }
-
-        RG ret = new RG(name + "_Test");
-        ret.graph = testSequencesGraph;
-        return ret;
-    }
-
+	
+	public void addPowerConsumption(int _mode, long _ticks) {
+		ticks[_mode] = ticks[_mode] + _ticks;
+	}
+	
+	public void setPowerConsumptionInMode(long _value, int _index) {
+		powerConsumptionPerTick[_index] = _value;
+	}
+    
+	public long computePowerConsumption() {
+		long pc = 0;
+		for (int i=0; i<nbOfModes; i++) {
+			pc += ticks[i]*powerConsumptionPerTick[i];
+		}
+		return pc;
+	}
 }

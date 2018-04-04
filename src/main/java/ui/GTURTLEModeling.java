@@ -103,7 +103,7 @@ import ui.dd.TDeploymentDiagramPanel;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.ftd.FaultTreeDiagramPanel;
-import ui.graph.RG;
+import graph.RG;
 import ui.het.CAMSBlockDiagramPanel;
 import ui.iod.InteractionOverviewDiagramPanel;
 import ui.ncdd.NCDiagramPanel;

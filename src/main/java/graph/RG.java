@@ -37,32 +37,82 @@
  */
 
 
+package graph;
 
-
-package ui.graph;
+import myutil.*;
 
 /**
-   * Class AUTElement
-   * Creation : 06/01/2017
-   ** @version 1.0 06/01/2017
-   * @author Ludovic APVRILLE
+ * Class RG
+ * Creation : 07/12/2016
+ * * @version 1.0 07/12/2016
+ *
+ * @author Ludovic APVRILLE
  */
-public class AUTElement implements Comparable<AUTElement> {
+public class RG {
+    public String name;
+    public AUTGraph graph;
+    public String fileName;
+    public String data;
+    public int nbOfStates = -1;
+    public int nbOfTransitions = -1;
 
-    public String value;
-
-    public AUTElement(String _value) {
-	value = _value;
+    public RG(String _name) {
+        name = _name;
     }
 
-    @Override
-    public int compareTo(AUTElement o1) {
-	return this.value.compareTo(o1.value);
+    public String getToolTip() {
+        return name;
     }
 
     public String toString() {
-	return value;
+        if (nbOfStates == -1) {
+            return name;
+        }
+        return name + " " + nbOfStates + " states, " + nbOfTransitions + " transitions";
     }
-    
+
+    public RG generateRefusalGraph() {
+        if (graph == null) {
+            if (data == null) {
+                return null;
+            }
+            graph = new AUTGraph();
+            graph.buildGraph(data);
+        }
+
+        TraceManager.addDev("Making Ref. G");
+        AUTGraph refusalGraph = graph.generateRefusalGraph();
+        //TraceManager.addDev("Null graph?");
+        if (refusalGraph == null) {
+            TraceManager.addDev("Null graph...");
+            return null;
+        }
+
+        RG ret = new RG(name + "_RF");
+        ret.graph = refusalGraph;
+        return ret;
+    }
+
+    public RG generateTestSequences() {
+        if (graph == null) {
+            if (data == null) {
+                return null;
+            }
+            graph = new AUTGraph();
+            graph.buildGraph(data);
+        }
+
+        TraceManager.addDev("Making Test sequences");
+        AUTGraph testSequencesGraph = graph.makeTestSequencesFromRefusalGraph();
+        //TraceManager.addDev("Null graph?");
+        if (testSequencesGraph == null) {
+            TraceManager.addDev("Null graph...");
+            return null;
+        }
+
+        RG ret = new RG(name + "_Test");
+        ret.graph = testSequencesGraph;
+        return ret;
+    }
 
 }

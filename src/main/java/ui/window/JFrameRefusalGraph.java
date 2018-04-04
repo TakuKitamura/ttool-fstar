@@ -45,8 +45,8 @@ import myutil.FileUtils;
 import myutil.ScrolledJTextArea;
 import ui.util.IconManager;
 import ui.MainGUI;
-import ui.graph.AUTGraph;
-import ui.graph.RG;
+import graph.AUTGraph;
+import graph.RG;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

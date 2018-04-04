@@ -39,7 +39,7 @@
 
 
 
-package ui.graph;
+package graph;
 
 import myutil.FileException;
 import myutil.FileUtils;

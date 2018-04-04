@@ -39,7 +39,7 @@
 
 
 
-package ui.graph;
+package graph;
 
 import java.awt.*;
 import java.util.ArrayList;

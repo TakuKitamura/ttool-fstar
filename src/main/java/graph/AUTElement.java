@@ -39,51 +39,30 @@
 
 
 
-package ui.graph;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+package graph;
 
 /**
-   * Class AUTSplitter
+   * Class AUTElement
    * Creation : 06/01/2017
    ** @version 1.0 06/01/2017
    * @author Ludovic APVRILLE
  */
-public class AUTSplitter  {
+public class AUTElement implements Comparable<AUTElement> {
 
-    
-    public ArrayList<AUTPartition> partitions;
+    public String value;
 
-    public AUTSplitter() {
-	partitions = new ArrayList<AUTPartition>();
+    public AUTElement(String _value) {
+	value = _value;
     }
 
-    public void addPartition(AUTPartition _p) {
-        partitions.add(_p);
+    @Override
+    public int compareTo(AUTElement o1) {
+	return this.value.compareTo(o1.value);
     }
 
     public String toString() {
-	StringBuffer sb = new StringBuffer("");
-	for(AUTPartition partition: partitions) {
-	    sb.append("{" + partition.toString() + "}");
-	}
-	return sb.toString();
+	return value;
     }
-
-    public int size() {
-	return partitions.size();
-    }
-
-    public int getHashCode() {
-        int[] values = new int[partitions.size()];
-        int cpt = 0;
-        for (AUTPartition p : partitions) {
-            values[cpt] = p.getHashCode();
-            cpt++;
-        }
-        return Arrays.hashCode(values);
-    }
-
+    
 
 }

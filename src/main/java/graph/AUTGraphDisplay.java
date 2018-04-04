@@ -37,7 +37,7 @@
  */
 
 
-package ui.graph;
+package graph;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;

@@ -48,7 +48,7 @@ import myutil.*;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
-import ui.graph.RG;
+import graph.RG;
 
 import javax.swing.*;
 import java.awt.*;

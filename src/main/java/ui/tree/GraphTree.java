@@ -43,7 +43,7 @@ package ui.tree;
 
 import myutil.GenericTree;
 import ui.MainGUI;
-import ui.graph.RG;
+import graph.RG;
 
 import java.util.List;
 

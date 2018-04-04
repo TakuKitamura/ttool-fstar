@@ -37,7 +37,7 @@
  */
 
 
-package ui.graph;
+package graph;
 
 import myutil.Conversion;
 import myutil.DijkstraState;

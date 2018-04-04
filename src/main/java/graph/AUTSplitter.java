@@ -39,39 +39,51 @@
 
 
 
-package ui.graph;
+package graph;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
-* Class CorePowerConsumption
-* Creation : 15/07/2009
-** @version 1.0 15/07/2009
-* @author Ludovic APVRILLE
+   * Class AUTSplitter
+   * Creation : 06/01/2017
+   ** @version 1.0 06/01/2017
+   * @author Ludovic APVRILLE
  */
-public class CorePowerConsumption  {
+public class AUTSplitter  {
+
     
-	private int nbOfModes;
-    private long ticks[];
-	private long powerConsumptionPerTick[];
-    
-    public CorePowerConsumption(int _nbOfModes) {
-		nbOfModes = _nbOfModes;
-		ticks = new long[nbOfModes];
-		powerConsumptionPerTick = new long[nbOfModes];
+    public ArrayList<AUTPartition> partitions;
+
+    public AUTSplitter() {
+	partitions = new ArrayList<AUTPartition>();
     }
-	
-	public void addPowerConsumption(int _mode, long _ticks) {
-		ticks[_mode] = ticks[_mode] + _ticks;
+
+    public void addPartition(AUTPartition _p) {
+        partitions.add(_p);
+    }
+
+    public String toString() {
+	StringBuffer sb = new StringBuffer("");
+	for(AUTPartition partition: partitions) {
+	    sb.append("{" + partition.toString() + "}");
 	}
-	
-	public void setPowerConsumptionInMode(long _value, int _index) {
-		powerConsumptionPerTick[_index] = _value;
-	}
-    
-	public long computePowerConsumption() {
-		long pc = 0;
-		for (int i=0; i<nbOfModes; i++) {
-			pc += ticks[i]*powerConsumptionPerTick[i];
-		}
-		return pc;
-	}
+	return sb.toString();
+    }
+
+    public int size() {
+	return partitions.size();
+    }
+
+    public int getHashCode() {
+        int[] values = new int[partitions.size()];
+        int cpt = 0;
+        for (AUTPartition p : partitions) {
+            values[cpt] = p.getHashCode();
+            cpt++;
+        }
+        return Arrays.hashCode(values);
+    }
+
+
 }
