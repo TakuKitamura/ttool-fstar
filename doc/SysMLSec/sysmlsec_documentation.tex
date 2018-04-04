@@ -353,22 +353,37 @@ Without taking into account penalties of the hardware platform (e.g. cache miss,
 \caption{Excerpt of the simulation of the secure application mapped on the non secure architecture} \label{fig:simu_mapping3}
 \end{figure*}
 
-\section{Designing security protocols}
+\subsection{Designing security protocols}
 During the HW/SW partitioning stage, security mechanisms have been modeled at a high level of abstraction, mostly for placing them correctly in the system, and evaluating their impact on the system performance. During the software design stage, security protocols can be designed in a more precise way.
 
 A design contains a block diagram (see Figure \ref{fig:design}) as well as a state machine for each regular block (see Figure \ref{fig:design_t}). 
 
+The block diagram contains a main block ("System") with two sub blocks ("T1" and "T2"). Two other blocks "Key" and "Messages" are used to define custom data types. T1 and T2 are cryptoblocks, i.e. they define default cryptographic methods e.g. encrypt, decrypt, hash, mac, message manipulation (concat, cut), etc. Last, a pragma operators:
+\begin{itemize}
+\item links cryptographic keys of T1 and T2. This key "sk" is system-wide, which means that it is shared once for all protocol sessions.
+\item gives a security property: the value of the attribute "secretData" of "T1" must remain confidential. 
+\end{itemize}
+
+
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=0.9\textwidth]{build/design-svg.pdf}
-\caption{Design of a security protocol} \label{fig:fv3}
+\caption{Design of a security protocol} \label{fig:design}
 \end{figure*}
 
 \begin{figure*}[htbp]
 \centering
-\includegraphics[width=0.2\textwidth]{build/design_t1-svg.pdf}
-\includegraphics[width=0.2\textwidth]{build/design_t2-svg.pdf}
-\caption{State machines of T1 (on the left) and T2 (on the right)} \label{fig:fv3}
+\includegraphics[width=0.2\textwidth]{build/design_t1-svg.pdf}\hspace{3cm}
+\includegraphics[width=0.35\textwidth]{build/design_t2-svg.pdf}
+\caption{State machines of T1 (on the left) and T2 (on the right)} \label{fig:design_t}
+\end{figure*}
+
+The security formal verification can be performed from these diagrams. Just like for HW/SW partitioning models, both security properties and the reachability of states can be studied, and results are back-traced to the diagrams with e.g. green locks when the property is satisfied (see Figure \ref{fig:design_result}).
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{build/design_result-svg.pdf}
+\caption{Result of the security verification} \label{fig:design_result}
 \end{figure*}
 
 \end{document}

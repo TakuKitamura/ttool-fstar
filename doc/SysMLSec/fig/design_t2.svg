@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="265"
+   height="425"
+   viewbox="313 45 268 424"
+   id="svg7972"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="design_t2.svg">
+  <metadata
+     id="metadata8074">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8072" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1144"
+     inkscape:window-height="794"
+     id="namedview8070"
+     showgrid="false"
+     inkscape:zoom="1.4232597"
+     inkscape:cx="219.993"
+     inkscape:cy="243.15704"
+     inkscape:window-x="862"
+     inkscape:window-y="543"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg7972" />
+  <ellipse
+     cx="407"
+     cy="57"
+     rx="7"
+     ry="7"
+     id="ellipse7974"
+     sodipodi:cx="407"
+     sodipodi:cy="57"
+     sodipodi:rx="7"
+     sodipodi:ry="7"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:#000000" />
+  <line
+     x1="96.983047"
+     y1="19.012711"
+     x2="96.983047"
+     y2="24.012711"
+     id="line7976"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="22.983051"
+     y="56.012711"
+     width="149"
+     height="39"
+     rx="5"
+     ry="5"
+     id="rect7978"
+     style="fill:#c1daf1" />
+  <rect
+     x="22.983051"
+     y="56.012711"
+     width="149"
+     height="39"
+     rx="5"
+     ry="5"
+     id="rect7980"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="38.983051"
+     y="71.012711"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7982">waitingForMessage</text>
+  <line
+     x1="22.983051"
+     y1="73.012711"
+     x2="171.98305"
+     y2="73.012711"
+     id="line7984"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="96.983047"
+     y1="130.01271"
+     x2="96.983047"
+     y2="125.01271"
+     id="line7986"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="96.983047"
+     y1="150.01271"
+     x2="96.983047"
+     y2="155.01271"
+     id="line7988"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="61.983051"
+     y1="131.01271"
+     x2="134.98305"
+     y2="131.01271"
+     id="line7990"
+     style="fill:none;stroke:#80b4cd;stroke-width:1" />
+  <line
+     x1="134.98305"
+     y1="131.01271"
+     x2="134.98305"
+     y2="151.01271"
+     id="line7992"
+     style="fill:none;stroke:#80b4cd;stroke-width:1" />
+  <line
+     x1="61.983051"
+     y1="151.01271"
+     x2="134.98305"
+     y2="151.01271"
+     id="line7994"
+     style="fill:none;stroke:#80b4cd;stroke-width:1" />
+  <line
+     x1="61.983051"
+     y1="131.01271"
+     x2="71.983047"
+     y2="141.01271"
+     id="line7996"
+     style="fill:none;stroke:#80b4cd;stroke-width:1" />
+  <line
+     x1="61.983051"
+     y1="151.01271"
+     x2="71.983047"
+     y2="141.01271"
+     id="line7998"
+     style="fill:none;stroke:#80b4cd;stroke-width:1" />
+  <line
+     x1="60.983051"
+     y1="130.01271"
+     x2="133.98305"
+     y2="130.01271"
+     id="line8000"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="133.98305"
+     y1="130.01271"
+     x2="133.98305"
+     y2="150.01271"
+     id="line8002"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="60.983051"
+     y1="150.01271"
+     x2="133.98305"
+     y2="150.01271"
+     id="line8004"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="60.983051"
+     y1="130.01271"
+     x2="70.983047"
+     y2="140.01271"
+     id="line8006"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="60.983051"
+     y1="150.01271"
+     x2="70.983047"
+     y2="140.01271"
+     id="line8008"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="72.983047"
+     y="145.01271"
+     style="font-size:12px;font-family:SansSerif"
+     id="text8010">chin(m2)</text>
+  <rect
+     x="25.983051"
+     y="187.01271"
+     width="142"
+     height="40"
+     rx="5"
+     ry="5"
+     id="rect8012"
+     style="fill:#c1daf1" />
+  <rect
+     x="25.983051"
+     y="187.01271"
+     width="142"
+     height="40"
+     rx="5"
+     ry="5"
+     id="rect8014"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="36.983051"
+     y="202.01271"
+     style="font-size:12px;font-family:SansSerif"
+     id="text8016">messageDecrypt</text>
+  <line
+     x1="25.983051"
+     y1="204.01271"
+     x2="167.98305"
+     y2="204.01271"
+     id="line8018"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="26.983051"
+     y="378.01273"
+     width="140"
+     height="40"
+     rx="5"
+     ry="5"
+     id="rect8020"
+     style="fill:#c1daf1" />
+  <rect
+     x="26.983051"
+     y="378.01273"
+     width="140"
+     height="40"
+     rx="5"
+     ry="5"
+     id="rect8022"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="33.983051"
+     y="393.01273"
+     style="font-size:12px;font-family:SansSerif"
+     id="text8024">SecretDataReceived</text>
+  <line
+     x1="26.983051"
+     y1="395.01273"
+     x2="166.98305"
+     y2="395.01273"
+     id="line8026"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="7.9830508"
+     y="293.01273"
+     width="178"
+     height="40"
+     rx="5"
+     ry="5"
+     id="rect8028"
+     style="fill:#c1daf1" />
+  <rect
+     x="7.9830508"
+     y="293.01273"
+     width="178"
+     height="40"
+     rx="5"
+     ry="5"
+     id="rect8030"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="27.983051"
+     y="308.01273"
+     style="font-size:12px;font-family:SansSerif"
+     id="text8032">messageDecrypted</text>
+  <line
+     x1="7.9830508"
+     y1="310.01273"
+     x2="185.98305"
+     y2="310.01273"
+     id="line8034"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="96.983047"
+     y1="24.012711"
+     x2="96.983047"
+     y2="56.012711"
+     id="line8036"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <polygon
+     points="402,93 411,93 407,102 "
+     id="polygon8038"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:#000000" />
+  <polygon
+     points="402,93 411,93 407,102 "
+     id="polygon8040"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="96.983047"
+     y1="95.012711"
+     x2="96.983047"
+     y2="125.01271"
+     id="line8042"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <polygon
+     points="402,162 411,162 407,171 "
+     id="polygon8044"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:#000000" />
+  <polygon
+     points="402,162 411,162 407,171 "
+     id="polygon8046"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="96.983047"
+     y1="155.01271"
+     x2="96.983047"
+     y2="187.01271"
+     id="line8048"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <polygon
+     points="402,224 411,224 407,233 "
+     id="polygon8050"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:#000000" />
+  <polygon
+     points="402,224 411,224 407,233 "
+     id="polygon8052"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="96.983047"
+     y1="227.01273"
+     x2="96.983047"
+     y2="293.01273"
+     id="line8054"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <polygon
+     points="402,330 411,330 407,339 "
+     id="polygon8056"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:#000000" />
+  <polygon
+     points="402,330 411,330 407,339 "
+     id="polygon8058"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="108.98305"
+     y="266.01273"
+     style="font-size:12px;font-family:SansSerif"
+     id="text8060">m = sdecrypt(m2, sk)</text>
+  <line
+     x1="96.983047"
+     y1="333.01273"
+     x2="96.983047"
+     y2="378.01273"
+     id="line8062"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <polygon
+     points="402,415 411,415 407,424 "
+     id="polygon8064"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:#000000" />
+  <polygon
+     points="402,415 411,415 407,424 "
+     id="polygon8066"
+     transform="translate(-310.01695,-45.987288)"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="120.98305"
+     y="357.01273"
+     style="font-size:12px;font-family:SansSerif"
+     id="text8068">receivedData = m.data</text>
+</svg>
