@@ -84,6 +84,4 @@ public class HwLink implements Comparable<HwLink> {
 	return s;
     }
 
-    
-
 }

@@ -220,7 +220,7 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
 
 
 	public void setRequestName(String name){
-		requestName=name;
+		requestName = name;
 		makeValue();
 	}	
 
@@ -229,8 +229,8 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
     }
 
 	public void setParam(int i, String s){
-		params[i]=s;
-		nParam=Math.max(i,nParam);
+		params[i] = s;
+		nParam = Math.max(i,nParam);
 	}
     public int nbOfParams() {
         return nParam;

@@ -99,7 +99,7 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
             resizeWithFather();
         }
 	
-        setMoveCd(x, y);
+        setMoveCd(x, y, true);
     }
 
     public void initScaling(int w, int h) {

@@ -5232,7 +5232,7 @@ or by a maintenance station
 
 
 <Modeling type="AVATAR Design" nameTab="Design" >
-<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="1400" >
+<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="899" minY="10" maxY="899" zoom="1.0000000000000016" >
 <MainCode value="#include &lt;sys/types.h&gt;"/>
 <MainCode value="#include &lt;sys/socket.h&gt;"/>
 <MainCode value="#include &lt;netinet/in.h&gt;"/>
@@ -5281,7 +5281,7 @@ or by a maintenance station
 <MainCode value=""/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="ObserverProp1;RemotelyControlledMicrowave;RemoteControl;MicroWaveOven;Bell;ControlPanel;Controller;Magnetron;Door;WirelessInterface;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2890" >
@@ -5289,8 +5289,8 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2889" />
-<P1  x="664" y="794" id="3057" />
-<P2  x="669" y="837" id="2925" />
+<P1  x="658" y="789" id="3040" />
+<P2  x="665" y="832" id="2908" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in obs_open()" />
@@ -5307,8 +5307,8 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2891" />
-<P1  x="411" y="496" id="3127" />
-<P2  x="115" y="497" id="3152" />
+<P1  x="409" y="491" id="3110" />
+<P2  x="112" y="492" id="3135" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in remoteStart(int value)" />
@@ -5323,10 +5323,10 @@ or by a maintenance station
 <TGConnectingPoint num="0" id="2895" />
 <TGConnectingPoint num="1" id="2896" />
 <TGConnectingPoint num="2" id="2897" />
-<P1  x="331" y="184" id="3175" />
-<P2  x="815" y="184" id="3176" />
-<Point x="332" y="151" />
-<Point x="815" y="151" />
+<P1  x="328" y="179" id="3158" />
+<P2  x="810" y="179" id="3159" />
+<Point x="329" y="150" />
+<Point x="812" y="150" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <iso value="in wirelessChannelRead(Message msg)" />
@@ -5335,7 +5335,7 @@ or by a maintenance station
 </extraparam>
 </CONNECTOR><SUBCOMPONENT type="-1" id="2893" >
 <father id="2898" num="0" />
-<cdparam x="332" y="151" />
+<cdparam x="329" y="150" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -5343,7 +5343,7 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="-1" id="2894" >
 <father id="2898" num="1" />
-<cdparam x="815" y="151" />
+<cdparam x="812" y="150" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -5355,8 +5355,8 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2899" />
-<P1  x="418" y="752" id="3054" />
-<P2  x="319" y="751" id="2996" />
+<P1  x="415" y="748" id="3037" />
+<P2  x="311" y="746" id="2979" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in ring()" />
@@ -5369,8 +5369,8 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2901" />
-<P1  x="792" y="766" id="3104" />
-<P2  x="746" y="752" id="3055" />
+<P1  x="789" y="761" id="3087" />
+<P2  x="740" y="748" id="3038" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in open()" />
@@ -5385,8 +5385,8 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2903" />
-<P1  x="746" y="627" id="3044" />
-<P2  x="777" y="538" id="3070" />
+<P1  x="740" y="625" id="3027" />
+<P2  x="775" y="532" id="3053" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in startM()" />
@@ -5401,8 +5401,8 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2905" />
-<P1  x="385" y="597" id="3021" />
-<P2  x="418" y="710" id="3045" />
+<P1  x="377" y="593" id="3004" />
+<P2  x="415" y="707" id="3028" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <iso value="in LEDOn()" />
@@ -5414,16 +5414,12 @@ or by a maintenance station
 <FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
 </extraparam>
 </CONNECTOR>
-<COMPONENT type="302" id="2923" >
-<cdparam x="382" y="26" />
-<sizeparam width="668" height="97" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="5000" id="2931" >
+<cdparam x="554" y="832" />
+<sizeparam width="223" height="126" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
-<infoparam name="Proverif Pragma" value="#InitialSystemKnowledge RemoteControl.PSK WirelessInterface.PSK
-#Authenticity RemoteControl.SendingRemoteOrder.msg WirelessInterface.gotDecryptedOrder.msg2
-
-#Confidentiality RemoteControl.duration
-" />
+<cdrectangleparam minX="6" maxX="369" minY="6" maxY="369" />
+<infoparam name="Block0" value="ObserverProp1" />
 <TGConnectingPoint num="0" id="2907" />
 <TGConnectingPoint num="1" id="2908" />
 <TGConnectingPoint num="2" id="2909" />
@@ -5440,44 +5436,14 @@ or by a maintenance station
 <TGConnectingPoint num="13" id="2920" />
 <TGConnectingPoint num="14" id="2921" />
 <TGConnectingPoint num="15" id="2922" />
-<extraparam>
-<Line value="#InitialSystemKnowledge RemoteControl.PSK WirelessInterface.PSK" />
-<Line value="#Authenticity RemoteControl.SendingRemoteOrder.msg WirelessInterface.gotDecryptedOrder.msg2" />
-<Line value="" />
-<Line value="#Confidentiality RemoteControl.duration" />
-</extraparam>
-</COMPONENT>
-
-<COMPONENT type="5000" id="2948" >
-<cdparam x="557" y="837" />
-<sizeparam width="225" height="131" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
-<infoparam name="Block0" value="ObserverProp1" />
-<TGConnectingPoint num="0" id="2924" />
-<TGConnectingPoint num="1" id="2925" />
-<TGConnectingPoint num="2" id="2926" />
-<TGConnectingPoint num="3" id="2927" />
-<TGConnectingPoint num="4" id="2928" />
-<TGConnectingPoint num="5" id="2929" />
-<TGConnectingPoint num="6" id="2930" />
-<TGConnectingPoint num="7" id="2931" />
-<TGConnectingPoint num="8" id="2932" />
-<TGConnectingPoint num="9" id="2933" />
-<TGConnectingPoint num="10" id="2934" />
-<TGConnectingPoint num="11" id="2935" />
-<TGConnectingPoint num="12" id="2936" />
-<TGConnectingPoint num="13" id="2937" />
-<TGConnectingPoint num="14" id="2938" />
-<TGConnectingPoint num="15" id="2939" />
-<TGConnectingPoint num="16" id="2940" />
-<TGConnectingPoint num="17" id="2941" />
-<TGConnectingPoint num="18" id="2942" />
-<TGConnectingPoint num="19" id="2943" />
-<TGConnectingPoint num="20" id="2944" />
-<TGConnectingPoint num="21" id="2945" />
-<TGConnectingPoint num="22" id="2946" />
-<TGConnectingPoint num="23" id="2947" />
+<TGConnectingPoint num="16" id="2923" />
+<TGConnectingPoint num="17" id="2924" />
+<TGConnectingPoint num="18" id="2925" />
+<TGConnectingPoint num="19" id="2926" />
+<TGConnectingPoint num="20" id="2927" />
+<TGConnectingPoint num="21" id="2928" />
+<TGConnectingPoint num="22" id="2929" />
+<TGConnectingPoint num="23" id="2930" />
 <extraparam>
 <CryptoBlock value="false" />
 <Signal value="in obs_open()" attached="true" />
@@ -5486,111 +5452,111 @@ or by a maintenance station
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5003" id="2957" >
-<cdparam x="326" y="839" />
-<sizeparam width="203" height="93" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="5003" id="2940" >
+<cdparam x="325" y="835" />
+<sizeparam width="200" height="90" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="6" maxX="369" minY="6" maxY="369" />
 <infoparam name="DataType0" value="Message" />
-<TGConnectingPoint num="0" id="2949" />
-<TGConnectingPoint num="1" id="2950" />
-<TGConnectingPoint num="2" id="2951" />
-<TGConnectingPoint num="3" id="2952" />
-<TGConnectingPoint num="4" id="2953" />
-<TGConnectingPoint num="5" id="2954" />
-<TGConnectingPoint num="6" id="2955" />
-<TGConnectingPoint num="7" id="2956" />
+<TGConnectingPoint num="0" id="2932" />
+<TGConnectingPoint num="1" id="2933" />
+<TGConnectingPoint num="2" id="2934" />
+<TGConnectingPoint num="3" id="2935" />
+<TGConnectingPoint num="4" id="2936" />
+<TGConnectingPoint num="5" id="2937" />
+<TGConnectingPoint num="6" id="2938" />
+<TGConnectingPoint num="7" id="2939" />
 <extraparam>
 <Attribute access="0" id="data" value="" type="8" typeOther="" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5003" id="2966" >
-<cdparam x="92" y="837" />
-<sizeparam width="203" height="90" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="5003" id="2949" >
+<cdparam x="89" y="832" />
+<sizeparam width="200" height="87" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="6" maxX="369" minY="6" maxY="369" />
 <infoparam name="DataType0" value="Key" />
-<TGConnectingPoint num="0" id="2958" />
-<TGConnectingPoint num="1" id="2959" />
-<TGConnectingPoint num="2" id="2960" />
-<TGConnectingPoint num="3" id="2961" />
-<TGConnectingPoint num="4" id="2962" />
-<TGConnectingPoint num="5" id="2963" />
-<TGConnectingPoint num="6" id="2964" />
-<TGConnectingPoint num="7" id="2965" />
+<TGConnectingPoint num="0" id="2941" />
+<TGConnectingPoint num="1" id="2942" />
+<TGConnectingPoint num="2" id="2943" />
+<TGConnectingPoint num="3" id="2944" />
+<TGConnectingPoint num="4" id="2945" />
+<TGConnectingPoint num="5" id="2946" />
+<TGConnectingPoint num="6" id="2947" />
+<TGConnectingPoint num="7" id="2948" />
 <extraparam>
 <Attribute access="0" id="data" value="" type="8" typeOther="" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5000" id="3191" >
-<cdparam x="90" y="184" />
-<sizeparam width="967" height="631" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="5000" id="3174" >
+<cdparam x="87" y="179" />
+<sizeparam width="964" height="626" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<cdrectangleparam minX="6" maxX="369" minY="6" maxY="369" />
 <infoparam name="Block0" value="RemotelyControlledMicrowave" />
-<TGConnectingPoint num="0" id="3167" />
-<TGConnectingPoint num="1" id="3168" />
-<TGConnectingPoint num="2" id="3169" />
-<TGConnectingPoint num="3" id="3170" />
-<TGConnectingPoint num="4" id="3171" />
-<TGConnectingPoint num="5" id="3172" />
-<TGConnectingPoint num="6" id="3173" />
-<TGConnectingPoint num="7" id="3174" />
-<TGConnectingPoint num="8" id="3175" />
-<TGConnectingPoint num="9" id="3176" />
-<TGConnectingPoint num="10" id="3177" />
-<TGConnectingPoint num="11" id="3178" />
-<TGConnectingPoint num="12" id="3179" />
-<TGConnectingPoint num="13" id="3180" />
-<TGConnectingPoint num="14" id="3181" />
-<TGConnectingPoint num="15" id="3182" />
-<TGConnectingPoint num="16" id="3183" />
-<TGConnectingPoint num="17" id="3184" />
-<TGConnectingPoint num="18" id="3185" />
-<TGConnectingPoint num="19" id="3186" />
-<TGConnectingPoint num="20" id="3187" />
-<TGConnectingPoint num="21" id="3188" />
-<TGConnectingPoint num="22" id="3189" />
-<TGConnectingPoint num="23" id="3190" />
+<TGConnectingPoint num="0" id="3150" />
+<TGConnectingPoint num="1" id="3151" />
+<TGConnectingPoint num="2" id="3152" />
+<TGConnectingPoint num="3" id="3153" />
+<TGConnectingPoint num="4" id="3154" />
+<TGConnectingPoint num="5" id="3155" />
+<TGConnectingPoint num="6" id="3156" />
+<TGConnectingPoint num="7" id="3157" />
+<TGConnectingPoint num="8" id="3158" />
+<TGConnectingPoint num="9" id="3159" />
+<TGConnectingPoint num="10" id="3160" />
+<TGConnectingPoint num="11" id="3161" />
+<TGConnectingPoint num="12" id="3162" />
+<TGConnectingPoint num="13" id="3163" />
+<TGConnectingPoint num="14" id="3164" />
+<TGConnectingPoint num="15" id="3165" />
+<TGConnectingPoint num="16" id="3166" />
+<TGConnectingPoint num="17" id="3167" />
+<TGConnectingPoint num="18" id="3168" />
+<TGConnectingPoint num="19" id="3169" />
+<TGConnectingPoint num="20" id="3170" />
+<TGConnectingPoint num="21" id="3171" />
+<TGConnectingPoint num="22" id="3172" />
+<TGConnectingPoint num="23" id="3173" />
 <extraparam>
 <CryptoBlock value="false" />
 <Signal value="in wirelessChannelRead(Message msg)" attached="true" />
 <Signal value="out wirelessChannelWrite(Message msg)" attached="true" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5000" id="2991" >
-<father id="3191" num="0" />
-<cdparam x="433" y="231" />
-<sizeparam width="414" height="148" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="2974" >
+<father id="3174" num="0" />
+<cdparam x="429" y="226" />
+<sizeparam width="410" height="143" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="553" minY="0" maxY="483" />
+<cdrectangleparam minX="0" maxX="554" minY="0" maxY="483" />
 <infoparam name="Block0" value="RemoteControl" />
-<TGConnectingPoint num="0" id="2967" />
-<TGConnectingPoint num="1" id="2968" />
-<TGConnectingPoint num="2" id="2969" />
-<TGConnectingPoint num="3" id="2970" />
-<TGConnectingPoint num="4" id="2971" />
-<TGConnectingPoint num="5" id="2972" />
-<TGConnectingPoint num="6" id="2973" />
-<TGConnectingPoint num="7" id="2974" />
-<TGConnectingPoint num="8" id="2975" />
-<TGConnectingPoint num="9" id="2976" />
-<TGConnectingPoint num="10" id="2977" />
-<TGConnectingPoint num="11" id="2978" />
-<TGConnectingPoint num="12" id="2979" />
-<TGConnectingPoint num="13" id="2980" />
-<TGConnectingPoint num="14" id="2981" />
-<TGConnectingPoint num="15" id="2982" />
-<TGConnectingPoint num="16" id="2983" />
-<TGConnectingPoint num="17" id="2984" />
-<TGConnectingPoint num="18" id="2985" />
-<TGConnectingPoint num="19" id="2986" />
-<TGConnectingPoint num="20" id="2987" />
-<TGConnectingPoint num="21" id="2988" />
-<TGConnectingPoint num="22" id="2989" />
-<TGConnectingPoint num="23" id="2990" />
+<TGConnectingPoint num="0" id="2950" />
+<TGConnectingPoint num="1" id="2951" />
+<TGConnectingPoint num="2" id="2952" />
+<TGConnectingPoint num="3" id="2953" />
+<TGConnectingPoint num="4" id="2954" />
+<TGConnectingPoint num="5" id="2955" />
+<TGConnectingPoint num="6" id="2956" />
+<TGConnectingPoint num="7" id="2957" />
+<TGConnectingPoint num="8" id="2958" />
+<TGConnectingPoint num="9" id="2959" />
+<TGConnectingPoint num="10" id="2960" />
+<TGConnectingPoint num="11" id="2961" />
+<TGConnectingPoint num="12" id="2962" />
+<TGConnectingPoint num="13" id="2963" />
+<TGConnectingPoint num="14" id="2964" />
+<TGConnectingPoint num="15" id="2965" />
+<TGConnectingPoint num="16" id="2966" />
+<TGConnectingPoint num="17" id="2967" />
+<TGConnectingPoint num="18" id="2968" />
+<TGConnectingPoint num="19" id="2969" />
+<TGConnectingPoint num="20" id="2970" />
+<TGConnectingPoint num="21" id="2971" />
+<TGConnectingPoint num="22" id="2972" />
+<TGConnectingPoint num="23" id="2973" />
 <extraparam>
 <CryptoBlock value="true" />
 <Attribute access="0" id="duration" value="12" type="8" typeOther="" />
@@ -5623,73 +5589,73 @@ or by a maintenance station
 <globalCode value="/* This is my global code !!!! */" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="3166" >
-<father id="3191" num="1" />
-<cdparam x="115" y="394" />
-<sizeparam width="921" height="412" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="3149" >
+<father id="3174" num="1" />
+<cdparam x="112" y="390" />
+<sizeparam width="918" height="409" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="46" minY="0" maxY="219" />
+<cdrectangleparam minX="0" maxX="46" minY="0" maxY="217" />
 <infoparam name="Block0" value="MicroWaveOven" />
-<TGConnectingPoint num="0" id="3142" />
-<TGConnectingPoint num="1" id="3143" />
-<TGConnectingPoint num="2" id="3144" />
-<TGConnectingPoint num="3" id="3145" />
-<TGConnectingPoint num="4" id="3146" />
-<TGConnectingPoint num="5" id="3147" />
-<TGConnectingPoint num="6" id="3148" />
-<TGConnectingPoint num="7" id="3149" />
-<TGConnectingPoint num="8" id="3150" />
-<TGConnectingPoint num="9" id="3151" />
-<TGConnectingPoint num="10" id="3152" />
-<TGConnectingPoint num="11" id="3153" />
-<TGConnectingPoint num="12" id="3154" />
-<TGConnectingPoint num="13" id="3155" />
-<TGConnectingPoint num="14" id="3156" />
-<TGConnectingPoint num="15" id="3157" />
-<TGConnectingPoint num="16" id="3158" />
-<TGConnectingPoint num="17" id="3159" />
-<TGConnectingPoint num="18" id="3160" />
-<TGConnectingPoint num="19" id="3161" />
-<TGConnectingPoint num="20" id="3162" />
-<TGConnectingPoint num="21" id="3163" />
-<TGConnectingPoint num="22" id="3164" />
-<TGConnectingPoint num="23" id="3165" />
+<TGConnectingPoint num="0" id="3125" />
+<TGConnectingPoint num="1" id="3126" />
+<TGConnectingPoint num="2" id="3127" />
+<TGConnectingPoint num="3" id="3128" />
+<TGConnectingPoint num="4" id="3129" />
+<TGConnectingPoint num="5" id="3130" />
+<TGConnectingPoint num="6" id="3131" />
+<TGConnectingPoint num="7" id="3132" />
+<TGConnectingPoint num="8" id="3133" />
+<TGConnectingPoint num="9" id="3134" />
+<TGConnectingPoint num="10" id="3135" />
+<TGConnectingPoint num="11" id="3136" />
+<TGConnectingPoint num="12" id="3137" />
+<TGConnectingPoint num="13" id="3138" />
+<TGConnectingPoint num="14" id="3139" />
+<TGConnectingPoint num="15" id="3140" />
+<TGConnectingPoint num="16" id="3141" />
+<TGConnectingPoint num="17" id="3142" />
+<TGConnectingPoint num="18" id="3143" />
+<TGConnectingPoint num="19" id="3144" />
+<TGConnectingPoint num="20" id="3145" />
+<TGConnectingPoint num="21" id="3146" />
+<TGConnectingPoint num="22" id="3147" />
+<TGConnectingPoint num="23" id="3148" />
 <extraparam>
 <CryptoBlock value="false" />
 <Signal value="in remoteStart(int value)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="3016" >
-<father id="3166" num="0" />
-<cdparam x="138" y="704" />
-<sizeparam width="181" height="95" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="2999" >
+<father id="3149" num="0" />
+<cdparam x="135" y="701" />
+<sizeparam width="176" height="90" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="740" minY="0" maxY="317" />
+<cdrectangleparam minX="0" maxX="742" minY="0" maxY="319" />
 <infoparam name="Block0" value="Bell" />
-<TGConnectingPoint num="0" id="2992" />
-<TGConnectingPoint num="1" id="2993" />
-<TGConnectingPoint num="2" id="2994" />
-<TGConnectingPoint num="3" id="2995" />
-<TGConnectingPoint num="4" id="2996" />
-<TGConnectingPoint num="5" id="2997" />
-<TGConnectingPoint num="6" id="2998" />
-<TGConnectingPoint num="7" id="2999" />
-<TGConnectingPoint num="8" id="3000" />
-<TGConnectingPoint num="9" id="3001" />
-<TGConnectingPoint num="10" id="3002" />
-<TGConnectingPoint num="11" id="3003" />
-<TGConnectingPoint num="12" id="3004" />
-<TGConnectingPoint num="13" id="3005" />
-<TGConnectingPoint num="14" id="3006" />
-<TGConnectingPoint num="15" id="3007" />
-<TGConnectingPoint num="16" id="3008" />
-<TGConnectingPoint num="17" id="3009" />
-<TGConnectingPoint num="18" id="3010" />
-<TGConnectingPoint num="19" id="3011" />
-<TGConnectingPoint num="20" id="3012" />
-<TGConnectingPoint num="21" id="3013" />
-<TGConnectingPoint num="22" id="3014" />
-<TGConnectingPoint num="23" id="3015" />
+<TGConnectingPoint num="0" id="2975" />
+<TGConnectingPoint num="1" id="2976" />
+<TGConnectingPoint num="2" id="2977" />
+<TGConnectingPoint num="3" id="2978" />
+<TGConnectingPoint num="4" id="2979" />
+<TGConnectingPoint num="5" id="2980" />
+<TGConnectingPoint num="6" id="2981" />
+<TGConnectingPoint num="7" id="2982" />
+<TGConnectingPoint num="8" id="2983" />
+<TGConnectingPoint num="9" id="2984" />
+<TGConnectingPoint num="10" id="2985" />
+<TGConnectingPoint num="11" id="2986" />
+<TGConnectingPoint num="12" id="2987" />
+<TGConnectingPoint num="13" id="2988" />
+<TGConnectingPoint num="14" id="2989" />
+<TGConnectingPoint num="15" id="2990" />
+<TGConnectingPoint num="16" id="2991" />
+<TGConnectingPoint num="17" id="2992" />
+<TGConnectingPoint num="18" id="2993" />
+<TGConnectingPoint num="19" id="2994" />
+<TGConnectingPoint num="20" id="2995" />
+<TGConnectingPoint num="21" id="2996" />
+<TGConnectingPoint num="22" id="2997" />
+<TGConnectingPoint num="23" id="2998" />
 <extraparam>
 <CryptoBlock value="false" />
 <Method value="$runBell()" />
@@ -5703,37 +5669,37 @@ or by a maintenance station
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="3041" >
-<father id="3166" num="1" />
-<cdparam x="129" y="516" />
-<sizeparam width="256" height="162" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="3024" >
+<father id="3149" num="1" />
+<cdparam x="126" y="514" />
+<sizeparam width="251" height="159" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="665" minY="0" maxY="250" />
+<cdrectangleparam minX="0" maxX="667" minY="0" maxY="250" />
 <infoparam name="Block0" value="ControlPanel" />
-<TGConnectingPoint num="0" id="3017" />
-<TGConnectingPoint num="1" id="3018" />
-<TGConnectingPoint num="2" id="3019" />
-<TGConnectingPoint num="3" id="3020" />
-<TGConnectingPoint num="4" id="3021" />
-<TGConnectingPoint num="5" id="3022" />
-<TGConnectingPoint num="6" id="3023" />
-<TGConnectingPoint num="7" id="3024" />
-<TGConnectingPoint num="8" id="3025" />
-<TGConnectingPoint num="9" id="3026" />
-<TGConnectingPoint num="10" id="3027" />
-<TGConnectingPoint num="11" id="3028" />
-<TGConnectingPoint num="12" id="3029" />
-<TGConnectingPoint num="13" id="3030" />
-<TGConnectingPoint num="14" id="3031" />
-<TGConnectingPoint num="15" id="3032" />
-<TGConnectingPoint num="16" id="3033" />
-<TGConnectingPoint num="17" id="3034" />
-<TGConnectingPoint num="18" id="3035" />
-<TGConnectingPoint num="19" id="3036" />
-<TGConnectingPoint num="20" id="3037" />
-<TGConnectingPoint num="21" id="3038" />
-<TGConnectingPoint num="22" id="3039" />
-<TGConnectingPoint num="23" id="3040" />
+<TGConnectingPoint num="0" id="3000" />
+<TGConnectingPoint num="1" id="3001" />
+<TGConnectingPoint num="2" id="3002" />
+<TGConnectingPoint num="3" id="3003" />
+<TGConnectingPoint num="4" id="3004" />
+<TGConnectingPoint num="5" id="3005" />
+<TGConnectingPoint num="6" id="3006" />
+<TGConnectingPoint num="7" id="3007" />
+<TGConnectingPoint num="8" id="3008" />
+<TGConnectingPoint num="9" id="3009" />
+<TGConnectingPoint num="10" id="3010" />
+<TGConnectingPoint num="11" id="3011" />
+<TGConnectingPoint num="12" id="3012" />
+<TGConnectingPoint num="13" id="3013" />
+<TGConnectingPoint num="14" id="3014" />
+<TGConnectingPoint num="15" id="3015" />
+<TGConnectingPoint num="16" id="3016" />
+<TGConnectingPoint num="17" id="3017" />
+<TGConnectingPoint num="18" id="3018" />
+<TGConnectingPoint num="19" id="3019" />
+<TGConnectingPoint num="20" id="3020" />
+<TGConnectingPoint num="21" id="3021" />
+<TGConnectingPoint num="22" id="3022" />
+<TGConnectingPoint num="23" id="3023" />
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="duration" value="9" type="8" typeOther="" />
@@ -5742,37 +5708,37 @@ or by a maintenance station
 <Signal value="out startButton(int duration)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="3066" >
-<father id="3166" num="2" />
-<cdparam x="418" y="627" />
-<sizeparam width="328" height="167" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="3049" >
+<father id="3149" num="2" />
+<cdparam x="415" y="625" />
+<sizeparam width="325" height="164" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="593" minY="0" maxY="245" />
 <infoparam name="Block0" value="Controller" />
-<TGConnectingPoint num="0" id="3042" />
-<TGConnectingPoint num="1" id="3043" />
-<TGConnectingPoint num="2" id="3044" />
-<TGConnectingPoint num="3" id="3045" />
-<TGConnectingPoint num="4" id="3046" />
-<TGConnectingPoint num="5" id="3047" />
-<TGConnectingPoint num="6" id="3048" />
-<TGConnectingPoint num="7" id="3049" />
-<TGConnectingPoint num="8" id="3050" />
-<TGConnectingPoint num="9" id="3051" />
-<TGConnectingPoint num="10" id="3052" />
-<TGConnectingPoint num="11" id="3053" />
-<TGConnectingPoint num="12" id="3054" />
-<TGConnectingPoint num="13" id="3055" />
-<TGConnectingPoint num="14" id="3056" />
-<TGConnectingPoint num="15" id="3057" />
-<TGConnectingPoint num="16" id="3058" />
-<TGConnectingPoint num="17" id="3059" />
-<TGConnectingPoint num="18" id="3060" />
-<TGConnectingPoint num="19" id="3061" />
-<TGConnectingPoint num="20" id="3062" />
-<TGConnectingPoint num="21" id="3063" />
-<TGConnectingPoint num="22" id="3064" />
-<TGConnectingPoint num="23" id="3065" />
+<TGConnectingPoint num="0" id="3025" />
+<TGConnectingPoint num="1" id="3026" />
+<TGConnectingPoint num="2" id="3027" />
+<TGConnectingPoint num="3" id="3028" />
+<TGConnectingPoint num="4" id="3029" />
+<TGConnectingPoint num="5" id="3030" />
+<TGConnectingPoint num="6" id="3031" />
+<TGConnectingPoint num="7" id="3032" />
+<TGConnectingPoint num="8" id="3033" />
+<TGConnectingPoint num="9" id="3034" />
+<TGConnectingPoint num="10" id="3035" />
+<TGConnectingPoint num="11" id="3036" />
+<TGConnectingPoint num="12" id="3037" />
+<TGConnectingPoint num="13" id="3038" />
+<TGConnectingPoint num="14" id="3039" />
+<TGConnectingPoint num="15" id="3040" />
+<TGConnectingPoint num="16" id="3041" />
+<TGConnectingPoint num="17" id="3042" />
+<TGConnectingPoint num="18" id="3043" />
+<TGConnectingPoint num="19" id="3044" />
+<TGConnectingPoint num="20" id="3045" />
+<TGConnectingPoint num="21" id="3046" />
+<TGConnectingPoint num="22" id="3047" />
+<TGConnectingPoint num="23" id="3048" />
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="duration" value="5" type="8" typeOther="" />
@@ -5820,37 +5786,37 @@ or by a maintenance station
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="3091" >
-<father id="3166" num="3" />
-<cdparam x="777" y="458" />
-<sizeparam width="253" height="160" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="3074" >
+<father id="3149" num="3" />
+<cdparam x="775" y="454" />
+<sizeparam width="250" height="157" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
 <infoparam name="Block0" value="Magnetron" />
-<TGConnectingPoint num="0" id="3067" />
-<TGConnectingPoint num="1" id="3068" />
-<TGConnectingPoint num="2" id="3069" />
-<TGConnectingPoint num="3" id="3070" />
-<TGConnectingPoint num="4" id="3071" />
-<TGConnectingPoint num="5" id="3072" />
-<TGConnectingPoint num="6" id="3073" />
-<TGConnectingPoint num="7" id="3074" />
-<TGConnectingPoint num="8" id="3075" />
-<TGConnectingPoint num="9" id="3076" />
-<TGConnectingPoint num="10" id="3077" />
-<TGConnectingPoint num="11" id="3078" />
-<TGConnectingPoint num="12" id="3079" />
-<TGConnectingPoint num="13" id="3080" />
-<TGConnectingPoint num="14" id="3081" />
-<TGConnectingPoint num="15" id="3082" />
-<TGConnectingPoint num="16" id="3083" />
-<TGConnectingPoint num="17" id="3084" />
-<TGConnectingPoint num="18" id="3085" />
-<TGConnectingPoint num="19" id="3086" />
-<TGConnectingPoint num="20" id="3087" />
-<TGConnectingPoint num="21" id="3088" />
-<TGConnectingPoint num="22" id="3089" />
-<TGConnectingPoint num="23" id="3090" />
+<TGConnectingPoint num="0" id="3050" />
+<TGConnectingPoint num="1" id="3051" />
+<TGConnectingPoint num="2" id="3052" />
+<TGConnectingPoint num="3" id="3053" />
+<TGConnectingPoint num="4" id="3054" />
+<TGConnectingPoint num="5" id="3055" />
+<TGConnectingPoint num="6" id="3056" />
+<TGConnectingPoint num="7" id="3057" />
+<TGConnectingPoint num="8" id="3058" />
+<TGConnectingPoint num="9" id="3059" />
+<TGConnectingPoint num="10" id="3060" />
+<TGConnectingPoint num="11" id="3061" />
+<TGConnectingPoint num="12" id="3062" />
+<TGConnectingPoint num="13" id="3063" />
+<TGConnectingPoint num="14" id="3064" />
+<TGConnectingPoint num="15" id="3065" />
+<TGConnectingPoint num="16" id="3066" />
+<TGConnectingPoint num="17" id="3067" />
+<TGConnectingPoint num="18" id="3068" />
+<TGConnectingPoint num="19" id="3069" />
+<TGConnectingPoint num="20" id="3070" />
+<TGConnectingPoint num="21" id="3071" />
+<TGConnectingPoint num="22" id="3072" />
+<TGConnectingPoint num="23" id="3073" />
 <extraparam>
 <CryptoBlock value="false" />
 <Attribute access="0" id="power" value="0" type="8" typeOther="" />
@@ -5870,37 +5836,37 @@ or by a maintenance station
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="3116" >
-<father id="3166" num="4" />
-<cdparam x="792" y="672" />
-<sizeparam width="215" height="126" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="3099" >
+<father id="3149" num="4" />
+<cdparam x="789" y="668" />
+<sizeparam width="212" height="125" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="706" minY="0" maxY="286" />
+<cdrectangleparam minX="0" maxX="706" minY="0" maxY="284" />
 <infoparam name="Block0" value="Door" />
-<TGConnectingPoint num="0" id="3092" />
-<TGConnectingPoint num="1" id="3093" />
-<TGConnectingPoint num="2" id="3094" />
-<TGConnectingPoint num="3" id="3095" />
-<TGConnectingPoint num="4" id="3096" />
-<TGConnectingPoint num="5" id="3097" />
-<TGConnectingPoint num="6" id="3098" />
-<TGConnectingPoint num="7" id="3099" />
-<TGConnectingPoint num="8" id="3100" />
-<TGConnectingPoint num="9" id="3101" />
-<TGConnectingPoint num="10" id="3102" />
-<TGConnectingPoint num="11" id="3103" />
-<TGConnectingPoint num="12" id="3104" />
-<TGConnectingPoint num="13" id="3105" />
-<TGConnectingPoint num="14" id="3106" />
-<TGConnectingPoint num="15" id="3107" />
-<TGConnectingPoint num="16" id="3108" />
-<TGConnectingPoint num="17" id="3109" />
-<TGConnectingPoint num="18" id="3110" />
-<TGConnectingPoint num="19" id="3111" />
-<TGConnectingPoint num="20" id="3112" />
-<TGConnectingPoint num="21" id="3113" />
-<TGConnectingPoint num="22" id="3114" />
-<TGConnectingPoint num="23" id="3115" />
+<TGConnectingPoint num="0" id="3075" />
+<TGConnectingPoint num="1" id="3076" />
+<TGConnectingPoint num="2" id="3077" />
+<TGConnectingPoint num="3" id="3078" />
+<TGConnectingPoint num="4" id="3079" />
+<TGConnectingPoint num="5" id="3080" />
+<TGConnectingPoint num="6" id="3081" />
+<TGConnectingPoint num="7" id="3082" />
+<TGConnectingPoint num="8" id="3083" />
+<TGConnectingPoint num="9" id="3084" />
+<TGConnectingPoint num="10" id="3085" />
+<TGConnectingPoint num="11" id="3086" />
+<TGConnectingPoint num="12" id="3087" />
+<TGConnectingPoint num="13" id="3088" />
+<TGConnectingPoint num="14" id="3089" />
+<TGConnectingPoint num="15" id="3090" />
+<TGConnectingPoint num="16" id="3091" />
+<TGConnectingPoint num="17" id="3092" />
+<TGConnectingPoint num="18" id="3093" />
+<TGConnectingPoint num="19" id="3094" />
+<TGConnectingPoint num="20" id="3095" />
+<TGConnectingPoint num="21" id="3096" />
+<TGConnectingPoint num="22" id="3097" />
+<TGConnectingPoint num="23" id="3098" />
 <extraparam>
 <CryptoBlock value="false" />
 <Method value="$openM()" />
@@ -5922,37 +5888,37 @@ or by a maintenance station
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="3141" >
-<father id="3166" num="5" />
-<cdparam x="411" y="458" />
-<sizeparam width="334" height="154" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="3124" >
+<father id="3149" num="5" />
+<cdparam x="409" y="454" />
+<sizeparam width="329" height="151" minWidth="1" minHeight="0" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="587" minY="0" maxY="258" />
+<cdrectangleparam minX="0" maxX="589" minY="0" maxY="258" />
 <infoparam name="Block0" value="WirelessInterface" />
-<TGConnectingPoint num="0" id="3117" />
-<TGConnectingPoint num="1" id="3118" />
-<TGConnectingPoint num="2" id="3119" />
-<TGConnectingPoint num="3" id="3120" />
-<TGConnectingPoint num="4" id="3121" />
-<TGConnectingPoint num="5" id="3122" />
-<TGConnectingPoint num="6" id="3123" />
-<TGConnectingPoint num="7" id="3124" />
-<TGConnectingPoint num="8" id="3125" />
-<TGConnectingPoint num="9" id="3126" />
-<TGConnectingPoint num="10" id="3127" />
-<TGConnectingPoint num="11" id="3128" />
-<TGConnectingPoint num="12" id="3129" />
-<TGConnectingPoint num="13" id="3130" />
-<TGConnectingPoint num="14" id="3131" />
-<TGConnectingPoint num="15" id="3132" />
-<TGConnectingPoint num="16" id="3133" />
-<TGConnectingPoint num="17" id="3134" />
-<TGConnectingPoint num="18" id="3135" />
-<TGConnectingPoint num="19" id="3136" />
-<TGConnectingPoint num="20" id="3137" />
-<TGConnectingPoint num="21" id="3138" />
-<TGConnectingPoint num="22" id="3139" />
-<TGConnectingPoint num="23" id="3140" />
+<TGConnectingPoint num="0" id="3100" />
+<TGConnectingPoint num="1" id="3101" />
+<TGConnectingPoint num="2" id="3102" />
+<TGConnectingPoint num="3" id="3103" />
+<TGConnectingPoint num="4" id="3104" />
+<TGConnectingPoint num="5" id="3105" />
+<TGConnectingPoint num="6" id="3106" />
+<TGConnectingPoint num="7" id="3107" />
+<TGConnectingPoint num="8" id="3108" />
+<TGConnectingPoint num="9" id="3109" />
+<TGConnectingPoint num="10" id="3110" />
+<TGConnectingPoint num="11" id="3111" />
+<TGConnectingPoint num="12" id="3112" />
+<TGConnectingPoint num="13" id="3113" />
+<TGConnectingPoint num="14" id="3114" />
+<TGConnectingPoint num="15" id="3115" />
+<TGConnectingPoint num="16" id="3116" />
+<TGConnectingPoint num="17" id="3117" />
+<TGConnectingPoint num="18" id="3118" />
+<TGConnectingPoint num="19" id="3119" />
+<TGConnectingPoint num="20" id="3120" />
+<TGConnectingPoint num="21" id="3121" />
+<TGConnectingPoint num="22" id="3122" />
+<TGConnectingPoint num="23" id="3123" />
 <extraparam>
 <CryptoBlock value="true" />
 <Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
@@ -5985,6 +5951,40 @@ or by a maintenance station
 </extraparam>
 </SUBCOMPONENT>
 
+<COMPONENT type="302" id="3191" >
+<cdparam x="190" y="25" />
+<sizeparam width="668" height="97" minWidth="76" minHeight="7" maxWidth="3125" maxHeight="3125" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="6" maxX="369" minY="6" maxY="369" />
+<infoparam name="Proverif Pragma" value="#InitialSystemKnowledge RemoteControl.PSK WirelessInterface.PSK
+#Authenticity RemoteControl.SendingRemoteOrder.msg WirelessInterface.gotDecryptedOrder.msg2
+
+#Confidentiality RemoteControl.duration
+" />
+<TGConnectingPoint num="0" id="3175" />
+<TGConnectingPoint num="1" id="3176" />
+<TGConnectingPoint num="2" id="3177" />
+<TGConnectingPoint num="3" id="3178" />
+<TGConnectingPoint num="4" id="3179" />
+<TGConnectingPoint num="5" id="3180" />
+<TGConnectingPoint num="6" id="3181" />
+<TGConnectingPoint num="7" id="3182" />
+<TGConnectingPoint num="8" id="3183" />
+<TGConnectingPoint num="9" id="3184" />
+<TGConnectingPoint num="10" id="3185" />
+<TGConnectingPoint num="11" id="3186" />
+<TGConnectingPoint num="12" id="3187" />
+<TGConnectingPoint num="13" id="3188" />
+<TGConnectingPoint num="14" id="3189" />
+<TGConnectingPoint num="15" id="3190" />
+<extraparam>
+<Line value="#InitialSystemKnowledge RemoteControl.PSK WirelessInterface.PSK" />
+<Line value="#Authenticity RemoteControl.SendingRemoteOrder.msg WirelessInterface.gotDecryptedOrder.msg2" />
+<Line value="" />
+<Line value="#Confidentiality RemoteControl.duration" />
+</extraparam>
+</COMPONENT>
+
 
 </AVATARBlockDiagramPanel>
 
@@ -6014,6 +6014,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6042,6 +6043,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6100,6 +6102,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6128,6 +6131,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6196,6 +6200,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6224,6 +6229,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6252,6 +6258,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6280,6 +6287,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6308,6 +6316,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6573,6 +6582,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6623,6 +6633,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6651,6 +6662,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6679,6 +6691,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6829,6 +6842,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6857,6 +6871,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6885,6 +6900,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="msg3 = sdecrypt(msg2, PSK)" />
 <actions value="selectedDuration = msg3.data" />
 </extraparam>
@@ -6915,6 +6931,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6943,6 +6960,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7130,6 +7148,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="openM()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -7159,6 +7178,7 @@ or by a maintenance station
 <afterMax value="3" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7217,6 +7237,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="closeM()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -7246,6 +7267,7 @@ or by a maintenance station
 <afterMax value="3" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7274,6 +7296,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7485,6 +7508,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="OFF()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -7514,6 +7538,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7542,6 +7567,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="ON()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -7571,6 +7597,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7599,6 +7626,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7778,6 +7806,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7806,6 +7835,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7834,6 +7864,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7862,6 +7893,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7890,6 +7922,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7918,6 +7951,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7946,6 +7980,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7974,6 +8009,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8002,6 +8038,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8030,6 +8067,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8058,6 +8096,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8086,6 +8125,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8114,6 +8154,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8142,6 +8183,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8200,6 +8242,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8228,6 +8271,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8256,6 +8300,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8314,6 +8359,7 @@ or by a maintenance station
 <afterMax value="1" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="remainingTime= remainingTime -1" />
 <actions value="durationModified(remainingTime)" />
 </extraparam>
@@ -8344,6 +8390,7 @@ or by a maintenance station
 <afterMax value="1" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="remainingTime=remainingTime -1" />
 <actions value="durationModified(remainingTime)" />
 </extraparam>
@@ -8374,6 +8421,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8402,6 +8450,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="remainingTime=duration" />
 <actions value="startCooking(remainingTime)" />
 </extraparam>
@@ -8472,6 +8521,7 @@ or by a maintenance station
 <afterMax value="9" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8500,6 +8550,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8528,6 +8579,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8556,6 +8608,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8584,6 +8637,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8612,6 +8666,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9294,6 +9349,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9332,6 +9388,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9360,6 +9417,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9469,6 +9527,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="runBell()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -9528,6 +9587,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9556,6 +9616,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9584,6 +9645,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9753,6 +9815,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="msg1.data = duration" />
 <actions value="msg = sencrypt(msg1, PSK)" />
 </extraparam>
@@ -9783,6 +9846,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9811,6 +9875,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -9839,6 +9904,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10015,7 +10081,7 @@ or by a maintenance station
 
 
 <Modeling type="AVATAR Design" nameTab="DesignCodeGeneration" >
-<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="1400" >
+<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="1400" zoom="1.0" >
 <MainCode value="#include &lt;sys/types.h&gt;"/>
 <MainCode value="#include &lt;sys/socket.h&gt;"/>
 <MainCode value="#include &lt;netinet/in.h&gt;"/>
@@ -10109,7 +10175,7 @@ or by a maintenance station
 <MainCode value=""/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="ObserverProp1;RemotelyControlledMicrowave;MicroWaveOven;Door;Magnetron;Controller;ControlPanel;Bell;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="4993" >
@@ -10614,6 +10680,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10642,6 +10709,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10700,6 +10768,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10728,6 +10797,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10796,6 +10866,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10824,6 +10895,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10852,6 +10924,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10880,6 +10953,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10908,6 +10982,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -11172,6 +11247,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -11222,6 +11298,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -11313,6 +11390,7 @@ or by a maintenance station
 <afterMax value="3" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -11371,6 +11449,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="closeM()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -11400,6 +11479,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="openM()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -11429,6 +11509,7 @@ or by a maintenance station
 <afterMax value="3" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -11457,6 +11538,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -11485,6 +11567,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -11713,6 +11796,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="OFF()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -11742,6 +11826,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -11770,6 +11855,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="ON()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -11799,6 +11885,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -11827,6 +11914,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12006,6 +12094,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12034,6 +12123,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12062,6 +12152,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12090,6 +12181,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12118,6 +12210,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12146,6 +12239,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12174,6 +12268,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12202,6 +12297,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12230,6 +12326,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12258,6 +12355,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12286,6 +12384,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12314,6 +12413,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12342,6 +12442,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12400,6 +12501,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12428,6 +12530,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12456,6 +12559,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12514,6 +12618,7 @@ or by a maintenance station
 <afterMax value="1" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="remainingTime= remainingTime -1" />
 <actions value="durationModified(remainingTime)" />
 </extraparam>
@@ -12544,6 +12649,7 @@ or by a maintenance station
 <afterMax value="1" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="remainingTime=remainingTime -1" />
 <actions value="durationModified(remainingTime)" />
 </extraparam>
@@ -12574,6 +12680,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12602,6 +12709,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="remainingTime=duration" />
 <actions value="startCooking(remainingTime)" />
 </extraparam>
@@ -12672,6 +12780,7 @@ or by a maintenance station
 <afterMax value="9" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12700,6 +12809,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12728,6 +12838,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12756,6 +12867,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12784,6 +12896,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -12812,6 +12925,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -13493,6 +13607,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -13531,6 +13646,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="start()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -13560,6 +13676,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -13669,6 +13786,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="runBell()" />
 </extraparam>
 </SUBCOMPONENT>
@@ -13728,6 +13846,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -13756,6 +13875,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -13784,6 +13904,7 @@ or by a maintenance station
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 

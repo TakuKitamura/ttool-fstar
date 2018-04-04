@@ -294,7 +294,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
                 //   if (p.getFather() != null) {
                 if (p.getFather() instanceof TMLCPrimitiveComponent) {
                     if (componentsToTakeIntoAccount.contains(p.getFather())) {
-                        TraceManager.addDev("-> port " + _port + " is connected to " + o);
+                        //TraceManager.addDev("-> port " + _port + " is connected to " + o);
                         ret.add( p );
                     }
                 }
@@ -1518,8 +1518,8 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         Iterator<TGComponent> iterator;
         TGComponent tgc;
 
-        // Go through the compnent list of all panels, and make paths. Then, go thru connectors, and merge paths until no
-        // more merging is possible
+        // Go through the component list of all panels, and make paths. Then, go thru connectors,
+        // and merge paths until nomore merging is possible
 
         for (TDiagramPanel panel: panels) {
             iterator = panel.getComponentList().listIterator();

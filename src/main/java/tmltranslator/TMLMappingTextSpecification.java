@@ -37,9 +37,6 @@
  */
 
 
-
-
-
 package tmltranslator;
 
 import myutil.Conversion;
@@ -57,8 +54,9 @@ import java.util.List;
  * Class TMLArchiTextSpecification
  * Import and export of TML architecture textual specifications
  * Creation: 21/09/2007
- * @version 1.0 21/09/2007
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 21/09/2007
  */
 public class TMLMappingTextSpecification<E> {
     public final static String CR = "\n";
@@ -88,10 +86,10 @@ public class TMLMappingTextSpecification<E> {
 
     public void saveFile(String path, String filename) throws FileException {
 
-    	File dir = new File(path);
-    	if (!dir.exists())
-    		dir.mkdir();
-    	
+        File dir = new File(path);
+        if (!dir.exists())
+            dir.mkdir();
+
         if (tmlmtxt != null) {
             tmlmtxt.saveFile(path, filename + ".tml");
         }
@@ -99,7 +97,7 @@ public class TMLMappingTextSpecification<E> {
             tmlatxt.saveFile(path, filename + ".tarchi");
         }
 
-        System.out.println("Saving architecture spec file in " + path + filename + ".tmap");
+        //System.out.println("Saving mapping files in " + path + filename + ".tmap");
         String header = makeHeader(filename);
         FileUtils.saveFile(path + filename + ".tmap", indent(header + spec));
     }
@@ -124,10 +122,10 @@ public class TMLMappingTextSpecification<E> {
         int nbOpen = 0;
         int nbClose = 0;
 
-        while ( (indexEnd = _toIndent.indexOf('\n')) > -1) {
-            tmp = _toIndent.substring(0, indexEnd+1);
+        while ((indexEnd = _toIndent.indexOf('\n')) > -1) {
+            tmp = _toIndent.substring(0, indexEnd + 1);
             try {
-                _toIndent = _toIndent.substring(indexEnd+1, _toIndent.length());
+                _toIndent = _toIndent.substring(indexEnd + 1, _toIndent.length());
             } catch (Exception e) {
                 _toIndent = "";
             }
@@ -155,7 +153,7 @@ public class TMLMappingTextSpecification<E> {
         String tmp;
         //int size;
 
-        for(int i=0; i<array.length; i++) {
+        for (int i = 0; i < array.length; i++) {
             if (_tmp.startsWith(array[i])) {
                 tmp = _tmp.substring(array[i].length(), _tmp.length());
                 //System.out.println("tmp=" + tmp + " _tmp" + _tmp + " array=" + array[i]);
@@ -174,7 +172,7 @@ public class TMLMappingTextSpecification<E> {
 
     public String toTextFormat(TMLMapping<E> _tmlmap) {
         tmlmap = _tmlmap;
-	tmlmap.handleCPs();
+        tmlmap.handleCPs();
         makeTML(tmlmap);
         makeArchi(tmlmap);
         makeMapping(tmlmap);
@@ -194,7 +192,7 @@ public class TMLMappingTextSpecification<E> {
 
     public void makeMapping(TMLMapping<E> tmlmap) {
         spec = CR;
-        spec +="TMLMAPPING" + CR;
+        spec += "TMLMAPPING" + CR;
         spec += makeMappingNodes(tmlmap);
         spec += makeMappingCommunicationNodes(tmlmap);
         spec += "ENDTMLMAPPING" + CR;
@@ -207,13 +205,13 @@ public class TMLMappingTextSpecification<E> {
         HwNode node;
         TMLTask task;
 
-        for(int i=0; i<nodes.size(); i++) {
+        for (int i = 0; i < nodes.size(); i++) {
             node = nodes.get(i);
             task = tasks.get(i);
 
             if ((node != null) && (task != null)) {
                 tmp += "MAP " + prepareString(node.getName()) + " " + prepareString(task.getName()) + CR;
-                tmp += "SET " + prepareString(task.getName()) +  " priority " + task.getPriority() + CR;
+                tmp += "SET " + prepareString(task.getName()) + " priority " + task.getPriority() + CR;
             }
         }
 
@@ -227,14 +225,14 @@ public class TMLMappingTextSpecification<E> {
         HwNode node;
         TMLElement elt;
 
-        for(int i=0; i<nodes.size(); i++) {
+        for (int i = 0; i < nodes.size(); i++) {
             node = nodes.get(i);
             elt = elts.get(i);
 
             if ((node != null) && (elt != null)) {
                 tmp += "MAP " + prepareString(node.getName()) + " " + prepareString(elt.getName()) + CR;
                 if (elt instanceof TMLChannel) {
-                    tmp += "SET " + prepareString(elt.getName()) +  " priority " + ((TMLChannel)(elt)).getPriority() + CR;
+                    tmp += "SET " + prepareString(elt.getName()) + " priority " + ((TMLChannel) (elt)).getPriority() + CR;
                 }
                 //tmp += "SET " + prepareString(task.getName()) +  " priority " + task.getPriority() + CR;
             }
@@ -477,7 +475,7 @@ public class TMLMappingTextSpecification<E> {
 
     public String printErrors() {
         String ret = "";
-        for(TMLTXTError error: errors) {
+        for (TMLTXTError error : errors) {
             ret += "ERROR at line " + error.lineNb + ": " + error.message + CR;
             try {
                 if (error.lineString == null) {
@@ -494,7 +492,7 @@ public class TMLMappingTextSpecification<E> {
 
     public String printWarnings() {
         String ret = "";
-        for(TMLTXTError error: warnings) {
+        for (TMLTXTError error : warnings) {
             ret += "WARNING at line " + error.lineNb + CR;
             ret += error.message + CR;
         }
@@ -510,7 +508,7 @@ public class TMLMappingTextSpecification<E> {
         } else {
             ret += printErrors() + CR + printWarnings() + CR;
             ret += "Compilation failed" + CR;
-            ret += errors.size() + " error(s), "+ warnings.size() + " warning(s)" + CR;
+            ret += errors.size() + " error(s), " + warnings.size() + " warning(s)" + CR;
         }
 
         return ret;
@@ -524,10 +522,10 @@ public class TMLMappingTextSpecification<E> {
 
         String s;
         String s1;
-        String [] split;
+        String[] split;
         int lineNb = 0;
 
-    //    String instruction;
+        //    String instruction;
 
         String specarchi;
         int index0 = spec.indexOf("TMLMAPPING");
@@ -544,7 +542,7 @@ public class TMLMappingTextSpecification<E> {
         BufferedReader br = new BufferedReader(sr);
 
         try {
-            while((s = br.readLine()) != null) {
+            while ((s = br.readLine()) != null) {
                 if (s != null) {
                     s = s.trim();
                     //System.out.println("s=" + s);
@@ -581,21 +579,21 @@ public class TMLMappingTextSpecification<E> {
 
     public int analyseInstruction(String _line, int _lineNb, String[] _split) {
         String error;
-      //  String params;
-       // String id;
+        //  String params;
+        // String id;
         //int tmp, tmp0, tmp1, i;
 
         HwExecutionNode hwnode;
         TMLTask task;
-        TMLChannel  channel;
+        TMLChannel channel;
         HwCommunicationNode hwcommnode;
         TMLElement elt;
 
         // MAP
-        if(isInstruction("MAP", _split[0])) {
+        if (isInstruction("MAP", _split[0])) {
 
             if (_split.length != 3) {
-                error = "A MAP instruction must be used with 2 parameters, and not " + (_split.length - 1) ;
+                error = "A MAP instruction must be used with 2 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error, _line);
                 return -1;
             }
@@ -639,10 +637,10 @@ public class TMLMappingTextSpecification<E> {
 
 
         // SET
-        if(isInstruction("SET", _split[0])) {
+        if (isInstruction("SET", _split[0])) {
 
             if (_split.length != 4) {
-                error = "A set instruction must be used with 3 parameters, and not " + (_split.length - 1) ;
+                error = "A set instruction must be used with 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error, _line);
                 return -1;
             }
@@ -665,7 +663,7 @@ public class TMLMappingTextSpecification<E> {
             task = tmlmap.getTaskByName(_split[1]);
             channel = tmlmap.getChannelByName(_split[1]);
             if ((task == null) && (channel == null)) {
-                error = "Unknown task / channel: " + _split[1] ;
+                error = "Unknown task / channel: " + _split[1];
                 addError(0, _lineNb, 0, error, _line);
                 return -1;
             }
@@ -683,7 +681,7 @@ public class TMLMappingTextSpecification<E> {
         } // SET
 
         // Other command
-        if((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
+        if ((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
             error = "Syntax error in mapping information: unrecognized instruction: " + _split[0];
             addError(0, _lineNb, 0, error, _line);
             return -1;
@@ -704,55 +702,55 @@ public class TMLMappingTextSpecification<E> {
         boolean err = false;
         String error;
 
-        if(_parameter < _split.length) {
-            switch(_type) {
-            case 0:
-                if (!isAValidId(_split[_parameter])) {
-                    err = true;
-                }
-                break;
-            case 1:
-                if (!isANumeral(_split[_parameter])) {
-                    err = true;
-                }
-                break;
-            case 3:
-                if (!isIncluded(_split[_parameter], taskparameters)) {
-                    err = true;
-                }
-                break;
-            case 4:
-                if (!isAValidId(getEvtId(_split[_parameter]))) {
-                    err = true;
-                    //System.out.println("Unvalid id");
-                } else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
-                    //System.out.println("Unvalid param");
-                    err = true;
-                }
-                break;
-            case 5:
-                if (!(_split[_parameter].equals("="))) {
-                    //System.out.println("Error of =");
-                    err = true;
-                }
-                break;
-            case 6:
-                if (_inst.equals("BOOL")) {
-                    String tmp = _split[_parameter].toUpperCase();
-                    if (!(tmp.equals("TRUE") || tmp.equals("FALSE"))) {
+        if (_parameter < _split.length) {
+            switch (_type) {
+                case 0:
+                    if (!isAValidId(_split[_parameter])) {
                         err = true;
                     }
-                } else {
+                    break;
+                case 1:
                     if (!isANumeral(_split[_parameter])) {
                         err = true;
                     }
-                }
-                break;
-            case 7:
-                if (!isAValidId(_split[_parameter]) && !isANumeral(_split[_parameter])) {
-                    err = true;
-                }
-                break;
+                    break;
+                case 3:
+                    if (!isIncluded(_split[_parameter], taskparameters)) {
+                        err = true;
+                    }
+                    break;
+                case 4:
+                    if (!isAValidId(getEvtId(_split[_parameter]))) {
+                        err = true;
+                        //System.out.println("Unvalid id");
+                    } else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
+                        //System.out.println("Unvalid param");
+                        err = true;
+                    }
+                    break;
+                case 5:
+                    if (!(_split[_parameter].equals("="))) {
+                        //System.out.println("Error of =");
+                        err = true;
+                    }
+                    break;
+                case 6:
+                    if (_inst.equals("BOOL")) {
+                        String tmp = _split[_parameter].toUpperCase();
+                        if (!(tmp.equals("TRUE") || tmp.equals("FALSE"))) {
+                            err = true;
+                        }
+                    } else {
+                        if (!isANumeral(_split[_parameter])) {
+                            err = true;
+                        }
+                    }
+                    break;
+                case 7:
+                    if (!isAValidId(_split[_parameter]) && !isANumeral(_split[_parameter])) {
+                        err = true;
+                    }
+                    break;
             }
         } else {
             err = true;
@@ -778,7 +776,7 @@ public class TMLMappingTextSpecification<E> {
             return false;
         }
 
-        boolean b1 = (_id.substring(0,1)).matches("[a-zA-Z]");
+        boolean b1 = (_id.substring(0, 1)).matches("[a-zA-Z]");
         boolean b2 = _id.matches("\\w*");
         boolean b3 = checkKeywords(_id);
 
@@ -791,7 +789,7 @@ public class TMLMappingTextSpecification<E> {
 
     public boolean checkKeywords(String _id) {
         String id = _id.toUpperCase();
-        for(int i=0; i<keywords.length; i++) {
+        for (int i = 0; i < keywords.length; i++) {
             if (id.compareTo(keywords[i]) == 0) {
                 return false;
             }
@@ -801,7 +799,7 @@ public class TMLMappingTextSpecification<E> {
 
     public boolean isIncluded(String _id, String[] _list) {
         String id = _id.toUpperCase();
-        for(int i=0; i<_list.length; i++) {
+        for (int i = 0; i < _list.length; i++) {
             if (id.compareTo(_list[i].toUpperCase()) == 0) {
                 return true;
             }
@@ -850,8 +848,8 @@ public class TMLMappingTextSpecification<E> {
         int lineNb = 0;
 
         try {
-            while((s = br.readLine()) != null) {
-                lineNb ++;
+            while ((s = br.readLine()) != null) {
+                lineNb++;
                 if (s != null) {
                     found = false;
                     s = s.trim();
@@ -862,8 +860,8 @@ public class TMLMappingTextSpecification<E> {
                         if (split.length > 0) {
                             if ((split[0].equals("#include")) && (split.length == 2)) {
                                 s1 = split[1];
-                                if ((s1.charAt(0) == '\"') && (s1.charAt(s1.length()-1) == '\"')) {
-                                    s1 = s1.substring(1, s1.length()-1).trim();
+                                if ((s1.charAt(0) == '\"') && (s1.charAt(s1.length() - 1) == '\"')) {
+                                    s1 = s1.substring(1, s1.length() - 1).trim();
                                     //System.out.println("Loading file:" + path + s1);
                                     try {
                                         content = FileUtils.loadFile(path + s1);

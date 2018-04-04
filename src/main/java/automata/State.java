@@ -54,6 +54,7 @@ import java.util.ListIterator;
 public class State {
     private String name;
     private LinkedList<Transition> transitions;
+    public Object referenceObject;
     
     public State(String _name) {
          transitions = new LinkedList<Transition>();

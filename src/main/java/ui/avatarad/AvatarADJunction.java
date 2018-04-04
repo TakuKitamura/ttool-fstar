@@ -37,11 +37,12 @@
  */
 
 
-
-
 package ui.avatarad;
 
-import ui.*;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 import ui.util.IconManager;
 
 import java.awt.*;
@@ -49,21 +50,22 @@ import java.awt.geom.Line2D;
 
 
 /**
-   * Class AvatarADJunction
-   * Junction between several activities, without any synchronization. To be used in avatar activity diagrams
-   * Creation: 02/09/2011
-   * @version 1.1 09/02/2017
-   * @author Ludovic APVRILLE
+ * Class AvatarADJunction
+ * Junction between several activities, without any synchronization. To be used in avatar activity diagrams
+ * Creation: 02/09/2011
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.1 09/02/2017
  */
 public class AvatarADJunction extends AvatarADBasicComponent {
 
     protected int range = 5;
 
-    public AvatarADJunction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarADJunction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-	initScaling(30, 30);
-	oldScaleFactor = tdp.getZoom();
+        initScaling(30, 30);
+        oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 22;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
@@ -101,29 +103,28 @@ public class AvatarADJunction extends AvatarADBasicComponent {
     }
 
 
-
     public void internalDrawing(Graphics g) {
         //g.drawLine(x +width/2, y,  x+width/2, y + height);
         //g.drawLine(x, y + (height/2), x+width, y + (height/2));
 
-        g.drawLine(x +width/2, y,  x+width/2, y + height / 2 - range);
-        g.drawLine(x +width/2, y + height/2 + range,  x+width/2, y + height);
-        g.drawLine(x, y + (height/2), x+width/2 - range, y + (height/2));
-        g.drawLine(x + width/2 + range, y + (height/2), x+width, y + (height/2));
+        g.drawLine(x + width / 2, y, x + width / 2, y + height / 2 - range);
+        g.drawLine(x + width / 2, y + height / 2 + range, x + width / 2, y + height);
+        g.drawLine(x, y + (height / 2), x + width / 2 - range, y + (height / 2));
+        g.drawLine(x + width / 2 + range, y + (height / 2), x + width, y + (height / 2));
 
-        g.drawLine(x+width/2, y + height / 2 - range, x+width/2-range, y+height/2);
-        g.drawLine(x+width/2, y + height / 2 - range, x+width/2+range, y+height/2);
-        g.drawLine(x+width/2-range, y + height / 2, x+width/2, y+height/2+range);
-        g.drawLine(x+width/2+range, y + height / 2, x+width/2, y+height/2+range);
+        g.drawLine(x + width / 2, y + height / 2 - range, x + width / 2 - range, y + height / 2);
+        g.drawLine(x + width / 2, y + height / 2 - range, x + width / 2 + range, y + height / 2);
+        g.drawLine(x + width / 2 - range, y + height / 2, x + width / 2, y + height / 2 + range);
+        g.drawLine(x + width / 2 + range, y + height / 2, x + width / 2, y + height / 2 + range);
     }
 
     public TGComponent isOnMe(int _x, int _y) {
         // vertical line
-        if ((int)(Line2D.ptSegDistSq(x +width/2, y,  x+width/2, y + height, _x, _y)) < distanceSelected) {
+        if ((int) (Line2D.ptSegDistSq(x + width / 2, y, x + width / 2, y + height, _x, _y)) < distanceSelected) {
             return this;
         }
         // horizontal line
-        if ((int)(Line2D.ptSegDistSq(x, y + (height/2), x+width, y + (height/2), _x, _y)) < distanceSelected) {
+        if ((int) (Line2D.ptSegDistSq(x, y + (height / 2), x + width, y + (height / 2), _x, _y)) < distanceSelected) {
             return this;
         }
         return null;

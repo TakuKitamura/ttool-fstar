@@ -39,6 +39,7 @@
 
 package ui.graph;
 
+import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import myutil.TraceManager;
 import org.graphstream.graph.implementations.AbstractEdge;
@@ -120,7 +121,13 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
         vGraph = new MultiGraph("TTool graph");
-        vGraph.addAttribute("ui.stylesheet", STYLE_SHEET);
+        if ((ConfigurationTTool.RGStyleSheet != null) && (ConfigurationTTool.RGStyleSheet.trim().length() > 0)) {
+            TraceManager.addDev("Adding stylesheet:" + ConfigurationTTool.RGStyleSheet+ "\n\nvs default:" + STYLE_SHEET);
+            vGraph.addAttribute("ui.stylesheet", ConfigurationTTool.RGStyleSheet );
+        } else {
+            vGraph.addAttribute("ui.stylesheet", STYLE_SHEET);
+        }
+        //vGraph.addAttribute("layout.weight", 0.5);
         int cpt = 0;
         graph.computeStates();
         for (AUTState state : graph.getStates()) {
@@ -145,6 +152,7 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
               TraceManager.addDev("Transition=" + tmp);*/
             edge.addAttribute("ui.label", transition.transition);
             edge.addAttribute("ui.class", "defaultedge");
+            edge.addAttribute("layout.weight", 0.4);
             if (!(transition.transition.startsWith("i("))) {
                 edge.addAttribute("ui.class", "external");
             }

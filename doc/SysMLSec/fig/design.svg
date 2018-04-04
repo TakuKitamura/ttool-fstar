@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="790"
+   height="300"
+   viewbox="16 29 780 299"
+   id="svg7419"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="design.svg">
+  <metadata
+     id="metadata7563">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs7561" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview7559"
+     showgrid="false"
+     inkscape:zoom="0.41080402"
+     inkscape:cx="398"
+     inkscape:cy="164"
+     inkscape:window-x="1179"
+     inkscape:window-y="678"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg7419" />
+  <rect
+     x="11"
+     y="6"
+     width="438"
+     height="219"
+     id="rect7421"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="12"
+     y="7"
+     width="436"
+     height="217"
+     id="rect7423"
+     style="fill:#c1daf1" />
+  <text
+     x="191"
+     y="21"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7425">&lt;&lt;block&gt;&gt;</text>
+  <text
+     x="207"
+     y="39"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7427">System</text>
+  <line
+     x1="11"
+     y1="45"
+     x2="449"
+     y2="45"
+     id="line7429"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="11"
+     y1="54"
+     x2="449"
+     y2="54"
+     id="line7431"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="11"
+     y1="63"
+     x2="449"
+     y2="63"
+     id="line7433"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="18"
+     y="79"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7435">~ in chin(Message msg)</text>
+  <text
+     x="18"
+     y="92"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7437">~ out chout(Message msg)</text>
+  <rect
+     x="253"
+     y="94"
+     width="139"
+     height="126"
+     id="rect7439"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="254"
+     y="95"
+     width="137"
+     height="124"
+     id="rect7441"
+     style="fill:#c1daf1" />
+  <text
+     x="261"
+     y="109"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7443">&lt;&lt;cryptoblock&gt;&gt;</text>
+  <text
+     x="315"
+     y="127"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7445">T2</text>
+  <line
+     x1="253"
+     y1="133"
+     x2="392"
+     y2="133"
+     id="line7447"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="260"
+     y="149"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7449">- m : Message;</text>
+  <text
+     x="260"
+     y="162"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7451">- m2 : Message;</text>
+  <text
+     x="260"
+     y="175"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7453">- sk : Key;</text>
+  <text
+     x="260"
+     y="188"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7455">- receivedData : int;</text>
+  <line
+     x1="253"
+     y1="194"
+     x2="392"
+     y2="194"
+     id="line7457"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="260"
+     y="210"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7459">- Message encrypt(Mes...</text>
+  <rect
+     x="26"
+     y="94"
+     width="215"
+     height="126"
+     id="rect7461"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="27"
+     y="95"
+     width="213"
+     height="124"
+     id="rect7463"
+     style="fill:#c1daf1" />
+  <text
+     x="72"
+     y="109"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7465">&lt;&lt;cryptoblock&gt;&gt;</text>
+  <text
+     x="126"
+     y="127"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7467">T1</text>
+  <line
+     x1="26"
+     y1="133"
+     x2="241"
+     y2="133"
+     id="line7469"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="33"
+     y="149"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7471">- secretData : int;</text>
+  <text
+     x="33"
+     y="162"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7473">- m : Message;</text>
+  <text
+     x="33"
+     y="175"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7475">- m1 : Message;</text>
+  <text
+     x="33"
+     y="188"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7477">- sk : Key;</text>
+  <line
+     x1="26"
+     y1="194"
+     x2="241"
+     y2="194"
+     id="line7479"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="33"
+     y="210"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7481">- Message encrypt(Message msg, Key k)</text>
+  <rect
+     x="58"
+     y="233"
+     width="123"
+     height="62"
+     id="rect7483"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="59"
+     y="234"
+     width="121"
+     height="60"
+     id="rect7485"
+     style="fill:#9cdca2" />
+  <text
+     x="67"
+     y="248"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7487">&lt;&lt;datatype&gt;&gt;</text>
+  <text
+     x="109"
+     y="263"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7489">Key</text>
+  <line
+     x1="58"
+     y1="265"
+     x2="181"
+     y2="265"
+     id="line7491"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="65"
+     y="277"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7493">- data : int;</text>
+  <rect
+     x="250"
+     y="234"
+     width="129"
+     height="61"
+     id="rect7495"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="251"
+     y="235"
+     width="127"
+     height="59"
+     id="rect7497"
+     style="fill:#9cdca2" />
+  <text
+     x="262"
+     y="249"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7499">&lt;&lt;datatype&gt;&gt;</text>
+  <text
+     x="286"
+     y="264"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7501">Message</text>
+  <line
+     x1="250"
+     y1="266"
+     x2="379"
+     y2="266"
+     id="line7503"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="257"
+     y="278"
+     style="font-size:10px;font-family:SansSerif"
+     id="text7505">- data : int;</text>
+  <line
+     x1="507"
+     y1="15"
+     x2="781"
+     y2="15"
+     id="line7507"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="507"
+     y1="15"
+     x2="507"
+     y2="99"
+     id="line7509"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="507"
+     y1="99"
+     x2="766"
+     y2="99"
+     id="line7511"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="781"
+     y1="15"
+     x2="781"
+     y2="84"
+     id="line7513"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <polygon
+     points="518,127 518,44 791,44 791,112 776,127 "
+     id="polygon7515"
+     style="fill:#c8aac8"
+     transform="translate(-10,-28)" />
+  <polygon
+     points="781,114 776,127 791,112 787,115 "
+     id="polygon7517"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(-10,-28)" />
+  <polygon
+     points="781,114 776,127 791,112 787,115 "
+     id="polygon7519"
+     style="fill:#640064"
+     transform="translate(-10,-28)" />
+  <text
+     x="532"
+     y="33"
+     style="font-size:14px;font-family:Dialog"
+     id="text7521">Model Pragmas</text>
+  <text
+     x="532"
+     y="46"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7523">#InitialSystemKnowledge T1.sk T2.sk</text>
+  <text
+     x="542"
+     y="59"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7525" />
+  <line
+     x1="507"
+     y1="56"
+     x2="781"
+     y2="56"
+     id="line7527"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="532"
+     y="72"
+     style="font-size:14px;font-family:Dialog"
+     id="text7529">Security Property</text>
+  <text
+     x="532"
+     y="85"
+     style="font-size:12px;font-family:SansSerif"
+     id="text7531">#Confidentiality T1.secretData</text>
+  <line
+     x1="449"
+     y1="60"
+     x2="480"
+     y2="60"
+     id="line7533"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="480"
+     y1="60"
+     x2="480"
+     y2="115"
+     id="line7535"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="444"
+     y="110"
+     width="9"
+     height="9"
+     id="rect7537"
+     style="fill:#000000" />
+  <rect
+     x="444"
+     y="55"
+     width="9"
+     height="9"
+     id="rect7539"
+     style="fill:#000000" />
+  <polygon
+     points="473,115 466,133 480,133 "
+     id="polygon7541"
+     style="fill:#ffffff"
+     transform="translate(-10,-28)" />
+  <polygon
+     points="473,60 466,78 480,78 "
+     id="polygon7543"
+     style="fill:#ffffff"
+     transform="translate(-10,-28)" />
+  <polygon
+     points="473,115 466,133 480,133 "
+     id="polygon7545"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(-10,-28)" />
+  <polygon
+     points="473,60 466,78 480,78 "
+     id="polygon7547"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(-10,-28)" />
+  <ellipse
+     cx="473"
+     cy="129"
+     rx="4"
+     ry="3"
+     id="ellipse7549"
+     sodipodi:cx="473"
+     sodipodi:cy="129"
+     sodipodi:rx="4"
+     sodipodi:ry="3"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(-10,-28)" />
+  <ellipse
+     cx="473"
+     cy="74"
+     rx="4"
+     ry="3"
+     id="ellipse7551"
+     sodipodi:cx="473"
+     sodipodi:cy="74"
+     sodipodi:rx="4"
+     sodipodi:ry="3"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(-10,-28)" />
+  <ellipse
+     cx="473"
+     cy="129"
+     rx="2"
+     ry="2"
+     id="ellipse7553"
+     sodipodi:cx="473"
+     sodipodi:cy="129"
+     sodipodi:rx="2"
+     sodipodi:ry="2"
+     style="fill:#000000"
+     transform="translate(-10,-28)" />
+  <ellipse
+     cx="473"
+     cy="74"
+     rx="2"
+     ry="2"
+     id="ellipse7555"
+     sodipodi:cx="473"
+     sodipodi:cy="74"
+     sodipodi:rx="2"
+     sodipodi:ry="2"
+     style="fill:#000000"
+     transform="translate(-10,-28)" />
+  <line
+     x1="480"
+     y1="115"
+     x2="454"
+     y2="115"
+     id="line7557"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+</svg>

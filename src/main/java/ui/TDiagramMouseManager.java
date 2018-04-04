@@ -44,6 +44,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import myutil.*;
 
 /**
  * Class TDiagramMouseManager
@@ -597,6 +598,8 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        //TraceManager.addDev("Mode=" +tdp.mode);
+
         if (tdp.mode == TDiagramPanel.MOVING_COMPONENT) {
             tgc.setMoveCd(e.getX() - decx, e.getY() - decy);
             tdp.repaint();

@@ -181,7 +181,7 @@ public class AvatarBDPanel extends TDiagramPanel {
     }
 
     public String getXMLHead() {
-        return "<AVATARBlockDiagramPanel name=\"" + name + "\"" + sizeParam()  +" >\n" + displayParam();
+        return "<AVATARBlockDiagramPanel name=\"" + name + "\"" + sizeParam()  + zoomParam() + " >\n" + displayParam();
     }
 
     public String getXMLTail() {

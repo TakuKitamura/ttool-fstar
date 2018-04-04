@@ -246,6 +246,14 @@ public class TMLEvent extends TMLCommunicationElement {
         return destinationTasks;
     }
 
+    public TMLPort getOriginPort() {
+        return originPort;
+    }
+
+    public TMLPort getDestinationPort() {
+        return destinationPort;
+    }
+
     public List<TMLPort> getOriginPorts() {
         return originPorts;
     }

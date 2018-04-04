@@ -18,6 +18,7 @@ import myutil.FileUtils;
 public class TestGTURTLEModeling extends AbstractUITest {
 
     //private static final String RESOURCES_DIR = "resources/ui/generateccode/";
+    private String[] codeGenOptions = { "", "-mas" };
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -46,27 +47,27 @@ public class TestGTURTLEModeling extends AbstractUITest {
 
         final String codeDirExpected = RESOURCES_DIR + mappingDiagName + File.separator + "expected" + File.separator;
 
-        mainGui.gtm.generateCCode( codeDir );
+        for( String compilerOption: codeGenOptions )    {
+            mainGui.gtm.generateCCode( codeDir, compilerOption );
+            /*try {
+                Thread.sleep(5000);
+            } catch (Exception ignored) {
+            }*/
+            try {
+                final IComparisonReport difference = textComparator.compare( new File( codeDir ), new File( codeDirExpected ) );
 
-        /*try {
-            Thread.sleep(5000);
-        } catch (Exception ignored) {
-        }*/
-
-        try {
-            final IComparisonReport difference = textComparator.compare( new File( codeDir ), new File( codeDirExpected ) );
-
-            if ( difference.containsDiff() ) {
-                difference.print();
-
-                fail( "Generated code files are not the same!!!" );
+                if ( difference.containsDiff() ) {
+                    difference.print();
+    
+                    fail( "Generated code files are not the same!!!" );
+                }
+                else {
+                    FileUtils.deleteFiles( codeDir );
+                }
             }
-            else {
-                FileUtils.deleteFiles( codeDir );
+            catch ( final IOException ex ) {
+                handleException( ex );
             }
-        }
-        catch ( final IOException ex ) {
-            handleException( ex );
         }
     }
 

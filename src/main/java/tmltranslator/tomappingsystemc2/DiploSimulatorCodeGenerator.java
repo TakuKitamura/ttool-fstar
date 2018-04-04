@@ -37,8 +37,6 @@
  */
 
 
-
-
 package tmltranslator.tomappingsystemc2;
 
 import myutil.Conversion;
@@ -55,8 +53,9 @@ import java.util.*;
 /**
  * Class TML2MappingSystemC
  * Creation: 03/09/2007
- * @version 1.1 03/09/2007
+ *
  * @author Daniel Knorreck, Dominique Blouin, Ludovic Apvrille
+ * @version 1.1 03/09/2007
  */
 public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator {
 
@@ -86,7 +85,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     private final NamesGenerationHelper namesGen;
 
     DiploSimulatorCodeGenerator(TMLModeling<?> _tmlm) {
-        this( _tmlm.getDefaultMapping() );
+        this(_tmlm.getDefaultMapping());
 
         tmlmodeling = _tmlm;
         tmlmodeling.removeForksAndJoins();
@@ -100,11 +99,11 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         //      tmlmapping.removeForksAndJoins();
         //        tmlmapping.makeMinimumMapping();
         //        tepeTranslator = new  SystemCTEPE(new ArrayList<TEPE>(), this);
-        this( _tmlmapping, null, new ArrayList<TEPE>() );
+        this(_tmlmapping, null, new ArrayList<TEPE>());
     }
 
     DiploSimulatorCodeGenerator(TMLModeling<?> _tmlm, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
-        this( _tmlm.getDefaultMapping(), _ebrdds, _tepes );
+        this(_tmlm.getDefaultMapping(), _ebrdds, _tepes);
 
         tmlmodeling = _tmlm;
         //        tmlmapping = tmlmodeling.getDefaultMapping();
@@ -114,14 +113,14 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     DiploSimulatorCodeGenerator(TMLMapping<?> _tmlmapping, List<EBRDD> _ebrdds, List<TEPE> _tepes) {
         tmlmapping = _tmlmapping;
 
-        if ( tmlmapping == null ) {
-            throw new IllegalArgumentException( "TML Mapping is NULL." );
+        if (tmlmapping == null) {
+            throw new IllegalArgumentException("TML Mapping is NULL.");
         }
 
         tmlmapping.handleCPs();
         tmlmapping.removeForksAndJoins();
         tmlmapping.makeMinimumMapping();
-        tepeTranslator = new  SystemCTEPE(_tepes, this );
+        tepeTranslator = new SystemCTEPE(_tepes, this);
         namesGen = NamesGenerationHelper.INSTANCE;
     }
 
@@ -138,6 +137,9 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     }
 
     public void generateSystemC(boolean _debug, boolean _optimize) {
+
+        TraceManager.addDev("Generate SystemC code from DiploSimulatorCodeGenerator");
+
         debug = _debug;
         optimize = _optimize;
         tmlmapping.removeAllRandomSequences();
@@ -160,8 +162,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
     private void generateMakefileSrc() {
         src = "SRCS = ";
-        for(TMLTask mst: tmlmapping.getMappedTasks()) {
-            src += namesGen.cppFileName( mst.getName() ) + SPACE;
+        for (TMLTask mst : tmlmapping.getMappedTasks()) {
+            src += namesGen.cppFileName(mst.getName()) + SPACE;
         }
         //for(EBRDD ebrdd: ebrdds){
         //      src += ebrdd.getName() + ".cpp ";
@@ -181,9 +183,9 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         header += "#include <SimComponents.h>\n#include <Server.h>\n#include <SimServSyncInfo.h>\n#include <ListenersSimCmd.h>\n";
 
         // Generate tasks header
-        for(TMLTask mst: tmlmapping.getMappedTasks()) {
+        for (TMLTask mst : tmlmapping.getMappedTasks()) {
             //header += "#include <" + mst.getReference() + ".h>" + CR;
-            header += "#include " + NamesGenerationHelper.LEFT_ANGLE_RACKET + namesGen.headerFileName( mst.getName() ) + NamesGenerationHelper.RIGHT_ANGLE_RACKET + CR;
+            header += "#include " + NamesGenerationHelper.LEFT_ANGLE_RACKET + namesGen.headerFileName(mst.getName()) + NamesGenerationHelper.RIGHT_ANGLE_RACKET + CR;
         }
         //for(EBRDD ebrdd: ebrdds){
         //      header += "#include <" + ebrdd.getName() + ".h>" + CR;
@@ -196,55 +198,53 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
         // Declaration of HW nodes
         declaration += "//Declaration of CPUs" + CR;
-        for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
-            if ( node instanceof HwCPU ) {
+        for (HwNode node : tmlmapping.getTMLArchitecture().getHwNodes()) {
+            if (node instanceof HwCPU) {
                 final HwCPU exNode = (HwCPU) node;
                 final String schedulerInstName;
 
-                if ( exNode.getType().equals( "CPURRPB" ) ) {
-                    schedulerInstName = namesGen.prioSchedulerInstanceName( exNode );
-                    declaration += "PrioScheduler* " + schedulerInstName + " = new PrioScheduler(\"" + namesGen.prioSchedulerName( exNode ) + "\", 0)" + SCCR;
-                }
-                else {
+                if (exNode.getType().equals("CPURRPB")) {
+                    schedulerInstName = namesGen.prioSchedulerInstanceName(exNode);
+                    declaration += "PrioScheduler* " + schedulerInstName + " = new PrioScheduler(\"" + namesGen.prioSchedulerName(exNode) + "\", 0)" + SCCR;
+                } else {
                     //tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime
                     //declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)exNode.execiTime)*(1+((float)exNode.branchingPredictionPenalty)/100)) + " ) " + SCCR;
-                    schedulerInstName = namesGen.rrSchedulerInstanceName( exNode );
-                    declaration += "RRScheduler* " + schedulerInstName + " = new RRScheduler(\"" + namesGen.rrSchedulerName( exNode ) + "\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime) + ", " + (int) Math.ceil((float)(exNode.clockRatio * Math.max(exNode.execiTime,exNode.execcTime) * (exNode.branchingPredictionPenalty * exNode.pipelineSize +100 - exNode.branchingPredictionPenalty))/100) + " ) " + SCCR;
+                    schedulerInstName = namesGen.rrSchedulerInstanceName(exNode);
+                    declaration += "RRScheduler* " + schedulerInstName + " = new RRScheduler(\"" + namesGen.rrSchedulerName(exNode) + "\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime) + ", " + (int) Math.ceil((float) (exNode.clockRatio * Math.max(exNode.execiTime, exNode.execcTime) * (exNode.branchingPredictionPenalty * exNode.pipelineSize + 100 - exNode.branchingPredictionPenalty)) / 100) + " ) " + SCCR;
                 }
 
-                TraceManager.addDev("cores " + exNode.nbOfCores);
+                //TraceManager.addDev("cores " + exNode.nbOfCores);
 
-                for(int cores = 0; cores < exNode.nbOfCores; cores++ ) {
-                    final String cpuInstName = namesGen.cpuInstanceName( exNode, cores );
-                    declaration += "CPU* " + cpuInstName + " = new SingleCoreCPU(" + exNode.getID() + ", \"" + namesGen.cpuName( exNode, cores ) + "\", " + schedulerInstName + ", ";
-                    declaration  += exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", "  + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
+                for (int cores = 0; cores < exNode.nbOfCores; cores++) {
+                    final String cpuInstName = namesGen.cpuInstanceName(exNode, cores);
+                    declaration += "CPU* " + cpuInstName + " = new SingleCoreCPU(" + exNode.getID() + ", \"" + namesGen.cpuName(exNode, cores) + "\", " + schedulerInstName + ", ";
+                    declaration += exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", " + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
 
-                    if ( cores != 0 ) {
+                    if (cores != 0) {
                         declaration += cpuInstName + "->setScheduler(" + schedulerInstName + ",false)" + SCCR;
                     }
 
-                    declaration += "addCPU(" + cpuInstName + ")"+ SCCR;
+                    declaration += "addCPU(" + cpuInstName + ")" + SCCR;
                 }
-            }
-            else if ( node instanceof HwA ) {
+            } else if (node instanceof HwA) {
                 final HwA hwaNode = (HwA) node;
-                final String schedulerInstName = namesGen.rrSchedulerInstanceName( hwaNode );
-                final String schedulerName = namesGen.rrSchedulerName( hwaNode );
-                declaration += "RRScheduler* " + schedulerInstName + " = new RRScheduler(\"" + schedulerName + "\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * HwA.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float)(hwaNode.clockRatio * Math.max(hwaNode.execiTime,hwaNode.execcTime) * (HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwA.DEFAULT_PIPELINE_SIZE +100 - HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY))/100) + " ) " + SCCR;
+                final String schedulerInstName = namesGen.rrSchedulerInstanceName(hwaNode);
+                final String schedulerName = namesGen.rrSchedulerName(hwaNode);
+                declaration += "RRScheduler* " + schedulerInstName + " = new RRScheduler(\"" + schedulerName + "\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * HwA.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float) (hwaNode.clockRatio * Math.max(hwaNode.execiTime, hwaNode.execcTime) * (HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwA.DEFAULT_PIPELINE_SIZE + 100 - HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY)) / 100) + " ) " + SCCR;
 
                 // DB: Issue #21 Why a for loop???
                 //for (int cores=0; cores<1; cores++){
-                final String hwaInstName = namesGen.hwAccInstanceName( hwaNode );
-                declaration += "CPU* " + hwaInstName + " = new SingleCoreCPU(" + hwaNode.getID() + ", \"" + namesGen.hwAccName( hwaNode ) + "\", " + schedulerInstName + ", ";
+                final String hwaInstName = namesGen.hwAccInstanceName(hwaNode);
+                declaration += "CPU* " + hwaInstName + " = new SingleCoreCPU(" + hwaNode.getID() + ", \"" + namesGen.hwAccName(hwaNode) + "\", " + schedulerInstName + ", ";
 
-                declaration  += hwaNode.clockRatio + ", " + hwaNode.execiTime + ", " + hwaNode.execcTime + ", " + HwA.DEFAULT_PIPELINE_SIZE + ", " + HwA.DEFAULT_TASK_SWITCHING_TIME + ", " + HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY + ", " + HwA.DEFAULT_GO_IDLE_TIME + ", "  + HwA.DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES + ", " + hwaNode.byteDataSize + ")" + SCCR;
+                declaration += hwaNode.clockRatio + ", " + hwaNode.execiTime + ", " + hwaNode.execcTime + ", " + HwA.DEFAULT_PIPELINE_SIZE + ", " + HwA.DEFAULT_TASK_SWITCHING_TIME + ", " + HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY + ", " + HwA.DEFAULT_GO_IDLE_TIME + ", " + HwA.DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES + ", " + hwaNode.byteDataSize + ")" + SCCR;
 
                 // DB: Issue #21 TODO: Should there be a scheduler?? Given the for loop, cores is always 0 so this code is never executed
                 //                if (cores!=0) {
                 //                      declaration+= cpuInstName +  "->setScheduler(" + schedulerInstName + ",false)" + SCCR;
                 //                }
 
-                declaration += "addCPU(" + hwaInstName + ")"+ SCCR;
+                declaration += "addCPU(" + hwaInstName + ")" + SCCR;
                 //}
             }
         }
@@ -254,22 +254,21 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         // Declaration of Buses
         declaration += "//Declaration of Buses" + CR;
 
-        for( final HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
+        for (final HwNode node : tmlmapping.getTMLArchitecture().getHwNodes()) {
             if (node instanceof HwBus) {
                 final HwBus thisBus = (HwBus) node;
 
-                for( int i=0; i< thisBus.pipelineSize; i++ ) {
-                    final String busInstName = namesGen.busInstanceName( thisBus, i );
-                    declaration += "Bus* " + busInstName + " = new Bus("+ node.getID() + ",\"" + namesGen.busName( thisBus, i ) + "\",0, 100, "+ thisBus.byteDataSize + ", " + node.clockRatio + ",";
+                for (int i = 0; i < thisBus.pipelineSize; i++) {
+                    final String busInstName = namesGen.busInstanceName(thisBus, i);
+                    declaration += "Bus* " + busInstName + " = new Bus(" + node.getID() + ",\"" + namesGen.busName(thisBus, i) + "\",0, 100, " + thisBus.byteDataSize + ", " + node.clockRatio + ",";
 
-                    if ( thisBus.arbitration==HwBus.CAN ) {
+                    if (thisBus.arbitration == HwBus.CAN) {
                         declaration += Boolean.TRUE.toString();
-                    }
-                    else {
+                    } else {
                         declaration += Boolean.FALSE.toString();
                     }
 
-                    declaration += ");\naddBus(" + busInstName + ")"+ SCCR;
+                    declaration += ");\naddBus(" + busInstName + ")" + SCCR;
                 }
             }
         }
@@ -279,12 +278,12 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         // Declaration of Bridges
         declaration += "//Declaration of Bridges" + CR;
 
-        for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
+        for (HwNode node : tmlmapping.getTMLArchitecture().getHwNodes()) {
             if (node instanceof HwBridge) {
                 final HwBridge bridge = (HwBridge) node;
-                final String bridgeInstName = namesGen.bridgeInstanceName( bridge );
-                declaration+= "Bridge* " + bridgeInstName + " = new Bridge("+ node.getID() + ",\"" + namesGen.bridgeName( bridge ) + "\", " + node.clockRatio + ", " + ((HwBridge)node).bufferByteSize + ")" +SCCR;
-                declaration += "addBridge("+ bridgeInstName +")"+ SCCR;
+                final String bridgeInstName = namesGen.bridgeInstanceName(bridge);
+                declaration += "Bridge* " + bridgeInstName + " = new Bridge(" + node.getID() + ",\"" + namesGen.bridgeName(bridge) + "\", " + node.clockRatio + ", " + ((HwBridge) node).bufferByteSize + ")" + SCCR;
+                declaration += "addBridge(" + bridgeInstName + ")" + SCCR;
             }
         }
 
@@ -293,12 +292,12 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         // Declaration of Memories
         declaration += "//Declaration of Memories" + CR;
 
-        for ( final HwNode node: tmlmapping.getTMLArchitecture().getHwNodes() ) {
-            if ( node instanceof HwMemory ) {
+        for (final HwNode node : tmlmapping.getTMLArchitecture().getHwNodes()) {
+            if (node instanceof HwMemory) {
                 final HwMemory memory = (HwMemory) node;
-                final String memInstName = namesGen.memoryInstanceName( memory );
-                declaration+= "Memory* " + memInstName + " = new Memory("+ node.getID() + ",\"" + namesGen.memoryName( memory ) + "\", " + node.clockRatio + ", " + ((HwMemory)node).byteDataSize + ")" +SCCR;
-                declaration += "addMem("+ memInstName +")"+ SCCR;
+                final String memInstName = namesGen.memoryInstanceName(memory);
+                declaration += "Memory* " + memInstName + " = new Memory(" + node.getID() + ",\"" + namesGen.memoryName(memory) + "\", " + node.clockRatio + ", " + ((HwMemory) node).byteDataSize + ")" + SCCR;
+                declaration += "addMem(" + memInstName + ")" + SCCR;
             }
         }
 
@@ -306,41 +305,39 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
         //Declaration of Bus masters
         declaration += "//Declaration of Bus masters" + CR;
-        for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
-            if (node instanceof HwExecutionNode || node instanceof HwBridge){
+        for (HwNode node : tmlmapping.getTMLArchitecture().getHwNodes()) {
+            if (node instanceof HwExecutionNode || node instanceof HwBridge) {
                 final List<HwLink> nodeLinks = tmlmapping.getTMLArchitecture().getLinkByHwNode(node);
 
-                for( final HwLink link: nodeLinks ) {
+                for (final HwLink link : nodeLinks) {
                     final int noOfCores;
 
-                    if ( node instanceof HwCPU ) {
-                        noOfCores = ((HwCPU)node).nbOfCores;
-                    }
-                    else {
+                    if (node instanceof HwCPU) {
+                        noOfCores = ((HwCPU) node).nbOfCores;
+                    } else {
                         noOfCores = 1;
                     }
 
-                    for ( int cores = 0; cores < noOfCores; cores++ ) {
+                    for (int cores = 0; cores < noOfCores; cores++) {
                         final String nodeInstanceName;
 
-                        if ( node instanceof HwCPU || node instanceof HwA ) {
-                            nodeInstanceName = namesGen.executionNodeInstanceName( (HwExecutionNode) node, cores );
-                        }
-                        else {
-                            nodeInstanceName = namesGen.bridgeInstanceName( (HwBridge) node );
-                        }
-
-                        final String busMasterInstName = namesGen.busMasterInstanceName( node, cores, link.bus );
-
-                        declaration+= "BusMaster* " + busMasterInstName + " = new BusMaster(\"" + namesGen.busMasterName( node, cores, link.bus ) + "\", " + link.getPriority() + ", " + link.bus.pipelineSize + ", array(" + link.bus.pipelineSize;
-
-                        for(int i=0; i< link.bus.pipelineSize; i++) {
-                            declaration+= ", (SchedulableCommDevice*) " + namesGen.schedComDeviceInstanceName( link.bus, i );
+                        if (node instanceof HwCPU || node instanceof HwA) {
+                            nodeInstanceName = namesGen.executionNodeInstanceName((HwExecutionNode) node, cores);
+                        } else {
+                            nodeInstanceName = namesGen.bridgeInstanceName((HwBridge) node);
                         }
 
-                        declaration+= "))" + SCCR;
+                        final String busMasterInstName = namesGen.busMasterInstanceName(node, cores, link.bus);
 
-                        declaration+= nodeInstanceName + "->addBusMaster(" + busMasterInstName + ")" + SCCR;
+                        declaration += "BusMaster* " + busMasterInstName + " = new BusMaster(\"" + namesGen.busMasterName(node, cores, link.bus) + "\", " + link.getPriority() + ", " + link.bus.pipelineSize + ", array(" + link.bus.pipelineSize;
+
+                        for (int i = 0; i < link.bus.pipelineSize; i++) {
+                            declaration += ", (SchedulableCommDevice*) " + namesGen.schedComDeviceInstanceName(link.bus, i);
+                        }
+
+                        declaration += "))" + SCCR;
+
+                        declaration += nodeInstanceName + "->addBusMaster(" + busMasterInstName + ")" + SCCR;
                     }
                 }
             }
@@ -351,37 +348,37 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         // Declaration of channels
         declaration += "//Declaration of channels" + CR;
 
-        for ( final TMLElement elem : tmlmodeling.getChannels() ) {
+        for (final TMLElement elem : tmlmodeling.getChannels()) {
             if (elem instanceof TMLChannel) {
-                final TMLChannel channel = (TMLChannel)elem;
+                final TMLChannel channel = (TMLChannel) elem;
 
-                final String channelTypeName = namesGen.channelTypeName( channel );
-                final String channelInstName = namesGen.channelInstanceName( channel );
+                final String channelTypeName = namesGen.channelTypeName(channel);
+                final String channelInstName = namesGen.channelInstanceName(channel);
 
-                declaration += channelTypeName + "* " + channelInstName + " = new " + channelTypeName  +"(" + channel.getID() + ",\"" + namesGen.channelName( channel ) + "\"," + channel.getSize() + ",";
+                declaration += channelTypeName + "* " + channelInstName + " = new " + channelTypeName + "(" + channel.getID() + ",\"" + namesGen.channelName(channel) + "\"," + channel.getSize() + ",";
 
                 final String param;
 
-                switch(channel.getType()) {
-                case TMLChannel.BRBW:
-                    param= "," + channel.getMax() + ",0";
-                    break;
-                case TMLChannel.BRNBW:
-                    param= ",0";
-                    break;
-                case TMLChannel.NBRNBW:
-                default:
-                    param= "";
+                switch (channel.getType()) {
+                    case TMLChannel.BRBW:
+                        param = "," + channel.getMax() + ",0";
+                        break;
+                    case TMLChannel.BRNBW:
+                        param = ",0";
+                        break;
+                    case TMLChannel.NBRNBW:
+                    default:
+                        param = "";
                 }
 
                 declaration += determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority();
 
-                if (channel.isLossy() && channel.getType()!=TMLChannel.NBRNBW) {
+                if (channel.isLossy() && channel.getType() != TMLChannel.NBRNBW) {
                     declaration += "," + channel.getLossPercentage() + "," + channel.getMaxNbOfLoss();
                 }
 
-                declaration += ")"+ SCCR;
-                declaration += "addChannel("+ channelInstName +")"+ SCCR;
+                declaration += ")" + SCCR;
+                declaration += "addChannel(" + channelInstName + ")" + SCCR;
             }
         }
 
@@ -390,32 +387,29 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         // Declaration of events
         declaration += "//Declaration of events" + CR;
 
-        for( final TMLEvent evt : tmlmodeling.getEvents() ) {
-            final String eventTypeName = namesGen.eventTypeName( evt );
+        for (final TMLEvent evt : tmlmodeling.getEvents()) {
+            final String eventTypeName = namesGen.eventTypeName(evt);
 
             final String param;
 
             if (evt.isInfinite()) {
-                param= ",0,false,false";
-            }
-            else {
+                param = ",0,false,false";
+            } else {
                 if (evt.isBlocking()) {
-                    param= "," + evt.getMaxSize() + ",0";
-                }
-                else {
-                    param= "," + evt.getMaxSize() + ",0";
+                    param = "," + evt.getMaxSize() + ",0";
+                } else {
+                    param = "," + evt.getMaxSize() + ",0";
                 }
             }
 
-            final String eventInstName = namesGen.eventInstanceName( evt );
-            final String eventName = namesGen.eventName( evt );
+            final String eventInstName = namesGen.eventInstanceName(evt);
+            final String eventName = namesGen.eventName(evt);
 
-            if (tmlmapping.isCommNodeMappedOn(evt,null)){
-                TraceManager.addDev("Evt: " + evt.getName());
+            if (tmlmapping.isCommNodeMappedOn(evt, null)) {
+                //TraceManager.addDev("Evt: " + evt.getName());
                 declaration += eventTypeName + "* " + eventInstName + " = new " + eventTypeName + "(" + evt.getID() + ",\"" + eventName + "\"," + determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt) + param;
 
-            }
-            else{
+            } else {
                 declaration += eventTypeName + "* " + eventInstName + " = new " + eventTypeName + "(" + evt.getID() + ",\"" + eventName + "\",0,0,0" + param;   ///old command
             }
 
@@ -424,7 +418,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
             }
 
             declaration += ")" + SCCR;
-            declaration += "addEvent("+ eventInstName +")"+ SCCR;
+            declaration += "addEvent(" + eventInstName + ")" + SCCR;
         }
 
         declaration += CR;
@@ -432,30 +426,29 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         // Declaration of requests
         declaration += "//Declaration of requests" + CR;
 
-        for(TMLTask task: tmlmodeling.getTasks()) {
+        for (TMLTask task : tmlmodeling.getTasks()) {
             if (task.isRequested()) {
-                final String reqChannelInstName = namesGen.requestChannelInstanceName( task );
+                final String reqChannelInstName = namesGen.requestChannelInstanceName(task);
                 TMLRequest req = task.getRequest();
 
-                if (tmlmapping.isCommNodeMappedOn(req,null)){
-                    TraceManager.addDev("Request: " + req.getName());
+                if (tmlmapping.isCommNodeMappedOn(req, null)) {
+                    //TraceManager.addDev("Request: " + req.getName());
                     declaration += "TMLEventBChannel<ParamType," + req.getNbOfParams() + ">* " + reqChannelInstName + " = new TMLEventBChannel<ParamType," + req.getNbOfParams() + ">(" +
-                        req.getID() + ",\"" + reqChannelInstName + "\"," +
-                        determineRouting(tmlmapping.getHwNodeOf(req.getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0," + req.getNbOfParams() + ",true)" + SCCR;
-                                         tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0,true,false";
-                }
-                else {
+                            req.getID() + ",\"" + reqChannelInstName + "\"," +
+                            determineRouting(tmlmapping.getHwNodeOf(req.getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0," + req.getNbOfParams() + ",true)" + SCCR;
+                                    tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0,true,false";
+                } else {
                     declaration += "TMLEventBChannel<ParamType," + req.getNbOfParams() + ">* " + reqChannelInstName + " = new TMLEventBChannel<ParamType," + req.getNbOfParams() + ">(" + //req.getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0," + req.getNbOfParams() + ",true)" + SCCR;
-                        req.getID() + ",\"" + reqChannelInstName + "\",0,0,0,0,true,false";
+                            req.getID() + ",\"" + reqChannelInstName + "\",0,0,0,0,true,false";
                 }
 
-                if ( req.isLossy() ) {
+                if (req.isLossy()) {
                     declaration += "," + req.getLossPercentage() + "," + req.getMaxNbOfLoss();
                 }
 
                 declaration += ")" + SCCR;
 
-                declaration += "addRequest( " + reqChannelInstName +")"+ SCCR;
+                declaration += "addRequest( " + reqChannelInstName + ")" + SCCR;
             }
         }
 
@@ -464,46 +457,44 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         //Set bus schedulers
         declaration += "//Set bus schedulers" + CR;
 
-        for ( final HwNode node : tmlmapping.getTMLArchitecture().getHwNodes() ) {
-            if ( node instanceof HwBus ) {
+        for (final HwNode node : tmlmapping.getTMLArchitecture().getHwNodes()) {
+            if (node instanceof HwBus) {
                 final HwBus bus = (HwBus) node;
-                final List<HwLink> busLinks= tmlmapping.getTMLArchitecture().getLinkByBus((HwBus)node);
-                String devices="";
-                int numDevices=0;
+                final List<HwLink> busLinks = tmlmapping.getTMLArchitecture().getLinkByBus((HwBus) node);
+                String devices = "";
+                int numDevices = 0;
 
-                if (!busLinks.isEmpty()){
-                    for ( final HwLink link : busLinks ) {
-                        if ( link.hwnode instanceof HwExecutionNode || link.hwnode instanceof HwBridge ) {
+                if (!busLinks.isEmpty()) {
+                    for (final HwLink link : busLinks) {
+                        if (link.hwnode instanceof HwExecutionNode || link.hwnode instanceof HwBridge) {
                             // DB Issue #21: This is a bug according to the cast in the for loop line
-                            if ( link.hwnode instanceof HwCPU ) { //|| (link.hwnode instanceof HwA)){
+                            if (link.hwnode instanceof HwCPU) { //|| (link.hwnode instanceof HwA)){
                                 final HwCPU cpu = (HwCPU) link.hwnode;
 
-                                for ( int cores = 0; cores < cpu.nbOfCores; cores++ ) {
-                                    devices += ", (WorkloadSource*) " + namesGen.workloadSourceInstanceName( cpu, cores, bus );
+                                for (int cores = 0; cores < cpu.nbOfCores; cores++) {
+                                    devices += ", (WorkloadSource*) " + namesGen.workloadSourceInstanceName(cpu, cores, bus);
                                     numDevices++;
                                 }
-                            }
-                            else {
-                                devices += ", (WorkloadSource*) " + namesGen.workloadSourceInstanceName( link.hwnode, 0, bus );
+                            } else {
+                                devices += ", (WorkloadSource*) " + namesGen.workloadSourceInstanceName(link.hwnode, 0, bus);
                                 numDevices++;
                             }
                         }
                     }
 
-                    declaration += namesGen.busInstanceName( bus, 0 ) + "->setScheduler( (WorkloadSource*) new ";
+                    declaration += namesGen.busInstanceName(bus, 0) + "->setScheduler( (WorkloadSource*) new ";
 
-                    if ( bus.arbitration == HwBus.BASIC_ROUND_ROBIN ) {
-                        declaration+="RRScheduler(\"" + namesGen.rrSchedulerName( bus ) + "\", 0, 5, " + (int) Math.ceil(((float)node.clockRatio)/((float)((HwBus)node).byteDataSize)) + ", array(";
-                    }
-                    else {
-                        declaration+="PrioScheduler(\"" + namesGen.prioSchedulerName( bus ) + "\", 0, array(";
+                    if (bus.arbitration == HwBus.BASIC_ROUND_ROBIN) {
+                        declaration += "RRScheduler(\"" + namesGen.rrSchedulerName(bus) + "\", 0, 5, " + (int) Math.ceil(((float) node.clockRatio) / ((float) ((HwBus) node).byteDataSize)) + ", array(";
+                    } else {
+                        declaration += "PrioScheduler(\"" + namesGen.prioSchedulerName(bus) + "\", 0, array(";
                     }
 
-                    declaration+= numDevices + devices + "), " + numDevices + "))" + SCCR;
+                    declaration += numDevices + devices + "), " + numDevices + "))" + SCCR;
                 }
 
-                for( int i = 1; i < bus.pipelineSize; i++ ) {
-                    declaration+= namesGen.busInstanceName( bus, i ) + "->setScheduler(" + namesGen.busInstanceName( bus, 0 ) + "->getScheduler(),false)" +SCCR;
+                for (int i = 1; i < bus.pipelineSize; i++) {
+                    declaration += namesGen.busInstanceName(bus, i) + "->setScheduler(" + namesGen.busInstanceName(bus, 0) + "->getScheduler(),false)" + SCCR;
                 }
             }
         }
@@ -521,25 +512,24 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         int[] aStatistics = new int[8];
         Set<Integer> mappedChannels = new HashSet<Integer>();
 
-        for ( final TMLTask task: tmlmapping.getMappedTasks() ) {
-            node= iterator.next();
+        for (final TMLTask task : tmlmapping.getMappedTasks()) {
+            node = iterator.next();
 
-            final String taskClassName = namesGen.taskTypeName( task );
-            declaration += taskClassName + "* " + namesGen.taskInstanceName( task ) + " = new " + taskClassName + "("+ task.getID() +","+ task.getPriority() + ",\"" + namesGen.taskName( task ) + "\", array(";
+            final String taskClassName = namesGen.taskTypeName(task);
+            declaration += taskClassName + "* " + namesGen.taskInstanceName(task) + " = new " + taskClassName + "(" + task.getID() + "," + task.getPriority() + ",\"" + namesGen.taskName(task) + "\", array(";
 
-            if ( node instanceof HwCPU ) {
+            if (node instanceof HwCPU) {
                 final HwCPU hwCpu = (HwCPU) node;
                 declaration += hwCpu.nbOfCores;
 
-                for ( int cores = 0; cores< hwCpu.nbOfCores; cores++ ) {
-                    declaration+= "," + namesGen.cpuInstanceName( hwCpu, cores );
+                for (int cores = 0; cores < hwCpu.nbOfCores; cores++) {
+                    declaration += "," + namesGen.cpuInstanceName(hwCpu, cores);
                 }
 
                 //                declaration+= "),1" + CR;
-            }
-            else if ( node instanceof HwA ) {
+            } else if (node instanceof HwA) {
                 final HwA hwAcc = (HwA) node;
-                declaration+= "1 ," + namesGen.hwAccInstanceName( hwAcc );
+                declaration += "1 ," + namesGen.hwAccInstanceName(hwAcc);
 
                 // DB Issue #22: copy paste error?? This causes class cast exception
                 //              declaration+= ((HwCPU)node).nbOfCores;
@@ -549,40 +539,39 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 //                }
                 //
                 //                declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
-            }
-            else {
-                throw new UnsupportedOperationException( "Not implemented for " + node.getClass().getSimpleName() + "!" );
+            } else {
+                throw new UnsupportedOperationException("Not implemented for " + node.getClass().getSimpleName() + "!");
             }
 
-            declaration+= "), 1" + CR;
+            declaration += "), 1" + CR;
 
-            final List<TMLChannel> channels = new ArrayList<TMLChannel>( tmlmodeling.getChannels( task ) );
-            final List<TMLEvent> events = new ArrayList<TMLEvent>( tmlmodeling.getEvents( task ) );
-            final List<TMLRequest> requests = new ArrayList<TMLRequest>( tmlmodeling.getRequests( task ) );
+            final List<TMLChannel> channels = new ArrayList<TMLChannel>(tmlmodeling.getChannels(task));
+            final List<TMLEvent> events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
+            final List<TMLRequest> requests = new ArrayList<TMLRequest>(tmlmodeling.getRequests(task));
 
             final MappedSystemCTask mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels);
             tasks.add(mst);
 
-            for( final TMLChannel channelb : channels ) {
-                declaration += "," + namesGen.channelInstanceName( channelb ) + CR;
+            for (final TMLChannel channelb : channels) {
+                declaration += "," + namesGen.channelInstanceName(channelb) + CR;
             }
 
-            for( final TMLEvent evt : events) {
-                declaration += "," + namesGen.eventInstanceName( evt ) + CR;
+            for (final TMLEvent evt : events) {
+                declaration += "," + namesGen.eventInstanceName(evt) + CR;
             }
 
-            for( final TMLRequest req: requests ) {
-                if ( req.isAnOriginTask( task ) ) {
-                    declaration+=", " + namesGen.requestChannelInstanceName( req.getDestinationTask() ) + CR;
+            for (final TMLRequest req : requests) {
+                if (req.isAnOriginTask(task)) {
+                    declaration += ", " + namesGen.requestChannelInstanceName(req.getDestinationTask()) + CR;
                 }
             }
 
-            if ( task.isRequested() ) {
-                declaration += "," + namesGen.requestChannelInstanceName( task ) + CR;
+            if (task.isRequested()) {
+                declaration += "," + namesGen.requestChannelInstanceName(task) + CR;
             }
 
             declaration += ")" + SCCR;
-            declaration += "addTask(" + namesGen.taskInstanceName( task ) +")"+ SCCR;
+            declaration += "addTask(" + namesGen.taskInstanceName(task) + ")" + SCCR;
         }
 
         declaration += "}\n\n";
@@ -594,7 +583,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         declaration += tepeTranslator.getCode();
 
         //Generation of tasks
-        for(MappedSystemCTask task: tasks){
+        for (MappedSystemCTask task : tasks) {
             task.determineCheckpoints(aStatistics);
             task.generateSystemC(debug, optimize);
         }
@@ -602,12 +591,13 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         //Declaration of TEPEs continued
         declaration += CR;
         declaration += "}\n};\n\n" + tepeTranslator.getEqFuncs();
-        declaration +="#include <main.h>\n";
+        declaration += "#include <main.h>\n";
 
-        if (aStatistics[0]!=0) TraceManager.addDev("Global gain variables " + 100 * aStatistics[1] / aStatistics[0]);
-        if (aStatistics[2]!=0) TraceManager.addDev("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
-        if (aStatistics[4]!=0) TraceManager.addDev("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);
-        if (aStatistics[6]!=0) TraceManager.addDev("Global gain checkpoints " + 100 * aStatistics[7] / aStatistics[6]);
+        //if (aStatistics[0] != 0) TraceManager.addDev("Global gain variables " + 100 * aStatistics[1] / aStatistics[0]);
+        //if (aStatistics[2] != 0) TraceManager.addDev("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
+        //if (aStatistics[4] != 0) TraceManager.addDev("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);
+        //if (aStatistics[6] != 0)
+         //   TraceManager.addDev("Global gain checkpoints " + 100 * aStatistics[7] / aStatistics[6]);
 
         //Declaration of EBRDDs
         /*declaration += "//Declaration of EBRDDs" + CR;
@@ -617,12 +607,12 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
           }*/
     }
 
-    private int extractPath(    final List<HwCommunicationNode> path,
-                                final StrWrap masters,
-                                final StrWrap slaves,
-                                final HwNode startNode,
-                                final HwNode destNode,
-                                final boolean reverseIn ) {
+    private int extractPath(final List<HwCommunicationNode> path,
+                            final StrWrap masters,
+                            final StrWrap slaves,
+                            final HwNode startNode,
+                            final HwNode destNode,
+                            final boolean reverseIn) {
         //        String firstPart="";
         HwNode firstNode = null;
         int masterCount = 0;
@@ -630,46 +620,41 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
         if (reverseIn) {
             slaves.str += ",static_cast<Slave*>(0)";
-        }
-        else {
+        } else {
             //firstPart=startNode.getName() + "0";
             firstNode = startNode;
         }
 
-        for( final HwCommunicationNode commElem : path ) {
-            if ( commElem instanceof HwMemory ) {
+        for (final HwCommunicationNode commElem : path) {
+            if (commElem instanceof HwMemory) {
                 reverse = true;
-                final String memoryInstName = namesGen.memoryInstanceName( (HwMemory) commElem );
+                final String memoryInstName = namesGen.memoryInstanceName((HwMemory) commElem);
                 slaves.str += ",static_cast<Slave*>(" + memoryInstName + "),static_cast<Slave*>(" + memoryInstName + ")";
                 firstNode = null;
                 // firstPart = "";
-            }
-            else {
-                if ( reverse ) {
-                    if ( firstNode == null ) {
+            } else {
+                if (reverse) {
+                    if (firstNode == null) {
                         //                    if ( firstPart.length()==0 ){
                         firstNode = commElem;
                         //                        firstPart=commElem.getName();
-                    }
-                    else {
-                        masters.str += "," + namesGen.busMasterInstanceName( commElem, 0, (HwBus) firstNode );
+                    } else {
+                        masters.str += "," + namesGen.busMasterInstanceName(commElem, 0, (HwBus) firstNode);
                         //                        masters.str += "," + commElem.getName() + "_" + firstPart + "_Master";
                         masterCount++;
-                        slaves.str += ",static_cast<Slave*>(" + namesGen.communicationNodeInstanceName( commElem, 0 ) + ")";
+                        slaves.str += ",static_cast<Slave*>(" + namesGen.communicationNodeInstanceName(commElem, 0) + ")";
                         firstNode = null;
                         //firstPart="";
                     }
-                }
-                else {
-                    if ( firstNode == null ) {
+                } else {
+                    if (firstNode == null) {
                         //                  if ( firstPart.length()==0 ){
                         firstNode = commElem;
-                        slaves.str += ",static_cast<Slave*>(" + namesGen.communicationNodeInstanceName( commElem, 0 ) + ")";
+                        slaves.str += ",static_cast<Slave*>(" + namesGen.communicationNodeInstanceName(commElem, 0) + ")";
                         //                        firstPart = commElem.getName();
                         //                        slaves.str+= ",static_cast<Slave*>(" + firstPart + ")";
-                    }
-                    else {
-                        masters.str += "," + namesGen.busMasterInstanceName( firstNode, 0, (HwBus) commElem);
+                    } else {
+                        masters.str += "," + namesGen.busMasterInstanceName(firstNode, 0, (HwBus) commElem);
                         //                        masters.str+= "," + firstPart + "_" + commElem.getName() + "_Master";
                         masterCount++;
                         firstNode = null;
@@ -679,19 +664,19 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
             }
         }
 
-        if ( reverse ) {
-            masters.str += "," + namesGen.busMasterInstanceName( destNode, 0, (HwBus) firstNode );
+        if (reverse) {
+            masters.str += "," + namesGen.busMasterInstanceName(destNode, 0, (HwBus) firstNode);
             //            masters.str+= "," + destNode.getName() + "0_" + firstPart + "_Master";
 
-            return masterCount + 1 ;
+            return masterCount + 1;
         }
 
         slaves.str += ",static_cast<Slave*>(0)";
 
-        return - masterCount;
+        return -masterCount;
     }
 
-    private String determineRouting( HwNode startNode, HwNode destNode, TMLElement commElemToRoute ){
+    private String determineRouting(HwNode startNode, HwNode destNode, TMLElement commElemToRoute) {
 
         //TraceManager.addDev( "Determine routing from " + startNode.getName() + " to " + destNode.getName() );
         StrWrap masters = new StrWrap();
@@ -700,8 +685,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         List<HwCommunicationNode> path = new LinkedList<HwCommunicationNode>();
         List<HwCommunicationNode> commNodes = new LinkedList<HwCommunicationNode>();
 
-        for( HwNode node: tmlmapping.getTMLArchitecture().getHwNodes() )        {
-            if( node instanceof HwCommunicationNode )   {
+        for (HwNode node : tmlmapping.getTMLArchitecture().getHwNodes()) {
+            if (node instanceof HwCommunicationNode) {
                 commNodes.add((HwCommunicationNode) node);
             }
         }
@@ -712,99 +697,97 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         //            //TraceManager.addDev( "startNode: " + startNode.getName() );
         //        }
 
-        HwMemory memory = getMemConnectedToBusChannelMapped( commNodes, null, commElemToRoute );
+        HwMemory memory = getMemConnectedToBusChannelMapped(commNodes, null, commElemToRoute);
 
-        if( memory == null ) {
-            TraceManager.addDev( "no memories to map" );
-            exploreBuses( 0, commNodes, path, startNode, destNode, commElemToRoute );
-        }
-        else {
+        if (memory == null) {
+            //TraceManager.addDev("no memories to map");
+            exploreBuses(0, commNodes, path, startNode, destNode, commElemToRoute);
+        } else {
             final List<HwCommunicationNode> commNodes2 = new LinkedList<HwCommunicationNode>(commNodes);
 
-            if( !exploreBuses( 0, commNodes, path, startNode, memory, commElemToRoute ) )       {
-                TraceManager.addDev("NO route to " + memory.getName() + "found!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            if (!exploreBuses(0, commNodes, path, startNode, memory, commElemToRoute)) {
+                //TraceManager.addDev("NO route to " + memory.getName() + "found!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
 
-            path.add( memory );
+            path.add(memory);
 
-            exploreBuses( 0, commNodes2, path, memory, destNode, commElemToRoute );
+            exploreBuses(0, commNodes2, path, memory, destNode, commElemToRoute);
         }
 
-        int hopNum = extractPath( path, masters, slaves, startNode, destNode, false );
+        int hopNum = extractPath(path, masters, slaves, startNode, destNode, false);
 
-        if ( hopNum < 0 ) {
-            hopNum = extractPath( path, masters, slaves, destNode, destNode, true ) - hopNum;
+        if (hopNum < 0) {
+            hopNum = extractPath(path, masters, slaves, destNode, destNode, true) - hopNum;
         }
 
-        TraceManager.addDev(commElemToRoute.getName() + " is mapped on:");
+        //TraceManager.addDev(commElemToRoute.getName() + " is mapped on:");
 
-        for(HwCommunicationNode commElem:path){
+        /*for (HwCommunicationNode commElem : path) {
             TraceManager.addDev(commElem.getName());
-        }
+        }*/
 
-        TraceManager.addDev("number of elements: " + hopNum);
-        TraceManager.addDev("masters: " + masters.str);
-        TraceManager.addDev("slaves: " + slaves.str);
+        //TraceManager.addDev("number of elements: " + hopNum);
+        //TraceManager.addDev("masters: " + masters.str);
+        //TraceManager.addDev("slaves: " + slaves.str);
 
         return hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")";
     }
 
-    private boolean exploreBuses(       final int depth,
-                                        final List<HwCommunicationNode> commNodes,
-                                        final List<HwCommunicationNode> path,
-                                        final HwNode startNode,
-                                        final HwNode destNode,
-                                        final TMLElement commElemToRoute ) {
+    private boolean exploreBuses(final int depth,
+                                 final List<HwCommunicationNode> commNodes,
+                                 final List<HwCommunicationNode> path,
+                                 final HwNode startNode,
+                                 final HwNode destNode,
+                                 final TMLElement commElemToRoute) {
         assert startNode != null : "Parameter 'startNode' should not be null.";
 
         //first called with Maping:getCommunicationNodes
         List<HwCommunicationNode> nodesToExplore;
-        TraceManager.addDev("No of comm nodes " + commNodes.size());
-        TraceManager.addDev("startNode=" + startNode);
+        //TraceManager.addDev("No of comm nodes " + commNodes.size());
+        //TraceManager.addDev("startNode=" + startNode);
         boolean busExploreMode = ((depth & 1) == 0);
 
-        if ( busExploreMode ) {
-            TraceManager.addDev("search for buses connected to " + startNode.getName());
-            nodesToExplore=getBusesConnectedToNode(commNodes, startNode);
-        }
-        else {
-            TraceManager.addDev("search for bridges connected to: " + startNode.getName());
-            nodesToExplore=getBridgesConnectedToBus(commNodes, (HwBus)startNode);
+        if (busExploreMode) {
+            //TraceManager.addDev("search for buses connected to " + startNode.getName());
+            nodesToExplore = getBusesConnectedToNode(commNodes, startNode);
+        } else {
+            //TraceManager.addDev("search for bridges connected to: " + startNode.getName());
+            nodesToExplore = getBridgesConnectedToBus(commNodes, (HwBus) startNode);
         }
 
-        TraceManager.addDev("no of elements found: " + nodesToExplore.size());
+        //TraceManager.addDev("no of elements found: " + nodesToExplore.size());
 
-        for(HwCommunicationNode currNode:nodesToExplore){
+        for (HwCommunicationNode currNode : nodesToExplore) {
             //memory = null;
-            if (busExploreMode){
+            if (busExploreMode) {
                 //memory = getMemConnectedToBusChannelMapped(commNodes, (HwBus)currNode, commElemToRoute);
-                if(isBusConnectedToNode(currNode, destNode)){
-                    TraceManager.addDev(currNode.getName() + " is last node");
+                if (isBusConnectedToNode(currNode, destNode)) {
+                    //TraceManager.addDev(currNode.getName() + " is last node");
                     path.add(currNode);
                     //if (memory!=null) path.add(memory);
                     commNodes.remove(currNode);
                     return true;
                 }
             }
-            if(tmlmapping.isCommNodeMappedOn(commElemToRoute, currNode)){
-                TraceManager.addDev(currNode.getName() + " mapping found for " + commElemToRoute.getName());
+            if (tmlmapping.isCommNodeMappedOn(commElemToRoute, currNode)) {
+                //TraceManager.addDev(currNode.getName() + " mapping found for " + commElemToRoute.getName());
                 path.add(currNode);
                 //if (memory!=null) path.add(memory);
                 commNodes.remove(currNode);
-                if (exploreBuses(depth+1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
+                if (exploreBuses(depth + 1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
                 path.remove(currNode);
                 //if (memory!=null) path.remove(memory);
                 commNodes.add(currNode);
             }
         }
-        for(HwCommunicationNode currNode:nodesToExplore){
+        for (HwCommunicationNode currNode : nodesToExplore) {
             //if (busExploreMode) memory = getMemConnectedToBusChannelMapped(commNodes, (HwBus)currNode, commElemToRoute); else memory=null;
             path.add(currNode);
             //if (memory!=null) path.add(memory);
             commNodes.remove(currNode);
             //for (int i=0; i<path.size(); i++) System.out.print("  ");
-            TraceManager.addDev(currNode.getName());
-            if (exploreBuses(depth+1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
+            //TraceManager.addDev(currNode.getName());
+            if (exploreBuses(depth + 1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
             path.remove(currNode);
             //if (memory!=null) path.remove(memory);
             commNodes.add(currNode);
@@ -812,55 +795,58 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         return false;
     }
 
-    private HwMemory getMemConnectedToBusChannelMapped( List<HwCommunicationNode> _commNodes, HwBus _bus, TMLElement _channel )   {
-        for( HwCommunicationNode commNode: _commNodes ) {
-            if( commNode instanceof HwMemory )  {
-                if( _bus != null ) TraceManager.addDev(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
-                TraceManager.addDev(_channel.getName() + " is mapped onto " + commNode.getName() + ": " + tmlmapping.isCommNodeMappedOn(_channel,commNode));
-                if( ( _bus == null || tmlmapping.getTMLArchitecture().isNodeConnectedToBus( commNode, _bus ) )
-                    && tmlmapping.isCommNodeMappedOn( _channel, commNode ) )    {
-                    return (HwMemory)commNode;
+    private HwMemory getMemConnectedToBusChannelMapped(List<HwCommunicationNode> _commNodes, HwBus _bus, TMLElement _channel) {
+        for (HwCommunicationNode commNode : _commNodes) {
+            if (commNode instanceof HwMemory) {
+                if (_bus != null) {
+                    //TraceManager.addDev(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
+                }
+                    //TraceManager.addDev(_channel.getName() + " is mapped onto " + commNode.getName() + ": " + tmlmapping.isCommNodeMappedOn(_channel, commNode));
+                if ((_bus == null || tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus))
+                        && tmlmapping.isCommNodeMappedOn(_channel, commNode)) {
+                    return (HwMemory) commNode;
                 }
             }
         }
         return null;
     }
 
-    private List<HwCommunicationNode> getBusesConnectedToNode(List<HwCommunicationNode> _commNodes, HwNode _node){
+    private List<HwCommunicationNode> getBusesConnectedToNode(List<HwCommunicationNode> _commNodes, HwNode _node) {
         List<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
-        for(HwCommunicationNode commNode: _commNodes){
-            if (commNode instanceof HwBus){
-                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(_node, (HwBus)commNode)) resultList.add(commNode);
+        for (HwCommunicationNode commNode : _commNodes) {
+            if (commNode instanceof HwBus) {
+                if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(_node, (HwBus) commNode))
+                    resultList.add(commNode);
             }
         }
         return resultList;
     }
 
-    private List<HwCommunicationNode> getBridgesConnectedToBus( List<HwCommunicationNode> _commNodes, HwBus _bus){
+    private List<HwCommunicationNode> getBridgesConnectedToBus(List<HwCommunicationNode> _commNodes, HwBus _bus) {
         List<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
-        for(HwCommunicationNode commNode: _commNodes){
-            if (commNode instanceof HwBridge){
+        for (HwCommunicationNode commNode : _commNodes) {
+            if (commNode instanceof HwBridge) {
                 if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add(commNode);
             }
         }
         return resultList;
     }
 
-    private boolean isBusConnectedToNode(HwCommunicationNode commNode, HwNode node){
-        for(HwLink link: tmlmapping.getTMLArchitecture().getHwLinks()) {
-            if(link.bus==commNode &&  link.hwnode==node) return true;
+    private boolean isBusConnectedToNode(HwCommunicationNode commNode, HwNode node) {
+        for (HwLink link : tmlmapping.getTMLArchitecture().getHwLinks()) {
+            if (link.bus == commNode && link.hwnode == node) return true;
         }
         return false;
     }
 
     private void generateTaskFiles(String path) throws FileException {
-        for(MappedSystemCTask mst: tasks) {
+        for (MappedSystemCTask mst : tasks) {
             mst.saveInFiles(path);
         }
     }
 
-    public MappedSystemCTask getMappedTaskByName(String iName){
-        for(MappedSystemCTask task: tasks){
+    public MappedSystemCTask getMappedTaskByName(String iName) {
+        for (MappedSystemCTask task : tasks) {
             if (task.getTMLTask().getName().equals(iName)) return task;
         }
         return null;

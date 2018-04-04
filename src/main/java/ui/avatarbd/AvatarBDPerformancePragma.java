@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.avatarbd;
 
 import myutil.Conversion;
@@ -52,18 +50,18 @@ import ui.window.JDialogPerformancePragma;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.ArrayList;
 
 /**
-   * Class Pragma
-   * Like a Note but with Pragma
-   * Creation: 06/12/2003
-   * @version 1.0 06/12/2003
-   * @author Ludovic APVRILLE, Letitia LI
+ * Class Pragma
+ * Like a Note but with Pragma
+ * Creation: 06/12/2003
+ *
+ * @author Ludovic APVRILLE, Letitia LI
+ * @version 1.0 06/12/2003
  */
 public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalComponent {
 
@@ -76,51 +74,52 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
     protected int limit = 15;
     protected int lockX = 1;
     protected int lockY = 5;
-	public ArrayList<String> syntaxErrors;
+    public ArrayList<String> syntaxErrors;
     protected Graphics myg;
 
     protected Color myColor;
 
     private Font myFont;//, myFontB;
-//    private int maxFontSize = 30;
+    //    private int maxFontSize = 30;
 //    private int minFontSize = 4;
     private int currentFontSize = -1;
     private final String[] pPragma = {"A[]", "A<>", "E[]", "E<>"};
     public Map<String, String> verifMap = new HashMap<String, String>();
 
     protected Graphics graphics;
-    public AvatarBDPerformancePragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+
+    public AvatarBDPerformancePragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         width = 200;
         height = 30;
         minWidth = 80;
         minHeight = 10;
-	properties = new LinkedList<String>();
+        properties = new LinkedList<String>();
         oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 0;
         //addTGConnectingPointsComment();
-	int len = makeTGConnectingPointsComment(16);
-	int decw = 0;
-	int dech = 0;
-	for(int i=0; i<2; i++) {
-	    connectingPoint[len] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.0 + dech);
-	    connectingPoint[len + 1 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 0.0 + dech);
-	    connectingPoint[len + 2 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.0 + dech);
-	    connectingPoint[len + 3 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.5 + dech);
-	    connectingPoint[len + 4 ] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.5 + dech);
-	    connectingPoint[len + 5 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 1.0 + dech);
-	    connectingPoint[len + 6 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 1.0 + dech);
-	    connectingPoint[len + 7 ] = new TGConnectingPointComment(this, 0, 0, true, true, 0.9 + decw, 1.0 + dech);
-	    len += 8;
-	}
+        int len = makeTGConnectingPointsComment(16);
+        int decw = 0;
+        int dech = 0;
+        for (int i = 0; i < 2; i++) {
+            connectingPoint[len] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.0 + dech);
+            connectingPoint[len + 1] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 0.0 + dech);
+            connectingPoint[len + 2] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.0 + dech);
+            connectingPoint[len + 3] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 0.5 + dech);
+            connectingPoint[len + 4] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0 + decw, 0.5 + dech);
+            connectingPoint[len + 5] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0 + decw, 1.0 + dech);
+            connectingPoint[len + 6] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5 + decw, 1.0 + dech);
+            connectingPoint[len + 7] = new TGConnectingPointComment(this, 0, 0, true, true, 0.9 + decw, 1.0 + dech);
+            len += 8;
+        }
 
         moveable = true;
         editable = true;
         removable = true;
 
         name = "Performance Pragma";
-		syntaxErrors = new ArrayList<String>();
+        syntaxErrors = new ArrayList<String>();
         value = "";
 
         myImageIcon = IconManager.imgic6000;
@@ -129,8 +128,9 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
     public String[] getValues() {
         return values;
     }
+
     public LinkedList<String> getProperties() {
-	return properties;
+        return properties;
     }
 
     public void internalDrawing(Graphics g) {
@@ -142,7 +142,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
           }*/
 
         if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize()+1;
+            currentFontSize = tdp.getFontSize() + 1;
             //System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
             //            myFont = f.deriveFont((float)currentFontSize);
             //myFontB = myFont.deriveFont(Font.BOLD);
@@ -156,17 +156,17 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
             makeValue();
         }
 
-      //  int h  = g.getFontMetrics().getHeight();
+        //  int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
         int desiredWidth = minWidth;
-        desiredWidth = Math.max(desiredWidth, 2*g.getFontMetrics().stringWidth("Performance Pragma") + marginX+ textX);
-	
-        for(int i=0; i< values.length; i++) {
-            desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX+textX);
+        desiredWidth = Math.max(desiredWidth, 2 * g.getFontMetrics().stringWidth("Performance Pragma") + marginX + textX);
+
+        for (int i = 0; i < values.length; i++) {
+            desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX + textX);
         }
 
-        int desiredHeight = (properties.size()+2)*currentFontSize + textY + 1;
+        int desiredHeight = (properties.size() + 2) * currentFontSize + textY + 1;
 
         //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
 
@@ -174,19 +174,19 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
             resize(desiredWidth, desiredHeight);
         }
 
-        g.drawLine(x, y, x+width, y);
-        g.drawLine(x, y, x, y+height);
-        g.drawLine(x, y+height, x+width-limit, y+height);
-        g.drawLine(x+width, y, x+width, y+height - limit);
+        g.drawLine(x, y, x + width, y);
+        g.drawLine(x, y, x, y + height);
+        g.drawLine(x, y + height, x + width - limit, y + height);
+        g.drawLine(x + width, y, x + width, y + height - limit);
 
         g.setColor(ColorManager.PERFORMANCE_PRAGMA_BG);
-        int [] px1 = {x+1, x+width, x + width, x + width-limit, x+1};
-        int [] py1 = {y+1, y+1, y+height-limit, y+height, y+height};
+        int[] px1 = {x + 1, x + width, x + width, x + width - limit, x + 1};
+        int[] py1 = {y + 1, y + 1, y + height - limit, y + height, y + height};
         g.fillPolygon(px1, py1, 5);
         g.setColor(c);
 
-        int [] px = {x+width, x + width - 4, x+width-10, x + width-limit};
-        int [] py = {y+height-limit, y + height - limit + 3, y + height - limit + 2, y +height};
+        int[] px = {x + width, x + width - 4, x + width - 10, x + width - limit};
+        int[] py = {y + height - limit, y + height - limit + 3, y + height - limit + 2, y + height};
         g.drawPolygon(px, py, 4);
 
         if (g.getColor() == ColorManager.NORMAL_0) {
@@ -194,25 +194,25 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         }
         g.fillPolygon(px, py, 4);
 
-        g.setColor(Color.black);	
-	
-	int i = 1;
-	Font heading = new Font("heading", Font.BOLD, 14);
-	g.setFont(heading);
-	g.drawString("Performance Pragmas", x+textX, y+textY + currentFontSize);
-	g.setFont(fold);
-	for (String s: properties){
-	    g.drawString(s, x + textX, y + textY + (i+1)* currentFontSize);
-	    drawVerification(s, g, x+textX, y+textY + (i+1)* currentFontSize);
-		if (syntaxErrors.contains(s)){
-				Color ctmp= g.getColor();
-				g.setColor(Color.red);
-				g.drawLine(x+textX/2,y+textY*3/2 + i*currentFontSize, x+width-textX/2, y+textY*3/2 +(i+1)*currentFontSize);
-				g.drawLine(x+width-textX/2,y+textY*3/2 + i*currentFontSize, x+textX/2, y+textY*3/2 +(i+1)*currentFontSize);
-				g.setColor(ctmp);
-			}
-	    i++;
-	}
+        g.setColor(Color.black);
+
+        int i = 1;
+        Font heading = new Font("heading", Font.BOLD, 14);
+        g.setFont(heading);
+        g.drawString("Performance Pragmas", x + textX, y + textY + currentFontSize);
+        g.setFont(fold);
+        for (String s : properties) {
+            g.drawString(s, x + textX, y + textY + (i + 1) * currentFontSize);
+            drawVerification(s, g, x + textX, y + textY + (i + 1) * currentFontSize);
+            if (syntaxErrors.contains(s)) {
+                Color ctmp = g.getColor();
+                g.setColor(Color.red);
+                g.drawLine(x + textX / 2, y + textY * 3 / 2 + i * currentFontSize, x + width - textX / 2, y + textY * 3 / 2 + (i + 1) * currentFontSize);
+                g.drawLine(x + width - textX / 2, y + textY * 3 / 2 + i * currentFontSize, x + textX / 2, y + textY * 3 / 2 + (i + 1) * currentFontSize);
+                g.setColor(ctmp);
+            }
+            i++;
+        }
 
 /*        for (int i = 0; i<values.length; i++) {
             //TraceManager.addDev("x+texX=" + (x + textX) + " y+textY=" + y + textY + i* h + ": " + values[i]);
@@ -225,19 +225,17 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 
     public void makeValue() {
         values = Conversion.wrapText(value);
-	properties.clear();
-	for (String s: values){
-	    if (s.isEmpty()){
-		//Ignore
-	    }
-		else if (s.contains("Latency") && (s.contains("<") || s.contains(">") || s.contains("?")) ) {
-			properties.add(s);
-		}
-	    else {
-		//Warning Message
-				properties.add(s);
-	    }
-	}
+        properties.clear();
+        for (String s : values) {
+            if (s.isEmpty()) {
+                //Ignore
+            } else if (s.contains("Latency") && (s.contains("<") || s.contains(">") || s.contains("?"))) {
+                properties.add(s);
+            } else {
+                //Warning Message
+                properties.add(s);
+            }
+        }
         //checkMySize();
     }
 
@@ -256,17 +254,17 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
       resize(desiredWidth, desiredHeight);
       }
       }*/
-  
-    
+
+
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
         JDialogPerformancePragma jdn = new JDialogPerformancePragma(frame, "Setting the performance pragmas", value);
         //jdn.setLocation(200, 150);
         GraphicLib.centerOnParent(jdn);
-		AvatarBDPanel abdp = (AvatarBDPanel) tdp;
-		jdn.blockAttributeMap = abdp.getBlockStrings(true,true,true);
-        jdn.setVisible( true ); // blocked until dialog has been closed
+        AvatarBDPanel abdp = (AvatarBDPanel) tdp;
+        jdn.blockAttributeMap = abdp.getBlockStrings(true, true, true);
+        jdn.setVisible(true); // blocked until dialog has been closed
 
         String s = jdn.getText();
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
@@ -285,7 +283,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         return null;
     }
 
-    public void rescale(double scaleFactor){
+    public void rescale(double scaleFactor) {
         /*dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
           lineHeight = (int)(dlineHeight);
           dlineHeight = dlineHeight - lineHeight;
@@ -305,7 +303,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
             makeValue();
         }
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        for(int i=0; i<values.length; i++) {
+        for (int i = 0; i < values.length; i++) {
             sb.append("<Line value=\"");
             sb.append(GTURTLEModeling.transformString(values[i]));
             sb.append("\" />\n");
@@ -313,48 +311,46 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         sb.append("</extraparam>\n");
         return new String(sb);
     }
-    private void drawVerification(String s, Graphics g, int _x, int _y){
+
+    private void drawVerification(String s, Graphics g, int _x, int _y) {
         Color c = g.getColor();
-     //   Color c1;
-		String status;
-		if (verifMap.containsKey(s)){
-	    	status = verifMap.get(s);
-	    	if (status.equals("PROVED_TRUE")){
-				g.setColor(Color.green);
-				int[] xp1 = new int[]{_x-35, _x-33, _x-27, _x-29};
-				int[] yp1 = new int[]{_y-3, _y-5, _y-1, _y+1};
-				int[] xp2 = new int[]{_x-29, _x-27, _x-18, _x-20};
-				int[] yp2 = new int[]{_y-1, _y+1, _y-8, _y-10};	
-				g.fillPolygon(xp1, yp1, 4);
-				g.fillPolygon(xp2, yp2, 4);
-	    	} 
-			else if (status.equals("PROVED_ERROR")){
-				Font f= g.getFont();
-				g.setFont(new Font("TimesRoman", Font.BOLD, 14)); 
-				g.drawString("?",_x-30,_y);
-				g.setFont(f);
-			}
-	    	else if (status.equals("PROVED_FALSE")){
-				g.setColor(Color.red);
-				int[] xp1 = new int[]{_x-32, _x-30, _x-21, _x-23};
-				int[] yp1 = new int[]{_y-12, _y-10, _y-2, _y};
-				int[] xp2 = new int[]{_x-30, _x-32, _x-23, _x-21};
-				int[] yp2 = new int[]{_y, _y-2, _y-12, _y-10};	
-				g.fillPolygon(xp1, yp1, 4);
-				g.fillPolygon(xp2, yp2, 4);
-	    	}
-			else {
-				Font f= g.getFont();
-				g.setFont(new Font("TimesRoman", Font.BOLD, 10)); 
-				g.drawString(status,_x-35,_y);
-				g.setFont(f);
-			}	
-		}
-		g.setColor(c);
+        //   Color c1;
+        String status;
+        if (verifMap.containsKey(s)) {
+            status = verifMap.get(s);
+            if (status.equals("PROVED_TRUE")) {
+                g.setColor(Color.green);
+                int[] xp1 = new int[]{_x - 35, _x - 33, _x - 27, _x - 29};
+                int[] yp1 = new int[]{_y - 3, _y - 5, _y - 1, _y + 1};
+                int[] xp2 = new int[]{_x - 29, _x - 27, _x - 18, _x - 20};
+                int[] yp2 = new int[]{_y - 1, _y + 1, _y - 8, _y - 10};
+                g.fillPolygon(xp1, yp1, 4);
+                g.fillPolygon(xp2, yp2, 4);
+            } else if (status.equals("PROVED_ERROR")) {
+                Font f = g.getFont();
+                g.setFont(new Font("TimesRoman", Font.BOLD, 14));
+                g.drawString("?", _x - 30, _y);
+                g.setFont(f);
+            } else if (status.equals("PROVED_FALSE")) {
+                g.setColor(Color.red);
+                int[] xp1 = new int[]{_x - 32, _x - 30, _x - 21, _x - 23};
+                int[] yp1 = new int[]{_y - 12, _y - 10, _y - 2, _y};
+                int[] xp2 = new int[]{_x - 30, _x - 32, _x - 23, _x - 21};
+                int[] yp2 = new int[]{_y, _y - 2, _y - 12, _y - 10};
+                g.fillPolygon(xp1, yp1, 4);
+                g.fillPolygon(xp2, yp2, 4);
+            } else {
+                Font f = g.getFont();
+                g.setFont(new Font("TimesRoman", Font.BOLD, 10));
+                g.drawString(status, _x - 35, _y);
+                g.setFont(f);
+            }
+        }
+        g.setColor(c);
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         value = "";
         values = null;
         try {
@@ -363,12 +359,12 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
             Element elt;
             String s;
 
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {

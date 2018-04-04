@@ -46,7 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChannel.h>
 
 ///This class models write operations on TML channels.
-class TMLWriteCommand:public TMLCommand{
+class TMLWriteCommand:public TMLCommand {
 public:
 	///Constructor
     	/**

@@ -2549,7 +2549,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         animateWithInfo.setEnabled(animate.isSelected());
         openDiagram.setEnabled(animate.isSelected());
         update.setSelected(false);
-        sendCommand("run-exploration " + minimalCommandCoverage.getValue() + " " + minimalBranchCoverage.getValue() + " " + getCurrentRGName());
+        String graph = getCurrentRGName();
+        sendCommand("run-exploration " + minimalCommandCoverage.getValue() + " " + minimalBranchCoverage.getValue()
+                + " " + graph);
 
     }
 
