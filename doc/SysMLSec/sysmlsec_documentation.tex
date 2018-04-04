@@ -224,12 +224,151 @@ A simple architecture model and mapping is shown in Figure \ref{fig:mapping1}. T
 \end{figure*}
 
 \subsection{Attack Tree Model}
+We can now capture potential attacks on this system in an attack tree model. SysML doesn't propose any way to capture fault or attack trees. TTool proposes to rely on SysML parametric diagrams in order to capture attacks (or faults).
 
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{fig/attacktree.png}
-\caption{Attack Tree Model} \label{fig:atatcktree}
+\caption{Attack Tree Model} \label{fig:attacktree}
 \end{figure*}
 
+The attack tree of Figure \ref{fig:attacktree} contains a root attack: "RetrieveConfidentialData". This root attack is possible if and only if the attack first connects on the bus (let's call this attack $att_1$), and then reads (and interpret) a data on the bus ($att_2$). Making either $att_1$ or $att_2$ not possible in our system would suffice to ensure that the root attack is not possible.  This is obvious in our attack tree, but this is not always the case. Thus, TTool proposes a way to investigate if a given attack is still possible in the system directly from attack trees. Let's try together:
+\begin{enumerate}
+\item Make a right click on the root attack, and click on  "Select for Reachability/Liveness".
+\item. Let's now see if the root attack is reachable. For this, check the syntax of the diagram, and click on the "Safety verification (internal tool)" icon. Then, select "Reachability of selected states" and click on start. Close the window. You diagram should be annotated with a green "R", as shown on Figure \ref{fig:attacktree_verif1}.
+\item Let's make $att_1$ or $att_2$ not feasible. For this, you can make a right click on e.g. $att_1$ and select "Disable". If an attack is disabled, it probably means that a countermeasure has been used. Thus, countermeasure blocks can be linked to attacks. In the case of $ att_1$, the countermeasure is to make the bus private (e.g., make it internal to a chip if the attacker has no way to investigate a bus within a chip). For $att_2$, a common countermeasure is to use security protocols relying on ciphering algorithms. For now, we assume that only $att_1$ is disabled. Make the verification process. After this verification process, you should obtain a red "R", meaning that the root attack is no more feasible (see Figure \ref{fig:attacktree_verif2})
+ \end{enumerate}
+
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{fig/attacktree_verif1.png}
+\caption{Attack Tree Model after formal verification} \label{fig:attacktree_verif1}
+\end{figure*}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{fig/attacktree_verif2.png}
+\caption{Attack Tree Model after formal verification} \label{fig:attacktree_verif2}
+\end{figure*}
+
+\subsection{Implementing security countermeasures}
+
+\subsubsection{Security verification}
+Before implementing security countermeasures in the mapping model, this document explains how to perform formal security
+ verification. Again, Figure \ref{fig:fv1} contains a security property on channel "comm" to verify that the latter is confidential. Let's now prove this confidentiality property on the first system version (see Figure \ref{fig:mapping1}):
+\begin{enumerate}
+\item Check the syntax of "NonSecureArchitectureWithNonSecureFV" diagram.
+\item Click on the "SecurityVerification (ProVerif)" icon. A dialog window should open: click on start. The results should be as shown in Figure \ref{fig:proverif1}.
+\item The result of the verification is displayed in the lower part of Figure \ref{fig:proverif1}. There are two results:
+\begin{itemize}
+\item The $comm$ channel is NOT confidential, which proves that the confidentiality requirement is NOT satisfied
+\item The read and write actions in T2 and T1 are reachable. This result is important in the case the property is satisfied. Indeed, if none of these actions were reachable, the channel would be confidential since there would be no exchange of data in this channel
+\end{itemize}
+\item Since $comm$ is not confidential, TTool can draw an attack trace that shows how the attacker manages to retrieve the data. Make a right click on the non satisfied authenticity, and select "show trace" (see Figure \ref{fig:trace1}). This (obvious) trace explains that T1 directly send a data to the attacker since T1 writes the data on a public bus.
+\item The functional view is annotated with the verification results, as shown on Figure \ref{fig:fv1results}
+\end{enumerate}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.6\textwidth]{fig/proverif1.png}
+\caption{Security verification dialog window} \label{fig:proverif1}
+\end{figure*}
+
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.6\textwidth]{fig/trace1.png}
+\caption{Attack trace} \label{fig:trace1}
+\end{figure*}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.1\textwidth]{build/fv1_t1_results-svg.pdf}
+\includegraphics[width=0.7\textwidth]{build/fv1_results-svg.pdf}
+\includegraphics[width=0.1\textwidth]{build/fv1_t2_results-svg.pdf}
+\caption{Functional View annotated with security verification} \label{fig:fv1results}
+\end{figure*}
+
+\subsubsection{Countermeasure 1: Secure Bus}
+As seen before, a first countermeasure is to use a secure bus, which is called "private" in TTool. Thus, the bus in the second mapping (called "SecureArchitectureWithNonSecureFV") is private. You can see this with the green shield icon on the bus. A double-click on this bus makes it possible to change this parameter (public, private).
+
+Try to make the security verification of this second system. You should observe that the confidentiality property is now verified.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.6\textwidth]{build/mapping2-svg}
+\caption{Secure Architecture thanks to a private bus} \label{fig:mapping2}
+\end{figure*}
+
+\subsubsection{Countermeasure 2: Secure Functions}
+A second countermeasure consists in adding security mechanisms to the two functions T1 and T2. TTool offers cryptographic configurations to add security mechanisms to the behaviour of blocks. Basically, a cryptographic configuration specifies the type of security mechanism (symmetric cipher, hash, key manipulation, nonce, etc.) and its performance impact in terms of complexity operations by sample.
+
+The modified activity diagrams of T1 and T2 are given in Figure \ref{fig:fv3}. Note that only the activity diagrams have been modified with regards to previous version.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.2\textwidth]{build/fv3_t1-svg.pdf}
+\includegraphics[width=0.4\textwidth]{build/fv3-svg.pdf}
+\includegraphics[width=0.2\textwidth]{build/fv3_t2-svg.pdf}
+\caption{Functional view updated with cryptographic configurations} \label{fig:fv3}
+\end{figure*}
+
+If you double-click on the SE operator of T1, the following windows should open (see Figure \ref{fig:ccdialog}). This dialog window contains the following field:
+\begin{itemize}
+\item \textbf{Name} of the configuration. This name is useful to reference a given cryptographic configuration when writing/reading data. For instance, the write operator on $comm$ in T1 uses the Cipherdata cryptographic configuration.
+\item The \textbf{type} of the cryptographic configuration: Symmetric, Asymmetric, MAC, Hash, Nonce, Advanced. In our case, a symmetric encryption is selected.
+\item The \textbf{complexity}, in terms of integer operations, of the selected operation
+\item The use of \textbf{cryptographic material}: keys, nonces and precise algorithms (AES, etc.)
+\end{itemize}
+
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{fig/ccdialog.png}
+\caption{Cryptographic configuration dialog window} \label{fig:ccdialog}
+\end{figure*}
+
+Let's now consider a third mapping (named "NonSecureArchitectureWithSecureFV") which basically consists in mapping the secure tasks to the non secure architecture (i.e., the one with the public bus). The result of the security verification of this system is given in Figure \ref{fig:fv3_result}. The confidentiality property is now verified.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{build/fv3_result-svg}
+\caption{Verification result in the case of a non secure architecture but with secure functions} \label{fig:fv3_result}
+\end{figure*}
+
+Unfortunately, security mechanisms impact the performance of the system. TTool makes it possible to evaluate the performance of two different mappings,e.g. the one with no security (version 1), and the one with security mechanisms (version 3). To do this, TTool relies on the DIPLODOCUS simulator\footnote{see the tutorial on DIPLODOCUS to learn how to use the DIPLODOCUS simulator: https://ttool.telecom-paristech.fr/diplodocus.html}.
+
+Without taking into account penalties of the hardware platform (e.g. cache miss, task switching time, boot time, etc.), simulation takes 20 cycles in the case of the non secure system (see Figure \ref{fig:simu_mapping1}), and 220 (20 cycles + 100 cycles for ciphering + 100 cycles for deciphering) in the case of the secure mechanisms added to tasks(see Figure \ref{fig:simu_mapping3}).
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{fig/simu_mapping1}
+\caption{Simulation of non secure application mapped on the non secure architecture} \label{fig:simu_mapping1}
+\end{figure*}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.99\textwidth]{fig/simu_mapping3}
+\caption{Excerpt of the simulation of the secure application mapped on the non secure architecture} \label{fig:simu_mapping3}
+\end{figure*}
+
+\section{Designing security protocols}
+During the HW/SW partitioning stage, security mechanisms have been modeled at a high level of abstraction, mostly for placing them correctly in the system, and evaluating their impact on the system performance. During the software design stage, security protocols can be designed in a more precise way.
+
+A design contains a block diagram (see Figure \ref{fig:design}) as well as a state machine for each regular block (see Figure \ref{fig:design_t}). 
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{build/design-svg.pdf}
+\caption{Design of a security protocol} \label{fig:fv3}
+\end{figure*}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.2\textwidth]{build/design_t1-svg.pdf}
+\includegraphics[width=0.2\textwidth]{build/design_t2-svg.pdf}
+\caption{State machines of T1 (on the left) and T2 (on the right)} \label{fig:fv3}
+\end{figure*}
 
 \end{document}
