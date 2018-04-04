@@ -126,7 +126,7 @@ Editor} & \textbf{Year}
 
 \subsection{Summary}
 
-This document describes how to use SysML-Sec using simple examples\footnote{This document has been started in the scope of the AQUAS european project}. In particular, it covers requirements, attack trees, HW/SW partitioning and  software design.
+This document describes how to use SysML-Sec using simple examples\footnote{This document has been started in the scope of the AQUAS european project}. In particular, it covers requirements, attack trees, HW/SW partitioning and software design.
 
 \newpage
 
@@ -136,7 +136,7 @@ At first, if not already configured\footnote{You version of TTool should be alre
 \begin{verbatim}
 TTool/bin/config.xml
 \end{verbatim}
-Open your configuration file, and set the following lines accordingly with your TTool and ProVerif installation:
+Open your configuration file, and add the following lines accordingly with your TTool and ProVerif installation:
 \begin{itemize}
 \item Directory in which formal specifications for security proofs are generated:
 \begin{verbatim}
@@ -151,7 +151,7 @@ Open your configuration file, and set the following lines accordingly with your 
 <ProVerifVerifierHost data="localhost" />
 \end{verbatim}
 \end{itemize}
-We also assume that the DIPLODOCUS simulator correctly works.
+We also assume that the DIPLODOCUS simulator works correctly.
 
 
 \subsection{External tools}
@@ -159,7 +159,7 @@ The  configuration for the DIPLODOCUS simulator assumes that a \textbf{C compile
 
 \newpage
 \section{Getting started with a toy example}\label{sec:example}
-This very first example explains how to use the main capabilities of SysML-Sec
+This very first example explains how to use the main capabilities of SysML-Sec.
 
 \subsection{Getting the example}
 Be sure to get the latest version of TTool including the remote loading of models (March 2018 and after). Do: File, Open from TTool repository, and select "SysMLSecTutorial.xml".
@@ -172,13 +172,13 @@ The first tab of the model presents an overview of the SysML-Sec methodology (se
 \centering
 \includegraphics[width=0.99\textwidth]{build/method-svg.pdf}
 
-\caption{The first diagram represents the method of SysML-Sec. Each stage of the method is represented by a rectangle that contains a link to all diagrams of the corresponding stage} \label{fig:method}
+\caption{The first diagram represents the SysML-Sec method. Each stage of the method is represented by a rectangle that contains a link to all diagrams of the corresponding stage} \label{fig:method}
 \end{figure*}
 
 \subsection{Security requirements}
-Security requirements are captured with a SysML requirement diagrams that is extended in the following way:
+Security requirements are captured with a SysML requirement diagram that is extended in the following ways:
 \begin{enumerate}
-\item Requirements can be tagged as "Functional", "Non Functional", "Privacy", "Confidentiality", "Non Repudiation", "Controlled Access", "Availability", "Immunity", "Data Origin Authenticity", "Freshness", "Business", "StakeHolder Need", "Other"
+\item Requirements can be tagged as "Functional", "Non Functional", "Privacy", "Confidentiality", "Non Repudiation", "Controlled Access", "Availability", "Immunity", "Data Origin Authenticity", "Freshness", "Business", "Stakeholder Need", "Other"
 \item Requirements have a \textbf{risk} attribute (low, medium, high).
 \item Property blocks can be added in order to reference a given property. Then, a "satisfy" link can be drawn between a Property and a Requirement.
 \end{enumerate}
@@ -192,7 +192,7 @@ The requirement diagram of Figure \ref{fig:req1} shows a confidentiality require
 \end{figure*}
 
 \subsection{Functional Model (version 1)}
-The functional model is build upon the merge of a  SysML Block Definition Diagram and a SysML Internal Block Diagram, see Figure \ref{fig:fv1}. The functional view contains two blocks : T1 and T2.  The functional behavior of T1 and T2 is captured with Activity diagrams, as displayed on the left and right of Figure \ref{fig:fv1}. Basically, T1 write one data sample, and T2 reads one data sample.
+The functional model is built upon the merge of a  SysML Block Definition Diagram and a SysML Internal Block Diagram, see Figure \ref{fig:fv1}. The functional view contains two blocks : T1 and T2.  The functional behavior of T1 and T2 is captured with Activity diagrams, as displayed on the left and right of Figure \ref{fig:fv1}. Basically, T1 writes one data sample, and T2 reads one data sample.
 
 
 \begin{figure*}[htbp]
@@ -224,7 +224,7 @@ A simple architecture model and mapping is shown in Figure \ref{fig:mapping1}. T
 \end{figure*}
 
 \subsection{Attack Tree Model}
-We can now capture potential attacks on this system in an attack tree model. SysML doesn't propose any way to capture fault or attack trees. TTool proposes to rely on SysML parametric diagrams in order to capture attacks (or faults).
+We can now capture potential attacks on this system in an attack tree model. However, SysML doesn't propose any way to capture fault or attack trees. TTool thus proposes relying on SysML parametric diagrams in order to capture attacks (or faults).
 
 \begin{figure*}[htbp]
 \centering
@@ -232,24 +232,24 @@ We can now capture potential attacks on this system in an attack tree model. Sys
 \caption{Attack Tree Model} \label{fig:attacktree}
 \end{figure*}
 
-The attack tree of Figure \ref{fig:attacktree} contains a root attack: "RetrieveConfidentialData". This root attack is possible if and only if the attack first connects on the bus (let's call this attack $att_1$), and then reads (and interpret) a data on the bus ($att_2$). Making either $att_1$ or $att_2$ not possible in our system would suffice to ensure that the root attack is not possible.  This is obvious in our attack tree, but this is not always the case. Thus, TTool proposes a way to investigate if a given attack is still possible in the system directly from attack trees. Let's try together:
+The attack tree of Figure \ref{fig:attacktree} contains a root attack: "RetrieveConfidentialData". This root attack is possible if and only if the attacker first connects to the bus (let's call this attack $att_1$), and then reads (and interprets) a data on the bus ($att_2$). Making either $att_1$ or $att_2$ not possible in our system would be sufficient to ensure that the root attack is not possible. This is obvious in our attack tree, but this is not always the case, such as for larger systems with complex logical combinations of attack steps. Thus, TTool proposes a way to investigate if a given attack is still possible in the system directly from attack trees. Let's try together:
 \begin{enumerate}
-\item Make a right click on the root attack, and click on  "Select for Reachability/Liveness".
-\item. Let's now see if the root attack is reachable. For this, check the syntax of the diagram, and click on the "Safety verification (internal tool)" icon. Then, select "Reachability of selected states" and click on start. Close the window. You diagram should be annotated with a green "R", as shown on Figure \ref{fig:attacktree_verif1}.
-\item Let's make $att_1$ or $att_2$ not feasible. For this, you can make a right click on e.g. $att_1$ and select "Disable". If an attack is disabled, it probably means that a countermeasure has been used. Thus, countermeasure blocks can be linked to attacks. In the case of $ att_1$, the countermeasure is to make the bus private (e.g., make it internal to a chip if the attacker has no way to investigate a bus within a chip). For $att_2$, a common countermeasure is to use security protocols relying on ciphering algorithms. For now, we assume that only $att_1$ is disabled. Make the verification process. After this verification process, you should obtain a red "R", meaning that the root attack is no more feasible (see Figure \ref{fig:attacktree_verif2})
+\item Right click on the root attack, and click on  "Select for Reachability/Liveness".
+\item Let's now see if the root attack is reachable. For this, check the syntax of the diagram, and click on the "Safety verification (internal tool)" icon. Then, select "Reachability of selected states" and click on start. Close the window. You diagram should be annotated with a green "R", as shown on Figure \ref{fig:attacktree_verif1}.
+\item Let's make $att_1$ or $att_2$ not feasible. For this, you can right click on e.g. $att_1$ and select "Disable". If an attack is disabled, it probably means that a countermeasure has been used. Thus, countermeasure blocks can be linked to attacks. In the case of $ att_1$, the countermeasure is to make the bus private (e.g., make it internal to a chip if the attacker has no way to investigate a bus within a chip). For $att_2$, a common countermeasure is to use security protocols relying on ciphering algorithms. For now, we assume that only $att_1$ is disabled. Run the verification process again. After this verification process, you should obtain a red "R", meaning that the root attack is no longer feasible (see Figure \ref{fig:attacktree_verif2})
  \end{enumerate}
 
 
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{fig/attacktree_verif1.png}
-\caption{Attack Tree Model after formal verification} \label{fig:attacktree_verif1}
+\caption{Attack Tree Model after formal verification with no attack steps disabled} \label{fig:attacktree_verif1}
 \end{figure*}
 
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{fig/attacktree_verif2.png}
-\caption{Attack Tree Model after formal verification} \label{fig:attacktree_verif2}
+\caption{Attack Tree Model after formal verification with attack steps disabled by countermeasures} \label{fig:attacktree_verif2}
 \end{figure*}
 
 \subsection{Implementing security countermeasures}
@@ -263,10 +263,10 @@ Before implementing security countermeasures in the mapping model, this document
 \item The result of the verification is displayed in the lower part of Figure \ref{fig:proverif1}. There are two results:
 \begin{itemize}
 \item The $comm$ channel is NOT confidential, which proves that the confidentiality requirement is NOT satisfied
-\item The read and write actions in T2 and T1 are reachable. This result is important in the case the property is satisfied. Indeed, if none of these actions were reachable, the channel would be confidential since there would be no exchange of data in this channel
+\item The read and write actions in T2 and T1 are reachable. This result is important in the case the property is satisfied. Indeed, if none of these actions were reachable, the channel would be confidential since there would be no exchange of data on this channel.
 \end{itemize}
-\item Since $comm$ is not confidential, TTool can draw an attack trace that shows how the attacker manages to retrieve the data. Make a right click on the non satisfied authenticity, and select "show trace" (see Figure \ref{fig:trace1}). This (obvious) trace explains that T1 directly send a data to the attacker since T1 writes the data on a public bus.
-\item The functional view is annotated with the verification results, as shown on Figure \ref{fig:fv1results}
+\item Since $comm$ is not confidential, TTool can draw an attack trace that shows how the attacker manages to retrieve the data. Right click on the non satisfied authenticity, and select "show trace" (see Figure \ref{fig:trace1}). This (obvious) trace explains that T1 directly send a data to the attacker since T1 writes the data on a public bus.
+\item The functional view is annotated with the verification results, as shown on Figure \ref{fig:fv1results}.
 \end{enumerate}
 
 \begin{figure*}[htbp]
@@ -293,16 +293,16 @@ Before implementing security countermeasures in the mapping model, this document
 \subsubsection{Countermeasure 1: Secure Bus}
 As seen before, a first countermeasure is to use a secure bus, which is called "private" in TTool. Thus, the bus in the second mapping (called "SecureArchitectureWithNonSecureFV") is private. You can see this with the green shield icon on the bus. A double-click on this bus makes it possible to change this parameter (public, private).
 
-Try to make the security verification of this second system. You should observe that the confidentiality property is now verified.
+Try to run the security verification of this second system. You should observe that the confidentiality property is now verified.
 
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=0.6\textwidth]{build/mapping2-svg}
-\caption{Secure Architecture thanks to a private bus} \label{fig:mapping2}
+\caption{Secure Architecture due to a private bus} \label{fig:mapping2}
 \end{figure*}
 
 \subsubsection{Countermeasure 2: Secure Functions}
-A second countermeasure consists in adding security mechanisms to the two functions T1 and T2. TTool offers cryptographic configurations to add security mechanisms to the behaviour of blocks. Basically, a cryptographic configuration specifies the type of security mechanism (symmetric cipher, hash, key manipulation, nonce, etc.) and its performance impact in terms of complexity operations by sample.
+A second countermeasure consists in adding security mechanisms to the two functions T1 and T2. TTool offers cryptographic configurations to add security mechanisms to the behaviour of blocks (See our Modelsward 2017 paper). Basically, a cryptographic configuration specifies the type of security mechanism (symmetric cipher, hash, key manipulation, nonce, etc.) and its performance impact in terms of complexity operations by sample.
 
 The modified activity diagrams of T1 and T2 are given in Figure \ref{fig:fv3}. Note that only the activity diagrams have been modified with regards to previous version.
 
@@ -314,12 +314,12 @@ The modified activity diagrams of T1 and T2 are given in Figure \ref{fig:fv3}. N
 \caption{Functional view updated with cryptographic configurations} \label{fig:fv3}
 \end{figure*}
 
-If you double-click on the SE operator of T1, the following windows should open (see Figure \ref{fig:ccdialog}). This dialog window contains the following field:
+If you double-click on the SE operator of T1, the following windows should open (see Figure \ref{fig:ccdialog}). This dialog window contains the following fields:
 \begin{itemize}
 \item \textbf{Name} of the configuration. This name is useful to reference a given cryptographic configuration when writing/reading data. For instance, the write operator on $comm$ in T1 uses the Cipherdata cryptographic configuration.
 \item The \textbf{type} of the cryptographic configuration: Symmetric, Asymmetric, MAC, Hash, Nonce, Advanced. In our case, a symmetric encryption is selected.
 \item The \textbf{complexity}, in terms of integer operations, of the selected operation
-\item The use of \textbf{cryptographic material}: keys, nonces and precise algorithms (AES, etc.)
+\item The use of \textbf{cryptographic material}: keys, nonces and precise algorithm (AES, etc.) 
 \end{itemize}
 
 
@@ -354,14 +354,14 @@ Without taking into account penalties of the hardware platform (e.g. cache miss,
 \end{figure*}
 
 \subsection{Designing security protocols}
-During the HW/SW partitioning stage, security mechanisms have been modeled at a high level of abstraction, mostly for placing them correctly in the system, and evaluating their impact on the system performance. During the software design stage, security protocols can be designed in a more precise way.
+During the HW/SW partitioning stage, security mechanisms have been modeled at a high level of abstraction, mostly to place them correctly in the system, and to evaluate their impact on the system performance. During the software design stage, security protocols can be designed in a more precise way.
 
-A design contains a block diagram (see Figure \ref{fig:design}) as well as a state machine for each regular block (see Figure \ref{fig:design_t}). 
+A software design contains a block diagram (see Figure \ref{fig:design}) as well as a state machine for each task block (see Figure \ref{fig:design_t}). 
 
-The block diagram contains a main block ("System") with two sub blocks ("T1" and "T2"). Two other blocks "Key" and "Messages" are used to define custom data types. T1 and T2 are cryptoblocks, i.e. they define default cryptographic methods e.g. encrypt, decrypt, hash, mac, message manipulation (concat, cut), etc. Last, a pragma operators:
+The block diagram contains a main block ("System") with two sub blocks ("T1" and "T2"). These tasks correspond to the same tasks modeled in the HW/SW Partitioning phase at a higher level of abstraction. Two other blocks "Key" and "Messages" are used to define custom data types. T1 and T2 are cryptoblocks, i.e. they define default cryptographic methods e.g. encrypt, decrypt, hash, mac, message manipulation (concat, cut), etc. Last, a pragma:
 \begin{itemize}
 \item links cryptographic keys of T1 and T2. This key "sk" is system-wide, which means that it is shared once for all protocol sessions.
-\item gives a security property: the value of the attribute "secretData" of "T1" must remain confidential. 
+\item gives a security property to check: the value of the attribute "secretData" of "T1" must remain confidential. 
 \end{itemize}
 
 

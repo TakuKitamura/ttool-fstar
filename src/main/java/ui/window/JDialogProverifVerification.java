@@ -141,8 +141,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     //security generation buttons
     ButtonGroup secGroup;
 
-    protected JCheckBox autoSec, autoConf, autoWeakAuth, autoStrongAuth, autoMapKeys, custom, addHSM;
-
+    protected JCheckBox autoConf, autoWeakAuth, autoStrongAuth, custom;
+	protected JRadioButton autoSec, autoMapKeys, addHSM;
     protected JTextField encTime, decTime, secOverhead;
     protected JComboBox<String> addtoCPU;
 
@@ -279,12 +279,13 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         c01.gridheight = 1;
 
         //genJava.addActionListener(this);
-        secGroup = new ButtonGroup();
-        autoSec = new JCheckBox("Add security");
-        jp02.add(autoSec, c01);
-        autoSec.addActionListener(this);
-        secGroup.add(autoSec);
-        autoConf = new JCheckBox("Add security (Confidentiality)");
+
+		secGroup=new ButtonGroup(); 
+        autoSec= new JRadioButton("Add security");
+		jp02.add(autoSec, c01);
+		autoSec.addActionListener(this);
+		secGroup.add(autoSec);
+        autoConf= new JCheckBox("Add security (Confidentiality)");
         jp02.add(autoConf, c01);
         autoConf.setEnabled(false);
         autoConf.addActionListener(this);
@@ -296,25 +297,27 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         autoStrongAuth = new JCheckBox("Add security (Strong Authenticity)");
         autoStrongAuth.setEnabled(false);
         jp02.add(autoStrongAuth, c01);
-        autoStrongAuth.addActionListener(this);
-        autoMapKeys = new JCheckBox("Add Keys");
-        autoMapKeys.addActionListener(this);
+
+		autoStrongAuth.addActionListener(this);
+        autoMapKeys= new JRadioButton("Add Keys");
+		autoMapKeys.addActionListener(this);
         jp02.add(autoMapKeys, c01);
-        secGroup.add(autoMapKeys);
-        addHSM = new JCheckBox("Add HSM");
-        jp02.add(addHSM, c01);
-        addHSM.addActionListener(this);
-        secGroup.add(addHSM);
-        jp02.add(new JLabel("Add HSM to component:"), c01);
-        listIgnored = new JList<String>(ignoredTasks);
+		secGroup.add(autoMapKeys);
+        addHSM = new JRadioButton("Add HSM");
+        jp02.add(addHSM,c01);
+		addHSM.addActionListener(this);
+		secGroup.add(addHSM);
+		jp02.add(new JLabel("Add HSM to component:"),c01);
+		listIgnored = new JList<String>(ignoredTasks);
 
 
-        listPanel = new JPanel();
-        GridBagConstraints c02 = new GridBagConstraints();
-        c02.gridwidth = 1;
-        c02.gridheight = 1;
-        c02.fill = GridBagConstraints.BOTH;
-        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		listPanel = new JPanel();
+		GridBagConstraints c02 = new GridBagConstraints();
+		c02.gridwidth=1;
+		c02.gridheight=1;
+		c02.fill= GridBagConstraints.BOTH;
+     	listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+
         listIgnored.addListSelectionListener(this);
         JScrollPane scrollPane1 = new JScrollPane(listIgnored);
         scrollPane1.setPreferredSize(new Dimension(250, 200));
