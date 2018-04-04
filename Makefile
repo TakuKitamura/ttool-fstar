@@ -196,6 +196,7 @@ PROD_USERNAME			= apvrille
 PROD_ADDRESS			= ssh.enst.fr
 PROD_PATH			= public_html/docs
 
+TTOOL_DOC_SYSMLSEC_DIR		 	= $(TTOOL_DOC)/SysMLSec
 TTOOL_DOC_AVATARCODEGENERATION_DIR 	= $(TTOOL_DOC)/codegeneration
 TTOOL_DOC_SOCLIB_USERGUIDE_DIR 		= $(TTOOL_DOC)/documents_soclib/USER_GUIDE
 TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR 	= $(TTOOL_DOC)/documents_soclib/INSTALLATION_GUIDE
@@ -440,8 +441,12 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@cp $(TTOOL_MPSOC)/generated_topcell/nbproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
 	@cp $(TTOOL_MPSOC)/generated_topcell/config_noproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
 #DOC
+	@$(MAKE) -C $(TTOOL_DOC_SYSMLSEC_DIR) sysmlsec_documentation
+	@cp $(TTOOL_DOC_SYSMLSEC_DIR)/build/sysmlsec_documentation.pdf  $(TTOOL_TARGET)/doc/sysmlsec_documentation.pdf
+	@cp $(TTOOL_DOC_SYSMLSEC_DIR)/build/sysmlsec_documentation.pdf  $(TTOOL_PRIVATE)/website/ttool/docs/
 	@$(MAKE) -C $(TTOOL_DOC_AVATARCODEGENERATION_DIR) codegeneration_documentation
 	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pdf  $(TTOOL_TARGET)/doc/avatarcodegeneration_documentation.pdf
+	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pdf  $(TTOOL_PRIVATE)/website/ttool/docs/
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR) user_guide
 	@cp $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR)/build/user_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_user_guide.pdf
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR) installation_guide
@@ -502,6 +507,7 @@ clean:
 	@$(MAKE) -C $(WEBCRAWLER_CLIENT_DIR) -e clean
 	@$(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e clean
 	@$(MAKE) -C $(JTTOOL_DIR) -e clean
+	@$(MAKE) -C $(TTOOL_DOC_SYSMLSEC_DIR) clean	
 	@$(MAKE) -C $(TTOOL_DOC_AVATARCODEGENERATION_DIR) clean
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR) clean
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR) clean
