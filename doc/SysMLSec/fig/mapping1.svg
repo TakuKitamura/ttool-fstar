@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="940"
+   height="500"
+   viewbox="231 132 915 505"
+   id="svg4889"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="mapping1.svg">
+  <metadata
+     id="metadata5053">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs5051" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview5049"
+     showgrid="false"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:zoom="0.28534031"
+     inkscape:cx="573"
+     inkscape:cy="318.5"
+     inkscape:window-x="1280"
+     inkscape:window-y="333"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4889" />
+  <line
+     x1="466"
+     y1="360"
+     x2="466"
+     y2="320"
+     id="line4891"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="195"
+     y1="211"
+     x2="341"
+     y2="248"
+     id="line4893"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="725"
+     y1="204"
+     x2="591"
+     y2="248"
+     id="line4895"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="8"
+     y="11"
+     width="250"
+     height="200"
+     id="rect4897"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="8"
+     y1="11"
+     x2="10"
+     y2="8"
+     id="line4899"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="258"
+     y1="11"
+     x2="260"
+     y2="8"
+     id="line4901"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="10"
+     y1="8"
+     x2="260"
+     y2="8"
+     id="line4903"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="258"
+     y1="211"
+     x2="260"
+     y2="208"
+     id="line4905"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="260"
+     y1="8"
+     x2="260"
+     y2="208"
+     id="line4907"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="9"
+     y="12"
+     width="248"
+     height="198"
+     id="rect4909"
+     style="fill:#c6ebf9" />
+  <text
+     x="92"
+     y="26"
+     style="font-size:12px;font-family:SansSerif"
+     id="text4911">&lt;&lt;CPURR&gt;&gt;</text>
+  <text
+     x="116"
+     y="41"
+     style="font-size:12px;font-family:SansSerif"
+     id="text4913">CPU1</text>
+  <rect
+     x="60"
+     y="80"
+     width="142"
+     height="40"
+     id="rect4915"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="61"
+     y="81"
+     width="140"
+     height="38"
+     id="rect4917"
+     style="fill:#c6e3f9" />
+  <line
+     x1="177"
+     y1="85"
+     x2="177"
+     y2="110"
+     id="line4919"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="177"
+     y1="85"
+     x2="192"
+     y2="85"
+     id="line4921"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="192"
+     y1="85"
+     x2="197"
+     y2="90"
+     id="line4923"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="197"
+     y1="90"
+     x2="197"
+     y2="110"
+     id="line4925"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="197"
+     y1="110"
+     x2="177"
+     y2="110"
+     id="line4927"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="192"
+     y1="85"
+     x2="192"
+     y2="90"
+     id="line4929"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="192"
+     y1="90"
+     x2="197"
+     y2="90"
+     id="line4931"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="65"
+     y="95"
+     style="font-size:12px;font-family:SansSerif"
+     id="text4933">NonSecureFV::T1</text>
+  <rect
+     x="663"
+     y="4"
+     width="250"
+     height="200"
+     id="rect4935"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="663"
+     y1="4"
+     x2="665"
+     y2="1"
+     id="line4937"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="913"
+     y1="4"
+     x2="915"
+     y2="1"
+     id="line4939"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="665"
+     y1="1"
+     x2="915"
+     y2="1"
+     id="line4941"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="913"
+     y1="204"
+     x2="915"
+     y2="201"
+     id="line4943"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="915"
+     y1="1"
+     x2="915"
+     y2="201"
+     id="line4945"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="664"
+     y="5"
+     width="248"
+     height="198"
+     id="rect4947"
+     style="fill:#c6ebf9" />
+  <text
+     x="747"
+     y="19"
+     style="font-size:12px;font-family:SansSerif"
+     id="text4949">&lt;&lt;CPURR&gt;&gt;</text>
+  <text
+     x="771"
+     y="34"
+     style="font-size:12px;font-family:SansSerif"
+     id="text4951">CPU2</text>
+  <rect
+     x="705"
+     y="86"
+     width="142"
+     height="40"
+     id="rect4953"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="706"
+     y="87"
+     width="140"
+     height="38"
+     id="rect4955"
+     style="fill:#c6e3f9" />
+  <line
+     x1="822"
+     y1="91"
+     x2="822"
+     y2="116"
+     id="line4957"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="822"
+     y1="91"
+     x2="837"
+     y2="91"
+     id="line4959"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="837"
+     y1="91"
+     x2="842"
+     y2="96"
+     id="line4961"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="842"
+     y1="96"
+     x2="842"
+     y2="116"
+     id="line4963"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="842"
+     y1="116"
+     x2="822"
+     y2="116"
+     id="line4965"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="837"
+     y1="91"
+     x2="837"
+     y2="96"
+     id="line4967"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="837"
+     y1="96"
+     x2="842"
+     y2="96"
+     id="line4969"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="710"
+     y="101"
+     style="font-size:12px;font-family:SansSerif"
+     id="text4971">NonSecureFV::T2</text>
+  <rect
+     x="341"
+     y="224"
+     width="250"
+     height="96"
+     id="rect4973"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="341"
+     y1="224"
+     x2="343"
+     y2="221"
+     id="line4975"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="591"
+     y1="224"
+     x2="593"
+     y2="221"
+     id="line4977"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="343"
+     y1="221"
+     x2="593"
+     y2="221"
+     id="line4979"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="591"
+     y1="320"
+     x2="593"
+     y2="317"
+     id="line4981"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="593"
+     y1="221"
+     x2="593"
+     y2="317"
+     id="line4983"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="342"
+     y="225"
+     width="248"
+     height="94"
+     id="rect4985"
+     style="fill:#d7bc80" />
+  <text
+     x="423"
+     y="239"
+     style="font-size:12px;font-family:SansSerif"
+     id="text4987">&lt;&lt;BUS-RR&gt;&gt;</text>
+  <text
+     x="440"
+     y="254"
+     style="font-size:12px;font-family:SansSerif"
+     id="text4989">MainBus</text>
+  <rect
+     x="381"
+     y="265"
+     width="164"
+     height="40"
+     id="rect4991"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="520"
+     y1="270"
+     x2="520"
+     y2="295"
+     id="line4993"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="520"
+     y1="270"
+     x2="535"
+     y2="270"
+     id="line4995"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="535"
+     y1="270"
+     x2="540"
+     y2="275"
+     id="line4997"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540"
+     y1="275"
+     x2="540"
+     y2="295"
+     id="line4999"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540"
+     y1="295"
+     x2="520"
+     y2="295"
+     id="line5001"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="535"
+     y1="270"
+     x2="535"
+     y2="275"
+     id="line5003"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="535"
+     y1="275"
+     x2="540"
+     y2="275"
+     id="line5005"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="386"
+     y="280"
+     style="font-size:12px;font-family:SansSerif"
+     id="text5007">NonSecureFV::comm</text>
+  <text
+     x="386"
+     y="300"
+     style="font-size:12px;font-family:SansSerif"
+     id="text5009">channel</text>
+  <rect
+     x="364"
+     y="360"
+     width="205"
+     height="139"
+     id="rect5011"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="364"
+     y1="360"
+     x2="366"
+     y2="357"
+     id="line5013"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="569"
+     y1="360"
+     x2="571"
+     y2="357"
+     id="line5015"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="366"
+     y1="357"
+     x2="571"
+     y2="357"
+     id="line5017"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="569"
+     y1="499"
+     x2="571"
+     y2="496"
+     id="line5019"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="571"
+     y1="357"
+     x2="571"
+     y2="496"
+     id="line5021"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <rect
+     x="365"
+     y="361"
+     width="203"
+     height="137"
+     id="rect5023"
+     style="fill:#acead3" />
+  <text
+     x="420"
+     y="375"
+     style="font-size:12px;font-family:SansSerif"
+     id="text5025">&lt;&lt;MEMORY&gt;&gt;</text>
+  <text
+     x="421"
+     y="390"
+     style="font-size:12px;font-family:SansSerif"
+     id="text5027">MainMemory</text>
+  <rect
+     x="386"
+     y="412"
+     width="164"
+     height="40"
+     id="rect5029"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="525"
+     y1="417"
+     x2="525"
+     y2="442"
+     id="line5031"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="525"
+     y1="417"
+     x2="540"
+     y2="417"
+     id="line5033"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540"
+     y1="417"
+     x2="545"
+     y2="422"
+     id="line5035"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="545"
+     y1="422"
+     x2="545"
+     y2="442"
+     id="line5037"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="545"
+     y1="442"
+     x2="525"
+     y2="442"
+     id="line5039"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540"
+     y1="417"
+     x2="540"
+     y2="422"
+     id="line5041"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540"
+     y1="422"
+     x2="545"
+     y2="422"
+     id="line5043"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     x="391"
+     y="427"
+     style="font-size:12px;font-family:SansSerif"
+     id="text5045">NonSecureFV::comm</text>
+  <text
+     x="391"
+     y="447"
+     style="font-size:12px;font-family:SansSerif"
+     id="text5047">channel</text>
+</svg>

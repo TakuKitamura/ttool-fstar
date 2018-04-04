@@ -1,0 +1,42 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="884" height="436" viewbox="126 88 758 348">
+<rect  x="296" y="93" width="175" height="40" fill="none" stroke="#000000" stroke-width="1"/>
+<rect  x="297" y="94" width="173" height="38" fill="#f3830a"/>
+<text  x="324" y="108" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">&lt;&lt;root attack&gt;&gt;</text>
+<text  x="306" y="123" style="font-size:12; font-family:SansSerif.plain; fill=#000000">RetrieveConfidentialData</text>
+<rect  x="157" y="301" width="112" height="40" fill="none" stroke="#000000" stroke-width="1"/>
+<rect  x="158" y="302" width="110" height="38" fill="#d6bb9e"/>
+<text  x="170" y="316" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">&lt;&lt;attack&gt;&gt;</text>
+<text  x="167" y="331" style="font-size:12; font-family:SansSerif.plain; fill=#000000">ConnectOnBus</text>
+<rect  x="308" y="177" width="150" height="50" rx="7" ry="7" fill="#bf99a1"/>
+<rect  x="308" y="177" width="150" height="50" rx="7" ry="7" fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="327" y="194" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">&lt;&lt;SEQUENCE&gt;&gt;</text>
+<text  x="383" y="206" style="font-size:12; font-family:SansSerif.italic; font-style=italic; fill=#000000"></text>
+<rect  x="481" y="298" width="122" height="40" fill="none" stroke="#000000" stroke-width="1"/>
+<rect  x="482" y="299" width="120" height="38" fill="#d6bb9e"/>
+<text  x="499" y="313" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">&lt;&lt;attack&gt;&gt;</text>
+<text  x="491" y="328" style="font-size:12; font-family:SansSerif.plain; fill=#000000">ReadDataOnBus</text>
+<polygon  points="715,298 903,298 879,338 690,338 " fill="#d1daae"/>
+<polygon  points="715,298 903,298 879,338 690,338 " fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="718" y="313" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">&lt;&lt;countermeasure&gt;&gt;</text>
+<text  x="767" y="328" style="font-size:12; font-family:SansSerif.plain; fill=#000000">Ciphering</text>
+<polygon  points="131,391 319,391 295,431 106,431 " fill="#d1daae"/>
+<polygon  points="131,391 319,391 295,431 106,431 " fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="134" y="406" style="font-size:12; font-family:SansSerif.bold; font-weight=bold; fill=#000000">&lt;&lt;countermeasure&gt;&gt;</text>
+<text  x="180" y="421" style="font-size:12; font-family:SansSerif.plain; fill=#000000">PrivateBus</text>
+<rect  x="343" y="222" width="5" height="5" fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="241" y1="301" x2="345" y2="227" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="345,227 340,236 335,227 " fill="#000000"/>
+<polygon  points="345,227 340,236 335,227 " fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="348" y="227" style="font-size:12; font-family:SansSerif.plain; fill=#000000">1</text>
+<rect  x="381" y="177" width="5" height="5" fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="383" y1="177" x2="383" y2="133" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="383,133 387,141 378,141 " fill="#000000"/>
+<polygon  points="383,133 387,141 378,141 " fill="none" stroke="#000000" stroke-width="1"/>
+<rect  x="418" y="222" width="5" height="5" fill="none" stroke="#000000" stroke-width="1"/>
+<line  x1="511" y1="298" x2="420" y2="227" stroke="#000000" stroke-width="1" fill="none"/>
+<polygon  points="420,227 429,228 423,236 " fill="#000000"/>
+<polygon  points="420,227 429,228 423,236 " fill="none" stroke="#000000" stroke-width="1"/>
+<text  x="423" y="227" style="font-size:12; font-family:SansSerif.plain; fill=#000000">2</text>
+</svg>

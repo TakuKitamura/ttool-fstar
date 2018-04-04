@@ -158,21 +158,77 @@ We also assume that the DIPLODOCUS simulator correctly works.
 The  configuration for the DIPLODOCUS simulator assumes that a \textbf{C compiler}, referenced by the provided Makefile (default = "gcc"\footnote{\url{https://gcc.gnu.org/}}) is installed on your machine, as well as the \textbf{POSIX-1 librairies}. Also, a Makefile utility must be installed (e.g., "GNU make"\footnote{\url{https://www.gnu.org/software/make/}}).
 
 \newpage
-\section{A toy example}\label{sec:example}
+\section{Getting started with a toy example}\label{sec:example}
 This very first example explains how to use the main capabilities of SysML-Sec
 
 \subsection{Getting the example}
 Be sure to get the latest version of TTool including the remote loading of models (March 2018 and after). Do: File, Open from TTool repository, and select "SysMLSecTutorial.xml".
 
 \subsection{Understanding the model}
-The first tab of the model presents an overview of the SysML-Sec methodology (see Figure \ref{fig:method}). Each stage of the method is represented with a rectangle that contains a link to the corresponding diagrams. 
+The first tab of the model presents an overview of the SysML-Sec methodology (see Figure \ref{fig:method}). Each stage of the method is represented with a rectangle that contains a link to the corresponding diagrams.  All other tabs correspond to the diagrams of the model.
 
 
 \begin{figure*}[htbp]
 \centering
-\includegraphics[scale=0.8]{build/method-svg.pdf}
+\includegraphics[width=0.99\textwidth]{build/method-svg.pdf}
 
 \caption{The first diagram represents the method of SysML-Sec. Each stage of the method is represented by a rectangle that contains a link to all diagrams of the corresponding stage} \label{fig:method}
+\end{figure*}
+
+\subsection{Security requirements}
+Security requirements are captured with a SysML requirement diagrams that is extended in the following way:
+\begin{enumerate}
+\item Requirements can be tagged as "Functional", "Non Functional", "Privacy", "Confidentiality", "Non Repudiation", "Controlled Access", "Availability", "Immunity", "Data Origin Authenticity", "Freshness", "Business", "StakeHolder Need", "Other"
+\item Requirements have a \textbf{risk} attribute (low, medium, high).
+\item Property blocks can be added in order to reference a given property. Then, a "satisfy" link can be drawn between a Property and a Requirement.
+\end{enumerate}
+
+The requirement diagram of Figure \ref{fig:req1} shows a confidentiality requirements that states that all functional communication paths should be confidential.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{build/requirements1-svg.pdf}
+\caption{Security requirements (version \#1)} \label{fig:req1}
+\end{figure*}
+
+\subsection{Functional Model (version 1)}
+The functional model is build upon the merge of a  SysML Block Definition Diagram and a SysML Internal Block Diagram, see Figure \ref{fig:fv1}. The functional view contains two blocks : T1 and T2.  The functional behavior of T1 and T2 is captured with Activity diagrams, as displayed on the left and right of Figure \ref{fig:fv1}. Basically, T1 write one data sample, and T2 reads one data sample.
+
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.1\textwidth]{build/fv1_t1-svg.pdf}
+\includegraphics[width=0.7\textwidth]{build/fv1-svg.pdf}
+\includegraphics[width=0.1\textwidth]{build/fv1_t2-svg.pdf}
+\caption{Functional View (version \#1)} \label{fig:fv1}
+\end{figure*}
+
+As shown on the block diagram, T1 and T2 are connected with a data communication channel. Since this communication channel must be secure (see Figure \ref{fig:req1}), we can now enrich the Requirement Diagram with a new security requirement connected to the initial security requirement (see Figure \ref{fig:req2})
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{build/requirements2-svg.pdf}
+\caption{Security requirements (version \#2)} \label{fig:req2}
+\end{figure*}
+
+We also enrich the communication channel $comm$ between T1 and T2 with a confidentiality property, as shown by the \textit{grey lock} with the question marks just next to the port of comm in T1 (Figure \ref{fig:fv1}).
+
+\subsection{Architecture and Mapping Models (version 1)}
+
+A simple architecture model and mapping is shown in Figure \ref{fig:mapping1}. T1 and T2 are mapped on CPU1 and CPU2, respectively. The channel between T1 and T2 is mapped on "MainBus" and on "MainMemory".
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{build/mapping1-svg.pdf}
+\caption{Mapping Model (version \#1)} \label{fig:mapping1}
+\end{figure*}
+
+\subsection{Attack Tree Model}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{fig/attacktree.png}
+\caption{Attack Tree Model} \label{fig:atatcktree}
 \end{figure*}
 
 
