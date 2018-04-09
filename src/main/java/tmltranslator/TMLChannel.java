@@ -156,6 +156,25 @@ public class TMLChannel extends TMLCommunicationElement {
         return taskNames;
     }
 
+    public ArrayList<TMLTask> getAllTasks() {
+        ArrayList<TMLTask> allTasks = new ArrayList<>();
+        if (originTask != null) {
+            allTasks.add(originTask);
+        }
+        if (destinationTask != null) {
+            allTasks.add(destinationTask);
+        }
+        for (TMLTask task : originTasks) {
+            allTasks.add(task);
+        }
+        for (TMLTask task : destinationTasks) {
+            allTasks.add(task);
+        }
+
+        return allTasks;
+
+    }
+
     public TMLTask getDestinationTask(int index) {
         return destinationTasks.get(index);
     }

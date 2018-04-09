@@ -37,15 +37,14 @@
  */
 
 
-
-
 package graph;
 
 /**
-   * Class AUTTransition
-   * Creation : 16/09/2004
-   ** @version 1.0 16/09/2004
-   * @author Ludovic APVRILLE
+ * Class AUTTransition
+ * Creation : 16/09/2004
+ * * @version 1.0 16/09/2004
+ *
+ * @author Ludovic APVRILLE
  */
 public class AUTTransition implements Comparable<AUTTransition> {
 
@@ -67,22 +66,22 @@ public class AUTTransition implements Comparable<AUTTransition> {
         transition = _transition;
     }
 
-    public int compareTo( AUTTransition _t ) {
-	if (origin != _t.origin) {
-	    return -1;
-	}
-	if (destination != _t.destination) {
-	    return -1;
-	}
-	if(elt != null) {
-	    if (elt != _t.elt) {
-		return -1;
-	    } else {
-		return 0;
-	    }
-	}
-	
-	return transition.compareTo(_t.transition);
+    public int compareTo(AUTTransition _t) {
+        if (origin != _t.origin) {
+            return -1;
+        }
+        if (destination != _t.destination) {
+            return -1;
+        }
+        if (elt != null) {
+            if (elt != _t.elt) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+
+        return transition.compareTo(_t.transition);
     }
 
     public String toString() {
@@ -96,7 +95,7 @@ public class AUTTransition implements Comparable<AUTTransition> {
         if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
             s = transition;
         } else {
-            s = transition.substring(index0+1, index1);
+            s = transition.substring(index0 + 1, index1);
         }
 
         index0 = s.indexOf("<");
@@ -117,17 +116,17 @@ public class AUTTransition implements Comparable<AUTTransition> {
             return 0;
         }
 
-        String s = transition.substring(index0+1, index1);
+        String s = transition.substring(index0 + 1, index1);
         String[] ss = s.split(",");
 
         int cpt = 0;
         int a;
-        for(int i=0; i<ss.length; i++) {
+        for (int i = 0; i < ss.length; i++) {
             //System.out.println("ss[" + i + "] =" + ss[i]);
             try {
                 a = Integer.decode(ss[i].trim()).intValue();
                 //System.out.println(">" + ss[i] + "< This is an int!");
-                cpt ++;
+                cpt++;
             } catch (Exception e) {
             }
         }
@@ -141,19 +140,19 @@ public class AUTTransition implements Comparable<AUTTransition> {
             return -1;
         }
 
-        String s = transition.substring(index0+1, index1);
+        String s = transition.substring(index0 + 1, index1);
         String[] ss = s.split(",");
 
         int cpt = 0;
         int a;
-        for(int i=0; i<ss.length; i++) {
+        for (int i = 0; i < ss.length; i++) {
             //System.out.println("gip ss[" + i + "] =" + ss[i]);
             try {
                 a = Integer.decode(ss[i].trim()).intValue();
                 if (cpt == _index) {
                     return a;
                 }
-                cpt ++;
+                cpt++;
             } catch (Exception e) {
             }
         }
@@ -161,11 +160,10 @@ public class AUTTransition implements Comparable<AUTTransition> {
     }
 
     public AUTTransition basicClone() {
-	AUTTransition tr = new AUTTransition(origin, transition, destination);
-	tr.isTau = isTau;
-	return tr;
+        AUTTransition tr = new AUTTransition(origin, transition, destination);
+        tr.isTau = isTau;
+        return tr;
     }
 
-    
 
 }

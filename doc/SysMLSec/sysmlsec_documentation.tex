@@ -180,7 +180,7 @@ Security requirements are captured with a SysML requirement diagram that is exte
 \begin{enumerate}
 \item Requirements can be tagged as "Functional", "Non Functional", "Privacy", "Confidentiality", "Non Repudiation", "Controlled Access", "Availability", "Immunity", "Data Origin Authenticity", "Freshness", "Business", "Stakeholder Need", "Other"
 \item Requirements have a \textbf{risk} attribute (low, medium, high).
-\item Property blocks can be added in order to reference a given property. Then, a "satisfy" link can be drawn between a Property and a Requirement.
+\item References to other diagram elements can be added and linked to requirements with a "satisfy" relation. "elt satifies req" means that elt is part of the mechanisms used to satisfy the referenced requirement.
 \end{enumerate}
 
 The requirement diagram of Figure \ref{fig:req1} shows a confidentiality requirements that states that all functional communication paths should be confidential.

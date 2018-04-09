@@ -37,20 +37,18 @@
  */
 
 
-
-
 package ui.window;
 
 import automata.Automata;
 import automata.State;
 import automata.Transition;
-import myutil.*;
 import common.SpecConfigTTool;
-import ui.util.IconManager;
+import graph.AUTGraph;
+import myutil.*;
 import ui.StoppableGUIElement;
 import ui.ThreadGUIElement;
 import ui.file.AUTFileFilter;
-import graph.AUTGraph;
+import ui.util.IconManager;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -61,12 +59,13 @@ import java.io.File;
 
 
 /**
-   * Class JFrameStatistics
-   * Creation: 13/08/2004
-   * version 1.0 13/08/2004
-   * @author Ludovic APVRILLE
+ * Class JFrameStatistics
+ * Creation: 13/08/2004
+ * version 1.0 13/08/2004
+ *
+ * @author Ludovic APVRILLE
  */
-public  class JFrameStatistics extends JFrame implements ActionListener, StoppableGUIElement, SteppedAlgorithm, ExternalCall {
+public class JFrameStatistics extends JFrame implements ActionListener, StoppableGUIElement, SteppedAlgorithm, ExternalCall {
     private String data;
     public static final int MAX_TRANSITIONS = 2500;
     //private int nbState;
@@ -116,7 +115,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
                 if (graph != null) {
                     graph.stopBuildGraph();
                 }
-            } else  {
+            } else {
                 if (tm != null) {
                     tm.stopBuildElement();
                 }
@@ -161,7 +160,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
     }
 
     public AUTGraph getGraph() {
-	return graph;
+        return graph;
     }
 
     public String getCurrentActivity() {
@@ -188,16 +187,16 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
     }
 
     public void goElement() {
-	if (graph == null) {
-	    graph = new AUTGraph();
-	    //System.out.println("Building graph : " + data);
-	    graph.buildGraph(data);
-	    graph.computeStates();
-	    //System.out.println("Build is done");
-	    if (stopped) {
-		return;
-	    }
-	}
+        if (graph == null) {
+            graph = new AUTGraph();
+            //System.out.println("Building graph : " + data);
+            graph.buildGraph(data);
+            graph.computeStates();
+            //System.out.println("Build is done");
+            if (stopped) {
+                return;
+            }
+        }
         graphDone = true;
         //System.out.println("making components");
         makeComponents();
@@ -209,7 +208,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
     public JFrameStatistics(String title, String dataAUT, AUTGraph graphAUT) {
         super(title);
         data = dataAUT;
-	graph = graphAUT;
+        graph = graphAUT;
         //System.out.println("dataAUT = " + dataAUT);
         stopAsSoonAsPossible = false;
     }
@@ -218,7 +217,6 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Container framePanel = getContentPane();
         framePanel.setLayout(new BorderLayout());
-
 
 
         //jstat = new JStatisticsPanel(this, data);
@@ -302,13 +300,12 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         transition.setText(String.valueOf(graph.getNbOfTransitions()));
         jp.add(transition);
 
-	showGraph = new JButton("Display graph");
-	showGraph.addActionListener(this);
-	if (graph.getNbOfStates() < 10000) {
-	    jp.add(showGraph);
-	}
+        showGraph = new JButton("Display graph");
+        showGraph.addActionListener(this);
+        if (graph.getNbOfStates() < 10000) {
+            jp.add(showGraph);
+        }
 
-	
 
         if (shouldIStop()) {
             return;
@@ -556,7 +553,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         System.out.println("G comp done");
     }
 
-    public void actionPerformed(ActionEvent evt)  {
+    public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
         //System.out.println("Command:" + command);
 
@@ -572,12 +569,12 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         } else if (evt.getSource() == savePathL) {
             saveAutomata(lastLongestAutomata);
         } else if (evt.getSource() == showGraph) {
-	    graph.display();
-	}
+            graph.display();
+        }
     }
 
     public void displayGraph() {
-	graph.display();
+        graph.display();
     }
 
     private void saveAutomata(Automata aut) {
@@ -593,7 +590,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         jfc.setFileFilter(filter);
 
         int returnVal = jfc.showDialog(this, "Save last path in AUT format");
-        if(returnVal != JFileChooser.APPROVE_OPTION) {
+        if (returnVal != JFileChooser.APPROVE_OPTION) {
             return;
         }
 
@@ -642,23 +639,23 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
                 return;
             }
 
-            if(from<0) {
+            if (from < 0) {
                 text.setText("Invalid value:" + combo1.getText() + ". Minimun value is 0");
                 return;
             }
 
-            if(to<0) {
+            if (to < 0) {
                 text.setText("Invalid value:" + combo2.getText() + ". Minimun value is 0");
                 return;
             }
 
-            if(from>=graph.getNbOfStates()) {
-                text1.setText("Invalid value:" + combo1.getText() + ". Maximum value is: " + (graph.getNbOfStates()-1));
+            if (from >= graph.getNbOfStates()) {
+                text1.setText("Invalid value:" + combo1.getText() + ". Maximum value is: " + (graph.getNbOfStates() - 1));
                 return;
             }
 
-            if(to>=graph.getNbOfStates()) {
-                text1.setText("Invalid value:" + combo2.getText() + ". Maximum value is: " + (graph.getNbOfStates()-1));
+            if (to >= graph.getNbOfStates()) {
+                text1.setText("Invalid value:" + combo2.getText() + ". Maximum value is: " + (graph.getNbOfStates() - 1));
                 return;
             }
 
@@ -678,23 +675,23 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
                 return;
             }
 
-            if(from<0) {
+            if (from < 0) {
                 text2.setText("Invalid value:" + combo3.getText() + ". Minimun value is 0");
                 return;
             }
 
-            if(to<0) {
+            if (to < 0) {
                 text2.setText("Invalid value:" + combo4.getText() + ". Minimun value is 0");
                 return;
             }
 
-            if(from>=graph.getNbOfStates()) {
-                text1.setText("Invalid value:" + combo3.getText() + ". Maximum value is: " + (graph.getNbOfStates()-1));
+            if (from >= graph.getNbOfStates()) {
+                text1.setText("Invalid value:" + combo3.getText() + ". Maximum value is: " + (graph.getNbOfStates() - 1));
                 return;
             }
 
-            if(to>=graph.getNbOfStates()) {
-                text2.setText("Invalid value:" + combo4.getText() + ". Maximum value is: " + (graph.getNbOfStates()-1));
+            if (to >= graph.getNbOfStates()) {
+                text2.setText("Invalid value:" + combo4.getText() + ". Maximum value is: " + (graph.getNbOfStates() - 1));
                 return;
             }
 
@@ -717,10 +714,10 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
         int to;
         JTextField text;
 
-	if (!cycleComputed) {
-	    hasCycle = GraphAlgorithms.hasCycle(graph);
-	    cycleComputed = true;
-	}
+        if (!cycleComputed) {
+            hasCycle = GraphAlgorithms.hasCycle(graph);
+            cycleComputed = true;
+        }
 
         DijkstraState[] dss;
         if (id == 1) {
@@ -773,25 +770,25 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
             return;
         }
 
-        for(int j=0; j<dss[to].path.length; j++) {
+        for (int j = 0; j < dss[to].path.length; j++) {
             path = path + "[" + dss[to].path[j] + "]";
             if (j < size - 1) {
-                path = path + " -- " + graph.getActionTransition(dss[to].path[j], dss[to].path[j+1]) + " --> ";
+                path = path + " -- " + graph.getActionTransition(dss[to].path[j], dss[to].path[j + 1]) + " --> ";
             }
         }
 
-        path = "Length=" + (size -1) + " / path=" + path;
+        path = "Length=" + (size - 1) + " / path=" + path;
         setPath(path, id);
 
         Automata automata = new Automata();
         State st = automata.getInitState();
         State nextState;
         Transition tr;
-        for(int j=1; j<dss[to].path.length; j++) {
+        for (int j = 1; j < dss[to].path.length; j++) {
             nextState = automata.newState();
-            tr = new Transition(graph.getActionTransition(dss[to].path[j-1], dss[to].path[j]), nextState);
+            tr = new Transition(graph.getActionTransition(dss[to].path[j - 1], dss[to].path[j]), nextState);
             st.addTransition(tr);
-            st =  nextState;
+            st = nextState;
         }
 
         //System.out.println("Graph=" + automata.toAUT());
@@ -823,7 +820,7 @@ public  class JFrameStatistics extends JFrame implements ActionListener, Stoppab
 
         String s;
 
-        for(int i=0; i<tm.getRowCount(); i++) {
+        for (int i = 0; i < tm.getRowCount(); i++) {
             s = tm.getValueAt(i, index).toString();
             wtmp = fm.stringWidth(s);
             w = Math.max(w, wtmp);

@@ -41,10 +41,14 @@
 
 package tmltranslator;
 
+import graph.AUTGraph;
+import graph.AUTState;
+import graph.AUTTransition;
+import myutil.DijkstraState;
+import myutil.GraphAlgorithms;
 import myutil.TraceManager;
 import tmltranslator.toproverif.TML2ProVerif;
 import ui.CorrespondanceTGElement;
-import automata.*;
 
 import java.util.*;
 
@@ -88,9 +92,9 @@ public class TMLMapping<E> {
 
     // Automata to verify the mapping of channels
     // and make minimal hardware
-    private Automata aut;
-    private HashMap<HwNode, State> nodesToStates;
-
+    private AUTGraph aut;
+    private HashMap<HwNode, AUTState> nodesToStates;
+    private ArrayList<AUTState> commNodes;
 
 
     // REFERENCES TO BE REMOVED!!!! :(
@@ -218,20 +222,30 @@ public class TMLMapping<E> {
             while (channelIt.hasNext()) {
                 ch = channelIt.next();
                 addCommToHwCommNode(ch, bus);
-                addCommToHwCommNode(ch, mem);
+                // if channel has no mem, map the channel on the new memory
+                if (getMemoryOfChannel(ch) == null) {
+                    addCommToHwCommNode(ch, mem);
+                }
             }
-
-
         }
+
 
         // Verify that all channels are mapped at least on one bus
         // and on one memory. Create the necessary hardware elements
-        // if they do not exist
+        // if they do not exist on the path which is suggested by already
+        // mapped elements
+
+        makeAutomata();
+
         Iterator<TMLChannel> channelIt = tmlm.getChannels().iterator();
         while (channelIt.hasNext()) {
             ch = channelIt.next();
             mem = getMemoryOfChannel(ch);
-            TraceManager.addDev("Memory of channel " + ch + " is " + mem);
+
+            if (mem == null) {
+
+            }
+            //TraceManager.addDev("Memory of channel " + ch + " is " + mem);
         }
 
         // Is there a memory?
@@ -426,6 +440,34 @@ public class TMLMapping<E> {
         return mappedCPLibs;
     }
 
+    public ArrayList<HwExecutionNode> getAllHwExecutionNodesOfTask(TMLTask t) {
+        ArrayList<HwExecutionNode> ret = new ArrayList<>();
+
+        for (int i = 0; i < onnodes.size(); i++) {
+            TMLTask task = mappedtasks.get(i);
+            if (task == t) {
+                ret.add(onnodes.get(i));
+            }
+
+        }
+        return ret;
+    }
+
+    public ArrayList<HwCommunicationNode> getAllCommunicationNodesOfChannel(TMLChannel ch) {
+        ArrayList<HwCommunicationNode> ret = new ArrayList<>();
+
+        for (int i = 0; i < oncommnodes.size(); i++) {
+            TMLElement elt = mappedcommelts.get(i);
+            if (elt == ch) {
+                ret.add(oncommnodes.get(i));
+            }
+
+        }
+
+        return ret;
+    }
+
+
     public void addTaskToHwExecutionNode(TMLTask _task, HwExecutionNode _hwnode) {
         onnodes.add(_hwnode);
         mappedtasks.add(_task);
@@ -517,16 +559,29 @@ public class TMLMapping<E> {
 
     public HwMemory getMemoryOfChannel(TMLChannel _ch) {
         int cpt = 0;
-        for(TMLElement elt: mappedcommelts) {
+        for (TMLElement elt : mappedcommelts) {
             if (elt == _ch) {
                 HwCommunicationNode node = oncommnodes.get(cpt);
                 if (node instanceof HwMemory) {
-                    return (HwMemory)(node);
+                    return (HwMemory) (node);
                 }
             }
-            cpt ++;
+            cpt++;
         }
         return null;
+    }
+
+    public int getNbOfMemoriesOfChannel(TMLChannel _ch) {
+        int cpt = 0;
+        for (TMLElement elt : mappedcommelts) {
+            if (elt == _ch) {
+                HwCommunicationNode node = oncommnodes.get(cpt);
+                if (node instanceof HwMemory) {
+                    cpt++;
+                }
+            }
+        }
+        return cpt;
     }
 
     public TMLElement getCommunicationElementByName(String _name) {
@@ -1643,28 +1698,83 @@ public class TMLMapping<E> {
 
 
     public void makeAutomata() {
-        aut = new Automata();
-        nodesToStates = new HashMap<HwNode, State>();
+        if (nodesToStates != null) {
+            return;
+        }
+        forceMakeAutomata();
+    }
+
+    public void forceMakeAutomata() {
+
+        nodesToStates = new HashMap<HwNode, AUTState>();
+        commNodes = new ArrayList<AUTState>();
+        int id = 0;
+        ArrayList<AUTState> states = new ArrayList<AUTState>();
+        ArrayList<AUTTransition> transitions = new ArrayList<AUTTransition>();
 
         // Make a state for each hardware node
-        for(HwNode node: tmla.getHwNodes()) {
-            State st = new State(node.getName());
+        for (HwNode node : tmla.getHwNodes()) {
+            AUTState st = new AUTState(id);
+            states.add(st);
+            id++;
             st.referenceObject = node;
             nodesToStates.put(node, st);
+            if (node instanceof HwCommunicationNode) {
+                commNodes.add(st);
+            }
         }
 
         // Making links
-        for(HwLink link: tmla.getHwLinks()) {
+        for (HwLink link : tmla.getHwLinks()) {
             HwNode node1 = link.bus;
             HwNode node2 = link.hwnode;
 
-            State st1 = nodesToStates.get(node1);
-            State st2 = nodesToStates.get(node2);
+            AUTState st1 = nodesToStates.get(node1);
+            AUTState st2 = nodesToStates.get(node2);
 
             if ((st1 != null) && (st2 != null)) {
-                Transition t = new Transition(link.getName(), st2);
-                st1.addTransition(t);
+                // A Hw execution Node node is output only
+                // A memory is input only
+                // This is an assumption to compute paths
+
+                if (!(node2 instanceof HwExecutionNode)) {
+                    AUTTransition tout = new AUTTransition(st1.id, link.getName(), st2.id);
+                    transitions.add(tout);
+                    st1.addOutTransition(tout);
+                    st2.addInTransition(tout);
+                }
+
+                // inverse transition
+                if (!(node2 instanceof HwMemory)) {
+                    AUTTransition t = new AUTTransition(st2.id, link.getName(), st1.id);
+                    transitions.add(t);
+                    st2.addOutTransition(t);
+                    st1.addInTransition(t);
+                }
             }
         }
+
+        aut = new AUTGraph(states, transitions);
+    }
+
+
+    public boolean checkPath(HwNode node1, HwNode node2) {
+        makeAutomata();
+
+        AUTState st1 = nodesToStates.get(node1);
+        AUTState st2 = nodesToStates.get(node2);
+
+        //TraceManager.addDev("st1=" + st1 + " st2=" + st2);
+
+        if ((st1 == null) || (st2 == null)) {
+            return false;
+        }
+
+        DijkstraState[] dss;
+        dss = GraphAlgorithms.ShortestPathFrom(aut, st1.id);
+
+        //TraceManager.addDev("Path from: " + st1.id + " to " + st2.id + ": size=" + dss[st2.id].path.length);
+
+        return dss[st2.id].path.length > 0;
     }
 }

@@ -39,9 +39,6 @@
  */
 
 
-
-
-
 package ui;
 
 import avatartranslator.AvatarSpecification;
@@ -53,35 +50,32 @@ import tmltranslator.tmlcp.TMLCPElement;
 import tmltranslator.tmlcp.TMLSDAction;
 import tmltranslator.tmlcp.TMLSDEvent;
 import tmltranslator.tmlcp.TMLSDMessage;
-import tmltranslator.TMLCheckingError;
 import translator.CheckingError;
 import ui.tmlad.*;
 import ui.tmlcd.TMLChannelOperator;
 import ui.tmlcd.TMLEventOperator;
 import ui.tmlcd.TMLRequestOperator;
 import ui.tmlcd.TMLTaskOperator;
-import ui.tmlcompd.TMLCPath;
-import ui.tmlcompd.TMLCPrimitiveComponent;
-import ui.tmlcompd.TMLCPrimitivePort;
 import ui.tmlcompd.*;
-import ui.tmlcompd.TMLCRecordComponent;
 import ui.tmldd.*;
 import ui.tmlsd.TGConnectorMessageTMLSD;
 import ui.tmlsd.TMLSDControllerInstance;
 import ui.tmlsd.TMLSDStorageInstance;
 import ui.tmlsd.TMLSDTransferInstance;
 
+import java.awt.*;
 import java.util.*;
-import java.awt.Point;
+import java.util.List;
 
 /**
  * Class GTMLModeling
  * Use to translate graphical TML modeling to  "tmlmodeling"
  * Creation: 23/11/2005
- * @version 1.2 07/02/2018
+ *
  * @author Ludovic APVRILLE, Andrea ENRICI, Matteo Bertolino
+ * @version 1.2 07/02/2018
  */
-public class GTMLModeling  {
+public class GTMLModeling {
     private TMLDesignPanel tmldp;
     private TMLComponentDesignPanel tmlcdp;
     private TMLArchiPanel tmlap;
@@ -138,7 +132,7 @@ public class GTMLModeling  {
         }
     }
 
-    public GTMLModeling( TMLCommunicationPatternPanel _tmlcpp, boolean resetList ) {
+    public GTMLModeling(TMLCommunicationPatternPanel _tmlcpp, boolean resetList) {
         tmlcpp = _tmlcpp;
         table = new Hashtable<String, String>();
         if (resetList) {
@@ -154,126 +148,123 @@ public class GTMLModeling  {
         putPrefixName = _b;
     }
 
-	public void processAttacker(){
-		//System.out.println("processing...");
-		//System.out.println(tmlm.getAttackerTasks());
-		if (tmlm==null){
-			return;
-		}
-		List<TMLTask> attackers = tmlm.getAttackerTasks();
-		for (TMLTask attacker: attackers){
-			//System.out.println(attacker.getName());
-			TMLCPrimitiveComponent atcomp = tmlcdp.getPrimitiveComponentByName(attacker.getName().split("__")[1]);
-			//System.out.println("comp " + attacker.getName().split("__")[1]);
-			if (atcomp !=null){
-				//Find activity diagram
-				TMLActivityDiagramPanel tadp = tmlcdp.getTMLActivityDiagramPanel(attacker.getName().split("__")[1]);
-				List<TGComponent> list = tadp.getComponentList();
-				//System.out.println("list " + list);
-				for (TGComponent tgc: list){
-					if (tgc instanceof TMLADWriteChannel){
-						TMLADWriteChannel wr = (TMLADWriteChannel) tgc;
-						if (wr.isAttacker()){
-							//System.out.println("channel " + wr.getChannelName());
-							String channelToAdd = wr.getChannelName();
-
-                            
-							//Find ports to attach
-							List<TMLCPrimitivePort> ports = tmlcdp.tmlctdp.getPortsByName(channelToAdd);
-							//System.out.println("orts " + ports);
-							if (ports.size()!=2){	
-								//throw error
-								//System.out.println("ERROR");
-								continue;
-							}
-
-							//Remove Port Connector
-							tmlcdp.tmlctdp.removeOneConnector(ports.get(0).getTGConnectingPointAtIndex(0));
+    public void processAttacker() {
+        //System.out.println("processing...");
+        //System.out.println(tmlm.getAttackerTasks());
+        if (tmlm == null) {
+            return;
+        }
+        List<TMLTask> attackers = tmlm.getAttackerTasks();
+        for (TMLTask attacker : attackers) {
+            //System.out.println(attacker.getName());
+            TMLCPrimitiveComponent atcomp = tmlcdp.getPrimitiveComponentByName(attacker.getName().split("__")[1]);
+            //System.out.println("comp " + attacker.getName().split("__")[1]);
+            if (atcomp != null) {
+                //Find activity diagram
+                TMLActivityDiagramPanel tadp = tmlcdp.getTMLActivityDiagramPanel(attacker.getName().split("__")[1]);
+                List<TGComponent> list = tadp.getComponentList();
+                //System.out.println("list " + list);
+                for (TGComponent tgc : list) {
+                    if (tgc instanceof TMLADWriteChannel) {
+                        TMLADWriteChannel wr = (TMLADWriteChannel) tgc;
+                        if (wr.isAttacker()) {
+                            //System.out.println("channel " + wr.getChannelName());
+                            String channelToAdd = wr.getChannelName();
 
 
-							//Add write port to attacker component
-							TMLCChannelOutPort originPort = new TMLCChannelOutPort(atcomp.getX(), atcomp.getY(), tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, atcomp, tmlcdp.tmlctdp);
-                            originPort.commName=channelToAdd;
-							tmlcdp.tmlctdp.addComponent(originPort, atcomp.getX(), atcomp.getY(),true,true);
+                            //Find ports to attach
+                            List<TMLCPrimitivePort> ports = tmlcdp.tmlctdp.getPortsByName(channelToAdd);
+                            //System.out.println("orts " + ports);
+                            if (ports.size() != 2) {
+                                //throw error
+                                //System.out.println("ERROR");
+                                continue;
+                            }
 
-							//Add fork/join to Component Diagram 
-							TMLCJoin join = new TMLCJoin(atcomp.getX(), atcomp.getY(), tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp);
-							tmlcdp.tmlctdp.addComponent(join, atcomp.getX(), atcomp.getY(),false,true);
-					
-							//Add 3 connectors, from each port to the join
-							TMLCPortConnector conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, originPort.getTGConnectingPointAtIndex(0), join.getTGConnectingPointAtIndex(1), new Vector<Point>());
-	                        tmlcdp.tmlctdp.addComponent(conn, 0,0,false,true);
-							if (!ports.get(0).isOrigin()){
-								conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(0).getTGConnectingPointAtIndex(0), join.getTGConnectingPointAtIndex(0), new Vector<Point>());
-								tmlcdp.tmlctdp.addComponent(conn, 0,0,false,true);
-								conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(1).getTGConnectingPointAtIndex(0), join.getTGConnectingPointAtIndex(6), new Vector<Point>());
-								tmlcdp.tmlctdp.addComponent(conn, 0,0,false,true);
-							}
-							else {
-								conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(0).getTGConnectingPointAtIndex(0), join.getTGConnectingPointAtIndex(6), new Vector<Point>());
-								tmlcdp.tmlctdp.addComponent(conn, 0,0,false,true);
-								conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(1).getTGConnectingPointAtIndex(0), join.getTGConnectingPointAtIndex(0), new Vector<Point>());
-								tmlcdp.tmlctdp.addComponent(conn, 0,0,false,true);
-							}
-						}
-					}
-					else if (tgc instanceof TMLADReadChannel){
-						TMLADReadChannel rd = (TMLADReadChannel) tgc;
-						if (rd.isAttacker()){
-							//System.out.println("channel " + rd.getChannelName());
-							String channelToAdd = rd.getChannelName();
-
-                            
-							//Find ports to attach
-							List<TMLCPrimitivePort> ports = tmlcdp.tmlctdp.getPortsByName(channelToAdd);
-							//System.out.println("orts " + ports);
-							if (ports.size()!=2){	
-								//throw error
-								//System.out.println("ERROR");
-								continue;
-							}
-
-							//Remove Port Connector
-							tmlcdp.tmlctdp.removeOneConnector(ports.get(0).getTGConnectingPointAtIndex(0));
+                            //Remove Port Connector
+                            tmlcdp.tmlctdp.removeOneConnector(ports.get(0).getTGConnectingPointAtIndex(0));
 
 
-							//Add write port to attacker component
-							TMLCChannelOutPort destPort = new TMLCChannelOutPort(atcomp.getX(), atcomp.getY(), tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, atcomp, tmlcdp.tmlctdp);
-                            destPort.commName=channelToAdd;
-							destPort.isOrigin=false;
-							tmlcdp.tmlctdp.addComponent(destPort, atcomp.getX(), atcomp.getY(),true,true);
+                            //Add write port to attacker component
+                            TMLCChannelOutPort originPort = new TMLCChannelOutPort(atcomp.getX(), atcomp.getY(), tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, atcomp, tmlcdp.tmlctdp);
+                            originPort.commName = channelToAdd;
+                            tmlcdp.tmlctdp.addComponent(originPort, atcomp.getX(), atcomp.getY(), true, true);
 
-							//Add fork/join to Component Diagram 
-							TMLCFork fork = new TMLCFork(atcomp.getX(), atcomp.getY(), tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp);
-							tmlcdp.tmlctdp.addComponent(fork, atcomp.getX(), atcomp.getY(),false,true);
-					
-							//Add 3 connectors, from each port to the join
-							TMLCPortConnector conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, destPort.getTGConnectingPointAtIndex(0), fork.getTGConnectingPointAtIndex(1), new Vector<Point>());
-	                        tmlcdp.tmlctdp.addComponent(conn, 0,0,false,true);
-							if (ports.get(0).isOrigin()){
-								conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(0).getTGConnectingPointAtIndex(0), fork.getTGConnectingPointAtIndex(0), new Vector<Point>());
-                        		tmlcdp.tmlctdp.addComponent(conn, 0,0,false,true);
-								conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(1).getTGConnectingPointAtIndex(0), fork.getTGConnectingPointAtIndex(6), new Vector<Point>());
-                        		tmlcdp.tmlctdp.addComponent(conn, 0,0,false,true);
-							}
-							else {
-								conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(0).getTGConnectingPointAtIndex(0), fork.getTGConnectingPointAtIndex(6), new Vector<Point>());
-                        		tmlcdp.tmlctdp.addComponent(conn, 0,0,false,true);
-								conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(1).getTGConnectingPointAtIndex(0), fork.getTGConnectingPointAtIndex(0), new Vector<Point>());
-                        		tmlcdp.tmlctdp.addComponent(conn, 0,0,false,true);
-							}
+                            //Add fork/join to Component Diagram
+                            TMLCJoin join = new TMLCJoin(atcomp.getX(), atcomp.getY(), tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp);
+                            tmlcdp.tmlctdp.addComponent(join, atcomp.getX(), atcomp.getY(), false, true);
 
-						}
-					}
-				}
-			}
-		}
-	}
+                            //Add 3 connectors, from each port to the join
+                            TMLCPortConnector conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, originPort.getTGConnectingPointAtIndex(0), join.getTGConnectingPointAtIndex(1), new Vector<Point>());
+                            tmlcdp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                            if (!ports.get(0).isOrigin()) {
+                                conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(0).getTGConnectingPointAtIndex(0), join.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                                tmlcdp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                                conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(1).getTGConnectingPointAtIndex(0), join.getTGConnectingPointAtIndex(6), new Vector<Point>());
+                                tmlcdp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                            } else {
+                                conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(0).getTGConnectingPointAtIndex(0), join.getTGConnectingPointAtIndex(6), new Vector<Point>());
+                                tmlcdp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                                conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(1).getTGConnectingPointAtIndex(0), join.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                                tmlcdp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                            }
+                        }
+                    } else if (tgc instanceof TMLADReadChannel) {
+                        TMLADReadChannel rd = (TMLADReadChannel) tgc;
+                        if (rd.isAttacker()) {
+                            //System.out.println("channel " + rd.getChannelName());
+                            String channelToAdd = rd.getChannelName();
+
+
+                            //Find ports to attach
+                            List<TMLCPrimitivePort> ports = tmlcdp.tmlctdp.getPortsByName(channelToAdd);
+                            //System.out.println("orts " + ports);
+                            if (ports.size() != 2) {
+                                //throw error
+                                //System.out.println("ERROR");
+                                continue;
+                            }
+
+                            //Remove Port Connector
+                            tmlcdp.tmlctdp.removeOneConnector(ports.get(0).getTGConnectingPointAtIndex(0));
+
+
+                            //Add write port to attacker component
+                            TMLCChannelOutPort destPort = new TMLCChannelOutPort(atcomp.getX(), atcomp.getY(), tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, atcomp, tmlcdp.tmlctdp);
+                            destPort.commName = channelToAdd;
+                            destPort.isOrigin = false;
+                            tmlcdp.tmlctdp.addComponent(destPort, atcomp.getX(), atcomp.getY(), true, true);
+
+                            //Add fork/join to Component Diagram
+                            TMLCFork fork = new TMLCFork(atcomp.getX(), atcomp.getY(), tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp);
+                            tmlcdp.tmlctdp.addComponent(fork, atcomp.getX(), atcomp.getY(), false, true);
+
+                            //Add 3 connectors, from each port to the join
+                            TMLCPortConnector conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, destPort.getTGConnectingPointAtIndex(0), fork.getTGConnectingPointAtIndex(1), new Vector<Point>());
+                            tmlcdp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                            if (ports.get(0).isOrigin()) {
+                                conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(0).getTGConnectingPointAtIndex(0), fork.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                                tmlcdp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                                conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(1).getTGConnectingPointAtIndex(0), fork.getTGConnectingPointAtIndex(6), new Vector<Point>());
+                                tmlcdp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                            } else {
+                                conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(0).getTGConnectingPointAtIndex(0), fork.getTGConnectingPointAtIndex(6), new Vector<Point>());
+                                tmlcdp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                                conn = new TMLCPortConnector(0, 0, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxX(), true, null, tmlcdp.tmlctdp, ports.get(1).getTGConnectingPointAtIndex(0), fork.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                                tmlcdp.tmlctdp.addComponent(conn, 0, 0, false, true);
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public TMLModeling<TGComponent> translateToTMLModeling(boolean onlyTakenIntoAccount, boolean _resetID) {
         tmlm = new TMLModeling<>(_resetID);
-        checkingErrors = new LinkedList<CheckingError> ();
-        warnings = new LinkedList<CheckingError> ();
+        checkingErrors = new LinkedList<CheckingError>();
+        warnings = new LinkedList<CheckingError>();
 
         //boolean b;
 
@@ -307,14 +298,15 @@ public class GTMLModeling  {
               TraceManager.addDev("TMLModeling=\n" + spec.toString());*/
 
             // Cheking syntax
+            //TraceManager.addDev("Checking syntax 1 of TML");
             TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmlm);
             syntax.checkSyntax();
 
             int type;
             TGComponent tgc;
 
-            if (syntax.hasErrors() >0) {
-                for(TMLError error: syntax.getErrors()) {
+            if (syntax.hasErrors() > 0) {
+                for (TMLError error : syntax.getErrors()) {
                     //TraceManager.addDev("Adding checking error");
                     if (error.type == TMLError.ERROR_STRUCTURE) {
                         type = CheckingError.STRUCTURE_ERROR;
@@ -355,7 +347,7 @@ public class GTMLModeling  {
                 if (tmlcdp != null) {
                     if (tmlcdp.tmlctdp != null) {
                         List<TMLCPath> faultyPaths = tmlcdp.tmlctdp.updatePorts();
-                        for(TMLCPath fp: faultyPaths) {
+                        for (TMLCPath fp : faultyPaths) {
                             if (fp != null) {
                                 // There is a faulty path
                                 // Create an error
@@ -370,9 +362,9 @@ public class GTMLModeling  {
                 }
 
                 addTMLComponents();
-				//Adapt for attacker
-				//TraceManager.addDev("Processing attacker");
-				processAttacker();
+                //Adapt for attacker
+                //TraceManager.addDev("Processing attacker");
+                processAttacker();
                 //TraceManager.addDev("Adding channels");
                 addTMLCChannels();
                 //TraceManager.addDev("Adding events");
@@ -388,14 +380,15 @@ public class GTMLModeling  {
                 TraceManager.addDev("Modeling error:" + mtmlde.getMessage());
             }
 
+            //TraceManager.addDev("Checking syntax 2 of TML");
             TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmlm);
             syntax.checkSyntax();
 
             int type;
             TGComponent tgc;
 
-            if (syntax.hasErrors() >0) {
-                for(TMLError error: syntax.getErrors()) {
+            if (syntax.hasErrors() > 0) {
+                for (TMLError error : syntax.getErrors()) {
                     //TraceManager.addDev("Adding checking error");
                     if (error.type == TMLError.ERROR_STRUCTURE) {
                         type = CheckingError.STRUCTURE_ERROR;
@@ -420,7 +413,7 @@ public class GTMLModeling  {
         return tmlm;
     }
 
-    public TMLDesignPanel getTMLDesignPanel()  {
+    public TMLDesignPanel getTMLDesignPanel() {
         return tmldp;
     }
 
@@ -451,6 +444,7 @@ public class GTMLModeling  {
     public List<CheckingError> getCheckingWarnings() {
         return warnings;
     }
+
     //
     //    private void addTMLPragmas(){
     //  TGComponent tgc;
@@ -477,10 +471,10 @@ public class GTMLModeling  {
         TMLActivityDiagramPanel tmladp;
 
         Iterator<? extends TGComponent> iterator = tasksToTakeIntoAccount.listIterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
             if (tgc instanceof TMLTaskOperator) {
-                tmlto = (TMLTaskOperator)tgc;
+                tmlto = (TMLTaskOperator) tgc;
                 tmladp = tmldp.getTMLActivityDiagramPanel(tmlto.getValue());
                 if (tmladp == null) {
                     String msg = tmlto.getValue() + " has no activity diagram";
@@ -517,11 +511,11 @@ public class GTMLModeling  {
         TMLComponentDesignPanel tmlcdptmp;
 
         Iterator<? extends TGComponent> iterator = componentsToTakeIntoAccount.listIterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
             if (tgc instanceof TMLCPrimitiveComponent) {
-                tmlcpc = (TMLCPrimitiveComponent)tgc;
-                tmlcdptmp = (TMLComponentDesignPanel)(tmlcpc.getTDiagramPanel().getMGUI().getTURTLEPanelOfTDiagramPanel(tmlcpc.getTDiagramPanel()));
+                tmlcpc = (TMLCPrimitiveComponent) tgc;
+                tmlcdptmp = (TMLComponentDesignPanel) (tmlcpc.getTDiagramPanel().getMGUI().getTURTLEPanelOfTDiagramPanel(tmlcpc.getTDiagramPanel()));
                 tmladp = tmlcdptmp.getReferencedTMLActivityDiagramPanel(tmlcpc.getTDiagramPanel(), tmlcpc.getValue());
                 if (tmladp == null) {
                     String msg = " has no activity diagram";
@@ -540,7 +534,7 @@ public class GTMLModeling  {
                     throw new MalformedTMLDesignException(tmlcpc.getValue() + " msg");
                 }
                 tmlt = new TMLTask(makeName(tgc, tmlcpc.getValue()), tmlcpc, tmladp);
-				tmlt.setAttacker(tmlcpc.isAttacker());
+                tmlt.setAttacker(tmlcpc.isAttacker());
                 //TraceManager.addDev("Task added:" + tmlt.getName() + " with tadp=" + tmladp + " major=" + tmladp.getMGUI().getMajorTitle(tmladp));
                 listE.addCor(tmlt, tgc);
                 tmlm.addTask(tmlt);
@@ -560,14 +554,14 @@ public class GTMLModeling  {
         TMLTask tt1, tt2;
         String name;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
             if (tgc instanceof TMLChannelOperator) {
-                tmlco = (TMLChannelOperator)tgc;
+                tmlco = (TMLChannelOperator) tgc;
                 //TraceManager.addDev("Found channel: " + tmlco.getChannelName());
                 t1 = tmldp.tmltdp.getTask1ToWhichIamConnected(tmlco);
                 t2 = tmldp.tmltdp.getTask2ToWhichIamConnected(tmlco);
-                if ((t1 != null) && (t2 != null) && (tasksToTakeIntoAccount.contains(t1)) && (tasksToTakeIntoAccount.contains(t2)) ) {
+                if ((t1 != null) && (t2 != null) && (tasksToTakeIntoAccount.contains(t1)) && (tasksToTakeIntoAccount.contains(t2))) {
                     name = makeName(tgc, tmlco.getChannelName());
                     channel = new TMLChannel(name, tmlco);
                     //TraceManager.addDev("name=" + name + " makeName1 =" + makeName(tgc, t1.getTaskName())  + " chname=" + tmlco.getChannelName());
@@ -586,8 +580,8 @@ public class GTMLModeling  {
                             throw new MalformedTMLDesignException(tmlco.getChannelName() + " msg");
                         }
                     } else {
-                        tt1 = tmlm.getTMLTaskByName(makeName((TGComponent)t1, t1.getTaskName()));
-                        tt2 = tmlm.getTMLTaskByName(makeName((TGComponent)t2, t2.getTaskName()));
+                        tt1 = tmlm.getTMLTaskByName(makeName((TGComponent) t1, t1.getTaskName()));
+                        tt2 = tmlm.getTMLTaskByName(makeName((TGComponent) t2, t2.getTaskName()));
                         channel.setTasks(tt1, tt2);
                         tmlm.addChannel(channel);
                         listE.addCor(channel, tgc);
@@ -595,7 +589,7 @@ public class GTMLModeling  {
                     }
                 } else {
                     removedChannels.add(new String(tmlco.getChannelName()));
-                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Channel " +  tmlco.getChannelName() + " has been removed");
+                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Channel " + tmlco.getChannelName() + " has been removed");
                     ce.setTDiagramPanel(tmldp.tmltdp);
                     ce.setTGComponent(tmlco);
                     warnings.add(ce);
@@ -615,19 +609,19 @@ public class GTMLModeling  {
         TMLTask tt1, tt2;
         String name;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
             if (tgc instanceof TMLEventOperator) {
-                tmleo = (TMLEventOperator)tgc;
+                tmleo = (TMLEventOperator) tgc;
                 //TraceManager.addDev("Found event: " + tmleo.getEventName());
                 t1 = tmldp.tmltdp.getTask1ToWhichIamConnected(tmleo);
                 t2 = tmldp.tmltdp.getTask2ToWhichIamConnected(tmleo);
-                if ((t1 != null) && (t2 != null) && (tasksToTakeIntoAccount.contains(t1)) && (tasksToTakeIntoAccount.contains(t2)) ) {
+                if ((t1 != null) && (t2 != null) && (tasksToTakeIntoAccount.contains(t1)) && (tasksToTakeIntoAccount.contains(t2))) {
                     name = makeName(tgc, tmleo.getEventName());
                     event = new TMLEvent(name, tmleo, tmleo.getMaxSamples(), tmleo.isBlocking());
                     addToTable(makeName(tgc, t1.getTaskName()) + "/" + tmleo.getEventName(), name);
                     addToTable(makeName(tgc, t2.getTaskName()) + "/" + tmleo.getEventName(), name);
-                    for(int i=0; i<tmleo.getEventMaxParam(); i++) {
+                    for (int i = 0; i < tmleo.getEventMaxParam(); i++) {
                         tt = tmleo.getParamAt(i);
                         if ((tt != null) && (tt.getType() != TType.NONE)) {
                             tmlt = new TMLType(tt.getType());
@@ -645,8 +639,8 @@ public class GTMLModeling  {
                             throw new MalformedTMLDesignException(tmleo.getEventName() + " msg");
                         }
                     } else {
-                        tt1 = tmlm.getTMLTaskByName(makeName((TGComponent)t1, t1.getTaskName()));
-                        tt2 = tmlm.getTMLTaskByName(makeName((TGComponent)t2, t2.getTaskName()));
+                        tt1 = tmlm.getTMLTaskByName(makeName((TGComponent) t1, t1.getTaskName()));
+                        tt2 = tmlm.getTMLTaskByName(makeName((TGComponent) t2, t2.getTaskName()));
                         event.setTasks(tt1, tt2);
                         tmlm.addEvent(event);
                         listE.addCor(event, tgc);
@@ -655,7 +649,7 @@ public class GTMLModeling  {
                 } else {
                     //TraceManager.addDev( "Removing event "+ new String(tmleo.getEventName()) );
                     removedEvents.add(new String(tmleo.getEventName()));
-                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Event " +  tmleo.getEventName() + " has been removed");
+                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Event " + tmleo.getEventName() + " has been removed");
                     ce.setTDiagramPanel(tmldp.tmltdp);
                     ce.setTGComponent(tmleo);
                     warnings.add(ce);
@@ -677,20 +671,20 @@ public class GTMLModeling  {
         TMLType tmltt;
         String name;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
-            
+
             if (tgc instanceof TMLRequestOperator) {
-                tmlro = (TMLRequestOperator)tgc;
+                tmlro = (TMLRequestOperator) tgc;
                 //TraceManager.addDev("Found request: " + tmlro.getRequestName());
                 t1 = tmldp.tmltdp.getTask1ToWhichIamConnected(tmlro);
                 t2 = tmldp.tmltdp.getTask2ToWhichIamConnected(tmlro);
-                if ((t1 != null) && (t2 != null) && (tasksToTakeIntoAccount.contains(t1)) && (tasksToTakeIntoAccount.contains(t2)) ) {
+                if ((t1 != null) && (t2 != null) && (tasksToTakeIntoAccount.contains(t1)) && (tasksToTakeIntoAccount.contains(t2))) {
                     name = makeName(tgc, tmlro.getRequestName());
                     addToTable(makeName(tgc, t1.getTaskName()) + "/" + tmlro.getRequestName(), name);
                     addToTable(makeName(tgc, t2.getTaskName()) + "/" + tmlro.getRequestName(), name);
                     // Check whether there is another request having a different name but with the same destination task
-                    request = tmlm.getRequestByDestinationTask(tmlm.getTMLTaskByName(makeName((TGComponent)t2, t2.getTaskName())));
+                    request = tmlm.getRequestByDestinationTask(tmlm.getTMLTaskByName(makeName((TGComponent) t2, t2.getTaskName())));
 
                     if (request != null) {
                         if (request.getName().compareTo(name) != 0) {
@@ -707,9 +701,9 @@ public class GTMLModeling  {
                     if (request == null) {
                         request = new TMLRequest(name, tmlro);
 
-                        request.setDestinationTask(tmlm.getTMLTaskByName(makeName((TGComponent)t2, t2.getTaskName())));
+                        request.setDestinationTask(tmlm.getTMLTaskByName(makeName((TGComponent) t2, t2.getTaskName())));
                         tmlm.addRequest(request);
-                        for(int i=0; i<tmlro.getRequestMaxParam(); i++) {
+                        for (int i = 0; i < tmlro.getRequestMaxParam(); i++) {
                             tt = tmlro.getParamAt(i);
                             if ((tt != null) && (tt.getType() != TType.NONE)) {
                                 tmlt = new TMLType(tt.getType());
@@ -718,7 +712,7 @@ public class GTMLModeling  {
                         }
                     } else {
                         // Must check whether the destination task is the same
-                        if (request.getDestinationTask() != tmlm.getTMLTaskByName(makeName((TGComponent)t2, t2.getTaskName()))) {
+                        if (request.getDestinationTask() != tmlm.getTMLTaskByName(makeName((TGComponent) t2, t2.getTaskName()))) {
                             String msg = "Two requests are declared with the same name but with two different destination tasks: " + tmlro.getRequestName();
                             UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
                             ce.setTDiagramPanel(tmldp.tmltdp);
@@ -729,10 +723,10 @@ public class GTMLModeling  {
 
                         // Must check whether the two requests are compatible (parameters)
                         int nbOfParamsCurrent = 0;
-                        for(int i=0; i<tmlro.getRequestMaxParam(); i++) {
+                        for (int i = 0; i < tmlro.getRequestMaxParam(); i++) {
                             tt = tmlro.getParamAt(i);
                             if ((tt != null) && (tt.getType() != TType.NONE)) {
-                                nbOfParamsCurrent ++;
+                                nbOfParamsCurrent++;
                             }
                         }
                         if (request.getNbOfParams() != nbOfParamsCurrent) {
@@ -746,7 +740,7 @@ public class GTMLModeling  {
 
                         // Must check param types as well
                         int cpti = 0;
-                        for(int i=0; i<tmlro.getRequestMaxParam(); i++) {
+                        for (int i = 0; i < tmlro.getRequestMaxParam(); i++) {
                             tt = tmlro.getParamAt(i);
                             if ((tt != null) && (tt.getType() != TType.NONE)) {
                                 tmlt = new TMLType(tt.getType());
@@ -758,13 +752,13 @@ public class GTMLModeling  {
                                     checkingErrors.add(ce);
                                     throw new MalformedTMLDesignException(tmlro.getRequestName() + " msg");
                                 }
-                                cpti ++;
+                                cpti++;
                             }
                         }
                     }
 
                     // More: test the compatibility of the request!
-                    if (request.getDestinationTask() != tmlm.getTMLTaskByName(makeName((TGComponent)t2, t2.getTaskName()))) {
+                    if (request.getDestinationTask() != tmlm.getTMLTaskByName(makeName((TGComponent) t2, t2.getTaskName()))) {
                         String msg = "request " + tmlro.getRequestName() + " is declared several times differently (compatibility issue)";
                         UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
                         ce.setTDiagramPanel(tmldp.tmltdp);
@@ -772,16 +766,16 @@ public class GTMLModeling  {
                         checkingErrors.add(ce);
                         throw new MalformedTMLDesignException(tmlro.getRequestName() + " msg");
                     }
-                    request.addOriginTask(tmlm.getTMLTaskByName(makeName((TGComponent)t1, t1.getTaskName())));
+                    request.addOriginTask(tmlm.getTMLTaskByName(makeName((TGComponent) t1, t1.getTaskName())));
 
-                    task = tmlm.getTMLTaskByName(makeName((TGComponent)t2, t2.getTaskName()));
+                    task = tmlm.getTMLTaskByName(makeName((TGComponent) t2, t2.getTaskName()));
                     task.setRequested(true);
                     task.setRequest(request);
 
                     // Request attributes
                     //TraceManager.addDev("Requests attributes");
                     String attname;
-                    for(int j=0; j<request.getNbOfParams(); j++) {
+                    for (int j = 0; j < request.getNbOfParams(); j++) {
                         attname = "arg" + (j + 1) + "__req";
                         if (task.getAttributeByName(attname) == null) {
                             tmltt = new TMLType(request.getType(j).getType());
@@ -795,7 +789,7 @@ public class GTMLModeling  {
 
                 } else {
                     removedRequests.add(new String(tmlro.getRequestName()));
-                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Request " +  tmlro.getRequestName() + " has been removed");
+                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Request " + tmlro.getRequestName() + " has been removed");
                     ce.setTDiagramPanel(tmldp.tmltdp);
                     ce.setTGComponent(tmlro);
                     warnings.add(ce);
@@ -823,15 +817,15 @@ public class GTMLModeling  {
 
         //TraceManager.addDev("*** Adding channels ***");
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
             if (tgc instanceof TMLCPrimitiveComponent) {
-                tmlc = (TMLCPrimitiveComponent)tgc;
+                tmlc = (TMLCPrimitiveComponent) tgc;
                 //TraceManager.addDev("Component:" + tmlc.getValue());
                 ports = tmlc.getAllChannelsOriginPorts();
                 //TraceManager.addDev("Ports size:" + ports.size());
                 li = ports.listIterator();
-                while(li.hasNext()) {
+                while (li.hasNext()) {
                     port1 = li.next();
                     if (!(alreadyConsidered.contains(port1))) {
                         portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
@@ -850,10 +844,10 @@ public class GTMLModeling  {
                             alreadyConsidered.add(port1);
                             alreadyConsidered.add(port2);
 
-                            String []text1 = port1.getPortName().split(",");
-                            String []text2 = port2.getPortName().split(",");
+                            String[] text1 = port1.getPortName().split(",");
+                            String[] text2 = port2.getPortName().split(",");
 
-                            for (j=0; j<Math.min(text1.length, text2.length); j++) {
+                            for (j = 0; j < Math.min(text1.length, text2.length); j++) {
                                 name1 = text1[j].trim();
                                 name2 = text2[j].trim();
 
@@ -914,15 +908,15 @@ public class GTMLModeling  {
 
                                     // Complex channels are used only for transformation towards the simulator
                                     TMLPort tmlport1, tmlport2;
-                                    tmlport1 = new TMLPort( port1.getPortName(), port1 );
-                                    tmlport1.setPrex( port1.isPrex() );
-                                    tmlport1.setPostex( port1.isPostex() );
-                                    tmlport1.setAssociatedEvent( port1.getAssociatedEvent() );
-                                    tmlport2 = new TMLPort( port2.getPortName(), port2 );
-                                    tmlport2.setPrex( port2.isPrex() );
-                                    tmlport2.setPostex( port2.isPostex() );
-                                    tmlport2.setAssociatedEvent( port2.getAssociatedEvent() );
-                                    channel.setPorts( tmlport1, tmlport2 );
+                                    tmlport1 = new TMLPort(port1.getPortName(), port1);
+                                    tmlport1.setPrex(port1.isPrex());
+                                    tmlport1.setPostex(port1.isPostex());
+                                    tmlport1.setAssociatedEvent(port1.getAssociatedEvent());
+                                    tmlport2 = new TMLPort(port2.getPortName(), port2);
+                                    tmlport2.setPrex(port2.isPrex());
+                                    tmlport2.setPostex(port2.isPostex());
+                                    tmlport2.setAssociatedEvent(port2.getAssociatedEvent());
+                                    channel.setPorts(tmlport1, tmlport2);
                                     tmlm.addChannel(channel);
                                     listE.addCor(channel, tgc);
                                     //TraceManager.addDev("Adding channel " + channel.getName());
@@ -942,7 +936,7 @@ public class GTMLModeling  {
                                 checkingErrors.add(ce);
                                 throw new MalformedTMLDesignException(msg);
                             }
-                            for(j=0; j<portstome.size(); j++) {
+                            for (j = 0; j < portstome.size(); j++) {
                                 port = portstome.get(j);
                                 if (port.getPortName().indexOf(",") != -1) {
                                     String msg = "Multiple definition of channels with more than one output port is not allowed: " + port.getPortName();
@@ -956,14 +950,14 @@ public class GTMLModeling  {
 
                             // Name of port
                             name = makeName(port1, port1.getPortName());
-                            for(j=0; j<portstome.size(); j++) {
+                            for (j = 0; j < portstome.size(); j++) {
                                 name += "__" + portstome.get(j).getPortName();
                             }
 
                             // Correspondence table
                             alreadyConsidered.add(port1);
                             addToTable(makeName(port1, port1.getFather().getValue()) + "/" + port1.getPortName(), name);
-                            for(j=0; j<portstome.size(); j++) {
+                            for (j = 0; j < portstome.size(); j++) {
                                 port = portstome.get(j);
                                 alreadyConsidered.add(port);
                                 addToTable(makeName(port, port.getFather().getValue()) + "/" + port.getPortName(), name);
@@ -973,7 +967,7 @@ public class GTMLModeling  {
                             port = portstome.get(0);
                             channel = new TMLChannel(name, port1);
                             channel.ports.add(port1);
-                            for(j=0; j<portstome.size(); j++) {
+                            for (j = 0; j < portstome.size(); j++) {
                                 TMLCPrimitivePort p = portstome.get(j);
                                 channel.ports.add(p);
                             }
@@ -1010,14 +1004,14 @@ public class GTMLModeling  {
                                 TMLPort tmlport;
                                 tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
                                 tmlport = new TMLPort(port1.getPortName(), port1);
-                                tmlport.setAssociatedEvent( port1.getAssociatedEvent() );
+                                tmlport.setAssociatedEvent(port1.getAssociatedEvent());
                                 channel.addTaskPort(tt1, tmlport, true);
-                                for(j=0; j<portstome.size(); j++) {
+                                for (j = 0; j < portstome.size(); j++) {
                                     port = portstome.get(j);
                                     tmlport = new TMLPort(port.getPortName(), port);
-                                    tmlport.setPrex( port.isPrex() );
-                                    tmlport.setPostex( port.isPostex() );
-                                    tmlport.setAssociatedEvent( port.getAssociatedEvent() );
+                                    tmlport.setPrex(port.isPrex());
+                                    tmlport.setPostex(port.isPostex());
+                                    tmlport.setAssociatedEvent(port.getAssociatedEvent());
                                     tt2 = tmlm.getTMLTaskByName(makeName(port, port.getFather().getValue()));
                                     channel.addTaskPort(tt2, tmlport, port.isOrigin());
                                 }
@@ -1057,15 +1051,15 @@ public class GTMLModeling  {
 
         //TraceManager.addDev("*** Adding Events ***");
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
             if (tgc instanceof TMLCPrimitiveComponent) {
-                tmlc = (TMLCPrimitiveComponent)tgc;
+                tmlc = (TMLCPrimitiveComponent) tgc;
                 //TraceManager.addDev("Component:" + tmlc.getValue());
                 ports = tmlc.getAllEventsOriginPorts();
                 //TraceManager.addDev("Ports size:" + ports.size());
                 li = ports.listIterator();
-                while(li.hasNext()) {
+                while (li.hasNext()) {
                     port1 = li.next();
                     if (!(alreadyConsidered.contains(port1))) {
                         portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
@@ -1085,16 +1079,16 @@ public class GTMLModeling  {
                         }
 
                         if (portstome.size() == 1) {
-                        	port2 = portstome.get(0);
-                        	alreadyConsidered.add(port1);
+                            port2 = portstome.get(0);
+                            alreadyConsidered.add(port1);
                             alreadyConsidered.add(port2);
 
                             // Useless loop. Loop because the algo evolves all the time ;-)
-                            for (int kk=0; kk<portstome.size(); kk++) {
+                            for (int kk = 0; kk < portstome.size(); kk++) {
                                 port2 = portstome.get(kk);
 
-                                String []text1 = port1.getPortName().split(",");
-                                String []text2 = port2.getPortName().split(",");
+                                String[] text1 = port1.getPortName().split(",");
+                                String[] text2 = port2.getPortName().split(",");
 
                                 /*for (i=0; i<text1.length; i++) {
                                   TraceManager.addDev("text1[" + i + "] = " + text1[i]);
@@ -1104,7 +1098,7 @@ public class GTMLModeling  {
                                   TraceManager.addDev("text2[" + i + "] = " + text2[i]);
                                   }*/
 
-                                for (j=0; j<Math.min(text1.length, text2.length); j++) {
+                                for (j = 0; j < Math.min(text1.length, text2.length); j++) {
                                     name1 = text1[j].trim();
                                     name2 = text2[j].trim();
                                     //TraceManager.addDev("name1=" + name1 + " name2=" + name2);
@@ -1124,9 +1118,9 @@ public class GTMLModeling  {
                                     } else {
                                         event = new TMLEvent(name, port1, -1, port1.isBlocking());
                                     }
-                                    event.port=port1;
-                                    event.port2= port2;
-                                    for(i=0; i<port1.getNbMaxAttribute(); i++) {
+                                    event.port = port1;
+                                    event.port2 = port2;
+                                    for (i = 0; i < port1.getNbMaxAttribute(); i++) {
                                         tt = port1.getParamAt(i);
                                         if ((tt != null) && (tt.getType() != TType.NONE)) {
                                             if (tt.getType() == TType.OTHER) {
@@ -1141,7 +1135,7 @@ public class GTMLModeling  {
                                                     checkingErrors.add(ce);
                                                     throw new MalformedTMLDesignException(msg);
                                                 } else {
-                                                    for(int k=0; k<record.getAttributes().size(); k++) {
+                                                    for (int k = 0; k < record.getAttributes().size(); k++) {
                                                         ta = record.getAttributes().get(k);
                                                         if (ta.getType() == TAttribute.NATURAL) {
                                                             tmlt = new TMLType(TMLType.NATURAL);
@@ -1202,7 +1196,7 @@ public class GTMLModeling  {
                                 checkingErrors.add(ce);
                                 throw new MalformedTMLDesignException(msg);
                             }
-                            for(j=0; j<portstome.size(); j++) {
+                            for (j = 0; j < portstome.size(); j++) {
                                 port = portstome.get(j);
                                 if (port.getPortName().indexOf(",") != -1) {
                                     String msg = "Multiple definition of events with more than one output port is not allowed: " + port.getPortName();
@@ -1215,14 +1209,14 @@ public class GTMLModeling  {
                             }
                             // Name of port
                             name = makeName(port1, port1.getPortName());
-                            for(j=0; j<portstome.size(); j++) {
+                            for (j = 0; j < portstome.size(); j++) {
                                 name += "__" + portstome.get(j).getPortName();
                             }
 
                             // Correspondance table
                             alreadyConsidered.add(port1);
                             addToTable(makeName(port1, port1.getFather().getValue()) + "/" + port1.getPortName(), name);
-                            for(j=0; j<portstome.size(); j++) {
+                            for (j = 0; j < portstome.size(); j++) {
                                 port = portstome.get(j);
                                 alreadyConsidered.add(port);
                                 addToTable(makeName(port, port.getFather().getValue()) + "/" + port.getPortName(), name);
@@ -1236,11 +1230,11 @@ public class GTMLModeling  {
                                 event = new TMLEvent(name, port1, -1, port1.isBlocking());
                             }
                             event.ports.add(port1);
-                            for(j=0; j<portstome.size(); j++) {
+                            for (j = 0; j < portstome.size(); j++) {
                                 TMLCPrimitivePort p = portstome.get(j);
                                 event.ports.add(p);
                             }
-                            for(i=0; i<port1.getNbMaxAttribute(); i++) {
+                            for (i = 0; i < port1.getNbMaxAttribute(); i++) {
                                 tt = port1.getParamAt(i);
                                 if ((tt != null) && (tt.getType() != TType.NONE)) {
                                     if (tt.getType() == TType.OTHER) {
@@ -1255,7 +1249,7 @@ public class GTMLModeling  {
                                             checkingErrors.add(ce);
                                             throw new MalformedTMLDesignException(msg);
                                         } else {
-                                            for(int k=0; k<record.getAttributes().size(); k++) {
+                                            for (int k = 0; k < record.getAttributes().size(); k++) {
                                                 ta = record.getAttributes().get(k);
                                                 if (ta.getType() == TAttribute.NATURAL) {
                                                     tmlt = new TMLType(TMLType.NATURAL);
@@ -1289,14 +1283,14 @@ public class GTMLModeling  {
                                 TMLPort tmlport;
                                 tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
                                 tmlport = new TMLPort(port1.getPortName(), port1);
-                                tmlport.setAssociatedEvent( port1.getAssociatedEvent() );
+                                tmlport.setAssociatedEvent(port1.getAssociatedEvent());
                                 event.addTaskPort(tt1, tmlport, true);
-                                for(j=0; j<portstome.size(); j++) {
+                                for (j = 0; j < portstome.size(); j++) {
                                     port = portstome.get(j);
                                     tmlport = new TMLPort(port.getPortName(), port);
-                                    tmlport.setPrex( port.isPrex() );
-                                    tmlport.setPostex( port.isPostex() );
-                                    tmlport.setAssociatedEvent( port.getAssociatedEvent() );
+                                    tmlport.setPrex(port.isPrex());
+                                    tmlport.setPostex(port.isPostex());
+                                    tmlport.setAssociatedEvent(port.getAssociatedEvent());
                                     tt2 = tmlm.getTMLTaskByName(makeName(port, port.getFather().getValue()));
                                     event.addTaskPort(tt2, tmlport, port.isOrigin());
                                 }
@@ -1344,16 +1338,16 @@ public class GTMLModeling  {
 
         //TraceManager.addDev("*** Adding requests ***");
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
-            
+
             if (tgc instanceof TMLCPrimitiveComponent) {
-                tmlc = (TMLCPrimitiveComponent)tgc;
+                tmlc = (TMLCPrimitiveComponent) tgc;
                 //TraceManager.addDev("Component:" + tmlc.getValue());
                 ports = tmlc.getAllRequestsDestinationPorts();
                 //TraceManager.addDev("Ports size:" + ports.size());
                 li = ports.listIterator();
-                while(li.hasNext()) {
+                while (li.hasNext()) {
                     port1 = li.next();
                     portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                     //TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
@@ -1372,7 +1366,7 @@ public class GTMLModeling  {
                         throw new MalformedTMLDesignException(msg);
                     }
 
-                    for(i=0; i<portstome.size(); i++) {
+                    for (i = 0; i < portstome.size(); i++) {
                         port3 = portstome.get(i);
                         if (!port3.isOrigin()) {
                             String msg = "port " + port1.getPortName() + " is not correctly connected to port " + port3.getName();
@@ -1390,14 +1384,14 @@ public class GTMLModeling  {
 
                     request = new TMLRequest(name, port1);
                     request.ports.add(port1);
-                    for(i=0; i<portstome.size(); i++) {
+                    for (i = 0; i < portstome.size(); i++) {
                         port2 = portstome.get(i);
                         request.ports.add(port2);
                         //TraceManager.addDev("Add add add to table request : " + makeName(port2, port2.getFather().getValue()) + "/" + port2.getName() + " name =" + name);
                         addToTable(makeName(port2, port2.getFather().getValue()) + "/" + port2.getPortName(), name);
                     }
 
-                    for(i=0; i<port1.getNbMaxAttribute(); i++) {
+                    for (i = 0; i < port1.getNbMaxAttribute(); i++) {
                         tt = port1.getParamAt(i);
                         if ((tt != null) && (tt.getType() != TType.NONE)) {
                             if (tt.getType() == TType.OTHER) {
@@ -1412,7 +1406,7 @@ public class GTMLModeling  {
                                     checkingErrors.add(ce);
                                     throw new MalformedTMLDesignException(msg);
                                 } else {
-                                    for(int k=0; k<record.getAttributes().size(); k++) {
+                                    for (int k = 0; k < record.getAttributes().size(); k++) {
                                         ta = record.getAttributes().get(k);
                                         if (ta.getType() == TAttribute.NATURAL) {
                                             tmlt = new TMLType(TMLType.NATURAL);
@@ -1440,7 +1434,7 @@ public class GTMLModeling  {
                     // Request attributes
                     //TraceManager.addDev("Requests attributes");
                     String attname;
-                    for(int j=0; j<request.getNbOfParams(); j++) {
+                    for (int j = 0; j < request.getNbOfParams(); j++) {
                         attname = "arg" + (j + 1) + "__req";
                         if (tt1.getAttributeByName(attname) == null) {
                             tmltt = new TMLType(request.getType(j).getType());
@@ -1451,7 +1445,7 @@ public class GTMLModeling  {
                         }
                     }
 
-                    for(i=0; i<portstome.size(); i++) {
+                    for (i = 0; i < portstome.size(); i++) {
                         port2 = portstome.get(i);
                         tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
                         if (tt2 == null) {
@@ -1488,7 +1482,7 @@ public class GTMLModeling  {
                             checkingErrors.add(ce);
                             throw new MalformedTMLDesignException(msg);
                         }
-                        for(i=0; i<request.getOriginTasks().size(); i++) {
+                        for (i = 0; i < request.getOriginTasks().size(); i++) {
                             otherReq.addOriginTask(request.getOriginTasks().get(i));
                         }
                     } else {
@@ -1519,8 +1513,9 @@ public class GTMLModeling  {
         //  TMLRequest req;
         TMLCRecordComponent rc;
 
-        for (TAttribute ta: attributes) {
-            rc = null; tt = null;
+        for (TAttribute ta : attributes) {
+            rc = null;
+            tt = null;
             if (ta.getType() == TAttribute.NATURAL) {
                 tt = new TMLType(TMLType.NATURAL);
             } else if (ta.getType() == TAttribute.BOOLEAN) {
@@ -1529,7 +1524,7 @@ public class GTMLModeling  {
                 // Must be a record
                 if (tgc instanceof TMLCPrimitiveComponent) {
                     //TraceManager.addDev("Searching for record named: " + ta.getTypeOther());
-                    rc = ((TMLCPrimitiveComponent)tgc).getRecordNamed(ta.getTypeOther());
+                    rc = ((TMLCPrimitiveComponent) tgc).getRecordNamed(ta.getTypeOther());
                     if (rc == null) {
                         tt = new TMLType(TMLType.OTHER);
                         UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Unknown record: " + ta.getTypeOther() + " of attribute " + ta.getId() + " declared in task " + tmltask.getName());
@@ -1558,7 +1553,7 @@ public class GTMLModeling  {
                 // Adding all elements of record
                 //TraceManager.addDev("Found a record named: " + rc.getValue());
                 LinkedList<TAttribute> attr = rc.getAttributes();
-                for (TAttribute tat: attr) {
+                for (TAttribute tat : attr) {
                     if (tat.getType() == TAttribute.NATURAL) {
                         tt = new TMLType(TMLType.NATURAL);
                     } else if (tat.getType() == TAttribute.BOOLEAN) {
@@ -1576,21 +1571,21 @@ public class GTMLModeling  {
         }
     }
 
-    private void createSecurityPatterns(TMLTask tmltask){
+    private void createSecurityPatterns(TMLTask tmltask) {
         TMLActivity activity = tmltask.getActivityDiagram();
-        TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel)(activity.getReferenceObject());
+        TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel) (activity.getReferenceObject());
         TGComponent tgc;
         //TraceManager.addDev("Generating activity diagram of:" + tmltask.getName());
 
         // search for start state
         List<TGComponent> list = tadp.getComponentList();
         Iterator<TGComponent> iterator = list.listIterator();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             tgc = iterator.next();
 
             if (tgc instanceof TMLADEncrypt) {
-                if (!((TMLADEncrypt)tgc).securityContext.isEmpty()){
-                    SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt)tgc).securityContext, ((TMLADEncrypt)tgc).type, ((TMLADEncrypt)tgc).message_overhead, ((TMLADEncrypt)tgc).size, ((TMLADEncrypt)tgc).encTime, ((TMLADEncrypt)tgc).decTime, ((TMLADEncrypt)tgc).nonce, ((TMLADEncrypt)tgc).formula, ((TMLADEncrypt)tgc).key);
+                if (!((TMLADEncrypt) tgc).securityContext.isEmpty()) {
+                    SecurityPattern securityPattern = new SecurityPattern(((TMLADEncrypt) tgc).securityContext, ((TMLADEncrypt) tgc).type, ((TMLADEncrypt) tgc).message_overhead, ((TMLADEncrypt) tgc).size, ((TMLADEncrypt) tgc).encTime, ((TMLADEncrypt) tgc).decTime, ((TMLADEncrypt) tgc).nonce, ((TMLADEncrypt) tgc).formula, ((TMLADEncrypt) tgc).key);
                     securityPatterns.put(securityPattern.name, securityPattern);
                     tmlm.addSecurityPattern(securityPattern);
                     ArrayList<TMLTask> l = new ArrayList<TMLTask>();
@@ -1607,14 +1602,14 @@ public class GTMLModeling  {
         //First generate security patterns over all tasks
         Iterator<TMLTask> iterator = tmlm.getTasks().listIterator();
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tmltask = iterator.next();
             createSecurityPatterns(tmltask);
         }
 
         iterator = tmlm.getTasks().listIterator();
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tmltask = iterator.next();
             generateTaskActivityDiagrams(tmltask);
         }
@@ -1629,10 +1624,10 @@ public class GTMLModeling  {
         boolean b1, b2;
         String tmp;
 
-        if(index > -1) {
+        if (index > -1) {
             tmp = _input.substring(0, index).trim();
 
-            b1 = (tmp.substring(0,1)).matches("[a-zA-Z]");
+            b1 = (tmp.substring(0, 1)).matches("[a-zA-Z]");
             b2 = tmp.matches("\\w*");
             if (b1 && b2) {
                 return tmp + " = " + tmp + " + 1";
@@ -1640,10 +1635,10 @@ public class GTMLModeling  {
         }
 
         index = _input.indexOf("--");
-        if(index > -1) {
+        if (index > -1) {
             tmp = _input.substring(0, index).trim();
 
-            b1 = (tmp.substring(0,1)).matches("[a-zA-Z]");
+            b1 = (tmp.substring(0, 1)).matches("[a-zA-Z]");
             b2 = tmp.matches("\\w*");
             if (b1 && b2) {
                 return tmp + " = " + tmp + " - 1";
@@ -1659,7 +1654,7 @@ public class GTMLModeling  {
 
     private void generateTaskActivityDiagrams(TMLTask tmltask) throws MalformedTMLDesignException {
         TMLActivity activity = tmltask.getActivityDiagram();
-        TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel)(activity.getReferenceObject());
+        TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel) (activity.getReferenceObject());
 
         //TraceManager.addDev("Generating activity diagram of:" + tmltask.getName());
 
@@ -1671,12 +1666,12 @@ public class GTMLModeling  {
         int cptStart = 0;
         //    boolean rndAdded = false;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
 
             if (tgc instanceof TMLADStartState) {
                 tss = (TMLADStartState) tgc;
-                cptStart ++;
+                cptStart++;
             }
         }
 
@@ -1701,7 +1696,7 @@ public class GTMLModeling  {
 
         // Creation of other elements
         TMLChannel channel;
-        String [] channels;
+        String[] channels;
         TMLEvent event;
         TMLRequest request;
 
@@ -1731,26 +1726,26 @@ public class GTMLModeling  {
         TMLAttribute tmlt;
 
         iterator = list.listIterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
-            if (tgc.getCheckLatency()){
-                String name = tmltask.getName() + ":" +  tgc.getName();
-                name = name.replaceAll(" ","");
+            if (tgc.getCheckLatency()) {
+                String name = tmltask.getName() + ":" + tgc.getName();
+                name = name.replaceAll(" ", "");
                 //TraceManager.addDev("To check " + name);
 
-                tmlm.addCheckedActivity(tgc, name+":" + tgc.getValue().split("\\(")[0]);
+                tmlm.addCheckedActivity(tgc, name + ":" + tgc.getValue().split("\\(")[0]);
             }
             if (tgc instanceof TMLADActionState) {
                 tmlaction = new TMLActionState("action", tgc);
-                tmp = ((TMLADActionState)(tgc)).getAction();
+                tmp = ((TMLADActionState) (tgc)).getAction();
                 tmp = modifyActionString(tmp);
                 tmlaction.setAction(tmp);
                 activity.addElement(tmlaction);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlaction, tgc);
 
             } else if (tgc instanceof TMLADRandom) {
-                tmladrandom = (TMLADRandom)tgc;
+                tmladrandom = (TMLADRandom) tgc;
                 tmlrandom = new TMLRandom("random" + tmladrandom.getValue(), tgc);
                 tmp = tmladrandom.getVariable();
                 tmp = modifyActionString(tmp);
@@ -1763,122 +1758,120 @@ public class GTMLModeling  {
                 tmlrandom.setMaxValue(tmp);
                 tmlrandom.setFunctionId(tmladrandom.getFunctionId());
                 activity.addElement(tmlrandom);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlrandom, tgc);
 
             } else if (tgc instanceof TMLADChoice) {
                 tmlchoice = new TMLChoice("choice", tgc);
                 // Guards are added at the same time as next activities
                 activity.addElement(tmlchoice);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlchoice, tgc);
 
             } else if (tgc instanceof TMLADSelectEvt) {
                 tmlselectevt = new TMLSelectEvt("select", tgc);
                 activity.addElement(tmlselectevt);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlselectevt, tgc);
 
             } else if (tgc instanceof TMLADExecI) {
                 tmlexeci = new TMLExecI("execi", tgc);
-                tmlexeci.setAction(modifyString(((TMLADExecI)tgc).getDelayValue()));
-                tmlexeci.setValue(((TMLADExecI)tgc).getDelayValue());
+                tmlexeci.setAction(modifyString(((TMLADExecI) tgc).getDelayValue()));
+                tmlexeci.setValue(((TMLADExecI) tgc).getDelayValue());
                 activity.addElement(tmlexeci);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexeci, tgc);
 
             } else if (tgc instanceof TMLADExecIInterval) {
                 tmlexecii = new TMLExecIInterval("execi", tgc);
                 tmlexecii.setValue(tgc.getValue());
-                tmlexecii.setMinDelay(modifyString(((TMLADExecIInterval)tgc).getMinDelayValue()));
-                tmlexecii.setMaxDelay(modifyString(((TMLADExecIInterval)tgc).getMaxDelayValue()));
+                tmlexecii.setMinDelay(modifyString(((TMLADExecIInterval) tgc).getMinDelayValue()));
+                tmlexecii.setMaxDelay(modifyString(((TMLADExecIInterval) tgc).getMaxDelayValue()));
                 activity.addElement(tmlexecii);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexecii, tgc);
 
             } else if (tgc instanceof TMLADEncrypt) {
-                tmlexecc = new TMLExecC("encrypt_"+((TMLADEncrypt)tgc).securityContext, tgc);
+                tmlexecc = new TMLExecC("encrypt_" + ((TMLADEncrypt) tgc).securityContext, tgc);
                 activity.addElement(tmlexecc);
-                SecurityPattern sp = securityPatterns.get(((TMLADEncrypt)tgc).securityContext);
-                if (sp ==null){
+                SecurityPattern sp = securityPatterns.get(((TMLADEncrypt) tgc).securityContext);
+                if (sp == null) {
                     //Throw error for missing security pattern
-                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADEncrypt)tgc).securityContext + " not found");
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADEncrypt) tgc).securityContext + " not found");
                     ce.setTDiagramPanel(tadp);
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
-                }
-                else {
+                } else {
                     tmlexecc.securityPattern = sp;
                     tmlexecc.setAction(Integer.toString(sp.encTime));
-                    ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                    ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                     tmlm.securityTaskMap.get(sp).add(tmltask);
                     listE.addCor(tmlexecc, tgc);
                 }
             } else if (tgc instanceof TMLADDecrypt) {
-                tmlexecc = new TMLExecC("decrypt_"+((TMLADDecrypt)tgc).securityContext, tgc);
+                tmlexecc = new TMLExecC("decrypt_" + ((TMLADDecrypt) tgc).securityContext, tgc);
                 activity.addElement(tmlexecc);
-                SecurityPattern sp = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
-                if (sp ==null){
+                SecurityPattern sp = securityPatterns.get(((TMLADDecrypt) tgc).securityContext);
+                if (sp == null) {
                     //Throw error for missing security pattern
-                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADDecrypt)tgc).securityContext + " not found");
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADDecrypt) tgc).securityContext + " not found");
                     ce.setTDiagramPanel(tadp);
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
-                }
-                else {
+                } else {
                     tmlexecc.securityPattern = sp;
                     tmlexecc.setAction(Integer.toString(sp.decTime));
-                    ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                    ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlexecc, tgc);
                     tmlm.securityTaskMap.get(sp).add(tmltask);
                 }
 
             } else if (tgc instanceof TMLADExecC) {
                 tmlexecc = new TMLExecC("execc", tgc);
-                tmlexecc.setValue(((TMLADExecC)tgc).getDelayValue());
-                tmlexecc.setAction(modifyString(((TMLADExecC)tgc).getDelayValue()));
+                tmlexecc.setValue(((TMLADExecC) tgc).getDelayValue());
+                tmlexecc.setAction(modifyString(((TMLADExecC) tgc).getDelayValue()));
                 activity.addElement(tmlexecc);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexecc, tgc);
 
             } else if (tgc instanceof TMLADExecCInterval) {
                 tmlexecci = new TMLExecCInterval("execci", tgc);
-                tmlexecci.setMinDelay(modifyString(((TMLADExecCInterval)tgc).getMinDelayValue()));
-                tmlexecci.setMaxDelay(modifyString(((TMLADExecCInterval)tgc).getMaxDelayValue()));
+                tmlexecci.setMinDelay(modifyString(((TMLADExecCInterval) tgc).getMinDelayValue()));
+                tmlexecci.setMaxDelay(modifyString(((TMLADExecCInterval) tgc).getMaxDelayValue()));
                 activity.addElement(tmlexecci);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlexecci, tgc);
 
             } else if (tgc instanceof TMLADDelay) {
                 tmldelay = new TMLDelay("d-delay", tgc);
-                tmldelay.setMinDelay(modifyString(((TMLADDelay)tgc).getDelayValue()));
-                tmldelay.setMaxDelay(modifyString(((TMLADDelay)tgc).getDelayValue()));
-                tmldelay.setUnit(((TMLADDelay)tgc).getUnit());
+                tmldelay.setMinDelay(modifyString(((TMLADDelay) tgc).getDelayValue()));
+                tmldelay.setMaxDelay(modifyString(((TMLADDelay) tgc).getDelayValue()));
+                tmldelay.setUnit(((TMLADDelay) tgc).getUnit());
                 activity.addElement(tmldelay);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmldelay, tgc);
 
             } else if (tgc instanceof TMLADDelayInterval) {
                 tmldelay = new TMLDelay("nd-delay", tgc);
-                tmldelay.setMinDelay(modifyString(((TMLADDelayInterval)tgc).getMinDelayValue()));
-                tmldelay.setMaxDelay(modifyString(((TMLADDelayInterval)tgc).getMaxDelayValue()));
-                tmldelay.setUnit(((TMLADDelayInterval)tgc).getUnit());
+                tmldelay.setMinDelay(modifyString(((TMLADDelayInterval) tgc).getMinDelayValue()));
+                tmldelay.setMaxDelay(modifyString(((TMLADDelayInterval) tgc).getMaxDelayValue()));
+                tmldelay.setUnit(((TMLADDelayInterval) tgc).getUnit());
                 activity.addElement(tmldelay);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmldelay, tgc);
 
             } else if (tgc instanceof TMLADForLoop) {
                 tmlforloop = new TMLForLoop("loop", tgc);
-                tmlforloop.setInit(modifyString(((TMLADForLoop)tgc).getInit()));
-                tmp = ((TMLADForLoop)tgc).getCondition();
+                tmlforloop.setInit(modifyString(((TMLADForLoop) tgc).getInit()));
+                tmp = ((TMLADForLoop) tgc).getCondition();
                 /*if (tmp.trim().length() == 0) {
                   tmp = "true";
                   }*/
                 tmlforloop.setCondition(modifyString(tmp));
-                tmlforloop.setIncrement(modifyActionString(((TMLADForLoop)tgc).getIncrement()));
+                tmlforloop.setIncrement(modifyActionString(((TMLADForLoop) tgc).getIncrement()));
 
                 activity.addElement(tmlforloop);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlforloop, tgc);
 
             } else if (tgc instanceof TMLADForStaticLoop) {
@@ -1892,7 +1885,7 @@ public class GTMLModeling  {
                 tmlforloop.setCondition(sl + "<" + modifyString(tgc.getValue()));
                 tmlforloop.setIncrement(sl + " = " + sl + " + 1");
                 activity.addElement(tmlforloop);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlforloop, tgc);
                 staticLoopIndex++;
 
@@ -1908,7 +1901,7 @@ public class GTMLModeling  {
                 tmlforloop.setIncrement("");
                 tmlforloop.setInfinite(true);
                 activity.addElement(tmlforloop);
-                ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                 listE.addCor(tmlforloop, tgc);
                 staticLoopIndex++;
 
@@ -1928,91 +1921,90 @@ public class GTMLModeling  {
 
             } else if (tgc instanceof TMLADReadChannel) {
                 // Get the channel
-				//TMLADReadChannel rd = (TMLADReadChannel) tgc;
-                channel = tmlm.getChannelByName(getFromTable(tmltask, ((TMLADReadChannel)tgc).getChannelName()));
-				/*if (rd.isAttacker()){
+                //TMLADReadChannel rd = (TMLADReadChannel) tgc;
+                channel = tmlm.getChannelByName(getFromTable(tmltask, ((TMLADReadChannel) tgc).getChannelName()));
+                /*if (rd.isAttacker()){
 					channel = tmlm.getChannelByName(getAttackerChannel(((TMLADReadChannel)tgc).getChannelName()));
 				}*/
                 if (channel == null) {
-                    if (Conversion.containsStringInList(removedChannels, ((TMLADReadChannel)tgc).getChannelName())) {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADReadChannel)tgc).getChannelName() + " has been removed because the corresponding channel is not taken into account");
+                    if (Conversion.containsStringInList(removedChannels, ((TMLADReadChannel) tgc).getChannelName())) {
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADReadChannel) tgc).getChannelName() + " has been removed because the corresponding channel is not taken into account");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         warnings.add(ce);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         activity.addElement(new TMLJunction("void junction", tgc));
                     } else {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADReadChannel)tgc).getChannelName() + " is an unknown channel");
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADReadChannel) tgc).getChannelName() + " is an unknown channel");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         checkingErrors.add(ce);
                     }
-	
+
                 } else {
                     tmlreadchannel = new TMLReadChannel("read channel", tgc);
-                    tmlreadchannel.setNbOfSamples(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
+                    tmlreadchannel.setNbOfSamples(modifyString(((TMLADReadChannel) tgc).getSamplesValue()));
                     tmlreadchannel.addChannel(channel);
                     //security pattern
-                    if (securityPatterns.get(((TMLADReadChannel)tgc).getSecurityContext())!=null){
-                        tmlreadchannel.securityPattern= securityPatterns.get(((TMLADReadChannel)tgc).getSecurityContext());
+                    if (securityPatterns.get(((TMLADReadChannel) tgc).getSecurityContext()) != null) {
+                        tmlreadchannel.securityPattern = securityPatterns.get(((TMLADReadChannel) tgc).getSecurityContext());
                         //NbOfSamples will increase due to extra overhead from MAC
-                        int cur=1;
+                        int cur = 1;
                         try {
-                            cur = Integer.valueOf(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
-                        } catch(NumberFormatException e) {
-                        } catch(NullPointerException e) {
+                            cur = Integer.valueOf(modifyString(((TMLADReadChannel) tgc).getSamplesValue()));
+                        } catch (NumberFormatException e) {
+                        } catch (NullPointerException e) {
                         }
                         int add = Integer.valueOf(tmlreadchannel.securityPattern.overhead);
-                        if (!tmlreadchannel.securityPattern.nonce.equals("")){
+                        if (!tmlreadchannel.securityPattern.nonce.equals("")) {
                             SecurityPattern nonce = securityPatterns.get(tmlreadchannel.securityPattern.nonce);
-                            if (nonce!=null){
+                            if (nonce != null) {
                                 add = Integer.valueOf(nonce.overhead);
                             }
                         }
-                        cur = cur+ add;
+                        cur = cur + add;
                         tmlreadchannel.setNbOfSamples(Integer.toString(cur));
-                    }
-                    else if (!((TMLADReadChannel)tgc).getSecurityContext().isEmpty()){
+                    } else if (!((TMLADReadChannel) tgc).getSecurityContext().isEmpty()) {
                         //Throw error for missing security pattern
-                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADReadChannel)tgc).getSecurityContext() + " not found");
+                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADReadChannel) tgc).getSecurityContext() + " not found");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
                     }
-					if (tmltask.isAttacker()){
-						tmlreadchannel.setAttacker(true);						
-					}
+                    if (tmltask.isAttacker()) {
+                        tmlreadchannel.setAttacker(true);
+                    }
                     activity.addElement(tmlreadchannel);
-                    ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                    ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlreadchannel, tgc);
-				}
+                }
             } else if (tgc instanceof TMLADSendEvent) {
-                event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADSendEvent)tgc).getEventName()));
+                event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADSendEvent) tgc).getEventName()));
                 if (event == null) {
-                    if (Conversion.containsStringInList(removedEvents, ((TMLADSendEvent)tgc).getEventName())) {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADSendEvent)tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
+                    if (Conversion.containsStringInList(removedEvents, ((TMLADSendEvent) tgc).getEventName())) {
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADSendEvent) tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         warnings.add(ce);
                         activity.addElement(new TMLJunction("void junction", tgc));
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     } else {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendEvent)tgc).getEventName() + " is an unknown event");
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendEvent) tgc).getEventName() + " is an unknown event");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     }
                 } else {
                     tmlsendevent = new TMLSendEvent("send event", tgc);
                     tmlsendevent.setEvent(event);
 
-                    for(int i=0; i<((TMLADSendEvent)tgc).realNbOfParams(); i++) {
-                        tmp = modifyString(((TMLADSendEvent)tgc).getRealParamValue(i));
+                    for (int i = 0; i < ((TMLADSendEvent) tgc).realNbOfParams(); i++) {
+                        tmp = modifyString(((TMLADSendEvent) tgc).getRealParamValue(i));
                         Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
                         if (allVariables.size() > 0) {
-                            for(int k=0; k<allVariables.size(); k++) {
+                            for (int k = 0; k < allVariables.size(); k++) {
                                 //TraceManager.addDev("Adding record: " + allVariables.get(k));
                                 tmlsendevent.addParam(allVariables.get(k));
                             }
@@ -2023,43 +2015,43 @@ public class GTMLModeling  {
                     }
                     if (event.getNbOfParams() != tmlsendevent.getNbOfParams()) {
                         //TraceManager.addDev("ERROR : event#:" + event.getNbOfParams() + " sendevent#:" + tmlsendevent.getNbOfParams());
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendEvent)tgc).getEventName() + ": wrong number of parameters");
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendEvent) tgc).getEventName() + ": wrong number of parameters");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     } else {
                         activity.addElement(tmlsendevent);
                         listE.addCor(tmlsendevent, tgc);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                     }
                 }
 
             } else if (tgc instanceof TMLADSendRequest) {
-                request = tmlm.getRequestByName(getFromTable(tmltask, ((TMLADSendRequest)tgc).getRequestName()));
+                request = tmlm.getRequestByName(getFromTable(tmltask, ((TMLADSendRequest) tgc).getRequestName()));
                 if (request == null) {
-                    if (Conversion.containsStringInList(removedRequests, ((TMLADSendRequest)tgc).getRequestName())) {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADSendRequest)tgc).getRequestName() + " has been removed because the corresponding request is not taken into account");
+                    if (Conversion.containsStringInList(removedRequests, ((TMLADSendRequest) tgc).getRequestName())) {
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADSendRequest) tgc).getRequestName() + " has been removed because the corresponding request is not taken into account");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         warnings.add(ce);
                         activity.addElement(new TMLJunction("void junction", tgc));
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     } else {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendRequest)tgc).getRequestName() + " is an unknown request");
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendRequest) tgc).getRequestName() + " is an unknown request");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     }
                 } else {
                     tmlsendrequest = new TMLSendRequest("send request", tgc);
                     tmlsendrequest.setRequest(request);
-                    for(int i=0; i<((TMLADSendRequest)tgc).realNbOfParams(); i++) {
-                        tmp = modifyString(((TMLADSendRequest)tgc).getRealParamValue(i));
+                    for (int i = 0; i < ((TMLADSendRequest) tgc).realNbOfParams(); i++) {
+                        tmp = modifyString(((TMLADSendRequest) tgc).getRealParamValue(i));
                         Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
                         if (allVariables.size() > 0) {
-                            for(int k=0; k<allVariables.size(); k++) {
+                            for (int k = 0; k < allVariables.size(); k++) {
                                 TraceManager.addDev("Adding record: " + allVariables.get(k));
                                 tmlsendrequest.addParam(allVariables.get(k));
                                 request.addParamName(allVariables.get(k));
@@ -2072,15 +2064,15 @@ public class GTMLModeling  {
                     }
                     if (request.getNbOfParams() != tmlsendrequest.getNbOfParams()) {
                         //TraceManager.addDev("ERROR : request#:" + request.getNbOfParams() + " sendrequest#:" + tmlsendrequest.getNbOfParams());
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendRequest)tgc).getRequestName() + ": wrong number of parameters");
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendRequest) tgc).getRequestName() + ": wrong number of parameters");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     } else {
                         activity.addElement(tmlsendrequest);
                         listE.addCor(tmlsendrequest, tgc);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                     }
                 }
 
@@ -2091,23 +2083,23 @@ public class GTMLModeling  {
                     ce.setTDiagramPanel(tadp);
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
-                    ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                    ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                 } else {
                     tmlaction = new TMLActionState("action reading args", tgc);
                     String act = "";
                     int cpt = 1;
-                    for(int i=0; i<((TMLADReadRequestArg)tgc).realNbOfParams(); i++) {
-                        tmp = modifyString(((TMLADReadRequestArg)tgc).getRealParamValue(i));
+                    for (int i = 0; i < ((TMLADReadRequestArg) tgc).realNbOfParams(); i++) {
+                        tmp = modifyString(((TMLADReadRequestArg) tgc).getRealParamValue(i));
                         Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
 
                         if (allVariables.size() > 0) {
-                            for(int k=0; k<allVariables.size(); k++) {
+                            for (int k = 0; k < allVariables.size(); k++) {
                                 //TraceManager.addDev("Adding record: " + allVariables.get(k));
                                 if (cpt != 1) {
                                     act += "$";
                                 }
                                 act += allVariables.get(k) + " = arg" + cpt + "__req";
-                                cpt ++;
+                                cpt++;
                             }
                         } else {
                             //TraceManager.addDev("Adding param: " + tmp);
@@ -2115,21 +2107,21 @@ public class GTMLModeling  {
                                 act += "$";
                             }
                             act += tmp + " = arg" + cpt + "__req";
-                            cpt ++;
+                            cpt++;
                         }
                     }
-                    if (request.getNbOfParams() != (cpt-1)) {
+                    if (request.getNbOfParams() != (cpt - 1)) {
                         //TraceManager.addDev("ERROR : request#:" + request.getNbOfParams() + " read request arg#:" + (cpt-1));
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Wrong number of parameters in \"reading request arg\" operator");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     } else {
                         //TraceManager.addDev("Adding action = " + act);
                         tmlaction.setAction(act);
                         activity.addElement(tmlaction);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                         listE.addCor(tmlaction, tgc);
                     }
 
@@ -2142,74 +2134,74 @@ public class GTMLModeling  {
                 listE.addCor(tmlstopstate, tgc);
 
             } else if (tgc instanceof TMLADNotifiedEvent) {
-                event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADNotifiedEvent)tgc).getEventName()));
+                event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADNotifiedEvent) tgc).getEventName()));
                 if (event == null) {
-                    if( removedEvents.size() > 0 )      {
-                        if (Conversion.containsStringInList(removedEvents, ((TMLADNotifiedEvent)tgc).getEventName())) {
-                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADNotifiedEvent)tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
+                    if (removedEvents.size() > 0) {
+                        if (Conversion.containsStringInList(removedEvents, ((TMLADNotifiedEvent) tgc).getEventName())) {
+                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADNotifiedEvent) tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
                             ce.setTDiagramPanel(tadp);
                             ce.setTGComponent(tgc);
                             warnings.add(ce);
                             activity.addElement(new TMLJunction("void junction", tgc));
-                            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                            ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         } else {
-                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADNotifiedEvent)tgc).getEventName() + " is an unknown event");
+                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADNotifiedEvent) tgc).getEventName() + " is an unknown event");
                             ce.setTDiagramPanel(tadp);
                             ce.setTGComponent(tgc);
                             checkingErrors.add(ce);
-                            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                            ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         }
                     } else {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADNotifiedEvent)tgc).getEventName() + " is an unknown event");
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADNotifiedEvent) tgc).getEventName() + " is an unknown event");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     }
                 } else {
                     event.setNotified(true);
                     tmlnotifiedevent = new TMLNotifiedEvent("notified event", tgc);
                     tmlnotifiedevent.setEvent(event);
-                    tmlnotifiedevent.setVariable(modifyString(((TMLADNotifiedEvent)tgc).getVariable()));
+                    tmlnotifiedevent.setVariable(modifyString(((TMLADNotifiedEvent) tgc).getVariable()));
                     activity.addElement(tmlnotifiedevent);
-                    ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                    ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlnotifiedevent, tgc);
                 }
 
             } else if (tgc instanceof TMLADWaitEvent) {
-                event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADWaitEvent)tgc).getEventName()));
+                event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADWaitEvent) tgc).getEventName()));
                 if (event == null) {
-                    if( removedEvents.size() > 0 )      {
-                        if (Conversion.containsStringInList(removedEvents, ((TMLADWaitEvent)tgc).getEventName())) {
-                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADWaitEvent)tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
+                    if (removedEvents.size() > 0) {
+                        if (Conversion.containsStringInList(removedEvents, ((TMLADWaitEvent) tgc).getEventName())) {
+                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADWaitEvent) tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
                             ce.setTDiagramPanel(tadp);
                             ce.setTGComponent(tgc);
                             warnings.add(ce);
-                            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                            ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                             activity.addElement(new TMLJunction("void junction", tgc));
                         } else {
-                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + " is an unknown event");
+                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent) tgc).getEventName() + " is an unknown event");
                             ce.setTDiagramPanel(tadp);
                             ce.setTGComponent(tgc);
-                            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                            ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                             checkingErrors.add(ce);
                         }
                     } else {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + " is an unknown event");
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent) tgc).getEventName() + " is an unknown event");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         checkingErrors.add(ce);
                     }
                 } else {
                     //TraceManager.addDev("Nb of param of event:" + event.getNbOfParams());
                     tmlwaitevent = new TMLWaitEvent("wait event", tgc);
                     tmlwaitevent.setEvent(event);
-                    for(int i=0; i<((TMLADWaitEvent)tgc).realNbOfParams(); i++) {
-                        tmp = modifyString(((TMLADWaitEvent)tgc).getRealParamValue(i));
+                    for (int i = 0; i < ((TMLADWaitEvent) tgc).realNbOfParams(); i++) {
+                        tmp = modifyString(((TMLADWaitEvent) tgc).getRealParamValue(i));
                         Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
                         if (allVariables.size() > 0) {
-                            for(int k=0; k<allVariables.size(); k++) {
+                            for (int k = 0; k < allVariables.size(); k++) {
                                 //TraceManager.addDev("Adding record: " + allVariables.get(k));
                                 tmlwaitevent.addParam(allVariables.get(k));
                             }
@@ -2220,86 +2212,85 @@ public class GTMLModeling  {
                     }
                     if (event.getNbOfParams() != tmlwaitevent.getNbOfParams()) {
                         //TraceManager.addDev("ERROR : event#:" + event.getNbOfParams() + " waitevent#:" + tmlwaitevent.getNbOfParams());
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + ": wrong number of parameters");
+                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent) tgc).getEventName() + ": wrong number of parameters");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     } else {
                         activity.addElement(tmlwaitevent);
                         listE.addCor(tmlwaitevent, tgc);
-                        ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                        ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                     }
 
                 }
 
             } else if (tgc instanceof TMLADWriteChannel) {
                 // Get channels
-				//TMLADWriteChannel wr = (TMLADWriteChannel) tgc;
-                channels = ((TMLADWriteChannel)tgc).getChannelsByName();
+                //TMLADWriteChannel wr = (TMLADWriteChannel) tgc;
+                channels = ((TMLADWriteChannel) tgc).getChannelsByName();
                 boolean error = false;
-                for(int i=0; i<channels.length; i++) {
+                for (int i = 0; i < channels.length; i++) {
                     //TraceManager.addDev("Getting from table " + tmltask.getName() + "/" +channels[i]);
                     channel = tmlm.getChannelByName(getFromTable(tmltask, channels[i]));
                     if (channel == null) {
-                        if (Conversion.containsStringInList(removedChannels, ((TMLADWriteChannel)tgc).getChannelName(i))) {
-                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADWriteChannel)tgc).getChannelName(i) + " has been removed because the corresponding channel is not taken into account");
+                        if (Conversion.containsStringInList(removedChannels, ((TMLADWriteChannel) tgc).getChannelName(i))) {
+                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADWriteChannel) tgc).getChannelName(i) + " has been removed because the corresponding channel is not taken into account");
                             ce.setTDiagramPanel(tadp);
                             ce.setTGComponent(tgc);
                             warnings.add(ce);
-                            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                            ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                             activity.addElement(new TMLJunction("void junction", tgc));
                         } else {
-                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWriteChannel)tgc).getChannelName(i) + " is an unknown channel");
+                            UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWriteChannel) tgc).getChannelName(i) + " is an unknown channel");
                             ce.setTDiagramPanel(tadp);
                             ce.setTGComponent(tgc);
-                            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                            ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.UNKNOWN);
                             checkingErrors.add(ce);
                         }
                         error = true;
-                    
-					}
+
+                    }
                 }
                 if (!error) {
                     tmlwritechannel = new TMLWriteChannel("write channel", tgc);
-                    tmlwritechannel.setNbOfSamples(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
-                    for(int i=0; i<channels.length; i++) {
+                    tmlwritechannel.setNbOfSamples(modifyString(((TMLADWriteChannel) tgc).getSamplesValue()));
+                    for (int i = 0; i < channels.length; i++) {
                         channel = tmlm.getChannelByName(getFromTable(tmltask, channels[i]));
                         tmlwritechannel.addChannel(channel);
                     }
-					//if (wr.isAttacker()){
-						//channel = tmlm.getChannelByName(getAttackerChannel(channels[0]));
-                        //tmlwritechannel.addChannel(channel);
-					//}
+                    //if (wr.isAttacker()){
+                    //channel = tmlm.getChannelByName(getAttackerChannel(channels[0]));
+                    //tmlwritechannel.addChannel(channel);
+                    //}
                     //add sec pattern
-                    if (securityPatterns.get(((TMLADWriteChannel)tgc).getSecurityContext())!=null){
-                        tmlwritechannel.securityPattern= securityPatterns.get(((TMLADWriteChannel)tgc).getSecurityContext());
-                        int cur = Integer.valueOf(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
+                    if (securityPatterns.get(((TMLADWriteChannel) tgc).getSecurityContext()) != null) {
+                        tmlwritechannel.securityPattern = securityPatterns.get(((TMLADWriteChannel) tgc).getSecurityContext());
+                        int cur = Integer.valueOf(modifyString(((TMLADWriteChannel) tgc).getSamplesValue()));
                         int add = Integer.valueOf(tmlwritechannel.securityPattern.overhead);
-                        if (!tmlwritechannel.securityPattern.nonce.equals("")){
+                        if (!tmlwritechannel.securityPattern.nonce.equals("")) {
                             SecurityPattern nonce = securityPatterns.get(tmlwritechannel.securityPattern.nonce);
-                            if (nonce!=null){
+                            if (nonce != null) {
                                 add = Integer.valueOf(nonce.overhead);
                             }
                         }
-                        cur = cur+ add;
+                        cur = cur + add;
                         tmlwritechannel.setNbOfSamples(Integer.toString(cur));
-                    }
-                    else if (!((TMLADWriteChannel)tgc).getSecurityContext().isEmpty()){
+                    } else if (!((TMLADWriteChannel) tgc).getSecurityContext().isEmpty()) {
                         //Throw error for missing security pattern
-                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADWriteChannel)tgc).getSecurityContext() + " not found");
+                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADWriteChannel) tgc).getSecurityContext() + " not found");
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
                     }
-					if (tmltask.isAttacker()){
-						tmlwritechannel.setAttacker(true);
-					}
+                    if (tmltask.isAttacker()) {
+                        tmlwritechannel.setAttacker(true);
+                    }
                     activity.addElement(tmlwritechannel);
-                    ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+                    ((BasicErrorHighlight) tgc).setStateAction(ErrorHighlight.OK);
                     listE.addCor(tmlwritechannel, tgc);
                 }
-			}
+            }
         }
 
         // Interconnection between elements
@@ -2310,16 +2301,17 @@ public class GTMLModeling  {
         int j, index;
 
         iterator = list.listIterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
             if (tgc instanceof TGConnectorTMLAD) {
-                tgco = (TGConnectorTMLAD)tgc;
+                tgco = (TGConnectorTMLAD) tgc;
                 p1 = tgco.getTGConnectingPointP1();
                 p2 = tgco.getTGConnectingPointP2();
 
                 // Identification of connected components
-                tgc1 = null; tgc2 = null;
-                for(j=0; j<list.size(); j++) {
+                tgc1 = null;
+                tgc2 = null;
+                for (j = 0; j < list.size(); j++) {
                     tgc3 = list.get(j);
                     if (tgc3.belongsToMe(p1)) {
                         tgc1 = tgc3;
@@ -2335,7 +2327,7 @@ public class GTMLModeling  {
                     ae1 = activity.findReferenceElement(tgc1);
                     ae2 = activity.findReferenceElement(tgc2);
 
-                    if ((ae1 != null ) && (ae2 != null)) {
+                    if ((ae1 != null) && (ae2 != null)) {
                         //Special case if "for loop" or if "choice"
 
                         if (ae1 instanceof TMLForLoop) {
@@ -2351,17 +2343,17 @@ public class GTMLModeling  {
                             //TraceManager.addDev("Adding next:" + ae2);
                             ae1.addNext(ae2);
                             //TraceManager.addDev("Adding guard:" + ((TMLADChoice)tgc1).getGuard(index));
-                            ((TMLChoice)ae1).addGuard(modifyString(((TMLADChoice)tgc1).getGuard(index)));
+                            ((TMLChoice) ae1).addGuard(modifyString(((TMLADChoice) tgc1).getGuard(index)));
 
                         } else if (ae1 instanceof TMLSequence) {
                             index = tgc1.indexOf(p1) - 1;
-                            ((TMLSequence)ae1).addIndex(index);
+                            ((TMLSequence) ae1).addIndex(index);
                             ae1.addNext(ae2);
                             //TraceManager.addDev("Adding " + ae2 + " at index " + index);
 
                         } else if (ae1 instanceof TMLRandomSequence) {
                             index = tgc1.indexOf(p1) - 1;
-                            ((TMLRandomSequence)ae1).addIndex(index);
+                            ((TMLRandomSequence) ae1).addIndex(index);
                             ae1.addNext(ae2);
                             //TraceManager.addDev("Adding " + ae2 + " at index " + index);
 
@@ -2374,12 +2366,11 @@ public class GTMLModeling  {
         }
 
 
-
         // Check that each "for" has two nexts
         // Check that TMLChoice have compatible guards
         // Check TML select evts
         iterator = list.listIterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
 
             if ((tgc instanceof TMLADForLoop) || (tgc instanceof TMLADForStaticLoop)) {
@@ -2393,7 +2384,7 @@ public class GTMLModeling  {
                     }
                 }
             } else if (tgc instanceof TMLADChoice) {
-                tmlchoice = (TMLChoice)(activity.findReferenceElement(tgc));
+                tmlchoice = (TMLChoice) (activity.findReferenceElement(tgc));
                 tmlchoice.orderGuards();
 
                 int nbNonDeter = tmlchoice.nbOfNonDeterministicGuard();
@@ -2428,7 +2419,7 @@ public class GTMLModeling  {
                     ce.setTDiagramPanel(tadp);
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
-                } else if ((index = tmlchoice.getElseGuard()) > -1){
+                } else if ((index = tmlchoice.getElseGuard()) > -1) {
                     index = tmlchoice.getElseGuard();
                     if (index == 0) {
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Choice should have a regular guard");
@@ -2445,7 +2436,7 @@ public class GTMLModeling  {
                 }
             }
             if (tgc instanceof TMLADSelectEvt) {
-                tmlselectevt = (TMLSelectEvt)(activity.findReferenceElement(tgc));
+                tmlselectevt = (TMLSelectEvt) (activity.findReferenceElement(tgc));
                 if (!tmlselectevt.isARealSelectEvt()) {
                     UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "'Select events'  should be followed by only event receiving operators");
                     ce.setTDiagramPanel(tadp);
@@ -2457,13 +2448,13 @@ public class GTMLModeling  {
         }
 
         // Sorting nexts elements of Sequence
-        for(j=0; j<activity.nElements(); j++) {
+        for (j = 0; j < activity.nElements(); j++) {
             ae1 = activity.get(j);
             if (ae1 instanceof TMLSequence) {
-                ((TMLSequence)ae1).sortNexts();
+                ((TMLSequence) ae1).sortNexts();
             }
             if (ae1 instanceof TMLRandomSequence) {
-                ((TMLRandomSequence)ae1).sortNexts();
+                ((TMLRandomSequence) ae1).sortNexts();
             }
         }
     }
@@ -2472,8 +2463,8 @@ public class GTMLModeling  {
         tmlm = new TMLModeling<>(true);
         archi = new TMLArchitecture();  //filled by makeArchitecture
         map = new TMLMapping<>(tmlm, archi, false);
-        checkingErrors = new LinkedList<CheckingError> ();
-        warnings = new LinkedList<CheckingError> ();
+        checkingErrors = new LinkedList<CheckingError>();
+        warnings = new LinkedList<CheckingError>();
         //listE = new CorrespondanceTGElement();
 
         //TraceManager.addDev("Making architecture");
@@ -2484,7 +2475,37 @@ public class GTMLModeling  {
         }
         //TraceManager.addDev("Making mapping");
         makeMapping();  //fills map
-		processAttackerScenario();
+
+        TMLSyntaxChecking syntax = new TMLSyntaxChecking(map, true);
+        syntax.checkSyntax();
+
+        int type;
+        TGComponent tgc;
+
+        if (syntax.hasErrors() > 0) {
+            for (TMLError error : syntax.getErrors()) {
+                //TraceManager.addDev("Adding checking error");
+                if (error.type == TMLError.ERROR_STRUCTURE) {
+                    type = CheckingError.STRUCTURE_ERROR;
+                } else {
+                    type = CheckingError.BEHAVIOR_ERROR;
+                }
+                tgc = listE.getTG(error.element);
+                if (tgc != null) {
+                    UICheckingError ce = new UICheckingError(type, error.message);
+                    ce.setTDiagramPanel(tgc.getTDiagramPanel());
+                    ce.setTGComponent(tgc);
+                    checkingErrors.add(ce);
+                } else {
+                    TMLCheckingError ce = new TMLCheckingError(type, error.message);
+                    ce.setTMLTask(error.task);
+                    checkingErrors.add(ce);
+                }
+            }
+        }
+
+
+        processAttackerScenario();
         map.setCorrespondanceList(listE);
         //  map.securityPatterns.addAll(securityPatterns.keySet());
         //TraceManager.addDev("Making TMLCPLib");
@@ -2498,7 +2519,7 @@ public class GTMLModeling  {
           }
           autoMapKeys();*/
         removeActionsWithRecords();
-        if (map.firewall){
+        if (map.firewall) {
             tmlap.getMainGUI().gtm.drawFirewall(map);
         }
         return map;     // the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
@@ -2506,81 +2527,80 @@ public class GTMLModeling  {
 
     // public SystemCAMSPanel<TGComponent> translateToSystemCAMS() { //ajout CD 04/07 FIXME
 	/*tous est a changé et a créé ici*/
-        // tmlm = new TMLModeling<>(true);
-        // archi = new TMLArchitecture();  //filled by makeArchitecture
-        // cams = new TMLSystemCAMS<>(tmlm, archi, false);
-        // cams.tmlscp = tmlscp;
-        // checkingErrors = new LinkedList<CheckingError> ();
-        // warnings = new LinkedList<CheckingError> ();
+    // tmlm = new TMLModeling<>(true);
+    // archi = new TMLArchitecture();  //filled by makeArchitecture
+    // cams = new TMLSystemCAMS<>(tmlm, archi, false);
+    // cams.tmlscp = tmlscp;
+    // checkingErrors = new LinkedList<CheckingError> ();
+    // warnings = new LinkedList<CheckingError> ();
 
-        // TraceManager.addDev("Making architecture");
-        // makeArchitecture();     //fills archi
-        // TraceManager.addDev("Making TML modeling");
-        // if (!makeTMLModeling()) {
-        //     return null;
-        // }
-        // TraceManager.addDev("Making SystemC-AMS");
-        // makeMapping();  //fills cams
-        // cams.listE = listE;
-        // TraceManager.addDev("Making TMLSCPlib");
-        // makeTMLCPLib();
+    // TraceManager.addDev("Making architecture");
+    // makeArchitecture();     //fills archi
+    // TraceManager.addDev("Making TML modeling");
+    // if (!makeTMLModeling()) {
+    //     return null;
+    // }
+    // TraceManager.addDev("Making SystemC-AMS");
+    // makeMapping();  //fills cams
+    // cams.listE = listE;
+    // TraceManager.addDev("Making TMLSCPlib");
+    // makeTMLCPLib();
 
-        // removeActionsWithRecords();
-        // cams.setTMLDesignPanel(this.tmlcdp);//a ajouter
-        // if (cams.firewall){ // j'espère pas besoin de tous ca
-        //     tmlscp.getMainGUI().gtm.drawFirewall(cams); 
-        // }
+    // removeActionsWithRecords();
+    // cams.setTMLDesignPanel(this.tmlcdp);//a ajouter
+    // if (cams.firewall){ // j'espère pas besoin de tous ca
+    //     tmlscp.getMainGUI().gtm.drawFirewall(cams);
+    // }
     //  return cams;
     // }
 
-	public void processAttackerScenario(){
-		//Scan tasks and activity diagrams for attacker read/write channels
-		for (TMLTask task: tmlm.getTasks()){
-			if (task.isAttacker()){
-				TMLActivity act=task.getActivityDiagram();
-				List<TMLActivityElement> toRemove= new ArrayList<TMLActivityElement>();
-				for (TMLActivityElement elem: act.getElements()){
-					if (elem instanceof TMLActivityElementChannel){
-						TMLActivityElementChannel elemChannel = (TMLActivityElementChannel) elem;
-						if (elemChannel.isAttacker()){
-							TMLChannel chan = elemChannel.getChannel(0);
-							if (!map.isAttackerAccessible(chan)){
-								toRemove.add(elem);
-								//Remove read/writechannel
-							}
-						}
-					}
-				}
-				for (TMLActivityElement elem: toRemove){
-					TMLExecI exec= new TMLExecI("100",elem.getReferenceObject());
- 					exec.setAction("100");
-                	exec.setValue("100");
-					act.replaceElement(elem, exec);
-				}
-				//System.out.println("activity " +  act.toXML());
-			}
-		}
+    public void processAttackerScenario() {
+        //Scan tasks and activity diagrams for attacker read/write channels
+        for (TMLTask task : tmlm.getTasks()) {
+            if (task.isAttacker()) {
+                TMLActivity act = task.getActivityDiagram();
+                List<TMLActivityElement> toRemove = new ArrayList<TMLActivityElement>();
+                for (TMLActivityElement elem : act.getElements()) {
+                    if (elem instanceof TMLActivityElementChannel) {
+                        TMLActivityElementChannel elemChannel = (TMLActivityElementChannel) elem;
+                        if (elemChannel.isAttacker()) {
+                            TMLChannel chan = elemChannel.getChannel(0);
+                            if (!map.isAttackerAccessible(chan)) {
+                                toRemove.add(elem);
+                                //Remove read/writechannel
+                            }
+                        }
+                    }
+                }
+                for (TMLActivityElement elem : toRemove) {
+                    TMLExecI exec = new TMLExecI("100", elem.getReferenceObject());
+                    exec.setAction("100");
+                    exec.setValue("100");
+                    act.replaceElement(elem, exec);
+                }
+                //System.out.println("activity " +  act.toXML());
+            }
+        }
 
-	}
+    }
 
-    public TMLCP translateToTMLCPDataStructure( String _cpName )        {
-        tmlcp = new TMLCP( _cpName );
-        checkingErrors = new LinkedList<CheckingError> ();
-        warnings = new LinkedList<CheckingError> ();
+    public TMLCP translateToTMLCPDataStructure(String _cpName) {
+        tmlcp = new TMLCP(_cpName);
+        checkingErrors = new LinkedList<CheckingError>();
+        warnings = new LinkedList<CheckingError>();
         //listE = new CorrespondanceTGElement();
 
-        if( tmlcpp != null )    {
+        if (tmlcpp != null) {
             try {
                 //TraceManager.addDev( "Making Communication Pattern data structure to check the syntax" );
                 makeCPDataStructure();  //fill the data structure tmlcp
-            }
-            catch( MalformedTMLDesignException mtmlde ) {
-                TraceManager.addDev( "Modeling error: " + mtmlde.getMessage() );
+            } catch (MalformedTMLDesignException mtmlde) {
+                TraceManager.addDev("Modeling error: " + mtmlde.getMessage());
             }
         }
 
         //TraceManager.addDev( "About to check the syntax of CPs" );
-        TMLCPSyntaxChecking syntax = new TMLCPSyntaxChecking( tmlcp );
+        TMLCPSyntaxChecking syntax = new TMLCPSyntaxChecking(tmlcp);
         syntax.checkSyntax();
         //Takes the data structure tmlcp passed to the constructor and checks the syntax of the components of a cp. If there are errors (these
         //are filled inside the class syntax), then CheckingErrors are filled according to the errors in class syntax
@@ -2588,25 +2608,24 @@ public class GTMLModeling  {
         int type;
         TGComponent tgc;
 
-        if( syntax.hasErrors() > 0 ) {
-            for( TMLCPError error: syntax.getErrors() ) {
-                if( error.type == TMLCPError.ERROR_STRUCTURE ) {
+        if (syntax.hasErrors() > 0) {
+            for (TMLCPError error : syntax.getErrors()) {
+                if (error.type == TMLCPError.ERROR_STRUCTURE) {
                     type = CheckingError.STRUCTURE_ERROR;
-                }
-                else {
+                } else {
                     type = CheckingError.BEHAVIOR_ERROR;
                 }
 
-                tgc = listE.getTG( error.element );
-                if ( tgc != null ) {
-                    UICheckingError ce = new UICheckingError( type, error.message );
-                    ce.setTDiagramPanel( tgc.getTDiagramPanel() );
-                    ce.setTGComponent( tgc );
-                    checkingErrors.add( ce );
+                tgc = listE.getTG(error.element);
+                if (tgc != null) {
+                    UICheckingError ce = new UICheckingError(type, error.message);
+                    ce.setTDiagramPanel(tgc.getTDiagramPanel());
+                    ce.setTGComponent(tgc);
+                    checkingErrors.add(ce);
                 } else {
-                    TMLCheckingError ce = new TMLCheckingError( type, error.message );
-                    ce.setTMLTask( error.task );
-                    checkingErrors.add( ce );
+                    TMLCheckingError ce = new TMLCheckingError(type, error.message);
+                    ce.setTMLTask(error.task);
+                    checkingErrors.add(ce);
                 }
             }
         }
@@ -2633,8 +2652,8 @@ public class GTMLModeling  {
         return tmlcp;
     }
 
-    private boolean nameInUse( List<String> _names, String _name) {
-        for(String s: _names) {
+    private boolean nameInUse(List<String> _names, String _name) {
+        for (String s : _names) {
             if (s.equals(_name)) {
                 return true;
             }
@@ -2676,11 +2695,11 @@ public class GTMLModeling  {
 
         List<String> names = new ArrayList<String>();
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
 
             if (tgc instanceof TMLArchiCPUNode) {
-                node = (TMLArchiCPUNode)tgc;
+                node = (TMLArchiCPUNode) tgc;
                 if (nameInUse(names, node.getName())) {
                     // Node with the same name
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + node.getName());
@@ -2712,7 +2731,7 @@ public class GTMLModeling  {
             }
 
             if (tgc instanceof TMLArchiFPGANode) {
-                fpgaNode = (TMLArchiFPGANode)tgc;
+                fpgaNode = (TMLArchiFPGANode) tgc;
                 if (nameInUse(names, fpgaNode.getName())) {
                     // Node with the same name
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + fpgaNode.getName());
@@ -2739,7 +2758,7 @@ public class GTMLModeling  {
             }
 
             if (tgc instanceof TMLArchiHWANode) {
-                hwanode = (TMLArchiHWANode)tgc;
+                hwanode = (TMLArchiHWANode) tgc;
                 if (nameInUse(names, hwanode.getName())) {
                     // Node with the same name
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + hwanode.getName());
@@ -2759,7 +2778,7 @@ public class GTMLModeling  {
             }
 
             if (tgc instanceof TMLArchiBUSNode) {
-                busnode = (TMLArchiBUSNode)tgc;
+                busnode = (TMLArchiBUSNode) tgc;
                 if (nameInUse(names, busnode.getName())) {
                     // Node with the same name
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + busnode.getName());
@@ -2782,7 +2801,7 @@ public class GTMLModeling  {
             }
 
             if (tgc instanceof TMLArchiVGMNNode) {
-                vgmnnode = (TMLArchiVGMNNode)tgc;
+                vgmnnode = (TMLArchiVGMNNode) tgc;
                 if (nameInUse(names, vgmnnode.getName())) {
                     // Node with the same name
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + vgmnnode.getName());
@@ -2805,7 +2824,7 @@ public class GTMLModeling  {
             }
 
             if (tgc instanceof TMLArchiCrossbarNode) {
-                crossbarnode = (TMLArchiCrossbarNode)tgc;
+                crossbarnode = (TMLArchiCrossbarNode) tgc;
                 if (nameInUse(names, crossbarnode.getName())) {
                     // Node with the same name
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + crossbarnode.getName());
@@ -2828,7 +2847,7 @@ public class GTMLModeling  {
             }
 
             if (tgc instanceof TMLArchiBridgeNode) {
-                bridgenode = (TMLArchiBridgeNode)tgc;
+                bridgenode = (TMLArchiBridgeNode) tgc;
                 if (nameInUse(names, bridgenode.getName())) {
                     // Node with the same name
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + bridgenode.getName());
@@ -2848,7 +2867,7 @@ public class GTMLModeling  {
             }
 
             if (tgc instanceof TMLArchiFirewallNode) {
-                firewallnode = (TMLArchiFirewallNode)tgc;
+                firewallnode = (TMLArchiFirewallNode) tgc;
                 if (nameInUse(names, firewallnode.getName())) {
                     // Node with the same name
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + firewallnode.getName());
@@ -2858,7 +2877,7 @@ public class GTMLModeling  {
                 } else {
                     names.add(firewallnode.getName());
                     bridge = new HwBridge(firewallnode.getName());
-                    bridge.isFirewall=true;
+                    bridge.isFirewall = true;
                     bridge.firewallRules = ((TMLArchiFirewallNode) tgc).getRules();
                     bridge.latency = ((TMLArchiFirewallNode) tgc).getLatency();
                     bridge.bufferByteSize = 1;
@@ -2871,7 +2890,7 @@ public class GTMLModeling  {
 
 
             if (tgc instanceof TMLArchiMemoryNode) {
-                memorynode = (TMLArchiMemoryNode)tgc;
+                memorynode = (TMLArchiMemoryNode) tgc;
                 if (nameInUse(names, memorynode.getName())) {
                     // Node with the same name
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + memorynode.getName());
@@ -2891,7 +2910,7 @@ public class GTMLModeling  {
             }
 
             if (tgc instanceof TMLArchiDMANode) {
-                dmanode = (TMLArchiDMANode)tgc;
+                dmanode = (TMLArchiDMANode) tgc;
                 if (nameInUse(names, dmanode.getName())) {
                     // Node with the same name
                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + dmanode.getName());
@@ -2919,11 +2938,12 @@ public class GTMLModeling  {
         HwNode originNode;
 
         iterator = tmlap.tmlap.getComponentList().listIterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
             if (tgc instanceof TMLArchiConnectorNode) {
-                connector = (TMLArchiConnectorNode)tgc;
-                tgc1 = null; tgc2 = null;
+                connector = (TMLArchiConnectorNode) tgc;
+                tgc1 = null;
+                tgc2 = null;
                 p1 = connector.getTGConnectingPointP1();
                 p2 = connector.getTGConnectingPointP2();
                 tgc1 = tgc.getTDiagramPanel().getComponentToWhichBelongs(p1);
@@ -2935,9 +2955,9 @@ public class GTMLModeling  {
 
                         if (tgc2 instanceof TMLArchiBUSNode) {
                             originNode = listE.getHwNode(tgc1);
-                            bus  = (HwBus)(listE.getHwNode(tgc2));
+                            bus = (HwBus) (listE.getHwNode(tgc2));
                             if ((originNode != null) && (bus != null)) {
-                                hwlink = new HwLink("link_" +originNode.getName() + "_to_" + bus.getName());
+                                hwlink = new HwLink("link_" + originNode.getName() + "_to_" + bus.getName());
                                 hwlink.setPriority(connector.getPriority());
                                 hwlink.bus = bus;
                                 hwlink.hwnode = originNode;
@@ -2950,9 +2970,9 @@ public class GTMLModeling  {
                         // DG added VGMN and crossbar
                         if (tgc2 instanceof TMLArchiVGMNNode) {
                             originNode = listE.getHwNode(tgc1);
-                            vgmn  = (HwVGMN)(listE.getHwNode(tgc2));
+                            vgmn = (HwVGMN) (listE.getHwNode(tgc2));
                             if ((originNode != null) && (vgmn != null)) {
-                                hwlink = new HwLink("link_" +originNode.getName() + "_to_" + vgmn.getName());
+                                hwlink = new HwLink("link_" + originNode.getName() + "_to_" + vgmn.getName());
                                 hwlink.setPriority(connector.getPriority());
                                 hwlink.vgmn = vgmn;
                                 hwlink.hwnode = originNode;
@@ -2964,9 +2984,9 @@ public class GTMLModeling  {
 
                         if (tgc2 instanceof TMLArchiCrossbarNode) {
                             originNode = listE.getHwNode(tgc1);
-                            crossbar  = (HwCrossbar)(listE.getHwNode(tgc2));
+                            crossbar = (HwCrossbar) (listE.getHwNode(tgc2));
                             if ((originNode != null) && (crossbar != null)) {
-                                hwlink = new HwLink("link_" +originNode.getName() + "_to_" + crossbar.getName());
+                                hwlink = new HwLink("link_" + originNode.getName() + "_to_" + crossbar.getName());
                                 hwlink.setPriority(connector.getPriority());
                                 hwlink.crossbar = crossbar;
                                 hwlink.hwnode = originNode;
@@ -2994,14 +3014,13 @@ public class GTMLModeling  {
 
         Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
 
-        tmlcp.setMainCP( createActivityDiagramDataStructure( (ui.tmlcp.TMLCPPanel) panelList.get(0), names ) ); //Special case for main CP
+        tmlcp.setMainCP(createActivityDiagramDataStructure((ui.tmlcp.TMLCPPanel) panelList.get(0), names)); //Special case for main CP
 
-        for( int panelCounter = 1; panelCounter < panelList.size(); panelCounter++ )    {
-            if( panelList.get( panelCounter) instanceof ui.tmlsd.TMLSDPanel )   {
-                tmlcp.addCPSequenceDiagram( createSequenceDiagramDataStructure( (ui.tmlsd.TMLSDPanel) panelList.get( panelCounter ), names ) );
-            }
-            else if( panelList.get( panelCounter ) instanceof ui.tmlcp.TMLCPPanel )     {
-                tmlcp.addCPActivityDiagram( createActivityDiagramDataStructure( (ui.tmlcp.TMLCPPanel) panelList.get( panelCounter ), names ) );
+        for (int panelCounter = 1; panelCounter < panelList.size(); panelCounter++) {
+            if (panelList.get(panelCounter) instanceof ui.tmlsd.TMLSDPanel) {
+                tmlcp.addCPSequenceDiagram(createSequenceDiagramDataStructure((ui.tmlsd.TMLSDPanel) panelList.get(panelCounter), names));
+            } else if (panelList.get(panelCounter) instanceof ui.tmlcp.TMLCPPanel) {
+                tmlcp.addCPActivityDiagram(createActivityDiagramDataStructure((ui.tmlcp.TMLCPPanel) panelList.get(panelCounter), names));
             }
             //TraceManager.addDev( "PANEL number: " + panelCounter + " " + panelList.get( panelCounter ) );
         }
@@ -3022,9 +3041,9 @@ public class GTMLModeling  {
     }   //End of method
 
 
-    private tmltranslator.tmlcp.TMLCPActivityDiagram createActivityDiagramDataStructure( ui.tmlcp.TMLCPPanel panel,
-                                                                                         List<String> names )
-        throws MalformedTMLDesignException {
+    private tmltranslator.tmlcp.TMLCPActivityDiagram createActivityDiagramDataStructure(ui.tmlcp.TMLCPPanel panel,
+                                                                                        List<String> names)
+            throws MalformedTMLDesignException {
         tmltranslator.tmlcp.TMLCPStart start;
         tmltranslator.tmlcp.TMLCPStop stop;
         tmltranslator.tmlcp.TMLCPJunction junction;
@@ -3047,77 +3066,76 @@ public class GTMLModeling  {
 
         List<TGComponent> components = panel.getComponentList();
 
-        if( nameInUse( names, panel.getName() ) ) {
+        if (nameInUse(names, panel.getName())) {
             String msg = panel.getName() + " already exists";
-            UICheckingError ce = new UICheckingError( CheckingError.STRUCTURE_ERROR, "Two diagrams have the same name: " + panel.getName() );
-            ce.setTDiagramPanel( tmlcpp.tmlcpp );
+            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two diagrams have the same name: " + panel.getName());
+            ce.setTDiagramPanel(tmlcpp.tmlcpp);
             //ce.setTGComponent( components );
-            checkingErrors.add( ce );
-            throw new MalformedTMLDesignException( msg );
+            checkingErrors.add(ce);
+            throw new MalformedTMLDesignException(msg);
             /*TraceManager.addDev( "ERROR: two diagrams have the same name!" );
               return new tmltranslator.tmlcp.TMLCPActivityDiagram( "ERROR", panel );*/
-        }
-        else {
-            names.add( panel.getName() );
+        } else {
+            names.add(panel.getName());
             //TraceManager.addDev("Lenght of elements: " + components.size() );
-            tmltranslator.tmlcp.TMLCPActivityDiagram AD  = new tmltranslator.tmlcp.TMLCPActivityDiagram( panel.getName(), panel );
+            tmltranslator.tmlcp.TMLCPActivityDiagram AD = new tmltranslator.tmlcp.TMLCPActivityDiagram(panel.getName(), panel);
             int k;
             TGComponent component;
             String compID;
 
-            for( k = 0; k < components.size(); k++ )        {
+            for (k = 0; k < components.size(); k++) {
                 component = components.get(k);
                 compID = component.getName() + "_#" + AD.getSize();
-                if( component instanceof ui.tmlcp.TMLCPStartState )     {
+                if (component instanceof ui.tmlcp.TMLCPStartState) {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() );
-                    start = new tmltranslator.tmlcp.TMLCPStart( compID, component );
-                    AD.setStartElement( start );
-                    AD.addTMLCPElement( start );        //CAREFUL: the elements are not added in the same order as they appear in the GUI
+                    start = new tmltranslator.tmlcp.TMLCPStart(compID, component);
+                    AD.setStartElement(start);
+                    AD.addTMLCPElement(start);        //CAREFUL: the elements are not added in the same order as they appear in the GUI
                 }
-                if( component instanceof ui.tmlcp.TMLCPStopState )      {
+                if (component instanceof ui.tmlcp.TMLCPStopState) {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    stop = new tmltranslator.tmlcp.TMLCPStop( compID, component );
+                    stop = new tmltranslator.tmlcp.TMLCPStop(compID, component);
                     AD.addTMLCPElement(stop);
                 }
-                if( component instanceof ui.tmlcp.TMLCPRefSD )  {
+                if (component instanceof ui.tmlcp.TMLCPRefSD) {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    refSD = new tmltranslator.tmlcp.TMLCPRefSD( compID, component );
-                    AD.addTMLCPElement( refSD );
+                    refSD = new tmltranslator.tmlcp.TMLCPRefSD(compID, component);
+                    AD.addTMLCPElement(refSD);
                 }
-                if( component instanceof ui.tmlcp.TMLCPRefAD )  {
+                if (component instanceof ui.tmlcp.TMLCPRefAD) {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    refAD = new tmltranslator.tmlcp.TMLCPRefAD( compID, component );
-                    AD.addTMLCPElement( refAD );
+                    refAD = new tmltranslator.tmlcp.TMLCPRefAD(compID, component);
+                    AD.addTMLCPElement(refAD);
                 }
-                if( component instanceof ui.tmlcp.TMLCPJunction )       {
+                if (component instanceof ui.tmlcp.TMLCPJunction) {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    junction = new tmltranslator.tmlcp.TMLCPJunction( compID, component );
-                    AD.addTMLCPElement( junction );
+                    junction = new tmltranslator.tmlcp.TMLCPJunction(compID, component);
+                    AD.addTMLCPElement(junction);
                 }
-                if( component instanceof ui.tmlcp.TMLCPJoin )   {
+                if (component instanceof ui.tmlcp.TMLCPJoin) {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    join = new tmltranslator.tmlcp.TMLCPJoin( compID, component );
-                    AD.addTMLCPElement( join );
+                    join = new tmltranslator.tmlcp.TMLCPJoin(compID, component);
+                    AD.addTMLCPElement(join);
                 }
-                if( component instanceof ui.tmlcp.TMLCPFork )   {
+                if (component instanceof ui.tmlcp.TMLCPFork) {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    fork = new tmltranslator.tmlcp.TMLCPFork( compID, component );
-                    AD.addTMLCPElement( fork );
+                    fork = new tmltranslator.tmlcp.TMLCPFork(compID, component);
+                    AD.addTMLCPElement(fork);
                 }
-                if( component instanceof ui.tmlcp.TMLCPForLoop )   {
+                if (component instanceof ui.tmlcp.TMLCPForLoop) {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    loop = new tmltranslator.tmlcp.TMLCPForLoop( compID, component );
-                    AD.addTMLCPElement( loop );
-                    loop.setInit(((ui.tmlcp.TMLCPForLoop)(component)).getInit());
-                    loop.setCondition(((ui.tmlcp.TMLCPForLoop)(component)).getCondition());
-                    loop.setIncrement(((ui.tmlcp.TMLCPForLoop)(component)).getIncrement());
+                    loop = new tmltranslator.tmlcp.TMLCPForLoop(compID, component);
+                    AD.addTMLCPElement(loop);
+                    loop.setInit(((ui.tmlcp.TMLCPForLoop) (component)).getInit());
+                    loop.setCondition(((ui.tmlcp.TMLCPForLoop) (component)).getCondition());
+                    loop.setIncrement(((ui.tmlcp.TMLCPForLoop) (component)).getIncrement());
 
                 }
-                if( component instanceof ui.tmlcp.TMLCPChoice ) {
+                if (component instanceof ui.tmlcp.TMLCPChoice) {
                     //TraceManager.addDev( k + component.getName() + "\t" + component.getValue() + "\t" + component.getY());
                     // old way: adding guards choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), ((ui.tmlcp.TMLCPChoice) component).getGuards(), component );
-                    choice = new tmltranslator.tmlcp.TMLCPChoice( compID, null, component );
-                    AD.addTMLCPElement( choice );
+                    choice = new tmltranslator.tmlcp.TMLCPChoice(compID, null, component);
+                    AD.addTMLCPElement(choice);
                 }
                 /*if( component instanceof ui.tmlcp.TGConnectorTMLCP)     {
                 //TraceManager.addDev( k + " " + ((ui.TGConnector)component).getTGConnectingPointP1().getFather().getName() + "\t" +
@@ -3130,11 +3148,11 @@ public class GTMLModeling  {
                 }*/
             }   //End of for loop over components
 
-                // Handling connectors
-            for( k = 0; k < components.size(); k++ )        {
+            // Handling connectors
+            for (k = 0; k < components.size(); k++) {
                 component = components.get(k);
                 //compID = component.getName() + "__" + elements.size();
-                if( component instanceof ui.tmlcp.TGConnectorTMLCP)     {
+                if (component instanceof ui.tmlcp.TGConnectorTMLCP) {
                     //TraceManager.addDev( k + " " + ((ui.TGConnector)component).getTGConnectingPointP1().getFather().getName() + "\t" +
                     //                                                                          ((ui.TGConnector)component).getTGConnectingPointP2().getFather().getName() + "\t" + component.getY() );
                     //Gathering start and end names;
@@ -3142,15 +3160,15 @@ public class GTMLModeling  {
                     TGComponent stc, enc;
                     TMLCPElement source, dest;
 
-                    stc = (TGComponent)(((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP1().getFather());
-                    enc = (TGComponent)(((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP2().getFather());
+                    stc = (TGComponent) (((ui.tmlcp.TGConnectorTMLCP) component).getTGConnectingPointP1().getFather());
+                    enc = (TGComponent) (((ui.tmlcp.TGConnectorTMLCP) component).getTGConnectingPointP2().getFather());
                     source = AD.getElementByReference(stc);
                     dest = AD.getElementByReference(enc);
 
                     if ((source != null) && (dest != null)) {
                         source.addNextElement(dest);
                         if (source instanceof tmltranslator.tmlcp.TMLCPChoice) {
-                            ((tmltranslator.tmlcp.TMLCPChoice)source).addGuard(((ui.tmlcp.TGConnectorTMLCP)component).getGuard());
+                            ((tmltranslator.tmlcp.TMLCPChoice) source).addGuard(((ui.tmlcp.TGConnectorTMLCP) component).getGuard());
                         }
                     }
 
@@ -3168,8 +3186,8 @@ public class GTMLModeling  {
     }   //End of method createActivityDiagramDataStructure
 
 
-    private tmltranslator.tmlcp.TMLCPSequenceDiagram createSequenceDiagramDataStructure( ui.tmlsd.TMLSDPanel panel,
-                                                                                         List<String> names )      throws MalformedTMLDesignException {
+    private tmltranslator.tmlcp.TMLCPSequenceDiagram createSequenceDiagramDataStructure(ui.tmlsd.TMLSDPanel panel,
+                                                                                        List<String> names) throws MalformedTMLDesignException {
 
         List<TAttribute> attributes;
         int index1;
@@ -3185,128 +3203,121 @@ public class GTMLModeling  {
         //      String delims = "[ +=:;]+";             //the delimiter chars used to parse attributes of SD instance
 
         //TraceManager.addDev( "ADDING TO DATA STRUCTURE THE DIAGRAM " + panel.getName() );
-        if( nameInUse( names, panel.getName() ) ) {
+        if (nameInUse(names, panel.getName())) {
             String msg = panel.getName() + " already exists";
-            UICheckingError ce = new UICheckingError( CheckingError.STRUCTURE_ERROR, "Two diagrams have the same name: " + panel.getName() );
-            ce.setTDiagramPanel( tmlcpp.tmlcpp );
+            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two diagrams have the same name: " + panel.getName());
+            ce.setTDiagramPanel(tmlcpp.tmlcpp);
             //ce.setTGComponent( components );
-            checkingErrors.add( ce );
-            throw new MalformedTMLDesignException( msg );
+            checkingErrors.add(ce);
+            throw new MalformedTMLDesignException(msg);
             /*TraceManager.addDev( "ERROR: two diagrams have the same name!" );
               return new tmltranslator.tmlcp.TMLCPSequenceDiagram( "ERROR", panel );*/
-        }
-        else {
-            names.add( panel.getName() );
-            tmltranslator.tmlcp.TMLCPSequenceDiagram SD = new tmltranslator.tmlcp.TMLCPSequenceDiagram( panel.getName(), panel );
+        } else {
+            names.add(panel.getName());
+            tmltranslator.tmlcp.TMLCPSequenceDiagram SD = new tmltranslator.tmlcp.TMLCPSequenceDiagram(panel.getName(), panel);
             List<TGComponent> elemList = panel.getComponentList();
             //TraceManager.addDev("Adding to the data structure the elements of: " + panel.getName() );
             //order messages according to the inverse of Y coordinate
             int j;
             TGComponent elem;
-            for(j = 0; j < elemList.size(); j++ )  {
+            for (j = 0; j < elemList.size(); j++) {
                 elem = elemList.get(j);
                 //include the package name of the class to avoid confusion with the graphical TMLSDInstance
-                if( elem instanceof TMLSDStorageInstance )      {
-                    instance = new tmltranslator.tmlcp.TMLSDInstance( elem.getName(), elem, "STORAGE" );
+                if (elem instanceof TMLSDStorageInstance) {
+                    instance = new tmltranslator.tmlcp.TMLSDInstance(elem.getName(), elem, "STORAGE");
                     TMLSDStorageInstance storage = (TMLSDStorageInstance) elemList.get(j);
                     attributes = storage.getAttributes();
-                    for( index1 = 0; index1 < attributes.size(); index1++ )     {       // an attribute is a variable declaration
-                        attribute = attributes.get( index1 );
-                        if( attribute.getType() == TAttribute.NATURAL )       {
-                            type = new TMLType( TMLType.NATURAL );
-                        }
-                        else {
-                            if( attribute.getType() == TAttribute.BOOLEAN )   {
-                                type = new TMLType( TMLType.BOOLEAN );
-                            }
-                            else        {
-                                type = new TMLType( TMLType.ADDRESS );
+                    for (index1 = 0; index1 < attributes.size(); index1++) {       // an attribute is a variable declaration
+                        attribute = attributes.get(index1);
+                        if (attribute.getType() == TAttribute.NATURAL) {
+                            type = new TMLType(TMLType.NATURAL);
+                        } else {
+                            if (attribute.getType() == TAttribute.BOOLEAN) {
+                                type = new TMLType(TMLType.BOOLEAN);
+                            } else {
+                                type = new TMLType(TMLType.ADDRESS);
                             }
                         }
-                        instance.addAttribute( new TMLAttribute( attribute.getId(), storage.getName(), type, attribute.getInitialValue() ) );
+                        instance.addAttribute(new TMLAttribute(attribute.getId(), storage.getName(), type, attribute.getInitialValue()));
                     }
-                    if( storage.getNumberInternalComponents() > 0 )     {       // action states are stored as internal components of an instance
+                    if (storage.getNumberInternalComponents() > 0) {       // action states are stored as internal components of an instance
                         components = storage.getInternalComponents();
-                        for( index2 = 0; index2 < storage.getNumberInternalComponents(); index2++ )     {
-                            instance.addAction( new TMLSDAction( components[index2].getValue(), storage.getName(), components[index2], components[index2].getY() ) );
+                        for (index2 = 0; index2 < storage.getNumberInternalComponents(); index2++) {
+                            instance.addAction(new TMLSDAction(components[index2].getValue(), storage.getName(), components[index2], components[index2].getY()));
                         }
                     }
-                    SD.addInstance( instance );
+                    SD.addInstance(instance);
                 }
-                if( elem instanceof TMLSDControllerInstance )   {
+                if (elem instanceof TMLSDControllerInstance) {
                     TMLSDControllerInstance controller = (TMLSDControllerInstance) elemList.get(j);
-                    instance = new tmltranslator.tmlcp.TMLSDInstance( controller.getName(), elem, "CONTROLLER" );
+                    instance = new tmltranslator.tmlcp.TMLSDInstance(controller.getName(), elem, "CONTROLLER");
                     attributes = controller.getAttributes();
-                    for( index1 = 0; index1 < attributes.size(); index1++ )     {       // an attribute is a variable declaration
-                        attribute = attributes.get( index1 );
-                        if( attribute.getType() == TAttribute.NATURAL )       {
-                            type = new TMLType( TMLType.NATURAL );
-                        }
-                        else {
-                            if( attribute.getType() == TAttribute.BOOLEAN )   {
-                                type = new TMLType( TMLType.BOOLEAN );
-                            }
-                            else        {
-                                type = new TMLType( TMLType.ADDRESS );
+                    for (index1 = 0; index1 < attributes.size(); index1++) {       // an attribute is a variable declaration
+                        attribute = attributes.get(index1);
+                        if (attribute.getType() == TAttribute.NATURAL) {
+                            type = new TMLType(TMLType.NATURAL);
+                        } else {
+                            if (attribute.getType() == TAttribute.BOOLEAN) {
+                                type = new TMLType(TMLType.BOOLEAN);
+                            } else {
+                                type = new TMLType(TMLType.ADDRESS);
                             }
                         }
-                        instance.addAttribute( new TMLAttribute( attribute.getId(), controller.getName(), type, attribute.getInitialValue() ) );
+                        instance.addAttribute(new TMLAttribute(attribute.getId(), controller.getName(), type, attribute.getInitialValue()));
                     }
-                    if( controller.getNumberInternalComponents() > 0 )  {       //Action states are stored as internal components of an instance
+                    if (controller.getNumberInternalComponents() > 0) {       //Action states are stored as internal components of an instance
                         components = controller.getInternalComponents();
-                        for( index2 = 0; index2 < controller.getNumberInternalComponents(); index2++ )  {       //get action states
-                            instance.addAction( new TMLSDAction( components[index2].getValue(), controller.getName(), components[index2], components[index2].getY() ) );
+                        for (index2 = 0; index2 < controller.getNumberInternalComponents(); index2++) {       //get action states
+                            instance.addAction(new TMLSDAction(components[index2].getValue(), controller.getName(), components[index2], components[index2].getY()));
                         }
                     }
-                    SD.addInstance( instance );
+                    SD.addInstance(instance);
                 }
-                if( elem instanceof TMLSDTransferInstance )     {
+                if (elem instanceof TMLSDTransferInstance) {
                     TMLSDTransferInstance transfer = (TMLSDTransferInstance) elemList.get(j);
-                    instance = new tmltranslator.tmlcp.TMLSDInstance( transfer.getName(), elem, "TRANSFER" );
+                    instance = new tmltranslator.tmlcp.TMLSDInstance(transfer.getName(), elem, "TRANSFER");
                     attributes = transfer.getAttributes();
-                    for( index1 = 0; index1 < attributes.size(); index1++ )     {       // an attribute is a variable declaration
-                        attribute = attributes.get( index1 );
-                        if( attribute.getType() == TAttribute.NATURAL )       {
-                            type = new TMLType( TMLType.NATURAL );
-                        }
-                        else {
-                            if( attribute.getType() == TAttribute.BOOLEAN )   {
-                                type = new TMLType( TMLType.BOOLEAN );
-                            }
-                            else        {
-                                type = new TMLType( TMLType.ADDRESS );
+                    for (index1 = 0; index1 < attributes.size(); index1++) {       // an attribute is a variable declaration
+                        attribute = attributes.get(index1);
+                        if (attribute.getType() == TAttribute.NATURAL) {
+                            type = new TMLType(TMLType.NATURAL);
+                        } else {
+                            if (attribute.getType() == TAttribute.BOOLEAN) {
+                                type = new TMLType(TMLType.BOOLEAN);
+                            } else {
+                                type = new TMLType(TMLType.ADDRESS);
                             }
                         }
-                        instance.addAttribute( new TMLAttribute( attribute.getId(), transfer.getName(), type, attribute.getInitialValue() ) );
+                        instance.addAttribute(new TMLAttribute(attribute.getId(), transfer.getName(), type, attribute.getInitialValue()));
                     }
-                    if( transfer.getNumberInternalComponents() > 0 )    {       //Action states are stored as internal components of an instance
+                    if (transfer.getNumberInternalComponents() > 0) {       //Action states are stored as internal components of an instance
                         components = transfer.getInternalComponents();
-                        for( index2 = 0; index2 < transfer.getNumberInternalComponents(); index2++ )    {       //get action states
-                            instance.addAction( new TMLSDAction( components[index2].getValue(), transfer.getName(), components[index2], components[index2].getY() ) );
+                        for (index2 = 0; index2 < transfer.getNumberInternalComponents(); index2++) {       //get action states
+                            instance.addAction(new TMLSDAction(components[index2].getValue(), transfer.getName(), components[index2], components[index2].getY()));
                         }
                     }
-                    SD.addInstance( instance );
+                    SD.addInstance(instance);
                 }
 
             }   //End of for over internal elements
-            for(j = 0; j < elemList.size(); j++ )  {
+            for (j = 0; j < elemList.size(); j++) {
                 elem = elemList.get(j);
-                if( elem instanceof TGConnectorMessageTMLSD )   {
+                if (elem instanceof TGConnectorMessageTMLSD) {
                     //TraceManager.addDev("Analyzing message:" + elem);
                     connector = (TGConnectorMessageTMLSD) elemList.get(j);
                     String sender = connector.getTGConnectingPointP1().getFather().getName();
                     String receiver = connector.getTGConnectingPointP2().getFather().getName();
                     //Should check that instances do not have multiple names
-                    message = new TMLSDMessage( connector.getName(), sender, receiver, connector.getY(), connector, connector.getParams() );
-                    for( tmltranslator.tmlcp.TMLSDInstance tempInstance: SD.getInstances() )    {
-                        if( tempInstance.getName().equals( sender ) )   {
+                    message = new TMLSDMessage(connector.getName(), sender, receiver, connector.getY(), connector, connector.getParams());
+                    for (tmltranslator.tmlcp.TMLSDInstance tempInstance : SD.getInstances()) {
+                        if (tempInstance.getName().equals(sender)) {
                             //TraceManager.addDev( "Adding message " + message.toString() + " to instance " + tempInstance.toString() );
-                            tempInstance.addMessage( message, TMLSDEvent.SEND_MESSAGE_EVENT );
+                            tempInstance.addMessage(message, TMLSDEvent.SEND_MESSAGE_EVENT);
                             //break;
                         }
-                        if( tempInstance.getName().equals( receiver ) )   {
+                        if (tempInstance.getName().equals(receiver)) {
                             //TraceManager.addDev( "Adding message " + message.toString() + " to instance " + tempInstance.toString() );
-                            tempInstance.addMessage( message, TMLSDEvent.RECEIVE_MESSAGE_EVENT );
+                            tempInstance.addMessage(message, TMLSDEvent.RECEIVE_MESSAGE_EVENT);
                             //break;
                         }
                     }
@@ -3343,14 +3354,14 @@ public class GTMLModeling  {
         TMLTaskOperator task;
         TMLCPrimitiveComponent pc;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
 
             if (tgc instanceof TMLArchiNode) {
                 Vector<TGComponent> tmp;
 
-                artifacts = ((TMLArchiNode)(tgc)).getAllTMLArchiArtifacts();
-                for( TMLArchiArtifact artifact:artifacts) {
+                artifacts = ((TMLArchiNode) (tgc)).getAllTMLArchiArtifacts();
+                for (TMLArchiArtifact artifact : artifacts) {
                     namePanel = artifact.getReferenceTaskName();
 
                     try {
@@ -3358,7 +3369,7 @@ public class GTMLModeling  {
 
                         // Regular design panel
                         if (tup instanceof TMLDesignPanel) {
-                            tmldp = (TMLDesignPanel)tup;
+                            tmldp = (TMLDesignPanel) tup;
                             if (panels.contains(tmldp)) {
                                 index = panels.indexOf(tmldp);
                                 tmp = taskss.get(index);
@@ -3374,8 +3385,7 @@ public class GTMLModeling  {
 
                             if (task != null) {
                                 tmp.add(task);
-                            }
-                            else {
+                            } else {
                                 UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Task " + artifact.getTaskName() + " referenced by artifact " + artifact.getValue() + " is unknown");
                                 ce.setTDiagramPanel(tmlap.tmlap);
                                 ce.setTGComponent(tgc);
@@ -3384,7 +3394,7 @@ public class GTMLModeling  {
 
                             // Component design panel
                         } else if (tup instanceof TMLComponentDesignPanel) {
-                            tmlcdp = (TMLComponentDesignPanel)(tup);
+                            tmlcdp = (TMLComponentDesignPanel) (tup);
                             if (cpanels.contains(tmlcdp)) {
                                 index = cpanels.indexOf(tmlcdp);
                                 tmp = taskss.get(index);
@@ -3421,14 +3431,14 @@ public class GTMLModeling  {
         GTMLModeling gtml;
         String s;
         index = 0;
-        for(TMLDesignPanel panel: panels) {
-            gtml =  new GTMLModeling(panel, false);
+        for (TMLDesignPanel panel : panels) {
+            gtml = new GTMLModeling(panel, false);
             gtml.putPrefixName(true);
-            gtml.setTasks( taskss.get(index) );
-            index ++;
+            gtml.setTasks(taskss.get(index));
+            index++;
             tmpm = gtml.translateToTMLModeling(false);
             warnings.addAll(gtml.getCheckingWarnings());
-            if (gtml.getCheckingErrors().size() >0) {
+            if (gtml.getCheckingErrors().size() > 0) {
                 checkingErrors.addAll(gtml.getCheckingErrors());
                 return false;
             }
@@ -3440,14 +3450,14 @@ public class GTMLModeling  {
         }
 
         if (cpanels.size() > 0) {
-            for(TMLComponentDesignPanel panel: cpanels) {
+            for (TMLComponentDesignPanel panel : cpanels) {
                 this.tmlcdp = panel;
-                gtml =  new GTMLModeling(panel, false);
+                gtml = new GTMLModeling(panel, false);
                 gtml.setComponents(allcomp);
                 gtml.putPrefixName(true);
                 tmpm = gtml.translateToTMLModeling(true, false);
                 warnings.addAll(gtml.getCheckingWarnings());
-                if (gtml.getCheckingErrors().size() >0) {
+                if (gtml.getCheckingErrors().size() > 0) {
                     checkingErrors.addAll(gtml.getCheckingErrors());
                     return false;
                 }
@@ -3496,12 +3506,12 @@ public class GTMLModeling  {
         // Properties of artifacts
         iterator = components.listIterator();
         TMLTask ttask;
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             //TraceManager.addDev("next");
             tgc = iterator.next();
             if (tgc instanceof TMLArchiNode) {
-                artifacts = ((TMLArchiNode)(tgc)).getAllTMLArchiArtifacts();
-                for(TMLArchiArtifact artifact:artifacts) {
+                artifacts = ((TMLArchiNode) (tgc)).getAllTMLArchiArtifacts();
+                for (TMLArchiArtifact artifact : artifacts) {
                     s = artifact.getReferenceTaskName() + "__" + artifact.getTaskName();
                     //TraceManager.addDev( "Exploring " + s );
                     s = s.replaceAll("\\s", "");
@@ -3597,32 +3607,32 @@ public class GTMLModeling  {
         //     String s;
         TMLArchiCPNode cp = null;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
             //TraceManager.addDev("---------------- tgc=" + tgc);
             if (tgc instanceof TMLArchiCPNode) {
-				try {
-				    cp = (TMLArchiCPNode)tgc;
-				    TMLCPLib tmlcplib = new TMLCPLib( cp.getCompleteName(), cp.getReference(), tgc, cp.getCPMEC() );
-				    map.addTMLCPLib(tmlcplib);
-				    tmlcplib.setMappedUnits(cp.getMappedUnits());
-				    tmlcplib.setAssignedAttributes( cp.getAssignedAttributes() );
-				    
-				    tmlcplib.setTransferTypes( cp.getTransferTypes() );
-				    
-				    // Handling mapped artifacts
-				    for (TMLArchiPortArtifact artifact: cp.getPortArtifactList()) {
-					TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority(), artifact.getBufferParameters() );
-					tmlcplib.addArtifact(arti);
-					//TraceManager.addDev("Adding CP artifact:" + arti);
-				    }
-				} catch (Exception e) {
-				    TraceManager.addDev("\n\n==========> Badly formed TMLCPLib:" + cp + "\nADDING WARNING\n");
-				    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "CP " +  cp.getCompleteName() + " has been removed (invalid CP)");
-		                    ce.setTDiagramPanel(tmlap.tmlap);
-		                    ce.setTGComponent(cp);
-		                    warnings.add(ce);		    
-				}
+                try {
+                    cp = (TMLArchiCPNode) tgc;
+                    TMLCPLib tmlcplib = new TMLCPLib(cp.getCompleteName(), cp.getReference(), tgc, cp.getCPMEC());
+                    map.addTMLCPLib(tmlcplib);
+                    tmlcplib.setMappedUnits(cp.getMappedUnits());
+                    tmlcplib.setAssignedAttributes(cp.getAssignedAttributes());
+
+                    tmlcplib.setTransferTypes(cp.getTransferTypes());
+
+                    // Handling mapped artifacts
+                    for (TMLArchiPortArtifact artifact : cp.getPortArtifactList()) {
+                        TMLCPLibArtifact arti = new TMLCPLibArtifact(artifact.getName(), artifact, artifact.getValue(), artifact.getPortName(), artifact.getMappedMemory(), artifact.getPriority(), artifact.getBufferParameters());
+                        tmlcplib.addArtifact(arti);
+                        //TraceManager.addDev("Adding CP artifact:" + arti);
+                    }
+                } catch (Exception e) {
+                    TraceManager.addDev("\n\n==========> Badly formed TMLCPLib:" + cp + "\nADDING WARNING\n");
+                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "CP " + cp.getCompleteName() + " has been removed (invalid CP)");
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(cp);
+                    warnings.add(ce);
+                }
             }
         }
     }
@@ -3646,25 +3656,25 @@ public class GTMLModeling  {
         TMLElement elt;
         String s;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tgc = iterator.next();
-		    //TraceManager.addDev(" is custom component?" + tgc + " class=" + tgc.getClass());
-	
-		    // Custom values (for plugin)
-		    if (tgc instanceof TGComponentPlugin) {
-				//TraceManager.addDev("custom component found:" + tgc);
-				String val = ((TGComponentPlugin)(tgc)).getCustomValue();
-				if (val != null) {
-				    //TraceManager.addDev("Adding custom value:" +  val);
-				    map.addCustomValue(val);
-				}
-		    }
+            //TraceManager.addDev(" is custom component?" + tgc + " class=" + tgc.getClass());
 
-		    // Execution nodes
-            node = archi.getHwNodeByName( tgc.getName() );
-            if( ( node != null ) && ( node instanceof HwExecutionNode ) ) {     //why checking this instanceof?
-                artifacts = ( (TMLArchiNode)(tgc) ).getAllTMLArchiArtifacts();
-                for( TMLArchiArtifact artifact:artifacts ) {
+            // Custom values (for plugin)
+            if (tgc instanceof TGComponentPlugin) {
+                //TraceManager.addDev("custom component found:" + tgc);
+                String val = ((TGComponentPlugin) (tgc)).getCustomValue();
+                if (val != null) {
+                    //TraceManager.addDev("Adding custom value:" +  val);
+                    map.addCustomValue(val);
+                }
+            }
+
+            // Execution nodes
+            node = archi.getHwNodeByName(tgc.getName());
+            if ((node != null) && (node instanceof HwExecutionNode)) {     //why checking this instanceof?
+                artifacts = ((TMLArchiNode) (tgc)).getAllTMLArchiArtifacts();
+                for (TMLArchiArtifact artifact : artifacts) {
                     //TraceManager.addDev("Exploring artifact " + artifact.getValue());
                     s = artifact.getReferenceTaskName();
                     ArchUnitMEC mec = artifact.getArchUnitMEC();
@@ -3676,11 +3686,11 @@ public class GTMLModeling  {
                     //TraceManager.addDev("3) Trying to get task named:" + s);
                     task = tmlm.getTMLTaskByName(s);
                     if (task != null) {
-                        if( operationType != -1 )       {
-                            task.addOperationType( operationType );
+                        if (operationType != -1) {
+                            task.addOperationType(operationType);
                         }
-                        node.addMECToHwExecutionNode( mec );
-                        map.addTaskToHwExecutionNode(task, (HwExecutionNode)node);
+                        node.addMECToHwExecutionNode(mec);
+                        map.addTaskToHwExecutionNode(task, (HwExecutionNode) node);
                     } else {
                         TraceManager.addDev("Null task. Raising an error");
                         String msg = "The task named " + artifact.getTaskName() + " was not found";
@@ -3694,25 +3704,24 @@ public class GTMLModeling  {
 
             // Other nodes (memory, bridge, bus, VGMN, crossbar)
             //}
-            if ((tgc instanceof TMLArchiBUSNode) ||(tgc instanceof TMLArchiVGMNNode) || (tgc instanceof TMLArchiCrossbarNode) ||(tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode) || (tgc instanceof TMLArchiFirewallNode)) {
+            if ((tgc instanceof TMLArchiBUSNode) || (tgc instanceof TMLArchiVGMNNode) || (tgc instanceof TMLArchiCrossbarNode) || (tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode) || (tgc instanceof TMLArchiDMANode) || (tgc instanceof TMLArchiFirewallNode)) {
                 node = archi.getHwNodeByName(tgc.getName());
                 if ((node != null) && (node instanceof HwCommunicationNode)) {
-                    if (tgc instanceof TMLArchiFirewallNode){
-                        map.firewall=true;
+                    if (tgc instanceof TMLArchiFirewallNode) {
+                        map.firewall = true;
                     }
-                    artifactscomm = ((TMLArchiCommunicationNode)(tgc)).getChannelArtifactList();
-                    for( TMLArchiCommunicationArtifact artifact:artifactscomm ) {
+                    artifactscomm = ((TMLArchiCommunicationNode) (tgc)).getChannelArtifactList();
+                    for (TMLArchiCommunicationArtifact artifact : artifactscomm) {
                         //TraceManager.addDev("Exploring artifact " + artifact.getValue());
                         s = artifact.getReferenceCommunicationName();
                         s = s.replaceAll("\\s", "");
                         s = s + "__" + artifact.getCommunicationName();
                         //TraceManager.addDev( "s: " + s );
                         String[] vectChNames = artifact.getCommunicationName().split("__");
-                        if( vectChNames.length > 1 )    {
+                        if (vectChNames.length > 1) {
                             s = artifact.getReferenceCommunicationName() + "__" + vectChNames[0] + "__" + artifact.getReferenceCommunicationName()
-                                + "__" + vectChNames[1];
-                        }
-                        else    {
+                                    + "__" + vectChNames[1];
+                        } else {
                             s = artifact.getReferenceCommunicationName() + "__" + vectChNames[0];
                         }
                         s = s.replaceAll("\\s", "");
@@ -3721,52 +3730,50 @@ public class GTMLModeling  {
                         //TraceManager.addDev("comm elts: " + tmlm.getStringListCommunicationElements());
                         if (elt instanceof TMLChannel) {
                             //TraceManager.addDev("Setting priority of " + elt + " to " + artifact.getPriority() );
-                            ((TMLChannel)(elt)).setPriority(artifact.getPriority());
+                            ((TMLChannel) (elt)).setPriority(artifact.getPriority());
                         }
-                        if(elt != null) {
+                        if (elt != null) {
                             //TraceManager.addDev( "Adding communication " + s + " to Hardware Communication Node " + node.getName() );
-                            map.addCommToHwCommNode(elt, (HwCommunicationNode)node);
+                            map.addCommToHwCommNode(elt, (HwCommunicationNode) node);
                         } else {
                             //TraceManager.addDev("Null mapping: no element named: " + s );
                         }
                     }
-                    artifactsEvt = ( (TMLArchiCommunicationNode)(tgc) ).getEventArtifactList();
-                    for( TMLArchiEventArtifact artifact:artifactsEvt ) {
+                    artifactsEvt = ((TMLArchiCommunicationNode) (tgc)).getEventArtifactList();
+                    for (TMLArchiEventArtifact artifact : artifactsEvt) {
                         //TraceManager.addDev("Exploring artifact " + artifact.getValue());
                         s = artifact.getReferenceEventName();
-                        s = s.replaceAll( "\\s", "" );
+                        s = s.replaceAll("\\s", "");
                         s = s + "__" + artifact.getEventArtifactName();
                         //TraceManager.addDev( "Searching for:" + s );
                         elt = tmlm.getCommunicationElementByName(s);
                         //TraceManager.addDev( "evt elts:" + tmlm.getStringListCommunicationElements() );
 
-                        if( elt instanceof TMLChannel ) {
+                        if (elt instanceof TMLChannel) {
                             //TraceManager.addDev("Setting priority");
-                            ( (TMLChannel)(elt) ).setPriority( artifact.getPriority() );
+                            ((TMLChannel) (elt)).setPriority(artifact.getPriority());
                         }
-                        if ( elt != null )      {
-                            map.addCommToHwCommNode( elt, (HwCommunicationNode)node );
+                        if (elt != null) {
+                            map.addCommToHwCommNode(elt, (HwCommunicationNode) node);
                         } else {
                             //TraceManager.addDev( "Null mapping: no element named: " + artifact.getEventArtifactName() );
                         }
                     }
                     //Map keys
-                    ArrayList<TMLArchiKey> keys = ( (TMLArchiCommunicationNode)(tgc) ).getKeyList();
-                    for (TMLArchiKey key:keys){
+                    ArrayList<TMLArchiKey> keys = ((TMLArchiCommunicationNode) (tgc)).getKeyList();
+                    for (TMLArchiKey key : keys) {
                         //TraceManager.addDev("Exploring key " + key.getValue());
                         SecurityPattern sp = tmlm.getSecurityPattern(key.getValue());
-                        if (sp!=null && node instanceof HwMemory){
-                            if (map.mappedSecurity.containsKey(sp)){
-                                map.mappedSecurity.get(sp).add((HwMemory)node);
-                            }
-                            else{
+                        if (sp != null && node instanceof HwMemory) {
+                            if (map.mappedSecurity.containsKey(sp)) {
+                                map.mappedSecurity.get(sp).add((HwMemory) node);
+                            } else {
                                 ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
                                 mems.add((HwMemory) node);
                                 map.mappedSecurity.put(sp, mems);
                                 //TraceManager.addDev("Added key of " + key.getValue());
                             }
-                        }
-                        else {
+                        } else {
                             //System.out.println("Can't map key " + key.getValue());
                         }
                     }
@@ -3781,14 +3788,14 @@ public class GTMLModeling  {
         table.put(s1, s2);
     }
 
-	public String getAttackerChannel(String s){
-		for (String channelName: table.keySet()){
-			if (channelName.split("/")[1].equals(s)){
-				return table.get(channelName);
-			}
-		}
-		return "";
-	}
+    public String getAttackerChannel(String s) {
+        for (String channelName : table.keySet()) {
+            if (channelName.split("/")[1].equals(s)) {
+                return table.get(channelName);
+            }
+        }
+        return "";
+    }
 
     public String getFromTable(TMLTask task, String s) {
         //TraceManager.addDev("TABLE GET: Getting from task=" + task.getName() + " element=" + s);
@@ -3822,7 +3829,7 @@ public class GTMLModeling  {
             return _name;
         }
         //TraceManager.addDev("Making name of " + tgc + " from name = " + _name);
-        String s = tgc.getTDiagramPanel().getMGUI().getTitleOf( tgc.getTDiagramPanel());
+        String s = tgc.getTDiagramPanel().getMGUI().getTitleOf(tgc.getTDiagramPanel());
         s = s.replaceAll("\\s", "");
         s = s + "__" + _name;
         //TraceManager.addDev("Making name=" + s);

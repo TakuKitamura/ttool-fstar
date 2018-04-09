@@ -49,6 +49,7 @@ import myutil.TraceManager;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 /**
@@ -75,11 +76,16 @@ public class TMLSyntaxChecking {
     private final String NO_NEXT_OPERATOR_ERROR = "No next operator";
     private final String SAME_PORT_NAME = "Two ports have the same name";
 
+    private final String TOO_MANY_MEMORIES = "Channel is mapped on more than one memory";
+    private final String INVALID_CHANNEL_PATH = "Channel path is invalid";
+
 
     private ArrayList<TMLError> errors;
     private ArrayList<TMLError> warnings;
     private TMLModeling<?> tmlm;
     private TMLMapping<?> mapping;
+
+    private boolean syntaxCheckForMappingOnly = false;
 
 
     public TMLSyntaxChecking(TMLModeling<?> _tmlm) {
@@ -91,21 +97,37 @@ public class TMLSyntaxChecking {
         tmlm = mapping.getTMLModeling();
     }
 
+    public TMLSyntaxChecking(TMLMapping<?> _mapping, boolean _syntaxCheckForMappingOnly) {
+        mapping = _mapping;
+        syntaxCheckForMappingOnly = _syntaxCheckForMappingOnly;
+        tmlm = mapping.getTMLModeling();
+    }
+
     public void checkSyntax() {
 
         errors = new ArrayList<TMLError>();
         warnings = new ArrayList<TMLError>();
 
         TraceManager.addDev("Checking syntax of TML Mapping/ Modeling");
+        if (!syntaxCheckForMappingOnly) {
 
-        checkReadAndWriteInChannelsEventsAndRequests();
+            checkReadAndWriteInChannelsEventsAndRequests();
 
-        checkActionSyntax();
+            checkActionSyntax();
 
-        checkNextActions();
+            checkNextActions();
 
-        checkPortName();
+            checkPortName();
+        }
+
+        if (mapping != null) {
+            checkMemoriesOfChannels();
+            checkPathToMemory();
+
+            // Check that if their is a memory for a channel, the memory is connected to the path
+        }
     }
+
 
     public int hasErrors() {
         if (errors == null) {
@@ -159,33 +181,33 @@ public class TMLSyntaxChecking {
         HashMap<String, TMLPort> destination = new HashMap<String, TMLPort>();
 
         // Channels
-        for(TMLChannel tmlc: tmlm.getChannels()) {
+        for (TMLChannel tmlc : tmlm.getChannels()) {
             TMLPort p = tmlc.getOriginPort();
             tryToAddPort(p, origin, "origin");
             p = tmlc.getDestinationPort();
             tryToAddPort(p, destination, "destination");
 
-            for(TMLPort po: tmlc.getOriginPorts()) {
+            for (TMLPort po : tmlc.getOriginPorts()) {
                 tryToAddPort(po, origin, "origin");
             }
 
-            for(TMLPort po: tmlc.getDestinationPorts()) {
+            for (TMLPort po : tmlc.getDestinationPorts()) {
                 tryToAddPort(po, destination, "destination");
             }
         }
 
         // Events
-        for(TMLEvent tmle: tmlm.getEvents()) {
+        for (TMLEvent tmle : tmlm.getEvents()) {
             TMLPort p = tmle.getOriginPort();
             tryToAddPort(p, origin, "origin");
             p = tmle.getDestinationPort();
             tryToAddPort(p, destination, "destination");
 
-            for(TMLPort po: tmle.getOriginPorts()) {
+            for (TMLPort po : tmle.getOriginPorts()) {
                 tryToAddPort(po, origin, "origin");
             }
 
-            for(TMLPort po: tmle.getDestinationPorts()) {
+            for (TMLPort po : tmle.getDestinationPorts()) {
                 tryToAddPort(po, destination, "destination");
             }
         }
@@ -217,7 +239,7 @@ public class TMLSyntaxChecking {
         TMLPort inP = map.get(_p.getName());
 
         if (inP != null) {
-            addError(null, null,SAME_PORT_NAME + ": " + _p.getName() + "(" + origin + " ports)", TMLError.ERROR_STRUCTURE);
+            addError(null, null, SAME_PORT_NAME + ": " + _p.getName() + "(" + origin + " ports)", TMLError.ERROR_STRUCTURE);
         } else {
             //TraceManager.addDev("Adding port with name=" + _p.getName() + " for kind=" + origin);
             map.put(_p.getName(), _p);
@@ -619,5 +641,70 @@ public class TMLSyntaxChecking {
         }
         return ret;
     }
+
+
+    // Mapping
+    public void checkMemoriesOfChannels() {
+
+        Iterator<TMLChannel> channelIt = tmlm.getChannels().iterator();
+        while (channelIt.hasNext()) {
+            TMLChannel ch = channelIt.next();
+            int n = mapping.getNbOfMemoriesOfChannel(ch);
+            if (n > 1) {
+                // Too many memories
+                addError(null, null, TOO_MANY_MEMORIES + ": " + ch.getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
+    }
+
+    // For each hw element to which a path is mapped
+    // We must check that both the reader and the writer
+    // can access to that element without going through a CPU
+    public void checkPathToMemory() {
+        Iterator<TMLChannel> channelIt = tmlm.getChannels().iterator();
+        while (channelIt.hasNext()) {
+            TMLChannel ch = channelIt.next();
+            checkPathToMemoryFromCPU(ch);
+            checkPathToMemoryFromAllHwCommNode(ch);
+        }
+    }
+
+    private void checkPathToMemoryFromCPU(TMLChannel ch) {
+        //We must consider all channel sources and destination
+        // We first select all involved tasks
+        ArrayList<TMLTask> tasks = ch.getAllTasks();
+
+        // Then we find the corresponding CPUs
+        for (TMLTask task : tasks) {
+            //We collect all the CPUs
+            //TraceManager.addDev("Collecting all CPUs of task: " + task.getTaskName());
+            for (HwExecutionNode origin : mapping.getAllHwExecutionNodesOfTask(task)) {
+                // And then we check the paths between node and all the nodes of ch
+                for (HwCommunicationNode destination : mapping.getAllCommunicationNodesOfChannel(ch)) {
+                    //TraceManager.addDev("Computing path between " + origin + " and " + destination);
+                    if (!mapping.checkPath(origin, destination)) {
+                        addError(null, null, INVALID_CHANNEL_PATH + ": " + ch.getName(), TMLError.ERROR_STRUCTURE);
+                        return;
+                    }
+                }
+
+            }
+        }
+    }
+
+    private void checkPathToMemoryFromAllHwCommNode(TMLChannel ch) {
+        HwMemory mem = mapping.getMemoryOfChannel(ch);
+        if (mem != null) {
+            for (HwCommunicationNode origin : mapping.getAllCommunicationNodesOfChannel(ch)) {
+                if (origin != mem) {
+                    if (!mapping.checkPath(origin, mem)) {
+                        addError(null, null, INVALID_CHANNEL_PATH + ": " + ch.getName(), TMLError.ERROR_STRUCTURE);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
 
 }
