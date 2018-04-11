@@ -140,12 +140,12 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
 
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
-        panel1.setBorder(new javax.swing.border.TitledBorder("Adding signals"));
+        panel1.setBorder(new javax.swing.border.TitledBorder("Connecting signals"));
         panel1.setMinimumSize(new Dimension(325, 250));
 
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Managing Signals"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("Connected signals"));
         panel2.setMinimumSize(new Dimension(325, 250));
 
         panel3 = new JPanel();
@@ -197,7 +197,7 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         // fourth line panel1
         c1.gridheight = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
-        addButton = new JButton("Add Signals");
+        addButton = new JButton("Connect Signals");
         addButton.addActionListener(this);
         panel1.add(addButton, c1);
 
@@ -232,7 +232,7 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         downButton.addActionListener(this);
         panel2.add(downButton, c2);
 
-        removeButton = new JButton("Remove signals");
+        removeButton = new JButton("Remove connected signals");
         removeButton.addActionListener(this);
         panel2.add(removeButton, c2);
 
@@ -243,6 +243,7 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         c3.weighty = 1;
         c3.weightx = 10.0;
         synchronous = new JRadioButton("synchronous");
+        synchronous.setToolTipText("The sender and receiver must synchronize to exchange a message");
         synchronous.addActionListener(this);
         panel3.add(synchronous, c3);
         isBroadcast = new JCheckBox("Broadcast channel");
@@ -250,6 +251,7 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         panel3.add(isBroadcast, c3);
 
         asynchronous = new JRadioButton("asynchronous");
+        asynchronous.setToolTipText("FIFO-based communication");
         asynchronous.addActionListener(this);
         panel3.add(asynchronous, c3);
         ButtonGroup bt = new ButtonGroup();
@@ -258,6 +260,7 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         asynchronous.setSelected(connector.isAsynchronous());
         synchronous.setSelected(!connector.isAsynchronous());
         isLossy = new JCheckBox("Lossy channel");
+        isLossy.setToolTipText("A lossy channel randomly losses messages");
         isLossy.setSelected(connector.isLossy());
         panel3.add(isLossy, c3);
 
@@ -269,6 +272,7 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         panel3.add(sizeOfFIFO, c3);
 
         blocking = new JCheckBox("Blocking on write when FIFO is full");
+        blocking.setToolTipText("With a non blocking channel, write(m) in a full FIFO losses m");
         blocking.setSelected(connector.isBlocking());
         panel3.add(blocking, c3);
 
@@ -280,7 +284,8 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         c4.weightx = 10.0;
         //panel3.add(new JLabel(" "), c3);
 
-        isPrivate = new JCheckBox("Private channel (an attacker cannot listen to it)");
+        isPrivate = new JCheckBox("Private channel");
+        isPrivate.setToolTipText("An attacker cannot spy messages on private channels");
         isPrivate.setSelected(connector.isPrivate());
         panel4.add(isPrivate, c4);
 

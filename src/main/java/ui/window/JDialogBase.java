@@ -62,6 +62,8 @@ public class JDialogBase extends JDialog {
         this.getRootPane().setDefaultButton(closeButton);
 	}
 
+
+
 	protected void initButtons(Container c,
 							   ActionListener al) {
 

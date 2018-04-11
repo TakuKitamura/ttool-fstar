@@ -47,7 +47,6 @@ import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogPragma;
-import myutil.TraceManager;
 
 import javax.swing.*;
 import java.awt.*;

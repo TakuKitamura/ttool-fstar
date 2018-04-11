@@ -532,7 +532,6 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
 
     public TGComponent isOnOnlyMe(int x1, int y1) {
-
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
         }
@@ -541,7 +540,6 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     public String getStereotype() {
         return stereotype;
-
     }
 
     public String getNodeName() {
@@ -670,7 +668,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         JDialogAvatarBlock jdab = new JDialogAvatarBlock(this.myAttributes, this.myMethods, this.mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab, globalCode, true, mainCode);
         setJDialogOptions(jdab);
 //        jdab.setSize(650, 575);
-        GraphicLib.centerOnParent(jdab, 750, 775);
+        GraphicLib.centerOnParent(jdab, 780, 700);
         jdab.setVisible(true); // blocked until dialog has been closed
         //makeValue();
         //if (oldValue.equals(value)) {
