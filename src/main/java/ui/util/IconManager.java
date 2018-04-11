@@ -57,7 +57,7 @@ public class IconManager {
     //Added by Solange
     public static ImageIcon imgic0, imgic1;
     public static Image img8, img9;
-    public static Image img5100, img5102, img5200;
+    public static Image img5072, img5100, img5102, img5200;
     //Added by Solange
     public static Image img0, img1;
 
@@ -157,7 +157,7 @@ public class IconManager {
     public static ImageIcon imgic5040, imgic5042, imgic5044, imgic5046, imgic5048;
     public static ImageIcon imgic5050, imgic5052, imgic5054, imgic5056, imgic5058;
     public static ImageIcon imgic5060, imgic5062, imgic5064, imgic5066, imgic5068;
-    public static ImageIcon imgic5070;
+    public static ImageIcon imgic5070, imgic5072;
 
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
     public static ImageIcon imgic5110, imgic5112, imgic5113, imgic5114;
@@ -613,6 +613,7 @@ public class IconManager {
     private static String icon5066 = "avatarmadimpact.gif";
     private static String icon5068 = "avatarrdref.gif";
     private static String icon5070 = "avatarlibfunction.gif";
+    private static String icon5072 = "scissors.png";
 
     private static String icon5100 = "avatarhead16.gif";
     private static String icon5102 = "avatarhead32.gif";
@@ -1088,6 +1089,10 @@ public class IconManager {
         imgic5066 = getIcon(icon5066);
         imgic5068 = getIcon(icon5068);
         imgic5070 = getIcon(icon5070);
+        imgic5072 = getIcon(icon5072);
+        if (imgic5072 != null) {
+            img5072 = imgic5072.getImage();
+        }
 
         imgic5100 = getIcon(icon5100);
         imgic5102 = getIcon(icon5102);

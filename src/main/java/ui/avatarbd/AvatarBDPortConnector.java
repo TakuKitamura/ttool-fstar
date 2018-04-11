@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.avatarbd;
 
 
@@ -57,11 +55,12 @@ import java.util.LinkedList;
 import java.util.Vector;
 
 /**
-   * Class AvatarBDPortConnector
-   * Connector used in AVATAR Block Diagrams
-   * Creation: 06/04/2010
-   * @version 1.0 06/04/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarBDPortConnector
+ * Connector used in AVATAR Block Diagrams
+ * Creation: 06/04/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 06/04/2010
  */
 public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;
@@ -87,7 +86,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
 
     public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
         value = "";
         editable = true;
@@ -99,7 +98,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         outSignalsAtDestination = new LinkedList<String>();
     }
 
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
         /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
           g.drawLine(x1, y1, x2, y2);
           } else {
@@ -119,59 +118,67 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
         //g.drawLine(x1, y1, x2, y2);
         Color col = g.getColor();
-        int cz = (int)(tdp.getZoom() * c);
+        int cz = (int) (tdp.getZoom() * c);
         if (isAsynchronous()) {
             g.setColor(Color.WHITE);
         }
-        g.fillRect(x2-(cz/2), y2-(cz/2), cz, cz);
-        g.fillRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);
+        g.fillRect(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
+        g.fillRect(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
         g.setColor(col);
         if (isAsynchronous()) {
-            g.drawRect(x2-(cz/2), y2-(cz/2), cz, cz);
-            g.drawRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);
+            g.drawRect(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
+            g.drawRect(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
             if (isBlocking()) {
-                g.drawLine(x2-(cz/2), y2-(cz/2), x2-(cz/2)+cz, y2-(cz/2)+cz);
-                g.drawLine(x2-(cz/2), y2-(cz/2)+cz, x2-(cz/2)+cz, y2-(cz/2));
-                g.drawLine(p1.getX()-(cz/2), p1.getY()+(cz/2), p1.getX()+(cz/2), p1.getY()-(cz/2));
-                g.drawLine(p1.getX()-(cz/2), p1.getY()-(cz/2), p1.getX()+(cz/2), p1.getY()+(cz/2));
+                g.drawLine(x2 - (cz / 2), y2 - (cz / 2), x2 - (cz / 2) + cz, y2 - (cz / 2) + cz);
+                g.drawLine(x2 - (cz / 2), y2 - (cz / 2) + cz, x2 - (cz / 2) + cz, y2 - (cz / 2));
+                g.drawLine(p1.getX() - (cz / 2), p1.getY() + (cz / 2), p1.getX() + (cz / 2), p1.getY() - (cz / 2));
+                g.drawLine(p1.getX() - (cz / 2), p1.getY() - (cz / 2), p1.getX() + (cz / 2), p1.getY() + (cz / 2));
             }
         }
 
+        if (isLossy) {
+            int czz = (int) (cz * 1.4);
+            int x3 = p1.getX();
+            int y3 = p1.getY();
+            g.drawImage(IconManager.img5072, x3 -cz, y3 + cz/2, null);
+            g.drawImage(IconManager.img5072, x2 -cz, y2 + cz/2, null);
+        }
 
-	if (!isPrivate() /*&& !isAsynchronous()*/) {
-	    int czz = (int)(cz*1.4);
-	    int x3 = p1.getX();
-	    int y3 = p1.getY();
 
-	    Polygon p1 = new Polygon();
-	    p1.addPoint(x2-(czz/2)+czz, y2-cz);
-	    p1.addPoint(x2+(czz/2)+czz, y2-cz);
-	    p1.addPoint(x2+czz, y2-(2*czz));
+        if (!isPrivate() /*&& !isAsynchronous()*/) {
+            int czz = (int) (cz * 1.4);
+            int x3 = p1.getX();
+            int y3 = p1.getY();
 
-	    Polygon p2 = new Polygon();
-	    p2.addPoint(x3-(czz/2)+czz, y3-cz);
-	    p2.addPoint(x3+(czz/2)+czz, y3-cz);
-	    p2.addPoint(x3+czz, y3-(2*czz));
+            Polygon p1 = new Polygon();
+            p1.addPoint(x2 - (czz / 2) + czz, y2 - cz);
+            p1.addPoint(x2 + (czz / 2) + czz, y2 - cz);
+            p1.addPoint(x2 + czz, y2 - (2 * czz));
 
-	    // Adding illuminatis sign at the end
-	    g.setColor(Color.WHITE);
-	    g.fillPolygon(p1);
-	    g.fillPolygon(p2);
+            Polygon p2 = new Polygon();
+            p2.addPoint(x3 - (czz / 2) + czz, y3 - cz);
+            p2.addPoint(x3 + (czz / 2) + czz, y3 - cz);
+            p2.addPoint(x3 + czz, y3 - (2 * czz));
 
-	    g.setColor(col);
-	    g.drawPolygon(p1);
-	    g.drawPolygon(p2);
-	    g.drawOval(x2+czz-4, y2-cz-7, 8, 6); 
-	    g.drawOval(x3+czz-4, y3-cz-7, 8, 6); 
-	    g.fillOval(x2+czz-2, y2-cz-6, 5, 4); 
-	    g.fillOval(x3+czz-2, y3-cz-6, 5, 4); 	    
-	    
-	}
+            // Adding illuminatis sign at the end
+            g.setColor(Color.WHITE);
+            g.fillPolygon(p1);
+            g.fillPolygon(p2);
+
+            g.setColor(col);
+            g.drawPolygon(p1);
+            g.drawPolygon(p2);
+            g.drawOval(x2 + czz - 4, y2 - cz - 7, 8, 6);
+            g.drawOval(x3 + czz - 4, y3 - cz - 7, 8, 6);
+            g.fillOval(x2 + czz - 2, y2 - cz - 6, 5, 4);
+            g.fillOval(x3 + czz - 2, y3 - cz - 6, 5, 4);
+
+        }
 
 
         Point p11;
         if (isp1) {
-            p11 = GraphicLib.intersectionRectangleSegment(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz, x1, y1, x2, y2);
+            p11 = GraphicLib.intersectionRectangleSegment(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz, x1, y1, x2, y2);
         } else {
             p11 = new Point(p_one.x, p_one.y);
         }
@@ -179,7 +186,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             p11 = new Point(p1.getX(), p1.getY());
             //System.out.println("null point");
         }
-        Point p22 = GraphicLib.intersectionRectangleSegment(x2-(cz/2), y2-(cz/2), cz, cz, x1, y1, x2, y2);
+        Point p22 = GraphicLib.intersectionRectangleSegment(x2 - (cz / 2), y2 - (cz / 2), cz, cz, x1, y1, x2, y2);
         if (p22 == null) {
             p22 = new Point(p2.getX(), p2.getY());
             //System.out.println("null point");
@@ -189,9 +196,9 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
         Font f = g.getFont();
         Font fold = f;
-        f = f.deriveFont((float)fontSize);
+        f = f.deriveFont((float) fontSize);
         g.setFont(f);
-        int h = - decY;
+        int h = -decY;
         int step = fontSize + 1;
         int w;
         String s;
@@ -201,7 +208,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             // Signals at origin
             if (inSignalsAtOrigin.size() > 0) {
                 //g.drawString("in:", p1.getX() + decX, p1.getY() + h);
-                for(String iso: inSignalsAtOrigin) {
+                for (String iso : inSignalsAtOrigin) {
                     h += step;
                     s = getShortName(iso);
                     if (p1.getX() <= p2.getX()) {
@@ -215,7 +222,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             if (outSignalsAtOrigin.size() > 0) {
                 //h += step;
                 //g.drawString("out:", p1.getX() + decX, p1.getY() + h);
-                for(String oso: outSignalsAtOrigin) {
+                for (String oso : outSignalsAtOrigin) {
                     h += step;
                     s = getShortName(oso);
                     if (p1.getX() <= p2.getX()) {
@@ -227,11 +234,11 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                 }
             }
             // Signals at destination
-            h = - decY;
+            h = -decY;
             if (outSignalsAtDestination.size() > 0) {
                 //h += step;
                 //g.drawString("out:", p2.getX() + decX, p2.getY() + h);
-                for(String osd: outSignalsAtDestination) {
+                for (String osd : outSignalsAtDestination) {
                     h += step;
                     s = getShortName(osd);
                     if (p1.getX() > p2.getX()) {
@@ -244,7 +251,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             }
             if (inSignalsAtDestination.size() > 0) {
                 //g.drawString("in:", p2.getX() + decX, p2.getY() + h);
-                for(String isd: inSignalsAtDestination) {
+                for (String isd : inSignalsAtDestination) {
                     h += step;
                     s = getShortName(isd);
                     if (p1.getX() > p2.getX()) {
@@ -270,7 +277,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
           }*/
 
         // Animation?
-        if ((TDiagramPanel.AVATAR_ANIMATE_ON) && (isAsynchronous())){
+        if ((TDiagramPanel.AVATAR_ANIMATE_ON) && (isAsynchronous())) {
             //TraceManager.addDev("anim port connector: " + this);
             String messageInformation[] = tdp.getMGUI().hasMessageInformationForAvatarConnector(this);
             if (messageInformation != null) {
@@ -288,11 +295,11 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     }
 
     public AvatarBDBlock getAvatarBDBlock1() {
-        return (AvatarBDBlock)(tdp.getComponentToWhichBelongs(p1));
+        return (AvatarBDBlock) (tdp.getComponentToWhichBelongs(p1));
     }
 
     public AvatarBDBlock getAvatarBDBlock2() {
-        return (AvatarBDBlock)(tdp.getComponentToWhichBelongs(p2));
+        return (AvatarBDBlock) (tdp.getComponentToWhichBelongs(p2));
     }
 
     public boolean editOndoubleClick(JFrame frame) {
@@ -302,12 +309,12 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         AvatarBDBlock block2 = getAvatarBDBlock2();
 
         Vector<String> v = getAssociationSignals();
-	
+
 
         JDialogSignalAssociation jdas = new JDialogSignalAssociation(frame, block1, block2, v, this, "Setting signal association");
         //jdas.setSize(800, 550);
         GraphicLib.centerOnParent(jdas, 800, 550);
-        jdas.setVisible( true ); // blocked until dialog has been closed
+        jdas.setVisible(true); // blocked until dialog has been closed
 
         if (jdas.hasBeenCancelled()) {
             return false;
@@ -321,11 +328,11 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         String assoc;
         AvatarSignal as1, as2;
         int index;
-        for(int i=0; i<v.size(); i++) {
+        for (int i = 0; i < v.size(); i++) {
             assoc = v.get(i);
             as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
             as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
-			System.out.println(as1 + " " + as2 + " " + assoc);
+            System.out.println(as1 + " " + as2 + " " + assoc);
             if ((as1 != null) && (as2 != null)) {
                 index = assoc.indexOf("->");
                 if (index > -1) {
@@ -338,8 +345,8 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             }
         }
 
-	((AvatarBDPanel)tdp).updateSignalAttachement(block2, this);
-	((AvatarBDPanel)tdp).updateSignalAttachement(block1, this);
+        ((AvatarBDPanel) tdp).updateSignalAttachement(block2, this);
+        ((AvatarBDPanel) tdp).updateSignalAttachement(block1, this);
 
         asynchronous = jdas.isAsynchronous();
         blockingFIFO = jdas.isBlocking();
@@ -352,9 +359,9 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             sizeOfFIFO = Math.max(1, sizeOfFIFO);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                                          "Unvalid FIFO size: " + jdas.getSizeOfFIFO(),
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "Unvalid FIFO size: " + jdas.getSizeOfFIFO(),
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
 
@@ -363,22 +370,22 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        for(String iso: inSignalsAtOrigin) {
+        for (String iso : inSignalsAtOrigin) {
             sb.append("<iso value=\"");
             sb.append(iso);
             sb.append("\" />\n");
         }
-        for(String osd: outSignalsAtDestination) {
+        for (String osd : outSignalsAtDestination) {
             sb.append("<osd value=\"");
             sb.append(osd);
             sb.append("\" />\n");
         }
-        for(String isd: inSignalsAtDestination) {
+        for (String isd : inSignalsAtDestination) {
             sb.append("<isd value=\"");
             sb.append(isd);
             sb.append("\" />\n");
         }
-        for(String oso: outSignalsAtOrigin) {
+        for (String oso : outSignalsAtOrigin) {
             sb.append("<oso value=\"");
             sb.append(oso);
             sb.append("\" />\n");
@@ -397,7 +404,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         try {
             NodeList nli;
             Node n1, n2;
@@ -410,12 +417,12 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             //System.out.println("Loading attributes");
             //System.out.println(nl.toString());
 
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
@@ -464,7 +471,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                                 if ((val1 != null) && (!(val1.equals("null")))) {
                                     try {
                                         sizeOfFIFO = Integer.decode(val1).intValue();
-                                    } catch(Exception e) {
+                                    } catch (Exception e) {
                                         sizeOfFIFO = 1024;
                                     }
                                 }
@@ -511,19 +518,19 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return TGComponentManager.AVATARBD_PORT_CONNECTOR;
     }
 
-    public void rescale(double scaleFactor){
+    public void rescale(double scaleFactor) {
         //System.out.println("Rescale connector");
         int xx, yy;
 
-        for(int i=0; i<nbInternalTGComponent; i++) {
+        for (int i = 0; i < nbInternalTGComponent; i++) {
             xx = tgcomponent[i].getX();
             yy = tgcomponent[i].getY();
             //System.out.println("Internal comp xx= " + xx + "  y==" + yy);
             tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
             tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-            xx = (int)(tgcomponent[i].dx);
+            xx = (int) (tgcomponent[i].dx);
             tgcomponent[i].dx = tgcomponent[i].dx - xx;
-            yy = (int)(tgcomponent[i].dy);
+            yy = (int) (tgcomponent[i].dy);
             tgcomponent[i].dy = tgcomponent[i].dy - yy;
 
             tgcomponent[i].setCd(xx, yy);
@@ -556,7 +563,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         Vector<String> v = new Vector<String>();
         String s;
 
-        for(i=0; i<outSignalsAtOrigin.size(); i++) {
+        for (i = 0; i < outSignalsAtOrigin.size(); i++) {
             try {
                 s = makeSignalAssociation(block1, block1.getAvatarSignalFromFullName(outSignalsAtOrigin.get(i)), block2, block2.getAvatarSignalFromFullName(inSignalsAtDestination.get(i)));
                 v.add(s);
@@ -565,7 +572,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             }
         }
 
-        for(i=0; i<inSignalsAtOrigin.size(); i++) {
+        for (i = 0; i < inSignalsAtOrigin.size(); i++) {
             try {
                 s = makeSignalAssociation(block1, block1.getAvatarSignalFromFullName(inSignalsAtOrigin.get(i)), block2, block2.getAvatarSignalFromFullName(outSignalsAtDestination.get(i)));
                 v.add(s);
@@ -604,7 +611,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             return null;
         }
 
-        return _assoc.substring(index0+1, index1).trim();
+        return _assoc.substring(index0 + 1, index1).trim();
     }
 
     public String getSecondSignalOfSignalAssociation(String _assoc) {
@@ -616,7 +623,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         }
 
         index0 = Math.max(index0, index1);
-        _assoc = _assoc.substring(index0+2, _assoc.length());
+        _assoc = _assoc.substring(index0 + 2, _assoc.length());
 
         index0 = _assoc.indexOf(".");
 
@@ -624,32 +631,30 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             return null;
         }
 
-        return _assoc.substring(index0+1, _assoc.length()).trim();
+        return _assoc.substring(index0 + 1, _assoc.length()).trim();
     }
-    public void addSignal(String signal, boolean in, boolean origin){
-	if (in){
-	    if (origin){
-		inSignalsAtOrigin.add(signal);
-	    }
-	    else {
-		inSignalsAtDestination.add(signal);
-	    }
-	}
-	else {
-	    if (origin){
-		outSignalsAtOrigin.add(signal);
-	    }
-	    else {
-		outSignalsAtDestination.add(signal);
-	    }
-	}
-		
+
+    public void addSignal(String signal, boolean in, boolean origin) {
+        if (in) {
+            if (origin) {
+                inSignalsAtOrigin.add(signal);
+            } else {
+                inSignalsAtDestination.add(signal);
+            }
+        } else {
+            if (origin) {
+                outSignalsAtOrigin.add(signal);
+            } else {
+                outSignalsAtDestination.add(signal);
+            }
+        }
+
     }
 
     public void updateAllSignals() {
         try {
             Vector<String> v = getAssociationSignals();
-		//	System.out.println(inSignalsAtOrigin + " " + inSignalsAtDestination + " " + outSignalsAtOrigin + " " + outSignalsAtDestination);
+            //	System.out.println(inSignalsAtOrigin + " " + inSignalsAtDestination + " " + outSignalsAtOrigin + " " + outSignalsAtDestination);
             inSignalsAtOrigin.clear();
             inSignalsAtDestination.clear();
             outSignalsAtOrigin.clear();
@@ -664,7 +669,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             String assoc;
             AvatarSignal as1, as2;
             int index;
-            for(int i=0; i<v.size(); i++) {
+            for (int i = 0; i < v.size(); i++) {
 
                 assoc = v.get(i);
                 //TraceManager.addDev("assoc=" + assoc);
@@ -703,27 +708,34 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return asynchronous;
     }
 
-    public void setAsynchronous(boolean asy){
-	asynchronous=asy;
+    public void setAsynchronous(boolean asy) {
+        asynchronous = asy;
     }
+
     public int getSizeOfFIFO() {
         return sizeOfFIFO;
     }
-    public void setSizeOfFIFO(int size){
-	sizeOfFIFO=size;
+
+    public void setSizeOfFIFO(int size) {
+        sizeOfFIFO = size;
     }
+
     public boolean isBlocking() {
         return blockingFIFO;
     }
-    public void setBlocking(boolean b){
-	blockingFIFO=b;
+
+    public void setBlocking(boolean b) {
+        blockingFIFO = b;
     }
+
     public boolean isPrivate() {
         return isPrivate;
     }
-    public void setPrivate(boolean pr){
-	isPrivate=pr;
+
+    public void setPrivate(boolean pr) {
+        isPrivate = pr;
     }
+
     public boolean isBroadcast() {
         return isBroadcast;
     }
@@ -749,9 +761,13 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         String b1 = "";
         String b2 = "";
         AvatarBDBlock b = getAvatarBDBlock1();
-        if (b != null) { b1 = b.getBlockName();}
+        if (b != null) {
+            b1 = b.getBlockName();
+        }
         b = getAvatarBDBlock2();
-        if (b != null) { b2 = b.getBlockName();}
+        if (b != null) {
+            b2 = b.getBlockName();
+        }
 
         return b1 + "/" + sig1 + " #--# " + b2 + "/" + sig2;
 
