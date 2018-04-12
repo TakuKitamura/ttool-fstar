@@ -240,6 +240,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public final static byte ATTACKTREE_SYNTAXCHECKING_OK = 49;
     public final static byte FAULTTREE_SYNTAXCHECKING_OK = 51;
     public final static byte COMPONENT_SELECTED = 50;
+    public final static byte CREATE_NEW_PANEL = 52;
 
     public final static int INCREMENT = 10;
 
@@ -630,6 +631,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     //--
 
     public void activeActions(boolean b) {
+        //TraceManager.addDev("Action actions:" + b);
         for (int i = 0; i < TGUIAction.NB_ACTION; i++) {
             actions[i].setEnabled(b);
         }
@@ -7364,9 +7366,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         int index;
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {
+            TraceManager.addDev("null TP Panel");
             return;
         }
         index = tp.tabbedPane.getSelectedIndex();
+
+        TraceManager.addDev("TP Panel: " + tp + " index=" + index);
 
         if (index < tp.panels.size() - 1) {
             setMode(FORWARD_DIAG);
@@ -7378,6 +7383,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             setMode(BACKWARD_DIAG);
         } else {
             setMode(NO_BACKWARD_DIAG);
+        }
+
+        // If no edition panel, we need to deactivate previous diagram and model checking
+
+        if (index == -1) {
+            setMode(MainGUI.CREATE_NEW_PANEL);
         }
 
         setMode(METHO_CHANGED);
@@ -8996,48 +9007,70 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 } else if (ac.equals("Clone")) {
                     mgui.cloneTab(mainTabbedPane.getSelectedIndex());
                 } else if (ac.equals("New TURTLE Analysis")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAnalysis();
                 } else if (ac.equals("New TURTLE Design")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newDesign();
                 } else if (ac.equals("New TURTLE Deployment")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newDeployment();
                 } else if (e.getSource() == newAttackTree) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAttackTree();
                 } else if (e.getSource() == newFaultTree) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newFaultTree();
                 } else if (ac.equals("New TURTLE Requirement Diagram")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newRequirement();
                 } else if (e.getSource() == newTMLMethodo) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newDiplodocusMethodology();
                 } else if (e.getSource() == newAvatarMethodo) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAvatarMethodology();
                 } else if (e.getSource() == newSysmlsecMethodo) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newSysmlsecMethodology();
                 } else if (ac.equals("New DIPLODOCUS Design")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newTMLDesign();
                 } else if (e.getSource() == newTMLComponentDesign) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newTMLComponentDesign();
                 } else if (e.getSource() == newTMLCP) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newTMLCP();
                 } else if (e.getSource() == newTMLArchi) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newTMLArchi();
                 } else if (ac.equals("New Proactive Design")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newProactiveDesign();
                 } else if (ac.equals("New TURTLE-OS Design")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newTURTLEOSDesign();
                 } else if (e.getSource() == newNCDesign) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newNCDesign();
                 } else if (e.getSource() == newAVATARBD) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAvatarBD();
                 } else if (e.getSource() == newAVATARDD) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newADD();
                 } else if (e.getSource() == newAVATARRequirement) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAvatarRequirement();
                 } else if (e.getSource() == newMAD) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAvatarMADs();
                 } else if (e.getSource() == newAVATARAnalysis) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAvatarAnalysis();
                 } else if (e.getSource() == newSystemCAMS) { //ajout CD
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newSystemCAMS();
                 }
             }

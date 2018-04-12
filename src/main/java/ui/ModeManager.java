@@ -54,7 +54,12 @@ import myutil.TraceManager;
 public class ModeManager {
 
     public static void setMode(byte mode, TGUIAction[] actions, JToolBarMainTurtle mainBar, MainGUI mgui) {
+        //TraceManager.addDev("Setting mode=" + mode);
         switch (mode) {
+            case MainGUI.CREATE_NEW_PANEL:
+                actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(false);
+                TraceManager.addDev("Deactivating syntax checking");
+                break;
             case MainGUI.NOT_OPENED:
                 mgui.activeActions(false);
                 actions[TGUIAction.ACT_NEW].setEnabled(true);

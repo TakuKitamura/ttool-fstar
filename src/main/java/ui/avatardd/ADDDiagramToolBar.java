@@ -43,6 +43,7 @@ package ui.avatardd;
 import ui.MainGUI;
 import ui.TGUIAction;
 import ui.TToolBar;
+import myutil.TraceManager;
 
 import javax.swing.*;
 
@@ -67,6 +68,9 @@ public class ADDDiagramToolBar extends TToolBar {
     }
 
     protected void setActive(boolean b) {
+
+        TraceManager.addDev("Active ADDtoolbar b=" +b);
+
         mgui.actions[TGUIAction.ADD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
