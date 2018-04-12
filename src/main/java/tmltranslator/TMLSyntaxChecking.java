@@ -78,6 +78,7 @@ public class TMLSyntaxChecking {
 
     private final String TOO_MANY_MEMORIES = "Channel is mapped on more than one memory";
     private final String INVALID_CHANNEL_PATH = "Channel path is invalid";
+    private final String INVALID_BUS_PATH = "Bus path is invalid for channel"; // Should be a warning only
 
 
     private ArrayList<TMLError> errors;
@@ -123,6 +124,7 @@ public class TMLSyntaxChecking {
         if (mapping != null) {
             checkMemoriesOfChannels();
             checkPathToMemory();
+            checkPathValidity();
 
             // Check that if their is a memory for a channel, the memory is connected to the path
         }
@@ -704,6 +706,32 @@ public class TMLSyntaxChecking {
                 }
             }
         }
+    }
+
+
+    private void checkPathValidity() {
+        Iterator<TMLChannel> channelIt = tmlm.getChannels().iterator();
+        while (channelIt.hasNext()) {
+            TMLChannel ch = channelIt.next();
+            checkPathValidityForChannel(ch);
+        }
+    }
+
+    private void checkPathValidityForChannel(TMLChannel ch) {
+        HwMemory mem = mapping.getMemoryOfChannel(ch);
+
+        // we want to verify that if there is at least one bus/bridge which is used in the mapping
+        // the path is complete. Otherwise, a warning is given for that channel mapping
+        ArrayList<HwCommunicationNode> elts = mapping.getAllCommunicationNodesOfChannel(ch);
+
+        if (elts.size() > 1) {
+            // We construct the hardware paths of ch
+            TMLChannelPath path = mapping.makePathOfChannel(ch);
+            if (path == null) {
+                addError(null, null, INVALID_BUS_PATH + ": " + ch.getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
+
     }
 
 

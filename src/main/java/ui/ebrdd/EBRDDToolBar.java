@@ -84,6 +84,8 @@ public class EBRDDToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
 		mgui.updateZoomInfo();
+
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
     }
     
     protected void setButtons() {

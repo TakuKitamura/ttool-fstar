@@ -84,7 +84,8 @@ public class AvatarCDToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACD_ACTOR_STICKMAN].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID].setEnabled(b);
-        
+
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
     }
     
     protected void setButtons() {

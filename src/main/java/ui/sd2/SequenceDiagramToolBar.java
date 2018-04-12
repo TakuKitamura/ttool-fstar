@@ -83,6 +83,9 @@ public class SequenceDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
         mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
+
         mgui.updateZoomInfo();
     }
 

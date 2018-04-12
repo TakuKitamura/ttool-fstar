@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.diplodocusmethodology;
 
 import ui.MainGUI;
@@ -53,24 +51,25 @@ import javax.swing.*;
 /**
  * Class DiplodocusMethodologyDiagramToolbar
  * Implements the toolbar to be used in conjunction with the Diplodocus Methodology
-* Creation: 28/03/2014
-* @version 1.0 28/03/2014
+ * Creation: 28/03/2014
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 28/03/2014
  */
 public class DiplodocusMethodologyDiagramToolbar extends TToolBar {
-    
+
     public DiplodocusMethodologyDiagramToolbar(MainGUI _mgui) {
         super(_mgui);
-        
+
     }
-    
+
     protected void setActive(boolean b) {
-		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-		
-		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-		mgui.updateZoomInfo();
-		
+        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+
+        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+        mgui.updateZoomInfo();
+
         //mgui.actions[TGUIAction.ARD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
@@ -85,9 +84,11 @@ public class DiplodocusMethodologyDiagramToolbar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);*/
-        
+
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
+
     }
-    
+
     protected void setButtons() {
         JButton button;
         
@@ -95,13 +96,13 @@ public class DiplodocusMethodologyDiagramToolbar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();*/
-        
+
         button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
         button.addMouseListener(mgui.mouseHandler);
-        
+
         button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
         button.addMouseListener(mgui.mouseHandler);
-        
+
         this.addSeparator();
         
         /*button = this.add(mgui.actions[TGUIAction.ARD_REQUIREMENT]);
@@ -140,9 +141,9 @@ public class DiplodocusMethodologyDiagramToolbar extends TToolBar {
          
         button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
         button.addMouseListener(mgui.mouseHandler);*/
-        
+
     }
-    
+
 } // Class
 
 

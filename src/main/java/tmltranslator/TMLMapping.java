@@ -1777,4 +1777,10 @@ public class TMLMapping<E> {
 
         return dss[st2.id].path.length > 0;
     }
+
+
+    public TMLChannelPath makePathOfChannel(TMLChannel ch) {
+        TMLChannelPath path = new TMLChannelPath(ch);
+        return path;
+    }
 }

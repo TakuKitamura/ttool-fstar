@@ -83,6 +83,8 @@ public class UseCaseDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.UCD_CONNECTOR_EXTEND].setEnabled(b);
         mgui.actions[TGUIAction.UCD_CONNECTOR_SPECIA].setEnabled(b);
 
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
+
         //mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
         //mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
         //mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);

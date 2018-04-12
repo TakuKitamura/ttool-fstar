@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.avatarmad;
 
 import ui.MainGUI;
@@ -51,11 +49,12 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
-   * Class AvatarMADToolBar
-   * Implements the toolbar to be used in conjunction with the Avatar Modeling Assumptions Diagram
-   * Creation: 27/08/2013
-   * @version 1.0 27/08/2013
-   * @author Ludovic APVRILLE
+ * Class AvatarMADToolBar
+ * Implements the toolbar to be used in conjunction with the Avatar Modeling Assumptions Diagram
+ * Creation: 27/08/2013
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 27/08/2013
  */
 public class AvatarMADToolBar extends TToolBar {
 
@@ -81,6 +80,8 @@ public class AvatarMADToolBar extends TToolBar {
         mgui.actions[TGUIAction.AMAD_VERSIONING_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.AMAD_BELONGSTOCOMPOSITION_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.AMAD_IMPACT_CONNECTOR].setEnabled(b);
+
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
 
         /*mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 
@@ -134,7 +135,7 @@ public class AvatarMADToolBar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.AMAD_IMPACT_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
 
-	this.addSeparator();
+        this.addSeparator();
 
         button = this.add(mgui.actions[TGUIAction.AMAD_BELONGSTOCOMPOSITION_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);

@@ -97,7 +97,7 @@ public class ModeManager {
                 actions[TGUIAction.ACT_MERGE].setEnabled(true);
                 actions[TGUIAction.ACT_NEW_DESIGN].setEnabled(true);
                 actions[TGUIAction.ACT_NEW_ANALYSIS].setEnabled(true);
-                actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(true);//DG 06.02.
+                //actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(true);//DG 06.02.
                 //actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG].setEnabled(true);
                 //actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(true);
                 actions[TGUIAction.ACT_SAVE_AS].setEnabled(true);

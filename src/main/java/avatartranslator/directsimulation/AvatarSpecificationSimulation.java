@@ -1028,10 +1028,10 @@ public class AvatarSpecificationSimulation {
                                 // non blocking -> check the fifo size
                                 int nb = getNbOfAsynchronousMessages(rel);
                                 if (nb < rel.getSizeOfFIFO()) {
-                                    TraceManager.addDev("FIFO not full: " + nb + " size=" + rel.getSizeOfFIFO());
+                                    //TraceManager.addDev("FIFO not full: " + nb + " size=" + rel.getSizeOfFIFO());
                                     addAsyncMessage(asat);
                                 } else {
-                                    TraceManager.addDev("*** Asyn msg was dropped because FIFO is full");
+                                    TraceManager.addDev("*** Async msg was dropped because FIFO is full");
                                 }
                             }
                         }
@@ -1044,7 +1044,7 @@ public class AvatarSpecificationSimulation {
                             // non blocking -> check the fifo size
                             int nb = getNbOfAsynchronousMessages(rel);
                             if (nb < rel.getSizeOfFIFO()) {
-                                TraceManager.addDev("FIFO not full: " + nb + " size=" + rel.getSizeOfFIFO());
+                                //TraceManager.addDev("FIFO not full: " + nb + " size=" + rel.getSizeOfFIFO());
                                 addAsyncMessage(asat);
                             } else {
                                 TraceManager.addDev("*** Asyn msg was dropped because FIFO is full");
