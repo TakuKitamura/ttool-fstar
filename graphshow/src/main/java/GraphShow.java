@@ -42,7 +42,7 @@
 
 import myutil.FileUtils;
 import myutil.TraceManager;
-import ui.graph.AUTGraph;
+import graph.AUTGraph;
 
 import java.io.File;
 

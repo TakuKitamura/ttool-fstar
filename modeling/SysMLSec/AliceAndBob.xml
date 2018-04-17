@@ -3,7 +3,7 @@
 <TURTLEGMODELING version="1.0beta">
 
 <Modeling type="AVATAR Design" nameTab="Example" >
-<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
+<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
@@ -1012,7 +1012,7 @@
 
 
 <Modeling type="AVATAR Design" nameTab="Example DH" >
-<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
+<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
@@ -2539,7 +2539,7 @@
 
 
 <Modeling type="AVATAR Design" nameTab="Example DH with Certificate" >
-<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
+<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
@@ -2582,7 +2582,7 @@
 
 <COMPONENT type="302" id="1293" >
 <cdparam x="566" y="94" />
-<sizeparam width="455" height="188" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="420" height="188" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Proverif Pragma" value="#PrivatePublicKeys Alice privK pubK
