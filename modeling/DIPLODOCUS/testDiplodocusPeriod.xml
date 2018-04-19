@@ -796,7 +796,7 @@
 <infoparam name="Primitive port" value="Event evt" />
 <TGConnectingPoint num="0" id="222" />
 <extraparam>
-<Prop commName="evt" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="1" checkStrongAuthStatus="1" />
+<Prop commName="evt" commType="1" origin="true" finite="true" blocking="false" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="1" checkStrongAuthStatus="1" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -1321,8 +1321,8 @@
 <TGConnectingPoint num="22" id="424" />
 <TGConnectingPoint num="23" id="425" />
 <extraparam>
-<info stereotype="CPU" nodeName="CPU0" />
-<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+<info stereotype="CPURRPB" nodeName="CPU0" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="1"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="849" >
@@ -1341,7 +1341,7 @@
 <TGConnectingPoint num="6" id="856" />
 <TGConnectingPoint num="7" id="857" />
 <extraparam>
-<info value="FVWithEvent::PeriodicTask" taskName="PeriodicTask" referenceTaskName="FVWithEvent" priority="0" operation="AnotherTask" fatherComponentMECType="0" />
+<info value="FVWithEvent::PeriodicTask" taskName="PeriodicTask" referenceTaskName="FVWithEvent" priority="5" operation="PeriodicTask" fatherComponentMECType="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="840" >
@@ -1360,7 +1360,7 @@
 <TGConnectingPoint num="6" id="847" />
 <TGConnectingPoint num="7" id="848" />
 <extraparam>
-<info value="FVWithEvent::AnotherTask" taskName="AnotherTask" referenceTaskName="FVWithEvent" priority="0" operation="AnotherTask" fatherComponentMECType="0" />
+<info value="FVWithEvent::AnotherTask" taskName="AnotherTask" referenceTaskName="FVWithEvent" priority="1" operation="AnotherTask" fatherComponentMECType="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="392" >
@@ -1379,7 +1379,7 @@
 <TGConnectingPoint num="6" id="390" />
 <TGConnectingPoint num="7" id="391" />
 <extraparam>
-<info value="FVWithEvent::ManagerOfPeriodicTask" taskName="ManagerOfPeriodicTask" referenceTaskName="FVWithEvent" priority="0" operation="AnotherTask" fatherComponentMECType="0" />
+<info value="FVWithEvent::ManagerOfPeriodicTask" taskName="ManagerOfPeriodicTask" referenceTaskName="FVWithEvent" priority="2" operation="ManagerOfPeriodicTask" fatherComponentMECType="0" />
 </extraparam>
 </SUBCOMPONENT>
 
