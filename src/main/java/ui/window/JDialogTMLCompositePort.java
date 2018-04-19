@@ -95,7 +95,14 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
     private JTextField lossPercentageText, maxNbOfLossText;
 
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex, boolean _checkConf, boolean _checkAuth, TGComponent _reference, Vector<TGComponent> _refs) {
+    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4,
+                                   TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking,
+                                   String _maxInFIFO, String _widthSamples, boolean _isLossy,
+                                   int _lossPercentage, int _maxNbOfLoss, Frame f,
+                                   String title, Vector<String> _types,
+                                   String _dataFlowType, String _associatedEvent, boolean _isPrex,
+                                   boolean _isPostex, boolean _checkConf,
+                                   boolean _checkAuth, TGComponent _reference, Vector<TGComponent> _refs) {
         super(f, title, true);
         frame = f;
 

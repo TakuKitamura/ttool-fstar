@@ -64,6 +64,8 @@ import java.awt.event.ActionListener;
  * @version 1.0 20/04/2010
  */
 public class AvatarRDRequirement extends TGCScalableWithInternalComponent implements WithAttributes, TGAutoAdjust {
+    public static int SIZE_LIMIT = 35;
+
     public String oldValue;
     protected int textX = 5;
     protected int textY = 22;
@@ -567,6 +569,10 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         ret += " " + text;
         ret += " criticality=" + criticality;
+
+        if (SIZE_LIMIT > 0) {
+            ret = ret.substring(0, SIZE_LIMIT) + "...";
+        }
 
         return ret;
     }
