@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<TURTLEGMODELING version="1.0beta">
+
+<Modeling type="TML Component Design" nameTab="DIPLODOCUS_C_Design" >
+<TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="10" maxX="2500" minY="10" maxY="1500" channels="true" events="true" requests="true" zoom="1.0" >
+<CONNECTOR type="126" id="1" >
+<cdparam x="967" y="411" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="Connector between ports" />
+<P1  x="933" y="411" id="27" />
+<P2  x="978" y="609" id="3" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="126" id="2" >
+<cdparam x="559" y="329" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="Connector between ports" />
+<P1  x="579" y="315" id="14" />
+<P2  x="808" y="315" id="25" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<COMPONENT type="1202" id="13" >
+<cdparam x="891" y="622" />
+<sizeparam width="200" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="Primitive component" value="AnotherTask" />
+<TGConnectingPoint num="0" id="5" />
+<TGConnectingPoint num="1" id="6" />
+<TGConnectingPoint num="2" id="7" />
+<TGConnectingPoint num="3" id="8" />
+<TGConnectingPoint num="4" id="9" />
+<TGConnectingPoint num="5" id="10" />
+<TGConnectingPoint num="6" id="11" />
+<TGConnectingPoint num="7" id="12" />
+<extraparam>
+<Data isAttacker="No" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1203" id="4" >
+<father id="13" num="0" />
+<cdparam x="965" y="609" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
+<infoparam name="Primitive port" value="Channel comm" />
+<TGConnectingPoint num="0" id="3" />
+<extraparam>
+<Prop commName="comm" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="32" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+</extraparam>
+</SUBCOMPONENT>
+
+<COMPONENT type="1202" id="24" >
+<cdparam x="366" y="244" />
+<sizeparam width="200" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="Primitive component" value="ManagerOfPeriodicTask" />
+<TGConnectingPoint num="0" id="16" />
+<TGConnectingPoint num="1" id="17" />
+<TGConnectingPoint num="2" id="18" />
+<TGConnectingPoint num="3" id="19" />
+<TGConnectingPoint num="4" id="20" />
+<TGConnectingPoint num="5" id="21" />
+<TGConnectingPoint num="6" id="22" />
+<TGConnectingPoint num="7" id="23" />
+<extraparam>
+<Data isAttacker="No" />
+<Attribute access="2" id="startTime" value="10" type="0" typeOther="" />
+<Attribute access="2" id="period" value="5" type="0" typeOther="" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1203" id="15" >
+<father id="24" num="0" />
+<cdparam x="553" y="302" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
+<infoparam name="Primitive port" value="Request req" />
+<TGConnectingPoint num="0" id="14" />
+<extraparam>
+<Prop commName="evt" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="1" checkStrongAuthStatus="1" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+</extraparam>
+</SUBCOMPONENT>
+
+<COMPONENT type="1202" id="37" >
+<cdparam x="821" y="248" />
+<sizeparam width="200" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="Primitive component" value="PeriodicTask" />
+<TGConnectingPoint num="0" id="29" />
+<TGConnectingPoint num="1" id="30" />
+<TGConnectingPoint num="2" id="31" />
+<TGConnectingPoint num="3" id="32" />
+<TGConnectingPoint num="4" id="33" />
+<TGConnectingPoint num="5" id="34" />
+<TGConnectingPoint num="6" id="35" />
+<TGConnectingPoint num="7" id="36" />
+<extraparam>
+<Data isAttacker="No" />
+<Attribute access="2" id="x" value="" type="0" typeOther="" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1203" id="26" >
+<father id="37" num="0" />
+<cdparam x="808" y="302" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
+<infoparam name="Primitive port" value="Request req" />
+<TGConnectingPoint num="0" id="25" />
+<extraparam>
+<Prop commName="evt" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="1" checkStrongAuthStatus="1" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1203" id="28" >
+<father id="37" num="1" />
+<cdparam x="920" y="385" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
+<infoparam name="Primitive port" value="Channel comm1" />
+<TGConnectingPoint num="0" id="27" />
+<extraparam>
+<Prop commName="comm1" commType="0" origin="true" finite="false" blocking="false" maxSamples="200" widthSamples="32" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="1" checkStrongAuthStatus="1" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+</extraparam>
+</SUBCOMPONENT>
+
+
+</TMLComponentTaskDiagramPanel>
+
+<TMLActivityDiagramPanel name="AnotherTask" minX="10" maxX="2500" minY="10" maxY="1500" >
+<COMPONENT type="1001" id="39" >
+<cdparam x="670" y="320" />
+<sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="38" />
+</COMPONENT>
+
+<COMPONENT type="1009" id="42" >
+<cdparam x="635" y="257" />
+<sizeparam width="81" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="read channel" value="comm(100) " />
+<TGConnectingPoint num="0" id="40" />
+<TGConnectingPoint num="1" id="41" />
+<extraparam>
+<Data channelName="comm" nbOfSamples="100" secPattern="" isAttacker="No" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="1000" id="44" >
+<cdparam x="656" y="187" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="start state" value="null" />
+<TGConnectingPoint num="0" id="43" />
+</COMPONENT>
+
+<CONNECTOR type="115" id="45" >
+<cdparam x="663" y="207" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="663" y="207" id="43" />
+<P2  x="675" y="252" id="40" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="115" id="46" >
+<cdparam x="675" y="282" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="675" y="282" id="41" />
+<P2  x="680" y="315" id="38" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+
+</TMLActivityDiagramPanel>
+
+<TMLActivityDiagramPanel name="ManagerOfPeriodicTask" minX="10" maxX="2500" minY="10" maxY="1500" >
+<COMPONENT type="1008" id="84" >
+<cdparam x="681" y="358" />
+<sizeparam width="35" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="send event" value="evt()" />
+<TGConnectingPoint num="0" id="85" />
+<TGConnectingPoint num="1" id="86" />
+<extraparam>
+<Data eventName="evt" nbOfParams="5" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="1001" id="48" >
+<cdparam x="691" y="484" />
+<sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="47" />
+</COMPONENT>
+
+<COMPONENT type="1026" id="52" >
+<cdparam x="698" y="422" />
+<sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="delay" value="null" />
+<TGConnectingPoint num="0" id="50" />
+<TGConnectingPoint num="1" id="51" />
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="49" >
+<father id="52" num="0" />
+<cdparam x="713" y="442" />
+<sizeparam width="60" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
+<infoparam name="value of the delay" value="period ms" />
+<extraparam>
+<TimeDelay minDelay="period" maxDelay="nope" hasMaxDelay="false" unit="ms" />
+</extraparam>
+</SUBCOMPONENT>
+
+<COMPONENT type="1030" id="58" >
+<cdparam x="532" y="308" />
+<sizeparam width="87" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="for ever loop" value="Loop for ever" />
+<TGConnectingPoint num="0" id="56" />
+<TGConnectingPoint num="1" id="57" />
+</COMPONENT>
+
+<COMPONENT type="1026" id="62" >
+<cdparam x="567" y="244" />
+<sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="delay" value="null" />
+<TGConnectingPoint num="0" id="60" />
+<TGConnectingPoint num="1" id="61" />
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="59" >
+<father id="62" num="0" />
+<cdparam x="582" y="264" />
+<sizeparam width="77" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
+<infoparam name="value of the delay" value="startTime ms" />
+<extraparam>
+<TimeDelay minDelay="startTime" maxDelay="nope" hasMaxDelay="false" unit="ms" />
+</extraparam>
+</SUBCOMPONENT>
+
+<COMPONENT type="1000" id="64" >
+<cdparam x="564" y="186" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="start state" value="null" />
+<TGConnectingPoint num="0" id="63" />
+</COMPONENT>
+
+<CONNECTOR type="115" id="65" >
+<cdparam x="571" y="206" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="571" y="206" id="63" />
+<P2  x="572" y="239" id="60" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="115" id="66" >
+<cdparam x="572" y="279" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="572" y="279" id="61" />
+<P2  x="575" y="303" id="56" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="115" id="67" >
+<cdparam x="619" y="322" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="619" y="322" id="57" />
+<P2  x="698" y="353" id="85" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="115" id="68" >
+<cdparam x="696" y="384" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="698" y="383" id="86" />
+<P2  x="703" y="417" id="50" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="115" id="69" >
+<cdparam x="703" y="457" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="703" y="457" id="51" />
+<P2  x="701" y="479" id="47" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+
+</TMLActivityDiagramPanel>
+
+<TMLActivityDiagramPanel name="PeriodicTask" minX="10" maxX="2500" minY="10" maxY="1500" >
+<COMPONENT type="1010" id="90" >
+<cdparam x="671" y="152" />
+<sizeparam width="39" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="wait event" value="evt() " />
+<TGConnectingPoint num="0" id="91" />
+<TGConnectingPoint num="1" id="92" />
+<extraparam>
+<Data eventName="evt" nbOfParams="5" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="1030" id="87" >
+<cdparam x="603" y="103" />
+<sizeparam width="87" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="for ever loop" value="Loop for ever" />
+<TGConnectingPoint num="0" id="88" />
+<TGConnectingPoint num="1" id="89" />
+</COMPONENT>
+
+<COMPONENT type="1001" id="71" >
+<cdparam x="680" y="295" />
+<sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="70" />
+</COMPONENT>
+
+<COMPONENT type="1006" id="74" >
+<cdparam x="648" y="218" />
+<sizeparam width="85" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="write channel" value="comm1(100)" />
+<TGConnectingPoint num="0" id="72" />
+<TGConnectingPoint num="1" id="73" />
+<extraparam>
+<Data channelName="comm1" nbOfSamples="100" secPattern="" isAttacker="No" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="1000" id="76" >
+<cdparam x="597" y="51" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="start state" value="null" />
+<TGConnectingPoint num="0" id="75" />
+</COMPONENT>
+
+<CONNECTOR type="115" id="77" >
+<cdparam x="814" y="177" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="604" y="71" id="75" />
+<P2  x="646" y="98" id="88" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="115" id="78" >
+<cdparam x="718" y="243" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="690" y="243" id="73" />
+<P2  x="690" y="290" id="70" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="115" id="93" >
+<cdparam x="583" y="126" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="690" y="117" id="89" />
+<P2  x="690" y="147" id="91" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="115" id="94" >
+<cdparam x="629" y="173" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<P1  x="690" y="177" id="92" />
+<P2  x="690" y="213" id="72" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+
+</TMLActivityDiagramPanel>
+
+</Modeling>
+
+
+
+
+<Modeling type="TML Architecture" nameTab="Architecture" >
+<TMLArchiDiagramPanel name="DIPLODOCUS architecture and mapping Diagram" minX="10" maxX="2500" minY="10" maxY="1500" attributes="0" masterClockFrequency="200" >
+<CONNECTOR type="125" id="171" >
+<cdparam x="983" y="440" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="983" y="440" id="161" />
+<P2  x="864" y="508" id="130" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<COMPONENT type="1105" id="146" >
+<cdparam x="933" y="240" />
+<sizeparam width="200" height="200" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="Memory0" value="name" />
+<TGConnectingPoint num="0" id="147" />
+<TGConnectingPoint num="1" id="148" />
+<TGConnectingPoint num="2" id="149" />
+<TGConnectingPoint num="3" id="150" />
+<TGConnectingPoint num="4" id="151" />
+<TGConnectingPoint num="5" id="152" />
+<TGConnectingPoint num="6" id="153" />
+<TGConnectingPoint num="7" id="154" />
+<TGConnectingPoint num="8" id="155" />
+<TGConnectingPoint num="9" id="156" />
+<TGConnectingPoint num="10" id="157" />
+<TGConnectingPoint num="11" id="158" />
+<TGConnectingPoint num="12" id="159" />
+<TGConnectingPoint num="13" id="160" />
+<TGConnectingPoint num="14" id="161" />
+<TGConnectingPoint num="15" id="162" />
+<TGConnectingPoint num="16" id="163" />
+<TGConnectingPoint num="17" id="164" />
+<TGConnectingPoint num="18" id="165" />
+<TGConnectingPoint num="19" id="166" />
+<TGConnectingPoint num="20" id="167" />
+<TGConnectingPoint num="21" id="168" />
+<TGConnectingPoint num="22" id="169" />
+<TGConnectingPoint num="23" id="170" />
+<extraparam>
+<info stereotype="MEMORY" nodeName="Memory0" />
+<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="0" />
+</extraparam>
+</COMPONENT>
+
+<CONNECTOR type="125" id="145" >
+<cdparam x="620" y="385" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="{info}" />
+<P1  x="620" y="370" id="109" />
+<P2  x="739" y="508" id="129" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<info priority="0" />
+<spy value="false" />
+</extraparam>
+</CONNECTOR>
+<COMPONENT type="1102" id="120" >
+<cdparam x="677" y="508" />
+<sizeparam width="250" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="Bus0" value="name" />
+<TGConnectingPoint num="0" id="121" />
+<TGConnectingPoint num="1" id="122" />
+<TGConnectingPoint num="2" id="123" />
+<TGConnectingPoint num="3" id="124" />
+<TGConnectingPoint num="4" id="125" />
+<TGConnectingPoint num="5" id="126" />
+<TGConnectingPoint num="6" id="127" />
+<TGConnectingPoint num="7" id="128" />
+<TGConnectingPoint num="8" id="129" />
+<TGConnectingPoint num="9" id="130" />
+<TGConnectingPoint num="10" id="131" />
+<TGConnectingPoint num="11" id="132" />
+<TGConnectingPoint num="12" id="133" />
+<TGConnectingPoint num="13" id="134" />
+<TGConnectingPoint num="14" id="135" />
+<TGConnectingPoint num="15" id="136" />
+<TGConnectingPoint num="16" id="137" />
+<TGConnectingPoint num="17" id="138" />
+<TGConnectingPoint num="18" id="139" />
+<TGConnectingPoint num="19" id="140" />
+<TGConnectingPoint num="20" id="141" />
+<TGConnectingPoint num="21" id="142" />
+<TGConnectingPoint num="22" id="143" />
+<TGConnectingPoint num="23" id="144" />
+<extraparam>
+<info stereotype="BUS-RR" nodeName="Bus0" />
+<attributes byteDataSize="4"  arbitrationPolicy="0"  sliceTime="10000"  pipelineSize="1"  clockRatio="1"  privacy="0"  referenceAttack="null" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="1100" id="95" >
+<cdparam x="192" y="175" />
+<sizeparam width="428" height="260" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="CPU0" value="name" />
+<TGConnectingPoint num="0" id="96" />
+<TGConnectingPoint num="1" id="97" />
+<TGConnectingPoint num="2" id="98" />
+<TGConnectingPoint num="3" id="99" />
+<TGConnectingPoint num="4" id="100" />
+<TGConnectingPoint num="5" id="101" />
+<TGConnectingPoint num="6" id="102" />
+<TGConnectingPoint num="7" id="103" />
+<TGConnectingPoint num="8" id="104" />
+<TGConnectingPoint num="9" id="105" />
+<TGConnectingPoint num="10" id="106" />
+<TGConnectingPoint num="11" id="107" />
+<TGConnectingPoint num="12" id="108" />
+<TGConnectingPoint num="13" id="109" />
+<TGConnectingPoint num="14" id="110" />
+<TGConnectingPoint num="15" id="111" />
+<TGConnectingPoint num="16" id="112" />
+<TGConnectingPoint num="17" id="113" />
+<TGConnectingPoint num="18" id="114" />
+<TGConnectingPoint num="19" id="115" />
+<TGConnectingPoint num="20" id="116" />
+<TGConnectingPoint num="21" id="117" />
+<TGConnectingPoint num="22" id="118" />
+<TGConnectingPoint num="23" id="119" />
+<extraparam>
+<info stereotype="CPU" nodeName="CPU0" />
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" MECType="0" encryption="0"/>
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1101" id="190" >
+<father id="95" num="0" />
+<cdparam x="295" y="331" />
+<sizeparam width="250" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="178" minY="0" maxY="220" />
+<infoparam name="TGComponent" value="DIPLODOCUS_C_Design::PeriodicTask" />
+<TGConnectingPoint num="0" id="191" />
+<TGConnectingPoint num="1" id="192" />
+<TGConnectingPoint num="2" id="193" />
+<TGConnectingPoint num="3" id="194" />
+<TGConnectingPoint num="4" id="195" />
+<TGConnectingPoint num="5" id="196" />
+<TGConnectingPoint num="6" id="197" />
+<TGConnectingPoint num="7" id="198" />
+<extraparam>
+<info value="DIPLODOCUS_C_Design::PeriodicTask" taskName="PeriodicTask" referenceTaskName="DIPLODOCUS_C_Design" priority="0" operation="PeriodicTask" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="181" >
+<father id="95" num="1" />
+<cdparam x="266" y="268" />
+<sizeparam width="249" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="179" minY="0" maxY="220" />
+<infoparam name="TGComponent" value="DIPLODOCUS_C_Design::AnotherTask" />
+<TGConnectingPoint num="0" id="182" />
+<TGConnectingPoint num="1" id="183" />
+<TGConnectingPoint num="2" id="184" />
+<TGConnectingPoint num="3" id="185" />
+<TGConnectingPoint num="4" id="186" />
+<TGConnectingPoint num="5" id="187" />
+<TGConnectingPoint num="6" id="188" />
+<TGConnectingPoint num="7" id="189" />
+<extraparam>
+<info value="DIPLODOCUS_C_Design::AnotherTask" taskName="AnotherTask" referenceTaskName="DIPLODOCUS_C_Design" priority="0" operation="AnotherTask" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="172" >
+<father id="95" num="2" />
+<cdparam x="214" y="209" />
+<sizeparam width="313" height="40" minWidth="100" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="115" minY="0" maxY="220" />
+<infoparam name="TGComponent" value="DIPLODOCUS_C_Design::ManagerOfPeriodicTask" />
+<TGConnectingPoint num="0" id="173" />
+<TGConnectingPoint num="1" id="174" />
+<TGConnectingPoint num="2" id="175" />
+<TGConnectingPoint num="3" id="176" />
+<TGConnectingPoint num="4" id="177" />
+<TGConnectingPoint num="5" id="178" />
+<TGConnectingPoint num="6" id="179" />
+<TGConnectingPoint num="7" id="180" />
+<extraparam>
+<info value="DIPLODOCUS_C_Design::ManagerOfPeriodicTask" taskName="ManagerOfPeriodicTask" referenceTaskName="DIPLODOCUS_C_Design" priority="0" operation="AnotherTask" fatherComponentMECType="0" />
+</extraparam>
+</SUBCOMPONENT>
+
+
+</TMLArchiDiagramPanel>
+
+</Modeling>
+
+
+
+
+</TURTLEGMODELING>
