@@ -507,11 +507,10 @@ public class TMLChannel extends TMLCommunicationElement {
             s += "destinationport=\"" + destPort + "\" ";
             if (originPort != null) {
                 s += "dataFlowType=\"" + originPort.getDataFlowType() + "\" ";
-            } else if ((originPorts != null) && (originPorts.size() > 0)){
+            } else if ((originPorts != null) && (originPorts.size() > 0)) {
                 TMLPort tmpP = originPorts.get(0);
                 s += "dataFlowType=\"" + tmpP.getDataFlowType() + "\" ";
             }
-
         }
         if (isAJoinChannel()) {
             s += "destinationtask=\"" + destinationTasks.get(0).getName() + "\" ";
@@ -548,5 +547,4 @@ public class TMLChannel extends TMLCommunicationElement {
         s += " />\n";
         return s;
     }
-
 }

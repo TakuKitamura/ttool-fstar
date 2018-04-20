@@ -77,7 +77,8 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_MERGE = 228;
     public static final int ACT_SAVE = 2;
 
-    public static final int ACT_SAVE_AS = 31;
+    public static final int ACT_SAVE_AS_PROJECT = 31;
+    public static final int ACT_SAVE_AS_MODEL = 475;
     public static final int ACT_SAVE_TIF = 213;
     public static final int ACT_OPEN_TIF = 214;
     public static final int ACT_OPEN_SD = 268;
@@ -630,7 +631,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 475;
+    public static final int NB_ACTION = 476;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -707,7 +708,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_SAVE_TIF] = new TAction("save-tif-command", "Save TIF specification",IconManager.imgic24, IconManager.imgic25, "Save TIF Specification", "Save in TIF a TURTLE modeling", 0);
         actions[ACT_OPEN_TIF] = new TAction("open-tif-command", "Open TIF specification",IconManager.imgic24, IconManager.imgic25, "Open TIF Specification", "Open a TURTLE modeling given in TIF", 0);
         actions[ACT_OPEN_SD] = new TAction("open-sd-command", "Open MSC specification",IconManager.imgic24, IconManager.imgic25, "Open MSC Specification", "Open a MSC specification given in xml format", 0);
-        actions[ACT_SAVE_AS] = new TAction("saveas-command", "Save as",IconManager.imgic24, IconManager.imgic25, "Save as", "Save an opened or a new TTool modeling under a new name", 0);
+        actions[ACT_SAVE_AS_PROJECT] = new TAction("saveasproject-command", "Save as Project",IconManager.imgic24, IconManager.imgic25, "Save as Project", "Save an opened or a new TTool modeling under a new project", 0);
+        actions[ACT_SAVE_AS_MODEL] = new TAction("saveasmodel-command", "Save as Model",IconManager.imgic24, IconManager.imgic25, "Save as Model", "Save an opened or a new TTool modeling under a new model", 0);
         actions[ACT_QUIT] = new TAction("quit-command", "Quit", IconManager.imgic26, IconManager.imgic27, "Quit",  "Quit TTool", 'Q');
 
         actions[ACT_SAVE_LOTOS] = new TAction("save-last-lotos", "Save last RT-LOTOS specification",IconManager.imgic24, IconManager.imgic25, "Save last RT-LOTOS specification", "Save the lastest automatically generated RT-LOTOS specification", 0);

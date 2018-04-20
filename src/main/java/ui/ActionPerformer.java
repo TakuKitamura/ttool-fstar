@@ -81,8 +81,10 @@ public class ActionPerformer {
             mgui.openLastProject();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_SAVE].getActionCommand())) {
             mgui.saveProject();
-        } else if (command.equals(mgui.actions[TGUIAction.ACT_SAVE_AS].getActionCommand())) {
-            mgui.saveAsProject();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_SAVE_AS_MODEL].getActionCommand())) {
+            mgui.saveAsNewModel();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_SAVE_AS_PROJECT].getActionCommand())) {
+            mgui.saveAsNewProject();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_SAVE_TIF].getActionCommand())) {
             mgui.saveTIF();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_OPEN_TIF].getActionCommand())) {

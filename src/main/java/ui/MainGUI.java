@@ -44,6 +44,8 @@ import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
+import graph.AUTGraph;
+import graph.RG;
 import launcher.RemoteExecutionThread;
 import launcher.RshClient;
 import myutil.*;
@@ -68,8 +70,6 @@ import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.file.*;
 import ui.ftd.FaultTreeDiagramPanel;
-import graph.AUTGraph;
-import graph.RG;
 import ui.het.CAMSBlockDiagramPanel;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
 import ui.interactivesimulation.SimulationTransaction;
@@ -741,7 +741,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         if (!Desktop.isDesktopSupported()) {
             return;
         }
-        File file = new File (SpecConfigTTool.TGraphPath );
+        File file = new File(SpecConfigTTool.TGraphPath);
         TraceManager.addDev("Getting desktop");
         Desktop desktop = Desktop.getDesktop();
         try {
@@ -2530,7 +2530,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             jfc.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
             jfc.setFileFilter(filter);
-        	/*jfc.addMouseListener(new MouseListener() {
+            /*jfc.addMouseListener(new MouseListener() {
 
         	    @Override
         	    public void mouseClicked(MouseEvent arg0) {
@@ -2967,6 +2967,41 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
     }
 
+
+    protected boolean saveAsNewProject() {
+        jfc.resetChoosableFileFilters();
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jfc.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TTool project", "ttool");
+        jfc.setFileFilter(filter);
+
+        createFileDialog();
+
+        return mainSave();
+
+    }
+
+    protected boolean saveAsNewModel() {
+        jfc.resetChoosableFileFilters();
+        jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        jfc.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
+        jfc.setFileFilter(filter);
+        int returnVal = jfc.showSaveDialog(frame);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            file = jfc.getSelectedFile();
+            file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
+        }
+
+        boolean b = mainSave();
+        if (b) {
+            dir = null;
+            config = null;
+            SpecConfigTTool.setBasicConfig(systemcOn);
+        }
+        return b;
+    }
+
     protected boolean saveProject() {
         if (file == null) {
             if (dir != null)
@@ -2980,6 +3015,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
         }
 
+        return mainSave();
+    }
+
+    public boolean mainSave() {
         if (checkFileForSave(file)) {
             try {
                 if (gtm == null) {
@@ -3327,7 +3366,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void showTToolConfiguration() {
         JFrameBasicText jft = new JFrameBasicText("Your configuration of TTool ...",
                 "Default configuration:\n-----------------------\n" + ConfigurationTTool.getConfiguration(systemcOn)
-                + "\nProject configuration:\n-----------------------\n" + SpecConfigTTool.getConfiguration(systemcOn),
+                        + "\nProject configuration:\n-----------------------\n" + SpecConfigTTool.getConfiguration(systemcOn),
                 IconManager.imgic76);
         jft.setIconImage(IconManager.img8);
         //jft.setSize(700, 800);
@@ -4894,7 +4933,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         if (file != null) {
             path = file.getAbsolutePath();
         }
-        TraceManager.addDev("Generating TML code: "+file.getAbsolutePath());
+        TraceManager.addDev("Generating TML code: " + file.getAbsolutePath());
         if (gtm.generateTMLTxt(path)) {
             TraceManager.addDev("Done TML generation");
             return ConfigurationTTool.TMLCodeDirectory;
@@ -8942,8 +8981,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
 
-
-
         private JMenuItem createMenuItem(String s) {
             JMenuItem item = new JMenuItem(s);
             item.setActionCommand(s);
@@ -9110,6 +9147,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 }
             }
         }
+
     }
 
     // Get the currently opened architecture panel
