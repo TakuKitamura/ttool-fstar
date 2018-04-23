@@ -422,7 +422,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id, text, kind, criticality, va, reqType, atn, referenceElements);
         // jdr.setSize(750, 400);
-        GraphicLib.centerOnParent(jdr, 750, 400);
+        GraphicLib.centerOnParent(jdr, 800, 400);
         jdr.setVisible(true);
 
         if (!jdr.isRegularClose()) {

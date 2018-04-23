@@ -37,15 +37,13 @@
  */
 
 
-
-
 package ui.window;
 
-import ui.util.IconManager;
 import ui.TGComponent;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLCRemoteCompositeComponent;
+import ui.util.IconManager;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -59,13 +57,14 @@ import java.util.Vector;
 
 
 /**
-   * Class JDialogSelectTMLComponent
-   * Dialog for managing primitive components to be validated
-   * Creation: 28/03/2008
-   * @version 1.0 28/03/2008
-   * @author Ludovic APVRILLE
+ * Class JDialogSelectTMLComponent
+ * Dialog for managing primitive components to be validated
+ * Creation: 28/03/2008
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 28/03/2008
  */
-public class JDialogSelectTMLComponent extends JDialogBase implements ActionListener, ListSelectionListener  {
+public class JDialogSelectTMLComponent extends JDialogBase implements ActionListener, ListSelectionListener {
     public static Vector<TGComponent> validated, ignored;
     private static boolean optimized = true;
 
@@ -82,7 +81,9 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
     private JButton allIgnored;
     protected JCheckBox optimize;
 
-    /** Creates new form  */
+    /**
+     * Creates new form
+     */
     public JDialogSelectTMLComponent(Frame f, Vector<TGComponent> _back, List<TGComponent> componentList, String title) {
         super(f, title, true);
 
@@ -111,10 +112,10 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         TGComponent tgc;
         TMLCCompositeComponent ccomp;
 
-        for(int i=0; i<lcs.size(); i++) {
+        for (int i = 0; i < lcs.size(); i++) {
             tgc = lcs.get(i);
             if (tgc instanceof TMLCCompositeComponent) {
-                ccomp = (TMLCCompositeComponent)tgc;
+                ccomp = (TMLCCompositeComponent) tgc;
                 cs.addAll(ccomp.getAllPrimitiveComponents());
             }
             if (tgc instanceof TMLCPrimitiveComponent) {
@@ -122,16 +123,16 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
             }
 
             if (tgc instanceof TMLCRemoteCompositeComponent) {
-                cs.addAll(((TMLCRemoteCompositeComponent)tgc).getAllPrimitiveComponents());
+                cs.addAll(((TMLCRemoteCompositeComponent) tgc).getAllPrimitiveComponents());
             }
         }
     }
 
-    private Vector<TGComponent> makeNewVal( List<TGComponent> list) {
+    private Vector<TGComponent> makeNewVal(List<TGComponent> list) {
         Vector<TGComponent> v = new Vector<TGComponent>();
         TGComponent tgc;
 
-        for(int i=0; i<list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             tgc = list.get(i);
             //System.out.println(tgc);
             if (tgc instanceof TMLCPrimitiveComponent) {
@@ -142,11 +143,11 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
     }
 
     private void checkTask(Vector<? extends TGComponent> tobeChecked, List<TGComponent> source) {
-    	TGComponent t;
+        TGComponent t;
 
-        for(int i=0; i<tobeChecked.size(); i++) {
+        for (int i = 0; i < tobeChecked.size(); i++) {
             t = tobeChecked.elementAt(i);
-            
+
             if (!source.contains(t)) {
                 tobeChecked.removeElementAt(i);
                 i--;
@@ -157,11 +158,11 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
     public void addNewTask(Vector<TGComponent> added, List<TGComponent> source, Vector<TGComponent> notSource) {
         TGComponent tgc;
 
-        for(int i=0; i<source.size(); i++) {
+        for (int i = 0; i < source.size(); i++) {
             tgc = source.get(i);
-            
-            if ((tgc instanceof TMLCPrimitiveComponent) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
-                added.addElement( tgc ) ;
+
+            if ((tgc instanceof TMLCPrimitiveComponent) && (!added.contains(tgc)) && (!notSource.contains(tgc))) {
+                added.addElement(tgc);
                 //System.out.println("New element");
             }
         }
@@ -175,17 +176,17 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         Container c = getContentPane();
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagConstraints c1 = new GridBagConstraints();
-	GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c2 = new GridBagConstraints();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
 
-	c.setLayout(gridbag2);
+        c.setLayout(gridbag2);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-	c2.weighty = 1.0;
+        c2.weighty = 1.0;
         c2.weightx = 1.0;
-	c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.gridwidth = 1;
+        c2.fill = GridBagConstraints.BOTH;
         c2.gridheight = 1;
 
         // ignored list
@@ -194,13 +195,12 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         panel1.setBorder(new javax.swing.border.TitledBorder("Ignored components"));
         listIgnored = new JList<TGComponent>(ign);
         //listIgnored.setPreferredSize(new Dimension(200, 250));
-        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         listIgnored.addListSelectionListener(this);
         JScrollPane scrollPane1 = new JScrollPane(listIgnored);
         panel1.add(scrollPane1, BorderLayout.CENTER);
         panel1.setPreferredSize(new Dimension(200, 250));
         c.add(panel1, c2);
-
 
 
         // central buttons
@@ -238,25 +238,33 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         allIgnored.setPreferredSize(new Dimension(50, 25));
         allIgnored.setActionCommand("allIgnored");
         panel3.add(allIgnored, c1);
-	
+
         c.add(panel3, c2);
 
-	// validated list
+        // validated list
         panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         panel2.setBorder(new javax.swing.border.TitledBorder("Used components"));
         listValidated = new JList<TGComponent>(val);
         //listValidated.setPreferredSize(new Dimension(200, 250));
-        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         listValidated.addListSelectionListener(this);
         JScrollPane scrollPane2 = new JScrollPane(listValidated);
         panel2.add(scrollPane2, BorderLayout.CENTER);
         panel2.setPreferredSize(new Dimension(200, 250));
-	c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel2, c2);
 
+        optimize = new JCheckBox("Optimize TML specification");
+        optimize.setSelected(optimized);
+        c.add(optimize, c2);
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.gridwidth = 1; //end row
+        initMainButtons(c2, c, this, false, "Check syntax", "Cancel");
+
+
         // main panel;
-        panel6 = new JPanel();
+        /*panel6 = new JPanel();
         panel6.setLayout(new BorderLayout());
 
         panel5 = new JPanel();
@@ -283,15 +291,15 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         panel6.add(panel5, BorderLayout.NORTH);
         panel6.add(panel4, BorderLayout.SOUTH);
 
-        c.add(panel6, c2);
+        c.add(panel6, c2);*/
 
     }
 
-    public void actionPerformed(ActionEvent evt)  {
+    public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-        if (command.equals("Start Syntax Analysis"))  {
+        if (command.equals("Start Syntax Analysis")) {
             closeDialog();
         } else if (command.equals("Cancel")) {
             cancelDialog();
@@ -308,10 +316,10 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
 
 
     private void addOneIgnored() {
-        int [] list = listValidated.getSelectedIndices();
+        int[] list = listValidated.getSelectedIndices();
         Vector<TGComponent> v = new Vector<TGComponent>();
         TGComponent o;
-        for (int i=0; i<list.length; i++){
+        for (int i = 0; i < list.length; i++) {
             o = val.elementAt(list[i]);
             ign.addElement(o);
             v.addElement(o);
@@ -324,10 +332,10 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
     }
 
     private void addOneValidated() {
-        int [] list = listIgnored.getSelectedIndices();
+        int[] list = listIgnored.getSelectedIndices();
         Vector<TGComponent> v = new Vector<TGComponent>();
         TGComponent o;
-        for (int i=0; i<list.length; i++){
+        for (int i = 0; i < list.length; i++) {
             o = ign.elementAt(list[i]);
             val.addElement(o);
             v.addElement(o);
@@ -358,7 +366,7 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
 
     public void closeDialog() {
         back.removeAllElements();
-        for(int i=0; i<val.size(); i++) {
+        for (int i = 0; i < val.size(); i++) {
             back.addElement(val.elementAt(i));
         }
         validated = val;
@@ -389,13 +397,13 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
             //listIgnored.clearSelection();
         }
 
-        if (ign.size() ==0) {
+        if (ign.size() == 0) {
             allValidated.setEnabled(false);
         } else {
             allValidated.setEnabled(true);
         }
 
-        if (val.size() ==0) {
+        if (val.size() == 0) {
             allIgnored.setEnabled(false);
             closeButton.setEnabled(false);
         } else {
