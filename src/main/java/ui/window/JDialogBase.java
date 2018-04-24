@@ -79,6 +79,28 @@ public class JDialogBase extends JDialog {
 		this.getRootPane().setDefaultButton(closeButton);
 	}
 
+	protected JPanel initBasicButtons(ActionListener al) {
+		JPanel buttonPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gridConstraints = new GridBagConstraints();
+		gridConstraints.gridwidth = 1;
+		gridConstraints.gridheight = 1;
+		gridConstraints.weighty = 1.0;
+		gridConstraints.weightx = 1.0;
+		gridConstraints.fill = GridBagConstraints.BOTH; //end row
+
+		cancelButton = new JButton("Cancel", IconManager.imgic27);
+		cancelButton.addActionListener(al);
+		buttonPanel.add(cancelButton, gridConstraints);
+
+		gridConstraints.gridwidth = GridBagConstraints.REMAINDER; //end row
+
+		closeButton = new JButton("Save and close", IconManager.imgic25);
+		closeButton.addActionListener(al);
+		buttonPanel.add(closeButton, gridConstraints);
+
+		return buttonPanel;
+	}
+
 
 
 	protected void initButtons(Container c,

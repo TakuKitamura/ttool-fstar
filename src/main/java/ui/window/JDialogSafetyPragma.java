@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,12 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
 
 
 package ui.window;
@@ -54,13 +52,14 @@ import java.util.HashMap;
  * Class JDialogPragma
  * Dialog for entering a note
  * Creation: 06/12/2003
- * @version 1.0 06/12/2003
+ *
  * @author Ludovic APVRILLE, Letitia LI
+ * @version 1.0 06/12/2003
  */
 public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
-    
+
     protected String text;
-    
+
     //components
     protected JTextArea textarea;
     protected JButton close;
@@ -68,22 +67,25 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     protected JMenuBar menuBar;
     protected JMenu help;
     protected JPopupMenu helpPopup;
-	public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
-    /** Creates new form  */
+    public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
+
+    /**
+     * Creates new form
+     */
     public JDialogSafetyPragma(Frame f, String title, String _text) {
         super(f, title, true);
         text = _text;
-        
+
         initComponents();
         pack();
     }
 //Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
 
     public class SuggestionPanel {
-	private final String[] pragma = {"A[]", "E<>", "A<>", "E[]", "min(", "max("};
-	//Form list of all blocks
-	//For each block, create a list of all attribute strings and states
-	
+        private final String[] pragma = {"A[]", "E<>", "A<>", "E[]", "min(", "max("};
+        //Form list of all blocks
+        //For each block, create a list of all attribute strings and states
+
         private JList list;
         private JPopupMenu popupMenu;
         private String subWord;
@@ -96,12 +98,12 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
             popupMenu.removeAll();
             popupMenu.setOpaque(false);
             popupMenu.setBorder(null);
-			
-            popupMenu.add(list = createSuggestionList(linePosition ,position, subWord), BorderLayout.CENTER);
-	    //Show popupMenu only if there are matching suggestions
-	    	if (list.getModel().getSize() >0){
+
+            popupMenu.add(list = createSuggestionList(linePosition, position, subWord), BorderLayout.CENTER);
+            //Show popupMenu only if there are matching suggestions
+            if (list.getModel().getSize() > 0) {
                 popupMenu.show(textarea, location.x, textarea.getBaseline(0, 0) + location.y);
-	    	}
+            }
         }
 
         public void hide() {
@@ -111,34 +113,33 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
             }
         }
 
-	private JList createSuggestionList(int linePosition, final int position, final String subWord) {
-	    ArrayList<String> matches = new ArrayList<String>();
-	    if (linePosition<3){
-	        for (String p: pragma) {
-          	    if (p.startsWith(subWord)){
-					matches.add(p);
-			    }
-			}
-	    }
-		
-		if (!subWord.contains(".")){
-			for (String block: blockAttributeMap.keySet()){
-				if (block.startsWith(subWord)){
-					matches.add(block);
-				}
-			}
-		}
-		else {
-			String block = subWord.split("\\.")[0];
-			if (blockAttributeMap.containsKey(block)){
-				for (String attr: blockAttributeMap.get(block)){
-					if (attr.startsWith(subWord.split("\\.")[1])){
-						matches.add(block+"."+attr);
-					}
-				}
-			}
-		}
-	    String[] data = new String[matches.size()];
+        private JList createSuggestionList(int linePosition, final int position, final String subWord) {
+            ArrayList<String> matches = new ArrayList<String>();
+            if (linePosition < 3) {
+                for (String p : pragma) {
+                    if (p.startsWith(subWord)) {
+                        matches.add(p);
+                    }
+                }
+            }
+
+            if (!subWord.contains(".")) {
+                for (String block : blockAttributeMap.keySet()) {
+                    if (block.startsWith(subWord)) {
+                        matches.add(block);
+                    }
+                }
+            } else {
+                String block = subWord.split("\\.")[0];
+                if (blockAttributeMap.containsKey(block)) {
+                    for (String attr : blockAttributeMap.get(block)) {
+                        if (attr.startsWith(subWord.split("\\.")[1])) {
+                            matches.add(block + "." + attr);
+                        }
+                    }
+                }
+            }
+            String[] data = new String[matches.size()];
             data = matches.toArray(data);
             JList<String> list = new JList<>(data);
             list.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
@@ -152,16 +153,16 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
                     }
                 }
             });
-	    
+
             return list;
         }
 
-	
+
         public boolean insertSelection() {
-		//Note that it will not add if the selection will not fit on the current line
-	    if (!popupMenu.isVisible()){
-		return false;
-	    }
+            //Note that it will not add if the selection will not fit on the current line
+            if (!popupMenu.isVisible()) {
+                return false;
+            }
             if (list.getSelectedValue() != null) {
                 try {
                     final String selectedSuggestion = ((String) list.getSelectedValue()).substring(subWord.length());
@@ -196,8 +197,10 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
             });
         }
     }
-     private SuggestionPanel suggestion;
-     protected void showSuggestionLater() {
+
+    private SuggestionPanel suggestion;
+
+    protected void showSuggestionLater() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -236,17 +239,16 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         if (subWord.length() < 1) {
             return;
         }
-		start=Math.max(0,position-1);
-		while (start>0){
-			//Find previous new line position
-			if (!String.valueOf(text.charAt(start)).matches(".")){
-				break;
-			}
-			else {
-				start--;
-			}
-		}
-        suggestion = new SuggestionPanel(textarea, position, subWord, location, position-start-1);
+        start = Math.max(0, position - 1);
+        while (start > 0) {
+            //Find previous new line position
+            if (!String.valueOf(text.charAt(start)).matches(".")) {
+                break;
+            } else {
+                start--;
+            }
+        }
+        suggestion = new SuggestionPanel(textarea, position, subWord, location, position - start - 1);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -262,7 +264,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     }
 
     protected void initComponents() {
-        
+
 
         Container c = getContentPane();
         Font f = new Font("Helvetica", Font.PLAIN, 14);
@@ -271,10 +273,10 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
         helpPopup = new JPopupMenu();
 
-		
-		helpPopup.add(new JLabel(IconManager.imgic7009));
-		
-		helpPopup.setPreferredSize(new Dimension(600,900));
+
+        helpPopup.add(new JLabel(IconManager.imgic7009));
+
+        helpPopup.setPreferredSize(new Dimension(600, 900));
         textarea = new JTextArea();
 
         textarea.setEditable(true);
@@ -282,12 +284,12 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         textarea.setTabSize(3);
         textarea.append(text);
         textarea.setFont(new Font("times", Font.PLAIN, 12));
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		help = new JMenu("?");
-		menuBar.add(help);
-		setJMenuBar(menuBar);
-		textarea.addKeyListener(new KeyListener() {
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        help = new JMenu("?");
+        menuBar.add(help);
+        setJMenuBar(menuBar);
+        textarea.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB) {
@@ -318,85 +320,82 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
                     suggestion.moveUp();
                 } else if (Character.isWhitespace(e.getKeyChar())) {
                     hideSuggestion();
-                }
-		else if (Character.isLetter(e.getKeyChar())){
+                } else if (Character.isLetter(e.getKeyChar())) {
                     showSuggestionLater();
                 }
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_DOWN && suggestion != null) {
-                   e.consume();
+                if (e.getKeyCode() == KeyEvent.VK_DOWN && suggestion != null) {
+                    e.consume();
                 } else if (e.getKeyCode() == KeyEvent.VK_UP && suggestion != null) {
                     e.consume();
-                } 
+                }
             }
         });
 
 
-	
         JScrollPane jsp = new JScrollPane(textarea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(300, 300));
         c.add(jsp, BorderLayout.CENTER);
-        
 
 
         close = new JButton("Ok", IconManager.imgic25);
         cancel = new JButton("Cancel", IconManager.imgic27);
-        
-	help.setPreferredSize(new Dimension(30,30));
+
+        help.setPreferredSize(new Dimension(30, 30));
 
         close.setPreferredSize(new Dimension(150, 30));
         cancel.setPreferredSize(new Dimension(150, 30));
-        
+
         close.addActionListener(this);
         cancel.addActionListener(this);
         help.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    help();
-                }
-            });
+            @Override
+            public void mousePressed(MouseEvent e) {
+                help();
+            }
+        });
         JPanel jp = new JPanel();
-        jp.add(close);
         jp.add(cancel);
-        
+        jp.add(close);
+
         c.add(jp, BorderLayout.SOUTH);
-	
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
+
+    public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
-        
+
         // Compare the action command to the known actions.
-        if (command.equals("Cancel"))  {
+        if (command.equals("Cancel")) {
             cancel();
         } else if (command.equals("Ok")) {
             close();
         }
-	
+
     }
-    
+
     public void cancel() {
         dispose();
     }
-    
+
     public void close() {
         text = textarea.getText();
         dispose();
     }
-    public void help(){
-	if (!helpPopup.isVisible()){
-	    helpPopup.show(help, 20, 20);
-	}
-	else {
-	    helpPopup.setVisible(false);
-	}
+
+    public void help() {
+        if (!helpPopup.isVisible()) {
+            helpPopup.show(help, 20, 20);
+        } else {
+            helpPopup.setVisible(false);
+        }
     }
+
     public String getText() {
         return text;
     }
-    
-    
+
+
 }
