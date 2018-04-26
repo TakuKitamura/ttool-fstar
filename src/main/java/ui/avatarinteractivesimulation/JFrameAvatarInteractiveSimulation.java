@@ -1848,11 +1848,11 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             return;
         }
 
-        newSVGSave(fileName);
+        newSVGSave("NEW" + fileName);
 
 
 
-      /*  StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+      StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
         sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
 
@@ -1887,7 +1887,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         //TraceManager.addDev("Svg=" + sb.toString());
 
-        //return sb.toString();*/
+        //return sb.toString();
 
     }
 

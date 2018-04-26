@@ -298,12 +298,16 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
-        // Compare the action command to the known actions.
-        if (command.equals("Start Syntax Analysis")) {
+        if (evt.getSource() == closeButton) {
             closeDialog();
-        } else if (command.equals("Cancel")) {
+            return;
+        } else if (evt.getSource() == cancelButton) {
             cancelDialog();
-        } else if (command.equals("addOneIgnored")) {
+            return;
+        }
+
+        // Compare the action command to the known actions.
+       if (command.equals("addOneIgnored")) {
             addOneIgnored();
         } else if (command.equals("addOneValidated")) {
             addOneValidated();
