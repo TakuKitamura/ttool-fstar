@@ -27,11 +27,11 @@ dependencies {
     compile name: 'commons-io-2.5'
     compile name: 'jsoup-1.8.1'
     compile name: 'gs-core-1.3'
-    compile name: 'batik-xml.jar'
-    compile name: 'batik-util.jar' 
-    compile name: 'batik-svggen.jar'
-    compile name: 'batik-dom.jar'
-    compile name: 'batik-awt-util.jar'
+    compile name: 'batik-xml'
+    compile name: 'batik-util' 
+    compile name: 'batik-svggen'
+    compile name: 'batik-dom'
+    compile name: 'batik-awt-util'
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
