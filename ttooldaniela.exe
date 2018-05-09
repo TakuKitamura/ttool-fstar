@@ -1,0 +1,7 @@
+#!/bin/sh
+
+java -version
+cd bin;
+java -Xmx1024m -jar ttool.jar -config config.xml -experimental -debug -avatar -uppaal -launcher
+
+ 
