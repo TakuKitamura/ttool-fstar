@@ -46,59 +46,20 @@ public class JDialogBase extends JDialog {
 	
 	protected void initButtons(GridBagConstraints c0, Container c,
 			                  ActionListener al) {
-		initMainButtons(c0, c, al, false, "Save and Close", "Cancel");
-	}
-
-	protected void initMainButtons(GridBagConstraints c0, Container c,
-							   ActionListener al, boolean isInverse, String closeButtonStr, String cancelButtonStr) {
 		//Close Button
-		if (isInverse) {
-			closeButton = new JButton(closeButtonStr, IconManager.imgic25);
-			closeButton.addActionListener(al);
-			c.add(closeButton, c0);
-
-			c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-
-			//Cancel Button
-			cancelButton = new JButton(cancelButtonStr, IconManager.imgic27);
-			cancelButton.addActionListener(al);
-			c.add(cancelButton, c0);
-		} else {
-			cancelButton = new JButton(cancelButtonStr, IconManager.imgic27);
-			cancelButton.addActionListener(al);
-			c.add(cancelButton, c0);
-
-			c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-
-			closeButton = new JButton(closeButtonStr, IconManager.imgic25);
-			closeButton.addActionListener(al);
-			c.add(closeButton, c0);
-		}
-
-		//Add closeButton's behaviour on Enter key
-		this.getRootPane().setDefaultButton(closeButton);
-	}
-
-	protected JPanel initBasicButtons(ActionListener al) {
-		JPanel buttonPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints gridConstraints = new GridBagConstraints();
-		gridConstraints.gridwidth = 1;
-		gridConstraints.gridheight = 1;
-		gridConstraints.weighty = 1.0;
-		gridConstraints.weightx = 1.0;
-		gridConstraints.fill = GridBagConstraints.BOTH; //end row
-
-		cancelButton = new JButton("Cancel", IconManager.imgic27);
-		cancelButton.addActionListener(al);
-		buttonPanel.add(cancelButton, gridConstraints);
-
-		gridConstraints.gridwidth = GridBagConstraints.REMAINDER; //end row
-
-		closeButton = new JButton("Save and close", IconManager.imgic25);
-		closeButton.addActionListener(al);
-		buttonPanel.add(closeButton, gridConstraints);
-
-		return buttonPanel;
+        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        closeButton.addActionListener(al);
+        c.add(closeButton, c0);
+        
+        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        
+        //Cancel Button
+        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        cancelButton.addActionListener(al);
+        c.add(cancelButton, c0);
+        
+        //Add closeButton's behaviour on Enter key
+        this.getRootPane().setDefaultButton(closeButton);
 	}
 
 
