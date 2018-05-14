@@ -245,7 +245,7 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
         String oldValue = value;
         JDialogAvatarProperty jdap = new JDialogAvatarProperty(frame, value, kind, not);
      //   jdap.setSize(300, 280);
-        GraphicLib.centerOnParent(jdap, 400, 280);
+        GraphicLib.centerOnParent(jdap, 300, 280);
         jdap.setVisible(true); // blocked until dialog has been closed
 
         if (jdap.hasBeenCancelled()) {

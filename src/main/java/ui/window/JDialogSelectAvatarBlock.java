@@ -37,10 +37,12 @@
  */
 
 
+
+
 package ui.window;
 
-import ui.avatarbd.AvatarBDStateMachineOwner;
 import ui.util.IconManager;
+import ui.avatarbd.AvatarBDStateMachineOwner;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -56,11 +58,10 @@ import java.util.LinkedList;
  * Class JDialogSelectAvatarBlock
  * Dialog for managing blocks to be validated
  * Creation: 18/05/2010
- *
- * @author Ludovic APVRILLE
  * @version 1.0 18/05/2010
+ * @author Ludovic APVRILLE
  */
-public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListener, ListSelectionListener {
+public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListener, ListSelectionListener  {
     public LinkedList<AvatarBDStateMachineOwner> validated, ignored;
     private boolean optimized = true;
 
@@ -76,10 +77,8 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
 
     private boolean hasBeenCancelled = true;
 
-    /**
-     * Creates new form
-     */
-    public JDialogSelectAvatarBlock(Frame f, LinkedList<AvatarBDStateMachineOwner> _back, LinkedList<AvatarBDStateMachineOwner> componentList, String title, LinkedList<AvatarBDStateMachineOwner> _validated, LinkedList<AvatarBDStateMachineOwner> _ignored, boolean _optimized) {
+    /** Creates new form  */
+    public JDialogSelectAvatarBlock(Frame f, LinkedList<AvatarBDStateMachineOwner> _back, LinkedList<AvatarBDStateMachineOwner> componentList, String title, LinkedList <AvatarBDStateMachineOwner> _validated, LinkedList <AvatarBDStateMachineOwner> _ignored, boolean _optimized) {
         super(f, title, true);
 
         back = _back;
@@ -89,7 +88,7 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
 
         if ((validated == null) || (ignored == null)) {
             val = new LinkedList<>(componentList);
-            ign = new LinkedList<>();
+            ign = new LinkedList<> ();
         } else {
             val = validated;
             ign = ignored;
@@ -104,19 +103,19 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
     }
 
     private void checkTask(LinkedList<AvatarBDStateMachineOwner> tobeChecked, LinkedList<AvatarBDStateMachineOwner> source) {
-        Iterator<AvatarBDStateMachineOwner> iterator = tobeChecked.iterator();
-
-        while (iterator.hasNext()) {
-            AvatarBDStateMachineOwner t = iterator.next();
+        Iterator<AvatarBDStateMachineOwner> iterator = tobeChecked.iterator ();
+        
+        while (iterator.hasNext ()) {
+            AvatarBDStateMachineOwner t = iterator.next ();
             if (!source.contains(t))
-                iterator.remove();
+                iterator.remove ();
         }
     }
 
     private void addNewTask(LinkedList<AvatarBDStateMachineOwner> added, LinkedList<AvatarBDStateMachineOwner> source, LinkedList<AvatarBDStateMachineOwner> notSource) {
-        for (AvatarBDStateMachineOwner tgc : source)
+        for (AvatarBDStateMachineOwner tgc: source)
             if (!added.contains(tgc) && !notSource.contains(tgc))
-                added.add(tgc);
+                added.add (tgc);
     }
 
     private void myInitComponents() {
@@ -127,33 +126,33 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
         Container c = getContentPane();
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagConstraints c1 = new GridBagConstraints();
-        GridBagLayout gridbag2 = new GridBagLayout();
+	GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c2 = new GridBagConstraints();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         //c.setLayout(new BorderLayout());
-        c.setLayout(gridbag2);
+	c.setLayout(gridbag2);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        c2.weighty = 1.0;
+	c2.weighty = 1.0;
         c2.weightx = 1.0;
-        c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.BOTH;
+	c2.gridwidth = 1;
+        c2.fill = GridBagConstraints.HORIZONTAL;
         c2.gridheight = 1;
 
         // ignored list
         JPanel panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         panel1.setBorder(new javax.swing.border.TitledBorder("Blocks ignored"));
-        listIgnored = new JList<>(ign.toArray(new AvatarBDStateMachineOwner[0]));
+        listIgnored = new JList<> (ign.toArray (new AvatarBDStateMachineOwner [0]));
         //listIgnored.setPreferredSize(new Dimension(200, 250));
-        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listIgnored.addListSelectionListener(this);
         JScrollPane scrollPane1 = new JScrollPane(listIgnored);
         panel1.add(scrollPane1, BorderLayout.CENTER);
         panel1.setPreferredSize(new Dimension(200, 250));
         c.add(panel1, c2);
 
-
+        
         // central buttons
         JPanel panel3 = new JPanel();
         panel3.setLayout(gridbag1);
@@ -193,45 +192,23 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
         c.add(panel3, c2);
 
 
-        // validated list
+	// validated list
         JPanel panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         panel2.setBorder(new javax.swing.border.TitledBorder("Blocks taken into account"));
-        listValidated = new JList<>(val.toArray(new AvatarBDStateMachineOwner[0]));
+        listValidated = new JList<> (val.toArray (new AvatarBDStateMachineOwner [0]));
         //listValidated.setPreferredSize(new Dimension(200, 250));
-        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
         listValidated.addListSelectionListener(this);
         JScrollPane scrollPane2 = new JScrollPane(listValidated);
         panel2.add(scrollPane2, BorderLayout.CENTER);
         panel2.setPreferredSize(new Dimension(200, 250));
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+	c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel2, c2);
 
 
-        optimize = new JCheckBox("Optimize specification");
-        optimize.setSelected(optimized);
-        c.add(optimize, c2);
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.gridwidth = 1; //end row
-        initMainButtons(c2, c, this, false, "Check syntax", "Cancel");
-
-        /*closeButton = new JButton("Start Syntax Analysis", IconManager.imgic37);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        closeButton.setPreferredSize(new Dimension(200, 30));
-
-        JPanel panel4 = new JPanel();
-        panel4.setLayout(new FlowLayout());
-        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        cancelButton.setPreferredSize(new Dimension(200, 30));
-        panel4.add(cancelButton);
-        panel4.add(closeButton);
-        c.add(panel4, c2);*/
-
-
         // main panel;
-        /*JPanel panel6 = new JPanel();
+        JPanel panel6 = new JPanel();
         panel6.setLayout(new BorderLayout());
 
         JPanel panel5 = new JPanel();
@@ -258,25 +235,21 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
         panel6.add(panel5, BorderLayout.NORTH);
         panel6.add(panel4, BorderLayout.SOUTH);
 
-        c.add(panel6, c2);*/
+        c.add(panel6, c2);
 
     }
 
-    public void actionPerformed(ActionEvent evt) {
+    public void actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
-
-        if (evt.getSource() == closeButton) {
-            closeDialog();
-            return;
-        } else if (evt.getSource() == cancelButton) {
-            cancelDialog();
-            return;
-        }
-
-
 
         // Compare the action command to the known actions.
         switch (command) {
+            case "Start Syntax Analysis":
+                closeDialog();
+                break;
+            case "Cancel":
+                cancelDialog();
+                break;
             case "addOneIgnored":
                 addOneIgnored();
                 break;
@@ -294,45 +267,45 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
 
 
     private void addOneIgnored() {
-        for (AvatarBDStateMachineOwner o : this.listValidated.getSelectedValuesList()) {
-            ign.add(o);
-            val.remove(o);
+        for (AvatarBDStateMachineOwner o: this.listValidated.getSelectedValuesList ()) {
+            ign.add (o);
+            val.remove (o);
         }
 
-        listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
-        listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
+        listIgnored.setListData(ign.toArray (new AvatarBDStateMachineOwner[0]));
+        listValidated.setListData(val.toArray (new AvatarBDStateMachineOwner[0]));
         setButtons();
     }
 
     private void addOneValidated() {
-        for (AvatarBDStateMachineOwner o : this.listIgnored.getSelectedValuesList()) {
-            val.add(o);
-            ign.remove(o);
+        for (AvatarBDStateMachineOwner o: this.listIgnored.getSelectedValuesList ()) {
+            val.add (o);
+            ign.remove (o);
         }
 
-        listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
-        listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
+        listIgnored.setListData(ign.toArray (new AvatarBDStateMachineOwner [0]));
+        listValidated.setListData(val.toArray (new AvatarBDStateMachineOwner [0]));
         setButtons();
     }
 
     private void allValidated() {
         val.addAll(ign);
-        ign.clear();
-        listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
-        listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
+        ign.clear ();
+        listIgnored.setListData(ign.toArray (new AvatarBDStateMachineOwner [0]));
+        listValidated.setListData(val.toArray (new AvatarBDStateMachineOwner [0]));
         setButtons();
     }
 
     private void allIgnored() {
         ign.addAll(val);
         val.clear();
-        listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
-        listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
+        listIgnored.setListData(ign.toArray (new AvatarBDStateMachineOwner [0]));
+        listValidated.setListData(val.toArray (new AvatarBDStateMachineOwner [0]));
         setButtons();
     }
 
     public void closeDialog() {
-        back.clear();
+        back.clear ();
         back.addAll(val);
 
         validated = val;
@@ -365,13 +338,13 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
             //listIgnored.clearSelection();
         }
 
-        if (ign.size() == 0) {
+        if (ign.size() ==0) {
             allValidated.setEnabled(false);
         } else {
             allValidated.setEnabled(true);
         }
 
-        if (val.size() == 0) {
+        if (val.size() ==0) {
             allIgnored.setEnabled(false);
             closeButton.setEnabled(false);
         } else {

@@ -182,6 +182,8 @@ public class IconManager {
     // Image of the help button for the ports (Solange)
     public static ImageIcon imgic2111; //New icon created by Solange
 
+    // SystemC-AMS
+    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005;
 
     //private static String icon7 = "turtle_large.gif";
     private static String icon8 = "turtle_16.gif";
@@ -654,8 +656,13 @@ public class IconManager {
     private static String icon7008 = "attacker.gif";
     private static String icon7009 = "uppaal.gif";
 
-    //
-
+    // SystemC-AMS
+    private static String icon8000 = "camstdfport.gif";
+    private static String icon8001 = "camsdeport.gif";
+    private static String icon8002 = "camsconverterportW.gif";
+    private static String icon8003 = "camsconverterportE.gif";
+    private static String icon8004 = "camsconverterportN.gif";
+    private static String icon8005 = "camsconverterportS.gif";
 
     public IconManager() {
 
@@ -1134,6 +1141,13 @@ public class IconManager {
         imgic7007 = getIcon(icon7007);
         imgic7008 = getIcon(icon7008);
         imgic7009 = getIcon(icon7009);
+
+        imgic8000 = getIcon(icon8000);
+        imgic8001 = getIcon(icon8001);
+        imgic8002 = getIcon(icon8002);
+        imgic8003 = getIcon(icon8003);
+        imgic8004 = getIcon(icon8004);
+        imgic8005 = getIcon(icon8005);
     }
 
 } // Class

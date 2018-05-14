@@ -37,6 +37,8 @@
  */
 
 
+
+
 package ui.tmlcp;
 
 import myutil.GraphicLib;
@@ -55,14 +57,13 @@ import java.awt.geom.Line2D;
  * Class TMLCPForLoop
  * For loop of a TML activity diagram
  * Creation: 03/06/2015
- *
- * @author Ludovic APVRILLE
  * @version 1.0 03/06/2015
+ * @author Ludovic APVRILLE
  */
 public class TMLCPForLoop extends TGCWithoutInternalComponent implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;
-    protected int textX = 5;
-    protected int textY = 15;
+    protected int textX =  5;
+    protected int textY =  15;
     protected int arc = 5;
 
     protected String init = "i=0";
@@ -71,7 +72,7 @@ public class TMLCPForLoop extends TGCWithoutInternalComponent implements Embedde
 
     protected int stateOfError = 0; // Not yet checked
 
-    public TMLCPForLoop(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    public TMLCPForLoop(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         width = 30;
@@ -96,38 +97,38 @@ public class TMLCPForLoop extends TGCWithoutInternalComponent implements Embedde
     }
 
     public void internalDrawing(Graphics g) {
-        final int textWidth = g.getFontMetrics().stringWidth(value);
+        final int textWidth  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, textWidth + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width / 2 - w1 / 2, y);
+            setCd(x + width/2 - w1/2, y);
             width = w1;
             //updateConnectingPoints();
         }
 
-        if (stateOfError > 0) {
+        if (stateOfError > 0)  {
             Color c = g.getColor();
-            switch (stateOfError) {
-                case ErrorHighlight.OK:
-                    g.setColor(ColorManager.FOR);
-                    break;
-                default:
-                    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+            switch(stateOfError) {
+            case ErrorHighlight.OK:
+                g.setColor(ColorManager.FOR);
+                break;
+            default:
+                g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
             }
             g.fillRoundRect(x, y, width, height, arc, arc);
             g.setColor(c);
         }
 
         g.drawRoundRect(x, y, width, height, arc, arc);
-        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
-        g.drawLine(x + width, y + height / 2, x + width + lineLength, y + height / 2);
+        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
+        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+        g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
 
-        g.drawString(value, x + (width - textWidth) / 2, y + textY);
+        g.drawString(value, x + (width - textWidth) / 2 , y + textY);
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-        String[] labels = new String[3];
-        String[] values = new String[3];
+        String [] labels = new String[3];
+        String [] values = new String[3];
         labels[0] = "Initialisation of variable";
         values[0] = init;
         labels[1] = "Condition to stay in loop";
@@ -137,9 +138,9 @@ public class TMLCPForLoop extends TGCWithoutInternalComponent implements Embedde
 
 
         JDialogMultiString jdms = new JDialogMultiString(frame, "Setting loop's properties", 3, labels, values);
-        //    jdms.setSize(400, 300);
+    //    jdms.setSize(400, 300);
         GraphicLib.centerOnParent(jdms, 400, 300);
-        jdms.setVisible(true); // blocked until dialog has been closed
+        jdms.setVisible( true ); // blocked until dialog has been closed
 
         if (jdms.hasBeenSet()) {
             init = jdms.getString(0);
@@ -159,11 +160,11 @@ public class TMLCPForLoop extends TGCWithoutInternalComponent implements Embedde
             return this;
         }
 
-        if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x, _y)) < distanceSelected) {
+        if ((int)(Line2D.ptSegDistSq(x+(width/2), y-lineLength, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
             return this;
         }
 
-        if ((int) (Line2D.ptSegDistSq(x + width, y + height / 2, x + width + lineLength, y + height / 2, _x, _y)) < distanceSelected) {
+        if ((int)(Line2D.ptSegDistSq(x+width, y+height/2, x+width +lineLength, y+height/2, _x, _y)) < distanceSelected) {
             return this;
         }
 
@@ -204,7 +205,7 @@ public class TMLCPForLoop extends TGCWithoutInternalComponent implements Embedde
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro *** " + getId());
         try {
 
@@ -217,12 +218,12 @@ public class TMLCPForLoop extends TGCWithoutInternalComponent implements Embedde
             //System.out.println("Loading Synchronization gates");
             //System.out.println(nl.toString());
 
-            for (int i = 0; i < nl.getLength(); i++) {
+            for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for (int j = 0; j < nli.getLength(); j++) {
+                    for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
@@ -250,7 +251,7 @@ public class TMLCPForLoop extends TGCWithoutInternalComponent implements Embedde
     }
 
     public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_TMLCP;
+	return TGComponentManager.CONNECTOR_TMLCP;
     }
 
     public void setStateAction(int _stateAction) {
