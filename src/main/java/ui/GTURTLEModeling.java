@@ -7001,11 +7001,11 @@ public class GTURTLEModeling {
         diagramNl = node.getChildNodes();
 
         for (int j = 0; j < diagramNl.getLength(); j++) {
-            //TraceManager.addDev("Design nodes: " + j);
+            TraceManager.addDev("SystemCAMS node: " + j);
             node = diagramNl.item(j);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 elt = (Element) node;
-                if (elt.getTagName().compareTo("SystemCAMSDiagramPanel") == 0) {
+                if (elt.getTagName().compareTo("SysCAMSComponentTaskDiagramPanel") == 0) {
                     TraceManager.addDev("Loading SystemC-AMS");
                     loadSystemCAMSDiagram(elt, indexDesign);
                     TraceManager.addDev("End loading SystemC-AMS");
@@ -7180,6 +7180,9 @@ public class GTURTLEModeling {
     public void loadDiagram(Element elt, TDiagramPanel tdp) throws MalformedModelingException, SAXException {
         int x, y;
         double zoom = 0;
+
+        TraceManager.addDev("Loading diagram:" + tdp);
+
         try {
             x = Integer.decode(elt.getAttribute("minX")).intValue();
             tdp.setMinX(x);
@@ -8526,7 +8529,7 @@ public class GTURTLEModeling {
             // TraceManager.addDev("Extra params" + tgc.getClass());
             // TraceManager.addDev("My value = " + tgc.getValue());
             tgc.loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
-            // TraceManager.addDev("Extra param ok");
+            //TraceManager.addDev("Extra param ok");
 
             if ((tgc instanceof TCDTObject) && (decId > 0)) {
                 TCDTObject to = (TCDTObject) tgc;
