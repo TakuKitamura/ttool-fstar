@@ -36,43 +36,37 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-package heterogeneoustranslator.systemCAMStranslator;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.Vector;
-import ui.*;
+package syscamstranslator;
 
 /**
-* Class CAMSConnection
-* Connection beetwen blocks for SystemC-AMS Diagrams
-* Creation: 30/08/2017
-* @version 1.0 30/08/2017
-* @author Côme DEMARIGNY
- */
+ * Creation: 07/05/2018
+ * @version 1.0 07/05/2018
+ * @author Irina Kit Yan LEE
+*/
 
-public class CAMSConnection{
-
-    public String name;
-    public CAMSBlocks inputBlock, outputBlock;
-    public int rate;
-    public int type;
-
-    public CAMSConnection(CAMSBlocks _inputBlock, CAMSBlocks _outputBlock){
-	inputBlock = _inputBlock;
-	outputBlock = _outputBlock;
+public class SysCAMSTConnectingPoint{
+    
+	SysCAMSTConnector ownerConnector ;
+    SysCAMSTComponent ownerComponent;
+    
+    public SysCAMSTConnectingPoint( SysCAMSTComponent _ownerComponent)
+    {
+      ownerComponent = _ownerComponent;
     }
 
-    public CAMSBlocks getInputBlock(){
-	return inputBlock;
+    SysCAMSTConnector getConnector(){
+      return ownerConnector;
     }
 
-    public CAMSBlocks getOutputBlock(){
-	return outputBlock;
+    public SysCAMSTComponent getComponent(){
+      return ownerComponent;
     }
 
+    void setConnector(SysCAMSTConnector _connector){
+      ownerConnector = _connector;
+    }
+    
+    boolean ConnectingPointIsFree(){
+      return  ownerConnector == null;
+    }
 }

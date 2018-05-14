@@ -52,16 +52,15 @@ import ui.avatarmad.AvatarMADAssumption;
 import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
 import ui.cd.*;
-import ui.het.CAMSBlock;
-import ui.het.CAMSBlockConnector;
-import ui.het.CAMSBlockDiagramPanel;
-import ui.het.CAMSConnectingPoint;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
 import ui.ncdd.NCSwitchNode;
 import ui.ncdd.NCTrafficArtifact;
 import ui.oscd.TOSClass;
 import ui.req.Requirement;
+import ui.syscams.SysCAMSCompositeComponent;
+import ui.syscams.SysCAMSPrimitiveComponent;
+import ui.syscams.SysCAMSRecordComponent;
 import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
@@ -114,7 +113,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     protected List<TGComponent> componentList;
     protected TGConnectingPoint selectedConnectingPoint;
-    protected CAMSConnectingPoint selectedCAMSConnectingPoints;
     protected TGComponent componentPointed;
     protected TGComponent componentPopup;
     protected TToolBar ttb;
@@ -184,7 +182,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected int y2;
     protected Vector<Point> listPoint;
     protected TGConnectingPoint p1, p2;
-    protected CAMSConnectingPoint cp1, cp2;
     protected int type;
 
     // For component selection
@@ -502,9 +499,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
             if (this.javaVisible && (tgc.hasPostJavaCode() || tgc.hasPreJavaCode()))
                 tgc.drawJavaCode(g);
-
-            if (this instanceof CAMSBlockDiagramPanel) //Connecting points should always be visible in System-C AMS panels
-                tgc.drawTGConnectingPoint(g, this.type);
         }
 
         // Draw name of component selected
@@ -948,10 +942,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return selectedConnectingPoint;
     }
 
-    public CAMSConnectingPoint getSelectedCAMSConnectingPoint() {
-        return selectedCAMSConnectingPoints;
-    }
-
     // Adding component
     public TGComponent addComponent(int x, int y, boolean swallow) {
         //TraceManager.addDev("Add component");
@@ -1094,46 +1084,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         y1 = -1;
         y2 = -1;
         listPoint = null;
-    }
-
-    public void addingCAMSConnector() {
-        listPoint = new Vector<Point>();
-        cp1 = getSelectedCAMSConnectingPoint();
-        x1 = cp1.getX();
-        y1 = cp1.getY();
-        selectedConnectingPoint.setFree(false);
-    }
-
-    public void setAddingCAMSConnector(int _x2, int _y2) {
-        x2 = _x2;
-        y2 = _y2;
-    }
-
-    public void addPointToCAMSConnector(int x, int y) {
-        listPoint.addElement(new Point(x, y));
-        x1 = x;
-        y1 = y;
-    }
-
-    public void finishAddingConnector(CAMSConnectingPoint cp2) {
-        CAMSBlockConnector camsco = TGComponentManager.addCAMSConnector(cp1.getX(), cp1.getY(), mgui.getIdButtonSelected(), this, cp1, cp2, listPoint);
-        if (camsco != null) {
-            TraceManager.addDev("Adding connector");
-            cp2.setFree(false);
-            this.componentList.add(0, camsco);
-            if (camsco instanceof SpecificActionAfterAdd) {
-                ((SpecificActionAfterAdd) camsco).specificActionAfterAdd();
-            }
-            stopAddingConnector(false);
-            cp1.setFree(false);
-            cp1 = null;
-            cp2 = null;
-        } else {
-            TraceManager.addDev("Cancel adding connector");
-            cp2.setFree(true);
-            stopAddingConnector(true);
-            cp1.setFree(true);
-        }
     }
 
 // -------------mark
@@ -2755,6 +2705,25 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         });
     }
+    
+    public String findSysCAMSPrimitiveComponentName(String name) {
+    	return this.findGoodName(name, new NameChecker() {
+    		public boolean checkSysCAMSCPrimitiveComponent(SysCAMSPrimitiveComponent o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		
+    		public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		
+    		public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
+    			for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+    				if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+    					return true;
+    			return false;
+    		}
+    	});
+    }
 
     public String findTMLRecordComponentName(String name) {
         return this.findTMLPrimitiveComponentName(name);
@@ -2800,16 +2769,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 if (o.getValue().equals(name))
                     return true;
                 return o.hasInternalBlockWithName(name);
-            }
-        });
-    }
-
-    public String findCAMSBlockName(String name) {
-        return this.findGoodName(name, new NameChecker() {
-            public boolean checkCAMSBlock(CAMSBlock o, String name) {
-                if (o.getValue().equals(name))
-                    return true;
-                return o.hasBlockWithName();
             }
         });
     }

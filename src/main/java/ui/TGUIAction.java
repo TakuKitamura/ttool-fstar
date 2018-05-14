@@ -77,8 +77,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_MERGE = 228;
     public static final int ACT_SAVE = 2;
 
-    public static final int ACT_SAVE_AS_PROJECT = 31;
-    public static final int ACT_SAVE_AS_MODEL = 475;
+    public static final int ACT_SAVE_AS = 31;
     public static final int ACT_SAVE_TIF = 213;
     public static final int ACT_OPEN_TIF = 214;
     public static final int ACT_OPEN_SD = 268;
@@ -276,8 +275,13 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLSD_EDIT = 391;
 
     public static final int CAMS_EDIT = 458;
-    public static final int CAMS_BLOCK = 459;
+    public static final int CAMS_BLOCK_TDF = 459;
     public static final int CAMS_CONNECTOR = 460;
+    public static final int CAMS_BLOCK_DE = 475;
+    public static final int CAMS_PORT_TDF = 476;
+    public static final int CAMS_PORT_DE = 477;
+    public static final int CAMS_PORT_CONVERTER = 478;
+    public static final int CAMS_CLUSTER = 479;
 
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
@@ -631,7 +635,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 476;
+    public static final int NB_ACTION = 480;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -708,8 +712,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_SAVE_TIF] = new TAction("save-tif-command", "Save TIF specification",IconManager.imgic24, IconManager.imgic25, "Save TIF Specification", "Save in TIF a TURTLE modeling", 0);
         actions[ACT_OPEN_TIF] = new TAction("open-tif-command", "Open TIF specification",IconManager.imgic24, IconManager.imgic25, "Open TIF Specification", "Open a TURTLE modeling given in TIF", 0);
         actions[ACT_OPEN_SD] = new TAction("open-sd-command", "Open MSC specification",IconManager.imgic24, IconManager.imgic25, "Open MSC Specification", "Open a MSC specification given in xml format", 0);
-        actions[ACT_SAVE_AS_PROJECT] = new TAction("saveasproject-command", "Save as Project",IconManager.imgic24, IconManager.imgic25, "Save as Project", "Save an opened or a new TTool modeling under a new project", 0);
-        actions[ACT_SAVE_AS_MODEL] = new TAction("saveasmodel-command", "Save as Model",IconManager.imgic24, IconManager.imgic25, "Save as Model", "Save an opened or a new TTool modeling under a new model", 0);
+        actions[ACT_SAVE_AS] = new TAction("saveas-command", "Save as",IconManager.imgic24, IconManager.imgic25, "Save as", "Save an opened or a new TTool modeling under a new name", 0);
         actions[ACT_QUIT] = new TAction("quit-command", "Quit", IconManager.imgic26, IconManager.imgic27, "Quit",  "Quit TTool", 'Q');
 
         actions[ACT_SAVE_LOTOS] = new TAction("save-last-lotos", "Save last RT-LOTOS specification",IconManager.imgic24, IconManager.imgic25, "Save last RT-LOTOS specification", "Save the lastest automatically generated RT-LOTOS specification", 0);
@@ -1090,9 +1093,13 @@ public class TGUIAction extends AbstractAction {
 
         //System C-AMS
         actions[CAMS_EDIT] = new TAction("add-action-C-AMS", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened SystemC-AMS diagram", 0);
-        actions[CAMS_BLOCK] = new TAction("C-AMS-block", "Add a block", IconManager.imgic5000, IconManager.imgic5000, "Block", "Add a Block to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_BLOCK_TDF] = new TAction("C-AMS-block-TDF", "Add a TDF block", IconManager.imgic5000, IconManager.imgic5000, "TDF block", "Add a TDF block to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_BLOCK_DE] = new TAction("C-AMS-block-DE", "Add a DE block", IconManager.imgic5000, IconManager.imgic5000, "DE block", "Add a DE block to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_CONNECTOR] = new TAction("C-AMS-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened SystemC-AMS Diagram", 0);
-
+        actions[CAMS_PORT_TDF] = new TAction("C-AMS-port-TDF", "Add a TDF port", IconManager.imgic8000, IconManager.imgic8000, "TDF port", "Add a TDF port to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_PORT_DE] = new TAction("C-AMS-port-DE", "Add a DE port", IconManager.imgic8001, IconManager.imgic8001, "DE port", "Add a DE port to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_PORT_CONVERTER] = new TAction("C-AMS-port-converter", "Add a converter port", IconManager.imgic8003, IconManager.imgic8003, "Converter port", "Add a converter port to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic5000, IconManager.imgic5000, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
 
         //ProActive State Machine Diagram
         actions[PROSMD_EDIT] = new TAction("edit-prosmd-diagram", "Edit ProActive state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit ProActive state machine diagram", "Make it possible to edit the currently opened ProActive state machine diagram", 0);

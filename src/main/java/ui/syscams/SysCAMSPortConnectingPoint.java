@@ -1,4 +1,4 @@
- /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  * 
  * ludovic.apvrille AT enst.fr
  * 
@@ -36,76 +36,29 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+package ui.syscams;
 
-
-
-package heterogeneoustranslator.systemCAMStranslator;
-
-import myutil.GraphicLib;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import ui.*;
-import ui.het.*;
-import ui.util.IconManager;
-import ui.window.JDialogCAMSBlocks;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.Vector;
-
+import ui.CDElement;
+import ui.TGComponentManager;
+import ui.TGConnectingPointWidthHeight;
 
 /**
-* Class CAMSSignal
-* Signals for SystemC-AMS Diagrams
-* Creation: 27/06/2017
-* @version 1.0 27/06/2017
-* @author Côme DEMARIGNY
+ * Class SysCAMSPortConnectingPoint
+ * Definition of connecting points on which connectors of SystemC-AMS Component Task diagrams can be connected
+ * Creation: 22/04/2018
+ * @version 1.0 22/04/2018
+ * @author Irina Kit Yan LEE
  */
-public class CAMSSignal {
-    
-    public final static int IN = 0;
-    public final static int OUT= 1;
-    public final static int HYBRID_IN = 2;
-    public final static int HYBRID_OUT= 3;
-    public final static int INCORRECT=-1;
 
-    private static int i=0;
-
-    private String name;
-    
-    public int inout;
-    
-    public CAMSSignal (String _name, int _inout) {
-	inout = _inout;
+public class SysCAMSPortConnectingPoint extends TGConnectingPointWidthHeight{
+    public SysCAMSPrimitivePort port;
+	public boolean positionned;
+	
+    public SysCAMSPortConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
     }
     
-
-    public CAMSSignal makeclone(){
-	return this;
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.CONNECTOR_PORT_TMLC;
     }
-
-    public static CAMSSignal isAValidSignal(String _name, int _inout) {
-        if (_inout==INCORRECT) {
-            return null;
-        }
-	String s = signalName(_name);
-        CAMSSignal cs = new CAMSSignal(s, _inout);
-
-        return cs;
-    }
-    
-    public int getInout(){
-	return inout;
-    }
-
-    public static String signalName(String _n){
-	String s="";
-	s+= _n + ": " + signalID();
-	return s;
-    }
-
-    public static int signalID(){i++;return i;}    
-
 }

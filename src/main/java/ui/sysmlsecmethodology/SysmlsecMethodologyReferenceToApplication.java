@@ -83,12 +83,12 @@ public class SysmlsecMethodologyReferenceToApplication extends SysmlsecMethodolo
     }
 
     public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
-        dn.setValidationsNumber(4);
+        dn.setValidationsNumber(5);
         dn.setValidationsInfo(0, SysmlsecMethodologyDiagramName.SIM_ANIM_APP_DIPLO);
         dn.setValidationsInfo(1, SysmlsecMethodologyDiagramName.SIM_TRACE_APP_DIPLO);
-        //dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.LOT_APP_DIPLO);
-        dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.UPP_APP_DIPLO);
-        dn.setValidationsInfo(3, SysmlsecMethodologyDiagramName.TML_APP_DIPLO);
+        dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.LOT_APP_DIPLO);
+        dn.setValidationsInfo(3, SysmlsecMethodologyDiagramName.UPP_APP_DIPLO);
+        dn.setValidationsInfo(4, SysmlsecMethodologyDiagramName.TML_APP_DIPLO);
     }
 
     public boolean makeCall(String diagramName, int index) {
@@ -113,7 +113,7 @@ public class SysmlsecMethodologyReferenceToApplication extends SysmlsecMethodolo
                 return true;
             }
             return false;
-        /*case 2:
+        case 2:
             if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
                 if (!tdp.getMGUI().generateLOTOS(true)) {
                     TraceManager.addDev("Generate LOTOS: error");
@@ -127,9 +127,9 @@ public class SysmlsecMethodologyReferenceToApplication extends SysmlsecMethodolo
             } else {
                 giveInformation("Syntax error");
                 return false;
-            }*/
+            }
 
-        case 2:
+        case 3:
             if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
                 tdp.getMGUI().generateUPPAAL(false);
                 boolean result = tdp.getMGUI().gtm.generateUPPAALFromTML(SpecConfigTTool.UPPAALCodeDirectory, false, 8, false);
@@ -146,7 +146,7 @@ public class SysmlsecMethodologyReferenceToApplication extends SysmlsecMethodolo
 
             }
             break;
-        case 3:
+        case 4:
             if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
                 TraceManager.addDev("Generate TML");
                 tmp = tdp.getMGUI().generateTMLTxt();

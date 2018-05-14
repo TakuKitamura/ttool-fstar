@@ -239,7 +239,6 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
-        c0.fill = GridBagConstraints.BOTH;
         
         c.add(panel1, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row

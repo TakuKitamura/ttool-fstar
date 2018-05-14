@@ -381,8 +381,8 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
             }
         });
         JPanel jp = new JPanel();
-        jp.add(cancel);
         jp.add(close);
+        jp.add(cancel);
 
         c.add(jp, BorderLayout.SOUTH);
 
