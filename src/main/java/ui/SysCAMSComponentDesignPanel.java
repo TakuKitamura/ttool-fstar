@@ -106,7 +106,7 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
         toolBarPanel.add(toolBarSysCAMS, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("SystemC-AMS Component Diagram", IconManager.imgic1208, toolBarPanel, "Opens SysCAMS component diagram");
+        tabbedPane.addTab("SystemC-AMS Component Diagram", IconManager.imgic1208, toolBarPanel, "SysCAMS Component Diagram");
         tabbedPane.setSelectedIndex(0);
 
         mgui.changeMade(syscamsctdp, TDiagramPanel.NEW_COMPONENT);

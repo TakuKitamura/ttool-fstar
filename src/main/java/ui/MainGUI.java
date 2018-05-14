@@ -9023,8 +9023,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     menu.add(newTMLCP);
                     menu.add(newTMLArchi);
                     menu.addSeparator();
-                    menu.add(newSysCAMS);
-                    menu.addSeparator();
+                    if (experimentalOn) {
+                        menu.add(newSysCAMS);
+                        menu.addSeparator();
+                    }
                 }
             }
 
