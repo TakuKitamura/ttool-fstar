@@ -611,7 +611,7 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
         compositePortNb--;
     }
 
-    public boolean hasRefencesTo(SysCAMSCompositeComponent syscamscc) {
+    public boolean hasReferencesTo(SysCAMSCompositeComponent syscamscc) {
         boolean b;
 
         for (int i = 0; i < nbInternalTGComponent; i++) {
@@ -622,7 +622,7 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
                 }
             }
             if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
-                b = ((SysCAMSCompositeComponent) tgcomponent[i]).hasRefencesTo(syscamscc);
+                b = ((SysCAMSCompositeComponent) tgcomponent[i]).hasReferencesTo(syscamscc);
                 if (b) {
                     return true;
                 }

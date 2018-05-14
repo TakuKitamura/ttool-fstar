@@ -1174,7 +1174,7 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
         while(iterator.hasNext()) {
             tgc = iterator.next();
             if (tgc instanceof SysCAMSCompositeComponent) {
-                if (((SysCAMSCompositeComponent)tgc).hasRefencesTo(syscamscc)) {
+                if (((SysCAMSCompositeComponent)tgc).hasReferencesTo(syscamscc)) {
                     panels.add(this);
                     return;
                 }
