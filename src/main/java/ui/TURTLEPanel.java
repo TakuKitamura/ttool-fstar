@@ -149,7 +149,6 @@ public abstract class TURTLEPanel implements GenericTree {
         StringBuffer s;
 
         tdp = panels.elementAt(indexOfDiagram);
-
         s = tdp.saveInXML();
         if (s == null) {
             //System.out.println("Null diagram");

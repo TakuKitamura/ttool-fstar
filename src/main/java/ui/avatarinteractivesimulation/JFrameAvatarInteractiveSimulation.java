@@ -68,6 +68,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
 
+
+import java.io.Writer;
+import java.io.OutputStreamWriter;
+import java.io.IOException;
+
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.dom.GenericDOMImplementation;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.DOMImplementation;
+
 /**
  * Class JFrameAvatarInteractiveSimulation
  * Creation: 21/01/2011
@@ -1817,7 +1828,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         } else {
             // Using model directory
             String path = mgui.getModelFileFullPath();
-            fileName = path.substring(0,path.lastIndexOf(File.separator)+1) + fileName;
+            fileName = path.substring(0, path.lastIndexOf(File.separator) + 1) + fileName;
             TraceManager.addDev("New Filename = " + fileName);
         }
 
@@ -1831,15 +1842,17 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         if (!ok) {
             JOptionPane.showMessageDialog(this,
-                                          "The capture could not be performed: the specified file is not valid",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The capture could not be performed: the specified file is not valid",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
+        newSVGSave("NEW" + fileName);
 
 
-        StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+
+      StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
         sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
 
@@ -1876,6 +1889,31 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         //return sb.toString();
 
+    }
+
+    // FileName must be valid
+    private void newSVGSave(String fileName) {
+        TraceManager.addDev("New SVG save in " + fileName);
+        // Get a DOMImplementation.
+        DOMImplementation domImpl =
+                GenericDOMImplementation.getDOMImplementation();
+
+        // Create an instance of org.w3c.dom.Document.
+        String svgNS = "http://www.w3.org/2000/svg";
+        Document document = domImpl.createDocument(svgNS, "svg", null);
+
+        // Create an instance of the SVG Generator.
+        SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
+
+        // Ask the test to render into the SVG Graphics2D implementation.
+        /*TestSVGGen test = new TestSVGGen();
+        test.paint(svgGenerator);
+
+        // Finally, stream out SVG to the standard output using
+        // UTF-8 encoding.
+        boolean useCSS = true; // we want to use CSS style attributes
+        Writer out = new OutputStreamWriter(System.out, "UTF-8");
+        svgGenerator.stream(out, useCSS);*/
     }
 
     public void actSaveSDPNG() {

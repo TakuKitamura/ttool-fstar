@@ -201,6 +201,7 @@ public class JDialogAvatarState extends JDialogBase implements ActionListener  {
 		jtp.setPreferredSize( new Dimension( 400, 450 ) );
 		jtp.add("General", panel11);
 		jtp.add("Prototyping", panel2);
+        c0.fill = GridBagConstraints.BOTH;
         c.add(jtp, c0);
         
         c0.gridwidth = 1;

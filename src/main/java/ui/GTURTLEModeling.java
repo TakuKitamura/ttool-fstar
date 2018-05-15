@@ -104,6 +104,7 @@ import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.ftd.FaultTreeDiagramPanel;
 import graph.RG;
+import ui.het.CAMSBlockDiagramPanel;
 import ui.iod.InteractionOverviewDiagramPanel;
 import ui.ncdd.NCDiagramPanel;
 import ui.osad.TURTLEOSActivityDiagramPanel;
@@ -114,7 +115,6 @@ import ui.procsd.ProactiveCSDPanel;
 import ui.prosmd.ProactiveSMDPanel;
 import ui.req.Requirement;
 import ui.req.RequirementDiagramPanel;
-import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
 import ui.tmlad.*;
 import ui.tmlcd.TMLTaskDiagramPanel;
@@ -144,7 +144,6 @@ import java.util.List;
 // AVATAR
 
 //Communication Pattern javaCC parser
-//import compiler.tmlCPparser.*;
 //import compiler.tmlCPparser.*;
 
 /**
@@ -6223,14 +6222,14 @@ public class GTURTLEModeling {
                     }
                 }
 
-            } else if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {  //ajout CD 24.07----mark
-                nl = doc.getElementsByTagName("SysCAMSBlockDiagramPanelCopy");
+            } else if (tdp instanceof CAMSBlockDiagramPanel) {  //ajout CD 24.07----mark
+                nl = doc.getElementsByTagName("CAMSBlockDiagramPanelCopy");
 
                 if (nl == null) {
                     return;
                 }
 
-                SysCAMSComponentTaskDiagramPanel camsp = (SysCAMSComponentTaskDiagramPanel) tdp;
+                CAMSBlockDiagramPanel camsp = (CAMSBlockDiagramPanel) tdp;
 
                 for (i = 0; i < nl.getLength(); i++) {
                     adn = nl.item(i);
@@ -6996,16 +6995,17 @@ public class GTURTLEModeling {
 
         nameTab = elt.getAttribute("nameTab");
 
-        indexDesign = mgui.createSysCAMSComponentDesign(nameTab);
+        indexDesign = mgui.createSystemCAMS(nameTab);
 
         diagramNl = node.getChildNodes();
 
         for (int j = 0; j < diagramNl.getLength(); j++) {
-            TraceManager.addDev("SystemCAMS node: " + j);
+            //TraceManager.addDev("Design nodes: " + j);
             node = diagramNl.item(j);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 elt = (Element) node;
-                if (elt.getTagName().compareTo("SysCAMSComponentTaskDiagramPanel") == 0) {
+                if (elt.getTagName().compareTo("SystemCAMSDiagramPanel") == 0) {
+                    // Class diagram
                     TraceManager.addDev("Loading SystemC-AMS");
                     loadSystemCAMSDiagram(elt, indexDesign);
                     TraceManager.addDev("End loading SystemC-AMS");
@@ -7180,9 +7180,6 @@ public class GTURTLEModeling {
     public void loadDiagram(Element elt, TDiagramPanel tdp) throws MalformedModelingException, SAXException {
         int x, y;
         double zoom = 0;
-
-        TraceManager.addDev("Loading diagram:" + tdp);
-
         try {
             x = Integer.decode(elt.getAttribute("minX")).intValue();
             tdp.setMinX(x);
@@ -7291,9 +7288,9 @@ public class GTURTLEModeling {
             ((AvatarADPanel) tdp).setConnectorsToFront();
         }
 
-        if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
+        if (tdp instanceof CAMSBlockDiagramPanel) {
             //TraceManager.addDev("Connectors...");
-            ((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
+            ((CAMSBlockDiagramPanel) tdp).setConnectorsToFront();
         }
     }
 
@@ -7513,9 +7510,11 @@ public class GTURTLEModeling {
     }
 
     public void loadSystemCAMSDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
+        //ajout CD
         String name;
         TDiagramPanel tdp;
 
+        // class diagram name
         name = elt.getAttribute("name");
         mgui.setSystemCAMSDiagramName(indexDesign, name);
         tdp = mgui.getMainTDiagramPanel(indexDesign);
@@ -8529,7 +8528,7 @@ public class GTURTLEModeling {
             // TraceManager.addDev("Extra params" + tgc.getClass());
             // TraceManager.addDev("My value = " + tgc.getValue());
             tgc.loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
-            //TraceManager.addDev("Extra param ok");
+            // TraceManager.addDev("Extra param ok");
 
             if ((tgc instanceof TCDTObject) && (decId > 0)) {
                 TCDTObject to = (TCDTObject) tgc;
@@ -9256,7 +9255,7 @@ public class GTURTLEModeling {
         }
     }
 
-    public boolean checkSyntaxSystemCAMS(Vector<TGComponent> blocksToTakeIntoAccount, SysCAMSComponentDesignPanel scp, boolean optimize) { //ajout CD 04/07 FIXME
+    public boolean checkSyntaxSystemCAMS(Vector<TGComponent> blocksToTakeIntoAccount, SystemCAMSPanel scp, boolean optimize) { //ajout CD 04/07 FIXME
         //     List<TMLError> warningsOptimize = new ArrayList<TMLError>();
         //     warnings = new LinkedList<CheckingError> ();
         //     mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);

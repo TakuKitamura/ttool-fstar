@@ -579,7 +579,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         c8.gridheight = 10;
         c8.weighty = 1.0;
         c8.weightx = 1.0;
-        c8.fill = GridBagConstraints.HORIZONTAL;
+        c8.fill = GridBagConstraints.BOTH;
         panelAttr.add(panel1, c8);
         c8.gridwidth = GridBagConstraints.REMAINDER; //end row
         //c.add(tabbedPane, c0);
@@ -597,7 +597,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             c9.gridheight = 10;
             c9.weighty = 1.0;
             c9.weightx = 1.0;
-            c9.fill = GridBagConstraints.HORIZONTAL;
+            c9.fill = GridBagConstraints.BOTH;
             panelMethod.add(panel3, c9);
             c9.gridwidth = GridBagConstraints.REMAINDER; //end row
             //c.add(tabbedPane, c0);
@@ -615,7 +615,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             c10.gridheight = 10;
             c10.weighty = 1.0;
             c10.weightx = 1.0;
-            c10.fill = GridBagConstraints.HORIZONTAL;
+            c10.fill = GridBagConstraints.BOTH;
             panelSignal.add(panel5, c10);
             c10.gridwidth = GridBagConstraints.REMAINDER; //end row
             //c.add(tabbedPane, c0);
