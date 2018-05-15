@@ -83,7 +83,7 @@ public class ConfigurationTTool {
     public static String LOTOSPath = "";
     public static String LIBPath = "";
     public static String IMGPath = "";
-    public static String DocGenPath = ".";
+    public static String DocGenPath = "";
     public static String GGraphPath = "";
     public static String TGraphPath = "";
     public static String TToolUpdateURL = "";

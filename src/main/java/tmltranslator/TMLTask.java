@@ -51,18 +51,15 @@ import java.util.*;
  */
 public class TMLTask extends TMLElement {
     private TMLActivity activity;
-
     private boolean isRequested = false;
     private TMLRequest request;
     private List<TMLAttribute> attributes;
     private boolean mustExit = false;
     private int priority;
-
     private Set<TMLChannel> channelsList;
     private Set<TMLChannel> readTMLChannelsList;
     private Set<TMLChannel> writeTMLChannelsList;
     private Set<TMLEvent> eventsList;
-
     private int operationType;
 	private boolean isAttacker;
 
