@@ -50,8 +50,13 @@ package ui.util;
  */
 public class DefaultText {
 
+<<<<<<< HEAD
     public static String BUILD = "12665";
     public static String DATE = "2018/05/15 02:01:37 CET";
+=======
+    public static String BUILD = "12663";
+    public static String DATE = "2018/05/13 02:01:46 CET";
+>>>>>>> parent of 632d5ad... update on build version: build.txt
 
     public static StringBuffer sbAbout = makeAbout();
 
