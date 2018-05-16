@@ -125,7 +125,7 @@ public class AvatarDeploymentPanelTranslator {
 					String taskName = task.getTaskName();
 					String referenceTaskName = task.getReferenceTaskName();
 														
-					AvatarTask avtask = new AvatarTask(taskName, referenceTaskName, avcpu);
+					AvatarTask avtask = new AvatarTask(taskName, referenceTaskName, avcpu, null);
 					
 					avcpu.addTask(avtask);
 					avatarMappedObject.add(avtask);
@@ -165,7 +165,7 @@ public class AvatarDeploymentPanelTranslator {
 				int nbOfAttachedTargets = bus.getNbOfAttachedTargets();
 				int fifoDepth = bus.getFifoDepth();
 				int minLatency = bus.getMinLatency();
-				System.out.println("vgsb read in");
+				System.out.println("vgsb read"+  nbOfAttachedTargets);
 				AvatarBus avbus = new AvatarBus(busName, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency);
 				avatarMap.put(dp, avbus);
 				avatarComponents.add(avbus);
@@ -179,7 +179,7 @@ public class AvatarDeploymentPanelTranslator {
 				int nbOfAttachedTargets = vgmn.getNbOfAttachedTargets();
 				int fifoDepth = vgmn.getFifoDepth();
 				int minLatency = vgmn.getMinLatency();
-				System.out.println("vgmn read in");
+				System.out.println("vgmn read "+  nbOfAttachedTargets);
 				AvatarVgmn avvgmn = new AvatarVgmn(vgmnName, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency);
 				avatarMap.put(dp, avvgmn);
 				avatarComponents.add(avvgmn);
@@ -242,10 +242,33 @@ public class AvatarDeploymentPanelTranslator {
 				int nConfig = addCoproMWMRNode.getNConfig(); // Nb of configuration registers
 				int nStatus = addCoproMWMRNode.getNStatus(); // nb of status registers
 				boolean useLLSC = addCoproMWMRNode.getUseLLSC(); // more efficient protocol. 0: not used. 1 or more -> used
+				int coprocType = addCoproMWMRNode.getCoprocType(); //virtual or real?
 				nb_init++;
 				nb_target+=2;//DG 28.08. two targets as two segments of memory are created mwmr and mwmrd
 				AvatarCoproMWMR acpMWMR;
-				acpMWMR = new AvatarCoproMWMR(timerName, srcid, srcid, tgtid, plaps, fifoToCoprocDepth, fifoFromCoprocDepth, nToCopro, nFromCopro, nConfig, nStatus, useLLSC);
+
+				//DG 19.09. map tasks to coproc
+				acpMWMR = new AvatarCoproMWMR(timerName, srcid, srcid, tgtid, plaps, fifoToCoprocDepth, fifoFromCoprocDepth, nToCopro, nFromCopro, nConfig, nStatus, useLLSC, coprocType);
+				// DG 27.04. : pourquoi deux fois new coproc? Bien: on peut mapper les tasks :)
+
+				Vector<ADDBlockArtifact> tasks = addCoproMWMRNode.getArtifactList();
+
+				for (int i = 0; i < tasks.size(); i++) {
+
+				ADDBlockArtifact task = tasks.get(i);
+
+				String taskName = task.getTaskName();
+				String referenceTaskName = task.getReferenceTaskName();
+														
+				AvatarTask avtask = new AvatarTask(taskName, referenceTaskName, null, acpMWMR);
+				
+				acpMWMR.addTask(avtask);
+				avatarMappedObject.add(avtask);
+				//avtask.setAvatarCoprocReference(acpMWMR); 
+	}
+				nb_init++;											
+				acpMWMR = new AvatarCoproMWMR(timerName, srcid, srcid, tgtid, plaps, fifoToCoprocDepth, fifoFromCoprocDepth, nToCopro, nFromCopro, nConfig, nStatus, useLLSC, coprocType);
+			
 				avatarMap.put(dp, acpMWMR);
 				avatarComponents.add(acpMWMR);
 
@@ -297,7 +320,7 @@ public class AvatarDeploymentPanelTranslator {
 				TGComponent owner_p1 = avatarddDiagramPanel.getComponentToWhichBelongs(connectingPoint1);
 				TGComponent owner_p2 = avatarddDiagramPanel.getComponentToWhichBelongs(connectingPoint2);
 
-				System.out.println(owner_p1.getName()+" connected to "+owner_p2.getName());	
+				//System.out.println(owner_p1.getName()+" connected to "+owner_p2.getName());	
 
 				AvatarComponent avowner_p1 = avatarMap.get(owner_p1);	
 				AvatarComponent avowner_p2 = avatarMap.get(owner_p2);

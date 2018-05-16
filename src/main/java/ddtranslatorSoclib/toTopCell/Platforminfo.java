@@ -47,6 +47,7 @@
 /* authors: v1.0 Daniela GENIUS august 2016 */
 
 package ddtranslatorSoclib.toTopCell;
+import ddtranslatorSoclib.*;
 
 public class Platforminfo {
 
@@ -84,12 +85,32 @@ public class Platforminfo {
         platforminfo+="Uses('caba:vci_mwmr_stats'),"+CR
         +"Uses('caba:vci_logger'),"+CR
         +"Uses('caba:vci_local_crossbar'),"+CR  
-	    +"Uses('caba:fifo_virtual_copro_wrapper'),"+CR ;
-	    //DG 28.08. example coprocessors
-	int i=0;					      
-	for(i=0;i<nb_hwa;i++){
-	    platforminfo+="Uses('caba:my_hwa"+i+"'),"+CR; 
-		}
+	    +"Uses('caba:fifo_virtual_copro_wrapper'),"+CR;
+
+for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
+      if(copro.getCoprocType()==0){
+      	platforminfo+="Uses('caba:vci_input_engine'),"+CR
+	+"Uses('common:papr_slot'),"+CR
+	    	+"Uses('caba:generic_fifo'),"+CR
+	    +"Uses('common:network_io'),"+CR;
+	 nb_hwa--;
+	  }
+	      
+	      else {
+		   if(copro.getCoprocType()==1)
+		       {
+			   platforminfo+="Uses('caba:vci_output_engine'),"+CR ;		   nb_hwa--;
+		       }
+	      
+
+		   else{int i;	      
+		  for(i=0;i<nb_hwa;i++){
+		      platforminfo+="Uses('caba:my_hwa"+i+"'),"+CR; 
+		  }
+	      }
+	      }
+}	         		
+
         platforminfo+="Uses('common:elf_file_loader'),"+CR
 	+"Uses('common:plain_file_loader'),"+CR
         +"Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:ppc405'),"+CR

@@ -73,22 +73,12 @@ MEMORY
     mem_rom (RXAL): ORIGIN = CONFIG_ROM_ADDR, LENGTH = CONFIG_ROM_SIZE
 #endif
     mem_ram (RWAL): ORIGIN = CONFIG_RAM_ADDR, LENGTH = CONFIG_RAM_SIZE
-//DG 7.9.
-#if defined(MWMR_RAM0_NAME)
-mwmr_ram0 (RWAL): ORIGIN = 0xA0200000, LENGTH = 0x00001000
-#endif
-#if defined(MWMR_RAM1_NAME)
-mwmr_ram1 (RWAL): ORIGIN = 0xA1200000, LENGTH = 0x00001000
-#endif
-
+//ajoute DG provisiore
+//mwmr_ram (RWAL): ORIGIN = 0xA0200000, LENGTH = 0x00001000
+//mwmrd_ram (RWAL): ORIGIN = 0xB0200000, LENGTH = 0x00003000
+//19.05. une seule RAMLOCKS en cas de besoin (actually unused)
 vci_locks (RWAL): ORIGIN = 0xC0200000, LENGTH = 0x100
-
-//ajout CD
-
-#include <arch/soclib/deployinfo_ram.h>
-
 //ajoute DG
-/*
 #if defined(DEPLOY_RAM0_NAME)
     DEPLOY_RAM0_NAME (RWAL): ORIGIN = DEPLOY_RAM0_ADDR, LENGTH = DEPLOY_RAM0_SIZE
 #endif
@@ -248,7 +238,6 @@ vci_locks (RWAL): ORIGIN = 0xC0200000, LENGTH = 0x100
 #if defined(CACHED_RAM29_NAME)
     CACHED_RAM29_NAME (RWAL): ORIGIN = CACHED_RAM29_ADDR, LENGTH = CACHED_RAM29_SIZE
 #endif
-*/
 //fin ajoute DG
 }
 

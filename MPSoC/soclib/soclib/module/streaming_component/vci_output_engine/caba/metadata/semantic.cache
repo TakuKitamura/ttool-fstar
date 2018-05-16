@@ -1,0 +1,15 @@
+;; Object metadata/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "metadata/"
+  :tables (list 
+   (semanticdb-table "vci_output_engine.sd"
+    :major-mode 'python-mode
+    :tags '(nil)
+    :file "vci_output_engine.sd"
+    :pointmax 1357
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0beta3"
+  :semanticdb-version "2.0beta3"
+  )

@@ -1,5 +1,5 @@
 #ifndef TRACEMANAGER_H
-#define TRACEMANANER_H
+#define TRACEMANAGER_H
 
 #include "request.h"
 

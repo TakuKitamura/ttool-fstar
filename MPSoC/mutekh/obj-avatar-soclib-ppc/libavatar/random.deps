@@ -1,0 +1,24 @@
+/users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/libavatar/random.o: \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/random.c \
+ /users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/config.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/stdlib.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/decls.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/include/arch/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/cpu.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/error.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/cpu.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/alloca.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/unistd.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/mutek/include/mutek/fileops.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/sys/stat.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/time.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/sys/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/limits.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/random.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/debug.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libm/include/math.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libm/include/fdlibm.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/mytimelib.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/sys/time.h

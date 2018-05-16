@@ -85,7 +85,11 @@ public class JDialogADDCoproMWMRNode extends JDialogBase implements ActionListen
 		
 		private String[] choices = { "false", "true"};
 		private JComboBox<String> useLLSC;
-		
+                private JComboBox<String> coproc;
+                private static int selectedCoproc = 0;
+   
+    private static String[] coprocTab = {"Input Engine","Output Engine","Virtual Coprocessor"};
+    
 		/** Creates new form  */
 		public JDialogADDCoproMWMRNode(Frame _frame, String _title, ADDCoproMWMRNode _node) {
 				super(_frame, _title, true);
@@ -176,6 +180,13 @@ public class JDialogADDCoproMWMRNode extends JDialogBase implements ActionListen
 				c2.gridwidth = 1; panel2.add(new JLabel("use LLSC:"), c2);
 				c2.gridwidth = GridBagConstraints.REMAINDER;
 				panel2.add(useLLSC, c2);
+							
+				c2.gridwidth = 1;
+				panel2.add(new JLabel("Coprocessor Type:"), c2);
+				coproc = new JComboBox<String>(coprocTab);
+				coproc.setSelectedIndex(selectedCoproc);
+				coproc.addActionListener(this);
+				panel2.add(coproc, c2);
 				
 				
 				// main panel;
@@ -199,7 +210,13 @@ public class JDialogADDCoproMWMRNode extends JDialogBase implements ActionListen
 				return;
 				}*/
 				
-				
+		  
+
+                            if (evt.getSource() == coproc) {
+                               selectedCoproc = coproc.getSelectedIndex();                   
+			    }
+		    
+		    
 				String command = evt.getActionCommand();
 				
 				// Compare the action command to the known actions.
@@ -266,6 +283,8 @@ public class JDialogADDCoproMWMRNode extends JDialogBase implements ActionListen
 		public boolean getUseLLSC() {
 				return (useLLSC.getSelectedIndex() == 1);
 		}
-		
-		
+               
+               public int getCoprocType() {
+		   return coproc.getSelectedIndex();       
+    }		
 }

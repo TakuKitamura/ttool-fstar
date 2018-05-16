@@ -15,23 +15,33 @@ void initMessages() {
 }
 
 long getMessageID() {
-  long tmp;
-  pthread_mutex_lock(&__message_mutex);
-  tmp = __id_message;
+ 
+  long tmp; 
+ 
+  //pthread_mutex_lock(&__message_mutex);
+  
+  tmp = __id_message; 
   __id_message ++;
-  pthread_mutex_unlock(&__message_mutex);
+  //pthread_mutex_unlock(&__message_mutex);
+ 
   return tmp;
 }
 
 message *getNewMessageWithParams(int nbOfParams) {
-	
+	debugMsg("getNewMessageWithParams");
 	message *msg = (message *)(malloc(sizeof(struct message)));
 	if (msg == NULL) {
 		criticalError("Allocation of request failed");
 	}
-	msg->nbOfParams = nbOfParams;
+	msg->nbOfParams = nbOfParams;	
+
 	msg->params = (int *)(malloc(sizeof(int) * nbOfParams));
-	msg->id = getMessageID();
+
+	//debugMsg("mutex: %x",&__message_mutex);
+	msg->id = getMessageID();	
+
+	printf("msg->id: %d\n",msg->id);
+
 	return msg;
 }
 

@@ -1,0 +1,5 @@
+/users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/arch/ldscript: \
+ /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/ldscript.cpp \
+ /users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/config.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/deployinfo.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/deployinfo_map.h

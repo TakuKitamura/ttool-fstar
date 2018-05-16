@@ -173,15 +173,19 @@ public class MappingTable {
       /* The accelerators themselves are specifies on DIPLODOCUS level */
       int count = l+5;
       int hwa_count=0;
+      int nb_hwa=0;
       int MWMR_SIZE=4096;
       int MWMRd_SIZE=12288;
       // int MWMR_BASE=0xA0200000;
       i=0;
+      for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {nb_hwa++;
+      }
+      
         for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {   
 	    mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0xA0"+  Integer.toHexString(2097152+MWMR_SIZE*i)+",  0x00001000, IntTab("+count+"), false));" + CR; 
-	    mapping += "maptab.add(Segment(\"mwmrd_ram"+hwa_count+"\", 0x20"+  Integer.toHexString(2097152+MWMRd_SIZE*i)+",  0x00003000, IntTab("+(count+1)+"), false));" + CR; 	 
+	    mapping += "maptab.add(Segment(\"mwmrd_ram"+hwa_count+"\", 0x20"+  Integer.toHexString(2097152+MWMRd_SIZE*i)+",  0x00003000, IntTab("+(count+nb_hwa)+"), false));" + CR; 	 
 	    hwa_count++;
-	    count+=2;
+	    count+=1;
       } 
  hwa_count=0;  
 

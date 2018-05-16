@@ -92,7 +92,8 @@ int nb_clusters=5;
 		header +="#include \"vci_vgmn.h\""+ CR;
 	    }
 	   int with_hw_accellerator = 1; //DG 23.08. a la main
-	   if (with_hw_accellerator>0){  
+	   if (with_hw_accellerator>0){
+	       header +="#include \"mwmr_controller.h\""+ CR;
 	       header +="#include \"vci_mwmr_controller.h\""+ CR;
 	   }
 	   //include statements for all coprocessors found
@@ -112,11 +113,23 @@ int nb_clusters=5;
 
 	       /* can be found in /users/outil/soc/soclib/soclib/module/internal_component/fifo* */
 	       //header +="#include \"fifo_virtual_copro_wrapper.h\""+ CR;
+	       if(HWAccelerator.getCoprocType()==0)
+		   { header +="#include \"vci_input_engine.h\""+ CR;
+		       header +="#include \"papr_slot.h\""+ CR;
+		   header +="#include \"generic_fifo.h\""+ CR;
+		   header +="#include \"network_io.h\""+ CR;}
+	       else {
+		   if(HWAccelerator.getCoprocType()==1)
+		       { header +="#include \"vci_output_engine.h\""+ CR;}
+	       
+	       
+	       else{
 	       header +="#include \"my_hwa"+hwas+".h\""+ CR;
 	       hwas++;
+	       }
 	   }
 	   //  }
-	   
+	   }
 	    header+= "#include \"vci_block_device.h\"" + CR
 		+ "#include \"vci_simhelper.h\"" + CR + "#include \"vci_fd_access.h\"" + CR
 		+ "#include \"vci_ethernet.h\"" + CR
