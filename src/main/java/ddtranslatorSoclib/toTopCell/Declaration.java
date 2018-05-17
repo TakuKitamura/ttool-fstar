@@ -127,10 +127,10 @@ public class Declaration {
 	
 	if(nb_clusters==0){
 	    // declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+3)+"), maptab);" + CR;
- declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(last_tty+3)+"), maptab);" + CR;
+	    // declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(last_tty+3)+"), maptab);" + CR;
 	}	
 	else{
-	    declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab(0,8), maptab);" + CR;
+	    //   declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab(0,8), maptab);" + CR;
 	}
 
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
@@ -281,7 +281,7 @@ if(nb_clusters==0){
 	  //declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+");" + CR2;
 	  //	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+ ");" + CR2;
 
-	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab,"+(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+4)+ ");" + CR2;
+	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab,"+(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+3)+ ");" + CR2;//DG 17.05.2018
 	  int i=0;
 
           //if BUS was not last in input file, update here
@@ -308,7 +308,7 @@ if(nb_clusters==0){
 	  //	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 	  //	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, " +(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;//DG 28.08.
 
-	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, " +(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;//DG 10.10
+	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, " +(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+3)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;//DG 17.05.2018
 
 	  // declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNbRAM()+TopCellGenerator.avatardd.getNbTTY()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 

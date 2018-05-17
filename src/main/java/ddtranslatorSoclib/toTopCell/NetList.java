@@ -225,24 +225,24 @@ public class NetList {
 	if(nb_clusters==0){
 	    // we can have several TTYs and each is associated to the fdtrom 
 
-	    /*	    if(icn=="vgmn"){
+	    	    if(icn=="vgmn"){
 		netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target())+"](signal_vci_vcifdaccesst);" + CR; 
 		netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+1)+"](signal_vci_ethernett);" + CR;	
 		netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+2)+"](signal_vci_bdt);" + CR;	
-	netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+3)+"](signal_vci_vcilocks);" + CR;	
+		//netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+3)+"](signal_vci_vcilocks);" + CR;	
 	    }else{ //vgsb 
 		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target())+"](signal_vci_vcifdaccesst);" + CR; 
 		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+1)+"](signal_vci_ethernett);" + CR;	
 		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+2)+"](signal_vci_bdt);" + CR;	
-		   		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+3)+"](signal_vci_vcilocks);" + CR;	
-		   }*/
+		//	netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+3)+"](signal_vci_vcilocks);" + CR;	
+		   }
 
 	    int l=8; //number of last tty ToDo
 	    if(icn=="vgmn"){
 		netlist = netlist + "vgmn.p_to_target["+(l)+"](signal_vci_vcifdaccesst);" + CR; 
 		netlist = netlist + "vgmn.p_to_target["+(l+1)+"](signal_vci_ethernett);" + CR;	
 		netlist = netlist + "vgmn.p_to_target["+(l+2)+"](signal_vci_bdt);" + CR;	
-		//netlist = netlist + "vgmn.p_to_target["+(l+3)+"](signal_vci_vcilocks);" + CR;	
+		//	netlist = netlist + "vgmn.p_to_target["+(l+3)+"](signal_vci_vcilocks);" + CR;	
 	int i;
 	//DG 14.09.
 	//int coproc_count=0;
