@@ -25,20 +25,20 @@ request *getNewRequest(int ID, int type, int hasDelay, long minDelay, long maxDe
 void makeNewRequest(request *req, int ID, int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params) {
   long delay;
   int i;
-
+  //debugMsg("makeNewReq");
   req->next = NULL;
   req->listOfRequests = NULL;
   req->nextRequestInList = NULL;
-
+ 
   req->type = type;
   req->ID = ID;
   req->hasDelay = hasDelay;
-
+ 
   if (req->hasDelay > 0) {
     delay = computeLongRandom(minDelay, maxDelay);
     delayToTimeSpec(&(req->delay), delay);
   }
-
+  
   req->selected = 0;
   req->nbOfParams = nbOfParams;
   req->params = params;
@@ -47,10 +47,11 @@ void makeNewRequest(request *req, int ID, int type, int hasDelay, long minDelay,
   req->delayElapsed = 0;
 
   req->relatedRequest = NULL;
-
+ 
   if (type == SEND_ASYNC_REQUEST) {
     // Must create a new message
     req->msg = getNewMessageWithParams(nbOfParams);
+    
     for(i=0; i<nbOfParams; i++) {
       req->msg->params[i] = *(params[i]);
     }
@@ -99,16 +100,20 @@ request *getRequestAtIndex(setOfRequests *list, int index) {
 
 request * addToRequestQueue(request *list, request *requestToAdd) {
   request *origin = list;
+  debugMsg("addToRequestQueue");
 
   if (list == NULL) {
     return requestToAdd;
   }
+debugMsg("addToRequestQueue1");
 
   while(list->next != NULL) {
     list = list->next;
   }
   
   list->next = requestToAdd;
+
+  requestToAdd->next = NULL;
 
   return origin;
 }

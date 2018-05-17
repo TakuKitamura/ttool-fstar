@@ -135,7 +135,7 @@ static inline void rehash_status( struct mwmr_s *fifo, local_mwmr_status_t *stat
     status->wptr =  endian_le32(cpu_mem_read_32( (uintptr_t)&fstatus->wptr ));
     status->rptr =  endian_le32(cpu_mem_read_32( (uintptr_t)&fstatus->rptr ));
 	status->modified = 0;
-//	srl_log_printf(NONE,"%s %d %d %d/%d\n", fifo->name, status->rptr, status->wptr, status->usage, fifo->gdepth);
+
 }
 
 static inline void writeback_status( struct mwmr_s *fifo, local_mwmr_status_t *status )

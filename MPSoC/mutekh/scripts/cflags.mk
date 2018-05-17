@@ -77,6 +77,7 @@ INCS=-nostdinc -D__MUTEK__ \
 	-I$(MUTEK_SRC_DIR)/include \
 	$(foreach mod,$(MODULE_NAMES),-I$($(mod)_SRC_DIR)/include) \
 	$(foreach mod,$(MODULE_NAMES),-I$($(mod)_OBJ_DIR)/include) \
+	-I$(MUTEK_SRC_DIR)/libmwmr/include/mwmr \
 	-I$(CURRENT_DIR) \
 	-I$(BUILD_DIR) \
 	-I$(MUTEK_SRC_DIR) \

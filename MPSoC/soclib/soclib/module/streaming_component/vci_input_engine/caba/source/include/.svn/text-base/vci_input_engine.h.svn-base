@@ -1,0 +1,142 @@
+/* -*- c++ -*-
+ * File      : soclib_vci_input_engine.h
+ * Date      : 221/02/2008
+ * Copyright : UPMC - LIP6
+ *
+**************************************************************************/
+/*
+   This componnent implements a vci input engine. 
+   It is designed to copy network packets from system memory 
+   into ethernet link(a text file).
+ 
+*/
+
+
+/**************************************************************************************************************************/
+#ifndef SOCLIB_VCI_INPUT_ENGINE_H
+#define SOCLIB_VCI_INPUT_ENGINE_H
+
+// includes
+#include <systemc>
+#include <string>
+
+#include "caba_base_module.h"
+#include "vci_initiator.h"
+#include "mapping_table.h"
+#include "generic_fifo.h"
+#include "fifo_ports.h"
+#include "papr_slot.h"
+
+#define BUFFER_SIZE 8192
+
+namespace soclib { namespace caba {
+
+template<typename vci_param>
+class VciInputEngine 
+  : public soclib::caba::BaseModule 
+{
+  // FSM_CONS  	
+  enum fsm_cons_state_e{
+    FSM_CONS_IDLE, 			
+    FSM_CONS_GET_SIZE ,	
+    FSM_CONS_GET_SLOT, 	
+    FSM_CONS_FILL_INT_SLOT ,	
+    FSM_CONS_SEND_INT_VCI, 	
+    FSM_CONS_SEND_INT_VCI_LAST ,
+    FSM_CONS_FILL_EXT_SLOT ,	
+    FSM_CONS_SEND_EXT_VCI, 	
+    FSM_CONS_SEND_EXT_VCI_LAST ,
+    FSM_CONS_MAJ ,		
+    FSM_CONS_SEND_DESC1 ,		
+    FSM_CONS_SEND_DESC2 ,	
+  };
+  //the register holding the FSM_CONS state
+  sc_core::sc_signal< int > r_fsm_cons_state;
+ 
+  //registers used to save useful data between command & response
+  sc_core::sc_signal <int> r_period; 
+  sc_core::sc_signal <int> r_running;
+  sc_core::sc_signal <int> r_channel_index;
+  sc_core::sc_signal <int> r_channel_count;
+  sc_core::sc_signal <int> r_mod1048576;
+  sc_core::sc_signal <int> r_temps;
+  sc_core::sc_signal <int> r_fsm_cons; // registre d'etat de l'automate FSM_CONS
+	
+  
+  sc_core::sc_signal<int> r_write_pointeur;
+  sc_core::sc_signal<int> r_read_pointeur;
+  sc_core::sc_signal<int> r_nb_ext_slot;
+  sc_core::sc_signal<int> r_taille; //taille du paquet courant
+  sc_core::sc_signal<int> r_reste; //taille restante du paquet
+  sc_core::sc_signal<int> r_vci_pointeur;
+  sc_core::sc_signal<int> r_data;
+  sc_core::sc_signal<int> r_address;
+  sc_core::sc_signal<int> r_espace_libre; // place dispo dans le buffer (en octets	
+
+  // compteurs d'instrumentation
+  sc_core::sc_signal<int> r_nb_paquet; // nombre de paquets présents dans le buffer
+  sc_core::sc_signal<int> r_nb_paquet_total; // nombre de paquets lus dans le fichier
+  sc_core::sc_signal<int> r_nb_paquet_transmis; // nombre de paquets transmis
+  sc_core::sc_signal<int> r_nb_paquet_jetes;	// nombre de paquets jetés 
+
+ 
+  // member variables
+
+  unsigned short m_nb_channels;
+  unsigned short m_burst_length;
+  int m_ident;
+  unsigned int m_dext;
+  FILE *m_finput;
+  papr_slot_t vci_slot;
+  papr_desc_or_data_t m_desc_u;
+
+  papr_desc_slot_or_data_t m_desc_slot_u;
+  int  nember_of_writen_info;
+  // la fifo des descripteurs de paquets (2 mots par descripteur)
+  GenericFifo<uint32_t> fifo_desc;
+  unsigned char buffer[BUFFER_SIZE]; // tampon d'ecriture
+   
+protected:
+  // Mandatory SystemC construct
+  SC_HAS_PROCESS(VciInputEngine);
+
+public:
+  // The ports
+  sc_core::sc_in<bool> p_resetn;
+  sc_core::sc_in<bool> p_clk;
+  soclib::caba::VciInitiator<vci_param> p_vci;
+  sc_core::sc_in<uint32_t> p_running;
+  sc_core::sc_out<uint32_t> p_status;
+  soclib::caba::FifoOutput<uint32_t> *p_pktdesc;
+  soclib::caba::FifoInput<uint32_t> p_slin;
+  soclib::caba::FifoInput<uint32_t> p_slext;
+
+
+  // Constructor & descructor, explained above
+  VciInputEngine(
+		 sc_core::sc_module_name insname,
+		 const soclib::common::IntTab &index,
+		 const soclib::common::MappingTable &mt,
+		 const std::string &finput,
+		 unsigned int dext,
+		 unsigned int nchannels,
+		 unsigned int burstlength);
+  ~VciInputEngine();
+
+private:
+  // The FSM functions
+  void transition();
+  void genMoore();
+  
+};
+
+// Namespace closing
+}}
+
+#endif
+
+
+
+  
+ 
+ 

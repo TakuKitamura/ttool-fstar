@@ -19,6 +19,11 @@ int my_clock_gettime(struct timespec *tp) {
   return clock_gettime(tp);
 }
 
+long get_cpu_cycles() {
+debugMsg("GET_CPU_CYCLES\n")
+  return cpu_cycle_count();
+}
+
 #else
 
 int my_clock_gettime(struct timespec *tp) {
@@ -48,6 +53,12 @@ void diffTime(struct timespec *src1, struct timespec *src2, struct timespec *des
   }
 
   dest->tv_sec = src2->tv_sec - src1->tv_sec - diff;
+}
+
+//DG
+void diffCycles(long *src1, long *src2, long *dest) {
+  int diff = 0;debugMsg("DIFF CYCLES\n");
+  *dest = src2-src1;
 }
 
 
@@ -90,8 +101,11 @@ void waitFor(long minDelay, long maxDelay) {
   struct timespec tsret;
   int delay;
 
-  debugMsg("Computing random");
 
+  
+  debugMsg("Computing random delay");
+  //debugLong("Min delay", minDelay);
+  //debugLong("Max delay", maxDelay);
   delay = computeLongRandom(minDelay, maxDelay);
 
   debugLong("Random delay=", delay);
@@ -100,5 +114,6 @@ void waitFor(long minDelay, long maxDelay) {
 
   debugLong("............. waiting For", delay);
   nanosleep(&tssrc, &tsret);
+  debugLong("............. waiting Done for: ", delay);
 }
 

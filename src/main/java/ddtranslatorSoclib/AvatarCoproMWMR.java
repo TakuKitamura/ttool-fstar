@@ -45,6 +45,7 @@
    * @author  Julien Henon, Daniela Genius */
 
 package ddtranslatorSoclib;
+import java.util.LinkedList;
 
 public class AvatarCoproMWMR extends AvatarComponent{
 
@@ -58,12 +59,16 @@ public class AvatarCoproMWMR extends AvatarComponent{
     private int nFromCopro;
     private int nConfig;
     private int nStatus;
-    private boolean useLLSC;
+    private boolean useLLSC; 
+    private int coprocType;
+   
 
     private AvatarConnectingPoint[] connectingsPoints;
     private int nbConnectingPoint = 16 ;
 
-    public AvatarCoproMWMR(String _coprocName,int srcid, int _srcid, int _tgtid, int _plaps, int _fifoToCoprocDepth,int _fifoFromCoprocDepth, int _nToCopro, int _nFromCopro, int _nConfig, int _nStatus, boolean _useLLSC)
+    private LinkedList<AvatarTask> tasksMapped;// DG 21.09.
+
+    public AvatarCoproMWMR(String _coprocName,int srcid, int _srcid, int _tgtid, int _plaps, int _fifoToCoprocDepth,int _fifoFromCoprocDepth, int _nToCopro, int _nFromCopro, int _nConfig, int _nStatus, boolean _useLLSC, int _coprocType)
     {
       coprocName = _coprocName;
       srcid =  _srcid;
@@ -76,9 +81,10 @@ public class AvatarCoproMWMR extends AvatarComponent{
       nConfig = _nConfig;
       nStatus = _nStatus;
       useLLSC = _useLLSC;
-
+      coprocType = _coprocType;
+      
       connectingsPoints = new AvatarConnectingPoint[nbConnectingPoint] ;
-
+      tasksMapped = new LinkedList<AvatarTask>(); //DG 21.09.
     }
     
     AvatarConnectingPoint[] getAvatarConnectingPoints(){
@@ -93,6 +99,11 @@ public class AvatarCoproMWMR extends AvatarComponent{
       connectingsPoints[_indexConnectingPoint].setConnector(_connector);
     }
     
+	public String putCoprocName(String coprocName){
+	    String MyCoprocName = coprocName;
+	return MyCoprocName;
+	}
+
 	public  String getCoprocName(){
 	return coprocName;
 	}
@@ -135,5 +146,17 @@ public class AvatarCoproMWMR extends AvatarComponent{
 	public boolean getUseLLSC(){
 	return useLLSC;
 	}
+
+    public int getCoprocType(){
+	return coprocType;
+	}
+    //DG 21.09.
+    public LinkedList<AvatarTask> getAllTasks(){
+      return tasksMapped;
+    }
+    public void addTask(AvatarTask task){
+      tasksMapped.add(task);
+    }
+
 
 }

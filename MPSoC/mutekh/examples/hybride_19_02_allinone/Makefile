@@ -1,0 +1,1 @@
+objs = main.o B0.o B1.o B2.o B.o debug.o message.o myerrors.o mytimelib.o random.o request.o request_manager.o syncchannel.o asyncchannel.o tracemanager.o

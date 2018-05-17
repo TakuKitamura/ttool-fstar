@@ -9,6 +9,7 @@
 // in usec
 
 int my_clock_gettime(struct timespec *tp);
+long get_cpu_cycles();
 void addTime(struct timespec *src1, struct timespec *src2, struct timespec *dest);
 void diffTime(struct timespec *src1, struct timespec *src2, struct timespec *dest);
 int isBefore(struct timespec *src1, struct timespec *src2);

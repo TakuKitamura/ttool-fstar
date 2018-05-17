@@ -1,0 +1,574 @@
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+#include "request.h"
+#include "myerrors.h"
+#include "message.h"
+#include "syncchannel.h"
+#include "asyncchannel.h"
+#include "mytimelib.h"
+#include "request_manager.h"
+#include "defs.h"
+#include "debug.h"
+#include "random.h"
+#include "tracemanager.h" 
+#include "mwmr.h" 
+ 
+
+#define NB_PROC 2
+#define WIDTH 4
+#define DEPTH 16
+
+void __user_init() {
+}
+
+#include "InterfaceDevice.h"
+#include "SmartCard.h"
+#include "TCPIP.h"
+#include "TCPPacketManager.h"
+#include "Application.h"
+#include "SmartCardController.h"
+
+/* Main mutex */
+pthread_barrier_t barrier ;
+pthread_attr_t *attr_t;
+pthread_mutex_t __mainMutex;
+
+#define CHANNEL0 __attribute__((section("section_channel0")))
+#define LOCK0 __attribute__((section("section_lock0")))
+#define CHANNEL1 __attribute__((section("section_channel1")))
+#define LOCK1 __attribute__((section("section_lock1")))
+#define CHANNEL2 __attribute__((section("section_channel2")))
+#define LOCK2 __attribute__((section("section_lock2")))
+#define CHANNEL3 __attribute__((section("section_channel3")))
+#define LOCK3 __attribute__((section("section_lock3")))
+#define CHANNEL4 __attribute__((section("section_channel4")))
+#define LOCK4 __attribute__((section("section_lock4")))
+#define CHANNEL5 __attribute__((section("section_channel5")))
+#define LOCK5 __attribute__((section("section_lock5")))
+#define CHANNEL6 __attribute__((section("section_channel6")))
+#define LOCK6 __attribute__((section("section_lock6")))
+#define base(arg) arg
+
+typedef struct mwmr_s mwmr_t;
+
+/* Synchronous channels */
+syncchannel __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket;
+syncchannel __TCPIP_emptyListOfPackets__TCPPacketManager_empty;
+syncchannel __TCPIP_addPacket__TCPPacketManager_addPacket;
+syncchannel __TCPIP_ackPacket__TCPPacketManager_ackPacket;
+uint32_t const mwmr_fifo0_lock LOCK0;
+struct mwmr_status_s mwmr_fifo0_status CHANNEL0;
+uint8_t mwmr_fifo0_data[32] CHANNEL0;
+struct mwmr_s mwmr_fifo0 CHANNEL0;
+
+syncchannel __Application_open__TCPIP_open;
+syncchannel __Application_close__TCPIP_close;
+syncchannel __Application_abort__TCPIP_abort;
+syncchannel __Application_sendTCP__TCPIP_send_TCP;
+uint32_t const mwmr_fifo1_lock LOCK1;
+struct mwmr_status_s mwmr_fifo1_status CHANNEL1;
+uint8_t mwmr_fifo1_data[32] CHANNEL1;
+struct mwmr_s mwmr_fifo1 CHANNEL1;
+
+syncchannel __SmartCardController_fromTtoP__TCPIP_fromTtoP;
+syncchannel __SmartCardController_fromPtoT__TCPIP_fromPtoT;
+syncchannel __SmartCardController_start_TCPIP__TCPIP_start;
+uint32_t const mwmr_fifo2_lock LOCK2;
+struct mwmr_status_s mwmr_fifo2_status CHANNEL2;
+uint8_t mwmr_fifo2_data[32] CHANNEL2;
+struct mwmr_s mwmr_fifo2 CHANNEL2;
+
+syncchannel __SmartCardController_reset__InterfaceDevice_reset;
+syncchannel __SmartCardController_pTS__InterfaceDevice_pTS;
+syncchannel __SmartCardController_dataReady__InterfaceDevice_data_Ready;
+syncchannel __SmartCardController_activation__InterfaceDevice_activation;
+syncchannel __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC;
+syncchannel __SmartCardController_answerToReset__InterfaceDevice_answerToReset;
+syncchannel __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm;
+syncchannel __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD;
+syncchannel __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady;
+uint32_t const mwmr_fifo3_lock LOCK3;
+struct mwmr_status_s mwmr_fifo3_status CHANNEL3;
+uint8_t mwmr_fifo3_data[32] CHANNEL3;
+struct mwmr_s mwmr_fifo3 CHANNEL3;
+
+syncchannel __SmartCardController_start_Application__Application_startApplication;
+uint32_t const mwmr_fifo4_lock LOCK4;
+struct mwmr_status_s mwmr_fifo4_status CHANNEL4;
+uint8_t mwmr_fifo4_data[32] CHANNEL4;
+struct mwmr_s mwmr_fifo4 CHANNEL4;
+
+syncchannel __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set;
+syncchannel __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset;
+syncchannel __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire;
+uint32_t const mwmr_fifo5_lock LOCK5;
+struct mwmr_status_s mwmr_fifo5_status CHANNEL5;
+uint8_t mwmr_fifo5_data[32] CHANNEL5;
+struct mwmr_s mwmr_fifo5 CHANNEL5;
+
+syncchannel __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set;
+syncchannel __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset;
+syncchannel __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire;
+uint32_t const mwmr_fifo6_lock LOCK6;
+struct mwmr_status_s mwmr_fifo6_status CHANNEL6;
+uint8_t mwmr_fifo6_data[32] CHANNEL6;
+struct mwmr_s mwmr_fifo6 CHANNEL6;
+
+/* Asynchronous channels */
+asyncchannel __TCPIP_receiveTCP__Application_receiveTCP;
+uint32_t const mwmr_fifo9_lock LOCK9;
+struct mwmr_status_s mwmr_fifo9_status CHANNEL9;
+uint8_t  mwmr_fifo9_data[32] CHANNEL9;
+struct mwmr_s mwmr_fifo9 CHANNEL9;
+
+asyncchannel __TCPPacketManager_storePacket__TCPPacketManager_retrieve;
+uint32_t const mwmr_fifo9_lock LOCK9;
+struct mwmr_status_s mwmr_fifo9_status CHANNEL9;
+uint8_t  mwmr_fifo9_data[32] CHANNEL9;
+struct mwmr_s mwmr_fifo9 CHANNEL9;
+
+
+int main(int argc, char *argv[]) {
+  
+  
+  void *ptr;
+  pthread_barrier_init(&barrier,NULL, NB_PROC);
+  pthread_attr_t *attr_t = malloc(sizeof(pthread_attr_t));
+  pthread_attr_init(attr_t);
+  pthread_mutex_init(&__mainMutex, NULL);
+  
+  /* Synchronous channels */
+  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.inname ="timeoutPacket";
+  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.outname ="timeoutPacket";
+  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.ok = 1;
+  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.ok2 = 0;
+  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.mwmr_fifo = &mwmr_fifo0;
+  __TCPIP_emptyListOfPackets__TCPPacketManager_empty.inname ="empty";
+  __TCPIP_emptyListOfPackets__TCPPacketManager_empty.outname ="emptyListOfPackets";
+  __TCPIP_emptyListOfPackets__TCPPacketManager_empty.ok = 1;
+  __TCPIP_emptyListOfPackets__TCPPacketManager_empty.ok2 = 0;
+  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.mwmr_fifo = &mwmr_fifo0;
+  __TCPIP_addPacket__TCPPacketManager_addPacket.inname ="addPacket";
+  __TCPIP_addPacket__TCPPacketManager_addPacket.outname ="addPacket";
+  __TCPIP_addPacket__TCPPacketManager_addPacket.ok = 1;
+  __TCPIP_addPacket__TCPPacketManager_addPacket.ok2 = 0;
+  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.mwmr_fifo = &mwmr_fifo0;
+  __TCPIP_ackPacket__TCPPacketManager_ackPacket.inname ="ackPacket";
+  __TCPIP_ackPacket__TCPPacketManager_ackPacket.outname ="ackPacket";
+  __TCPIP_ackPacket__TCPPacketManager_ackPacket.ok = 1;
+  __TCPIP_ackPacket__TCPPacketManager_ackPacket.ok2 = 0;
+  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.mwmr_fifo = &mwmr_fifo0;
+  mwmr_fifo0.width = 32;
+  mwmr_fifo0.depth = 100;
+  mwmr_fifo0.gdepth = mwmr_fifo0.depth;
+  mwmr_fifo0.buffer = mwmr_fifo0_data;
+  mwmr_fifo0.status = &mwmr_fifo0_status;
+  
+  mwmr_fifo0_status.rptr = 0;
+  mwmr_fifo0_status.wptr = 0;
+  mwmr_fifo0_status.usage = 0;
+  mwmr_fifo0_status.lock = 0;
+  
+  mwmr_fifo0.status =&mwmr_fifo0_status;
+  mwmr_fifo0.status->lock=0;
+  mwmr_fifo0.status->rptr=0;
+  mwmr_fifo0.status->usage=0;
+  mwmr_fifo0.status->wptr =0;
+  __Application_open__TCPIP_open.inname ="open";
+  __Application_open__TCPIP_open.outname ="open";
+  __Application_open__TCPIP_open.ok = 1;
+  __Application_open__TCPIP_open.ok2 = 0;
+  __Application_open__TCPIP_open.mwmr_fifo = &mwmr_fifo1;
+  __Application_close__TCPIP_close.inname ="close";
+  __Application_close__TCPIP_close.outname ="close";
+  __Application_close__TCPIP_close.ok = 1;
+  __Application_close__TCPIP_close.ok2 = 0;
+  __Application_open__TCPIP_open.mwmr_fifo = &mwmr_fifo1;
+  __Application_abort__TCPIP_abort.inname ="abort";
+  __Application_abort__TCPIP_abort.outname ="abort";
+  __Application_abort__TCPIP_abort.ok = 1;
+  __Application_abort__TCPIP_abort.ok2 = 0;
+  __Application_open__TCPIP_open.mwmr_fifo = &mwmr_fifo1;
+  __Application_sendTCP__TCPIP_send_TCP.inname ="send_TCP";
+  __Application_sendTCP__TCPIP_send_TCP.outname ="sendTCP";
+  __Application_sendTCP__TCPIP_send_TCP.ok = 1;
+  __Application_sendTCP__TCPIP_send_TCP.ok2 = 0;
+  __Application_open__TCPIP_open.mwmr_fifo = &mwmr_fifo1;
+  mwmr_fifo1.width = 4;
+  mwmr_fifo1.depth = 100;
+  mwmr_fifo1.gdepth = mwmr_fifo1.depth;
+  mwmr_fifo1.buffer = mwmr_fifo1_data;
+  mwmr_fifo1.status = &mwmr_fifo1_status;
+  
+  mwmr_fifo1_status.rptr = 0;
+  mwmr_fifo1_status.wptr = 0;
+  mwmr_fifo1_status.usage = 0;
+  mwmr_fifo1_status.lock = 0;
+  
+  mwmr_fifo1.status =&mwmr_fifo1_status;
+  mwmr_fifo1.status->lock=0;
+  mwmr_fifo1.status->rptr=0;
+  mwmr_fifo1.status->usage=0;
+  mwmr_fifo1.status->wptr =0;
+  __SmartCardController_fromTtoP__TCPIP_fromTtoP.inname ="fromTtoP";
+  __SmartCardController_fromTtoP__TCPIP_fromTtoP.outname ="fromTtoP";
+  __SmartCardController_fromTtoP__TCPIP_fromTtoP.ok = 1;
+  __SmartCardController_fromTtoP__TCPIP_fromTtoP.ok2 = 0;
+  __SmartCardController_fromTtoP__TCPIP_fromTtoP.mwmr_fifo = &mwmr_fifo2;
+  __SmartCardController_fromPtoT__TCPIP_fromPtoT.inname ="fromPtoT";
+  __SmartCardController_fromPtoT__TCPIP_fromPtoT.outname ="fromPtoT";
+  __SmartCardController_fromPtoT__TCPIP_fromPtoT.ok = 1;
+  __SmartCardController_fromPtoT__TCPIP_fromPtoT.ok2 = 0;
+  __SmartCardController_fromTtoP__TCPIP_fromTtoP.mwmr_fifo = &mwmr_fifo2;
+  __SmartCardController_start_TCPIP__TCPIP_start.inname ="start";
+  __SmartCardController_start_TCPIP__TCPIP_start.outname ="start_TCPIP";
+  __SmartCardController_start_TCPIP__TCPIP_start.ok = 1;
+  __SmartCardController_start_TCPIP__TCPIP_start.ok2 = 0;
+  __SmartCardController_fromTtoP__TCPIP_fromTtoP.mwmr_fifo = &mwmr_fifo2;
+  mwmr_fifo2.width = 32;
+  mwmr_fifo2.depth = 100;
+  mwmr_fifo2.gdepth = mwmr_fifo2.depth;
+  mwmr_fifo2.buffer = mwmr_fifo2_data;
+  mwmr_fifo2.status = &mwmr_fifo2_status;
+  
+  mwmr_fifo2_status.rptr = 0;
+  mwmr_fifo2_status.wptr = 0;
+  mwmr_fifo2_status.usage = 0;
+  mwmr_fifo2_status.lock = 0;
+  
+  mwmr_fifo2.status =&mwmr_fifo2_status;
+  mwmr_fifo2.status->lock=0;
+  mwmr_fifo2.status->rptr=0;
+  mwmr_fifo2.status->usage=0;
+  mwmr_fifo2.status->wptr =0;
+  __SmartCardController_reset__InterfaceDevice_reset.inname ="reset";
+  __SmartCardController_reset__InterfaceDevice_reset.outname ="reset";
+  __SmartCardController_reset__InterfaceDevice_reset.ok = 1;
+  __SmartCardController_reset__InterfaceDevice_reset.ok2 = 0;
+  __SmartCardController_reset__InterfaceDevice_reset.mwmr_fifo = &mwmr_fifo3;
+  __SmartCardController_pTS__InterfaceDevice_pTS.inname ="pTS";
+  __SmartCardController_pTS__InterfaceDevice_pTS.outname ="pTS";
+  __SmartCardController_pTS__InterfaceDevice_pTS.ok = 1;
+  __SmartCardController_pTS__InterfaceDevice_pTS.ok2 = 0;
+  __SmartCardController_reset__InterfaceDevice_reset.mwmr_fifo = &mwmr_fifo3;
+  __SmartCardController_dataReady__InterfaceDevice_data_Ready.inname ="dataReady";
+  __SmartCardController_dataReady__InterfaceDevice_data_Ready.outname ="data_Ready";
+  __SmartCardController_dataReady__InterfaceDevice_data_Ready.ok = 1;
+  __SmartCardController_dataReady__InterfaceDevice_data_Ready.ok2 = 0;
+  __SmartCardController_reset__InterfaceDevice_reset.mwmr_fifo = &mwmr_fifo3;
+  __SmartCardController_activation__InterfaceDevice_activation.inname ="activation";
+  __SmartCardController_activation__InterfaceDevice_activation.outname ="activation";
+  __SmartCardController_activation__InterfaceDevice_activation.ok = 1;
+  __SmartCardController_activation__InterfaceDevice_activation.ok2 = 0;
+  __SmartCardController_reset__InterfaceDevice_reset.mwmr_fifo = &mwmr_fifo3;
+  __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.inname ="fromDtoSC";
+  __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.outname ="fromDtoSC";
+  __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.ok = 1;
+  __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.ok2 = 0;
+  __SmartCardController_reset__InterfaceDevice_reset.mwmr_fifo = &mwmr_fifo3;
+  __SmartCardController_answerToReset__InterfaceDevice_answerToReset.inname ="answerToReset";
+  __SmartCardController_answerToReset__InterfaceDevice_answerToReset.outname ="answerToReset";
+  __SmartCardController_answerToReset__InterfaceDevice_answerToReset.ok = 1;
+  __SmartCardController_answerToReset__InterfaceDevice_answerToReset.ok2 = 0;
+  __SmartCardController_reset__InterfaceDevice_reset.mwmr_fifo = &mwmr_fifo3;
+  __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.inname ="pTSConfirm";
+  __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.outname ="pTSCConfirm";
+  __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.ok = 1;
+  __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.ok2 = 0;
+  __SmartCardController_reset__InterfaceDevice_reset.mwmr_fifo = &mwmr_fifo3;
+  __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.inname ="fromSCtoD";
+  __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.outname ="fromSCtoD";
+  __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.ok = 1;
+  __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.ok2 = 0;
+  __SmartCardController_reset__InterfaceDevice_reset.mwmr_fifo = &mwmr_fifo3;
+  __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.inname ="dataReady";
+  __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.outname ="data_Ready_SC";
+  __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.ok = 1;
+  __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.ok2 = 0;
+  __SmartCardController_reset__InterfaceDevice_reset.mwmr_fifo = &mwmr_fifo3;
+  mwmr_fifo3.width = 4;
+  mwmr_fifo3.depth = 100;
+  mwmr_fifo3.gdepth = mwmr_fifo3.depth;
+  mwmr_fifo3.buffer = mwmr_fifo3_data;
+  mwmr_fifo3.status = &mwmr_fifo3_status;
+  
+  mwmr_fifo3_status.rptr = 0;
+  mwmr_fifo3_status.wptr = 0;
+  mwmr_fifo3_status.usage = 0;
+  mwmr_fifo3_status.lock = 0;
+  
+  mwmr_fifo3.status =&mwmr_fifo3_status;
+  mwmr_fifo3.status->lock=0;
+  mwmr_fifo3.status->rptr=0;
+  mwmr_fifo3.status->usage=0;
+  mwmr_fifo3.status->wptr =0;
+  __SmartCardController_start_Application__Application_startApplication.inname ="startApplication";
+  __SmartCardController_start_Application__Application_startApplication.outname ="start_Application";
+  __SmartCardController_start_Application__Application_startApplication.ok = 1;
+  __SmartCardController_start_Application__Application_startApplication.ok2 = 0;
+  __SmartCardController_start_Application__Application_startApplication.mwmr_fifo = &mwmr_fifo4;
+  mwmr_fifo4.width = 4;
+  mwmr_fifo4.depth = 100;
+  mwmr_fifo4.gdepth = mwmr_fifo4.depth;
+  mwmr_fifo4.buffer = mwmr_fifo4_data;
+  mwmr_fifo4.status = &mwmr_fifo4_status;
+  
+  mwmr_fifo4_status.rptr = 0;
+  mwmr_fifo4_status.wptr = 0;
+  mwmr_fifo4_status.usage = 0;
+  mwmr_fifo4_status.lock = 0;
+  
+  mwmr_fifo4.status =&mwmr_fifo4_status;
+  mwmr_fifo4.status->lock=0;
+  mwmr_fifo4.status->rptr=0;
+  mwmr_fifo4.status->usage=0;
+  mwmr_fifo4.status->wptr =0;
+  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.inname ="set";
+  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.outname ="set__mainTimer";
+  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.ok = 1;
+  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.ok2 = 0;
+  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.mwmr_fifo = &mwmr_fifo5;
+  __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.inname ="reset";
+  __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.outname ="reset__mainTimer";
+  __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.ok = 1;
+  __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.ok2 = 0;
+  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.mwmr_fifo = &mwmr_fifo5;
+  __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.inname ="expire__mainTimer";
+  __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.outname ="expire";
+  __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.ok = 1;
+  __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.ok2 = 0;
+  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.mwmr_fifo = &mwmr_fifo5;
+  mwmr_fifo5.width = 4;
+  mwmr_fifo5.depth = 100;
+  mwmr_fifo5.gdepth = mwmr_fifo5.depth;
+  mwmr_fifo5.buffer = mwmr_fifo5_data;
+  mwmr_fifo5.status = &mwmr_fifo5_status;
+  
+  mwmr_fifo5_status.rptr = 0;
+  mwmr_fifo5_status.wptr = 0;
+  mwmr_fifo5_status.usage = 0;
+  mwmr_fifo5_status.lock = 0;
+  
+  mwmr_fifo5.status =&mwmr_fifo5_status;
+  mwmr_fifo5.status->lock=0;
+  mwmr_fifo5.status->rptr=0;
+  mwmr_fifo5.status->usage=0;
+  mwmr_fifo5.status->wptr =0;
+  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.inname ="set";
+  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.outname ="set__timerP";
+  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.ok = 1;
+  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.ok2 = 0;
+  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.mwmr_fifo = &mwmr_fifo6;
+  __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.inname ="reset";
+  __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.outname ="reset__timerP";
+  __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.ok = 1;
+  __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.ok2 = 0;
+  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.mwmr_fifo = &mwmr_fifo6;
+  __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.inname ="expire__timerP";
+  __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.outname ="expire";
+  __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.ok = 1;
+  __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.ok2 = 0;
+  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.mwmr_fifo = &mwmr_fifo6;
+  mwmr_fifo6.width = 4;
+  mwmr_fifo6.depth = 100;
+  mwmr_fifo6.gdepth = mwmr_fifo6.depth;
+  mwmr_fifo6.buffer = mwmr_fifo6_data;
+  mwmr_fifo6.status = &mwmr_fifo6_status;
+  
+  mwmr_fifo6_status.rptr = 0;
+  mwmr_fifo6_status.wptr = 0;
+  mwmr_fifo6_status.usage = 0;
+  mwmr_fifo6_status.lock = 0;
+  
+  mwmr_fifo6.status =&mwmr_fifo6_status;
+  mwmr_fifo6.status->lock=0;
+  mwmr_fifo6.status->rptr=0;
+  mwmr_fifo6.status->usage=0;
+  mwmr_fifo6.status->wptr =0;
+  /* Asynchronous channels */
+  __TCPIP_receiveTCP__Application_receiveTCP.inname ="receiveTCP";
+  __TCPIP_receiveTCP__Application_receiveTCP.outname ="receiveTCP";
+  __TCPIP_receiveTCP__Application_receiveTCP.isBlocking = 0;
+  __TCPIP_receiveTCP__Application_receiveTCP.maxNbOfMessages = 5;
+  __TCPIP_receiveTCP__Application_receiveTCP.mwmr_fifo = &mwmr_fifo9;
+  mwmr_fifo9.width = 4;
+  mwmr_fifo9.depth = 5;
+  mwmr_fifo9.gdepth = mwmr_fifo9.depth;
+  mwmr_fifo9.buffer = mwmr_fifo9_data;
+  mwmr_fifo9.status = &mwmr_fifo9_status;
+  mwmr_fifo9.status->lock=0;
+  mwmr_fifo9.status->rptr=0;
+  mwmr_fifo9.status->usage=0;
+  mwmr_fifo9.status->wptr=0;
+  mwmr_fifo9_status.rptr = 0;
+  mwmr_fifo9_status.wptr = 0;
+  mwmr_fifo9_status.usage = 0;
+  mwmr_fifo9_status.lock = 0;
+  
+  __TCPPacketManager_storePacket__TCPPacketManager_retrieve.inname ="retrieve";
+  __TCPPacketManager_storePacket__TCPPacketManager_retrieve.outname ="storePacket";
+  __TCPPacketManager_storePacket__TCPPacketManager_retrieve.isBlocking = 0;
+  __TCPPacketManager_storePacket__TCPPacketManager_retrieve.maxNbOfMessages = 5;
+  __TCPPacketManager_storePacket__TCPPacketManager_retrieve.mwmr_fifo = &mwmr_fifo9;
+  mwmr_fifo9.width = 32;
+  mwmr_fifo9.depth = 5;
+  mwmr_fifo9.gdepth = mwmr_fifo9.depth;
+  mwmr_fifo9.buffer = mwmr_fifo9_data;
+  mwmr_fifo9.status = &mwmr_fifo9_status;
+  mwmr_fifo9.status->lock=0;
+  mwmr_fifo9.status->rptr=0;
+  mwmr_fifo9.status->usage=0;
+  mwmr_fifo9.status->wptr=0;
+  mwmr_fifo9_status.rptr = 0;
+  mwmr_fifo9_status.wptr = 0;
+  mwmr_fifo9_status.usage = 0;
+  mwmr_fifo9_status.lock = 0;
+  
+  
+  /* Threads of tasks */
+  pthread_t thread__InterfaceDevice;
+  pthread_t thread__SmartCard;
+  pthread_t thread__TCPIP;
+  pthread_t thread__TCPPacketManager;
+  pthread_t thread__Application;
+  pthread_t thread__SmartCardController;
+  /* Activating tracing  */
+  /* Activating randomness */
+  initRandom();
+  /* Initializing the main mutex */
+if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}
+  
+  /* User initialization */
+  __user_init();
+  
+  
+  struct mwmr_s *channels_array_InterfaceDevice[9];
+  channels_array_InterfaceDevice[0]=&mwmr_fifo9;
+  channels_array_InterfaceDevice[1]=&mwmr_fifo9;
+  channels_array_InterfaceDevice[2]=&mwmr_fifo9;
+  channels_array_InterfaceDevice[3]=&mwmr_fifo10;
+  channels_array_InterfaceDevice[4]=&mwmr_fifo11;
+  channels_array_InterfaceDevice[5]=&mwmr_fifo12;
+  channels_array_InterfaceDevice[6]=&mwmr_fifo13;
+  channels_array_InterfaceDevice[7]=&mwmr_fifo14;
+  channels_array_InterfaceDevice[8]=&mwmr_fifo15;
+  
+  ptr =malloc(sizeof(pthread_t));
+  thread__InterfaceDevice= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  pthread_attr_affinity(attr_t, 1);  
+  
+  
+  pthread_create(&thread__InterfaceDevice, attr_t, mainFunc__InterfaceDevice, (void *)channels_array_InterfaceDevice);
+  
+  struct mwmr_s *channels_array_SmartCard[9];
+  channels_array_SmartCard[0]=&mwmr_fifo9;
+  channels_array_SmartCard[1]=&mwmr_fifo9;
+  channels_array_SmartCard[2]=&mwmr_fifo9;
+  channels_array_SmartCard[3]=&mwmr_fifo10;
+  channels_array_SmartCard[4]=&mwmr_fifo11;
+  channels_array_SmartCard[5]=&mwmr_fifo12;
+  channels_array_SmartCard[6]=&mwmr_fifo13;
+  channels_array_SmartCard[7]=&mwmr_fifo14;
+  channels_array_SmartCard[8]=&mwmr_fifo15;
+  
+  ptr =malloc(sizeof(pthread_t));
+  thread__SmartCard= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  pthread_attr_affinity(attr_t, 0);  
+  
+  
+  pthread_create(&thread__SmartCard, attr_t, mainFunc__SmartCard, (void *)channels_array_SmartCard);
+  
+  struct mwmr_s *channels_array_TCPIP[9];
+  channels_array_TCPIP[0]=&mwmr_fifo9;
+  channels_array_TCPIP[1]=&mwmr_fifo9;
+  channels_array_TCPIP[2]=&mwmr_fifo9;
+  channels_array_TCPIP[3]=&mwmr_fifo10;
+  channels_array_TCPIP[4]=&mwmr_fifo11;
+  channels_array_TCPIP[5]=&mwmr_fifo12;
+  channels_array_TCPIP[6]=&mwmr_fifo13;
+  channels_array_TCPIP[7]=&mwmr_fifo14;
+  channels_array_TCPIP[8]=&mwmr_fifo15;
+  
+  ptr =malloc(sizeof(pthread_t));
+  thread__TCPIP= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  pthread_attr_affinity(attr_t, 0);  
+  
+  
+  pthread_create(&thread__TCPIP, attr_t, mainFunc__TCPIP, (void *)channels_array_TCPIP);
+  
+  struct mwmr_s *channels_array_TCPPacketManager[9];
+  channels_array_TCPPacketManager[0]=&mwmr_fifo9;
+  channels_array_TCPPacketManager[1]=&mwmr_fifo9;
+  channels_array_TCPPacketManager[2]=&mwmr_fifo9;
+  channels_array_TCPPacketManager[3]=&mwmr_fifo10;
+  channels_array_TCPPacketManager[4]=&mwmr_fifo11;
+  channels_array_TCPPacketManager[5]=&mwmr_fifo12;
+  channels_array_TCPPacketManager[6]=&mwmr_fifo13;
+  channels_array_TCPPacketManager[7]=&mwmr_fifo14;
+  channels_array_TCPPacketManager[8]=&mwmr_fifo15;
+  
+  ptr =malloc(sizeof(pthread_t));
+  thread__TCPPacketManager= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  pthread_attr_affinity(attr_t, 0);  
+  
+  
+  pthread_create(&thread__TCPPacketManager, attr_t, mainFunc__TCPPacketManager, (void *)channels_array_TCPPacketManager);
+  
+  struct mwmr_s *channels_array_Application[9];
+  channels_array_Application[0]=&mwmr_fifo9;
+  channels_array_Application[1]=&mwmr_fifo9;
+  channels_array_Application[2]=&mwmr_fifo9;
+  channels_array_Application[3]=&mwmr_fifo10;
+  channels_array_Application[4]=&mwmr_fifo11;
+  channels_array_Application[5]=&mwmr_fifo12;
+  channels_array_Application[6]=&mwmr_fifo13;
+  channels_array_Application[7]=&mwmr_fifo14;
+  channels_array_Application[8]=&mwmr_fifo15;
+  
+  ptr =malloc(sizeof(pthread_t));
+  thread__Application= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  pthread_attr_affinity(attr_t, 0);  
+  
+  
+  pthread_create(&thread__Application, attr_t, mainFunc__Application, (void *)channels_array_Application);
+  
+  struct mwmr_s *channels_array_SmartCardController[9];
+  channels_array_SmartCardController[0]=&mwmr_fifo9;
+  channels_array_SmartCardController[1]=&mwmr_fifo9;
+  channels_array_SmartCardController[2]=&mwmr_fifo9;
+  channels_array_SmartCardController[3]=&mwmr_fifo10;
+  channels_array_SmartCardController[4]=&mwmr_fifo11;
+  channels_array_SmartCardController[5]=&mwmr_fifo12;
+  channels_array_SmartCardController[6]=&mwmr_fifo13;
+  channels_array_SmartCardController[7]=&mwmr_fifo14;
+  channels_array_SmartCardController[8]=&mwmr_fifo15;
+  
+  ptr =malloc(sizeof(pthread_t));
+  thread__SmartCardController= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  pthread_attr_affinity(attr_t, 0);  
+  
+  
+  pthread_create(&thread__SmartCardController, attr_t, mainFunc__SmartCardController, (void *)channels_array_SmartCardController);
+  
+  
+  
+  pthread_join(thread__InterfaceDevice, NULL);
+  pthread_join(thread__SmartCard, NULL);
+  pthread_join(thread__TCPIP, NULL);
+  pthread_join(thread__TCPPacketManager, NULL);
+  pthread_join(thread__Application, NULL);
+  pthread_join(thread__SmartCardController, NULL);
+  
+  
+  return 0;
+  
+}

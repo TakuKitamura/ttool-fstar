@@ -1,0 +1,10 @@
+/users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/libc/error.o: \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/error.c \
+ /users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/config.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/string.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/decls.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/include/arch/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/error.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/errno.h

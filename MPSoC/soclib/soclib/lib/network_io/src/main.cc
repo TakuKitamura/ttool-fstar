@@ -10,8 +10,8 @@ int sc_main( int argc, char **argv )
 	using namespace soclib::common;
 
 	try {
-		NetworkIo ni(argv[1], argv[2], "");
-		NetworkIo no(argv[3], "", argv[4]);
+	  NetworkIo ni(argv[1], argv[2], "");
+	  NetworkIo no(argv[3], "", argv[4]);
 		while (ni.has_packet()) {
 			NetworkPacket *p = ni.get_packet();
 			if ( !p )

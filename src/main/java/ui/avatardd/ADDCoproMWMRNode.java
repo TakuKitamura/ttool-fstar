@@ -49,7 +49,7 @@ import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogADDCoproMWMRNode;
-
+import java.util.Vector;
 import javax.swing.*;
 import java.awt.*;
 
@@ -65,7 +65,7 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 	private int textY2 = 30;
 	private int derivationx = 2;
 	private int derivationy = 3;
-	private String stereotype = "MWMR-CoPro";
+	private String stereotype = "HWA";
 
 
 	private int srcid; // initiator id 
@@ -78,7 +78,7 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 	private int nConfig; // Nb of configuration registers
 	private int nStatus; // nb of status registers
 	private boolean useLLSC; // more efficient protocol. 0: not used. 1 or more -> used
-
+        private int coprocType;//virtual or real coproc
 
 	public ADDCoproMWMRNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -342,6 +342,9 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 		useLLSC = dialog.getUseLLSC();
 		TraceManager.addDev("useLLSC = " + useLLSC);
 
+		coprocType = dialog.getCoprocType();
+		TraceManager.addDev("coproc type = " + coprocType);
+		
 		if (error) {
 			JOptionPane.showMessageDialog(frame,
 					"Invalid value for the following attributes: " + errors,
@@ -373,6 +376,7 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 		sb.append(" nConfig=\"" + nConfig + "\" ");
 		sb.append(" nStatus=\"" + nStatus + "\" ");
 		sb.append(" useLLSC=\"" + useLLSC + "\" ");
+		sb.append(" coprocType=\"" + coprocType + "\" ");
 		sb.append("/>\n");
 		sb.append("</extraparam>\n");
 		return new String(sb);
@@ -421,8 +425,9 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 								nFromCopro = Integer.decode(elt.getAttribute("nFromCopro")).intValue();
 								nConfig = Integer.decode(elt.getAttribute("nConfig")).intValue();
 								nStatus = Integer.decode(elt.getAttribute("nStatus")).intValue();
-								tmp = elt.getAttribute("useLLSC");
+								tmp = elt.getAttribute("useLLSC");							      
                                 useLLSC = tmp.compareTo("true") == 0;
+				coprocType = Integer.decode(elt.getAttribute("coprocType")).intValue();
 
 							}
 						}
@@ -447,6 +452,7 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 		attr += "nConfig = " + nConfig + "\n";
 		attr += "nStatus = " + nStatus + "\n";
 		attr += "useLLSC = " + useLLSC + "\n";
+		attr += "coprocType = " + coprocType + "\n";
 		return attr;	
 	}
 
@@ -502,4 +508,22 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 	public boolean getUseLLSC() {
 		return useLLSC;
 	}
+
+        public int getCoprocType() {
+		return coprocType;
+	}
+
+    //DG 19.09.
+    public Vector<ADDBlockArtifact> getArtifactList() {
+        Vector<ADDBlockArtifact> v = new Vector<ADDBlockArtifact>();
+        
+        for(int i=0; i<nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof ADDBlockArtifact) {
+                v.add( (ADDBlockArtifact) tgcomponent[i] );
+            }
+        }
+        
+        return v;
+    }
+
 }

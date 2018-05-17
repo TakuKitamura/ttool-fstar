@@ -44,7 +44,8 @@ void debugInt(char *msg, int value) {
   }
   
   if (msg != NULL) {
-    printf("DT> %s: %d\n", msg, value);
+    // printf("DT> %s: %d\n", msg, value);
+ printf("DT> %s: %x\n", msg, value);
   }
 }
 

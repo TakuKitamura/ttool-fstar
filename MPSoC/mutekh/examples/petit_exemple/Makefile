@@ -1,0 +1,1 @@
+objs = main.o B0.o B1.o B2.o B.o
