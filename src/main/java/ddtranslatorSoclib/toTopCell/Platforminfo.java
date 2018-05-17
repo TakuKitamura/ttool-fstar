@@ -62,11 +62,11 @@ public class Platforminfo {
     //bus can be other than VGSB (CAN...), for the moment restricted to VGSB
         String platforminfo = CR;
         platforminfo +="use =  ["+CR
-	+"Uses('caba:vci_locks'),"+CR
-	+"Uses('caba:vci_ram'),"+CR
-	+"Uses('caba:vci_fdt_rom'),"+CR
-	+"Uses('caba:vci_heterogeneous_rom'),"+CR
-	+"Uses('caba:vci_multi_tty'),"+CR
+	    //    	+"Uses('caba:vci_locks'),"+CR	    
+	    	+"Uses('caba:vci_ram'),"+CR
+	    	+"Uses('caba:vci_fdt_rom'),"+CR
+	    	+"Uses('caba:vci_heterogeneous_rom'),"+CR
+	    	+"Uses('caba:vci_multi_tty'),"+CR
 	+"Uses('caba:vci_xicu'),"+CR
 	+"Uses('caba:vci_block_device'),"+CR
 	+"Uses('caba:vci_ethernet'),"+CR

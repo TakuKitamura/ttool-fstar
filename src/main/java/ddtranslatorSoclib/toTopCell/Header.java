@@ -83,7 +83,9 @@ int nb_clusters=5;
 	    + "#include \"mapping_table.h\"" + CR
 				+ "#include \"vci_fdt_rom.h\"" + CR + "#include \"vci_xcache_wrapper.h\"" + CR
 				+ "#include \"vci_ram.h\"" + CR + "#include \"vci_heterogeneous_rom.h\"" + CR
-	    + "#include \"vci_multi_tty.h\"" + CR + "#include \"vci_locks.h\"" + CR + "#include \"vci_xicu.h\""+ CR
+	      + "#include \"vci_multi_tty.h\"" + CR
+	    //+ "#include \"vci_locks.h\"" + CR
+	    + "#include \"vci_xicu.h\""+ CR
 	    + "#include \"vci_mwmr_stats.h\""+ CR;//DG 20.09.
 	    if (with_vgsb>0){
 		header +="#include \"vci_vgsb.h\""+ CR;
