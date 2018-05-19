@@ -104,7 +104,7 @@ import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.ftd.FaultTreeDiagramPanel;
 import graph.RG;
-import ui.het.CAMSBlockDiagramPanel;
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.iod.InteractionOverviewDiagramPanel;
 import ui.ncdd.NCDiagramPanel;
 import ui.osad.TURTLEOSActivityDiagramPanel;
@@ -6222,14 +6222,14 @@ public class GTURTLEModeling {
                     }
                 }
 
-            } else if (tdp instanceof CAMSBlockDiagramPanel) {  //ajout CD 24.07----mark
-                nl = doc.getElementsByTagName("CAMSBlockDiagramPanelCopy");
+            } else if (tdp instanceof SysCAMSComponentTaskDiagramPanel) { 
+                nl = doc.getElementsByTagName("SysCAMSComponentTaskDiagramPanelCopy");
 
                 if (nl == null) {
                     return;
                 }
 
-                CAMSBlockDiagramPanel camsp = (CAMSBlockDiagramPanel) tdp;
+                SysCAMSComponentTaskDiagramPanel camsp = (SysCAMSComponentTaskDiagramPanel) tdp;
 
                 for (i = 0; i < nl.getLength(); i++) {
                     adn = nl.item(i);
@@ -6455,7 +6455,7 @@ public class GTURTLEModeling {
         } else if (type.compareTo("Sysmlsec Methodology") == 0) {
             loadSysmlsecMethodology(node);
         } else if (type.compareTo("SystemC-AMS") == 0) {
-            loadSystemCAMS(node);
+            loadSysCAMS(node);
         } else if (type.compareTo("TML Design") == 0) {
             loadTMLDesign(node);
         } else if (type.compareTo("TML Component Design") == 0) {
@@ -6986,16 +6986,15 @@ public class GTURTLEModeling {
         }
     }
 
-    public void loadSystemCAMS(Node node) throws MalformedModelingException, SAXException {
+		public void loadSysCAMS(Node node) throws MalformedModelingException, SAXException {
         Element elt = (Element) node;
         String nameTab;
         NodeList diagramNl;
         int indexDesign;
 
-
         nameTab = elt.getAttribute("nameTab");
 
-        indexDesign = mgui.createSystemCAMS(nameTab);
+        indexDesign = mgui.createSysCAMSComponentDesign(nameTab);
 
         diagramNl = node.getChildNodes();
 
@@ -7004,10 +7003,10 @@ public class GTURTLEModeling {
             node = diagramNl.item(j);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 elt = (Element) node;
-                if (elt.getTagName().compareTo("SystemCAMSDiagramPanel") == 0) {
+                if (elt.getTagName().compareTo("SysCAMSComponentTaskDiagramPanel") == 0) {
                     // Class diagram
                     TraceManager.addDev("Loading SystemC-AMS");
-                    loadSystemCAMSDiagram(elt, indexDesign);
+                    loadSysCAMSDiagram(elt, indexDesign);
                     TraceManager.addDev("End loading SystemC-AMS");
                 }
             }
@@ -7288,9 +7287,9 @@ public class GTURTLEModeling {
             ((AvatarADPanel) tdp).setConnectorsToFront();
         }
 
-        if (tdp instanceof CAMSBlockDiagramPanel) {
+        if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
             //TraceManager.addDev("Connectors...");
-            ((CAMSBlockDiagramPanel) tdp).setConnectorsToFront();
+            ((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
         }
     }
 
@@ -7509,18 +7508,15 @@ public class GTURTLEModeling {
         loadDiagram(elt, tdp);
     }
 
-    public void loadSystemCAMSDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
-        //ajout CD
+    public void loadSysCAMSDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
         String name;
         TDiagramPanel tdp;
 
         // class diagram name
         name = elt.getAttribute("name");
-        mgui.setSystemCAMSDiagramName(indexDesign, name);
+        mgui.setSysCAMSComponentTaskDiagramName(indexDesign, name);
         tdp = mgui.getMainTDiagramPanel(indexDesign);
         tdp.setName(name);
-
-        //TraceManager.addDev("tdp=" + tdp.getName());
 
         loadDiagram(elt, tdp);
     }
@@ -9255,7 +9251,7 @@ public class GTURTLEModeling {
         }
     }
 
-    public boolean checkSyntaxSystemCAMS(Vector<TGComponent> blocksToTakeIntoAccount, SystemCAMSPanel scp, boolean optimize) { //ajout CD 04/07 FIXME
+    /*public boolean checkSyntaxSystemCAMS(Vector<TGComponent> blocksToTakeIntoAccount, SystemCAMSPanel scp, boolean optimize) { //ajout CD 04/07 FIXME
         //     List<TMLError> warningsOptimize = new ArrayList<TMLError>();
         //     warnings = new LinkedList<CheckingError> ();
         //     mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
@@ -9286,7 +9282,7 @@ public class GTURTLEModeling {
         //         mgui.setMode(MainGUI.GEN_DESIGN_OK);
         return true;
         //     }
-    }
+    }*/
 
     public boolean checkSyntaxTMLMapping(Vector<TGComponent> nodesToTakeIntoAccount, TMLArchiPanel tmlap, boolean optimize) {
         List<TMLError> warningsOptimize = new ArrayList<TMLError>();
