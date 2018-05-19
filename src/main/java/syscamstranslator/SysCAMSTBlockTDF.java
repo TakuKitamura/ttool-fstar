@@ -38,12 +38,11 @@
 
 package syscamstranslator;
 
-import ui.syscams.SysCAMSPortConverter;
-import ui.syscams.SysCAMSPortTDF;
+import java.util.LinkedList;
 
 /**
- * Creation: 14/05/2018
- * @version 1.0 14/05/2018
+ * Creation: 19/05/2018
+ * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
 */
 
@@ -52,15 +51,17 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	private String blockTDFName;
 	private int period;
 	private String processCode;
-	private java.util.List<SysCAMSPortTDF> tdfports;
-	private java.util.List<SysCAMSPortConverter> convports;
 	
-	public SysCAMSTBlockTDF(String _blockTDFName, int _period, String _processCode, java.util.List<SysCAMSPortTDF> _tdfports, java.util.List<SysCAMSPortConverter> _convports) {
+	private SysCAMSTCluster cluster;
+	
+	private LinkedList<SysCAMSTPortTDF> portTDF;
+	private LinkedList<SysCAMSTPortConverter> portConverter;
+	
+	public SysCAMSTBlockTDF(String _blockTDFName, int _period, String _processCode, SysCAMSTCluster _cluster) {
 		blockTDFName = _blockTDFName;
 		period = _period;
 		processCode = _processCode;
-		tdfports = _tdfports;
-		convports = _convports;
+		cluster = _cluster;
 	}
 
 	public int getPeriod() {
@@ -87,19 +88,27 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 		blockTDFName = _blockTDFName;
 	}
 
-	public java.util.List<SysCAMSPortTDF> getTdfports() {
-		return tdfports;
+	public SysCAMSTCluster getCluster() {
+		return cluster;
 	}
 
-	public void setTdfports(java.util.List<SysCAMSPortTDF> tdfports) {
-		this.tdfports = tdfports;
+	public void setCluster(SysCAMSTCluster _cluster) {
+		cluster = _cluster;
 	}
 
-	public java.util.List<SysCAMSPortConverter> getConvports() {
-		return convports;
-	}
+    public LinkedList<SysCAMSTPortTDF> getPortTDF(){
+    	return portTDF;
+    }
 
-	public void setConvports(java.util.List<SysCAMSPortConverter> convports) {
-		this.convports = convports;
-	}
+    public void addPortTDF(SysCAMSTPortTDF tdf){
+    	portTDF.add(tdf);
+    }
+    
+    public LinkedList<SysCAMSTPortConverter> getPortConverter(){
+    	return portConverter;
+    }
+
+    public void addPortConverter(SysCAMSTPortConverter converter){
+    	portConverter.add(converter);
+    }
 }

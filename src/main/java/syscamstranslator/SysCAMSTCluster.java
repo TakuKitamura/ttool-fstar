@@ -38,23 +38,23 @@
 
 package syscamstranslator;
 
-import ui.syscams.SysCAMSBlockTDF;
+import java.util.LinkedList;
 
 /**
- * Creation: 14/05/2018
- * @version 1.0 14/05/2018
+ * Creation: 19/05/2018
+ * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
 */
 
 public class SysCAMSTCluster extends SysCAMSTComponent {
 
 	private String clusterName;
-	private java.util.List<SysCAMSBlockTDF> blocks;
 	
-	public SysCAMSTCluster(String _clusterName, java.util.List<SysCAMSBlockTDF> _blocks) {
+	private LinkedList<SysCAMSTBlockTDF> blocks;
+	
+	public SysCAMSTCluster(String _clusterName) {
 		super();
 		clusterName = _clusterName;
-		blocks = _blocks;
 	}
 
 	public String getClusterName() {
@@ -65,11 +65,11 @@ public class SysCAMSTCluster extends SysCAMSTComponent {
 		clusterName = _clusterName;
 	}
 
-	public java.util.List<SysCAMSBlockTDF> getBlocks() {
-		return blocks;
-	}
+    public LinkedList<SysCAMSTBlockTDF> getBlockTDF(){
+    	return blocks;
+    }
 
-	public void setBlocks(java.util.List<SysCAMSBlockTDF> blocks) {
-		this.blocks = blocks;
-	}
+    public void addBlockTDF(SysCAMSTBlockTDF tdf){
+    	blocks.add(tdf);
+    }
 }

@@ -53,13 +53,16 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 	private int origin;
 	private String TDFType;
 	
-	public SysCAMSTPortTDF(String _name, int _period, int _rate, int _delay, int _origin, String _TDFType) {
+	private SysCAMSTBlockTDF blockTDF;
+	
+	public SysCAMSTPortTDF(String _name, int _period, int _rate, int _delay, int _origin, String _TDFType, SysCAMSTBlockTDF _blockTDF) {
 		name = _name;
 		period = _period;
 		rate = _rate;
 		delay = _delay;
 		origin = _origin;
 		TDFType = _TDFType;
+		blockTDF = _blockTDF;
 	}
 
 	public String getName() {
@@ -108,5 +111,13 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 
 	public void setTDFType(String _TDFType) {
 		TDFType = _TDFType;
+	}
+
+	public synchronized SysCAMSTBlockTDF getBlockTDF() {
+		return blockTDF;
+	}
+
+	public synchronized void setBlockTDF(SysCAMSTBlockTDF _blockTDF) {
+		blockTDF = _blockTDF;
 	}
 }

@@ -53,13 +53,16 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 	private int origin;
 	private String DEType;
 	
-	public SysCAMSTPortDE(String _name, int _period, int _rate, int _delay, int _origin, String _DEType) {
+	private SysCAMSTBlockDE blockDE;
+	
+	public SysCAMSTPortDE(String _name, int _period, int _rate, int _delay, int _origin, String _DEType, SysCAMSTBlockDE _blockDE) {
 		name = _name;
 		period = _period;
 		rate = _rate;
 		delay = _delay;
 		origin = _origin;
 		DEType = _DEType;
+		blockDE = _blockDE;
 	}
 
 	public String getName() {
@@ -108,5 +111,13 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 
 	public void setDEType(String _DEType) {
 		DEType = _DEType;
+	}
+
+	public SysCAMSTBlockDE getBlockTDF() {
+		return blockDE;
+	}
+
+	public void setBlockDE(SysCAMSTBlockDE _blockDE) {
+		blockDE = _blockDE;
 	}
 }
