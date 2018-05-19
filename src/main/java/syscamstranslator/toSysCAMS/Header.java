@@ -1,6 +1,8 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ * Daniela Genius, Lip6, UMR 7606 
  * 
  * ludovic.apvrille AT enst.fr
+ * daniela.genius@lip6.fr
  * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -36,43 +38,60 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+/* this class produces the lines containing essentially the initial #includes; we include all potential components event if they are not used in the deployment diagram*/
 
+/* authors: v1.0 Raja GATGOUT 2014
+            v2.0 Daniela GENIUS, Julien HENON 2015 */
 
+package syscamstranslator.toSysCAMS;
 
-package heterogeneoustranslator.systemCAMStranslator;
+import java.util.List;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.Vector;
-import ui.*;
+import syscamstranslator.*;
+import ui.syscams.SysCAMSBlockTDF;
 
 /**
-* Class CAMSConnection
-* Connection beetwen blocks for SystemC-AMS Diagrams
-* Creation: 30/08/2017
-* @version 1.0 30/08/2017
-* @author CÃ´me DEMARIGNY
- */
+ * Class Header
+ * En-tête des fichiers .h et .cpp
+ * Creation: 14/05/2018
+ * @version 1.0 14/05/2018
+ * @author Irina Kit Yan LEE
+*/
 
-public class CAMSConnection{
+public class Header {
+	static private String headerPrimitive;
+	static private String headerCluster;
+	private final static String CR = "\n";
+	private final static String CR2 = "\n\n";
 
-    public String name;
-    public CAMSBlocks inputBlock, outputBlock;
-    public int rate;
-    public int type;
+	Header() {}
 
-    public CAMSConnection(CAMSBlocks _inputBlock, CAMSBlocks _outputBlock){
-	inputBlock = _inputBlock;
-	outputBlock = _outputBlock;
-    }
-
-    public CAMSBlocks getInputBlock(){
-	return inputBlock;
-    }
-
-    public CAMSBlocks getOutputBlock(){
-	return outputBlock;
-    }
-
+	public static String getPrimitiveHeader(SysCAMSTBlockTDF tdf) {
+		if (tdf != null) {
+			headerPrimitive = "//-------------------------------Header------------------------------------" + CR2
+					+ "#ifndef " + tdf.getBlockTDFName().toUpperCase() + "_H"+ CR 
+					+ "#define " + tdf.getBlockTDFName().toUpperCase() + "_H" + CR2
+					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc-ams>" + CR2;
+		} else {
+			headerPrimitive = "";
+		}
+		return headerPrimitive;
+	}
+	
+	public static String getClusterHeader(SysCAMSTCluster cluster) {
+		 if (cluster != null) {
+			 List<SysCAMSBlockTDF> blocks = cluster.getBlocks();
+			 
+			 headerCluster = "//-------------------------------Header------------------------------------" + CR2
+						+ "#include <systemc-ams>" + CR2;
+			 
+			 for (SysCAMSBlockTDF b : blocks) {
+				 headerCluster = headerCluster + "#include \"" + b.getValue() + ".h\"" + CR;
+			 }
+			 headerCluster = headerCluster + CR;
+		 } else {
+			 headerCluster = "";
+		 }
+		 return headerCluster;
+	} 
 }
