@@ -1,6 +1,8 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ * Daniela Genius, Lip6, UMR 7606 
  * 
  * ludovic.apvrille AT enst.fr
+ * daniela.genius@lip6.fr
  * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -36,64 +38,37 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.syscams;
 
-import java.awt.Graphics;
 
-import ui.TDiagramPanel;
-import ui.TGComponent;
 
-/**
- * Class SysCAMSPortDE
- * Primitive port. To be used in SystemC-AMS diagrams
- * Creation: 14/05/2018
- * @version 1.0 14/05/2018
- * @author Irina Kit Yan LEE
-*/
+/* authors: v1.0 Raja GATGOUT 2014
+            v2.0 Daniela GENIUS, Julien HENON 2015 */
 
-public class SysCAMSPortDE extends SysCAMSPrimitivePort {
-	private int period;
-	private int rate;
-	private int delay;
-	private String DEType;
+package ddtranslatorSoclib.toTopCell;
+
+public class Simulation {
 	
-	public SysCAMSPortDE(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-			TDiagramPanel _tdp) {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-	}
+    private  static String simulation;
+	
+    private final static String CR = "\n";
+	private final static String CR2 = "\n\n";
+    
+    public Simulation(){
+    }
 
-	public String getDEType() {
-		return DEType;
-	}
-
-	public void setDEType(String DEType) {
-		this.DEType = DEType;
-	}
-
-	public int getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(int period) {
-		this.period = period;
-	}
-
-	public int getRate() {
-		return rate;
-	}
-
-	public void setRate(int rate) {
-		this.rate = rate;
-	}
-
-	public int getDelay() {
-		return delay;
-	}
-
-	public void setDelay(int delay) {
-		this.delay = delay;
-	}
-
-	public void drawParticularity(Graphics g) {
-	}	
+    public static String getSimulation(){
+		 simulation  = CR2+ CR2+ 
+		     "/***************************************************************************" +	CR +
+		     "----------------------------simulation-------------------------" + CR +
+		     "***************************************************************************/"+CR2 ;
+		 simulation =simulation+"int sc_main (int argc, char *argv[])" + CR + "{" + CR;
+		 simulation = simulation +"       try {" + CR +"         return _main(argc, argv);" + CR + "    }" + CR2;
+		 simulation =simulation +"       catch (std::exception &e) {" + CR + "            std::cout << e.what() << std::endl;" + CR + "            throw;"+ CR+"    }"; 
+		simulation =simulation+" catch (...) {" + CR;
+		simulation =simulation+"std::cout << \"Unknown exception occured\" << std::endl;" + CR;
+		simulation =simulation+"throw;" + CR;
+		simulation =simulation+"}" + CR;
+		simulation =  simulation+ CR +"       return 1;"+ CR + "}"  ;		 
+		return simulation;
+    }
 }

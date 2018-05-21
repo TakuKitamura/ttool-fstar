@@ -38,9 +38,11 @@
 
 package syscamstranslator;
 
+import java.util.LinkedList;
+
 /**
- * Creation: 07/05/2018
- * @version 1.0 07/05/2018
+ * Creation: 19/05/2018
+ * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
 */
 
@@ -50,10 +52,16 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	private int period;
 	private String processCode;
 	
-	public SysCAMSTBlockTDF(String _blockTDFName, int _period, String _processCode) {
+	private SysCAMSTCluster cluster;
+	
+	private LinkedList<SysCAMSTPortTDF> portTDF;
+	private LinkedList<SysCAMSTPortConverter> portConverter;
+	
+	public SysCAMSTBlockTDF(String _blockTDFName, int _period, String _processCode, SysCAMSTCluster _cluster) {
 		blockTDFName = _blockTDFName;
 		period = _period;
 		processCode = _processCode;
+		cluster = _cluster;
 	}
 
 	public int getPeriod() {
@@ -79,4 +87,28 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	public void setBlockTDFName(String _blockTDFName) {
 		blockTDFName = _blockTDFName;
 	}
+
+	public SysCAMSTCluster getCluster() {
+		return cluster;
+	}
+
+	public void setCluster(SysCAMSTCluster _cluster) {
+		cluster = _cluster;
+	}
+
+    public LinkedList<SysCAMSTPortTDF> getPortTDF(){
+    	return portTDF;
+    }
+
+    public void addPortTDF(SysCAMSTPortTDF tdf){
+    	portTDF.add(tdf);
+    }
+    
+    public LinkedList<SysCAMSTPortConverter> getPortConverter(){
+    	return portConverter;
+    }
+
+    public void addPortConverter(SysCAMSTPortConverter converter){
+    	portConverter.add(converter);
+    }
 }

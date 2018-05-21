@@ -1,6 +1,8 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ * Daniela Genius, Lip6, UMR 7606 
  * 
  * ludovic.apvrille AT enst.fr
+ * daniela.genius@lip6.fr
  * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -36,64 +38,60 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.syscams;
+/* this class produces the lines containing essentially the initial #includes; we include all potential components event if they are not used in the deployment diagram*/
 
-import java.awt.Graphics;
+/* authors: v1.0 Raja GATGOUT 2014
+            v2.0 Daniela GENIUS, Julien HENON 2015 */
 
-import ui.TDiagramPanel;
-import ui.TGComponent;
+package syscamstranslator.toSysCAMS;
+
+import java.util.List;
+
+import syscamstranslator.*;
+import ui.syscams.SysCAMSBlockTDF;
 
 /**
- * Class SysCAMSPortDE
- * Primitive port. To be used in SystemC-AMS diagrams
+ * Class Header
+ * En-tête des fichiers .h et .cpp
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
 */
 
-public class SysCAMSPortDE extends SysCAMSPrimitivePort {
-	private int period;
-	private int rate;
-	private int delay;
-	private String DEType;
+public class Header {
+	static private String headerPrimitive;
+	static private String headerCluster;
+	private final static String CR = "\n";
+	private final static String CR2 = "\n\n";
+
+	Header() {}
+
+	public static String getPrimitiveHeader(SysCAMSTBlockTDF tdf) {
+		if (tdf != null) {
+			headerPrimitive = "//-------------------------------Header------------------------------------" + CR2
+					+ "#ifndef " + tdf.getBlockTDFName().toUpperCase() + "_H"+ CR 
+					+ "#define " + tdf.getBlockTDFName().toUpperCase() + "_H" + CR2
+					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc-ams>" + CR2;
+		} else {
+			headerPrimitive = "";
+		}
+		return headerPrimitive;
+	}
 	
-	public SysCAMSPortDE(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-			TDiagramPanel _tdp) {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-	}
-
-	public String getDEType() {
-		return DEType;
-	}
-
-	public void setDEType(String DEType) {
-		this.DEType = DEType;
-	}
-
-	public int getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(int period) {
-		this.period = period;
-	}
-
-	public int getRate() {
-		return rate;
-	}
-
-	public void setRate(int rate) {
-		this.rate = rate;
-	}
-
-	public int getDelay() {
-		return delay;
-	}
-
-	public void setDelay(int delay) {
-		this.delay = delay;
-	}
-
-	public void drawParticularity(Graphics g) {
-	}	
+	public static String getClusterHeader(SysCAMSTCluster cluster) {
+		 if (cluster != null) {
+			 List<SysCAMSBlockTDF> blocks = cluster.getBlocks();
+			 
+			 headerCluster = "//-------------------------------Header------------------------------------" + CR2
+						+ "#include <systemc-ams>" + CR2;
+			 
+			 for (SysCAMSBlockTDF b : blocks) {
+				 headerCluster = headerCluster + "#include \"" + b.getValue() + ".h\"" + CR;
+			 }
+			 headerCluster = headerCluster + CR;
+		 } else {
+			 headerCluster = "";
+		 }
+		 return headerCluster;
+	} 
 }

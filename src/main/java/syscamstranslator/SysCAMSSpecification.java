@@ -42,9 +42,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Creation: 07/05/2018
- * @version 1.0 07/05/2018
- * @author Irina Kit Yan LEE
+* Creation: 14/05/2018
+* @version 1.0 14/05/2018
+* @author Irina Kit Yan LEE
 */
 
 public class SysCAMSSpecification{
@@ -128,7 +128,7 @@ public class SysCAMSSpecification{
       return (getAllBlockTDF()).size();
     }
 
-    public int getNbBlocDE(){
+    public int getNbBlockDE(){
       return (getAllBlockDE()).size();
     }
 

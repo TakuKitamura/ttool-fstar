@@ -126,7 +126,7 @@ public  class SysCAMSPortConnector extends TGConnector implements ScalableTGComp
     }
 
     public int getType() {
-        return TGComponentManager.CONNECTOR_PORT_TMLC;
+        return TGComponentManager.CAMS_CONNECTOR;
     }
 
     public void specificActionAfterAdd() {

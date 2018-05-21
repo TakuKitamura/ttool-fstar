@@ -911,8 +911,8 @@ public class ActionPerformer {
 	    	// SystemC-AMS
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_EDIT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
-        } /*else if (command.equals(mgui.actions[TGUIAction.CAMS_BLOCK_TDF].getActionCommand())) {
-	         mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_TDF);
+        } else if (command.equals(mgui.actions[TGUIAction.CAMS_BLOCK_TDF].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_TDF);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_BLOCK_DE].getActionCommand())) {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_DE);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_CONNECTOR].getActionCommand())) {
@@ -927,7 +927,7 @@ public class ActionPerformer {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_CLUSTER);
 
             // Attack Tree Diagrams
-	    } */ else if (command.equals(mgui.actions[TGUIAction.ATD_BLOCK].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ATD_BLOCK].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_BLOCK);
         } else if (command.equals(mgui.actions[TGUIAction.ATD_ATTACK].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_ATTACK);

@@ -53,7 +53,6 @@ import java.awt.*;
  */
 
 public class SysCAMSRemotePortCompositeComponent extends TGCWithInternalComponent implements SwallowedTGComponent, WithAttributes {
-    private SysCAMSCompositePort port;
 	SysCAMSReferencePortConnectingPoint point;
 	private int defaultDiag = 10;
 	private Color myColor = new Color(251, 252, 200);
@@ -81,13 +80,6 @@ public class SysCAMSRemotePortCompositeComponent extends TGCWithInternalComponen
 		Color pc = myColor;
 		Color col = g.getColor();
 		
-		if (port != null) {
-			pc = port.getPortColor();
-			if (pc == null) {
-				pc = myColor;
-			}
-		}
-		
 		if (point != null) {
 			xp = point.getX() - (defaultDiag / 2);
 			yp = point.getY() - (defaultDiag / 2);
@@ -101,20 +93,8 @@ public class SysCAMSRemotePortCompositeComponent extends TGCWithInternalComponen
 		}
 	}
 	
-	public void setElements(SysCAMSCompositePort _port, SysCAMSReferencePortConnectingPoint _point) {
-		port = _port;
+	public void setElements(SysCAMSReferencePortConnectingPoint _point) {
 		point = _point;
-	}
-	
-	public SysCAMSCompositePort getPort() {
-		return port;
-	}
-	
-	public String getAttributes() {
-		if (port != null) {
-			return port.getAttributes();
-		}
-		return "";
 	}
 	
 	public TGComponent isOnOnlyMe(int x1, int y1) {
@@ -135,4 +115,8 @@ public class SysCAMSRemotePortCompositeComponent extends TGCWithInternalComponen
 	 public int getType() {
         return TGComponentManager.TMLCTD_CREMOTEPORTCOMPONENT;
     }
+
+	public String getAttributes() {
+		return null;
+	}
 }

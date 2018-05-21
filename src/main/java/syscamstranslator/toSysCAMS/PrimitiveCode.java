@@ -1,6 +1,8 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ * Daniela Genius, Lip6, UMR 7606 
  * 
  * ludovic.apvrille AT enst.fr
+ * daniela.genius@lip6.fr
  * 
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -36,88 +38,59 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package syscamstranslator;
+/* this class produces the lines containing essentially the initial #includes; we include all potential components event if they are not used in the deployment diagram*/
+
+/* authors: v1.0 Raja GATGOUT 2014
+            v2.0 Daniela GENIUS, Julien HENON 2015 */
+
+package syscamstranslator.toSysCAMS;
+
+import java.util.List;
+
+import syscamstranslator.*;
+import ui.syscams.SysCAMSBlockTDF;
+import ui.syscams.SysCAMSPortConverter;
+import ui.syscams.SysCAMSPortTDF;
 
 /**
- * Creation: 07/05/2018
- * @version 1.0 07/05/2018
+ * Class Header
+ * En-tête des fichiers .h et .cpp
+ * Creation: 14/05/2018
+ * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
 */
 
-public class SysCAMSTPortTDF extends SysCAMSTComponent {
+public class PrimitiveCode {
+	static private String codePrimitive;
+	static private String corpsCluster;
+	private final static String CR = "\n";
+	private final static String CR2 = "\n\n";
 
-	private String name;
-	private int period;
-	private int rate;
-	private int delay;
-	private int origin;
-	private String TDFType;
+	PrimitiveCode() {}
+
+	public static String getPrimitiveCode(SysCAMSBlockTDF tdf) {
+		if (tdf != null) {
+			codePrimitive = Header.getPrimitiveHeader(tdf) + Corps.getPrimitiveCorps(tdf);
+		} else {
+			codePrimitive = "";
+		}
+		return codePrimitive;
+	}
 	
-	private SysCAMSTBlockTDF blockTDF;
-	
-	public SysCAMSTPortTDF(String _name, int _period, int _rate, int _delay, int _origin, String _TDFType, SysCAMSTBlockTDF _blockTDF) {
-		name = _name;
-		period = _period;
-		rate = _rate;
-		delay = _delay;
-		origin = _origin;
-		TDFType = _TDFType;
-		blockTDF = _blockTDF;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String _name) {
-		name = _name;
-	}
-
-	public int getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(int _period) {
-		period = _period;
-	}
-
-	public int getRate() {
-		return rate;
-	}
-
-	public void setRate(int _rate) {
-		rate = _rate;
-	}
-
-	public int getDelay() {
-		return delay;
-	}
-
-	public void setDelay(int _delay) {
-		delay = _delay;
-	}
-
-	public int getOrigin() {
-		return origin;
-	}
-
-	public void setOrigin(int _origin) {
-		origin = _origin;
-	}
-
-	public String getTDFType() {
-		return TDFType;
-	}
-
-	public void setTDFType(String _TDFType) {
-		TDFType = _TDFType;
-	}
-
-	public synchronized SysCAMSTBlockTDF getBlockTDF() {
-		return blockTDF;
-	}
-
-	public synchronized void setBlockTDF(SysCAMSTBlockTDF _blockTDF) {
-		blockTDF = _blockTDF;
-	}
+	public static String getClusterCorps(SysCAMSTCluster cluster) {
+		 if (cluster != null) {
+			 List<SysCAMSBlockTDF> blocks = cluster.getBlocks();
+			 
+			 corpsCluster = "//-------------------------------Header------------------------------------" + CR2
+						+ "#include <systemc-ams>" + CR2;
+			 
+			 for (SysCAMSBlockTDF b : blocks) {
+				 corpsCluster = corpsCluster + "#include \"" + b.getValue() + ".h\"" + CR;
+			 }
+			 corpsCluster = corpsCluster + CR;
+		 } else {
+			 corpsCluster = "";
+		 }
+		 return corpsCluster;
+	} 
 }

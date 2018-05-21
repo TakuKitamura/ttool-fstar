@@ -75,7 +75,6 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
 	private double ddefaultDiag = 0.0;
 	
 	private SysCAMSCompositeComponent syscamscc;
-	private ArrayList<SysCAMSCompositePort> ports;
 	
 	private NodeList nl;
     
@@ -103,8 +102,6 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
         
 		value = "No reference";
 		name = "Remote composite component";
-		
-		ports = new ArrayList<SysCAMSCompositePort>();
 		
         myImageIcon = IconManager.imgic1200;
     }
@@ -144,10 +141,6 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
 			if (syscamscc.getTDiagramPanel() == null) {
 				syscamscc = null;
 				value =  "No reference";
-			} else {
-				if (ports.size() != syscamscc.getCompositePortNb()) {
-					updateReference();
-				}
 			}
 		}
 		if (myColor == null) {
@@ -267,10 +260,6 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
         StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<info ref=\"" + value + "\" "); 
         sb.append("/>\n");
-		
-		for (SysCAMSCompositePort port: ports) {
-			sb.append("<port id=\"" + port.getId() + "\" />\n");
-		}
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -284,12 +273,8 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
             NodeList nli;
             Node n1, n2;
             Element elt;
-			int j, k;
-			int index;
-			int cptk = 0;
-			SysCAMSRemotePortCompositeComponent pcc;
+			int j;
 			TGConnectingPoint[] old = null;
-			ArrayList<SysCAMSCompositePort> tmp = null;
 			
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -305,11 +290,6 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
 								if (syscamscc != null ){
 									updateReference();
 									rescaled = true;
-									tmp = ports;
-									ports = new ArrayList<SysCAMSCompositePort>();
-									for (SysCAMSCompositePort port: tmp) {
-										ports.add(port);
-									}
 								}
 							}
 							
@@ -318,37 +298,7 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
 									old =  connectingPoint;
 									connectingPoint = new TGConnectingPoint[nbConnectingPoint];
 								}
-								try {
-									int portid = Integer.decode(elt.getAttribute("id")).intValue();
-									
-									for (SysCAMSCompositePort port: tmp) {
-										if (port.getId() == portid) {
-											index = tmp.indexOf(port);
-											for (k=index*5; k<(index+1)*5; k++) {
-												// Must update position of connecting point
-												connectingPoint[k] = old[cptk];
-												
-												if ((k % 5) == 0) {
-													if (nbInternalTGComponent > (k/5)) {
-														pcc = (SysCAMSRemotePortCompositeComponent)(tgcomponent[k/5]);
-														if (pcc != null) {
-															pcc.setElements(port, (SysCAMSReferencePortConnectingPoint)(connectingPoint[k]));
-														}
-													}
-												}
-												((SysCAMSReferencePortConnectingPoint)(connectingPoint[k])).setPort(port);
-												if (connectingPoint[k] == null) {
-													TraceManager.addDev("null cp");
-												}
-												cptk ++;
-											}
-											break;
-										}
-									}
-								} catch (Exception e) {
-								}
 							}
-							
                         }
                     }
                 }
@@ -383,7 +333,7 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
     }
 	
 	public void resizeWithFather() {
-        if ((father != null) && ((father instanceof SysCAMSCompositeComponent) ||(father instanceof SysCAMSPrimitiveComponent))) {
+        if ((father != null) && ((father instanceof SysCAMSCompositeComponent) || (father instanceof SysCAMSBlockTDF) || (father instanceof SysCAMSBlockDE))) {
 			// Too large to fit in the father? -> resize it!
 			resizeToFatherSize();
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
@@ -391,12 +341,19 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
         }
     }
 	
-	public java.util.List<SysCAMSPrimitiveComponent> getAllPrimitiveComponents() {
+	public java.util.List<SysCAMSBlockTDF> getAllBlockTDFComponents() {
 		if (syscamscc == null) {
-			return new ArrayList<SysCAMSPrimitiveComponent>();
+			return new ArrayList<SysCAMSBlockTDF>();
 		}
-		return syscamscc.getAllPrimitiveComponents();
+		return syscamscc.getAllBlockTDFComponents();
 	}
+	
+//	public java.util.List<SysCAMSBlockDE> getAllBlockDEComponents() {
+//		if (syscamscc == null) {
+//			return new ArrayList<SysCAMSBlockDE>();
+//		}
+//		return syscamscc.getAllBlockDEComponents();
+//	}
 	
 	public java.util.List<SysCAMSRecordComponent> getAllRecordComponents() {
 		if (syscamscc == null) {
@@ -405,28 +362,34 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
 		return syscamscc.getAllRecordComponents();
 	}
 	
-	public java.util.List<SysCAMSCompositePort> getAllInternalCompositePorts() {
-		java.util.List<SysCAMSCompositePort> list = new ArrayList<SysCAMSCompositePort>();
-		if (syscamscc == null) {
-			return list;
-		}
-		return syscamscc.getAllInternalCompositePorts();
-	}
-	
 	public ArrayList<SysCAMSPrimitivePort> getAllInternalPrimitivePorts() {
 		ArrayList<SysCAMSPrimitivePort> list = new ArrayList<SysCAMSPrimitivePort>();
 		if (syscamscc == null) {
 			return list;
+		} else {
+			for (SysCAMSPortTDF tdf : syscamscc.getAllInternalPortsTDF()) {
+				list.add(tdf);
+			}
+//			for (SysCAMSPortDE de : syscamscc.getAllInternalPortsDE()) {
+//				list.add(de);
+//			}
+			return list;
 		}
-		return syscamscc.getAllInternalPrimitivePorts();
 	}
 	
-	public SysCAMSPrimitiveComponent getPrimitiveComponentByName(String _name) {
+	public SysCAMSBlockTDF getBlockTDFComponentByName(String _name) {
 		if (syscamscc == null) {
 			return null;
 		}
-		return syscamscc.getPrimitiveComponentByName(_name);
+		return syscamscc.getBlockTDFComponentByName(_name);
 	}
+	
+//	public SysCAMSBlockDE getBlockDEComponentByName(String _name) {
+//		if (syscamscc == null) {
+//			return null;
+//		}
+//		return syscamscc.getBlockDEComponentByName(_name);
+//	}
 	
 	public void drawTGConnectingPoint(Graphics g, int type) {
         for (int i=0; i<nbConnectingPoint; i++) {
@@ -441,58 +404,17 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
 	// Update tgconnecting points accordingly. Those points should point to their original ones so as to be sure to be drawn at the right place
 	// to a list of those points, keep that list, and then, generate a array of those points.
 	public void updatePorts() {
-		ArrayList<SysCAMSCompositePort> list = syscamscc.getFirstLevelCompositePorts();
 		int cpt=0;
-		
-		int i, j;
-		SysCAMSCompositePort tmp;
-		SysCAMSReferencePortConnectingPoint point;
 		
 		// Close attention to the list
 		boolean change = true;
-		if (list.size() != ports.size()) {
-			change = true;
-		} else {
-			for (SysCAMSCompositePort port: ports) {
-				if (!list.contains(port)) {
-					change = true;
-					break;
-				}
-			}
-		}
-		
 		if (change) {
 			TraceManager.addDev("change on  ports!");
 			// Delete unused ports and 
 			ArrayList<SysCAMSReferencePortConnectingPoint> points = new ArrayList<SysCAMSReferencePortConnectingPoint>();
 			cpt=0;
 			
-			for(i=0; i<ports.size(); i++) {
-				tmp = ports.get(i);
-				if (list.contains(tmp)) {
-					for (j=cpt; j<cpt+5; j++) {
-						points.add((SysCAMSReferencePortConnectingPoint)(connectingPoint[cpt]));
-					}
-				} else {
-					ports.remove(tmp);
-					for (j=cpt; j<cpt+5; j++) {
-						tdp.removeOneConnector(connectingPoint[cpt]);
-						// Shall we remove the connecting points?
-					}
-					i --;
-				}
-				cpt = cpt + 5;
-			}
 			// Add new ports
-			for (SysCAMSCompositePort port1: list) {
-				if (!ports.contains(port1)) {
-					ports.add(port1);
-					for(j=0; j<5; j++) {
-						point = new SysCAMSReferencePortConnectingPoint(port1, this, 0.5, 0.5);
-						points.add(point);
-					}
-				}
-			}
 			
 			if (nbConnectingPoint == points.size()) {
 			} else {
@@ -508,7 +430,7 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
 					connectingPoint[cpt] = pt;
 					if ((cpt % 5) == 0) {
 						tgp = new SysCAMSRemotePortCompositeComponent(getX(), getY(), 0, 0, 10, 10, false, this, tdp);
-						tgp.setElements(ports.get(cpttg), (SysCAMSReferencePortConnectingPoint)pt);
+						tgp.setElements((SysCAMSReferencePortConnectingPoint)pt);
 						tgcomponent[cpttg] = tgp;
 						cpttg ++;
 					}
@@ -518,20 +440,6 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
 		}
 	}
 	
-	public TGComponent getPortOf(TGConnectingPoint tp) {
-		if (ports == null) {
-			return null;
-		}
-		for (int i=0; i<nbConnectingPoint; i++) {
-			if (connectingPoint[i] == tp) {
-				if (i/5 < ports.size()) {
-					return ports.get(i/5);
-				}
-			}
-		}
-		return null;
-	}
-	
 	public boolean setIdTGConnectingPoint(int num, int id) {
 		int i;
 		try {
@@ -539,7 +447,7 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
 				nbConnectingPoint = num + 1;
 				connectingPoint = new TGConnectingPoint[nbConnectingPoint];
 				for(i=0; i<nbConnectingPoint; i++) {
-					connectingPoint[i] = new SysCAMSReferencePortConnectingPoint(null, this, 0.5, 0.5);
+					connectingPoint[i] = new SysCAMSReferencePortConnectingPoint(this, 0.5, 0.5);
 				}
 			} else {
 				if (num >= nbConnectingPoint) {
@@ -550,7 +458,7 @@ public class SysCAMSRemoteCompositeComponent extends TGCScalableWithInternalComp
 						connectingPoint[i] = old[i];
 					}
 					for(i=old.length; i<nbConnectingPoint; i++) {
-						connectingPoint[i] = new SysCAMSReferencePortConnectingPoint(null, this, 0.5, 0.5);
+						connectingPoint[i] = new SysCAMSReferencePortConnectingPoint(this, 0.5, 0.5);
 					}
 				}
 			}

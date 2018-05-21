@@ -55,7 +55,6 @@ public class SysCAMSPath  {
     public ArrayList<SysCAMSPrimitivePort> consumerPorts;
 
     // Facilities
-    public ArrayList<SysCAMSCompositePort> cports;
     public ArrayList<SysCAMSFork> forks;
     public ArrayList<SysCAMSJoin> joins;
 
@@ -78,7 +77,6 @@ public class SysCAMSPath  {
     };
 
     public SysCAMSPath() {
-        cports = new ArrayList<SysCAMSCompositePort>();
         producerPorts = new ArrayList<SysCAMSPrimitivePort>();
         consumerPorts = new ArrayList<SysCAMSPrimitivePort>();
         forks = new ArrayList<SysCAMSFork>();
@@ -86,12 +84,9 @@ public class SysCAMSPath  {
     }
 
     public void addComponent(TGComponent _tgc) {
-        if (_tgc instanceof SysCAMSCompositePort) {
-            cports.add((SysCAMSCompositePort)_tgc);
-        }
         if (_tgc instanceof SysCAMSPrimitivePort) {
             SysCAMSPrimitivePort p = (SysCAMSPrimitivePort)_tgc;
-            if (p.isOrigin()) {
+            if (p.getOrigin() == 1) {
                 producerPorts.add(p);
             } else {
                 consumerPorts.add(p);
@@ -114,9 +109,6 @@ public class SysCAMSPath  {
     }
 
     public boolean contains(TGComponent tgc) {
-        if (cports.contains(tgc)) {
-            return true;
-        }
         if (producerPorts.contains(tgc)) {
             return true;
         }
@@ -130,7 +122,6 @@ public class SysCAMSPath  {
     }
 
     public void mergeWith(SysCAMSPath _path) {
-        cports.addAll(_path.cports);
         producerPorts.addAll(_path.producerPorts);
         consumerPorts.addAll(_path.consumerPorts);
         forks.addAll(_path.forks);
@@ -320,25 +311,6 @@ public class SysCAMSPath  {
                 join.setConflict(hasError(), errors[errorNumber]);
             } else {
                 join.setConflict(false, "");
-            }
-        }
-
-        for (SysCAMSCompositePort port: cports) {
-            if (producerPorts.size() > 0) {
-                port.setOutPort(producerPorts.get(0));
-            } else {
-                port.setOutPort(null);
-            }
-
-            if (consumerPorts.size() > 0) {
-                port.setInPort(consumerPorts.get(0));
-            } else {
-                port.setInPort(null);
-            }
-            if (hasError()) {
-                port.setConflict(hasError(), errors[errorNumber]);
-            } else {
-                port.setConflict(false, "");
             }
         }
 

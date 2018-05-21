@@ -278,11 +278,11 @@ public class TGUIAction extends AbstractAction {
     public static final int CAMS_EDIT = 458;
     public static final int CAMS_BLOCK_TDF = 459;
     public static final int CAMS_CONNECTOR = 460;
-    public static final int CAMS_BLOCK_DE = 475;
-    public static final int CAMS_PORT_TDF = 476;
-    public static final int CAMS_PORT_DE = 477;
-    public static final int CAMS_PORT_CONVERTER = 478;
-    public static final int CAMS_CLUSTER = 479;
+    public static final int CAMS_BLOCK_DE = 476;
+    public static final int CAMS_PORT_TDF = 477;
+    public static final int CAMS_PORT_DE = 478;
+    public static final int CAMS_PORT_CONVERTER = 479;
+    public static final int CAMS_CLUSTER = 480;
 
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
@@ -636,7 +636,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 480;
+    public static final int NB_ACTION = 481;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 

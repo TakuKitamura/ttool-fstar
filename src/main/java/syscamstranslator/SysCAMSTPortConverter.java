@@ -39,8 +39,8 @@
 package syscamstranslator;
 
 /**
- * Creation: 07/05/2018
- * @version 1.0 07/05/2018
+ * Creation: 19/05/2018
+ * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
 */
 
@@ -50,16 +50,19 @@ public class SysCAMSTPortConverter extends SysCAMSTComponent {
 	private int period;
 	private int rate;
 	private int delay;
-	private String origin;
+	private int origin;
 	private String ConvType;
 	
-	public SysCAMSTPortConverter(String _name, int _period, int _rate, int _delay, String _origin, String _ConvType) {
+	private SysCAMSTBlockTDF blockTDF;
+	
+	public SysCAMSTPortConverter(String _name, int _period, int _rate, int _delay, int _origin, String _ConvType, SysCAMSTBlockTDF _blockTDF) {
 		name = _name;
 		period = _period;
 		rate = _rate;
 		delay = _delay;
 		origin = _origin;
 		ConvType = _ConvType;
+		blockTDF = _blockTDF;
 	}
 
 	public String getName() {
@@ -94,12 +97,12 @@ public class SysCAMSTPortConverter extends SysCAMSTComponent {
 		delay = _delay;
 	}
 
-	public String getOrigin() {
+	public int getOrigin() {
 		return origin;
 	}
 
-	public void setOrigin(String _origin) {
-		origin = _origin;
+	public void setOrigin(int origin) {
+		this.origin = origin;
 	}
 
 	public String getConvType() {
@@ -108,5 +111,13 @@ public class SysCAMSTPortConverter extends SysCAMSTComponent {
 
 	public void setConvType(String _ConvType) {
 		ConvType = _ConvType;
+	}
+
+	public SysCAMSTBlockTDF getBlockTDF() {
+		return blockTDF;
+	}
+
+	public void setBlockTDF(SysCAMSTBlockTDF _blockTDF) {
+		blockTDF = _blockTDF;
 	}
 }

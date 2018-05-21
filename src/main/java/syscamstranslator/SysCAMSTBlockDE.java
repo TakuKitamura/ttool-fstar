@@ -38,9 +38,11 @@
 
 package syscamstranslator;
 
+import java.util.LinkedList;
+
 /**
- * Creation: 07/05/2018
- * @version 1.0 07/05/2018
+ * Creation: 19/05/2018
+ * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
 */
 
@@ -48,6 +50,8 @@ public class SysCAMSTBlockDE extends SysCAMSTComponent {
 
 	private String blockDEName;
 	private int period;
+	
+	private LinkedList<SysCAMSTPortDE> portDE;
 	
 	public SysCAMSTBlockDE(String _blockDEName, int _period) {
 		blockDEName = _blockDEName;
@@ -69,4 +73,12 @@ public class SysCAMSTBlockDE extends SysCAMSTComponent {
 	public void setBlockDEName(String _blockDEName) {
 		blockDEName = _blockDEName;
 	}
+
+    public LinkedList<SysCAMSTPortDE> getPortDE(){
+    	return portDE;
+    }
+
+    public void addPortDE(SysCAMSTPortDE de){
+    	portDE.add(de);
+    }
 }
