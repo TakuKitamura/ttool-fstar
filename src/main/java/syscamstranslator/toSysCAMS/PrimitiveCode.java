@@ -53,20 +53,20 @@ import ui.syscams.SysCAMSPortConverter;
 import ui.syscams.SysCAMSPortTDF;
 
 /**
- * Class Header
- * En-tête des fichiers .h et .cpp
+ * Class PrimitiveCode
+ * Code of the TDF blocks for files .h
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
 */
 
-public class Corps {
+public class PrimitiveCode {
 	static private String corpsPrimitive;
 	static private String corpsCluster;
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
-	Corps() {}
+	PrimitiveCode() {}
 
 	public static String getPrimitiveCorps(SysCAMSTBlockTDF tdf) {
 		if (tdf != null) {
