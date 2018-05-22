@@ -52,7 +52,7 @@ import ui.syscams.SysCAMSBlockTDF;
 
 /**
  * Class Header
- * En-tête des fichiers .h et .cpp
+ * Header of files .h and .cpp
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
@@ -80,13 +80,13 @@ public class Header {
 	
 	public static String getClusterHeader(SysCAMSTCluster cluster) {
 		 if (cluster != null) {
-			 List<SysCAMSBlockTDF> blocks = cluster.getBlocks();
+			 LinkedList<SysCAMSTBlockTDF> blocks = cluster.getTDFBlocks();
 			 
 			 headerCluster = "//-------------------------------Header------------------------------------" + CR2
 						+ "#include <systemc-ams>" + CR2;
 			 
-			 for (SysCAMSBlockTDF b : blocks) {
-				 headerCluster = headerCluster + "#include \"" + b.getValue() + ".h\"" + CR;
+			 for (SysCAMSTBlockTDF b : blocks) {
+				 headerCluster = headerCluster + "#include \"" + b.getTDFname() + ".h\"" + CR;
 			 }
 			 headerCluster = headerCluster + CR;
 		 } else {
