@@ -52,10 +52,10 @@ import ui.avatarmad.AvatarMADAssumption;
 import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
 import ui.cd.*;
-import ui.het.CAMSBlock;
-import ui.het.CAMSBlockConnector;
-import ui.het.CAMSBlockDiagramPanel;
-import ui.het.CAMSConnectingPoint;
+import ui.syscams.SysCAMSBlockDE;
+import ui.syscams.SysCAMSBlockTDF;
+import ui.syscams.SysCAMSCompositeComponent;
+import ui.syscams.SysCAMSRecordComponent;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
 import ui.ncdd.NCSwitchNode;
@@ -114,7 +114,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     protected List<TGComponent> componentList;
     protected TGConnectingPoint selectedConnectingPoint;
-    protected CAMSConnectingPoint selectedCAMSConnectingPoints;
+    /*protected CAMSConnectingPoint selectedCAMSConnectingPoints;*/
     protected TGComponent componentPointed;
     protected TGComponent componentPopup;
     protected TToolBar ttb;
@@ -184,7 +184,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected int y2;
     protected Vector<Point> listPoint;
     protected TGConnectingPoint p1, p2;
-    protected CAMSConnectingPoint cp1, cp2;
+   /* protected CAMSConnectingPoint cp1, cp2;*/
     protected int type;
 
     // For component selection
@@ -503,8 +503,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             if (this.javaVisible && (tgc.hasPostJavaCode() || tgc.hasPreJavaCode()))
                 tgc.drawJavaCode(g);
 
-            if (this instanceof CAMSBlockDiagramPanel) //Connecting points should always be visible in System-C AMS panels
-                tgc.drawTGConnectingPoint(g, this.type);
+            /*if (this instanceof CAMSBlockDiagramPanel) //Connecting points should always be visible in System-C AMS panels
+                tgc.drawTGConnectingPoint(g, this.type);*/
         }
 
         // Draw name of component selected
@@ -948,9 +948,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return selectedConnectingPoint;
     }
 
-    public CAMSConnectingPoint getSelectedCAMSConnectingPoint() {
+    /* CAMSConnectingPoint getSelectedCAMSConnectingPoint() {
         return selectedCAMSConnectingPoints;
-    }
+    }*/
 
     // Adding component
     public TGComponent addComponent(int x, int y, boolean swallow) {
@@ -1096,7 +1096,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         listPoint = null;
     }
 
-    public void addingCAMSConnector() {
+    /*public void addingCAMSConnector() {
         listPoint = new Vector<Point>();
         cp1 = getSelectedCAMSConnectingPoint();
         x1 = cp1.getX();
@@ -1134,7 +1134,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             stopAddingConnector(true);
             cp1.setFree(true);
         }
-    }
+    }*/
 
 // -------------mark
 
@@ -2597,6 +2597,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof TMLCRecordComponent && this.checkTMLCRecordComponent((TMLCRecordComponent) o, name))
                     || (o instanceof TMLCCompositeComponent && this.checkTMLCCompositeComponent((TMLCCompositeComponent) o, name))
                     || (o instanceof TMLTaskInterface && this.checkTMLTaskInterface((TMLTaskInterface) o, name))
+                	  || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
+                    || (o instanceof SysCAMSBlockDE && this.checkSysCAMSBlockDEComponent((SysCAMSBlockDE) o, name))
+                    || (o instanceof SysCAMSRecordComponent && this.checkSysCAMSRecordComponent((SysCAMSRecordComponent) o, name))
+                    || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
                     || (o instanceof ATDBlock && this.checkATDBlock((ATDBlock) o, name))
                     || (o instanceof AvatarBDBlock && this.checkAvatarBDBlock((AvatarBDBlock) o, name))
                     || (o instanceof AvatarCDBlock && this.checkAvatarCDBlock((AvatarCDBlock) o, name))
@@ -2644,6 +2648,22 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         public boolean checkTMLTaskInterface(TMLTaskInterface o, String name) {
             return false;
+        }
+        
+        public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
+        	return false;
+        }
+        
+        public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
+        	return false;
+        }
+        
+        public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
+        	return false;
         }
 
         public boolean checkATDBlock(ATDBlock o, String name) {
@@ -2768,6 +2788,29 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         });
     }
 
+		 public String findSysCAMSPrimitiveComponentName(String name) {
+    	return this.findGoodName(name, new NameChecker() {
+    		public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		
+    		public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		
+    		public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		
+    		public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
+    			for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+    				if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+    					return true;
+    			return false;
+    		}
+    	});
+    }
+
     public String findBlockName(String name) {
         return this.findGoodName(name, new NameChecker() {
             public boolean checkATDBlock(ATDBlock o, String name) {
@@ -2804,7 +2847,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         });
     }
 
-    public String findCAMSBlockName(String name) {
+    /*public String findCAMSBlockName(String name) {
         return this.findGoodName(name, new NameChecker() {
             public boolean checkCAMSBlock(CAMSBlock o, String name) {
                 if (o.getValue().equals(name))
@@ -2812,7 +2855,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 return o.hasBlockWithName();
             }
         });
-    }
+    }*/
 
     public String findAvatarSMDStateName(String name) {
         return this.findGoodName(name, new NameChecker() {

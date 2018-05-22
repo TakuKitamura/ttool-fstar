@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.99-beta4">
+<TURTLEGMODELING version="1.0beta">
 
 <Modeling type="AVATAR Design" nameTab="AVATAR Design" >
-<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1900" minY="10" maxY="2400" >
+<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1900" minY="10" maxY="2400" zoom="1.0" >
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
@@ -650,6 +650,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -678,6 +679,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -706,6 +708,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -734,6 +737,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -762,6 +766,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="counter=counter-1" />
 </extraparam>
 </SUBCOMPONENT>
@@ -904,6 +909,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -952,6 +958,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -980,6 +987,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1008,6 +1016,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1036,6 +1045,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1214,6 +1224,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1262,6 +1273,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1290,6 +1302,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1318,6 +1331,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1346,6 +1360,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1374,6 +1389,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1388,7 +1404,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="584" >
 <father id="586" num="0" />
 <cdparam x="390" y="307" />
-<sizeparam width="57" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="67" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -1402,6 +1418,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1416,7 +1433,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="591" >
 <father id="593" num="0" />
 <cdparam x="396" y="390" />
-<sizeparam width="108" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="129" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -1430,13 +1447,14 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="packet.date=priority" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="5108" id="596" >
-<cdparam x="322" y="329" />
-<sizeparam width="143" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="310" y="329" />
+<sizeparam width="167" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="TGComponent" value="null" />
@@ -1448,8 +1466,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="607" >
-<cdparam x="422" y="181" />
-<sizeparam width="111" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="413" y="181" />
+<sizeparam width="129" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Receive signal" value="address(address)" />
@@ -1467,8 +1485,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="618" >
-<cdparam x="243" y="181" />
-<sizeparam width="121" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="233" y="181" />
+<sizeparam width="140" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Receive signal" value="bootstrap(address)" />
@@ -1594,8 +1612,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="713" >
-<cdparam x="348" y="435" />
-<sizeparam width="90" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="340" y="435" />
+<sizeparam width="106" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Send signal" value="packet(packet)" />
@@ -1641,6 +1659,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1669,6 +1688,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1697,6 +1717,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1725,6 +1746,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1753,6 +1775,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1781,6 +1804,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1809,6 +1833,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1837,6 +1862,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1865,6 +1891,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1893,6 +1920,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1921,6 +1949,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1969,6 +1998,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2017,6 +2047,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2065,6 +2096,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2093,6 +2125,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2107,7 +2140,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="835" >
 <father id="837" num="0" />
 <cdparam x="942" y="673" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2121,6 +2154,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f2=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2136,7 +2170,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="842" >
 <father id="844" num="0" />
 <cdparam x="886" y="655" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2150,6 +2184,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f1=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2165,7 +2200,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="849" >
 <father id="851" num="0" />
 <cdparam x="828" y="662" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="47" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2179,6 +2214,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f0=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2194,7 +2230,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="856" >
 <father id="858" num="0" />
 <cdparam x="631" y="675" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2208,6 +2244,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f1=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2223,7 +2260,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="863" >
 <father id="865" num="0" />
 <cdparam x="673" y="652" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2237,6 +2274,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f2=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2252,7 +2290,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="870" >
 <father id="872" num="0" />
 <cdparam x="582" y="678" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="47" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2266,6 +2304,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f0=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2281,7 +2320,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="877" >
 <father id="879" num="0" />
 <cdparam x="495" y="689" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2295,6 +2334,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f2=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2310,7 +2350,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="884" >
 <father id="886" num="0" />
 <cdparam x="422" y="660" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2324,6 +2364,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f1=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2339,7 +2380,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="891" >
 <father id="893" num="0" />
 <cdparam x="354" y="590" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="47" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2353,6 +2394,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f0=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2368,7 +2410,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="898" >
 <father id="900" num="0" />
 <cdparam x="676" y="112" />
-<sizeparam width="30" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="40" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2382,6 +2424,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2440,6 +2483,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2468,6 +2512,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2496,6 +2541,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2524,6 +2570,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2552,6 +2599,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2566,7 +2614,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="946" >
 <father id="948" num="0" />
 <cdparam x="133" y="459" />
-<sizeparam width="44" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="52" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2580,6 +2628,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f0=false" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2595,7 +2644,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="953" >
 <father id="955" num="0" />
 <cdparam x="162" y="377" />
-<sizeparam width="20" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2609,6 +2658,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2637,6 +2687,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2665,6 +2716,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2693,6 +2745,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2721,6 +2774,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2749,6 +2803,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2777,6 +2832,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2805,6 +2861,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2833,6 +2890,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2847,7 +2905,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1016" >
 <father id="1018" num="0" />
 <cdparam x="266" y="380" />
-<sizeparam width="20" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="25" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2861,6 +2919,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2875,7 +2934,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1023" >
 <father id="1025" num="0" />
 <cdparam x="215" y="296" />
-<sizeparam width="66" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="77" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2889,6 +2948,7 @@
 <afterMax value="20" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2903,7 +2963,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1030" >
 <father id="1032" num="0" />
 <cdparam x="231" y="117" />
-<sizeparam width="69" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="88" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2917,6 +2977,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2965,6 +3026,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3013,6 +3075,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3061,6 +3124,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3075,7 +3139,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1070" >
 <father id="1072" num="0" />
 <cdparam x="1101" y="469" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="47" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3089,6 +3153,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f0=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3104,7 +3169,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1077" >
 <father id="1079" num="0" />
 <cdparam x="1169" y="539" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3118,6 +3183,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f1=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3133,7 +3199,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1084" >
 <father id="1086" num="0" />
 <cdparam x="1242" y="568" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3147,6 +3213,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f2=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3162,7 +3229,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1091" >
 <father id="1093" num="0" />
 <cdparam x="1329" y="557" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="47" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3176,6 +3243,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f0=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3191,7 +3259,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1098" >
 <father id="1100" num="0" />
 <cdparam x="1420" y="531" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3205,6 +3273,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f2=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3220,7 +3289,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1105" >
 <father id="1107" num="0" />
 <cdparam x="1378" y="554" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3234,6 +3303,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f1=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3249,7 +3319,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1112" >
 <father id="1114" num="0" />
 <cdparam x="1575" y="541" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="47" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3263,6 +3333,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f0=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3278,7 +3349,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1119" >
 <father id="1121" num="0" />
 <cdparam x="1633" y="534" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3292,6 +3363,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f1=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3307,7 +3379,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1126" >
 <father id="1128" num="0" />
 <cdparam x="1689" y="552" />
-<sizeparam width="39" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="46" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3321,6 +3393,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f2=true" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3350,6 +3423,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3378,6 +3452,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3392,7 +3467,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1147" >
 <father id="1149" num="0" />
 <cdparam x="209" y="461" />
-<sizeparam width="44" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="51" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3406,6 +3481,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f1=false" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3421,7 +3497,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1154" >
 <father id="1156" num="0" />
 <cdparam x="293" y="478" />
-<sizeparam width="44" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="51" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3435,6 +3511,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 <actions value="f2=false" />
 </extraparam>
 </SUBCOMPONENT>
@@ -3450,7 +3527,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1161" >
 <father id="1163" num="0" />
 <cdparam x="213" y="384" />
-<sizeparam width="20" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="25" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3464,6 +3541,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3568,8 +3646,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1256" >
-<cdparam x="282" y="399" />
-<sizeparam width="83" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="275" y="399" />
+<sizeparam width="96" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Send signal" value="to_c2(packet)" />
@@ -3636,8 +3714,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1308" >
-<cdparam x="167" y="418" />
-<sizeparam width="83" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="160" y="418" />
+<sizeparam width="96" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Send signal" value="to_c1(packet)" />
@@ -3654,8 +3732,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1319" >
-<cdparam x="56" y="410" />
-<sizeparam width="83" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="49" y="410" />
+<sizeparam width="97" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Send signal" value="to_c0(packet)" />
@@ -3681,8 +3759,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1332" >
-<cdparam x="157" y="245" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="151" y="245" />
+<sizeparam width="114" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="from_IE(packet)" />
@@ -3749,8 +3827,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1384" >
-<cdparam x="1677" y="423" />
-<sizeparam width="157" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1666" y="423" />
+<sizeparam width="178" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c2_to_queue_high(packet)" />
@@ -3767,8 +3845,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1395" >
-<cdparam x="1614" y="484" />
-<sizeparam width="157" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1603" y="484" />
+<sizeparam width="178" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c1_to_queue_high(packet)" />
@@ -3785,8 +3863,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1406" >
-<cdparam x="1559" y="444" />
-<sizeparam width="157" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1548" y="444" />
+<sizeparam width="179" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c0_to_queue_high(packet)" />
@@ -3803,8 +3881,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1417" >
-<cdparam x="1334" y="444" />
-<sizeparam width="178" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1323" y="444" />
+<sizeparam width="201" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c1_to_queue_medium(packet)" />
@@ -3821,8 +3899,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1428" >
-<cdparam x="1395" y="402" />
-<sizeparam width="178" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1384" y="402" />
+<sizeparam width="201" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c2_to_queue_medium(packet)" />
@@ -3839,8 +3917,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1439" >
-<cdparam x="1280" y="478" />
-<sizeparam width="178" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1268" y="478" />
+<sizeparam width="202" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c0_to_queue_medium(packet)" />
@@ -3857,8 +3935,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1450" >
-<cdparam x="1692" y="808" />
-<sizeparam width="116" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1684" y="808" />
+<sizeparam width="132" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Send signal" value="queue_high(packet)" />
@@ -3925,8 +4003,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1502" >
-<cdparam x="1447" y="763" />
-<sizeparam width="137" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1438" y="763" />
+<sizeparam width="155" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Send signal" value="queue_medium(packet)" />
@@ -3993,8 +4071,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1554" >
-<cdparam x="1135" y="419" />
-<sizeparam width="152" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1124" y="419" />
+<sizeparam width="174" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c2_to_queue_low(packet)" />
@@ -4011,8 +4089,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1565" >
-<cdparam x="1101" y="387" />
-<sizeparam width="152" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1090" y="387" />
+<sizeparam width="174" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c1_to_queue_low(packet)" />
@@ -4029,8 +4107,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1576" >
-<cdparam x="1096" y="352" />
-<sizeparam width="152" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1085" y="352" />
+<sizeparam width="175" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c0_to_queue_low(packet)" />
@@ -4097,8 +4175,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1628" >
-<cdparam x="1167" y="776" />
-<sizeparam width="111" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1158" y="776" />
+<sizeparam width="128" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Send signal" value="queue_low(packet)" />
@@ -4165,8 +4243,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1680" >
-<cdparam x="930" y="544" />
-<sizeparam width="157" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="919" y="544" />
+<sizeparam width="178" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c2_to_queue_high(packet)" />
@@ -4183,8 +4261,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1691" >
-<cdparam x="867" y="605" />
-<sizeparam width="157" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="856" y="605" />
+<sizeparam width="178" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c1_to_queue_high(packet)" />
@@ -4201,8 +4279,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1702" >
-<cdparam x="812" y="565" />
-<sizeparam width="157" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="801" y="565" />
+<sizeparam width="179" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c0_to_queue_high(packet)" />
@@ -4219,8 +4297,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1713" >
-<cdparam x="587" y="565" />
-<sizeparam width="178" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="576" y="565" />
+<sizeparam width="201" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c1_to_queue_medium(packet)" />
@@ -4237,8 +4315,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1724" >
-<cdparam x="648" y="523" />
-<sizeparam width="178" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="637" y="523" />
+<sizeparam width="201" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c2_to_queue_medium(packet)" />
@@ -4255,8 +4333,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1735" >
-<cdparam x="533" y="599" />
-<sizeparam width="178" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="521" y="599" />
+<sizeparam width="202" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c0_to_queue_medium(packet)" />
@@ -4273,8 +4351,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1746" >
-<cdparam x="923" y="838" />
-<sizeparam width="116" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="915" y="838" />
+<sizeparam width="132" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Send signal" value="queue_high(packet)" />
@@ -4341,8 +4419,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1798" >
-<cdparam x="678" y="793" />
-<sizeparam width="137" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="669" y="793" />
+<sizeparam width="155" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Send signal" value="queue_medium(packet)" />
@@ -4409,8 +4487,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1850" >
-<cdparam x="388" y="540" />
-<sizeparam width="152" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="377" y="540" />
+<sizeparam width="174" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c2_to_queue_low(packet)" />
@@ -4427,8 +4505,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1861" >
-<cdparam x="354" y="508" />
-<sizeparam width="152" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="343" y="508" />
+<sizeparam width="174" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c1_to_queue_low(packet)" />
@@ -4445,8 +4523,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1872" >
-<cdparam x="349" y="473" />
-<sizeparam width="152" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="338" y="473" />
+<sizeparam width="175" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Receive signal" value="c0_to_queue_low(packet)" />
@@ -4463,8 +4541,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1883" >
-<cdparam x="401" y="801" />
-<sizeparam width="111" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="392" y="801" />
+<sizeparam width="128" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
 <infoparam name="Send signal" value="queue_low(packet)" />
@@ -4559,6 +4637,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4587,6 +4666,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4655,6 +4735,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4703,6 +4784,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4751,6 +4833,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4779,6 +4862,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4847,6 +4931,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4915,6 +5000,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4953,6 +5039,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4981,6 +5068,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5019,6 +5107,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5047,6 +5136,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5075,6 +5165,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5103,6 +5194,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5131,6 +5223,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5159,6 +5252,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5173,7 +5267,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="2077" >
 <father id="2079" num="0" />
 <cdparam x="795" y="321" />
-<sizeparam width="50" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="59" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -5187,6 +5281,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5201,7 +5296,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="2084" >
 <father id="2086" num="0" />
 <cdparam x="408" y="346" />
-<sizeparam width="50" height="17" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="59" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -5215,6 +5310,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5319,8 +5415,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="2179" >
-<cdparam x="740" y="348" />
-<sizeparam width="90" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="732" y="348" />
+<sizeparam width="106" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="packet(packet)" />
@@ -5337,8 +5433,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="2190" >
-<cdparam x="622" y="199" />
-<sizeparam width="160" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="610" y="199" />
+<sizeparam width="184" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="scheduledPacket0(packet)" />
@@ -5355,8 +5451,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="2201" >
-<cdparam x="814" y="201" />
-<sizeparam width="160" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="803" y="201" />
+<sizeparam width="183" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="scheduledPacket1(packet)" />
@@ -5423,8 +5519,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="2253" >
-<cdparam x="413" y="196" />
-<sizeparam width="154" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="404" y="196" />
+<sizeparam width="173" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="from_queue_high(packet)" />
@@ -5441,8 +5537,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="2264" >
-<cdparam x="300" y="223" />
-<sizeparam width="175" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="289" y="223" />
+<sizeparam width="196" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="from_queue_medium(packet)" />
@@ -5459,8 +5555,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="2275" >
-<cdparam x="211" y="197" />
-<sizeparam width="149" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="201" y="197" />
+<sizeparam width="169" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="from_queue_low(packet)" />
@@ -5486,8 +5582,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="2288" >
-<cdparam x="250" y="455" />
-<sizeparam width="129" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="239" y="455" />
+<sizeparam width="150" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="to_scheduler0(packet)" />
@@ -5504,8 +5600,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="2299" >
-<cdparam x="388" y="456" />
-<sizeparam width="129" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="378" y="456" />
+<sizeparam width="149" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="to_scheduler1(packet)" />
@@ -5620,6 +5716,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5668,6 +5765,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5716,6 +5814,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5744,6 +5843,7 @@
 <afterMax value="100" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5772,6 +5872,7 @@
 <afterMax value="100" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5800,6 +5901,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5828,6 +5930,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5856,6 +5959,7 @@
 <afterMax value="100" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5884,6 +5988,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6097,6 +6202,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6125,6 +6231,7 @@
 <afterMax value="100" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6153,6 +6260,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6181,6 +6289,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6209,6 +6318,7 @@
 <afterMax value="100" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6237,6 +6347,7 @@
 <afterMax value="100" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6285,6 +6396,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6333,6 +6445,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6381,6 +6494,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6594,6 +6708,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6622,6 +6737,7 @@
 <afterMax value="100" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6650,6 +6766,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6678,6 +6795,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6706,6 +6824,7 @@
 <afterMax value="100" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6734,6 +6853,7 @@
 <afterMax value="100" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6782,6 +6902,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6830,6 +6951,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6878,6 +7000,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7091,6 +7214,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7119,6 +7243,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7147,6 +7272,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7175,6 +7301,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7203,6 +7330,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7231,6 +7359,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7259,6 +7388,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7287,6 +7417,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7315,6 +7446,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7343,6 +7475,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7391,6 +7524,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7439,6 +7573,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7845,6 +7980,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7903,6 +8039,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7951,6 +8088,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -7979,6 +8117,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8007,6 +8146,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8035,6 +8175,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8063,6 +8204,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8091,6 +8233,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8119,6 +8262,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8147,6 +8291,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8175,6 +8320,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8203,6 +8349,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -8231,6 +8378,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<probability value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10125,7 +10273,7 @@
 <infoparam name="Primitive port" value="Channel classifPacket" />
 <TGConnectingPoint num="0" id="4375" />
 <extraparam>
-<Prop commName="classifPacket" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classifPacket" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10142,7 +10290,7 @@
 <infoparam name="Primitive port" value="Event toQueue" />
 <TGConnectingPoint num="0" id="4377" />
 <extraparam>
-<Prop commName="toQueue" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toQueue" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10159,7 +10307,7 @@
 <infoparam name="Primitive port" value="Channel classif" />
 <TGConnectingPoint num="0" id="4379" />
 <extraparam>
-<Prop commName="classif" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classif" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10195,7 +10343,7 @@
 <infoparam name="Primitive port" value="Channel schedPacket" />
 <TGConnectingPoint num="0" id="4390" />
 <extraparam>
-<Prop commName="schedPacket" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="schedPacket" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10212,7 +10360,7 @@
 <infoparam name="Primitive port" value="Event newAddr" />
 <TGConnectingPoint num="0" id="4392" />
 <extraparam>
-<Prop commName="newAddr" commType="1" origin="true" finite="true" blocking="true" maxSamples="32" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newAddr" commType="1" origin="true" finite="true" blocking="true" maxSamples="32" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10229,7 +10377,7 @@
 <infoparam name="Primitive port" value="Channel address" />
 <TGConnectingPoint num="0" id="4394" />
 <extraparam>
-<Prop commName="address" commType="0" origin="true" finite="false" blocking="true" maxSamples="32" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="address" commType="0" origin="true" finite="false" blocking="true" maxSamples="32" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10265,7 +10413,7 @@
 <infoparam name="Primitive port" value="Event newAddr" />
 <TGConnectingPoint num="0" id="4405" />
 <extraparam>
-<Prop commName="newAddr" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newAddr" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10282,7 +10430,7 @@
 <infoparam name="Primitive port" value="Event newBoot" />
 <TGConnectingPoint num="0" id="4407" />
 <extraparam>
-<Prop commName="newBoot" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newBoot" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10299,7 +10447,7 @@
 <infoparam name="Primitive port" value="Channel packet" />
 <TGConnectingPoint num="0" id="4409" />
 <extraparam>
-<Prop commName="packet" commType="0" origin="true" finite="false" blocking="true" maxSamples="32" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="packet" commType="0" origin="true" finite="false" blocking="true" maxSamples="32" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10316,7 +10464,7 @@
 <infoparam name="Primitive port" value="Channel address" />
 <TGConnectingPoint num="0" id="4411" />
 <extraparam>
-<Prop commName="address" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="address" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10333,7 +10481,7 @@
 <infoparam name="Primitive port" value="Channel bootstrapaddress" />
 <TGConnectingPoint num="0" id="4413" />
 <extraparam>
-<Prop commName="bootstrapaddress" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="bootstrapaddress" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10350,7 +10498,7 @@
 <infoparam name="Primitive port" value="Event newPacket" />
 <TGConnectingPoint num="0" id="4415" />
 <extraparam>
-<Prop commName="newPacket" commType="1" origin="true" finite="true" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newPacket" commType="1" origin="true" finite="true" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10387,7 +10535,7 @@
 <infoparam name="Primitive port" value="Event newBoot" />
 <TGConnectingPoint num="0" id="4426" />
 <extraparam>
-<Prop commName="newBoot" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newBoot" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10404,7 +10552,7 @@
 <infoparam name="Primitive port" value="Channel bootstrapaddress" />
 <TGConnectingPoint num="0" id="4428" />
 <extraparam>
-<Prop commName="bootstrapaddress" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="bootstrapaddress" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10459,7 +10607,7 @@
 <infoparam name="Primitive port" value="Channel toSchedPacket" />
 <TGConnectingPoint num="0" id="4439" />
 <extraparam>
-<Prop commName="toSchedPacket" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toSchedPacket" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10476,7 +10624,7 @@
 <infoparam name="Primitive port" value="Event newQueueMedium" />
 <TGConnectingPoint num="0" id="4441" />
 <extraparam>
-<Prop commName="newQueueMedium" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newQueueMedium" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10493,7 +10641,7 @@
 <infoparam name="Primitive port" value="Event newQueueLow" />
 <TGConnectingPoint num="0" id="4443" />
 <extraparam>
-<Prop commName="newQueueLow" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newQueueLow" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10510,7 +10658,7 @@
 <infoparam name="Primitive port" value="Channel toSched0" />
 <TGConnectingPoint num="0" id="4445" />
 <extraparam>
-<Prop commName="toSched0" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toSched0" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10527,7 +10675,7 @@
 <infoparam name="Primitive port" value="Channel toSched1" />
 <TGConnectingPoint num="0" id="4447" />
 <extraparam>
-<Prop commName="toSched1" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toSched1" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10544,7 +10692,7 @@
 <infoparam name="Primitive port" value="Channel schedPacket1" />
 <TGConnectingPoint num="0" id="4449" />
 <extraparam>
-<Prop commName="schedPacket1" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="schedPacket1" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10561,7 +10709,7 @@
 <infoparam name="Primitive port" value="Channel schedPacket0" />
 <TGConnectingPoint num="0" id="4451" />
 <extraparam>
-<Prop commName="schedPacket0" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="schedPacket0" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10578,7 +10726,7 @@
 <infoparam name="Primitive port" value="Event newQueueHigh" />
 <TGConnectingPoint num="0" id="4453" />
 <extraparam>
-<Prop commName="newQueueHigh" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newQueueHigh" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10595,7 +10743,7 @@
 <infoparam name="Primitive port" value="Event newSchedPacket1" />
 <TGConnectingPoint num="0" id="4455" />
 <extraparam>
-<Prop commName="newSchedPacket1" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newSchedPacket1" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10612,7 +10760,7 @@
 <infoparam name="Primitive port" value="Event newSchedPacket0" />
 <TGConnectingPoint num="0" id="4457" />
 <extraparam>
-<Prop commName="newSchedPacket0" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newSchedPacket0" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10629,7 +10777,7 @@
 <infoparam name="Primitive port" value="Channel schedPacket" />
 <TGConnectingPoint num="0" id="4459" />
 <extraparam>
-<Prop commName="schedPacket" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="schedPacket" commType="0" origin="true" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10665,7 +10813,7 @@
 <infoparam name="Primitive port" value="Channel toSched1" />
 <TGConnectingPoint num="0" id="4470" />
 <extraparam>
-<Prop commName="toSched1" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toSched1" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10682,7 +10830,7 @@
 <infoparam name="Primitive port" value="Channel schedPacket1" />
 <TGConnectingPoint num="0" id="4472" />
 <extraparam>
-<Prop commName="schedPacket1" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="schedPacket1" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10699,7 +10847,7 @@
 <infoparam name="Primitive port" value="Event newSchedPacket1" />
 <TGConnectingPoint num="0" id="4474" />
 <extraparam>
-<Prop commName="newSchedPacket1" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newSchedPacket1" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10735,7 +10883,7 @@
 <infoparam name="Primitive port" value="Channel toSched0" />
 <TGConnectingPoint num="0" id="4485" />
 <extraparam>
-<Prop commName="toSched0" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toSched0" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10752,7 +10900,7 @@
 <infoparam name="Primitive port" value="Channel schedPacket0" />
 <TGConnectingPoint num="0" id="4487" />
 <extraparam>
-<Prop commName="schedPacket0" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="schedPacket0" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10769,7 +10917,7 @@
 <infoparam name="Primitive port" value="Event newSchedPacket0" />
 <TGConnectingPoint num="0" id="4489" />
 <extraparam>
-<Prop commName="newSchedPacket0" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newSchedPacket0" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10806,7 +10954,7 @@
 <infoparam name="Primitive port" value="Channel classifPacket2" />
 <TGConnectingPoint num="0" id="4509" />
 <extraparam>
-<Prop commName="classifPacket2" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classifPacket2" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10823,7 +10971,7 @@
 <infoparam name="Primitive port" value="Event toQueue2" />
 <TGConnectingPoint num="0" id="4511" />
 <extraparam>
-<Prop commName="toQueue2" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toQueue2" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10840,7 +10988,7 @@
 <infoparam name="Primitive port" value="Channel classif2" />
 <TGConnectingPoint num="0" id="4513" />
 <extraparam>
-<Prop commName="classif2" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classif2" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10877,7 +11025,7 @@
 <infoparam name="Primitive port" value="Channel classifPacket1" />
 <TGConnectingPoint num="0" id="4524" />
 <extraparam>
-<Prop commName="classifPacket1" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classifPacket1" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10894,7 +11042,7 @@
 <infoparam name="Primitive port" value="Channel classif1" />
 <TGConnectingPoint num="0" id="4526" />
 <extraparam>
-<Prop commName="classif1" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classif1" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10911,7 +11059,7 @@
 <infoparam name="Primitive port" value="Event toQueue1" />
 <TGConnectingPoint num="0" id="4528" />
 <extraparam>
-<Prop commName="toQueue1" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toQueue1" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10970,7 +11118,7 @@
 <infoparam name="Primitive port" value="Channel toSchedPacket" />
 <TGConnectingPoint num="0" id="4539" />
 <extraparam>
-<Prop commName="toSchedPacket" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toSchedPacket" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -10987,7 +11135,7 @@
 <infoparam name="Primitive port" value="Event newQueueLow" />
 <TGConnectingPoint num="0" id="4541" />
 <extraparam>
-<Prop commName="newQueueLow" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newQueueLow" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11004,7 +11152,7 @@
 <infoparam name="Primitive port" value="Event newQueueMedium" />
 <TGConnectingPoint num="0" id="4543" />
 <extraparam>
-<Prop commName="newQueueMedium" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newQueueMedium" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11021,7 +11169,7 @@
 <infoparam name="Primitive port" value="Event newQueueHigh" />
 <TGConnectingPoint num="0" id="4545" />
 <extraparam>
-<Prop commName="newQueueHigh" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="31" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newQueueHigh" commType="1" origin="true" finite="true" blocking="true" maxSamples="1" widthSamples="31" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11038,7 +11186,7 @@
 <infoparam name="Primitive port" value="Channel classifPacket" />
 <TGConnectingPoint num="0" id="4547" />
 <extraparam>
-<Prop commName="classifPacket" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classifPacket" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11055,7 +11203,7 @@
 <infoparam name="Primitive port" value="Event toQueue" />
 <TGConnectingPoint num="0" id="4549" />
 <extraparam>
-<Prop commName="toQueue" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toQueue" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11072,7 +11220,7 @@
 <infoparam name="Primitive port" value="Channel classif" />
 <TGConnectingPoint num="0" id="4551" />
 <extraparam>
-<Prop commName="classif" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classif" commType="0" origin="true" finite="false" blocking="true" maxSamples="1" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11089,7 +11237,7 @@
 <infoparam name="Primitive port" value="Channel packet" />
 <TGConnectingPoint num="0" id="4553" />
 <extraparam>
-<Prop commName="packet" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="packet" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11106,7 +11254,7 @@
 <infoparam name="Primitive port" value="Event toQueue2" />
 <TGConnectingPoint num="0" id="4555" />
 <extraparam>
-<Prop commName="toQueue2" commType="1" origin="false" finite="true" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toQueue2" commType="1" origin="false" finite="true" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11123,7 +11271,7 @@
 <infoparam name="Primitive port" value="Event toQueue1" />
 <TGConnectingPoint num="0" id="4557" />
 <extraparam>
-<Prop commName="toQueue1" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="toQueue1" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="1" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11140,7 +11288,7 @@
 <infoparam name="Primitive port" value="Channel classifPacket1" />
 <TGConnectingPoint num="0" id="4559" />
 <extraparam>
-<Prop commName="classifPacket1" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classifPacket1" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11157,7 +11305,7 @@
 <infoparam name="Primitive port" value="Channel classifPacket2" />
 <TGConnectingPoint num="0" id="4561" />
 <extraparam>
-<Prop commName="classifPacket2" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classifPacket2" commType="0" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11174,7 +11322,7 @@
 <infoparam name="Primitive port" value="Event newPacket" />
 <TGConnectingPoint num="0" id="4563" />
 <extraparam>
-<Prop commName="newPacket" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="newPacket" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11191,7 +11339,7 @@
 <infoparam name="Primitive port" value="Channel classif1" />
 <TGConnectingPoint num="0" id="4565" />
 <extraparam>
-<Prop commName="classif1" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classif1" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -11208,7 +11356,7 @@
 <infoparam name="Primitive port" value="Channel classif2" />
 <TGConnectingPoint num="0" id="4567" />
 <extraparam>
-<Prop commName="classif2" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" referenceReq="" />
+<Prop commName="classif2" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" isPrex="false" isPostex="false" lossPercentage="0" maxNbOfLoss="0" dataFlowType="int16_t" associatedEvent="" checkConf="false" checkConfStatus="0" checkAuth="false" checkWeakAuthStatus="0" checkStrongAuthStatus="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -15724,7 +15872,7 @@
 <TGConnectingPoint num="23" id="5587" />
 <extraparam>
 <info stereotype="MEMORY" nodeName="Memory1" />
-<attributes byteDataSize="4"  clockRatio="1"  bufferType="0" />
+<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="0" />
 </extraparam>
 </COMPONENT>
 
@@ -15760,7 +15908,7 @@
 <TGConnectingPoint num="23" id="5612" />
 <extraparam>
 <info stereotype="MEMORY" nodeName="Memory2" />
-<attributes byteDataSize="4"  clockRatio="1"  bufferType="0" />
+<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="0" />
 </extraparam>
 </COMPONENT>
 
@@ -15961,7 +16109,7 @@
 <TGConnectingPoint num="23" id="5739" />
 <extraparam>
 <info stereotype="MEMORY" nodeName="Memory0" />
-<attributes byteDataSize="4"  clockRatio="1"  bufferType="0" />
+<attributes byteDataSize="4"  memorySize="1024"  clockRatio="1"  bufferType="0" />
 </extraparam>
 </COMPONENT>
 
