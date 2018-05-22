@@ -43,7 +43,7 @@
 /* authors: v1.0 Daniela GENIUS, Julien HENON 2015 */
 
 
-package ddtranslatorSoclib.toTopCell;
+package syscamstranslator.toSysCAMS;
 import avatartranslator.AvatarRelation;//DG 23.06.
 import avatartranslator.AvatarSpecification;//DG 23.06.
 import ddtranslatorSoclib.AvatarChannel;
