@@ -51,113 +51,111 @@ import ddtranslatorSoclib.AvatarTTY;
 
 public class Signal {
 
-	private final static String CR = "\n";
-	private final static String CR2 = "\n\n";
-	private final static String NAME_CLK = "signal_clk";
-	private static final String NAME_RST = "signal_resetn";
+    private final static String CR = "\n";
+    private final static String CR2 = "\n\n";
+    private final static String NAME_CLK = "signal_clk";
+    private static final String NAME_RST = "signal_resetn";
 
-	public static String getSignal() {
-		int nb_clusters = TopCellGenerator.syscams.getAllCrossbar().size();
-		// nb_clusters=2;
-		String signal = CR2 + "//-------------------------------signaux------------------------------------" + CR2;
+    public static String getSignal() {
+        int nb_clusters = TopCellGenerator.syscams.getAllCrossbar().size();
+        // nb_clusters=2;
+        String signal = CR2 + "//-------------------------------signaux------------------------------------" + CR2;
 
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_m[cpus.size() + 1];" + CR;
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_xicu(\"signal_vci_xicu\");" + CR;
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_m[cpus.size() + 1];" + CR;
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_xicu(\"signal_vci_xicu\");" + CR;
 
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_vcifdtrom(\"signal_vci_vcifdtrom\");" + CR;
-		signal = signal + " caba::VciSignals<vci_param> signal_vci_vcihetrom(\"signal_vci_vcihetrom\");" + CR;
-		signal = signal + " caba::VciSignals<vci_param> signal_vci_vcirom(\"signal_vci_vcirom\");" + CR;
-		signal = signal + " caba::VciSignals<vci_param> signal_vci_vcisimhelper(\"signal_vci_vcisimhelper\");" + CR;
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_vcirttimer(\"signal_vci_vcirttimer\");" + CR;
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_vcilocks(\"signal_vci_vcilocks\");" + CR;
-		// signal = signal +"caba::VciSignals<vci_param>
-		// signal_vci_mwmr_ram(\"signal_vci_mwmr_ram\");"+ CR;
-		// signal = signal +"caba::VciSignals<vci_param>
-		// signal_vci_mwmrd_ram(\"signal_vci_mwmrd_ram\");"+ CR;
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_vcifdaccessi;" + CR;
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_vcifdaccesst;" + CR;
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_bdi;" + CR;
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_bdt;" + CR;
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_etherneti;" + CR;
-		signal = signal + "caba::VciSignals<vci_param> signal_vci_ethernett;" + CR;
-		signal = signal + "" + CR;
-		signal = signal + "sc_clock signal_clk(\"signal_clk\");" + CR;
-		signal = signal + "sc_signal<bool>  signal_resetn(\"" + NAME_RST + "\");" + CR2;
-		int i = 0;
-		for (AvatarCoproMWMR copro : TopCellGenerator.syscams.getAllCoproMWMR()) {
-			signal = signal + "caba::VciSignals<vci_param> signal_mwmr_" + i + "_initiator;" + CR;
-			signal = signal + "caba::VciSignals<vci_param> signal_mwmr_" + i + "_target;" + CR;
-			signal = signal + " soclib::caba::FifoSignals<uint32_t> signal_fifo_" + i + "_from_ctrl;" + CR;
-			signal = signal + " soclib::caba::FifoSignals<uint32_t> signal_fifo_" + i + "_to_ctrl;" + CR;
-			i++;
-		}
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_vcifdtrom(\"signal_vci_vcifdtrom\");" + CR;
+        signal = signal + " caba::VciSignals<vci_param> signal_vci_vcihetrom(\"signal_vci_vcihetrom\");" + CR;
+        signal = signal + " caba::VciSignals<vci_param> signal_vci_vcirom(\"signal_vci_vcirom\");" + CR;
+        signal = signal + " caba::VciSignals<vci_param> signal_vci_vcisimhelper(\"signal_vci_vcisimhelper\");" + CR;
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_vcirttimer(\"signal_vci_vcirttimer\");" + CR;
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_vcilocks(\"signal_vci_vcilocks\");" + CR;
+        // signal = signal +"caba::VciSignals<vci_param>
+        // signal_vci_mwmr_ram(\"signal_vci_mwmr_ram\");"+ CR;
+        // signal = signal +"caba::VciSignals<vci_param>
+        // signal_vci_mwmrd_ram(\"signal_vci_mwmrd_ram\");"+ CR;
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_vcifdaccessi;" + CR;
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_vcifdaccesst;" + CR;
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_bdi;" + CR;
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_bdt;" + CR;
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_etherneti;" + CR;
+        signal = signal + "caba::VciSignals<vci_param> signal_vci_ethernett;" + CR;
+        signal = signal + "" + CR;
+        signal = signal + "sc_clock signal_clk(\"signal_clk\");" + CR;
+        signal = signal + "sc_signal<bool>  signal_resetn(\"" + NAME_RST + "\");" + CR2;
+        int i = 0;
+        for (AvatarCoproMWMR copro : TopCellGenerator.syscams.getAllCoproMWMR()) {
+            signal = signal + "caba::VciSignals<vci_param> signal_mwmr_" + i + "_initiator;" + CR;
+            signal = signal + "caba::VciSignals<vci_param> signal_mwmr_" + i + "_target;" + CR;
+            signal = signal + " soclib::caba::FifoSignals<uint32_t> signal_fifo_" + i + "_from_ctrl;" + CR;
+            signal = signal + " soclib::caba::FifoSignals<uint32_t> signal_fifo_" + i + "_to_ctrl;" + CR;
+            i++;
+        }
 
-		if (TopCellGenerator.syscams.getAllCrossbar().size() == 0) {
-			for (AvatarRAM ram : TopCellGenerator.syscams.getAllRAM())
-				signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
-						+ "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;
-			i = 0;
+        if (TopCellGenerator.syscams.getAllCrossbar().size() == 0) {
+            for (AvatarRAM ram : TopCellGenerator.syscams.getAllRAM())
+                signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
+                        + "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;
+            i = 0;
 
-			for (AvatarTTY tty : TopCellGenerator.syscams.getAllTTY()) {
-				// signal = signal + "soclib::caba::VciSignals<vci_param>
-				// signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" +
-				// CR2;
-				signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty" + i + "(\"signal_vci_tty" + i
-						+ "\");" + CR2;
-				i++;
-			}
+            for (AvatarTTY tty : TopCellGenerator.syscams.getAllTTY()) {
+                // signal = signal + "soclib::caba::VciSignals<vci_param>
+                // signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" +
+                // CR2;
+                signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty" + i + "(\"signal_vci_tty" + i
+                        + "\");" + CR2;
+                i++;
+            }
 
-			signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
-			System.out.print("number of processors : " + TopCellGenerator.syscams.getNbCPU() + "\n");
-		}
+            signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
+            System.out.print("number of processors : " + TopCellGenerator.syscams.getNbCPU() + "\n");
+        } else {
+            for (AvatarRAM ram : TopCellGenerator.syscams.getAllRAM())
+                signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
+                        + "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;
+            i = 0;
+            for (AvatarTTY tty : TopCellGenerator.syscams.getAllTTY()) {
+                // signal = signal + "soclib::caba::VciSignals<vci_param>
+                // signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" +
+                // CR2;
+                signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty" + i + "(\"signal_vci_tty" + i
+                        + "\");" + CR2;
+                i++;
+            }
+            int p = 0;
+            // if (with_hw_accellerator>0){ //DG 23.08.
+            for (AvatarCoproMWMR HWAccelerator : TopCellGenerator.syscams.getAllCoproMWMR()) {
+                // les accellerateurs sont caches car apparaissent uniquement au niveau
+                // DIPLODOCUS
+                // signal = signal + " soclib::caba::VciSignals<vci_param>
+                // signal_mwmr"+HWAccelerator.getNo()+"_target(\"signal_mwmr"+HWAccelerator.getNo()+"_target\""+CR;
+                // signal = signal + " soclib::caba::VciSignals<vci_param>
+                // signal_mwmr"+HWAccelerator.getNo()+"_initiator(\"signal_mwmr"+HWAccelerator.getNo()+"_initiator\""
+                // +CR;
 
-		else {
-			for (AvatarRAM ram : TopCellGenerator.syscams.getAllRAM())
-				signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
-						+ "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;
-			i = 0;
-			for (AvatarTTY tty : TopCellGenerator.syscams.getAllTTY()) {
-				// signal = signal + "soclib::caba::VciSignals<vci_param>
-				// signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" +
-				// CR2;
-				signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty" + i + "(\"signal_vci_tty" + i
-						+ "\");" + CR2;
-				i++;
-			}
-			int p = 0;
-			// if (with_hw_accellerator>0){ //DG 23.08.
-			for (AvatarCoproMWMR HWAccelerator : TopCellGenerator.syscams.getAllCoproMWMR()) {
-				// les accellerateurs sont caches car apparaissent uniquement au niveau
-				// DIPLODOCUS
-				// signal = signal + " soclib::caba::VciSignals<vci_param>
-				// signal_mwmr"+HWAccelerator.getNo()+"_target(\"signal_mwmr"+HWAccelerator.getNo()+"_target\""+CR;
-				// signal = signal + " soclib::caba::VciSignals<vci_param>
-				// signal_mwmr"+HWAccelerator.getNo()+"_initiator(\"signal_mwmr"+HWAccelerator.getNo()+"_initiator\""
-				// +CR;
+                // signal = signal + " soclib::caba::FifoSignals<uint32_t>
+                // signal_fifo_to_ctrl"+HWAccelerator.getNo()+"(\"signal_fifo_to_ctrl"+HWAccelerator.getNo()+"\");"+CR;
+                // signal = signal + " soclib::caba::FifoSignals<uint32_t>
+                // signal_fifo_from_ctrl"+HWAccelerator.getNo()+"(\"signal_fifo_from_ctrl"+HWAccelerator.getNo()+"\");"+CR;
 
-				// signal = signal + " soclib::caba::FifoSignals<uint32_t>
-				// signal_fifo_to_ctrl"+HWAccelerator.getNo()+"(\"signal_fifo_to_ctrl"+HWAccelerator.getNo()+"\");"+CR;
-				// signal = signal + " soclib::caba::FifoSignals<uint32_t>
-				// signal_fifo_from_ctrl"+HWAccelerator.getNo()+"(\"signal_fifo_from_ctrl"+HWAccelerator.getNo()+"\");"+CR;
+                signal = signal + "	soclib::caba::VciSignals<vci_param> signal_mwmr" + p + "_target(\"signal_mwmr" + p
+                        + "_target\"" + CR;
+                signal = signal + "	soclib::caba::VciSignals<vci_param> signal_mwmr" + p + "_initiator(\"signal_mwmr"
+                        + p + "_initiator\"" + CR;
 
-				signal = signal + "	soclib::caba::VciSignals<vci_param> signal_mwmr" + p + "_target(\"signal_mwmr" + p
-						+ "_target\"" + CR;
-				signal = signal + "	soclib::caba::VciSignals<vci_param> signal_mwmr" + p + "_initiator(\"signal_mwmr"
-						+ p + "_initiator\"" + CR;
+                signal = signal + "	soclib::caba::FifoSignals<uint32_t> signal_fifo_to_ctrl" + p
+                        + "(\"signal_fifo_to_ctrl" + p + "\");" + CR;
+                signal = signal + "       soclib::caba::FifoSignals<uint32_t> signal_fifo_from_ctrl" + p
+                        + "(\"signal_fifo_from_ctrl" + p + "\");" + CR;
+                p++;
+            }
 
-				signal = signal + "	soclib::caba::FifoSignals<uint32_t> signal_fifo_to_ctrl" + p
-						+ "(\"signal_fifo_to_ctrl" + p + "\");" + CR;
-				signal = signal + "       soclib::caba::FifoSignals<uint32_t> signal_fifo_from_ctrl" + p
-						+ "(\"signal_fifo_from_ctrl" + p + "\");" + CR;
-				p++;
-			}
+            signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
+            // System.out.print("number of processors : " +
+            // TopCellGenerator.avatardd.getNbCPU()+"\n");
+            System.out.print("number of clusters : " + TopCellGenerator.syscams.getNbClusters() + "\n");
 
-			signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
-			// System.out.print("number of processors : " +
-			// TopCellGenerator.avatardd.getNbCPU()+"\n");
-			System.out.print("number of clusters : " + TopCellGenerator.syscams.getNbClusters() + "\n");
-
-		}
-		return signal;
-	}
+        }
+        return signal;
+    }
 }

@@ -44,7 +44,7 @@
 /* authors: v1.0 Raja GATGOUT 2014
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
-package ddtranslatorSoclib.toTopCell;
+package syscamstranslator.toSysCAMS;
 
 import ddtranslatorSoclib.AvatarCPU;
 import ddtranslatorSoclib.AvatarCoproMWMR;
@@ -59,7 +59,7 @@ public class NetList {
     private static boolean tracing;
 
     public static String getNetlist(String icn, boolean _tracing) {
-	int nb_clusters=TopCellGenerator.syscams.getAllCrossbar().size();
+	int nb_clusters = TopCellGenerator.syscams.getAllCrossbar().size();
 	
 	tracing = _tracing;
 	
