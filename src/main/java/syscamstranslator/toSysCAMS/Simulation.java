@@ -44,7 +44,7 @@
 /* authors: v1.0 Raja GATGOUT 2014
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
-package ddtranslatorSoclib.toTopCell;
+package syscamstranslator.toSysCAMS;
 
 public class Simulation {
 	

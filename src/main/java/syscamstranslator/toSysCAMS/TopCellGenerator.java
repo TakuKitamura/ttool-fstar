@@ -60,6 +60,8 @@ public class TopCellGenerator {
 	public static SysCAMSSpecification syscams;
 	// ---------------------------------------------------
 
+
+
 	public String VCIparameters;
 	public String config;
 	public String mainFile;
@@ -112,7 +114,7 @@ public class TopCellGenerator {
 		if (TopCellGenerator.syscams.getNbPortConverter() == 0) {
 			System.out.println("***Warning: require at least one converter port***");
 		}
-		String top = Header.getPrimitiveHeader(tdf) + Corps.getPrimitiveCorps(tdf);
+		String top = Header.getPrimitiveHeader(tdf) + Body.getPrimitiveBody(tdf);
 		return (top);
 	}
 

@@ -52,7 +52,7 @@ import ui.syscams.SysCAMSBlockTDF;
 
 /**
  * Class Header
- * En-tête des fichiers .h et .cpp
+ * Header of .h et .cpp
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE

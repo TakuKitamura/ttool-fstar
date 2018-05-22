@@ -53,8 +53,7 @@ import ui.syscams.SysCAMSPortConverter;
 import ui.syscams.SysCAMSPortTDF;
 
 /**
- * Class Header
- * En-tête des fichiers .h et .cpp
+ * Class PrimitiveCode
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
@@ -70,14 +69,14 @@ public class PrimitiveCode {
 
 	public static String getPrimitiveCode(SysCAMSBlockTDF tdf) {
 		if (tdf != null) {
-			codePrimitive = Header.getPrimitiveHeader(tdf) + Corps.getPrimitiveCorps(tdf);
+			codePrimitive = Header.getPrimitiveHeader(tdf) + Body.getPrimitiveCorps(tdf);
 		} else {
 			codePrimitive = "";
 		}
 		return codePrimitive;
 	}
 	
-	public static String getClusterCorps(SysCAMSTCluster cluster) {
+	public static String getClusterBody(SysCAMSTCluster cluster) {
 		 if (cluster != null) {
 			 List<SysCAMSBlockTDF> blocks = cluster.getBlocks();
 			 

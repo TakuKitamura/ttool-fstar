@@ -53,16 +53,16 @@ import ui.syscams.SysCAMSPortConverter;
 import ui.syscams.SysCAMSPortTDF;
 
 /**
- * Class Header
- * En-tête des fichiers .h et .cpp
+ * Class Body
+ * Body of .h et .cpp files
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
 */
 
 public class Corps {
-	static private String corpsPrimitive;
-	static private String corpsCluster;
+	static private String bodyPrimitive;
+	static private String bodyCluster;
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
@@ -72,88 +72,88 @@ public class Corps {
 		if (tdf != null) {
 			List<SysCAMSPortTDF> tdfports = tdf.getTdfports();
 			List<SysCAMSPortConverter> convports = tdf.getConvports();
-			
-			corpsPrimitive = "//-------------------------------Corps------------------------------------" + CR2
+
+			bodyPrimitive = "//-------------------------------Corps------------------------------------" + CR2
 					+ "SCA_TDF_MODULE(" + tdf.getBlockTDFName() + ") {" + CR2;
-			
+
 			if (!tdfports.isEmpty()) {
-				corpsPrimitive = corpsPrimitive + "\t// TDF port declarations" + CR;
+				bodyPrimitive = bodyPrimitive + "\t// TDF port declarations" + CR;
 				for (SysCAMSPortTDF t : tdfports) {
 					if (t.getOrigin() == 0) {
-						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_in<" + t.getTDFType() + "> " + t.getPortName() + CR;
+						bodyPrimitive = bodyPrimitive + "\tsca_tdf::sca_in<" + t.getTDFType() + "> " + t.getPortName() + CR;
 					} else if (t.getOrigin() == 1) {
-						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_out<" + t.getTDFType() + "> " + t.getPortName() + CR;
+						bodyPrimitive = bodyPrimitive + "\tsca_tdf::sca_out<" + t.getTDFType() + "> " + t.getPortName() + CR;
 					}
 				}
 			}
 			if (!convports.isEmpty()) {
-				corpsPrimitive = corpsPrimitive + "\t// Converter port declarations" + CR;
+				bodyPrimitive = bodyPrimitive + "\t// Converter port declarations" + CR;
 				for (SysCAMSPortConverter conv : convports) {
 					if (conv.getOrigin() == 0) {
-						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getPortName() + CR;
+						bodyPrimitive = bodyPrimitive + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getPortName() + CR;
 					} else if (conv.getOrigin() == 1) {
-						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_de::out<" + conv.getConvType() + "> " + conv.getPortName() + CR;
+						bodyPrimitive = bodyPrimitive + "\tsca_tdf::sca_de::out<" + conv.getConvType() + "> " + conv.getPortName() + CR;
 					}
 				}
 			}
-			
-			corpsPrimitive = corpsPrimitive + CR + "\t// Constructor" + CR + "\tSCA_CTOR(" + tdf.getBlockTDFName() + ")" + CR;
-		
+
+			bodyPrimitive = bodyPrimitive + CR + "\t// Constructor" + CR + "\tSCA_CTOR(" + tdf.getBlockTDFName() + ")" + CR;
+
 			if (!tdfports.isEmpty() || !convports.isEmpty()) {
-				corpsPrimitive = corpsPrimitive + ": ";
+				bodyPrimitive = bodyPrimitive + ": ";
 				if (!tdfports.isEmpty()) {
 					for (SysCAMSPortTDF t : tdfports) {
-						corpsPrimitive = corpsPrimitive + "\t" + t.getPortName() + "(\"" + t.getPortName() + "\")"+ CR;
+						bodyPrimitive = bodyPrimitive + "\t" + t.getPortName() + "(\"" + t.getPortName() + "\")"+ CR;
 					}
 				}
 				if (!convports.isEmpty()) {
 					for (SysCAMSPortConverter conv : convports) {
-						corpsPrimitive = corpsPrimitive + "\t" + conv.getPortName() + "(\"" + conv.getPortName() + "\")"+ CR;
+						bodyPrimitive = bodyPrimitive + "\t" + conv.getPortName() + "(\"" + conv.getPortName() + "\")"+ CR;
 					}
 				}
-				corpsPrimitive = corpsPrimitive + "\t{}" + CR2;
+				bodyPrimitive = bodyPrimitive + "\t{}" + CR2;
 			}
-			
-			corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR;
-			
-			// Block period 
+
+			bodyPrimitive = bodyPrimitive + "\tvoid set_attributes() {" + CR;
+
+			// Block period
 			if (tdf.getPeriod() != 0) {
-				corpsPrimitive = corpsPrimitive + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_MS);" + CR;
-			}	
+				bodyPrimitive = bodyPrimitive + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_MS);" + CR;
+			}
 			for (SysCAMSPortTDF t : tdfports) {
 				if (t.getPeriod() != 0) {
-					corpsPrimitive = corpsPrimitive + "\t\t" + t.getPortName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_US);" + CR;
-				} 
+					bodyPrimitive = bodyPrimitive + "\t\t" + t.getPortName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_US);" + CR;
+				}
 				if (t.getRate() != 0) {
-					corpsPrimitive = corpsPrimitive + "\t\t" + t.getPortName() + ".set_rate(" + t.getRate() + ");" + CR;
-				} 
+					bodyPrimitive = bodyPrimitive + "\t\t" + t.getPortName() + ".set_rate(" + t.getRate() + ");" + CR;
+				}
 				if (t.getDelay() != 0) {
-					corpsPrimitive = corpsPrimitive + "\t\t" + t.getPortName() + ".set_delay(" + t.getDelay() + ");" + CR;
-				} 
+					bodyPrimitive = bodyPrimitive + "\t\t" + t.getPortName() + ".set_delay(" + t.getDelay() + ");" + CR;
+				}
 			}
 			// Block processCode
-			corpsPrimitive = corpsPrimitive + "\t}" + CR2 + "\t" + tdf.getProcessCode() + CR2 + "};" + CR2 + "# endif"
+			bodyPrimitive = bodyPrimitive + "\t}" + CR2 + "\t" + tdf.getProcessCode() + CR2 + "};" + CR2 + "# endif"
 					+ " // " + tdf.getBlockTDFName().toUpperCase() + "_H";
 		} else {
-			corpsPrimitive = "";
+			bodyPrimitive = "";
 		}
-		return corpsPrimitive;
+		return bodyPrimitive;
 	}
-	
+
 	public static String getClusterCorps(SysCAMSTCluster cluster) {
 		 if (cluster != null) {
 			 List<SysCAMSBlockTDF> blocks = cluster.getBlocks();
-			 
-			 corpsCluster = "//-------------------------------Header------------------------------------" + CR2
+
+			 bodyCluster = "//-------------------------------Header------------------------------------" + CR2
 						+ "#include <systemc-ams>" + CR2;
-			 
+
 			 for (SysCAMSBlockTDF b : blocks) {
-				 corpsCluster = corpsCluster + "#include \"" + b.getValue() + ".h\"" + CR;
+				 bodyCluster = bodyCluster + "#include \"" + b.getValue() + ".h\"" + CR;
 			 }
-			 corpsCluster = corpsCluster + CR;
+			 bodyCluster = bodyCluster + CR;
 		 } else {
-			 corpsCluster = "";
+			 bodyCluster = "";
 		 }
-		 return corpsCluster;
-	} 
+		 return bodyCluster;
+	}
 }
