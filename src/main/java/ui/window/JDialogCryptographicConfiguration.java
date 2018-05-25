@@ -269,16 +269,18 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 	}
 
 
-	private void addEmptyLine(GridBagConstraints gc) {
-        gc.weighty = 1.0;
-        gc.weightx = 1.0;
-        gc.gridwidth = GridBagConstraints.REMAINDER; //end row
-        gc.fill = GridBagConstraints.BOTH;
-        gc.gridheight = 1;
-        add(new JLabel(" "), gc);
-    }
+
 
 	public class EncryptPanel extends JPanel {
+        private void addEmptyLine(GridBagConstraints gc) {
+            gc.weighty = 1.0;
+            gc.weightx = 1.0;
+            gc.gridwidth = GridBagConstraints.REMAINDER; //end row
+            gc.fill = GridBagConstraints.BOTH;
+            gc.gridheight = 1;
+            add(new JLabel(" "), gc);
+        }
+
 		EncryptPanel(JDialogCryptographicConfiguration j){
 			GridBagConstraints c1 = new GridBagConstraints();
 			GridBagLayout gridbag1 = new GridBagLayout();
@@ -338,6 +340,8 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 			add(texts[7],c1);
 
+            addEmptyLine(c1);
+
 			c1.gridwidth = 1;
 			add(new JLabel("Nonce"),c1);
 			helps.put(5, new JComboBox<>(nonces));
@@ -351,6 +355,8 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			add(inserts[5], c1);
 			texts[5]=new JTextField(values[5], 15);
 			add(texts[5], c1);
+
+            addEmptyLine(c1);
 
 			c1.gridwidth = 1;
 			add(new JLabel("Encrypted Key"),c1);
