@@ -703,13 +703,19 @@ public class IconManager {
         }
 
         //Added by Solange
-        imgic0 = getIcon(icon0);
+       	imgic0 = getIcon(icon0);
+        
         //Added by Solange, the component icon
-        imgic1 = getIcon(icon1);
+       	imgic1 = getIcon(icon1);
 
         //Added by Solange
-        img0 = imgic0.getImage();
-        img1 = imgic1.getImage();
+        if ( imgic0 != null ) {
+        	img0 = imgic0.getImage();
+        }
+
+        if ( imgic1 != null ) {
+        	img1 = imgic1.getImage();
+        }
 
         imgic13 = getIcon(icon13);
         imgic14 = getIcon(icon14);
