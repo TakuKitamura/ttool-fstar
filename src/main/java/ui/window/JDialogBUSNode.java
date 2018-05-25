@@ -95,7 +95,8 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
         GridBagConstraints c2 = new GridBagConstraints();
 
         setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
+        //c.setLayout(gridbag0);
+        c.setLayout(new BorderLayout());
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -174,10 +175,10 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
         panel2.add(refAttacks, c2);
 
         // main panel;
-        c0.gridheight = 10;
+        /*c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
-        c0.fill = GridBagConstraints.HORIZONTAL;
+        c0.fill = GridBagConstraints.BOTH;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel2, c0);
 
@@ -186,6 +187,18 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
         c0.fill = GridBagConstraints.HORIZONTAL;
         
         initButtons(c0, c, this);
+
+
+
+        // main panel;
+		/*c0.gridwidth = 1;
+		c0.gridheight = 1;
+		c0.fill = GridBagConstraints.HORIZONTAL;
+		initButtons(c0, c, this);*/
+        c.add(panel2, BorderLayout.CENTER);
+        initButtons(c, this);
+        JPanel panelButton = initBasicButtons(this);
+        c.add(panelButton, BorderLayout.SOUTH);
     }
 
     public void actionPerformed(ActionEvent evt)  {
