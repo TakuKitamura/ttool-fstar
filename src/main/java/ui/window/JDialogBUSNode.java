@@ -94,6 +94,10 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
 
+        final int defaultMargin = 3;
+        final Insets lblInsets = new Insets(defaultMargin, defaultMargin, 0, defaultMargin);
+        final Insets tfdInsets = new Insets(0, defaultMargin, defaultMargin, defaultMargin);
+
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         //c.setLayout(gridbag0);
         c.setLayout(new BorderLayout());
@@ -106,24 +110,27 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
         panel2.setBorder(new javax.swing.border.TitledBorder("Bus attributes"));
         panel2.setPreferredSize(new Dimension(400, 200));
 
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Bus name:"), c2);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nodeName = new JTextField(node.getNodeName(), 30);
-        nodeName.setEditable(true);
-        nodeName.setFont(new Font("times", Font.PLAIN, 12));
-        panel2.add(nodeName, c1);
 
         c2.gridwidth = 1;
         c2.gridheight = 1;
         c2.weighty = 1.0;
         c2.weightx = 1.0;
         c2.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Arbitration policy:"), c2);
+        c2.insets = lblInsets;
+        //c1.anchor = GridBagConstraints.EAST;
+        panel2.add(new JLabel("Bus name:", SwingConstants.RIGHT), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nodeName = new JTextField(node.getNodeName(), 30);
+        nodeName.setEditable(true);
+        nodeName.setFont(new Font("times", Font.PLAIN, 12));
+        panel2.add(nodeName, c2);
+
+        c2.gridwidth = 1;
+        c2.gridheight = 1;
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Arbitration policy:", SwingConstants.RIGHT), c2);
 
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         arbitrationPolicy = new JComboBox<>();
@@ -135,31 +142,31 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
         panel2.add(arbitrationPolicy, c2);
 
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Data size (in byte):"), c2);
+        panel2.add(new JLabel("Data size (in byte):", SwingConstants.RIGHT), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         byteDataSize = new JTextField(""+node.getByteDataSize(), 15);
         panel2.add(byteDataSize, c2);
 
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Pipeline size (num. stages):"), c2);
+        panel2.add(new JLabel("Pipeline size (num. stages):", SwingConstants.RIGHT), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         pipelineSize = new JTextField(""+node.getPipelineSize(), 15);
         panel2.add(pipelineSize, c2);
 
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Slice time (in microseconds):"), c2);
+        panel2.add(new JLabel("Slice time (in microseconds):", SwingConstants.RIGHT), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         sliceTime = new JTextField(""+node.getSliceTime(), 15);
         panel2.add(sliceTime, c2);
 
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Clock divider:"), c2);
+        panel2.add(new JLabel("Clock divider:", SwingConstants.RIGHT), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         clockRatio = new JTextField(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
 
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Bus Privacy:"), c2);
+        panel2.add(new JLabel("Bus Privacy:", SwingConstants.RIGHT), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         privacy = new JComboBox<>();
         privacy.addItem("Public");
@@ -168,7 +175,7 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
         panel2.add(privacy, c2);
 
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Reference Attack:"), c2);
+        panel2.add(new JLabel("Reference Attack:", SwingConstants.RIGHT), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         refAttacks = new JComboBox<>(refs);
         refAttacks.setSelectedItem(node.getRefAttack());
