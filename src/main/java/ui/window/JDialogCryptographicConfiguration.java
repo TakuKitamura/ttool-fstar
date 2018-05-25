@@ -216,15 +216,15 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 				}
 
 				if (repanel){
-					c0.gridwidth = 1;
+					/*c0.gridwidth = 1;
 					c0.gridheight = 10;
 					c0.weighty = 1.0;
 					c0.weightx = 1.0;
-					c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+					c0.gridwidth = GridBagConstraints.REMAINDER; //end row*/
 
-					c.add(panel1,c0);
+					c.add(panel1, BorderLayout.CENTER);
 					// main panel;
-					c0.gridwidth = 1;
+					/*c0.gridwidth = 1;
 					c0.gridheight = 1;
 					c0.fill = GridBagConstraints.HORIZONTAL;
 					closeButton = new JButton("Save and Close", IconManager.imgic25);
@@ -234,7 +234,11 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 					c0.gridwidth = GridBagConstraints.REMAINDER; //end row
 					cancelButton = new JButton("Cancel", IconManager.imgic27);
 					cancelButton.addActionListener(this);
-					c.add(cancelButton, c0);
+					c.add(cancelButton, c0);*/
+                    initButtons(c, this);
+                    JPanel panelButton = initBasicButtons(this);
+                    c.add(panelButton, BorderLayout.SOUTH);
+
 					this.invalidate();	   
 					this.validate();
 					this.repaint();
@@ -298,17 +302,21 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			c1.weightx = 1.0;
 			c1.fill = GridBagConstraints.HORIZONTAL;
 			c1.anchor = GridBagConstraints.CENTER;
-			String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce", "Advanced"}; 
+			String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce", "Advanced"};
+
+            addEmptyLine(c1);
+
 			// String1
 			c1.gridwidth = 1;
 			add(new JLabel("Cryptographic Configuration Name"),c1);
-
-			addEmptyLine(c1);
-
 			texts[0]=new JTextField(values[0],15);
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 			add(texts[0],c1);
-			c1.gridwidth=1;
+
+
+            addEmptyLine(c1);
+
+            c1.gridwidth=1;
 			add(new JLabel("Security Pattern"), c1);
 			helps.put(1, new JComboBox<>(vals));
 			helps.get(1).setSelectedItem(values[1]);
@@ -372,6 +380,8 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			texts[8]=new JTextField(values[8], 15);
 			add(texts[8], c1);
 
+            addEmptyLine(c1);
+
 			c1.gridwidth = 1;
 			add(new JLabel("Algorithm"),c1);
 			helps.put(9, new JComboBox<>(algNames));
@@ -392,6 +402,15 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 	}
 
 	public class funcPanel extends JPanel {
+        private void addEmptyLine(GridBagConstraints gc) {
+            gc.weighty = 1.0;
+            gc.weightx = 1.0;
+            gc.gridwidth = GridBagConstraints.REMAINDER; //end row
+            gc.fill = GridBagConstraints.BOTH;
+            gc.gridheight = 1;
+            add(new JLabel(" "), gc);
+        }
+
 		funcPanel(JDialogCryptographicConfiguration j){
 			GridBagConstraints c1 = new GridBagConstraints();
 			GridBagLayout gridbag1 = new GridBagLayout();
@@ -419,6 +438,9 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			c1.anchor = GridBagConstraints.CENTER;
 			String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce", "Advanced"}; 
 			// String1
+
+            addEmptyLine(c1);
+
 			c1.gridwidth = 1;
 			add(new JLabel("Cryptographic Configuration Name"),c1);
 			texts[0]=new JTextField(values[0],15);
@@ -438,6 +460,8 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			texts[1]=new JTextField(values[1], 15);
 			add(texts[1], c1);
 
+			addEmptyLine(c1);
+
 			c1.gridwidth = 1;
 			add(new JLabel("Computational Complexity"),c1);
 			texts[3]=new JTextField(values[3],15);
@@ -449,6 +473,8 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			texts[4]=new JTextField(values[4],15);
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 			add(texts[4],c1);
+
+			addEmptyLine(c1);
 
 			c1.gridwidth = 1;
 			add(new JLabel("Algorithm"),c1);
@@ -467,6 +493,15 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 
 
 	public class advPanel extends JPanel {
+        private void addEmptyLine(GridBagConstraints gc) {
+            gc.weighty = 1.0;
+            gc.weightx = 1.0;
+            gc.gridwidth = GridBagConstraints.REMAINDER; //end row
+            gc.fill = GridBagConstraints.BOTH;
+            gc.gridheight = 1;
+            add(new JLabel(" "), gc);
+        }
+
 		advPanel(JDialogCryptographicConfiguration j){
 			GridBagConstraints c1 = new GridBagConstraints();
 			GridBagLayout gridbag1 = new GridBagLayout();
@@ -494,6 +529,8 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			c1.anchor = GridBagConstraints.CENTER;
 			String[] vals = new String[]{"Symmetric Encryption", "Asymmetric Encryption","MAC", "Hash", "Nonce", "Advanced"}; 
 
+			addEmptyLine(c1);
+
 			// String1
 			c1.gridwidth = 1;
 			add(new JLabel("Cryptographic Configuration Name"),c1);
@@ -513,6 +550,8 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			texts[1]=new JTextField(values[1], 15);
 			add(texts[1], c1);
 
+			addEmptyLine(c1);
+
 			c1.gridwidth = 1;
 			add(new JLabel("Overhead"),c1);
 			texts[2]=new JTextField(values[2],15);
@@ -526,7 +565,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 			add(texts[3],c1);
 
-
+            addEmptyLine(c1);
 
 			c1.gridwidth=1;
 			add(new JLabel("Custom Security Formula"), c1);
