@@ -39,6 +39,56 @@
 
 package ui.window;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import avatartranslator.AvatarPragma;
 import avatartranslator.AvatarPragmaAuthenticity;
 import avatartranslator.AvatarPragmaReachability;
@@ -48,34 +98,21 @@ import launcher.LauncherException;
 import launcher.RshClient;
 import launcher.RshClientReader;
 import myutil.FileException;
-import myutil.FileUtils;
 import myutil.GraphicLib;
 import myutil.MasterProcessInterface;
 import myutil.TraceManager;
 import proverifspec.ProVerifOutputAnalyzer;
+import proverifspec.ProVerifOutputListener;
 import proverifspec.ProVerifQueryAuthResult;
 import proverifspec.ProVerifQueryResult;
 import proverifspec.ProVerifResultTraceStep;
-import proverifspec.ProVerifOutputListener;
+import tmltranslator.TMLMapping;
 import ui.AvatarDesignPanel;
-import ui.util.IconManager;
 import ui.MainGUI;
-import ui.TURTLEPanel;
 import ui.TMLArchiPanel;
-
+import ui.TURTLEPanel;
 import ui.interactivesimulation.JFrameSimulationSDPanel;
-import tmltranslator.*;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.*;
-import java.util.*;
+import ui.util.IconManager;
 
 
 /**
@@ -152,7 +189,12 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     Map<JCheckBox, ArrayList<JCheckBox>> cpuTaskObjs = new HashMap<JCheckBox, ArrayList<JCheckBox>>();
 
     private class MyMenuItem extends JMenuItem {
-        AvatarPragma pragma;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -344414299222823444L;
+		
+		AvatarPragma pragma;
         ProVerifQueryResult result;
 
         MyMenuItem(String text) {
@@ -183,15 +225,21 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
 
     private class ProVerifVerificationException extends Exception {
-        private String message;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -2359743729229833671L;
+		
+		// Issue #131 Already defined in super class
+		//private String message;
 
-        ProVerifVerificationException(String message) {
-            this.message = message;
+        public ProVerifVerificationException(String message) {
+            super( message );
         }
-
-        public String getMessage() {
-            return this.message;
-        }
+//
+//        public String getMessage() {
+//            return this.message;
+//        }
     }
 
     /**
@@ -787,13 +835,15 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                     mgui.gtm.autoMapKeys();
                 }
                 mode = NOT_STARTED;
-            } else {
+            }
+            else {
                 testGo();
                 pathCode = code1.getText().trim();
 
-                if (pathCode.isEmpty()) {
-                    pathCode += "pvspec";
-                }
+                // Issue #131: Not needed. Would duplicate file name
+//                if (pathCode.isEmpty()) {
+//                    pathCode += "pvspec";
+//                }
 
                 SpecConfigTTool.checkAndCreateProverifDir(pathCode);
 
@@ -933,7 +983,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
     private void maybeShowPopup(MouseEvent e) {
         if (e.isPopupTrigger() && e.getComponent() instanceof JList) {
-            JList curList = (JList) e.getComponent();
+            JList<?> curList = (JList<?>) e.getComponent();
             int row = curList.locationToIndex(e.getPoint());
             curList.clearSelection();
             curList.setSelectedIndex(row);
