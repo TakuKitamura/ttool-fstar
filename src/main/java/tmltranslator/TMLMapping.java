@@ -1063,7 +1063,7 @@ public class TMLMapping<E> {
         write.addNext(stopWrite);
 
         // All mapping to be done
-        // Map DMA task to the DMA nod eof the CPLib
+        // Map DMA task to the DMA node of the CPLib
         addTaskToHwExecutionNode(dmaTask, node);
 
 

@@ -1,3 +1,0 @@
-SUBDIRS = \
-	common/src \
-	src

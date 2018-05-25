@@ -1,8 +1,0 @@
-#0 time=0.003190630 block=Block1 type=state_entering state=__StartState
-#1 time=0.003302655 block=Block1 type=state_entering state=state0
-#2 time=0.003343306 block=Block0 type=state_entering state=__StartState
-#3 time=0.003437728 block=Block0 type=state_entering state=state0
-#4 time=0.003617095 block=Block0 type=send_async channel=val msgid=0 params=
-#5 time=0.003656192 block=Block0 type=send_async_2 channel=val
-#6 time=0.004016915 block=Block1 type=receive_async channel=val msgid=0 params=
-#7 time=0.004066638 block=Block1 type=receive_async_2 channel=val

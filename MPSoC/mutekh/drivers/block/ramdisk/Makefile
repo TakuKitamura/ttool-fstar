@@ -1,4 +1,0 @@
-
-objs = block-ramdisk.o
-
-

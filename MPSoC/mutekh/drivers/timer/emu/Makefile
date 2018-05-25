@@ -1,4 +1,0 @@
-
-objs = timer-emu.o
-
-
