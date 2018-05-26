@@ -44,7 +44,10 @@ import ui.util.IconManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -52,6 +55,7 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -78,6 +82,8 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener {
 	/** Access to ActionPerformed **/
 	private JTextField nameTextField;
 	private JTextField periodTextField;
+	private String listPeriodString[];
+	private JComboBox<String> periodComboBoxString;
 	private JTextArea processCodeTextArea;
 
 	/** Parameters **/
@@ -128,27 +134,73 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener {
 		attributesBox.setBorder(BorderFactory.createTitledBorder("Setting TDF block attributes"));
 
 		// BorderLayout for Adding Attributes
-		JPanel attributesBoxPanel = new JPanel(new GridLayout(2, 2, 0, 10));
-		
-		// GridLayout for name
-		JLabel nameLabel = new JLabel("Name : ");
-		attributesBoxPanel.add(nameLabel);
-		if (block.getValue().toString().equals("")) { // name empty
+		GridBagLayout gridBag = new GridBagLayout();
+	    GridBagConstraints constraints = new GridBagConstraints();
+	    JPanel attributesBoxPanel = new JPanel();
+	    attributesBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+	    attributesBoxPanel.setLayout(gridBag); 
+	    
+	    JLabel labelName = new JLabel("Name : ");
+	    constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(labelName, constraints);
+        attributesBoxPanel.add(labelName);
+
+	    if (block.getValue().toString().equals("")) { // name empty
 			nameTextField = new JTextField(10);
 		} else {
 			nameTextField = new JTextField(block.getValue().toString(), 10); // name not empty
 		}
-		attributesBoxPanel.add(nameTextField);
+	    constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+	    gridBag.setConstraints(nameTextField, constraints);
+	    attributesBoxPanel.add(nameTextField);
 		
-		// GridLayout for period
-		JLabel periodLabel = new JLabel("Period Tm (ms) : ");
+	    JLabel periodLabel = new JLabel("Period Tp : ");
+		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(periodLabel, constraints);
 		attributesBoxPanel.add(periodLabel);
-		if (block.getPeriod() == -1) {
+
+	    if (block.getPeriod() == -1) { // name empty 		// port.getName().toString().equals("") ||
 			periodTextField = new JTextField(10);
 		} else {
-			periodTextField = new JTextField(Integer.toString(block.getPeriod()), 10);
+			periodTextField = new JTextField("" + block.getPeriod(), 10); // name not empty
 		}
-		attributesBoxPanel.add(periodTextField);
+	    constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+	    gridBag.setConstraints(periodTextField, constraints);
+	    attributesBoxPanel.add(periodTextField);
+	    
+	    listPeriodString = new String[3];
+	    listPeriodString[0] = "us";
+		listPeriodString[1] = "ms";
+		listPeriodString[2] = "s";
+		periodComboBoxString = new JComboBox<String>(listPeriodString);
+		if (block.getTime().equals("") || block.getTime().equals("us")) {
+			periodComboBoxString.setSelectedIndex(0);
+		} else if (block.getTime().equals("ms")){
+			periodComboBoxString.setSelectedIndex(1);
+		} else {
+			periodComboBoxString.setSelectedIndex(2);
+		}
+		periodComboBoxString.setActionCommand("time");
+		periodComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(periodComboBoxString, constraints);
+		attributesBoxPanel.add(periodComboBoxString);
+
 		attributesBox.add(attributesBoxPanel); // add border to box
 		
 		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); // add box to grid

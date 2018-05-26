@@ -42,7 +42,11 @@ import ui.syscams.*;
 import ui.util.IconManager;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -74,6 +78,8 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 	/** Access to ActionPerformed **/
 	private JTextField nameTextField;
 	private JTextField periodTextField;
+	private String listPeriodString[];
+	private JComboBox<String> periodComboBoxString;
 	private JTextField rateTextField;
 	private JTextField delayTextField;
 	private String listTypeString[];
@@ -119,58 +125,125 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		Box box = Box.createVerticalBox();
 		box.setBorder(BorderFactory.createTitledBorder("Setting converter input port attributes"));
 
-		JPanel boxPanel = new JPanel(new GridLayout(6, 2, 0, 10));
+		GridBagLayout gridBag = new GridBagLayout();
+	    GridBagConstraints constraints = new GridBagConstraints();
+	    JPanel boxPanel = new JPanel();
+	    boxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+	    boxPanel.setLayout(gridBag); 
+	    
+	    JLabel labelName = new JLabel("Name : ");
+	    constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(labelName, constraints);
+	    boxPanel.add(labelName);
 
-		JLabel labelName = new JLabel("Name : ");
-		boxPanel.add(labelName);
-
-		if (port.getPortName().toString().equals("")) { // name empty
+	    if (port.getPortName().toString().equals("")) { // name empty
 			nameTextField = new JTextField(10);
 		} else {
 			nameTextField = new JTextField(port.getPortName().toString(), 10); // name not empty
 		}
+	    constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+	    gridBag.setConstraints(nameTextField, constraints);
+	    boxPanel.add(nameTextField);
+	   
+		JLabel periodLabel = new JLabel("Period Tp : ");
+		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(periodLabel, constraints);
+	    boxPanel.add(periodLabel);
 
-		boxPanel.add(nameTextField);
-
-		// Period
-		JLabel periodLabel = new JLabel("Period Tp (us) : ");
-		boxPanel.add(periodLabel); // add label to box
-		if (port.getPeriod() == -1) { // name empty 		// port.getName().toString().equals("") ||
+	    if (port.getPeriod() == -1) { // name empty 		// port.getName().toString().equals("") ||
 			periodTextField = new JTextField(10);
 		} else {
 			periodTextField = new JTextField("" + port.getPeriod(), 10); // name not empty
 		}
-		boxPanel.add(periodTextField); // add text to box
-
-		// Rate
+	    constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+	    gridBag.setConstraints(periodTextField, constraints);
+	    boxPanel.add(periodTextField);
+	    
+	    listPeriodString = new String[3];
+	    listPeriodString[0] = "us";
+		listPeriodString[1] = "ms";
+		listPeriodString[2] = "s";
+		periodComboBoxString = new JComboBox<String>(listPeriodString);
+		if (port.getTime().equals("") || port.getTime().equals("us")) {
+			periodComboBoxString.setSelectedIndex(0);
+		} else if (port.getTime().equals("ms")){
+			periodComboBoxString.setSelectedIndex(1);
+		} else {
+			periodComboBoxString.setSelectedIndex(2);
+		}
+		periodComboBoxString.setActionCommand("time");
+		periodComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(periodComboBoxString, constraints);
+	    boxPanel.add(periodComboBoxString);
+	    
 		JLabel rateLabel = new JLabel("Rate : ");
+		constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(rateLabel, constraints);
 		boxPanel.add(rateLabel); // add label to box
 
-		if (port.getRate() == -1) { // name empty		// port.getName().toString().equals("") ||
+		if (port.getRate() == -1) { // name empty	
 			rateTextField = new JTextField(10);
 		} else {
 			rateTextField = new JTextField("" + port.getRate(), 10); // name not empty
 		}
+		constraints = new GridBagConstraints(1, 2, 2, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(rateTextField, constraints);
 		boxPanel.add(rateTextField); // add text to box
 
-		// Delay
 		JLabel delayLabel = new JLabel("Delay : ");
+		constraints = new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(delayLabel, constraints);
 		boxPanel.add(delayLabel); // add label to box
+		
 		if (port.getDelay() == -1) { // name empty			// port.getName().toString().equals("") || 
 			delayTextField = new JTextField(10);
 		} else {
 			delayTextField = new JTextField("" + port.getDelay(), 10); // name not empty
 		}
+		constraints = new GridBagConstraints(1, 3, 2, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(delayTextField, constraints);
 		boxPanel.add(delayTextField); // add text to box
 
-		// Type
 		JLabel typeLabel = new JLabel("Type : ");
+		constraints = new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(typeLabel, constraints);
 		boxPanel.add(typeLabel); // add label to box
-		listTypeString = new String[4];
+		
+		listTypeString = new String[3];
 		listTypeString[0] = "int";
 		listTypeString[1] = "bool";
 		listTypeString[2] = "double";
-		listTypeString[3] = "sc_dt::sc_logic";
 		typeComboBoxString = new JComboBox<String>(listTypeString);
 		if (port.getConvType().equals("") || port.getConvType().equals("int")) {
 			typeComboBoxString.setSelectedIndex(0);
@@ -181,16 +254,23 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		if (port.getConvType().equals("double")) {
 			typeComboBoxString.setSelectedIndex(2);
 		}
-		if (port.getConvType().equals("sc_dt::sc_logic")) {
-			typeComboBoxString.setSelectedIndex(3);
-		}
 		typeComboBoxString.setActionCommand("type");
 		typeComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(1, 4, 2, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(typeComboBoxString, constraints);
 		boxPanel.add(typeComboBoxString); // add combo to box
-
-		// Origin
+		
 		JLabel orginLabel = new JLabel("Origin : ");
+		constraints = new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(orginLabel, constraints);
 		boxPanel.add(orginLabel); // add label to box
+		
 		listOriginString = new String[2];
 		listOriginString[0] = "Input";
 		listOriginString[1] = "Output";
@@ -202,6 +282,11 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		}
 		originComboBoxString.setActionCommand("origin");
 		originComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(1, 5, 2, 1, 1.0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(originComboBoxString, constraints);
 		boxPanel.add(originComboBoxString); // add combo to box
 		
 		box.add(boxPanel); // add border to box
@@ -284,7 +369,8 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 				port.setDelay(-1);
 			}
 			port.setConvType((String) typeComboBoxString.getSelectedItem());
-			
+			port.setTime((String) periodComboBoxString.getSelectedItem());
+
 			if ((String) originComboBoxString.getSelectedItem() == "Output") {
 				port.setOrigin(1);
 			} else {
