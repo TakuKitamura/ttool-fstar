@@ -47,53 +47,29 @@
 package syscamstranslator.toSysCAMS;
 
 import syscamstranslator.*;
-import syscamstranslator.toSysCAMS.*;
-import ui.syscams.SysCAMSBlockTDF;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
+
+/**
+ * Class TopCellGenerator
+ * Save the components and connectors in files
+ * Creation: 14/05/2018
+ * @version 1.0 14/05/2018
+ * @author Irina Kit Yan LEE
+*/
 
 public class TopCellGenerator {
-	// --------------- accessing Avatardd -----------------
 	public static SysCAMSSpecification syscams;
-	// ---------------------------------------------------
 
-	public String VCIparameters;
-	public String config;
-	public String mainFile;
-	public String src;
-	public String top;
-	public String deployinfo;
-	public String deployinfo_map;
-	public String deployinfo_ram;
-	public String platform_desc;
-	public String procinfo;
-	public String nbproc;
-	public final String DOTH = ".h";
-	public final String DOTCPP = ".cpp";
-	public final String SYSTEM_INCLUDE = "#include \"systemc.h\"";
-	public final String CR = "\n";
-	public final String CR2 = "\n\n";
-	public final String SCCR = ";\n";
-	public final String EFCR = "}\n";
-	public final String EFCR2 = "}\n\n";
-	public final String EF = "}";
-	public final String COTE = "";
-	public final String NAME_RST = "signal_resetn";
-	public final String TYPEDEF = "typedef";
+	private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
+	private final static String GENERATED_PATH2 = "generated_H" + File.separator;
 
-	private final static String GENERATED_PATH = "generated_topcell" + File.separator;
-	private boolean tracing;
-
-	public TopCellGenerator(SysCAMSSpecification sys, boolean _tracing) {
+	public TopCellGenerator(SysCAMSSpecification sys) {
 		syscams = sys;
-		tracing = _tracing;
 	}
 
-	public String generateTopCell(SysCAMSTBlockTDF tdf) {
-		/* first test validity of the hardware platform */
+	public String generateTopCell(SysCAMSTCluster c, LinkedList<SysCAMSTConnector> connectors) {
 		if (TopCellGenerator.syscams.getNbCluster() == 0) {
 			System.out.println("***Warning: require at least one cluster***");
 		}
@@ -112,43 +88,50 @@ public class TopCellGenerator {
 		if (TopCellGenerator.syscams.getNbPortConverter() == 0) {
 			System.out.println("***Warning: require at least one converter port***");
 		}
-		String top = Header.getPrimitiveHeader(tdf) + Corps.getPrimitiveCorps(tdf);
+		if (TopCellGenerator.syscams.getNbConnector() == 0) {
+			System.out.println("***Warning: require at least one connector***");
+		}
+		String top = Header.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
 		return (top);
 	}
 
-	public static void saveFile(String path) {
-//		try {
-//			System.err.println(path + GENERATED_PATH + "top.cc");
-//			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/top.cc");
-//			top = generateTopCell();
-//			fw.write(top);
-//			fw.close();
-//		} catch (IOException ex) {
-//		}
-		saveFileBlockTDF(path);
-	}
-
-	public static void saveFileBlockTDF(String path) {
+	public void saveFile(String path) {
 		LinkedList<SysCAMSTCluster> clusters = TopCellGenerator.syscams.getAllCluster();
-		String code;
+		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnector();
+		
+		String top;
 		
 		for (SysCAMSTCluster c : clusters) {
-			List<SysCAMSBlockTDF> tdf = c.getBlocks();
-			for (SysCAMSBlockTDF t : tdf) {
-				try {
-					System.err.println(path + GENERATED_PATH + t.getValue() + ".h");
-					FileWriter fw = new FileWriter(path + GENERATED_PATH + "/" + t.getValue() + ".h");
-					code = PrimitiveCode.getPrimitiveCode(t);
-					fw.write(code);
-					fw.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+			try {
+				// Save file .cpp
+				System.err.println(path + GENERATED_PATH1 + c.getClusterName() + ".cpp");
+				FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + c.getClusterName() + ".cpp");
+				top = generateTopCell(c, connectors);
+				fw.write(top);
+				fw.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
+			// Save files .h
+			saveFileBlockTDF(path, c);
 		}
 	}
-	
-	public static void main (String[] args) {
-		saveFile("/main/syscamstranslator/");
+
+	public void saveFileBlockTDF(String path, SysCAMSTCluster c) {
+		String header, code;
+		LinkedList<SysCAMSTBlockTDF> tdf = c.getBlockTDF();
+		for (SysCAMSTBlockTDF t : tdf) {
+			try {
+				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
+				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
+				header = Header.getPrimitiveHeader(t);
+				fw.write(header);
+				code = PrimitiveCode.getPrimitiveCode(t);
+				fw.write(code);
+				fw.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 }

@@ -45,10 +45,9 @@
 
 package syscamstranslator.toSysCAMS;
 
-import java.util.List;
+import java.util.LinkedList;
 
 import syscamstranslator.*;
-import ui.syscams.SysCAMSBlockTDF;
 
 /**
  * Class Header
@@ -68,9 +67,8 @@ public class Header {
 
 	public static String getPrimitiveHeader(SysCAMSTBlockTDF tdf) {
 		if (tdf != null) {
-			headerPrimitive = "//-------------------------------Header------------------------------------" + CR2
-					+ "#ifndef " + tdf.getBlockTDFName().toUpperCase() + "_H"+ CR 
-					+ "#define " + tdf.getBlockTDFName().toUpperCase() + "_H" + CR2
+			headerPrimitive = "#ifndef " + tdf.getName().toUpperCase() + "_H"+ CR 
+					+ "#define " + tdf.getName().toUpperCase() + "_H" + CR2
 					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc-ams>" + CR2;
 		} else {
 			headerPrimitive = "";
@@ -80,13 +78,12 @@ public class Header {
 	
 	public static String getClusterHeader(SysCAMSTCluster cluster) {
 		 if (cluster != null) {
-			 LinkedList<SysCAMSTBlockTDF> blocks = cluster.getTDFBlocks();
+			 LinkedList<SysCAMSTBlockTDF> blocks = cluster.getBlockTDF();
 			 
-			 headerCluster = "//-------------------------------Header------------------------------------" + CR2
-						+ "#include <systemc-ams>" + CR2;
+			 headerCluster = "#include <systemc-ams>" + CR;
 			 
 			 for (SysCAMSTBlockTDF b : blocks) {
-				 headerCluster = headerCluster + "#include \"" + b.getTDFname() + ".h\"" + CR;
+				 headerCluster = headerCluster + "#include \"" + b.getName() + ".h\"" + CR;
 			 }
 			 headerCluster = headerCluster + CR;
 		 } else {
