@@ -39,6 +39,8 @@
 package syscamstranslator;
 
 /**
+ * Class SysCAMSTPortDE
+ * Parameters of a SystemC-AMS port DE
  * Creation: 07/05/2018
  * @version 1.0 07/05/2018
  * @author Irina Kit Yan LEE
@@ -48,6 +50,7 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 
 	private String name;
 	private int period;
+	private String time;
 	private int rate;
 	private int delay;
 	private int origin;
@@ -55,9 +58,10 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 	
 	private SysCAMSTBlockDE blockDE;
 	
-	public SysCAMSTPortDE(String _name, int _period, int _rate, int _delay, int _origin, String _DEType, SysCAMSTBlockDE _blockDE) {
+	public SysCAMSTPortDE(String _name, int _period, String _time, int _rate, int _delay, int _origin, String _DEType, SysCAMSTBlockDE _blockDE) {
 		name = _name;
 		period = _period;
+		time = _time;
 		rate = _rate;
 		delay = _delay;
 		origin = _origin;
@@ -80,7 +84,15 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 	public void setPeriod(int _period) {
 		period = _period;
 	}
+	
+	public String getTime() {
+		return time;
+	}
 
+	public void setTime(String _time) {
+		time = _time;
+	}
+	
 	public int getRate() {
 		return rate;
 	}

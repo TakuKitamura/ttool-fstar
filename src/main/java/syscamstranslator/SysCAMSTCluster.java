@@ -41,6 +41,8 @@ package syscamstranslator;
 import java.util.LinkedList;
 
 /**
+ * Class SysCAMSTCluster
+ * Paramters of a SystemC-AMS cluster
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
@@ -55,6 +57,7 @@ public class SysCAMSTCluster extends SysCAMSTComponent {
 	public SysCAMSTCluster(String _clusterName) {
 		super();
 		clusterName = _clusterName;
+		blocks = new LinkedList<SysCAMSTBlockTDF>();
 	}
 
 	public String getClusterName() {

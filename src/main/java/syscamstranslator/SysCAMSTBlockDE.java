@@ -41,6 +41,8 @@ package syscamstranslator;
 import java.util.LinkedList;
 
 /**
+ * Class SysCAMSTBlockDE
+ * Parameters of a SystemC-AMS block DE
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
@@ -48,14 +50,15 @@ import java.util.LinkedList;
 
 public class SysCAMSTBlockDE extends SysCAMSTComponent {
 
-	private String blockDEName;
+	private String name;
 	private int period;
 	
 	private LinkedList<SysCAMSTPortDE> portDE;
 	
-	public SysCAMSTBlockDE(String _blockDEName, int _period) {
-		blockDEName = _blockDEName;
+	public SysCAMSTBlockDE(String _name, int _period) {
+		name = _name;
 		period = _period;
+		portDE = new LinkedList<SysCAMSTPortDE>();
 	}
 
 	public int getPeriod() {
@@ -66,12 +69,12 @@ public class SysCAMSTBlockDE extends SysCAMSTComponent {
 		period = _period;
 	}
 
-	public String getBlockDEName() {
-		return blockDEName;
+	public String getName() {
+		return name;
 	}
 
-	public void setBlockDEName(String _blockDEName) {
-		blockDEName = _blockDEName;
+	public void setBlockDEName(String _name) {
+		name = _name;
 	}
 
     public LinkedList<SysCAMSTPortDE> getPortDE(){

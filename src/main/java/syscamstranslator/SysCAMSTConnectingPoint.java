@@ -39,6 +39,8 @@
 package syscamstranslator;
 
 /**
+ * Class SysCAMSTConnectingPoint
+ * Parameters of a SystemC-AMS connecting point
  * Creation: 07/05/2018
  * @version 1.0 07/05/2018
  * @author Irina Kit Yan LEE
@@ -46,27 +48,26 @@ package syscamstranslator;
 
 public class SysCAMSTConnectingPoint{
     
-	SysCAMSTConnector ownerConnector ;
-    SysCAMSTComponent ownerComponent;
+	private SysCAMSTConnector ownerConnector ;
+    private SysCAMSTComponent ownerComponent;
     
-    public SysCAMSTConnectingPoint( SysCAMSTComponent _ownerComponent)
-    {
-      ownerComponent = _ownerComponent;
+    public SysCAMSTConnectingPoint( SysCAMSTComponent _ownerComponent) {
+    	ownerComponent = _ownerComponent;
     }
 
-    SysCAMSTConnector getConnector(){
-      return ownerConnector;
+    public SysCAMSTConnector getConnector() {
+    	return ownerConnector;
     }
 
-    public SysCAMSTComponent getComponent(){
-      return ownerComponent;
+    public SysCAMSTComponent getComponent() {
+    	return ownerComponent;
     }
 
-    void setConnector(SysCAMSTConnector _connector){
-      ownerConnector = _connector;
+    void setConnector(SysCAMSTConnector _connector) {
+    	ownerConnector = _connector;
     }
     
     boolean ConnectingPointIsFree(){
-      return  ownerConnector == null;
+    	return ownerConnector == null;
     }
 }

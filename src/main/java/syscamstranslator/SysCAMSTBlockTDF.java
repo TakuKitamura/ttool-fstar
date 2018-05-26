@@ -41,6 +41,8 @@ package syscamstranslator;
 import java.util.LinkedList;
 
 /**
+ * Class SysCAMSTBlockTDF
+ * Parameters of a SystemC-AMS block TDF
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
@@ -48,7 +50,7 @@ import java.util.LinkedList;
 
 public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 
-	private String blockTDFName;
+	private String name;
 	private int period;
 	private String processCode;
 	
@@ -57,11 +59,13 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	private LinkedList<SysCAMSTPortTDF> portTDF;
 	private LinkedList<SysCAMSTPortConverter> portConverter;
 	
-	public SysCAMSTBlockTDF(String _blockTDFName, int _period, String _processCode, SysCAMSTCluster _cluster) {
-		blockTDFName = _blockTDFName;
+	public SysCAMSTBlockTDF(String _name, int _period, String _processCode, SysCAMSTCluster _cluster) {
+		name = _name;
 		period = _period;
 		processCode = _processCode;
 		cluster = _cluster;
+		portTDF = new LinkedList<SysCAMSTPortTDF>();
+		portConverter = new LinkedList<SysCAMSTPortConverter>();
 	}
 
 	public int getPeriod() {
@@ -80,12 +84,12 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 		processCode = _processCode;
 	}
 
-	public String getBlockTDFName() {
-		return blockTDFName;
+	public String getName() {
+		return name;
 	}
 
-	public void setBlockTDFName(String _blockTDFName) {
-		blockTDFName = _blockTDFName;
+	public void setBlockTDFName(String _name) {
+		name = _name;
 	}
 
 	public SysCAMSTCluster getCluster() {
