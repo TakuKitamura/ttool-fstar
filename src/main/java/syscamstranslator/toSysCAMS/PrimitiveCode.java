@@ -61,8 +61,8 @@ import ui.syscams.SysCAMSPortTDF;
 */
 
 public class PrimitiveCode {
-	static private String corpsPrimitive;
-	static private String corpsCluster;
+	private String corpsPrimitive;
+	private String corpsCluster;
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
