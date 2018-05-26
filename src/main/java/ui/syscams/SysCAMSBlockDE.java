@@ -63,6 +63,7 @@ import java.util.Vector;
 
 public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, WithAttributes {
 	private int period;
+	private String time;
 	
 	private int maxFontSize = 14;
     private int minFontSize = 4;
@@ -107,6 +108,9 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
     	value = tdp.findSysCAMSPrimitiveComponentName("Block_DE_");
         name = "Primitive component";
+        
+        setPeriod(0);
+        setTime("");
         
         myImageIcon = IconManager.imgic1202;
 
@@ -431,4 +435,13 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 	public String getAttributes() {
 		return null;
 	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
 }
+

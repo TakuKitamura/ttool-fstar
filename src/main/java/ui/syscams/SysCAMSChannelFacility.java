@@ -151,7 +151,7 @@ public abstract class SysCAMSChannelFacility extends TGCScalableWithInternalComp
     }
 
     public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_PORT_TMLC;
+        return TGComponentManager.CAMS_CONNECTOR;
     }
 
     public Color getPortColor() {

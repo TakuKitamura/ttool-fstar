@@ -63,6 +63,7 @@ import java.util.Vector;
 
 public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, WithAttributes {
 	private int period;
+	private String time;
 	private String processCode;
 	
 	private int maxFontSize = 14;
@@ -109,6 +110,11 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
         value = tdp.findSysCAMSPrimitiveComponentName("Block_TDF_");
         oldValue = value;
         name = "Primitive component";
+        
+        // Initialization of port attributes
+        setPeriod(0);
+        setProcessCode("void processing() {\n\n}");
+        setTime("");
         
         myImageIcon = IconManager.imgic1202;
 
@@ -359,6 +365,8 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
     }
 
     protected String translateExtraParam() {
+    	StringBuffer proc;
+    	
         StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<Data isAttacker=\"");
         sb.append(isAttacker() ? "Yes": "No");
@@ -366,12 +374,30 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
         sb.append("<Attribute period=\"");
         sb.append(this.getPeriod());
         sb.append("\" processCode=\"");
-        sb.append(this.getProcessCode());
+        proc = encode(this.getProcessCode());
+        sb.append(proc);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
 
+    public StringBuffer encode(String data) {
+    	StringBuffer databuf = new StringBuffer(data);
+    	StringBuffer buffer = new StringBuffer("");
+        for(int pos = 0; pos != data.length(); pos++) {
+        	char c = databuf.charAt(pos);
+            switch(c) {
+                case '&':  buffer.append("&amp;");       break;
+                case '\"': buffer.append("&quot;");      break;
+                case '\'': buffer.append("&apos;");      break;
+                case '<':  buffer.append("&lt;");        break;
+                case '>':  buffer.append("&gt;");        break;
+                default:   buffer.append(databuf.charAt(pos)); break;
+            }
+        }
+        return buffer;
+    }
+        
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         try {
             NodeList nli;
@@ -495,4 +521,13 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	public String getAttributes() {
 		return null;
 	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
 }
+

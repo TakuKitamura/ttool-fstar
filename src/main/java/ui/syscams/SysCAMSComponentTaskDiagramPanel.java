@@ -705,7 +705,7 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 
     public void loadExtraParameters(Element elt) {
     }
-
+    
     public void setConnectorsToFront() {
         TGComponent tgc;
         Iterator<TGComponent> iterator = componentList.listIterator();

@@ -53,6 +53,7 @@ import ui.TGComponent;
 
 public class SysCAMSPortTDF extends SysCAMSPrimitivePort {
 	private int period;
+	private String time;
 	private int rate;
 	private int delay;
 	private String TDFType;
@@ -62,6 +63,14 @@ public class SysCAMSPortTDF extends SysCAMSPrimitivePort {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 	}
 	
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
 	public String getTDFType() {
 		return TDFType;
 	}

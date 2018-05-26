@@ -88,12 +88,8 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         minWidth = 1;
         minHeight = 1;
 
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[1];
-		for (int i=0; i<1; i++) {
-			connectingPoint[i] = new SysCAMSPortConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-		}
-        
+        initConnectingPoint(true, true, 1);
+                
         addTGConnectingPointsComment();
 
         nbInternalTGComponent = 0;
@@ -117,16 +113,19 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         // Initialization of port attributes
         if (this instanceof SysCAMSPortTDF) {
         	((SysCAMSPortTDF) this).setPeriod(0);
+        	((SysCAMSPortTDF) this).setTime("");
         	((SysCAMSPortTDF) this).setRate(0);
         	((SysCAMSPortTDF) this).setDelay(0);
         	((SysCAMSPortTDF) this).setTDFType("int");
         } else if (this instanceof SysCAMSPortDE) {
         	((SysCAMSPortDE) this).setPeriod(0);
+        	((SysCAMSPortDE) this).setTime("");
         	((SysCAMSPortDE) this).setRate(0);
         	((SysCAMSPortDE) this).setDelay(0);
         	((SysCAMSPortDE) this).setDEType("int");
         } else if (this instanceof SysCAMSPortConverter) {
         	((SysCAMSPortConverter) this).setPeriod(0);
+        	((SysCAMSPortConverter) this).setTime("");
         	((SysCAMSPortConverter) this).setDelay(0);
         	((SysCAMSPortConverter) this).setRate(0);
         	((SysCAMSPortConverter) this).setConvType("int");
@@ -342,18 +341,21 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         
         if (this instanceof SysCAMSPortTDF) {
         	sb.append("\" period=\"" + ((SysCAMSPortTDF) this).getPeriod());
+        	sb.append("\" time=\"" + ((SysCAMSPortTDF) this).getTime());
         	sb.append("\" rate=\"" + ((SysCAMSPortTDF) this).getRate());
         	sb.append("\" delay=\"" + ((SysCAMSPortTDF) this).getDelay());
         	sb.append("\" type=\"" + ((SysCAMSPortTDF) this).getTDFType());
         }
         if (this instanceof SysCAMSPortDE) {
         	sb.append("\" period=\"" + ((SysCAMSPortDE) this).getPeriod());
+        	sb.append("\" time=\"" + ((SysCAMSPortDE) this).getTime());
         	sb.append("\" rate=\"" + ((SysCAMSPortDE) this).getRate());
         	sb.append("\" delay=\"" + ((SysCAMSPortDE) this).getDelay());
         	sb.append("\" type=\"" + ((SysCAMSPortDE) this).getDEType());
         }
         if (this instanceof SysCAMSPortConverter) {
         	sb.append("\" period=\"" + ((SysCAMSPortConverter) this).getPeriod());
+        	sb.append("\" time=\"" + ((SysCAMSPortConverter) this).getTime());
         	sb.append("\" rate=\"" + ((SysCAMSPortConverter) this).getRate());
         	sb.append("\" delay=\"" + ((SysCAMSPortConverter) this).getDelay());
         	sb.append("\" type=\"" + ((SysCAMSPortConverter) this).getConvType());
@@ -370,7 +372,7 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
             Element elt;
             
             int period, rate, delay;
-            String type; 
+            String type, time; 
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -385,22 +387,26 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
                                 typep = Integer.decode(elt.getAttribute("commType")).intValue();
                                 isOrigin = Integer.decode(elt.getAttribute("origin")).intValue();
                                 period = Integer.decode(elt.getAttribute("period")).intValue();
+                                time = elt.getAttribute("time");
                                 rate = Integer.decode(elt.getAttribute("rate")).intValue();
                                 delay = Integer.decode(elt.getAttribute("delay")).intValue();
                                 type = elt.getAttribute("type");
                                 setPortName(commName);
                                 if (this instanceof SysCAMSPortTDF) {
                                 	((SysCAMSPortTDF)this).setPeriod(period);
+                                	((SysCAMSPortTDF)this).setTime(time);
                                 	((SysCAMSPortTDF)this).setRate(rate);
                                 	((SysCAMSPortTDF)this).setDelay(delay);
                                 	((SysCAMSPortTDF)this).setTDFType(type);
                                 } else if (this instanceof SysCAMSPortDE) {
                                 	((SysCAMSPortDE)this).setPeriod(period);
+                                	((SysCAMSPortDE)this).setTime(time);
                                 	((SysCAMSPortDE)this).setRate(rate);
                                 	((SysCAMSPortDE)this).setDelay(delay);
                                 	((SysCAMSPortDE)this).setDEType(type);
                                 } else if (this instanceof SysCAMSPortConverter) {
                                 	((SysCAMSPortConverter)this).setPeriod(period);
+                                	((SysCAMSPortConverter)this).setTime(time);
                                 	((SysCAMSPortConverter)this).setRate(rate);
                                 	((SysCAMSPortConverter)this).setDelay(delay);
                                 	((SysCAMSPortConverter)this).setConvType(type);
@@ -452,7 +458,7 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     }
     
     public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_PORT_TMLC;
+        return TGComponentManager.CAMS_CONNECTOR;
     }
 
     public String getAttributes() {
