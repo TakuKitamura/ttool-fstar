@@ -2152,11 +2152,6 @@ public class TGComponentManager {
                 tgc = new SysmlsecMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
 
-            //     // System C-AMS
-            // case CAMS_CONNECTOR:
-            //     tgc = new CAMSBlockConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            //     break;
-
             // AVATAR MAD
             case AVATARMAD_COMPOSITION_CONNECTOR:
                 tgc = new AvatarMADCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);

@@ -70,8 +70,26 @@ public class SysCAMSPanelTranslator {
 	private void MakeListOfComponent(SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel) {
 
 		Map<TGComponent, SysCAMSTComponent> syscamsMap = new HashMap<TGComponent, SysCAMSTComponent>();
+				
+		TGComponent tgc;
+        Iterator<TGComponent> iterator1 = tgcComponents.listIterator();
+        Iterator<TGComponent> iterator2 = tgcComponents.listIterator();
+        List<TGComponent> list = new ArrayList<TGComponent>();
 
-		for (TGComponent dp : tgcComponents) {
+        while(iterator1.hasNext()) {
+            tgc = iterator1.next();
+            if (!(tgc instanceof TGConnector)) {
+                list.add(tgc);
+            }
+        }
+        while(iterator2.hasNext()) {
+            tgc = iterator2.next();
+            if (tgc instanceof TGConnector) {
+                list.add(tgc);
+            }
+        }	
+		
+		for (TGComponent dp : list) {
 			if (dp instanceof SysCAMSBlockDE) {
 				SysCAMSBlockDE blockDE = (SysCAMSBlockDE) dp;
 				
@@ -84,20 +102,21 @@ public class SysCAMSPanelTranslator {
 				for (int i = 0; i < portsDE.size(); i++) {
 					SysCAMSPortDE portDE = portsDE.get(i);
 					
-					String portName = portDE.getValue();
+					String portName = portDE.getPortName();
 					int periodPort = portDE.getPeriod();
+					String time = portDE.getTime();
 					int rate = portDE.getRate();
 					int delay = portDE.getDelay();
 					String type = portDE.getDEType();
 					int origin = portDE.getOrigin();
 					
-					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, periodPort, rate, delay, origin, type, syscamsBlockDE);
+					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, periodPort, time, rate, delay, origin, type, syscamsBlockDE);
 					
-					syscamsMap.put(dp, syscamsPortDE);
+					syscamsMap.put(portDE, syscamsPortDE);
 					syscamsBlockDE.addPortDE(syscamsPortDE);
 					syscamsComponents.add(syscamsPortDE);
 				}	
-				syscamsMap.put(dp, syscamsBlockDE);
+				syscamsMap.put(blockDE, syscamsBlockDE);
 				syscamsComponents.add(syscamsBlockDE);
 			} else if (dp instanceof SysCAMSCompositeComponent) {
 				SysCAMSCompositeComponent cluster = (SysCAMSCompositeComponent) dp;
@@ -120,16 +139,17 @@ public class SysCAMSPanelTranslator {
 					for (int j = 0; j < portsTDF.size(); j++) {
 						SysCAMSPortTDF portTDF = portsTDF.get(j);
 						
-						String portName = portTDF.getValue();
+						String portName = portTDF.getPortName();
 						int periodPort = portTDF.getPeriod();
+						String time = portTDF.getTime();
 						int rate = portTDF.getRate();
 						int delay = portTDF.getDelay();
 						String type = portTDF.getTDFType();
 						int origin = portTDF.getOrigin();
 						
-						SysCAMSTPortTDF syscamsPortTDF = new SysCAMSTPortTDF(portName, periodPort, rate, delay, origin, type, syscamsBlockTDF);
+						SysCAMSTPortTDF syscamsPortTDF = new SysCAMSTPortTDF(portName, periodPort, time, rate, delay, origin, type, syscamsBlockTDF);
 					
-						syscamsMap.put(dp, syscamsPortTDF);
+						syscamsMap.put(portTDF, syscamsPortTDF);
 						syscamsBlockTDF.addPortTDF(syscamsPortTDF);
 						syscamsComponents.add(syscamsPortTDF);
 					}
@@ -137,24 +157,25 @@ public class SysCAMSPanelTranslator {
 					for (int j = 0; j < portsConverter.size(); j++) {
 						SysCAMSPortConverter portConverter = portsConverter.get(j);
 						
-						String portName = portConverter.getValue();
+						String portName = portConverter.getPortName();
 						int periodPort = portConverter.getPeriod();
+						String time = portConverter.getTime();
 						int rate = portConverter.getRate();
 						int delay = portConverter.getDelay();
 						String type = portConverter.getConvType();
 						int origin = portConverter.getOrigin();
 						
-						SysCAMSTPortConverter syscamsPortConverter = new SysCAMSTPortConverter(portName, periodPort, rate, delay, origin, type, syscamsBlockTDF);
+						SysCAMSTPortConverter syscamsPortConverter = new SysCAMSTPortConverter(portName, periodPort, time, rate, delay, origin, type, syscamsBlockTDF);
 						
-						syscamsMap.put(dp, syscamsPortConverter);
+						syscamsMap.put(portConverter, syscamsPortConverter);
 						syscamsBlockTDF.addPortConverter(syscamsPortConverter);
 						syscamsComponents.add(syscamsPortConverter);
 					}
-					syscamsMap.put(dp, syscamsBlockTDF);
+					syscamsMap.put(blockTDF, syscamsBlockTDF);
 					syscamsCluster.addBlockTDF(syscamsBlockTDF);
 					syscamsComponents.add(syscamsBlockTDF);
 				}
-				syscamsMap.put(dp, syscamsCluster);
+				syscamsMap.put(cluster, syscamsCluster);
 				syscamsComponents.add(syscamsCluster);
 			} else if (dp instanceof SysCAMSPortConnector) {
 				SysCAMSPortConnector connector = (SysCAMSPortConnector) dp;

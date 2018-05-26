@@ -7286,10 +7286,10 @@ public class GTURTLEModeling {
             //TraceManager.addDev("Connectors...");
             ((AvatarADPanel) tdp).setConnectorsToFront();
         }
-
+        
         if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
-            //TraceManager.addDev("Connectors...");
-            ((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
+        	//TraceManager.addDev("Connectors...");
+        	((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
         }
     }
 

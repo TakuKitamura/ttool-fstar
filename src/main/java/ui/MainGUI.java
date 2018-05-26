@@ -8350,6 +8350,40 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     //--------------------end DDD------------------------------------------------
 
+    public SysCAMSComponentTaskDiagramPanel getSysCAMSPanel() {
+    	SysCAMSComponentTaskDiagramPanel syscamsDiagram = null; 
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        Vector<TDiagramPanel> ps = tp.panels;
+        for (TDiagramPanel panel : ps) {
+            if (panel instanceof SysCAMSComponentTaskDiagramPanel) {
+                syscamsDiagram = (SysCAMSComponentTaskDiagramPanel) panel;
+            }
+        }
+        if (syscamsDiagram == null)
+            System.err.println("No SysCAMS Panel found : MainGUI.getSysCAMSPanel()");
+        return syscamsDiagram;
+    }
+    
+    public SysCAMSComponentTaskDiagramPanel getFirstSysCAMSPanelFound() {
+    	SysCAMSComponentTaskDiagramPanel syscamsdp = null;
+        for (int i = 0; i < tabs.size(); i++)
+            if (tabs.get(i) instanceof SysCAMSComponentDesignPanel) {
+                syscamsdp = ((SysCAMSComponentDesignPanel) tabs.get(i)).syscamsctdp;
+            }
+        if (syscamsdp == null)
+            System.err.println("No SysCAMS Panel Found : MainGUI.getFirstSysCAMSPanelFound()");
+        return syscamsdp;
+    }
+    
+    public void syscamsExecutableCodeGeneration() {
+        JDialogSysCAMSExecutableCodeGeneration jgen = new JDialogSysCAMSExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution",
+                "../SysCAMSGenerationCode/");
+   
+        GraphicLib.centerOnParent(jgen, 500, 450);
+        jgen.setVisible(true);
+        dtree.toBeUpdated();
+    }
+    
     public boolean selectMainTab(String id) {
         TURTLEPanel tp;
 
