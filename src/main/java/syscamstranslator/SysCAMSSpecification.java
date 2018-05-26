@@ -130,7 +130,7 @@ public class SysCAMSSpecification{
     	LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
     	for (SysCAMSTConnector con : connectors) {
     		if (con instanceof SysCAMSTConnector) {
-    			cons.add((SysCAMSTConnector) con);
+    			cons.add(on);
     		}
     	}
     	return cons;
