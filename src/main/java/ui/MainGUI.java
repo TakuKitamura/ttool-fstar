@@ -105,6 +105,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -2391,7 +2392,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 byte[] ba = new byte[nb];
                 fis.read(ba);
                 fis.close();
-                s = new String(ba);
+                s = new String(ba, "UTF-8");
+
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
@@ -2596,7 +2598,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 byte[] ba = new byte[nb];
                 fis.read(ba);
                 fis.close();
-                s = new String(ba);
+                s = new String(ba, "UTF-8");
+                TraceManager.addDev("Mode:" + s);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
@@ -2682,7 +2685,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 byte[] ba = new byte[nb];
                 fis.read(ba);
                 fis.close();
-                s = new String(ba);
+                s = new String(ba, "UTF-8");
+                //TraceManager.addDev("Model:" + s);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
@@ -2743,9 +2747,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
 
             }
-        } catch (MalformedModelingException mme) {
+        } catch (Exception mme) {
             JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            frame.setTitle("TToolt: unnamed project");
+            frame.setTitle("TTool: unnamed project");
         }
 
         gtm.enableUndo(true);
@@ -7457,7 +7461,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
         index = tp.tabbedPane.getSelectedIndex();
 
-        TraceManager.addDev("TP Panel: " + tp + " index=" + index);
+        //TraceManager.addDev("TP Panel: " + tp + " index=" + index);
 
         if (index < tp.panels.size() - 1) {
             setMode(FORWARD_DIAG);
@@ -7979,7 +7983,14 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             gtm.loadModelingFromXML(s);
             changeMade(null, -1);
         } catch (MalformedModelingException mme) {
-            JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported file) ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported xml format) ", "Error when loading modeling",
+                    JOptionPane
+                    .INFORMATION_MESSAGE);
+            frame.setTitle("TTool: unamed project");
+        } catch (UnsupportedEncodingException mme) {
+            JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported encoding format) ", "Error when loading modeling",
+                    JOptionPane
+                            .INFORMATION_MESSAGE);
             frame.setTitle("TTool: unamed project");
         }
 

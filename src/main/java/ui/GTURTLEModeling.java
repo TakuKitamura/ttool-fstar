@@ -4451,7 +4451,7 @@ public class GTURTLEModeling {
             return s;
         byte b[] = null;
         try {
-            b = s.getBytes("ISO-8859-1");
+            b = s.getBytes("UTF-8");
             return new String(b);
         } catch (Exception e) {
             throw new MalformedModelingException();
@@ -4481,7 +4481,7 @@ public class GTURTLEModeling {
         StringBuffer sb = new StringBuffer();
 
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
         sb.append("version=\"" + DefaultText.getVersion());
         sb.append("\" copyMaxId=\"" + copyMaxId);
         sb.append("\" decX=\"" + _decX);
@@ -4557,7 +4557,7 @@ public class GTURTLEModeling {
         //TraceManager.addDev("Making copy");
 
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
         sb.append("version=\"" + DefaultText.getVersion());
         sb.append("\" copyMaxId=\"" + copyMaxId);
         sb.append("\" decX=\"" + _decX);
@@ -4670,7 +4670,7 @@ public class GTURTLEModeling {
     public String makeOneDiagramXMLFromGraphicalModel(TURTLEPanel tp, int indexOfDiagram) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
 
         StringBuffer s;
         String str;
@@ -4697,7 +4697,7 @@ public class GTURTLEModeling {
     public String makeXMLFromTurtleModeling(int index, String extensionToName) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
 
         StringBuffer s;
         String str;
@@ -6313,7 +6313,7 @@ public class GTURTLEModeling {
             return null;
         }
 
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
 
         if (index2 > -1) {
             sb.append("<Modeling type=\"Analysis\" nameTab=\"Analysis\" >\n");
@@ -6335,11 +6335,13 @@ public class GTURTLEModeling {
         return sb.toString();
     }
 
-    public void loadModelingFromXML(String s) throws MalformedModelingException {
+    public void loadModelingFromXML(String s) throws MalformedModelingException, UnsupportedEncodingException {
 
         if (s == null) {
             return;
         }
+
+        //TraceManager.addDev("Modeling in loadModelingFromXML:" + s);
 
         s = decodeString(s);
 
@@ -6348,7 +6350,9 @@ public class GTURTLEModeling {
         decId = 0;
         TGComponent.setGeneralId(100000);
 
-        ByteArrayInputStream bais = new ByteArrayInputStream(s.getBytes());
+        //TraceManager.addDev("Modeling in loadModelingFromXML:" + s);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(s.getBytes("UTF-8"));
 
         if ((dbf == null) || (db == null)) {
             throw new MalformedModelingException();
