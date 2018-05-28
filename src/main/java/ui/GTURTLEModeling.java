@@ -2031,20 +2031,26 @@ public class GTURTLEModeling {
         try {
             proverif = avatar2proverif.generateProVerif(true, true, 1, true, false);
             warnings = avatar2proverif.getWarnings();
+            
+            // Issue #131
+            final String proverifSpecFile = SpecConfigTTool.ProVerifCodeDirectory + "pvspec";
 
-            if (!avatar2proverif.saveInFile("pvspec")) {
+            if (!avatar2proverif.saveInFile( proverifSpecFile )) {
+//            if (!avatar2proverif.saveInFile("pvspec")) {
                 return;
             }
 
             RshClient rshc = new RshClient(ConfigurationTTool.ProVerifVerifierHost);
 
-            rshc.setCmd(ConfigurationTTool.ProVerifVerifierPath + " -in pitype pvspec");
+            // Issue #131
+            rshc.setCmd(ConfigurationTTool.ProVerifVerifierPath + " -in pitype " + proverifSpecFile );
+//            rshc.setCmd(ConfigurationTTool.ProVerifVerifierPath + " -in pitype pvspec");
             rshc.sendExecuteCommandRequest();
             Reader data = rshc.getDataReaderFromProcess();
 
             ProVerifOutputAnalyzer pvoa = getProVerifOutputAnalyzer();
             pvoa.analyzeOutput(data, true);
-            HashMap<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+            Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
             for (AvatarPragmaSecret pragma : confResults.keySet()) {
                 if (confResults.get(pragma).isProved() && !confResults.get(pragma).isSatisfied()) {
                     nonSecChans.add(pragma.getArg().getBlock().getName() + "__" + pragma.getArg().getName());
@@ -2055,7 +2061,7 @@ public class GTURTLEModeling {
                     }
                 }
             }
-            HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
+            Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
             for (AvatarPragmaAuthenticity pragma : authResults.keySet()) {
                 if (authResults.get(pragma).isProved() && !authResults.get(pragma).isSatisfied()) {
                     nonAuthChans.add(pragma.getAttrA().getAttribute().getBlock().getName() + "__" + pragma.getAttrA().getAttribute().getName().replaceAll("_chData", ""));
