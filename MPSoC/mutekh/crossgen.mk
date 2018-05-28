@@ -25,15 +25,10 @@
 #### LINE 25 IS HERE ####
 
 # Target architecture
-#TARGET=mipsel
-#TARGET=nios2
-#TARGET=microblaze
-TARGET= powerpc
+TARGET=mipsel
 
 # Install PATH
-#PREFIX=/opt/mutekh
-#PREFIX=/users/enseig/genius/Prog/mutekh/microblaze
-PREFIX=/users/enseig/genius/MPSoC/mutekh
+PREFIX=/opt/mutekh
 
 # Temp directory
 WORKDIR=/tmp/crossgen
