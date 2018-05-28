@@ -17,21 +17,23 @@
 #include "mwmr.h" 
  
 
-#define NB_PROC 2
+#define NB_PROC 6
 #define WIDTH 4
 #define DEPTH 16
 
 void __user_init() {
 }
 
-#include "InterfaceDevice.h"
-#include "SmartCard.h"
-#include "TCPIP.h"
-#include "TCPPacketManager.h"
-#include "Application.h"
-#include "SmartCardController.h"
-#include "Timer__mainTimer__TCPIP.h"
-#include "Timer__timerP__TCPPacketManager.h"
+#include "Bootstrap.h"
+#include "OutputEngine.h"
+#include "InputEngine.h"
+#include "Classification.h"
+#include "Classif0.h"
+#include "Classif1.h"
+#include "Classif2.h"
+#include "Scheduling.h"
+#include "Sched1.h"
+#include "Sched0.h"
 
 /* Main mutex */
 pthread_barrier_t barrier ;
@@ -96,185 +98,183 @@ pthread_mutex_t __mainMutex;
 #define LOCK27 __attribute__((section("section_lock27")))
 #define CHANNEL28 __attribute__((section("section_channel28")))
 #define LOCK28 __attribute__((section("section_lock28")))
+#define CHANNEL29 __attribute__((section("section_channel29")))
+#define LOCK29 __attribute__((section("section_lock29")))
+#define CHANNEL30 __attribute__((section("section_channel30")))
+#define LOCK30 __attribute__((section("section_lock30")))
+#define CHANNEL31 __attribute__((section("section_channel31")))
+#define LOCK31 __attribute__((section("section_lock31")))
+#define CHANNEL32 __attribute__((section("section_channel32")))
+#define LOCK32 __attribute__((section("section_lock32")))
+#define CHANNEL33 __attribute__((section("section_channel33")))
+#define LOCK33 __attribute__((section("section_lock33")))
+#define CHANNEL34 __attribute__((section("section_channel34")))
+#define LOCK34 __attribute__((section("section_lock34")))
+#define CHANNEL35 __attribute__((section("section_channel35")))
+#define LOCK35 __attribute__((section("section_lock35")))
+#define CHANNEL36 __attribute__((section("section_channel36")))
+#define LOCK36 __attribute__((section("section_lock36")))
+#define CHANNEL37 __attribute__((section("section_channel37")))
+#define LOCK37 __attribute__((section("section_lock37")))
+#define CHANNEL38 __attribute__((section("section_channel38")))
+#define LOCK38 __attribute__((section("section_lock38")))
+#define CHANNEL39 __attribute__((section("section_channel39")))
+#define LOCK39 __attribute__((section("section_lock39")))
+#define CHANNEL40 __attribute__((section("section_channel40")))
+#define LOCK40 __attribute__((section("section_lock40")))
+#define CHANNEL41 __attribute__((section("section_channel41")))
+#define LOCK41 __attribute__((section("section_lock41")))
+#define CHANNEL42 __attribute__((section("section_channel42")))
+#define LOCK42 __attribute__((section("section_lock42")))
+#define CHANNEL43 __attribute__((section("section_channel43")))
+#define LOCK43 __attribute__((section("section_lock43")))
+#define CHANNEL44 __attribute__((section("section_channel44")))
+#define LOCK44 __attribute__((section("section_lock44")))
+#define CHANNEL45 __attribute__((section("section_channel45")))
+#define LOCK45 __attribute__((section("section_lock45")))
 #define base(arg) arg
 
 typedef struct mwmr_s mwmr_t;
 
 /* Synchronous channels */
-syncchannel __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket;
-uint32_t const TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket_lock LOCK0;
-struct mwmr_status_s TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket_status CHANNEL0;
-uint8_t TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket_data[32] CHANNEL0;
-struct mwmr_s TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket CHANNEL0;
-
-syncchannel __TCPIP_emptyListOfPackets__TCPPacketManager_empty;
-uint32_t const TCPIP_emptyListOfPackets__TCPPacketManager_empty_lock LOCK1;
-struct mwmr_status_s TCPIP_emptyListOfPackets__TCPPacketManager_empty_status CHANNEL1;
-uint8_t TCPIP_emptyListOfPackets__TCPPacketManager_empty_data[32] CHANNEL1;
-struct mwmr_s TCPIP_emptyListOfPackets__TCPPacketManager_empty CHANNEL1;
-
-syncchannel __TCPIP_addPacket__TCPPacketManager_addPacket;
-uint32_t const TCPIP_addPacket__TCPPacketManager_addPacket_lock LOCK2;
-struct mwmr_status_s TCPIP_addPacket__TCPPacketManager_addPacket_status CHANNEL2;
-uint8_t TCPIP_addPacket__TCPPacketManager_addPacket_data[32] CHANNEL2;
-struct mwmr_s TCPIP_addPacket__TCPPacketManager_addPacket CHANNEL2;
-
-syncchannel __TCPIP_ackPacket__TCPPacketManager_ackPacket;
-uint32_t const TCPIP_ackPacket__TCPPacketManager_ackPacket_lock LOCK3;
-struct mwmr_status_s TCPIP_ackPacket__TCPPacketManager_ackPacket_status CHANNEL3;
-uint8_t TCPIP_ackPacket__TCPPacketManager_ackPacket_data[32] CHANNEL3;
-struct mwmr_s TCPIP_ackPacket__TCPPacketManager_ackPacket CHANNEL3;
-
-syncchannel __Application_open__TCPIP_open;
-uint32_t const Application_open__TCPIP_open_lock LOCK4;
-struct mwmr_status_s Application_open__TCPIP_open_status CHANNEL4;
-uint8_t Application_open__TCPIP_open_data[32] CHANNEL4;
-struct mwmr_s Application_open__TCPIP_open CHANNEL4;
-
-syncchannel __Application_close__TCPIP_close;
-uint32_t const Application_close__TCPIP_close_lock LOCK5;
-struct mwmr_status_s Application_close__TCPIP_close_status CHANNEL5;
-uint8_t Application_close__TCPIP_close_data[32] CHANNEL5;
-struct mwmr_s Application_close__TCPIP_close CHANNEL5;
-
-syncchannel __Application_abort__TCPIP_abort;
-uint32_t const Application_abort__TCPIP_abort_lock LOCK6;
-struct mwmr_status_s Application_abort__TCPIP_abort_status CHANNEL6;
-uint8_t Application_abort__TCPIP_abort_data[32] CHANNEL6;
-struct mwmr_s Application_abort__TCPIP_abort CHANNEL6;
-
-syncchannel __Application_sendTCP__TCPIP_send_TCP;
-uint32_t const Application_sendTCP__TCPIP_send_TCP_lock LOCK7;
-struct mwmr_status_s Application_sendTCP__TCPIP_send_TCP_status CHANNEL7;
-uint8_t Application_sendTCP__TCPIP_send_TCP_data[32] CHANNEL7;
-struct mwmr_s Application_sendTCP__TCPIP_send_TCP CHANNEL7;
-
-syncchannel __SmartCardController_fromTtoP__TCPIP_fromTtoP;
-uint32_t const SmartCardController_fromTtoP__TCPIP_fromTtoP_lock LOCK8;
-struct mwmr_status_s SmartCardController_fromTtoP__TCPIP_fromTtoP_status CHANNEL8;
-uint8_t SmartCardController_fromTtoP__TCPIP_fromTtoP_data[32] CHANNEL8;
-struct mwmr_s SmartCardController_fromTtoP__TCPIP_fromTtoP CHANNEL8;
-
-syncchannel __SmartCardController_fromPtoT__TCPIP_fromPtoT;
-uint32_t const SmartCardController_fromPtoT__TCPIP_fromPtoT_lock LOCK9;
-struct mwmr_status_s SmartCardController_fromPtoT__TCPIP_fromPtoT_status CHANNEL9;
-uint8_t SmartCardController_fromPtoT__TCPIP_fromPtoT_data[32] CHANNEL9;
-struct mwmr_s SmartCardController_fromPtoT__TCPIP_fromPtoT CHANNEL9;
-
-syncchannel __SmartCardController_start_TCPIP__TCPIP_start;
-uint32_t const SmartCardController_start_TCPIP__TCPIP_start_lock LOCK10;
-struct mwmr_status_s SmartCardController_start_TCPIP__TCPIP_start_status CHANNEL10;
-uint8_t SmartCardController_start_TCPIP__TCPIP_start_data[32] CHANNEL10;
-struct mwmr_s SmartCardController_start_TCPIP__TCPIP_start CHANNEL10;
-
-syncchannel __SmartCardController_reset__InterfaceDevice_reset;
-uint32_t const SmartCardController_reset__InterfaceDevice_reset_lock LOCK11;
-struct mwmr_status_s SmartCardController_reset__InterfaceDevice_reset_status CHANNEL11;
-uint8_t SmartCardController_reset__InterfaceDevice_reset_data[32] CHANNEL11;
-struct mwmr_s SmartCardController_reset__InterfaceDevice_reset CHANNEL11;
-
-syncchannel __SmartCardController_pTS__InterfaceDevice_pTS;
-uint32_t const SmartCardController_pTS__InterfaceDevice_pTS_lock LOCK12;
-struct mwmr_status_s SmartCardController_pTS__InterfaceDevice_pTS_status CHANNEL12;
-uint8_t SmartCardController_pTS__InterfaceDevice_pTS_data[32] CHANNEL12;
-struct mwmr_s SmartCardController_pTS__InterfaceDevice_pTS CHANNEL12;
-
-syncchannel __SmartCardController_dataReady__InterfaceDevice_data_Ready;
-uint32_t const SmartCardController_dataReady__InterfaceDevice_data_Ready_lock LOCK13;
-struct mwmr_status_s SmartCardController_dataReady__InterfaceDevice_data_Ready_status CHANNEL13;
-uint8_t SmartCardController_dataReady__InterfaceDevice_data_Ready_data[32] CHANNEL13;
-struct mwmr_s SmartCardController_dataReady__InterfaceDevice_data_Ready CHANNEL13;
-
-syncchannel __SmartCardController_activation__InterfaceDevice_activation;
-uint32_t const SmartCardController_activation__InterfaceDevice_activation_lock LOCK14;
-struct mwmr_status_s SmartCardController_activation__InterfaceDevice_activation_status CHANNEL14;
-uint8_t SmartCardController_activation__InterfaceDevice_activation_data[32] CHANNEL14;
-struct mwmr_s SmartCardController_activation__InterfaceDevice_activation CHANNEL14;
-
-syncchannel __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC;
-uint32_t const SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC_lock LOCK15;
-struct mwmr_status_s SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC_status CHANNEL15;
-uint8_t SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC_data[32] CHANNEL15;
-struct mwmr_s SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC CHANNEL15;
-
-syncchannel __SmartCardController_answerToReset__InterfaceDevice_answerToReset;
-uint32_t const SmartCardController_answerToReset__InterfaceDevice_answerToReset_lock LOCK16;
-struct mwmr_status_s SmartCardController_answerToReset__InterfaceDevice_answerToReset_status CHANNEL16;
-uint8_t SmartCardController_answerToReset__InterfaceDevice_answerToReset_data[32] CHANNEL16;
-struct mwmr_s SmartCardController_answerToReset__InterfaceDevice_answerToReset CHANNEL16;
-
-syncchannel __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm;
-uint32_t const SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm_lock LOCK17;
-struct mwmr_status_s SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm_status CHANNEL17;
-uint8_t SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm_data[32] CHANNEL17;
-struct mwmr_s SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm CHANNEL17;
-
-syncchannel __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD;
-uint32_t const SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD_lock LOCK18;
-struct mwmr_status_s SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD_status CHANNEL18;
-uint8_t SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD_data[32] CHANNEL18;
-struct mwmr_s SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD CHANNEL18;
-
-syncchannel __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady;
-uint32_t const SmartCardController_data_Ready_SC__InterfaceDevice_dataReady_lock LOCK19;
-struct mwmr_status_s SmartCardController_data_Ready_SC__InterfaceDevice_dataReady_status CHANNEL19;
-uint8_t SmartCardController_data_Ready_SC__InterfaceDevice_dataReady_data[32] CHANNEL19;
-struct mwmr_s SmartCardController_data_Ready_SC__InterfaceDevice_dataReady CHANNEL19;
-
-syncchannel __SmartCardController_start_Application__Application_startApplication;
-uint32_t const SmartCardController_start_Application__Application_startApplication_lock LOCK20;
-struct mwmr_status_s SmartCardController_start_Application__Application_startApplication_status CHANNEL20;
-uint8_t SmartCardController_start_Application__Application_startApplication_data[32] CHANNEL20;
-struct mwmr_s SmartCardController_start_Application__Application_startApplication CHANNEL20;
-
-syncchannel __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set;
-uint32_t const TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set_lock LOCK21;
-struct mwmr_status_s TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set_status CHANNEL21;
-uint8_t TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set_data[32] CHANNEL21;
-struct mwmr_s TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set CHANNEL21;
-
-syncchannel __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset;
-uint32_t const TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset_lock LOCK22;
-struct mwmr_status_s TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset_status CHANNEL22;
-uint8_t TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset_data[32] CHANNEL22;
-struct mwmr_s TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset CHANNEL22;
-
-syncchannel __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire;
-uint32_t const TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire_lock LOCK23;
-struct mwmr_status_s TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire_status CHANNEL23;
-uint8_t TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire_data[32] CHANNEL23;
-struct mwmr_s TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire CHANNEL23;
-
-syncchannel __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set;
-uint32_t const TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set_lock LOCK24;
-struct mwmr_status_s TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set_status CHANNEL24;
-uint8_t TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set_data[32] CHANNEL24;
-struct mwmr_s TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set CHANNEL24;
-
-syncchannel __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset;
-uint32_t const TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset_lock LOCK25;
-struct mwmr_status_s TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset_status CHANNEL25;
-uint8_t TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset_data[32] CHANNEL25;
-struct mwmr_s TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset CHANNEL25;
-
-syncchannel __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire;
-uint32_t const TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire_lock LOCK26;
-struct mwmr_status_s TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire_status CHANNEL26;
-uint8_t TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire_data[32] CHANNEL26;
-struct mwmr_s TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire CHANNEL26;
-
 /* Asynchronous channels */
-asyncchannel __TCPIP_receiveTCP__Application_receiveTCP;
-uint32_t const TCPIP_receiveTCP__Application_receiveTCP_lock LOCK27;
-struct mwmr_status_s TCPIP_receiveTCP__Application_receiveTCP_status CHANNEL27;
-uint8_t TCPIP_receiveTCP__Application_receiveTCP_data[32] CHANNEL27;
-struct mwmr_s TCPIP_receiveTCP__Application_receiveTCP CHANNEL27;
+asyncchannel __InputEngine_packet__Classification_from_IE;
+uint32_t const InputEngine_packet__Classification_from_IE_lock LOCK0;
+struct mwmr_status_s InputEngine_packet__Classification_from_IE_status CHANNEL0;
+uint8_t InputEngine_packet__Classification_from_IE_data[32] CHANNEL0;
+struct mwmr_s InputEngine_packet__Classification_from_IE CHANNEL0;
 
-asyncchannel __TCPPacketManager_storePacket__TCPPacketManager_retrieve;
-uint32_t const TCPPacketManager_storePacket__TCPPacketManager_retrieve_lock LOCK28;
-struct mwmr_status_s TCPPacketManager_storePacket__TCPPacketManager_retrieve_status CHANNEL28;
-uint8_t TCPPacketManager_storePacket__TCPPacketManager_retrieve_data[32] CHANNEL28;
-struct mwmr_s TCPPacketManager_storePacket__TCPPacketManager_retrieve CHANNEL28;
+asyncchannel __Bootstrap_address__InputEngine_bootstrap;
+uint32_t const Bootstrap_address__InputEngine_bootstrap_lock LOCK1;
+struct mwmr_status_s Bootstrap_address__InputEngine_bootstrap_status CHANNEL1;
+uint8_t Bootstrap_address__InputEngine_bootstrap_data[32] CHANNEL1;
+struct mwmr_s Bootstrap_address__InputEngine_bootstrap CHANNEL1;
+
+asyncchannel __OutputEngine_address__InputEngine_address;
+uint32_t const OutputEngine_address__InputEngine_address_lock LOCK2;
+struct mwmr_status_s OutputEngine_address__InputEngine_address_status CHANNEL2;
+uint8_t OutputEngine_address__InputEngine_address_data[32] CHANNEL2;
+struct mwmr_s OutputEngine_address__InputEngine_address CHANNEL2;
+
+asyncchannel __Scheduling_packet__OutputEngine_packet;
+uint32_t const Scheduling_packet__OutputEngine_packet_lock LOCK3;
+struct mwmr_status_s Scheduling_packet__OutputEngine_packet_status CHANNEL3;
+uint8_t Scheduling_packet__OutputEngine_packet_data[32] CHANNEL3;
+struct mwmr_s Scheduling_packet__OutputEngine_packet CHANNEL3;
+
+asyncchannel __Classif2_from_classif__Classification_to_c2;
+uint32_t const Classif2_from_classif__Classification_to_c2_lock LOCK4;
+struct mwmr_status_s Classif2_from_classif__Classification_to_c2_status CHANNEL4;
+uint8_t Classif2_from_classif__Classification_to_c2_data[32] CHANNEL4;
+struct mwmr_s Classif2_from_classif__Classification_to_c2 CHANNEL4;
+
+asyncchannel __Classif2_to_queue_low__Classification_c2_to_queue_low;
+uint32_t const Classif2_to_queue_low__Classification_c2_to_queue_low_lock LOCK5;
+struct mwmr_status_s Classif2_to_queue_low__Classification_c2_to_queue_low_status CHANNEL5;
+uint8_t Classif2_to_queue_low__Classification_c2_to_queue_low_data[32] CHANNEL5;
+struct mwmr_s Classif2_to_queue_low__Classification_c2_to_queue_low CHANNEL5;
+
+asyncchannel __Classif2_to_queue_medium__Classification_c2_to_queue_medium;
+uint32_t const Classif2_to_queue_medium__Classification_c2_to_queue_medium_lock LOCK6;
+struct mwmr_status_s Classif2_to_queue_medium__Classification_c2_to_queue_medium_status CHANNEL6;
+uint8_t Classif2_to_queue_medium__Classification_c2_to_queue_medium_data[32] CHANNEL6;
+struct mwmr_s Classif2_to_queue_medium__Classification_c2_to_queue_medium CHANNEL6;
+
+asyncchannel __Classif2_to_queue_high__Classification_c2_to_queue_high;
+uint32_t const Classif2_to_queue_high__Classification_c2_to_queue_high_lock LOCK7;
+struct mwmr_status_s Classif2_to_queue_high__Classification_c2_to_queue_high_status CHANNEL7;
+uint8_t Classif2_to_queue_high__Classification_c2_to_queue_high_data[32] CHANNEL7;
+struct mwmr_s Classif2_to_queue_high__Classification_c2_to_queue_high CHANNEL7;
+
+asyncchannel __Classif0_from_classif__Classification_to_c0;
+uint32_t const Classif0_from_classif__Classification_to_c0_lock LOCK8;
+struct mwmr_status_s Classif0_from_classif__Classification_to_c0_status CHANNEL8;
+uint8_t Classif0_from_classif__Classification_to_c0_data[32] CHANNEL8;
+struct mwmr_s Classif0_from_classif__Classification_to_c0 CHANNEL8;
+
+asyncchannel __Classif0_to_queue_low__Classification_c0_to_queue_low;
+uint32_t const Classif0_to_queue_low__Classification_c0_to_queue_low_lock LOCK9;
+struct mwmr_status_s Classif0_to_queue_low__Classification_c0_to_queue_low_status CHANNEL9;
+uint8_t Classif0_to_queue_low__Classification_c0_to_queue_low_data[32] CHANNEL9;
+struct mwmr_s Classif0_to_queue_low__Classification_c0_to_queue_low CHANNEL9;
+
+asyncchannel __Classif0_to_queue_medium__Classification_c0_to_queue_medium;
+uint32_t const Classif0_to_queue_medium__Classification_c0_to_queue_medium_lock LOCK10;
+struct mwmr_status_s Classif0_to_queue_medium__Classification_c0_to_queue_medium_status CHANNEL10;
+uint8_t Classif0_to_queue_medium__Classification_c0_to_queue_medium_data[32] CHANNEL10;
+struct mwmr_s Classif0_to_queue_medium__Classification_c0_to_queue_medium CHANNEL10;
+
+asyncchannel __Classif0_to_queue_high__Classification_c0_to_queue_high;
+uint32_t const Classif0_to_queue_high__Classification_c0_to_queue_high_lock LOCK11;
+struct mwmr_status_s Classif0_to_queue_high__Classification_c0_to_queue_high_status CHANNEL11;
+uint8_t Classif0_to_queue_high__Classification_c0_to_queue_high_data[32] CHANNEL11;
+struct mwmr_s Classif0_to_queue_high__Classification_c0_to_queue_high CHANNEL11;
+
+asyncchannel __Classif1_from_classif__Classification_to_c1;
+uint32_t const Classif1_from_classif__Classification_to_c1_lock LOCK12;
+struct mwmr_status_s Classif1_from_classif__Classification_to_c1_status CHANNEL12;
+uint8_t Classif1_from_classif__Classification_to_c1_data[32] CHANNEL12;
+struct mwmr_s Classif1_from_classif__Classification_to_c1 CHANNEL12;
+
+asyncchannel __Classif1_to_queue_low__Classification_c1_to_queue_low;
+uint32_t const Classif1_to_queue_low__Classification_c1_to_queue_low_lock LOCK13;
+struct mwmr_status_s Classif1_to_queue_low__Classification_c1_to_queue_low_status CHANNEL13;
+uint8_t Classif1_to_queue_low__Classification_c1_to_queue_low_data[32] CHANNEL13;
+struct mwmr_s Classif1_to_queue_low__Classification_c1_to_queue_low CHANNEL13;
+
+asyncchannel __Classif1_to_queue_medium__Classification_c1_to_queue_medium;
+uint32_t const Classif1_to_queue_medium__Classification_c1_to_queue_medium_lock LOCK14;
+struct mwmr_status_s Classif1_to_queue_medium__Classification_c1_to_queue_medium_status CHANNEL14;
+uint8_t Classif1_to_queue_medium__Classification_c1_to_queue_medium_data[32] CHANNEL14;
+struct mwmr_s Classif1_to_queue_medium__Classification_c1_to_queue_medium CHANNEL14;
+
+asyncchannel __Classif1_to_queue_high__Classification_c1_to_queue_high;
+uint32_t const Classif1_to_queue_high__Classification_c1_to_queue_high_lock LOCK15;
+struct mwmr_status_s Classif1_to_queue_high__Classification_c1_to_queue_high_status CHANNEL15;
+uint8_t Classif1_to_queue_high__Classification_c1_to_queue_high_data[32] CHANNEL15;
+struct mwmr_s Classif1_to_queue_high__Classification_c1_to_queue_high CHANNEL15;
+
+asyncchannel __Classification_queue_low__Scheduling_from_queue_low;
+uint32_t const Classification_queue_low__Scheduling_from_queue_low_lock LOCK16;
+struct mwmr_status_s Classification_queue_low__Scheduling_from_queue_low_status CHANNEL16;
+uint8_t Classification_queue_low__Scheduling_from_queue_low_data[32] CHANNEL16;
+struct mwmr_s Classification_queue_low__Scheduling_from_queue_low CHANNEL16;
+
+asyncchannel __Classification_queue_medium__Scheduling_from_queue_medium;
+uint32_t const Classification_queue_medium__Scheduling_from_queue_medium_lock LOCK17;
+struct mwmr_status_s Classification_queue_medium__Scheduling_from_queue_medium_status CHANNEL17;
+uint8_t Classification_queue_medium__Scheduling_from_queue_medium_data[32] CHANNEL17;
+struct mwmr_s Classification_queue_medium__Scheduling_from_queue_medium CHANNEL17;
+
+asyncchannel __Classification_queue_high__Scheduling_from_queue_high;
+uint32_t const Classification_queue_high__Scheduling_from_queue_high_lock LOCK18;
+struct mwmr_status_s Classification_queue_high__Scheduling_from_queue_high_status CHANNEL18;
+uint8_t Classification_queue_high__Scheduling_from_queue_high_data[32] CHANNEL18;
+struct mwmr_s Classification_queue_high__Scheduling_from_queue_high CHANNEL18;
+
+asyncchannel __Sched0_toScheduler0__Scheduling_to_scheduler0;
+uint32_t const Sched0_toScheduler0__Scheduling_to_scheduler0_lock LOCK19;
+struct mwmr_status_s Sched0_toScheduler0__Scheduling_to_scheduler0_status CHANNEL19;
+uint8_t Sched0_toScheduler0__Scheduling_to_scheduler0_data[32] CHANNEL19;
+struct mwmr_s Sched0_toScheduler0__Scheduling_to_scheduler0 CHANNEL19;
+
+asyncchannel __Sched0_scheduledPacket0__Scheduling_scheduledPacket0;
+uint32_t const Sched0_scheduledPacket0__Scheduling_scheduledPacket0_lock LOCK20;
+struct mwmr_status_s Sched0_scheduledPacket0__Scheduling_scheduledPacket0_status CHANNEL20;
+uint8_t Sched0_scheduledPacket0__Scheduling_scheduledPacket0_data[32] CHANNEL20;
+struct mwmr_s Sched0_scheduledPacket0__Scheduling_scheduledPacket0 CHANNEL20;
+
+asyncchannel __Sched1_toScheduler1__Scheduling_to_scheduler1;
+uint32_t const Sched1_toScheduler1__Scheduling_to_scheduler1_lock LOCK21;
+struct mwmr_status_s Sched1_toScheduler1__Scheduling_to_scheduler1_status CHANNEL21;
+uint8_t Sched1_toScheduler1__Scheduling_to_scheduler1_data[32] CHANNEL21;
+struct mwmr_s Sched1_toScheduler1__Scheduling_to_scheduler1 CHANNEL21;
+
+asyncchannel __Sched1_scheduledPacket1__Scheduling_scheduledPacket1;
+uint32_t const Sched1_scheduledPacket1__Scheduling_scheduledPacket1_lock LOCK22;
+struct mwmr_status_s Sched1_scheduledPacket1__Scheduling_scheduledPacket1_status CHANNEL22;
+uint8_t Sched1_scheduledPacket1__Scheduling_scheduledPacket1_data[32] CHANNEL22;
+struct mwmr_s Sched1_scheduledPacket1__Scheduling_scheduledPacket1 CHANNEL22;
 
 
 int main(int argc, char *argv[]) {
@@ -289,627 +289,480 @@ int main(int argc, char *argv[]) {
   int sizeParams;
   
   /* Synchronous channels */
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket_status.rptr = 0;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket_status.wptr = 0;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket_status.usage = 0;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket_status.lock = 0;
-  
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.width = 32;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.depth = 100;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.gdepth = TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.depth;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.buffer = TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket_data;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.status = &TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket_status;
-  
-  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.inname ="timeoutPacket";
-  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.outname ="timeoutPacket";
-  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.mwmr_fifo = &TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket;
-  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.ok_send = 0;
-  __TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.ok_receive = 1;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.status =&TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket_status;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.status->lock=0;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.status->rptr=0;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.status->usage=0;
-  TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket.status->wptr =0;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty_status.rptr = 0;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty_status.wptr = 0;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty_status.usage = 0;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty_status.lock = 0;
-  
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty.width = 4;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty.depth = 100;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty.gdepth = TCPIP_emptyListOfPackets__TCPPacketManager_empty.depth;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty.buffer = TCPIP_emptyListOfPackets__TCPPacketManager_empty_data;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty.status = &TCPIP_emptyListOfPackets__TCPPacketManager_empty_status;
-  
-  __TCPIP_emptyListOfPackets__TCPPacketManager_empty.inname ="empty";
-  __TCPIP_emptyListOfPackets__TCPPacketManager_empty.outname ="emptyListOfPackets";
-  __TCPIP_emptyListOfPackets__TCPPacketManager_empty.mwmr_fifo = &TCPIP_emptyListOfPackets__TCPPacketManager_empty;
-  __TCPIP_emptyListOfPackets__TCPPacketManager_empty.ok_send = 1;
-  __TCPIP_emptyListOfPackets__TCPPacketManager_empty.ok_receive = 0;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty.status =&TCPIP_emptyListOfPackets__TCPPacketManager_empty_status;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty.status->lock=0;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty.status->rptr=0;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty.status->usage=0;
-  TCPIP_emptyListOfPackets__TCPPacketManager_empty.status->wptr =0;
-  TCPIP_addPacket__TCPPacketManager_addPacket_status.rptr = 0;
-  TCPIP_addPacket__TCPPacketManager_addPacket_status.wptr = 0;
-  TCPIP_addPacket__TCPPacketManager_addPacket_status.usage = 0;
-  TCPIP_addPacket__TCPPacketManager_addPacket_status.lock = 0;
-  
-  TCPIP_addPacket__TCPPacketManager_addPacket.width = 32;
-  TCPIP_addPacket__TCPPacketManager_addPacket.depth = 100;
-  TCPIP_addPacket__TCPPacketManager_addPacket.gdepth = TCPIP_addPacket__TCPPacketManager_addPacket.depth;
-  TCPIP_addPacket__TCPPacketManager_addPacket.buffer = TCPIP_addPacket__TCPPacketManager_addPacket_data;
-  TCPIP_addPacket__TCPPacketManager_addPacket.status = &TCPIP_addPacket__TCPPacketManager_addPacket_status;
-  
-  __TCPIP_addPacket__TCPPacketManager_addPacket.inname ="addPacket";
-  __TCPIP_addPacket__TCPPacketManager_addPacket.outname ="addPacket";
-  __TCPIP_addPacket__TCPPacketManager_addPacket.mwmr_fifo = &TCPIP_addPacket__TCPPacketManager_addPacket;
-  __TCPIP_addPacket__TCPPacketManager_addPacket.ok_send = 1;
-  __TCPIP_addPacket__TCPPacketManager_addPacket.ok_receive = 0;
-  TCPIP_addPacket__TCPPacketManager_addPacket.status =&TCPIP_addPacket__TCPPacketManager_addPacket_status;
-  TCPIP_addPacket__TCPPacketManager_addPacket.status->lock=0;
-  TCPIP_addPacket__TCPPacketManager_addPacket.status->rptr=0;
-  TCPIP_addPacket__TCPPacketManager_addPacket.status->usage=0;
-  TCPIP_addPacket__TCPPacketManager_addPacket.status->wptr =0;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket_status.rptr = 0;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket_status.wptr = 0;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket_status.usage = 0;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket_status.lock = 0;
-  
-  TCPIP_ackPacket__TCPPacketManager_ackPacket.width = 32;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket.depth = 100;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket.gdepth = TCPIP_ackPacket__TCPPacketManager_ackPacket.depth;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket.buffer = TCPIP_ackPacket__TCPPacketManager_ackPacket_data;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket.status = &TCPIP_ackPacket__TCPPacketManager_ackPacket_status;
-  
-  __TCPIP_ackPacket__TCPPacketManager_ackPacket.inname ="ackPacket";
-  __TCPIP_ackPacket__TCPPacketManager_ackPacket.outname ="ackPacket";
-  __TCPIP_ackPacket__TCPPacketManager_ackPacket.mwmr_fifo = &TCPIP_ackPacket__TCPPacketManager_ackPacket;
-  __TCPIP_ackPacket__TCPPacketManager_ackPacket.ok_send = 1;
-  __TCPIP_ackPacket__TCPPacketManager_ackPacket.ok_receive = 0;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket.status =&TCPIP_ackPacket__TCPPacketManager_ackPacket_status;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket.status->lock=0;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket.status->rptr=0;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket.status->usage=0;
-  TCPIP_ackPacket__TCPPacketManager_ackPacket.status->wptr =0;
-  Application_open__TCPIP_open_status.rptr = 0;
-  Application_open__TCPIP_open_status.wptr = 0;
-  Application_open__TCPIP_open_status.usage = 0;
-  Application_open__TCPIP_open_status.lock = 0;
-  
-  Application_open__TCPIP_open.width = 4;
-  Application_open__TCPIP_open.depth = 100;
-  Application_open__TCPIP_open.gdepth = Application_open__TCPIP_open.depth;
-  Application_open__TCPIP_open.buffer = Application_open__TCPIP_open_data;
-  Application_open__TCPIP_open.status = &Application_open__TCPIP_open_status;
-  
-  __Application_open__TCPIP_open.inname ="open";
-  __Application_open__TCPIP_open.outname ="open";
-  __Application_open__TCPIP_open.mwmr_fifo = &Application_open__TCPIP_open;
-  __Application_open__TCPIP_open.ok_send = 1;
-  __Application_open__TCPIP_open.ok_receive = 0;
-  Application_open__TCPIP_open.status =&Application_open__TCPIP_open_status;
-  Application_open__TCPIP_open.status->lock=0;
-  Application_open__TCPIP_open.status->rptr=0;
-  Application_open__TCPIP_open.status->usage=0;
-  Application_open__TCPIP_open.status->wptr =0;
-  Application_close__TCPIP_close_status.rptr = 0;
-  Application_close__TCPIP_close_status.wptr = 0;
-  Application_close__TCPIP_close_status.usage = 0;
-  Application_close__TCPIP_close_status.lock = 0;
-  
-  Application_close__TCPIP_close.width = 4;
-  Application_close__TCPIP_close.depth = 100;
-  Application_close__TCPIP_close.gdepth = Application_close__TCPIP_close.depth;
-  Application_close__TCPIP_close.buffer = Application_close__TCPIP_close_data;
-  Application_close__TCPIP_close.status = &Application_close__TCPIP_close_status;
-  
-  __Application_close__TCPIP_close.inname ="close";
-  __Application_close__TCPIP_close.outname ="close";
-  __Application_close__TCPIP_close.mwmr_fifo = &Application_close__TCPIP_close;
-  __Application_close__TCPIP_close.ok_send = 1;
-  __Application_close__TCPIP_close.ok_receive = 0;
-  Application_close__TCPIP_close.status =&Application_close__TCPIP_close_status;
-  Application_close__TCPIP_close.status->lock=0;
-  Application_close__TCPIP_close.status->rptr=0;
-  Application_close__TCPIP_close.status->usage=0;
-  Application_close__TCPIP_close.status->wptr =0;
-  Application_abort__TCPIP_abort_status.rptr = 0;
-  Application_abort__TCPIP_abort_status.wptr = 0;
-  Application_abort__TCPIP_abort_status.usage = 0;
-  Application_abort__TCPIP_abort_status.lock = 0;
-  
-  Application_abort__TCPIP_abort.width = 4;
-  Application_abort__TCPIP_abort.depth = 100;
-  Application_abort__TCPIP_abort.gdepth = Application_abort__TCPIP_abort.depth;
-  Application_abort__TCPIP_abort.buffer = Application_abort__TCPIP_abort_data;
-  Application_abort__TCPIP_abort.status = &Application_abort__TCPIP_abort_status;
-  
-  __Application_abort__TCPIP_abort.inname ="abort";
-  __Application_abort__TCPIP_abort.outname ="abort";
-  __Application_abort__TCPIP_abort.mwmr_fifo = &Application_abort__TCPIP_abort;
-  __Application_abort__TCPIP_abort.ok_send = 1;
-  __Application_abort__TCPIP_abort.ok_receive = 0;
-  Application_abort__TCPIP_abort.status =&Application_abort__TCPIP_abort_status;
-  Application_abort__TCPIP_abort.status->lock=0;
-  Application_abort__TCPIP_abort.status->rptr=0;
-  Application_abort__TCPIP_abort.status->usage=0;
-  Application_abort__TCPIP_abort.status->wptr =0;
-  Application_sendTCP__TCPIP_send_TCP_status.rptr = 0;
-  Application_sendTCP__TCPIP_send_TCP_status.wptr = 0;
-  Application_sendTCP__TCPIP_send_TCP_status.usage = 0;
-  Application_sendTCP__TCPIP_send_TCP_status.lock = 0;
-  
-  Application_sendTCP__TCPIP_send_TCP.width = 4;
-  Application_sendTCP__TCPIP_send_TCP.depth = 100;
-  Application_sendTCP__TCPIP_send_TCP.gdepth = Application_sendTCP__TCPIP_send_TCP.depth;
-  Application_sendTCP__TCPIP_send_TCP.buffer = Application_sendTCP__TCPIP_send_TCP_data;
-  Application_sendTCP__TCPIP_send_TCP.status = &Application_sendTCP__TCPIP_send_TCP_status;
-  
-  __Application_sendTCP__TCPIP_send_TCP.inname ="send_TCP";
-  __Application_sendTCP__TCPIP_send_TCP.outname ="sendTCP";
-  __Application_sendTCP__TCPIP_send_TCP.mwmr_fifo = &Application_sendTCP__TCPIP_send_TCP;
-  __Application_sendTCP__TCPIP_send_TCP.ok_send = 1;
-  __Application_sendTCP__TCPIP_send_TCP.ok_receive = 0;
-  Application_sendTCP__TCPIP_send_TCP.status =&Application_sendTCP__TCPIP_send_TCP_status;
-  Application_sendTCP__TCPIP_send_TCP.status->lock=0;
-  Application_sendTCP__TCPIP_send_TCP.status->rptr=0;
-  Application_sendTCP__TCPIP_send_TCP.status->usage=0;
-  Application_sendTCP__TCPIP_send_TCP.status->wptr =0;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP_status.rptr = 0;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP_status.wptr = 0;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP_status.usage = 0;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP_status.lock = 0;
-  
-  SmartCardController_fromTtoP__TCPIP_fromTtoP.width = 32;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP.depth = 100;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP.gdepth = SmartCardController_fromTtoP__TCPIP_fromTtoP.depth;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP.buffer = SmartCardController_fromTtoP__TCPIP_fromTtoP_data;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP.status = &SmartCardController_fromTtoP__TCPIP_fromTtoP_status;
-  
-  __SmartCardController_fromTtoP__TCPIP_fromTtoP.inname ="fromTtoP";
-  __SmartCardController_fromTtoP__TCPIP_fromTtoP.outname ="fromTtoP";
-  __SmartCardController_fromTtoP__TCPIP_fromTtoP.mwmr_fifo = &SmartCardController_fromTtoP__TCPIP_fromTtoP;
-  __SmartCardController_fromTtoP__TCPIP_fromTtoP.ok_send = 0;
-  __SmartCardController_fromTtoP__TCPIP_fromTtoP.ok_receive = 1;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP.status =&SmartCardController_fromTtoP__TCPIP_fromTtoP_status;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP.status->lock=0;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP.status->rptr=0;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP.status->usage=0;
-  SmartCardController_fromTtoP__TCPIP_fromTtoP.status->wptr =0;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT_status.rptr = 0;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT_status.wptr = 0;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT_status.usage = 0;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT_status.lock = 0;
-  
-  SmartCardController_fromPtoT__TCPIP_fromPtoT.width = 32;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT.depth = 100;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT.gdepth = SmartCardController_fromPtoT__TCPIP_fromPtoT.depth;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT.buffer = SmartCardController_fromPtoT__TCPIP_fromPtoT_data;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT.status = &SmartCardController_fromPtoT__TCPIP_fromPtoT_status;
-  
-  __SmartCardController_fromPtoT__TCPIP_fromPtoT.inname ="fromPtoT";
-  __SmartCardController_fromPtoT__TCPIP_fromPtoT.outname ="fromPtoT";
-  __SmartCardController_fromPtoT__TCPIP_fromPtoT.mwmr_fifo = &SmartCardController_fromPtoT__TCPIP_fromPtoT;
-  __SmartCardController_fromPtoT__TCPIP_fromPtoT.ok_send = 1;
-  __SmartCardController_fromPtoT__TCPIP_fromPtoT.ok_receive = 0;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT.status =&SmartCardController_fromPtoT__TCPIP_fromPtoT_status;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT.status->lock=0;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT.status->rptr=0;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT.status->usage=0;
-  SmartCardController_fromPtoT__TCPIP_fromPtoT.status->wptr =0;
-  SmartCardController_start_TCPIP__TCPIP_start_status.rptr = 0;
-  SmartCardController_start_TCPIP__TCPIP_start_status.wptr = 0;
-  SmartCardController_start_TCPIP__TCPIP_start_status.usage = 0;
-  SmartCardController_start_TCPIP__TCPIP_start_status.lock = 0;
-  
-  SmartCardController_start_TCPIP__TCPIP_start.width = 4;
-  SmartCardController_start_TCPIP__TCPIP_start.depth = 100;
-  SmartCardController_start_TCPIP__TCPIP_start.gdepth = SmartCardController_start_TCPIP__TCPIP_start.depth;
-  SmartCardController_start_TCPIP__TCPIP_start.buffer = SmartCardController_start_TCPIP__TCPIP_start_data;
-  SmartCardController_start_TCPIP__TCPIP_start.status = &SmartCardController_start_TCPIP__TCPIP_start_status;
-  
-  __SmartCardController_start_TCPIP__TCPIP_start.inname ="start";
-  __SmartCardController_start_TCPIP__TCPIP_start.outname ="start_TCPIP";
-  __SmartCardController_start_TCPIP__TCPIP_start.mwmr_fifo = &SmartCardController_start_TCPIP__TCPIP_start;
-  __SmartCardController_start_TCPIP__TCPIP_start.ok_send = 1;
-  __SmartCardController_start_TCPIP__TCPIP_start.ok_receive = 0;
-  SmartCardController_start_TCPIP__TCPIP_start.status =&SmartCardController_start_TCPIP__TCPIP_start_status;
-  SmartCardController_start_TCPIP__TCPIP_start.status->lock=0;
-  SmartCardController_start_TCPIP__TCPIP_start.status->rptr=0;
-  SmartCardController_start_TCPIP__TCPIP_start.status->usage=0;
-  SmartCardController_start_TCPIP__TCPIP_start.status->wptr =0;
-  SmartCardController_reset__InterfaceDevice_reset_status.rptr = 0;
-  SmartCardController_reset__InterfaceDevice_reset_status.wptr = 0;
-  SmartCardController_reset__InterfaceDevice_reset_status.usage = 0;
-  SmartCardController_reset__InterfaceDevice_reset_status.lock = 0;
-  
-  SmartCardController_reset__InterfaceDevice_reset.width = 4;
-  SmartCardController_reset__InterfaceDevice_reset.depth = 100;
-  SmartCardController_reset__InterfaceDevice_reset.gdepth = SmartCardController_reset__InterfaceDevice_reset.depth;
-  SmartCardController_reset__InterfaceDevice_reset.buffer = SmartCardController_reset__InterfaceDevice_reset_data;
-  SmartCardController_reset__InterfaceDevice_reset.status = &SmartCardController_reset__InterfaceDevice_reset_status;
-  
-  __SmartCardController_reset__InterfaceDevice_reset.inname ="reset";
-  __SmartCardController_reset__InterfaceDevice_reset.outname ="reset";
-  __SmartCardController_reset__InterfaceDevice_reset.mwmr_fifo = &SmartCardController_reset__InterfaceDevice_reset;
-  __SmartCardController_reset__InterfaceDevice_reset.ok_send = 0;
-  __SmartCardController_reset__InterfaceDevice_reset.ok_receive = 1;
-  SmartCardController_reset__InterfaceDevice_reset.status =&SmartCardController_reset__InterfaceDevice_reset_status;
-  SmartCardController_reset__InterfaceDevice_reset.status->lock=0;
-  SmartCardController_reset__InterfaceDevice_reset.status->rptr=0;
-  SmartCardController_reset__InterfaceDevice_reset.status->usage=0;
-  SmartCardController_reset__InterfaceDevice_reset.status->wptr =0;
-  SmartCardController_pTS__InterfaceDevice_pTS_status.rptr = 0;
-  SmartCardController_pTS__InterfaceDevice_pTS_status.wptr = 0;
-  SmartCardController_pTS__InterfaceDevice_pTS_status.usage = 0;
-  SmartCardController_pTS__InterfaceDevice_pTS_status.lock = 0;
-  
-  SmartCardController_pTS__InterfaceDevice_pTS.width = 4;
-  SmartCardController_pTS__InterfaceDevice_pTS.depth = 100;
-  SmartCardController_pTS__InterfaceDevice_pTS.gdepth = SmartCardController_pTS__InterfaceDevice_pTS.depth;
-  SmartCardController_pTS__InterfaceDevice_pTS.buffer = SmartCardController_pTS__InterfaceDevice_pTS_data;
-  SmartCardController_pTS__InterfaceDevice_pTS.status = &SmartCardController_pTS__InterfaceDevice_pTS_status;
-  
-  __SmartCardController_pTS__InterfaceDevice_pTS.inname ="pTS";
-  __SmartCardController_pTS__InterfaceDevice_pTS.outname ="pTS";
-  __SmartCardController_pTS__InterfaceDevice_pTS.mwmr_fifo = &SmartCardController_pTS__InterfaceDevice_pTS;
-  __SmartCardController_pTS__InterfaceDevice_pTS.ok_send = 0;
-  __SmartCardController_pTS__InterfaceDevice_pTS.ok_receive = 1;
-  SmartCardController_pTS__InterfaceDevice_pTS.status =&SmartCardController_pTS__InterfaceDevice_pTS_status;
-  SmartCardController_pTS__InterfaceDevice_pTS.status->lock=0;
-  SmartCardController_pTS__InterfaceDevice_pTS.status->rptr=0;
-  SmartCardController_pTS__InterfaceDevice_pTS.status->usage=0;
-  SmartCardController_pTS__InterfaceDevice_pTS.status->wptr =0;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready_status.rptr = 0;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready_status.wptr = 0;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready_status.usage = 0;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready_status.lock = 0;
-  
-  SmartCardController_dataReady__InterfaceDevice_data_Ready.width = 4;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready.depth = 100;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready.gdepth = SmartCardController_dataReady__InterfaceDevice_data_Ready.depth;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready.buffer = SmartCardController_dataReady__InterfaceDevice_data_Ready_data;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready.status = &SmartCardController_dataReady__InterfaceDevice_data_Ready_status;
-  
-  __SmartCardController_dataReady__InterfaceDevice_data_Ready.inname ="dataReady";
-  __SmartCardController_dataReady__InterfaceDevice_data_Ready.outname ="data_Ready";
-  __SmartCardController_dataReady__InterfaceDevice_data_Ready.mwmr_fifo = &SmartCardController_dataReady__InterfaceDevice_data_Ready;
-  __SmartCardController_dataReady__InterfaceDevice_data_Ready.ok_send = 0;
-  __SmartCardController_dataReady__InterfaceDevice_data_Ready.ok_receive = 1;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready.status =&SmartCardController_dataReady__InterfaceDevice_data_Ready_status;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready.status->lock=0;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready.status->rptr=0;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready.status->usage=0;
-  SmartCardController_dataReady__InterfaceDevice_data_Ready.status->wptr =0;
-  SmartCardController_activation__InterfaceDevice_activation_status.rptr = 0;
-  SmartCardController_activation__InterfaceDevice_activation_status.wptr = 0;
-  SmartCardController_activation__InterfaceDevice_activation_status.usage = 0;
-  SmartCardController_activation__InterfaceDevice_activation_status.lock = 0;
-  
-  SmartCardController_activation__InterfaceDevice_activation.width = 4;
-  SmartCardController_activation__InterfaceDevice_activation.depth = 100;
-  SmartCardController_activation__InterfaceDevice_activation.gdepth = SmartCardController_activation__InterfaceDevice_activation.depth;
-  SmartCardController_activation__InterfaceDevice_activation.buffer = SmartCardController_activation__InterfaceDevice_activation_data;
-  SmartCardController_activation__InterfaceDevice_activation.status = &SmartCardController_activation__InterfaceDevice_activation_status;
-  
-  __SmartCardController_activation__InterfaceDevice_activation.inname ="activation";
-  __SmartCardController_activation__InterfaceDevice_activation.outname ="activation";
-  __SmartCardController_activation__InterfaceDevice_activation.mwmr_fifo = &SmartCardController_activation__InterfaceDevice_activation;
-  __SmartCardController_activation__InterfaceDevice_activation.ok_send = 0;
-  __SmartCardController_activation__InterfaceDevice_activation.ok_receive = 1;
-  SmartCardController_activation__InterfaceDevice_activation.status =&SmartCardController_activation__InterfaceDevice_activation_status;
-  SmartCardController_activation__InterfaceDevice_activation.status->lock=0;
-  SmartCardController_activation__InterfaceDevice_activation.status->rptr=0;
-  SmartCardController_activation__InterfaceDevice_activation.status->usage=0;
-  SmartCardController_activation__InterfaceDevice_activation.status->wptr =0;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC_status.rptr = 0;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC_status.wptr = 0;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC_status.usage = 0;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC_status.lock = 0;
-  
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.width = 32;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.depth = 100;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.gdepth = SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.depth;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.buffer = SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC_data;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.status = &SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC_status;
-  
-  __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.inname ="fromDtoSC";
-  __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.outname ="fromDtoSC";
-  __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.mwmr_fifo = &SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC;
-  __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.ok_send = 0;
-  __SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.ok_receive = 1;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.status =&SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC_status;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.status->lock=0;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.status->rptr=0;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.status->usage=0;
-  SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC.status->wptr =0;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset_status.rptr = 0;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset_status.wptr = 0;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset_status.usage = 0;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset_status.lock = 0;
-  
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset.width = 4;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset.depth = 100;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset.gdepth = SmartCardController_answerToReset__InterfaceDevice_answerToReset.depth;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset.buffer = SmartCardController_answerToReset__InterfaceDevice_answerToReset_data;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset.status = &SmartCardController_answerToReset__InterfaceDevice_answerToReset_status;
-  
-  __SmartCardController_answerToReset__InterfaceDevice_answerToReset.inname ="answerToReset";
-  __SmartCardController_answerToReset__InterfaceDevice_answerToReset.outname ="answerToReset";
-  __SmartCardController_answerToReset__InterfaceDevice_answerToReset.mwmr_fifo = &SmartCardController_answerToReset__InterfaceDevice_answerToReset;
-  __SmartCardController_answerToReset__InterfaceDevice_answerToReset.ok_send = 1;
-  __SmartCardController_answerToReset__InterfaceDevice_answerToReset.ok_receive = 0;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset.status =&SmartCardController_answerToReset__InterfaceDevice_answerToReset_status;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset.status->lock=0;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset.status->rptr=0;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset.status->usage=0;
-  SmartCardController_answerToReset__InterfaceDevice_answerToReset.status->wptr =0;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm_status.rptr = 0;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm_status.wptr = 0;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm_status.usage = 0;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm_status.lock = 0;
-  
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.width = 4;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.depth = 100;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.gdepth = SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.depth;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.buffer = SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm_data;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.status = &SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm_status;
-  
-  __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.inname ="pTSConfirm";
-  __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.outname ="pTSCConfirm";
-  __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.mwmr_fifo = &SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm;
-  __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.ok_send = 1;
-  __SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.ok_receive = 0;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.status =&SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm_status;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.status->lock=0;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.status->rptr=0;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.status->usage=0;
-  SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm.status->wptr =0;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD_status.rptr = 0;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD_status.wptr = 0;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD_status.usage = 0;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD_status.lock = 0;
-  
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.width = 32;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.depth = 100;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.gdepth = SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.depth;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.buffer = SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD_data;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.status = &SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD_status;
-  
-  __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.inname ="fromSCtoD";
-  __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.outname ="fromSCtoD";
-  __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.mwmr_fifo = &SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD;
-  __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.ok_send = 1;
-  __SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.ok_receive = 0;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.status =&SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD_status;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.status->lock=0;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.status->rptr=0;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.status->usage=0;
-  SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD.status->wptr =0;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady_status.rptr = 0;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady_status.wptr = 0;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady_status.usage = 0;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady_status.lock = 0;
-  
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.width = 4;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.depth = 100;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.gdepth = SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.depth;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.buffer = SmartCardController_data_Ready_SC__InterfaceDevice_dataReady_data;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.status = &SmartCardController_data_Ready_SC__InterfaceDevice_dataReady_status;
-  
-  __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.inname ="dataReady";
-  __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.outname ="data_Ready_SC";
-  __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.mwmr_fifo = &SmartCardController_data_Ready_SC__InterfaceDevice_dataReady;
-  __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.ok_send = 1;
-  __SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.ok_receive = 0;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.status =&SmartCardController_data_Ready_SC__InterfaceDevice_dataReady_status;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.status->lock=0;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.status->rptr=0;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.status->usage=0;
-  SmartCardController_data_Ready_SC__InterfaceDevice_dataReady.status->wptr =0;
-  SmartCardController_start_Application__Application_startApplication_status.rptr = 0;
-  SmartCardController_start_Application__Application_startApplication_status.wptr = 0;
-  SmartCardController_start_Application__Application_startApplication_status.usage = 0;
-  SmartCardController_start_Application__Application_startApplication_status.lock = 0;
-  
-  SmartCardController_start_Application__Application_startApplication.width = 4;
-  SmartCardController_start_Application__Application_startApplication.depth = 100;
-  SmartCardController_start_Application__Application_startApplication.gdepth = SmartCardController_start_Application__Application_startApplication.depth;
-  SmartCardController_start_Application__Application_startApplication.buffer = SmartCardController_start_Application__Application_startApplication_data;
-  SmartCardController_start_Application__Application_startApplication.status = &SmartCardController_start_Application__Application_startApplication_status;
-  
-  __SmartCardController_start_Application__Application_startApplication.inname ="startApplication";
-  __SmartCardController_start_Application__Application_startApplication.outname ="start_Application";
-  __SmartCardController_start_Application__Application_startApplication.mwmr_fifo = &SmartCardController_start_Application__Application_startApplication;
-  __SmartCardController_start_Application__Application_startApplication.ok_send = 1;
-  __SmartCardController_start_Application__Application_startApplication.ok_receive = 0;
-  SmartCardController_start_Application__Application_startApplication.status =&SmartCardController_start_Application__Application_startApplication_status;
-  SmartCardController_start_Application__Application_startApplication.status->lock=0;
-  SmartCardController_start_Application__Application_startApplication.status->rptr=0;
-  SmartCardController_start_Application__Application_startApplication.status->usage=0;
-  SmartCardController_start_Application__Application_startApplication.status->wptr =0;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set_status.rptr = 0;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set_status.wptr = 0;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set_status.usage = 0;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set_status.lock = 0;
-  
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.width = 4;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.depth = 100;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.gdepth = TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.depth;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.buffer = TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set_data;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.status = &TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set_status;
-  
-  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.inname ="set";
-  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.outname ="set__mainTimer";
-  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.mwmr_fifo = &TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set;
-  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.ok_send = 1;
-  __TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.ok_receive = 0;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.status =&TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set_status;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.status->lock=0;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.status->rptr=0;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.status->usage=0;
-  TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set.status->wptr =0;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset_status.rptr = 0;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset_status.wptr = 0;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset_status.usage = 0;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset_status.lock = 0;
-  
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.width = 4;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.depth = 100;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.gdepth = TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.depth;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.buffer = TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset_data;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.status = &TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset_status;
-  
-  __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.inname ="reset";
-  __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.outname ="reset__mainTimer";
-  __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.mwmr_fifo = &TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset;
-  __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.ok_send = 1;
-  __TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.ok_receive = 0;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.status =&TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset_status;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.status->lock=0;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.status->rptr=0;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.status->usage=0;
-  TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset.status->wptr =0;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire_status.rptr = 0;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire_status.wptr = 0;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire_status.usage = 0;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire_status.lock = 0;
-  
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.width = 4;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.depth = 100;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.gdepth = TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.depth;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.buffer = TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire_data;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.status = &TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire_status;
-  
-  __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.inname ="expire__mainTimer";
-  __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.outname ="expire";
-  __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.mwmr_fifo = &TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire;
-  __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.ok_send = 0;
-  __TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.ok_receive = 1;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.status =&TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire_status;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.status->lock=0;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.status->rptr=0;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.status->usage=0;
-  TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire.status->wptr =0;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set_status.rptr = 0;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set_status.wptr = 0;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set_status.usage = 0;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set_status.lock = 0;
-  
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.width = 4;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.depth = 100;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.gdepth = TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.depth;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.buffer = TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set_data;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.status = &TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set_status;
-  
-  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.inname ="set";
-  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.outname ="set__timerP";
-  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.mwmr_fifo = &TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set;
-  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.ok_send = 1;
-  __TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.ok_receive = 0;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.status =&TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set_status;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.status->lock=0;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.status->rptr=0;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.status->usage=0;
-  TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set.status->wptr =0;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset_status.rptr = 0;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset_status.wptr = 0;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset_status.usage = 0;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset_status.lock = 0;
-  
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.width = 4;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.depth = 100;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.gdepth = TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.depth;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.buffer = TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset_data;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.status = &TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset_status;
-  
-  __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.inname ="reset";
-  __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.outname ="reset__timerP";
-  __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.mwmr_fifo = &TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset;
-  __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.ok_send = 1;
-  __TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.ok_receive = 0;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.status =&TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset_status;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.status->lock=0;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.status->rptr=0;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.status->usage=0;
-  TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset.status->wptr =0;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire_status.rptr = 0;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire_status.wptr = 0;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire_status.usage = 0;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire_status.lock = 0;
-  
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.width = 4;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.depth = 100;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.gdepth = TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.depth;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.buffer = TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire_data;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.status = &TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire_status;
-  
-  __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.inname ="expire__timerP";
-  __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.outname ="expire";
-  __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.mwmr_fifo = &TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire;
-  __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.ok_send = 0;
-  __TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.ok_receive = 1;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.status =&TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire_status;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.status->lock=0;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.status->rptr=0;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.status->usage=0;
-  TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire.status->wptr =0;
   /* Asynchronous channels */
-  TCPIP_receiveTCP__Application_receiveTCP_status.rptr = 0;
-  TCPIP_receiveTCP__Application_receiveTCP_status.wptr = 0;
-  TCPIP_receiveTCP__Application_receiveTCP_status.usage = 0;
-  TCPIP_receiveTCP__Application_receiveTCP_status.lock = 0;
+  InputEngine_packet__Classification_from_IE_status.rptr = 0;
+  InputEngine_packet__Classification_from_IE_status.wptr = 0;
+  InputEngine_packet__Classification_from_IE_status.usage = 0;
+  InputEngine_packet__Classification_from_IE_status.lock = 0;
   
-  TCPIP_receiveTCP__Application_receiveTCP.width = 4;
-  TCPIP_receiveTCP__Application_receiveTCP.depth = 5;
-  TCPIP_receiveTCP__Application_receiveTCP.gdepth = TCPIP_receiveTCP__Application_receiveTCP.depth;
-  TCPIP_receiveTCP__Application_receiveTCP.buffer = TCPIP_receiveTCP__Application_receiveTCP_data;
-  TCPIP_receiveTCP__Application_receiveTCP.status = &TCPIP_receiveTCP__Application_receiveTCP_status;
-  __TCPIP_receiveTCP__Application_receiveTCP.inname ="receiveTCP";
-  __TCPIP_receiveTCP__Application_receiveTCP.outname ="receiveTCP";
-  __TCPIP_receiveTCP__Application_receiveTCP.isBlocking = 0;
-  __TCPIP_receiveTCP__Application_receiveTCP.maxNbOfMessages = 5;
-  __TCPIP_receiveTCP__Application_receiveTCP.mwmr_fifo = &TCPIP_receiveTCP__Application_receiveTCP;
-  TCPIP_receiveTCP__Application_receiveTCP.status =&TCPIP_receiveTCP__Application_receiveTCP_status;
-  TCPIP_receiveTCP__Application_receiveTCP.status->lock=0;
-  TCPIP_receiveTCP__Application_receiveTCP.status->rptr=0;
-  TCPIP_receiveTCP__Application_receiveTCP.status->usage=0;
-  TCPIP_receiveTCP__Application_receiveTCP.status->wptr=0;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve_status.rptr = 0;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve_status.wptr = 0;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve_status.usage = 0;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve_status.lock = 0;
+  InputEngine_packet__Classification_from_IE.width = 8;
+  InputEngine_packet__Classification_from_IE.depth = 1024;
+  InputEngine_packet__Classification_from_IE.gdepth = InputEngine_packet__Classification_from_IE.depth;
+  InputEngine_packet__Classification_from_IE.buffer = InputEngine_packet__Classification_from_IE_data;
+  InputEngine_packet__Classification_from_IE.status = &InputEngine_packet__Classification_from_IE_status;
+  __InputEngine_packet__Classification_from_IE.inname ="from_IE";
+  __InputEngine_packet__Classification_from_IE.outname ="packet";
+  __InputEngine_packet__Classification_from_IE.isBlocking = 0;
+  __InputEngine_packet__Classification_from_IE.maxNbOfMessages = 1024;
+  __InputEngine_packet__Classification_from_IE.mwmr_fifo = &InputEngine_packet__Classification_from_IE;
+  InputEngine_packet__Classification_from_IE.status =&InputEngine_packet__Classification_from_IE_status;
+  InputEngine_packet__Classification_from_IE.status->lock=0;
+  InputEngine_packet__Classification_from_IE.status->rptr=0;
+  InputEngine_packet__Classification_from_IE.status->usage=0;
+  InputEngine_packet__Classification_from_IE.status->wptr=0;
+  Bootstrap_address__InputEngine_bootstrap_status.rptr = 0;
+  Bootstrap_address__InputEngine_bootstrap_status.wptr = 0;
+  Bootstrap_address__InputEngine_bootstrap_status.usage = 0;
+  Bootstrap_address__InputEngine_bootstrap_status.lock = 0;
   
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve.width = 32;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve.depth = 5;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve.gdepth = TCPPacketManager_storePacket__TCPPacketManager_retrieve.depth;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve.buffer = TCPPacketManager_storePacket__TCPPacketManager_retrieve_data;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve.status = &TCPPacketManager_storePacket__TCPPacketManager_retrieve_status;
-  __TCPPacketManager_storePacket__TCPPacketManager_retrieve.inname ="retrieve";
-  __TCPPacketManager_storePacket__TCPPacketManager_retrieve.outname ="storePacket";
-  __TCPPacketManager_storePacket__TCPPacketManager_retrieve.isBlocking = 0;
-  __TCPPacketManager_storePacket__TCPPacketManager_retrieve.maxNbOfMessages = 5;
-  __TCPPacketManager_storePacket__TCPPacketManager_retrieve.mwmr_fifo = &TCPPacketManager_storePacket__TCPPacketManager_retrieve;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve.status =&TCPPacketManager_storePacket__TCPPacketManager_retrieve_status;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve.status->lock=0;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve.status->rptr=0;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve.status->usage=0;
-  TCPPacketManager_storePacket__TCPPacketManager_retrieve.status->wptr=0;
+  Bootstrap_address__InputEngine_bootstrap.width = 4;
+  Bootstrap_address__InputEngine_bootstrap.depth = 1024;
+  Bootstrap_address__InputEngine_bootstrap.gdepth = Bootstrap_address__InputEngine_bootstrap.depth;
+  Bootstrap_address__InputEngine_bootstrap.buffer = Bootstrap_address__InputEngine_bootstrap_data;
+  Bootstrap_address__InputEngine_bootstrap.status = &Bootstrap_address__InputEngine_bootstrap_status;
+  __Bootstrap_address__InputEngine_bootstrap.inname ="bootstrap";
+  __Bootstrap_address__InputEngine_bootstrap.outname ="address";
+  __Bootstrap_address__InputEngine_bootstrap.isBlocking = 0;
+  __Bootstrap_address__InputEngine_bootstrap.maxNbOfMessages = 1024;
+  __Bootstrap_address__InputEngine_bootstrap.mwmr_fifo = &Bootstrap_address__InputEngine_bootstrap;
+  Bootstrap_address__InputEngine_bootstrap.status =&Bootstrap_address__InputEngine_bootstrap_status;
+  Bootstrap_address__InputEngine_bootstrap.status->lock=0;
+  Bootstrap_address__InputEngine_bootstrap.status->rptr=0;
+  Bootstrap_address__InputEngine_bootstrap.status->usage=0;
+  Bootstrap_address__InputEngine_bootstrap.status->wptr=0;
+  OutputEngine_address__InputEngine_address_status.rptr = 0;
+  OutputEngine_address__InputEngine_address_status.wptr = 0;
+  OutputEngine_address__InputEngine_address_status.usage = 0;
+  OutputEngine_address__InputEngine_address_status.lock = 0;
+  
+  OutputEngine_address__InputEngine_address.width = 4;
+  OutputEngine_address__InputEngine_address.depth = 1024;
+  OutputEngine_address__InputEngine_address.gdepth = OutputEngine_address__InputEngine_address.depth;
+  OutputEngine_address__InputEngine_address.buffer = OutputEngine_address__InputEngine_address_data;
+  OutputEngine_address__InputEngine_address.status = &OutputEngine_address__InputEngine_address_status;
+  __OutputEngine_address__InputEngine_address.inname ="address";
+  __OutputEngine_address__InputEngine_address.outname ="address";
+  __OutputEngine_address__InputEngine_address.isBlocking = 0;
+  __OutputEngine_address__InputEngine_address.maxNbOfMessages = 1024;
+  __OutputEngine_address__InputEngine_address.mwmr_fifo = &OutputEngine_address__InputEngine_address;
+  OutputEngine_address__InputEngine_address.status =&OutputEngine_address__InputEngine_address_status;
+  OutputEngine_address__InputEngine_address.status->lock=0;
+  OutputEngine_address__InputEngine_address.status->rptr=0;
+  OutputEngine_address__InputEngine_address.status->usage=0;
+  OutputEngine_address__InputEngine_address.status->wptr=0;
+  Scheduling_packet__OutputEngine_packet_status.rptr = 0;
+  Scheduling_packet__OutputEngine_packet_status.wptr = 0;
+  Scheduling_packet__OutputEngine_packet_status.usage = 0;
+  Scheduling_packet__OutputEngine_packet_status.lock = 0;
+  
+  Scheduling_packet__OutputEngine_packet.width = 8;
+  Scheduling_packet__OutputEngine_packet.depth = 1024;
+  Scheduling_packet__OutputEngine_packet.gdepth = Scheduling_packet__OutputEngine_packet.depth;
+  Scheduling_packet__OutputEngine_packet.buffer = Scheduling_packet__OutputEngine_packet_data;
+  Scheduling_packet__OutputEngine_packet.status = &Scheduling_packet__OutputEngine_packet_status;
+  __Scheduling_packet__OutputEngine_packet.inname ="packet";
+  __Scheduling_packet__OutputEngine_packet.outname ="packet";
+  __Scheduling_packet__OutputEngine_packet.isBlocking = 0;
+  __Scheduling_packet__OutputEngine_packet.maxNbOfMessages = 1024;
+  __Scheduling_packet__OutputEngine_packet.mwmr_fifo = &Scheduling_packet__OutputEngine_packet;
+  Scheduling_packet__OutputEngine_packet.status =&Scheduling_packet__OutputEngine_packet_status;
+  Scheduling_packet__OutputEngine_packet.status->lock=0;
+  Scheduling_packet__OutputEngine_packet.status->rptr=0;
+  Scheduling_packet__OutputEngine_packet.status->usage=0;
+  Scheduling_packet__OutputEngine_packet.status->wptr=0;
+  Classif2_from_classif__Classification_to_c2_status.rptr = 0;
+  Classif2_from_classif__Classification_to_c2_status.wptr = 0;
+  Classif2_from_classif__Classification_to_c2_status.usage = 0;
+  Classif2_from_classif__Classification_to_c2_status.lock = 0;
+  
+  Classif2_from_classif__Classification_to_c2.width = 8;
+  Classif2_from_classif__Classification_to_c2.depth = 8;
+  Classif2_from_classif__Classification_to_c2.gdepth = Classif2_from_classif__Classification_to_c2.depth;
+  Classif2_from_classif__Classification_to_c2.buffer = Classif2_from_classif__Classification_to_c2_data;
+  Classif2_from_classif__Classification_to_c2.status = &Classif2_from_classif__Classification_to_c2_status;
+  __Classif2_from_classif__Classification_to_c2.inname ="from_classif";
+  __Classif2_from_classif__Classification_to_c2.outname ="to_c2";
+  __Classif2_from_classif__Classification_to_c2.isBlocking = 0;
+  __Classif2_from_classif__Classification_to_c2.maxNbOfMessages = 8;
+  __Classif2_from_classif__Classification_to_c2.mwmr_fifo = &Classif2_from_classif__Classification_to_c2;
+  Classif2_from_classif__Classification_to_c2.status =&Classif2_from_classif__Classification_to_c2_status;
+  Classif2_from_classif__Classification_to_c2.status->lock=0;
+  Classif2_from_classif__Classification_to_c2.status->rptr=0;
+  Classif2_from_classif__Classification_to_c2.status->usage=0;
+  Classif2_from_classif__Classification_to_c2.status->wptr=0;
+  Classif2_to_queue_low__Classification_c2_to_queue_low_status.rptr = 0;
+  Classif2_to_queue_low__Classification_c2_to_queue_low_status.wptr = 0;
+  Classif2_to_queue_low__Classification_c2_to_queue_low_status.usage = 0;
+  Classif2_to_queue_low__Classification_c2_to_queue_low_status.lock = 0;
+  
+  Classif2_to_queue_low__Classification_c2_to_queue_low.width = 8;
+  Classif2_to_queue_low__Classification_c2_to_queue_low.depth = 8;
+  Classif2_to_queue_low__Classification_c2_to_queue_low.gdepth = Classif2_to_queue_low__Classification_c2_to_queue_low.depth;
+  Classif2_to_queue_low__Classification_c2_to_queue_low.buffer = Classif2_to_queue_low__Classification_c2_to_queue_low_data;
+  Classif2_to_queue_low__Classification_c2_to_queue_low.status = &Classif2_to_queue_low__Classification_c2_to_queue_low_status;
+  __Classif2_to_queue_low__Classification_c2_to_queue_low.inname ="c2_to_queue_low";
+  __Classif2_to_queue_low__Classification_c2_to_queue_low.outname ="to_queue_low";
+  __Classif2_to_queue_low__Classification_c2_to_queue_low.isBlocking = 0;
+  __Classif2_to_queue_low__Classification_c2_to_queue_low.maxNbOfMessages = 8;
+  __Classif2_to_queue_low__Classification_c2_to_queue_low.mwmr_fifo = &Classif2_to_queue_low__Classification_c2_to_queue_low;
+  Classif2_to_queue_low__Classification_c2_to_queue_low.status =&Classif2_to_queue_low__Classification_c2_to_queue_low_status;
+  Classif2_to_queue_low__Classification_c2_to_queue_low.status->lock=0;
+  Classif2_to_queue_low__Classification_c2_to_queue_low.status->rptr=0;
+  Classif2_to_queue_low__Classification_c2_to_queue_low.status->usage=0;
+  Classif2_to_queue_low__Classification_c2_to_queue_low.status->wptr=0;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium_status.rptr = 0;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium_status.wptr = 0;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium_status.usage = 0;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium_status.lock = 0;
+  
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium.width = 8;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium.depth = 8;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium.gdepth = Classif2_to_queue_medium__Classification_c2_to_queue_medium.depth;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium.buffer = Classif2_to_queue_medium__Classification_c2_to_queue_medium_data;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium.status = &Classif2_to_queue_medium__Classification_c2_to_queue_medium_status;
+  __Classif2_to_queue_medium__Classification_c2_to_queue_medium.inname ="c2_to_queue_medium";
+  __Classif2_to_queue_medium__Classification_c2_to_queue_medium.outname ="to_queue_medium";
+  __Classif2_to_queue_medium__Classification_c2_to_queue_medium.isBlocking = 0;
+  __Classif2_to_queue_medium__Classification_c2_to_queue_medium.maxNbOfMessages = 8;
+  __Classif2_to_queue_medium__Classification_c2_to_queue_medium.mwmr_fifo = &Classif2_to_queue_medium__Classification_c2_to_queue_medium;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium.status =&Classif2_to_queue_medium__Classification_c2_to_queue_medium_status;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium.status->lock=0;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium.status->rptr=0;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium.status->usage=0;
+  Classif2_to_queue_medium__Classification_c2_to_queue_medium.status->wptr=0;
+  Classif2_to_queue_high__Classification_c2_to_queue_high_status.rptr = 0;
+  Classif2_to_queue_high__Classification_c2_to_queue_high_status.wptr = 0;
+  Classif2_to_queue_high__Classification_c2_to_queue_high_status.usage = 0;
+  Classif2_to_queue_high__Classification_c2_to_queue_high_status.lock = 0;
+  
+  Classif2_to_queue_high__Classification_c2_to_queue_high.width = 8;
+  Classif2_to_queue_high__Classification_c2_to_queue_high.depth = 8;
+  Classif2_to_queue_high__Classification_c2_to_queue_high.gdepth = Classif2_to_queue_high__Classification_c2_to_queue_high.depth;
+  Classif2_to_queue_high__Classification_c2_to_queue_high.buffer = Classif2_to_queue_high__Classification_c2_to_queue_high_data;
+  Classif2_to_queue_high__Classification_c2_to_queue_high.status = &Classif2_to_queue_high__Classification_c2_to_queue_high_status;
+  __Classif2_to_queue_high__Classification_c2_to_queue_high.inname ="c2_to_queue_high";
+  __Classif2_to_queue_high__Classification_c2_to_queue_high.outname ="to_queue_high";
+  __Classif2_to_queue_high__Classification_c2_to_queue_high.isBlocking = 0;
+  __Classif2_to_queue_high__Classification_c2_to_queue_high.maxNbOfMessages = 8;
+  __Classif2_to_queue_high__Classification_c2_to_queue_high.mwmr_fifo = &Classif2_to_queue_high__Classification_c2_to_queue_high;
+  Classif2_to_queue_high__Classification_c2_to_queue_high.status =&Classif2_to_queue_high__Classification_c2_to_queue_high_status;
+  Classif2_to_queue_high__Classification_c2_to_queue_high.status->lock=0;
+  Classif2_to_queue_high__Classification_c2_to_queue_high.status->rptr=0;
+  Classif2_to_queue_high__Classification_c2_to_queue_high.status->usage=0;
+  Classif2_to_queue_high__Classification_c2_to_queue_high.status->wptr=0;
+  Classif0_from_classif__Classification_to_c0_status.rptr = 0;
+  Classif0_from_classif__Classification_to_c0_status.wptr = 0;
+  Classif0_from_classif__Classification_to_c0_status.usage = 0;
+  Classif0_from_classif__Classification_to_c0_status.lock = 0;
+  
+  Classif0_from_classif__Classification_to_c0.width = 8;
+  Classif0_from_classif__Classification_to_c0.depth = 8;
+  Classif0_from_classif__Classification_to_c0.gdepth = Classif0_from_classif__Classification_to_c0.depth;
+  Classif0_from_classif__Classification_to_c0.buffer = Classif0_from_classif__Classification_to_c0_data;
+  Classif0_from_classif__Classification_to_c0.status = &Classif0_from_classif__Classification_to_c0_status;
+  __Classif0_from_classif__Classification_to_c0.inname ="from_classif";
+  __Classif0_from_classif__Classification_to_c0.outname ="to_c0";
+  __Classif0_from_classif__Classification_to_c0.isBlocking = 0;
+  __Classif0_from_classif__Classification_to_c0.maxNbOfMessages = 8;
+  __Classif0_from_classif__Classification_to_c0.mwmr_fifo = &Classif0_from_classif__Classification_to_c0;
+  Classif0_from_classif__Classification_to_c0.status =&Classif0_from_classif__Classification_to_c0_status;
+  Classif0_from_classif__Classification_to_c0.status->lock=0;
+  Classif0_from_classif__Classification_to_c0.status->rptr=0;
+  Classif0_from_classif__Classification_to_c0.status->usage=0;
+  Classif0_from_classif__Classification_to_c0.status->wptr=0;
+  Classif0_to_queue_low__Classification_c0_to_queue_low_status.rptr = 0;
+  Classif0_to_queue_low__Classification_c0_to_queue_low_status.wptr = 0;
+  Classif0_to_queue_low__Classification_c0_to_queue_low_status.usage = 0;
+  Classif0_to_queue_low__Classification_c0_to_queue_low_status.lock = 0;
+  
+  Classif0_to_queue_low__Classification_c0_to_queue_low.width = 8;
+  Classif0_to_queue_low__Classification_c0_to_queue_low.depth = 8;
+  Classif0_to_queue_low__Classification_c0_to_queue_low.gdepth = Classif0_to_queue_low__Classification_c0_to_queue_low.depth;
+  Classif0_to_queue_low__Classification_c0_to_queue_low.buffer = Classif0_to_queue_low__Classification_c0_to_queue_low_data;
+  Classif0_to_queue_low__Classification_c0_to_queue_low.status = &Classif0_to_queue_low__Classification_c0_to_queue_low_status;
+  __Classif0_to_queue_low__Classification_c0_to_queue_low.inname ="c0_to_queue_low";
+  __Classif0_to_queue_low__Classification_c0_to_queue_low.outname ="to_queue_low";
+  __Classif0_to_queue_low__Classification_c0_to_queue_low.isBlocking = 0;
+  __Classif0_to_queue_low__Classification_c0_to_queue_low.maxNbOfMessages = 8;
+  __Classif0_to_queue_low__Classification_c0_to_queue_low.mwmr_fifo = &Classif0_to_queue_low__Classification_c0_to_queue_low;
+  Classif0_to_queue_low__Classification_c0_to_queue_low.status =&Classif0_to_queue_low__Classification_c0_to_queue_low_status;
+  Classif0_to_queue_low__Classification_c0_to_queue_low.status->lock=0;
+  Classif0_to_queue_low__Classification_c0_to_queue_low.status->rptr=0;
+  Classif0_to_queue_low__Classification_c0_to_queue_low.status->usage=0;
+  Classif0_to_queue_low__Classification_c0_to_queue_low.status->wptr=0;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium_status.rptr = 0;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium_status.wptr = 0;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium_status.usage = 0;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium_status.lock = 0;
+  
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium.width = 8;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium.depth = 8;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium.gdepth = Classif0_to_queue_medium__Classification_c0_to_queue_medium.depth;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium.buffer = Classif0_to_queue_medium__Classification_c0_to_queue_medium_data;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium.status = &Classif0_to_queue_medium__Classification_c0_to_queue_medium_status;
+  __Classif0_to_queue_medium__Classification_c0_to_queue_medium.inname ="c0_to_queue_medium";
+  __Classif0_to_queue_medium__Classification_c0_to_queue_medium.outname ="to_queue_medium";
+  __Classif0_to_queue_medium__Classification_c0_to_queue_medium.isBlocking = 0;
+  __Classif0_to_queue_medium__Classification_c0_to_queue_medium.maxNbOfMessages = 8;
+  __Classif0_to_queue_medium__Classification_c0_to_queue_medium.mwmr_fifo = &Classif0_to_queue_medium__Classification_c0_to_queue_medium;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium.status =&Classif0_to_queue_medium__Classification_c0_to_queue_medium_status;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium.status->lock=0;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium.status->rptr=0;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium.status->usage=0;
+  Classif0_to_queue_medium__Classification_c0_to_queue_medium.status->wptr=0;
+  Classif0_to_queue_high__Classification_c0_to_queue_high_status.rptr = 0;
+  Classif0_to_queue_high__Classification_c0_to_queue_high_status.wptr = 0;
+  Classif0_to_queue_high__Classification_c0_to_queue_high_status.usage = 0;
+  Classif0_to_queue_high__Classification_c0_to_queue_high_status.lock = 0;
+  
+  Classif0_to_queue_high__Classification_c0_to_queue_high.width = 8;
+  Classif0_to_queue_high__Classification_c0_to_queue_high.depth = 8;
+  Classif0_to_queue_high__Classification_c0_to_queue_high.gdepth = Classif0_to_queue_high__Classification_c0_to_queue_high.depth;
+  Classif0_to_queue_high__Classification_c0_to_queue_high.buffer = Classif0_to_queue_high__Classification_c0_to_queue_high_data;
+  Classif0_to_queue_high__Classification_c0_to_queue_high.status = &Classif0_to_queue_high__Classification_c0_to_queue_high_status;
+  __Classif0_to_queue_high__Classification_c0_to_queue_high.inname ="c0_to_queue_high";
+  __Classif0_to_queue_high__Classification_c0_to_queue_high.outname ="to_queue_high";
+  __Classif0_to_queue_high__Classification_c0_to_queue_high.isBlocking = 0;
+  __Classif0_to_queue_high__Classification_c0_to_queue_high.maxNbOfMessages = 8;
+  __Classif0_to_queue_high__Classification_c0_to_queue_high.mwmr_fifo = &Classif0_to_queue_high__Classification_c0_to_queue_high;
+  Classif0_to_queue_high__Classification_c0_to_queue_high.status =&Classif0_to_queue_high__Classification_c0_to_queue_high_status;
+  Classif0_to_queue_high__Classification_c0_to_queue_high.status->lock=0;
+  Classif0_to_queue_high__Classification_c0_to_queue_high.status->rptr=0;
+  Classif0_to_queue_high__Classification_c0_to_queue_high.status->usage=0;
+  Classif0_to_queue_high__Classification_c0_to_queue_high.status->wptr=0;
+  Classif1_from_classif__Classification_to_c1_status.rptr = 0;
+  Classif1_from_classif__Classification_to_c1_status.wptr = 0;
+  Classif1_from_classif__Classification_to_c1_status.usage = 0;
+  Classif1_from_classif__Classification_to_c1_status.lock = 0;
+  
+  Classif1_from_classif__Classification_to_c1.width = 8;
+  Classif1_from_classif__Classification_to_c1.depth = 8;
+  Classif1_from_classif__Classification_to_c1.gdepth = Classif1_from_classif__Classification_to_c1.depth;
+  Classif1_from_classif__Classification_to_c1.buffer = Classif1_from_classif__Classification_to_c1_data;
+  Classif1_from_classif__Classification_to_c1.status = &Classif1_from_classif__Classification_to_c1_status;
+  __Classif1_from_classif__Classification_to_c1.inname ="from_classif";
+  __Classif1_from_classif__Classification_to_c1.outname ="to_c1";
+  __Classif1_from_classif__Classification_to_c1.isBlocking = 0;
+  __Classif1_from_classif__Classification_to_c1.maxNbOfMessages = 8;
+  __Classif1_from_classif__Classification_to_c1.mwmr_fifo = &Classif1_from_classif__Classification_to_c1;
+  Classif1_from_classif__Classification_to_c1.status =&Classif1_from_classif__Classification_to_c1_status;
+  Classif1_from_classif__Classification_to_c1.status->lock=0;
+  Classif1_from_classif__Classification_to_c1.status->rptr=0;
+  Classif1_from_classif__Classification_to_c1.status->usage=0;
+  Classif1_from_classif__Classification_to_c1.status->wptr=0;
+  Classif1_to_queue_low__Classification_c1_to_queue_low_status.rptr = 0;
+  Classif1_to_queue_low__Classification_c1_to_queue_low_status.wptr = 0;
+  Classif1_to_queue_low__Classification_c1_to_queue_low_status.usage = 0;
+  Classif1_to_queue_low__Classification_c1_to_queue_low_status.lock = 0;
+  
+  Classif1_to_queue_low__Classification_c1_to_queue_low.width = 8;
+  Classif1_to_queue_low__Classification_c1_to_queue_low.depth = 8;
+  Classif1_to_queue_low__Classification_c1_to_queue_low.gdepth = Classif1_to_queue_low__Classification_c1_to_queue_low.depth;
+  Classif1_to_queue_low__Classification_c1_to_queue_low.buffer = Classif1_to_queue_low__Classification_c1_to_queue_low_data;
+  Classif1_to_queue_low__Classification_c1_to_queue_low.status = &Classif1_to_queue_low__Classification_c1_to_queue_low_status;
+  __Classif1_to_queue_low__Classification_c1_to_queue_low.inname ="c1_to_queue_low";
+  __Classif1_to_queue_low__Classification_c1_to_queue_low.outname ="to_queue_low";
+  __Classif1_to_queue_low__Classification_c1_to_queue_low.isBlocking = 0;
+  __Classif1_to_queue_low__Classification_c1_to_queue_low.maxNbOfMessages = 8;
+  __Classif1_to_queue_low__Classification_c1_to_queue_low.mwmr_fifo = &Classif1_to_queue_low__Classification_c1_to_queue_low;
+  Classif1_to_queue_low__Classification_c1_to_queue_low.status =&Classif1_to_queue_low__Classification_c1_to_queue_low_status;
+  Classif1_to_queue_low__Classification_c1_to_queue_low.status->lock=0;
+  Classif1_to_queue_low__Classification_c1_to_queue_low.status->rptr=0;
+  Classif1_to_queue_low__Classification_c1_to_queue_low.status->usage=0;
+  Classif1_to_queue_low__Classification_c1_to_queue_low.status->wptr=0;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium_status.rptr = 0;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium_status.wptr = 0;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium_status.usage = 0;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium_status.lock = 0;
+  
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium.width = 8;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium.depth = 8;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium.gdepth = Classif1_to_queue_medium__Classification_c1_to_queue_medium.depth;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium.buffer = Classif1_to_queue_medium__Classification_c1_to_queue_medium_data;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium.status = &Classif1_to_queue_medium__Classification_c1_to_queue_medium_status;
+  __Classif1_to_queue_medium__Classification_c1_to_queue_medium.inname ="c1_to_queue_medium";
+  __Classif1_to_queue_medium__Classification_c1_to_queue_medium.outname ="to_queue_medium";
+  __Classif1_to_queue_medium__Classification_c1_to_queue_medium.isBlocking = 0;
+  __Classif1_to_queue_medium__Classification_c1_to_queue_medium.maxNbOfMessages = 8;
+  __Classif1_to_queue_medium__Classification_c1_to_queue_medium.mwmr_fifo = &Classif1_to_queue_medium__Classification_c1_to_queue_medium;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium.status =&Classif1_to_queue_medium__Classification_c1_to_queue_medium_status;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium.status->lock=0;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium.status->rptr=0;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium.status->usage=0;
+  Classif1_to_queue_medium__Classification_c1_to_queue_medium.status->wptr=0;
+  Classif1_to_queue_high__Classification_c1_to_queue_high_status.rptr = 0;
+  Classif1_to_queue_high__Classification_c1_to_queue_high_status.wptr = 0;
+  Classif1_to_queue_high__Classification_c1_to_queue_high_status.usage = 0;
+  Classif1_to_queue_high__Classification_c1_to_queue_high_status.lock = 0;
+  
+  Classif1_to_queue_high__Classification_c1_to_queue_high.width = 8;
+  Classif1_to_queue_high__Classification_c1_to_queue_high.depth = 8;
+  Classif1_to_queue_high__Classification_c1_to_queue_high.gdepth = Classif1_to_queue_high__Classification_c1_to_queue_high.depth;
+  Classif1_to_queue_high__Classification_c1_to_queue_high.buffer = Classif1_to_queue_high__Classification_c1_to_queue_high_data;
+  Classif1_to_queue_high__Classification_c1_to_queue_high.status = &Classif1_to_queue_high__Classification_c1_to_queue_high_status;
+  __Classif1_to_queue_high__Classification_c1_to_queue_high.inname ="c1_to_queue_high";
+  __Classif1_to_queue_high__Classification_c1_to_queue_high.outname ="to_queue_high";
+  __Classif1_to_queue_high__Classification_c1_to_queue_high.isBlocking = 0;
+  __Classif1_to_queue_high__Classification_c1_to_queue_high.maxNbOfMessages = 8;
+  __Classif1_to_queue_high__Classification_c1_to_queue_high.mwmr_fifo = &Classif1_to_queue_high__Classification_c1_to_queue_high;
+  Classif1_to_queue_high__Classification_c1_to_queue_high.status =&Classif1_to_queue_high__Classification_c1_to_queue_high_status;
+  Classif1_to_queue_high__Classification_c1_to_queue_high.status->lock=0;
+  Classif1_to_queue_high__Classification_c1_to_queue_high.status->rptr=0;
+  Classif1_to_queue_high__Classification_c1_to_queue_high.status->usage=0;
+  Classif1_to_queue_high__Classification_c1_to_queue_high.status->wptr=0;
+  Classification_queue_low__Scheduling_from_queue_low_status.rptr = 0;
+  Classification_queue_low__Scheduling_from_queue_low_status.wptr = 0;
+  Classification_queue_low__Scheduling_from_queue_low_status.usage = 0;
+  Classification_queue_low__Scheduling_from_queue_low_status.lock = 0;
+  
+  Classification_queue_low__Scheduling_from_queue_low.width = 8;
+  Classification_queue_low__Scheduling_from_queue_low.depth = 1024;
+  Classification_queue_low__Scheduling_from_queue_low.gdepth = Classification_queue_low__Scheduling_from_queue_low.depth;
+  Classification_queue_low__Scheduling_from_queue_low.buffer = Classification_queue_low__Scheduling_from_queue_low_data;
+  Classification_queue_low__Scheduling_from_queue_low.status = &Classification_queue_low__Scheduling_from_queue_low_status;
+  __Classification_queue_low__Scheduling_from_queue_low.inname ="from_queue_low";
+  __Classification_queue_low__Scheduling_from_queue_low.outname ="queue_low";
+  __Classification_queue_low__Scheduling_from_queue_low.isBlocking = 0;
+  __Classification_queue_low__Scheduling_from_queue_low.maxNbOfMessages = 1024;
+  __Classification_queue_low__Scheduling_from_queue_low.mwmr_fifo = &Classification_queue_low__Scheduling_from_queue_low;
+  Classification_queue_low__Scheduling_from_queue_low.status =&Classification_queue_low__Scheduling_from_queue_low_status;
+  Classification_queue_low__Scheduling_from_queue_low.status->lock=0;
+  Classification_queue_low__Scheduling_from_queue_low.status->rptr=0;
+  Classification_queue_low__Scheduling_from_queue_low.status->usage=0;
+  Classification_queue_low__Scheduling_from_queue_low.status->wptr=0;
+  Classification_queue_medium__Scheduling_from_queue_medium_status.rptr = 0;
+  Classification_queue_medium__Scheduling_from_queue_medium_status.wptr = 0;
+  Classification_queue_medium__Scheduling_from_queue_medium_status.usage = 0;
+  Classification_queue_medium__Scheduling_from_queue_medium_status.lock = 0;
+  
+  Classification_queue_medium__Scheduling_from_queue_medium.width = 8;
+  Classification_queue_medium__Scheduling_from_queue_medium.depth = 1024;
+  Classification_queue_medium__Scheduling_from_queue_medium.gdepth = Classification_queue_medium__Scheduling_from_queue_medium.depth;
+  Classification_queue_medium__Scheduling_from_queue_medium.buffer = Classification_queue_medium__Scheduling_from_queue_medium_data;
+  Classification_queue_medium__Scheduling_from_queue_medium.status = &Classification_queue_medium__Scheduling_from_queue_medium_status;
+  __Classification_queue_medium__Scheduling_from_queue_medium.inname ="from_queue_medium";
+  __Classification_queue_medium__Scheduling_from_queue_medium.outname ="queue_medium";
+  __Classification_queue_medium__Scheduling_from_queue_medium.isBlocking = 0;
+  __Classification_queue_medium__Scheduling_from_queue_medium.maxNbOfMessages = 1024;
+  __Classification_queue_medium__Scheduling_from_queue_medium.mwmr_fifo = &Classification_queue_medium__Scheduling_from_queue_medium;
+  Classification_queue_medium__Scheduling_from_queue_medium.status =&Classification_queue_medium__Scheduling_from_queue_medium_status;
+  Classification_queue_medium__Scheduling_from_queue_medium.status->lock=0;
+  Classification_queue_medium__Scheduling_from_queue_medium.status->rptr=0;
+  Classification_queue_medium__Scheduling_from_queue_medium.status->usage=0;
+  Classification_queue_medium__Scheduling_from_queue_medium.status->wptr=0;
+  Classification_queue_high__Scheduling_from_queue_high_status.rptr = 0;
+  Classification_queue_high__Scheduling_from_queue_high_status.wptr = 0;
+  Classification_queue_high__Scheduling_from_queue_high_status.usage = 0;
+  Classification_queue_high__Scheduling_from_queue_high_status.lock = 0;
+  
+  Classification_queue_high__Scheduling_from_queue_high.width = 8;
+  Classification_queue_high__Scheduling_from_queue_high.depth = 1024;
+  Classification_queue_high__Scheduling_from_queue_high.gdepth = Classification_queue_high__Scheduling_from_queue_high.depth;
+  Classification_queue_high__Scheduling_from_queue_high.buffer = Classification_queue_high__Scheduling_from_queue_high_data;
+  Classification_queue_high__Scheduling_from_queue_high.status = &Classification_queue_high__Scheduling_from_queue_high_status;
+  __Classification_queue_high__Scheduling_from_queue_high.inname ="from_queue_high";
+  __Classification_queue_high__Scheduling_from_queue_high.outname ="queue_high";
+  __Classification_queue_high__Scheduling_from_queue_high.isBlocking = 0;
+  __Classification_queue_high__Scheduling_from_queue_high.maxNbOfMessages = 1024;
+  __Classification_queue_high__Scheduling_from_queue_high.mwmr_fifo = &Classification_queue_high__Scheduling_from_queue_high;
+  Classification_queue_high__Scheduling_from_queue_high.status =&Classification_queue_high__Scheduling_from_queue_high_status;
+  Classification_queue_high__Scheduling_from_queue_high.status->lock=0;
+  Classification_queue_high__Scheduling_from_queue_high.status->rptr=0;
+  Classification_queue_high__Scheduling_from_queue_high.status->usage=0;
+  Classification_queue_high__Scheduling_from_queue_high.status->wptr=0;
+  Sched0_toScheduler0__Scheduling_to_scheduler0_status.rptr = 0;
+  Sched0_toScheduler0__Scheduling_to_scheduler0_status.wptr = 0;
+  Sched0_toScheduler0__Scheduling_to_scheduler0_status.usage = 0;
+  Sched0_toScheduler0__Scheduling_to_scheduler0_status.lock = 0;
+  
+  Sched0_toScheduler0__Scheduling_to_scheduler0.width = 8;
+  Sched0_toScheduler0__Scheduling_to_scheduler0.depth = 8;
+  Sched0_toScheduler0__Scheduling_to_scheduler0.gdepth = Sched0_toScheduler0__Scheduling_to_scheduler0.depth;
+  Sched0_toScheduler0__Scheduling_to_scheduler0.buffer = Sched0_toScheduler0__Scheduling_to_scheduler0_data;
+  Sched0_toScheduler0__Scheduling_to_scheduler0.status = &Sched0_toScheduler0__Scheduling_to_scheduler0_status;
+  __Sched0_toScheduler0__Scheduling_to_scheduler0.inname ="toScheduler0";
+  __Sched0_toScheduler0__Scheduling_to_scheduler0.outname ="to_scheduler0";
+  __Sched0_toScheduler0__Scheduling_to_scheduler0.isBlocking = 0;
+  __Sched0_toScheduler0__Scheduling_to_scheduler0.maxNbOfMessages = 8;
+  __Sched0_toScheduler0__Scheduling_to_scheduler0.mwmr_fifo = &Sched0_toScheduler0__Scheduling_to_scheduler0;
+  Sched0_toScheduler0__Scheduling_to_scheduler0.status =&Sched0_toScheduler0__Scheduling_to_scheduler0_status;
+  Sched0_toScheduler0__Scheduling_to_scheduler0.status->lock=0;
+  Sched0_toScheduler0__Scheduling_to_scheduler0.status->rptr=0;
+  Sched0_toScheduler0__Scheduling_to_scheduler0.status->usage=0;
+  Sched0_toScheduler0__Scheduling_to_scheduler0.status->wptr=0;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0_status.rptr = 0;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0_status.wptr = 0;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0_status.usage = 0;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0_status.lock = 0;
+  
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0.width = 8;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0.depth = 8;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0.gdepth = Sched0_scheduledPacket0__Scheduling_scheduledPacket0.depth;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0.buffer = Sched0_scheduledPacket0__Scheduling_scheduledPacket0_data;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0.status = &Sched0_scheduledPacket0__Scheduling_scheduledPacket0_status;
+  __Sched0_scheduledPacket0__Scheduling_scheduledPacket0.inname ="scheduledPacket0";
+  __Sched0_scheduledPacket0__Scheduling_scheduledPacket0.outname ="scheduledPacket0";
+  __Sched0_scheduledPacket0__Scheduling_scheduledPacket0.isBlocking = 0;
+  __Sched0_scheduledPacket0__Scheduling_scheduledPacket0.maxNbOfMessages = 8;
+  __Sched0_scheduledPacket0__Scheduling_scheduledPacket0.mwmr_fifo = &Sched0_scheduledPacket0__Scheduling_scheduledPacket0;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0.status =&Sched0_scheduledPacket0__Scheduling_scheduledPacket0_status;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0.status->lock=0;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0.status->rptr=0;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0.status->usage=0;
+  Sched0_scheduledPacket0__Scheduling_scheduledPacket0.status->wptr=0;
+  Sched1_toScheduler1__Scheduling_to_scheduler1_status.rptr = 0;
+  Sched1_toScheduler1__Scheduling_to_scheduler1_status.wptr = 0;
+  Sched1_toScheduler1__Scheduling_to_scheduler1_status.usage = 0;
+  Sched1_toScheduler1__Scheduling_to_scheduler1_status.lock = 0;
+  
+  Sched1_toScheduler1__Scheduling_to_scheduler1.width = 8;
+  Sched1_toScheduler1__Scheduling_to_scheduler1.depth = 8;
+  Sched1_toScheduler1__Scheduling_to_scheduler1.gdepth = Sched1_toScheduler1__Scheduling_to_scheduler1.depth;
+  Sched1_toScheduler1__Scheduling_to_scheduler1.buffer = Sched1_toScheduler1__Scheduling_to_scheduler1_data;
+  Sched1_toScheduler1__Scheduling_to_scheduler1.status = &Sched1_toScheduler1__Scheduling_to_scheduler1_status;
+  __Sched1_toScheduler1__Scheduling_to_scheduler1.inname ="toScheduler1";
+  __Sched1_toScheduler1__Scheduling_to_scheduler1.outname ="to_scheduler1";
+  __Sched1_toScheduler1__Scheduling_to_scheduler1.isBlocking = 0;
+  __Sched1_toScheduler1__Scheduling_to_scheduler1.maxNbOfMessages = 8;
+  __Sched1_toScheduler1__Scheduling_to_scheduler1.mwmr_fifo = &Sched1_toScheduler1__Scheduling_to_scheduler1;
+  Sched1_toScheduler1__Scheduling_to_scheduler1.status =&Sched1_toScheduler1__Scheduling_to_scheduler1_status;
+  Sched1_toScheduler1__Scheduling_to_scheduler1.status->lock=0;
+  Sched1_toScheduler1__Scheduling_to_scheduler1.status->rptr=0;
+  Sched1_toScheduler1__Scheduling_to_scheduler1.status->usage=0;
+  Sched1_toScheduler1__Scheduling_to_scheduler1.status->wptr=0;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1_status.rptr = 0;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1_status.wptr = 0;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1_status.usage = 0;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1_status.lock = 0;
+  
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1.width = 8;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1.depth = 8;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1.gdepth = Sched1_scheduledPacket1__Scheduling_scheduledPacket1.depth;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1.buffer = Sched1_scheduledPacket1__Scheduling_scheduledPacket1_data;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1.status = &Sched1_scheduledPacket1__Scheduling_scheduledPacket1_status;
+  __Sched1_scheduledPacket1__Scheduling_scheduledPacket1.inname ="scheduledPacket1";
+  __Sched1_scheduledPacket1__Scheduling_scheduledPacket1.outname ="scheduledPacket1";
+  __Sched1_scheduledPacket1__Scheduling_scheduledPacket1.isBlocking = 0;
+  __Sched1_scheduledPacket1__Scheduling_scheduledPacket1.maxNbOfMessages = 8;
+  __Sched1_scheduledPacket1__Scheduling_scheduledPacket1.mwmr_fifo = &Sched1_scheduledPacket1__Scheduling_scheduledPacket1;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1.status =&Sched1_scheduledPacket1__Scheduling_scheduledPacket1_status;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1.status->lock=0;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1.status->rptr=0;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1.status->usage=0;
+  Sched1_scheduledPacket1__Scheduling_scheduledPacket1.status->wptr=0;
   
   /* Threads of tasks */
-  pthread_t thread__InterfaceDevice;
-  pthread_t thread__SmartCard;
-  pthread_t thread__TCPIP;
-  pthread_t thread__TCPPacketManager;
-  pthread_t thread__Application;
-  pthread_t thread__SmartCardController;
-  pthread_t thread__Timer__mainTimer__TCPIP;
-  pthread_t thread__Timer__timerP__TCPPacketManager;
+  pthread_t thread__Bootstrap;
+  pthread_t thread__OutputEngine;
+  pthread_t thread__InputEngine;
+  pthread_t thread__Classification;
+  pthread_t thread__Classif0;
+  pthread_t thread__Classif1;
+  pthread_t thread__Classif2;
+  pthread_t thread__Scheduling;
+  pthread_t thread__Sched1;
+  pthread_t thread__Sched0;
   /* Activating tracing  */
-  /* Activating debug messages */
-  activeDebug();
   /* Activating randomness */
   initRandom();
   /* Initializing the main mutex */
@@ -919,165 +772,166 @@ if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}
   __user_init();
   
   
-  debugMsg("Starting tasks");
-  struct mwmr_s *channels_array_InterfaceDevice[9];
-  channels_array_InterfaceDevice[0]=&SmartCardController_reset__InterfaceDevice_reset;
-  channels_array_InterfaceDevice[1]=&SmartCardController_pTS__InterfaceDevice_pTS;
-  channels_array_InterfaceDevice[2]=&SmartCardController_dataReady__InterfaceDevice_data_Ready;
-  channels_array_InterfaceDevice[3]=&SmartCardController_activation__InterfaceDevice_activation;
-  channels_array_InterfaceDevice[4]=&SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC;
-  channels_array_InterfaceDevice[5]=&SmartCardController_answerToReset__InterfaceDevice_answerToReset;
-  channels_array_InterfaceDevice[6]=&SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm;
-  channels_array_InterfaceDevice[7]=&SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD;
-  channels_array_InterfaceDevice[8]=&SmartCardController_data_Ready_SC__InterfaceDevice_dataReady;
+  struct mwmr_s *channels_array_Bootstrap[1];
+  channels_array_Bootstrap[0]=&Bootstrap_address__InputEngine_bootstrap;
   
   ptr =malloc(sizeof(pthread_t));
-  thread__InterfaceDevice= (pthread_t)ptr;
+  thread__Bootstrap= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
   pthread_attr_affinity(attr_t, 0);  
   
   
-  debugMsg("Starting tasks");
-  pthread_create(&thread__InterfaceDevice, attr_t, mainFunc__InterfaceDevice, (void *)channels_array_InterfaceDevice);
+  pthread_create(&thread__Bootstrap, attr_t, mainFunc__Bootstrap, (void *)channels_array_Bootstrap);
   
-  struct mwmr_s *channels_array_SmartCard;
+  struct mwmr_s *channels_array_OutputEngine[2];
+  channels_array_OutputEngine[0]=&OutputEngine_address__InputEngine_address;
+  channels_array_OutputEngine[1]=&Scheduling_packet__OutputEngine_packet;
+  
   ptr =malloc(sizeof(pthread_t));
-  thread__SmartCard= (pthread_t)ptr;
+  thread__OutputEngine= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
   pthread_attr_affinity(attr_t, 0);  
   
   
-  debugMsg("Starting tasks");
-  pthread_create(&thread__SmartCard, attr_t, mainFunc__SmartCard, (void *)channels_array_SmartCard);
+  pthread_create(&thread__OutputEngine, attr_t, mainFunc__OutputEngine, (void *)channels_array_OutputEngine);
   
-  struct mwmr_s *channels_array_TCPIP[15];
-  channels_array_TCPIP[0]=&TCPIP_receiveTCP__Application_receiveTCP;
-  channels_array_TCPIP[1]=&TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket;
-  channels_array_TCPIP[2]=&TCPIP_emptyListOfPackets__TCPPacketManager_empty;
-  channels_array_TCPIP[3]=&TCPIP_addPacket__TCPPacketManager_addPacket;
-  channels_array_TCPIP[4]=&TCPIP_ackPacket__TCPPacketManager_ackPacket;
-  channels_array_TCPIP[5]=&Application_open__TCPIP_open;
-  channels_array_TCPIP[6]=&Application_close__TCPIP_close;
-  channels_array_TCPIP[7]=&Application_abort__TCPIP_abort;
-  channels_array_TCPIP[8]=&Application_sendTCP__TCPIP_send_TCP;
-  channels_array_TCPIP[9]=&SmartCardController_fromTtoP__TCPIP_fromTtoP;
-  channels_array_TCPIP[10]=&SmartCardController_fromPtoT__TCPIP_fromPtoT;
-  channels_array_TCPIP[11]=&SmartCardController_start_TCPIP__TCPIP_start;
-  channels_array_TCPIP[12]=&TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set;
-  channels_array_TCPIP[13]=&TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset;
-  channels_array_TCPIP[14]=&TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire;
+  struct mwmr_s *channels_array_InputEngine[3];
+  channels_array_InputEngine[0]=&InputEngine_packet__Classification_from_IE;
+  channels_array_InputEngine[1]=&Bootstrap_address__InputEngine_bootstrap;
+  channels_array_InputEngine[2]=&OutputEngine_address__InputEngine_address;
   
   ptr =malloc(sizeof(pthread_t));
-  thread__TCPIP= (pthread_t)ptr;
+  thread__InputEngine= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
   pthread_attr_affinity(attr_t, 0);  
   
   
-  debugMsg("Starting tasks");
-  pthread_create(&thread__TCPIP, attr_t, mainFunc__TCPIP, (void *)channels_array_TCPIP);
+  pthread_create(&thread__InputEngine, attr_t, mainFunc__InputEngine, (void *)channels_array_InputEngine);
   
-  struct mwmr_s *channels_array_TCPPacketManager[8];
-  channels_array_TCPPacketManager[0]=&TCPPacketManager_storePacket__TCPPacketManager_retrieve;
-  channels_array_TCPPacketManager[1]=&TCPIP_timeoutPacket__TCPPacketManager_timeoutPacket;
-  channels_array_TCPPacketManager[2]=&TCPIP_emptyListOfPackets__TCPPacketManager_empty;
-  channels_array_TCPPacketManager[3]=&TCPIP_addPacket__TCPPacketManager_addPacket;
-  channels_array_TCPPacketManager[4]=&TCPIP_ackPacket__TCPPacketManager_ackPacket;
-  channels_array_TCPPacketManager[5]=&TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set;
-  channels_array_TCPPacketManager[6]=&TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset;
-  channels_array_TCPPacketManager[7]=&TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire;
+  struct mwmr_s *channels_array_Classification[16];
+  channels_array_Classification[0]=&InputEngine_packet__Classification_from_IE;
+  channels_array_Classification[1]=&Classif2_from_classif__Classification_to_c2;
+  channels_array_Classification[2]=&Classif2_to_queue_low__Classification_c2_to_queue_low;
+  channels_array_Classification[3]=&Classif2_to_queue_medium__Classification_c2_to_queue_medium;
+  channels_array_Classification[4]=&Classif2_to_queue_high__Classification_c2_to_queue_high;
+  channels_array_Classification[5]=&Classif0_from_classif__Classification_to_c0;
+  channels_array_Classification[6]=&Classif0_to_queue_low__Classification_c0_to_queue_low;
+  channels_array_Classification[7]=&Classif0_to_queue_medium__Classification_c0_to_queue_medium;
+  channels_array_Classification[8]=&Classif0_to_queue_high__Classification_c0_to_queue_high;
+  channels_array_Classification[9]=&Classif1_from_classif__Classification_to_c1;
+  channels_array_Classification[10]=&Classif1_to_queue_low__Classification_c1_to_queue_low;
+  channels_array_Classification[11]=&Classif1_to_queue_medium__Classification_c1_to_queue_medium;
+  channels_array_Classification[12]=&Classif1_to_queue_high__Classification_c1_to_queue_high;
+  channels_array_Classification[13]=&Classification_queue_low__Scheduling_from_queue_low;
+  channels_array_Classification[14]=&Classification_queue_medium__Scheduling_from_queue_medium;
+  channels_array_Classification[15]=&Classification_queue_high__Scheduling_from_queue_high;
   
   ptr =malloc(sizeof(pthread_t));
-  thread__TCPPacketManager= (pthread_t)ptr;
+  thread__Classification= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
   pthread_attr_affinity(attr_t, 0);  
   
   
-  debugMsg("Starting tasks");
-  pthread_create(&thread__TCPPacketManager, attr_t, mainFunc__TCPPacketManager, (void *)channels_array_TCPPacketManager);
+  pthread_create(&thread__Classification, attr_t, mainFunc__Classification, (void *)channels_array_Classification);
   
-  struct mwmr_s *channels_array_Application[6];
-  channels_array_Application[0]=&TCPIP_receiveTCP__Application_receiveTCP;
-  channels_array_Application[1]=&Application_open__TCPIP_open;
-  channels_array_Application[2]=&Application_close__TCPIP_close;
-  channels_array_Application[3]=&Application_abort__TCPIP_abort;
-  channels_array_Application[4]=&Application_sendTCP__TCPIP_send_TCP;
-  channels_array_Application[5]=&SmartCardController_start_Application__Application_startApplication;
+  struct mwmr_s *channels_array_Classif0[4];
+  channels_array_Classif0[0]=&Classif0_from_classif__Classification_to_c0;
+  channels_array_Classif0[1]=&Classif0_to_queue_low__Classification_c0_to_queue_low;
+  channels_array_Classif0[2]=&Classif0_to_queue_medium__Classification_c0_to_queue_medium;
+  channels_array_Classif0[3]=&Classif0_to_queue_high__Classification_c0_to_queue_high;
   
   ptr =malloc(sizeof(pthread_t));
-  thread__Application= (pthread_t)ptr;
+  thread__Classif0= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
   pthread_attr_affinity(attr_t, 0);  
   
   
-  debugMsg("Starting tasks");
-  pthread_create(&thread__Application, attr_t, mainFunc__Application, (void *)channels_array_Application);
+  pthread_create(&thread__Classif0, attr_t, mainFunc__Classif0, (void *)channels_array_Classif0);
   
-  struct mwmr_s *channels_array_SmartCardController[13];
-  channels_array_SmartCardController[0]=&SmartCardController_fromTtoP__TCPIP_fromTtoP;
-  channels_array_SmartCardController[1]=&SmartCardController_fromPtoT__TCPIP_fromPtoT;
-  channels_array_SmartCardController[2]=&SmartCardController_start_TCPIP__TCPIP_start;
-  channels_array_SmartCardController[3]=&SmartCardController_reset__InterfaceDevice_reset;
-  channels_array_SmartCardController[4]=&SmartCardController_pTS__InterfaceDevice_pTS;
-  channels_array_SmartCardController[5]=&SmartCardController_dataReady__InterfaceDevice_data_Ready;
-  channels_array_SmartCardController[6]=&SmartCardController_activation__InterfaceDevice_activation;
-  channels_array_SmartCardController[7]=&SmartCardController_fromDtoSC__InterfaceDevice_fromDtoSC;
-  channels_array_SmartCardController[8]=&SmartCardController_answerToReset__InterfaceDevice_answerToReset;
-  channels_array_SmartCardController[9]=&SmartCardController_pTSCConfirm__InterfaceDevice_pTSConfirm;
-  channels_array_SmartCardController[10]=&SmartCardController_fromSCtoD__InterfaceDevice_fromSCtoD;
-  channels_array_SmartCardController[11]=&SmartCardController_data_Ready_SC__InterfaceDevice_dataReady;
-  channels_array_SmartCardController[12]=&SmartCardController_start_Application__Application_startApplication;
+  struct mwmr_s *channels_array_Classif1[4];
+  channels_array_Classif1[0]=&Classif1_from_classif__Classification_to_c1;
+  channels_array_Classif1[1]=&Classif1_to_queue_low__Classification_c1_to_queue_low;
+  channels_array_Classif1[2]=&Classif1_to_queue_medium__Classification_c1_to_queue_medium;
+  channels_array_Classif1[3]=&Classif1_to_queue_high__Classification_c1_to_queue_high;
   
   ptr =malloc(sizeof(pthread_t));
-  thread__SmartCardController= (pthread_t)ptr;
+  thread__Classif1= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
   pthread_attr_affinity(attr_t, 0);  
   
   
-  debugMsg("Starting tasks");
-  pthread_create(&thread__SmartCardController, attr_t, mainFunc__SmartCardController, (void *)channels_array_SmartCardController);
+  pthread_create(&thread__Classif1, attr_t, mainFunc__Classif1, (void *)channels_array_Classif1);
   
-  struct mwmr_s *channels_array_Timer__mainTimer__TCPIP[3];
-  channels_array_Timer__mainTimer__TCPIP[0]=&TCPIP_set__mainTimer__Timer__mainTimer__TCPIP_set;
-  channels_array_Timer__mainTimer__TCPIP[1]=&TCPIP_reset__mainTimer__Timer__mainTimer__TCPIP_reset;
-  channels_array_Timer__mainTimer__TCPIP[2]=&TCPIP_expire__mainTimer__Timer__mainTimer__TCPIP_expire;
+  struct mwmr_s *channels_array_Classif2[4];
+  channels_array_Classif2[0]=&Classif2_from_classif__Classification_to_c2;
+  channels_array_Classif2[1]=&Classif2_to_queue_low__Classification_c2_to_queue_low;
+  channels_array_Classif2[2]=&Classif2_to_queue_medium__Classification_c2_to_queue_medium;
+  channels_array_Classif2[3]=&Classif2_to_queue_high__Classification_c2_to_queue_high;
   
   ptr =malloc(sizeof(pthread_t));
-  thread__Timer__mainTimer__TCPIP= (pthread_t)ptr;
+  thread__Classif2= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
   pthread_attr_affinity(attr_t, 0);  
   
   
-  debugMsg("Starting tasks");
-  pthread_create(&thread__Timer__mainTimer__TCPIP, attr_t, mainFunc__Timer__mainTimer__TCPIP, (void *)channels_array_Timer__mainTimer__TCPIP);
+  pthread_create(&thread__Classif2, attr_t, mainFunc__Classif2, (void *)channels_array_Classif2);
   
-  struct mwmr_s *channels_array_Timer__timerP__TCPPacketManager[3];
-  channels_array_Timer__timerP__TCPPacketManager[0]=&TCPPacketManager_set__timerP__Timer__timerP__TCPPacketManager_set;
-  channels_array_Timer__timerP__TCPPacketManager[1]=&TCPPacketManager_reset__timerP__Timer__timerP__TCPPacketManager_reset;
-  channels_array_Timer__timerP__TCPPacketManager[2]=&TCPPacketManager_expire__timerP__Timer__timerP__TCPPacketManager_expire;
+  struct mwmr_s *channels_array_Scheduling[8];
+  channels_array_Scheduling[0]=&Scheduling_packet__OutputEngine_packet;
+  channels_array_Scheduling[1]=&Classification_queue_low__Scheduling_from_queue_low;
+  channels_array_Scheduling[2]=&Classification_queue_medium__Scheduling_from_queue_medium;
+  channels_array_Scheduling[3]=&Classification_queue_high__Scheduling_from_queue_high;
+  channels_array_Scheduling[4]=&Sched0_toScheduler0__Scheduling_to_scheduler0;
+  channels_array_Scheduling[5]=&Sched0_scheduledPacket0__Scheduling_scheduledPacket0;
+  channels_array_Scheduling[6]=&Sched1_toScheduler1__Scheduling_to_scheduler1;
+  channels_array_Scheduling[7]=&Sched1_scheduledPacket1__Scheduling_scheduledPacket1;
   
   ptr =malloc(sizeof(pthread_t));
-  thread__Timer__timerP__TCPPacketManager= (pthread_t)ptr;
+  thread__Scheduling= (pthread_t)ptr;
   attr_t = malloc(sizeof(pthread_attr_t));
   pthread_attr_affinity(attr_t, 0);  
   
   
-  debugMsg("Starting tasks");
-  pthread_create(&thread__Timer__timerP__TCPPacketManager, attr_t, mainFunc__Timer__timerP__TCPPacketManager, (void *)channels_array_Timer__timerP__TCPPacketManager);
+  pthread_create(&thread__Scheduling, attr_t, mainFunc__Scheduling, (void *)channels_array_Scheduling);
+  
+  struct mwmr_s *channels_array_Sched1[2];
+  channels_array_Sched1[0]=&Sched1_toScheduler1__Scheduling_to_scheduler1;
+  channels_array_Sched1[1]=&Sched1_scheduledPacket1__Scheduling_scheduledPacket1;
+  
+  ptr =malloc(sizeof(pthread_t));
+  thread__Sched1= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  pthread_attr_affinity(attr_t, 0);  
+  
+  
+  pthread_create(&thread__Sched1, attr_t, mainFunc__Sched1, (void *)channels_array_Sched1);
+  
+  struct mwmr_s *channels_array_Sched0[2];
+  channels_array_Sched0[0]=&Sched0_toScheduler0__Scheduling_to_scheduler0;
+  channels_array_Sched0[1]=&Sched0_scheduledPacket0__Scheduling_scheduledPacket0;
+  
+  ptr =malloc(sizeof(pthread_t));
+  thread__Sched0= (pthread_t)ptr;
+  attr_t = malloc(sizeof(pthread_attr_t));
+  pthread_attr_affinity(attr_t, 0);  
+  
+  
+  pthread_create(&thread__Sched0, attr_t, mainFunc__Sched0, (void *)channels_array_Sched0);
   
   
   
-  debugMsg("Joining tasks");
-  pthread_join(thread__InterfaceDevice, NULL);
-  pthread_join(thread__SmartCard, NULL);
-  pthread_join(thread__TCPIP, NULL);
-  pthread_join(thread__TCPPacketManager, NULL);
-  pthread_join(thread__Application, NULL);
-  pthread_join(thread__SmartCardController, NULL);
-  pthread_join(thread__Timer__mainTimer__TCPIP, NULL);
-  pthread_join(thread__Timer__timerP__TCPPacketManager, NULL);
+  pthread_join(thread__Bootstrap, NULL);
+  pthread_join(thread__OutputEngine, NULL);
+  pthread_join(thread__InputEngine, NULL);
+  pthread_join(thread__Classification, NULL);
+  pthread_join(thread__Classif0, NULL);
+  pthread_join(thread__Classif1, NULL);
+  pthread_join(thread__Classif2, NULL);
+  pthread_join(thread__Scheduling, NULL);
+  pthread_join(thread__Sched1, NULL);
+  pthread_join(thread__Sched0, NULL);
   
   
-  debugMsg("Application terminated");
   return 0;
   
 }

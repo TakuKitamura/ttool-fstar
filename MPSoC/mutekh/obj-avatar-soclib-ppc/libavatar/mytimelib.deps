@@ -8,7 +8,7 @@
  /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/types.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/include/arch/hexo/types.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/error.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/mytimelib.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/mytimelib.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/sys/time.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/random.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/debug.h
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/random.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/debug.h

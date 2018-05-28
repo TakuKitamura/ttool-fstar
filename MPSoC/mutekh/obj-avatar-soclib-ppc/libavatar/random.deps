@@ -16,9 +16,9 @@
  /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/time.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/sys/types.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/limits.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/random.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/debug.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/random.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/debug.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libm/include/math.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libm/include/fdlibm.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/mytimelib.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/mytimelib.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/sys/time.h

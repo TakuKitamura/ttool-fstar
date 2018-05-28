@@ -79,12 +79,14 @@
  /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/random.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/tracemanager.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/mwmr.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/InterfaceDevice.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Bootstrap.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/main.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/SmartCard.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/TCPIP.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/TCPPacketManager.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Application.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/SmartCardController.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Timer__mainTimer__TCPIP.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Timer__timerP__TCPPacketManager.h
+ /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/OutputEngine.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/InputEngine.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Classification.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Classif0.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Classif1.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Classif2.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Scheduling.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Sched1.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/examples/avatar/Sched0.h

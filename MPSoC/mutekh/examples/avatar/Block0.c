@@ -33,14 +33,13 @@ void *mainFunc__Block0(struct mwmr_s *channels_Block0[]){
   while(__currentState != STATE__STOP__STATE) {
     switch(__currentState) {
       case STATE__START__STATE: 
-      debug2Msg(__myname, "-> (=====) Entering state + state0");
       __currentState = STATE__state0;
       break;
       
       case STATE__state0: 
       debug2Msg(__myname, "-> (=====)before MakeNewRequest");
       debugInt("channel address", &__req0);
-      makeNewRequest(&__req0, 18, SEND_ASYNC_REQUEST, 0, 0, 0, 0, __params0);
+      makeNewRequest(&__req0, 128, SEND_ASYNC_REQUEST, 0, 0, 0, 0, __params0);
       debug2Msg(__myname, "-> (=====)after MakeNewRequest");
       __req0.asyncChannel = &__Block0_val__Block1_val;
       debug2Msg(__myname, "-> (=====)before executeOneRequest");

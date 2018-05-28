@@ -46,7 +46,6 @@ void *mainFunc__Sched1(struct mwmr_s *channels_Sched1[]){
   while(__currentState != STATE__STOP__STATE) {
     switch(__currentState) {
       case STATE__START__STATE: 
-      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       
@@ -63,7 +62,6 @@ void *mainFunc__Sched1(struct mwmr_s *channels_Sched1[]){
       __returnRequest = executeOneRequest(&__list, &__req0);
       debug2Msg(__myname, "-> (=====)after executeOneRequest");
       clearListOfRequests(&__list);
-      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       
@@ -80,7 +78,6 @@ void *mainFunc__Sched1(struct mwmr_s *channels_Sched1[]){
       __returnRequest = executeOneRequest(&__list, &__req0);
       debug2Msg(__myname, "-> (=====)after executeOneRequest");
       clearListOfRequests(&__list);
-      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       
@@ -120,24 +117,20 @@ void *mainFunc__Sched1(struct mwmr_s *channels_Sched1[]){
       __returnRequest = executeListOfRequests(&__list);
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
-        debug2Msg(__myname, "-> (=====) Entering state + PriorityLow");
         __currentState = STATE__PriorityLow;
         
       }
       else  if (__returnRequest == &__req1) {
-        debug2Msg(__myname, "-> (=====) Entering state + PriorityMedium");
         __currentState = STATE__PriorityMedium;
         
       }
       else  if (__returnRequest == &__req2) {
-        debug2Msg(__myname, "-> (=====) Entering state + PriorityHigh");
         __currentState = STATE__PriorityHigh;
         
       }
       break;
       
       case STATE__Enqueue: 
-      debug2Msg(__myname, "-> (=====) Entering state + choice__0");
       __currentState = STATE__choice__0;
       break;
       
@@ -150,7 +143,6 @@ void *mainFunc__Sched1(struct mwmr_s *channels_Sched1[]){
       __returnRequest = executeOneRequest(&__list, &__req0);
       debug2Msg(__myname, "-> (=====)after executeOneRequest");
       clearListOfRequests(&__list);
-      debug2Msg(__myname, "-> (=====) Entering state + Enqueue");
       __currentState = STATE__Enqueue;
       break;
       

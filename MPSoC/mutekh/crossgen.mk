@@ -25,10 +25,15 @@
 #### LINE 25 IS HERE ####
 
 # Target architecture
-TARGET=mipsel
+#TARGET=mipsel
+#TARGET=nios2
+#TARGET=microblaze
+TARGET= powerpc
 
 # Install PATH
-PREFIX=/opt/mutekh
+#PREFIX=/opt/mutekh
+#PREFIX=/users/enseig/genius/Prog/mutekh/microblaze
+PREFIX=/users/cao/rporto/MPSoC/mutekh
 
 # Temp directory
 WORKDIR=/tmp/crossgen
@@ -161,7 +166,7 @@ gmp_URL=ftp://ftp.gnu.org/gnu/gmp/$(gmp_ARCHIVE)
 gmp_TESTBIN=lib/libgmp.a
 
 mpc_ARCHIVE=mpc-$(mpc_VER).tar.gz
-mpc_URL=http://www.multiprecision.org/mpc/download/$(mpc_ARCHIVE)
+mpc_URL=http://www.multiprecision.org/downloads/$(mpc_ARCHIVE)
 mpc_TESTBIN=lib/libmpc.a
 mpc_DEPS=mpfr gmp
 mpc_CONF+=--with-mpfr=$(PREFIX) --with-gmp=$(PREFIX)
