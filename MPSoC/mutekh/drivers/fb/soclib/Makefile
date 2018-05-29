@@ -1,3 +1,0 @@
-objs =											\
-fb-soclib.o
-

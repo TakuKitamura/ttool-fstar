@@ -56,5 +56,5 @@
  /users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/gpct/include/gpct/_cont_lists.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/interrupt.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/mutek/include/mutek/rwlock.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/message.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/myerrors.h
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/message.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/myerrors.h

@@ -538,7 +538,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
                 if (avddspec == null) {
                     jta.append("Error: No AVATAR Deployemnt specification\n");
                 } else {
-                    //System.err.println("**AVATAR TOPCELL found");
+                    System.err.println("**AVATAR TOPCELL found");
 
                     TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec, tracemode.isSelected(), avspec);
                     testGo();
@@ -546,10 +546,10 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
                     try {
                         jta.append("Saving  MPSoC code in files\n");
-                        //System.err.println("Saving MPSoC code in files\n");
+                        System.err.println("Saving MPSoC code in files\n");
                         pathCode = code2.getText();
 
-                        //System.err.println("AVATAR TOPCELL saved in " + code2.getText());
+                        System.err.println("AVATAR TOPCELL saved in " + code2.getText());
                         topCellGenerator.saveFile(pathCode);
 
                         jta.append("Code saved\n");
@@ -613,7 +613,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
                     if (avddspec == null) {
                         jta.append("Error: No AVATAR Deployment specification\n");
                     } else {
-                        //System.err.println("AVATAR TOPCELL found");
+                        System.err.println("AVATAR TOPCELL found");
                     }
 
                     TopCellGenerator topCellGenerator = new TopCellGenerator(avddspec, tracemode.isSelected(), avspec);

@@ -1,4 +1,0 @@
-
-objs = tty-soclib.o
-
-

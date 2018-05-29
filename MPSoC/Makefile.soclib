@@ -1,1 +1,0 @@
-objs = main.o Bootstrap.o OutputEngine.o InputEngine.o Classification.o Classif0.o Classif1.o Classif2.o Scheduling.o Sched1.o Sched0.o 
