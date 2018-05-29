@@ -1,0 +1,42 @@
+
+
+  %set OUTPUT_NAME avatar
+
+  # New source code module to be compiled
+  %append MODULES $(OUTPUT_NAME):$(CONFIGPATH)
+
+  # Application license
+  CONFIG_LICENSE_APP_LGPL
+
+  # Libs
+  CONFIG_PTHREAD
+  CONFIG_PTHREAD_MAIN
+  CONFIG_PTHREAD_TIME
+
+#ajoute DG
+CONFIG_PTHREAD_ATTRIBUTES
+#ajoute DG
+
+  CONFIG_PTHREAD_STACK_SIZE 32768
+  CONFIG_LIBC_STREAM_STD
+#  CONFIG_MUTEK_TIMER undefined
+  CONFIG_LIBAVATAR
+  CONFIG_HEXO_INTTYPES_DEPRECATED undefined
+  CONFIG_LIBM
+  CONFIG_LIBC_STREAM
+  CONFIG_VFS
+#ajoute DG
+ CONFIG_MWMR
+ CONFIG_MWMR_SOCLIB
+ #CONFIG_SRL
+ #CONFIG_SRL_SOCLIB
+#fin ajoute DG
+  CONFIG_MUTEK_SCHEDULER_STATIC
+
+%include $(SRC_DIR)/examples/common/build_options.conf
+%include $(SRC_DIR)/examples/common/platforms.conf
+
+  # inter-processor interrupts
+  CONFIG_HEXO_IPI
+#  CONFIG_ARCH_SMP undefined
+  CONFIG_CPU_MAXCOUNT 5

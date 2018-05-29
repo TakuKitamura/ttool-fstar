@@ -1,1 +1,1 @@
-objs = main.o Bootstrap.o OutputEngine.o InputEngine.o Classification.o Classif0.o Classif1.o Classif2.o Scheduling.o Sched1.o Sched0.o 
+objs = main.o InterfaceDevice.o SmartCard.o TCPIP.o TCPPacketManager.o Application.o SmartCardController.o Timer__mainTimer__TCPIP.o Timer__timerP__TCPPacketManager.o 

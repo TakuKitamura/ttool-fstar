@@ -158,8 +158,8 @@ tmpl(void)::handle_txn(const VciLoggerElem<vci_param> &elem, const mwmr_info_t &
         
         //prefix(elem, mwmr) << "WDATA" << std::hex<< wdata<<std::endl;
        
-        //if ( wdata == 0x1) {  
-            if ( wdata >= 1 ) {  
+        if ( wdata == 0x1) {  
+            //if ( wdata >= 1 ) {  
             if ( rdata == vci_param::STORE_COND_ATOMIC ){ 
                
                 prefix(elem, mwmr) << "lock_take" << std::endl;

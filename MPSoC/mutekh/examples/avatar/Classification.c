@@ -93,6 +93,7 @@ void *mainFunc__Classification(struct mwmr_s *channels_Classification[]){
   while(__currentState != STATE__STOP__STATE) {
     switch(__currentState) {
       case STATE__START__STATE: 
+      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       
@@ -151,46 +152,55 @@ void *mainFunc__Classification(struct mwmr_s *channels_Classification[]){
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
         f2 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + High");
         __currentState = STATE__High;
         
       }
       else  if (__returnRequest == &__req1) {
         f1 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + High");
         __currentState = STATE__High;
         
       }
       else  if (__returnRequest == &__req2) {
         f0 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + High");
         __currentState = STATE__High;
         
       }
       else  if (__returnRequest == &__req3) {
         f0 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Medium");
         __currentState = STATE__Medium;
         
       }
       else  if (__returnRequest == &__req4) {
         f0 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Low");
         __currentState = STATE__Low;
         
       }
       else  if (__returnRequest == &__req5) {
         f2 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Medium");
         __currentState = STATE__Medium;
         
       }
       else  if (__returnRequest == &__req6) {
         f2 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Low");
         __currentState = STATE__Low;
         
       }
       else  if (__returnRequest == &__req7) {
         f1 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Medium");
         __currentState = STATE__Medium;
         
       }
       else  if (__returnRequest == &__req8) {
         f1 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Low");
         __currentState = STATE__Low;
         
       }
@@ -236,22 +246,26 @@ void *mainFunc__Classification(struct mwmr_s *channels_Classification[]){
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
         f0 = false;
+        debug2Msg(__myname, "-> (=====) Entering state + state1");
         __currentState = STATE__state1;
         
       }
       else  if (__returnRequest == &__req1) {
         f2 = false;
+        debug2Msg(__myname, "-> (=====) Entering state + state1");
         __currentState = STATE__state1;
         
       }
       else  if (__returnRequest == &__req2) {
         f1 = false;
+        debug2Msg(__myname, "-> (=====) Entering state + state1");
         __currentState = STATE__state1;
         
       }
       break;
       
       case STATE__state1: 
+      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       
@@ -315,51 +329,61 @@ void *mainFunc__Classification(struct mwmr_s *channels_Classification[]){
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
         f2 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + High");
         __currentState = STATE__High;
         
       }
       else  if (__returnRequest == &__req1) {
         f1 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + High");
         __currentState = STATE__High;
         
       }
       else  if (__returnRequest == &__req2) {
         f0 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + High");
         __currentState = STATE__High;
         
       }
       else  if (__returnRequest == &__req3) {
         f2 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Medium");
         __currentState = STATE__Medium;
         
       }
       else  if (__returnRequest == &__req4) {
         f1 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Medium");
         __currentState = STATE__Medium;
         
       }
       else  if (__returnRequest == &__req5) {
         f0 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Medium");
         __currentState = STATE__Medium;
         
       }
       else  if (__returnRequest == &__req6) {
         f2 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Low");
         __currentState = STATE__Low;
         
       }
       else  if (__returnRequest == &__req7) {
         f1 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Low");
         __currentState = STATE__Low;
         
       }
       else  if (__returnRequest == &__req8) {
         f0 = true;
+        debug2Msg(__myname, "-> (=====) Entering state + Low");
         __currentState = STATE__Low;
         
       }
       else  if (__returnRequest == &__req9) {
         waitFor((10)*1000, (20)*1000);
+        debug2Msg(__myname, "-> (=====) Entering state + sendPacket");
         __currentState = STATE__sendPacket;
         
       }
@@ -390,10 +414,12 @@ void *mainFunc__Classification(struct mwmr_s *channels_Classification[]){
       __returnRequest = executeListOfRequests(&__list);
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
+        debug2Msg(__myname, "-> (=====) Entering state + Waiting");
         __currentState = STATE__Waiting;
         
       }
       else  if (__returnRequest == &__req1) {
+        debug2Msg(__myname, "-> (=====) Entering state + Waiting");
         __currentState = STATE__Waiting;
         
       }
@@ -424,10 +450,12 @@ void *mainFunc__Classification(struct mwmr_s *channels_Classification[]){
       __returnRequest = executeListOfRequests(&__list);
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
+        debug2Msg(__myname, "-> (=====) Entering state + Waiting");
         __currentState = STATE__Waiting;
         
       }
       else  if (__returnRequest == &__req1) {
+        debug2Msg(__myname, "-> (=====) Entering state + Waiting");
         __currentState = STATE__Waiting;
         
       }
@@ -450,10 +478,12 @@ void *mainFunc__Classification(struct mwmr_s *channels_Classification[]){
       __returnRequest = executeListOfRequests(&__list);
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
+        debug2Msg(__myname, "-> (=====) Entering state + recQueue");
         __currentState = STATE__recQueue;
         
       }
       else  if (__returnRequest == &__req1) {
+        debug2Msg(__myname, "-> (=====) Entering state + WaitForPacket");
         __currentState = STATE__WaitForPacket;
         
       }
@@ -484,10 +514,12 @@ void *mainFunc__Classification(struct mwmr_s *channels_Classification[]){
       __returnRequest = executeListOfRequests(&__list);
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
+        debug2Msg(__myname, "-> (=====) Entering state + Waiting");
         __currentState = STATE__Waiting;
         
       }
       else  if (__returnRequest == &__req1) {
+        debug2Msg(__myname, "-> (=====) Entering state + Waiting");
         __currentState = STATE__Waiting;
         
       }

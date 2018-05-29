@@ -39,6 +39,7 @@ void *mainFunc__OutputEngine(struct mwmr_s *channels_OutputEngine[]){
   while(__currentState != STATE__STOP__STATE) {
     switch(__currentState) {
       case STATE__START__STATE: 
+      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       
@@ -54,6 +55,7 @@ void *mainFunc__OutputEngine(struct mwmr_s *channels_OutputEngine[]){
       __returnRequest = executeOneRequest(&__list, &__req0);
       debug2Msg(__myname, "-> (=====)after executeOneRequest");
       clearListOfRequests(&__list);
+      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       
@@ -67,6 +69,7 @@ void *mainFunc__OutputEngine(struct mwmr_s *channels_OutputEngine[]){
       __returnRequest = executeOneRequest(&__list, &__req0);
       debug2Msg(__myname, "-> (=====)after executeOneRequest");
       clearListOfRequests(&__list);
+      debug2Msg(__myname, "-> (=====) Entering state + FreePacket");
       __currentState = STATE__FreePacket;
       break;
       

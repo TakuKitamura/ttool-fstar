@@ -60,6 +60,7 @@ void *mainFunc__Scheduling(struct mwmr_s *channels_Scheduling[]){
   while(__currentState != STATE__STOP__STATE) {
     switch(__currentState) {
       case STATE__START__STATE: 
+      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       
@@ -88,10 +89,12 @@ void *mainFunc__Scheduling(struct mwmr_s *channels_Scheduling[]){
       __returnRequest = executeListOfRequests(&__list);
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
+        debug2Msg(__myname, "-> (=====) Entering state + Waiting");
         __currentState = STATE__Waiting;
         
       }
       else  if (__returnRequest == &__req1) {
+        debug2Msg(__myname, "-> (=====) Entering state + Waiting");
         __currentState = STATE__Waiting;
         
       }
@@ -110,6 +113,7 @@ void *mainFunc__Scheduling(struct mwmr_s *channels_Scheduling[]){
       __returnRequest = executeOneRequest(&__list, &__req0);
       debug2Msg(__myname, "-> (=====)after executeOneRequest");
       clearListOfRequests(&__list);
+      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       
@@ -147,22 +151,27 @@ void *mainFunc__Scheduling(struct mwmr_s *channels_Scheduling[]){
       __returnRequest = executeListOfRequests(&__list);
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
+        debug2Msg(__myname, "-> (=====) Entering state + SendToOutput");
         __currentState = STATE__SendToOutput;
         
       }
       else  if (__returnRequest == &__req1) {
+        debug2Msg(__myname, "-> (=====) Entering state + SendToOutput");
         __currentState = STATE__SendToOutput;
         
       }
       else  if (__returnRequest == &__req2) {
+        debug2Msg(__myname, "-> (=====) Entering state + Read");
         __currentState = STATE__Read;
         
       }
       else  if (__returnRequest == &__req3) {
+        debug2Msg(__myname, "-> (=====) Entering state + Read");
         __currentState = STATE__Read;
         
       }
       else  if (__returnRequest == &__req4) {
+        debug2Msg(__myname, "-> (=====) Entering state + Read");
         __currentState = STATE__Read;
         
       }
@@ -170,6 +179,7 @@ void *mainFunc__Scheduling(struct mwmr_s *channels_Scheduling[]){
       
       case STATE__Read: 
       waitFor((50)*1000, (50)*1000);
+      debug2Msg(__myname, "-> (=====) Entering state + Dispatch");
       __currentState = STATE__Dispatch;
       break;
       

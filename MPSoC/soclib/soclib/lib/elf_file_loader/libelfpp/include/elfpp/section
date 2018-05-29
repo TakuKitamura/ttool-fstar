@@ -1,4 +1,0 @@
-
-#include "elfpp_section.hh"
-#include "elfpp_section.hxx"
-
