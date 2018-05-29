@@ -111,7 +111,7 @@ public class ClusterCode {
 			filename = filename + "tb";
 			
 			corpsCluster = corpsCluster + "\t// Configure signal tracing." + CR 
-					+ "\tsca_trace_file* tfp = sca_create_tabular_trace_file(\"" + filename +"\");" + CR;
+					+ "\tsca_trace_file* tfp = sca_create_tabular_trace_file(\"" + cluster.getClusterName() + "_tb\");" + CR;
 			
 			nb_con = 1;
 			for (int i = 0; i < connectors.size(); i++) {
