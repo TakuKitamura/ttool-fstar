@@ -1,0 +1,47 @@
+SOCLIB_CPU=ppc
+MUTEKH_CPU=ppc
+
+#SOCLIB_CPU=mips32el
+#MUTEKH_CPU=mips
+
+include generated_topcell/procinfo.mk
+
+#SOCLIB_CPU=sparcv8
+#MUTEKH_CPU=sparc
+#SOCLIB_CPU_COUNT=1
+
+PATH+=/opt/mutekh/bin
+export PATH
+
+updateruntime:
+	cp mutekh/libmwmr/*.c mutekh/examples/avatar
+	cp mutekh/libmwmr/include/mwmr/mwmr.h mutekh/examples/avatar
+	cp src/*.c ~/TTool/MPSoC/mutekh/libavatar/
+	cp src/*.h ~/TTool/MPSoC/mutekh/libavatar/include/  
+
+	
+updategeneratedcode:
+	cp src/defs.h mutekh/examples/avatar
+	cp generated_src/*.h mutekh/examples/avatar 
+	cp generated_src/*.c mutekh/examples/avatar 
+	cp Makefile.soclib mutekh/examples/avatar/Makefile
+
+compilesoclib:
+	cp generated_topcell/top.cc  soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/
+	cp generated_topcell/deployinfo.h  mutekh/arch/soclib/
+	cp generated_topcell/deployinfo_map.h  mutekh/arch/soclib/
+	cp generated_topcell/deployinfo_ram.h  mutekh/arch/soclib/
+	cp generated_topcell/platform_desc  soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/platform_desc
+	cat generated_topcell/config_noproc generated_topcell/nbproc > generated_topcell/config 
+	cp generated_topcell/config  mutekh/examples/avatar/
+	cd mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial
+
+runsoclib-trace:
+	echo "running soclib"
+	cd soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ../../../../../mutekh/avatar-soclib-$(MUTEKH_CPU).out > ../../../../trace
+
+runsoclib:
+	echo "running soclib"
+	cd soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ../../../../../mutekh/avatar-soclib-$(MUTEKH_CPU).out
+	
+allsoclib: updateruntime updategeneratedcode compilesoclib runsoclib

@@ -1,0 +1,36 @@
+
+
+  %set OUTPUT_NAME avatar
+
+  # New source code module to be compiled
+  %append MODULES $(OUTPUT_NAME):$(CONFIGPATH)
+
+  # Application license
+  CONFIG_LICENSE_APP_LGPL
+
+# Libs
+  CONFIG_PTHREAD
+  CONFIG_PTHREAD_MAIN
+  CONFIG_PTHREAD_TIME
+
+  CONFIG_PTHREAD_ATTRIBUTES
+
+  CONFIG_PTHREAD_STACK_SIZE 32768
+  CONFIG_LIBC_STREAM_STD
+
+  CONFIG_LIBAVATAR
+  CONFIG_HEXO_INTTYPES_DEPRECATED undefined
+  CONFIG_LIBM
+  CONFIG_LIBC_STREAM
+  CONFIG_VFS
+  CONFIG_MWMR
+  CONFIG_MWMR_SOCLIB
+  CONFIG_MUTEK_SCHEDULER_STATIC
+
+%include $(SRC_DIR)/examples/common/build_options.conf
+%include $(SRC_DIR)/examples/common/platforms.conf
+
+# inter-processor interrupts
+  CONFIG_HEXO_IPI
+
+  CONFIG_ARCH_SMP

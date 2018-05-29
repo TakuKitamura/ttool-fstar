@@ -273,7 +273,7 @@ Tools:
 
 Using built-in specs.
 COLLECT_GCC=powerpc-unknown-elf-gcc
-COLLECT_LTO_WRAPPER=/users/enseig/genius/TTool/MPSoC/mutekh/bin/../libexec/gcc/powerpc-unknown-elf/4.5.2/lto-wrapper
+COLLECT_LTO_WRAPPER=/users/enseig/genius/Prog/mutekh/bin/../libexec/gcc/powerpc-unknown-elf/4.5.2/lto-wrapper
 Target: powerpc-unknown-elf
 Configured with: /tmp/crossgen/gcc-4.5.2/configure MAKEINFO='makeinfo --version' --disable-nls --prefix=/users/cao/becoulet/mutekh/tools/ --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/becoulet/mutekh/tools/ --with-gmp=/users/cao/becoulet/mutekh/tools/ --with-mpc=/users/cao/becoulet/mutekh/tools/ : (reconfigured) /tmp/crossgen/gcc-4.5.2/configure MAKEINFO='makeinfo --version' --disable-nls --prefix=/users/cao/becoulet/mutekh/tools/ --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/becoulet/mutekh/tools/ --with-gmp=/users/cao/becoulet/mutekh/tools/ --with-mpc=/users/cao/becoulet/mutekh/tools/
 Thread model: single
@@ -305,7 +305,7 @@ Environment:
 > CONF=examples/avatar/config
 > CURRENT_DIR=/users/enseig/genius/TTool/MPSoC/mutekh
 > CVS_RSH=ssh
-> DISPLAY=localhost:10.0
+> DISPLAY=localhost:11.0
 > G_BROKEN_FILENAMES=1
 > GROUP=cadres
 > HOME=/users/enseig/genius
@@ -337,7 +337,7 @@ Environment:
 > MUTEK_SRC_DIR=/users/enseig/genius/TTool/MPSoC/mutekh
 > NNTPSERVER=asim
 > OSTYPE=linux
-> PATH=.:/users/enseig/genius/tools/shtools:/usr/ucb:/bin:/usr/bin:/etc:/usr/openwin/bin:/usr/local/bin:/usr/etc:/usr/X11R6/bin:/asim/alliance/bin:/asim/gnu/bin:/labo/gnu/bin:/labo/bin:/labo/TeX/bin:/users/enseig/genius/bin:/users/enseig/genius/TTool/MPSoC/soclib/utils/bin:/users/enseig/genius/TTool/MPSoC/mutekh/bin:/opt/gcc-cross-mipsel/4.3.3/bin/:/cxtools/gcc_mips/obj/bin/:/users/enseig/genius/bin:/users/enseig/genius/Prog/soclib/utils/bin:/users/enseig/genius/Prog/mutekh/bin:/opt/gcc-cross-mipsel/4.3.3/bin/:/cxtools/gcc_mips/obj/bin/
+> PATH=.:/users/enseig/genius/tools/shtools:/usr/ucb:/bin:/usr/bin:/etc:/usr/openwin/bin:/usr/local/bin:/usr/etc:/usr/X11R6/bin:/asim/alliance/bin:/asim/gnu/bin:/labo/gnu/bin:/labo/bin:/labo/TeX/bin:/users/enseig/genius/bin:/users/enseig/genius/Prog/soclib/utils/bin:/users/enseig/genius/Prog/mutekh/bin:/opt/gcc-cross-mipsel/4.3.3/bin/:/cxtools/gcc_mips/obj/bin/:/users/enseig/genius/bin:/users/enseig/genius/TTool/MPSoC/soclib/utils/bin:/users/enseig/genius/TTool/MPSoC/mutekh/bin:/opt/gcc-cross-mipsel/4.3.3/bin/:/cxtools/gcc_mips/obj/bin/
 > PWD=/users/enseig/genius/TTool/MPSoC/mutekh
 > PYTHONPATH=/users/enseig/genius/dsx/lib/python
 > QTDIR=/usr/lib64/qt-3.3
@@ -345,10 +345,10 @@ Environment:
 > QTLIB=/usr/lib64/qt-3.3/lib
 > REMOTEHOST=padme
 > SHELL=/bin/tcsh
-> SHLVL=3
-> SSH_CLIENT=132.227.103.87 37554 22
-> SSH_CONNECTION=132.227.103.87 37554 132.227.67.142 22
-> SSH_TTY=/dev/pts/0
+> SHLVL=4
+> SSH_CLIENT=132.227.103.87 52708 22
+> SSH_CONNECTION=132.227.103.87 52708 132.227.67.142 22
+> SSH_TTY=/dev/pts/1
 > TERM=xterm
 > USER_DIR=/users/enseig/genius/TTool/MPSoC/mutekh
 > USER=genius
@@ -356,5 +356,914 @@ Environment:
 > VENDOR=unknown
 > XMODIFIERS=@im=none
 
-================ finished on mar. mai 15 15:46:18 CEST 2018
+================ finished on ven. mai 25 15:56:20 CEST 2018
+
+
+Tools:
+
+Using built-in specs.
+COLLECT_GCC=powerpc-unknown-elf-gcc
+COLLECT_LTO_WRAPPER=/users/enseig/genius/Prog/mutekh/bin/../libexec/gcc/powerpc-unknown-elf/4.5.2/lto-wrapper
+Target: powerpc-unknown-elf
+Configured with: /tmp/crossgen/gcc-4.5.2/configure MAKEINFO='makeinfo --version' --disable-nls --prefix=/users/cao/becoulet/mutekh/tools/ --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/becoulet/mutekh/tools/ --with-gmp=/users/cao/becoulet/mutekh/tools/ --with-mpc=/users/cao/becoulet/mutekh/tools/ : (reconfigured) /tmp/crossgen/gcc-4.5.2/configure MAKEINFO='makeinfo --version' --disable-nls --prefix=/users/cao/becoulet/mutekh/tools/ --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/becoulet/mutekh/tools/ --with-gmp=/users/cao/becoulet/mutekh/tools/ --with-mpc=/users/cao/becoulet/mutekh/tools/
+Thread model: single
+gcc version 4.5.2 (GCC) 
+GNU ld (GNU Binutils) 2.20.1.20100303
+  Supported emulations:
+   elf32ppc
+   elf32ppclinux
+   elf32ppcsim
+
+
+Repository:
+
+svn: '/users/enseig/genius/TTool/MPSoC/mutekh' n'est pas une copie de travail
+/bin/sh: hg : commande introuvable
+
+
+Environment:
+
+
+================ finished on ven. mai 25 16:05:48 CEST 2018
+
+Flattened build configuration file:
+
+  CONFIG_ARCH_DEVICE_TREE defined
+  CONFIG_ARCH_SMP defined
+  CONFIG_ARCH_SOCLIB defined
+  CONFIG_COMPILE_DEBUG defined
+  CONFIG_COMPILE_OPTIMIZE 2
+  CONFIG_CPU_MAXCOUNT 2
+  CONFIG_CPU_PPC_SOCLIB defined
+  CONFIG_CPU_RESET_HANDLER defined
+  CONFIG_DRIVER_BLOCK_SOCLIB defined
+  CONFIG_DRIVER_CHAR_SOCLIBTTY defined
+  CONFIG_DRIVER_ICU_SOCLIB defined
+  CONFIG_DRIVER_ICU_SOCLIB_XICU defined
+  CONFIG_DRIVER_TIMER_SOCLIB defined
+  CONFIG_FDT defined
+  CONFIG_HEXO_INTTYPES_DEPRECATED undefined
+  CONFIG_HEXO_IPI defined
+  CONFIG_LIBC_STREAM defined
+  CONFIG_LIBC_STREAM_STD defined
+  CONFIG_LIBM defined
+  CONFIG_LICENSE_APP_LGPL defined
+  CONFIG_MUTEK_PRINTK_KEEP_EARLY defined
+  CONFIG_MUTEK_SCHEDULER_STATIC defined
+  CONFIG_MWMR defined
+  CONFIG_MWMR_SOCLIB defined
+  CONFIG_PTHREAD defined
+  CONFIG_PTHREAD_ATTRIBUTES defined
+  CONFIG_PTHREAD_MAIN defined
+  CONFIG_PTHREAD_STACK_SIZE 32768
+  CONFIG_PTHREAD_TIME defined
+  CONFIG_RAM_ADDR 0x7f000000
+  CONFIG_RAM_SIZE 0x01000000
+  CONFIG_ROM_ADDR 0x60000000
+  CONFIG_ROM_SIZE 0x00100000
+  CONFIG_SOCLIB_EARLY_CONSOLE defined
+  CONFIG_SOCLIB_EARLY_CONSOLE_ADDR 0xd0200000
+  CONFIG_VFS defined
+
+Initialization order:
+
+
+Configuration used:
+
+       Configuration token name                 Value            Declare location 
+================================================================================
+
+       CONFIG_ARCH_CLUSTER                      undefined        arch.config:11   
+ + U   CONFIG_ARCH_DEVICE_TREE                  defined          arch.config:89   
+   X   CONFIG_ARCH_EMU                          undefined        emu.config:2     
+   X   CONFIG_ARCH_GAISLER                      undefined        gaisler.config:2 
+       CONFIG_ARCH_HW_INIT                      undefined        arch.config:76   
+       CONFIG_ARCH_HW_INIT_USER                 undefined        arch.config:83   
+   X   CONFIG_ARCH_IBMPC                        undefined        ibmpc.config:2   
+ + U   CONFIG_ARCH_SMP                          defined          arch.config:2    
+ + XU  CONFIG_ARCH_SOCLIB                       defined          soclib.config:2  
+       CONFIG_ARCH_SOCLIB_BOOTLOADER_MUTEKH     undefined        soclib.config:70 
+       CONFIG_ARCH_SOCLIB_RAMLOCK               undefined        soclib.config:45 
+       CONFIG_ARCH_SOCLIB_VCACHE_32             undefined        soclib.config:27 
+       CONFIG_ARCH_SOCLIB_VCACHE_40             undefined        soclib.config:36 
+   X   CONFIG_CAPSULE                           undefined        capsule.config:2 
+       CONFIG_COMPILE_COLLECT                   undefined        global.config:20 
+ + U   CONFIG_COMPILE_DEBUG                     defined          global.config:25 
+ +     CONFIG_COMPILE_FRAMEPTR                  defined          global.config:37 
+       CONFIG_COMPILE_INSTRUMENT                undefined        global.config:43 
+ v     CONFIG_COMPILE_MARCH                     undefined        global.config:53 
+ v     CONFIG_COMPILE_MCPU                      405              global.config:48 
+ v U   CONFIG_COMPILE_OPTIMIZE                  2                global.config:30 
+ +     CONFIG_COMPILE_PIC                       defined          global.config:8  
+       CONFIG_COMPILE_SAVETEMPS                 undefined        global.config:2  
+ +     CONFIG_COMPILE_SOFTFLOAT                 defined          global.config:14 
+ v U   CONFIG_CPU_MAXCOUNT                      2                cpu.config:5     
+ + U   CONFIG_CPU_PPC_SOCLIB                    defined          ppc.config:5     
+ v     CONFIG_CPU_RESET_ADDR                    0xffffff80       cpu.config:21    
+ + U   CONFIG_CPU_RESET_HANDLER                 defined          cpu.config:12    
+ v     CONFIG_CPU_RESET_SIZE                    0x80             cpu.config:27    
+   X   CONFIG_CPU_X86                           undefined        x86.config:2     
+   X   CONFIG_CPU_X86_64_EMU                    undefined        emu.config:2     
+   X   CONFIG_CPU_X86_EMU                       undefined        emu.config:2     
+ +     CONFIG_DATA_FROM_ROM                     defined          arch.config:70   
+       CONFIG_DEBUG                             undefined        global.config:58 
+ + XM  CONFIG_DEVICE                            defined          drivers.config:2 
+ +     CONFIG_DEVICE_TREE                       defined          drivers.config:8 
+       CONFIG_DRIVER_BLOCK_ATA                  undefined        block-ata.config:2 
+       CONFIG_DRIVER_BLOCK_CACHE                undefined        block-cache.config:2 
+       CONFIG_DRIVER_BLOCK_EMU                  undefined        block-file-emu.config:2 
+       CONFIG_DRIVER_BLOCK_PARTITION            undefined        block-partition.config:2 
+       CONFIG_DRIVER_BLOCK_RAMDISK              undefined        block-ramdisk.config:2 
+       CONFIG_DRIVER_BLOCK_SD_MMC               undefined        sd-mmc.config:2  
+ + U   CONFIG_DRIVER_BLOCK_SOCLIB               defined          block-soclib.config:2 
+       CONFIG_DRIVER_CHAR_EMUTTY                undefined        tty-emu.config:2 
+       CONFIG_DRIVER_CHAR_GAISLER_APBUART       undefined        gaisler-apbuart.config:2 
+       CONFIG_DRIVER_CHAR_NULL                  undefined        null.config:2    
+       CONFIG_DRIVER_CHAR_RANDOM                undefined        random.config:2  
+       CONFIG_DRIVER_CHAR_SAM7DBGU              undefined        dbgu-sam7.config:2 
+ + U   CONFIG_DRIVER_CHAR_SOCLIBTTY             defined          tty-soclib.config:2 
+       CONFIG_DRIVER_CHAR_UART8250              undefined        uart-8250.config:2 
+       CONFIG_DRIVER_CHAR_US6089C_UART          undefined        uart-us6089c.config:2 
+       CONFIG_DRIVER_CHAR_VGATTY                undefined        tty-vga.config:2 
+       CONFIG_DRIVER_CHAR_ZERO                  undefined        zero.config:2    
+ + A   CONFIG_DRIVER_ENUM_FDT                   defined          enum-fdt.config:2 
+       CONFIG_DRIVER_ENUM_ISAPNP                undefined        enum-isapnp.config:2 
+       CONFIG_DRIVER_ENUM_PCI                   undefined        enum-pci.config:2 
+ + A   CONFIG_DRIVER_ENUM_ROOT                  defined          enum-root.config:2 
+       CONFIG_DRIVER_FB_SOCLIB                  undefined        fb-soclib.config:2 
+       CONFIG_DRIVER_FB_VGA                     undefined        fb-vga.config:2  
+       CONFIG_DRIVER_FS_DEVFS                   undefined        devfs.config:1   
+       CONFIG_DRIVER_FS_FAT                     undefined        fat.config:2     
+       CONFIG_DRIVER_FS_ISO9660                 undefined        iso9660.config:2 
+       CONFIG_DRIVER_FS_RAMFS                   undefined        ramfs.config:2   
+       CONFIG_DRIVER_FS_SOCLIB_FDACCESS         undefined        fdaccess.config:2 
+       CONFIG_DRIVER_GPIO_SAM7                  undefined        gpio-sam7.config:2 
+       CONFIG_DRIVER_I2C_TWI6061A               undefined        i2c-twi6061a.config:2 
+       CONFIG_DRIVER_ICU_8259                   undefined        icu-8259.config:2 
+       CONFIG_DRIVER_ICU_APIC                   undefined        icu-apic.config:2 
+       CONFIG_DRIVER_ICU_ARM                    undefined        icu-arm.config:2 
+       CONFIG_DRIVER_ICU_EMU                    undefined        icu-emu.config:2 
+       CONFIG_DRIVER_ICU_LM32                   undefined        icu-lm32.config:2 
+       CONFIG_DRIVER_ICU_MIPS                   undefined        icu-mips.config:2 
+       CONFIG_DRIVER_ICU_NIOS2                  undefined        icu-nios2.config:2 
+ +     CONFIG_DRIVER_ICU_PPC                    defined          icu-ppc.config:2 
+       CONFIG_DRIVER_ICU_SAM7                   undefined        icu-sam7.config:2 
+ + U   CONFIG_DRIVER_ICU_SOCLIB                 defined          icu-soclib.config:2 
+ + U   CONFIG_DRIVER_ICU_SOCLIB_XICU            defined          xicu.config:2    
+       CONFIG_DRIVER_ICU_SPARC                  undefined        icu-sparc.config:2 
+       CONFIG_DRIVER_INPUT_8042                 undefined        input-8042.config:2 
+       CONFIG_DRIVER_INPUT_MT5F                 undefined        mt5-f.config:2   
+       CONFIG_DRIVER_LCD_PCF8833                undefined        pcf8833.config:2 
+       CONFIG_DRIVER_LCD_S1D15G00               undefined        s1d15g00.config:2 
+ +     CONFIG_DRIVER_MEM_MEMORY                 defined          memory.config:2  
+       CONFIG_DRIVER_NET_NE2000                 undefined        net-ne2000.config:2 
+       CONFIG_DRIVER_NET_TUNTAP                 undefined        net-tuntap.config:2 
+       CONFIG_DRIVER_SPI_OPENCORES              undefined        spi-oc_spi_controller.config:2 
+       CONFIG_DRIVER_SPI_SPI6088D               undefined        spi-spi6088d.config:2 
+       CONFIG_DRIVER_TIMER_8253                 undefined        timer-8253.config:2 
+       CONFIG_DRIVER_TIMER_EMU                  undefined        timer-emu.config:2 
+       CONFIG_DRIVER_TIMER_PITC_6079A           undefined        pitc_6079a.config:2 
+ + U   CONFIG_DRIVER_TIMER_SOCLIB               defined          timer-soclib.config:2 
+ + XUA CONFIG_FDT                               defined          fdt.config:2     
+ + XM  CONFIG_GPCT                              defined          gpct.config:2    
+ v     CONFIG_HETROM_ADDR                       undefined        arch.config:58   
+ v     CONFIG_HETROM_SIZE                       undefined        arch.config:64   
+       CONFIG_HET_BUILD                         undefined        global.config:73 
+ + XM  CONFIG_HEXO                              defined          hexo.config:2    
+   A   CONFIG_HEXO_CONTEXT_PREEMPT              undefined        hexo.config:54   
+       CONFIG_HEXO_CONTEXT_STATS                undefined        hexo.config:61   
+   A   CONFIG_HEXO_FPU                          undefined        hexo.config:40   
+   A   CONFIG_HEXO_INTERRUPT_STACK              undefined        hexo.config:15   
+   U   CONFIG_HEXO_INTTYPES_DEPRECATED          undefined        hexo.config:101  
+       CONFIG_HEXO_INTTYPES_SMALL               undefined        hexo.config:108  
+ + UA  CONFIG_HEXO_IPI                          defined          hexo.config:29   
+ + A   CONFIG_HEXO_IRQ                          defined          hexo.config:9    
+       CONFIG_HEXO_LAZY_SWITCH                  undefined        hexo.config:47   
+   A   CONFIG_HEXO_MMU                          undefined        hexo.config:72   
+ v     CONFIG_HEXO_RESET_STACK_SIZE             12               hexo.config:114  
+ v     CONFIG_HEXO_STACK_ALIGN                  16               hexo.config:121  
+   A   CONFIG_HEXO_USERMODE                     undefined        hexo.config:66   
+   X   CONFIG_LIBAVATAR                         undefined        libavatar.config:2 
+ + XM  CONFIG_LIBC                              defined          libc.config:2    
+   XA  CONFIG_LIBCRYPTO                         undefined        crypto.config:2  
+ +     CONFIG_LIBC_ASSERT                       defined          libc.config:8    
+       CONFIG_LIBC_FORMATTER_FLOAT              undefined        libc.config:65   
+   A   CONFIG_LIBC_FORMATTER_HEXDUMP            undefined        libc.config:72   
+ + M   CONFIG_LIBC_FORMATTER_PRINTF             defined          libc.config:54   
+       CONFIG_LIBC_FORMATTER_SIMPLE             undefined        libc.config:60   
+   A   CONFIG_LIBC_SEMAPHORE                    undefined        libc.config:14   
+ + U   CONFIG_LIBC_STREAM                       defined          libc.config:21   
+ v     CONFIG_LIBC_STREAM_BUFFER_SIZE           256              libc.config:28   
+ + U   CONFIG_LIBC_STREAM_STD                   defined          libc.config:48   
+       CONFIG_LIBC_UNIXFD                       undefined        libc.config:35   
+   X   CONFIG_LIBDSRL                           undefined        dsrl.config:2    
+   X   CONFIG_LIBELF                            undefined        libelf.config:2  
+   X   CONFIG_LIBLUA                            undefined        liblua.config:2  
+ + XU  CONFIG_LIBM                              defined          libm.config:2    
+   X   CONFIG_LIBTERMUI                         undefined        termui.config:2  
+   XA  CONFIG_LIBTINYGL                         undefined        tinygl.config:2  
+       CONFIG_LICENSE_APP_BSD                   undefined        license.config:41 
+       CONFIG_LICENSE_APP_CECILL2               undefined        license.config:13 
+       CONFIG_LICENSE_APP_GPL                   undefined        license.config:19 
+       CONFIG_LICENSE_APP_GPL3                  undefined        license.config:25 
+ + U   CONFIG_LICENSE_APP_LGPL                  defined          license.config:31 
+       CONFIG_LICENSE_APP_LGPL3                 undefined        license.config:36 
+       CONFIG_LICENSE_APP_MIT                   undefined        license.config:46 
+       CONFIG_LICENSE_APP_PROPRIETARY           undefined        license.config:56 
+       CONFIG_LICENSE_APP_PUBLIC                undefined        license.config:51 
+ + M   CONFIG_LICENSE_META                      defined          license.config:2 
+ + XM  CONFIG_MUTEK                             defined          mutek.config:2   
+ +     CONFIG_MUTEK_CONSOLE                     defined          mutek.config:16  
+       CONFIG_MUTEK_LOGO                        undefined        mutek.config:49  
+ +     CONFIG_MUTEK_MAIN                        defined          mutek.config:9   
+       CONFIG_MUTEK_MEMALLOC_ALGO_BESTFIT       undefined        mutek.config:220 
+ +     CONFIG_MUTEK_MEMALLOC_ALGO_FIRSTFIT      defined          mutek.config:214 
+ v     CONFIG_MUTEK_MEMALLOC_ALIGN              0x20             mutek.config:225 
+       CONFIG_MUTEK_MEMALLOC_CRC                undefined        mutek.config:250 
+       CONFIG_MUTEK_MEMALLOC_EXPERIMENTAL       undefined        mutek.config:201 
+       CONFIG_MUTEK_MEMALLOC_GUARD              undefined        mutek.config:258 
+       CONFIG_MUTEK_MEMALLOC_GUARD_INSTRUMENT   undefined        mutek.config:275 
+       CONFIG_MUTEK_MEMALLOC_SCRAMBLE           undefined        mutek.config:232 
+       CONFIG_MUTEK_MEMALLOC_SCRAMBLE_INIT      undefined        mutek.config:238 
+       CONFIG_MUTEK_MEMALLOC_SIMPLE             undefined        mutek.config:195 
+ +     CONFIG_MUTEK_MEMALLOC_SMART              defined          mutek.config:207 
+       CONFIG_MUTEK_MEMALLOC_STATS              undefined        mutek.config:244 
+       CONFIG_MUTEK_MEM_REGION                  undefined        mutek.config:184 
+       CONFIG_MUTEK_NUMA                        undefined        mutek.config:55  
+ +     CONFIG_MUTEK_PRINTK                      defined          mutek.config:61  
+       CONFIG_MUTEK_PRINTK_HEXDUMP              undefined        mutek.config:68  
+ + U   CONFIG_MUTEK_PRINTK_KEEP_EARLY           defined          mutek.config:80  
+       CONFIG_MUTEK_PRINTK_LOCK                 undefined        mutek.config:74  
+   A   CONFIG_MUTEK_RWLOCK                      undefined        mutek.config:167 
+ + A   CONFIG_MUTEK_SCHEDULER                   defined          mutek.config:121 
+       CONFIG_MUTEK_SCHEDULER_CANDIDATE_FCN     undefined        mutek.config:162 
+ v     CONFIG_MUTEK_SCHEDULER_IDLE_STACK_SIZE   2048             mutek.config:154 
+       CONFIG_MUTEK_SCHEDULER_MIGRATION         undefined        mutek.config:136 
+       CONFIG_MUTEK_SCHEDULER_PREEMPT           undefined        mutek.config:129 
+ + U   CONFIG_MUTEK_SCHEDULER_STATIC            defined          mutek.config:143 
+ + A   CONFIG_MUTEK_SEMAPHORE                   defined          mutek.config:174 
+       CONFIG_MUTEK_SLAB                        undefined        mutek.config:285 
+       CONFIG_MUTEK_SMP_APP_START               undefined        mutek.config:86  
+ +     CONFIG_MUTEK_TIMER                       defined          mutek.config:28  
+ +     CONFIG_MUTEK_TIMER_EVENTS                defined          mutek.config:42  
+ v     CONFIG_MUTEK_TIMER_UNIT                  1e-3             mutek.config:35  
+ + XU  CONFIG_MWMR                              defined          mwmr.config:2    
+       CONFIG_MWMR_INSTRUMENTATION              undefined        mwmr.config:21   
+       CONFIG_MWMR_LOCKFREE                     undefined        mwmr.config:34   
+       CONFIG_MWMR_PTHREAD                      undefined        mwmr.config:15   
+ + U   CONFIG_MWMR_SOCLIB                       defined          mwmr.config:8    
+       CONFIG_MWMR_USE_RAMLOCKS                 undefined        mwmr.config:28   
+   X   CONFIG_NETWORK                           undefined        network.config:2 
+   X   CONFIG_OPENMP                            undefined        openmp.config:2  
+ + XUA CONFIG_PTHREAD                           defined          pthread.config:2 
+ + U   CONFIG_PTHREAD_ATTRIBUTES                defined          pthread.config:88 
+ +     CONFIG_PTHREAD_BARRIER                   defined          pthread.config:47 
+       CONFIG_PTHREAD_BARRIER_ATTR              undefined        pthread.config:82 
+ +     CONFIG_PTHREAD_CANCEL                    defined          pthread.config:58 
+       CONFIG_PTHREAD_CHECK                     undefined        pthread.config:22 
+ +     CONFIG_PTHREAD_COND                      defined          pthread.config:41 
+ +     CONFIG_PTHREAD_JOIN                      defined          pthread.config:64 
+       CONFIG_PTHREAD_KEYS                      undefined        pthread.config:100 
+ + U   CONFIG_PTHREAD_MAIN                      defined          pthread.config:17 
+ +     CONFIG_PTHREAD_MUTEX                     defined          pthread.config:70 
+ +     CONFIG_PTHREAD_MUTEX_ATTR                defined          pthread.config:76 
+       CONFIG_PTHREAD_ONCE                      undefined        pthread.config:94 
+   A   CONFIG_PTHREAD_RWLOCK                    undefined        pthread.config:28 
+   A   CONFIG_PTHREAD_SPIN                      undefined        pthread.config:35 
+ v U   CONFIG_PTHREAD_STACK_SIZE                32768            pthread.config:10 
+ + U   CONFIG_PTHREAD_TIME                      defined          pthread.config:120 
+ v U   CONFIG_RAM_ADDR                          0x7f000000       arch.config:34   
+ v U   CONFIG_RAM_SIZE                          0x01000000       arch.config:40   
+       CONFIG_RELEASE                           undefined        global.config:64 
+ v U   CONFIG_ROM_ADDR                          0x60000000       arch.config:46   
+ v U   CONFIG_ROM_SIZE                          0x00100000       arch.config:52   
+ + U   CONFIG_SOCLIB_EARLY_CONSOLE              defined          soclib.config:14 
+ v U   CONFIG_SOCLIB_EARLY_CONSOLE_ADDR         0xd0200000       soclib.config:21 
+       CONFIG_SOCLIB_MEMCHECK                   undefined        soclib.config:50 
+ v     CONFIG_SOCLIB_VMEM_MALLOC_REGION_SIZE    0x8000           soclib.config:63 
+   X   CONFIG_SRL                               undefined        srl.config:2     
+   X   CONFIG_UNIX                              undefined        unix.config:2    
+ + XU  CONFIG_VFS                               defined          vfs.config:2     
+ +     CONFIG_VFS_GLOBAL_CWD                    defined          vfs.config:32    
+ +     CONFIG_VFS_GLOBAL_ROOT                   defined          vfs.config:26    
+ v     CONFIG_VFS_NAMELEN                       32               vfs.config:9     
+       CONFIG_VFS_STATS                         undefined        vfs.config:21    
+       CONFIG_VFS_VERBOSE                       undefined        vfs.config:16    
+   A   CONFIG_VMEM                              undefined        mutek.config:94  
+
+    (+) defined, (U) assigned in build config file, (X) module.
+    (v) value, (A) automatic dependency, (M) mandatory.
+
+
+Flattened build configuration file:
+
+  CONFIG_ARCH_DEVICE_TREE defined
+  CONFIG_ARCH_SMP defined
+  CONFIG_ARCH_SOCLIB defined
+  CONFIG_COMPILE_DEBUG defined
+  CONFIG_COMPILE_OPTIMIZE 2
+  CONFIG_CPU_MAXCOUNT 2
+  CONFIG_CPU_PPC_SOCLIB defined
+  CONFIG_CPU_RESET_HANDLER defined
+  CONFIG_DRIVER_BLOCK_SOCLIB defined
+  CONFIG_DRIVER_CHAR_SOCLIBTTY defined
+  CONFIG_DRIVER_ICU_SOCLIB defined
+  CONFIG_DRIVER_ICU_SOCLIB_XICU defined
+  CONFIG_DRIVER_TIMER_SOCLIB defined
+  CONFIG_FDT defined
+  CONFIG_HEXO_INTTYPES_DEPRECATED undefined
+  CONFIG_HEXO_IPI defined
+  CONFIG_LIBAVATAR defined
+  CONFIG_LIBC_STREAM defined
+  CONFIG_LIBC_STREAM_STD defined
+  CONFIG_LIBM defined
+  CONFIG_LICENSE_APP_LGPL defined
+  CONFIG_MUTEK_PRINTK_KEEP_EARLY defined
+  CONFIG_MUTEK_SCHEDULER_STATIC defined
+  CONFIG_MWMR defined
+  CONFIG_MWMR_SOCLIB defined
+  CONFIG_PTHREAD defined
+  CONFIG_PTHREAD_ATTRIBUTES defined
+  CONFIG_PTHREAD_MAIN defined
+  CONFIG_PTHREAD_STACK_SIZE 32768
+  CONFIG_PTHREAD_TIME defined
+  CONFIG_RAM_ADDR 0x7f000000
+  CONFIG_RAM_SIZE 0x01000000
+  CONFIG_ROM_ADDR 0x60000000
+  CONFIG_ROM_SIZE 0x00100000
+  CONFIG_SOCLIB_EARLY_CONSOLE defined
+  CONFIG_SOCLIB_EARLY_CONSOLE_ADDR 0xd0200000
+  CONFIG_VFS defined
+
+Initialization order:
+
+
+Configuration used:
+
+       Configuration token name                 Value            Declare location 
+================================================================================
+
+       CONFIG_ARCH_CLUSTER                      undefined        arch.config:11   
+ + U   CONFIG_ARCH_DEVICE_TREE                  defined          arch.config:89   
+   X   CONFIG_ARCH_EMU                          undefined        emu.config:2     
+   X   CONFIG_ARCH_GAISLER                      undefined        gaisler.config:2 
+       CONFIG_ARCH_HW_INIT                      undefined        arch.config:76   
+       CONFIG_ARCH_HW_INIT_USER                 undefined        arch.config:83   
+   X   CONFIG_ARCH_IBMPC                        undefined        ibmpc.config:2   
+ + U   CONFIG_ARCH_SMP                          defined          arch.config:2    
+ + XU  CONFIG_ARCH_SOCLIB                       defined          soclib.config:2  
+       CONFIG_ARCH_SOCLIB_BOOTLOADER_MUTEKH     undefined        soclib.config:70 
+       CONFIG_ARCH_SOCLIB_RAMLOCK               undefined        soclib.config:45 
+       CONFIG_ARCH_SOCLIB_VCACHE_32             undefined        soclib.config:27 
+       CONFIG_ARCH_SOCLIB_VCACHE_40             undefined        soclib.config:36 
+   X   CONFIG_CAPSULE                           undefined        capsule.config:2 
+       CONFIG_COMPILE_COLLECT                   undefined        global.config:20 
+ + U   CONFIG_COMPILE_DEBUG                     defined          global.config:25 
+ +     CONFIG_COMPILE_FRAMEPTR                  defined          global.config:37 
+       CONFIG_COMPILE_INSTRUMENT                undefined        global.config:43 
+ v     CONFIG_COMPILE_MARCH                     undefined        global.config:53 
+ v     CONFIG_COMPILE_MCPU                      405              global.config:48 
+ v U   CONFIG_COMPILE_OPTIMIZE                  2                global.config:30 
+ +     CONFIG_COMPILE_PIC                       defined          global.config:8  
+       CONFIG_COMPILE_SAVETEMPS                 undefined        global.config:2  
+ +     CONFIG_COMPILE_SOFTFLOAT                 defined          global.config:14 
+ v U   CONFIG_CPU_MAXCOUNT                      2                cpu.config:5     
+ + U   CONFIG_CPU_PPC_SOCLIB                    defined          ppc.config:5     
+ v     CONFIG_CPU_RESET_ADDR                    0xffffff80       cpu.config:21    
+ + U   CONFIG_CPU_RESET_HANDLER                 defined          cpu.config:12    
+ v     CONFIG_CPU_RESET_SIZE                    0x80             cpu.config:27    
+   X   CONFIG_CPU_X86                           undefined        x86.config:2     
+   X   CONFIG_CPU_X86_64_EMU                    undefined        emu.config:2     
+   X   CONFIG_CPU_X86_EMU                       undefined        emu.config:2     
+ +     CONFIG_DATA_FROM_ROM                     defined          arch.config:70   
+       CONFIG_DEBUG                             undefined        global.config:58 
+ + XM  CONFIG_DEVICE                            defined          drivers.config:2 
+ +     CONFIG_DEVICE_TREE                       defined          drivers.config:8 
+       CONFIG_DRIVER_BLOCK_ATA                  undefined        block-ata.config:2 
+       CONFIG_DRIVER_BLOCK_CACHE                undefined        block-cache.config:2 
+       CONFIG_DRIVER_BLOCK_EMU                  undefined        block-file-emu.config:2 
+       CONFIG_DRIVER_BLOCK_PARTITION            undefined        block-partition.config:2 
+       CONFIG_DRIVER_BLOCK_RAMDISK              undefined        block-ramdisk.config:2 
+       CONFIG_DRIVER_BLOCK_SD_MMC               undefined        sd-mmc.config:2  
+ + U   CONFIG_DRIVER_BLOCK_SOCLIB               defined          block-soclib.config:2 
+       CONFIG_DRIVER_CHAR_EMUTTY                undefined        tty-emu.config:2 
+       CONFIG_DRIVER_CHAR_GAISLER_APBUART       undefined        gaisler-apbuart.config:2 
+       CONFIG_DRIVER_CHAR_NULL                  undefined        null.config:2    
+       CONFIG_DRIVER_CHAR_RANDOM                undefined        random.config:2  
+       CONFIG_DRIVER_CHAR_SAM7DBGU              undefined        dbgu-sam7.config:2 
+ + U   CONFIG_DRIVER_CHAR_SOCLIBTTY             defined          tty-soclib.config:2 
+       CONFIG_DRIVER_CHAR_UART8250              undefined        uart-8250.config:2 
+       CONFIG_DRIVER_CHAR_US6089C_UART          undefined        uart-us6089c.config:2 
+       CONFIG_DRIVER_CHAR_VGATTY                undefined        tty-vga.config:2 
+       CONFIG_DRIVER_CHAR_ZERO                  undefined        zero.config:2    
+ + A   CONFIG_DRIVER_ENUM_FDT                   defined          enum-fdt.config:2 
+       CONFIG_DRIVER_ENUM_ISAPNP                undefined        enum-isapnp.config:2 
+       CONFIG_DRIVER_ENUM_PCI                   undefined        enum-pci.config:2 
+ + A   CONFIG_DRIVER_ENUM_ROOT                  defined          enum-root.config:2 
+       CONFIG_DRIVER_FB_SOCLIB                  undefined        fb-soclib.config:2 
+       CONFIG_DRIVER_FB_VGA                     undefined        fb-vga.config:2  
+       CONFIG_DRIVER_FS_DEVFS                   undefined        devfs.config:1   
+       CONFIG_DRIVER_FS_FAT                     undefined        fat.config:2     
+       CONFIG_DRIVER_FS_ISO9660                 undefined        iso9660.config:2 
+       CONFIG_DRIVER_FS_RAMFS                   undefined        ramfs.config:2   
+       CONFIG_DRIVER_FS_SOCLIB_FDACCESS         undefined        fdaccess.config:2 
+       CONFIG_DRIVER_GPIO_SAM7                  undefined        gpio-sam7.config:2 
+       CONFIG_DRIVER_I2C_TWI6061A               undefined        i2c-twi6061a.config:2 
+       CONFIG_DRIVER_ICU_8259                   undefined        icu-8259.config:2 
+       CONFIG_DRIVER_ICU_APIC                   undefined        icu-apic.config:2 
+       CONFIG_DRIVER_ICU_ARM                    undefined        icu-arm.config:2 
+       CONFIG_DRIVER_ICU_EMU                    undefined        icu-emu.config:2 
+       CONFIG_DRIVER_ICU_LM32                   undefined        icu-lm32.config:2 
+       CONFIG_DRIVER_ICU_MIPS                   undefined        icu-mips.config:2 
+       CONFIG_DRIVER_ICU_NIOS2                  undefined        icu-nios2.config:2 
+ +     CONFIG_DRIVER_ICU_PPC                    defined          icu-ppc.config:2 
+       CONFIG_DRIVER_ICU_SAM7                   undefined        icu-sam7.config:2 
+ + U   CONFIG_DRIVER_ICU_SOCLIB                 defined          icu-soclib.config:2 
+ + U   CONFIG_DRIVER_ICU_SOCLIB_XICU            defined          xicu.config:2    
+       CONFIG_DRIVER_ICU_SPARC                  undefined        icu-sparc.config:2 
+       CONFIG_DRIVER_INPUT_8042                 undefined        input-8042.config:2 
+       CONFIG_DRIVER_INPUT_MT5F                 undefined        mt5-f.config:2   
+       CONFIG_DRIVER_LCD_PCF8833                undefined        pcf8833.config:2 
+       CONFIG_DRIVER_LCD_S1D15G00               undefined        s1d15g00.config:2 
+ +     CONFIG_DRIVER_MEM_MEMORY                 defined          memory.config:2  
+       CONFIG_DRIVER_NET_NE2000                 undefined        net-ne2000.config:2 
+       CONFIG_DRIVER_NET_TUNTAP                 undefined        net-tuntap.config:2 
+       CONFIG_DRIVER_SPI_OPENCORES              undefined        spi-oc_spi_controller.config:2 
+       CONFIG_DRIVER_SPI_SPI6088D               undefined        spi-spi6088d.config:2 
+       CONFIG_DRIVER_TIMER_8253                 undefined        timer-8253.config:2 
+       CONFIG_DRIVER_TIMER_EMU                  undefined        timer-emu.config:2 
+       CONFIG_DRIVER_TIMER_PITC_6079A           undefined        pitc_6079a.config:2 
+ + U   CONFIG_DRIVER_TIMER_SOCLIB               defined          timer-soclib.config:2 
+ + XUA CONFIG_FDT                               defined          fdt.config:2     
+ + XM  CONFIG_GPCT                              defined          gpct.config:2    
+ v     CONFIG_HETROM_ADDR                       undefined        arch.config:58   
+ v     CONFIG_HETROM_SIZE                       undefined        arch.config:64   
+       CONFIG_HET_BUILD                         undefined        global.config:73 
+ + XM  CONFIG_HEXO                              defined          hexo.config:2    
+   A   CONFIG_HEXO_CONTEXT_PREEMPT              undefined        hexo.config:54   
+       CONFIG_HEXO_CONTEXT_STATS                undefined        hexo.config:61   
+   A   CONFIG_HEXO_FPU                          undefined        hexo.config:40   
+   A   CONFIG_HEXO_INTERRUPT_STACK              undefined        hexo.config:15   
+   U   CONFIG_HEXO_INTTYPES_DEPRECATED          undefined        hexo.config:101  
+       CONFIG_HEXO_INTTYPES_SMALL               undefined        hexo.config:108  
+ + UA  CONFIG_HEXO_IPI                          defined          hexo.config:29   
+ + A   CONFIG_HEXO_IRQ                          defined          hexo.config:9    
+       CONFIG_HEXO_LAZY_SWITCH                  undefined        hexo.config:47   
+   A   CONFIG_HEXO_MMU                          undefined        hexo.config:72   
+ v     CONFIG_HEXO_RESET_STACK_SIZE             12               hexo.config:114  
+ v     CONFIG_HEXO_STACK_ALIGN                  16               hexo.config:121  
+   A   CONFIG_HEXO_USERMODE                     undefined        hexo.config:66   
+ + XU  CONFIG_LIBAVATAR                         defined          libavatar.config:2 
+ + XM  CONFIG_LIBC                              defined          libc.config:2    
+   XA  CONFIG_LIBCRYPTO                         undefined        crypto.config:2  
+ +     CONFIG_LIBC_ASSERT                       defined          libc.config:8    
+       CONFIG_LIBC_FORMATTER_FLOAT              undefined        libc.config:65   
+   A   CONFIG_LIBC_FORMATTER_HEXDUMP            undefined        libc.config:72   
+ + M   CONFIG_LIBC_FORMATTER_PRINTF             defined          libc.config:54   
+       CONFIG_LIBC_FORMATTER_SIMPLE             undefined        libc.config:60   
+   A   CONFIG_LIBC_SEMAPHORE                    undefined        libc.config:14   
+ + U   CONFIG_LIBC_STREAM                       defined          libc.config:21   
+ v     CONFIG_LIBC_STREAM_BUFFER_SIZE           256              libc.config:28   
+ + U   CONFIG_LIBC_STREAM_STD                   defined          libc.config:48   
+       CONFIG_LIBC_UNIXFD                       undefined        libc.config:35   
+   X   CONFIG_LIBDSRL                           undefined        dsrl.config:2    
+   X   CONFIG_LIBELF                            undefined        libelf.config:2  
+   X   CONFIG_LIBLUA                            undefined        liblua.config:2  
+ + XU  CONFIG_LIBM                              defined          libm.config:2    
+   X   CONFIG_LIBTERMUI                         undefined        termui.config:2  
+   XA  CONFIG_LIBTINYGL                         undefined        tinygl.config:2  
+       CONFIG_LICENSE_APP_BSD                   undefined        license.config:41 
+       CONFIG_LICENSE_APP_CECILL2               undefined        license.config:13 
+       CONFIG_LICENSE_APP_GPL                   undefined        license.config:19 
+       CONFIG_LICENSE_APP_GPL3                  undefined        license.config:25 
+ + U   CONFIG_LICENSE_APP_LGPL                  defined          license.config:31 
+       CONFIG_LICENSE_APP_LGPL3                 undefined        license.config:36 
+       CONFIG_LICENSE_APP_MIT                   undefined        license.config:46 
+       CONFIG_LICENSE_APP_PROPRIETARY           undefined        license.config:56 
+       CONFIG_LICENSE_APP_PUBLIC                undefined        license.config:51 
+ + M   CONFIG_LICENSE_META                      defined          license.config:2 
+ + XM  CONFIG_MUTEK                             defined          mutek.config:2   
+ +     CONFIG_MUTEK_CONSOLE                     defined          mutek.config:16  
+       CONFIG_MUTEK_LOGO                        undefined        mutek.config:49  
+ +     CONFIG_MUTEK_MAIN                        defined          mutek.config:9   
+       CONFIG_MUTEK_MEMALLOC_ALGO_BESTFIT       undefined        mutek.config:220 
+ +     CONFIG_MUTEK_MEMALLOC_ALGO_FIRSTFIT      defined          mutek.config:214 
+ v     CONFIG_MUTEK_MEMALLOC_ALIGN              0x20             mutek.config:225 
+       CONFIG_MUTEK_MEMALLOC_CRC                undefined        mutek.config:250 
+       CONFIG_MUTEK_MEMALLOC_EXPERIMENTAL       undefined        mutek.config:201 
+       CONFIG_MUTEK_MEMALLOC_GUARD              undefined        mutek.config:258 
+       CONFIG_MUTEK_MEMALLOC_GUARD_INSTRUMENT   undefined        mutek.config:275 
+       CONFIG_MUTEK_MEMALLOC_SCRAMBLE           undefined        mutek.config:232 
+       CONFIG_MUTEK_MEMALLOC_SCRAMBLE_INIT      undefined        mutek.config:238 
+       CONFIG_MUTEK_MEMALLOC_SIMPLE             undefined        mutek.config:195 
+ +     CONFIG_MUTEK_MEMALLOC_SMART              defined          mutek.config:207 
+       CONFIG_MUTEK_MEMALLOC_STATS              undefined        mutek.config:244 
+       CONFIG_MUTEK_MEM_REGION                  undefined        mutek.config:184 
+       CONFIG_MUTEK_NUMA                        undefined        mutek.config:55  
+ +     CONFIG_MUTEK_PRINTK                      defined          mutek.config:61  
+       CONFIG_MUTEK_PRINTK_HEXDUMP              undefined        mutek.config:68  
+ + U   CONFIG_MUTEK_PRINTK_KEEP_EARLY           defined          mutek.config:80  
+       CONFIG_MUTEK_PRINTK_LOCK                 undefined        mutek.config:74  
+   A   CONFIG_MUTEK_RWLOCK                      undefined        mutek.config:167 
+ + A   CONFIG_MUTEK_SCHEDULER                   defined          mutek.config:121 
+       CONFIG_MUTEK_SCHEDULER_CANDIDATE_FCN     undefined        mutek.config:162 
+ v     CONFIG_MUTEK_SCHEDULER_IDLE_STACK_SIZE   2048             mutek.config:154 
+       CONFIG_MUTEK_SCHEDULER_MIGRATION         undefined        mutek.config:136 
+       CONFIG_MUTEK_SCHEDULER_PREEMPT           undefined        mutek.config:129 
+ + U   CONFIG_MUTEK_SCHEDULER_STATIC            defined          mutek.config:143 
+ + A   CONFIG_MUTEK_SEMAPHORE                   defined          mutek.config:174 
+       CONFIG_MUTEK_SLAB                        undefined        mutek.config:285 
+       CONFIG_MUTEK_SMP_APP_START               undefined        mutek.config:86  
+ +     CONFIG_MUTEK_TIMER                       defined          mutek.config:28  
+ +     CONFIG_MUTEK_TIMER_EVENTS                defined          mutek.config:42  
+ v     CONFIG_MUTEK_TIMER_UNIT                  1e-3             mutek.config:35  
+ + XU  CONFIG_MWMR                              defined          mwmr.config:2    
+       CONFIG_MWMR_INSTRUMENTATION              undefined        mwmr.config:21   
+       CONFIG_MWMR_LOCKFREE                     undefined        mwmr.config:34   
+       CONFIG_MWMR_PTHREAD                      undefined        mwmr.config:15   
+ + U   CONFIG_MWMR_SOCLIB                       defined          mwmr.config:8    
+       CONFIG_MWMR_USE_RAMLOCKS                 undefined        mwmr.config:28   
+   X   CONFIG_NETWORK                           undefined        network.config:2 
+   X   CONFIG_OPENMP                            undefined        openmp.config:2  
+ + XUA CONFIG_PTHREAD                           defined          pthread.config:2 
+ + U   CONFIG_PTHREAD_ATTRIBUTES                defined          pthread.config:88 
+ +     CONFIG_PTHREAD_BARRIER                   defined          pthread.config:47 
+       CONFIG_PTHREAD_BARRIER_ATTR              undefined        pthread.config:82 
+ +     CONFIG_PTHREAD_CANCEL                    defined          pthread.config:58 
+       CONFIG_PTHREAD_CHECK                     undefined        pthread.config:22 
+ +     CONFIG_PTHREAD_COND                      defined          pthread.config:41 
+ +     CONFIG_PTHREAD_JOIN                      defined          pthread.config:64 
+       CONFIG_PTHREAD_KEYS                      undefined        pthread.config:100 
+ + U   CONFIG_PTHREAD_MAIN                      defined          pthread.config:17 
+ +     CONFIG_PTHREAD_MUTEX                     defined          pthread.config:70 
+ +     CONFIG_PTHREAD_MUTEX_ATTR                defined          pthread.config:76 
+       CONFIG_PTHREAD_ONCE                      undefined        pthread.config:94 
+   A   CONFIG_PTHREAD_RWLOCK                    undefined        pthread.config:28 
+   A   CONFIG_PTHREAD_SPIN                      undefined        pthread.config:35 
+ v U   CONFIG_PTHREAD_STACK_SIZE                32768            pthread.config:10 
+ + U   CONFIG_PTHREAD_TIME                      defined          pthread.config:120 
+ v U   CONFIG_RAM_ADDR                          0x7f000000       arch.config:34   
+ v U   CONFIG_RAM_SIZE                          0x01000000       arch.config:40   
+       CONFIG_RELEASE                           undefined        global.config:64 
+ v U   CONFIG_ROM_ADDR                          0x60000000       arch.config:46   
+ v U   CONFIG_ROM_SIZE                          0x00100000       arch.config:52   
+ + U   CONFIG_SOCLIB_EARLY_CONSOLE              defined          soclib.config:14 
+ v U   CONFIG_SOCLIB_EARLY_CONSOLE_ADDR         0xd0200000       soclib.config:21 
+       CONFIG_SOCLIB_MEMCHECK                   undefined        soclib.config:50 
+ v     CONFIG_SOCLIB_VMEM_MALLOC_REGION_SIZE    0x8000           soclib.config:63 
+   X   CONFIG_SRL                               undefined        srl.config:2     
+   X   CONFIG_UNIX                              undefined        unix.config:2    
+ + XU  CONFIG_VFS                               defined          vfs.config:2     
+ +     CONFIG_VFS_GLOBAL_CWD                    defined          vfs.config:32    
+ +     CONFIG_VFS_GLOBAL_ROOT                   defined          vfs.config:26    
+ v     CONFIG_VFS_NAMELEN                       32               vfs.config:9     
+       CONFIG_VFS_STATS                         undefined        vfs.config:21    
+       CONFIG_VFS_VERBOSE                       undefined        vfs.config:16    
+   A   CONFIG_VMEM                              undefined        mutek.config:94  
+
+    (+) defined, (U) assigned in build config file, (X) module.
+    (v) value, (A) automatic dependency, (M) mandatory.
+
+
+Flattened build configuration file:
+
+  CONFIG_ARCH_DEVICE_TREE defined
+  CONFIG_ARCH_SMP defined
+  CONFIG_ARCH_SOCLIB defined
+  CONFIG_COMPILE_DEBUG defined
+  CONFIG_COMPILE_OPTIMIZE 2
+  CONFIG_CPU_MAXCOUNT 6
+  CONFIG_CPU_PPC_SOCLIB defined
+  CONFIG_CPU_RESET_HANDLER defined
+  CONFIG_DRIVER_BLOCK_SOCLIB defined
+  CONFIG_DRIVER_CHAR_SOCLIBTTY defined
+  CONFIG_DRIVER_ICU_SOCLIB defined
+  CONFIG_DRIVER_ICU_SOCLIB_XICU defined
+  CONFIG_DRIVER_TIMER_SOCLIB defined
+  CONFIG_FDT defined
+  CONFIG_HEXO_INTTYPES_DEPRECATED undefined
+  CONFIG_HEXO_IPI defined
+  CONFIG_LIBAVATAR defined
+  CONFIG_LIBC_STREAM defined
+  CONFIG_LIBC_STREAM_STD defined
+  CONFIG_LIBM defined
+  CONFIG_LICENSE_APP_LGPL defined
+  CONFIG_MUTEK_PRINTK_KEEP_EARLY defined
+  CONFIG_MUTEK_SCHEDULER_STATIC defined
+  CONFIG_MWMR defined
+  CONFIG_MWMR_SOCLIB defined
+  CONFIG_PTHREAD defined
+  CONFIG_PTHREAD_ATTRIBUTES defined
+  CONFIG_PTHREAD_MAIN defined
+  CONFIG_PTHREAD_STACK_SIZE 32768
+  CONFIG_PTHREAD_TIME defined
+  CONFIG_RAM_ADDR 0x7f000000
+  CONFIG_RAM_SIZE 0x01000000
+  CONFIG_ROM_ADDR 0x60000000
+  CONFIG_ROM_SIZE 0x00100000
+  CONFIG_SOCLIB_EARLY_CONSOLE defined
+  CONFIG_SOCLIB_EARLY_CONSOLE_ADDR 0xd0200000
+  CONFIG_VFS defined
+
+Initialization order:
+
+
+Configuration used:
+
+       Configuration token name                 Value            Declare location 
+================================================================================
+
+       CONFIG_ARCH_CLUSTER                      undefined        arch.config:11   
+ + U   CONFIG_ARCH_DEVICE_TREE                  defined          arch.config:89   
+   X   CONFIG_ARCH_EMU                          undefined        emu.config:2     
+   X   CONFIG_ARCH_GAISLER                      undefined        gaisler.config:2 
+       CONFIG_ARCH_HW_INIT                      undefined        arch.config:76   
+       CONFIG_ARCH_HW_INIT_USER                 undefined        arch.config:83   
+   X   CONFIG_ARCH_IBMPC                        undefined        ibmpc.config:2   
+ + U   CONFIG_ARCH_SMP                          defined          arch.config:2    
+ + XU  CONFIG_ARCH_SOCLIB                       defined          soclib.config:2  
+       CONFIG_ARCH_SOCLIB_BOOTLOADER_MUTEKH     undefined        soclib.config:70 
+       CONFIG_ARCH_SOCLIB_RAMLOCK               undefined        soclib.config:45 
+       CONFIG_ARCH_SOCLIB_VCACHE_32             undefined        soclib.config:27 
+       CONFIG_ARCH_SOCLIB_VCACHE_40             undefined        soclib.config:36 
+   X   CONFIG_CAPSULE                           undefined        capsule.config:2 
+       CONFIG_COMPILE_COLLECT                   undefined        global.config:20 
+ + U   CONFIG_COMPILE_DEBUG                     defined          global.config:25 
+ +     CONFIG_COMPILE_FRAMEPTR                  defined          global.config:37 
+       CONFIG_COMPILE_INSTRUMENT                undefined        global.config:43 
+ v     CONFIG_COMPILE_MARCH                     undefined        global.config:53 
+ v     CONFIG_COMPILE_MCPU                      405              global.config:48 
+ v U   CONFIG_COMPILE_OPTIMIZE                  2                global.config:30 
+ +     CONFIG_COMPILE_PIC                       defined          global.config:8  
+       CONFIG_COMPILE_SAVETEMPS                 undefined        global.config:2  
+ +     CONFIG_COMPILE_SOFTFLOAT                 defined          global.config:14 
+ v U   CONFIG_CPU_MAXCOUNT                      6                cpu.config:5     
+ + U   CONFIG_CPU_PPC_SOCLIB                    defined          ppc.config:5     
+ v     CONFIG_CPU_RESET_ADDR                    0xffffff80       cpu.config:21    
+ + U   CONFIG_CPU_RESET_HANDLER                 defined          cpu.config:12    
+ v     CONFIG_CPU_RESET_SIZE                    0x80             cpu.config:27    
+   X   CONFIG_CPU_X86                           undefined        x86.config:2     
+   X   CONFIG_CPU_X86_64_EMU                    undefined        emu.config:2     
+   X   CONFIG_CPU_X86_EMU                       undefined        emu.config:2     
+ +     CONFIG_DATA_FROM_ROM                     defined          arch.config:70   
+       CONFIG_DEBUG                             undefined        global.config:58 
+ + XM  CONFIG_DEVICE                            defined          drivers.config:2 
+ +     CONFIG_DEVICE_TREE                       defined          drivers.config:8 
+       CONFIG_DRIVER_BLOCK_ATA                  undefined        block-ata.config:2 
+       CONFIG_DRIVER_BLOCK_CACHE                undefined        block-cache.config:2 
+       CONFIG_DRIVER_BLOCK_EMU                  undefined        block-file-emu.config:2 
+       CONFIG_DRIVER_BLOCK_PARTITION            undefined        block-partition.config:2 
+       CONFIG_DRIVER_BLOCK_RAMDISK              undefined        block-ramdisk.config:2 
+       CONFIG_DRIVER_BLOCK_SD_MMC               undefined        sd-mmc.config:2  
+ + U   CONFIG_DRIVER_BLOCK_SOCLIB               defined          block-soclib.config:2 
+       CONFIG_DRIVER_CHAR_EMUTTY                undefined        tty-emu.config:2 
+       CONFIG_DRIVER_CHAR_GAISLER_APBUART       undefined        gaisler-apbuart.config:2 
+       CONFIG_DRIVER_CHAR_NULL                  undefined        null.config:2    
+       CONFIG_DRIVER_CHAR_RANDOM                undefined        random.config:2  
+       CONFIG_DRIVER_CHAR_SAM7DBGU              undefined        dbgu-sam7.config:2 
+ + U   CONFIG_DRIVER_CHAR_SOCLIBTTY             defined          tty-soclib.config:2 
+       CONFIG_DRIVER_CHAR_UART8250              undefined        uart-8250.config:2 
+       CONFIG_DRIVER_CHAR_US6089C_UART          undefined        uart-us6089c.config:2 
+       CONFIG_DRIVER_CHAR_VGATTY                undefined        tty-vga.config:2 
+       CONFIG_DRIVER_CHAR_ZERO                  undefined        zero.config:2    
+ + A   CONFIG_DRIVER_ENUM_FDT                   defined          enum-fdt.config:2 
+       CONFIG_DRIVER_ENUM_ISAPNP                undefined        enum-isapnp.config:2 
+       CONFIG_DRIVER_ENUM_PCI                   undefined        enum-pci.config:2 
+ + A   CONFIG_DRIVER_ENUM_ROOT                  defined          enum-root.config:2 
+       CONFIG_DRIVER_FB_SOCLIB                  undefined        fb-soclib.config:2 
+       CONFIG_DRIVER_FB_VGA                     undefined        fb-vga.config:2  
+       CONFIG_DRIVER_FS_DEVFS                   undefined        devfs.config:1   
+       CONFIG_DRIVER_FS_FAT                     undefined        fat.config:2     
+       CONFIG_DRIVER_FS_ISO9660                 undefined        iso9660.config:2 
+       CONFIG_DRIVER_FS_RAMFS                   undefined        ramfs.config:2   
+       CONFIG_DRIVER_FS_SOCLIB_FDACCESS         undefined        fdaccess.config:2 
+       CONFIG_DRIVER_GPIO_SAM7                  undefined        gpio-sam7.config:2 
+       CONFIG_DRIVER_I2C_TWI6061A               undefined        i2c-twi6061a.config:2 
+       CONFIG_DRIVER_ICU_8259                   undefined        icu-8259.config:2 
+       CONFIG_DRIVER_ICU_APIC                   undefined        icu-apic.config:2 
+       CONFIG_DRIVER_ICU_ARM                    undefined        icu-arm.config:2 
+       CONFIG_DRIVER_ICU_EMU                    undefined        icu-emu.config:2 
+       CONFIG_DRIVER_ICU_LM32                   undefined        icu-lm32.config:2 
+       CONFIG_DRIVER_ICU_MIPS                   undefined        icu-mips.config:2 
+       CONFIG_DRIVER_ICU_NIOS2                  undefined        icu-nios2.config:2 
+ +     CONFIG_DRIVER_ICU_PPC                    defined          icu-ppc.config:2 
+       CONFIG_DRIVER_ICU_SAM7                   undefined        icu-sam7.config:2 
+ + U   CONFIG_DRIVER_ICU_SOCLIB                 defined          icu-soclib.config:2 
+ + U   CONFIG_DRIVER_ICU_SOCLIB_XICU            defined          xicu.config:2    
+       CONFIG_DRIVER_ICU_SPARC                  undefined        icu-sparc.config:2 
+       CONFIG_DRIVER_INPUT_8042                 undefined        input-8042.config:2 
+       CONFIG_DRIVER_INPUT_MT5F                 undefined        mt5-f.config:2   
+       CONFIG_DRIVER_LCD_PCF8833                undefined        pcf8833.config:2 
+       CONFIG_DRIVER_LCD_S1D15G00               undefined        s1d15g00.config:2 
+ +     CONFIG_DRIVER_MEM_MEMORY                 defined          memory.config:2  
+       CONFIG_DRIVER_NET_NE2000                 undefined        net-ne2000.config:2 
+       CONFIG_DRIVER_NET_TUNTAP                 undefined        net-tuntap.config:2 
+       CONFIG_DRIVER_SPI_OPENCORES              undefined        spi-oc_spi_controller.config:2 
+       CONFIG_DRIVER_SPI_SPI6088D               undefined        spi-spi6088d.config:2 
+       CONFIG_DRIVER_TIMER_8253                 undefined        timer-8253.config:2 
+       CONFIG_DRIVER_TIMER_EMU                  undefined        timer-emu.config:2 
+       CONFIG_DRIVER_TIMER_PITC_6079A           undefined        pitc_6079a.config:2 
+ + U   CONFIG_DRIVER_TIMER_SOCLIB               defined          timer-soclib.config:2 
+ + XUA CONFIG_FDT                               defined          fdt.config:2     
+ + XM  CONFIG_GPCT                              defined          gpct.config:2    
+ v     CONFIG_HETROM_ADDR                       undefined        arch.config:58   
+ v     CONFIG_HETROM_SIZE                       undefined        arch.config:64   
+       CONFIG_HET_BUILD                         undefined        global.config:73 
+ + XM  CONFIG_HEXO                              defined          hexo.config:2    
+   A   CONFIG_HEXO_CONTEXT_PREEMPT              undefined        hexo.config:54   
+       CONFIG_HEXO_CONTEXT_STATS                undefined        hexo.config:61   
+   A   CONFIG_HEXO_FPU                          undefined        hexo.config:40   
+   A   CONFIG_HEXO_INTERRUPT_STACK              undefined        hexo.config:15   
+   U   CONFIG_HEXO_INTTYPES_DEPRECATED          undefined        hexo.config:101  
+       CONFIG_HEXO_INTTYPES_SMALL               undefined        hexo.config:108  
+ + UA  CONFIG_HEXO_IPI                          defined          hexo.config:29   
+ + A   CONFIG_HEXO_IRQ                          defined          hexo.config:9    
+       CONFIG_HEXO_LAZY_SWITCH                  undefined        hexo.config:47   
+   A   CONFIG_HEXO_MMU                          undefined        hexo.config:72   
+ v     CONFIG_HEXO_RESET_STACK_SIZE             12               hexo.config:114  
+ v     CONFIG_HEXO_STACK_ALIGN                  16               hexo.config:121  
+   A   CONFIG_HEXO_USERMODE                     undefined        hexo.config:66   
+ + XU  CONFIG_LIBAVATAR                         defined          libavatar.config:2 
+ + XM  CONFIG_LIBC                              defined          libc.config:2    
+   XA  CONFIG_LIBCRYPTO                         undefined        crypto.config:2  
+ +     CONFIG_LIBC_ASSERT                       defined          libc.config:8    
+       CONFIG_LIBC_FORMATTER_FLOAT              undefined        libc.config:65   
+   A   CONFIG_LIBC_FORMATTER_HEXDUMP            undefined        libc.config:72   
+ + M   CONFIG_LIBC_FORMATTER_PRINTF             defined          libc.config:54   
+       CONFIG_LIBC_FORMATTER_SIMPLE             undefined        libc.config:60   
+   A   CONFIG_LIBC_SEMAPHORE                    undefined        libc.config:14   
+ + U   CONFIG_LIBC_STREAM                       defined          libc.config:21   
+ v     CONFIG_LIBC_STREAM_BUFFER_SIZE           256              libc.config:28   
+ + U   CONFIG_LIBC_STREAM_STD                   defined          libc.config:48   
+       CONFIG_LIBC_UNIXFD                       undefined        libc.config:35   
+   X   CONFIG_LIBDSRL                           undefined        dsrl.config:2    
+   X   CONFIG_LIBELF                            undefined        libelf.config:2  
+   X   CONFIG_LIBLUA                            undefined        liblua.config:2  
+ + XU  CONFIG_LIBM                              defined          libm.config:2    
+   X   CONFIG_LIBTERMUI                         undefined        termui.config:2  
+   XA  CONFIG_LIBTINYGL                         undefined        tinygl.config:2  
+       CONFIG_LICENSE_APP_BSD                   undefined        license.config:41 
+       CONFIG_LICENSE_APP_CECILL2               undefined        license.config:13 
+       CONFIG_LICENSE_APP_GPL                   undefined        license.config:19 
+       CONFIG_LICENSE_APP_GPL3                  undefined        license.config:25 
+ + U   CONFIG_LICENSE_APP_LGPL                  defined          license.config:31 
+       CONFIG_LICENSE_APP_LGPL3                 undefined        license.config:36 
+       CONFIG_LICENSE_APP_MIT                   undefined        license.config:46 
+       CONFIG_LICENSE_APP_PROPRIETARY           undefined        license.config:56 
+       CONFIG_LICENSE_APP_PUBLIC                undefined        license.config:51 
+ + M   CONFIG_LICENSE_META                      defined          license.config:2 
+ + XM  CONFIG_MUTEK                             defined          mutek.config:2   
+ +     CONFIG_MUTEK_CONSOLE                     defined          mutek.config:16  
+       CONFIG_MUTEK_LOGO                        undefined        mutek.config:49  
+ +     CONFIG_MUTEK_MAIN                        defined          mutek.config:9   
+       CONFIG_MUTEK_MEMALLOC_ALGO_BESTFIT       undefined        mutek.config:220 
+ +     CONFIG_MUTEK_MEMALLOC_ALGO_FIRSTFIT      defined          mutek.config:214 
+ v     CONFIG_MUTEK_MEMALLOC_ALIGN              0x20             mutek.config:225 
+       CONFIG_MUTEK_MEMALLOC_CRC                undefined        mutek.config:250 
+       CONFIG_MUTEK_MEMALLOC_EXPERIMENTAL       undefined        mutek.config:201 
+       CONFIG_MUTEK_MEMALLOC_GUARD              undefined        mutek.config:258 
+       CONFIG_MUTEK_MEMALLOC_GUARD_INSTRUMENT   undefined        mutek.config:275 
+       CONFIG_MUTEK_MEMALLOC_SCRAMBLE           undefined        mutek.config:232 
+       CONFIG_MUTEK_MEMALLOC_SCRAMBLE_INIT      undefined        mutek.config:238 
+       CONFIG_MUTEK_MEMALLOC_SIMPLE             undefined        mutek.config:195 
+ +     CONFIG_MUTEK_MEMALLOC_SMART              defined          mutek.config:207 
+       CONFIG_MUTEK_MEMALLOC_STATS              undefined        mutek.config:244 
+       CONFIG_MUTEK_MEM_REGION                  undefined        mutek.config:184 
+       CONFIG_MUTEK_NUMA                        undefined        mutek.config:55  
+ +     CONFIG_MUTEK_PRINTK                      defined          mutek.config:61  
+       CONFIG_MUTEK_PRINTK_HEXDUMP              undefined        mutek.config:68  
+ + U   CONFIG_MUTEK_PRINTK_KEEP_EARLY           defined          mutek.config:80  
+       CONFIG_MUTEK_PRINTK_LOCK                 undefined        mutek.config:74  
+   A   CONFIG_MUTEK_RWLOCK                      undefined        mutek.config:167 
+ + A   CONFIG_MUTEK_SCHEDULER                   defined          mutek.config:121 
+       CONFIG_MUTEK_SCHEDULER_CANDIDATE_FCN     undefined        mutek.config:162 
+ v     CONFIG_MUTEK_SCHEDULER_IDLE_STACK_SIZE   2048             mutek.config:154 
+       CONFIG_MUTEK_SCHEDULER_MIGRATION         undefined        mutek.config:136 
+       CONFIG_MUTEK_SCHEDULER_PREEMPT           undefined        mutek.config:129 
+ + U   CONFIG_MUTEK_SCHEDULER_STATIC            defined          mutek.config:143 
+ + A   CONFIG_MUTEK_SEMAPHORE                   defined          mutek.config:174 
+       CONFIG_MUTEK_SLAB                        undefined        mutek.config:285 
+       CONFIG_MUTEK_SMP_APP_START               undefined        mutek.config:86  
+ +     CONFIG_MUTEK_TIMER                       defined          mutek.config:28  
+ +     CONFIG_MUTEK_TIMER_EVENTS                defined          mutek.config:42  
+ v     CONFIG_MUTEK_TIMER_UNIT                  1e-3             mutek.config:35  
+ + XU  CONFIG_MWMR                              defined          mwmr.config:2    
+       CONFIG_MWMR_INSTRUMENTATION              undefined        mwmr.config:21   
+       CONFIG_MWMR_LOCKFREE                     undefined        mwmr.config:34   
+       CONFIG_MWMR_PTHREAD                      undefined        mwmr.config:15   
+ + U   CONFIG_MWMR_SOCLIB                       defined          mwmr.config:8    
+       CONFIG_MWMR_USE_RAMLOCKS                 undefined        mwmr.config:28   
+   X   CONFIG_NETWORK                           undefined        network.config:2 
+   X   CONFIG_OPENMP                            undefined        openmp.config:2  
+ + XUA CONFIG_PTHREAD                           defined          pthread.config:2 
+ + U   CONFIG_PTHREAD_ATTRIBUTES                defined          pthread.config:88 
+ +     CONFIG_PTHREAD_BARRIER                   defined          pthread.config:47 
+       CONFIG_PTHREAD_BARRIER_ATTR              undefined        pthread.config:82 
+ +     CONFIG_PTHREAD_CANCEL                    defined          pthread.config:58 
+       CONFIG_PTHREAD_CHECK                     undefined        pthread.config:22 
+ +     CONFIG_PTHREAD_COND                      defined          pthread.config:41 
+ +     CONFIG_PTHREAD_JOIN                      defined          pthread.config:64 
+       CONFIG_PTHREAD_KEYS                      undefined        pthread.config:100 
+ + U   CONFIG_PTHREAD_MAIN                      defined          pthread.config:17 
+ +     CONFIG_PTHREAD_MUTEX                     defined          pthread.config:70 
+ +     CONFIG_PTHREAD_MUTEX_ATTR                defined          pthread.config:76 
+       CONFIG_PTHREAD_ONCE                      undefined        pthread.config:94 
+   A   CONFIG_PTHREAD_RWLOCK                    undefined        pthread.config:28 
+   A   CONFIG_PTHREAD_SPIN                      undefined        pthread.config:35 
+ v U   CONFIG_PTHREAD_STACK_SIZE                32768            pthread.config:10 
+ + U   CONFIG_PTHREAD_TIME                      defined          pthread.config:120 
+ v U   CONFIG_RAM_ADDR                          0x7f000000       arch.config:34   
+ v U   CONFIG_RAM_SIZE                          0x01000000       arch.config:40   
+       CONFIG_RELEASE                           undefined        global.config:64 
+ v U   CONFIG_ROM_ADDR                          0x60000000       arch.config:46   
+ v U   CONFIG_ROM_SIZE                          0x00100000       arch.config:52   
+ + U   CONFIG_SOCLIB_EARLY_CONSOLE              defined          soclib.config:14 
+ v U   CONFIG_SOCLIB_EARLY_CONSOLE_ADDR         0xd0200000       soclib.config:21 
+       CONFIG_SOCLIB_MEMCHECK                   undefined        soclib.config:50 
+ v     CONFIG_SOCLIB_VMEM_MALLOC_REGION_SIZE    0x8000           soclib.config:63 
+   X   CONFIG_SRL                               undefined        srl.config:2     
+   X   CONFIG_UNIX                              undefined        unix.config:2    
+ + XU  CONFIG_VFS                               defined          vfs.config:2     
+ +     CONFIG_VFS_GLOBAL_CWD                    defined          vfs.config:32    
+ +     CONFIG_VFS_GLOBAL_ROOT                   defined          vfs.config:26    
+ v     CONFIG_VFS_NAMELEN                       32               vfs.config:9     
+       CONFIG_VFS_STATS                         undefined        vfs.config:21    
+       CONFIG_VFS_VERBOSE                       undefined        vfs.config:16    
+   A   CONFIG_VMEM                              undefined        mutek.config:94  
+
+    (+) defined, (U) assigned in build config file, (X) module.
+    (v) value, (A) automatic dependency, (M) mandatory.
+
+
+
+Tools:
+
+Using built-in specs.
+COLLECT_GCC=powerpc-unknown-elf-gcc
+COLLECT_LTO_WRAPPER=/users/enseig/genius/TTool/MPSoC/mutekh/bin/../libexec/gcc/powerpc-unknown-elf/4.5.2/lto-wrapper
+Target: powerpc-unknown-elf
+Configured with: /tmp/crossgen/gcc-4.5.2/configure MAKEINFO='makeinfo --version' --disable-nls --prefix=/users/cao/becoulet/mutekh/tools/ --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/becoulet/mutekh/tools/ --with-gmp=/users/cao/becoulet/mutekh/tools/ --with-mpc=/users/cao/becoulet/mutekh/tools/ : (reconfigured) /tmp/crossgen/gcc-4.5.2/configure MAKEINFO='makeinfo --version' --disable-nls --prefix=/users/cao/becoulet/mutekh/tools/ --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/becoulet/mutekh/tools/ --with-gmp=/users/cao/becoulet/mutekh/tools/ --with-mpc=/users/cao/becoulet/mutekh/tools/
+Thread model: single
+gcc version 4.5.2 (GCC) 
+GNU ld (GNU Binutils) 2.20.1.20100303
+  Supported emulations:
+   elf32ppc
+   elf32ppclinux
+   elf32ppcsim
+
+
+Repository:
+
+svn: '/users/enseig/genius/TTool/MPSoC/mutekh' n'est pas une copie de travail
+/bin/sh: hg : commande introuvable
+
+
+Environment:
+
+12c12
+< DISPLAY=localhost:11.0
+---
+> DISPLAY=localhost:10.0
+44c44
+< PATH=.:/users/enseig/genius/tools/shtools:/usr/ucb:/bin:/usr/bin:/etc:/usr/openwin/bin:/usr/local/bin:/usr/etc:/usr/X11R6/bin:/asim/alliance/bin:/asim/gnu/bin:/labo/gnu/bin:/labo/bin:/labo/TeX/bin:/users/enseig/genius/bin:/users/enseig/genius/Prog/soclib/utils/bin:/users/enseig/genius/Prog/mutekh/bin:/opt/gcc-cross-mipsel/4.3.3/bin/:/cxtools/gcc_mips/obj/bin/:/users/enseig/genius/bin:/users/enseig/genius/TTool/MPSoC/soclib/utils/bin:/users/enseig/genius/TTool/MPSoC/mutekh/bin:/opt/gcc-cross-mipsel/4.3.3/bin/:/cxtools/gcc_mips/obj/bin/
+---
+> PATH=.:/users/enseig/genius/tools/shtools:/usr/ucb:/bin:/usr/bin:/etc:/usr/openwin/bin:/usr/local/bin:/usr/etc:/usr/X11R6/bin:/asim/alliance/bin:/asim/gnu/bin:/labo/gnu/bin:/labo/bin:/labo/TeX/bin:/users/enseig/genius/bin:/users/enseig/genius/TTool/MPSoC/soclib/utils/bin:/users/enseig/genius/TTool/MPSoC/mutekh/bin:/opt/gcc-cross-mipsel/4.3.3/bin/:/cxtools/gcc_mips/obj/bin/:/users/enseig/genius/bin:/users/enseig/genius/Prog/soclib/utils/bin:/users/enseig/genius/Prog/mutekh/bin:/opt/gcc-cross-mipsel/4.3.3/bin/:/cxtools/gcc_mips/obj/bin/:/users/enseig/genius/bin:/users/enseig/genius/TTool/MPSoC/soclib/utils/bin:/users/enseig/genius/TTool/MPSoC/mutekh/bin:/opt/gcc-cross-mipsel/4.3.3/bin/:/cxtools/gcc_mips/obj/bin/
+53,55c53,55
+< SSH_CLIENT=132.227.103.87 52708 22
+< SSH_CONNECTION=132.227.103.87 52708 132.227.67.142 22
+< SSH_TTY=/dev/pts/1
+---
+> SSH_CLIENT=132.227.103.87 37554 22
+> SSH_CONNECTION=132.227.103.87 37554 132.227.67.142 22
+> SSH_TTY=/dev/pts/0
+
+================ finished on lun. mai 28 13:39:42 CEST 2018
+
+
+Tools:
+
+Using built-in specs.
+COLLECT_GCC=powerpc-unknown-elf-gcc
+COLLECT_LTO_WRAPPER=/users/enseig/genius/TTool/MPSoC/mutekh/bin/../libexec/gcc/powerpc-unknown-elf/4.5.2/lto-wrapper
+Target: powerpc-unknown-elf
+Configured with: /tmp/crossgen/gcc-4.5.2/configure MAKEINFO='makeinfo --version' --disable-nls --prefix=/users/cao/becoulet/mutekh/tools/ --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/becoulet/mutekh/tools/ --with-gmp=/users/cao/becoulet/mutekh/tools/ --with-mpc=/users/cao/becoulet/mutekh/tools/ : (reconfigured) /tmp/crossgen/gcc-4.5.2/configure MAKEINFO='makeinfo --version' --disable-nls --prefix=/users/cao/becoulet/mutekh/tools/ --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/becoulet/mutekh/tools/ --with-gmp=/users/cao/becoulet/mutekh/tools/ --with-mpc=/users/cao/becoulet/mutekh/tools/
+Thread model: single
+gcc version 4.5.2 (GCC) 
+GNU ld (GNU Binutils) 2.20.1.20100303
+  Supported emulations:
+   elf32ppc
+   elf32ppclinux
+   elf32ppcsim
+
+
+Repository:
+
+svn: '/users/enseig/genius/TTool/MPSoC/mutekh' n'est pas une copie de travail
+/bin/sh: hg : commande introuvable
+
+
+Environment:
+
+
+================ finished on lun. mai 28 13:48:44 CEST 2018
 

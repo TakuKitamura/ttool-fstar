@@ -40,8 +40,8 @@
  /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/sys/stat.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/time.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/sys/types.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/tracemanager.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/request.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/tracemanager.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/request.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libpthread/include/pthread.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/local.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/local.h \
@@ -63,10 +63,10 @@
  /users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/gpct/include/gpct/_cont_lists.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/interrupt.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/mutek/include/mutek/rwlock.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/syncchannel.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/defs.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/asyncchannel.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/message.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/debug.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/include/mytimelib.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/syncchannel.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/defs.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/asyncchannel.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/message.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/debug.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libavatar/mytimelib.h \
  /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/sys/time.h
