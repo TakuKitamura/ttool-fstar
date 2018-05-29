@@ -48,55 +48,62 @@ package ddtranslatorSoclib.toSoclib;
  * @version 1.0 01/07/2014
  * @author Ludovic APVRILLE, Raja GATGOUT
  */
-public class TaskFileSoclib {
+public class TaskFileSoclib
+{
 
-//deleted pthread.h
-//added  mwmr.h
+    private final static String INCLUDE_HEADER =
+	"#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
+    private final static String LOCAL_INCLUDE_HEADER =
+	"#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"mwmr.h\"\n ";
 
-    private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-    private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"mwmr.h\"\n "; 
-	
     private final static String CR = "\n";
-	
+
     private String name;
     private int cpuId = 0;
-	
+
     private String headerCode;
     private String mainCode;
-	
-	
-    public TaskFileSoclib(String _name , int cpuid) {
-	    name = _name;
-	    headerCode = "";
-	    mainCode = "";
-	    cpuId = cpuid;
+
+
+    public TaskFileSoclib (String _name, int cpuid)
+    {
+	name = _name;
+	headerCode = "";
+	mainCode = "";
+	cpuId = cpuid;
     }
-	
-    public String getName() {
+
+    public String getName ()
+    {
 	return name;
     }
 
-    public int getCPUId(){
-      return cpuId; 
+    public int getCPUId ()
+    {
+	return cpuId;
     }
-	
-    public String getFullHeaderCode() {
+
+    public String getFullHeaderCode ()
+    {
 	String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
 	s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER + CR + CR;
 	s += headerCode;
 	s += "#endif\n";
 	return s;
-	}
-	
-	public String getMainCode() {
-	    return "#include \"" + name + ".h\"" + CR + CR + mainCode;
-	}
-	
-	public void addToHeaderCode(String _code) {
-	    headerCode += _code;
-	}
-	
-	public void addToMainCode(String _code) {
-	    mainCode += _code;
-	}	
+    }
+
+    public String getMainCode ()
+    {
+	return "#include \"" + name + ".h\"" + CR + CR + mainCode;
+    }
+
+    public void addToHeaderCode (String _code)
+    {
+	headerCode += _code;
+    }
+
+    public void addToMainCode (String _code)
+    {
+	mainCode += _code;
+    }
 }
