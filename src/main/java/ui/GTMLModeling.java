@@ -1737,8 +1737,14 @@ public class GTMLModeling  {
                 String name = tmltask.getName() + ":" +  tgc.getName();
                 name = name.replaceAll(" ","");
                 //TraceManager.addDev("To check " + name);
-
-                tmlm.addCheckedActivity(tgc, name+":" + tgc.getValue().split("\\(")[0]);
+                if (tgc.getValue().contains("(")){
+                	tmlm.addCheckedActivity(tgc, name+":" + tgc.getValue().split("\\(")[0]);
+                }
+                else {
+                	if (tgc instanceof TMLADExecI){
+	                	tmlm.addCheckedActivity(tgc, ((TMLADExecI) tgc).getDelayValue());
+	                }
+                }
             }
             if (tgc instanceof TMLADActionState) {
                 tmlaction = new TMLActionState("action", tgc);

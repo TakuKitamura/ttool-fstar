@@ -950,8 +950,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 }
                 });*/
         sorterPI.setTableHeader(latTable.getTableHeader());
-        ((latTable.getColumnModel()).getColumn(0)).setPreferredWidth(700);
-        ((latTable.getColumnModel()).getColumn(1)).setPreferredWidth(700);
+        ((latTable.getColumnModel()).getColumn(0)).setPreferredWidth(400);
+        ((latTable.getColumnModel()).getColumn(1)).setPreferredWidth(400);
         ((latTable.getColumnModel()).getColumn(2)).setPreferredWidth(100);
         ((latTable.getColumnModel()).getColumn(3)).setPreferredWidth(100);
         ((latTable.getColumnModel()).getColumn(4)).setPreferredWidth(100);
@@ -960,8 +960,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         jspLatency = new JScrollPane(latTable);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
-        jspLatency.setMinimumSize(new Dimension(450, 100));
-        jspLatency.setPreferredSize(new Dimension(450, 100));
+        jspLatency.setMinimumSize(new Dimension(1200, 100));
+        jspLatency.setPreferredSize(new Dimension(1200, 100));
         latencyPanel.add(jspLatency, c0);
 
 
@@ -1489,12 +1489,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     public void addLatency(){
         SimulationLatency sl = new SimulationLatency();
-        sl.setTransaction1(transaction1.getSelectedItem().toString());
-        sl.setTransaction2(transaction2.getSelectedItem().toString());
-        nameLatencyMap.put(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString(), sl);
-        latencies.add(sl);
+        if (transaction1.getSelectedItem() !=null && transaction2.getSelectedItem() != null){        
+	        sl.setTransaction1(transaction1.getSelectedItem().toString());	
+	        sl.setTransaction2(transaction2.getSelectedItem().toString());
+	        nameLatencyMap.put(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString(), sl);
+	        latencies.add(sl);
         //        toCheck.add(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString());
-        updateTransactionsTable();
+	        updateTransactionsTable();
+	    }
     }
 
     public void resetLatencies(){
