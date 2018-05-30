@@ -87,7 +87,7 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 	/** Constructor **/
 	public JDialogSysCAMSBlockDE(SysCAMSBlockDE block) {
 		/** Set JDialog **/
-		this.setTitle("Setting TDF Block Attributes");
+		this.setTitle("Setting DE Block Attributes");
 		this.setSize(500, 180);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

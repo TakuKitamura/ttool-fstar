@@ -493,7 +493,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 
         try {
             if (jp1.getSelectedIndex() == 0) {
-                jta.append("Generating executable code (SOCLIB version)\n");
+                jta.append("Generating executable code (SystemC-AMS version)\n");
 
                 SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel = mgui.getFirstSysCAMSPanelFound();
                 SysCAMSPanelTranslator syscamspaneltranslator = new SysCAMSPanelTranslator(syscamsDiagramPanel);
