@@ -1,0 +1,8 @@
+/users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/libm/s_sin.o: \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libm/s_sin.c \
+ /users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/config.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libm/include/fdlibm.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/decls.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/include/arch/hexo/types.h

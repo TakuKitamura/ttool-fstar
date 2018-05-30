@@ -60,9 +60,6 @@ import ui.dd.TGConnectorLinkNode;
 import ui.diplodocusmethodology.*;
 import ui.ebrdd.*;
 import ui.ftd.*;
-import ui.het.CAMSBlock;
-import ui.het.CAMSBlockConnector;
-import ui.het.CAMSConnectingPoint;
 import ui.iod.*;
 import ui.ncdd.*;
 import ui.osad.*;
@@ -70,6 +67,7 @@ import ui.oscd.*;
 import ui.procsd.*;
 import ui.prosmd.*;
 import ui.req.*;
+import ui.syscams.*;
 import ui.sysmlsecmethodology.*;
 import ui.tmlad.*;
 import ui.tmlcd.*;
@@ -337,7 +335,12 @@ public class TGComponentManager {
 
     // SystemC-AMS
     public static final int CAMS_CONNECTOR = 1601;
-    public static final int CAMS_BLOCK = 1602;
+    public static final int CAMS_BLOCK_TDF = 1602;
+    public static final int CAMS_BLOCK_DE = 1603;
+    public static final int CAMS_PORT_TDF = 1604;
+    public static final int CAMS_PORT_DE = 1605;
+    public static final int CAMS_PORT_CONVERTER = 1606;
+    public static final int CAMS_CLUSTER = 1607;
 
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -1208,9 +1211,6 @@ public class TGComponentManager {
             case TMLARCHI_HWANODE:
                 tgc = new TMLArchiHWANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-            case TMLARCHI_CAMSNODE:
-                tgc = new TMLArchiCAMSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-                break;
             case TMLARCHI_MEMORYNODE:
                 tgc = new TMLArchiMemoryNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1232,10 +1232,25 @@ public class TGComponentManager {
             case TMLARCHI_KEY:
                 tgc = new TMLArchiKey(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-            case CAMS_BLOCK:
-                tgc = new CAMSBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            // SystemC-AMS
+            case CAMS_BLOCK_TDF:
+                tgc = new SysCAMSBlockTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-
+            case CAMS_BLOCK_DE:
+            	tgc = new SysCAMSBlockDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case CAMS_PORT_TDF:
+            	tgc = new SysCAMSPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case CAMS_PORT_DE:
+            	tgc = new SysCAMSPortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case CAMS_PORT_CONVERTER:
+            	tgc = new SysCAMSPortConverter(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case CAMS_CLUSTER:
+            	tgc = new SysCAMSCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
             // Communication patterns + SD
             case TMLCP_CHOICE:
                 tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1615,9 +1630,21 @@ public class TGComponentManager {
         } else if (tgc instanceof AvatarADAssociationConnector) {
             return AAD_ASSOCIATION_CONNECTOR;
 
-            //SystemC-AMS -----mark
-        } else if (tgc instanceof CAMSBlockConnector) {
+            // SystemC-AMS
+        } else if (tgc instanceof SysCAMSPortConnector) {
             return CAMS_CONNECTOR;
+        } else if (tgc instanceof SysCAMSBlockTDF) {
+        	return CAMS_BLOCK_TDF;
+        } else if (tgc instanceof SysCAMSBlockDE) {
+        	return CAMS_BLOCK_DE;
+        } else if (tgc instanceof SysCAMSPortTDF) {
+        	return CAMS_PORT_TDF;
+        } else if (tgc instanceof SysCAMSPortDE) {
+        	return CAMS_PORT_DE;
+        } else if (tgc instanceof SysCAMSPortConverter) {
+        	return CAMS_PORT_CONVERTER;
+        } else if (tgc instanceof SysCAMSCompositeComponent) {
+        	return CAMS_CLUSTER;
 
             // Others
         } else if (tgc instanceof TADDeterministicDelay) {
@@ -1952,8 +1979,6 @@ public class TGComponentManager {
             return AVATAR_FIREWALL;
         } else if (tgc instanceof TMLArchiHWANode) {
             return TMLARCHI_HWANODE;
-        } else if (tgc instanceof TMLArchiCAMSNode) {
-            return TMLARCHI_CAMSNODE;
         } else if (tgc instanceof TMLArchiMemoryNode) {
             return TMLARCHI_MEMORYNODE;
         } else if (tgc instanceof TMLArchiDMANode) {
@@ -2316,6 +2341,9 @@ public class TGComponentManager {
             case CONNECTOR_PORT_TMLC:
                 tgc = new TMLCPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
+            case CAMS_CONNECTOR:
+            	tgc = new SysCAMSPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            	break;
             case CONNECTOR_NODE_TMLARCHI:
                 tgc = new TMLArchiConnectorNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
@@ -2364,10 +2392,10 @@ public class TGComponentManager {
 
     }
 
-    public final static CAMSBlockConnector addCAMSConnector(int x, int y, int id, TDiagramPanel tdp, CAMSConnectingPoint p1, CAMSConnectingPoint p2, Vector<Point> listPoint) {
+/*    public final static CAMSBlockConnector addCAMSConnector(int x, int y, int id, TDiagramPanel tdp, CAMSConnectingPoint p1, CAMSConnectingPoint p2, Vector<Point> listPoint) {
         CAMSBlockConnector cbc = null;
         cbc = new CAMSBlockConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
         return cbc;
-    }
+    }*/
 
 } // Class

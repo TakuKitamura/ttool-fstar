@@ -1,4 +1,0 @@
-
-objs = icu-arm.o
-
-

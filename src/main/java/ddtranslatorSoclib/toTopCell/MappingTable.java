@@ -166,22 +166,26 @@ public class MappingTable {
       mapping = mapping + "maptab.add(Segment(\"vci_fd_access\", 0xd4200000, 0x00000100, IntTab("+(l+1)+"), false));" + CR;
       mapping = mapping + "maptab.add(Segment(\"vci_ethernet\",  0xd5000000, 0x00000020, IntTab("+(l+2)+"), false));" + CR;
       mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0xd1200000, 0x00000020, IntTab("+(l+3)+"), false));" + CR2;
-      mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0xC0200000, 0x00000100, IntTab("+(l+4)+"), false));" + CR2;
+      //mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0xC0200000, 0x00000100, IntTab("+(l+4)+"), false));" + CR2;
     
 
       /* Instanciation of the MWMR wrappers for hardware accellerators */
       /* The accelerators themselves are specifies on DIPLODOCUS level */
       int count = l+5;
       int hwa_count=0;
+      int nb_hwa=0;
       int MWMR_SIZE=4096;
       int MWMRd_SIZE=12288;
       // int MWMR_BASE=0xA0200000;
       i=0;
+      for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {nb_hwa++;
+      }
+      
         for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {   
 	    mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0xA0"+  Integer.toHexString(2097152+MWMR_SIZE*i)+",  0x00001000, IntTab("+count+"), false));" + CR; 
-	    mapping += "maptab.add(Segment(\"mwmrd_ram"+hwa_count+"\", 0x20"+  Integer.toHexString(2097152+MWMRd_SIZE*i)+",  0x00003000, IntTab("+(count+1)+"), false));" + CR; 	 
+	    mapping += "maptab.add(Segment(\"mwmrd_ram"+hwa_count+"\", 0x20"+  Integer.toHexString(2097152+MWMRd_SIZE*i)+",  0x00003000, IntTab("+(count+nb_hwa)+"), false));" + CR; 	 
 	    hwa_count++;
-	    count+=2;
+	    count+=1;
       } 
  hwa_count=0;  
 
@@ -205,7 +209,7 @@ public class MappingTable {
       mapping = mapping + "maptab.add(Segment(\"vci_fd_access\", 0x17200000, 0x00000100, IntTab(0,5), false));" + CR;
       mapping = mapping + "maptab.add(Segment(\"vci_ethernet\",  0x18200000, 0x00000020, IntTab(0,6), false));" + CR;
       mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0x19200000, 0x00000020, IntTab(0,7), false));" + CR2;
-         mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0x1A200000, 0x00000020, IntTab(0,8), false));" + CR2;
+      // mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0x1A200000, 0x00000020, IntTab(0,8), false));" + CR2;
         
       int SEG_ICU_BASE  =          285212672;
       int SEG_ICU_SIZE  =          20;
@@ -277,7 +281,7 @@ mapping += "maptab.add(Segment(\"vci_rttimer\", 0x"+ Integer.toHexString(SEG_TIM
 	      tty.setNo_target(10+nb_ram);
 	  }
 	  else{
-	      tty.setNo_target(nb_ram);
+	      tty.setNo_target(tty.getNo_cluster()+nb_ram);
 	  }	 	     
 	  mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0x"+Integer.toHexString(SEG_TTY_BASE +  tty.getNo_cluster()* CLUSTER_SIZE)+", 0x00000010, IntTab("+tty.getNo_cluster()+","+(tty.getNo_target())+"), false));" + CR; 	  
       }

@@ -349,7 +349,7 @@ build: x86_64-unknown-linux-gnu
 target: powerpc-unknown-elf
 __EOF__
       cat >> $file << \__EOF__
-configured with: /tmp/crossgen/gcc-4.5.2/configure --disable-nls --prefix=/users/cao/genius/Prog/mutekh --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/genius/Prog/mutekh --with-gmp=/users/cao/genius/Prog/mutekh --with-mpc=/users/cao/genius/Prog/mutekh
+configured with: /tmp/crossgen/gcc-4.5.2/configure MAKEINFO='makeinfo --version' --disable-nls --prefix=/users/cao/becoulet/mutekh/tools/ --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/becoulet/mutekh/tools/ --with-gmp=/users/cao/becoulet/mutekh/tools/ --with-mpc=/users/cao/becoulet/mutekh/tools/ : (reconfigured) /tmp/crossgen/gcc-4.5.2/configure MAKEINFO='makeinfo --version' --disable-nls --prefix=/users/cao/becoulet/mutekh/tools/ --target=powerpc-unknown-elf --disable-checking --disable-werror --enable-languages=c --disable-libssp --enable-multilib --with-mpfr=/users/cao/becoulet/mutekh/tools/ --with-gmp=/users/cao/becoulet/mutekh/tools/ --with-mpc=/users/cao/becoulet/mutekh/tools/
 __EOF__
       cat >> $file << __EOF__
 >Description:

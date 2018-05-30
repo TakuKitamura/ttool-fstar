@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.avatarrd;
 
 import ui.MainGUI;
@@ -51,11 +49,12 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
-   * Class AvatarRDToolBar
-   * Implements the toolbar to be used in conjunction with the Avatar Requirement Diagram
-   * Creation: 20/04/2010
-   * @version 1.0 20/04/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarRDToolBar
+ * Implements the toolbar to be used in conjunction with the Avatar Requirement Diagram
+ * Creation: 20/04/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 20/04/2010
  */
 public class AvatarRDToolBar extends TToolBar {
 
@@ -76,17 +75,19 @@ public class AvatarRDToolBar extends TToolBar {
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
         mgui.actions[TGUIAction.ARD_REQUIREMENT].setEnabled(b);
         mgui.actions[TGUIAction.ARD_PROPERTY].setEnabled(b);
-	mgui.actions[TGUIAction.ARD_ELEMENT_REFERENCE].setEnabled(b);
+        mgui.actions[TGUIAction.ARD_ELEMENT_REFERENCE].setEnabled(b);
         mgui.actions[TGUIAction.ARD_VERIFY_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.ARD_DERIVE_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.ARD_REFINE_CONNECTOR].setEnabled(b);
-	mgui.actions[TGUIAction.ARD_SATISFY_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.ARD_SATISFY_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.ARD_COPY_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.ARD_COMPOSITION_CONNECTOR].setEnabled(b);
 
         mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 
         mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
 
     }
 
@@ -135,13 +136,13 @@ public class AvatarRDToolBar extends TToolBar {
 
         this.addSeparator();
 
-	button = this.add(mgui.actions[TGUIAction.ARD_ELEMENT_REFERENCE]);
-        button.addMouseListener(mgui.mouseHandler);
-	
-	button = this.add(mgui.actions[TGUIAction.ARD_SATISFY_CONNECTOR]);
+        button = this.add(mgui.actions[TGUIAction.ARD_ELEMENT_REFERENCE]);
         button.addMouseListener(mgui.mouseHandler);
 
-	this.addSeparator();
+        button = this.add(mgui.actions[TGUIAction.ARD_SATISFY_CONNECTOR]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        this.addSeparator();
 
         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
         button.addMouseListener(mgui.mouseHandler);

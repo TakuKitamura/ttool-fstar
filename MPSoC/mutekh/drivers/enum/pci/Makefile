@@ -1,4 +1,0 @@
-
-objs += enum-pci.o
-
-

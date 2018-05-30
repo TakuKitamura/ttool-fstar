@@ -757,7 +757,7 @@ public class TMLModeling<E> {
 
     public void backtrace(ProVerifOutputAnalyzer pvoa, String mappingName){
         //System.out.println("Backtracing Confidentiality");
-        HashMap<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+        Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
 
         for (AvatarPragmaSecret pragma: confResults.keySet()) {
             ProVerifQueryResult result = confResults.get(pragma);
@@ -829,7 +829,7 @@ public class TMLModeling<E> {
 	}
 
 
-    public void backtraceAuthenticity(HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authenticityResults, String mappingName) {
+    public void backtraceAuthenticity(Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authenticityResults, String mappingName) {
         //        System.out.println("Backtracing Authenticity");
         for (AvatarPragmaAuthenticity pragma: authenticityResults.keySet()) {
             ProVerifQueryAuthResult result = authenticityResults.get(pragma);
@@ -912,7 +912,7 @@ public class TMLModeling<E> {
                     for (String channelName: channels){
                         if (channelName.contains("retData_") || channelName.contains("data_")){
                             channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
-                            String header= channelName.split("__retData_")[0];
+                            //String header= channelName.split("__retData_")[0];
                             for (TMLTask t: getTasks()){
                                 if (channelName.contains(t.getName().split("__")[1])){
                                     channelName = channelName.replace("_"+t.getName().split("__")[1],"");
@@ -1008,7 +1008,7 @@ public class TMLModeling<E> {
                         for (String channelName: channels){
                             if (channelName.contains("retData_") || channelName.contains("data_")){
                                 channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
-                                String header= channelName.split("__retData_")[0];
+                                //String header= channelName.split("__retData_")[0];
                                 for (TMLTask t: getTasks()){
                                     if (channelName.contains(t.getName().split("__")[1])){
                                         channelName = channelName.replace("_"+t.getName().split("__")[1],"");
@@ -1112,7 +1112,7 @@ public class TMLModeling<E> {
                     for (String channelName: channels){
                         if (channelName.contains("retData_") || channelName.contains("data_")){
                             channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
-                            String header= channelName.split("__retData_")[0];
+                            //String header= channelName.split("__retData_")[0];
                             for (TMLTask t: getTasks()){
                                 if (channelName.contains(t.getName().split("__")[1])){
                                     channelName = channelName.replace("_"+t.getName().split("__")[1],"");

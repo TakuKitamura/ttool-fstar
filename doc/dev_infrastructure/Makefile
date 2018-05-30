@@ -13,7 +13,7 @@ FIGPDFS		= $(patsubst $(FIGDIR)/%.fig,$(FIGDIR)/%.pdf,$(FIGURES))
 FIGPDFTS	= $(patsubst $(FIGDIR)/%.fig,$(FIGDIR)/%.pdf_t,$(FIGURES))
 FIGURES		= $(filter-out $(FIGS) $(FIGPDFS) $(FIGPDFTS), $(wildcard $(FIGDIR)/*))
 
-JOB	= lettreBenjaminRanft
+JOB	= ttool_development_infrastructure
 TEXS	= $(wildcard *.tex) $(wildcard *.sty) $(wildcard *.cls)
 PICS	= $(wildcard *.png) $(filter-out $(JOB).pdf,$(wildcard *.pdf))
 BIBS	= $(wildcard *.bib) $(wildcard *.bst)

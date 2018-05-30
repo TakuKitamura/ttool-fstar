@@ -86,6 +86,8 @@ public class SysmlsecMethodologyDiagramToolbar extends TToolBar {
 
           mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);*/
 
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
+
     }
 
     protected void setButtons() {

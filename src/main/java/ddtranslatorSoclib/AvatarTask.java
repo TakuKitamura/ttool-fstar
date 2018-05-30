@@ -50,16 +50,17 @@
 package ddtranslatorSoclib;
 
 public class AvatarTask extends AvatarMappedObject{
-
+    private AvatarCoproMWMR avatarCoprocReference;
     private AvatarCPU avatarCPUReference;
     private String taskName ;
     private String referenceTaskName;
 
-    public AvatarTask(String _taskName , String _referenceTaskName, AvatarCPU _avatarCPUReference ){
+    public AvatarTask(String _taskName , String _referenceTaskName, AvatarCPU _avatarCPUReference, AvatarCoproMWMR _avatarCoprocReference ){
 
       taskName = _taskName;
       referenceTaskName = _referenceTaskName;
-      avatarCPUReference = _avatarCPUReference;   
+      avatarCPUReference = _avatarCPUReference; 
+      avatarCoprocReference = _avatarCoprocReference;
     }
 
     public String getTaskName(){
@@ -73,6 +74,15 @@ public class AvatarTask extends AvatarMappedObject{
     public AvatarCPU getAvatarCPUReference(){
       return avatarCPUReference;
     } 
+
+    public AvatarCoproMWMR getAvatarCoprocReference(){
+      return avatarCoprocReference;
+    }
+
+    public void setAvatarCoprocReference(AvatarCoproMWMR _avatarCoprocReference){
+      return;
+    } 
+
 
     public int getCPUNo(){
       return avatarCPUReference.getNo_proc();

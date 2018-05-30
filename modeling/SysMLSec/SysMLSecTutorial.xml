@@ -825,8 +825,8 @@
 <cdparam x="419" y="198" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="419" y="198" id="375" />
-<P2  x="552" y="198" id="364" />
+<P1  x="406" y="185" id="375" />
+<P2  x="565" y="185" id="364" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="1202" id="374" >
@@ -1551,8 +1551,8 @@
 <cdparam x="419" y="198" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="419" y="198" id="694" />
-<P2  x="570" y="198" id="683" />
+<P1  x="406" y="185" id="694" />
+<P2  x="583" y="185" id="683" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="1202" id="693" >
@@ -2052,7 +2052,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="System;T2;T1;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="875" >
@@ -2091,7 +2091,7 @@
 
 <COMPONENT type="302" id="892" >
 <cdparam x="517" y="43" />
-<sizeparam width="274" height="84" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="260" height="84" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
 <infoparam name="Proverif Pragma" value="#InitialSystemKnowledge T1.sk T2.sk

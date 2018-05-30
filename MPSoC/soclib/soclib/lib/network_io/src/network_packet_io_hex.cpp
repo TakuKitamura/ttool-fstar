@@ -63,7 +63,7 @@ public:
 		if ( packet_hex.size() / 2 != size ) {
 			std::cerr << "Spurious frame in " << m_filename << ": "
 					  << size << " " << packet_hex << std::endl;
-			return NULL;
+			return NULL; 
 		}
 
 		uint8_t *adata = new uint8_t[size];

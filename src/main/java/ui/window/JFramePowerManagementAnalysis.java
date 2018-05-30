@@ -49,8 +49,8 @@ import common.SpecConfigTTool;
 import ui.FormatManager;
 import ui.util.IconManager;
 import ui.StoppableGUIElement;
-import ui.graph.AUTGraph;
-import ui.graph.VCDGenerator;
+import graph.AUTGraph;
+import graph.VCDGenerator;
 
 import javax.swing.*;
 import java.awt.*;

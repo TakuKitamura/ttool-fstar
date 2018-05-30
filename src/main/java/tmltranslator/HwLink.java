@@ -37,22 +37,21 @@
  */
 
 
-
-
 package tmltranslator;
 
 /**
  * Class HwLink
  * Creation: 05/09/2007
- * @version 1.0 05/09/2007
+ *
  * @author Ludovic APVRILLE and Daniel KNORRECK
+ * @version 1.0 05/09/2007
  */
 public class HwLink implements Comparable<HwLink> {
     public HwBus bus;
     //public HwCommunicationNode bus;
     public HwVGMN vgmn;//DG 10.08.
     public HwCrossbar crossbar;//DG 10.08.
-    
+
     public HwNode hwnode;
     protected String name;
     protected int priority;
@@ -73,15 +72,31 @@ public class HwLink implements Comparable<HwLink> {
         priority = _priority;
     }
 
-    public int compareTo(HwLink o){
+    public int compareTo(HwLink o) {
         if (priority > o.getPriority()) return 1;
         if (priority < o.getPriority()) return -1;
         return 0;
     }
 
     public String toXML() {
-	String s = "<LINK name=\"" + name + "\" bus=\"" + bus.getName() + "\" hwnode=\"" + hwnode.getName() + "\" priority=\"" + priority + "\" />\n";
-	return s;
+        String s = "<LINK name=\"" + name + "\" bus=\"" + bus.getName() + "\" hwnode=\"" + hwnode.getName() + "\" priority=\"" + priority + "\" />\n";
+        return s;
+    }
+
+    public boolean areConnected(HwNode node1, HwNode node2) {
+        if (connectedBusHwNode(node1, node2)) {
+            return true;
+        }
+        return connectedBusHwNode(node2, node1);
+
+    }
+
+    private boolean connectedBusHwNode(HwNode nodeBus, HwNode node) {
+        if (hwnode != node) {
+            return false;
+        }
+
+        return (nodeBus == bus) || (nodeBus == vgmn) || (nodeBus == crossbar);
     }
 
 }

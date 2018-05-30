@@ -45,6 +45,7 @@
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
 package ddtranslatorSoclib.toTopCell;
+import ddtranslatorSoclib.AvatarCoproMWMR;//DG 30.04.2018
 
 public class Simulation {
 	
@@ -57,6 +58,26 @@ public class Simulation {
     }
 
     public static String getSimulation(){
+ int network_io=0;
+ simulation=CR;
+ for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
+		//a coprocessor with its FIFO interface built from HWA 
+		/*	netlist = netlist +"hwa"+i+".p_clk(signal_clk);" + CR;
+		netlist = netlist +"hwa"+i+".p_resetn(signal_resetn);" + CR;	      	
+                netlist = netlist +"hwa"+i+".p_from_ctrl["+i+"](signal_fifo_"+i+"_from_ctrl);" + CR;
+		netlist = netlist +"hwa"+i+".p_to_ctrl["+i+"](signal_fifo_"+i+"_to_ctrl);" + CR2;*/
+
+
+		//IE and OE are special cases as they have VCI an fifo initiator interface!!!
+		// In that case, another main (for Network_IO) is substituted
+  
+     
+     if((copro.getCoprocType()==0)||(copro.getCoprocType()==1)){
+	 network_io=1;
+     }
+ }
+	
+ if((network_io==0)){
 		 simulation  = CR2+ CR2+ 
 		     "/***************************************************************************" +	CR +
 		     "----------------------------simulation-------------------------" + CR +
@@ -69,6 +90,8 @@ public class Simulation {
 		simulation =simulation+"throw;" + CR;
 		simulation =simulation+"}" + CR;
 		simulation =  simulation+ CR +"       return 1;"+ CR + "}"  ;		 
-		return simulation;
+		//return simulation;
+	}
+ return simulation;
     }
 }

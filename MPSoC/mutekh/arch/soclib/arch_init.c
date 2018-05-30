@@ -27,6 +27,7 @@
 # include <device/driver.h>
 # include <device/device.h>
 # include <mutek/fdt.h>
+# include <stdio.h>
 #endif
 
 #include <arch/mem_checker.h>
@@ -223,15 +224,17 @@ void arch_init_other()
     mmu_cpu_init();
 #endif      
     cpu_init();
-        
+  
 
 #if defined(CONFIG_ARCH_DEVICE_TREE) && defined(CONFIG_HEXO_IRQ)
     struct device_s *icu = enum_fdt_icudev_for_cpuid(&fdt_enum_dev, cpu_id());
     if ( icu )
         cpu_interrupt_sethandler_device(icu);
 #endif
+    //printk("############cpu_count %d\n ", cpu_count);//DG 11.05.
 
     ++cpu_count;
+
 
     lock_release(&cpu_init_lock);
 

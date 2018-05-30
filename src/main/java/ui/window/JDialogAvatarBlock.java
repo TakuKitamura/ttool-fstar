@@ -37,15 +37,12 @@
  */
 
 
-
-
 package ui.window;
 
 import myutil.Conversion;
 import myutil.GraphicLib;
 import ui.AvatarMethod;
 import ui.AvatarSignal;
-import ui.util.IconManager;
 import ui.TAttribute;
 
 import javax.swing.*;
@@ -61,10 +58,11 @@ import java.util.LinkedList;
  * Class JDialogAvatarBlock
  * Dialog for managing attributes, methods and signals of Avatar Blocks
  * Creation: 08/04/2010
- * @version 1.0 08/04/2010
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 08/04/2010
  */
-public class JDialogAvatarBlock extends JDialogBase implements ActionListener, ListSelectionListener  {
+public class JDialogAvatarBlock extends JDialogBase implements ActionListener, ListSelectionListener {
 
     private LinkedList<TAttribute> attributes, attributesPar, forbidden;
     private LinkedList<Boolean> initValues;
@@ -74,7 +72,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
 
     private boolean cancelled = true;
 
-    protected String [] globalCode;
+    protected String[] globalCode;
     protected JTextArea jtaGlobalCode;
     protected boolean hasGlobalCode;
     protected String mainCode;
@@ -121,8 +119,10 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     private JButton downSignalButton;
     private JButton removeSignalButton;
 
-    /** Creates new form  */
-    public JDialogAvatarBlock(LinkedList<TAttribute> _attributes, LinkedList<AvatarMethod> _methods, LinkedList<AvatarSignal> _signals, LinkedList<TAttribute> _forbidden, Frame f, String title, String attrib, int _tab, String []_globalCode, boolean _hasGlobalCode, String _mainCode) {
+    /**
+     * Creates new form
+     */
+    public JDialogAvatarBlock(LinkedList<TAttribute> _attributes, LinkedList<AvatarMethod> _methods, LinkedList<AvatarSignal> _signals, LinkedList<TAttribute> _forbidden, Frame f, String title, String attrib, int _tab, String[] _globalCode, boolean _hasGlobalCode, String _mainCode) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
@@ -133,12 +133,12 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
 
 
         if (methodsPar == null) {
-            methodsPar = new LinkedList<AvatarMethod> ();
+            methodsPar = new LinkedList<AvatarMethod>();
             hasMethods = false;
         }
 
         if (signalsPar == null) {
-            signalsPar = new LinkedList<AvatarSignal> ();
+            signalsPar = new LinkedList<AvatarSignal>();
             hasSignals = false;
         }
 
@@ -150,22 +150,22 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
 
 
         forbidden = _forbidden;
-        initValues = new LinkedList<Boolean> ();
+        initValues = new LinkedList<Boolean>();
         this.attrib = attrib;
         tab = _tab;
 
-        attributes = new LinkedList<TAttribute> ();
-        methods = new LinkedList<AvatarMethod> ();
-        signals = new LinkedList<AvatarSignal> ();
+        attributes = new LinkedList<TAttribute>();
+        methods = new LinkedList<AvatarMethod>();
+        signals = new LinkedList<AvatarSignal>();
 
-        for(TAttribute attr: this.attributesPar)
-            this.attributes.add (attr.makeClone());
+        for (TAttribute attr : this.attributesPar)
+            this.attributes.add(attr.makeClone());
 
-        for(AvatarMethod meth: this.methodsPar)
-            this.methods.add (meth.makeClone());
+        for (AvatarMethod meth : this.methodsPar)
+            this.methods.add(meth.makeClone());
 
-        for(AvatarSignal sig: this.signalsPar)
-            this.signals.add (sig.makeClone());
+        for (AvatarSignal sig : this.signalsPar)
+            this.signals.add(sig.makeClone());
 
         initComponents();
         myInitComponents();
@@ -180,22 +180,26 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
 
     private void initComponents() {
 
-    	// Issue #41 Ordering of tabbed panes 
+        // Issue #41 Ordering of tabbed panes
         JTabbedPane tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
         Container c = getContentPane();
 
-        JPanel panelAttr = new JPanel(new BorderLayout());
-        JPanel panelMethod = new JPanel(new BorderLayout());
-        JPanel panelSignal = new JPanel(new BorderLayout());
+        //JPanel panelAttr = new JPanel(new FlowLayout());
+        //JPanel panelMethod = new JPanel(new BorderLayout());
+        //JPanel panelSignal = new JPanel(new BorderLayout());
         JPanel panelCode;
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagLayout gridbag3 = new GridBagLayout();
-       // GridBagLayout gridbag4 = new GridBagLayout();
+        // GridBagLayout gridbag4 = new GridBagLayout();
         GridBagLayout gridbag5 = new GridBagLayout();
         GridBagLayout gridbag6 = new GridBagLayout();
         GridBagLayout gridbag7 = new GridBagLayout();
+        GridBagLayout gridbag8 = new GridBagLayout();
+        GridBagLayout gridbag9 = new GridBagLayout();
+        GridBagLayout gridbag10 = new GridBagLayout();
+
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
@@ -204,23 +208,33 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         GridBagConstraints c5 = new GridBagConstraints();
         GridBagConstraints c6 = new GridBagConstraints();
         GridBagConstraints c7 = new GridBagConstraints();
+        GridBagConstraints c8 = new GridBagConstraints();
+        GridBagConstraints c9 = new GridBagConstraints();
+        GridBagConstraints c10 = new GridBagConstraints();
+
+        JPanel panelAttr = new JPanel(gridbag8);
+        JPanel panelMethod = new JPanel(gridbag9);
+        JPanel panelSignal = new JPanel(gridbag10);
+
 
         setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
+        //c.setLayout(gridbag0);
+        c.setLayout(new BorderLayout());
+
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Adding " + attrib + "s"));
-        panel1.setPreferredSize(new Dimension(300, 450));
-	panel1.setMinimumSize(new Dimension(300, 200));
+        panel1.setPreferredSize(new Dimension(300, 550));
+        panel1.setMinimumSize(new Dimension(300, 200));
 
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Managing " + attrib + "s"));
-        panel2.setPreferredSize(new Dimension(300, 450));
-	panel1.setMinimumSize(new Dimension(300, 200));
+        panel2.setPreferredSize(new Dimension(300, 550));
+        panel2.setMinimumSize(new Dimension(300, 200));
 
         // first line panel1
         c1.gridwidth = 1;
@@ -287,7 +301,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         panel1.add(addButton, c1);
 
         // 1st line panel2
-        listAttribute = new JList<TAttribute> (this.attributes.toArray (new TAttribute[0]));
+        listAttribute = new JList<TAttribute>(this.attributes.toArray(new TAttribute[0]));
         //listAttribute.setFixedCellWidth(150);
         //listAttribute.setFixedCellHeight(20);
         listAttribute.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -327,12 +341,12 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         panel3 = new JPanel();
         panel3.setLayout(gridbag3);
         panel3.setBorder(new javax.swing.border.TitledBorder("Adding methods"));
-        panel3.setPreferredSize(new Dimension(300, 450));
+        panel3.setPreferredSize(new Dimension(300, 550));
 
         panel4 = new JPanel();
         panel4.setLayout(gridbag2);
         panel4.setBorder(new javax.swing.border.TitledBorder("Managing methods"));
-        panel4.setPreferredSize(new Dimension(300, 450));
+        panel4.setPreferredSize(new Dimension(300, 550));
 
         // first line panel3
         c3.gridwidth = 1;
@@ -382,11 +396,11 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         panel3.add(addMethodButton, c3);
 
         // 1st line panel4
-        listMethod = new JList<AvatarMethod> (this.methods.toArray (new AvatarMethod[0]));
+        listMethod = new JList<AvatarMethod>(this.methods.toArray(new AvatarMethod[0]));
         listMethod.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listMethod.addListSelectionListener(this);
         scrollPane = new JScrollPane(listMethod);
-        scrollPane.setSize(300, 450);
+        scrollPane.setSize(300, 550);
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
         c4.fill = GridBagConstraints.BOTH;
         c4.gridheight = 5;
@@ -472,7 +486,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         panel5.add(addSignalButton, c5);
 
         // 1st line panel6
-        listSignal = new JList<AvatarSignal> (this.signals.toArray (new AvatarSignal[0]));
+        listSignal = new JList<AvatarSignal>(this.signals.toArray(new AvatarSignal[0]));
         listSignal.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listSignal.addListSelectionListener(this);
         scrollPane = new JScrollPane(listSignal);
@@ -540,14 +554,14 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         panelCode.add(jsp, c2);
 
         panelCode.add(new JLabel("Global code of block:"), c7);
-	panelCode.add(new JLabel("To implement a method m of block B: \"__userImplemented__B__m(...){...}\""), c7);
+        panelCode.add(new JLabel("To implement a method m of block B: \"__userImplemented__B__m(...){...}\""), c7);
         jtaGlobalCode = new JTextArea();
         jtaGlobalCode.setEditable(true);
         jtaGlobalCode.setMargin(new Insets(10, 10, 10, 10));
         jtaGlobalCode.setTabSize(3);
         String files = "";
         if (globalCode != null) {
-            for(int i=0; i<globalCode.length; i++) {
+            for (int i = 0; i < globalCode.length; i++) {
                 files += globalCode[i] + "\n";
             }
         }
@@ -559,19 +573,57 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
 
 
         // main panel;
-        panelAttr.add(panel1, BorderLayout.WEST);
-        panelAttr.add(panel2, BorderLayout.EAST);
+        //panelAttr.add(panel1, BorderLayout.WEST);
+        //panelAttr.add(panel2, BorderLayout.EAST);
+        c8.gridwidth = 1;
+        c8.gridheight = 10;
+        c8.weighty = 1.0;
+        c8.weightx = 1.0;
+        c8.fill = GridBagConstraints.BOTH;
+        panelAttr.add(panel1, c8);
+        c8.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c.add(tabbedPane, c0);
+
+        c8.gridwidth = 1;
+        c8.gridheight = 10;
+        panelAttr.add(panel2, c8);
+
         tabbedPane.addTab("Attributes", panelAttr);
 
         if (hasMethods) {
-            panelMethod.add(panel3, BorderLayout.WEST);
-            panelMethod.add(panel4, BorderLayout.EAST);
+            //panelMethod.add(panel3, BorderLayout.WEST);
+            //panelMethod.add(panel4, BorderLayout.EAST);
+            c9.gridwidth = 1;
+            c9.gridheight = 10;
+            c9.weighty = 1.0;
+            c9.weightx = 1.0;
+            c9.fill = GridBagConstraints.BOTH;
+            panelMethod.add(panel3, c9);
+            c9.gridwidth = GridBagConstraints.REMAINDER; //end row
+            //c.add(tabbedPane, c0);
+
+            c9.gridwidth = 1;
+            c9.gridheight = 10;
+            panelMethod.add(panel4, c9);
             tabbedPane.addTab("Methods", panelMethod);
         }
 
         if (hasSignals) {
-            panelSignal.add(panel5, BorderLayout.WEST);
-            panelSignal.add(panel6, BorderLayout.EAST);
+            //panelSignal.add(panel5, BorderLayout.WEST);
+            //panelSignal.add(panel6, BorderLayout.EAST);
+            c10.gridwidth = 1;
+            c10.gridheight = 10;
+            c10.weighty = 1.0;
+            c10.weightx = 1.0;
+            c10.fill = GridBagConstraints.BOTH;
+            panelSignal.add(panel5, c10);
+            c10.gridwidth = GridBagConstraints.REMAINDER; //end row
+            //c.add(tabbedPane, c0);
+
+            c10.gridwidth = 1;
+            c10.gridheight = 10;
+            panelSignal.add(panel6, c10);
+
             tabbedPane.addTab("Signals", panelSignal);
         }
 
@@ -589,18 +641,23 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c.add(tabbedPane, c0);
+        //c.add(tabbedPane, c0);
 
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
+
+        JPanel panel4Buttons = new JPanel();
+        panel4Buttons.setLayout(gridbag0);
+        initButtons(c0, panel4Buttons, this);
+
+        c.add(tabbedPane, BorderLayout.CENTER);
+        c.add(panel4Buttons, BorderLayout.SOUTH);
     }
 
-    public void actionPerformed(ActionEvent evt)  {
+    public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == typeBox) {
-            boolean b = initValues.get (typeBox.getSelectedIndex()).booleanValue();
+            boolean b = initValues.get(typeBox.getSelectedIndex()).booleanValue();
             initialValue.setEnabled(b);
             return;
         }
@@ -609,7 +666,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         //String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-        if (evt.getSource() == closeButton)  {
+        if (evt.getSource() == closeButton) {
             closeDialog();
         } else if (evt.getSource() == addButton) {
             addAttribute();
@@ -623,7 +680,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             upAttribute();
         } else if (evt.getSource() == upMethodButton) {
             upMethod();
-        }  else if (evt.getSource() == downMethodButton) {
+        } else if (evt.getSource() == downMethodButton) {
             downMethod();
         } else if (evt.getSource() == removeMethodButton) {
             removeMethod();
@@ -669,7 +726,6 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     }
 
 
-
     public void addAttribute() {
         Object o1 = accessBox.getSelectedItem();
         Object o2 = typeBox.getSelectedItem();
@@ -677,8 +733,8 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         String value = initialValue.getText();
         TAttribute a;
 
-        if (s.length()>0) {
-            if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword)) && (TAttribute.notIn(s, forbidden))){
+        if (s.length() > 0) {
+            if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword)) && (TAttribute.notIn(s, forbidden))) {
                 int i = TAttribute.getAccess(o1.toString());
                 int j = TAttribute.getAvatarType(o2.toString());
 
@@ -686,17 +742,17 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
                     value = "2";
                 }
 
-                if ((i != -1) && (j!= -1)) {
+                if ((i != -1) && (j != -1)) {
 
-                    if ((value.length() < 1) || (initialValue.isEnabled() == false)){
+                    if ((value.length() < 1) || (initialValue.isEnabled() == false)) {
 
                         value = "";
                     } else {
                         if (!TAttribute.isAValidInitialValue(j, value)) {
                             JOptionPane.showMessageDialog(frame,
-                                                          "The initial value is not valid",
-                                                          "Error",
-                                                          JOptionPane.INFORMATION_MESSAGE);
+                                    "The initial value is not valid",
+                                    "Error",
+                                    JOptionPane.INFORMATION_MESSAGE);
                             return;
                         }
                     }
@@ -712,7 +768,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
                     int index = attributes.size();
                     if (attributes.contains(a)) {
                         index = attributes.indexOf(a);
-                        a = attributes.get (index);
+                        a = attributes.get(index);
                         a.setAccess(i);
                         if (j == TAttribute.OTHER) {
                             a.setTypeOther(o2.toString());
@@ -722,27 +778,27 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
                     } else {
                         attributes.add(index, a);
                     }
-                    listAttribute.setListData(attributes.toArray (new TAttribute[0]));
+                    listAttribute.setListData(attributes.toArray(new TAttribute[0]));
                     identifierText.setText("");
                 } else {
                     JOptionPane.showMessageDialog(frame,
-                                                  "Bad access / type",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+                            "Bad access / type",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
             } else {
                 JOptionPane.showMessageDialog(frame,
-                                              "Bad identifier: identifier already in use, or invalid identifier",
-                                              "Error",
-                                              JOptionPane.INFORMATION_MESSAGE);
+                        "Bad identifier: identifier already in use, or invalid identifier",
+                        "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
         } else {
             JOptionPane.showMessageDialog(frame,
-                                          "Bad identifier",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "Bad identifier",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
     }
@@ -759,7 +815,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
 
             // Checks whether the same method already belongs to the list
             int index = -1;
-            for(int i=0; i<methods.size(); i++) {
+            for (int i = 0; i < methods.size(); i++) {
                 amtmp = methods.get(i);
                 // Same id?
                 if (amtmp.equals(am)) {
@@ -770,17 +826,17 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             if (index == -1) {
                 methods.add(am);
             } else {
-                methods.remove (index);
+                methods.remove(index);
                 methods.add(index, am);
             }
-            listMethod.setListData(methods.toArray (new AvatarMethod[0]));
+            listMethod.setListData(methods.toArray(new AvatarMethod[0]));
             methodText.setText("");
 
         } else {
             JOptionPane.showMessageDialog(frame,
-                                          "Badly formatted method declaration",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "Badly formatted method declaration",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
     }
@@ -794,7 +850,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         if (as != null) {
             // Checks whether the same signal already belongs to the list
             int index = -1;
-            for(int i=0; i<signals.size(); i++) {
+            for (int i = 0; i < signals.size(); i++) {
                 astmp = signals.get(i);
                 // Same id?
                 if (astmp.equals(as)) {
@@ -805,39 +861,39 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             if (index == -1) {
                 signals.add(as);
             } else {
-                signals.remove (index);
-                signals.add (index, as);
+                signals.remove(index);
+                signals.add(index, as);
             }
-            listSignal.setListData(signals.toArray (new AvatarSignal[0]));
+            listSignal.setListData(signals.toArray(new AvatarSignal[0]));
             signalText.setText("");
 
         } else {
             JOptionPane.showMessageDialog(frame,
-                                          "Badly formatted signal declaration",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "Badly formatted signal declaration",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
     }
 
     public void removeAttribute() {
-        int i = listAttribute.getSelectedIndex() ;
-        if (i!= -1) {
-            TAttribute a = attributes.get (i);
+        int i = listAttribute.getSelectedIndex();
+        if (i != -1) {
+            TAttribute a = attributes.get(i);
             a.setAccess(-1);
-            attributes.remove (i);
-            listAttribute.setListData(attributes.toArray (new TAttribute[0]));
+            attributes.remove(i);
+            listAttribute.setListData(attributes.toArray(new TAttribute[0]));
         }
     }
 
     public void downAttribute() {
         int i = listAttribute.getSelectedIndex();
-        if ((i!= -1) && (i != attributes.size() - 1)) {
-            TAttribute o = attributes.get (i);
-            attributes.remove (i);
-            attributes.add (i+1, o);
-            listAttribute.setListData(attributes.toArray (new TAttribute[0]));
-            listAttribute.setSelectedIndex(i+1);
+        if ((i != -1) && (i != attributes.size() - 1)) {
+            TAttribute o = attributes.get(i);
+            attributes.remove(i);
+            attributes.add(i + 1, o);
+            listAttribute.setListData(attributes.toArray(new TAttribute[0]));
+            listAttribute.setSelectedIndex(i + 1);
         }
     }
 
@@ -846,19 +902,19 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         //TraceManager.addDev("Selected index = " + i);
         if (i > 0) {
             //TraceManager.addDev("Modifying ...");
-            TAttribute o = attributes.get (i);
-            attributes.remove (i);
-            attributes.add (i-1, o);
-            listAttribute.setListData(attributes.toArray (new TAttribute[0]));
-            listAttribute.setSelectedIndex(i-1);
+            TAttribute o = attributes.get(i);
+            attributes.remove(i);
+            attributes.add(i - 1, o);
+            listAttribute.setListData(attributes.toArray(new TAttribute[0]));
+            listAttribute.setSelectedIndex(i - 1);
         }
     }
 
     public void removeMethod() {
-        int i = listMethod.getSelectedIndex() ;
-        if (i!= -1) {
-            methods.remove (i);
-            listMethod.setListData(methods.toArray (new AvatarMethod [0]));
+        int i = listMethod.getSelectedIndex();
+        if (i != -1) {
+            methods.remove(i);
+            listMethod.setListData(methods.toArray(new AvatarMethod[0]));
         }
     }
 
@@ -866,71 +922,71 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         int i = listMethod.getSelectedIndex();
         //TraceManager.addDev("Selected index method = " + i);
         if (i > 0) {
-            AvatarMethod o = methods.get (i);
-            methods.remove (i);
-            methods.add (i-1, o);
-            listMethod.setListData(methods.toArray (new AvatarMethod [0]));
-            listMethod.setSelectedIndex(i-1);
+            AvatarMethod o = methods.get(i);
+            methods.remove(i);
+            methods.add(i - 1, o);
+            listMethod.setListData(methods.toArray(new AvatarMethod[0]));
+            listMethod.setSelectedIndex(i - 1);
         }
     }
 
     public void downMethod() {
         int i = listMethod.getSelectedIndex();
-        if ((i!= -1) && (i != methods.size() - 1)) {
-            AvatarMethod o = methods.get (i);
-            methods.remove (i);
-            methods.add (i+1, o);
-            listMethod.setListData(methods.toArray (new AvatarMethod [0]));
-            listMethod.setSelectedIndex(i+1);
+        if ((i != -1) && (i != methods.size() - 1)) {
+            AvatarMethod o = methods.get(i);
+            methods.remove(i);
+            methods.add(i + 1, o);
+            listMethod.setListData(methods.toArray(new AvatarMethod[0]));
+            listMethod.setSelectedIndex(i + 1);
         }
     }
 
     public void removeSignal() {
-        int i = listSignal.getSelectedIndex() ;
-        if (i!= -1) {
-            signals.remove (i);
-            listSignal.setListData(signals.toArray (new AvatarSignal [0]));
+        int i = listSignal.getSelectedIndex();
+        if (i != -1) {
+            signals.remove(i);
+            listSignal.setListData(signals.toArray(new AvatarSignal[0]));
         }
     }
 
     public void upSignal() {
         int i = listSignal.getSelectedIndex();
         if (i > 0) {
-            AvatarSignal o = signals.get (i);
-            signals.remove (i);
-            signals.add (i-1, o);
-            listSignal.setListData(signals.toArray (new AvatarSignal [0]));
-            listSignal.setSelectedIndex(i-1);
+            AvatarSignal o = signals.get(i);
+            signals.remove(i);
+            signals.add(i - 1, o);
+            listSignal.setListData(signals.toArray(new AvatarSignal[0]));
+            listSignal.setSelectedIndex(i - 1);
         }
     }
 
     public void downSignal() {
         int i = listSignal.getSelectedIndex();
-        if ((i!= -1) && (i != signals.size() - 1)) {
-            AvatarSignal o = signals.get (i);
+        if ((i != -1) && (i != signals.size() - 1)) {
+            AvatarSignal o = signals.get(i);
             signals.remove(i);
-            signals.add (i+1, o);
-            listSignal.setListData(signals.toArray (new AvatarSignal [0]));
-            listSignal.setSelectedIndex(i+1);
+            signals.add(i + 1, o);
+            listSignal.setListData(signals.toArray(new AvatarSignal[0]));
+            listSignal.setSelectedIndex(i + 1);
         }
     }
 
 
     public void closeDialog() {
         cancelled = false;
-        attributesPar.clear ();
-        for(TAttribute attr: this.attributes)
-            attributesPar.add (attr);
+        attributesPar.clear();
+        for (TAttribute attr : this.attributes)
+            attributesPar.add(attr);
 
-        methodsPar.clear ();
-        for(AvatarMethod meth: this.methods)
-            methodsPar.add (meth);
+        methodsPar.clear();
+        for (AvatarMethod meth : this.methods)
+            methodsPar.add(meth);
 
-        signalsPar.clear ();
-        for(AvatarSignal sig: this.signals)
-            signalsPar.add (sig);
+        signalsPar.clear();
+        for (AvatarSignal sig : this.signals)
+            signalsPar.add(sig);
 
-        globalCode =  Conversion.wrapText(jtaGlobalCode.getText());
+        globalCode = Conversion.wrapText(jtaGlobalCode.getText());
         mainCode = jtaMainCode.getText();
         cancelled = false;
         dispose();
@@ -941,13 +997,12 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     }
 
 
-
     public void cancelDialog() {
         dispose();
     }
 
     public void valueChanged(ListSelectionEvent e) {
-        int i = listAttribute.getSelectedIndex() ;
+        int i = listAttribute.getSelectedIndex();
         if (i == -1) {
             removeButton.setEnabled(false);
             upButton.setEnabled(false);
@@ -955,7 +1010,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             identifierText.setText("");
             //initialValue.setText("");
         } else {
-            TAttribute a = attributes.get (i);
+            TAttribute a = attributes.get(i);
             identifierText.setText(a.getId());
             initialValue.setText(a.getInitialValue());
             select(accessBox, TAttribute.getStringAccess(a.getAccess()));
@@ -977,7 +1032,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             }
         }
 
-        i = listMethod.getSelectedIndex() ;
+        i = listMethod.getSelectedIndex();
         if (i == -1) {
             removeMethodButton.setEnabled(false);
             upMethodButton.setEnabled(false);
@@ -985,7 +1040,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             methodText.setText("");
             //initialValue.setText("");
         } else {
-            AvatarMethod am = methods.get (i);
+            AvatarMethod am = methods.get(i);
             methodText.setText(am.toString());
             //TraceManager.addDev("Implementation of " + am + " is: " +  am.isImplementationProvided());
             implementationProvided.setSelected(am.isImplementationProvided());
@@ -1002,7 +1057,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             }
         }
 
-        i = listSignal.getSelectedIndex() ;
+        i = listSignal.getSelectedIndex();
         if (i == -1) {
             removeSignalButton.setEnabled(false);
             upSignalButton.setEnabled(false);
@@ -1010,7 +1065,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             signalText.setText("");
             //initialValue.setText("");
         } else {
-            AvatarSignal as = signals.get (i);
+            AvatarSignal as = signals.get(i);
             signalText.setText(as.toBasicString());
             signalInOutBox.setSelectedIndex(as.getInOut());
             removeSignalButton.setEnabled(true);
@@ -1029,7 +1084,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
 
     public void select(JComboBox<String> jcb, String text) {
         String s;
-        for(int i=0; i<jcb.getItemCount(); i++) {
+        for (int i = 0; i < jcb.getItemCount(); i++) {
             s = jcb.getItemAt(i);
             //System.out.println("String found: *" + s + "* *" + text + "*");
             if (s.equals(text)) {

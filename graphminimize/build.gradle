@@ -4,7 +4,7 @@ apply plugin: 'application'
 sourceSets {
     main {
         java {
-            srcDir "${rootProject.absPath}/src/main/java/ui/graph"
+            srcDir "${rootProject.absPath}/src/main/java/graph"
             srcDir "${rootProject.absPath}/src/main/java/ui/util"
             srcDir "${rootProject.absPath}/src/main/java/ui/file"
             srcDir "${rootProject.absPath}/src/main/java/vcd"

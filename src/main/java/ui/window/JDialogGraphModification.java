@@ -48,7 +48,7 @@ import myutil.ScrolledJTextArea;
 import common.SpecConfigTTool;
 import ui.util.IconManager;
 import ui.file.AUTFileFilter;
-import ui.graph.AUTMappingGraph;
+import graph.AUTMappingGraph;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,0 +1,16 @@
+/users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/arch/power.o: \
+ /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/power.c \
+ /users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/config.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/include/arch/mem_checker.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/libc/include/stdint.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/decls.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/include/arch/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/power.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/error.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/iospace.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/types.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/iospace.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/ordering.h \
+ /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/ordering.h

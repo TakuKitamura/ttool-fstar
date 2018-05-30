@@ -342,7 +342,20 @@ public class TasksAndMainGenerator {
 	    }
 	}
     }
-      
+ 
+    //DG 19.09. need this for main program generation
+    /* public int makeCoprocReferenceFromTask(AvatarBlock block){
+    	List<AvatarTask> tasks = avddspec.getAllMappedTask();
+	
+    	for (AvatarTask task : tasks){
+    		if (task.getTaskName().equals(block.getName())){
+    			return task.getAvatarCoprocReference();
+    		}
+    	}
+
+    	return -1;
+	}*/
+   
     public int FindCPUidFromTask(AvatarBlock block){
     	List<AvatarTask> tasks = avddspec.getAllMappedTask();
 	
@@ -368,6 +381,8 @@ public class TasksAndMainGenerator {
 	
 		System.out.println("Warning: Unmapped Block "+block.getName());
 		}
+	    //DG 19.09. found coproc do not make task
+	   
 	    }
         }
 
@@ -1057,14 +1072,13 @@ public class TasksAndMainGenerator {
 	int i=0;
 	int MWMRd_SIZE=12288;
 
-	for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
+	/*	for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
 
 	    for(AvatarRelation ar: avspec.getRelations()) {			
 		
 		if(ar.nbOfSignals()!=0){
 		    for(i=0; i<ar.nbOfSignals() ; i++) {		  				
 			if(((ar.block1.getName()==copro.getName())||(ar.block2.getName()==copro.getName()))){
-
 
 			    mainFile.appendToMainCode("uint32_t *fifo_data"+i+"=(uint32_t*)(0x"+Integer.toHexString(538968064+MWMRd_SIZE*i)+");"+CR);
 			    //one single RAMLOCKS, fixed address
@@ -1081,42 +1095,111 @@ public class TasksAndMainGenerator {
 		    }
 		}
 	    }
-	}	
+	    }	*/
 
-	  i=0;
+	//i=0;
 	  int MWMR_SIZE=4096;
 
 	  for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
+ 
+	      int j=0;
 
+	      System.out.println("@@@@@@@@@@@ Task generator : coproc found @@@@@@@@@@");
 	      for(AvatarRelation ar: avspec.getRelations()) {			
-		
+		System.out.println("@@@@@@@@@@@ Task generator : relations found @@@@@@@@@@");
 		  if(ar.nbOfSignals()!=0){
-		      for(i=0; i<ar.nbOfSignals() ; i++) {	
+		      for(j=0; j<ar.nbOfSignals() ; j++) {
+			  System.out.println("@@@@@@@@@@@ Task generator : signals found @@@@@@@@@@");
+	
 			  // detect if there is a coprocessors implicated in the FIFO MWMR communication
 			  //in this case we have to address the hardware wrapper rather than the software channel
 
-			  if(((ar.block1.getName()==copro.getName())||(ar.block2.getName()==copro.getName()))){
-   
+			  System.out.println("ar.block1.getName() :"+ar.block1.getName());
+			  System.out.println("ar.block2.getName() :"+ar.block2.getName());
+
+			  System.out.println("copro.getName() :"+copro.getCoprocName());
+			  // System.out.println("copro.getHWAName() :"+copro.getHWACoprocName());
+
+			  boolean found = false;
+			 
+			  /* if one of the tasks at either end  task is mapped to this coprocessor */
+			  for(TaskFileSoclib taskFile: taskFiles) { 
+
+			      System.out.println("taskFile.getName() :"+taskFile.getName());
+			      //if((taskFile.getName().equals(ar.block1.getName())||taskFile.getName().equals(ar.block2.getName()))){
+
+			      List<AvatarTask> tasks = copro.getAllTasks();
+
+			      //DG 21.09. ne reconnait aucune mapped task
+
+			      for (AvatarTask task : tasks ){
+				  String taskname = task.getTaskName();
+
+			      //DG 21.09. we still have to check if this is a coprocessor
+
+			      if(taskFile.getName().equals(ar.block1.getName())&&ar.block1.getName().equals(taskname)){
+				  //we have an input coprocessor
+				  //j++;
+System.out.println("@@@@@@@@@@@ we have an input coprocessor  @@@@@@@@@@");
+				  found = true;
+			      }
+			          if(taskFile.getName().equals(ar.block2.getName())&&ar.block2.getName().equals(taskname)){
+				  //we have an output coprocessor
+System.out.println("@@@@@@@@@@@ we have an output coprocessor  @@@@@@@@@@");
+			      	   found = true;
+			       }
+
+				  if (found){
+
+			      System.out.println("@@@@@@@@@@@ Task generator : if @@@@@@@@@@");
+ 
 			      // 0 = MWMR_FROM_COPROC = READ
 			      // 1 = MWMR_FROM_COPROC = WRITE
 			      //distinguish incoming and outgoing FIFOs
 
-			      AvatarSignal sig = ar.getSignal1(i);
+			      //DG 21.09. i becomes j
+
+			      mainFile.appendToMainCode("uint32_t *fifo_data"+j+"=(uint32_t*)(0x"+Integer.toHexString(538968064+MWMRd_SIZE*j)+");"+CR);
+System.out.println("@@@@@@@@@@@ Task generator : middle 0 @@@@@@@@@@");
+			    //one single RAMLOCKS, fixed address
+mainFile.appendToMainCode("uint32_t *fifo_lock"+j+"= (uint32_t*)("+0x1A200000+");"+CR);
+System.out.println("@@@@@@@@@@@ Task generator : middle 1 @@@@@@@@@@");
+System.out.println("@@@@@@@@@@@ Task generator : i @@@@@@@@@@ "+i);
+System.out.println("@@@@@@@@@@@ Task generator : j @@@@@@@@@@ "+j);
+                            mainFile.appendToMainCode("mwmr_t *"+getChannelName(ar, j)+" = (mwmr_t*)(0x"+Integer.toHexString(538968064+MWMRd_SIZE*j)+");"+CR);
+			    //depth 100 per default, to be changed later
+System.out.println("@@@@@@@@@@@ Task generator : channel name @@@@@@@@@@"+getChannelName(ar, j) );
+System.out.println("@@@@@@@@@@@ Task generator : middle 2 @@@@@@@@@@");
+			    mainFile.appendToMainCode("mwmr_initialize_pointer("+getChannelName(ar, j)+","+(width*4)+", 100, fifo_data"+j+",fifo_lock"+j+");"+CR);
+
+
+System.out.println("@@@@@@@@@@@ Task generator : middle 3 @@@@@@@@@@");
+
+			      AvatarSignal sig = ar.getSignal1(j);
 			      if(sig.isIn()){
-				  mainFile.appendToMainCode("mwmr_hw_init(0xA0"+ Integer.toHexString(2097152+MWMR_SIZE*i)+","+ 0 +",1,"+getChannelName(ar, i)+");"+CR);
+				  mainFile.appendToMainCode("mwmr_hw_init(0xA0"+ Integer.toHexString(2097152+MWMR_SIZE*j)+","+ 0 +",1,"+getChannelName(ar, j)+");"+CR);
+System.out.println("@@@@@@@@@@@ Task generator : middle 4 @@@@@@@@@@");
 			      }
 			      else{  //sig.isOut()
-				  mainFile.appendToMainCode("mwmr_hw_init(0xA0"+ Integer.toHexString(2097152+MWMR_SIZE*i)+","+ 0 +",0,"+getChannelName(ar, i)+");"+CR);
+				  mainFile.appendToMainCode("mwmr_hw_init(0xA0"+ Integer.toHexString(2097152+MWMR_SIZE*j)+","+ 0 +",0,"+getChannelName(ar, j)+");"+CR);
+System.out.println("@@@@@@@@@@@ Task generator : middle 5 @@@@@@@@@@");
 			      }
-			      i++;
-			  }
+				  }
+				  found = false;
+System.out.println("@@@@@@@@@@@ Task generator : end @@@@@@@@@@");
+//j++;
+i++;
+
+			      }
+			  }			  
 		      }
-		  }
+		  }		      
 	      }
 	  }
 
-
-
+		      //DG 19.09 il faut encore assurer que ce taskFile est un virtual coprocessor		      
+    
+	      
 	mainFile.appendToMainCode("/* Initializing the main mutex */" + CR);
 	mainFile.appendToMainCode("if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}" + CR + CR);
 

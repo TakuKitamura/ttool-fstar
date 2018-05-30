@@ -428,18 +428,18 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@cp $(TTOOL_EXECUTABLECODE)/example/*.java $(TTOOL_TARGET)/executablecode/example/
 	@cp $(TTOOL_EXECUTABLECODE)/example/README $(TTOOL_TARGET)/executablecode/example/
 # MPSOC
-	@mkdir -p $(TTOOL_TARGET)/MPSoC
-	@mkdir -p $(TTOOL_TARGET)/MPSoC/generated_topcell
-	@mkdir -p $(TTOOL_TARGET)/MPSoC/generated_src
-	@mkdir -p $(TTOOL_TARGET)/MPSoC/src
-	@cp $(TTOOL_MPSOC)/Makefile $(TTOOL_TARGET)/MPSoC/
-	@cp $(TTOOL_MPSOC)/Makefile.defs $(TTOOL_TARGET)/MPSoC/
-	@cp $(TTOOL_MPSOC)/Makefile.forsoclib $(TTOOL_TARGET)/MPSoC/
-	@cp $(TTOOL_MPSOC)/src/*.c $(TTOOL_TARGET)/MPSoC/src/
-	@cp $(TTOOL_MPSOC)/src/*.h $(TTOOL_TARGET)/MPSoC/src/
-	@cp $(TTOOL_MPSOC)/generated_src/README $(TTOOL_TARGET)/MPSoC/generated_src/
-	@cp $(TTOOL_MPSOC)/generated_topcell/nbproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
-	@cp $(TTOOL_MPSOC)/generated_topcell/config_noproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
+#	@mkdir -p $(TTOOL_TARGET)/MPSoC
+#	@mkdir -p $(TTOOL_TARGET)/MPSoC/generated_topcell
+#	@mkdir -p $(TTOOL_TARGET)/MPSoC/generated_src
+#	@mkdir -p $(TTOOL_TARGET)/MPSoC/src
+#	@cp $(TTOOL_MPSOC)/Makefile $(TTOOL_TARGET)/MPSoC/
+#	@cp $(TTOOL_MPSOC)/Makefile.defs $(TTOOL_TARGET)/MPSoC/
+#	@cp $(TTOOL_MPSOC)/Makefile.forsoclib $(TTOOL_TARGET)/MPSoC/
+#	@cp $(TTOOL_MPSOC)/src/*.c $(TTOOL_TARGET)/MPSoC/src/
+#	@cp $(TTOOL_MPSOC)/src/*.h $(TTOOL_TARGET)/MPSoC/src/
+#	@cp $(TTOOL_MPSOC)/generated_src/README $(TTOOL_TARGET)/MPSoC/generated_src/
+#	@cp $(TTOOL_MPSOC)/generated_topcell/nbproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
+#	@cp $(TTOOL_MPSOC)/generated_topcell/config_noproc $(TTOOL_TARGET)/MPSoC/generated_topcell/
 #DOC
 	@$(MAKE) -C $(TTOOL_DOC_SYSMLSEC_DIR) sysmlsec_documentation
 	@cp $(TTOOL_DOC_SYSMLSEC_DIR)/build/sysmlsec_documentation.pdf  $(TTOOL_TARGET)/doc/sysmlsec_documentation.pdf

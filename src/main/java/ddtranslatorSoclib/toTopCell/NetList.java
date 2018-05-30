@@ -60,7 +60,8 @@ public class NetList {
 
     public static String getNetlist(String icn, boolean _tracing) {
 	int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
-	
+	 int coproc_count=0;
+
 	tracing = _tracing;
 	
 	String netlist;
@@ -224,27 +225,27 @@ public class NetList {
 	if(nb_clusters==0){
 	    // we can have several TTYs and each is associated to the fdtrom 
 
-	    /*	    if(icn=="vgmn"){
+	    /*	    	    if(icn=="vgmn"){
 		netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target())+"](signal_vci_vcifdaccesst);" + CR; 
 		netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+1)+"](signal_vci_ethernett);" + CR;	
 		netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+2)+"](signal_vci_bdt);" + CR;	
-	netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+3)+"](signal_vci_vcilocks);" + CR;	
+		//netlist = netlist + "vgmn.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+3)+"](signal_vci_vcilocks);" + CR;	
 	    }else{ //vgsb 
 		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target())+"](signal_vci_vcifdaccesst);" + CR; 
 		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+1)+"](signal_vci_ethernett);" + CR;	
 		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+2)+"](signal_vci_bdt);" + CR;	
-		   		netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+3)+"](signal_vci_vcilocks);" + CR;	
-		   }*/
+		//	netlist = netlist + "vgsb.p_to_target["+(TopCellGenerator.avatardd.getNb_target()+3)+"](signal_vci_vcilocks);" + CR;	
+		}*/
 
-	    int l=8; //number of last tty ToDo
+		    	    int l=8; //number of last tty ToDo
 	    if(icn=="vgmn"){
 		netlist = netlist + "vgmn.p_to_target["+(l)+"](signal_vci_vcifdaccesst);" + CR; 
 		netlist = netlist + "vgmn.p_to_target["+(l+1)+"](signal_vci_ethernett);" + CR;	
 		netlist = netlist + "vgmn.p_to_target["+(l+2)+"](signal_vci_bdt);" + CR;	
-	netlist = netlist + "vgmn.p_to_target["+(l+3)+"](signal_vci_vcilocks);" + CR;	
+		//	netlist = netlist + "vgmn.p_to_target["+(l+3)+"](signal_vci_vcilocks);" + CR;	
 	int i;
 	//DG 14.09.
-	int coproc_count=0;
+	//int coproc_count=0;
 	for(i=0;i<coproc_count;i++){
 
 	    netlist = netlist + "vgmn.p_to_target["+(l+4+i)+"](signal_mwmr_"+i+"_target);" + CR;
@@ -253,10 +254,10 @@ public class NetList {
 		netlist = netlist + "vgsb.p_to_target["+(l)+"](signal_vci_vcifdaccesst);" + CR; 
 		netlist = netlist + "vgsb.p_to_target["+(l+1)+"](signal_vci_ethernett);" + CR;	
 		netlist = netlist + "vgsb.p_to_target["+(l+2)+"](signal_vci_bdt);" + CR;	
-		   		netlist = netlist + "vgsb.p_to_target["+(l+3)+"](signal_vci_vcilocks);" + CR;	
+		//	netlist = netlist + "vgsb.p_to_target["+(l+3)+"](signal_vci_vcilocks);" + CR;	
 
 	//DG 14.09.
-				int coproc_count=0;
+				//	int coproc_count=0;
 				int i;
 	  for(i=0;i<coproc_count;i++){
 	      netlist = netlist + "vgmn.p_to_target["+(l+4+i)+"](signal_mwmr_"+i+"_target);" + CR;
@@ -362,35 +363,100 @@ public class NetList {
 
 	//////////////// locks
  
-  	netlist = netlist + "vcilocks.p_clk(signal_clk);" + CR;
-  	netlist = netlist + "vcilocks.p_resetn(signal_resetn);" + CR;     
-  	netlist = netlist + "vcilocks.p_vci(signal_vci_vcilocks);" + CR;	
+	//	netlist = netlist + "vcilocks.p_clk(signal_clk);" + CR;
+	//	netlist = netlist + "vcilocks.p_resetn(signal_resetn);" + CR;     
+  	//netlist = netlist + "vcilocks.p_vci(signal_vci_vcilocks);" + CR;	
 
 	////////////////MWMR controller; hypothesis 1 per coprocessor
 	//	if(nb_cluster == 0){
-	    i=0;
-	    int coproc_count=0;
+	
+	i=0;int j=0;
+	   
 
 	    for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
 		//a coprocessor with its FIFO interface built from HWA 
-		netlist = netlist +"hwa"+i+".p_clk(signal_clk);" + CR;
+		/*	netlist = netlist +"hwa"+i+".p_clk(signal_clk);" + CR;
 		netlist = netlist +"hwa"+i+".p_resetn(signal_resetn);" + CR;	      	
                 netlist = netlist +"hwa"+i+".p_from_ctrl["+i+"](signal_fifo_"+i+"_from_ctrl);" + CR;
-		netlist = netlist +"hwa"+i+".p_to_ctrl["+i+"](signal_fifo_"+i+"_to_ctrl);" + CR2;
+		netlist = netlist +"hwa"+i+".p_to_ctrl["+i+"](signal_fifo_"+i+"_to_ctrl);" + CR2;*/
+
+
+		//IE and OE are special cases as they have VCI an fifo initiator interface!!!
+		
+		if(copro.getCoprocType()==0){
+		     i=0;  
+		    netlist = netlist +copro.getCoprocName()+".p_clk(signal_clk);" + CR;
+		    netlist = netlist +copro.getCoprocName()+".p_resetn(signal_resetn);" + CR;
+		    netlist = netlist +copro.getCoprocName()+".p_vci(signal_vci_IE);"+ CR;
+		    
+		    netlist = netlist +copro.getCoprocName()+".p_pktdesc[0](signal_fifo_"+j+"_"+i+"_to_ctrl);" + CR;
+		    netlist = netlist +copro.getCoprocName()+".p_slin(signal_fifo_"+j+"_"+i+"_from_ctrl);" + CR;
+		    netlist = netlist +copro.getCoprocName()+".p_slext(signal_fifo_"+j+"_"+(i+1)+"_from_ctrl);" + CR;
+		   
+		    netlist = netlist +copro.getCoprocName()+".p_running(signal_IE_from_ctrl);" + CR;
+		    netlist = netlist +copro.getCoprocName()+".p_status(signal_IE_to_ctrl);" + CR2;
+		    i=0;  
+		}
+		else if(copro.getCoprocType()==1){
+		    netlist = netlist +copro.getCoprocName()+".p_clk(signal_clk);" + CR;
+		    netlist = netlist +copro.getCoprocName()+".p_resetn(signal_resetn);" + CR;
+		    netlist = netlist +copro.getCoprocName()+".p_vci(signal_vci_OE);"+ CR;
+		     
+		    netlist = netlist +copro.getCoprocName()+".p_desc(signal_fifo_"+j+"_"+i+"_from_ctrl);" + CR;
+		    netlist = netlist +copro.getCoprocName()+".p_slin(signal_fifo_"+j+"_"+i+"_to_ctrl);" + CR;
+		    netlist = netlist +copro.getCoprocName()+".p_slext(signal_fifo_"+j+"_"+(i+1)+"_to_ctrl);" + CR;
+		    
+		    netlist = netlist +copro.getCoprocName()+".p_running(signal_OE_from_ctrl);" + CR;
+		    netlist = netlist +copro.getCoprocName()+".p_status(signal_OE_to_ctrl);" + CR2;
+  i=0;  
+		}
+		else{ // a completer pour plusieurs fifos et signaux non-fifo
+		netlist = netlist +copro.getCoprocName()+".p_clk(signal_clk);" + CR;
+		netlist = netlist +copro.getCoprocName()+".p_resetn(signal_resetn);" + CR;
+		netlist = netlist +"hwa"+i+".p_from_ctrl["+i+"](signal_fifo_"+j+"_"+i+"_from_ctrl);" + CR;
+		netlist = netlist +"hwa"+i+".p_to_ctrl["+i+"](signal_fifo_"+j+"_"+i+"_to_ctrl);" + CR2;
+		}
+		//DG 7.5. probleme avec les index i: faut faire plus general!!
 	
 		//MWMR controller of the HWA
-		netlist = netlist +copro.getCoprocName() +".p_clk(signal_clk);" + CR;
-		netlist = netlist +copro.getCoprocName() +".p_resetn(signal_resetn);" + CR;
-		netlist = netlist +copro.getCoprocName() +".p_vci_initiator(signal_mwmr_"+i+"_initiator);" + CR;
-		netlist = netlist + copro.getCoprocName()+".p_vci_target(signal_mwmr_"+i+"_target);" + CR2;
-		netlist = netlist +copro.getCoprocName() +".p_from_coproc["+i+"](signal_fifo_"+i+"_from_ctrl);" + CR;
-netlist = netlist +copro.getCoprocName() +".p_to_coproc["+i+"](signal_fifo_"+i+"_to_ctrl);" + CR;
-//DG 5.9.
-//	netlist = netlist +copro.getCoprocName() +".status();" + CR;
-//	netlist = netlist +copro.getCoprocName() +".config();" + CR;
-i++;
-coproc_count++;
-          }
+
+	    //additional interfaces for IE and OE
+	    
+	    if(copro.getCoprocType()==0){
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_clk(signal_clk);" + CR;
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_resetn(signal_resetn);" + CR;
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_vci_initiator(signal_mwmr_"+i+"_initiator);" + CR;
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_from_coproc["+i+"](signal_fifo_"+ j+"_"+i+"_from_ctrl);" + CR;//pktdesc
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_from_coproc["+(i+1)+"](signal_fifo_"+ j+"_"+(i+1)+"_from_ctrl);" + CR;//running
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_status[0](signal_IE_to_ctrl);" + CR;//status
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_to_coproc["+i+"](signal_fifo_"+j +"_"+i+"_to_ctrl);" + CR;//slin
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_config[0](signal_IE_from_ctrl);" + CR;//slext
+	    }
+	    else{
+		if(copro.getCoprocType()==1){
+		    netlist = netlist +copro.getCoprocName() +"_wrapper.p_clk(signal_clk);" + CR;
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_resetn(signal_resetn);" + CR;
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_vci_initiator(signal_mwmr_"+i+"_initiator);" + CR;
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_from_coproc["+i+"](signal_fifo_"+ j+"_"+i+"_from_ctrl);" + CR;//desc
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_status[0](signal_OE_to_ctrl);" + CR;//running
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_to_coproc["+i+"](signal_fifo_"+j +"_"+i+"_to_ctrl);" + CR;//status
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_to_coproc["+(i+1)+"](signal_fifo_"+j +"_"+(i+1)+"_to_ctrl);" + CR;//slin
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_config[0](signal_OE_from_ctrl);" + CR;//slext
+		}
+		else{
+		    //DG currently only one fifo per direction
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_clk(signal_clk);" + CR;
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_resetn(signal_resetn);" + CR;
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_vci_initiator(signal_mwmr_"+i+"_initiator);" + CR;
+		netlist = netlist + copro.getCoprocName()+"_wrapper.p_vci_target(signal_mwmr_"+i+"_target);" + CR2;
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_from_coproc["+i+"](signal_fifo_"+ j+"_"+i+"_from_ctrl);" + CR;
+		netlist = netlist +copro.getCoprocName() +"_wrapper.p_to_coproc["+i+"](signal_fifo_"+j +"_"+i+"_to_ctrl);" + CR;
+		}
+	i++;	
+	    }
+	     j++;
+	    coproc_count++;
+	    }
 	   
 	
    //If there is a spy, add logger or stats to vci interface
@@ -407,7 +473,7 @@ coproc_count++;
 	  }	
 	  
    }
-   int j=0;
+    j=0;
   
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
 	    if (ram.getMonitored()==1){	

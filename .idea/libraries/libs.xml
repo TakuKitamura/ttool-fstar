@@ -20,8 +20,15 @@
       <root url="jar://$PROJECT_DIR$/libs/junit-4.12.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/derbyclient-10.9.1.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/commons-math3-3.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-awt-util.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-dom.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-svggen.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-util.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/batik-xml.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/libs/commons-io-2.5-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES />
   </library>
 </component>

@@ -221,7 +221,8 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
         {
 	    if (copro instanceof AvatarCoproMWMR){
 			System.out.println("Coproc added to specification");
-
+			//DG 19.09. associate HW task name 
+			//copro.putName(blockname);
             copros.add((AvatarCoproMWMR)copro);
 	    }
         }

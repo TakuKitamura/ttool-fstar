@@ -37,11 +37,7 @@
  */
 
 
-
-
 package ui.window;
-
-import ui.util.IconManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,16 +47,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
-   * Class JDialogMultiString
-   * Dialog for managing several string components
-   * Creation: 18/11/2005
-   * @version 1.0 18/11/2005
-   * @author Ludovic APVRILLE
+ * Class JDialogMultiString
+ * Dialog for managing several string components
+ * Creation: 18/11/2005
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 18/11/2005
  */
-public class JDialogMultiString extends JDialogBase implements ActionListener  {
+public class JDialogMultiString extends JDialogBase implements ActionListener {
 
-    private String [] labels;
-    private String [] values;
+    private String[] labels;
+    private String[] values;
 
     private int nbString;
 
@@ -69,14 +66,16 @@ public class JDialogMultiString extends JDialogBase implements ActionListener  {
     private JPanel panel1;
 
     // Panel1
-    private JTextField [] texts;
+    private JTextField[] texts;
     private JButton inserts[];
     private HashMap<Integer, JComboBox<String>> helps;
 
     private ArrayList<String[]> possibleValues = null;
 
 
-    /** Creates new form  */
+    /**
+     * Creates new form
+     */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values) {
 
@@ -85,7 +84,6 @@ public class JDialogMultiString extends JDialogBase implements ActionListener  {
         nbString = _nbString;
         labels = _labels;
         values = _values;
-
 
 
         texts = new JTextField[nbString];
@@ -116,8 +114,8 @@ public class JDialogMultiString extends JDialogBase implements ActionListener  {
     }
 
     private void initComponents() {
-	inserts = new JButton[labels.length];
-	helps = new HashMap<>();
+        inserts = new JButton[labels.length];
+        helps = new HashMap<>();
 
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
@@ -155,24 +153,24 @@ public class JDialogMultiString extends JDialogBase implements ActionListener  {
         c1.anchor = GridBagConstraints.CENTER;
 
         // String1
-        for(int i=0; i<nbString; i++) {
-	    c1.gridwidth = 1;
+        for (int i = 0; i < nbString; i++) {
+            c1.gridwidth = 1;
             panel1.add(new JLabel(labels[i] + " = "), c1);
-            
+
             if (possibleValues != null) {
                 if (i < possibleValues.size()) {
-                    String [] tmp = possibleValues.get(i);
+                    String[] tmp = possibleValues.get(i);
                     if (tmp != null) {
                         helps.put(i, new JComboBox<>(tmp));
                         panel1.add(helps.get(i), c1);
-			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-			inserts[i] = new JButton("Use");
-			inserts[i].addActionListener(this);
-			panel1.add(inserts[i], c1);
+                        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+                        inserts[i] = new JButton("Use");
+                        inserts[i].addActionListener(this);
+                        panel1.add(inserts[i], c1);
                     }
                 }
             }
-	    c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+            c1.gridwidth = GridBagConstraints.REMAINDER; //end row
             texts[i] = new JTextField(values[i], 15);
             panel1.add(texts[i], c1);
         }
@@ -184,31 +182,31 @@ public class JDialogMultiString extends JDialogBase implements ActionListener  {
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-
+        c0.fill = GridBagConstraints.BOTH;
         c.add(panel1, c0);
 
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
-        
+
         initButtons(c0, c, this);
     }
 
-    public void actionPerformed(ActionEvent evt)  {
+    public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
+        if (command.equals("Save and Close")) {
             closeDialog();
         } else if (command.equals("Cancel")) {
             cancelDialog();
         } else if (inserts != null) {
-	    for(int i=0; i<inserts.length; i++) {
-		if (evt.getSource() == inserts[i]) {
-		    texts[i].setText(helps.get(i).getSelectedItem().toString());
-		}
-	    }
-	}
+            for (int i = 0; i < inserts.length; i++) {
+                if (evt.getSource() == inserts[i]) {
+                    texts[i].setText(helps.get(i).getSelectedItem().toString());
+                }
+            }
+        }
     }
 
 
