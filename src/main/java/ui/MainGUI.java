@@ -2599,7 +2599,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 fis.read(ba);
                 fis.close();
                 s = new String(ba, "UTF-8");
-                TraceManager.addDev("Mode:" + s);
+                //TraceManager.addDev("Mode:" + s);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
