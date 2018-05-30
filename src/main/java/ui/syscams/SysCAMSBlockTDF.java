@@ -112,7 +112,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
         name = "Primitive component";
         
         // Initialization of port attributes
-        setPeriod(0);
+        setPeriod(-1);
         setProcessCode("void processing() {\n\n}");
         setTime("");
         

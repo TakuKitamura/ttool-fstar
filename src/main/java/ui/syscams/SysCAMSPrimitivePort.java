@@ -112,22 +112,22 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         
         // Initialization of port attributes
         if (this instanceof SysCAMSPortTDF) {
-        	((SysCAMSPortTDF) this).setPeriod(0);
+        	((SysCAMSPortTDF) this).setPeriod(-1);
         	((SysCAMSPortTDF) this).setTime("");
-        	((SysCAMSPortTDF) this).setRate(0);
-        	((SysCAMSPortTDF) this).setDelay(0);
+        	((SysCAMSPortTDF) this).setRate(-1);
+        	((SysCAMSPortTDF) this).setDelay(-1);
         	((SysCAMSPortTDF) this).setTDFType("int");
         } else if (this instanceof SysCAMSPortDE) {
-        	((SysCAMSPortDE) this).setPeriod(0);
+        	((SysCAMSPortDE) this).setPeriod(-1);
         	((SysCAMSPortDE) this).setTime("");
-        	((SysCAMSPortDE) this).setRate(0);
-        	((SysCAMSPortDE) this).setDelay(0);
+        	((SysCAMSPortDE) this).setRate(-1);
+        	((SysCAMSPortDE) this).setDelay(-1);
         	((SysCAMSPortDE) this).setDEType("int");
         } else if (this instanceof SysCAMSPortConverter) {
-        	((SysCAMSPortConverter) this).setPeriod(0);
+        	((SysCAMSPortConverter) this).setPeriod(-1);
         	((SysCAMSPortConverter) this).setTime("");
-        	((SysCAMSPortConverter) this).setDelay(0);
-        	((SysCAMSPortConverter) this).setRate(0);
+        	((SysCAMSPortConverter) this).setDelay(-1);
+        	((SysCAMSPortConverter) this).setRate(-1);
         	((SysCAMSPortConverter) this).setConvType("int");
         }
     }

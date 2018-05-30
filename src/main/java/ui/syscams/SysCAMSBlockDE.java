@@ -109,7 +109,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
     	value = tdp.findSysCAMSPrimitiveComponentName("Block_DE_");
         name = "Primitive component";
         
-        setPeriod(0);
+        setPeriod(-1);
         setTime("");
         
         myImageIcon = IconManager.imgic1202;

@@ -240,10 +240,11 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		gridBag.setConstraints(typeLabel, constraints);
 		boxPanel.add(typeLabel); // add label to box
 		
-		listTypeString = new String[3];
+		listTypeString = new String[4];
 		listTypeString[0] = "int";
 		listTypeString[1] = "bool";
 		listTypeString[2] = "double";
+		listTypeString[3] = "sc_dt::sc_logic";
 		typeComboBoxString = new JComboBox<String>(listTypeString);
 		if (port.getConvType().equals("") || port.getConvType().equals("int")) {
 			typeComboBoxString.setSelectedIndex(0);
@@ -253,6 +254,9 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		}
 		if (port.getConvType().equals("double")) {
 			typeComboBoxString.setSelectedIndex(2);
+		}
+		if (port.getConvType().equals("sc_dt::sc_logic")) {
+			typeComboBoxString.setSelectedIndex(3);
 		}
 		typeComboBoxString.setActionCommand("type");
 		typeComboBoxString.addActionListener(this);

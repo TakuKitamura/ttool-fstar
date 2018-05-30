@@ -89,7 +89,7 @@ public class PrimitiveCode {
 					if (conv.getOrigin() == 0) {
 						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
 					} else if (conv.getOrigin() == 1) {
-						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_de::out<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
+						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_de::sca_out<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
 					}
 				}
 			}
@@ -102,10 +102,10 @@ public class PrimitiveCode {
 					for (int i = 0; i < tdfports.size(); i++) {
 						if (tdfports.size() > 1) {
 							if (cpt == 0) {
-								corpsPrimitive = corpsPrimitive + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")";
+								corpsPrimitive = corpsPrimitive + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")" + CR;
 								cpt++;
 							} else {
-								corpsPrimitive = corpsPrimitive + "," + CR + "\t" + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")"+ CR;
+								corpsPrimitive = corpsPrimitive + "\t, " + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")" + CR;
 							}
 						} else {
 							corpsPrimitive = corpsPrimitive + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")" + CR;
@@ -117,10 +117,10 @@ public class PrimitiveCode {
 					for (int i = 0; i < convports.size(); i++) {
 						if (convports.size() > 1) {
 							if (cpt == 0) {
-								corpsPrimitive = corpsPrimitive + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")";
+								corpsPrimitive = corpsPrimitive + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")" + CR;
 								cpt++;
 							} else {
-								corpsPrimitive = corpsPrimitive + "," + CR + "\t" + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")"+ CR;
+								corpsPrimitive = corpsPrimitive + "\t, " + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")" + CR;
 							}
 						} else {
 							corpsPrimitive = corpsPrimitive + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")" + CR;
@@ -132,25 +132,25 @@ public class PrimitiveCode {
 			}
 			
 			// Block period 
-			if (tdf.getPeriod() != 0) {
+			if (tdf.getPeriod() != -1) {
 				corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_MS);" + CR;
 				cpt2++;
 			}	
 			if (cpt2 > 0) {
 				for (SysCAMSTPortTDF t : tdfports) {
-					if (t.getPeriod() != 0) {
+					if (t.getPeriod() != -1) {
 						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
 					} 
-					if (t.getRate() != 0) {
+					if (t.getRate() != -1) {
 						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
 					} 
-					if (t.getDelay() != 0) {
+					if (t.getDelay() != -1) {
 						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
 					} 
 				}
 			} else {
 				for (SysCAMSTPortTDF t : tdfports) {
-					if (t.getPeriod() != 0) {
+					if (t.getPeriod() != -1) {
 						if (cpt2 == 0) {
 							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
 							cpt2++;
@@ -158,7 +158,7 @@ public class PrimitiveCode {
 							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
 						}
 					} 
-					if (t.getRate() != 0 && cpt2 == 0) {
+					if (t.getRate() != -1) {
 						if (cpt2 == 0) {
 							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
 							cpt2++;
@@ -166,7 +166,7 @@ public class PrimitiveCode {
 							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
 						}
 					} 
-					if (t.getDelay() != 0 && cpt2 == 0) {
+					if (t.getDelay() != -1) {
 						if (cpt2 == 0) {
 							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
 							cpt2++;
@@ -176,8 +176,48 @@ public class PrimitiveCode {
 					} 
 				}
 			}
-			// Block processCode
+			if (cpt2 > 0) {
+				for (SysCAMSTPortConverter t : convports) {
+					if (t.getPeriod() != -1) {
+						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+					} 
+					if (t.getRate() != -1) {
+						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+					} 
+					if (t.getDelay() != -1) {
+						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+					} 
+				}
+			} else {
+				for (SysCAMSTPortConverter t : convports) {
+					if (t.getPeriod() != -1) {
+						if (cpt2 == 0) {
+							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+							cpt2++;
+						} else {
+							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+						}
+					} 
+					if (t.getRate() != -1 && cpt2 == 0) {
+						if (cpt2 == 0) {
+							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+							cpt2++;
+						} else {
+							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+						}
+					} 
+					if (t.getDelay() != -1 && cpt2 == 0) {
+						if (cpt2 == 0) {
+							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+							cpt2++;
+						} else {
+							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+						}
+					} 
+				}
+			}
 			
+			// Block processCode
 			if (cpt2 > 0) {
 				corpsPrimitive = corpsPrimitive + "\t}" + CR2;
 			}
