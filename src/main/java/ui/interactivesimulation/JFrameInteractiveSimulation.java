@@ -73,6 +73,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
+
+
 /**
    * Class JFrameInteractiveSimulation
    * Creation: 21/04/2009
@@ -206,7 +208,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private JButton addLatencyCheckButton;
     private JButton updateLatencyButton;
     private LatencyTableModel latm;
-    public Vector<String> checkedTransactions = new Vector<String>();
+    public Vector<String> checkedTransactions = new Vector<String>(); //List of all strings: Name: (id)
     private JScrollPane jspLatency;
     private int chanId=0;
 
@@ -232,11 +234,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private Map<String, String> diagramTable;
 
     private List<Point> points;
-    private Map<String, String> checkTable = new HashMap<String, String>();
-    private Map<String, List<String>> transTimes = new HashMap<String, List<String>>();
-    private Vector<SimulationLatency> latencies = new Vector<SimulationLatency>();
-	private HashMap<String, List<String>> msgTimes = new HashMap<String, List<String>>(); 
-
+    private Map<String, String> checkTable = new HashMap<String, String>(); // commands: transaction time map
+    private Map<String, List<String>> transTimes = new HashMap<String, List<String>>(); //OperatorId : {transaction time} map
+    private Vector<SimulationLatency> latencies = new Vector<SimulationLatency>(); //List of all latencies
+	private HashMap<String, List<String>> msgTimes = new HashMap<String, List<String>>(); //msgId : {transaction time} map
+	private HashMap<String, List<String>> nameIdMap = new HashMap<String, List<String>>() ; // Names : List{operatorid}
 
 	private PipedOutputStream pos;
 	private PipedInputStream pis;
@@ -996,8 +998,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         //System.out.println("Row table:" + rowTable.toString());
         //System.out.println("Value table:" + valueTable.toString());
-    }
-
+	}
     private void initActions() {
         actions = new InteractiveSimulationActions[InteractiveSimulationActions.NB_ACTION];
         for(int i=0; i<InteractiveSimulationActions.NB_ACTION; i++) {
@@ -1381,6 +1382,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
 	public void resetSimTrace(){
 		msgTimes.clear();
+		chanId=0;
 		channelIDMap.clear();
 		simtraces.clear();
 		simIndex=0;
@@ -1561,20 +1563,15 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							msgTimes.put(tran.channelName, new ArrayList<String>());
 						} 
 						if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
-							//						int tmp=msgId-1;
-
-							if (command.equals("Write")){	
+							if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
+								msgId=channelIDMap.get(tran.channelName).remove(0);
+							}
+							else {
 								if (!channelIDMap.containsKey(tran.channelName)){
 									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
 								}
 								channelIDMap.get(tran.channelName).add(msgId);
 								chanId++;
-							}
-							else {
-								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
-									msgId=channelIDMap.get(tran.channelName).remove(0);
-								}
-
 							}
 							String trace="";
 							if (command.equals("Write")){
@@ -1614,20 +1611,15 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							msgTimes.put(tran.channelName, new ArrayList<String>());
 						} 
 						if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
-							//						int tmp=msgId-1;
-
-							if (command.equals("Send")){	
+							if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
+								msgId=channelIDMap.get(tran.channelName).remove(0);
+							}
+							else {
 								if (!channelIDMap.containsKey(tran.channelName)){
 									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
 								}
 								channelIDMap.get(tran.channelName).add(msgId);
 								chanId++;
-							}
-							else {
-								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
-									msgId=channelIDMap.get(tran.channelName).remove(0);
-								}
-
 							}
 							String trace="";
 							if (command.equals("Send")){
@@ -1676,20 +1668,15 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							msgTimes.put(tran.channelName, new ArrayList<String>());
 						} 
 						if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
-							//						int tmp=msgId-1;
-
-							if (command.equals("Request")){	
+							if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
+								msgId=channelIDMap.get(tran.channelName).remove(0);
+							}
+							else {
 								if (!channelIDMap.containsKey(tran.channelName)){
 									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
 								}
 								channelIDMap.get(tran.channelName).add(msgId);
 								chanId++;
-							}
-							else {
-								if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
-									msgId=channelIDMap.get(tran.channelName).remove(0);
-								}
-
 							}
 							String trace="";
 							if (command.equals("Request")){
@@ -1971,7 +1958,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                     nextCommand = "-1";
                                 }
                                 updateRunningCommand(id, command, progression, startTime, finishTime, nextCommand, transStartTime, transFinishTime, state);
-
                                 if (checkTable.containsKey(command)){
                                     if (!transTimes.containsKey(command)){
                                         ArrayList<String> timeList = new ArrayList<String>();
@@ -2665,32 +2651,40 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     private void addLatency(){
         SimulationLatency sl = new SimulationLatency();
-        sl.setTransaction1(transaction1.getSelectedItem().toString());
-        sl.setTransaction2(transaction2.getSelectedItem().toString());
-        sl.setMinTime("??");
-        sl.setMaxTime("??");
-        sl.setAverageTime("??");
-        sl.setStDev("??");
-        boolean found=false;
-        for (Object o:latencies){
-            SimulationLatency s = (SimulationLatency) o;
-            if (s.getTransaction1() == sl.getTransaction1() && s.getTransaction2() == sl.getTransaction2()){
-                found=true;
-            }
-        }
-        if (!found){
-            latencies.add(sl);
-        }
-        updateLatency();
-        if (latm !=null && latencies.size()>0){
-            latm.setData(latencies);
+        if (transaction1.getSelectedItem() !=null && transaction2.getSelectedItem() != null){        
+        	sl.setTransaction1(transaction1.getSelectedItem().toString());
+        	sl.setTransaction2(transaction2.getSelectedItem().toString());
+       		sl.setMinTime("??");
+       		sl.setMaxTime("??");
+        	sl.setAverageTime("??");
+        	sl.setStDev("??");
+        	boolean found=false;
+        	for (Object o:latencies){
+        	    SimulationLatency s = (SimulationLatency) o;
+        	    if (s.getTransaction1() == sl.getTransaction1() && s.getTransaction2() == sl.getTransaction2()){
+        	        found=true;
+        	    }
+        	}
+        	if (!found){
+        	    latencies.add(sl);
+        	}
+        	updateLatency();
+        	if (latm !=null && latencies.size()>0){
+        	    latm.setData(latencies);
+        	}
         }
     }
     private void updateLatency(){
         for (Object o:latencies){
             SimulationLatency sl = (SimulationLatency) o;
             //calcuate response + checkpoint 1 id + checkpoint 2 id
-            sendCommand("cl " + sl.getTransaction1().split("ID: ")[1].split("\\)")[0] + " " + sl.getTransaction2().split("ID: ")[1].split("\\)")[0]);
+            List<String> id1List = nameIdMap.get(sl.getTransaction1());
+            List<String> id2List = nameIdMap.get(sl.getTransaction2());            
+            for (String id1: id1List){
+            	for (String id2: id2List){
+        	    	sendCommand("cl " + id1 + " " + id2);
+        	    }
+        	}
         }
     }
 
@@ -2701,57 +2695,64 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		//System.out.println(checkTable.toString());
         for (Object o: latencies){
             SimulationLatency sl = (SimulationLatency) o;
-			//System.out.println(sl.trans2 + " " + sl.trans1);
             sl.setMinTime("??");
             sl.setMaxTime("??");
             sl.setAverageTime("??");
             sl.setStDev("??");
-            for (String st1:transTimes.keySet()){
-                for (String st2:transTimes.keySet()){
-                    if (st1!=st2){
-                        if (checkTable.get(st2).contains(sl.getTransaction2()) && checkTable.get(st1).contains(sl.getTransaction1())){
-                            ArrayList<Integer> minTimes = new ArrayList<Integer>();
-                            if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
-                                for(String time1: transTimes.get(st1)){
-                                    //Find the first subsequent transaction
-                                    int time = Integer.MAX_VALUE;
-                                    for (String time2: transTimes.get(st2)){
-                                        int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
-                                        if (diff < time && diff >=0){
-                                            time=diff;
-                                        }
-                                    }
-                                    if (time!=Integer.MAX_VALUE){
-                                        minTimes.add(time);
-                                    }
-                                }
-                                if (minTimes.size()>0){
-                                    int sum=0;
-                                    sl.setMinTime(Integer.toString(Collections.min(minTimes)));
-                                    sl.setMaxTime(Integer.toString(Collections.max(minTimes)));
-                                    for (int time: minTimes){
-                                        sum+=time;
-                                    }
-									//System.out.println("mintimes " + minTimes);
-                                    double average = (double) sum/ (double) minTimes.size();
-                                    double stdev =0.0;
-                                    for (int time:minTimes){
-                                        stdev +=(time - average)*(time-average);
-                                    }
-                                    stdev= stdev/minTimes.size();
-                                    stdev = Math.sqrt(stdev);
-                                    sl.setAverageTime(String.format("%.1f",average));
-                                    sl.setStDev(String.format("%.1f",stdev));
-									
-									mgui.addLatencyVals(Integer.valueOf(st2), new String[]{sl.getTransaction1(), Integer.toString(Collections.max(minTimes))}); 
-                                }
-                            }
-
-                        }
-
+            List<String> ids1 = nameIdMap.get(sl.getTransaction1());
+            List<String> ids2 = nameIdMap.get(sl.getTransaction2());
+            List<Integer> times1 = new ArrayList<Integer>();
+            List<Integer> times2 = new ArrayList<Integer>();
+			for (String id1: ids1){
+				if (transTimes.containsKey(id1)){
+					for(String time1: transTimes.get(id1)){
+	                	times1.add(Integer.valueOf(time1));
+	                }
+				}
+			}
+			for (String id2: ids2){
+				if (transTimes.containsKey(id2)){			
+                	ArrayList<Integer> minTimes = new ArrayList<Integer>();
+                    for (String time2: transTimes.get(id2)){
+	                	times2.add(Integer.valueOf(time2));
+	                }
+	            }
+	        }
+	       // System.out.println("times1 " + times1);
+	       //System.out.println("times2 " + times2);
+	        List<Integer> minTimes = new ArrayList<Integer>();
+	        for (int time1 : times1){
+				//Find the first subsequent transaction
+	            int time = Integer.MAX_VALUE;
+	            for (int time2: times2){
+   		        	int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
+                    if (diff < time && diff >=0){
+                    	time=diff;
                     }
                 }
-
+                if (time!=Integer.MAX_VALUE){
+            		minTimes.add(time);
+            	}
+            }
+            if (minTimes.size()>0){
+            	int sum=0;
+                sl.setMinTime(Integer.toString(Collections.min(minTimes)));
+                sl.setMaxTime(Integer.toString(Collections.max(minTimes)));
+                for (int time: minTimes){
+                	sum+=time;
+                }
+                double average = (double) sum/ (double) minTimes.size();
+                double stdev =0.0;
+                for (int time:minTimes){
+                	stdev +=(time - average)*(time-average);
+                }
+                stdev= stdev/minTimes.size();
+                stdev = Math.sqrt(stdev);
+                sl.setAverageTime(String.format("%.1f",average));
+                sl.setStDev(String.format("%.1f",stdev));
+                if (ids2.size()==1){
+					mgui.addLatencyVals(Integer.valueOf(ids2.get(0)), new String[]{sl.getTransaction1(), Integer.toString(Collections.max(minTimes))});
+				} 
             }
         }
         if (latm!=null && latencies.size()>0){
@@ -3441,12 +3442,20 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         if (tmap==null){
             return;
         }
-
         for (TGComponent tgc: tmap.getTMLModeling().getCheckedComps().keySet()){
-            TraceManager.addDev(tmap.getTMLModeling().getCheckedComps().get(tgc)+" (ID: " + tgc.getDIPLOID() + ")");
-			checkedTransactions.add(tmap.getTMLModeling().getCheckedComps().get(tgc)+" (ID: " + tgc.getDIPLOID() + ")");
-            checkTable.put(Integer.toString(tgc.getDIPLOID()),tmap.getTMLModeling().getCheckedComps().get(tgc)+" (ID: " + tgc.getDIPLOID() + ")");
+     		String compName = tmap.getTMLModeling().getCheckedComps().get(tgc);
+            TraceManager.addDev(compName+" (ID: " + tgc.getDIPLOID() + ")");
+			checkedTransactions.add(compName+" (ID: " + tgc.getDIPLOID() + ")");
+			if (!nameIdMap.containsKey(compName)){
+				nameIdMap.put(compName,new ArrayList<String>());
+				checkedTransactions.add(compName);
+			}
+			nameIdMap.get(compName).add(Integer.toString(tgc.getDIPLOID()));
+			nameIdMap.put(compName+" (ID: " + tgc.getDIPLOID() + ")",new ArrayList<String>());
+			nameIdMap.get(compName + " (ID: " + tgc.getDIPLOID() + ")").add(Integer.toString(tgc.getDIPLOID()));
+            checkTable.put(Integer.toString(tgc.getDIPLOID()),compName+" (ID: " + tgc.getDIPLOID() + ")");
         }
+	
     }
     
     public void activeBreakPoint(boolean active) {

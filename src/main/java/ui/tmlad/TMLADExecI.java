@@ -55,7 +55,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 21/11/2005
  * @author Ludovic APVRILLE
  */
-public class TMLADExecI extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADExecI extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, CheckableLatency, BasicErrorHighlight {
     private int lineLength = 5;
     private int textX, textY;
     private int ilength = 10;
