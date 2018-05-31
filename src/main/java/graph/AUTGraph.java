@@ -1396,7 +1396,7 @@ public class AUTGraph implements myutil.Graph {
 
         computeStates();
 
-        DijkstraState[] allPaths = GraphAlgorithms.ShortestPathFrom(this, 0);
+        DijkstraState[] allPaths = GraphAlgorithms.LongestPathFrom(this, 0);
 
         for (AUTState state : states) {
             if (state.isTerminationState()) {
