@@ -133,7 +133,7 @@ for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()) {
     //System.out.print("number of processors : " + TopCellGenerator.avatardd.getNbCPU()+"\n");
     // System.out.print("number of clusters : " + TopCellGenerator.avatardd.getNbClusters()+"\n");
 
-  
+  i = 0;
   if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){
       for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()){
 	  //	signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()

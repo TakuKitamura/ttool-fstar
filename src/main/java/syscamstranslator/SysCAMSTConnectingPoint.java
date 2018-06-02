@@ -49,25 +49,25 @@ package syscamstranslator;
 public class SysCAMSTConnectingPoint{
     
 	private SysCAMSTConnector ownerConnector ;
-    private SysCAMSTComponent ownerComponent;
-    
-    public SysCAMSTConnectingPoint( SysCAMSTComponent _ownerComponent) {
-    	ownerComponent = _ownerComponent;
-    }
+	private SysCAMSTComponent ownerComponent;
 
-    public SysCAMSTConnector getConnector() {
-    	return ownerConnector;
-    }
+	public SysCAMSTConnectingPoint( SysCAMSTComponent _ownerComponent) {
+		ownerComponent = _ownerComponent;
+	}
 
-    public SysCAMSTComponent getComponent() {
-    	return ownerComponent;
-    }
+	public SysCAMSTConnector getConnector() {
+		return ownerConnector;
+	}
 
-    void setConnector(SysCAMSTConnector _connector) {
-    	ownerConnector = _connector;
-    }
-    
-    boolean ConnectingPointIsFree(){
-    	return ownerConnector == null;
+	public SysCAMSTComponent getComponent() {
+		return ownerComponent;
+	}
+
+	void setConnector(SysCAMSTConnector _connector) {
+		ownerConnector = _connector;
+	}
+
+	boolean ConnectingPointIsFree(){
+		return ownerConnector == null;
     }
 }

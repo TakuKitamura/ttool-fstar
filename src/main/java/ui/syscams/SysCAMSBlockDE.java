@@ -444,4 +444,3 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		this.time = time;
 	}
 }
-

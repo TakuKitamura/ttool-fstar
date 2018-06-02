@@ -1,3 +1,0 @@
-
-objs = context.o
-

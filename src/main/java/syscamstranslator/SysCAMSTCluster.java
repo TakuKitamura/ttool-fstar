@@ -68,11 +68,11 @@ public class SysCAMSTCluster extends SysCAMSTComponent {
 		clusterName = _clusterName;
 	}
 
-    public LinkedList<SysCAMSTBlockTDF> getBlockTDF(){
-    	return blocks;
-    }
+	public LinkedList<SysCAMSTBlockTDF> getBlockTDF(){
+		return blocks;
+	}
 
-    public void addBlockTDF(SysCAMSTBlockTDF tdf){
-    	blocks.add(tdf);
-    }
+	public void addBlockTDF(SysCAMSTBlockTDF tdf){
+		blocks.add(tdf);
+	}
 }

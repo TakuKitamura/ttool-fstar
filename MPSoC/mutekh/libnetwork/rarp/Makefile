@@ -1,3 +1,0 @@
-objs += rarp.o
-
-

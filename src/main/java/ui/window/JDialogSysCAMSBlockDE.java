@@ -98,11 +98,11 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 		this.block = block;
 		
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-        getRootPane().getActionMap().put("close", new AbstractAction() {
-        	public void actionPerformed(ActionEvent e) {
-                dispose();
-        	}
-        });
+		getRootPane().getActionMap().put("close", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+		        dispose();
+			}
+		});
 		
 		dialog();
 	}
@@ -125,53 +125,53 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
 		// BorderLayout for Adding Attributes
 		GridBagLayout gridBag = new GridBagLayout();
-	    GridBagConstraints constraints = new GridBagConstraints();
-	    JPanel attributesBoxPanel = new JPanel();
-	    attributesBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-	    attributesBoxPanel.setLayout(gridBag); 
-	    
-	    JLabel labelName = new JLabel("Name : ");
-	    constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.BOTH,
-                new Insets(5, 10, 5, 10), 0, 0);
-        gridBag.setConstraints(labelName, constraints);
-        attributesBoxPanel.add(labelName);
+		GridBagConstraints constraints = new GridBagConstraints();
+		JPanel attributesBoxPanel = new JPanel();
+		attributesBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+		attributesBoxPanel.setLayout(gridBag); 
 
-	    if (block.getValue().toString().equals("")) { // name empty
+		JLabel labelName = new JLabel("Name : ");
+		constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
+							GridBagConstraints.CENTER,
+							GridBagConstraints.BOTH,
+							new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(labelName, constraints);
+		attributesBoxPanel.add(labelName);
+
+	    	if (block.getValue().toString().equals("")) { // name empty
 			nameTextField = new JTextField(10);
 		} else {
 			nameTextField = new JTextField(block.getValue().toString(), 10); // name not empty
 		}
-	    constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.BOTH,
-                new Insets(5, 10, 5, 10), 0, 0);
-	    gridBag.setConstraints(nameTextField, constraints);
-	    attributesBoxPanel.add(nameTextField);
+	    	constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
+							GridBagConstraints.CENTER,
+							GridBagConstraints.BOTH,
+							new Insets(5, 10, 5, 10), 0, 0);
+	   	gridBag.setConstraints(nameTextField, constraints);
+	    	attributesBoxPanel.add(nameTextField);
 		
-	    JLabel periodLabel = new JLabel("Period Tp : ");
+	    	JLabel periodLabel = new JLabel("Period Tp : ");
 		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.BOTH,
-                new Insets(5, 10, 5, 10), 0, 0);
+							GridBagConstraints.CENTER,
+							GridBagConstraints.BOTH,
+							new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(periodLabel, constraints);
 		attributesBoxPanel.add(periodLabel);
 
-	    if (block.getPeriod() == -1) { // name empty 		// port.getName().toString().equals("") ||
+	   	 if (block.getPeriod() == -1) { // name empty 		// port.getName().toString().equals("") ||
 			periodTextField = new JTextField(10);
 		} else {
 			periodTextField = new JTextField("" + block.getPeriod(), 10); // name not empty
 		}
-	    constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.BOTH,
-                new Insets(5, 10, 5, 10), 0, 0);
-	    gridBag.setConstraints(periodTextField, constraints);
-	    attributesBoxPanel.add(periodTextField);
-	    
-	    listPeriodString = new String[3];
-	    listPeriodString[0] = "us";
+	   	constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
+							GridBagConstraints.CENTER,
+							GridBagConstraints.BOTH,
+							new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(periodTextField, constraints);
+		attributesBoxPanel.add(periodTextField);
+
+		listPeriodString = new String[3];
+	    	listPeriodString[0] = "us";
 		listPeriodString[1] = "ms";
 		listPeriodString[2] = "s";
 		periodComboBoxString = new JComboBox<String>(listPeriodString);
@@ -185,9 +185,9 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 		periodComboBoxString.setActionCommand("time");
 		periodComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.BOTH,
-                new Insets(5, 10, 5, 10), 0, 0);
+							GridBagConstraints.CENTER,
+							GridBagConstraints.BOTH,
+							new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(periodComboBoxString, constraints);
 		attributesBoxPanel.add(periodComboBoxString);
 		

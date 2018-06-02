@@ -2031,20 +2031,26 @@ public class GTURTLEModeling {
         try {
             proverif = avatar2proverif.generateProVerif(true, true, 1, true, false);
             warnings = avatar2proverif.getWarnings();
+            
+            // Issue #131
+            final String proverifSpecFile = SpecConfigTTool.ProVerifCodeDirectory + "pvspec";
 
-            if (!avatar2proverif.saveInFile("pvspec")) {
+            if (!avatar2proverif.saveInFile( proverifSpecFile )) {
+//            if (!avatar2proverif.saveInFile("pvspec")) {
                 return;
             }
 
             RshClient rshc = new RshClient(ConfigurationTTool.ProVerifVerifierHost);
 
-            rshc.setCmd(ConfigurationTTool.ProVerifVerifierPath + " -in pitype pvspec");
+            // Issue #131
+            rshc.setCmd(ConfigurationTTool.ProVerifVerifierPath + " -in pitype " + proverifSpecFile );
+//            rshc.setCmd(ConfigurationTTool.ProVerifVerifierPath + " -in pitype pvspec");
             rshc.sendExecuteCommandRequest();
             Reader data = rshc.getDataReaderFromProcess();
 
             ProVerifOutputAnalyzer pvoa = getProVerifOutputAnalyzer();
             pvoa.analyzeOutput(data, true);
-            HashMap<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+            Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
             for (AvatarPragmaSecret pragma : confResults.keySet()) {
                 if (confResults.get(pragma).isProved() && !confResults.get(pragma).isSatisfied()) {
                     nonSecChans.add(pragma.getArg().getBlock().getName() + "__" + pragma.getArg().getName());
@@ -2055,7 +2061,7 @@ public class GTURTLEModeling {
                     }
                 }
             }
-            HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
+            Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
             for (AvatarPragmaAuthenticity pragma : authResults.keySet()) {
                 if (authResults.get(pragma).isProved() && !authResults.get(pragma).isSatisfied()) {
                     nonAuthChans.add(pragma.getAttrA().getAttribute().getBlock().getName() + "__" + pragma.getAttrA().getAttribute().getName().replaceAll("_chData", ""));
@@ -4445,7 +4451,7 @@ public class GTURTLEModeling {
             return s;
         byte b[] = null;
         try {
-            b = s.getBytes("ISO-8859-1");
+            b = s.getBytes("UTF-8");
             return new String(b);
         } catch (Exception e) {
             throw new MalformedModelingException();
@@ -4475,7 +4481,7 @@ public class GTURTLEModeling {
         StringBuffer sb = new StringBuffer();
 
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
         sb.append("version=\"" + DefaultText.getVersion());
         sb.append("\" copyMaxId=\"" + copyMaxId);
         sb.append("\" decX=\"" + _decX);
@@ -4551,7 +4557,7 @@ public class GTURTLEModeling {
         //TraceManager.addDev("Making copy");
 
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
         sb.append("version=\"" + DefaultText.getVersion());
         sb.append("\" copyMaxId=\"" + copyMaxId);
         sb.append("\" decX=\"" + _decX);
@@ -4664,7 +4670,7 @@ public class GTURTLEModeling {
     public String makeOneDiagramXMLFromGraphicalModel(TURTLEPanel tp, int indexOfDiagram) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
 
         StringBuffer s;
         String str;
@@ -4691,7 +4697,7 @@ public class GTURTLEModeling {
     public String makeXMLFromTurtleModeling(int index, String extensionToName) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
 
         StringBuffer s;
         String str;
@@ -6307,7 +6313,7 @@ public class GTURTLEModeling {
             return null;
         }
 
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
 
         if (index2 > -1) {
             sb.append("<Modeling type=\"Analysis\" nameTab=\"Analysis\" >\n");
@@ -6329,11 +6335,13 @@ public class GTURTLEModeling {
         return sb.toString();
     }
 
-    public void loadModelingFromXML(String s) throws MalformedModelingException {
+    public void loadModelingFromXML(String s) throws MalformedModelingException, UnsupportedEncodingException {
 
         if (s == null) {
             return;
         }
+
+        //TraceManager.addDev("Modeling in loadModelingFromXML:" + s);
 
         s = decodeString(s);
 
@@ -6342,7 +6350,9 @@ public class GTURTLEModeling {
         decId = 0;
         TGComponent.setGeneralId(100000);
 
-        ByteArrayInputStream bais = new ByteArrayInputStream(s.getBytes());
+        //TraceManager.addDev("Modeling in loadModelingFromXML:" + s);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(s.getBytes("UTF-8"));
 
         if ((dbf == null) || (db == null)) {
             throw new MalformedModelingException();
@@ -7288,7 +7298,7 @@ public class GTURTLEModeling {
         }
         
         if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
-        	//TraceManager.addDev("Connectors...");
+			//TraceManager.addDev("Connectors...");
         	((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
         }
     }

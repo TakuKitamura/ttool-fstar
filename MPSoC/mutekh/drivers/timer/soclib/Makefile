@@ -1,4 +1,0 @@
-
-objs = timer-soclib.o
-
-

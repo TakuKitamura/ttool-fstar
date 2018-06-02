@@ -38,71 +38,31 @@
 
 package ui.syscams;
 
-import java.awt.Graphics;
-
 import ui.TDiagramPanel;
 import ui.TGComponent;
+import ui.TGComponentManager;
+
+import java.awt.*;
 
 /**
- * Class SysCAMSPortTDF
- * Primitive port. To be used in SystemC-AMS diagrams
- * Creation: 14/05/2018
- * @version 1.0 14/05/2018
+ * Class SysCAMSChannelOutPort
+ * Channel out port. To be used in SystemC-AMS component task diagrams
+ * Creation: 22/04/2018
+ * @version 1.0 22/04/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
-public class SysCAMSPortTDF extends SysCAMSPrimitivePort {
-	private int period;
-	private String time;
-	private int rate;
-	private int delay;
-	private String TDFType;
+public class SysCAMSChannelOutPort extends SysCAMSPrimitivePort {
+    public SysCAMSChannelOutPort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        
+		initConnectingPoint(true, true, 1);
+    }
 	
-	public SysCAMSPortTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-			TDiagramPanel _tdp) {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-	}
-	
-	public String getTime() {
-		return time;
-	}
-
-	public void setTime(String time) {
-		this.time = time;
-	}
-
-	public String getTDFType() {
-		return TDFType;
-	}
-
-	public void setTDFType(String tDFType) {
-		TDFType = tDFType;
-	}
-
-	public int getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(int period) {
-		this.period = period;
-	}
-
-	public int getRate() {
-		return rate;
-	}
-
-	public void setRate(int rate) {
-		this.rate = rate;
-	}
-
-	public int getDelay() {
-		return delay;
-	}
-
-	public void setDelay(int delay) {
-		this.delay = delay;
-	}
-
 	public void drawParticularity(Graphics g) {
 	}
+	
+    public int getType() {
+        return TGComponentManager.TMLCTD_COPORT;
+    }
 }

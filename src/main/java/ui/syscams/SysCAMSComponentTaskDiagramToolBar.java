@@ -98,6 +98,9 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.CAMS_CLUSTER]);
 		button.addMouseListener(mgui.mouseHandler);
 		
+		button = this.add(mgui.actions[TGUIAction.CAMS_PORT_CONVERTER]);
+		button.addMouseListener(mgui.mouseHandler);
+		
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.CAMS_BLOCK_TDF]);

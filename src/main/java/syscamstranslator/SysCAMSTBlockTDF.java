@@ -100,19 +100,19 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 		cluster = _cluster;
 	}
 
-    public LinkedList<SysCAMSTPortTDF> getPortTDF(){
-    	return portTDF;
-    }
+	public LinkedList<SysCAMSTPortTDF> getPortTDF(){
+		return portTDF;
+	}
 
-    public void addPortTDF(SysCAMSTPortTDF tdf){
-    	portTDF.add(tdf);
-    }
-    
-    public LinkedList<SysCAMSTPortConverter> getPortConverter(){
-    	return portConverter;
-    }
+	public void addPortTDF(SysCAMSTPortTDF tdf){
+		portTDF.add(tdf);
+	}
 
-    public void addPortConverter(SysCAMSTPortConverter converter){
-    	portConverter.add(converter);
-    }
+	public LinkedList<SysCAMSTPortConverter> getPortConverter(){
+		return portConverter;
+	}
+
+	public void addPortConverter(SysCAMSTPortConverter converter){
+		portConverter.add(converter);
+	}
 }

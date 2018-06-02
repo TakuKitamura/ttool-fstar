@@ -530,4 +530,3 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		this.time = time;
 	}
 }
-

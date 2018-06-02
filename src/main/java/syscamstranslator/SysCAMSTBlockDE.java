@@ -77,11 +77,11 @@ public class SysCAMSTBlockDE extends SysCAMSTComponent {
 		name = _name;
 	}
 
-    public LinkedList<SysCAMSTPortDE> getPortDE(){
-    	return portDE;
-    }
+	public LinkedList<SysCAMSTPortDE> getPortDE(){
+		return portDE;
+	}
 
-    public void addPortDE(SysCAMSTPortDE de){
-    	portDE.add(de);
-    }
+	public void addPortDE(SysCAMSTPortDE de){
+		portDE.add(de);
+	}
 }

@@ -1358,7 +1358,7 @@ public class AUTGraph implements myutil.Graph {
             } else {
                 // For each possible transition, we create a new transition to a new destination state
                 for (AUTTransition tr : current.outTransitions) {
-                    // Create new transition. Is a new staqte necessary?
+                    // Create new transition. Is a new state necessary?
                     AUTState destState = states.get(tr.destination);
                     AUTState stRefusal;
                     stRefusal = new AUTState(newStates.size());
@@ -1396,7 +1396,7 @@ public class AUTGraph implements myutil.Graph {
 
         computeStates();
 
-        DijkstraState[] allPaths = GraphAlgorithms.ShortestPathFrom(this, 0);
+        DijkstraState[] allPaths = GraphAlgorithms.LongestPathFrom(this, 0);
 
         for (AUTState state : states) {
             if (state.isTerminationState()) {
