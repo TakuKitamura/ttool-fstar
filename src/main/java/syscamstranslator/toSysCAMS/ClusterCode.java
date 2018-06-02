@@ -104,12 +104,6 @@ public class ClusterCode {
 				nb_block++;
 			}
 			
-			String filename = "";
-			for (int i = 0; i < tdf.size(); i++) {
-				filename = filename + tdf.get(i).getName() + "_";
-			}
-			filename = filename + "tb";
-			
 			corpsCluster = corpsCluster + "\t// Configure signal tracing." + CR 
 					+ "\tsca_trace_file* tfp = sca_create_tabular_trace_file(\"" + cluster.getClusterName() + "_tb\");" + CR;
 			

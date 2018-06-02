@@ -99,15 +99,25 @@ public class TopCellGenerator {
 		LinkedList<SysCAMSTCluster> clusters = TopCellGenerator.syscams.getAllCluster();
 		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnector();
 		
-		String top;
+		String top, makefile;
 		
 		for (SysCAMSTCluster c : clusters) {
 			try {
 				// Save file .cpp
 				System.err.println(path + GENERATED_PATH1 + c.getClusterName() + ".cpp");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + c.getClusterName() + ".cpp");
+				FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + c.getClusterName() + "_tb.cpp");
 				top = generateTopCell(c, connectors);
 				fw.write(top);
+				fw.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			try {
+				// Save Makefile
+				System.err.println(path + "Makefile");
+				FileWriter fw = new FileWriter(path + "/" + "Makefile");
+				makefile = MakefileCode.getMakefileCode(c);
+				fw.write(makefile);
 				fw.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -135,3 +145,4 @@ public class TopCellGenerator {
 		}
 	}
 }
+

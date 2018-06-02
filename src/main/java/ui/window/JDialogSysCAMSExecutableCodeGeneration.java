@@ -72,6 +72,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 
     private String textSysC1 = "Base directory of code generation:";
     private String textSysC7 = "Base directory of topcell generation:";
+    private String textSysC8 = "Base directory of Makefile:";
 //    private String textSysC2 = "Compile SystemC-AMS executable with"; // compile
 //    private String textSysC4 = "Run code in soclib / mutekh:";
 //    private String textSysC5 = "Show AVATAR trace from file w/o hardware:";
@@ -107,7 +108,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
     protected JRadioButton exe, exeint, exetrace, exesoclib, compile, compilesoclib, viewtrace, viewtracesoclib;
     protected ButtonGroup compilegroup, exegroup, viewgroup;
     protected JLabel gen;
-    protected JTextField code1, code2, compiler, exe1, exe2, exe3, exe4, exe2int, simulationTraceFile, simulationsoclibTraceFile;
+    protected JTextField code1, code2, code3, compiler, exe1, exe2, exe3, exe4, exe2int, simulationTraceFile, simulationsoclibTraceFile;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
     protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode, putUserCode;
@@ -204,18 +205,22 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         c01.gridheight = 1;
 
         gen = new JLabel(textSysC1);
-        //genJava.addActionListener(this);
         jp01.add(gen, c01);
 
         code1 = new JTextField(pathCode, 100);
         jp01.add(code1, c01);
 
         gen = new JLabel(textSysC7);
-        //genJava.addActionListener(this);
         jp01.add(gen, c01);
 
         code2 = new JTextField(pathCode, 100);
         jp01.add(code2, c01);
+        
+        gen = new JLabel(textSysC8);
+        jp01.add(gen, c01);
+        
+        code3 = new JTextField(pathCode, 100);
+        jp01.add(code3, c01);
 
         jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
