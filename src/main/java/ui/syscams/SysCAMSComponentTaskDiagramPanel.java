@@ -136,12 +136,12 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 
     public boolean nameBlockTDFComponentInUse(String oldValue, String newValue) {
         boolean ko = mgui.nameComponentInUse(tp, oldValue, newValue);
-        return ko ? ko : nameAllRecordComponentInUse(oldValue, newValue);
+        return ko;
     }
 
     public boolean nameRecordComponentInUse(String oldValue, String newValue) {
         boolean ko = mgui.nameComponentInUse(tp, oldValue, newValue);
-        return ko? ko : nameAllRecordComponentInUse(oldValue, newValue);
+        return ko;
     }
 
     public boolean isCompositeNameUsed(String newvalue) {
@@ -150,37 +150,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
                 return true;
         }
         return false;
-    }
-
-    public boolean nameAllRecordComponentInUse(String oldValue, String newValue) {
-        Iterator<SysCAMSRecordComponent> iterator = getRecordComponentList().listIterator();
-        SysCAMSRecordComponent record;
-
-        while(iterator.hasNext()) {
-            record = iterator.next();
-            if (record.getName().compareTo(newValue) == 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public LinkedList<SysCAMSRecordComponent> getRecordComponentList() {
-        LinkedList<SysCAMSRecordComponent> ll = new LinkedList<SysCAMSRecordComponent>();
-        TGComponent tgc;
-
-        Iterator<TGComponent> iterator = componentList.listIterator();
-
-        while(iterator.hasNext()) {
-            tgc = iterator.next();
-            if (tgc instanceof SysCAMSRecordComponent) {
-                ll.add((SysCAMSRecordComponent) tgc);
-            }
-            if (tgc instanceof SysCAMSCompositeComponent) {
-                ll.addAll(((SysCAMSCompositeComponent)tgc).getAllRecordComponents());
-            }
-        }
-        return ll;
     }
 
     public List<SysCAMSBlockTDF> getBlockTDFComponentList() {
@@ -259,127 +228,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
         getAllPortsConnectedTo( ll, _port );
         return ll;
     }
-
-//    public List<String> getAllSysCAMSCommunicationNames(String _topname) {
-//        List<String> al = new ArrayList<String>();
-//
-//        SysCAMSPrimitiveComponent syscamsc;
-//        List<SysCAMSPrimitiveComponent> components = getPrimitiveComponentList();
-//        Iterator<SysCAMSPrimitiveComponent> iterator = components.listIterator();
-//        Iterator<SysCAMSPrimitivePort> li;//, li2;
-//        List<SysCAMSPrimitivePort> ports, portstome;
-//        String name, name1, name2;
-//        SysCAMSPrimitivePort port1, port2;
-//
-//        int j;
-//
-//        while( iterator.hasNext() ) {
-//            syscamsc = iterator.next();
-//            ports = syscamsc.getAllChannelsOriginPorts();
-//            li = ports.listIterator();
-//            while( li.hasNext() ) {
-//                port1 = li.next();
-//                portstome = getPortsConnectedTo( port1, components );
-//                Iterator<SysCAMSPrimitivePort> ite = portstome.listIterator();
-//
-//                while( ite.hasNext()) {
-//                    port2 = ite.next();
-//                    if (!port2.isOrigin()) {
-//                        String []text1 = port1.getPortName().split( "," );
-//                        String []text2 = port2.getPortName().split( "," );
-//                        for ( j = 0; j < Math.min( text1.length, text2.length ); j++ ) {
-//                            name1 = text1[j].trim();
-//                            name2 = text2[j].trim();
-//                            if( name1.equals( name2 ) ) {
-//                                name = name1;
-//                            }
-//                            else {
-//                                name = name1 + "__" + name2;
-//                            }
-//                            al.add( _topname + "::" + name );
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return al;
-//    }
-//
-//    public List<String> getAllSysCAMSInputPorts( String _topname ) {   //the destination ports
-//        //Use HashSet to avoid returning multiple identical ports due to the presence of join nodes
-//        Set<String> al = new HashSet<String>();
-//        SysCAMSPrimitiveComponent syscamsc;
-//        List<SysCAMSPrimitiveComponent> components = getPrimitiveComponentList();
-//        Iterator<SysCAMSPrimitiveComponent> iterator = components.listIterator();
-//        Iterator<SysCAMSPrimitivePort> li;//, li2;
-//        List<SysCAMSPrimitivePort> ports, portstome;
-//        String name2;
-//        SysCAMSPrimitivePort port1, port2;
-//        int j;
-//
-//        while( iterator.hasNext() ) {
-//            syscamsc = iterator.next();
-//            ports = syscamsc.getAllChannelsOriginPorts();
-//            li = ports.listIterator();
-//            while( li.hasNext() ) {
-//                port1 = li.next();
-//                portstome = getPortsConnectedTo( port1, components );   //this prints the ports via TraceManager
-//                Iterator<SysCAMSPrimitivePort> ite = portstome.listIterator();
-//                while( ite.hasNext()) {
-//                    port2 = ite.next();
-//                    if( !port2.isOrigin() ) {
-//                        String []text1 = port1.getPortName().split( "," );
-//                        String []text2 = port2.getPortName().split( "," );
-//                        for( j = 0; j < Math.min( text1.length, text2.length ); j++ ) {
-//                            name2 = text2[j].trim();
-//                            al.add( _topname + "::" + name2 );
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return new ArrayList<String>(al);
-//    }
-//
-//    public List<String> getAllSysCAMSEventNames( String _topname ) {
-//
-//        List<String> al = new ArrayList<String>();
-//        SysCAMSPrimitiveComponent syscamsc;
-//        List<SysCAMSPrimitiveComponent> components = getPrimitiveComponentList();
-//        Iterator<SysCAMSPrimitiveComponent> iterator = components.listIterator();
-//        Iterator<SysCAMSPrimitivePort> li;//, li2;
-//        List<SysCAMSPrimitivePort> ports, portstome;
-//        String name, name1, name2;
-//        SysCAMSPrimitivePort port1, port2;
-//        int j;
-//
-//        while( iterator.hasNext() ) {
-//            syscamsc = iterator.next() ;
-//            ports = syscamsc.getAllEventsOriginPorts();
-//            li = ports.listIterator();
-//            while( li.hasNext() ) {
-//                port1 = li.next();
-//                portstome = getPortsConnectedTo( port1, components );
-//                if ( portstome.size() == 1 ) {
-//                    port2 = portstome.get(0);
-//                    String []text1 = port1.getPortName().split( "," );
-//                    String []text2 = port2.getPortName().split( "," );
-//                    for ( j = 0; j < Math.min( text1.length, text2.length ); j++ ) {
-//                        name1 = text1[j].trim();
-//                        name2 = text2[j].trim();
-//                        if( name1.equals( name2 ) ) {
-//                            name = name1;
-//                        }
-//                        else {
-//                            name = name1 + "__" + name2;
-//                        }
-//                        al.add( _topname + "::" + name );
-//                    }
-//                }
-//            }
-//        }
-//        return al;
-//    }
 
     public void getAllPortsConnectedTo( List<TGComponent> ll, SysCAMSPrimitivePort _port) {
         List<TGComponent> components = getMGUI().getAllSysCAMSComponents();
@@ -598,7 +446,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
     public SysCAMSBlockDE getBlockDEComponentByName(String _name) {
     	TGComponent tgc;
     	Iterator<TGComponent> iterator = componentList.listIterator();
-//    	SysCAMSBlockDE tmp;
     	
     	while(iterator.hasNext()) {
     		tgc = iterator.next();
@@ -607,18 +454,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
     				return ((SysCAMSBlockDE)tgc);
     			}
     		}
-//    		if (tgc instanceof SysCAMSCompositeComponent) {
-//    			tmp = ((SysCAMSCompositeComponent)tgc).getBlockDEComponentByName(_name);
-//    			if (tmp != null) {
-//    				return tmp;
-//    			}
-//    		}
-//    		if (tgc instanceof SysCAMSRemoteCompositeComponent) {
-//    			tmp = ((SysCAMSRemoteCompositeComponent)tgc).getBlockDEComponentByName(_name);
-//    			if (tmp != null) {
-//    				return tmp;
-//    			}
-//    		}
     	}
     	return null;
     }
@@ -956,81 +791,9 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
                     String s = o.toString();
                     list.add( primComp.getValue() + "." + s.substring( 2, s.length()-1 ) );
                 }
-//                for( SysCAMSBlockDE primComp: ((SysCAMSCompositeComponent)tgc).getAllBlockDEComponents() ) {
-//                	Object o = primComp.getPeriod();
-//            		String s = o.toString();
-//            		list.add( primComp.getValue() + "." + s.substring( 2, s.length()-1 ) );
-//                }
             }
         }
         return list;
-    }
-
-    public Vector<String> getAllRecords(SysCAMSBlockTDF tgc) {
-        Vector<String> list = new Vector<String>();
-        getAllRecords((SysCAMSCompositeComponent)(tgc.getFather()), list);
-        return list;
-    }
-    
-    public Vector<String> getAllRecords(SysCAMSBlockDE tgc) {
-    	Vector<String> list = new Vector<String>();
-    	getAllRecords((SysCAMSCompositeComponent)(tgc.getFather()), list);
-    	return list;
-    }
-
-    public void getAllRecords(SysCAMSCompositeComponent comp,  Vector<String> list) {
-        TGComponent tgc;
-        if (comp == null) {
-            Iterator<TGComponent> iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                tgc = iterator.next();
-                if (tgc instanceof SysCAMSRecordComponent) {
-                    list.add(tgc.getValue());
-                }
-            }
-            return;
-        }
-
-        for(int i=0; i<comp.getNbInternalTGComponent(); i++) {
-            tgc = comp.getInternalTGComponent(i);
-            if (tgc instanceof SysCAMSRecordComponent) {
-                list.add(tgc.getValue());
-            }
-        }
-        getAllRecords((SysCAMSCompositeComponent)(comp.getFather()), list);
-    }
-
-    public SysCAMSRecordComponent getRecordNamed(SysCAMSBlockTDF tgc, String _nameOfRecord) {
-        return getRecordNamed((SysCAMSCompositeComponent)(tgc.getFather()), _nameOfRecord);
-    }
-    
-    public SysCAMSRecordComponent getRecordNamed(SysCAMSBlockDE tgc, String _nameOfRecord) {
-    	return getRecordNamed((SysCAMSCompositeComponent)(tgc.getFather()), _nameOfRecord);
-    }
-
-    public SysCAMSRecordComponent getRecordNamed(SysCAMSCompositeComponent comp,  String _nameOfRecord) {
-        TGComponent tgc;
-        if (comp == null) {
-            Iterator<TGComponent> iterator = componentList.listIterator();
-            while(iterator.hasNext()) {
-                tgc = iterator.next();
-                if (tgc instanceof SysCAMSRecordComponent) {
-                    if (tgc.getValue().compareTo(_nameOfRecord) == 0) {
-                        return (SysCAMSRecordComponent)tgc;
-                    }
-                }
-            }
-            return null;
-        }
-        for(int i=0; i<comp.getNbInternalTGComponent(); i++) {
-            tgc = comp.getInternalTGComponent(i);
-            if (tgc instanceof SysCAMSRecordComponent) {
-                if (tgc.getValue().compareTo(_nameOfRecord) == 0) {
-                    return (SysCAMSRecordComponent)tgc;
-                }
-            }
-        }
-        return getRecordNamed((SysCAMSCompositeComponent)(comp.getFather()), _nameOfRecord);
     }
 
     public void findAllReferencedPanels( List<SysCAMSComponentTaskDiagramPanel> panels) {
@@ -1077,10 +840,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
                     for(SysCAMSPortTDF pp: listtdf) {
                         addToPaths(paths, pp);
                     }
-//                    listde = ((SysCAMSCompositeComponent)tgc).getAllInternalPortsDE();
-//                    for(SysCAMSPortDE pp: listde) {
-//                    	addToPaths(paths, pp);
-//                    }
                 }
                 if (tgc instanceof SysCAMSBlockTDF) {
                     listtdf = ((SysCAMSBlockTDF)tgc).getAllInternalPortsTDF();

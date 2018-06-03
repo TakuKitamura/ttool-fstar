@@ -51,7 +51,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Vector;
 
 /**
  * Class SysCAMSBlockDE
@@ -275,14 +274,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
         return true;
     }
 
-    public Vector<String> getAllRecords() {
-        return ((SysCAMSComponentTaskDiagramPanel)(tdp)).getAllRecords(this);
-    }
-
-    public SysCAMSRecordComponent getRecordNamed(String _nameOfRecord) {
-        return ((SysCAMSComponentTaskDiagramPanel)(tdp)).getRecordNamed(this, _nameOfRecord);
-    }
-
     public int getType() {
 		return TGComponentManager.CAMS_BLOCK_DE;
     }
@@ -444,3 +435,4 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		this.time = time;
 	}
 }
+

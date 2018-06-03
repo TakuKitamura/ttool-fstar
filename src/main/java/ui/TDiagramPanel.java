@@ -55,7 +55,6 @@ import ui.cd.*;
 import ui.syscams.SysCAMSBlockDE;
 import ui.syscams.SysCAMSBlockTDF;
 import ui.syscams.SysCAMSCompositeComponent;
-import ui.syscams.SysCAMSRecordComponent;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
 import ui.ncdd.NCSwitchNode;
@@ -2599,7 +2598,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof TMLTaskInterface && this.checkTMLTaskInterface((TMLTaskInterface) o, name))
                 	  || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
                     || (o instanceof SysCAMSBlockDE && this.checkSysCAMSBlockDEComponent((SysCAMSBlockDE) o, name))
-                    || (o instanceof SysCAMSRecordComponent && this.checkSysCAMSRecordComponent((SysCAMSRecordComponent) o, name))
                     || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
                     || (o instanceof ATDBlock && this.checkATDBlock((ATDBlock) o, name))
                     || (o instanceof AvatarBDBlock && this.checkAvatarBDBlock((AvatarBDBlock) o, name))
@@ -2655,10 +2653,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         
         public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
-        	return false;
-        }
-        
-        public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
         	return false;
         }
         
@@ -2795,10 +2789,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     		}
     		
     		public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
-    			return o.getValue().equals(name);
-    		}
-    		
-    		public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
     			return o.getValue().equals(name);
     		}
     		
@@ -3684,3 +3674,4 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return tdmm;
     }
 }
+

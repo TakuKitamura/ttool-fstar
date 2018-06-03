@@ -164,10 +164,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 			}
 		}
 		g.setFont(fold);
-//		// Icon
-//		if ((width>30) && (height > (iconSize + 2*textX))) {
-//			g.drawImage(IconManager.imgic1200.getImage(), x + width - iconSize - textX, y + textX, null);
-//		}
     }
 	
 	public void rescale(double scaleFactor){
@@ -256,9 +252,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
         if (tgc instanceof SysCAMSCompositeComponent) {
             tgc.resizeWithFather();
         }
-		if (tgc instanceof SysCAMSRecordComponent) {
-            tgc.resizeWithFather();
-        }
 		if (tgc instanceof SysCAMSBlockTDF) {
             tgc.resizeWithFather();
         }
@@ -305,9 +298,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 			if (tgcomponent[i] instanceof SysCAMSBlockDE) {
 				tgcomponent[i].resizeWithFather();
 			}
-			if (tgcomponent[i] instanceof SysCAMSRecordComponent) {
-				tgcomponent[i].resizeWithFather();
-			}
         }
 		if (getFather() != null) {
 			resizeWithFather();
@@ -332,35 +322,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 			}
 			if (tgcomponent[i] instanceof SysCAMSBlockTDF) {
 				ll.add(((SysCAMSBlockTDF)(tgcomponent[i])));
-			}
-		}
-		return ll;
-	}
-	
-//	public java.util.List<SysCAMSBlockDE> getAllBlockDEComponents() {
-//		ArrayList<SysCAMSBlockDE> ll = new ArrayList<SysCAMSBlockDE>();
-//		for(int i=0; i<nbInternalTGComponent; i++) {
-//			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
-//				ll.addAll(((SysCAMSCompositeComponent)tgcomponent[i]).getAllBlockDEComponents());
-//			}
-//			if (tgcomponent[i] instanceof SysCAMSRemoteCompositeComponent) {
-//				ll.addAll(((SysCAMSRemoteCompositeComponent)tgcomponent[i]).getAllBlockDEComponents());
-//			}
-//			if (tgcomponent[i] instanceof SysCAMSBlockDE) {
-//				ll.add(((SysCAMSBlockDE)(tgcomponent[i])));
-//			}
-//		}
-//		return ll;
-//	}
-	
-	public ArrayList<SysCAMSRecordComponent> getAllRecordComponents() {
-		ArrayList<SysCAMSRecordComponent> ll = new ArrayList<SysCAMSRecordComponent>();
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
-				ll.addAll(((SysCAMSCompositeComponent)tgcomponent[i]).getAllRecordComponents());
-			}
-			if (tgcomponent[i] instanceof SysCAMSRecordComponent) {
-				ll.add(((SysCAMSRecordComponent)(tgcomponent[i])));
 			}
 		}
 		return ll;
@@ -392,19 +353,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 		return list;
 	}
 	
-//	public ArrayList<SysCAMSPortDE> getAllInternalPortsDE() {
-//		ArrayList<SysCAMSPortDE> list = new ArrayList<SysCAMSPortDE>();
-//		for(int i=0; i<nbInternalTGComponent; i++) {
-//			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
-//				list.addAll(((SysCAMSCompositeComponent)tgcomponent[i]).getAllInternalPortsDE());
-//			}
-//			if (tgcomponent[i] instanceof SysCAMSBlockDE) {
-//				list.addAll(((SysCAMSBlockDE)tgcomponent[i]).getAllInternalPortsDE());
-//			}
-//		}
-//		return list;
-//	}
-	
 	public SysCAMSBlockTDF getBlockTDFComponentByName(String _name) {
 		SysCAMSBlockTDF tgc;
 		ListIterator<SysCAMSBlockTDF> li = getAllBlockTDFComponents().listIterator();
@@ -417,19 +365,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 		}
 		return null;
 	}
-	
-//	public SysCAMSBlockDE getBlockDEComponentByName(String _name) {
-//		SysCAMSBlockDE tgc;
-//		ListIterator<SysCAMSBlockDE> li = getAllBlockDEComponents().listIterator();
-//		
-//		while(li.hasNext()) {
-//			tgc = li.next();
-//			if (tgc.getValue().equals(_name)) {
-//				return tgc;
-//			}
-//		}
-//		return null;
-//	}
 	
 	public SysCAMSCompositeComponent getCompositeComponentByName(String _name) {
 		TGComponent tgc;
