@@ -76,11 +76,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
         if (tgc instanceof SysCAMSPrimitivePort) {
             updatePorts();
         }
-
-        if (tgc instanceof SysCAMSChannelFacility) {
-            updatePorts();
-        }
-
         return true;
     }
 
@@ -581,7 +576,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
         // Get all SysCAMSPrimitivePort
         List<SysCAMSPortTDF> tdfports = new ArrayList<SysCAMSPortTDF>();
         List<SysCAMSPortDE> deports = new ArrayList<SysCAMSPortDE>();
-        List<SysCAMSChannelFacility> facilities = new ArrayList<SysCAMSChannelFacility>();
 
         iterator = componentList.listIterator();
 
@@ -600,13 +594,9 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
             if (tgc instanceof SysCAMSPortDE) {
             	deports.add((SysCAMSPortDE)tgc);
             }
-            if (tgc instanceof SysCAMSChannelFacility) {
-                facilities.add((SysCAMSChannelFacility)tgc);
-            }
         }
 
         // We take each primitive ports individually and we go thru the graph
-        ArrayList<SysCAMSChannelFacility> mets = new ArrayList<SysCAMSChannelFacility>();
         TGConnector connector;
         TGConnectingPoint tp;
         String conflictMessage;
@@ -616,10 +606,8 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
                 tp = pport.getTGConnectingPointAtIndex(i);
                 connector = findTGConnectorUsing(tp);
                 if (connector != null) {
-                    mets.clear();
-                    conflictMessage = propagate(pport, tp, connector, mets);
+                    conflictMessage = propagate(pport, tp, connector);
                     TraceManager.addDev("Conflict=" + conflictMessage);
-                    analysePorts(pport, mets, (conflictMessage != null), conflictMessage);
                 } 
             }
         }
@@ -628,20 +616,16 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
         		tp = pport.getTGConnectingPointAtIndex(i);
         		connector = findTGConnectorUsing(tp);
         		if (connector != null) {
-        			mets.clear();
-        			conflictMessage = propagate(pport, tp, connector, mets);
+        			conflictMessage = propagate(pport, tp, connector);
         			TraceManager.addDev("Conflict=" + conflictMessage);
-        			analysePorts(pport, mets, (conflictMessage != null), conflictMessage);
         		} 
         	}
         }
     }
 
-    public String propagate(SysCAMSPrimitivePort pport, TGConnectingPoint tp, TGConnector connector, ArrayList<SysCAMSChannelFacility> mets) {
+    public String propagate(SysCAMSPrimitivePort pport, TGConnectingPoint tp, TGConnector connector) {
         TGConnectingPoint tp2;
-        SysCAMSChannelFacility cp = null;
         String conflictMessage = null;
-        String conflictMessageTmp;
 
         if (tp == connector.getTGConnectingPointP1()) {
             tp2 = connector.getTGConnectingPointP2();
@@ -655,110 +639,7 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
             return conflictMessage;
         }
 
-        // Cycle?
-        if (mets.contains(tgc)) {
-            return "Connection contains a cycle";
-        } else if(tgc instanceof SysCAMSFork) {
-            // Only one out, more than one in is ok
-            // No SysCAMSJoin
-            cp = (SysCAMSChannelFacility)tgc;
-            mets.add(cp);
-
-            // Checks that "mets" contains no SysCAMSJoin
-            for(SysCAMSChannelFacility met: mets) {
-                if (met instanceof SysCAMSJoin) {
-                    conflictMessage = "Join and Fork operators are mixed in the same channel";
-                    conflictMessageTmp = explore(pport, tp2, cp, mets);
-                    if (conflictMessageTmp != null) {
-                        conflictMessage = conflictMessageTmp;
-                    }
-                    return conflictMessage;
-                }
-            }
-
-            if (pport.getOrigin() == 1) {
-                if ((cp.getInPort() != null) && (cp.getInPort() != pport)) {
-                    conflictMessage = "More than two sending ports  in a fork architecture";
-                }
-                cp.setInPort(pport);
-                conflictMessageTmp = explore(pport, tp2, cp, mets);
-                if (conflictMessageTmp != null) {
-                    conflictMessage = conflictMessageTmp;
-                }
-            } else {
-                conflictMessage = explore(pport, tp2, cp, mets);
-            }
-        } else if(tgc instanceof SysCAMSJoin) {
-            // Only one out, more than one in is ok
-            // No SysCAMSFork
-            cp = (SysCAMSChannelFacility)tgc;
-            mets.add(cp);
-
-            // Checks that "mets" contains no SysCAMSJoin
-            for(SysCAMSChannelFacility met: mets) {
-                if (met instanceof SysCAMSFork) {
-                    conflictMessage = "Fork and Join operators are mixed in the same channel";
-                    conflictMessageTmp = explore(pport, tp2, cp, mets);
-                    if (conflictMessageTmp != null) {
-                        conflictMessage = conflictMessageTmp;
-                    }
-                    return conflictMessage;
-                }
-            }
-
-            if (pport.getOrigin() == 0) {
-                if ((cp.getOutPort() != null) && (cp.getOutPort() != pport)) {
-                    conflictMessage = "More than two receiving ports in a join architecture";
-                }
-                cp.setOutPort(pport);
-                conflictMessageTmp = explore(pport, tp2, cp, mets);
-                if (conflictMessageTmp != null) {
-                    conflictMessage = conflictMessageTmp;
-                }
-            } else {
-                conflictMessage = explore(pport, tp2, cp, mets);
-            }
-        }
-        if (cp != null) {
-            if ((cp.getInPort() != null) && (cp.getOutPort() != null)){
-                if (cp.getInPort().getType() != cp.getOutPort().getType()) {
-                    conflictMessage = "Ports are not compatible";
-                } else {
-                    TraceManager.addDev("ports of " + cp + " are compatible out=" + cp.getOutPort().getType() + " in=" + cp.getInPort().getType());
-                }
-            }
-        }
         return conflictMessage;
-    }
-
-    public String explore(SysCAMSPrimitivePort pport, TGConnectingPoint _tp, SysCAMSChannelFacility cp, ArrayList<SysCAMSChannelFacility> mets) {
-        String conflictMessage = null;
-        String conflictMessageTmp;
-        TGConnectingPoint tp;
-        TGConnector connector;
-
-        for(int i=0; i<cp.getNbConnectingPoint(); i++) {
-            tp = cp.getTGConnectingPointAtIndex(i);
-            if (tp != _tp) {
-                connector = findTGConnectorUsing(tp);
-                if (connector != null) {
-                    conflictMessageTmp = propagate(pport, tp, connector, mets);
-                    if (conflictMessageTmp != null) {
-                        conflictMessage = conflictMessageTmp;
-                    }
-                }
-            }
-        }
-        return conflictMessage;
-    }
-
-    public void analysePorts(SysCAMSPrimitivePort pport, ArrayList<SysCAMSChannelFacility> mets, boolean conflict, String message) {
-        if (mets.size() == 0) {
-            return;
-        }
-        for(SysCAMSChannelFacility port: mets) {
-            port.setConflict(conflict, message);
-        }
     }
 
     public List<String> getAllSysCAMSTaskNames(String _topname) {
@@ -854,9 +735,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
                 	}
                 }
                 if (tgc instanceof SysCAMSPrimitivePort) {
-                    addToPaths(paths, tgc);
-                }
-                if (tgc instanceof SysCAMSChannelFacility) {
                     addToPaths(paths, tgc);
                 }
             }

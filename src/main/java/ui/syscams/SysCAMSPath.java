@@ -54,10 +54,6 @@ public class SysCAMSPath  {
     public ArrayList<SysCAMSPrimitivePort> producerPorts;
     public ArrayList<SysCAMSPrimitivePort> consumerPorts;
 
-    // Facilities
-    public ArrayList<SysCAMSFork> forks;
-    public ArrayList<SysCAMSJoin> joins;
-
     private boolean errorOfConnection = false;
 
     private int errorNumber;
@@ -79,8 +75,6 @@ public class SysCAMSPath  {
     public SysCAMSPath() {
         producerPorts = new ArrayList<SysCAMSPrimitivePort>();
         consumerPorts = new ArrayList<SysCAMSPrimitivePort>();
-        forks = new ArrayList<SysCAMSFork>();
-        joins = new ArrayList<SysCAMSJoin>();
     }
 
     public void addComponent(TGComponent _tgc) {
@@ -91,12 +85,6 @@ public class SysCAMSPath  {
             } else {
                 consumerPorts.add(p);
             }
-        }
-        if (_tgc instanceof SysCAMSFork) {
-            forks.add((SysCAMSFork)_tgc);
-        }
-        if (_tgc instanceof SysCAMSJoin) {
-            joins.add((SysCAMSJoin)_tgc);
         }
     }
 
@@ -115,17 +103,12 @@ public class SysCAMSPath  {
         if (consumerPorts.contains(tgc)) {
             return true;
         }
-        if (forks.contains(tgc)) {
-            return true;
-        }
-        return joins.contains(tgc);
+        return false;
     }
 
     public void mergeWith(SysCAMSPath _path) {
         producerPorts.addAll(_path.producerPorts);
         consumerPorts.addAll(_path.consumerPorts);
-        forks.addAll(_path.forks);
-        joins.addAll(_path.joins);
         setErrorOfConnection(getErrorOfConnection() || _path.getErrorOfConnection());
     }
 
@@ -147,12 +130,6 @@ public class SysCAMSPath  {
     public void checkRules() {
         errorNumber = -1;
 
-        //rule0: fork or join, but not both
-        if ((forks.size() > 0) && (joins.size() >0)) {
-            faultyComponent = forks.get(0);
-            errorNumber = 0;
-        }
-
         //rule1: Must have at least one producer
         if (producerPorts.size() == 0) {
             errorNumber = 1;
@@ -167,12 +144,6 @@ public class SysCAMSPath  {
             if ((producerPorts != null) && (producerPorts.size() > 0)) {
                 faultyComponent = producerPorts.get(0);
             }
-        }
-
-        //rule3: If fork: must have only one producer
-        if ((forks.size() > 0) && (producerPorts.size() >1)) {
-            errorNumber = 3;
-            faultyComponent = forks.get(0);
         }
 
         //rule4: producers and consumers must be of the same type
@@ -198,75 +169,6 @@ public class SysCAMSPath  {
         if (errorOfConnection) {
             errorNumber = 5;
         }
-
-        //rule7: requests cannot be connected through fork or join
-        if ((forks.size() > 0) || (joins.size() >0)) {
-            // Look for event, either at origin, or at destination
-            for (SysCAMSPrimitivePort porto: producerPorts) {
-                if (porto.getPortType() == 2) {
-                    errorNumber = 7;
-                    faultyComponent = porto;
-                    break;
-                }
-            }
-            for (SysCAMSPrimitivePort porti: consumerPorts) {
-                if (porti.getPortType() == 2) {
-                    errorNumber = 7;
-                    faultyComponent = porti;
-                    break;
-                }
-            }
-        }
-
-        //rule8: all events/requests with the same parameters
-//        if ((forks.size() > 0) || (joins.size() >0)) {
-//            if (producerPorts != null && producerPorts.size() > 0) {
-//                SysCAMSPrimitivePort referencePort = producerPorts.get(0);
-//                if (referencePort != null) {
-//                    if ((referencePort.getPortType() == 1) ||(referencePort.getPortType() == 2)) {
-//                        // Event or request found
-//                        // We now check that they are all compatible with the reference
-//                        for (SysCAMSPrimitivePort porto: producerPorts) {
-//                            if (!(porto.hasSameParametersThan(referencePort))) {
-//                                errorNumber = 8;
-//                                faultyComponent = porto;
-//                                break;
-//                            }
-//                        }
-//
-//                        for (SysCAMSPrimitivePort porti: consumerPorts) {
-//                            if (!(porti.hasSameParametersThan(referencePort))) {
-//                                errorNumber = 8;
-//                                faultyComponent = porti;
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
-        // rule9: if no fork, no join, no request: one to one communication
-        boolean foundReq = true;
-        if ((forks.size() == 0) && (joins.size() == 0)) {
-            if (producerPorts != null && producerPorts.size() > 0) {
-                SysCAMSPrimitivePort referencePort = producerPorts.get(0);
-                if (referencePort != null) {
-                    if (referencePort.getPortType() != 2) {
-                        foundReq = false;
-                    }
-                }
-            }
-            if (!foundReq) {
-                if (producerPorts.size() > 1) {
-                    errorNumber = 9;
-                    faultyComponent = producerPorts.get(1);
-                } else if (consumerPorts.size() > 1) {
-                    errorNumber = 9;
-                    faultyComponent = consumerPorts.get(1);
-                }
-            }
-        }
     }
 
     public void setColor() {
@@ -274,45 +176,6 @@ public class SysCAMSPath  {
         // set the inp and outp primitive ports if possible (otherwise, null)
         // if no error: set conflict to false
         // If error -> set the conflict to true
-
-        for (SysCAMSFork fork: forks) {
-            if (producerPorts.size() > 0) {
-                fork.setOutPort(producerPorts.get(0));
-            } else {
-                fork.setOutPort(null);
-            }
-
-            if (consumerPorts.size() > 0) {
-                fork.setInPort(consumerPorts.get(0));
-            } else {
-                fork.setInPort(null);
-            }
-
-            if (hasError()) {
-                fork.setConflict(hasError(), errors[errorNumber]);
-            } else {
-                fork.setConflict(false, "");
-            }
-        }
-
-        for (SysCAMSJoin join: joins) {
-            if (producerPorts.size() > 0) {
-                join.setOutPort(producerPorts.get(0));
-            } else {
-                join.setOutPort(null);
-            }
-
-            if (consumerPorts.size() > 0) {
-                join.setInPort(consumerPorts.get(0));
-            } else {
-                join.setInPort(null);
-            }
-            if (hasError()) {
-                join.setConflict(hasError(), errors[errorNumber]);
-            } else {
-                join.setConflict(false, "");
-            }
-        }
 
         for (SysCAMSPrimitivePort pport: producerPorts) {
             if (hasError()) {
