@@ -183,7 +183,8 @@ public class IconManager {
     public static ImageIcon imgic2111; //New icon created by Solange
 
 		// SystemC-AMS
-    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005;
+    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic8007,
+    						imgic8008;
 
     //private static String icon7 = "turtle_large.gif";
     private static String icon8 = "turtle_16.gif";
@@ -663,6 +664,9 @@ public class IconManager {
     private static String icon8003 = "camsconverterportE.gif";
     private static String icon8004 = "camsconverterportN.gif";
     private static String icon8005 = "camsconverterportS.gif";
+    private static String icon8006 = "camsclusterblock.gif";
+    private static String icon8007 = "camstdfblock.gif";
+    private static String icon8008 = "camsdeblock.gif";
 
 
     public IconManager() {
@@ -703,19 +707,13 @@ public class IconManager {
         }
 
         //Added by Solange
-       	imgic0 = getIcon(icon0);
-        
+        imgic0 = getIcon(icon0);
         //Added by Solange, the component icon
-       	imgic1 = getIcon(icon1);
+        imgic1 = getIcon(icon1);
 
         //Added by Solange
-        if ( imgic0 != null ) {
-        	img0 = imgic0.getImage();
-        }
-
-        if ( imgic1 != null ) {
-        	img1 = imgic1.getImage();
-        }
+        img0 = imgic0.getImage();
+        img1 = imgic1.getImage();
 
         imgic13 = getIcon(icon13);
         imgic14 = getIcon(icon14);
@@ -1155,6 +1153,10 @@ public class IconManager {
         imgic8003 = getIcon(icon8003);
         imgic8004 = getIcon(icon8004);
         imgic8005 = getIcon(icon8005);
+        imgic8006 = getIcon(icon8006);
+        imgic8007 = getIcon(icon8007);
+        imgic8008 = getIcon(icon8008);
     }
 
 } // Class
+

@@ -1096,13 +1096,13 @@ public class TGUIAction extends AbstractAction {
 
         //System C-AMS
         actions[CAMS_EDIT] = new TAction("add-action-C-AMS", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened SystemC-AMS diagram", 0);
-        actions[CAMS_BLOCK_TDF] = new TAction("C-AMS-block-TDF", "Add a TDF block", IconManager.imgic5000, IconManager.imgic5000, "TDF block", "Add a TDF block to the currently opened SystemC-AMS Diagram", 0);
-        actions[CAMS_BLOCK_DE] = new TAction("C-AMS-block-DE", "Add a DE block", IconManager.imgic5000, IconManager.imgic5000, "DE block", "Add a DE block to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_BLOCK_TDF] = new TAction("C-AMS-block-TDF", "Add a TDF block", IconManager.imgic8007, IconManager.imgic8007, "TDF block", "Add a TDF block to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_BLOCK_DE] = new TAction("C-AMS-block-DE", "Add a DE block", IconManager.imgic8008, IconManager.imgic8008, "DE block", "Add a DE block to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_CONNECTOR] = new TAction("C-AMS-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_PORT_TDF] = new TAction("C-AMS-port-TDF", "Add a TDF port", IconManager.imgic8000, IconManager.imgic8000, "TDF port", "Add a TDF port to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_PORT_DE] = new TAction("C-AMS-port-DE", "Add a DE port", IconManager.imgic8001, IconManager.imgic8001, "DE port", "Add a DE port to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_PORT_CONVERTER] = new TAction("C-AMS-port-converter", "Add a converter port", IconManager.imgic8003, IconManager.imgic8003, "Converter port", "Add a converter port to the currently opened SystemC-AMS Diagram", 0);
-        actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic5000, IconManager.imgic5000, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic8006, IconManager.imgic8006, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_GENCODE] = new TAction("GENCODE", "GENCODE",IconManager.imgic94, IconManager.imgic94, "Generate SystemC-AMS code", "SystemC-AMS diagram without check syntax", 0);
         
         //ProActive State Machine Diagram
@@ -1325,3 +1325,4 @@ public class TGUIAction extends AbstractAction {
         listeners.remove(ActionListener.class, l);
     }
 }
+
