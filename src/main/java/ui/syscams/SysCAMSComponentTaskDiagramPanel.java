@@ -179,9 +179,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
             if (tgc instanceof SysCAMSCompositeComponent) {
                 ll.addAll(((SysCAMSCompositeComponent)tgc).getAllRecordComponents());
             }
-            if (tgc instanceof SysCAMSRemoteCompositeComponent) {
-                ll.addAll(((SysCAMSRemoteCompositeComponent)tgc).getAllRecordComponents());
-            }
         }
         return ll;
     }
@@ -200,9 +197,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
             }
             if (tgc instanceof SysCAMSCompositeComponent) {
                 ll.addAll(((SysCAMSCompositeComponent)tgc).getAllBlockTDFComponents());
-            }
-            if (tgc instanceof SysCAMSRemoteCompositeComponent) {
-                ll.addAll(((SysCAMSRemoteCompositeComponent)tgc).getAllBlockTDFComponents());
             }
         }
         return ll;
@@ -597,12 +591,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
                     return tmp;
                 }
             }
-            if (tgc instanceof SysCAMSRemoteCompositeComponent) {
-                tmp = ((SysCAMSRemoteCompositeComponent)tgc).getBlockTDFComponentByName(_name);
-                if (tmp != null) {
-                    return tmp;
-                }
-            }
         }
         return null;
     }
@@ -644,10 +632,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 
             if (tgc instanceof SysCAMSCompositeComponent) {
                 ((SysCAMSCompositeComponent)tgc).updateReferenceToSysCAMSCompositeComponent(syscamscc);
-            }
-
-            if (tgc instanceof SysCAMSRemoteCompositeComponent) {
-                ((SysCAMSRemoteCompositeComponent)tgc).updateReference(syscamscc);
             }
         }
     }
@@ -705,7 +689,7 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 
     public void loadExtraParameters(Element elt) {
     }
-
+    
     public void setConnectorsToFront() {
         TGComponent tgc;
         Iterator<TGComponent> iterator = componentList.listIterator();
@@ -734,13 +718,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 
             if (tgc instanceof SysCAMSCompositeComponent) {
                 ((SysCAMSCompositeComponent)(tgc)).delayedLoad();
-            }
-
-            if (tgc instanceof SysCAMSRemoteCompositeComponent) {
-                try {
-                    ((SysCAMSRemoteCompositeComponent)(tgc)).delayedLoad();
-                } catch (Exception e) {
-                }
             }
         }
     }
@@ -1067,13 +1044,7 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
-            if (tgc instanceof SysCAMSRemoteCompositeComponent) {
-                SysCAMSRemoteCompositeComponent remote = (SysCAMSRemoteCompositeComponent)tgc;
-                TDiagramPanel panel = remote.getReferencedDiagram();
-                if ((panel != null) && (panel instanceof SysCAMSComponentTaskDiagramPanel)){
-                    ((SysCAMSComponentTaskDiagramPanel)panel).findAllReferencedPanels(panels);
-                }
-            }
+
             if (tgc instanceof SysCAMSCompositeComponent) {
                 //We must find all panels referencing this component
                 panels.addAll(mgui.getAllPanelsReferencingSysCAMSCompositeComponent((SysCAMSCompositeComponent)tgc));
@@ -1210,14 +1181,9 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 
         while(iterator.hasNext()) {
             tgc = iterator.next();
+            
             if (tgc instanceof SysCAMSCompositeComponent) {
                 if (((SysCAMSCompositeComponent)tgc).hasRefencesTo(syscamscc)) {
-                    panels.add(this);
-                    return;
-                }
-            }
-            if (tgc instanceof SysCAMSRemoteCompositeComponent) {
-                if (((SysCAMSRemoteCompositeComponent)tgc).getReference() == syscamscc) {
                     panels.add(this);
                     return;
                 }

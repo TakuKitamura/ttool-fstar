@@ -265,9 +265,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 		if (tgc instanceof SysCAMSBlockDE) {
 			tgc.resizeWithFather();
 		}
-		if (tgc instanceof SysCAMSRemoteCompositeComponent) {
-            tgc.resizeWithFather();
-        }
         //add it
         addInternalComponent(tgc, 0);
 		return true;
@@ -311,9 +308,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 			if (tgcomponent[i] instanceof SysCAMSRecordComponent) {
 				tgcomponent[i].resizeWithFather();
 			}
-			if (tgcomponent[i] instanceof SysCAMSRemoteCompositeComponent) {
-				tgcomponent[i].resizeWithFather();
-			}
         }
 		if (getFather() != null) {
 			resizeWithFather();
@@ -335,9 +329,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 		for(int i=0; i<nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
 				ll.addAll(((SysCAMSCompositeComponent)tgcomponent[i]).getAllBlockTDFComponents());
-			}
-			if (tgcomponent[i] instanceof SysCAMSRemoteCompositeComponent) {
-				ll.addAll(((SysCAMSRemoteCompositeComponent)tgcomponent[i]).getAllBlockTDFComponents());
 			}
 			if (tgcomponent[i] instanceof SysCAMSBlockTDF) {
 				ll.add(((SysCAMSBlockTDF)(tgcomponent[i])));
@@ -368,10 +359,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
 				ll.addAll(((SysCAMSCompositeComponent)tgcomponent[i]).getAllRecordComponents());
 			}
-			if (tgcomponent[i] instanceof SysCAMSRemoteCompositeComponent) {
-				ll.addAll(((SysCAMSRemoteCompositeComponent)tgcomponent[i]).getAllRecordComponents());
-			}
-			
 			if (tgcomponent[i] instanceof SysCAMSRecordComponent) {
 				ll.add(((SysCAMSRecordComponent)(tgcomponent[i])));
 			}
@@ -543,9 +530,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 	
 	public void updateReferenceToSysCAMSCompositeComponent(SysCAMSCompositeComponent syscamscc) {
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSRemoteCompositeComponent) {
-				((SysCAMSRemoteCompositeComponent)tgcomponent[i]).updateReference(syscamscc);
-			}
 			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
 				((SysCAMSCompositeComponent)tgcomponent[i]).updateReferenceToSysCAMSCompositeComponent(syscamscc);
 			}
@@ -554,12 +538,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 	
 	public void delayedLoad() {
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSRemoteCompositeComponent) {
-				try {
-					((SysCAMSRemoteCompositeComponent)tgcomponent[i]).delayedLoad();
-				} catch (Exception e) {
-				}
-			}
 			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
 				((SysCAMSCompositeComponent)tgcomponent[i]).delayedLoad();
 			}
@@ -578,12 +556,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 		boolean b;
 		
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSRemoteCompositeComponent) {
-				b = ((SysCAMSRemoteCompositeComponent)tgcomponent[i]).getReference() == syscamscc;
-				if (b) {
-					return true;
-				}
-			}
 			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
 				b = ((SysCAMSCompositeComponent)tgcomponent[i]).hasRefencesTo(syscamscc);
 				if (b) {
@@ -604,3 +576,4 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
     	}
 	}
 }
+
