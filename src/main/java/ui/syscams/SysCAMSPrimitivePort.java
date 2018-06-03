@@ -100,8 +100,8 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         userResizable = false;
         commName = "port";
         makeValue();
-        setName("Primitive port");
-
+        name = "Primitive port - " + getPortTypeName();
+        
         myImageIcon = IconManager.imgic1206;
         portImageIconTDF = IconManager.imgic8000;
         portImageIconDE = IconManager.imgic8001;
@@ -423,7 +423,7 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     }
 
     public void makeValue() {
-        value = getPortTypeName() + " " + getPortName();
+        value = getPortName();
     }
 
     public String getPortName() {

@@ -106,7 +106,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
         userResizable = true;
 
     	value = tdp.findSysCAMSPrimitiveComponentName("Block_DE_");
-        name = "Primitive component";
+        name = "Primitive component - Block DE";
         
         setPeriod(-1);
         setTime("");

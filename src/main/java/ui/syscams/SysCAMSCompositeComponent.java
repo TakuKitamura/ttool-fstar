@@ -99,8 +99,8 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
         removable = true;
         userResizable = true;
         
-		value = "Cluster";
-		name = "Composite component";
+		value = "cluster";
+		name = "Composite component - Cluster";
 		
         myImageIcon = IconManager.imgic1200;
     }

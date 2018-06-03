@@ -108,7 +108,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 
         value = tdp.findSysCAMSPrimitiveComponentName("Block_TDF_");
         oldValue = value;
-        name = "Primitive component";
+        name = "Primitive component - Block TDF";
         
         // Initialization of port attributes
         setPeriod(-1);
