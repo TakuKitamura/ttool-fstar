@@ -8201,6 +8201,9 @@ public class GTURTLEModeling {
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n = nl.item(i);
+                if (n == null) {
+                    TraceManager.addDev("Null component");
+                }
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
                     try {
                         tgc = makeXMLComponent(n, tdp);
@@ -8217,7 +8220,7 @@ public class GTURTLEModeling {
                         if (type > 0) {
                             t = "" + type;
                         }
-                        TraceManager.addDev("A badly formed component could not be created in the diagram");
+                        TraceManager.addDev("A badly formed component could not be created in the diagram:" + " diagram: " + tdp + " component:" + n);
 
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A component could not be correctly loaded - type=" + t);
                         ce.setTDiagramPanel(tdp);
@@ -8346,6 +8349,7 @@ public class GTURTLEModeling {
             }
 
             if ((myId == -1) || (myX == -1) || (myY == -1) || (myWidth == -1) || (myHeight == -1)) {
+                TraceManager.addDev("Malformed id");
                 throw new MalformedModelingException();
             }
 
@@ -8360,6 +8364,7 @@ public class GTURTLEModeling {
                 //TraceManager.addDev("Searching for component with id " + fatherId);
                 father = tdp.findComponentWithId(fatherId);
                 if (father == null) {
+                    TraceManager.addDev("Malformed father");
                     throw new MalformedModelingException();
                 }
 
@@ -8381,9 +8386,11 @@ public class GTURTLEModeling {
                             ((SwallowTGComponent) father).addSwallowedTGComponent(tgc, myX, myY);
                             //TraceManager.addDev("Swallowed to father = " + father.getValue() + ". My name=" + myName + " decId=" + decId);
                         } else {
+                            TraceManager.addDev("Malformed swallow 1");
                             throw new MalformedModelingException();
                         }
                     } else {
+                        TraceManager.addDev("Malformed swallow 2");
                         throw new MalformedModelingException();
                     }
                 }
@@ -8399,6 +8406,7 @@ public class GTURTLEModeling {
             // TraceManager.addDev("TGComponent (" + tgc + ") built " + myType);
 
             if (tgc == null) {
+                TraceManager.addDev("Malformed null");
                 throw new MalformedModelingException();
             }
 
@@ -8532,9 +8540,9 @@ public class GTURTLEModeling {
 
             //extra param
             // TraceManager.addDev("Extra params" + tgc.getClass());
-            // TraceManager.addDev("My value = " + tgc.getValue());
+            //TraceManager.addDev("My value = " + tgc.getValue());
             tgc.loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
-            // TraceManager.addDev("Extra param ok");
+            //TraceManager.addDev("Extra param ok");
 
             if ((tgc instanceof TCDTObject) && (decId > 0)) {
                 TCDTObject to = (TCDTObject) tgc;
@@ -8565,7 +8573,7 @@ public class GTURTLEModeling {
               }*/
 
         } catch (Exception e) {
-            // TraceManager.addError("Exception XML Component "/* + e.getMessage() + "trace=" + e.getStackTrace()*/);
+            TraceManager.addError("Exception XML Component "+ e.getMessage() + "trace=" + e.getStackTrace());
             throw new MalformedModelingException();
         }
         return tgc;
