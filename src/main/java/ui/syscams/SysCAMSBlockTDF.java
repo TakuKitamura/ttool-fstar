@@ -68,7 +68,6 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	private int maxFontSize = 14;
     private int minFontSize = 4;
     private int currentFontSize = -1;
-    private boolean displayText = true;
     private Color myColor;
 
 	private boolean isAttacker=false;
@@ -128,37 +127,33 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
         if (myColor == null) {
     		myColor = Color.lightGray;
         }
-        if ((rescaled) && (!tdp.isScaled())) {
-            if (currentFontSize == -1) {
-                currentFontSize = f.getSize();
-            }
-            rescaled = false;
-            // Must set the font size ..
-            // Find the biggest font not greater than max_font size
-            // By Increment of 1
-            // Or decrement of 1
-            // If font is less than 4, no text is displayed
+        
+        if (this.rescaled && !this.tdp.isScaled()) {
+            this.rescaled = false;
+            // Must set the font size...
+            // Incrementally find the biggest font not greater than max_font size
+            // If font is less than min_font, no text is displayed
 
-            int maxCurrentFontSize = Math.max(0, Math.min(height-(2*textX), maxFontSize));
-            f = f.deriveFont((float)maxCurrentFontSize);
+            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+            f = f.deriveFont((float) maxCurrentFontSize);
+
+            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+            	if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
+            		break;
+            	}
+                maxCurrentFontSize--;
+                f = f.deriveFont((float) maxCurrentFontSize);
+            }
+
+            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+                maxCurrentFontSize++;
+                f = f.deriveFont((float) maxCurrentFontSize);
+            }
             g.setFont(f);
-            while(maxCurrentFontSize > (minFontSize-1)) {
-                if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
-                    break;
-                }
-                maxCurrentFontSize --;
-                f = f.deriveFont((float)maxCurrentFontSize);
-                g.setFont(f);
-            }
-            currentFontSize = maxCurrentFontSize;
-            if(currentFontSize <minFontSize) {
-                displayText = false;
-            } else {
-                displayText = true;
-                f = f.deriveFont((float)currentFontSize);
-                g.setFont(f);
-            }
-        }
+            this.currentFontSize = maxCurrentFontSize;
+        } else {
+            f = f.deriveFont(this.currentFontSize);
+    	}
 
         // Zoom is assumed to be computed
         Color c = g.getColor();
@@ -169,25 +164,24 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
             g.setColor(c);
         }
 
-        // Font size
-        if (displayText) {
-            f = f.deriveFont((float)currentFontSize);
-            g.setFont(f);
-            w = g.getFontMetrics().stringWidth(value);
-            if (w > (width - 2 * textX)) {
-            	// name
-                g.drawString(value, x + textX + 1, y + currentFontSize + textX);
-                // period
-            	String s = "Tm = " + this.getPeriod();
-            	g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
-            } else {
-            	// name
-                g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
-                // period
-            	String s = "Tm = " + this.getPeriod();
-            	w = g.getFontMetrics().stringWidth(s);
-            	g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
-            }
+        // Set font size
+        int attributeFontSize = this.currentFontSize * 5 / 6;
+        g.setFont(f.deriveFont((float) attributeFontSize));
+        g.setFont(f);
+        w = g.getFontMetrics().stringWidth(value);
+        if (w > (width - 2 * textX)) {
+        	g.setFont(f.deriveFont(Font.BOLD));
+            g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+            g.setFont(f.deriveFont(Font.PLAIN));
+        	String s = "Tm = " + this.getPeriod();
+        	g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
+        } else {
+        	g.setFont(f.deriveFont(Font.BOLD));
+            g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
+            g.setFont(f.deriveFont(Font.PLAIN));
+        	String s = "Tm = " + this.getPeriod();
+        	w = g.getFontMetrics().stringWidth(s);
+        	g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
         }
 
         g.setFont(fold);
@@ -232,7 +226,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
     	// On the name ?
-        if ((displayText) && (_y <= (y + currentFontSize + textX))) {
+        if (_y <= (y + currentFontSize + textX)) {
             //TraceManager.addDev("Edit on double click x=" + _x + " y=" + _y);
             oldValue = value;
             String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
@@ -378,12 +372,24 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
         for(int pos = 0; pos != data.length(); pos++) {
         	char c = databuf.charAt(pos);
             switch(c) {
-                case '&':  buffer.append("&amp;");       break;
-                case '\"': buffer.append("&quot;");      break;
-                case '\'': buffer.append("&apos;");      break;
-                case '<':  buffer.append("&lt;");        break;
-                case '>':  buffer.append("&gt;");        break;
-                default:   buffer.append(databuf.charAt(pos)); break;
+                case '&' :  
+                	buffer.append("&amp;");       
+                	break;
+                case '\"' : 
+                	buffer.append("&quot;");      
+                	break;
+                case '\'' : 
+                	buffer.append("&apos;");      
+                	break;
+                case '<' :  
+                	buffer.append("&lt;");        
+                	break;
+                case '>' :  
+                	buffer.append("&gt;");        
+                	break;
+                default :   
+                	buffer.append(databuf.charAt(pos)); 
+                	break;
             }
         }
         return buffer;

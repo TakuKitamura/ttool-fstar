@@ -83,7 +83,7 @@ public class ClusterCode {
 				nb_con++;
 			}
 			 
-			corpsCluster = corpsCluster + CR + "\t// Instantiate source and sink as well as bind their ports to the signal." + CR;
+			corpsCluster = corpsCluster + CR + "\t// Instantiate headers files as well as bind their ports to the signal." + CR;
 			
 			for (SysCAMSTBlockTDF t : tdf) {
 				corpsCluster = corpsCluster + "\t" + t.getName() + " " + t.getName() + "_" + nb_block + "(\"" + t.getName() + "_" + nb_block + "\");" + CR;

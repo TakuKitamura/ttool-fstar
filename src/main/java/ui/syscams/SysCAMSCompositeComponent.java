@@ -62,7 +62,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 	private int maxFontSize = 20;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
-	private boolean displayText = true;
 	private Color myColor;
 	private int iconSize = 17;
 
@@ -107,43 +106,40 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
     
     public void internalDrawing(Graphics g) {
 		int w;
-		int c;
 		Font f = g.getFont();
 		Font fold = f;
 		
 		if (myColor == null) {
-			if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white) {
-				myColor = Color.white;
-			} else {
-				myColor = Color.white;
-			}
+			myColor = Color.white;
 		}
-		if ((rescaled) && (!tdp.isScaled())) {
-			if (currentFontSize == -1) {
-				currentFontSize = f.getSize();
-			}
-			rescaled = false;
-			// Must set the font size ..
-			// Find the biggest font not greater than max_font size
-			// By Increment of 1
-			// Or decrement of 1
-			// If font is less than 4, no text is displayed
-			
-			int maxCurrentFontSize = Math.max(0, Math.min(height-(2*textX), maxFontSize));
-			
-			while(maxCurrentFontSize > (minFontSize-1)) {
-				f = f.deriveFont((float)maxCurrentFontSize);
-				g.setFont(f);
-				w = g.getFontMetrics().stringWidth(value);
-				c = width - iconSize - (2 * textX);
-				if (w < c) {
-					break;
-				}
-				maxCurrentFontSize --;
-			}
-			currentFontSize = maxCurrentFontSize;
-            displayText = currentFontSize >= minFontSize;
-		}
+		
+		if (this.rescaled && !this.tdp.isScaled()) {
+            this.rescaled = false;
+            // Must set the font size...
+            // Incrementally find the biggest font not greater than max_font size
+            // If font is less than min_font, no text is displayed
+
+            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+            f = f.deriveFont((float) maxCurrentFontSize);
+
+            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+            	if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
+            		break;
+            	}
+                maxCurrentFontSize--;
+                f = f.deriveFont((float) maxCurrentFontSize);
+            }
+
+            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+                maxCurrentFontSize++;
+                f = f.deriveFont((float) maxCurrentFontSize);
+            }
+            g.setFont(f);
+            this.currentFontSize = maxCurrentFontSize;
+        } else {
+            f = f.deriveFont(this.currentFontSize);
+    	}
+		
 		// Zoom is assumed to be computed
 		Color col = g.getColor();
 		g.drawRect(x, y, width, height);
@@ -152,17 +148,18 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 			g.fillRect(x+1, y+1, width-1, height-1);
 			g.setColor(col);
 		}
-        // Font size 
-		if (displayText) {
-			f = f.deriveFont((float)currentFontSize);
-			g.setFont(f);
-			w = g.getFontMetrics().stringWidth(value);
-			if (!(w < (width - 2 * (iconSize + textX)))) {
-				g.drawString(value, x + textX + 1, y + currentFontSize + textX);
-			} else {
-				g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
-			}
+       
+		// Set font size
+        int attributeFontSize = this.currentFontSize * 5 / 6;
+        g.setFont(f.deriveFont((float) attributeFontSize));
+        g.setFont(f);
+		w = g.getFontMetrics().stringWidth(value);
+		if (!(w < (width - 2 * (iconSize + textX)))) {
+			g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+		} else {
+			g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
 		}
+		
 		g.setFont(fold);
     }
 	

@@ -63,6 +63,9 @@ import java.awt.*;
 public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference, WithAttributes {
     protected Color myColor;
     protected int orientation;
+	private int maxFontSize = 14;
+    private int minFontSize = 4;
+    private int currentFontSize = -1;
     protected int oldx, oldy;
     protected int halfwidth = 13;
     protected int currentOrientation = GraphicLib.NORTH;
@@ -72,6 +75,8 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     protected int oldTypep = typep;
     public String commName;
 
+    private int textX = 15; // border for ports
+    private double dtextX = 0.0;
     protected int decPoint = 3;
 
     protected boolean conflict = false;
@@ -85,6 +90,10 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
 
         initScaling(2*halfwidth, 2*halfwidth);
 
+        dtextX = textX * oldScaleFactor;
+        textX = (int)dtextX;
+        dtextX = dtextX - textX;
+        
         minWidth = 1;
         minHeight = 1;
 
@@ -146,21 +155,75 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     }
 
     public void internalDrawing(Graphics g) {
-        if ((x != oldx) | (oldy != y)) {
+    	int w;
+        Font f = g.getFont();
+        Font fold = f;
+        
+    	if ((x != oldx) | (oldy != y)) {
             // Component has moved!
             manageMove();
             oldx = x;
             oldy = y;
         }
 
-        if (rescaled) {
-            rescaled = false;
-        }
+    	if (this.rescaled && !this.tdp.isScaled()) {
+            this.rescaled = false;
+            // Must set the font size...
+            // Incrementally find the biggest font not greater than max_font size
+            // If font is less than min_font, no text is displayed
+
+            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+            f = f.deriveFont((float) maxCurrentFontSize);
+
+            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+            	if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
+            		break;
+            	}
+                maxCurrentFontSize--;
+                f = f.deriveFont((float) maxCurrentFontSize);
+            }
+
+            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+                maxCurrentFontSize++;
+                f = f.deriveFont((float) maxCurrentFontSize);
+            }
+            g.setFont(f);
+            this.currentFontSize = maxCurrentFontSize;
+        } else {
+            f = f.deriveFont(this.currentFontSize);
+    	}
 
         // Zoom is assumed to be computed
         Color c = g.getColor();
         g.setColor(c);
          
+        if (this instanceof SysCAMSPortTDF) {
+        	g.drawRect(x+width/2-portImageIconTDF.getIconWidth()/2, y+height/2-portImageIconTDF.getIconHeight()/2, portImageIconTDF.getIconWidth(), portImageIconTDF.getIconHeight());
+    		g.drawImage(portImageIconTDF.getImage(), x+width/2-portImageIconTDF.getIconWidth()/2, y+height/2-portImageIconTDF.getIconHeight()/2, null);
+        } else if (this instanceof SysCAMSPortConverter) {
+        	switch(currentOrientation) {
+            case GraphicLib.NORTH:
+        		g.drawRect(x-1+width/2-portImageIconN.getIconWidth()/2, y-1+height/2-portImageIconN.getIconHeight()/2, portImageIconN.getIconWidth()+2, portImageIconN.getIconHeight()+2);
+         		g.drawImage(portImageIconN.getImage(), x+width/2-portImageIconN.getIconWidth()/2, y+height/2-portImageIconN.getIconHeight()/2, null);
+            	break;
+            case GraphicLib.SOUTH:
+        		g.drawRect(x+width/2-portImageIconS.getIconWidth()/2, y+height/2-portImageIconS.getIconHeight()/2, portImageIconS.getIconWidth(), portImageIconS.getIconHeight());
+         		g.drawImage(portImageIconS.getImage(), x+width/2-portImageIconS.getIconWidth()/2, y+height/2-portImageIconS.getIconHeight()/2, null);
+            	break;
+            case GraphicLib.WEST:
+        		g.drawRect(x+width/2-portImageIconW.getIconWidth()/2, y+height/2-portImageIconW.getIconHeight()/2, portImageIconW.getIconWidth(), portImageIconW.getIconHeight());
+         		g.drawImage(portImageIconW.getImage(), x+width/2-portImageIconW.getIconWidth()/2, y+height/2-portImageIconW.getIconHeight()/2, null);
+            	break;
+            case GraphicLib.EAST:
+            default:
+        		g.drawRect(x+width/2-portImageIconE.getIconWidth()/2, y+height/2-portImageIconE.getIconHeight()/2, portImageIconE.getIconWidth(), portImageIconE.getIconHeight());
+         		g.drawImage(portImageIconE.getImage(), x+width/2-portImageIconE.getIconWidth()/2, y+height/2-portImageIconE.getIconHeight()/2, null);
+            }
+        } else if (this instanceof SysCAMSPortDE) {
+        	g.drawRect(x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, portImageIconDE.getIconWidth(), portImageIconDE.getIconHeight());
+    		g.drawImage(portImageIconDE.getImage(), x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, null);
+    	}
+        
         TGComponent tgc = getFather();
         if ((tgc != null) && (tgc instanceof SysCAMSBlockTDF)) {
         	if (tgc instanceof SysCAMSBlockTDF && this instanceof SysCAMSPortTDF) {
@@ -197,24 +260,14 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         	}
         }
         
-        int ft = 10;
-        if ((tgc != null) && (tgc instanceof SysCAMSBlockTDF)) {
-            ft = ((SysCAMSBlockTDF)tgc).getCurrentFontSize();
-        }
-        if ((tgc != null) && (tgc instanceof SysCAMSBlockDE)) {
-        	ft = ((SysCAMSBlockDE)tgc).getCurrentFontSize();
-        }
-        int w;
-        Font f = g.getFont();
-        Font fold = f;
-
-        int si = Math.min(8, (int)((float)ft - 2));
-        f = f.deriveFont((float)si);
+    	// Set font size
+        int attributeFontSize = this.currentFontSize * 5 / 6;
+        g.setFont(f.deriveFont((float) attributeFontSize));
         g.setFont(f);
         w = g.getFontMetrics().stringWidth(commName);
         if (w < ((int)(width * 1.5))) {
-            g.drawString(commName, x, y-1);
-        }
+        	g.drawString(commName, x, y-1);
+        } 
 
         g.setFont(fold);
 
