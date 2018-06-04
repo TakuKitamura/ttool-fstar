@@ -266,6 +266,7 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         g.setFont(f);
         w = g.getFontMetrics().stringWidth(commName);
         if (w < ((int)(width * 1.5))) {
+        	g.setFont(f.deriveFont(Font.BOLD));
         	g.drawString(commName, x, y-1);
         } 
 
