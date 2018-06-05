@@ -2115,7 +2115,7 @@ outerloop:
 			return avspec;
 		}
 
-		public void backtraceReachability(HashMap<AvatarPragmaReachability, ProVerifQueryResult> reachabilityResults) {
+		public void backtraceReachability( Map<AvatarPragmaReachability, ProVerifQueryResult> reachabilityResults) {
 			for (AvatarPragmaReachability pragma: reachabilityResults.keySet())
 			{
 				ProVerifQueryResult result = reachabilityResults.get(pragma);

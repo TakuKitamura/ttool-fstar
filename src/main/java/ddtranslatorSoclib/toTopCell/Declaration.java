@@ -127,10 +127,10 @@ public class Declaration {
 	
 	if(nb_clusters==0){
 	    // declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+3)+"), maptab);" + CR;
- declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(last_tty+3)+"), maptab);" + CR;
+	    // declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(last_tty+3)+"), maptab);" + CR;
 	}	
 	else{
-	    declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab(0,8), maptab);" + CR;
+	    //   declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab(0,8), maptab);" + CR;
 	}
 
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) 
@@ -169,24 +169,108 @@ declaration +=  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(cp
 	  for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
 	      //	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+copro.getSrcid() + "), IntTab("+copro.getTgtid() + "),copro.getPlaps(),copro.getFifoToCoProcDepth(),copro.getNToCopro(),copro.getNFromCopro(),copro.getNConfig(),copro.getNStatus(), copro.getUseLLSC());"+ CR;
 	
-	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+(init_no-1)+"), IntTab("+target_no+ "),"+copro.getPlaps()+","+copro.getFifoToCoprocDepth()+","+copro.getFifoFromCoprocDepth()+","+copro.getNToCopro()+","+copro.getNFromCopro()+","+copro.getNConfig()+","+copro.getNStatus()+","+ copro.getUseLLSC()+");"+ CR2;
+	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "_wrapper(\"" + copro.getCoprocName()+ "_wrapper\", maptab, IntTab("+(init_no-1)+"), IntTab("+target_no+ "),"+copro.getPlaps()+","+copro.getFifoToCoprocDepth()+","+copro.getFifoFromCoprocDepth()+","+copro.getNToCopro()+","+copro.getNFromCopro()+","+copro.getNConfig()+","+copro.getNStatus()+","+ copro.getUseLLSC()+");"+ CR2;
 
 //one virtual component for each hardware accellerator, info from diplodocus (not yet implemented)
 
 //DG 28.08. 
 	      //   declaration += "soclib::caba::FifoVirtualCoprocessorWrapper hwa"+hwa_no+"(\"hwa"+hwa_no+"\",1,1,1,1);"+ CR2;
+	      if(copro.getCoprocType()==0){
+		  declaration += "soclib::caba::VciInputEngine<vci_param>"  + copro.getCoprocName()+"(\"" + copro.getCoprocName()+ "\", 1 , maptab,\"input.txt\",1024,1,8);"+ CR;
+	      }
+	      /*VciInputEngine(
+		 sc_core::sc_module_name insname,
+		 const soclib::common::IntTab &index, //???channel index
+		 const soclib::common::MappingTable &mt,
+		 const std::string &finput,
+		 uint32_t dext,
+		 uint32_t nchannels,
+		 uint32_t burstlength);*/	      
+	      //DG 27.04.2018 attention a la numerotation!faut il incrementer ici?
+	      else {
+		   if(copro.getCoprocType()==1)
+		       {
+			   declaration += "soclib::caba::VciOutputEngine<vci_param>"+ copro.getCoprocName()+"(\"" + copro.getCoprocName()+ "\", 1 , maptab,1,1,1,\"output.txt\",\"throw.txt\");"+ CR;
+			   /*VciOutputEngine(
+		  sc_core::sc_module_name insname,
+		  const soclib::common::IntTab &index,
+		  const soclib::common::MappingTable &mt,
+                  uint32_t advance,
+                  uint32_t delay,
+                  uint32_t size,
+		  const std::string &foutput,
+		  const std::string &fthrow);*/			   
+		       }
+	      
 
+	      else{	      
 declaration += "dsx::caba::MyHWA"+hwa_no+" hwa"+hwa_no+"(\"hwa"+hwa_no+"\");"+ CR2;
-	      target_no++;
-	      init_no++;
-	      hwa_no++;
+	      hwa_no++;  
+	      // init_no++; DG 27.04.2018
+	      // target_no++; DG 27.04.2018
+	      }
 	  }
-	
-  }else{
+	      init_no++;
+	       target_no++;
+	  }
+	}else{
 	declaration +=  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(0,cpus.size()+1), IntTab(0,7));" + CR;
 	declaration +=  "caba::VciEthernet<vci_param> vcieth(\"vcieth\", maptab, IntTab(0,cpus.size()+2), IntTab(0,8), \"soclib0\");" + CR;
-	declaration +=  "caba::VciBlockDevice<vci_param> vcibd(\"vcibd\", maptab, IntTab(0,cpus.size()), IntTab(0,9),\"block0.iso\", 2048);" + CR;	
-  }
+	declaration +=  "caba::VciBlockDevice<vci_param> vcibd(\"vcibd\", maptab, IntTab(0,cpus.size()), IntTab(0,9),\"block0.iso\", 2048);" + CR;
+
+int hwa_no=0;
+	 //int target_no = TopCellGenerator.avatardd.getNb_target();
+	 int target_no = (last_tty +4);//DG 5.9.
+	 int init_no = TopCellGenerator.avatardd.getNb_init();
+	  for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
+	      //	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", maptab, IntTab("+copro.getSrcid() + "), IntTab("+copro.getTgtid() + "),copro.getPlaps(),copro.getFifoToCoProcDepth(),copro.getNToCopro(),copro.getNFromCopro(),copro.getNConfig(),copro.getNStatus(), copro.getUseLLSC());"+ CR;
+	
+	      declaration += "caba::VciMwmrController<vci_param> " + copro.getCoprocName()+ "_wrapper(\"" + copro.getCoprocName()+ "_wrapper\", maptab, IntTab("+(init_no-1)+"), IntTab("+target_no+ "),"+copro.getPlaps()+","+copro.getFifoToCoprocDepth()+","+copro.getFifoFromCoprocDepth()+","+copro.getNToCopro()+","+copro.getNFromCopro()+","+copro.getNConfig()+","+copro.getNStatus()+","+ copro.getUseLLSC()+");"+ CR2;
+
+//one virtual component for each hardware accellerator, info from diplodocus (not yet implemented)
+
+//DG 28.08. 
+	      //   declaration += "soclib::caba::FifoVirtualCoprocessorWrapper hwa"+hwa_no+"(\"hwa"+hwa_no+"\",1,1,1,1);"+ CR2;
+	      if(copro.getCoprocType()==0){
+		  declaration += "soclib::caba::VciInputEngine<vci_param>" + copro.getCoprocName()+ "(\"" + copro.getCoprocName()+ "\", 1 , maptab,\"input.txt\",1024,1,8);"+ CR;
+	      }
+	      /*VciInputEngine(
+		 sc_core::sc_module_name insname,
+		 const soclib::common::IntTab &index, //???channel index
+		 const soclib::common::MappingTable &mt,
+		 const std::string &finput,
+		 uint32_t dext,
+		 uint32_t nchannels,
+		 uint32_t burstlength);*/	      
+	      //DG 27.04.2018 attention a la numerotation!faut il incrementer ici?
+	      else {
+		   if(copro.getCoprocType()==1)
+		       {
+			   declaration += "soclib::caba::VciOutputEngine<vci_param>" + copro.getCoprocName()+"(\"" + copro.getCoprocName()+ "\", 1 , maptab,1,1,1,\"output.txt\",\"throw.txt\");"+ CR;
+			   /*VciOutputEngine(
+		  sc_core::sc_module_name insname,
+		  const soclib::common::IntTab &index,
+		  const soclib::common::MappingTable &mt,
+                  uint32_t advance,
+                  uint32_t delay,
+                  uint32_t size,
+		  const std::string &foutput,
+		  const std::string &fthrow);*/			   
+		       }
+	      
+
+	      else{	      
+declaration += "dsx::caba::MyHWA"+hwa_no+" hwa"+hwa_no+"(\"hwa"+hwa_no+"\");"+ CR2;
+//target_no++; DG 27.04.
+//init_no++; DG 27.04.
+	      hwa_no++;
+	      }
+	      }
+	      target_no++;
+	      init_no++;
+	  }
+	
+	}
 
 if(nb_clusters==0){
 
@@ -197,19 +281,23 @@ if(nb_clusters==0){
 	  //declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+");" + CR2;
 	  //	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+ ");" + CR2;
 
-	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab,"+(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+4)+ ");" + CR2;//DG 28.08.
+	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab,"+(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+3)+ ");" + CR2;//DG 17.05.2018
 	  int i=0;
 
           //if BUS was not last in input file, update here
 
-          bus.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
-          bus.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());
+	  //DG 12.10. enleve
+          //bus.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
+          //bus.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());
 	  }	
 
          for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
 	     //System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
 	     //System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
 	  /* The user might have forgotten to specify the following, thus set default values */
+	     System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
+	     System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
+	     
 
 	  if(vgmn.getMinLatency()<2)
 	  vgmn.setMinLatency(10); //default value; must be > 2
@@ -220,13 +308,14 @@ if(nb_clusters==0){
 	  //	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 	  //	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, " +(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;//DG 28.08.
 
-	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, " +(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+3)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;//DG 5.9.
+	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, " +(3+TopCellGenerator.avatardd.getNb_init())+"," + (TopCellGenerator.avatardd.getNb_target()+3)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;//DG 17.05.2018
 
 	  // declaration += "soclib::caba::VciVgmn<vci_param> vgmn(\"" + vgmn.getVgmnName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNbRAM()+TopCellGenerator.avatardd.getNbTTY()+4)+  "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
 
+	  //DG 12.10. enleve 
 	  // if VGMN was not last in input file, update here 
-          vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
-          vgmn.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target()+4);
+	  //   vgmn.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
+          //vgmn.setnbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target()+4);
 
 	 }
 
@@ -300,7 +389,7 @@ else {
           //if CROSSBAR was not last in input file, update here 
           crossbar.setNbOfAttachedInitiators(TopCellGenerator.avatardd.getNb_init()); 
           crossbar.setNbOfAttachedTargets(TopCellGenerator.avatardd.getNb_target());	 
-
+	  i++;
 	}
 }
 int  i=0;

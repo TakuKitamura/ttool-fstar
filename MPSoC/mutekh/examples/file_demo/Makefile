@@ -1,2 +1,0 @@
-
-objs = main.o

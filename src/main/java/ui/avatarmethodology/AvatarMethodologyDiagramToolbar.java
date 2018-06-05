@@ -85,6 +85,8 @@ public class AvatarMethodologyDiagramToolbar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);*/
+
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
         
     }
     

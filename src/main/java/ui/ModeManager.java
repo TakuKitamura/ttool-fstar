@@ -54,7 +54,12 @@ import myutil.TraceManager;
 public class ModeManager {
 
     public static void setMode(byte mode, TGUIAction[] actions, JToolBarMainTurtle mainBar, MainGUI mgui) {
+        //TraceManager.addDev("Setting mode=" + mode);
         switch (mode) {
+            case MainGUI.CREATE_NEW_PANEL:
+                actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(false);
+                TraceManager.addDev("Deactivating syntax checking");
+                break;
             case MainGUI.NOT_OPENED:
                 mgui.activeActions(false);
                 actions[TGUIAction.ACT_NEW].setEnabled(true);
@@ -97,10 +102,11 @@ public class ModeManager {
                 actions[TGUIAction.ACT_MERGE].setEnabled(true);
                 actions[TGUIAction.ACT_NEW_DESIGN].setEnabled(true);
                 actions[TGUIAction.ACT_NEW_ANALYSIS].setEnabled(true);
-                actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(true);//DG 06.02.
+                //actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(true);//DG 06.02.
                 //actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG].setEnabled(true);
                 //actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(true);
-                actions[TGUIAction.ACT_SAVE_AS].setEnabled(true);
+                actions[TGUIAction.ACT_SAVE_AS_PROJECT].setEnabled(true);
+                actions[TGUIAction.ACT_SAVE_AS_MODEL].setEnabled(true);
                 actions[TGUIAction.ACT_IMPORT_LIB].setEnabled(true);
                 actions[TGUIAction.ACT_SAVE].setEnabled(false);
                 if (TDiagramPanel.copyData != null) {

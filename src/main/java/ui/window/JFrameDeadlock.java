@@ -46,7 +46,7 @@ package ui.window;
 import myutil.TableSorter;
 import ui.FormatManager;
 import ui.util.IconManager;
-import ui.graph.AUTGraph;
+import graph.AUTGraph;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

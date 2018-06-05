@@ -90,7 +90,7 @@ public class HSMGeneration implements Runnable {
 
             ProVerifOutputAnalyzer pvoa = avatar2proverif.getOutputAnalyzer();
             pvoa.analyzeOutput(data, true);
-            HashMap<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+            Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
             for (AvatarPragmaSecret pragma : confResults.keySet()) {
                 if (confResults.get(pragma).isProved() && !confResults.get(pragma).isSatisfied()) {
                     nonSecChans.add(pragma.getArg().getBlock().getName() + "__" + pragma.getArg().getName());
@@ -101,7 +101,7 @@ public class HSMGeneration implements Runnable {
                     }
                 }
             }
-            HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
+            Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
             for (AvatarPragmaAuthenticity pragma : authResults.keySet()) {
                 if (authResults.get(pragma).isProved() && !authResults.get(pragma).isSatisfied()) {
                     nonAuthChans.add(pragma.getAttrA().getAttribute().getBlock().getName() + "__" + pragma.getAttrA().getAttribute().getName().replaceAll("_chData", ""));

@@ -95,7 +95,14 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
     private JTextField lossPercentageText, maxNbOfLossText;
 
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType, String _associatedEvent, boolean _isPrex, boolean _isPostex, boolean _checkConf, boolean _checkAuth, TGComponent _reference, Vector<TGComponent> _refs) {
+    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4,
+                                   TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking,
+                                   String _maxInFIFO, String _widthSamples, boolean _isLossy,
+                                   int _lossPercentage, int _maxNbOfLoss, Frame f,
+                                   String title, Vector<String> _types,
+                                   String _dataFlowType, String _associatedEvent, boolean _isPrex,
+                                   boolean _isPostex, boolean _checkConf,
+                                   boolean _checkAuth, TGComponent _reference, Vector<TGComponent> _refs) {
         super(f, title, true);
         frame = f;
 
@@ -217,7 +224,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
 
         JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
-        panel1.setBorder(new javax.swing.border.TitledBorder("Name and type "));
+        panel1.setBorder(new javax.swing.border.TitledBorder("Name, type and parameters"));
         panel1.setPreferredSize(new Dimension(300, 150));
 
         // First line panel1
@@ -265,12 +272,168 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         origin.addActionListener(this);
         panel1.add(origin, c1);
 
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("Type #1"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        typeList1 = new JComboBox<>(types1);
+        //TraceManager.addDev("type1= " + type1);
+        if (type1.getType() < TType.OTHER) {
+            typeList1.setSelectedIndex(type1.getType());
+        } else {
+            for (i = TType.OTHER; i < types1.size(); i++) {
+                //TraceManager.addDev("Looking for:"  + type1.getTypeOther());
+                //TraceManager.addDev("Current type:"  +  types1.get(i));
+                if ((types1.get(i)).compareTo(type1.getTypeOther()) == 0) {
+                    typeList1.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        panel1.add(typeList1, c1);
 
-        // parameters
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("Type #2"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        typeList2 = new JComboBox<>(types2);
+        if (type2.getType() < TType.OTHER) {
+            typeList2.setSelectedIndex(type2.getType());
+        } else {
+            for (i = TType.OTHER; i < types2.size(); i++) {
+                //TraceManager.addDev("Looking for:"  + type1.getTypeOther());
+                //TraceManager.addDev("Current type:"  +  types1.get(i));
+                if ((types2.get(i)).compareTo(type2.getTypeOther()) == 0) {
+                    typeList2.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        panel1.add(typeList2, c1);
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("Type: #3"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        typeList3 = new JComboBox<>(types3);
+        if (type3.getType() < TType.OTHER) {
+            typeList3.setSelectedIndex(type3.getType());
+        } else {
+            for (i = TType.OTHER; i < types3.size(); i++) {
+                //TraceManager.addDev("Looking for:"  + type1.getTypeOther());
+                //TraceManager.addDev("Current type:"  +  types1.get(i));
+                if ((types3.get(i)).compareTo(type3.getTypeOther()) == 0) {
+                    typeList3.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        panel1.add(typeList3, c1);
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("Type: #4"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        typeList4 = new JComboBox<>(types4);
+        if (type4.getType() < TType.OTHER) {
+            typeList4.setSelectedIndex(type4.getType());
+        } else {
+            for (i = TType.OTHER; i < types4.size(); i++) {
+                //TraceManager.addDev("Looking for:"  + type1.getTypeOther());
+                //TraceManager.addDev("Current type:"  +  types1.get(i));
+                if ((types4.get(i)).compareTo(type4.getTypeOther()) == 0) {
+                    typeList4.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        panel1.add(typeList4, c1);
+
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("Type: #5"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        typeList5 = new JComboBox<>(types5);
+        if (type5.getType() < TType.OTHER) {
+            typeList5.setSelectedIndex(type5.getType());
+        } else {
+            for (i = TType.OTHER; i < types5.size(); i++) {
+                //TraceManager.addDev("Looking for:"  + type1.getTypeOther());
+                //TraceManager.addDev("Current type:"  +  types1.get(i));
+                if ((types5.get(i)).compareTo(type5.getTypeOther()) == 0) {
+                    typeList5.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        panel1.add(typeList5, c1);
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("Blocking?"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        blocking = new JComboBox<>(blockings);
+        if (isBlocking) {
+            blocking.setSelectedIndex(0);
+        } else {
+            blocking.setSelectedIndex(1);
+        }
+        blocking.addActionListener(this);
+        panel1.add(blocking, c1);
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("Finite?"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        finite = new JComboBox<>(finites);
+        if (isFinite) {
+            finite.setSelectedIndex(0);
+        } else {
+            finite.setSelectedIndex(1);
+        }
+        finite.addActionListener(this);
+        panel1.add(finite, c1);
+
+        c1.gridwidth = 1;
+        panel1.add(new JLabel("Width (in Byte)="), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        widthText = new JTextField(widthSamples);
+        panel1.add(widthText, c1);
+
+        c1.gridwidth = 1;
+        panel1.add(new JLabel("Capacity="), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        maxText = new JTextField(maxInFIFO);
+        panel1.add(maxText, c1);
+
+
+
         JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Formal Verification & Simulation Parameters "));
+        panel2.setBorder(new javax.swing.border.TitledBorder("Properties and Verification "));
         panel2.setPreferredSize(new Dimension(300, 300));
+
+        //If related to security requirement, allow reference to the requirement
+        c2.gridwidth = 1;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.anchor = GridBagConstraints.CENTER;
+        panel2.add(new JLabel("Reference Requirement"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        refReq = new JComboBox<>(refs);
+        panel2.add(refReq, c2);
+        if (reference != null) {
+            refReq.setSelectedItem(reference);
+        }
+
+
         c2.gridwidth = 1;
         c2.gridheight = 1;
         c2.weighty = 1.0;
@@ -291,119 +454,9 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         authCheckBox.setSelected(checkAuth);
 
 
-        //If related to security requirement, allow reference to the requirement
-        c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        panel2.add(new JLabel("Reference Requirement"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        refReq = new JComboBox<>(refs);
-        panel2.add(refReq, c2);
-        if (reference != null) {
-            refReq.setSelectedItem(reference);
-        }
-
-        c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        panel2.add(new JLabel("Type #1"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList1 = new JComboBox<>(types1);
-        //TraceManager.addDev("type1= " + type1);
-        if (type1.getType() < TType.OTHER) {
-            typeList1.setSelectedIndex(type1.getType());
-        } else {
-            for (i = TType.OTHER; i < types1.size(); i++) {
-                //TraceManager.addDev("Looking for:"  + type1.getTypeOther());
-                //TraceManager.addDev("Current type:"  +  types1.get(i));
-                if ((types1.get(i)).compareTo(type1.getTypeOther()) == 0) {
-                    typeList1.setSelectedIndex(i);
-                    break;
-                }
-            }
-        }
-        panel2.add(typeList1, c2);
-
-        c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        panel2.add(new JLabel("Type #2"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList2 = new JComboBox<>(types2);
-        if (type2.getType() < TType.OTHER) {
-            typeList2.setSelectedIndex(type2.getType());
-        } else {
-            for (i = TType.OTHER; i < types2.size(); i++) {
-                //TraceManager.addDev("Looking for:"  + type1.getTypeOther());
-                //TraceManager.addDev("Current type:"  +  types1.get(i));
-                if ((types2.get(i)).compareTo(type2.getTypeOther()) == 0) {
-                    typeList2.setSelectedIndex(i);
-                    break;
-                }
-            }
-        }
-        panel2.add(typeList2, c2);
-
-        c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        panel2.add(new JLabel("Type: #3"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList3 = new JComboBox<>(types3);
-        if (type3.getType() < TType.OTHER) {
-            typeList3.setSelectedIndex(type3.getType());
-        } else {
-            for (i = TType.OTHER; i < types3.size(); i++) {
-                //TraceManager.addDev("Looking for:"  + type1.getTypeOther());
-                //TraceManager.addDev("Current type:"  +  types1.get(i));
-                if ((types3.get(i)).compareTo(type3.getTypeOther()) == 0) {
-                    typeList3.setSelectedIndex(i);
-                    break;
-                }
-            }
-        }
-        panel2.add(typeList3, c2);
-
-        c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        panel2.add(new JLabel("Type: #4"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList4 = new JComboBox<>(types4);
-        if (type4.getType() < TType.OTHER) {
-            typeList4.setSelectedIndex(type4.getType());
-        } else {
-            for (i = TType.OTHER; i < types4.size(); i++) {
-                //TraceManager.addDev("Looking for:"  + type1.getTypeOther());
-                //TraceManager.addDev("Current type:"  +  types1.get(i));
-                if ((types4.get(i)).compareTo(type4.getTypeOther()) == 0) {
-                    typeList4.setSelectedIndex(i);
-                    break;
-                }
-            }
-        }
-        panel2.add(typeList4, c2);
 
 
-        c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        panel2.add(new JLabel("Type: #5"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList5 = new JComboBox<>(types5);
-        if (type5.getType() < TType.OTHER) {
-            typeList5.setSelectedIndex(type5.getType());
-        } else {
-            for (i = TType.OTHER; i < types5.size(); i++) {
-                //TraceManager.addDev("Looking for:"  + type1.getTypeOther());
-                //TraceManager.addDev("Current type:"  +  types1.get(i));
-                if ((types5.get(i)).compareTo(type5.getTypeOther()) == 0) {
-                    typeList5.setSelectedIndex(i);
-                    break;
-                }
-            }
-        }
-        panel2.add(typeList5, c2);
+
 
         // Code generation
         JPanel panel4 = new JPanel();
@@ -454,45 +507,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         isPostexCB.setSelected(isPostex);
         panel4.add(isPostexCB, c4);
 
-        c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        panel2.add(new JLabel("Blocking?"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        blocking = new JComboBox<>(blockings);
-        if (isBlocking) {
-            blocking.setSelectedIndex(0);
-        } else {
-            blocking.setSelectedIndex(1);
-        }
-        blocking.addActionListener(this);
-        panel2.add(blocking, c2);
 
-        c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        panel2.add(new JLabel("Finite?"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        finite = new JComboBox<>(finites);
-        if (isFinite) {
-            finite.setSelectedIndex(0);
-        } else {
-            finite.setSelectedIndex(1);
-        }
-        finite.addActionListener(this);
-        panel2.add(finite, c2);
-
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("Width (in Byte)="), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        widthText = new JTextField(widthSamples);
-        panel2.add(widthText, c2);
-
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("Capacity="), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        maxText = new JTextField(maxInFIFO);
-        panel2.add(maxText, c2);
         
         /*c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         c2.fill = GridBagConstraints.HORIZONTAL;

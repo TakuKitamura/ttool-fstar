@@ -37,8 +37,6 @@
  */
 
 
-
- 
 package ui.file;
 
 import myutil.FileUtils;
@@ -50,11 +48,12 @@ import java.io.File;
 /**
  * Class TFileFilter
  * Creation : 12/12/2003
+ *
  * @author Ludovic APVRILLE
  */
 public class TFileFilter extends FileFilter {
 
-//Accept all directories and  xml files
+    //Accept all directories and  xml files
     public boolean accept(File f) {
         if (f.isDirectory()) {
             return true;
@@ -67,13 +66,13 @@ public class TFileFilter extends FileFilter {
 
         return false;
     }
-    
+
     public String getDescription() {
-        return "TURTLE Files";
+        return "TTool Files";
     }
-    
+
     public static String getExtension() {
-	 	return  FileUtils.xml;  
+        return FileUtils.xml;
     }
 
 }

@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.atd;
 
 import myutil.GraphicLib;
@@ -53,13 +51,14 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
-   * Class ATDConstraint
-   * Constraint of SysML Parametric diagrams, adapted to attack trees
-   * Creation: 11/12/2009
-   * @version 1.0 11/12/2009
-   * @author Ludovic APVRILLE
+ * Class ATDConstraint
+ * Constraint of SysML Parametric diagrams, adapted to attack trees
+ * Creation: 11/12/2009
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 11/12/2009
  */
-public class ATDConstraint extends TGCScalableWithInternalComponent implements  SwallowedTGComponent, ConstraintListInterface {
+public class ATDConstraint extends TGCScalableWithInternalComponent implements SwallowedTGComponent, ConstraintListInterface {
     private int textY1 = 5;
     //private int textY2 = 30;
 
@@ -71,17 +70,17 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
     private static int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
- //   private int textX = 1;
+    //   private int textX = 1;
 
     private static int arc = 7;
 
     private String equation;
 
-    public ATDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public ATDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = (int)(150* tdp.getZoom());
-        height = (int)(50 * tdp.getZoom());
+        width = (int) (150 * tdp.getZoom());
+        height = (int) (50 * tdp.getZoom());
         minWidth = 100;
 
         nbConnectingPoint = 12;
@@ -117,7 +116,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
     public void internalDrawing(Graphics g) {
 
         Font f = g.getFont();
-   //     Font fold = f;
+        //     Font fold = f;
 
         if (currentFontSize == -1) {
             currentFontSize = f.getSize();
@@ -127,9 +126,9 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 
             rescaled = false;
 
-            float scale = (float)(f.getSize()*tdp.getZoom());
+            float scale = (float) (f.getSize() * tdp.getZoom());
             scale = Math.min(maxFontSize, scale);
-            currentFontSize = (int)scale;
+            currentFontSize = (int) scale;
             displayText = !(scale < minFontSize);
         }
 
@@ -149,15 +148,15 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
         if (displayText) {
             f = f.deriveFont(currentFontSize);
             g.setFont(f.deriveFont(Font.BOLD));
-            int w  = g.getFontMetrics().stringWidth(value);
-            g.drawString(value, x + (width - w)/2, y + currentFontSize + (int)(textY1*tdp.getZoom()));
-            g.setFont(f0.deriveFont(f0.getSize()-2).deriveFont(Font.ITALIC));
-            w  = g.getFontMetrics().stringWidth(equation);
+            int w = g.getFontMetrics().stringWidth(value);
+            g.drawString(value, x + (width - w) / 2, y + currentFontSize + (int) (textY1 * tdp.getZoom()));
+            g.setFont(f0.deriveFont(f0.getSize() - 2).deriveFont(Font.ITALIC));
+            w = g.getFontMetrics().stringWidth(equation);
             if (w >= width) {
-                w  = g.getFontMetrics().stringWidth("...");
-                g.drawString("...", x + (width - w)/2, y + (2*currentFontSize) + (int)(textY1*tdp.getZoom()));
+                w = g.getFontMetrics().stringWidth("...");
+                g.drawString("...", x + (width - w) / 2, y + (2 * currentFontSize) + (int) (textY1 * tdp.getZoom()));
             } else {
-                g.drawString(equation, x + (width - w)/2, y + (2*currentFontSize) + (int)(textY1*tdp.getZoom()));
+                g.drawString(equation, x + (width - w) / 2, y + (2 * currentFontSize) + (int) (textY1 * tdp.getZoom()));
             }
             g.setFont(f0);
         }
@@ -178,16 +177,14 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
        }*/
 
 
-
-
     public boolean editOndoubleClick(JFrame frame) {
 //        String tmp;
 //        boolean error = false;
 
         JDialogConstraintText dialog = new JDialogConstraintText(frame, "Setting constraint attributes", this, equation, "Equation");
-     //   dialog.setSize(450, 350);
+        //   dialog.setSize(450, 350);
         GraphicLib.centerOnParent(dialog, 450, 350);
-        dialog.setVisible( true ); // blocked until dialog has been closed
+        dialog.setVisible(true); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -233,27 +230,27 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
     }
 
     public boolean isOR() {
-	return (value.compareTo(STEREOTYPES[0]) == 0);
+        return (value.compareTo(STEREOTYPES[0]) == 0);
     }
 
     public boolean isXOR() {
-	return (value.compareTo(STEREOTYPES[1]) == 0);
+        return (value.compareTo(STEREOTYPES[1]) == 0);
     }
 
     public boolean isAND() {
-	return (value.compareTo(STEREOTYPES[2]) == 0);
+        return (value.compareTo(STEREOTYPES[2]) == 0);
     }
 
     public boolean isSequence() {
-	return (value.compareTo(STEREOTYPES[3]) == 0);
+        return (value.compareTo(STEREOTYPES[3]) == 0);
     }
 
     public boolean isBefore() {
-	return (value.compareTo(STEREOTYPES[4]) == 0);
+        return (value.compareTo(STEREOTYPES[4]) == 0);
     }
 
     public boolean isAfter() {
-	return (value.compareTo(STEREOTYPES[5]) == 0);
+        return (value.compareTo(STEREOTYPES[5]) == 0);
     }
 
     protected String translateExtraParam() {
@@ -265,7 +262,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         //System.out.println("*** load extra synchro ***");
         try {
 
@@ -277,12 +274,12 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 //            String prio;
 //            String isRoot = null;
 
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {

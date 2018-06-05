@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.avatarad;
 
 import ui.MainGUI;
@@ -51,13 +49,14 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
-   * Class AvatarADToolBar
-   * Implements the toolbar to be used in conjunction with the panel of
-   * AVATAR Activity Diagram
-   * Creation: 01/09/2011
-   * @version 1.0 01/09/2011
-   * @author Ludovic APVRILLE
-   * @see ui.cd.TClassDiagramPanel
+ * Class AvatarADToolBar
+ * Implements the toolbar to be used in conjunction with the panel of
+ * AVATAR Activity Diagram
+ * Creation: 01/09/2011
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 01/09/2011
+ * @see ui.cd.TClassDiagramPanel
  */
 public class AvatarADToolBar extends TToolBar {
 
@@ -68,10 +67,10 @@ public class AvatarADToolBar extends TToolBar {
 
     protected void setActive(boolean b) {
         mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-	mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-	
-	mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-	mgui.updateZoomInfo();
+        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+
+        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+        mgui.updateZoomInfo();
 
         mgui.actions[TGUIAction.AAD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
@@ -89,6 +88,8 @@ public class AvatarADToolBar extends TToolBar {
         mgui.actions[TGUIAction.AAD_PARTITION].setEnabled(b);
         mgui.actions[TGUIAction.AAD_ASSOCIATION_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.AAD_ALIGN_PARTITION].setEnabled(b);
+
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
     }
 
     protected void setButtons() {
@@ -135,7 +136,6 @@ public class AvatarADToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 
         this.addSeparator();
-
 
 
         button = this.add(mgui.actions[TGUIAction.AAD_ACTION]);

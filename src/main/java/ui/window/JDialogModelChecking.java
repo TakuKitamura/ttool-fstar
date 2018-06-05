@@ -37,13 +37,11 @@
  */
 
 
-
-
 package ui.window;
 
-import ui.util.IconManager;
 import ui.TClassInterface;
 import ui.TGComponent;
+import ui.util.IconManager;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -55,13 +53,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
-   * Class JDialogModelChecking
-   * Dialog for managing Tclasses to be validated
-   * Creation: 13/12/2003
-   * @version 1.0 13/12/2003
-   * @author Ludovic APVRILLE
+ * Class JDialogModelChecking
+ * Dialog for managing Tclasses to be validated
+ * Creation: 13/12/2003
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 13/12/2003
  */
-public class JDialogModelChecking extends JDialogBase implements ActionListener, ListSelectionListener  {
+public class JDialogModelChecking extends JDialogBase implements ActionListener, ListSelectionListener {
     public static java.util.List<TClassInterface> validated, ignored;
     private static boolean overideSyntaxChecking = false;
 
@@ -77,7 +76,9 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
     private JButton allIgnored;
     protected JCheckBox syntax;
 
-    /** Creates new form  */
+    /**
+     * Creates new form
+     */
     public JDialogModelChecking(Frame f, LinkedList<TClassInterface> _back, java.util.List<TGComponent> componentList, String title) {
         super(f, title, true);
 
@@ -86,7 +87,7 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
         if ((validated == null) || (ignored == null)) {
             val = makeNewVal(componentList);
             //System.out.println("Val size: " + val.size() + "component list:" + componentList.size());
-            ign = new LinkedList<TClassInterface> ();
+            ign = new LinkedList<TClassInterface>();
         } else {
             val = validated;
             ign = ignored;
@@ -101,28 +102,28 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
     }
 
     private java.util.List<TClassInterface> makeNewVal(java.util.List<TGComponent> list) {
-    	java.util.List<TClassInterface> v = new LinkedList<TClassInterface> ();
+        java.util.List<TClassInterface> v = new LinkedList<TClassInterface>();
 
-        for (TGComponent tgc: list)
+        for (TGComponent tgc : list)
             if (tgc instanceof TClassInterface)
-                v.add ((TClassInterface) tgc);
+                v.add((TClassInterface) tgc);
 
         return v;
     }
 
     private void checkTClasses(java.util.List<TClassInterface> tobeChecked, java.util.List<TGComponent> source) {
-        Iterator<TClassInterface> iter = tobeChecked.iterator ();
-        while (iter.hasNext ()) {
-            TClassInterface t = iter.next ();
+        Iterator<TClassInterface> iter = tobeChecked.iterator();
+        while (iter.hasNext()) {
+            TClassInterface t = iter.next();
             if (!source.contains(t))
-                iter.remove ();
+                iter.remove();
         }
     }
 
     public void addNewTclasses(java.util.List<TClassInterface> added, java.util.List<TGComponent> source, java.util.List<TClassInterface> notSource) {
-        for (TGComponent tgc: source)
+        for (TGComponent tgc : source)
             if ((tgc instanceof TClassInterface) && (!added.contains(tgc)) && (!notSource.contains(tgc)))
-                added.add ((TClassInterface) tgc);
+                added.add((TClassInterface) tgc);
     }
 
     private void myInitComponents() {
@@ -133,35 +134,39 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
         Container c = getContentPane();
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagConstraints c1 = new GridBagConstraints();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
         setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(new BorderLayout());
+        //c.setLayout(new BorderLayout());
+        c.setLayout(gridbag0);
+        JPanel mainPanel = new JPanel(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // ignored list
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         panel1.setBorder(new javax.swing.border.TitledBorder("Ignored"));
-        listIgnored = new JList<TClassInterface> (ign.toArray (new TClassInterface[0]));
+        listIgnored = new JList<TClassInterface>(ign.toArray(new TClassInterface[0]));
         //listIgnored.setPreferredSize(new Dimension(200, 250));
-        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         listIgnored.addListSelectionListener(this);
         JScrollPane scrollPane1 = new JScrollPane(listIgnored);
         panel1.add(scrollPane1, BorderLayout.CENTER);
         panel1.setPreferredSize(new Dimension(200, 250));
-        c.add(panel1, BorderLayout.WEST);
+        mainPanel.add(panel1, BorderLayout.WEST);
 
         // validated list
         panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         panel2.setBorder(new javax.swing.border.TitledBorder("Taken into account"));
-        listValidated = new JList<TClassInterface> (val.toArray (new TClassInterface[0]));
+        listValidated = new JList<TClassInterface>(val.toArray(new TClassInterface[0]));
         //listValidated.setPreferredSize(new Dimension(200, 250));
-        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         listValidated.addListSelectionListener(this);
         JScrollPane scrollPane2 = new JScrollPane(listValidated);
         panel2.add(scrollPane2, BorderLayout.CENTER);
         panel2.setPreferredSize(new Dimension(200, 250));
-        c.add(panel2, BorderLayout.EAST);
+        mainPanel.add(panel2, BorderLayout.EAST);
 
         // central buttons
         panel3 = new JPanel();
@@ -199,9 +204,15 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
         allIgnored.setActionCommand("allIgnored");
         panel3.add(allIgnored, c1);
 
-        c.add(panel3, BorderLayout.CENTER);
+        mainPanel.add(panel3, BorderLayout.CENTER);
 
         // main panel;
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c0.fill = GridBagConstraints.BOTH;
         panel6 = new JPanel();
         panel6.setLayout(new BorderLayout());
 
@@ -229,19 +240,20 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
         panel6.add(panel5, BorderLayout.NORTH);
         panel6.add(panel4, BorderLayout.SOUTH);
 
-        c.add(panel6, BorderLayout.SOUTH);
+        c.add(mainPanel, c0);
+        c.add(panel6, c0);
 
     }
 
-    public void actionPerformed(ActionEvent evt)  {
+    public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-        if (command.equals("Start Syntax Analysis"))  {
+        if (command.equals("Start Syntax Analysis")) {
             closeDialog();
         } else if (command.equals("Cancel")) {
             cancelDialog();
-	} else if (command.equals("addOneIgnored")) {
+        } else if (command.equals("addOneIgnored")) {
             addOneIgnored();
         } else if (command.equals("addOneValidated")) {
             addOneValidated();
@@ -254,48 +266,48 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
 
 
     private void addOneIgnored() {
-        for (TClassInterface c: this.listValidated.getSelectedValuesList ()) {
-            ign.add (c);
-            val.remove (c);
+        for (TClassInterface c : this.listValidated.getSelectedValuesList()) {
+            ign.add(c);
+            val.remove(c);
         }
 
-        listIgnored.setListData(ign.toArray (new TClassInterface [0]));
-        listValidated.setListData(val.toArray (new TClassInterface [0]));
+        listIgnored.setListData(ign.toArray(new TClassInterface[0]));
+        listValidated.setListData(val.toArray(new TClassInterface[0]));
         this.setButtons();
     }
 
     private void addOneValidated() {
-        for (TClassInterface c: this.listIgnored.getSelectedValuesList ()) {
-            ign.remove (c);
-            val.add (c);
+        for (TClassInterface c : this.listIgnored.getSelectedValuesList()) {
+            ign.remove(c);
+            val.add(c);
         }
 
-        listIgnored.setListData(ign.toArray (new TClassInterface [0]));
-        listValidated.setListData(val.toArray (new TClassInterface [0]));
+        listIgnored.setListData(ign.toArray(new TClassInterface[0]));
+        listValidated.setListData(val.toArray(new TClassInterface[0]));
         setButtons();
     }
 
     private void allValidated() {
-        val.addAll (ign);
-        ign.clear ();
-        listIgnored.setListData(ign.toArray (new TClassInterface[0]));
-        listValidated.setListData(val.toArray (new TClassInterface[0]));
+        val.addAll(ign);
+        ign.clear();
+        listIgnored.setListData(ign.toArray(new TClassInterface[0]));
+        listValidated.setListData(val.toArray(new TClassInterface[0]));
         this.setButtons();
     }
 
     private void allIgnored() {
         ign.addAll(val);
-        val.clear ();
-        listIgnored.setListData(ign.toArray (new TClassInterface[0]));
-        listValidated.setListData(val.toArray (new TClassInterface[0]));
+        val.clear();
+        listIgnored.setListData(ign.toArray(new TClassInterface[0]));
+        listValidated.setListData(val.toArray(new TClassInterface[0]));
         setButtons();
     }
 
 
     public void closeDialog() {
-        back.clear ();
-        for(int i=0; i<val.size(); i++) {
-            back.add (val.get (i));
+        back.clear();
+        for (int i = 0; i < val.size(); i++) {
+            back.add(val.get(i));
         }
         validated = val;
         ignored = ign;
@@ -325,13 +337,13 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
             //listIgnored.clearSelection();
         }
 
-        if (ign.size() ==0) {
+        if (ign.size() == 0) {
             allValidated.setEnabled(false);
         } else {
             allValidated.setEnabled(true);
         }
 
-        if (val.size() ==0) {
+        if (val.size() == 0) {
             allIgnored.setEnabled(false);
             closeButton.setEnabled(false);
         } else {
@@ -346,9 +358,9 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
 
     public int nbStart() {
         int cpt = 0;
-        for (TClassInterface t: val)
+        for (TClassInterface t : val)
             if (t.isStart())
-                cpt ++;
+                cpt++;
 
         return cpt;
     }

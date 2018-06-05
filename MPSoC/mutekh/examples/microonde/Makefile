@@ -1,0 +1,1 @@
+objs = main.o MicroWaveOven.o Bell.o ControlPanel.o Controller.o Magnetron.o Door.o 

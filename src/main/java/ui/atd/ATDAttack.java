@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,12 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
 
 
 package ui.atd;
@@ -54,17 +52,18 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
-   * Class ATDAttack
-   * Attack -> SysML value type
-   * Creation: 09/12/2009
-   * @version 1.0 09/12/2009
-   * @author Ludovic APVRILLE
+ * Class ATDAttack
+ * Attack -> SysML value type
+ * Creation: 09/12/2009
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 09/12/2009
  */
 public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility, CanBeDisabled {
     private int textY1 = 3;
- //   private int textY2 = 3;
+    //   private int textY2 = 3;
 
-   // private static int arc = 7;
+    // private static int arc = 7;
     //private int textX = 10;
 
     protected String oldValue = "";
@@ -79,11 +78,11 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
     private boolean displayText = true;
     private int textX = 10;
 
-    public ATDAttack(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public ATDAttack(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         width = 125;
-        height = (int)(40 * tdp.getZoom());
+        height = (int) (40 * tdp.getZoom());
         minWidth = 100;
 
         nbConnectingPoint = 24;
@@ -101,7 +100,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         connectingPoint[9] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
         connectingPoint[10] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
         connectingPoint[11] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
-	connectingPoint[12] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[12] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
         connectingPoint[13] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
         connectingPoint[14] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
         connectingPoint[15] = new ATDCountermeasureConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
@@ -151,7 +150,6 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
             rescaled = false;
 
 
-
             // Must set the font size ..
             // Find the biggest font not greater than max_font size
             // By Increment of 1
@@ -185,9 +183,9 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
               }*/
 
 
-            float scale = (float)(f.getSize()*tdp.getZoom());
+            float scale = (float) (f.getSize() * tdp.getZoom());
             scale = Math.min(maxFontSize, scale);
-            currentFontSize = (int)scale;
+            currentFontSize = (int) scale;
             if (scale < minFontSize) {
                 displayText = false;
             } else {
@@ -208,7 +206,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
             g.setColor(ColorManager.ATD_ATTACK_DISABLED);
         }
 
-        g.fill3DRect(x+1, y+1, width-1, height-1, true);
+        g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
         g.setColor(c);
 
         // Strings
@@ -217,55 +215,54 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         //TraceManager.addDev("display text of attack=" + displayText);
 
         if (displayText) {
-            f = f.deriveFont((float)currentFontSize);
+            f = f.deriveFont((float) currentFontSize);
             g.setFont(f);
             //Font f0 = g.getFont();
 
-            boolean cannotWriteAttack = (height < (2 * currentFontSize + (int)(textY1 * tdp.getZoom())));
+            boolean cannotWriteAttack = (height < (2 * currentFontSize + (int) (textY1 * tdp.getZoom())));
             //TraceManager.addDev("Zoom=" + tdp.getZoom() + " Cannot write attack=" + cannotWriteAttack + "Font=" + f0);
             if (cannotWriteAttack) {
-                w  = g.getFontMetrics().stringWidth(value);
-                int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
-                if ((w < (2*textX + width)) && (h < height)) {
-                    g.drawString(value, x + (width - w)/2, y + h);
+                w = g.getFontMetrics().stringWidth(value);
+                int h = currentFontSize + (int) (textY1 * tdp.getZoom());
+                if ((w < (2 * textX + width)) && (h < height)) {
+                    g.drawString(value, x + (width - w) / 2, y + h);
                 } else {
-                    w  = g.getFontMetrics().stringWidth(ster);
-                    if ((w < (2*textX + width)) && (h < height)) {
-                        g.drawString(ster, x + (width - w)/2, y + h);
+                    w = g.getFontMetrics().stringWidth(ster);
+                    if ((w < (2 * textX + width)) && (h < height)) {
+                        g.drawString(ster, x + (width - w) / 2, y + h);
                     }
                 }
             } else {
                 g.setFont(f.deriveFont(Font.BOLD));
-                int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+                int h = currentFontSize + (int) (textY1 * tdp.getZoom());
                 int cumulated = 0;
                 w = g.getFontMetrics().stringWidth(ster);
-                if ((w < (2*textX + width)) && (h < height)) {
-                    g.drawString(ster, x + (width - w)/2, y + h);
+                if ((w < (2 * textX + width)) && (h < height)) {
+                    g.drawString(ster, x + (width - w) / 2, y + h);
                     cumulated = h;
                 }
                 g.setFont(f);
-                w  = g.getFontMetrics().stringWidth(value);
-                h = cumulated + currentFontSize + (int)(textY1 * tdp.getZoom());
-                if ((w < (2*textX + width)) && (h < height)) {
+                w = g.getFontMetrics().stringWidth(value);
+                h = cumulated + currentFontSize + (int) (textY1 * tdp.getZoom());
+                if ((w < (2 * textX + width)) && (h < height)) {
                     //TraceManager.addDev("Drawing value=" + value);
-                    g.drawString(value, x + (width - w)/2, y + h);
+                    g.drawString(value, x + (width - w) / 2, y + h);
                 } else {
-		    g.drawString(value, x + (width - w)/2, y + h);
+                    g.drawString(value, x + (width - w) / 2, y + h);
                     //TraceManager.addDev("--------------------------------------------------- Cannot draw value=" + value);
                     //TraceManager.addDev("w=" + w + " val=" + (2*textX + width) + "h=" + h + " height=" + height + " zoom=" + tdp.getZoom() + " Font=" + f0);
                 }
             }
 
-	    if (!isEnabled()) {
-		String val = "disabled";
-		w = g.getFontMetrics().stringWidth(val);
-		//int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
-		g.setFont(f.deriveFont(Font.ITALIC));
-		g.drawString(val, x + (width - w - 5), y + height - 2);
-	    }
+            if (!isEnabled()) {
+                String val = "disabled";
+                w = g.getFontMetrics().stringWidth(val);
+                //int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+                g.setFont(f.deriveFont(Font.ITALIC));
+                g.drawString(val, x + (width - w - 5), y + height - 2);
+            }
 
-	    
-	    
+
         } else {
             TraceManager.addDev("-------------------------------------------------- Cannot display text of attack");
         }
@@ -287,12 +284,12 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 
         if (currentFontSize != -1) {
             if (currentFontSize != f0.getSize()) {
-                g.setFont(f0.deriveFont((float)currentFontSize));
+                g.setFont(f0.deriveFont((float) currentFontSize));
             }
         }
 
-        int w  = Math.max(g.getFontMetrics().stringWidth(value), g.getFontMetrics().stringWidth(ster));
-        int w1 = Math.max((int)(minWidth*tdp.getZoom()), w + 2 * textX);
+        int w = Math.max(g.getFontMetrics().stringWidth(value), g.getFontMetrics().stringWidth(ster));
+        int w1 = Math.max((int) (minWidth * tdp.getZoom()), w + 2 * textX);
 
         //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
         if (w1 != width) {
@@ -321,9 +318,9 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         boolean error = false;
 
         JDialogAttack dialog = new JDialogAttack(frame, "Setting attack attributes", this);
-   //     dialog.setSize(450, 350);
+        //     dialog.setSize(450, 350);
         GraphicLib.centerOnParent(dialog, 450, 350);
-        dialog.setVisible( true ); // blocked until dialog has been closed
+        dialog.setVisible(true); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -351,9 +348,9 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 
         if (error) {
             JOptionPane.showMessageDialog(frame,
-                                          "Name is non-valid",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "Name is non-valid",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
 
         return !error;
@@ -374,31 +371,31 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info description=\"" + description);
-        sb.append("\" root=\"" +isRootAttack);
+        sb.append("\" root=\"" + isRootAttack);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         //System.out.println("*** load extra synchro ***");
         try {
 
             NodeList nli;
             Node n1, n2;
             Element elt;
-      //      int t1id;
+            //      int t1id;
             String sdescription = null;
-       //     String prio;
+            //     String prio;
             String isRoot = null;
 
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
@@ -446,8 +443,6 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
     public boolean isRootAttack() {
         return isRootAttack;
     }
-
-
 
 
 }

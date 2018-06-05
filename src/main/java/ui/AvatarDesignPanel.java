@@ -63,6 +63,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
    * Class AvatarDesignPanel
@@ -451,9 +452,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
         resetModelBacktracingProVerif();
 
         // Confidential attributes
-        HashMap<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
-        LinkedList<AvatarAttribute> secretAttributes = new LinkedList<AvatarAttribute> ();
-        LinkedList<AvatarAttribute> nonSecretAttributes = new LinkedList<AvatarAttribute> ();
+        Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+        List<AvatarAttribute> secretAttributes = new LinkedList<AvatarAttribute> ();
+        List<AvatarAttribute> nonSecretAttributes = new LinkedList<AvatarAttribute> ();
         for (AvatarPragmaSecret pragma: confResults.keySet())
         {
             ProVerifQueryResult result = confResults.get(pragma);
@@ -505,7 +506,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
 
         // Reachable states
-        HashMap<AvatarPragmaReachability, ProVerifQueryResult> reachResults = pvoa.getReachabilityResults();
+        Map<AvatarPragmaReachability, ProVerifQueryResult> reachResults = pvoa.getReachabilityResults();
         for (AvatarPragmaReachability pragma: reachResults.keySet())
         {
             ProVerifQueryResult result = reachResults.get(pragma);
@@ -530,7 +531,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
             }
         }
 
-        HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
+        Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
         for (Object ob: abdp.getComponentList())
             if (ob instanceof AvatarBDPragma) {
                 AvatarBDPragma pragma = (AvatarBDPragma) ob;

@@ -103,8 +103,8 @@ import ui.dd.TDeploymentDiagramPanel;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.ftd.FaultTreeDiagramPanel;
-import ui.graph.RG;
-import ui.het.CAMSBlockDiagramPanel;
+import graph.RG;
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.iod.InteractionOverviewDiagramPanel;
 import ui.ncdd.NCDiagramPanel;
 import ui.osad.TURTLEOSActivityDiagramPanel;
@@ -1110,8 +1110,6 @@ public class GTURTLEModeling {
             overhead, String decComp) {
         return autoSecure(gui, name, tmap, newarch, encComp, overhead, decComp, true, false, false);
     }
-
-    
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth) {
     
@@ -2902,7 +2900,7 @@ public class GTURTLEModeling {
             return s;
         byte b[] = null;
         try {
-            b = s.getBytes("ISO-8859-1");
+            b = s.getBytes("UTF-8");
             return new String(b);
         } catch (Exception e) {
             throw new MalformedModelingException();
@@ -2932,7 +2930,7 @@ public class GTURTLEModeling {
         StringBuffer sb = new StringBuffer();
 
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
         sb.append("version=\"" + DefaultText.getVersion());
         sb.append("\" copyMaxId=\"" + copyMaxId);
         sb.append("\" decX=\"" + _decX);
@@ -3008,7 +3006,7 @@ public class GTURTLEModeling {
         //TraceManager.addDev("Making copy");
 
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
         sb.append("version=\"" + DefaultText.getVersion());
         sb.append("\" copyMaxId=\"" + copyMaxId);
         sb.append("\" decX=\"" + _decX);
@@ -3121,7 +3119,7 @@ public class GTURTLEModeling {
     public String makeOneDiagramXMLFromGraphicalModel(TURTLEPanel tp, int indexOfDiagram) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
 
         StringBuffer s;
         String str;
@@ -3148,7 +3146,7 @@ public class GTURTLEModeling {
     public String makeXMLFromTurtleModeling(int index, String extensionToName) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
 
         StringBuffer s;
         String str;
@@ -4679,14 +4677,14 @@ public class GTURTLEModeling {
                     }
                 }
 
-            } else if (tdp instanceof CAMSBlockDiagramPanel) {  //ajout CD 24.07----mark
-                nl = doc.getElementsByTagName("CAMSBlockDiagramPanelCopy");
+            } else if (tdp instanceof SysCAMSComponentTaskDiagramPanel) { 
+                nl = doc.getElementsByTagName("SysCAMSComponentTaskDiagramPanelCopy");
 
                 if (nl == null) {
                     return;
                 }
 
-                CAMSBlockDiagramPanel camsp = (CAMSBlockDiagramPanel) tdp;
+                SysCAMSComponentTaskDiagramPanel camsp = (SysCAMSComponentTaskDiagramPanel) tdp;
 
                 for (i = 0; i < nl.getLength(); i++) {
                     adn = nl.item(i);
@@ -4764,7 +4762,7 @@ public class GTURTLEModeling {
             return null;
         }
 
-        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
 
         if (index2 > -1) {
             sb.append("<Modeling type=\"Analysis\" nameTab=\"Analysis\" >\n");
@@ -4786,11 +4784,13 @@ public class GTURTLEModeling {
         return sb.toString();
     }
 
-    public void loadModelingFromXML(String s) throws MalformedModelingException {
+    public void loadModelingFromXML(String s) throws MalformedModelingException, UnsupportedEncodingException {
 
         if (s == null) {
             return;
         }
+
+        //TraceManager.addDev("Modeling in loadModelingFromXML:" + s);
 
         s = decodeString(s);
 
@@ -4799,7 +4799,9 @@ public class GTURTLEModeling {
         decId = 0;
         TGComponent.setGeneralId(100000);
 
-        ByteArrayInputStream bais = new ByteArrayInputStream(s.getBytes());
+        //TraceManager.addDev("Modeling in loadModelingFromXML:" + s);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(s.getBytes("UTF-8"));
 
         if ((dbf == null) || (db == null)) {
             throw new MalformedModelingException();
@@ -4912,7 +4914,7 @@ public class GTURTLEModeling {
         } else if (type.compareTo("Sysmlsec Methodology") == 0) {
             loadSysmlsecMethodology(node);
         } else if (type.compareTo("SystemC-AMS") == 0) {
-            loadSystemCAMS(node);
+            loadSysCAMS(node);
         } else if (type.compareTo("TML Design") == 0) {
             loadTMLDesign(node);
         } else if (type.compareTo("TML Component Design") == 0) {
@@ -5443,16 +5445,15 @@ public class GTURTLEModeling {
         }
     }
 
-    public void loadSystemCAMS(Node node) throws MalformedModelingException, SAXException {
+		public void loadSysCAMS(Node node) throws MalformedModelingException, SAXException {
         Element elt = (Element) node;
         String nameTab;
         NodeList diagramNl;
         int indexDesign;
 
-
         nameTab = elt.getAttribute("nameTab");
 
-        indexDesign = mgui.createSystemCAMS(nameTab);
+        indexDesign = mgui.createSysCAMSComponentDesign(nameTab);
 
         diagramNl = node.getChildNodes();
 
@@ -5461,10 +5462,10 @@ public class GTURTLEModeling {
             node = diagramNl.item(j);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 elt = (Element) node;
-                if (elt.getTagName().compareTo("SystemCAMSDiagramPanel") == 0) {
+                if (elt.getTagName().compareTo("SysCAMSComponentTaskDiagramPanel") == 0) {
                     // Class diagram
                     TraceManager.addDev("Loading SystemC-AMS");
-                    loadSystemCAMSDiagram(elt, indexDesign);
+                    loadSysCAMSDiagram(elt, indexDesign);
                     TraceManager.addDev("End loading SystemC-AMS");
                 }
             }
@@ -5745,9 +5746,9 @@ public class GTURTLEModeling {
             ((AvatarADPanel) tdp).setConnectorsToFront();
         }
 
-        if (tdp instanceof CAMSBlockDiagramPanel) {
+        if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
             //TraceManager.addDev("Connectors...");
-            ((CAMSBlockDiagramPanel) tdp).setConnectorsToFront();
+            ((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
         }
     }
 
@@ -5966,18 +5967,15 @@ public class GTURTLEModeling {
         loadDiagram(elt, tdp);
     }
 
-    public void loadSystemCAMSDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
-        //ajout CD
+    public void loadSysCAMSDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
         String name;
         TDiagramPanel tdp;
 
         // class diagram name
         name = elt.getAttribute("name");
-        mgui.setSystemCAMSDiagramName(indexDesign, name);
+        mgui.setSysCAMSComponentTaskDiagramName(indexDesign, name);
         tdp = mgui.getMainTDiagramPanel(indexDesign);
         tdp.setName(name);
-
-        //TraceManager.addDev("tdp=" + tdp.getName());
 
         loadDiagram(elt, tdp);
     }
@@ -6652,6 +6650,9 @@ public class GTURTLEModeling {
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n = nl.item(i);
+                if (n == null) {
+                    TraceManager.addDev("Null component");
+                }
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
                     try {
                         tgc = makeXMLComponent(n, tdp);
@@ -6668,7 +6669,7 @@ public class GTURTLEModeling {
                         if (type > 0) {
                             t = "" + type;
                         }
-                        TraceManager.addDev("A badly formed component could not be created in the diagram");
+                        TraceManager.addDev("A badly formed component could not be created in the diagram:" + " diagram: " + tdp + " component:" + n);
 
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A component could not be correctly loaded - type=" + t);
                         ce.setTDiagramPanel(tdp);
@@ -6797,6 +6798,7 @@ public class GTURTLEModeling {
             }
 
             if ((myId == -1) || (myX == -1) || (myY == -1) || (myWidth == -1) || (myHeight == -1)) {
+                TraceManager.addDev("Malformed id");
                 throw new MalformedModelingException();
             }
 
@@ -6811,6 +6813,7 @@ public class GTURTLEModeling {
                 //TraceManager.addDev("Searching for component with id " + fatherId);
                 father = tdp.findComponentWithId(fatherId);
                 if (father == null) {
+                    TraceManager.addDev("Malformed father");
                     throw new MalformedModelingException();
                 }
 
@@ -6832,9 +6835,11 @@ public class GTURTLEModeling {
                             ((SwallowTGComponent) father).addSwallowedTGComponent(tgc, myX, myY);
                             //TraceManager.addDev("Swallowed to father = " + father.getValue() + ". My name=" + myName + " decId=" + decId);
                         } else {
+                            TraceManager.addDev("Malformed swallow 1");
                             throw new MalformedModelingException();
                         }
                     } else {
+                        TraceManager.addDev("Malformed swallow 2");
                         throw new MalformedModelingException();
                     }
                 }
@@ -6850,6 +6855,7 @@ public class GTURTLEModeling {
             // TraceManager.addDev("TGComponent (" + tgc + ") built " + myType);
 
             if (tgc == null) {
+                TraceManager.addDev("Malformed null");
                 throw new MalformedModelingException();
             }
 
@@ -6983,9 +6989,9 @@ public class GTURTLEModeling {
 
             //extra param
             // TraceManager.addDev("Extra params" + tgc.getClass());
-            // TraceManager.addDev("My value = " + tgc.getValue());
+            //TraceManager.addDev("My value = " + tgc.getValue());
             tgc.loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
-            // TraceManager.addDev("Extra param ok");
+            //TraceManager.addDev("Extra param ok");
 
             if ((tgc instanceof TCDTObject) && (decId > 0)) {
                 TCDTObject to = (TCDTObject) tgc;
@@ -7016,7 +7022,7 @@ public class GTURTLEModeling {
               }*/
 
         } catch (Exception e) {
-            // TraceManager.addError("Exception XML Component "/* + e.getMessage() + "trace=" + e.getStackTrace()*/);
+            TraceManager.addError("Exception XML Component "+ e.getMessage() + "trace=" + e.getStackTrace());
             throw new MalformedModelingException();
         }
         return tgc;
@@ -7712,7 +7718,7 @@ public class GTURTLEModeling {
         }
     }
 
-    public boolean checkSyntaxSystemCAMS(Vector<TGComponent> blocksToTakeIntoAccount, SystemCAMSPanel scp, boolean optimize) { //ajout CD 04/07 FIXME
+    /*public boolean checkSyntaxSystemCAMS(Vector<TGComponent> blocksToTakeIntoAccount, SystemCAMSPanel scp, boolean optimize) { //ajout CD 04/07 FIXME
         //     List<TMLError> warningsOptimize = new ArrayList<TMLError>();
         //     warnings = new LinkedList<CheckingError> ();
         //     mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
@@ -7743,7 +7749,7 @@ public class GTURTLEModeling {
         //         mgui.setMode(MainGUI.GEN_DESIGN_OK);
         return true;
         //     }
-    }
+    }*/
 
     public boolean checkSyntaxTMLMapping(Vector<TGComponent> nodesToTakeIntoAccount, TMLArchiPanel tmlap, boolean optimize) {
         List<TMLError> warningsOptimize = new ArrayList<TMLError>();

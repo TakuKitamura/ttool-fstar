@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,12 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
 
 
 package ui.avatarbd;
@@ -60,8 +58,8 @@ import java.util.LinkedList;
 /**
  * This class represent a Library Function block on an avatar block diagram.
  *
- * @version 1.0 04.08.2016
  * @author Florian LUGOU
+ * @version 1.0 04.08.2016
  */
 public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent, AvatarBDStateMachineOwner, Comparable<AvatarBDLibraryFunction> {
 
@@ -93,7 +91,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     /**
      * The vertical spacing between lines.
      */
-    private static final int paddingVertical   = 3;
+    private static final int paddingVertical = 3;
 
     /**
      * Used to know where the user double clicked
@@ -109,7 +107,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
      * Used to know where the user double clicked
      */
     private int limitSignals;
-    
+
     /**
      * Current font size.
      */
@@ -153,26 +151,17 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     /**
      * Standard constructor for a library function block.
      *
-     * @param x
-     *      The absolute coordinate of the block along X.
-     * @param y
-     *      The absolute coordinate of the block along Y.
-     * @param minX
-     *      The minimum authorized coordinate along X.
-     * @param maxX
-     *      The maximum authorized coordinate along X.
-     * @param minY
-     *      The minimum authorized coordinate along Y.
-     * @param maxY
-     *      The maximum authorized coordinate along Y.
-     * @param pos
-     *      Indicates whether the position is considered as relative to this father's component.
-     * @param father
-     *      The father component in the diagram.
-     * @param tdp
-     *      The diagram panel.
+     * @param x      The absolute coordinate of the block along X.
+     * @param y      The absolute coordinate of the block along Y.
+     * @param minX   The minimum authorized coordinate along X.
+     * @param maxX   The maximum authorized coordinate along X.
+     * @param minY   The minimum authorized coordinate along Y.
+     * @param maxY   The maximum authorized coordinate along Y.
+     * @param pos    Indicates whether the position is considered as relative to this father's component.
+     * @param father The father component in the diagram.
+     * @param tdp    The diagram panel.
      */
-    public AvatarBDLibraryFunction (
+    public AvatarBDLibraryFunction(
             int x,
             int y,
             int minX,
@@ -204,16 +193,16 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
 
         // Find a new unused name
         int i;
-        for (i=0; i<100; i++) {
+        for (i = 0; i < 100; i++) {
             String tmpName = "LibraryFunction" + i;
-            if (this.tdp.isAvatarBlockNameUnique (tmpName) &&
-                true) { // TODO: check if no other tab has same name
+            if (this.tdp.isAvatarBlockNameUnique(tmpName) &&
+                    true) { // TODO: check if no other tab has same name
                 this.name = tmpName;
                 this.value = tmpName;
                 break;
             }
         }
-        if  (i == 100) {
+        if (i == 100) {
             // TODO: throw exception
         }
 
@@ -223,29 +212,27 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         // TODO: change that
         this.myImageIcon = IconManager.imgic700;
 
-        this.parameters = new LinkedList<TAttribute> ();
-        this.attributes = new LinkedList<TAttribute> ();
-        this.signals    = new LinkedList<AvatarSignal> ();
-        this.returnAttributes = new LinkedList<TAttribute> ();
-        this.methods = new LinkedList<AvatarMethod> ();
+        this.parameters = new LinkedList<TAttribute>();
+        this.attributes = new LinkedList<TAttribute>();
+        this.signals = new LinkedList<AvatarSignal>();
+        this.returnAttributes = new LinkedList<TAttribute>();
+        this.methods = new LinkedList<AvatarMethod>();
 
         // Ask the panel to add a tab for the state machine diagram.
         this.actionOnAdd();
     }
 
-    public TDiagramPanel getDiagramPanel () {
+    public TDiagramPanel getDiagramPanel() {
         return this.tdp;
     }
 
-    public String getFunctionName () {
+    public String getFunctionName() {
         return this.name;
     }
 
-    public String getFullyQualifiedName()
-    {
+    public String getFullyQualifiedName() {
         String result = "";
-        if (this.father != null && (this.father instanceof AvatarBDBlock))
-        {
+        if (this.father != null && (this.father instanceof AvatarBDBlock)) {
             result = ((AvatarBDBlock) this.father).getFullyQualifiedName() + ".";
         }
         result += this.name;
@@ -253,88 +240,87 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         return result;
     }
 
-    public LinkedList<TAttribute> getParameters () {
+    public LinkedList<TAttribute> getParameters() {
         return this.parameters;
     }
 
-    public void resetParameters () {
-        this.parameters = new LinkedList<TAttribute> ();
+    public void resetParameters() {
+        this.parameters = new LinkedList<TAttribute>();
     }
 
-    public void addParameter (TAttribute parameter) {
-        this.parameters.add (parameter);
+    public void addParameter(TAttribute parameter) {
+        this.parameters.add(parameter);
     }
 
-    public LinkedList<AvatarSignal> getSignals () {
+    public LinkedList<AvatarSignal> getSignals() {
         return this.signals;
     }
 
-    public void resetSignals () {
-        this.signals = new LinkedList<AvatarSignal> ();
+    public void resetSignals() {
+        this.signals = new LinkedList<AvatarSignal>();
     }
 
-    public void addSignal (AvatarSignal signal) {
-        this.signals.add (signal);
+    public void addSignal(AvatarSignal signal) {
+        this.signals.add(signal);
     }
 
-    public LinkedList<TAttribute> getAttributes () {
+    public LinkedList<TAttribute> getAttributes() {
         return this.attributes;
     }
 
-    public void resetAttributes () {
-        this.attributes = new LinkedList<TAttribute> ();
+    public void resetAttributes() {
+        this.attributes = new LinkedList<TAttribute>();
     }
 
-    public void addAttribute (TAttribute attribute) {
-        this.attributes.add (attribute);
+    public void addAttribute(TAttribute attribute) {
+        this.attributes.add(attribute);
     }
 
-    public LinkedList<TAttribute> getReturnAttributes () {
+    public LinkedList<TAttribute> getReturnAttributes() {
         return this.returnAttributes;
     }
 
-    public void resetReturnAttributes () {
-        this.returnAttributes = new LinkedList<TAttribute> ();
+    public void resetReturnAttributes() {
+        this.returnAttributes = new LinkedList<TAttribute>();
     }
 
-    public void addReturnAttribute (TAttribute returnAttribute) {
-        this.returnAttributes.add (returnAttribute);
+    public void addReturnAttribute(TAttribute returnAttribute) {
+        this.returnAttributes.add(returnAttribute);
     }
 
-    public LinkedList<AvatarMethod> getMethods () {
+    public LinkedList<AvatarMethod> getMethods() {
         return this.methods;
     }
 
-    public void resetMethods () {
-        this.methods = new LinkedList<AvatarMethod> ();
+    public void resetMethods() {
+        this.methods = new LinkedList<AvatarMethod>();
     }
 
-    public void addMethod (AvatarMethod method) {
-        this.methods.add (method);
+    public void addMethod(AvatarMethod method) {
+        this.methods.add(method);
     }
 
     @Override
-    public void internalDrawing (Graphics graph) {
-        Font font = graph.getFont ();
-        this.internalDrawingAux (graph);
-        graph.setFont (font);
+    public void internalDrawing(Graphics graph) {
+        Font font = graph.getFont();
+        this.internalDrawingAux(graph);
+        graph.setFont(font);
     }
 
     /**
      * Draws the Library Function object.
      *
-     * @param graph
-     *      The {@link Graphics} object used to draw this component.
+     * @param graph The {@link Graphics} object used to draw this component.
      */
-    private void internalDrawingAux (Graphics graph) {
+    private void internalDrawingAux(Graphics graph) {
         // Draw outer rectangle (for border)
-        Color c = graph.getColor ();
-        graph.drawRect (this.x, this.y, this.width, this.height);
+        Color c = graph.getColor();
+        graph.drawRect(this.x, this.y, this.width, this.height);
 
         // Draw inner rectangle
-        graph.setColor (ColorManager.AVATAR_LIBRARYFUNCTION);
-        graph.fillRect (this.x+1, this.y+1, this.width-1, this.height-1);
-        graph.setColor (c);
+        graph.setColor(ColorManager.AVATAR_LIBRARYFUNCTION);
+        graph.fillRect(this.x + 1, this.y + 1, this.width - 1, this.height - 1);
+        graph.setColor(c);
 
         // limits
         this.limitName = -1;
@@ -344,16 +330,16 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         // h retains the coordinate along X where an element was last drawn
         int h = 0;
 
-        int paddingVertical = (int) (AvatarBDLibraryFunction.paddingVertical * this.tdp.getZoom ());
-        int paddingHorizontal = (int) (AvatarBDLibraryFunction.paddingHorizontal * this.tdp.getZoom ());
+        int paddingVertical = (int) (AvatarBDLibraryFunction.paddingVertical * this.tdp.getZoom());
+        int paddingHorizontal = (int) (AvatarBDLibraryFunction.paddingHorizontal * this.tdp.getZoom());
 
         // Draw icon
-        this.iconIsDrawn = this.width > IconManager.iconSize + 2*paddingHorizontal && height > IconManager.iconSize + 2*paddingHorizontal;
+        this.iconIsDrawn = this.width > IconManager.iconSize + 2 * paddingHorizontal && height > IconManager.iconSize + 2 * paddingHorizontal;
         if (this.iconIsDrawn)
-            graph.drawImage (IconManager.img5100, this.x + this.width - IconManager.iconSize - paddingHorizontal, this.y + paddingHorizontal, null);
+            graph.drawImage(IconManager.img5100, this.x + this.width - IconManager.iconSize - paddingHorizontal, this.y + paddingHorizontal, null);
 
 
-        Font font = graph.getFont ();
+        Font font = graph.getFont();
 
         String ster;
         if (!this.isCrypto)
@@ -361,56 +347,56 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         else
             ster = "<<" + stereotypeCrypto + ">>";
 
-        if (this.rescaled && !this.tdp.isScaled ()) {
+        if (this.rescaled && !this.tdp.isScaled()) {
             this.rescaled = false;
             // Must set the font size...
             // Incrementally find the biggest font not greater than max_font size
             // If font is less than min_font, no text is displayed
 
             // This is the maximum font size possible
-            int maxCurrentFontSize = Math.max (0, Math.min (this.height, (int) (AvatarBDLibraryFunction.maxFontSize*this.tdp.getZoom ())));
-            font = font.deriveFont ((float) maxCurrentFontSize);
+            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (AvatarBDLibraryFunction.maxFontSize * this.tdp.getZoom())));
+            font = font.deriveFont((float) maxCurrentFontSize);
 
             // Try to decrease font size until we get below the minimum
-            while (maxCurrentFontSize > (AvatarBDLibraryFunction.minFontSize*this.tdp.getZoom () - 1)) {
+            while (maxCurrentFontSize > (AvatarBDLibraryFunction.minFontSize * this.tdp.getZoom() - 1)) {
                 // Compute width of name of the function
-                int w0 = graph.getFontMetrics (font).stringWidth (this.value);
+                int w0 = graph.getFontMetrics(font).stringWidth(this.value);
                 // Compute width of string stereotype
-                int w1 = graph.getFontMetrics (font).stringWidth (ster);
+                int w1 = graph.getFontMetrics(font).stringWidth(ster);
 
                 // if one of the two width is small enough use this font size
-                if (Math.min (w0, w1) < this.width - (2*paddingHorizontal))
+                if (Math.min(w0, w1) < this.width - (2 * paddingHorizontal))
                     break;
 
                 // Decrease font size
-                maxCurrentFontSize --;
+                maxCurrentFontSize--;
                 // Scale the font
-                font = font.deriveFont ((float) maxCurrentFontSize);
+                font = font.deriveFont((float) maxCurrentFontSize);
             }
 
             // Box is too damn small
-            if (this.currentFontSize < AvatarBDLibraryFunction.minFontSize*this.tdp.getZoom ()) {
-                maxCurrentFontSize ++;
+            if (this.currentFontSize < AvatarBDLibraryFunction.minFontSize * this.tdp.getZoom()) {
+                maxCurrentFontSize++;
                 // Scale the font
-                font = font.deriveFont ((float) maxCurrentFontSize);
+                font = font.deriveFont((float) maxCurrentFontSize);
             }
 
             // Use this font
-            graph.setFont (font);
+            graph.setFont(font);
             this.currentFontSize = maxCurrentFontSize;
         } else
-            font = font.deriveFont (this.currentFontSize);
+            font = font.deriveFont(this.currentFontSize);
 
-        graph.setFont (font.deriveFont (Font.BOLD));
-        h = graph.getFontMetrics ().getAscent () + graph.getFontMetrics ().getLeading () + paddingVertical;
+        graph.setFont(font.deriveFont(Font.BOLD));
+        h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + paddingVertical;
 
-        if (h + graph.getFontMetrics ().getDescent () + paddingVertical >= this.height)
+        if (h + graph.getFontMetrics().getDescent() + paddingVertical >= this.height)
             return;
 
         // Write stereotype if small enough
-        int w = graph.getFontMetrics ().stringWidth (ster);
-        if (w + 2*paddingHorizontal < this.width)
-            graph.drawString (ster, this.x + (this.width - w)/2, this.y + h);
+        int w = graph.getFontMetrics().stringWidth(ster);
+        if (w + 2 * paddingHorizontal < this.width)
+            graph.drawString(ster, this.x + (this.width - w) / 2, this.y + h);
         else {
             // try to draw with "..." instead
             if (!this.isCrypto)
@@ -418,38 +404,38 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             else
                 ster = stereotypeCrypto;
 
-            for (int stringLength = ster.length ()-1; stringLength >= 0; stringLength--) {
-                String abbrev = "<<" + ster.substring (0, stringLength) + "...>>";
-                w = graph.getFontMetrics ().stringWidth (abbrev);
-                if (w + 2*paddingHorizontal < this.width) {
-                    graph.drawString (abbrev, this.x + (this.width - w)/2, this.y + h);
+            for (int stringLength = ster.length() - 1; stringLength >= 0; stringLength--) {
+                String abbrev = "<<" + ster.substring(0, stringLength) + "...>>";
+                w = graph.getFontMetrics().stringWidth(abbrev);
+                if (w + 2 * paddingHorizontal < this.width) {
+                    graph.drawString(abbrev, this.x + (this.width - w) / 2, this.y + h);
                     break;
                 }
             }
         }
 
         // Write value if small enough
-        graph.setFont (font);
-        h += graph.getFontMetrics ().getHeight () + paddingVertical;
-        if (h + graph.getFontMetrics ().getDescent () + paddingVertical >= this.height)
+        graph.setFont(font);
+        h += graph.getFontMetrics().getHeight() + paddingVertical;
+        if (h + graph.getFontMetrics().getDescent() + paddingVertical >= this.height)
             return;
 
-        w = graph.getFontMetrics ().stringWidth (this.value);
-        if (w + 2*paddingHorizontal < this.width)
-            graph.drawString (this.value, this.x + (this.width - w)/2, this.y + h);
+        w = graph.getFontMetrics().stringWidth(this.value);
+        if (w + 2 * paddingHorizontal < this.width)
+            graph.drawString(this.value, this.x + (this.width - w) / 2, this.y + h);
         else {
             // try to draw with "..." instead
-            for (int stringLength = this.value.length ()-1; stringLength >= 0; stringLength--) {
-                String abbrev = this.value.substring (0, stringLength) + "...";
-                w = graph.getFontMetrics ().stringWidth (abbrev);
-                if (w + 2*paddingHorizontal < this.width) {
-                    graph.drawString (abbrev, this.x + (this.width - w)/2, this.y + h);
+            for (int stringLength = this.value.length() - 1; stringLength >= 0; stringLength--) {
+                String abbrev = this.value.substring(0, stringLength) + "...";
+                w = graph.getFontMetrics().stringWidth(abbrev);
+                if (w + 2 * paddingHorizontal < this.width) {
+                    graph.drawString(abbrev, this.x + (this.width - w) / 2, this.y + h);
                     break;
                 }
             }
         }
 
-        h += graph.getFontMetrics ().getDescent () + paddingVertical;
+        h += graph.getFontMetrics().getDescent() + paddingVertical;
 
         // Update lower bound of text
         this.limitName = this.y + h;
@@ -458,21 +444,21 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             return;
 
         // Draw separator
-        graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
+        graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
 
-        if (! this.tdp.areAttributesVisible ())
+        if (!this.tdp.areAttributesVisible())
             return;
 
         // Set font size
         // int attributeFontSize = Math.min (12, this.currentFontSize - 2);
-        int attributeFontSize = this.currentFontSize*5/6;
-        graph.setFont (font.deriveFont ((float) attributeFontSize));
-        int step = graph.getFontMetrics ().getHeight ();
+        int attributeFontSize = this.currentFontSize * 5 / 6;
+        graph.setFont(font.deriveFont((float) attributeFontSize));
+        int step = graph.getFontMetrics().getHeight();
 
         h += paddingVertical;
 
         // Parameters
-        for (TAttribute attr: this.parameters) {
+        for (TAttribute attr : this.parameters) {
             h += step;
             if (h >= this.height - paddingHorizontal) {
                 this.limitParameters = this.y + this.height;
@@ -480,20 +466,20 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             }
 
             // Get the string for this parameter
-            String attrString = attr.toAvatarString ();
+            String attrString = attr.toAvatarString();
 
             // Try to draw it
-            w = graph.getFontMetrics ().stringWidth (attrString);
-            if (w + 2*paddingHorizontal < this.width)
-                graph.drawString (attrString, this.x + paddingHorizontal, this.y + h);
+            w = graph.getFontMetrics().stringWidth(attrString);
+            if (w + 2 * paddingHorizontal < this.width)
+                graph.drawString(attrString, this.x + paddingHorizontal, this.y + h);
             else {
                 // If we can't, try to draw with "..." instead
                 int stringLength;
-                for (stringLength = attrString.length ()-1; stringLength >= 0; stringLength--) {
-                    String abbrev = attrString.substring (0, stringLength) + "...";
-                    w = graph.getFontMetrics ().stringWidth (abbrev);
-                    if (w + 2*paddingHorizontal < this.width) {
-                        graph.drawString (abbrev, this.x + paddingHorizontal, this.y + h);
+                for (stringLength = attrString.length() - 1; stringLength >= 0; stringLength--) {
+                    String abbrev = attrString.substring(0, stringLength) + "...";
+                    w = graph.getFontMetrics().stringWidth(abbrev);
+                    if (w + 2 * paddingHorizontal < this.width) {
+                        graph.drawString(abbrev, this.x + paddingHorizontal, this.y + h);
                         break;
                     }
                 }
@@ -504,7 +490,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             }
         }
 
-        h += graph.getFontMetrics ().getDescent () + paddingVertical;
+        h += graph.getFontMetrics().getDescent() + paddingVertical;
 
         // Remember the end of parameters
         this.limitParameters = this.y + h;
@@ -512,29 +498,29 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         if (h + paddingVertical >= this.height)
             return;
 
-        graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
+        graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
         h += paddingVertical;
 
         // Signals
-        for (AvatarSignal signal: this.signals) {
-            h += step ;
+        for (AvatarSignal signal : this.signals) {
+            h += step;
             if (h >= this.height - paddingHorizontal) {
                 this.limitSignals = this.y + this.height;
                 return;
             }
 
-            String signalString = "~ " + signal.toString ();
-            w = graph.getFontMetrics ().stringWidth (signalString);
-            if (w + 2*paddingHorizontal < this.width)
-                graph.drawString (signalString, this.x + paddingHorizontal, this.y + h);
+            String signalString = "~ " + signal.toString();
+            w = graph.getFontMetrics().stringWidth(signalString);
+            if (w + 2 * paddingHorizontal < this.width)
+                graph.drawString(signalString, this.x + paddingHorizontal, this.y + h);
             else {
                 // If we can't, try to draw with "..." instead
                 int stringLength;
-                for (stringLength = signalString.length ()-1; stringLength >= 0; stringLength--) {
-                    String abbrev = signalString.substring (0, stringLength) + "...";
-                    w = graph.getFontMetrics ().stringWidth (abbrev);
-                    if (w + 2*paddingHorizontal < this.width) {
-                        graph.drawString (abbrev, this.x + paddingHorizontal, this.y + h);
+                for (stringLength = signalString.length() - 1; stringLength >= 0; stringLength--) {
+                    String abbrev = signalString.substring(0, stringLength) + "...";
+                    w = graph.getFontMetrics().stringWidth(abbrev);
+                    if (w + 2 * paddingHorizontal < this.width) {
+                        graph.drawString(abbrev, this.x + paddingHorizontal, this.y + h);
                         break;
                     }
                 }
@@ -545,7 +531,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             }
         }
 
-        h += graph.getFontMetrics ().getDescent () + paddingVertical;
+        h += graph.getFontMetrics().getDescent() + paddingVertical;
 
         // Remember limit of signals
         this.limitSignals = this.y + h;
@@ -553,29 +539,29 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         if (h + paddingVertical >= this.height)
             return;
 
-        graph.drawLine (this.x, this.y+h, this.x+this.width, this.y+h);
+        graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
         h += paddingVertical;
 
         // Return Attributes
-        for (TAttribute attr: this.returnAttributes) {
+        for (TAttribute attr : this.returnAttributes) {
             h += step;
             if (h >= this.height - paddingHorizontal)
                 return;
 
             // Get the string for this return attribute
-            String attrString = attr.toAvatarString ();
+            String attrString = attr.toAvatarString();
 
-            w = graph.getFontMetrics ().stringWidth (attrString);
-            if (w + 2*paddingHorizontal < this.width)
-                graph.drawString (attrString, this.x + paddingHorizontal, this.y + h);
+            w = graph.getFontMetrics().stringWidth(attrString);
+            if (w + 2 * paddingHorizontal < this.width)
+                graph.drawString(attrString, this.x + paddingHorizontal, this.y + h);
             else {
                 // If we can't, try to draw with "..." instead
                 int stringLength;
-                for (stringLength = attrString.length ()-1; stringLength >= 0; stringLength--) {
-                    String abbrev = attrString.substring (0, stringLength) + "...";
-                    w = graph.getFontMetrics ().stringWidth (abbrev);
-                    if (w + 2*paddingHorizontal < this.width) {
-                        graph.drawString (abbrev, this.x + paddingHorizontal, this.y + h);
+                for (stringLength = attrString.length() - 1; stringLength >= 0; stringLength--) {
+                    String abbrev = attrString.substring(0, stringLength) + "...";
+                    w = graph.getFontMetrics().stringWidth(abbrev);
+                    if (w + 2 * paddingHorizontal < this.width) {
+                        graph.drawString(abbrev, this.x + paddingHorizontal, this.y + h);
                         break;
                     }
                 }
@@ -588,14 +574,14 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     }
 
     @Override
-    public void setName (String s) {
-        this.tdp.changeStateMachineTabName (this.name, s);
+    public void setName(String s) {
+        this.tdp.changeStateMachineTabName(this.name, s);
         this.name = s;
-        this.setValue (s);
+        this.setValue(s);
     }
 
     @Override
-    public TGComponent isOnMe (int x1, int y1) {
+    public TGComponent isOnMe(int x1, int y1) {
 
         if (GraphicLib.isInRectangle(x1, y1, this.x, this.y, this.width, this.height))
             return this;
@@ -605,26 +591,26 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
 
     @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
-        int paddingHorizontal = (int) (AvatarBDLibraryFunction.paddingHorizontal*this.tdp.getZoom ());
+        int paddingHorizontal = (int) (AvatarBDLibraryFunction.paddingHorizontal * this.tdp.getZoom());
         if (this.iconIsDrawn && GraphicLib.isInRectangle(
-                    _x,
-                    _y,
-                    this.x + this.width - IconManager.iconSize - paddingHorizontal,
-                    this.y + paddingHorizontal,
-                    IconManager.iconSize,
-                    IconManager.iconSize)) {
-            this.tdp.selectTab (this.getValue ());
+                _x,
+                _y,
+                this.x + this.width - IconManager.iconSize - paddingHorizontal,
+                this.y + paddingHorizontal,
+                IconManager.iconSize,
+                IconManager.iconSize)) {
+            this.tdp.selectTab(this.getValue());
             return true;
         }
 
         // Click on the name
         if (_y < limitName) {
-            String s = (String) JOptionPane.showInputDialog (frame, "Library Function Name",
+            String s = (String) JOptionPane.showInputDialog(frame, "Library Function Name",
                     "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
                     null,
                     this.getValue());
 
-            if (s == null || s.isEmpty () || s.equals(this.value))
+            if (s == null || s.isEmpty() || s.equals(this.value))
                 return false;
 
             if (!TAttribute.isAValidId(s, false, false)) {
@@ -635,7 +621,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                 return false;
             }
 
-            if (!this.tdp.isAvatarBlockNameUnique (s)) {
+            if (!this.tdp.isAvatarBlockNameUnique(s)) {
                 JOptionPane.showMessageDialog(frame,
                         "Could not change the name of the Library Function: the new name is already used by another element.",
                         "Error",
@@ -644,7 +630,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             }
 
             // Update the name of the tab corresponding to the state machine of the library function
-            if (!this.tdp.changeStateMachineTabName (this.value, s)) {
+            if (!this.tdp.changeStateMachineTabName(this.value, s)) {
                 JOptionPane.showMessageDialog(frame,
                         "Could not change the name of the Library Function: this name is already used by another tab.",
                         "Error",
@@ -654,7 +640,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
 
             this.name = s;
             this.value = s;
-            this.recalculateSize ();
+            this.recalculateSize();
             this.repaint = true;
 
             return true;
@@ -663,28 +649,28 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         // Click on parameters
 
         // Create a new dialog to change parameters, signals, return values, etc.
-        JDialogAvatarLibraryFunction dialog = new JDialogAvatarLibraryFunction (
+        JDialogAvatarLibraryFunction dialog = new JDialogAvatarLibraryFunction(
                 this,
                 frame,
                 "Settings of library function " + value,
                 "Library Function");
-        this.setJDialogOptions (dialog);
-     //   dialog.setSize (650, 575);
-        GraphicLib.centerOnParent (dialog,650, 575);
+        this.setJDialogOptions(dialog);
+        //   dialog.setSize (650, 575);
+        GraphicLib.centerOnParent(dialog, 650, 575);
 
         // Focus on the right input depending on the part that was clicked.
         // FIXME: if nothing is displayed, focus will go on tab 2 instead of tab 0
         if (_y < this.limitParameters)
-            dialog.selectTabIndex (0);
+            dialog.selectTabIndex(0);
         else if (_y < this.limitSignals)
-            dialog.selectTabIndex (1);
+            dialog.selectTabIndex(1);
         else
-            dialog.selectTabIndex (2);
+            dialog.selectTabIndex(2);
 
         // Set visible and block until dialog is closed
-        dialog.setVisible (true);
+        dialog.setVisible(true);
 
-        ((AvatarBDPanel) tdp).updateAllSignalsOnConnectors ();
+        ((AvatarBDPanel) tdp).updateAllSignalsOnConnectors();
 
         // Tag so that it is rescaled
         this.rescaled = true;
@@ -692,7 +678,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         return true;
     }
 
-    protected void setJDialogOptions (JDialogAvatarLibraryFunction jdab) {
+    protected void setJDialogOptions(JDialogAvatarLibraryFunction jdab) {
         /*
         jdab.addAccess (TAttribute.getStringAccess (TAttribute.PRIVATE));
         jdab.addType (TAttribute.getStringAvatarType (TAttribute.BOOLEAN), true);
@@ -719,10 +705,10 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
      *
      * @return The string for the corresponding XML element.
      */
-    protected String translateExtraParam () {
-        StringBuffer sb = new StringBuffer ("<extraparam>\n");
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<CryptoLibraryFunction value=\"" + isCrypto + "\" />\n");
-        for (TAttribute attr: this.parameters) {
+        for (TAttribute attr : this.parameters) {
             sb.append("<Parameter access=\"");
             sb.append(attr.getAccess());
             sb.append("\" id=\"");
@@ -736,13 +722,13 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             sb.append("\" />\n");
         }
 
-        for(AvatarSignal signal: this.signals) {
+        for (AvatarSignal signal : this.signals) {
             sb.append("<Signal value=\"");
             sb.append(signal.toString());
             sb.append("\" />\n");
         }
 
-        for (TAttribute attr: this.returnAttributes) {
+        for (TAttribute attr : this.returnAttributes) {
             sb.append("<ReturnAttribute access=\"");
             sb.append(attr.getAccess());
             sb.append("\" id=\"");
@@ -756,7 +742,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             sb.append("\" />\n");
         }
 
-        for (TAttribute attr: this.attributes) {
+        for (TAttribute attr : this.attributes) {
             sb.append("<Attribute access=\"");
             sb.append(attr.getAccess());
             sb.append("\" id=\"");
@@ -770,7 +756,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             sb.append("\" />\n");
         }
 
-        for(AvatarMethod method: this.methods) {
+        for (AvatarMethod method : this.methods) {
             sb.append("<Method value=\"");
             sb.append(method.toSaveString());
             sb.append("\" />\n");
@@ -783,23 +769,19 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
 
     /**
      * Load a Library Function element from a XML description.
-     *
+     * <p>
      * TODO
-     * @param nl
-     *      The {@link NodeList} representing the XML extraparam node
-     * @param decX
-     *      Unused.
-     * @param decY
-     *      Unused.
-     * @param decId
-     *      Unused.
      *
+     * @param nl    The {@link NodeList} representing the XML extraparam node
+     * @param decX  Unused.
+     * @param decY  Unused.
+     * @param decId Unused.
      * @throws MalformedModelingExpresion When the provided XML is corrupted.
      */
     @Override
-    public void loadExtraParam (NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         try {
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 Node n1 = nl.item(i);
 
                 // Ignore if it's not an element
@@ -808,7 +790,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
 
                 // Fetch the children nodes
                 NodeList nli = n1.getChildNodes();
-                for(int j=0; j<nli.getLength(); j++) {
+                for (int j = 0; j < nli.getLength(); j++) {
                     Node n2 = nli.item(j);
 
                     // Ignore if it's not an element
@@ -816,96 +798,93 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                         continue;
                     Element elt = (Element) n2;
 
-                    switch (elt.getTagName ()) {
+                    switch (elt.getTagName()) {
                         case "CryptoLibraryFunction":
-                            if (elt.getAttribute("value").equals ("true"))
+                            if (elt.getAttribute("value").equals("true"))
                                 this.isCrypto = true;
                             break;
 
-                        case "Parameter":
-                            {
-                                Integer access = Integer.decode (elt.getAttribute ("access")).intValue ();
-                                Integer type = Integer.decode (elt.getAttribute ("type")).intValue ();
-                                String typeOther = elt.getAttribute ("typeOther");
-                                String id = elt.getAttribute("id");
-                                String valueAtt = elt.getAttribute("value");
-                                if (valueAtt.equals("null"))
-                                    valueAtt = "";
+                        case "Parameter": {
+                            Integer access = Integer.decode(elt.getAttribute("access")).intValue();
+                            Integer type = Integer.decode(elt.getAttribute("type")).intValue();
+                            String typeOther = elt.getAttribute("typeOther");
+                            String id = elt.getAttribute("id");
+                            String valueAtt = elt.getAttribute("value");
+                            if (valueAtt.equals("null"))
+                                valueAtt = "";
 
-                                if (TAttribute.isAValidId (id, false, false) && TAttribute.isAValidInitialValue (type, valueAtt)) {
-                                    if (type == TAttribute.NATURAL)
-                                        type = TAttribute.INTEGER;
+                            if (TAttribute.isAValidId(id, false, false) && TAttribute.isAValidInitialValue(type, valueAtt)) {
+                                if (type == TAttribute.NATURAL)
+                                    type = TAttribute.INTEGER;
 
-                                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-                                    ta.isAvatar = true;
-                                    this.parameters.add (ta);
-                                }
+                                TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+                                ta.isAvatar = true;
+                                this.parameters.add(ta);
                             }
+                        }
 
-                            break;
+                        break;
 
                         case "Signal":
                             String signal = elt.getAttribute("value");
 
-                            if (signal.equals ("null"))
+                            if (signal.equals("null"))
                                 break;
 
-                            AvatarSignal as = AvatarSignal.isAValidSignal (signal);
+                            AvatarSignal as = AvatarSignal.isAValidSignal(signal);
                             if (as != null)
-                                this.signals.add (as);
+                                this.signals.add(as);
                             else
                                 TraceManager.addDev("Invalid signal ignored:" + signal);
 
                             break;
 
-                        case "ReturnAttribute":
-                            {
-                                Integer access = Integer.decode (elt.getAttribute ("access")).intValue ();
-                                Integer type = Integer.decode (elt.getAttribute ("type")).intValue ();
-                                String typeOther = elt.getAttribute ("typeOther");
-                                String id = elt.getAttribute("id");
-                                String valueAtt = elt.getAttribute("value");
-                                if (valueAtt.equals("null"))
-                                    valueAtt = "";
+                        case "ReturnAttribute": {
+                            Integer access = Integer.decode(elt.getAttribute("access")).intValue();
+                            Integer type = Integer.decode(elt.getAttribute("type")).intValue();
+                            String typeOther = elt.getAttribute("typeOther");
+                            String id = elt.getAttribute("id");
+                            String valueAtt = elt.getAttribute("value");
+                            if (valueAtt.equals("null"))
+                                valueAtt = "";
 
-                                if (TAttribute.isAValidId (id, false, false) && TAttribute.isAValidInitialValue (type, valueAtt)) {
-                                    if (type == TAttribute.NATURAL)
-                                        type = TAttribute.INTEGER;
+                            if (TAttribute.isAValidId(id, false, false) && TAttribute.isAValidInitialValue(type, valueAtt)) {
+                                if (type == TAttribute.NATURAL)
+                                    type = TAttribute.INTEGER;
 
-                                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-                                    ta.isAvatar = true;
-                                    this.returnAttributes.add (ta);
-                                }
+                                TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+                                ta.isAvatar = true;
+                                this.returnAttributes.add(ta);
                             }
+                        }
 
-                            break;
+                        break;
 
-                        case "Attribute":
-                            {
-                                Integer access = Integer.decode (elt.getAttribute ("access")).intValue ();
-                                Integer type = Integer.decode (elt.getAttribute ("type")).intValue ();
-                                String typeOther = elt.getAttribute ("typeOther");
-                                String id = elt.getAttribute("id");
-                                String valueAtt = elt.getAttribute("value");
-                                if (valueAtt.equals("null"))
-                                    valueAtt = "";
+                        case "Attribute": {
+                            Integer access = Integer.decode(elt.getAttribute("access")).intValue();
+                            Integer type = Integer.decode(elt.getAttribute("type")).intValue();
+                            String typeOther = elt.getAttribute("typeOther");
+                            String id = elt.getAttribute("id");
+                            String valueAtt = elt.getAttribute("value");
+                            if (valueAtt.equals("null"))
+                                valueAtt = "";
 
-                                if (TAttribute.isAValidId (id, false, false) && TAttribute.isAValidInitialValue (type, valueAtt)) {
-                                    if (type == TAttribute.NATURAL)
-                                        type = TAttribute.INTEGER;
+                            if (TAttribute.isAValidId(id, false, false) && TAttribute.isAValidInitialValue(type, valueAtt)) {
+                                if (type == TAttribute.NATURAL)
+                                    type = TAttribute.INTEGER;
 
-                                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-                                    ta.isAvatar = true;
-                                    this.attributes.add (ta);
-                                }
+                                TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+                                ta.isAvatar = true;
+                                this.attributes.add(ta);
                             }
+                        }
 
-                            break;
+                        break;
 
                         case "Method":
                             String method = elt.getAttribute("value");
 
-                            if (method.equals ("null"))
+                            if (method.equals("null"))
                                 break;
 
                             boolean implementation = false;
@@ -920,7 +899,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                             AvatarMethod am = AvatarMethod.isAValidMethod(method);
                             if (am != null) {
                                 am.setImplementationProvided(implementation);
-                                this.methods.add (am);
+                                this.methods.add(am);
                             }
 
                             break;
@@ -943,8 +922,8 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
      *
      * @return The panel of the corresponding state machine diagram.
      */
-    public AvatarSMDPanel getAvatarSMDPanel () {
-        return ((AvatarDesignPanel) (this.tdp.tp)).getAvatarSMDPanel (this.value);
+    public AvatarSMDPanel getAvatarSMDPanel() {
+        return ((AvatarDesignPanel) (this.tdp.tp)).getAvatarSMDPanel(this.value);
     }
 
     /**
@@ -953,8 +932,8 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     public void removeCryptoElements() {
         this.isCrypto = false;
 
-        for (String method: AvatarMethod.cryptoMethods)
-            this.removeMethodIfApplicable (method);
+        for (String method : AvatarMethod.cryptoMethods)
+            this.removeMethodIfApplicable(method);
     }
 
     /**
@@ -963,23 +942,22 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     public void addCryptoElements() {
         this.isCrypto = true;
 
-        for (String method: AvatarMethod.cryptoMethods)
-            this.addMethodIfApplicable (method);
+        for (String method : AvatarMethod.cryptoMethods)
+            this.addMethodIfApplicable(method);
     }
 
     /**
      * Removes a method from the list of methods if it exists.
      *
-     * @param methodString
-     *      The String corresponding to the method to remove.
+     * @param methodString The String corresponding to the method to remove.
      */
     private void removeMethodIfApplicable(String methodString) {
-        Iterator<AvatarMethod> iterator = this.methods.iterator ();
-        while (iterator.hasNext ()) {
-            AvatarMethod am = iterator.next ();
+        Iterator<AvatarMethod> iterator = this.methods.iterator();
+        while (iterator.hasNext()) {
+            AvatarMethod am = iterator.next();
             // TODO: replace by a more OO way...
-            if (am.toString ().equals (methodString)) {
-                iterator.remove ();
+            if (am.toString().equals(methodString)) {
+                iterator.remove();
                 break;
             }
         }
@@ -988,46 +966,45 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     /**
      * Adds a method to the list of methods if it doesn't already exist.
      *
-     * @param methodString
-     *      The String corresponding to the method to add.
+     * @param methodString The String corresponding to the method to add.
      */
-    private void addMethodIfApplicable (String methodString) {
-        for (AvatarMethod am: this.methods)
+    private void addMethodIfApplicable(String methodString) {
+        for (AvatarMethod am : this.methods)
             // TODO: replace by a more OO way...
-            if (am.toString ().equals (methodString))
-                    return;
+            if (am.toString().equals(methodString))
+                return;
 
-        AvatarMethod am = AvatarMethod.isAValidMethod (methodString);
+        AvatarMethod am = AvatarMethod.isAValidMethod(methodString);
         if (am != null)
-            this.methods.add (am);
+            this.methods.add(am);
     }
 
     @Override
-    public String getOwnerName () {
-        return this.getFunctionName ();
+    public String getOwnerName() {
+        return this.getFunctionName();
     }
 
     @Override
-    public LinkedList<TAttribute> getAttributeList () {
-        LinkedList<TAttribute> list = new LinkedList<TAttribute> ();
-        list.addAll (this.parameters);
-        list.addAll (this.returnAttributes);
-        list.addAll (this.attributes);
+    public LinkedList<TAttribute> getAttributeList() {
+        LinkedList<TAttribute> list = new LinkedList<TAttribute>();
+        list.addAll(this.parameters);
+        list.addAll(this.returnAttributes);
+        list.addAll(this.attributes);
 
         return list;
     }
 
     @Override
-    public LinkedList<String> getAllTimerList () {
-        LinkedList<String> v = new LinkedList<String> ();
+    public LinkedList<String> getAllTimerList() {
+        LinkedList<String> v = new LinkedList<String>();
 
-        for (TAttribute a: this.parameters)
+        for (TAttribute a : this.parameters)
             if (a.getType() == TAttribute.TIMER)
                 v.add(a.getId());
-        for (TAttribute a: this.returnAttributes)
+        for (TAttribute a : this.returnAttributes)
             if (a.getType() == TAttribute.TIMER)
                 v.add(a.getId());
-        for (TAttribute a: this.attributes)
+        for (TAttribute a : this.attributes)
             if (a.getType() == TAttribute.TIMER)
                 v.add(a.getId());
 
@@ -1035,38 +1012,38 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     }
 
     @Override
-    public TAttribute getAttributeByName (String _name) {
-        for (TAttribute a: this.parameters)
+    public TAttribute getAttributeByName(String _name) {
+        for (TAttribute a : this.parameters)
             if (a.getId().compareTo(_name) == 0)
                 return a;
-        for (TAttribute a: this.returnAttributes)
+        for (TAttribute a : this.returnAttributes)
             if (a.getId().compareTo(_name) == 0)
                 return a;
-        for (TAttribute a: this.attributes)
+        for (TAttribute a : this.attributes)
             if (a.getId().compareTo(_name) == 0)
                 return a;
         return null;
     }
 
     @Override
-    public LinkedList<AvatarSignal> getSignalList () {
-        return new LinkedList<AvatarSignal> (this.signals);
+    public LinkedList<AvatarSignal> getSignalList() {
+        return new LinkedList<AvatarSignal>(this.signals);
     }
 
     @Override
-    public LinkedList<AvatarSignal> getAllSignalList () {
-        return this.getSignalList ();
+    public LinkedList<AvatarSignal> getAllSignalList() {
+        return this.getSignalList();
     }
 
     @Override
-    public AvatarSignal getSignalNameBySignalDef (String _id) {
+    public AvatarSignal getSignalNameBySignalDef(String _id) {
         int index0 = _id.indexOf('(');
         if (index0 > -1)
             _id = _id.substring(0, index0);
 
         _id = _id.trim();
-        for (AvatarSignal as: this.signals)
-            if (as.getId().equals (_id))
+        for (AvatarSignal as : this.signals)
+            if (as.getId().equals(_id))
                 return as;
 
         return null;
@@ -1078,23 +1055,23 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             // Too large to fit in the father? -> resize it!
             this.resizeToFatherSize();
 
-            this.setCdRectangle (0, this.father.getWidth() - this.getWidth(), 0, this.father.getHeight() - this.getHeight());
-            this.setMoveCd (this.x, this.y);
+            this.setCdRectangle(0, this.father.getWidth() - this.getWidth(), 0, this.father.getHeight() - this.getHeight());
+            this.setMoveCd(this.x, this.y);
         }
     }
 
     @Override
-    public LinkedList<AvatarMethod> getMethodList () {
-        return new LinkedList<AvatarMethod> (this.methods);
+    public LinkedList<AvatarMethod> getMethodList() {
+        return new LinkedList<AvatarMethod>(this.methods);
     }
 
     @Override
-    public LinkedList<AvatarMethod> getAllMethodList () {
-        return this.getMethodList ();
+    public LinkedList<AvatarMethod> getAllMethodList() {
+        return this.getMethodList();
     }
 
     @Override
-    public int compareTo (AvatarBDLibraryFunction f) {
-        return this.name.compareTo (f.getFunctionName ());
+    public int compareTo(AvatarBDLibraryFunction f) {
+        return this.name.compareTo(f.getFunctionName());
     }
 }

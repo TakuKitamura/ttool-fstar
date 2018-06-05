@@ -43,7 +43,7 @@
 package tmatrix;
 
 import translator.TURTLEModeling;
-import ui.graph.AUTGraph;
+import graph.AUTGraph;
 import ui.req.Requirement;
 import ui.req.RequirementObserver;
 

@@ -44,6 +44,8 @@ import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
+import graph.AUTGraph;
+import graph.RG;
 import launcher.RemoteExecutionThread;
 import launcher.RshClient;
 import myutil.*;
@@ -68,9 +70,6 @@ import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.file.*;
 import ui.ftd.FaultTreeDiagramPanel;
-import ui.graph.AUTGraph;
-import ui.graph.RG;
-import ui.het.CAMSBlockDiagramPanel;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.iod.InteractionOverviewDiagramPanel;
@@ -84,7 +83,6 @@ import ui.tmlcd.TMLTaskDiagramPanel;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
 import ui.tmlcp.TMLCPPanel;
-import ui.tmldd.TMLArchiCAMSNode;
 import ui.tmldd.TMLArchiDiagramPanel;
 import ui.tmlsd.TMLSDPanel;
 import ui.tree.DiagramTreeModel;
@@ -94,6 +92,7 @@ import ui.ucd.UseCaseDiagramPanel;
 import ui.util.DefaultText;
 import ui.util.IconManager;
 import ui.window.*;
+import ui.syscams.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -106,6 +105,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -240,6 +240,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public final static byte ATTACKTREE_SYNTAXCHECKING_OK = 49;
     public final static byte FAULTTREE_SYNTAXCHECKING_OK = 51;
     public final static byte COMPONENT_SELECTED = 50;
+    public final static byte CREATE_NEW_PANEL = 52;
 
     public final static int INCREMENT = 10;
 
@@ -630,6 +631,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     //--
 
     public void activeActions(boolean b) {
+        //TraceManager.addDev("Action actions:" + b);
         for (int i = 0; i < TGUIAction.NB_ACTION; i++) {
             actions[i].setEnabled(b);
         }
@@ -739,7 +741,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         if (!Desktop.isDesktopSupported()) {
             return;
         }
-        File file = new File (SpecConfigTTool.TGraphPath );
+        File file = new File(SpecConfigTTool.TGraphPath);
         TraceManager.addDev("Getting desktop");
         Desktop desktop = Desktop.getDesktop();
         try {
@@ -1058,34 +1060,20 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
 
-    public int addSystemCAMSPanel(String name, int index) { //ajout CD -----Mark
+    public int addSysCAMSComponentDesignPanel(String name, int index) { 
         if (index == -1) {
             index = tabs.size();
         }
-        SystemCAMSPanel scp = new SystemCAMSPanel(this);
-        tabs.add(index, scp);
-        mainTabbedPane.add(scp.tabbedPane, index);
-        mainTabbedPane.setToolTipTextAt(index, "Open System C-AMS diagrams ");
+        SysCAMSComponentDesignPanel sccdp = new SysCAMSComponentDesignPanel(this);
+        tabs.add(index, sccdp);
+        mainTabbedPane.add(sccdp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open SystemC-AMS design diagrams");
         mainTabbedPane.setTitleAt(index, name);
         mainTabbedPane.setIconAt(index, IconManager.imgic60);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
-        scp.init();
+        sccdp.init();
         //ystem.out.println("Design added");
         return index;
-    }
-
-    public CAMSBlockDiagramPanel addSystemCAMSPanel(String name, int index, TMLArchiCAMSNode parent) {
-        if (index == -1) {
-            index = tabs.size();
-        }
-        SystemCAMSPanel scp = new SystemCAMSPanel(this);
-        tabs.add(index, scp);
-        mainTabbedPane.add(scp.tabbedPane, index);
-        mainTabbedPane.setToolTipTextAt(index, "Open System C-AMS diagrams ");
-        mainTabbedPane.setTitleAt(index, name);
-        mainTabbedPane.setIconAt(index, IconManager.imgic60);
-        scp.init();
-        return scp.getCAMSBlockDiagramPanel();
     }
 
     //Return the list of all the TMLArchiDiagramPanels
@@ -1482,8 +1470,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
 
-    public int createSystemCAMS(String name) { //ajout CD
-        int index = addSystemCAMSPanel(name, -1);
+		public int createSysCAMSComponentDesign(String name) {
+        int index = addSysCAMSComponentDesignPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
         return index;
     }
@@ -1875,9 +1863,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //frame.repaint();
     }
 
-    public void newSystemCAMS() {//ajout CD
-        //TraceManager.addDev("NEW DIPLO Architecture");
-        addSystemCAMSPanel("SystemC-AMS", -1);
+     public void newSysCAMS() {
+        //TraceManager.addDev("NEW DESIGN");
+        addSysCAMSComponentDesignPanel("SystemC_AMS", -1);
         tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
@@ -2404,7 +2392,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 byte[] ba = new byte[nb];
                 fis.read(ba);
                 fis.close();
-                s = new String(ba);
+                s = new String(ba, "UTF-8");
+
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
@@ -2528,7 +2517,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             jfc.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
             jfc.setFileFilter(filter);
-        	/*jfc.addMouseListener(new MouseListener() {
+            /*jfc.addMouseListener(new MouseListener() {
 
         	    @Override
         	    public void mouseClicked(MouseEvent arg0) {
@@ -2609,7 +2598,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 byte[] ba = new byte[nb];
                 fis.read(ba);
                 fis.close();
-                s = new String(ba);
+                s = new String(ba, "UTF-8");
+                //TraceManager.addDev("Mode:" + s);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
@@ -2695,7 +2685,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 byte[] ba = new byte[nb];
                 fis.read(ba);
                 fis.close();
-                s = new String(ba);
+                s = new String(ba, "UTF-8");
+                //TraceManager.addDev("Model:" + s);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
@@ -2756,9 +2747,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
 
             }
-        } catch (MalformedModelingException mme) {
+        } catch (Exception mme) {
             JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            frame.setTitle("TToolt: unnamed project");
+            frame.setTitle("TTool: unnamed project");
         }
 
         gtm.enableUndo(true);
@@ -2965,6 +2956,41 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
     }
 
+
+    protected boolean saveAsNewProject() {
+        jfc.resetChoosableFileFilters();
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jfc.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TTool project", "ttool");
+        jfc.setFileFilter(filter);
+
+        createFileDialog();
+
+        return mainSave();
+
+    }
+
+    protected boolean saveAsNewModel() {
+        jfc.resetChoosableFileFilters();
+        jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        jfc.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
+        jfc.setFileFilter(filter);
+        int returnVal = jfc.showSaveDialog(frame);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            file = jfc.getSelectedFile();
+            file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
+        }
+
+        boolean b = mainSave();
+        if (b) {
+            dir = null;
+            config = null;
+            SpecConfigTTool.setBasicConfig(systemcOn);
+        }
+        return b;
+    }
+
     protected boolean saveProject() {
         if (file == null) {
             if (dir != null)
@@ -2978,6 +3004,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
         }
 
+        return mainSave();
+    }
+
+    public boolean mainSave() {
         if (checkFileForSave(file)) {
             try {
                 if (gtm == null) {
@@ -3325,7 +3355,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void showTToolConfiguration() {
         JFrameBasicText jft = new JFrameBasicText("Your configuration of TTool ...",
                 "Default configuration:\n-----------------------\n" + ConfigurationTTool.getConfiguration(systemcOn)
-                + "\nProject configuration:\n-----------------------\n" + SpecConfigTTool.getConfiguration(systemcOn),
+                        + "\nProject configuration:\n-----------------------\n" + SpecConfigTTool.getConfiguration(systemcOn),
                 IconManager.imgic76);
         jft.setIconImage(IconManager.img8);
         //jft.setSize(700, 800);
@@ -3778,45 +3808,44 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     }
                 }
             }
-        } else if (tp instanceof SystemCAMSPanel) { //Ajout CD
-
-            SystemCAMSPanel camsp = (SystemCAMSPanel) tp;
-            JDialogSelectSystemCAMSBlock.validated = camsp.validated;
-            JDialogSelectSystemCAMSBlock.ignored = camsp.ignored;
-            Vector<TGComponent> camsBlocksToValidate = new Vector<TGComponent>();
-            JDialogSelectSystemCAMSBlock jdsscb = new JDialogSelectSystemCAMSBlock(frame, camsBlocksToValidate, camsp.camsbdp.getComponentList(), "Block Parameter");
-            if (!automatic) {
-                GraphicLib.centerOnParent(jdsscb);
-                jdsscb.setVisible(true);
-            } else {
-                jdsscb.closeDialog();
-            }
-
-            if (camsBlocksToValidate.size() > 0) {
-                camsp.validated = JDialogSelectSystemCAMSBlock.validated;
-                camsp.ignored = JDialogSelectSystemCAMSBlock.ignored;
-                expandToWarnings();
-                expandToErrors();
-                if (b) {
-                    setMode(MainGUI.GEN_SYSTEMC_OK);
-                    setMode(MainGUI.MODEL_OK);
-                    ret = true;
-                    if (!automatic) {
-                        JOptionPane.showMessageDialog(frame,
-                                "0 error, " + getCheckingWarnings().size() + " warning(s). You can now perform verifications (safety, security, performance) or generate executable code",
-                                "Syntax analysis successful on SystemC-AMS",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } else {
-                    if (!automatic) {
-                        JOptionPane.showMessageDialog(frame,
-                                "The SystemC-AMS contains several errors",
-                                "Syntax analysis failed",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
-                }
-            }
-
+        } else if (tp instanceof SysCAMSComponentDesignPanel) {
+        	SysCAMSComponentDesignPanel syscamscdp = (SysCAMSComponentDesignPanel) tp;
+        	JDialogSelectSysCAMSComponent.validated = syscamscdp.validated;
+        	JDialogSelectSysCAMSComponent.ignored = syscamscdp.ignored;
+        	Vector<TGComponent> syscamsComponentsToValidate = new Vector<TGComponent>();
+        	JDialogSelectSysCAMSComponent jdssyscamsc = new JDialogSelectSysCAMSComponent(frame, syscamsComponentsToValidate, syscamscdp.syscamsctdp.getComponentList(), "Choosing SystemC-AMS components to validate");
+        	if (!automatic) {
+        		GraphicLib.centerOnParent(jdssyscamsc);
+        		jdssyscamsc.setVisible(true); // Blocked until dialog has been closed
+        	} else {
+        		jdssyscamsc.closeDialog();
+        	}
+        	if (syscamsComponentsToValidate.size() > 0) {
+        		syscamscdp.validated = JDialogSelectSysCAMSComponent.validated;
+        		syscamscdp.ignored = JDialogSelectSysCAMSComponent.ignored;
+//        		b = gtm.translateSysCAMSComponentDesign(syscamsComponentsToValidate, syscamscdp, jdssyscamsc.getOptimize());
+        		expandToWarnings();
+        		expandToErrors();
+        		if (b) {
+        			//setMode(MainGUI.MODEL_OK);
+        			setMode(MainGUI.GEN_SYSTEMC_OK);
+        			setMode(MainGUI.MODEL_OK);
+        			ret = true;
+        			if (!automatic) {
+        				JOptionPane.showMessageDialog(frame,
+        						"0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
+        						"Syntax analysis successful on SystemC-AMS designs",
+        						JOptionPane.INFORMATION_MESSAGE);
+        			}
+        		} else {
+        			if (!automatic) {
+        				JOptionPane.showMessageDialog(frame,
+        						"The SystemC-AMS design contains several errors",
+        						"Syntax analysis failed",
+        						JOptionPane.INFORMATION_MESSAGE);
+        			}
+        		}
+        	}
         } else if (tp instanceof TMLArchiPanel) {
             tmlap = (TMLArchiPanel) tp;
             JDialogSelectTMLNodes.validated = tmlap.validated;
@@ -4892,7 +4921,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         if (file != null) {
             path = file.getAbsolutePath();
         }
-        TraceManager.addDev("Generating TML code: "+file.getAbsolutePath());
+        TraceManager.addDev("Generating TML code: " + file.getAbsolutePath());
         if (gtm.generateTMLTxt(path)) {
             TraceManager.addDev("Done TML generation");
             return ConfigurationTTool.TMLCodeDirectory;
@@ -6057,6 +6086,34 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         return ll;
     }
+    
+    public List<TGComponent> getAllSysCAMSComponents() {
+    	TURTLEPanel tp;
+    	List<TGComponent> ll = new LinkedList<TGComponent>();
+    	
+    	for (int i = 0; i < tabs.size(); i++) {
+    		tp = tabs.elementAt(i);
+    		
+    		if (tp instanceof SysCAMSComponentDesignPanel) {
+    			ll.addAll(((SysCAMSComponentDesignPanel) tp).syscamsctdp.getComponentList());
+    		}
+    	}
+    	
+    	return ll;
+    }
+
+    public ArrayList<SysCAMSComponentTaskDiagramPanel> getAllPanelsReferencingSysCAMSCompositeComponent(SysCAMSCompositeComponent syscamscc) {
+        TURTLEPanel tp;
+        ArrayList<SysCAMSComponentTaskDiagramPanel> foundPanels = new ArrayList<SysCAMSComponentTaskDiagramPanel>();
+
+        for (int i = 0; i < tabs.size(); i++) {
+            tp = tabs.elementAt(i);
+            if (tp instanceof SysCAMSComponentDesignPanel) {
+                ((SysCAMSComponentDesignPanel) tp).syscamsctdp.getPanelsUsingAComponent(syscamscc, foundPanels);
+            }
+        }
+        return foundPanels;
+    }
 
     public void removeTClass(TURTLEPanel tp, String s) {
         if (!(tp instanceof DesignPanel)) {
@@ -6196,6 +6253,17 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
     }
 
+		public void updateReferenceToSysCAMSCompositeComponent(SysCAMSCompositeComponent tmlcc) {
+    	TURTLEPanel tp;
+    	
+    	for (int i = 0; i < tabs.size(); i++) {
+    		tp = tabs.elementAt(i);
+    		if (tp instanceof SysCAMSComponentDesignPanel) {
+    			((SysCAMSComponentDesignPanel) tp).syscamsctdp.updateReferenceToSysCAMSCompositeComponent(tmlcc);
+    		}
+    	}
+    }
+
     public TMLCCompositeComponent getCompositeComponent(String name) {
         int index = name.indexOf("::");
         if (index == -1) {
@@ -6214,6 +6282,25 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         return ((TMLComponentDesignPanel) (tp)).tmlctdp.getCompositeComponentByName(componentName);
     }
+
+		public SysCAMSCompositeComponent getSysCAMSCompositeComponent(String name) {
+    	int index = name.indexOf("::");
+    	if (index == -1) {
+    		return null;
+    	}
+    	
+    	String panelName = name.substring(0, index);
+    	String componentName = name.substring(index + 2, name.length());
+    	
+    	TURTLEPanel tp = getTURTLEPanel(panelName);
+    	
+    	if ((tp == null) || (!(tp instanceof SysCAMSComponentDesignPanel))) {
+    		return null;
+    	}
+    	
+    	return ((SysCAMSComponentDesignPanel) (tp)).syscamsctdp.getCompositeComponentByName(componentName);
+    }
+
 
     public AvatarSMDPanel getAvatarSMDPanel(int indexDesign, String name) {
 
@@ -6327,6 +6414,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void setTMLComponentTaskDiagramName(int indexDesign, String name) {
         TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
+    }
+
+		public void setSysCAMSComponentTaskDiagramName(int indexDesign, String name) {
+    	TURTLEPanel tp = tabs.elementAt(indexDesign);
+    	tp.tabbedPane.setTitleAt(0, name);
     }
 
     public void setTMLArchitectureDiagramName(int indexDesign, String name) {
@@ -7364,9 +7456,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         int index;
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {
+            TraceManager.addDev("null TP Panel");
             return;
         }
         index = tp.tabbedPane.getSelectedIndex();
+
+        //TraceManager.addDev("TP Panel: " + tp + " index=" + index);
 
         if (index < tp.panels.size() - 1) {
             setMode(FORWARD_DIAG);
@@ -7378,6 +7473,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             setMode(BACKWARD_DIAG);
         } else {
             setMode(NO_BACKWARD_DIAG);
+        }
+
+        // If no edition panel, we need to deactivate previous diagram and model checking
+
+        if (index == -1) {
+            setMode(MainGUI.CREATE_NEW_PANEL);
         }
 
         setMode(METHO_CHANGED);
@@ -7846,13 +7947,50 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return false;
     }
 
+		public boolean newSysCAMSComponentTaskName(TURTLEPanel tp, String old, String niou) {
+    	JTabbedPane jtp = tp.tabbedPane;
+    	for (int i = 0; i < jtp.getTabCount(); i++) {
+    		if (jtp.getTitleAt(i).equals(niou)) {
+    			return false;
+    		}
+    	}
+    	TraceManager.addDev("old " + old + " niou " + niou);
+    	for (int i = 0; i < jtp.getTabCount(); i++) {
+    		TraceManager.addDev("Tab " + i + " = " + mainTabbedPane.getTitleAt(i));
+    		if (jtp.getTitleAt(i).equals(old)) {
+    			jtp.setTitleAt(i, niou);
+    			jtp.setToolTipTextAt(i, "Opens the SystemC-AMS diagram of " + niou);
+    			TDiagramPanel tdp;
+    			//change panel name
+    			for (int j = 0; j < tp.panels.size(); j++) {
+    				tdp = tp.panels.elementAt(j);
+    				if (tdp.getName().equals(old)) {
+    					tdp.setName(niou);
+    				}
+    			}
+    			
+    			return true;
+    		}
+    	}
+    	// internal error
+    	ErrorGUI.exit(ErrorGUI.ERROR_TAB);
+    	return false;
+    }
+
     public void cloneTab(int index) {
         String s = gtm.makeXMLFromTurtleModeling(index, "_cloned");
         try {
             gtm.loadModelingFromXML(s);
             changeMade(null, -1);
         } catch (MalformedModelingException mme) {
-            JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported file) ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported xml format) ", "Error when loading modeling",
+                    JOptionPane
+                    .INFORMATION_MESSAGE);
+            frame.setTitle("TTool: unamed project");
+        } catch (UnsupportedEncodingException mme) {
+            JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported encoding format) ", "Error when loading modeling",
+                    JOptionPane
+                            .INFORMATION_MESSAGE);
             frame.setTitle("TTool: unamed project");
         }
 
@@ -8763,7 +8901,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         private JPopupMenu menu;
 
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement/*, newTMLDesign*/, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
-                newNCDesign, sort, clone, newAttackTree, newFaultTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSystemCAMS;
+                newNCDesign, sort, clone, newAttackTree, newFaultTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSysCAMS;
         private JMenuItem newAVATARAnalysis;
 
         public PopupListener(MainGUI _mgui) {
@@ -8821,7 +8959,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             newTMLComponentDesign = createMenuItem("New Partitioning - Functional view");
             newTMLArchi = createMenuItem("New Partitioning - Architecture and Mapping");
             newTMLCP = createMenuItem("New Partitioning - Communication Pattern");
-            newSystemCAMS = createMenuItem("New SystemC-AMS Block Diagram"); //ajout CD
+            newSysCAMS = createMenuItem("New SystemC-AMS Block Diagram"); //ajout CD
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
             newNCDesign = createMenuItem("New Network Calculus Design");
@@ -8908,7 +9046,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     menu.add(newTMLCP);
                     menu.add(newTMLArchi);
                     menu.addSeparator();
-                    menu.add(newSystemCAMS);//ajout CD
+                    menu.add(newSysCAMS);
                     menu.addSeparator();
                 }
             }
@@ -8929,8 +9067,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
 
         }
-
-
 
 
         private JMenuItem createMenuItem(String s) {
@@ -8996,49 +9132,71 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 } else if (ac.equals("Clone")) {
                     mgui.cloneTab(mainTabbedPane.getSelectedIndex());
                 } else if (ac.equals("New TURTLE Analysis")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAnalysis();
                 } else if (ac.equals("New TURTLE Design")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newDesign();
                 } else if (ac.equals("New TURTLE Deployment")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newDeployment();
                 } else if (e.getSource() == newAttackTree) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAttackTree();
                 } else if (e.getSource() == newFaultTree) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newFaultTree();
                 } else if (ac.equals("New TURTLE Requirement Diagram")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newRequirement();
                 } else if (e.getSource() == newTMLMethodo) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newDiplodocusMethodology();
                 } else if (e.getSource() == newAvatarMethodo) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAvatarMethodology();
                 } else if (e.getSource() == newSysmlsecMethodo) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newSysmlsecMethodology();
                 } else if (ac.equals("New DIPLODOCUS Design")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newTMLDesign();
                 } else if (e.getSource() == newTMLComponentDesign) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newTMLComponentDesign();
                 } else if (e.getSource() == newTMLCP) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newTMLCP();
                 } else if (e.getSource() == newTMLArchi) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newTMLArchi();
                 } else if (ac.equals("New Proactive Design")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newProactiveDesign();
                 } else if (ac.equals("New TURTLE-OS Design")) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newTURTLEOSDesign();
                 } else if (e.getSource() == newNCDesign) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newNCDesign();
                 } else if (e.getSource() == newAVATARBD) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAvatarBD();
                 } else if (e.getSource() == newAVATARDD) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newADD();
                 } else if (e.getSource() == newAVATARRequirement) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAvatarRequirement();
                 } else if (e.getSource() == newMAD) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAvatarMADs();
                 } else if (e.getSource() == newAVATARAnalysis) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newAvatarAnalysis();
-                } else if (e.getSource() == newSystemCAMS) { //ajout CD
-                    mgui.newSystemCAMS();
+                } else if (e.getSource() == newSysCAMS) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
+                    mgui.newSysCAMS();
                 }
             }
         };
@@ -9077,6 +9235,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 }
             }
         }
+
     }
 
     // Get the currently opened architecture panel

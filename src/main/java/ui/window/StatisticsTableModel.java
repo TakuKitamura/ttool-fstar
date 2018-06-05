@@ -42,9 +42,9 @@
 package ui.window;
 
 import myutil.SteppedAlgorithm;
-import ui.graph.AUTGraph;
-import ui.graph.AUTTransition;
+import graph.AUTGraph;
 
+import graph.AUTTransition;
 import javax.swing.table.AbstractTableModel;
 import java.io.BufferedReader;
 import java.io.StringReader;

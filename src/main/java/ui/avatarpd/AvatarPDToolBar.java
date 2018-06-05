@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.avatarpd;
 
 import ui.MainGUI;
@@ -52,135 +50,138 @@ import javax.swing.*;
 
 /**
  * Class AvatarPDToolBar
- * Implements the toolbar to be used in conjunction with the panel of 
+ * Implements the toolbar to be used in conjunction with the panel of
  * AVATAR Parametric Diagram
  * Creation: 22/04/2010
- * @version 1.0 22/04/2010
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 22/04/2010
  * @see ui.cd.TClassDiagramPanel
  */
 public class AvatarPDToolBar extends TToolBar {
-    
+
     public AvatarPDToolBar(MainGUI _mgui) {
         super(_mgui);
-        
+
     }
-    
+
     protected void setActive(boolean b) {
-		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-		
-		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-		mgui.updateZoomInfo();
-		
+        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+
+        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+        mgui.updateZoomInfo();
+
         mgui.actions[TGUIAction.APD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-		
-		mgui.actions[TGUIAction.APD_BLOCK].setEnabled(b);
-		mgui.actions[TGUIAction.APD_LOGICAL_CONSTRAINT].setEnabled(b);
+
+        mgui.actions[TGUIAction.APD_BLOCK].setEnabled(b);
+        mgui.actions[TGUIAction.APD_LOGICAL_CONSTRAINT].setEnabled(b);
         mgui.actions[TGUIAction.APD_TEMPORAL_CONSTRAINT].setEnabled(b);
-		mgui.actions[TGUIAction.APD_ATTRIBUTE].setEnabled(b);
-		mgui.actions[TGUIAction.APD_SIGNAL].setEnabled(b);
-		mgui.actions[TGUIAction.APD_ALIAS].setEnabled(b);
-		
-		mgui.actions[TGUIAction.APD_BOOLEQ].setEnabled(b);
-		mgui.actions[TGUIAction.APD_ATTRIBUTE_SETTING].setEnabled(b);
+        mgui.actions[TGUIAction.APD_ATTRIBUTE].setEnabled(b);
+        mgui.actions[TGUIAction.APD_SIGNAL].setEnabled(b);
+        mgui.actions[TGUIAction.APD_ALIAS].setEnabled(b);
+
+        mgui.actions[TGUIAction.APD_BOOLEQ].setEnabled(b);
+        mgui.actions[TGUIAction.APD_ATTRIBUTE_SETTING].setEnabled(b);
         mgui.actions[TGUIAction.APD_PROPERTY].setEnabled(b);
-		mgui.actions[TGUIAction.APD_PROPERTY_RELATION].setEnabled(b);
-		mgui.actions[TGUIAction.APD_ATTRIBUTE_CONNECTOR].setEnabled(b);
-		mgui.actions[TGUIAction.APD_SIGNAL_CONNECTOR].setEnabled(b);
-		mgui.actions[TGUIAction.APD_PROPERTY_CONNECTOR].setEnabled(b);
-		mgui.actions[TGUIAction.APD_COMPOSITION_CONNECTOR].setEnabled(b);
-		
-		mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID].setEnabled(b);
-        
+        mgui.actions[TGUIAction.APD_PROPERTY_RELATION].setEnabled(b);
+        mgui.actions[TGUIAction.APD_ATTRIBUTE_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.APD_SIGNAL_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.APD_PROPERTY_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.APD_COMPOSITION_CONNECTOR].setEnabled(b);
+
+        mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID].setEnabled(b);
+
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
+
     }
-    
+
     protected void setButtons() {
         JButton button;
-        
+
         button = this.add(mgui.actions[TGUIAction.APD_EDIT]);
         button.addMouseListener(mgui.mouseHandler);
-        
+
         this.addSeparator();
-        
+
         button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
         button.addMouseListener(mgui.mouseHandler);
-        
+
         button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
         button.addMouseListener(mgui.mouseHandler);
-        
+
         this.addSeparator();
-        
+
         button = this.add(mgui.actions[TGUIAction.APD_BLOCK]);
         button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.APD_COMPOSITION_CONNECTOR]);
+
+        button = this.add(mgui.actions[TGUIAction.APD_COMPOSITION_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.APD_ATTRIBUTE]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.APD_ATTRIBUTE_SETTING]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.APD_BOOLEQ]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.APD_ATTRIBUTE_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		
+
         this.addSeparator();
-		this.addSeparator();
-        
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.APD_ATTRIBUTE]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        button = this.add(mgui.actions[TGUIAction.APD_ATTRIBUTE_SETTING]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        button = this.add(mgui.actions[TGUIAction.APD_BOOLEQ]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        button = this.add(mgui.actions[TGUIAction.APD_ATTRIBUTE_CONNECTOR]);
+        button.addMouseListener(mgui.mouseHandler);
+
+
+        this.addSeparator();
+        this.addSeparator();
+
         button = this.add(mgui.actions[TGUIAction.APD_SIGNAL]);
         button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.APD_ALIAS]);
+
+        button = this.add(mgui.actions[TGUIAction.APD_ALIAS]);
         button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.APD_SIGNAL_CONNECTOR]);
+
+        button = this.add(mgui.actions[TGUIAction.APD_SIGNAL_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.APD_LOGICAL_CONSTRAINT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.APD_TEMPORAL_CONSTRAINT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
+
         this.addSeparator();
-		this.addSeparator();
-        
-		button = this.add(mgui.actions[TGUIAction.APD_PROPERTY]);
+
+        button = this.add(mgui.actions[TGUIAction.APD_LOGICAL_CONSTRAINT]);
         button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.APD_PROPERTY_RELATION]);
+
+        button = this.add(mgui.actions[TGUIAction.APD_TEMPORAL_CONSTRAINT]);
         button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.APD_PROPERTY_CONNECTOR]);
+
+        this.addSeparator();
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.APD_PROPERTY]);
         button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID]);
+
+        button = this.add(mgui.actions[TGUIAction.APD_PROPERTY_RELATION]);
         button.addMouseListener(mgui.mouseHandler);
-		
+
+        button = this.add(mgui.actions[TGUIAction.APD_PROPERTY_CONNECTOR]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID]);
+        button.addMouseListener(mgui.mouseHandler);
+
 		/*this.addSeparator();
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
         button.addMouseListener(mgui.mouseHandler);*/
-		
-		
+
+
     }
-    
+
 } // Class
 
 

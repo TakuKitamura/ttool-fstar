@@ -29,7 +29,7 @@ struct setOfRequests {
   pthread_cond_t *wakeupCondition;
   pthread_mutex_t *mutex;
 
-  int hasATimeRequest; // Means that at least on request of the list hasn't completed yet its time delay
+  int hasATimeRequest; // Means that at least one request of the list hasn't completed yet its time delay
   timespec minTimeToWait;
   struct request *selectedRequest;
 };

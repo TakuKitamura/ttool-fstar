@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -56,34 +54,38 @@ import java.util.regex.Pattern;
  * Class JDialogPragma
  * Dialog for entering a note
  * Creation: 06/12/2003
- * @version 1.0 06/12/2003
+ *
  * @author Ludovic APVRILLE, Letitia LI
+ * @version 1.0 06/12/2003
  */
 public class JDialogPragma extends JDialogBase implements ActionListener {
-    
+
     protected String text;
-    
+
     //components
     private JTextArea textarea;
     protected JButton close;
     protected JButton cancel;
     protected JMenu help;
     private JPopupMenu helpPopup;
-	public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<>();
-	public HashMap<String, java.util.List<String>> blockStateMap = new HashMap<>();
-    /** Creates new form  */
+    public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<>();
+    public HashMap<String, java.util.List<String>> blockStateMap = new HashMap<>();
+
+    /**
+     * Creates new form
+     */
     public JDialogPragma(Frame f, String title, String _text) {
         super(f, title, true);
         text = _text;
-        
+
         initComponents();
         pack();
     }
 //Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
 
     public class SuggestionPanel {
-		private final String[] pragma = {"#Authenticity", "#Confidentiality", "#PublicConstant", "#PrivateConstant", "#InitialSessionKnowledge", "#InitialSystemKnowledge", "#PrivatePublicKeys", "#Public", "#SecrecyAssumption", "#Secret"};
-		private JList list;
+        private final String[] pragma = {"#Authenticity", "#Confidentiality", "#PublicConstant", "#PrivateConstant", "#InitialSessionKnowledge", "#InitialSystemKnowledge", "#PrivatePublicKeys", "#Public", "#SecrecyAssumption", "#Secret"};
+        private JList list;
         private JPopupMenu popupMenu;
         private String subWord;
         private final int insertionPosition;
@@ -96,10 +98,10 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
             popupMenu.setOpaque(false);
             popupMenu.setBorder(null);
             popupMenu.add(list = createSuggestionList(position, subWord, header), BorderLayout.CENTER);
-	    	//Show popupMenu only if there are matching suggestions
-	    	if (list.getModel().getSize() >0){
+            //Show popupMenu only if there are matching suggestions
+            if (list.getModel().getSize() > 0) {
                 popupMenu.show(textarea, location.x, textarea.getBaseline(0, 0) + location.y);
-	    	}
+            }
         }
 
         public void hide() {
@@ -109,62 +111,58 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
             }
         }
 
-		private JList createSuggestionList(final int position, final String subWord, String header) {
-			ArrayList<String> matches = new ArrayList<>();
-	    	if (subWord.startsWith("#")){
-	    	    for (String p: pragma) {
-        	  	    if (p.startsWith(subWord)){
-						matches.add(p);
-				    }
-				}
-			}
-			else if (header.contains("#")){
-				//Find instances of '.'
-				Pattern p = Pattern.compile("\\.");
-				Matcher m = p.matcher(subWord);
-				int count = 0;
-				while (m.find()){
-				    count +=1;
-				}
-				if (count==0){
-					//Suggest block names
-					for (String block: blockAttributeMap.keySet()){
-						if (block.startsWith(subWord)){
-							matches.add(block);
-						}
-					}
-				}
-				else if (count==1){
-					if (header.contains("Authenticity")){
-						//Suggest state names
-						String block = subWord.split("\\.")[0];
-						for (String st: blockStateMap.get(block)){
-							if (st.startsWith(subWord.split("\\.")[1])){
-								matches.add(block+"."+st);
-							}
-						}
-					}
-					else {					
-						String block = subWord.split("\\.")[0];
-						for (String attr: blockAttributeMap.get(block)){
-							if (attr.startsWith(subWord.split("\\.")[1])){
-								matches.add(block+"."+attr);
-							}
-						}
-					}
-				}
-				else {
-					String block = subWord.split("\\.")[0];
-					String state = subWord.split("\\.")[1];
-					for (String attr: blockAttributeMap.get(block)){
-						if (attr.startsWith(subWord.split("\\.")[2])){
-							matches.add(block+"."+state+"."+attr);
-						}
-					}
-				
-				}
-			}
-		    String[] data = new String[matches.size()];
+        private JList createSuggestionList(final int position, final String subWord, String header) {
+            ArrayList<String> matches = new ArrayList<>();
+            if (subWord.startsWith("#")) {
+                for (String p : pragma) {
+                    if (p.startsWith(subWord)) {
+                        matches.add(p);
+                    }
+                }
+            } else if (header.contains("#")) {
+                //Find instances of '.'
+                Pattern p = Pattern.compile("\\.");
+                Matcher m = p.matcher(subWord);
+                int count = 0;
+                while (m.find()) {
+                    count += 1;
+                }
+                if (count == 0) {
+                    //Suggest block names
+                    for (String block : blockAttributeMap.keySet()) {
+                        if (block.startsWith(subWord)) {
+                            matches.add(block);
+                        }
+                    }
+                } else if (count == 1) {
+                    if (header.contains("Authenticity")) {
+                        //Suggest state names
+                        String block = subWord.split("\\.")[0];
+                        for (String st : blockStateMap.get(block)) {
+                            if (st.startsWith(subWord.split("\\.")[1])) {
+                                matches.add(block + "." + st);
+                            }
+                        }
+                    } else {
+                        String block = subWord.split("\\.")[0];
+                        for (String attr : blockAttributeMap.get(block)) {
+                            if (attr.startsWith(subWord.split("\\.")[1])) {
+                                matches.add(block + "." + attr);
+                            }
+                        }
+                    }
+                } else {
+                    String block = subWord.split("\\.")[0];
+                    String state = subWord.split("\\.")[1];
+                    for (String attr : blockAttributeMap.get(block)) {
+                        if (attr.startsWith(subWord.split("\\.")[2])) {
+                            matches.add(block + "." + state + "." + attr);
+                        }
+                    }
+
+                }
+            }
+            String[] data = new String[matches.size()];
             data = matches.toArray(data);
             JList<String> list = new JList<>(data);
             list.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
@@ -178,15 +176,15 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
                     }
                 }
             });
-	    
+
             return list;
         }
 
-	
+
         public boolean insertSelection() {
-	    if (!popupMenu.isVisible()){
-		return false;
-	    }
+            if (!popupMenu.isVisible()) {
+                return false;
+            }
             if (list.getSelectedValue() != null) {
                 try {
                     final String selectedSuggestion = ((String) list.getSelectedValue()).substring(subWord.length());
@@ -221,8 +219,10 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
             });
         }
     }
-     private SuggestionPanel suggestion;
-     protected void showSuggestionLater() {
+
+    private SuggestionPanel suggestion;
+
+    protected void showSuggestionLater() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -259,24 +259,22 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
         if (subWord.length() < 1) {
             return;
         }
-		String header;
-		//Find the most recent pragma name
-		start=Math.max(0,position-1);
-		while (start>0){
-			//Find previous new line position
-			if (!String.valueOf(text.charAt(start)).matches(".")){
-				break;
-			}
-			else {
-				start--;
-			}
-		}
-		if (start==0){
-			header = text.substring(start, position).split(" ")[0];
-		}
-		else {
-			header = text.substring(start+1,position).split(" ")[0];
-		}
+        String header;
+        //Find the most recent pragma name
+        start = Math.max(0, position - 1);
+        while (start > 0) {
+            //Find previous new line position
+            if (!String.valueOf(text.charAt(start)).matches(".")) {
+                break;
+            } else {
+                start--;
+            }
+        }
+        if (start == 0) {
+            header = text.substring(start, position).split(" ")[0];
+        } else {
+            header = text.substring(start + 1, position).split(" ")[0];
+        }
         suggestion = new SuggestionPanel(textarea, position, subWord, location, header);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -293,15 +291,15 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
     }
 
     protected void initComponents() {
-        
+
         Container c = getContentPane();
         Font f = new Font("Helvetica", Font.PLAIN, 14);
         setFont(f);
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
         helpPopup = new JPopupMenu();
-	JTextArea jft = new JTextArea("Pragma Guidelines: \n #Authenticity: Compare if two Attributes are equal at given states \n #Confidentiality: Query whether the attacker knows the value of this attribute. \n #PublicConstant: Declare string as public constant \n #PrivateConstant: Declare string as private constant \n #InitialSessionKnowledge: Knowledge at the start of each session\n #InitialSystemKnowledge: Knowledge at the start of the system \n #PrivatePublicKeys: Set two attribute of a block as Private and Public Key respectively \n #Public: Declare variable public \n #SecrecyAssumption: Assume attribute confidential, but query to verify \n #Secret: See #Confidentiality");
-	helpPopup.add(jft);
+        JTextArea jft = new JTextArea("Pragma Guidelines: \n #Authenticity: Compare if two Attributes are equal at given states \n #Confidentiality: Query whether the attacker knows the value of this attribute. \n #PublicConstant: Declare string as public constant \n #PrivateConstant: Declare string as private constant \n #InitialSessionKnowledge: Knowledge at the start of each session\n #InitialSystemKnowledge: Knowledge at the start of the system \n #PrivatePublicKeys: Set two attribute of a block as Private and Public Key respectively \n #Public: Declare variable public \n #SecrecyAssumption: Assume attribute confidential, but query to verify \n #Secret: See #Confidentiality");
+        helpPopup.add(jft);
         textarea = new JTextArea();
 
         textarea.setEditable(true);
@@ -309,12 +307,12 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
         textarea.setTabSize(3);
         textarea.append(text);
         textarea.setFont(new Font("times", Font.PLAIN, 12));
-	JMenuBar menuBar = new JMenuBar();
-	menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-	help = new JMenu("?");
-	menuBar.add(help);
-	setJMenuBar(menuBar);
-	textarea.addKeyListener(new KeyListener() {
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        help = new JMenu("?");
+        menuBar.add(help);
+        setJMenuBar(menuBar);
+        textarea.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER || e.getKeyChar() == KeyEvent.VK_TAB) {
@@ -345,85 +343,83 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
                     suggestion.moveUp();
                 } else if (Character.isWhitespace(e.getKeyChar())) {
                     hideSuggestion();
-                }
-		else if (Character.isLetter(e.getKeyChar()) || e.getKeyChar()=='#'){
+                } else if (Character.isLetter(e.getKeyChar()) || e.getKeyChar() == '#') {
                     showSuggestionLater();
                 }
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_DOWN && suggestion != null) {
-                   e.consume();
+                if (e.getKeyCode() == KeyEvent.VK_DOWN && suggestion != null) {
+                    e.consume();
                 } else if (e.getKeyCode() == KeyEvent.VK_UP && suggestion != null) {
                     e.consume();
-                } 
+                }
             }
         });
 
 
-	
         JScrollPane jsp = new JScrollPane(textarea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(300, 300));
         c.add(jsp, BorderLayout.CENTER);
-        
 
 
         close = new JButton("Ok", IconManager.imgic25);
         cancel = new JButton("Cancel", IconManager.imgic27);
-        
-	help.setPreferredSize(new Dimension(30,30));
+
+        help.setPreferredSize(new Dimension(30, 30));
 
         close.setPreferredSize(new Dimension(150, 30));
         cancel.setPreferredSize(new Dimension(150, 30));
-        
+
         close.addActionListener(this);
         cancel.addActionListener(this);
         help.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    help();
-                }
-            });
+            @Override
+            public void mousePressed(MouseEvent e) {
+                help();
+            }
+        });
         JPanel jp = new JPanel();
-        jp.add(close);
         jp.add(cancel);
-        
+        jp.add(close);
+
         c.add(jp, BorderLayout.SOUTH);
-	
+
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
+
+    public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
-        
+
         // Compare the action command to the known actions.
-        if (command.equals("Cancel"))  {
+        if (command.equals("Cancel")) {
             cancel();
         } else if (command.equals("Ok")) {
             close();
         }
-	
+
     }
-    
+
     public void cancel() {
         dispose();
     }
-    
+
     public void close() {
         text = textarea.getText();
         dispose();
     }
-    public void help(){
-	if (!helpPopup.isVisible()){
-	    helpPopup.show(help, 20, 20);
-	}
-	else {
-	    helpPopup.setVisible(false);
-	}
+
+    public void help() {
+        if (!helpPopup.isVisible()) {
+            helpPopup.show(help, 20, 20);
+        } else {
+            helpPopup.setVisible(false);
+        }
     }
+
     public String getText() {
         return text;
     }
-    
-    
+
+
 }

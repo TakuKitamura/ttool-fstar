@@ -1,0 +1,14 @@
+;; Object include/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "include/"
+  :tables (list 
+   (semanticdb-table "papr_slot.h"
+    :major-mode 'c-mode
+    :tags 'nil
+    :file "papr_slot.h"
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0beta3"
+  :semanticdb-version "2.0beta3"
+  )

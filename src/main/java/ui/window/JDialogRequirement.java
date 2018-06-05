@@ -157,6 +157,7 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
         c1.gridheight = 1;
         c1.weighty = 1.0;
         c1.weightx = 1.0;
+        c1.fill = GridBagConstraints.BOTH;
         jta = new JTextArea();
         jta.setEditable(true);
         jta.setMargin(new Insets(10, 10, 10, 10));
@@ -165,8 +166,8 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
         jta.setFont(new Font("times", Font.PLAIN, 12));
        
         JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jsp.setPreferredSize(new Dimension(300, 200));
-        panel1.add(jsp);
+        //jsp.setPreferredSize(new Dimension(300, 200));
+        panel1.add(jsp, c1);
         //}
         
         // Panel2
@@ -282,6 +283,7 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
+        c0.fill = GridBagConstraints.BOTH;
         
         c.add(panel1, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row

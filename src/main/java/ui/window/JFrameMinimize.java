@@ -44,8 +44,8 @@ import myutil.FileException;
 import myutil.FileUtils;
 import myutil.ScrolledJTextArea;
 import ui.MainGUI;
-import ui.graph.AUTGraph;
-import ui.graph.RG;
+import graph.AUTGraph;
+import graph.RG;
 import ui.util.IconManager;
 
 import javax.swing.*;

@@ -1,0 +1,608 @@
+
+// -*- c++ -*-
+#include "../include/vci_input_engine.h"
+#include "network_io.h"
+#include <cassert>
+#include <string.h>
+
+#include "soclib_endian.h"
+#include "exception.h"
+#include "alloc_elems.h"
+
+using namespace std;
+
+namespace soclib { namespace caba {
+// This macro is an helper function to factor out the template parameters
+#define tmpl(x) template<typename vci_param> x VciInputEngine<vci_param>
+tmpl(/**/)::VciInputEngine( sc_module_name insname,
+			    const soclib::common::IntTab &index,
+			    const soclib::common::MappingTable &mt,
+			    const std::string &input_file,
+			    //const std::string &input_config_file,  //add by zjz
+			    unsigned int dext,
+                            unsigned int nchannels,
+                            unsigned int burstlength)			    
+	   : soclib::caba::BaseModule(insname),
+	     r_fsm_cons_state("fsm_cons_state"),
+	 
+             r_period("period"),
+	     r_running("running_save"),
+	     r_channel_index("channel_index"),
+	     r_channel_count("channel_count"),
+	     r_mod1048576("mod1048576"),
+	     r_temps("temps"),
+	     r_dext("debit_exterieur"),
+	     r_write_pointeur("write_pointeur"),
+	     r_read_pointeur("read_pointeur"),
+	     r_nb_ext_slot("nb_ext_slot"),
+	     r_taille("taille"),
+	     r_reste("reste"),
+	     r_vci_pointeur("vci_pointeur"),
+	     r_data("data"),
+	     r_address("address"),
+	     r_espace_libre("espace_libre"),
+	     r_nb_paquet("nb_paquet"),
+	     r_nb_paquet_total("nb_paquet_total"),
+	     r_nb_paquet_transmis("nb_paquet_transmis"),
+	     r_nb_paquet_jetes("nb_paquet_jetes"),
+	     m_nb_channels(nchannels),
+	     m_burst_length(burstlength),
+	   //m_io("pcap","test2.pcap", ""),
+	     m_io("hex",input_file, ""),
+  	     m_ident(mt.indexForId(index)),
+	     m_dext(dext), 
+	     fifo_desc("fifo_desc", 32),
+	     //fifo_desc("fifo_desc", 64),//DG 18.06.
+	     p_resetn("resetn"),
+	     p_clk("clk"),
+	     p_vci("vci"),
+	     p_running("running"),
+	     p_status("status"),
+	     p_pktdesc(soclib::common::alloc_elems<FifoOutput<uint32_t> >("pktdesc", nchannels)),
+	     p_slin("slin"),
+	     p_slext("slext")
+{
+  // add by ZJZ
+
+  //  char test[10];
+
+  //FILE *input = fopen(input_config_file.c_str(), "r");
+
+  //for (int i=0; i<10; i++){ //lire octet par octet le paquet
+  // unsigned int tmp;
+  // fscanf (input, "%02x", &tmp);
+  // test[i] = tmp;
+  //}
+
+  //cout << test << endl;
+
+  //fclose(input);
+
+  // end of the modification
+
+  //printf("Successful Instanciation of VciInputEngine: %s\n", name().c_str());
+  // Sensitivity list for transition() and genMoore(), no genMealy()
+
+  SC_METHOD(transition);
+  dont_initialize();
+  sensitive << p_clk.pos();
+    
+  SC_METHOD(genMoore);
+  dont_initialize();
+  sensitive << p_clk.neg();
+}
+
+
+tmpl(/**/)::~VciInputEngine()
+{
+  cout << "\t nb paquets envoyes: " << r_nb_paquet_total.read() << endl;
+  cout << "\t nb paquets jetes: " << r_nb_paquet_jetes.read() << endl;
+  cout << "\t nb paquets bufferises: " << r_nb_paquet_transmis .read()<< endl;
+  //cout << "\t debit determine: "<< r_dext.read()<< endl;
+}
+
+tmpl(void)::get_packet(unsigned int &espace_libre)
+{
+  int  tmp_wp=0;
+  if ( !m_waiting_packet )
+    m_waiting_packet = m_io.get_packet();
+
+  if ( !m_waiting_packet ){
+    return;}
+
+//11.06. auto-adaptatif : attendre jusqu'il y a d'espace dans le buffer
+  if ( m_waiting_packet->size() + 4 > espace_libre) {
+#ifdef SOCLIB_MODULE_DEBUG
+    std::cout << "Dropping packet: too big for buffer" << std::endl;
+#endif
+    //r_dext=r_dext.read()+128;//DG 20.05.on peut fine-tuner cet increment
+   // delete m_waiting_packet;
+   // m_waiting_packet = NULL;
+    return;
+  }
+
+
+  tmp_wp=r_write_pointeur.read();
+
+  if ( BUFFER_SIZE-tmp_wp < 4 )
+    tmp_wp = 0;//DG 13.05.
+
+  uint32_t size_le = machine_to_le(
+      (uint32_t)m_waiting_packet->size());
+  memcpy( &buffer[tmp_wp], &size_le, sizeof(uint32_t) );
+  tmp_wp += 4;
+
+  #ifdef SOCLIB_MODULE_DEBUG
+  std::cout << "Getting packet of size "
+	    << m_waiting_packet->size()
+	    << " in buffer at offset "
+	    << tmp_wp<< std::endl;
+  #endif
+
+  if ( tmp_wp + m_waiting_packet->size() >= BUFFER_SIZE ) {
+    size_t s0 = BUFFER_SIZE - tmp_wp;
+    assert( tmp_wp + s0 <= BUFFER_SIZE );
+    assert( m_waiting_packet->size() - s0 <= BUFFER_SIZE );
+#ifdef SOCLIB_MODULE_DEBUG
+  std::cout << " wrapping";
+#endif
+    memcpy( &buffer[tmp_wp], m_waiting_packet->data(), s0 );
+    memcpy( &buffer[0],
+	    (uint8_t*)m_waiting_packet->data() + s0,
+	    m_waiting_packet->size() - s0 );
+  } else {
+    assert( m_waiting_packet->size() <= BUFFER_SIZE );
+#ifdef SOCLIB_MODULE_DEBUG
+  std::cout << " straight";
+#endif
+    memcpy( &buffer[tmp_wp],
+	    m_waiting_packet->data(),
+	    m_waiting_packet->size() );
+  }
+
+  tmp_wp = (tmp_wp + m_waiting_packet->size()) % BUFFER_SIZE;
+#ifdef SOCLIB_MODULE_DEBUG
+  std::cout << " wp at end:" << tmp_wp << std::endl;
+#endif
+
+  r_write_pointeur = tmp_wp;
+  
+  espace_libre = espace_libre - m_waiting_packet->size() - 4;
+  r_nb_paquet = r_nb_paquet.read() + 1;	
+  r_nb_paquet_transmis = r_nb_paquet_transmis.read() + 1;
+
+  delete m_waiting_packet;
+  m_waiting_packet = NULL;
+  
+  //printf("temps pour lire un paquet: %d\n", r_temps.read()); 
+}
+
+tmpl(void)::transition()
+{
+    
+  int  tmp_rp=0;
+  int  tmp_fifo_desc_data=0;
+  bool tmp_fifo_desc_put=false; 
+  bool tmp_fifo_desc_get=false;
+  //int tmp_espace_libre=BUFFER_SIZE;
+
+  if (!p_resetn.read()) {
+
+    r_channel_count =  0 ;
+    r_channel_index =  0 ;
+    r_period = 0;
+    r_temps = 0;
+    //r_dext = m_dext;
+    r_dext = 0;//DG 9.7.
+    r_mod1048576 = 0;
+    r_fsm_cons_state = FSM_CONS_IDLE;
+    r_espace_libre = BUFFER_SIZE;
+    r_nb_paquet = 0;
+    r_nb_paquet_total = 0;
+    r_nb_paquet_transmis = 0;
+    r_nb_paquet_jetes = 0;
+    r_nb_ext_slot=0;
+    r_write_pointeur=0;
+    r_read_pointeur=0;
+    r_address=0;
+    r_running = 0; 
+    fifo_desc.init();  
+    return;
+  }
+
+  //printf("************m_nb_channels: %d \n",m_nb_channels);
+  //printf("************m_burst_length: %d \n",m_burst_length);
+  
+  unsigned int espace_libre = r_espace_libre;
+
+  //tmp_espace_libre= r_espace_libre.read() ;
+
+  // incrementation temps local
+  
+  r_temps = r_temps.read() + 1;
+  //r_temps = sc_simulation_time();//DG 09.05.
+  r_running = p_running.read();
+  r_period = r_dext.read();
+  //cout<< "r_period" << r_period.read() << endl;
+  if (r_running.read()!=0){
+    if (r_period.read()>0){
+      r_period= r_period.read()-1 ;
+    } else {
+      get_packet(espace_libre);
+    } // end else r_period
+  } // end if r_running
+
+  // Implement the CONS  FSM
+  
+  switch ((enum fsm_cons_state_e)r_fsm_cons_state.read()){
+  case FSM_CONS_IDLE :
+    r_vci_pointeur = 1;
+    if (r_nb_paquet.read()!=0){
+      r_fsm_cons_state = FSM_CONS_GET_SIZE;
+      r_mod1048576  =(r_mod1048576.read() +1) % 1048576;
+      //printf("nb_paquets : %d\n", r_nb_paquet.read()+1);
+    }
+    break;
+
+  case FSM_CONS_GET_SIZE : 
+    //printf("nb_: %d\n", r_nb_paquet.read()+1);
+    if ((BUFFER_SIZE - r_read_pointeur.read()) < 4){
+      //On attend un cycle que r_read_pointeur repasse à 0
+      r_read_pointeur=0;
+      break;
+    }			
+    uint32_t size;
+    memcpy( &size, &buffer[r_read_pointeur.read()], sizeof(uint32_t) );
+    size = le_to_machine(size);
+    r_taille = size;
+    r_reste = size;
+    
+    r_read_pointeur = (r_read_pointeur.read() +4)% BUFFER_SIZE;
+    r_fsm_cons_state = FSM_CONS_GET_SLOT;
+		  
+    break;
+			
+  case FSM_CONS_GET_SLOT :
+    {      
+      unsigned int tmp_nb_ext_slot=0;
+      /* Il faut 1 slot interne		*/
+      /* Et nb_slot (>=0) slots externes	*/
+      if (r_taille.read() > (int32_t)PAPR_PAYLOAD_FIRST_SIZE){  			 
+	tmp_nb_ext_slot = (r_taille.read()  - PAPR_PAYLOAD_FIRST_SIZE) / PAPR_PAYLOAD_SIZE;
+	tmp_nb_ext_slot+=	((r_taille.read()  - PAPR_PAYLOAD_FIRST_SIZE) % PAPR_PAYLOAD_SIZE)?1:0 ;
+      }
+      r_nb_ext_slot= tmp_nb_ext_slot;		
+      if (p_slin.rok){
+	r_address = p_slin.data.read();
+	//printf("IE addresse lue: %x \n",p_slin.data.read());
+	vci_slot.descripteur_slot.is_internal=1;
+	//cout << "IE slot interne " << endl;
+	r_fsm_cons_state = FSM_CONS_FILL_INT_SLOT;
+      }
+      //vci_slot.descripteur_slot.is_internal=1;//DG 19.02.
+      //cout << "IE slot interne " << endl;				  
+      break;
+    }
+
+  case FSM_CONS_FILL_INT_SLOT :
+	
+    /* On ne quitte cet état que si on a pu remplir correctemment	*/
+    /* le champ "adresse suivant".					*/
+    /* Il faut garder une copie de ce descripteur au frais:		*/
+    /* lignes m_desc_u.descripteur =.. 					*/
+     
+    if (r_taille.read() <= (int32_t)PAPR_PAYLOAD_FIRST_SIZE){		  
+      //il y a un seul slot
+      vci_slot.descripteur_slot.address = 0x0;  
+            
+      tmp_rp= ( r_read_pointeur.read()
+		+ r_taille.read())% BUFFER_SIZE;                
+      r_fsm_cons_state = FSM_CONS_SEND_INT_VCI;
+      vci_slot.descripteur_slot.slot_size = r_taille.read() ;
+
+    } else {
+      //il y a plusieurs slots
+      if (p_slext.rok){
+	vci_slot.descripteur_slot.address =  p_slext.data.read();                  
+      }
+
+      vci_slot.descripteur_slot.slot_size = PAPR_PAYLOAD_FIRST_SIZE ;
+      if (vci_slot.descripteur_slot.address !=0){
+	// On ne sort de l'état que si on a une adresse valide 
+	// pour la suite.                                                  
+	cout << "***IE external address ***" <<hex << vci_slot.descripteur_slot.address <<endl;
+	tmp_rp = ( r_read_pointeur.read() 
+		   + PAPR_PAYLOAD_FIRST_SIZE)%BUFFER_SIZE;		     
+	r_reste.write (r_reste.read() - PAPR_PAYLOAD_FIRST_SIZE); 
+	r_fsm_cons_state = FSM_CONS_SEND_INT_VCI;
+      }
+    }	  
+    vci_slot.descripteur_slot.total_size = r_taille.read();
+    vci_slot.descripteur_slot.offset = PAPR_OFFSET;
+    vci_slot.descripteur_slot.date = r_mod1048576.read();
+
+    m_desc_u.descripteur.total_size = r_taille.read();
+    //m_desc_u.descripteur.slot_size = vci_slot.descripteur_slot.slot_size;
+    //m_desc_u.descripteur.offset = PAPR_OFFSET;
+    //m_desc_u.descripteur.offset = 40;
+    m_desc_u.descripteur.is_internal = 1; //DG modif: le premier slot est sytematiquement sur puce
+    m_desc_u.descripteur.date = r_mod1048576.read(); 
+    m_desc_u.descripteur.address = r_address.read();
+
+    memset(vci_slot.data, 0, PAPR_PAYLOAD_SIZE);
+    //  printf("INPUT ENGINE address emballe : %x \n",r_address.read()); //DG 13.05.
+    // printf("INPUT ENGINE temps emballe : %d \n",r_temps.read()); //DG 13.05.
+	      
+    //enlever si pas de mesure de latence des paquets souhaitee			 		
+    vci_slot.data[PAPR_OFFSET - 4] = (r_temps.read()&0xFF000000)>>24 ;
+    vci_slot.data[PAPR_OFFSET - 3] = (r_temps.read()&0xFF0000)>>16 ;
+    vci_slot.data[PAPR_OFFSET - 2] = (r_temps.read()&0xFF00)>>8 ;
+    vci_slot.data[PAPR_OFFSET - 1] = (r_temps.read()&0xFF) ;
+         
+    memcpy (&(vci_slot.data[PAPR_OFFSET]), &(buffer[r_read_pointeur.read()]), vci_slot.descripteur_slot.slot_size );	
+   		        	
+    r_read_pointeur=tmp_rp;
+    break;
+
+  case FSM_CONS_SEND_INT_VCI :
+		            
+    if (p_vci.cmdack){
+      typename vci_param::fast_data_t *d = (typename vci_param::fast_data_t *)&vci_slot;
+      assert((size_t)r_vci_pointeur.read() < sizeof(papr_slot_t)/sizeof(typename vci_param::fast_data_t));
+      //r_data.write (*((int*) &vci_slot +r_vci_pointeur.read()));
+      r_data.write (d[r_vci_pointeur.read()]);
+      //printf("%x:",r_vci_pointeur.read());   //DG 15.04. 
+      //printf("%x ",d[r_vci_pointeur.read()]);  //DG 15.04.               
+      r_address = r_address.read() + 4;
+      r_vci_pointeur= r_vci_pointeur.read() +1;
+
+      if (r_vci_pointeur == ((PAPR_SLOT_SIZE >> 2)-1)){
+	r_fsm_cons_state = FSM_CONS_SEND_INT_VCI_LAST;//printf("\n");
+      }
+    }
+    break;
+  case FSM_CONS_SEND_INT_VCI_LAST :
+
+    if (p_vci.cmdack){
+      if (r_nb_ext_slot.read()!=0){
+	//printf("I SHOULD NOT BE HERE!!!\n");			  
+	r_fsm_cons_state = FSM_CONS_FILL_EXT_SLOT;
+	r_address = vci_slot.descripteur_slot.address; // On prepare l'@ du 1er slot ext
+      } else {
+	r_fsm_cons_state = FSM_CONS_MAJ;
+      }
+      r_vci_pointeur = 1;
+    }
+    break;
+  case FSM_CONS_FILL_EXT_SLOT :
+	  
+    r_vci_pointeur = 1;
+    /* On ne quitte cet état que si on a pu remplir correctemment*/
+    /* le champ "adresse suivant".*/
+    if (r_reste <= (int32_t)PAPR_PAYLOAD_SIZE){
+      vci_slot.descripteur_slot.address = 0; 
+			       
+      vci_slot.descripteur_slot.slot_size = r_reste.read() ;
+      tmp_rp = (r_read_pointeur.read() + r_reste.read())%BUFFER_SIZE;
+      r_fsm_cons_state = FSM_CONS_SEND_EXT_VCI;
+    } else {
+			
+//       if (p_slext.rok){
+// 	int tmp_adr = p_slext.data.read();
+// 	//cout << name() << " ad externe lue2: "<< hex<< tmp_adr  << endl;
+//       }
+			   			
+      vci_slot.descripteur_slot.slot_size = PAPR_PAYLOAD_SIZE ;
+      if (vci_slot.descripteur_slot.address !=0){
+	// On ne sort de l'état que si on a une adresse valide 
+	// pour la suite.
+	tmp_rp = (r_read_pointeur.read() + PAPR_PAYLOAD_SIZE)%BUFFER_SIZE;
+	r_reste.write (r_reste.read() - PAPR_PAYLOAD_SIZE); 
+	r_fsm_cons_state = FSM_CONS_SEND_EXT_VCI;
+      }
+    }
+    vci_slot.descripteur_slot.total_size = r_taille.read();
+    vci_slot.descripteur_slot.offset = 0;
+    vci_slot.descripteur_slot.is_internal = 0;
+    vci_slot.descripteur_slot.date = r_mod1048576.read(); //Sans interet
+    memset(vci_slot.data, 0, PAPR_PAYLOAD_SIZE);
+    memcpy (vci_slot.data, &(buffer[tmp_rp]), PAPR_PAYLOAD_SIZE );
+    r_data.write ( *((int *)&vci_slot));
+    r_read_pointeur=tmp_rp;
+    break;
+
+  case FSM_CONS_SEND_EXT_VCI :
+    if (p_vci.cmdack){
+      r_data.write (*((int*)&vci_slot + r_vci_pointeur.read()));
+      r_address = r_address + 4;
+      r_vci_pointeur = r_vci_pointeur.read() + 1;
+      if (r_vci_pointeur == (PAPR_SLOT_SIZE / sizeof(int))-1 ){
+	r_fsm_cons_state = FSM_CONS_SEND_EXT_VCI_LAST;
+      }
+    }
+    break;
+  case FSM_CONS_SEND_EXT_VCI_LAST :
+    if (p_vci.cmdack){
+      if ((r_nb_ext_slot.read()-1)!=0){
+	r_nb_ext_slot=r_nb_ext_slot.read()-1;
+	r_address = vci_slot.descripteur_slot.address; // On prepare l'@ du slot suivant
+	r_fsm_cons_state = FSM_CONS_FILL_EXT_SLOT;
+      } else {
+	r_fsm_cons_state = FSM_CONS_MAJ;
+      }
+      r_vci_pointeur = 1;
+    }
+
+    break;
+  case FSM_CONS_MAJ :
+    r_nb_paquet = r_nb_paquet.read() -1;
+    //cout << "un paquet enleve du buffer" << endl;
+    r_nb_paquet_total = r_nb_paquet_total.read() +1;
+    espace_libre = espace_libre + r_taille.read() + 4;
+    r_fsm_cons_state = FSM_CONS_SEND_DESC1;
+    break;
+
+  case FSM_CONS_SEND_DESC1 :
+    if (fifo_desc.wok()){
+      tmp_fifo_desc_put = true;
+      tmp_fifo_desc_data = m_desc_u.binary[0];
+
+      //std::cout << name() << " HELLO addresse ecrite dans fifo interne: "<<m_desc_u.binary[0] <<std::endl;
+
+      // ici je compte ce que j ai écris
+      r_fsm_cons_state = FSM_CONS_SEND_DESC2;
+    }
+    break;
+  case FSM_CONS_SEND_DESC2 :
+    if (fifo_desc.wok()){
+      tmp_fifo_desc_put = true;
+      tmp_fifo_desc_data = m_desc_u.binary[1];
+
+
+
+      //nember_of_writen_info =  nember_of_writen_info+1;
+
+      //std::cout << name() << " NOMBRE D'INFORMATION ÉCRITES: "<< std::hex << nember_of_writen_info<<"ÉCRITS À "<<sc_simulation_time()<<std::endl;
+
+      r_fsm_cons_state = FSM_CONS_IDLE;
+    }
+    break;
+  }// fin switch FSM_CONS
+  //if (r_fsm_cons_state.read()!=0) printf("%x",r_fsm_cons_state.read());
+
+  if (p_pktdesc[r_channel_index].wok){
+    tmp_fifo_desc_get = true;
+  }
+  
+  /*  for ( size_t i=0; i<m_nb_channels; ++i ) {
+    if (p_pktdesc[i].wok.read() && p_pktdesc[i].w.read()){
+      std::cout << name()
+		<< " data envoye a channel " << i
+		<< " : "  << hex << p_pktdesc[i].data.read()
+		<< std::endl;
+    }
+    }*/
+
+
+  if      (tmp_fifo_desc_get & tmp_fifo_desc_put)  {fifo_desc.put_and_get(tmp_fifo_desc_data);}
+  else if (tmp_fifo_desc_get & !tmp_fifo_desc_put) {fifo_desc.simple_get();}
+  else if (!tmp_fifo_desc_get & tmp_fifo_desc_put) {fifo_desc.simple_put(tmp_fifo_desc_data);}
+		
+  // handling r_channel_index & r_channel_count registers
+  if ( fifo_desc.rok() && p_pktdesc[r_channel_index].wok ) {
+    //printf("************: r_channel_count %d \n",r_channel_count.read());
+     //printf("************: r_channel_index %d \n",r_channel_index.read());
+      //  printf("************:  m_burst_length %d \n", m_burst_length);
+    //  printf("************:  m_nb_channels%d \n", m_nb_channels );
+    if ( r_channel_count == ( m_burst_length - 1) ) {
+      
+      r_channel_index = (r_channel_index.read()+1) % m_nb_channels ; 
+      r_channel_count = 0 ;
+    } else {
+      r_channel_count = r_channel_count + 1 ;
+    }
+
+  } // end if fifo ok
+
+  r_espace_libre = espace_libre;
+
+}//fin transition
+
+tmpl(void)::genMoore(){ 
+  p_status = r_fsm_cons_state.read() ;
+
+  //r ports vci
+  p_vci.rspack = true;
+  p_vci.trdid = 0x0;
+  p_vci.pktid = 0x0;
+  p_vci.srcid = m_ident;
+  p_vci.plen = 0x0;
+  p_vci.contig = 0x0;
+  p_vci.clen = 0x0;
+  p_vci.cfixed = true;
+  p_vci.cons = 0x0;
+  p_vci.wrap = 0x0;
+  p_vci.be = 0xF;
+
+  //printf("************m_nb_channels: %d \n",m_nb_channels);
+  //printf("************m_burst_length: %d \n",m_burst_length);
+
+  if (p_vci.rspval.read() && p_vci.rerror.read()){
+    cout << name() <<": erreur VCI" << endl;
+    cout << "r_fsm_cons_state: "<<r_fsm_cons_state << endl;
+    cout << "r_address: "<< hex << r_address.read()<<dec<< endl;
+    cout << "r_nb_paquet_jetes: "<< r_nb_paquet_jetes << endl;
+    cout << "r_nb_paquet encore bufferises: "<< r_nb_paquet << endl;
+    cout << "r_nb_paquet_total: "<< r_nb_paquet_total << endl;
+    cout << "r_nb_paquet_transmis: "<< r_nb_paquet_transmis << endl;
+    cout << "r_nb_ext_slot: "<< r_nb_ext_slot.read() << endl;
+    exit (0);
+  }
+
+  switch (r_fsm_cons_state){
+  case FSM_CONS_SEND_INT_VCI :
+    p_vci.cmdval = true;
+    p_vci.address = r_address.read();  
+    p_vci.wdata = r_data.read(); 
+    p_vci.cmd = vci_param::CMD_WRITE;//printf("ADDRESS LEAVES IE: %x\n", r_address.read());
+    //printf("%x", r_data.read());
+    p_vci.eop = false;
+    break;
+  case FSM_CONS_SEND_INT_VCI_LAST :
+    p_vci.cmdval = true;
+    p_vci.address = r_address.read();
+    p_vci.wdata = r_data.read(); 	
+    p_vci.cmd = vci_param::CMD_WRITE;//printf("ADDRESS LEAVES IE: %x\n", r_address.read());
+    //printf("%x\n", r_data.read()); 
+    p_vci.eop = true;
+    break;
+  case FSM_CONS_SEND_EXT_VCI :
+    p_vci.cmdval = true;
+    p_vci.address = r_address.read();	
+    p_vci.wdata = r_data.read();
+    p_vci.cmd = vci_param::CMD_WRITE;
+    p_vci.eop = false;
+    break;
+  case FSM_CONS_SEND_EXT_VCI_LAST :
+    p_vci.cmdval = true;
+    p_vci.address = r_address.read();	
+    p_vci.wdata = r_data.read();
+    p_vci.cmd = vci_param::CMD_WRITE;
+    p_vci.eop = true;
+    break;
+  default :
+    p_vci.cmdval = false ;
+    break;
+                    
+  }// fin switch FSM_CONS
+  	
+  // ports FIFOs write   
+  //std::cout << hex << "debug" << std::endl;      
+  for(int h=0; h<m_nb_channels; h++){
+    if ( h == r_channel_index.read()) { //modif DG 19.06.
+      //printf(" channel index %d h %d\n",r_channel_index.read(),h);
+      p_pktdesc[r_channel_index.read()].w = (bool)fifo_desc.rok();// DG 26.06. was h
+      
+      //printf(" %d ",(bool)fifo_desc.rok());
+      //std::cout << hex << "debug" << std::endl;      
+      p_pktdesc[h].data = fifo_desc.read();
+
+      /*if ((bool)fifo_desc.rok()==true){
+      	std::cout<<"sent on outfifo " <<h << ": " << std::hex << fifo_desc.read() << std::endl; //ajoute DG 15.07.
+	std::cout << "at time " << std::dec << r_temps.read()  << std::endl;
+	}*/
+    } else {
+      p_pktdesc[h% m_nb_channels].w=false; //DG 26.06. bug oublie le modulo
+    }
+  }	  
+         
+
+  // port p_slin & p_slext
+  p_slin.r = ((r_running.read()!=0) && (r_fsm_cons_state == FSM_CONS_GET_SLOT));
+  //p_slext.r = false ;//a completer
+p_slext.r = ((r_running.read()!=0) && (r_fsm_cons_state ==FSM_CONS_FILL_INT_SLOT));//DG 27.05.
+}//fin fonction genmoore
+
+
+}}
+
