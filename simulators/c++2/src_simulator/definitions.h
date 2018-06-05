@@ -89,7 +89,7 @@ using std::max;
 //cost of a send/wait command
 #define WAIT_SEND_VLEN 1
 //activate tis flag to take penalties (energy mode, branch prediction, context switch) into account
-#undef PENALTIES_ENABLED
+#define PENALTIES_ENABLED
 //enables the state hash feature
 #undef STATE_HASH_ENABLED
 //enables listerns for interactive simulation, switch off for fast simulation in command line mode
