@@ -155,7 +155,6 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     }
 
     public void internalDrawing(Graphics g) {
-    	int w;
         Font f = g.getFont();
         Font fold = f;
         
@@ -264,11 +263,8 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         int attributeFontSize = this.currentFontSize * 5 / 6;
         g.setFont(f.deriveFont((float) attributeFontSize));
         g.setFont(f);
-        w = g.getFontMetrics().stringWidth(commName);
-        if (w < ((int)(width * 1.5))) {
-        	g.setFont(f.deriveFont(Font.BOLD));
-        	g.drawString(commName, x, y-1);
-        } 
+    	g.setFont(f.deriveFont(Font.BOLD));
+    	g.drawString(commName, x, y-1);
 
         g.setFont(fold);
 

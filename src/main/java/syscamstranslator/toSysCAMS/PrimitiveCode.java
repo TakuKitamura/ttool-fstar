@@ -224,18 +224,39 @@ public class PrimitiveCode {
 					
 			StringBuffer pcbuf = new StringBuffer(tdf.getProcessCode());
 			StringBuffer buffer = new StringBuffer("");
+			int tab = 0;
+			int begin = 0;
+			
 	        for(int pos = 0; pos != tdf.getProcessCode().length(); pos++) {
 	        	char c = pcbuf.charAt(pos);
 	            switch(c) {
-	                case '\t':  buffer.append("\t\t");       	 	break;
-	                case '}' : 	buffer.append("\t}");       		break;
-	                default:   	buffer.append(pcbuf.charAt(pos)); 	break;
+	                case '\t':  
+	                	begin = 1;
+	                	tab++;
+	                	break;
+	                default:  
+	                	if (begin == 1) {
+	                		int i = tab;
+	                		while (i >= 0) {
+	                			buffer.append("\t"); 
+	                			i--;
+	                		}
+	                		buffer.append(pcbuf.charAt(pos)); 	
+	                		begin = 0;
+	                		tab = 0;
+	                	} else {
+	                		if (c == '}') {
+	                			buffer.append("\t"); 
+	                		}
+	                		buffer.append(pcbuf.charAt(pos)); 	
+	                	}
+	                	break;
 	            }
 	        }
 			
 	        String pc = buffer.toString();
 	        
-			corpsPrimitive = corpsPrimitive + "\t" + pc + CR2 + "};" + CR2 + "#endif"
+			corpsPrimitive = corpsPrimitive + "\t" + pc + CR + "};" + CR2 + "#endif"
 					+ " // " + tdf.getName().toUpperCase() + "_H";
 		} else {
 			corpsPrimitive = "";

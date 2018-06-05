@@ -117,6 +117,8 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener {
     	StringBuffer databuf = new StringBuffer(data);
     	StringBuffer buffer = new StringBuffer("");
     	int endline = 0;
+    	int nb_arobase = 0;
+    	int condition = 0;
     	
         for(int pos = 0; pos != data.length(); pos++) {
         	char c = databuf.charAt(pos);
@@ -128,20 +130,52 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener {
                 case '{'  : 
                 	buffer.append("{\n"); 
                 	endline = 1;
+                	nb_arobase++;
                 	break;
-                case ';'  : 
-                	buffer.append(";\n"); 
-                	endline = 1;
+                case '}'  : 
+                	if (nb_arobase == 1) {
+                		buffer.append("}\n"); 
+                		endline = 0;
+                	} else {
+                		int i = nb_arobase;
+                		while (i >= 1) {
+                			buffer.append("\t");
+                			i--;
+                		}
+                		buffer.append("}\n"); 
+                		endline = 1;
+                	}
+                	nb_arobase--;
+                	break;
+                case ';'  :
+                	if (condition == 1) {
+                		buffer.append(";");
+                	} else {
+                		buffer.append(";\n");
+                		endline = 1;
+                	}
                 	break;
                 case ' '  :
                 	if (endline == 0) {
                 		buffer.append(databuf.charAt(pos)); 
                 	}
                 	break;
+                case '(' :
+                	buffer.append("(");
+                	condition = 1;
+                	break;
+                case ')' :
+                	buffer.append(")");
+                	condition = 0;
+                	break;
                 default   : 
                 	if (endline == 1) {
                 		endline = 0;
-                		buffer.append("\t");
+                		int i = nb_arobase;
+                		while (i >= 1) {
+                			buffer.append("\t");
+                			i--;
+                		}
                 	}
                 	buffer.append(databuf.charAt(pos)); 
                 	break;
