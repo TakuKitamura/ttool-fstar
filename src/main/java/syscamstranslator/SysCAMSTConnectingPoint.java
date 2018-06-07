@@ -63,10 +63,6 @@ public class SysCAMSTConnectingPoint{
 		return ownerComponent;
 	}
 
-	void setConnector(SysCAMSTConnector _connector) {
-		ownerConnector = _connector;
-	}
-
 	boolean ConnectingPointIsFree(){
 		return ownerConnector == null;
     }

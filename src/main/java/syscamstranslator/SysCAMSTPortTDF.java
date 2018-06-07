@@ -73,63 +73,31 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 		return name;
 	}
 
-	public void setName(String _name) {
-		name = _name;
-	}
-
 	public int getPeriod() {
 		return period;
-	}
-
-	public void setPeriod(int _period) {
-		period = _period;
 	}
 
 	public String getTime() {
 		return time;
 	}
 
-	public void setTime(String _time) {
-		time = _time;
-	}
-
 	public int getRate() {
 		return rate;
-	}
-
-	public void setRate(int _rate) {
-		rate = _rate;
 	}
 
 	public int getDelay() {
 		return delay;
 	}
 
-	public void setDelay(int _delay) {
-		delay = _delay;
-	}
-
 	public int getOrigin() {
 		return origin;
-	}
-
-	public void setOrigin(int _origin) {
-		origin = _origin;
 	}
 
 	public String getTDFType() {
 		return TDFType;
 	}
 
-	public void setTDFType(String _TDFType) {
-		TDFType = _TDFType;
-	}
-
-	public synchronized SysCAMSTBlockTDF getBlockTDF() {
+	public SysCAMSTBlockTDF getBlockTDF() {
 		return blockTDF;
-	}
-
-	public synchronized void setBlockTDF(SysCAMSTBlockTDF _blockTDF) {
-		blockTDF = _blockTDF;
 	}
 }

@@ -73,63 +73,31 @@ public class SysCAMSTPortConverter extends SysCAMSTComponent {
 		return name;
 	}
 
-	public void setName(String _name) {
-		name = _name;
-	}
-
 	public int getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(int _period) {
-		period = _period;
-	}
-	
 	public String getTime() {
 		return time;
 	}
 
-	public void setTime(String _time) {
-		time = _time;
-	}
-	
 	public int getRate() {
 		return rate;
-	}
-
-	public void setRate(int _rate) {
-		rate = _rate;
 	}
 
 	public int getDelay() {
 		return delay;
 	}
 
-	public void setDelay(int _delay) {
-		delay = _delay;
-	}
-
 	public int getOrigin() {
 		return origin;
-	}
-
-	public void setOrigin(int origin) {
-		this.origin = origin;
 	}
 
 	public String getConvType() {
 		return ConvType;
 	}
 
-	public void setConvType(String _ConvType) {
-		ConvType = _ConvType;
-	}
-
 	public SysCAMSTBlockTDF getBlockTDF() {
 		return blockTDF;
-	}
-
-	public void setBlockTDF(SysCAMSTBlockTDF _blockTDF) {
-		blockTDF = _blockTDF;
 	}
 }

@@ -65,16 +65,8 @@ public class SysCAMSTBlockDE extends SysCAMSTComponent {
 		return period;
 	}
 
-	public void setPeriod(int _period) {
-		period = _period;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setBlockDEName(String _name) {
-		name = _name;
 	}
 
 	public LinkedList<SysCAMSTPortDE> getPortDE(){

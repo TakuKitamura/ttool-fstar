@@ -72,32 +72,16 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 		return period;
 	}
 
-	public void setPeriod(int _period) {
-		period = _period;
-	}
-
 	public String getProcessCode() {
 		return processCode;
-	}
-
-	public void setProcessCode(String _processCode) {
-		processCode = _processCode;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setBlockTDFName(String _name) {
-		name = _name;
-	}
-
 	public SysCAMSTCluster getCluster() {
 		return cluster;
-	}
-
-	public void setCluster(SysCAMSTCluster _cluster) {
-		cluster = _cluster;
 	}
 
 	public LinkedList<SysCAMSTPortTDF> getPortTDF(){

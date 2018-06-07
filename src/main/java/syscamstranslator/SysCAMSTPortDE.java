@@ -73,63 +73,31 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 		return name;
 	}
 
-	public void setName(String _name) {
-		name = _name;
-	}
-
 	public int getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(int _period) {
-		period = _period;
-	}
-	
 	public String getTime() {
 		return time;
 	}
 
-	public void setTime(String _time) {
-		time = _time;
-	}
-	
 	public int getRate() {
 		return rate;
-	}
-
-	public void setRate(int _rate) {
-		rate = _rate;
 	}
 
 	public int getDelay() {
 		return delay;
 	}
 
-	public void setDelay(int _delay) {
-		delay = _delay;
-	}
-
 	public int getOrigin() {
 		return origin;
-	}
-
-	public void setOrigin(int _origin) {
-		origin = _origin;
 	}
 
 	public String getDEType() {
 		return DEType;
 	}
 
-	public void setDEType(String _DEType) {
-		DEType = _DEType;
-	}
-
 	public SysCAMSTBlockDE getBlockTDF() {
 		return blockDE;
-	}
-
-	public void setBlockDE(SysCAMSTBlockDE _blockDE) {
-		blockDE = _blockDE;
 	}
 }
