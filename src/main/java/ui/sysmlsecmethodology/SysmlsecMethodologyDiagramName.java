@@ -87,8 +87,8 @@ public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalCo
 
     protected final String[] SHORT_ACTION_NAMES = {
         "simu", "upp", "proverif", "inv",
-        "code-gen", "sim-trace", "upp", "lot", "tml",
-        "fv", "sim-trace", "tmap", "sim-anim", "sim-anim"};
+        "code-gen", "sim-anim", "sim-trace", "lot", "upp", "tml",
+        "fv", "sim-trace", "sim-anim", "tmap"};
 
     protected final String[] LONG_ACTION_NAMES = {
         /*0*/ "Simulation and animate the model",

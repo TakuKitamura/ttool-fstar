@@ -217,7 +217,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 			}
 		}
 
-        JDialogBUSNode dialog = new JDialogBUSNode(frame, "Setting VGMN attributes", this, attacks);
+        JDialogBUSNode dialog = new JDialogBUSNode(frame, "Setting Bus Attributes", this, attacks);
        // dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
         dialog.setVisible( true ); // blocked until dialog has been closed

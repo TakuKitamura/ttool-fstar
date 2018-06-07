@@ -41,6 +41,7 @@
 
 package ui.window;
 
+import myutil.TraceManager;
 import ui.util.IconManager;
 import ui.tmldd.TMLArchiBUSNode;
 
@@ -216,12 +217,14 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
            }*/
 
 
-        String command = evt.getActionCommand();
+        //String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
+        if (evt.getSource() == closeButton)  {
+            TraceManager.addDev("Closing button");
             closeDialog();
-        } else if (command.equals("Cancel")) {
+        } else if (evt.getSource() == cancelButton) {
+            TraceManager.addDev("Cancel button");
             cancelDialog();
         }
     }
