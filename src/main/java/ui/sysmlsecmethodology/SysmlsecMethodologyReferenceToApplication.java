@@ -92,6 +92,7 @@ public class SysmlsecMethodologyReferenceToApplication extends SysmlsecMethodolo
     }
 
     public boolean makeCall(String diagramName, int index) {
+        //TraceManager.addDev("Make call to App with index=" + index);
         String tmp;
 
         switch(index) {

@@ -1109,4 +1109,6 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         this.repaint();
         this.revalidate();
     }
+    
+    
 }

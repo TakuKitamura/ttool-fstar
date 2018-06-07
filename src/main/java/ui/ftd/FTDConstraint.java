@@ -40,6 +40,7 @@
 package ui.ftd;
 
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -316,7 +317,11 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
                                 equation = elt.getAttribute("equation");
                                 tmp = elt.getAttribute("index");
                                 //TraceManager.addDev("index=" + tmp);
-                                index = Integer.decode(tmp).intValue();
+                                try {
+                                    index = Integer.decode(tmp).intValue();
+                                } catch (Exception e) {
+                                    //TraceManager.addDev("Wrong index for:" + tmp);
+                                }
                             }
                         }
                     }
@@ -324,6 +329,7 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
             }
 
         } catch (Exception e) {
+            TraceManager.addDev("Laoding extra param failed");
             throw new MalformedModelingException();
         }
     }
