@@ -2,48 +2,17 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/graphminimize/TTool-graphminimize.iml" filepath="$PROJECT_DIR$/.idea/modules/graphminimize/TTool-graphminimize.iml" group="graphminimize" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/graphshow/TTool-graphshow.iml" filepath="$PROJECT_DIR$/.idea/modules/graphshow/TTool-graphshow.iml" group="graphshow" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/launcher/TTool-launcher.iml" filepath="$PROJECT_DIR$/.idea/modules/launcher/TTool-launcher.iml" group="launcher" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rundse/TTool-rundse.iml" filepath="$PROJECT_DIR$/.idea/modules/rundse/TTool-rundse.iml" group="rundse" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tiftranslator/TTool-tiftranslator.iml" filepath="$PROJECT_DIR$/.idea/modules/tiftranslator/TTool-tiftranslator.iml" group="tiftranslator" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tmltranslator/TTool-tmltranslator.iml" filepath="$PROJECT_DIR$/.idea/modules/tmltranslator/TTool-tmltranslator.iml" group="tmltranslator" />
       <module fileurl="file://$PROJECT_DIR$/graphminimize/src/main/graphminimize.iml" filepath="$PROJECT_DIR$/graphminimize/src/main/graphminimize.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/graphminimize/graphminimize_main.iml" filepath="$PROJECT_DIR$/.idea/modules/graphminimize/graphminimize_main.iml" group="graphminimize" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/graphminimize/graphminimize_test.iml" filepath="$PROJECT_DIR$/.idea/modules/graphminimize/graphminimize_test.iml" group="graphminimize" />
       <module fileurl="file://$PROJECT_DIR$/graphshow/src/main/graphshow.iml" filepath="$PROJECT_DIR$/graphshow/src/main/graphshow.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/graphshow/graphshow_main.iml" filepath="$PROJECT_DIR$/.idea/modules/graphshow/graphshow_main.iml" group="graphshow" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/graphshow/graphshow_test.iml" filepath="$PROJECT_DIR$/.idea/modules/graphshow/graphshow_test.iml" group="graphshow" />
       <module fileurl="file://$PROJECT_DIR$/launcher/src/main/launcher.iml" filepath="$PROJECT_DIR$/launcher/src/main/launcher.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/launcher/launcher_main.iml" filepath="$PROJECT_DIR$/.idea/modules/launcher/launcher_main.iml" group="launcher" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/launcher/launcher_test.iml" filepath="$PROJECT_DIR$/.idea/modules/launcher/launcher_test.iml" group="launcher" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ludovicapvrille-ttool.iml" filepath="$PROJECT_DIR$/.idea/modules/ludovicapvrille-ttool.iml" />
       <module fileurl="file://$PROJECT_DIR$/simulationcontrol/src/main/remotesimulator.iml" filepath="$PROJECT_DIR$/simulationcontrol/src/main/remotesimulator.iml" />
       <module fileurl="file://$PROJECT_DIR$/rundse/src/main/rundse.iml" filepath="$PROJECT_DIR$/rundse/src/main/rundse.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rundse/rundse_main.iml" filepath="$PROJECT_DIR$/.idea/modules/rundse/rundse_main.iml" group="rundse" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rundse/rundse_test.iml" filepath="$PROJECT_DIR$/.idea/modules/rundse/rundse_test.iml" group="rundse" />
       <module fileurl="file://$PROJECT_DIR$/src/main/shared.iml" filepath="$PROJECT_DIR$/src/main/shared.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/simulationcontrol/simulationcontrol.iml" filepath="$PROJECT_DIR$/.idea/modules/simulationcontrol/simulationcontrol.iml" group="simulationcontrol" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/simulationcontrol/simulationcontrol_main.iml" filepath="$PROJECT_DIR$/.idea/modules/simulationcontrol/simulationcontrol_main.iml" group="simulationcontrol" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/simulationcontrol/simulationcontrol_test.iml" filepath="$PROJECT_DIR$/.idea/modules/simulationcontrol/simulationcontrol_test.iml" group="simulationcontrol" />
       <module fileurl="file://$PROJECT_DIR$/tiftranslator/src/main/tiftranslator.iml" filepath="$PROJECT_DIR$/tiftranslator/src/main/tiftranslator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tiftranslator/tiftranslator_main.iml" filepath="$PROJECT_DIR$/.idea/modules/tiftranslator/tiftranslator_main.iml" group="tiftranslator" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tiftranslator/tiftranslator_test.iml" filepath="$PROJECT_DIR$/.idea/modules/tiftranslator/tiftranslator_test.iml" group="tiftranslator" />
       <module fileurl="file://$PROJECT_DIR$/tmltranslator/src/main/tmltranslator.iml" filepath="$PROJECT_DIR$/tmltranslator/src/main/tmltranslator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tmltranslator/tmltranslator_main.iml" filepath="$PROJECT_DIR$/.idea/modules/tmltranslator/tmltranslator_main.iml" group="tmltranslator" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tmltranslator/tmltranslator_test.iml" filepath="$PROJECT_DIR$/.idea/modules/tmltranslator/tmltranslator_test.iml" group="tmltranslator" />
       <module fileurl="file://$PROJECT_DIR$/ttool/src/main/ttool.iml" filepath="$PROJECT_DIR$/ttool/src/main/ttool.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ttool/ttool-ttool.iml" filepath="$PROJECT_DIR$/.idea/modules/ttool/ttool-ttool.iml" group="ttool" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ttool/ttool-ttool_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ttool/ttool-ttool_main.iml" group="ttool" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ttool/ttool-ttool_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ttool/ttool-ttool_test.iml" group="ttool" />
       <module fileurl="file://$PROJECT_DIR$/webcrawler/client/src/main/webcrawler-client.iml" filepath="$PROJECT_DIR$/webcrawler/client/src/main/webcrawler-client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webcrawler/client/webcrawler-client_main.iml" filepath="$PROJECT_DIR$/.idea/modules/webcrawler/client/webcrawler-client_main.iml" group="webcrawler-client" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webcrawler/client/webcrawler-client_test.iml" filepath="$PROJECT_DIR$/.idea/modules/webcrawler/client/webcrawler-client_test.iml" group="webcrawler-client" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webcrawler/client/webcrawler-client~1.iml" filepath="$PROJECT_DIR$/.idea/modules/webcrawler/client/webcrawler-client~1.iml" group="webcrawler-client" />
       <module fileurl="file://$PROJECT_DIR$/webcrawler/server/src/main/webcrawler-server.iml" filepath="$PROJECT_DIR$/webcrawler/server/src/main/webcrawler-server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webcrawler/server/webcrawler-server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/webcrawler/server/webcrawler-server_main.iml" group="webcrawler-server" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webcrawler/server/webcrawler-server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/webcrawler/server/webcrawler-server_test.iml" group="webcrawler-server" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/webcrawler/server/webcrawler-server~1.iml" filepath="$PROJECT_DIR$/.idea/modules/webcrawler/server/webcrawler-server~1.iml" group="webcrawler-server" />
     </modules>
   </component>
 </project>
