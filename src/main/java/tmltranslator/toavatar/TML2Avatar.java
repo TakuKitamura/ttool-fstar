@@ -1250,6 +1250,7 @@ outerloop:
 					if (ae.securityPattern!=null){
 						//send nonce
 						if (ae.securityPattern.type.equals("Nonce")){
+							block.addAttribute(new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block,null));
 							as.addValue(ae.securityPattern.name);
 						}
 						//send encrypted key

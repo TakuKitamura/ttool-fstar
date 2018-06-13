@@ -42,6 +42,7 @@
 package ui.window;
 
 import ui.util.IconManager;
+import myutil.TraceManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -170,10 +171,12 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 		String command = evt.getActionCommand();
 
 		// Compare the action command to the known actions.
-		if (command.equals("Save and Close"))  {
-			closeDialog();
-		} else if (command.equals("Cancel")) {
-			cancelDialog();
+		 if (evt.getSource() == closeButton)  {
+            TraceManager.addDev("Closing button");
+            closeDialog();
+        } else if (evt.getSource() == cancelButton) {
+            TraceManager.addDev("Cancel button");
+            cancelDialog();
 		} else if (inserts[0] != null) {
 			if (evt.getSource() == inserts[0]) {
 				texts[1].setText(helps.get(1).getSelectedItem().toString());
