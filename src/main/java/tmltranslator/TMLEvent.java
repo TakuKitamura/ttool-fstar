@@ -46,6 +46,7 @@ import ui.tmlcompd.TMLCPrimitivePort;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import myutil.*;
 
 /**
  * Class TMLEvent
@@ -120,6 +121,20 @@ public class TMLEvent extends TMLCommunicationElement {
             }
         }
         return origin;
+    }
+
+    public boolean hasDestinationTask(TMLTask t) {
+        if (destination == t) {
+            return true;
+        }
+        for (TMLTask task: destinationTasks) {
+            //TraceManager.addDev("Comparing " + t.getTaskName() + " with " + task.getTaskName());
+            if (task == t) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public TMLTask getDestinationTask() {
