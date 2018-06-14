@@ -444,5 +444,12 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         return isRootAttack;
     }
 
+    public void wasUnswallowed() {
+        setFather(null);
+        TDiagramPanel tdp = getTDiagramPanel();
+        setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+
+    }
+
 
 }
