@@ -42,6 +42,7 @@ import ui.*;
 import ui.util.IconManager;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.util.Vector;
 
 /**
@@ -73,8 +74,10 @@ public  class SysCAMSPortConnector extends TGConnector implements ScalableTGComp
     	return p2;
 	}
 
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        try {
+    protected void drawLastSegment(Graphics gr, int x1, int y1, int x2, int y2){
+		Graphics2D g = (Graphics2D) gr;
+
+    	try {
             SysCAMSPortConnectingPoint pt1 = (SysCAMSPortConnectingPoint)p1;
             SysCAMSPortConnectingPoint pt2 = (SysCAMSPortConnectingPoint)p2;
             if (!pt1.positionned) {
@@ -101,7 +104,28 @@ public  class SysCAMSPortConnector extends TGConnector implements ScalableTGComp
                     g.setFont(fold);
                 }
             }
-            g.drawLine(x1, y1, x2, y2);
+            double phi = Math.toRadians(40);
+        	int barb = 20;
+        	int lineSize = 3;
+        	
+            Point begin = new Point(x1, y1-(lineSize/3));
+    		Point end = new Point(x2, y2-(lineSize/3));
+
+    		g.setStroke(new BasicStroke(lineSize - 1));
+    		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    		g.drawLine(begin.x, begin.y, end.x, end.y);
+
+    		double dy = end.y - begin.y;
+    		double dx = end.x - begin.x;
+    		double theta = Math.atan2(dy, dx);
+    		double x, y, rho = theta + phi;
+    		for (int j = 0; j < 2; j++) {
+    			x = end.x - barb * Math.cos(rho);
+    			y = end.y - barb * Math.sin(rho);
+    			g.setStroke(new BasicStroke(lineSize - 1));
+    			g.draw(new Line2D.Double(end.x, end.y, x, y));
+    			rho = theta - phi;
+    		}
             return;
         } catch (Exception e) {
         }
