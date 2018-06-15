@@ -131,6 +131,8 @@ public class HSMGeneration implements Runnable {
 	}
     
     public void run(){
+    	Map<String, Integer> channelIndexMap = new HashMap<String, Integer>();
+    	int channelIndex=0;
     	TraceManager.addDev("Adding HSM");
         
         String encComp = "100";
@@ -171,8 +173,8 @@ public class HSMGeneration implements Runnable {
         for (String cpuName : selectedCpuTasks.keySet()) {
             Map<String, HSMChannel> hsmChannels = new HashMap<String, HSMChannel>();
             TMLCPrimitiveComponent hsm = new TMLCPrimitiveComponent(0, 500, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxY(), false, null, tcdp);
-            //TAttribute isEnc = new TAttribute(2, "isEnc", "true", 4);
-            //hsm.getAttributeList().add(isEnc);
+            TAttribute index = new TAttribute(2, "channelIndex", "0", 0);
+            hsm.getAttributeList().add(index);
             tcdp.addComponent(hsm, 0, 500, false, true);
             hsm.setValueWithChange("HSM_" + cpuName);
             //Find all associated components
@@ -240,6 +242,10 @@ public class HSMGeneration implements Runnable {
                                 if (type != -1) {
                                     compChannels.put(writeChannel.getChannelName(), ch);
                                     channelInstances.add(tg);
+                                    if (!channelIndexMap.containsKey(writeChannel.getChannelName())){
+	                                    channelIndexMap.put(writeChannel.getChannelName(),channelIndex);
+	                                    channelIndex++;
+									}   
                                 }
                             }
                         } else {
@@ -261,6 +267,10 @@ public class HSMGeneration implements Runnable {
                                 HSMChannel ch = new HSMChannel(writeChannel.getChannelName(), compName, type);
                                 ch.securityContext = writeChannel.getSecurityContext();
                                 compChannels.put(writeChannel.getChannelName(), ch);
+                                if (!channelIndexMap.containsKey(writeChannel.getChannelName())){
+	                            	channelIndexMap.put(writeChannel.getChannelName(),channelIndex);
+	                                channelIndex++;
+								}   
                                 //chanNames.add(writeChannel.getChannelName()+compName);
                             }
                         }
@@ -275,6 +285,10 @@ public class HSMGeneration implements Runnable {
                                     HSMChannel ch = new HSMChannel(readChannel.getChannelName(), compName, HSMChannel.DEC);
                                     ch.securityContext = "hsmSec_" + readChannel.getChannelName();
                                     compChannels.put(readChannel.getChannelName(), ch);
+                                    if (!channelIndexMap.containsKey(readChannel.getChannelName())){
+	                            		channelIndexMap.put(readChannel.getChannelName(),channelIndex);
+	                                	channelIndex++;
+									}   
                                     if (nonSecChans.contains(compName + "__" + readChannel.getChannelName() + "_chData") && nonAuthChans.contains(compName + "__" + readChannel.getChannelName())) {
                                         ch.nonceName = "nonce_" + readChannel.getChannelName();
                                     }
@@ -287,6 +301,10 @@ public class HSMGeneration implements Runnable {
                                 HSMChannel ch = new HSMChannel(readChannel.getChannelName(), compName, HSMChannel.DEC);
                                 ch.securityContext = readChannel.getSecurityContext();
                                 compChannels.put(readChannel.getChannelName(), ch);
+                                if (!channelIndexMap.containsKey(readChannel.getChannelName())){
+	                            	channelIndexMap.put(readChannel.getChannelName(),channelIndex);
+	                                channelIndex++;
+								}   
                             }
                         }
                     }
@@ -301,6 +319,8 @@ public class HSMGeneration implements Runnable {
                         //}
                     }
                 }
+                
+                System.out.println("channelIndex " + channelIndexMap);
                 //System.out.println("compchannels " +compChannels);
                 List<ChannelData> hsmChans = new ArrayList<ChannelData>();
                 ChannelData chd = new ChannelData("startHSM_" + cpuName, false, false);
@@ -322,7 +342,7 @@ public class HSMGeneration implements Runnable {
                     if (!hsmChan.isChan) {
                         originPort.typep = 2;
                         destPort.typep = 2;
-                    //    originPort.setParam(0, new TType(2));
+                        originPort.setParam(0, new TType(1));
                     }
                     destPort.isOrigin = !hsmChan.isOrigin;
 
@@ -367,7 +387,11 @@ public class HSMGeneration implements Runnable {
 
                     TMLADSendRequest req = new TMLADSendRequest(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     req.setRequestName("startHSM_" + cpuName);
-                   // req.setParam(0, "isEnc");
+                    
+                                        
+                    
+                    req.setParam(0, Integer.toString(channelIndexMap.get(chanName)));
+                    req.makeValue();
                     tad.addComponent(req, xpos, ypos + yShift, false, true);
 
                     fromStart.setP2(req.getTGConnectingPointAtIndex(0));
@@ -458,7 +482,9 @@ public class HSMGeneration implements Runnable {
                     yShift += 50;
                     TMLADSendRequest req = new TMLADSendRequest(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     req.setRequestName("startHSM_" + cpuName);
-                  //  req.setParam(0, "isEnc");
+                    
+                    req.setParam(0, Integer.toString(channelIndexMap.get(chanName)));
+                    
                     req.makeValue();
                     tad.addComponent(req, xpos, ypos + yShift, false, true);
 
@@ -534,9 +560,9 @@ public class HSMGeneration implements Runnable {
             fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 
 
-/*            TMLADReadRequestArg req = new TMLADReadRequestArg(300, 100, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+            TMLADReadRequestArg req = new TMLADReadRequestArg(300, 100, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
             tad.addComponent(req, 300, 100, false, true);
-            req.setParam(0, "isEnc");
+            req.setParam(0, "channelIndex");
             req.makeValue();
 
             //Connect start and readrequest
@@ -544,14 +570,14 @@ public class HSMGeneration implements Runnable {
             fromStart.setP2(req.getTGConnectingPointAtIndex(0));
             tad.addComponent(fromStart, 300, 200, false, true);
 
-*/
+
             TMLADChoice choice = new TMLADChoice(300, 200, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
             tad.addComponent(choice, 300, 200, false, true);
 
 
             //Connect readrequest and choice
             fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
-            fromStart.setP1(start.getTGConnectingPointAtIndex(0));
+            fromStart.setP1(req.getTGConnectingPointAtIndex(1));
             fromStart.setP2(choice.getTGConnectingPointAtIndex(0));
             tad.addComponent(fromStart, 300, 200, false, true);
 
@@ -661,6 +687,10 @@ public class HSMGeneration implements Runnable {
                 int i = 1;
 
                 for (String chan : hsmChannels.keySet()) {
+                
+                	//Add guard as channelindex
+                	choice.setGuard("[channelIndex=="+channelIndexMap.get(chan)+"]",i-1);
+                	
                     HSMChannel ch = hsmChannels.get(chan);
                     TMLADReadChannel rd = new TMLADReadChannel(xc, 300, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     rd.setChannelName("data_" + chan + "_" + hsmChannels.get(chan).task);
