@@ -42,8 +42,10 @@ import ui.*;
 import ui.util.IconManager;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.Vector;
+
+import myutil.GraphicLib;
 
 /**
  * Class SysCAMSPortConnector
@@ -104,27 +106,10 @@ public  class SysCAMSPortConnector extends TGConnector implements ScalableTGComp
                     g.setFont(fold);
                 }
             }
-            double phi = Math.toRadians(40);
-        	int barb = 20;
-        	int lineSize = 3;
-        	
-            Point begin = new Point(x1, y1-(lineSize/3));
-    		Point end = new Point(x2, y2-(lineSize/3));
-
-    		g.setStroke(new BasicStroke(lineSize - 1));
-    		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    		g.drawLine(begin.x, begin.y, end.x, end.y);
-
-    		double dy = end.y - begin.y;
-    		double dx = end.x - begin.x;
-    		double theta = Math.atan2(dy, dx);
-    		double x, y, rho = theta + phi;
-    		for (int j = 0; j < 2; j++) {
-    			x = end.x - barb * Math.cos(rho);
-    			y = end.y - barb * Math.sin(rho);
-    			g.setStroke(new BasicStroke(lineSize - 1));
-    			g.draw(new Line2D.Double(end.x, end.y, x, y));
-    			rho = theta - phi;
+            if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+    			g.drawLine(x1, y1, x2, y2);
+    		} else {
+    			GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
     		}
             return;
         } catch (Exception e) {
