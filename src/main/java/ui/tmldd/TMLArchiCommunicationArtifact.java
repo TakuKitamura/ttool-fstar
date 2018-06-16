@@ -179,7 +179,7 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
 
         JDialogCommunicationArtifact dialog = new JDialogCommunicationArtifact(frame, "Setting channel artifact attributes", this);
    //     dialog.setSize(700, 600);
-        GraphicLib.centerOnParent(dialog, 700, 600);
+        GraphicLib.centerOnParent(dialog, 400, 300);
         dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
@@ -343,5 +343,7 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
     public String getAttributes() {
         return "Priority = " + priority;
     }
+
+
 
 }

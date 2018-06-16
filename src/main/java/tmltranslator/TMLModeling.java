@@ -1266,10 +1266,42 @@ public class TMLModeling<E> {
         return ll;
     }
 
+    public List<TMLEvent> getEventsToMe(TMLTask task) {
+        TMLEvent evt;
+
+        List<TMLEvent> ll = new LinkedList<TMLEvent>();
+
+        // Must search the task for event operator, check the request for destination class
+        Iterator<TMLEvent> iterator = getListIteratorEvents();
+
+        while (iterator.hasNext()) {
+
+            evt = iterator.next();
+            //TraceManager.addDev("Considering event:" + evt.getName());
+
+            if (evt.hasDestinationTask(task)) {
+                ll.add(evt);
+            }
+        }
+
+        return ll;
+    }
+
     public TMLChannel getChannelToMe(TMLTask task) {
         List<TMLChannel> ll = getChannelsToMe(task);
 
         if ((ll == null) || (ll.size() == 0)) {
+            return null;
+        }
+
+        return ll.get(0);
+    }
+
+    public TMLEvent getEventToMe(TMLTask task) {
+        List<TMLEvent> ll = getEventsToMe(task);
+
+        if ((ll == null) || (ll.size() == 0)) {
+            TraceManager.addDev("Returning null event");
             return null;
         }
 
@@ -2250,7 +2282,7 @@ public class TMLModeling<E> {
         TMLForLoop junction = new TMLForLoop("junctionOfFork", null);
         junction.setInit("fork" + SEP1 + "i=0");
         junction.setCondition("fork" + SEP1 + "i<1");
-        junction.setIncrement("fork" + SEP1 + "i=fork__i");
+        junction.setIncrement("fork" + SEP1 + "i=0");
         TMLAttribute attr = new TMLAttribute("fork" + SEP1 + "i", "fork" + SEP1 +"i", new TMLType(TMLType.NATURAL), "0");
         forkTask.addAttribute(attr);
         forkActivity.addElement(junction);

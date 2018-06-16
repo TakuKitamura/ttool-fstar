@@ -449,5 +449,12 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         return isRootFault;
     }
 
+    public void wasUnswallowed() {
+        setFather(null);
+        TDiagramPanel tdp = getTDiagramPanel();
+        setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+
+    }
+
 
 }

@@ -2647,6 +2647,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public void wasUnswallowed() {
+        setFather(null);
+        TDiagramPanel tdp = getTDiagramPanel();
+        setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
     }
 
 

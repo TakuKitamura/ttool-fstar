@@ -149,6 +149,7 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
 		for(int i=0; i<11; i++) {
 			list.add(""+i);
 		}
+		panel2.add(new JLabel("Priority:"), c1);
 		priority = new JComboBox<>(list);
 		priority.setSelectedIndex(artifact.getPriority());
 		panel2.add(priority, c1);
@@ -170,6 +171,7 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c0.fill = GridBagConstraints.BOTH;
         c.add(panel2, c0);
         
         c0.gridwidth = 1;

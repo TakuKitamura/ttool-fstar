@@ -49,6 +49,7 @@ import ui.util.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
 import graph.RG;
+import graph.AUTGraph;
 
 import javax.swing.*;
 import java.awt.*;
@@ -121,6 +122,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JButton stop;
     protected JButton close;
     protected JButton show;
+    protected JButton display;
 
     //protected JRadioButton exe, exeint;
     //protected ButtonGroup exegroup;
@@ -305,16 +307,19 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         stop = new JButton("Stop", IconManager.imgic55);
         close = new JButton("Close", IconManager.imgic27);
         show = new JButton("RG analysis", IconManager.imgic28);
+        display = new JButton("Show", IconManager.imgic28);
 
         start.setPreferredSize(new Dimension(100, 30));
         stop.setPreferredSize(new Dimension(100, 30));
         close.setPreferredSize(new Dimension(120, 30));
         show.setPreferredSize(new Dimension(150, 30));
+        display.setPreferredSize(new Dimension(100, 30));
 
         start.addActionListener(this);
         stop.addActionListener(this);
         close.addActionListener(this);
         show.addActionListener(this);
+        display.addActionListener(this);
 
         // Information
         JPanel jplow = new JPanel(new BorderLayout());
@@ -397,6 +402,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         jp2.add(stop);
         jp2.add(close);
         jp2.add(show);
+        jp2.add(display);
         jplow.add(jp2, BorderLayout.SOUTH);
 
         c.add(jplow, BorderLayout.SOUTH);
@@ -414,6 +420,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             closeDialog();
         } else if (evt.getSource() == show) {
             showGraph();
+        } else if (evt.getSource() == display) {
+            displayGraph();
         } else if (evt.getSource() == saveGraphAUT) {
             setButtons();
         } else if (evt.getSource() == saveGraphDot) {
@@ -441,6 +449,16 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     public void showGraph() {
         if (graphAUT != null) {
             mgui.showAUTFromString("Last RG", graphAUT);
+        }
+    }
+
+    public void displayGraph() {
+        // Make this in a different thread
+        // And authorize the show only for a small nb of states ...
+        if (graphAUT != null) {
+            AUTGraph rg = new AUTGraph();
+            rg.buildGraph(graphAUT);
+            rg.display();
         }
     }
 
@@ -719,6 +737,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         }
 
         show.setEnabled(graphMode == GRAPH_OK);
+        display.setEnabled(graphMode == GRAPH_OK);
     }
 
     public boolean hasToContinue() {
