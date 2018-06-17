@@ -52,9 +52,9 @@ import ui.avatarmad.AvatarMADAssumption;
 import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
 import ui.cd.*;
-import ui.syscams.SysCAMSBlockDE;
-import ui.syscams.SysCAMSBlockTDF;
-import ui.syscams.SysCAMSCompositeComponent;
+import ui.eln.*;
+import ui.eln.sca_eln.*;
+import ui.syscams.*;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
 import ui.ncdd.NCSwitchNode;
@@ -2596,9 +2596,22 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof TMLCRecordComponent && this.checkTMLCRecordComponent((TMLCRecordComponent) o, name))
                     || (o instanceof TMLCCompositeComponent && this.checkTMLCCompositeComponent((TMLCCompositeComponent) o, name))
                     || (o instanceof TMLTaskInterface && this.checkTMLTaskInterface((TMLTaskInterface) o, name))
-                	  || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
+                	|| (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
                     || (o instanceof SysCAMSBlockDE && this.checkSysCAMSBlockDEComponent((SysCAMSBlockDE) o, name))
                     || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
+                    || (o instanceof ELNComponentResistor && this.checkELNComponentResistor((ELNComponentResistor) o, name))
+                    || (o instanceof ELNComponentCapacitor && this.checkELNComponentCapacitor((ELNComponentCapacitor) o, name))
+                    || (o instanceof ELNComponentInductor && this.checkELNComponentInductor((ELNComponentInductor) o, name))
+                    || (o instanceof ELNComponentVoltageControlledVoltageSource && this.checkELNComponentVoltageControlledVoltageSource((ELNComponentVoltageControlledVoltageSource) o, name))
+                    || (o instanceof ELNComponentVoltageControlledCurrentSource && this.checkELNComponentVoltageControlledCurrentSource((ELNComponentVoltageControlledCurrentSource) o, name))
+                    || (o instanceof ELNComponentCurrentControlledVoltageSource && this.checkELNComponentCurrentControlledVoltageSource((ELNComponentCurrentControlledVoltageSource) o, name))
+                    || (o instanceof ELNComponentCurrentControlledCurrentSource && this.checkELNComponentCurrentControlledCurrentSource((ELNComponentCurrentControlledCurrentSource) o, name))
+                    || (o instanceof ELNComponentNullor && this.checkELNComponentNullor((ELNComponentNullor) o, name))
+                    || (o instanceof ELNComponentGyrator && this.checkELNComponentGyrator((ELNComponentGyrator) o, name))
+                    || (o instanceof ELNComponentIdealTransformer && this.checkELNComponentIdealTransformer((ELNComponentIdealTransformer) o, name))
+                    || (o instanceof ELNComponentTransmissionLine && this.checkELNComponentTransmissionLine ((ELNComponentTransmissionLine) o, name))
+                    || (o instanceof ELNComponentIndependentVoltageSource && this.checkELNComponentIndependentVoltageSource((ELNComponentIndependentVoltageSource) o, name))
+                    || (o instanceof ELNComponentIndependentCurrentSource && this.checkELNComponentIndependentCurrentSource((ELNComponentIndependentCurrentSource) o, name))
                     || (o instanceof ATDBlock && this.checkATDBlock((ATDBlock) o, name))
                     || (o instanceof AvatarBDBlock && this.checkAvatarBDBlock((AvatarBDBlock) o, name))
                     || (o instanceof AvatarCDBlock && this.checkAvatarCDBlock((AvatarCDBlock) o, name))
@@ -2657,6 +2670,58 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         
         public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
+        	return false;
+        }
+
+        public boolean checkELNComponentResistor(ELNComponentResistor o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCapacitor(ELNComponentCapacitor o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentInductor(ELNComponentInductor o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageControlledVoltageSource(ELNComponentVoltageControlledVoltageSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageControlledCurrentSource(ELNComponentVoltageControlledCurrentSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCurrentControlledVoltageSource(ELNComponentCurrentControlledVoltageSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCurrentControlledCurrentSource(ELNComponentCurrentControlledCurrentSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentNullor(ELNComponentNullor o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentGyrator(ELNComponentGyrator o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentIdealTransformer(ELNComponentIdealTransformer o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentTransmissionLine(ELNComponentTransmissionLine o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentIndependentVoltageSource(ELNComponentIndependentVoltageSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentIndependentCurrentSource(ELNComponentIndependentCurrentSource o, String name) {
         	return false;
         }
 
@@ -2782,7 +2847,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         });
     }
 
-		 public String findSysCAMSPrimitiveComponentName(String name) {
+    public String findSysCAMSPrimitiveComponentName(String name) {
     	return this.findGoodName(name, new NameChecker() {
     		public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
     			return o.getValue().equals(name);
@@ -2801,6 +2866,50 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     	});
     }
 
+    public String findELNComponentName(String name) {
+    	return this.findGoodName(name, new NameChecker() {
+    		public boolean checkELNComponentResistor(ELNComponentResistor o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCapacitor(ELNComponentCapacitor o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentInductor(ELNComponentInductor o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageControlledVoltageSource(ELNComponentVoltageControlledVoltageSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageControlledCurrentSource(ELNComponentVoltageControlledCurrentSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCurrentControlledVoltageSource(ELNComponentCurrentControlledVoltageSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCurrentControlledCurrentSource(ELNComponentCurrentControlledCurrentSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentNullor(ELNComponentNullor o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentGyrator(ELNComponentGyrator o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentIdealTransformer(ELNComponentIdealTransformer o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentTransmissionLine(ELNComponentTransmissionLine o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentIndependentVoltageSource(ELNComponentIndependentVoltageSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentIndependentCurrentSource(ELNComponentIndependentCurrentSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    	});
+    }
+    
     public String findBlockName(String name) {
         return this.findGoodName(name, new NameChecker() {
             public boolean checkATDBlock(ATDBlock o, String name) {

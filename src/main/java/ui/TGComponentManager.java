@@ -59,6 +59,8 @@ import ui.dd.TDDNode;
 import ui.dd.TGConnectorLinkNode;
 import ui.diplodocusmethodology.*;
 import ui.ebrdd.*;
+import ui.eln.*;
+import ui.eln.sca_eln.*;
 import ui.ftd.*;
 import ui.iod.*;
 import ui.ncdd.*;
@@ -342,6 +344,22 @@ public class TGComponentManager {
     public static final int CAMS_PORT_CONVERTER = 1606;
     public static final int CAMS_CLUSTER = 1607;
 
+    // ELN
+    public static final int ELN_CONNECTOR = 1610;
+    public static final int ELN_RESISTOR = 1611;
+    public static final int ELN_CAPACITOR = 1612;
+    public static final int ELN_INDUCTOR = 1613;
+    public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 1614;
+    public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 1615;
+    public static final int ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE = 1616;
+    public static final int ELN_CURRENT_CONTROLLED_CURRENT_SOURCE = 1617;
+    public static final int ELN_NULLOR = 1618;
+    public static final int ELN_GYRATOR = 1619;
+    public static final int ELN_IDEAL_TRANSFORMER = 1620;
+    public static final int ELN_TRANSMISSION_LINE = 1621;
+    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 1622;
+    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 1623;
+    
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
     public static final int PROSMD_STOP_STATE = 2001;
@@ -1251,6 +1269,46 @@ public class TGComponentManager {
             case CAMS_CLUSTER:
             	tgc = new SysCAMSCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
+            // ELN
+            case ELN_RESISTOR:
+            	tgc = new ELNComponentResistor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_CAPACITOR:
+            	tgc = new ELNComponentCapacitor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_INDUCTOR:
+            	tgc = new ELNComponentInductor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE:
+            	tgc = new ELNComponentVoltageControlledVoltageSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE:
+            	tgc = new ELNComponentVoltageControlledCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE:
+            	tgc = new ELNComponentCurrentControlledVoltageSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_CURRENT_CONTROLLED_CURRENT_SOURCE:
+            	tgc = new ELNComponentCurrentControlledCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_NULLOR:
+            	tgc = new ELNComponentNullor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_GYRATOR:
+            	tgc = new ELNComponentGyrator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_IDEAL_TRANSFORMER: 
+            	tgc = new ELNComponentIdealTransformer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_TRANSMISSION_LINE:
+            	tgc = new ELNComponentTransmissionLine(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_INDEPENDENT_VOLTAGE_SOURCE:
+            	tgc = new ELNComponentIndependentVoltageSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_INDEPENDENT_CURRENT_SOURCE: 
+            	tgc = new ELNComponentIndependentCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
             // Communication patterns + SD
             case TMLCP_CHOICE:
                 tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1646,7 +1704,37 @@ public class TGComponentManager {
         } else if (tgc instanceof SysCAMSCompositeComponent) {
         	return CAMS_CLUSTER;
 
-            // Others
+        	// ELN
+        } else if (tgc instanceof ELNConnector) {
+        	return ELN_CONNECTOR;	
+        } else if (tgc instanceof ELNComponentResistor) {
+        	return ELN_RESISTOR;
+        } else if (tgc instanceof ELNComponentCapacitor) {
+        	return ELN_CAPACITOR;
+        } else if (tgc instanceof ELNComponentInductor) {
+        	return ELN_INDUCTOR;
+        } else if (tgc instanceof ELNComponentInductor) {
+        	return ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE;
+        } else if (tgc instanceof ELNComponentInductor) {
+        	return ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE;
+        } else if (tgc instanceof ELNComponentInductor) {
+        	return ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE;
+        } else if (tgc instanceof ELNComponentInductor) {
+        	return ELN_CURRENT_CONTROLLED_CURRENT_SOURCE;
+        } else if (tgc instanceof ELNComponentNullor) {
+        	return ELN_NULLOR;
+        } else if (tgc instanceof ELNComponentGyrator) {
+        	return ELN_GYRATOR;
+        } else if (tgc instanceof ELNComponentIdealTransformer) {
+        	return ELN_IDEAL_TRANSFORMER;
+        } else if (tgc instanceof ELNComponentTransmissionLine) {
+        	return ELN_TRANSMISSION_LINE;
+        } else if (tgc instanceof ELNComponentIndependentVoltageSource) {
+        	return ELN_INDEPENDENT_VOLTAGE_SOURCE;
+        } else if (tgc instanceof ELNComponentIndependentCurrentSource) {
+        	return ELN_INDEPENDENT_CURRENT_SOURCE;
+        	
+        	// Others
         } else if (tgc instanceof TADDeterministicDelay) {
             return TAD_DETERMINISTIC_DELAY;
         } else if (tgc instanceof TADParallel) {
@@ -2338,6 +2426,9 @@ public class TGComponentManager {
                 break;
             case CAMS_CONNECTOR:
             	tgc = new SysCAMSPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            	break;
+            case ELN_CONNECTOR:
+            	tgc = new ELNConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             	break;
             case CONNECTOR_NODE_TMLARCHI:
                 tgc = new TMLArchiConnectorNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);

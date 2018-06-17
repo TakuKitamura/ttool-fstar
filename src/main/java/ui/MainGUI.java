@@ -1076,6 +1076,22 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
 
+    public int addELNDesignPanel(String name, int index) { 
+    	if (index == -1) {
+    		index = tabs.size();
+    	}
+    	ELNDesignPanel elndp = new ELNDesignPanel(this);
+    	tabs.add(index, elndp);
+    	mainTabbedPane.add(elndp.tabbedPane, index);
+    	mainTabbedPane.setToolTipTextAt(index, "Open ELN design diagrams");
+    	mainTabbedPane.setTitleAt(index, name);
+    	mainTabbedPane.setIconAt(index, IconManager.imgic60);
+    	//mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+    	elndp.init();
+    	//ystem.out.println("Design added");
+    	return index;
+    }
+
     //Return the list of all the TMLArchiDiagramPanels
     public Vector<TMLArchiPanel> getTMLArchiDiagramPanels() {
 
@@ -1470,12 +1486,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
 
-		public int createSysCAMSComponentDesign(String name) {
+	public int createSysCAMSComponentDesign(String name) {
         int index = addSysCAMSComponentDesignPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
         return index;
     }
 
+	public int createELN(String name) {
+        int index = addELNDesignPanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+	
     public int createADD(String name) {
         int index = addADDPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
@@ -1863,13 +1885,22 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //frame.repaint();
     }
 
-     public void newSysCAMS() {
+	public void newSysCAMS() {
         //TraceManager.addDev("NEW DESIGN");
         addSysCAMSComponentDesignPanel("SystemC_AMS", -1);
         tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
         //frame.repaint();
+    }
+    
+    public void newELN() {
+    	//TraceManager.addDev("NEW DESIGN");
+    	addELNDesignPanel("ELN", -1);
+    	tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
+    	mainTabbedPane.setSelectedIndex(tabs.size() - 1);
+    	//paneAction(null);
+    	//frame.repaint();
     }
 
     public void newADD() {
@@ -3841,6 +3872,44 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         			if (!automatic) {
         				JOptionPane.showMessageDialog(frame,
         						"The SystemC-AMS design contains several errors",
+        						"Syntax analysis failed",
+        						JOptionPane.INFORMATION_MESSAGE);
+        			}
+        		}
+        	}
+        } else if (tp instanceof ELNDesignPanel) {
+        	ELNDesignPanel elndp = (ELNDesignPanel) tp;
+        	JDialogSelectELNComponent.validated = elndp.validated;
+        	JDialogSelectELNComponent.ignored = elndp.ignored;
+        	Vector<TGComponent> ELNComponentsToValidate = new Vector<TGComponent>();
+        	JDialogSelectELNComponent jdselnc = new JDialogSelectELNComponent(frame, ELNComponentsToValidate, elndp.elndp.getComponentList(), "Choosing ELN components to validate");
+        	if (!automatic) {
+        		GraphicLib.centerOnParent(jdselnc);
+        		jdselnc.setVisible(true); // Blocked until dialog has been closed
+        	} else {
+        		jdselnc.closeDialog();
+        	}
+        	if (ELNComponentsToValidate.size() > 0) {
+        		elndp.validated = JDialogSelectELNComponent.validated;
+        		elndp.ignored = JDialogSelectELNComponent.ignored;
+//        		b = gtm.translateSysCAMSComponentDesign(syscamsComponentsToValidate, syscamscdp, jdssyscamsc.getOptimize());
+        		expandToWarnings();
+        		expandToErrors();
+        		if (b) {
+        			//setMode(MainGUI.MODEL_OK);
+        			setMode(MainGUI.GEN_SYSTEMC_OK);
+        			setMode(MainGUI.MODEL_OK);
+        			ret = true;
+        			if (!automatic) {
+        				JOptionPane.showMessageDialog(frame,
+        						"0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
+        						"Syntax analysis successful on ELN designs",
+        						JOptionPane.INFORMATION_MESSAGE);
+        			}
+        		} else {
+        			if (!automatic) {
+        				JOptionPane.showMessageDialog(frame,
+        						"The ELN design contains several errors",
         						"Syntax analysis failed",
         						JOptionPane.INFORMATION_MESSAGE);
         			}
@@ -6102,6 +6171,21 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     	return ll;
     }
 
+    public List<TGComponent> getAllELNComponents() {
+    	TURTLEPanel tp;
+    	List<TGComponent> ll = new LinkedList<TGComponent>();
+    	
+    	for (int i = 0; i < tabs.size(); i++) {
+    		tp = tabs.elementAt(i);
+    		
+    		if (tp instanceof ELNDesignPanel) {
+    			ll.addAll(((ELNDesignPanel) tp).elndp.getComponentList());
+    		}
+    	}
+    	
+    	return ll;
+    }
+
     public ArrayList<SysCAMSComponentTaskDiagramPanel> getAllPanelsReferencingSysCAMSCompositeComponent(SysCAMSCompositeComponent syscamscc) {
         TURTLEPanel tp;
         ArrayList<SysCAMSComponentTaskDiagramPanel> foundPanels = new ArrayList<SysCAMSComponentTaskDiagramPanel>();
@@ -6416,10 +6500,15 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         tp.tabbedPane.setTitleAt(0, name);
     }
 
-		public void setSysCAMSComponentTaskDiagramName(int indexDesign, String name) {
+	public void setSysCAMSComponentTaskDiagramName(int indexDesign, String name) {
     	TURTLEPanel tp = tabs.elementAt(indexDesign);
     	tp.tabbedPane.setTitleAt(0, name);
     }
+	
+	public void setELNDiagramName(int indexDesign, String name) {
+		TURTLEPanel tp = tabs.elementAt(indexDesign);
+		tp.tabbedPane.setTitleAt(0, name);
+	}
 
     public void setTMLArchitectureDiagramName(int indexDesign, String name) {
         TURTLEPanel tp = tabs.elementAt(indexDesign);
@@ -8935,7 +9024,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         private JPopupMenu menu;
 
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement/*, newTMLDesign*/, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
-                newNCDesign, sort, clone, newAttackTree, newFaultTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSysCAMS;
+        		newNCDesign, sort, clone, newAttackTree, newFaultTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSysCAMS, newELN;
         private JMenuItem newAVATARAnalysis;
 
         public PopupListener(MainGUI _mgui) {
@@ -8993,7 +9082,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             newTMLComponentDesign = createMenuItem("New Partitioning - Functional view");
             newTMLArchi = createMenuItem("New Partitioning - Architecture and Mapping");
             newTMLCP = createMenuItem("New Partitioning - Communication Pattern");
-            newSysCAMS = createMenuItem("New SystemC-AMS Block Diagram"); //ajout CD
+            newSysCAMS = createMenuItem("New SystemC-AMS Block Diagram");
+            newELN = createMenuItem("New ELN Diagram"); 
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
             newNCDesign = createMenuItem("New Network Calculus Design");
@@ -9081,6 +9171,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     menu.add(newTMLArchi);
                     menu.addSeparator();
                     menu.add(newSysCAMS);
+                    menu.add(newELN);
                     menu.addSeparator();
                 }
             }
@@ -9231,7 +9322,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 } else if (e.getSource() == newSysCAMS) {
                     ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newSysCAMS();
-                }
+                } else if (e.getSource() == newELN) {
+	            	ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
+	            	mgui.newELN();
+	            }
             }
         };
     }

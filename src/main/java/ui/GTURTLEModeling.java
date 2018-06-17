@@ -116,6 +116,7 @@ import ui.prosmd.ProactiveSMDPanel;
 import ui.req.Requirement;
 import ui.req.RequirementDiagramPanel;
 import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
+import ui.eln.*;
 import ui.tmlad.*;
 import ui.tmlcd.TMLTaskDiagramPanel;
 import ui.tmlcd.TMLTaskOperator;
@@ -4706,7 +4707,35 @@ public class GTURTLEModeling {
                         makePostLoading(camsp, beginIndex);
                     }
                 }
+            } else if (tdp instanceof ELNDiagramPanel) { 
+                nl = doc.getElementsByTagName("ELNDiagramPanelCopy");
 
+                if (nl == null) {
+                    return;
+                }
+
+                ELNDiagramPanel elndp = (ELNDiagramPanel) tdp;
+
+                for (i = 0; i < nl.getLength(); i++) {
+                    adn = nl.item(i);
+                    if (adn.getNodeType() == Node.ELEMENT_NODE) {
+                        elt = (Element) adn;
+
+                        if (elndp == null) {
+                            throw new MalformedModelingException();
+                        }
+
+                        decX = _decX;
+                        decY = _decY;
+
+                        makeXMLComponents(elt.getElementsByTagName("COMPONENT"), elndp);
+                        makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), elndp);
+                        makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), elndp);
+                        connectConnectorsToRealPoints(elndp);
+                        elndp.structureChanged();
+                        makePostLoading(elndp, beginIndex);
+                    }
+                }
             } else if (tdp instanceof AvatarADPanel) {
                 nl = doc.getElementsByTagName("AvatarADPanelCopy");
 
@@ -4915,6 +4944,8 @@ public class GTURTLEModeling {
             loadSysmlsecMethodology(node);
         } else if (type.compareTo("SystemC-AMS") == 0) {
             loadSysCAMS(node);
+        } else if (type.compareTo("ELN") == 0) {
+            loadELN(node);
         } else if (type.compareTo("TML Design") == 0) {
             loadTMLDesign(node);
         } else if (type.compareTo("TML Component Design") == 0) {
@@ -5445,7 +5476,7 @@ public class GTURTLEModeling {
         }
     }
 
-		public void loadSysCAMS(Node node) throws MalformedModelingException, SAXException {
+	public void loadSysCAMS(Node node) throws MalformedModelingException, SAXException {
         Element elt = (Element) node;
         String nameTab;
         NodeList diagramNl;
@@ -5472,6 +5503,33 @@ public class GTURTLEModeling {
         }
     }
 
+	public void loadELN(Node node) throws MalformedModelingException, SAXException {
+        Element elt = (Element) node;
+        String nameTab;
+        NodeList diagramNl;
+        int indexDesign;
+
+        nameTab = elt.getAttribute("nameTab");
+
+        indexDesign = mgui.createELN(nameTab);
+
+        diagramNl = node.getChildNodes();
+
+        for (int j = 0; j < diagramNl.getLength(); j++) {
+            //TraceManager.addDev("Design nodes: " + j);
+            node = diagramNl.item(j);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                elt = (Element) node;
+                if (elt.getTagName().compareTo("ELNDiagramPanel") == 0) {
+                    // Class diagram
+                    TraceManager.addDev("Loading ELN");
+                    loadELNDiagram(elt, indexDesign);
+                    TraceManager.addDev("End loading ELN");
+                }
+            }
+        }
+    }	
+		
     public void loadTMLDesign(Node node) throws MalformedModelingException, SAXException {
         Element elt = (Element) node;
         String nameTab;
@@ -5750,6 +5808,11 @@ public class GTURTLEModeling {
 			//TraceManager.addDev("Connectors...");
         	((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
         }
+        
+        if (tdp instanceof ELNDiagramPanel) {
+        	//TraceManager.addDev("Connectors...");
+        	((ELNDiagramPanel) tdp).setConnectorsToFront();
+        }
     }
 
     // AVATAR
@@ -5974,6 +6037,19 @@ public class GTURTLEModeling {
         // class diagram name
         name = elt.getAttribute("name");
         mgui.setSysCAMSComponentTaskDiagramName(indexDesign, name);
+        tdp = mgui.getMainTDiagramPanel(indexDesign);
+        tdp.setName(name);
+
+        loadDiagram(elt, tdp);
+    }
+    
+    public void loadELNDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
+        String name;
+        TDiagramPanel tdp;
+
+        // class diagram name
+        name = elt.getAttribute("name");
+        mgui.setELNDiagramName(indexDesign, name);
         tdp = mgui.getMainTDiagramPanel(indexDesign);
         tdp.setName(name);
 
