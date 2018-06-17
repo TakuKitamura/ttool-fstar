@@ -103,8 +103,9 @@ import java.util.regex.Pattern;
 			for (TMLTask t1:tmlmodel.getTasks()){
 				List<SecurityPattern> keys = new ArrayList<SecurityPattern>();
 				accessKeys.put(t1, keys);
+			
 				HwExecutionNode node1 = (HwExecutionNode) tmlmap.getHwNodeOf(t1);
-				//Try to find memory using only private buses
+				//Try to find memory using only private buses from origin
 				List<HwNode> toVisit = new ArrayList<HwNode>();
 				//List<HwNode> toMemory = new ArrayList<HwNode>();
 				List<HwNode> complete = new ArrayList<HwNode>();
@@ -132,13 +133,16 @@ import java.util.regex.Pattern;
 							}
 						}
 						else if (curr == link.hwnode){
-							if (!complete.contains(link.bus) && !toVisit.contains(link.bus)){
+							if (!complete.contains(link.bus) && !toVisit.contains(link.bus) && link.bus.privacy==1){
 								toVisit.add(link.bus);
 							}
 						}
 					}
 					complete.add(curr);
 				}
+				
+				//Find path to secure memory from destination node
+				
 				//		System.out.println("Memory found ?"+ memory);
 				for (TMLTask t2:tmlmodel.getTasks()){
 					HwExecutionNode node2 = (HwExecutionNode) tmlmap.getHwNodeOf(t2);
@@ -147,6 +151,7 @@ import java.util.regex.Pattern;
 						originDestMap.put(t1.getName()+"__"+t2.getName(), channelPublic);
 					}
 					else if (node1==node2){
+						
 						originDestMap.put(t1.getName()+"__"+t2.getName(), channelPrivate);
 					}
 					else {
@@ -165,7 +170,7 @@ import java.util.regex.Pattern;
 								pathMap.put(link.bus, tmp);
 							}
 						}
-outerloop:
+						outerloop:
 						while (found.size()>0){
 							HwNode curr = found.remove(0);
 							for (HwLink link: links){
@@ -213,9 +218,11 @@ outerloop:
 					}
 				}
 			}
+			//System.out.println(originDestMap);
 		}
 
-		public void checkChannels(){
+
+	/*	public void checkChannels(){
 			List<TMLChannel> channels = tmlmodel.getChannels();
 			List<TMLTask> destinations = new ArrayList<TMLTask>();
 			TMLTask a; 
@@ -233,6 +240,11 @@ outerloop:
 				for (TMLTask t: destinations){
 					//List<HwBus> buses = new ArrayList<HwBus>();
 					HwNode node2 = tmlmap.getHwNodeOf(t);
+
+					//Check if each node has a secure path to memory
+					
+					
+					
 
 					if (node1==node2){
 						channelMap.put(channel, channelPrivate);
@@ -255,7 +267,7 @@ outerloop:
 								pathMap.put(link.bus, tmp);
 							}
 						}
-outerloop:
+						outerloop:
 						while (found.size()>0){
 							HwNode curr = found.remove(0);
 							for (HwLink link: links){
@@ -307,7 +319,8 @@ outerloop:
 					}
 				}
 			}  
-		}
+			System.out.println(channelMap);
+		}*/
 
 		public List<AvatarStateMachineElement> translateState(TMLActivityElement ae, AvatarBlock block){
 
@@ -1562,7 +1575,7 @@ outerloop:
 			}
 
 			checkConnections();
-			checkChannels();
+		//	checkChannels();
 
 			distributeKeys();
 

@@ -75,7 +75,7 @@ public class HSMGeneration implements Runnable {
 
         avatar2proverif = new AVATAR2ProVerif(avatarspec);
         try {
-            proverif = avatar2proverif.generateProVerif(true, true, 3, true, false);
+            proverif = avatar2proverif.generateProVerif(true, true, 3, true, true);
             //warnings = avatar2proverif.getWarnings();
 
             if (!avatar2proverif.saveInFile("pvspec")) {
@@ -90,6 +90,10 @@ public class HSMGeneration implements Runnable {
 
             ProVerifOutputAnalyzer pvoa = avatar2proverif.getOutputAnalyzer();
             pvoa.analyzeOutput(data, true);
+            if (pvoa.getResults().size() ==0){
+            	TraceManager.addDev("ERROR: No security results");
+            }
+            
             Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
             for (AvatarPragmaSecret pragma : confResults.keySet()) {
                 if (confResults.get(pragma).isProved() && !confResults.get(pragma).isSatisfied()) {
@@ -320,7 +324,7 @@ public class HSMGeneration implements Runnable {
                     }
                 }
                 
-                System.out.println("channelIndex " + channelIndexMap);
+               // System.out.println("channelIndex " + channelIndexMap);
                 //System.out.println("compchannels " +compChannels);
                 List<ChannelData> hsmChans = new ArrayList<ChannelData>();
                 ChannelData chd = new ChannelData("startHSM_" + cpuName, false, false);
@@ -586,8 +590,9 @@ public class HSMGeneration implements Runnable {
             //Allows 9 channels max to simplify the diagram
 
             //If more than 3 channels, build 2 levels of choices
-            TMLADChoice choice2 = new TMLADChoice(xc, 400, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+
             if (hsmChannels.keySet().size() > 3) {
+                TMLADChoice choice2 = new TMLADChoice(xc, 400, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                 int i = 0;
                 for (String chan : hsmChannels.keySet()) {
                     HSMChannel ch = hsmChannels.get(chan);

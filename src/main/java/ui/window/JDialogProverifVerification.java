@@ -1034,6 +1034,9 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
             LinkedList<AvatarPragma> nonProved = new LinkedList<>();
 
             this.results = this.pvoa.getResults();
+            
+            //System.out.println(results);
+            
             for (AvatarPragma pragma : this.results.keySet()) {
                 if (pragma instanceof AvatarPragmaReachability) {
                     ProVerifQueryResult r = this.results.get(pragma);
