@@ -38,11 +38,11 @@
 
 package ui.window;
 
-import ui.eln.*;
 import ui.eln.sca_eln.ELNComponentIndependentVoltageSource;
 import ui.util.IconManager;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -151,7 +151,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 	    gridBag.setConstraints(nameTextField, constraints);
 	    boxPanel.add(nameTextField);
 	    
-	    //1
 	    JLabel initValLabel = new JLabel("init_value : ");
 	    constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
 	    		GridBagConstraints.CENTER,
@@ -168,7 +167,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 	    gridBag.setConstraints(initValueTextField, constraints);
 	    boxPanel.add(initValueTextField);
 	   
-	    //2
 	    JLabel offsetLabel = new JLabel("offset : ");
 	    constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
 	    		GridBagConstraints.CENTER,
@@ -185,7 +183,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 	    gridBag.setConstraints(offsetTextField, constraints);
 	    boxPanel.add(offsetTextField);
 	    
-	    //3
 	    JLabel amplitudeLabel = new JLabel("amplitude : ");
 	    constraints = new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
 	    		GridBagConstraints.CENTER,
@@ -202,7 +199,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 	    gridBag.setConstraints(amplitudeTextField, constraints);
 	    boxPanel.add(amplitudeTextField);
 	    
-	    //4
 		JLabel frequencyLabel = new JLabel("frequency : ");
 		constraints = new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER,
@@ -257,7 +253,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 		gridBag.setConstraints(frequencyComboBoxString, constraints);
 	    boxPanel.add(frequencyComboBoxString);
 	    
-	    //5
 	    JLabel phaseLabel = new JLabel("phase : ");
 	    constraints = new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0,
 	    		GridBagConstraints.CENTER,
@@ -282,7 +277,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 	    gridBag.setConstraints(phaseRadLabel, constraints);
 	    boxPanel.add(phaseRadLabel);
 	    
-	    //6
 	    JLabel delayLabel = new JLabel("delay : ");
 	    constraints = new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0,
 	    		GridBagConstraints.CENTER,
@@ -299,7 +293,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 	    gridBag.setConstraints(delayTextField, constraints);
 	    boxPanel.add(delayTextField);
 	    
-	    //7
 	    JLabel acAmplitudeLabel = new JLabel("ac_amplitude : ");
 	    constraints = new GridBagConstraints(0, 7, 1, 1, 1.0, 1.0,
 	    		GridBagConstraints.CENTER,
@@ -316,7 +309,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 	    gridBag.setConstraints(acAmplitudeTextField, constraints);
 	    boxPanel.add(acAmplitudeTextField);
 	    
-	    //8
 	    JLabel acPhaseLabel = new JLabel("ac_phase : ");
 	    constraints = new GridBagConstraints(0, 8, 1, 1, 1.0, 1.0,
 	    		GridBagConstraints.CENTER,
@@ -341,7 +333,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 	    gridBag.setConstraints(acPhaseRadLabel, constraints);
 	    boxPanel.add(acPhaseRadLabel);
 	    
-	    //9
 	    JLabel acNoiseAmplitudeLabel = new JLabel("ac_noise_amplitude : ");
 	    constraints = new GridBagConstraints(0, 9, 1, 1, 1.0, 1.0,
 	    		GridBagConstraints.CENTER,
@@ -369,12 +360,14 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 		saveCloseButton.setIcon(IconManager.imgic25);
 		saveCloseButton.setActionCommand("Save_Close");
 		saveCloseButton.addActionListener(this);
+		saveCloseButton.setPreferredSize(new Dimension(200, 30));
 		downPanel.add(saveCloseButton);
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setIcon(IconManager.imgic27);
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
+		cancelButton.setPreferredSize(new Dimension(200, 30));
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
@@ -386,7 +379,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 		if ("Save_Close".equals(e.getActionCommand())) {
 			vsource.setValue(new String(nameTextField.getText()));
 
-			//1
 			if (!(initValueTextField.getText().isEmpty())) {
 				Boolean initValValueDouble = false;
 				try {
@@ -405,7 +397,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 				vsource.setInitValue(0.0);
 			}
 			
-			//2
 			if (!(offsetTextField.getText().isEmpty())) {
 				Boolean offsetValueDouble = false;
 				try {
@@ -424,7 +415,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 				vsource.setOffset(0.0);
 			}
 			
-			//3
 			if (!(amplitudeTextField.getText().isEmpty())) {
 				Boolean amplitudeValueDouble = false;
 				try {
@@ -442,8 +432,7 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 			} else {
 				vsource.setAmplitude(0.0);
 			}
-			
-			//4
+
 			if (!(frequencyTextField.getText().isEmpty())) {
 				Boolean frequencyValueDouble = false;
 				try {
@@ -464,7 +453,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 			
 			vsource.setUnit0((String) frequencyComboBoxString.getSelectedItem());
 			
-			//5
 			if (!(phaseTextField.getText().isEmpty())) {
 				Boolean phaseValueDouble = false;
 				try {
@@ -483,7 +471,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 				vsource.setPhase(0.0);
 			}
 			
-			//6
 			String a = delayTextField.getText().split(Pattern.quote("("))[1].split(",")[0];
 			String b = delayTextField.getText().split(Pattern.quote("("))[1].split(",")[1].split(Pattern.quote(")"))[0].split(" ")[1];
 			
@@ -491,7 +478,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 				vsource.setDelay(delayTextField.getText());
 			}
 			
-			//7
 			if (!(acAmplitudeTextField.getText().isEmpty())) {
 				Boolean acAmplitudeValueDouble = false;
 				try {
@@ -510,7 +496,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 				vsource.setAcAmplitude(0.0);
 			}
 			
-			//8
 			if (!(acPhaseTextField.getText().isEmpty())) {
 				Boolean acPhaseValueDouble = false;
 				try {
@@ -529,7 +514,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 				vsource.setAcPhase(0.0);
 			}
 			
-			//9
 			if (!(acNoiseAmplitudeTextField.getText().isEmpty())) {
 				Boolean acNoiseAmplitudeValueDouble = false;
 				try {

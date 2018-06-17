@@ -53,7 +53,9 @@ import java.util.Vector;
  */
 
 public  class ELNConnector extends TGConnector implements ScalableTGComponent {
-    protected double oldScaleFactor;
+   
+	protected double oldScaleFactor;
+    protected int c = 10; //square length
 
     public ELNConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
@@ -73,7 +75,10 @@ public  class ELNConnector extends TGConnector implements ScalableTGComponent {
     	return p2;
 	}
 
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        int cz = (int) (tdp.getZoom() * c);
+        g.fillOval(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
+        g.fillOval(x1 - (cz / 2), y1 - (cz / 2), cz, cz);
         g.drawLine(x1, y1, x2, y2);
     }
 

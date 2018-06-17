@@ -38,11 +38,11 @@
 
 package ui.window;
 
-import ui.eln.*;
 import ui.eln.sca_eln.ELNComponentIdealTransformer;
 import ui.util.IconManager;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -165,12 +165,14 @@ public class JDialogELNComponentIdealTransformer extends JDialog implements Acti
 		saveCloseButton.setIcon(IconManager.imgic25);
 		saveCloseButton.setActionCommand("Save_Close");
 		saveCloseButton.addActionListener(this);
+		saveCloseButton.setPreferredSize(new Dimension(200, 30));
 		downPanel.add(saveCloseButton);
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setIcon(IconManager.imgic27);
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
+		cancelButton.setPreferredSize(new Dimension(200, 30));
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
