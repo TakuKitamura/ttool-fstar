@@ -1361,7 +1361,7 @@ public class GTURTLEModeling {
         } else if (tmap != null) {
             t2a = new TML2Avatar(tmap, false, true);
             avatarspec = t2a.generateAvatarSpec(loopLimit);
-            drawPanel(avatarspec, mgui.getFirstAvatarDesignPanelFound());
+           // drawPanel(avatarspec, mgui.getFirstAvatarDesignPanelFound());
 
         } else if (tmlm != null) {
             //Generate default mapping

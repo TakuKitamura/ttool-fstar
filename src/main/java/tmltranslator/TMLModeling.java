@@ -1085,15 +1085,15 @@ public class TMLModeling<E> {
                   }
                   }*/
                 signalName=signalName.split("__")[1];
-                System.out.println("secpattern " + signalName);
+             //   System.out.println("secpattern " + signalName);
                 List<String> channels=secChannelMap.get(signalName);
-                System.out.println("secpattern channels " + channels);
+               // System.out.println("secpattern channels " + channels);
                 if (channels!=null) {
                     for (String channelName: channels) {
                         channel = getChannelByShortName(channelName);
                         if (channel!=null){
                             for (TMLCPrimitivePort port:channel.ports){
-                                System.out.println("adding to port " + channelName);
+                             //   System.out.println("adding to port " + channelName);
                                 if (port.checkAuth){
                                     port.checkStrongAuthStatus = 2;
                                     port.secName= signalName;
