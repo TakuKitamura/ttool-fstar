@@ -42,10 +42,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.util.IconManager;
 
 import javax.swing.*;
+
 import java.awt.*;
+import java.util.Vector;
 
 /**
 * Class ADDClusterNode
@@ -61,6 +64,9 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 	private int derivationx = 2;
 	private int derivationy = 3;
 	private String stereotype = "Cluster";
+    private int currentFontSize = -1;
+    private int textX = 15; // border for ports
+    public String oldValue;
 	
 	private int index = 0;
 	
@@ -98,14 +104,13 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		nbInternalTGComponent = 0;
 		
 		moveable = true;
+		multieditable = true;
 		editable = true;
 		removable = true;
 		userResizable = true;
 		
 		name = tdp.findNodeName("Cluster");
 		value = "name";
-		
-//		myImageIcon = IconManager.imgic8006;
 	}
 	
 	public void internalDrawing(Graphics g) {
@@ -167,7 +172,57 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		return index;
 	}
 	
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+		int i;
+		MainGUI mgui = getTDiagramPanel().getMainGUI();
+		Vector<TURTLEPanel> listPanel = mgui.getTabs();
+		
+		// On the name ?
+        if (_y <= (y + currentFontSize + textX)) {
+            //TraceManager.addDev("Edit on double click x=" + _x + " y=" + _y);
+            oldValue = value;
+            String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
+                                                           JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
+                                                           null,
+                                                           getValue());
+            if ((s != null) && (s.length() > 0)) {
+                // Check whether this name is already in use, or not
+
+                if (!TAttribute.isAValidId(s, false, false)) {
+                    JOptionPane.showMessageDialog(frame,
+                                                  "Could not change the name of the component: the new name is not a valid name",
+                                                  "Error",
+                                                  JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+//                if (oldValue.compareTo(s) != 0) {
+//                    if (((SysCAMSComponentTaskDiagramPanel)(tdp)).nameBlockTDFComponentInUse(oldValue, s)) {
+//                        JOptionPane.showMessageDialog(frame,
+//                                                      "Error: the name is already in use",
+//                                                      "Name modification",
+//                                                      JOptionPane.ERROR_MESSAGE);
+//                        return false;
+//                    }
+//                }
+
+
+                //TraceManager.addDev("Set value with change");
+    			setComponentName(s);
+                setValueWithChange(s);
+//				isAttacker = s.contains("Attacker");
+//                rescaled = true;
+                //TraceManager.addDev("return true");
+                return true;
+
+            }
+            return false;
+        }
+		
+		for (i = 0; i < listPanel.size(); i++) {
+			if (mgui.getTitleAt(listPanel.get(i)).equals("SystemC_AMS")) {
+				mgui.selectMainTab("SystemC_AMS");
+			}
+		}
 		return true;
 	}
 	
