@@ -43,6 +43,7 @@ import ui.util.IconManager;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -92,7 +93,7 @@ public class JDialogELNComponentInductor extends JDialog implements ActionListen
 	public JDialogELNComponentInductor(ELNComponentInductor _l) {
 		/** Set JDialog **/
 		setTitle("Setting the inductor");
-		setSize(500, 220);
+		setSize(500, 190);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -257,7 +258,7 @@ public class JDialogELNComponentInductor extends JDialog implements ActionListen
 		attributesMainPanel.add(box); // add grid to grid
 
 		// Down Side
-		JPanel downPanel = new JPanel(new GridLayout(1, 2));
+		JPanel downPanel = new JPanel(new FlowLayout());
 
 		JButton saveCloseButton = new JButton("Save and close");
 		saveCloseButton.setIcon(IconManager.imgic25);

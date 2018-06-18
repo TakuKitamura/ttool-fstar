@@ -43,6 +43,7 @@ import ui.util.IconManager;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -92,7 +93,7 @@ public class JDialogELNComponentCapacitor extends JDialog implements ActionListe
 	public JDialogELNComponentCapacitor(ELNComponentCapacitor _c) {
 		/** Set JDialog **/
 		setTitle("Setting the capacitor");
-		setSize(500, 220);
+		setSize(500, 190);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -257,7 +258,7 @@ public class JDialogELNComponentCapacitor extends JDialog implements ActionListe
 		attributesMainPanel.add(box); // add grid to grid
 
 		// Down Side
-		JPanel downPanel = new JPanel(new GridLayout(1, 2));
+		JPanel downPanel = new JPanel(new FlowLayout());
 
 		JButton saveCloseButton = new JButton("Save and close");
 		saveCloseButton.setIcon(IconManager.imgic25);
