@@ -548,6 +548,8 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_ARTIFACT);
         }  else if (command.equals(mgui.actions[TGUIAction.ADD_CHANNELARTIFACT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CHANNELARTIFACT);
+        }  else if (command.equals(mgui.actions[TGUIAction.ADD_CLUSTERNODE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CLUSTERNODE);
 
         } else if (command.equals(mgui.actions[TGUIAction.TCD_ASSOCIATION].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_ASSOCIATION);

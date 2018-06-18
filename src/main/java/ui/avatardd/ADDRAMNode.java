@@ -36,16 +36,12 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
 
 import ui.*;
 import ui.util.IconManager;
 
 import java.util.Vector;
-
 
 /**
    * Class ADDRAMNode
@@ -54,6 +50,7 @@ import java.util.Vector;
    * @version 1.0 01/07/2014
    * @author Ludovic APVRILLE
  */
+
 public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, WithAttributes {
 
     protected int monitored = 0;
@@ -104,9 +101,6 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
         myImageIcon = IconManager.imgic700;
     }
 
-
-
-
     public int getType() {
         return TGComponentManager.ADD_RAMNODE;
     }
@@ -114,7 +108,6 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         //TraceManager.addDev("Accept swallowed?");
         return tgc instanceof ADDBlockArtifact;
-
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -128,15 +121,12 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
             addInternalComponent(tgc, 0);
             return true;
         }
-
         return false;
-
     }
 
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }
-
 
     public Vector<ADDChannelArtifact> getArtifactList() {
         Vector<ADDChannelArtifact> v = new Vector<ADDChannelArtifact>();
@@ -155,16 +145,13 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
                 tgcomponent[i].resizeWithFather();
             }
         }
-
     }
-
 
     public int getMonitored() {
         return monitored;
     }
 
     public void setMonitored(int _monitored){
-	monitored = _monitored;
+    	monitored = _monitored;
     }
-
 }

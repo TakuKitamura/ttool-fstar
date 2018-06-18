@@ -50,6 +50,7 @@ import ui.window.JDialogELNComponentResistor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 /**
  * Class ELNComponentResistor
@@ -118,7 +119,8 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
         return myColor;
     }
 
-    public void internalDrawing(Graphics g) {
+    public void internalDrawing(Graphics gr) {
+    	Graphics2D g = (Graphics2D) gr;
         Font f = g.getFont();
         Font fold = f;
         
@@ -156,11 +158,32 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
             f = f.deriveFont(this.currentFontSize);
     	}
 
-        // Zoom is assumed to be computed
+	    // Zoom is assumed to be computed
 		Color c = g.getColor();
 		int [] ptx = {x, x+width/4, x+width/4, x+3*width/4, x+3*width/4, x+width, x+3*width/4, x+3*width/4, x+width/4, x+width/4};
 		int [] pty = {y+height/2, y+height/2, y, y, y+height/2, y+height/2, y+height/2, y+height, y+height, y+height/2};
-		g.drawPolygon(ptx, pty, 10);
+		Polygon p = new Polygon(ptx, pty, 10);
+		g.drawPolygon(p);
+		
+		//------------------
+		// Save the current transform of the graphics contexts.
+		AffineTransform saveTransform = g.getTransform();
+		// Create a identity affine transform, and apply to the Graphics2D context
+		AffineTransform identity = new AffineTransform();
+		g.setTransform(identity);
+		 
+		// Paint Shape (with identity transform), centered at (0, 0) as defined.
+		g.rotate(Math.toRadians(90));
+		g.setTransform(identity);
+		g.drawPolygon(p);
+		g.fill(p);
+		
+		// Restore original transform before returning
+	    g.setTransform(saveTransform);
+		//------------------
+	    
+	    //------------------
+		
 		g.setColor(c);
       
     	// Set font size
