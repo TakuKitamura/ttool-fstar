@@ -479,6 +479,7 @@ public class TGComponentManager {
     public static final int ADD_CHANNELARTIFACT = 5362;
     public static final int ADD_VGMNNODE = 5363;
     public static final int ADD_CROSSBARNODE = 5364;
+    public static final int ADD_CLUSTERNODE = 5365;
 
     // AVATAR CD -> starts at 5400
     public static final int ACD_BLOCK = 5400;
@@ -744,6 +745,9 @@ public class TGComponentManager {
                 break;
             case ADD_CHANNELARTIFACT:
                 tgc = new ADDChannelArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_CLUSTERNODE:
+                tgc = new ADDClusterNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 
             //AVATAR Methodology

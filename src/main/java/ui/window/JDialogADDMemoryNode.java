@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -50,10 +47,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-//import javax.swing.event.*;
-//import java.util.*;
-
-
 /**
  * Class JDialogADDMemoryNode
  * Dialog for managing attributes of Memory nodes
@@ -63,6 +56,7 @@ import java.awt.event.ActionListener;
  * @version 1.1 18/06/2018 (Add processCode)
  * @author Irina Kit Yan LEE
  */
+
 public class JDialogADDMemoryNode extends JDialogBase implements ActionListener  {
 
     //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
@@ -71,7 +65,6 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
     
     private JPanel panel2, panel3;
     private JTabbedPane tabbedPane;
-    private JComboBox<String> periodComboBoxString;
 	private JTextArea processCodeTextArea;
 	private String finalString;
     private Frame frame;
@@ -95,7 +88,6 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
         super(_frame, _title, true);
         frame = _frame;
         node = _node;
-        
         memoryName = _title.split(" ")[1];
         
         initComponents();
@@ -103,8 +95,7 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
         pack();
     }
     
-    private void myInitComponents() {
-    }
+    private void myInitComponents() {}
     
     public StringBuffer encode(String data) {
     	StringBuffer databuf = new StringBuffer(data);
@@ -256,7 +247,7 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
         
         if (memoryName.equals("RAM")) {
 			panel3.add(new JLabel("Behavior function of RAM : "), BorderLayout.NORTH);
-			StringBuffer stringbuf = encode(((ADDRAMNode) node).getProcessCode());
+			StringBuffer stringbuf = encode(node.getProcessCode());
 			String beginString = stringbuf.toString();
 			finalString = beginString.replaceAll("\t}", "}");
 			
@@ -296,7 +287,7 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
     }
     
     public void	actionPerformed(ActionEvent evt)  {
-       /* if (evt.getSource() == typeBox) {
+    	/*if (evt.getSource() == typeBox) {
             boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
             initialValue.setEnabled(b);
             return;
@@ -308,7 +299,7 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
         String command = evt.getActionCommand();
         
         if (memoryName.equals("RAM")) {
-        	((ADDRAMNode) node).setProcessCode(processCodeTextArea.getText());
+        	node.setProcessCode(processCodeTextArea.getText());
         }
         
         // Compare the action command to the known actions.

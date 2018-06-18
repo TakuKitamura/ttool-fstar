@@ -49,14 +49,11 @@ import java.util.Vector;
    * Creation: 01/07/2014
    * @version 1.0 01/07/2014
    * @author Ludovic APVRILLE
-   * @version 1.1 18/06/2018 (Add processCode)
-   * @author Irina Kit Yan LEE
  */
 
 public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, WithAttributes {
 
     protected int monitored = 0;
-    private String processCode;
 
     public ADDRAMNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -102,8 +99,6 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
         value = "name";
 
         myImageIcon = IconManager.imgic700;
-        
-        setProcessCode("");
     }
 
     public int getType() {
@@ -159,12 +154,4 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
     public void setMonitored(int _monitored){
     	monitored = _monitored;
     }
-
-	public String getProcessCode() {
-		return processCode;
-	}
-
-	public void setProcessCode(String _processCode) {
-		processCode = _processCode;
-	}
 }

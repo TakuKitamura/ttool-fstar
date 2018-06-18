@@ -89,6 +89,7 @@ public class ADDDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.ADD_ICUNODE].setEnabled(b);
         mgui.actions[TGUIAction.ADD_COPROMWMRNODE].setEnabled(b);
         mgui.actions[TGUIAction.ADD_TIMERNODE].setEnabled(b);
+        mgui.actions[TGUIAction.ADD_CLUSTERNODE].setEnabled(b);
         mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 
         mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
@@ -169,7 +170,11 @@ public class ADDDiagramToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.ADD_ROMNODE]);
         button.addMouseListener(mgui.mouseHandler);
-
+        
+        this.addSeparator();
+        
+        button = this.add(mgui.actions[TGUIAction.ADD_CLUSTERNODE]);
+        button.addMouseListener(mgui.mouseHandler);
 
         this.addSeparator();
 
