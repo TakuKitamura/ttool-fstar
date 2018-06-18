@@ -250,12 +250,12 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         sb.append("\" />\n");
         sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
         sb.append(" index=\"" + index + "\" ");
+        sb.append(" processCode=\"" + ((ADDRAMNode)this).getProcessCode() + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
 
-    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
@@ -266,6 +266,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
           //  int t1id;
             String sstereotype = null, snodeName = null;
             monitored = 0;
+            String processCode;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -292,7 +293,8 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
                                 //monitored = Integer.decode(elt.getAttribute("monitored")).intValue();
                                 index = Integer.decode(elt.getAttribute("index")).intValue();
-
+                                processCode = elt.getAttribute("processCode");
+                                ((ADDRAMNode) this).setProcessCode(processCode);
                             }
                         }
                     }
