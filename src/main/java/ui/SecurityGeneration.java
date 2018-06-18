@@ -85,7 +85,7 @@ public class SecurityGeneration implements Runnable {
 
         avatar2proverif = new AVATAR2ProVerif(avatarspec);
         try {
-            proverif = avatar2proverif.generateProVerif(true, true, 3, true, false);
+            proverif = avatar2proverif.generateProVerif(true, true, 3, true, true);
             //warnings = avatar2proverif.getWarnings();
 
             if (!avatar2proverif.saveInFile("pvspec")) {
@@ -98,9 +98,17 @@ public class SecurityGeneration implements Runnable {
             rshc.sendExecuteCommandRequest();
             Reader data = rshc.getDataReaderFromProcess();
 
+		
             ProVerifOutputAnalyzer pvoa = avatar2proverif.getOutputAnalyzer();
             pvoa.analyzeOutput(data, true);
+            
+            if (pvoa.getResults().size() ==0){
+            	TraceManager.addDev("ERROR: No security results");
+            }
+            
+            
             Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+
             for (AvatarPragmaSecret pragma : confResults.keySet()) {
                 if (confResults.get(pragma).isProved() && !confResults.get(pragma).isSatisfied()) {
                     nonSecChans.add(pragma.getArg().getBlock().getName() + "__" + pragma.getArg().getName());
@@ -111,6 +119,8 @@ public class SecurityGeneration implements Runnable {
                     }
                 }
             }
+            
+
             Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
             for (AvatarPragmaAuthenticity pragma : authResults.keySet()) {
                 if (authResults.get(pragma).isProved() && !authResults.get(pragma).isSatisfied()) {
