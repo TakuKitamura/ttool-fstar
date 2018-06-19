@@ -455,6 +455,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     public void displayGraph() {
         // Make this in a different thread
         // And authorize the show only for a small nb of states ...
+
         if (graphAUT != null) {
             AUTGraph rg = new AUTGraph();
             rg.buildGraph(graphAUT);

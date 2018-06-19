@@ -525,6 +525,10 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
                         if (instance == null) {
                             jta.append("Invalid plugin: could not create an instance\n");
                         } else {
+                            // Try to set the current project directory
+                            Plugin.executeOneStringMethod(instance, code1.getText(), "setCodeDirectory");
+
+                            // then start the plugin itself
                             boolean ret = Plugin.executeBoolStringMethod(instance, XML, "generateCode", codeOpt.getText());
                         }
                     } catch (Exception e) {
