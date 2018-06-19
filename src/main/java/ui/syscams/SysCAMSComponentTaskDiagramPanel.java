@@ -147,10 +147,23 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
         return false;
     }
 
+    public SysCAMSCompositeComponent getCompositeComponent() {
+    	TGComponent tgc;
+    	Iterator<TGComponent> iterator = componentList.listIterator();
+    	
+    	while(iterator.hasNext()) {
+    		tgc = iterator.next();
+    		
+    		if (tgc instanceof SysCAMSCompositeComponent) {
+    			return (SysCAMSCompositeComponent) tgc;
+    		}
+    	}
+    	return null;
+    }   
+    
     public List<SysCAMSBlockTDF> getBlockTDFComponentList() {
         List<SysCAMSBlockTDF> ll = new LinkedList<SysCAMSBlockTDF>();
         TGComponent tgc;
-
         Iterator<TGComponent> iterator = componentList.listIterator();
 
         while(iterator.hasNext()) {
@@ -899,3 +912,4 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
         return terms;
     }
 }
+
