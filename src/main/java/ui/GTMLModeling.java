@@ -1077,9 +1077,20 @@ public class GTMLModeling {
                             checkingErrors.add(ce);
                             throw new MalformedTMLDesignException(msg);
                         }
+                        // Same parameters than in destination ports?
+
 
                         if (portstome.size() == 1) {
                             port2 = portstome.get(0);
+                            if (!port2.hasSameParametersThan(port1)) {
+                                String msg = "port " + port1.getPortName() + " does not define the same parameters as port " + port2.getName();
+                                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                                ce.setTDiagramPanel(tmlcdp.tmlctdp);
+                                ce.setTGComponent(port1);
+                                checkingErrors.add(ce);
+                                throw new MalformedTMLDesignException(msg);
+                            }
+
                             alreadyConsidered.add(port1);
                             alreadyConsidered.add(port2);
 
@@ -1203,6 +1214,14 @@ public class GTMLModeling {
                                     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
                                     ce.setTDiagramPanel(tmlcdp.tmlctdp);
                                     ce.setTGComponent(port);
+                                    checkingErrors.add(ce);
+                                    throw new MalformedTMLDesignException(msg);
+                                }
+                                if (!port.hasSameParametersThan(port1)) {
+                                    String msg = "port " + port1.getPortName() + " does not define the same parameters as port " + port.getName();
+                                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                                    ce.setTDiagramPanel(tmlcdp.tmlctdp);
+                                    ce.setTGComponent(port1);
                                     checkingErrors.add(ce);
                                     throw new MalformedTMLDesignException(msg);
                                 }
@@ -1376,6 +1395,16 @@ public class GTMLModeling {
                             checkingErrors.add(ce);
                             throw new MalformedTMLDesignException(msg);
                         }
+                        // Same parameters than in destination ports?
+                        if (!port3.hasSameParametersThan(port1)) {
+                            String msg = "port " + port1.getPortName() + " does not define the same parameters as port " + port3.getName();
+                            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                            ce.setTDiagramPanel(tmlcdp.tmlctdp);
+                            ce.setTGComponent(port1);
+                            checkingErrors.add(ce);
+                            throw new MalformedTMLDesignException(msg);
+                        }
+
                     }
 
                     String name1 = port1.getPortName();
