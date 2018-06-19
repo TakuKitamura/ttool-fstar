@@ -56,8 +56,6 @@ import java.awt.*;
    * Creation: 21/08/2014
    * @version 1.0 21/08/2014
    * @author Ludovic APVRILLE
-   * @version 1.1 18/06/2018 (Add processCode)
-   * @author Irina Kit Yan LEE
  */
 
 public abstract class ADDMemoryNode extends ADDCommunicationNode implements WithAttributes {

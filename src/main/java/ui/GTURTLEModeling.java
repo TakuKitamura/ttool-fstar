@@ -5481,6 +5481,7 @@ public class GTURTLEModeling {
         String nameTab;
         NodeList diagramNl;
         int indexDesign;
+        int indexTab = 0;
 
         nameTab = elt.getAttribute("nameTab");
 
@@ -5496,7 +5497,8 @@ public class GTURTLEModeling {
                 if (elt.getTagName().compareTo("SysCAMSComponentTaskDiagramPanel") == 0) {
                     // Class diagram
                     TraceManager.addDev("Loading SystemC-AMS");
-                    loadSysCAMSDiagram(elt, indexDesign);
+                    loadSysCAMSDiagram(elt, indexDesign, indexTab);
+                    indexTab++;
                     TraceManager.addDev("End loading SystemC-AMS");
                 }
             }
@@ -6030,15 +6032,18 @@ public class GTURTLEModeling {
         loadDiagram(elt, tdp);
     }
 
-    public void loadSysCAMSDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
-        String name;
-        TDiagramPanel tdp;
+    public void loadSysCAMSDiagram(Element elt, int indexDesign, int indexTab) throws MalformedModelingException, SAXException {
+    	String name;
 
-        // class diagram name
         name = elt.getAttribute("name");
-        mgui.setSysCAMSComponentTaskDiagramName(indexDesign, name);
-        tdp = mgui.getMainTDiagramPanel(indexDesign);
-        tdp.setName(name);
+        mgui.createSysCAMS(indexDesign, name);
+
+        TDiagramPanel tdp = mgui.getSysCAMSPanel(indexDesign, indexTab, name);
+
+        if (tdp == null) {
+            throw new MalformedModelingException();
+        }
+        tdp.removeAll();
 
         loadDiagram(elt, tdp);
     }
@@ -8572,3 +8577,4 @@ public class GTURTLEModeling {
     }
 
 }
+

@@ -377,7 +377,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return avatarOn;
     }
 
-
+    public boolean isSystemcOn() {
+    	return systemcOn;
+    }
+    
     public void build() {
         // Swing look and feel
 
@@ -6367,7 +6370,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return ((TMLComponentDesignPanel) (tp)).tmlctdp.getCompositeComponentByName(componentName);
     }
 
-		public SysCAMSCompositeComponent getSysCAMSCompositeComponent(String name) {
+	public SysCAMSCompositeComponent getSysCAMSCompositeComponent(String name) {
     	int index = name.indexOf("::");
     	if (index == -1) {
     		return null;
@@ -6383,6 +6386,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     	}
     	
     	return ((SysCAMSComponentDesignPanel) (tp)).syscamsctdp.getCompositeComponentByName(componentName);
+    }
+
+	public SysCAMSComponentTaskDiagramPanel getSysCAMSPanel(int indexDesign, String name) {
+
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
+        if (tp == null) {
+            return null;
+        }
+        if (tp instanceof SysCAMSComponentDesignPanel) {
+            return ((SysCAMSComponentDesignPanel) tp).getSysCAMSPanel(name);
+        }
+        return null;
     }
 
 
@@ -7200,7 +7215,20 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         setPanelMode();
         return true;
     }
+    
+    public boolean createSysCAMS(int index, String s) {
+        return createSysCAMS(tabs.elementAt(index), s);
+    }
 
+    public boolean createSysCAMS(TURTLEPanel tp, String s) {
+        if (!(tp instanceof SysCAMSComponentDesignPanel)) {
+            return false;
+        }
+
+        ((SysCAMSComponentDesignPanel) tp).addSysCAMS(s);
+        setPanelMode();
+        return true;
+    }
 
     public boolean isRequirementCreated(int index, String s) {
         return isRequirementCreated(tabs.elementAt(index), s);
@@ -7302,7 +7330,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     }
 
-
+    public SysCAMSComponentTaskDiagramPanel getSysCAMSPanel(int index, int indexTab, String s) {
+    	TURTLEPanel tp = tabs.elementAt(index);
+    	return getSysCAMSPanel(tp, indexTab, s);
+    }
+    
+    public SysCAMSComponentTaskDiagramPanel getSysCAMSPanel(TURTLEPanel tp, int indexTab, String s) {
+    	if (tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+    		return (SysCAMSComponentTaskDiagramPanel) (tp.panelAt(indexTab));
+    	}
+    	return null;
+    }
+    
     public AvatarRDPanel getAvatarRDPanel(int index, int indexTab, String s) {
         TURTLEPanel tp = tabs.elementAt(index);
         return getAvatarRDPanel(tp, indexTab, s);
@@ -8450,16 +8489,16 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     //--------------------end DDD------------------------------------------------
 
-    public SysCAMSComponentTaskDiagramPanel getSysCAMSPanel() {
-    	SysCAMSComponentTaskDiagramPanel syscamsDiagram = null; 
-        TURTLEPanel tp = getCurrentTURTLEPanel();
+    public Vector<SysCAMSComponentTaskDiagramPanel> getListSysCAMSPanel() {
+    	Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagram = new Vector<SysCAMSComponentTaskDiagramPanel>(); 
+        TURTLEPanel tp = getTURTLEPanel("SystemC_AMS");
         Vector<TDiagramPanel> ps = tp.panels;
         for (TDiagramPanel panel : ps) {
             if (panel instanceof SysCAMSComponentTaskDiagramPanel) {
-                syscamsDiagram = (SysCAMSComponentTaskDiagramPanel) panel;
+                syscamsDiagram.add((SysCAMSComponentTaskDiagramPanel) panel);
             }
         }
-        if (syscamsDiagram == null)
+        if (syscamsDiagram.size() == 0) 
             System.err.println("No SysCAMS Panel found : MainGUI.getSysCAMSPanel()");
         return syscamsDiagram;
     }
@@ -9371,3 +9410,4 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return tmlap;
     }
 } // Class MainGUI
+

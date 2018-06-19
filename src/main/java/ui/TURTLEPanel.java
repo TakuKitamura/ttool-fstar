@@ -364,6 +364,10 @@ public abstract class TURTLEPanel implements GenericTree {
         return false;
     }
 
+    public boolean isSystemCAMSEnabled() {
+    	return false;
+    }
+    
     public MainGUI getMainGUI() {
         return mgui;
     }
@@ -421,3 +425,4 @@ public abstract class TURTLEPanel implements GenericTree {
     }
 
 }
+
