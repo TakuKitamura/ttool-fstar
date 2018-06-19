@@ -1712,7 +1712,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
         }
 
-        return  (String [])(lString.toArray(new String[lString.size()]));
+        return  lString.toArray(new String[lString.size()]);
     }
 
     public String[] getAllInEvents(String nameOfComponent) {
