@@ -6370,37 +6370,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return ((TMLComponentDesignPanel) (tp)).tmlctdp.getCompositeComponentByName(componentName);
     }
 
-	public SysCAMSCompositeComponent getSysCAMSCompositeComponent(String name) {
-    	int index = name.indexOf("::");
-    	if (index == -1) {
-    		return null;
-    	}
-    	
-    	String panelName = name.substring(0, index);
-    	String componentName = name.substring(index + 2, name.length());
-    	
-    	TURTLEPanel tp = getTURTLEPanel(panelName);
-    	
-    	if ((tp == null) || (!(tp instanceof SysCAMSComponentDesignPanel))) {
-    		return null;
-    	}
-    	
-    	return ((SysCAMSComponentDesignPanel) (tp)).syscamsctdp.getCompositeComponentByName(componentName);
-    }
-
-	public SysCAMSComponentTaskDiagramPanel getSysCAMSPanel(int indexDesign, String name) {
-
-        TURTLEPanel tp = tabs.elementAt(indexDesign);
-        if (tp == null) {
-            return null;
-        }
-        if (tp instanceof SysCAMSComponentDesignPanel) {
-            return ((SysCAMSComponentDesignPanel) tp).getSysCAMSPanel(name);
-        }
-        return null;
-    }
-
-
     public AvatarSMDPanel getAvatarSMDPanel(int indexDesign, String name) {
 
         TURTLEPanel tp = tabs.elementAt(indexDesign);
