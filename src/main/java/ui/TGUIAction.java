@@ -463,6 +463,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ADD_CHANNELARTIFACT = 411;
     public static final int ADD_VGMNNODE = 401;
     public static final int ADD_CROSSBARNODE = 421;
+    public static final int ADD_CLUSTERNODE = 497;
 
     // -------------------------------------------------------------
     public static final int DEPLOY_AVATAR_DIAGRAM = 418;
@@ -654,7 +655,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 497;
+    public static final int NB_ACTION = 498;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -920,7 +921,7 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_ICUNODE] = new TAction("add-add-icunode", "Add an ICU", IconManager.imgic1112, IconManager.imgic1112, "ICU", "Add a ICU node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_COPROMWMRNODE] = new TAction("add-add-copromwmrnode", "Add a MWMR Copro", IconManager.imgic1114, IconManager.imgic1114, "MWMR Copro", "Add a DMA node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_TIMERNODE] = new TAction("add-add-timernode", "Add a Timer", IconManager.imgic1116, IconManager.imgic1116, "Timer", "Add a timer node to the currently opened AVATAR deployment diagram", 0);
-
+        actions[ADD_CLUSTERNODE] = new TAction("add-add-clusternode", "Add a Cluster", IconManager.imgic8006, IconManager.imgic8006, "Cluster", "Add a cluster node to the currently opened AVATAR deployment diagram", 0);
 
         actions[TCD_PARALLEL_OPERATOR] = new TAction("add-parallel-operator", "Add Parallel composition operator", IconManager.imgic112, IconManager.imgic112, "Parallel composition operator", "Add a Parallel composition operator to the currently opened class diagram", 0);
         actions[TCD_CONNECTOR_ATTRIBUTE] = new TAction("add-attribute-connector", "Connects an association to a composition operator", IconManager.imgic108, IconManager.imgic108, "Attributes an association with a composition operator", "Adds a connector between an association and a composition operator to the currently opened class diagram", 0);

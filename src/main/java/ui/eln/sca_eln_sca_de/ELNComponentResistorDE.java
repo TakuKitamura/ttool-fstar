@@ -36,7 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.eln.sca_eln;
+package ui.eln.sca_eln_sca_tdf;
 
 import myutil.GraphicLib;
 
@@ -47,20 +47,21 @@ import ui.*;
 import ui.eln.ELNConnectingPoint;
 import ui.util.IconManager;
 import ui.window.JDialogELNComponentResistor;
+import ui.window.JDialogELNComponentResistorDE;
+import ui.window.JDialogELNComponentResistorTDf;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 /**
- * Class ELNComponentResistor
- * Resistor to be used in ELN diagrams
- * Creation: 12/06/2018
- * @version 1.0 12/06/2018
+ * Class ELNComponentResistorDE
+ * Variable resistor controlled by a DE input signal to be used in ELN diagrams
+ * Creation: 16/06/2018
+ * @version 1.0 16/06/2018
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentResistor extends TGCScalableWithInternalComponent {
+public class ELNComponentResistorDE extends TGCScalableWithInternalComponent {
     protected Color myColor;
     protected int orientation;
 	private int maxFontSize = 14;
@@ -76,13 +77,12 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
     private int fact = 2;
     
 	// Parameters
-	private double val;
-	private String unit;
+	private double scale;
     
-    public ELNComponentResistor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public ELNComponentResistorDE(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(50*fact, 10*fact);
+        initScaling(50*fact, 50*fact);
 
         dtextX = textX * oldScaleFactor;
         textX = (int)dtextX;
@@ -99,13 +99,12 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
         editable = true;
         removable = true;
         userResizable = false;
-        value = tdp.findELNComponentName("R");
+        value = tdp.findELNComponentName("TDF_R");
         
         myImageIcon = IconManager.imgic1206;
         
         // Initialization of self attributes
-        setVal(1.0);
-        setUnit("\u03A9");
+        setScale(1.0);
     }
 
     public void initConnectingPoint(int nb) {
@@ -119,8 +118,7 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
         return myColor;
     }
 
-    public void internalDrawing(Graphics gr) {
-    	Graphics2D g = (Graphics2D) gr;
+    public void internalDrawing(Graphics g) {
         Font f = g.getFont();
         Font fold = f;
         
@@ -158,32 +156,11 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
             f = f.deriveFont(this.currentFontSize);
     	}
 
-	    // Zoom is assumed to be computed
+        // Zoom is assumed to be computed
 		Color c = g.getColor();
 		int [] ptx = {x, x+width/4, x+width/4, x+3*width/4, x+3*width/4, x+width, x+3*width/4, x+3*width/4, x+width/4, x+width/4};
 		int [] pty = {y+height/2, y+height/2, y, y, y+height/2, y+height/2, y+height/2, y+height, y+height, y+height/2};
-		Polygon p = new Polygon(ptx, pty, 10);
-		g.drawPolygon(p);
-		
-		//------------------
-		// Save the current transform of the graphics contexts.
-		AffineTransform saveTransform = g.getTransform();
-		// Create a identity affine transform, and apply to the Graphics2D context
-		AffineTransform identity = new AffineTransform();
-		g.setTransform(identity);
-		 
-		// Paint Shape (with identity transform), centered at (0, 0) as defined.
-		g.rotate(Math.toRadians(90));
-		g.setTransform(identity);
-		g.drawPolygon(p);
-		g.fill(p);
-		
-		// Restore original transform before returning
-	    g.setTransform(saveTransform);
-		//------------------
-	    
-	    //------------------
-		
+		g.drawPolygon(ptx, pty, 10);
 		g.setColor(c);
       
     	// Set font size
@@ -192,7 +169,7 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
         g.setFont(f.deriveFont((float) attributeFontSize));
         g.setFont(f);
     	g.setFont(f.deriveFont(Font.BOLD));
-    	g.drawString(value, x + (width - w)/2, y-height/fact);
+    	g.drawString(value, x + (width - w)/2, y-(height/(5*fact)));
 
         g.setFont(fold);
     }
@@ -257,41 +234,18 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
     }
     
     public int getType() {
-    	return TGComponentManager.ELN_RESISTOR;
+    	return TGComponentManager.ELN_DE_RESISTOR;
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-    	JDialogELNComponentResistor jde = new JDialogELNComponentResistor(this);
+    	JDialogELNComponentResistorDE jde = new JDialogELNComponentResistorDE(this);
     	jde.setVisible(true);
         return true;
     }
     
-    public StringBuffer encode(String data) {
-    	StringBuffer databuf = new StringBuffer(data);
-    	StringBuffer buffer = new StringBuffer("");
-        for(int pos = 0; pos != data.length(); pos++) {
-        	char c = databuf.charAt(pos);
-            switch(c) {
-                case '\u03A9' :  
-                	buffer.append("&#x3A9;");       
-                	break;
-                case '\u03BC' : 
-                	buffer.append("&#x3BC;");      
-                	break;
-                default :   
-                	buffer.append(databuf.charAt(pos)); 
-                	break;
-            }
-        }
-        return buffer;
-    }
-
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<attributes value=\"" + val); 
-        sb.append("\" unit=\"");
-        sb.append(encode(unit));
-		sb.append("\"");
+        sb.append("<attributes scale=\"" + scale + "\"");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -303,8 +257,7 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
             Node n1, n2;
             Element elt;
             
-            double value;
-            String unit;
+            double scale;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -315,10 +268,8 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("attributes")) {
-                            	value = Double.parseDouble(elt.getAttribute("value"));
-								unit = elt.getAttribute("unit");
-								setVal(value);
-								setUnit(unit);
+                            	scale = Double.parseDouble(elt.getAttribute("scale"));
+								setScale(scale);
                             }
                         }
                     }
@@ -333,19 +284,11 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent {
         return TGComponentManager.ELN_CONNECTOR;
     }
     
-    public double getVal() {
-		return val;
+    public double getScale() {
+		return scale;
 	}
 
-	public void setVal(double _val) {
-		val = _val;
-	}
-
-	public String getUnit() {
-		return unit;
-	}
-
-	public void setUnit(String _unit) {
-		unit = _unit;
+	public void setScale(double _scale) {
+		scale = _scale;
 	}
 }
