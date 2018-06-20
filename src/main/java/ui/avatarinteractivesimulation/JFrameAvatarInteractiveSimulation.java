@@ -42,14 +42,15 @@ package ui.avatarinteractivesimulation;
 import avatartranslator.*;
 import avatartranslator.directsimulation.*;
 import common.ConfigurationTTool;
-import myutil.*;
+import myutil.FileUtils;
+import myutil.GraphicLib;
+import myutil.TableSorter;
+import myutil.TraceManager;
+import myutil.SVGGeneration;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
-
-import java.io.*;
-
 import ui.*;
 import ui.avatarbd.AvatarBDPortConnector;
 import ui.interactivesimulation.LatencyTableModel;
@@ -64,6 +65,10 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.*;
 import java.util.List;
 
@@ -1837,7 +1842,9 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             return;
         }
 
-        newSVGSave(fileName);
+        SVGGeneration gen = new SVGGeneration();
+        gen.saveInSVG(sdpanel, fileName);
+        //newSVGSave(fileName);
 
 
         /*StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
@@ -1880,7 +1887,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
     }
 
     // FileName must be valid
-    private void newSVGSave(String fileName) {
+    /*private void newSVGSave(String fileName) {
         TraceManager.addDev("New SVG save in " + fileName);
         // Get a DOMImplementation.
         DOMImplementation domImpl =
@@ -1895,8 +1902,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
         // Ask the test to render into the SVG Graphics2D implementation.
         sdpanel.paint(svgGenerator);
-        /*TestSVGGen test = new TestSVGGen();
-        test.paint(svgGenerator);*/
+        
 
         // Finally, stream out SVG to the standard output using
         // UTF-8 encoding.
@@ -1909,7 +1915,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         } catch (Exception e) {
             TraceManager.addDev("SVG generation failed: " + e.getMessage());
         }
-    }
+    }*/
 
     public void actSaveSDPNG() {
         //Saving PNG file;

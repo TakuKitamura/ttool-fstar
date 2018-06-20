@@ -3600,6 +3600,50 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return sb.toString();
     }
 
+    public String oldSvgCapture() {
+        int w = this.getWidth();
+        int h = this.getHeight();
+        int x = getRealMinX();
+        int y = getRealMinY();
+        w = getRealMaxX() - x;
+        h = getRealMaxY() - y;
+        //TraceManager.addDev("x=" + x + " y=" + y + " w=" + w + " h=" + h + " getWidth = " + this.getWidth() + " getHeight = " + this.getHeight());
+        x = x - 5;
+        y = y - 5;
+        w = w + 10;
+        h = h + 10;
+        w = Math.max(0, w);
+        h = Math.max(0, h);
+        x = Math.max(5, x);
+        y = Math.max(5, y);
+        w = Math.min(w, getWidth() - x);
+        h = Math.min(h, getHeight() - y);
+
+
+        StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+        sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
+        //sb.append(" width=\"" + (w+x) + "\" height=\"" + (h+y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
+        sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"");
+        sb.append(" width=\"" + (w + x) + "\" height=\"" + (h + y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
+
+        // Issue #14 point 10: Somehow the last graphics that was used is different than the actual one leading
+        // to an error in calculating string lengths
+        final SVGGraphics svgg = new SVGGraphics((Graphics2D) getGraphics());
+//      SVGGraphics svgg = new SVGGraphics((Graphics2D)lastGraphics);
+
+        RepaintManager.currentManager(this).setDoubleBufferingEnabled(false);
+        //this.paint(svgg);
+        //TraceManager.addDev("Painting for svg");
+        basicPaintMyComponents(svgg);
+        //TraceManager.addDev("Painting for svg done");
+        sb.append(svgg.getSVGString());
+        RepaintManager.currentManager(this).setDoubleBufferingEnabled(true);
+
+        sb.append("</svg>");
+
+        return sb.toString();
+    }
+
     public void stopAddingConnector() {
         //TraceManager.addDev("Stop Adding connector in tdp");
         if (tdmm != null) {
