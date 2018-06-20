@@ -41,6 +41,9 @@
 
 package ui.interactivesimulation;
 
+import common.ConfigurationTTool;
+import myutil.FileUtils;
+import myutil.SVGGeneration;
 import myutil.TraceManager;
 import ui.ColorManager;
 import ui.MainGUI;
@@ -52,12 +55,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.BufferedReader;
+import java.io.File;
 
- 
+
 /**
  * Class JFrameSimulationSDPanel
  * Creation: 26/05/2011
- * version 1.0 26/05/2011
+ * version 1.0 20/06/2018
  * @author Ludovic APVRILLE
  */
 public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
@@ -73,10 +77,12 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
     //, buttonStart, buttonStopAndClose;
 	//protected JTextArea jta;
 	//protected JScrollPane jsp;
+
+    private MainGUI mgui;
 	
 	public JFrameTMLSimulationPanel(Frame _f, MainGUI _mgui, String _title) {
 		super(_title);
-		
+		mgui = _mgui;
 		initActions();
 		makeComponents();
 		//setComponents();
@@ -104,8 +110,10 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
         
         // Top panel
         JPanel topPanel = new JPanel();
-        JButton buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_ALL]);
+        JButton buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW]);
         topPanel.add(buttonClose);
+        JButton buttonSVG = new JButton(actions[InteractiveSimulationActions.ACT_SAVE_SD_SVG]);
+        topPanel.add(buttonSVG);
         /*topPanel.add(new JLabel(" time unit:"));
         units = new JComboBox<>(unitTab);
         units.setSelectedIndex(1);
@@ -148,57 +156,56 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
             //actions[i].addKeyListener(this);
         }
     }
-	
-	
+
 	
 	public void close() {
 		dispose();
 		setVisible(false);
-		
 	}
-	
-	private void refresh() {
-		if (sdpanel != null ){
-			sdpanel.refresh();
-		}
-	}
-    
-	
+
+	private void saveSVG() {
+        TraceManager.addDev("Saving in svg format");
+        File file = mgui.selectSVGFileForCapture(true);
+
+
+        boolean ok = true;
+
+        try {
+            ok = FileUtils.checkFileForSave(file);
+        } catch (Exception e) {
+            ok = false;
+        }
+
+        if (!ok) {
+            JOptionPane.showMessageDialog(this,
+                    "The capture could not be performed: the specified file is not valid",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        SVGGeneration gen = new SVGGeneration();
+        gen.saveInSVG(sdpanel, file.getAbsolutePath());
+        //newSVGSave(fileName);
+    }
+
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();
 		//TraceManager.addDev("Command:" + command);
 		
-		if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_ALL].getActionCommand()))  {
+		if (command.equals(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW].getActionCommand()))  {
 			close();
-		} else if (command.equals(actions[InteractiveSimulationActions.ACT_REFRESH].getActionCommand()))  {
-			refresh();
-		} else if (evt.getSource() == units) {
-            if (sdpanel != null) {
-                switch(units.getSelectedIndex()) {
-                case 0:
-                    
-                }
-                sdpanel.setClockDiviser(clockDivisers[units.getSelectedIndex()]);
-            }
+		} else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_SD_SVG].getActionCommand())) {
+            saveSVG();
         }
 	}
-    
-    public void setFileReference(String _fileReference) {
-        if (sdpanel != null) {
-            TraceManager.addDev("Resetting file");
-            sdpanel.setFileReference(_fileReference);
-        }
-    }
 
     public void setFileReference(BufferedReader inputStream) {
         if (sdpanel != null) {
             sdpanel.setFileReference(inputStream);
         }
     }
-	
-	public void setCurrentTime(long timeValue) {
-		status.setText("time = " + timeValue);
-	}
+
 	
 	public void setStatus(String _status) {
 		status.setText(_status);

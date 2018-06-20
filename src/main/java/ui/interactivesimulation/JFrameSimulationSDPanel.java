@@ -104,7 +104,7 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
         
         // Top panel
         JPanel topPanel = new JPanel();
-        JButton buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_ALL]);
+        JButton buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW]);
         topPanel.add(buttonClose);
         topPanel.add(new JLabel(" time unit:"));
         units = new JComboBox<>(unitTab);
@@ -164,7 +164,7 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
 		String command = evt.getActionCommand();
 		//TraceManager.addDev("Command:" + command);
 		
-		if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_ALL].getActionCommand()))  {
+		if (command.equals(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW].getActionCommand()))  {
 			close();
 		} else if (command.equals(actions[InteractiveSimulationActions.ACT_REFRESH].getActionCommand()))  {
 			refresh();
