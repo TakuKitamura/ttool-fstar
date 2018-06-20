@@ -106,6 +106,8 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     protected JButton stop;
     protected JButton close;
 
+    protected JLabel picLabel;
+
     protected JLabel gen, comp, opt;
     protected JTextField code1, code2, compiler1, codeOpt;
     //exe1, exe2, exe3, exe2int, exe2formal;
@@ -130,6 +132,8 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     //private boolean wasClosed = false;
 
     private GTURTLEModeling gtm;
+
+    private LinkedList<ImageIcon> listOfLogos;
 
 
     /** Creates new form  */
@@ -217,16 +221,30 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
+        listOfLogos = new LinkedList<>();
         generators = new Vector<String>();
         generators.add(DEFAULT_GENERATOR);
+        listOfLogos.add(rescale(IconManager.ttoolImageIcon));
         fillGeneratorsWithPlugins(generators);
 
         generatorsBox = new JComboBox<>(generators);
         if (generators.size() > 1) {
             generatorsBox.setSelectedIndex(1);
         }
+
+        // Drawing image
+        picLabel = new JLabel();
+        picLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        setIcon();
+
+
+        // Adding selection listener to generator
+        generatorsBox.addActionListener(this);
+
         jp01.add(generatorsBox, c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+
+        jp01.add(picLabel, c01);
 
         jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -326,6 +344,15 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         c.add(jp2, BorderLayout.SOUTH);
     }
 
+    private void setIcon() {
+        ImageIcon img = listOfLogos.get(generatorsBox.getSelectedIndex());
+        if (img == null) {
+            picLabel.setIcon(listOfLogos.get(0));
+        } else {
+            picLabel.setIcon(img);
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
@@ -337,6 +364,8 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
+        } else if (evt.getSource() == generatorsBox) {
+            setIcon();
         }
     }
 
@@ -493,7 +522,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
                 jta.append( s.toString() );
             }
         } else {
-            // code generation by plugin!
+            // Code generation by plugin!
             int index = generatorsBox.getSelectedIndex() - 1;
             int cpt = 0;
             Plugin foundPlugin = null;
@@ -607,12 +636,25 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         }
     }
 
+    protected ImageIcon rescale(ImageIcon icon) {
+        if (icon == null) {
+            return null;
+        }
+        Image newImg = icon.getImage().getScaledInstance(200, -1, Image.SCALE_DEFAULT);
+        return new ImageIcon(newImg);
+    }
+
     public void fillGeneratorsWithPlugins(Vector<String> v) {
+
         LinkedList<Plugin> list = PluginManager.pluginManager.getPluginDiplodocusCodeGenerator();
         for(Plugin p: list) {
             String desc = p.getDiplodocusCodeGeneratorIdentifier();
             if (desc != null) {
                 v.add(desc);
+                ImageIcon img = p.getDiplodocusCodeGeneratorLogo();
+                TraceManager.addDev("Adding image for desc= " + desc + ": " + img);
+
+                listOfLogos.add(rescale(img));
             }
         }
     }

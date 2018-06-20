@@ -40,6 +40,7 @@
 package myutil;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -102,6 +103,13 @@ public class Plugin {
     public String getDiplodocusCodeGeneratorIdentifier() {
         String desc = executeRetStringMethod(classDiplodocusCodeGenerator, "getIdentifier");
         return desc;
+    }
+
+    public ImageIcon getDiplodocusCodeGeneratorLogo() {
+        String mName = "getLogoImage";
+        TraceManager.addDev("Getting image with method=" + mName);
+        ImageIcon img = executeRetImageIconMethod(classDiplodocusCodeGenerator, mName);
+        return img;
     }
 
 
@@ -228,7 +236,7 @@ public class Plugin {
         try {
             return (String) (m.invoke(null));
         } catch (Exception e) {
-            TraceManager.addDev("Exception occured when executing method " + _methodName + " in class=" + _className);
+            TraceManager.addDev("Exception occurred when executing method " + _methodName + " in class=" + _className);
             return null;
         }
     }
@@ -246,10 +254,11 @@ public class Plugin {
             }
             return (String) (m.invoke(null));
         } catch (Exception e) {
-            TraceManager.addDev("Exception occured when executing method " + _methodName);
+            TraceManager.addDev("Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
             return null;
         }
     }
+
 
     public static int executeIntMethod(Object instance, String _methodName) throws Exception {
         Class[] cArg = new Class[0];
