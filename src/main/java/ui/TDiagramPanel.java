@@ -38,10 +38,7 @@
 
 package ui;
 
-import myutil.GenericTree;
-import myutil.GraphicLib;
-import myutil.SVGGraphics;
-import myutil.TraceManager;
+import myutil.*;
 import ui.atd.ATDAttack;
 import ui.atd.ATDBlock;
 import ui.avatarad.AvatarADActivity;
@@ -3576,7 +3573,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         h = Math.min(h, getHeight() - y);
 
 
-        StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+        /*StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
         sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
         //sb.append(" width=\"" + (w+x) + "\" height=\"" + (h+y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"");
@@ -3597,7 +3594,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         sb.append("</svg>");
 
-        return sb.toString();
+        return sb.toString();*/
+
+        SVGGeneration gen = new SVGGeneration();
+        return gen.getSVGString(this);
     }
 
     public String oldSvgCapture() {

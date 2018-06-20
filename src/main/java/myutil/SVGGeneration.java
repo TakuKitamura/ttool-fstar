@@ -53,6 +53,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import javax.swing.*;
+import java.io.*;
 
 /**
    * Class SVGGeneration
@@ -68,8 +69,8 @@ public class SVGGeneration  {
 
     }
 
-    public void saveInSVG(JPanel panel, String fileName) {
-        TraceManager.addDev("New SVG save in " + fileName);
+
+    public SVGGraphics2D getSVGGenerator(JPanel panel) {
         // Get a DOMImplementation.
         DOMImplementation domImpl =
                 GenericDOMImplementation.getDOMImplementation();
@@ -83,11 +84,12 @@ public class SVGGeneration  {
 
         // Ask the test to render into the SVG Graphics2D implementation.
         panel.paint(svgGenerator);
-        /*TestSVGGen test = new TestSVGGen();
-        test.paint(svgGenerator);*/
 
-        // Finally, stream out SVG to the standard output using
-        // UTF-8 encoding.
+        return svgGenerator;
+    }
+
+    public void saveInSVG(JPanel panel, String fileName) {
+        SVGGraphics2D svgGenerator = getSVGGenerator(panel);
         boolean useCSS = true; // we want to use CSS style attributes
         try {
             File fileSave = new File(fileName);
@@ -96,6 +98,21 @@ public class SVGGeneration  {
             svgGenerator.stream(out, useCSS);
         } catch (Exception e) {
             TraceManager.addDev("SVG generation failed: " + e.getMessage());
+        }
+    }
+
+    public String getSVGString(JPanel panel) {
+        SVGGraphics2D svgGenerator = getSVGGenerator(panel);
+
+        boolean useCSS = true; // we want to use CSS style attributes
+        try {
+            StringWriter ouS = new StringWriter();
+            svgGenerator.stream(ouS, useCSS);
+            String tmp = ouS.toString();
+            return tmp;
+        } catch (Exception e) {
+            TraceManager.addDev("SVG generation failed: " + e.getMessage());
+            return null;
         }
     }
 

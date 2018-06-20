@@ -1902,7 +1902,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
         // Ask the test to render into the SVG Graphics2D implementation.
         sdpanel.paint(svgGenerator);
-        
+
 
         // Finally, stream out SVG to the standard output using
         // UTF-8 encoding.
