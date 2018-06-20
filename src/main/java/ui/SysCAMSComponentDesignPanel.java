@@ -82,7 +82,7 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 	}
 
 	public void init() {
-		mgui.changeMade(syscamsctdp, TDiagramPanel.NEW_COMPONENT);
+        	mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
 	}
 	
 	public String saveHeaderInXml(String extensionToName) {
@@ -129,34 +129,34 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 	}
 	
 	public boolean isSystemCAMSEnabled() {
-    	return true;
-    }
+    		return true;
+    	}
 	
 	public boolean addSysCAMS(String s) {
-        SysCAMSComponentTaskDiagramToolBar ardtb = new SysCAMSComponentTaskDiagramToolBar(mgui);
-        toolbars.add(ardtb);
+		SysCAMSComponentTaskDiagramToolBar ardtb = new SysCAMSComponentTaskDiagramToolBar(mgui);
+		toolbars.add(ardtb);
 
-        toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
+		toolBarPanel = new JPanel();
+		toolBarPanel.setLayout(new BorderLayout());
 
-        //Class diagram
-        syscamsctdp = new SysCAMSComponentTaskDiagramPanel(mgui, ardtb);
-        syscamsctdp.setName(s);
-        syscamsctdp.tp = this;
-        tdp = syscamsctdp;
-        panels.add(syscamsctdp);
-        JScrollDiagramPanel jsp = new JScrollDiagramPanel(syscamsctdp);
-        syscamsctdp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
-        toolBarPanel.add(ardtb, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic84, toolBarPanel, "Opens SysCAMS component diagram");
-        tabbedPane.setSelectedIndex(0);
-        JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
+		//Class diagram
+		syscamsctdp = new SysCAMSComponentTaskDiagramPanel(mgui, ardtb);
+		syscamsctdp.setName(s);
+		syscamsctdp.tp = this;
+		tdp = syscamsctdp;
+		panels.add(syscamsctdp);
+		JScrollDiagramPanel jsp = new JScrollDiagramPanel(syscamsctdp);
+		syscamsctdp.jsp = jsp;
+		jsp.setWheelScrollingEnabled(true);
+		jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
+		toolBarPanel.add(ardtb, BorderLayout.NORTH);
+		toolBarPanel.add(jsp, BorderLayout.CENTER);
+		tabbedPane.addTab(s, IconManager.imgic84, toolBarPanel, "Opens SysCAMS component diagram");
+		tabbedPane.setSelectedIndex(0);
+		JPanel toolBarPanel = new JPanel();
+		toolBarPanel.setLayout(new BorderLayout());
 
-        return true;
-    }
+		return true;
+    	}
 }
 

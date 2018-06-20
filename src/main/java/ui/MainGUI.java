@@ -1891,7 +1891,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 	public void newSysCAMS() {
         //TraceManager.addDev("NEW DESIGN");
         addSysCAMSComponentDesignPanel("SystemC_AMS", -1);
-        tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
+        //tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
         //frame.repaint();
