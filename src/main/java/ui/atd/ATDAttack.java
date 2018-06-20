@@ -118,7 +118,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         editable = true;
         removable = true;
 
-        value = "attack01";
+        value = tdp.findAttackName("attack");
         description = "blah blah blah";
 
         currentFontSize = -1;

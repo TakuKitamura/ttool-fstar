@@ -42,6 +42,7 @@ import myutil.GenericTree;
 import myutil.GraphicLib;
 import myutil.SVGGraphics;
 import myutil.TraceManager;
+import ui.atd.ATDAttack;
 import ui.atd.ATDBlock;
 import ui.avatarad.AvatarADActivity;
 import ui.avatarbd.AvatarBDBlock;
@@ -52,16 +53,17 @@ import ui.avatarmad.AvatarMADAssumption;
 import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
 import ui.cd.*;
-import ui.syscams.SysCAMSBlockDE;
-import ui.syscams.SysCAMSBlockTDF;
-import ui.syscams.SysCAMSCompositeComponent;
-import ui.syscams.SysCAMSRecordComponent;
+import ui.ftd.FTDFault;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
 import ui.ncdd.NCSwitchNode;
 import ui.ncdd.NCTrafficArtifact;
 import ui.oscd.TOSClass;
 import ui.req.Requirement;
+import ui.syscams.SysCAMSBlockDE;
+import ui.syscams.SysCAMSBlockTDF;
+import ui.syscams.SysCAMSCompositeComponent;
+import ui.syscams.SysCAMSRecordComponent;
 import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
@@ -184,7 +186,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected int y2;
     protected Vector<Point> listPoint;
     protected TGConnectingPoint p1, p2;
-   /* protected CAMSConnectingPoint cp1, cp2;*/
+    /* protected CAMSConnectingPoint cp1, cp2;*/
     protected int type;
 
     // For component selection
@@ -1276,7 +1278,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         ySel = y;
         for (TGComponent tgc : this.componentList)
             if (tgc.isSelected()) {
-                if ((xSel-oldX != 0 ) || (ySel-oldY != 0 )) {
+                if ((xSel - oldX != 0) || (ySel - oldY != 0)) {
                     /*TraceManager.addDev("" + tgc + " is selected oldX=" + xSel +
                             " oldY=" + oldY + " xSel=" + xSel + " ySel=" + ySel);*/
                 }
@@ -2597,11 +2599,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof TMLCRecordComponent && this.checkTMLCRecordComponent((TMLCRecordComponent) o, name))
                     || (o instanceof TMLCCompositeComponent && this.checkTMLCCompositeComponent((TMLCCompositeComponent) o, name))
                     || (o instanceof TMLTaskInterface && this.checkTMLTaskInterface((TMLTaskInterface) o, name))
-                	  || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
+                    || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
                     || (o instanceof SysCAMSBlockDE && this.checkSysCAMSBlockDEComponent((SysCAMSBlockDE) o, name))
                     || (o instanceof SysCAMSRecordComponent && this.checkSysCAMSRecordComponent((SysCAMSRecordComponent) o, name))
                     || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
                     || (o instanceof ATDBlock && this.checkATDBlock((ATDBlock) o, name))
+                    || (o instanceof ATDAttack && this.checkATDAttack((ATDAttack) o, name))
+                    || (o instanceof FTDFault && this.checkFTDFault((FTDFault) o, name))
                     || (o instanceof AvatarBDBlock && this.checkAvatarBDBlock((AvatarBDBlock) o, name))
                     || (o instanceof AvatarCDBlock && this.checkAvatarCDBlock((AvatarCDBlock) o, name))
                     || (o instanceof AvatarSMDState && this.checkAvatarSMDState((AvatarSMDState) o, name))
@@ -2649,24 +2653,32 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         public boolean checkTMLTaskInterface(TMLTaskInterface o, String name) {
             return false;
         }
-        
+
         public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
-        	return false;
+            return false;
         }
-        
+
         public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
-        	return false;
+            return false;
         }
-        
+
         public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
-        	return false;
+            return false;
         }
-        
+
         public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
-        	return false;
+            return false;
         }
 
         public boolean checkATDBlock(ATDBlock o, String name) {
+            return false;
+        }
+
+        public boolean checkATDAttack(ATDAttack o, String name) {
+            return false;
+        }
+
+        public boolean checkFTDFault(FTDFault o, String name) {
             return false;
         }
 
@@ -2788,27 +2800,43 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         });
     }
 
-		 public String findSysCAMSPrimitiveComponentName(String name) {
-    	return this.findGoodName(name, new NameChecker() {
-    		public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
-    			return o.getValue().equals(name);
-    		}
-    		
-    		public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
-    			return o.getValue().equals(name);
-    		}
-    		
-    		public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
-    			return o.getValue().equals(name);
-    		}
-    		
-    		public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
-    			for (int i = 0; i < o.getNbInternalTGComponent(); i++)
-    				if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
-    					return true;
-    			return false;
-    		}
-    	});
+    public String findSysCAMSPrimitiveComponentName(String name) {
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
+                return o.getValue().equals(name);
+            }
+
+            public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
+                return o.getValue().equals(name);
+            }
+
+            public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
+                return o.getValue().equals(name);
+            }
+
+            public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
+                for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+                    if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+                        return true;
+                return false;
+            }
+        });
+    }
+
+    public String findAttackName(String name) {
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkATDAttack(ATDAttack o, String name) {
+                return o.getValue().equals(name);
+            }
+        });
+    }
+
+    public String findFaultName(String name) {
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkFTDFault(FTDFault o, String name) {
+                return o.getValue().equals(name);
+            }
+        });
     }
 
     public String findBlockName(String name) {

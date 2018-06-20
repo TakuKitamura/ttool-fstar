@@ -129,7 +129,8 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         editable = true;
         removable = true;
 
-        value = "fault01";
+        //value = "fault01";
+        value = tdp.findFaultName("fault");
         description = "blah blah blah";
 
         currentFontSize = -1;
