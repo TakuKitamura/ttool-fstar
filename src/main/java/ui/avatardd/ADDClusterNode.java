@@ -62,7 +62,7 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 	private int textY2 = 30;
 	private int derivationx = 2;
 	private int derivationy = 3;
-	private String stereotype = "Cluster";
+	private String stereotype = "SystemC-AMS Cluster";
     private int currentFontSize = -1;
     private int textX = 15; // border for ports
 	
