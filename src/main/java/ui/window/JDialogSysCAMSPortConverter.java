@@ -42,6 +42,8 @@ import ui.syscams.*;
 import ui.util.IconManager;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -94,7 +96,6 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 	public JDialogSysCAMSPortConverter(SysCAMSPortConverter port) {
 		/** Set JDialog **/
 		this.setTitle("Setting Converter Ports");
-		this.setSize(500, 318);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setAlwaysOnTop(true);
@@ -297,22 +298,24 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		attributesMainPanel.add(box); // add grid to grid
 
 		// Down Side
-		JPanel downPanel = new JPanel(new GridLayout(1, 2));
+		JPanel downPanel = new JPanel(new FlowLayout());
 
 		JButton saveCloseButton = new JButton("Save and close");
 		saveCloseButton.setIcon(IconManager.imgic25);
 		saveCloseButton.setActionCommand("Save_Close");
 		saveCloseButton.addActionListener(this);
+		saveCloseButton.setPreferredSize(new Dimension(200, 30));
 		downPanel.add(saveCloseButton);
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setIcon(IconManager.imgic27);
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
+		cancelButton.setPreferredSize(new Dimension(200, 30));
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-	
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 
@@ -389,3 +392,4 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		}
 	}
 }
+

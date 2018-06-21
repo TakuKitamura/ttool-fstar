@@ -42,10 +42,11 @@ import ui.syscams.*;
 import ui.util.IconManager;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,12 +65,12 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
 /**
- * Class JDialogSystemCAMSBlockDE
+ * Class JDialogSystemCAMSBlockDE 
  * Dialog for managing of SystemC-AMS DE Block
  * Creation: 26/04/2018
  * @version 1.0 26/04/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 @SuppressWarnings("serial")
 
@@ -88,7 +89,6 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 	public JDialogSysCAMSBlockDE(SysCAMSBlockDE block) {
 		/** Set JDialog **/
 		this.setTitle("Setting DE Block Attributes");
-		this.setSize(500, 180);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setAlwaysOnTop(true);
@@ -96,14 +96,14 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
 		/** Parameters **/
 		this.block = block;
-		
+
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
 		getRootPane().getActionMap().put("close", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-		        dispose();
+				dispose();
 			}
 		});
-		
+
 		dialog();
 	}
 
@@ -128,90 +128,82 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 		GridBagConstraints constraints = new GridBagConstraints();
 		JPanel attributesBoxPanel = new JPanel();
 		attributesBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-		attributesBoxPanel.setLayout(gridBag); 
+		attributesBoxPanel.setLayout(gridBag);
 
 		JLabel labelName = new JLabel("Name : ");
-		constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+		constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(labelName, constraints);
 		attributesBoxPanel.add(labelName);
 
-	    	if (block.getValue().toString().equals("")) { // name empty
+		if (block.getValue().toString().equals("")) { // name empty
 			nameTextField = new JTextField(10);
 		} else {
 			nameTextField = new JTextField(block.getValue().toString(), 10); // name not empty
 		}
-	    	constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
-	   	gridBag.setConstraints(nameTextField, constraints);
-	    	attributesBoxPanel.add(nameTextField);
-		
-	    	JLabel periodLabel = new JLabel("Period Tp : ");
-		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+		constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(nameTextField, constraints);
+		attributesBoxPanel.add(nameTextField);
+
+		JLabel periodLabel = new JLabel("Period Tp : ");
+		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(periodLabel, constraints);
 		attributesBoxPanel.add(periodLabel);
 
-	   	 if (block.getPeriod() == -1) { // name empty 		// port.getName().toString().equals("") ||
+		if (block.getPeriod() == -1) { // name empty // port.getName().toString().equals("") ||
 			periodTextField = new JTextField(10);
 		} else {
 			periodTextField = new JTextField("" + block.getPeriod(), 10); // name not empty
 		}
-	   	constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+		constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(periodTextField, constraints);
 		attributesBoxPanel.add(periodTextField);
 
 		listPeriodString = new String[3];
-	    	listPeriodString[0] = "us";
+		listPeriodString[0] = "us";
 		listPeriodString[1] = "ms";
 		listPeriodString[2] = "s";
 		periodComboBoxString = new JComboBox<String>(listPeriodString);
 		if (block.getTime().equals("") || block.getTime().equals("us")) {
 			periodComboBoxString.setSelectedIndex(0);
-		} else if (block.getTime().equals("ms")){
+		} else if (block.getTime().equals("ms")) {
 			periodComboBoxString.setSelectedIndex(1);
 		} else {
 			periodComboBoxString.setSelectedIndex(2);
 		}
 		periodComboBoxString.setActionCommand("time");
 		periodComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(periodComboBoxString, constraints);
 		attributesBoxPanel.add(periodComboBoxString);
-		
+
 		attributesBox.add(attributesBoxPanel);
-		
+
 		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); // add box to grid
 
 		// Down Side
-		JPanel downPanel = new JPanel(new GridLayout(1, 2));
+		JPanel downPanel = new JPanel(new FlowLayout());
 
 		JButton saveCloseButton = new JButton("Save and close");
 		saveCloseButton.setIcon(IconManager.imgic25);
 		saveCloseButton.setActionCommand("Save_Close");
 		saveCloseButton.addActionListener(this);
+		saveCloseButton.setPreferredSize(new Dimension(200, 30));
 		downPanel.add(saveCloseButton);
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setIcon(IconManager.imgic27);
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
+		cancelButton.setPreferredSize(new Dimension(200, 30));
 		downPanel.add(cancelButton);
-			
+
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 
@@ -238,7 +230,7 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 			} else {
 				block.setPeriod(-1);
 			}
-			
+
 			this.dispose();
 		}
 
@@ -247,3 +239,4 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 		}
 	}
 }
+
