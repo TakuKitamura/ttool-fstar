@@ -63,7 +63,6 @@ import ui.req.Requirement;
 import ui.syscams.SysCAMSBlockDE;
 import ui.syscams.SysCAMSBlockTDF;
 import ui.syscams.SysCAMSCompositeComponent;
-import ui.syscams.SysCAMSRecordComponent;
 import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
