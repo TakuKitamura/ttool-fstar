@@ -62,7 +62,7 @@ public class TClassEventFiniteBlocking extends TClass implements TClassEventComm
 	public TClassEventFiniteBlocking(String name, String _eventName, int _nbPara, int _maxSamples) {
 		super(name, true);
 		nbPara = _nbPara;
-		//System.out.println("Nb of params:" +nbPara);
+		//
 		maxSamples = _maxSamples;
 		sendReqGates = new LinkedList<>();
 		waitGates = new LinkedList<>();
@@ -148,8 +148,8 @@ public class TClassEventFiniteBlocking extends TClass implements TClassEventComm
 	}
 
 	public void makeTClass() {
-		//System.out.println("toto1");
-		//System.out.println("Nb of params:" +nbPara);
+		//
+		//
 
 		Gate forward_0, forward_1, g;
 		ADActionStateWithGate adag;

@@ -659,7 +659,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
             path.add(currNode);
             //if (memory!=null) path.add(memory);
             commNodes.remove(currNode);
-            //for (int i=0; i<path.size(); i++) System.out.print("  ");
+
             //TraceManager.addDev(currNode.getName());
             if (exploreBuses(depth + 1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
             path.remove(currNode);

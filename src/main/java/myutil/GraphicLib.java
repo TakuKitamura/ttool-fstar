@@ -37,8 +37,6 @@
  */
 
 
-
-
 package myutil;
 
 import javax.swing.*;
@@ -48,10 +46,11 @@ import java.util.Vector;
 
 
 /**
-   * Class GraphLib
-   * Creation: 01/12/2003
-   * @version 1.1 01/12/2003
-   * @author Ludovic APVRILLE
+ * Class GraphLib
+ * Creation: 01/12/2003
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.1 01/12/2003
  */
 public final class GraphicLib {
 
@@ -87,9 +86,9 @@ public final class GraphicLib {
 
     public static float dash1[] = {5.0f};
     public static BasicStroke dashed = new BasicStroke(1.0f,
-                                                       BasicStroke.CAP_BUTT,
-                                                       BasicStroke.JOIN_MITER,
-                                                       10.0f, dash1, 0.0f);
+            BasicStroke.CAP_BUTT,
+            BasicStroke.JOIN_MITER,
+            10.0f, dash1, 0.0f);
 
     public static void setNormalStroke(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -107,9 +106,9 @@ public final class GraphicLib {
     }
 
     public static void centerString(Graphics g, String s, int x, int y, int width) {
-	int w = g.getFontMetrics().stringWidth(s);
-	int posX = x + (width-w)/2;
-	g.drawString(s, posX, y); 
+        int w = g.getFontMetrics().stringWidth(s);
+        int posX = x + (width - w) / 2;
+        g.drawString(s, posX, y);
     }
 
     public static void setDashed() {
@@ -118,11 +117,11 @@ public final class GraphicLib {
 
     public static void doubleColorRect(Graphics g, int x, int y, int width, int height, Color color1, Color color2) {
         g.setColor(color1);
-        g.drawLine(x, y, x +width, y);
-        g.drawLine(x, y, x, y+height);
+        g.drawLine(x, y, x + width, y);
+        g.drawLine(x, y, x, y + height);
         g.setColor(color2);
-        g.drawLine(x, y+height, x+width, y+height);
-        g.drawLine(x+width, y, x+width, y+height);
+        g.drawLine(x, y + height, x + width, y + height);
+        g.drawLine(x + width, y, x + width, y + height);
     }
 
     public static void dashedLine(Graphics g, int x1, int y1, int x2, int y2) {
@@ -176,7 +175,7 @@ public final class GraphicLib {
     }
 
 
-    private static void  drawArrow(Graphics g, int x1, int y1, int x2, int y2, int head, int length, boolean full) {
+    private static void drawArrow(Graphics g, int x1, int y1, int x2, int y2, int head, int length, boolean full) {
         // changement de repere
         int x = x2 - x1;
         int y = y2 - y1;
@@ -193,10 +192,10 @@ public final class GraphicLib {
         // tete de la fleche
         xPoints[0] = x1;
         yPoints[0] = y1;
-        xPoints[1] = (int)(length*Math.cos(alpha-angle) + x1);
-        yPoints[1] = (int)(length*Math.sin(alpha-angle) + y1);
-        xPoints[2] = (int)(length*Math.cos(alpha+angle) + x1);
-        yPoints[2] = (int)(length*Math.sin(alpha+angle) + y1);
+        xPoints[1] = (int) (length * Math.cos(alpha - angle) + x1);
+        yPoints[1] = (int) (length * Math.sin(alpha - angle) + y1);
+        xPoints[2] = (int) (length * Math.cos(alpha + angle) + x1);
+        yPoints[2] = (int) (length * Math.sin(alpha + angle) + y1);
 
 
         if (full) {
@@ -224,7 +223,7 @@ public final class GraphicLib {
         int x22 = Math.max(x1, x2);
         int y22 = Math.max(y1, y2);
 
-        if ((x11 < x) || (x22 > x+width)) {
+        if ((x11 < x) || (x22 > x + width)) {
             return false;
         }
 
@@ -238,32 +237,32 @@ public final class GraphicLib {
     // If lines are parallel, returns one of the point
     public static boolean pointBelongsToSegment(double x1, double y1, double x3, double y3, double x4, double y4) {
 
-        //System.out.println("Point on segment : x1=" + x1 + " y1=" + y1);
-        //System.out.println("x3=" + x3 + " y3=" + y3 +" x4=" + x4 + " y4=" + y4);
+        //TraceManager.addDev("Point on segment : x1=" + x1 + " y1=" + y1);
+        //TraceManager.addDev("x3=" + x3 + " y3=" + y3 +" x4=" + x4 + " y4=" + y4);
         double y33 = Math.min(y3, y4);
         double y44 = Math.max(y3, y4);
 
         if (x3 == x4) {
             // vertical line
             if (Math.abs(x1 - x3) < EPSILON) {
-                if (((y1 >= y33) && (y44 >= y1)) || (Math.abs(y1-y44)<EPSILON) || (Math.abs(y1-y33)<EPSILON)) {
+                if (((y1 >= y33) && (y44 >= y1)) || (Math.abs(y1 - y44) < EPSILON) || (Math.abs(y1 - y33) < EPSILON)) {
                     return true;
                 }
             }
             return false;
         }
 
-        //System.out.println("Toto121");
+        //TraceManager.addDev("Toto121");
 
         double x33 = Math.min(x3, x4);
         double x44 = Math.max(x3, x4);
-        if (((x1 >= x33) && (x44 >= x1)) || (Math.abs(x1-x44)<EPSILON) || (Math.abs(x1-y33)<EPSILON)) {
-            double y11 = y3 + (y3-y4)*(x1-x3)/(x3-x4);
-            //System.out.println("y1=" + y1 + " y11=" + y11);
-            if (Math.abs(y1-y11)<EPSILON){
-                //System.out.println("EPSILON");
-                if (((y1 >= y33) && (y44 >= y1)) || (Math.abs(y1-y44)<EPSILON) || (Math.abs(y1-y33)<EPSILON)) {
-                    //System.out.println("OK");
+        if (((x1 >= x33) && (x44 >= x1)) || (Math.abs(x1 - x44) < EPSILON) || (Math.abs(x1 - y33) < EPSILON)) {
+            double y11 = y3 + (y3 - y4) * (x1 - x3) / (x3 - x4);
+            //TraceManager.addDev("y1=" + y1 + " y11=" + y11);
+            if (Math.abs(y1 - y11) < EPSILON) {
+                //TraceManager.addDev("EPSILON");
+                if (((y1 >= y33) && (y44 >= y1)) || (Math.abs(y1 - y44) < EPSILON) || (Math.abs(y1 - y33) < EPSILON)) {
+                    //TraceManager.addDev("OK");
                     return true;
                 }
             }
@@ -278,14 +277,14 @@ public final class GraphicLib {
     public static Point intersectionTwoSegments(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
         int type1 = 0, type2 = 0;
         double x, y;
-        //System.out.println("x1=" + x1 + " y1=" + y1 +" x2=" + x2 + " y2=" + y2);
-        //System.out.println("x3=" + x3 + " y3=" + y3 +" x4=" + x4 + " y4=" + y4);
+        //TraceManager.addDev("x1=" + x1 + " y1=" + y1 +" x2=" + x2 + " y2=" + y2);
+        //TraceManager.addDev("x3=" + x3 + " y3=" + y3 +" x4=" + x4 + " y4=" + y4);
 
         if (x1 == x2) {
             if (y1 == y2) {
                 // only one point is provided
                 if (pointBelongsToSegment(x1, y1, x3, y3, x4, y4)) {
-                    return new Point((int)x1, (int)y1);
+                    return new Point((int) x1, (int) y1);
                 } else {
                     return null;
                 }
@@ -299,7 +298,7 @@ public final class GraphicLib {
             if (y3 == y4) {
                 // only one point is provided
                 if (pointBelongsToSegment(x3, y3, x1, y1, x2, y2)) {
-                    return new Point((int)x3, (int)y3);
+                    return new Point((int) x3, (int) y3);
                 } else {
                     return null;
                 }
@@ -315,37 +314,45 @@ public final class GraphicLib {
 
         if ((type1 == 1) && (type2 == 1)) {
             // Both are vertical
-            //System.out.println("Toto11");
+            //TraceManager.addDev("Toto11");
             if (x1 != x3) {
-                //System.out.println("Toto12");
+                //TraceManager.addDev("Toto12");
                 return null;
             } else {
-                //System.out.println("Toto13");
-                if (((y11 >= y33) && (y44 >= y11)) || (Math.abs(y11-y44)<EPSILON) || (Math.abs(y11-y33)<EPSILON)){
-                    return new Point((int)x1, (int)y1);
+                //TraceManager.addDev("Toto13");
+                if (((y11 >= y33) && (y44 >= y11)) || (Math.abs(y11 - y44) < EPSILON) || (Math.abs(y11 - y33) < EPSILON)) {
+                    return new Point((int) x1, (int) y1);
                 }
-                if (((y22 >= y33) && (y44 >= y22)) || (Math.abs(y22-y44)<EPSILON) || (Math.abs(y22-y33)<EPSILON)){
-                    return new Point((int)x2, (int)y2);
+                if (((y22 >= y33) && (y44 >= y22)) || (Math.abs(y22 - y44) < EPSILON) || (Math.abs(y22 - y33) < EPSILON)) {
+                    return new Point((int) x2, (int) y2);
                 }
-                if (((y33 >= y11) && (y22 >= y33)) || (Math.abs(y33-y11)<EPSILON) || (Math.abs(y22-y33)<EPSILON)){
-                    return new Point((int)x3, (int)y3);
+                if (((y33 >= y11) && (y22 >= y33)) || (Math.abs(y33 - y11) < EPSILON) || (Math.abs(y22 - y33) < EPSILON)) {
+                    return new Point((int) x3, (int) y3);
                 }
-                if (((y44 >= y11) && (y22 >= y44))|| (Math.abs(y44-y11)<EPSILON) || (Math.abs(y22-y44)<EPSILON)) {
-                    return new Point((int)x4, (int)y4);
+                if (((y44 >= y11) && (y22 >= y44)) || (Math.abs(y44 - y11) < EPSILON) || (Math.abs(y22 - y44) < EPSILON)) {
+                    return new Point((int) x4, (int) y4);
                 }
                 return null;
             }
         }
 
         // at least one of them is not vertical
-        if ((type1 == 1)  || (type2 == 1)){
-            //System.out.println("Toto21");
+        if ((type1 == 1) || (type2 == 1)) {
+            //TraceManager.addDev("Toto21");
             if (type1 == 1) {
                 // we switch segments so that the second is vertical
-                x = x1; y = y1;
-                x1 = x3; y1 = y3; x3 = x; y3 = y;
-                x= x2; y = y2;
-                x2 = x4; y2 = y4; x4 = x; y4 = y;
+                x = x1;
+                y = y1;
+                x1 = x3;
+                y1 = y3;
+                x3 = x;
+                y3 = y;
+                x = x2;
+                y = y2;
+                x2 = x4;
+                y2 = y4;
+                x4 = x;
+                y4 = y;
             }
 
             // we are now sure the second one is vertical and not the first one
@@ -354,12 +361,12 @@ public final class GraphicLib {
 
             // we calculate the point (x3, y) on the first segment
 
-            y = (((y1-y2)*(x3-x1))/(x1 - x2))+y1;
+            y = (((y1 - y2) * (x3 - x1)) / (x1 - x2)) + y1;
             if ((y >= y33) && (y44 >= y)) {
                 // the point belongs to the vertical segment
                 // Does it also belongs to its original segment ?
                 if (pointBelongsToSegment(x3, y, x1, y1, x2, y2)) {
-                    return new Point((int)x3, (int)y);
+                    return new Point((int) x3, (int) y);
                 } else {
                     return null;
                 }
@@ -370,35 +377,35 @@ public final class GraphicLib {
         }
 
 
-        //System.out.println("Toto31");
-        double den = ((y1-y2)/(x1-x2)) - ((y3-y4)/(x3-x4));
+        //TraceManager.addDev("Toto31");
+        double den = ((y1 - y2) / (x1 - x2)) - ((y3 - y4) / (x3 - x4));
         if (Math.abs(den) < EPSILON) {
-            //System.out.println("Toto32");
+            //TraceManager.addDev("Toto32");
             // segments are parallel
             // common point ?
             if (pointBelongsToSegment(x1, y1, x3, y3, x4, y4)) {
-                return new Point((int)x1, (int)y1);
+                return new Point((int) x1, (int) y1);
             }
             if (pointBelongsToSegment(x2, y2, x3, y3, x4, y4)) {
-                return new Point((int)x2, (int)y2);
+                return new Point((int) x2, (int) y2);
             }
             if (pointBelongsToSegment(x3, y3, x1, y1, x2, y2)) {
-                return new Point((int)x3, (int)y3);
+                return new Point((int) x3, (int) y3);
             }
             if (pointBelongsToSegment(x4, y4, x1, y1, x2, y2)) {
-                return new Point((int)x4, (int)y4);
+                return new Point((int) x4, (int) y4);
             }
 
         } else {
-            //System.out.println("Toto34");
+            //TraceManager.addDev("Toto34");
 
-            double num = y3 - y1 + (x1*(y1-y2)/(x1-x2)) - (x3*(y3-y4)/(x3-x4));
+            double num = y3 - y1 + (x1 * (y1 - y2) / (x1 - x2)) - (x3 * (y3 - y4) / (x3 - x4));
             x = num / den;
-            double ya = ((y3-y4)*(x-x3))/(x3-x4) + y3;
+            double ya = ((y3 - y4) * (x - x3)) / (x3 - x4) + y3;
             //double yb = ((y1-y2)*(x-x1))/(x1-x2) + y1;
-            //System.out.println("Toto35 x=" + x + " ya=" + ya + " yb=" + yb);
+            //TraceManager.addDev("Toto35 x=" + x + " ya=" + ya + " yb=" + yb);
             if ((pointBelongsToSegment(x, ya, x1, y1, x2, y2)) && (pointBelongsToSegment(x, ya, x3, y3, x4, y4))) {
-                return new Point((int)x, (int)ya);
+                return new Point((int) x, (int) ya);
             } else {
                 return null;
             }
@@ -410,36 +417,36 @@ public final class GraphicLib {
         Point p;
 
         // lelft
-        //System.out.println("Left");
+        //TraceManager.addDev("Left");
         p = intersectionTwoSegments(x1, y1, x1, y1 + height, x3, y3, x4, y4);
         if (p != null)
             return p;
 
         // upper
-        //System.out.println("Upper");
-        p = intersectionTwoSegments(x1, y1, x1+width, y1, x3, y3, x4, y4);
+        //TraceManager.addDev("Upper");
+        p = intersectionTwoSegments(x1, y1, x1 + width, y1, x3, y3, x4, y4);
         if (p != null)
             return p;
 
         // right
-        //System.out.println("Right");
-        p = intersectionTwoSegments(x1+width, y1, x1+width, y1+height, x3, y3, x4, y4);
+        //TraceManager.addDev("Right");
+        p = intersectionTwoSegments(x1 + width, y1, x1 + width, y1 + height, x3, y3, x4, y4);
         if (p != null)
             return p;
 
         // lower
-        //System.out.println("Lower");
-        p = intersectionTwoSegments(x1, y1+height, x1+width, y1+height, x3, y3, x4, y4);
+        //TraceManager.addDev("Lower");
+        p = intersectionTwoSegments(x1, y1 + height, x1 + width, y1 + height, x3, y3, x4, y4);
         if (p != null)
             return p;
         return null;
     }
 
     public static boolean isInRectangle(int x1, int y1, int x, int y, int width, int height) {
-        return  x1 >= x         &&
-            x + width >= x1 &&
-            y1 >= y         &&
-            y + height >= y1;
+        return x1 >= x &&
+                x + width >= x1 &&
+                y1 >= y &&
+                y + height >= y1;
     }
 
     public static Point putPointOnRectangle(int x1, int y1, int x, int y, int width, int height) {
@@ -452,10 +459,10 @@ public final class GraphicLib {
         int d; // minimal distance
         Point p = new Point(); // returned point
 
-        d1 = Math.abs(y-y1);
-        d2 = Math.abs(x-x1);
-        d3 = Math.abs(y+height-y1);
-        d4 = Math.abs(x+width-x1);
+        d1 = Math.abs(y - y1);
+        d2 = Math.abs(x - x1);
+        d3 = Math.abs(y + height - y1);
+        d4 = Math.abs(x + width - x1);
 
         d = Math.min(Math.min(Math.min(d1, d2), d3), d4);
 
@@ -479,7 +486,7 @@ public final class GraphicLib {
     }
 
     // Returns the closer segment of the rectangle, from a given point (x1, y1)
-    public static int getCloserOrientation (int x1, int y1, int x, int y, int width, int height) {
+    public static int getCloserOrientation(int x1, int y1, int x, int y, int width, int height) {
         // Compute the four distances between the point and the four segments
         // Find the closer segment
         // Project the point on it
@@ -489,10 +496,10 @@ public final class GraphicLib {
         int d; // minimal distance
         int ret; // returned orientation
 
-        d1 = Math.abs(y-y1);
-        d2 = Math.abs(x-x1);
-        d3 = Math.abs(y+height-y1);
-        d4 = Math.abs(x+width-x1);
+        d1 = Math.abs(y - y1);
+        d2 = Math.abs(x - x1);
+        d3 = Math.abs(y + height - y1);
+        d4 = Math.abs(x + width - x1);
 
         d = Math.min(Math.min(Math.min(d1, d2), d3), d4);
 
@@ -512,19 +519,19 @@ public final class GraphicLib {
 
     public static void centerOnScreen(Window w) {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        w.setLocation((screen.width - w.getSize().width)/2,(screen.height - w.getSize().height)/2);
+        w.setLocation((screen.width - w.getSize().width) / 2, (screen.height - w.getSize().height) / 2);
     }
 
-    public static void centerOnParent(  final Window window ) {
-        centerOnParent( window, -1, -1 );
+    public static void centerOnParent(final Window window) {
+        centerOnParent(window, -1, -1);
     }
 
-    public static void centerOnParent(  final Window w,
-                                        final int width,
-                                        final int heigth ) {
-        if ( width > 0 && heigth > 0 ) {
+    public static void centerOnParent(final Window w,
+                                      final int width,
+                                      final int heigth) {
+        if (width > 0 && heigth > 0) {
             Dimension screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize();
-            w.setSize( Math.min( width, screenSize.width ), Math.min( heigth, screenSize.height ) );
+            w.setSize(Math.min(width, screenSize.width), Math.min(heigth, screenSize.height));
         }
 
         Window parent = w.getOwner();
@@ -534,14 +541,14 @@ public final class GraphicLib {
             return;
         }
         Point p = parent.getLocation();
-        w.setLocation(((parent.getSize().width - w.getSize().width)/2) + p.x, ((parent.getSize().height - w.getSize().height)/2) + p.y);
+        w.setLocation(((parent.getSize().width - w.getSize().width) / 2) + p.x, ((parent.getSize().height - w.getSize().height) / 2) + p.y);
     }
 
     // Trivial sorting algorithm as there are only a few tabs
     // maxIndex is a non valid index
     // Vector v contains elements that should be sorted the same way
     public static void sortJTabbedPane(JTabbedPane jtp, Vector<?> v, int beginIndex, int maxIndex) {
-        //System.out.println("Sorting from " + beginIndex + " to " + maxIndex);
+        //TraceManager.addDev("Sorting from " + beginIndex + " to " + maxIndex);
         if (beginIndex >= maxIndex) {
             return;
         }
@@ -549,7 +556,7 @@ public final class GraphicLib {
         String s = jtp.getTitleAt(beginIndex);
         int index = beginIndex;
         // Search for the one to move
-        for(int i=beginIndex+1; i<maxIndex; i++) {
+        for (int i = beginIndex + 1; i < maxIndex; i++) {
             if (s.compareTo(jtp.getTitleAt(i)) > 0) {
                 index = i;
                 s = jtp.getTitleAt(i);
@@ -560,7 +567,7 @@ public final class GraphicLib {
             moveTabFromTo(jtp, v, index, beginIndex);
         }
 
-        beginIndex ++;
+        beginIndex++;
         sortJTabbedPane(jtp, v, beginIndex, maxIndex);
     }
 
@@ -603,20 +610,19 @@ public final class GraphicLib {
         g.setColor(fillColor);
         g.fillRoundRect(x, y, width, height, arc, arc);
         g.setColor(fillColor.brighter());
-        g.drawLine(x+1, y+(arc/2), x+1, y+height-(arc/2));
-        g.drawLine(x+(arc/2), y+1, x+width-(arc/2), y+1);
-        g.drawArc(x+1, y+1, arc, arc, -180, -90);
-        g.drawArc(x+1, y+height-arc-1, arc, arc, 180, 45);
-        g.drawArc(x+width-1-arc, y+1, arc, arc, 90, -45);
+        g.drawLine(x + 1, y + (arc / 2), x + 1, y + height - (arc / 2));
+        g.drawLine(x + (arc / 2), y + 1, x + width - (arc / 2), y + 1);
+        g.drawArc(x + 1, y + 1, arc, arc, -180, -90);
+        g.drawArc(x + 1, y + height - arc - 1, arc, arc, 180, 45);
+        g.drawArc(x + width - 1 - arc, y + 1, arc, arc, 90, -45);
         g.setColor(fillColor.darker());
-        g.drawLine(x+width-1, y+(arc/2), x+width-1, y+height-(arc/2));
-        g.drawLine(x+(arc/2), y+height-1, x+width-(arc/2), y+height-1);
-        g.drawArc(x+width-1-arc, y+height-1-arc, arc, arc, -90, 90);
-        g.drawArc(x+1, y+height-arc-1, arc, arc, -135, 45);
-        g.drawArc(x+width-1-arc, y+1, arc, arc, 45, -45);
+        g.drawLine(x + width - 1, y + (arc / 2), x + width - 1, y + height - (arc / 2));
+        g.drawLine(x + (arc / 2), y + height - 1, x + width - (arc / 2), y + height - 1);
+        g.drawArc(x + width - 1 - arc, y + height - 1 - arc, arc, arc, -90, 90);
+        g.drawArc(x + 1, y + height - arc - 1, arc, arc, -135, 45);
+        g.drawArc(x + width - 1 - arc, y + 1, arc, arc, 45, -45);
         g.setColor(borderColor);
         g.drawRoundRect(x, y, width, height, arc, arc);
-
 
 
         g.setColor(c);
@@ -627,18 +633,18 @@ public final class GraphicLib {
         for (Component component : components) {
             component.setEnabled(enable);
             if (component instanceof Container) {
-                enableComponents((Container)component, enable);
+                enableComponents((Container) component, enable);
             }
         }
     }
 
     public static JTabbedPane createTabbedPane() {
-        final JTabbedPane pane = new JTabbedPane( JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT );
+        final JTabbedPane pane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
         return pane;
     }
 
     public static JTabbedPane createTabbedPaneRegular() {
-        final JTabbedPane pane = new JTabbedPane( JTabbedPane.TOP);
+        final JTabbedPane pane = new JTabbedPane(JTabbedPane.TOP);
         return pane;
     }
 }

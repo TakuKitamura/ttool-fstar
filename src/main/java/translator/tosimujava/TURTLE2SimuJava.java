@@ -117,7 +117,7 @@ public class TURTLE2SimuJava {
     
     public void printJavaClasses() {
         for (TJavaProcess tjp: this.processes) {
-            System.out.println(tjp.getJavaName() + ":\n" + tjp.toString() + "\n\n");
+            
         }
         
         printMainClass();    
@@ -191,9 +191,9 @@ public class TURTLE2SimuJava {
             tjp = foundTJProcess(t.getName());
             if (tjp != null) {
                 //generateExternalPreemption(t, jc);
-                //System.out.println("Generate operations for " + jc.getJavaName());
+                //
                 generateOperations(t, tjp);
-                //System.out.println("Done");
+                //
             }
         }
     }
@@ -238,11 +238,11 @@ public class TURTLE2SimuJava {
      
         for(i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
-            System.out.println("t = " + t.getName() + " Relation=" + r);
+            
             if ((r.type == Relation.PRE) && (r.t1 == t)) {
-                //System.out.println("Preemption from t to " + r.t2.getName());
+                //
                 jc1 = foundJClass(r.t2.getName());
-                //System.out.println("jc1 = " + jc1.getJavaName());
+                //
                 tclasses.add(jc1);
             }
         }
@@ -251,7 +251,7 @@ public class TURTLE2SimuJava {
             return;
         }
      
-        //System.out.println("Size=" + tclasses.size());
+        //
      
         // Create the necessary operation
         jc.addStartingPreemptionCode(JKeyword.INDENT + DECL_CODE_04 + "\n");
@@ -320,18 +320,18 @@ public class TURTLE2SimuJava {
         tjp.addOperation(jo);
         jo.addCode(tjp.getDeclarationOfOp(tjp.getOperationNb()));
         if (debug) {
-            jo.addCode("System.out.println(getName() + \" / id=\" + id + \"executes :\" + " + jo.nb + ");\n"); 
+            jo.addCode("
         }
         return jo;
     }
     
     private void generateStandardOperationsRec(TClass t, TJavaProcess tjp, ActivityDiagram ad, ADComponent adc, ADComponent last, JOperation jo, int dec, boolean endNeeded) {
-        System.out.println("Generating std op rec " + jo.getName());
+        
         if (adc instanceof ADActionStateWithGate) {
             ADActionStateWithGate adaswg = (ADActionStateWithGate)adc;
             indent(jo, dec);
             if (debug) {
-                jo.addCode("System.out.println(\"Call on " + adaswg.getGate().getName() + " value=" + adaswg.getActionValue() + " from " + tjp.getJavaName() + "\");\n");
+                jo.addCode("
             }
             // Call on gate!
             manageCallOnGate(t, tjp, ad, adc, jo,dec, tjp.foundJGate(adaswg.getGate().getName()), adaswg.getActionValue(), null, null, endNeeded);
@@ -340,8 +340,8 @@ public class TURTLE2SimuJava {
         } else if (adc instanceof ADActionStateWithParam) {
             ADActionStateWithParam adaswp = (ADActionStateWithParam) adc;
             indent(jo, dec);
-            //System.out.println("java expr: " + adaswp.brutToString());
-            //System.out.println(" Modified java expr: " + makeJavaExpression(adaswp.brutToString()));
+            //
+            //
             jo.addCode(makeJavaExpression(adaswp.brutToString()) + JKeyword.END_OP_N);
             generateStandardOperationsRec(t, tjp, ad, adc.getNext(0), adc, jo, dec, endNeeded);
         } /*else if (adc instanceof ADChoice) {
@@ -369,7 +369,7 @@ public class TURTLE2SimuJava {
             ADTLO adtlo = (ADTLO)(adc);
             indent(jo, dec);
             if (debug)
-                jo.addCode("System.out.println(\"Limited call  on " + adtlo.getGate().getName() + " value=" + adtlo.getAction() + " from " + tjp.getJavaName() + "\");\n");
+                jo.addCode("
             manageCallOnGate(t, tjp, ad, adc, jo,dec, tjp.foundJGate(adtlo.getGate().getName()), adtlo.getAction(), adtlo.getLatency(), adtlo.getDelay(), endNeeded);
             //generateStandardOperationsRec(t, jc, adtlo.getNext(0), jo, dec, endNeeded);
         } else if (adc instanceof ADStop) {
@@ -381,7 +381,7 @@ public class TURTLE2SimuJava {
         } /*else if (adc instanceof ADPreempt) {
             makePreemptionCode(t, tjp, ad, (ADPreempt)adc, last, jo, dec, endNeeded);
         } else {
-            System.out.println("Operator not supported: " + adc.toString());
+            
             if (endNeeded) {
                 makeEndCode(jo, dec, true);
             }
@@ -494,10 +494,10 @@ public class TURTLE2SimuJava {
                 if ((tjp1 != null) && (tjp2 != null)) {
                     if (toTakeIntoAccountJC.contains(tjp1) && toTakeIntoAccountJC.contains(tjp2)) {
                         for(j=0; j<r.gatesOfT1.size(); j++) {
-                            System.out.println("Gates 1)" + r.gatesOfT1.elementAt(j).getName() + " 2:" + r.gatesOfT2.elementAt(j).getName());
+                            
                             jg1 = tjp1.foundJGate(r.gatesOfT1.elementAt(j).getName());
                             jg2 = tjp2.foundJGate(r.gatesOfT2.elementAt(j).getName());
-                            //System.out.println("foundJGate");
+                            //
                             if ((jg1 != null) && (jg2 != null)) {
                                 s += JKeyword.INDENT + JKeyword.INDENT + jg1.getJName() + ".synchroGate = " + jg2.getJName() + JKeyword.END_OP + "\n";
                                 s += JKeyword.INDENT + JKeyword.INDENT + jg2.getJName() + ".synchroGate = " + jg1.getJName() + JKeyword.END_OP + "\n";
@@ -558,7 +558,7 @@ public class TURTLE2SimuJava {
             jc = (JavaClass)(iterator.next());
             if (toTakeIntoAccount.contains(jc)) {
                 ll = listClassesStartingAt(jc.getJavaName());
-                System.out.println("Getting list for" + jc.getJavaName());
+                
                 if ((ll != null) && (ll.size() > 0)) {
                     jc.addStartingSequenceCode(JKeyword.INDENT + DECL_CODE_03 + "\n");
                     jc.addStartingSequenceCode(generateJGateCreation(ll));
@@ -598,7 +598,7 @@ public class TURTLE2SimuJava {
         for(int i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
             if (r.type == Relation.SEQ) {
-                System.out.println("Found one seq relation");
+                
                 if(r.t1.getName().equals(name)) {
                     jc = foundJClass(r.t2.getName());
                     if (jc != null) {
@@ -768,7 +768,7 @@ public class TURTLE2SimuJava {
      
         indent(jo, dec);
         if (debug)
-            jo.addCode("System.out.println(\"Call terminated for" + jc.getJavaName() + "\");\n");
+            jo.addCode("
      
         if (delay != null) {
             indent(jo, dec);
@@ -920,7 +920,7 @@ public class TURTLE2SimuJava {
      
             if (debug) {
                 indent(jo, dec);
-                jo.addCode("System.out.println(\" __nchoice=\" + __nchoice + \" \");\n");
+                jo.addCode("
             }
             indent(jo,dec);
             jo.addCode("__ssss = new SynchroSchemes[__nchoice];\n");
@@ -980,7 +980,7 @@ public class TURTLE2SimuJava {
      
                 if (debug) {
                     indent(jo, dec);
-                    jo.addCode("System.out.println(\"Going to branch " + i + "\");\n");
+                    jo.addCode("
                 }
                 // Get values from synchro
                 adag = adch.getADActionStateWithGate(i);
@@ -1013,7 +1013,7 @@ public class TURTLE2SimuJava {
             jo.addCode("__nchoice = LibLogicalOperator.makeChoice(__bchoice);\n");
             indent(jo, dec);
             if (debug)
-                jo.addCode("System.out.println(\" __nchoice=\" + __nchoice + \" \");\n");
+                jo.addCode("
      
             // switching a path
             indent(jo, dec);
@@ -1026,7 +1026,7 @@ public class TURTLE2SimuJava {
                 dec ++;
                 indent(jo, dec);
                 if (debug)
-                    jo.addCode("System.out.println(\"Guard #" + i + "\");\n");
+                    jo.addCode("
                 generateStandardOperationsRec(t, jc, ad, adch.getNext(i), adch, jo, dec, false);
                 indent(jo, dec);
                 jo.addCode("break;\n");
@@ -1129,7 +1129,7 @@ public class TURTLE2SimuJava {
                 jo.addCode(name+ ".join();\n");
                 dec --;
                 indent(jo, dec);
-                jo.addCode("} catch (InterruptedException ie) {System.out.println(\"Interrupted\");}\n");
+                jo.addCode("} catch (InterruptedException ie) {
                 idSeq ++;
                 indent(jo, dec);
                 jo.addCode("\n");
@@ -1180,7 +1180,7 @@ public class TURTLE2SimuJava {
         if (adpar.getNbNext() > 1) {
             // We assume that there is no synchronization
             boolean b = true;//adpar.isAValidMotif(t);
-            System.out.println("Nb of gates = " + adpar.nbGate() + " valueGate=" + adpar.getValueGate());
+            
             if ((adpar.nbGate() == 0) ||(adpar.getNbNext() > 2) || (!b)) {
                 indent(jo, dec);
                 jo.addCode("int []tab = new int[" + adpar.getNbNext() + "];\n");
@@ -1190,14 +1190,14 @@ public class TURTLE2SimuJava {
                     idop = tjp.getOperationNb() - 1;
                     indent(jo, dec);
                     jo.addCode("tab[" + i + "] = " + idop + ";\n");
-                    //System.out.println("Parallel with next = " + adpar.getNext(i).toString());
+                    //
                     generateStandardOperationsRec(t, tjp, ad, adpar.getNext(i), adpar, jo1, 2, true);
                 }
                 indent(jo, dec);
                 jo.addCode("jse.addParallelProcess(tab);\n");       
                 basicFinishJO(jo, dec);
             } else {
-                System.out.println("Parallel - synchro");
+                
                 // Synchronization
                 // adpar : nb next == 2
                 // Creation of new synchronization gates
@@ -1378,7 +1378,7 @@ public class TURTLE2SimuJava {
     
     private void generateMainClass() {
         mainClass = new MainClassSimu(MAIN_CLASS);
-        System.out.println("Adding mainclass :" + MAIN_CLASS);
+        
     }
     
     private void generateBasicCodeMainClass() {
@@ -1418,7 +1418,7 @@ public class TURTLE2SimuJava {
     
     
     private void printMainClass() {
-        System.out.println(mainClass.getName() + ":\n" + mainClass.toString() + "\n\n");
+        
     }
     
 }

@@ -104,7 +104,7 @@ public class JDialogSelectRequirements extends JDialogBase implements ActionList
         
         for(int i=0; i<list.size(); i++) {
             tgc = list.get(i);
-            //System.out.println(tgc);
+            //
             if (tgc instanceof Requirement) {
                 if (((Requirement)tgc).isFormal()) {
                     v.addElement( (Requirement) tgc );
@@ -136,7 +136,7 @@ public class JDialogSelectRequirements extends JDialogBase implements ActionList
             
             if ((tgc instanceof Requirement) && (((Requirement)tgc).isFormal()) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
                 added.addElement( (Requirement) tgc);
-                //System.out.println("New element");
+                //
             }
         }
     }

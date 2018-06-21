@@ -219,16 +219,16 @@ public abstract class TGComponent implements CDElement, GenericTree {
         tdp = _tdp;
         x = _x;
         y = _y;
-        //System.out.println(name + " x=" + x + " y=" + y);
+        //TraceManager.addDev(name + " x=" + x + " y=" + y);
         //setCd(x, y);
-        //System.out.println(name + " x=" + x + " y=" + y);
+        //TraceManager.addDev(name + " x=" + x + " y=" + y);
         setState(TGState.NORMAL);
 
         canBeCloned = true;
 
         id = ID;
         ID ++;
-        //System.out.println("creation Id:" + id);
+        //TraceManager.addDev("creation Id:" + id);
     }
 
     // abstract operations
@@ -842,7 +842,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
 
     public void drawRunningDiploID(Graphics g, RunningInfo ri) {
-        //System.out.println("Drawing running DIPLO");
+        //TraceManager.addDev("Drawing running DIPLO");
         int wb = 40;
         int hb = 10;
         int wh = 15;
@@ -1030,7 +1030,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         }
 
         if ((state == TGState.POINTER_ON_ME) && (getDefaultConnector() != -1)) {
-            //System.out.println("pointed");
+            //TraceManager.addDev("pointed");
             drawOutFreeTGConnectingPointsCompatibleWith(g, getDefaultConnector());
         }
 
@@ -1087,7 +1087,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
         if ( TDiagramPanel.DIPLO_ANIMATE_ON ) {
             if (breakpoint) {
-                //System.out.println("breakpoint");
+                //TraceManager.addDev("breakpoint");
                 g.setColor(ColorManager.BREAKPOINT);
                 Font f = g.getFont();
                 g.setFont(f.deriveFont(Font.BOLD));
@@ -1226,7 +1226,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         if ( TDiagramPanel.AVATAR_ANIMATE_ON) {
             //TraceManager.addDev("Avatar animate?");
             if (breakpoint) {
-                //System.out.println("breakpoint");
+                //TraceManager.addDev("breakpoint");
                 g.setColor(ColorManager.BREAKPOINT);
                 Font f = g.getFont();
                 g.setFont(f.deriveFont(Font.BOLD));
@@ -1304,11 +1304,11 @@ public abstract class TGComponent implements CDElement, GenericTree {
         ColorManager.setColor(g, TGState.RESIZE_INDICATIONS, 0);
         GraphicLib.setHighStroke(g);
 
-        //System.out.println("Min = " + minWidth + " max = " + maxWidth);
+        //TraceManager.addDev("Min = " + minWidth + " max = " + maxWidth);
         boolean b1 = (minWidth != maxWidth);
         boolean b2 = (minHeight != maxHeight);
 
-        //System.out.println("b1 = " + b1 + " b2 = " + b2);
+        //TraceManager.addDev("b1 = " + b1 + " b2 = " + b2);
 
         if (b1 && b2) {
             // upper left
@@ -1477,7 +1477,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         int current = getMyCurrentMaxX();
 
         for(int i=0; i<nbInternalTGComponent; i++) {
-            //System.out.println("Current=" + current + "name = " + tgcomponent[i].getName());
+            //TraceManager.addDev("Current=" + current + "name = " + tgcomponent[i].getName());
             //if (tgcomponent[i].moveWithFather()) {
             current = Math.max(current, tgcomponent[i].getCurrentMaxX());
             //}
@@ -1686,7 +1686,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         newwidth = Math.max(newwidth, minWidth);
         newwidth = Math.min(newwidth, maxWidth);
 
-        //System.out.println("width = " + width + " newwidth = " + newwidth + " maxX =" + maxX + " x=" + x + " father.getX()=" +father.getX());
+        //TraceManager.addDev("width = " + width + " newwidth = " + newwidth + " maxX =" + maxX + " x=" + x + " father.getX()=" +father.getX());
         if ((father != null) && (drawingZoneRelativeToFather)) {
             if ((newwidth+x) > (width + maxX + father.getX())) {
                 newwidth = maxX + father.getX() + width - x;
@@ -1719,7 +1719,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public void setUserResize(int desired_x, int desired_y, int desired_width, int desired_height) {
-        //System.out.println("newx = " + desired_x + " newy = " + desired_y + " minWidth = " + minWidth);
+        //TraceManager.addDev("newx = " + desired_x + " newy = " + desired_y + " minWidth = " + minWidth);
         setCd(desired_x, desired_y);
         actionOnUserResize(desired_width, desired_height);
     }
@@ -1825,7 +1825,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     public int makeTGConnectingPointsComment(int nb) {
         int i, len;
 
-        //System.out.println("Adding comment points to " + this.getName());
+        //TraceManager.addDev("Adding comment points to " + this.getName());
         if (connectingPoint != null) {
             TGConnectingPoint[] tmp = connectingPoint;
             len = tmp.length;
@@ -1894,7 +1894,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public void drawTGConnectingPoint(Graphics g, int type) {
-        //System.out.println("I am " + getName());
+        //TraceManager.addDev("I am " + getName());
         for (int i=0; i<nbConnectingPoint; i++) {
             if (connectingPoint[i].isCompatibleWith(type)) {
                 connectingPoint[i].draw(g);
@@ -1960,7 +1960,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
-        //System.out.println("Getting TGConnecting point");
+        //TraceManager.addDev("Getting TGConnecting point");
 
         for (int i=0; i<nbConnectingPoint; i++) {
             if ((Math.abs(connectingPoint[i].getX() - x) < 4) && (Math.abs(connectingPoint[i].getY() - y) < 4) && (connectingPoint[i].isFree()) && (connectingPoint[i].isCompatibleWith(type))){
@@ -2090,7 +2090,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public boolean setIdTGConnectingPoint(int num, int id) {
-        //System.out.println("name= " + name + " nbCP=" + nbConnectingPoint + " num=" + num +  "id=" + id);
+        //TraceManager.addDev("name= " + name + " nbCP=" + nbConnectingPoint + " num=" + num +  "id=" + id);
         if (num >= nbConnectingPoint) {
             return false;
         }
@@ -2143,7 +2143,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
                 } else {
                     d1 = Point2D.distanceSq(currentp.getX(), currentp.getY(), x, y);
                     d2 = Point2D.distanceSq(currentCloser.getX(), currentCloser.getY(), x, y);
-                    //System.out.println("d1=" + d1 + " d2=" + d2 + "currentx=" + currentp.getX() + "currentcloserx=" + currentCloser.getX());
+                    //TraceManager.addDev("d1=" + d1 + " d2=" + d2 + "currentx=" + currentp.getX() + "currentcloserx=" + currentCloser.getX());
                     if (d1 < d2) {
                         currentCloser = currentp;
                     }
@@ -2216,7 +2216,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
                 } else {
                     d1 = Point2D.distanceSq(currentp.getX(), currentp.getY(), x, y);
                     d2 = Point2D.distanceSq(currentCloser.getX(), currentCloser.getY(), x, y);
-                    //System.out.println("d1=" + d1 + " d2=" + d2 + "currentx=" + currentp.getX() + "currentcloserx=" + currentCloser.getX());
+                    //TraceManager.addDev("d1=" + d1 + " d2=" + d2 + "currentx=" + currentp.getX() + "currentcloserx=" + currentCloser.getX());
                     if (d1 < d2) {
                         currentCloser = currentp;
                     }
@@ -2370,7 +2370,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         width = w;
         height = h;
         if (father != null) {
-            //System.out.println("Resizing (" + w + "," + h + ")");
+            //TraceManager.addDev("Resizing (" + w + "," + h + ")");
             father.newSizeForSon(this);
         }
     }
@@ -2387,7 +2387,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public void setCd(int _x, int _y) {
-        //System.out.println("SetCd -> " + this.getName());
+        //TraceManager.addDev("SetCd -> " + this.getName());
         int oldX = x;
         int oldY = y;
 
@@ -2397,7 +2397,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         repaint = true;
         if ((oldX != x) || (oldY != y)) {
             // every son must be deplaced
-            //System.out.println("Moving son");
+            //TraceManager.addDev("Moving son");
             TGComponent tgc;
             for(int i=0; i<nbInternalTGComponent; i++) {
                 tgc = tgcomponent[i];
@@ -2410,7 +2410,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public  void setMoveCd(int _x, int _y, boolean forceMove) {
-        //System.out.println("SetCd -> " + this.getName());
+        //TraceManager.addDev("SetCd -> " + this.getName());
         int oldX = x;
         int oldY = y;
        
@@ -2439,7 +2439,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         repaint = true;
         if ((oldX != x) || (oldY != y)) {
             // every son must be deplaced
-            //System.out.println("Moving son");
+            //TraceManager.addDev("Moving son");
             TGComponent tgc;
             for(int i=0; i<nbInternalTGComponent; i++) {
                 tgc = tgcomponent[i];
@@ -2460,7 +2460,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
      *
      *
      */
-    public final void fatherHasMoved(int dx, int dy)  {  //System.out.println("father has moved");
+    public final void fatherHasMoved(int dx, int dy)  {  //TraceManager.addDev("father has moved");
         TGComponent tgc;
         int oldX = x;
         int oldY = y;
@@ -2479,7 +2479,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public void move(int decx, int decy) {
-        //System.out.println("here111111111111");
+        //TraceManager.addDev("here111111111111");
         setMoveCd(x+decx, y+decy, false);
     }
 
@@ -2835,16 +2835,16 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public void myActionWhenRemoved() {
-        //System.out.println("I am removed:" + value);
+        //TraceManager.addDev("I am removed:" + value);
     }
 
     protected boolean editOndoubleClick(JFrame frame) {
-        //  System.out.println("editOn....");
+        //  TraceManager.addDev("editOn....");
         return tdp.actionOnDoubleClick(this);
     }
 
     protected boolean editOndoubleClick(JFrame frame, int _x, int _y) {
-        //  System.out.println("editOn....");
+        //  TraceManager.addDev("editOn....");
         return tdp.actionOnDoubleClick(this);
     }
 
@@ -2924,7 +2924,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
             }
         }
         tgcomponent = tgcomponentbis;
-        //System.out.println("Nb internal:" + nbInternalTGComponent);
+        //TraceManager.addDev("Nb internal:" + nbInternalTGComponent);
         return true;
     }
 
@@ -3097,7 +3097,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     protected String translateSizeParam() {
         StringBuffer sb = new StringBuffer();
         sb.append("<sizeparam width=\"" + width + "\" height=\"" + height);
-        //System.out.println("tgc = " + this + "minWidth=" + minWidth);
+        //TraceManager.addDev("tgc = " + this + "minWidth=" + minWidth);
         sb.append("\" minWidth=\"" + minWidth + "\" minHeight=\"" + minHeight);
         sb.append("\" maxWidth=\"" + maxWidth + "\" maxHeight=\"" + maxHeight);
         sb.append("\" minDesiredWidth=\"" + minDesiredWidth + "\" minDesiredHeight=\"" + minDesiredHeight);
@@ -3258,7 +3258,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 
     public final void makePostLoading(int decId) throws MalformedModelingException {
-        //System.out.println("Make post loading of " + getName());
+        //TraceManager.addDev("Make post loading of " + getName());
         postLoading(decId);
         for(int i=0; i<nbInternalTGComponent; i++) {
             tgcomponent[i].postLoading(decId);

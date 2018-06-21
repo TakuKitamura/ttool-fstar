@@ -84,7 +84,7 @@ public  class TGConnectorAssociationProCSD extends TGConnector {
 		
 		myImageIcon = IconManager.imgic102;
 		
-		//System.out.println("Connector created: from "+p1.getFather().toString()+" to "+p2.getFather().toString());
+		//
 	}
 	
 	public void setP1(TGConnectingPoint p) {
@@ -107,7 +107,7 @@ public  class TGConnectorAssociationProCSD extends TGConnector {
 	}
 	
 	public void pointHasBeenRemoved(TGCPointOfConnector tgc) {
-		System.out.println("Internal Points:" + nbInternalTGComponent);
+		
 		
 		int i, index = 0;
 		TGConnectingPointTwoFathers cp1, cp2;

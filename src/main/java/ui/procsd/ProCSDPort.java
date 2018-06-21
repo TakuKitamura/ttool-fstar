@@ -102,7 +102,7 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 		// No more delegate ports, by Solange
 		/*
 		if (this.getType()!=TGComponentManager.PROCSD_DELEGATE_PORT)
-		 System.out.println("operation allowed only for delegate ports !!!!!");
+		 
 		else */
 			myInterface=pi;
 		 
@@ -241,7 +241,7 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
 	  }
 	  else
 	  {
-		  //System.out.println(toString() + "doesn't have an Interface connected");
+		  //
 		  return null;
 	  }
 	 
@@ -497,8 +497,8 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
     public boolean isMandatory(ProCSDInterface it)
     {
         //If the interface IS mandatory, by Solange
-//System.out.println("Founded mandatory interface: " + it.toString());
-//System.out.println("Interface " + it.toString() + " IS NOT mandatory");
+//
+//
         return it.manda;
     }
     
@@ -512,7 +512,7 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
     	Vector<TAttribute> msgMandatory=new Vector<TAttribute>();
 	
     	if(it==null) {
-    		System.out.println("Interface not found for this port");
+    		
     		return(null);
 		}
     	
@@ -568,18 +568,18 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
     						myMessages2= it2.getMyMessages();
     						if(myMessages2.containsAll(myMessages1))
     						{
-    							//	System.out.println(it2.toString() + " is compatible with mandatory " + it.toString());
+    							//	
     							return(0);
     						}
     						else
     						{
-    							//		System.out.println("ERROR: " + it2.toString() + " is not compatible with mandatory " + it.toString());
+    							//		
     							return(2);
     						}
     					}
     					else
     					{
-    						//	System.out.println(p2.toString() + " doesn't have an Interface connected. No compatibility with mandatory " + it.toString());
+    						//	
     						return(2);
     					}
     				}
@@ -595,24 +595,24 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
     							myMessages2= it2.getMyMessages();
     							if(myMessages2.containsAll(myMessages1))
     							{
-    								//		System.out.println(it2.toString() + " is compatible with mandatory " + it.toString());
+    								//		
     								return(0);
     							}
     							else
     							{
-    								//		System.out.println("ERROR: " + it2.toString() + " is not compatible with mandatory " + it.toString());
+    								//		
     								return(2);
     							}
     						}
     						else
     						{
-    							//		System.out.println("ERROR!!!!!");
+    							//		
     							return(3);
     						}
     					}
     					else
     					{
-    						//	System.out.println(p2.toString() + " doesn't have an Interface connected. No compatibility with mandatory " + it.toString());
+    						//	
     						return(2);
     					}
     				}
@@ -620,13 +620,13 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
     		}
     		else			//not mandatory
     		{
-    			//		System.out.println(it.toString() + " is OPTIONAL so can be connected or not, and is compatible with any interface");
+    			//		
     			return(0);
     		}
     	}
     	else
     	{
-    		//   	System.out.println(p.toString() + " doesn't have an Interface connected");
+    		//   	
     		return(2);
     	}
    }//end method
@@ -728,7 +728,7 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
     	}
     	if (e.getActionCommand().equals("pretty print"))
     	{
-    		System.out.println(this.prettyPrint());
+    		
     	}
 
     }

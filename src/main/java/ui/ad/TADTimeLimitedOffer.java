@@ -179,9 +179,9 @@ public class TADTimeLimitedOffer extends TGCWithInternalComponent implements Act
 		int x1 = tgcomponent[0].getX();
 		int y1 = tgcomponent[0].getY();
 		tgcomponent[0].setCdRectangle(width + distanceStateLine + 2, width + distanceStateLine + 10, textY - 10, textY + 10);
-		//System.out.println(name + " x=" + x1 + " y=" + y1);
+		//
 		tgcomponent[0].setCd(x1 + diffWidth + diffX, y1);
-		//System.out.println(name + " x=" + x1 + " y=" + y1);
+		//
 	}
 	
 	public boolean editOndoubleClick(JFrame frame) {

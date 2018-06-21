@@ -157,7 +157,7 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
         }
         
         if ((myAttributes.size() == 0) || (!areVisible())) {
-            //System.out.println("Min resize" + toString());
+            //
             minDesiredWidth = minWidth;
             minDesiredHeight = minHeight;
             lastVisible = areVisible();
@@ -166,7 +166,7 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
         
         lastVisible = areVisible();
         
-        //System.out.println("Regular resize" + toString());
+        //
         int desiredWidth = minWidth;
         int h = myG.getFontMetrics().getHeight();
         int desiredHeight =  Math.max(minHeight, h * (myAttributes.size() -1) + minHeight);
@@ -180,7 +180,7 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
     
     public void checkMySize() {
         calculateMyDesiredSize();
-        //System.out.println("I check my size");
+        //
         //boolean b;
         
         TGComponent tgc = getTopFather();
@@ -253,21 +253,21 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
             String typeOther;
             String id, valueAtt;
             
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Attribute")) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 access = Integer.decode(elt.getAttribute("access")).intValue();
                                 type = Integer.decode(elt.getAttribute("type")).intValue();
                                 try {
@@ -282,9 +282,9 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
                                     valueAtt = "";
                                 }
 								
-								//System.out.println("Studying attribute " + id);
+								//
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
-                                    //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
+                                    //
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     myAttributes.add (ta);
                                 }

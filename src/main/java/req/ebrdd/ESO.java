@@ -81,8 +81,8 @@ public class ESO extends ERCElement {
 			return;
 		}
 		
-		//System.out.println("Nb of indexes" + indexes.size());
-		//System.out.println("Nb of nexts" + nexts.size());
+		//
+		//
 		ArrayList<ERCElement> nextsbis = new ArrayList<ERCElement>();
 		
 		// Sort according to index stored in indexes
@@ -108,7 +108,7 @@ public class ESO extends ERCElement {
 		sons = nextsbis;
 		
 		//for(i=0; i<nexts.size(); i++){
-		// System.out.println("sequence #" + i + " = " + nexts.elementAt(i));
+		// 
 		//}
 		
     }

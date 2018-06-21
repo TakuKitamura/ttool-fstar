@@ -319,7 +319,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
             assignedAttributes.removeAllElements();
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
 
@@ -385,9 +385,9 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
             //Set its coordinates
             tgc.setFather(this);
             tgc.setDrawingZone(true);
-            //System.out.println("Internal component");
+            //
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
+            //
             tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);

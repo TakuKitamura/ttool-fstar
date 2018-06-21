@@ -168,12 +168,12 @@ public class TCDSynchroGateList extends TGCWithoutInternalComponent {
         TTwoAttributes tt;
         int i;
         
-        //System.out.println("Checking whether gates are still declared");
+        //
         
         for(i=0; i<gates.size(); i++) {
             tt = gates.get (i);
             if ((tt.t1.getGateById(tt.ta1.getId()) == null) || ((tt.t2.getGateById(tt.ta2.getId()) == null))){
-                //System.out.println("Removing synchro " + tt.ta1.getId() + " " + tt.ta2.getId());
+                //
                 gates.remove(tt);
                 i --;
             }
@@ -185,12 +185,12 @@ public class TCDSynchroGateList extends TGCWithoutInternalComponent {
             tt.ta2 = tt.t2.getGateById(tt.ta2.getId());
         }
         
-        //System.out.println("Checking properties of gates");
+        //
         
         for(i=0; i<gates.size(); i++) {
             tt = gates.get (i);
-            //System.out.println("Checking propery of" + tt.toString());
-            //System.out.println("ta1 = " + tt.ta1.toString());
+            //
+            //
             if  ((tt.ta1.getAccess() != TAttribute.PUBLIC) || (tt.ta2.getAccess() != TAttribute.PUBLIC)) {
                 gates.remove(tt);
                 i --;
@@ -203,7 +203,7 @@ public class TCDSynchroGateList extends TGCWithoutInternalComponent {
         t2 = _t2;
         if ((t1 != oldt1) || (t2 != oldt2)) {
             gates = new LinkedList<TTwoAttributes> ();
-            //System.out.println("New gates");
+            //
             makeValue();
         }
         oldt1 = t1;
@@ -257,7 +257,7 @@ public class TCDSynchroGateList extends TGCWithoutInternalComponent {
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro *** " + getId());
+        //
         try {
             gatesTmp = new LinkedList<TTwoAttributes> ();
             
@@ -268,17 +268,17 @@ public class TCDSynchroGateList extends TGCWithoutInternalComponent {
             String g1, g2;
             TTwoAttributes tt;
             
-            //System.out.println("Loading Synchronization gates");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             t1id = -1; t2id = -1; g1 = null; g2 = null;
@@ -291,7 +291,7 @@ public class TCDSynchroGateList extends TGCWithoutInternalComponent {
                             if ((t1id != -1) && (t2id != -1) && (g1 != null) && (g2 != null)) {
                                 t1id += decId;
                                 t2id += decId;
-                                //System.out.println("New Gate");
+                                //
                                 tt = new TTwoAttributes(t1id, t2id, g1, g2);
                                 gatesTmp.add(tt);
                             } else {
@@ -310,27 +310,27 @@ public class TCDSynchroGateList extends TGCWithoutInternalComponent {
     
     public void postLoading(int decId) throws MalformedModelingException {
         
-        //System.out.println("Post loading:" +gatesTmp.size() + " id=" + getId());
+        //
         TAttribute a;
         
         
         try {
             for (TTwoAttributes tt: gatesTmp) {
                 if ((tdp.findComponentWithId(tt.t1id) != t1) || (tdp.findComponentWithId(tt.t2id) != t2)) {
-                    //System.out.println("Malformed 1");
+                    //
                     throw new MalformedModelingException();
                 }
                 tt.t1 = t1;
                 tt.t2 = t2;
                 a = t1.getGateById(tt.ta1s);
                 if (a == null) {
-                    //System.out.println("Malformed 2");
+                    //
                     throw new MalformedModelingException();
                 }
                 tt.ta1 = a;
                 a = t2.getGateById(tt.ta2s);
                 if (a == null) {
-                    //System.out.println("Malformed 3");
+                    //
                     throw new MalformedModelingException();
                 }
                 tt.ta2 = a;
@@ -338,11 +338,11 @@ public class TCDSynchroGateList extends TGCWithoutInternalComponent {
             }
         } catch (Exception e) {
             if (decId ==0) {
-                //System.out.println("Malformed 4");
+                //
                 throw new MalformedModelingException();
             }
         }
-        //System.out.println("Nullify gatesTmp:" + getId());
+        //
         gatesTmp = null;
         
     }

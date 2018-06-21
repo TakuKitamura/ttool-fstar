@@ -207,7 +207,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 	 */
 	public void resizeWithFather() {
 		if ((father != null) && (father instanceof ProCSDComponent)) {
-			// System.out.println("cdRect comp");
+			// 
 			setCdRectangle(0, father.getWidth() - getWidth(), 0, father
 					.getHeight()
 					- getHeight());
@@ -561,7 +561,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 		 }
 		
 		 if (e.getActionCommand().equals("pretty print")) {
-			 System.out.println(this.prettyPrint());  
+			 
 		 }
 		
 		 
@@ -678,9 +678,9 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		for (int i = 0; i < myAttributes.size(); i++) {
-			// System.out.println("Attribute:" + i);
+			// 
 			a = myAttributes.get (i);
-			// System.out.println("Attribute:" + i + " = " + a.getId());
+			// 
 
 			sb.append("<Attribute access=\"");
 			sb.append(a.getAccess());
@@ -726,22 +726,22 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 			String id, valueAtt;
 
 			// Ruteo, by Solange
-			// System.out.println("Loading attributes");
-			// System.out.println(nl.toString());
+			// 
+			// 
             //
 			 
 			for (int i = 0; i < nl.getLength(); i++) {
 				n1 = nl.item(i);
-				// System.out.println(n1);
+				// 
 				if (n1.getNodeType() == Node.ELEMENT_NODE) {
 					nli = n1.getChildNodes();
 					for (int j = 0; j < nli.getLength(); j++) {
 						n2 = nli.item(j);
-						// System.out.println(n2);
+						// 
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("Attribute")) {
-								// System.out.println("Analyzing attribute");
+								// 
 								access = Integer.decode(
 										elt.getAttribute("access")).intValue();
 								type = Integer.decode(elt.getAttribute("type"))
@@ -760,7 +760,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 								if ((TAttribute.isAValidId(id, false, false))
 										&& (TAttribute.isAValidInitialValue(
 												type, valueAtt))) {
-									// System.out.println("Adding attribute " +
+									// 
 									// id + " typeOther=" + typeOther);
 									TAttribute ta = new TAttribute(access, id,
 											valueAtt, type, typeOther);
@@ -1257,7 +1257,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 		 					pInterface.setValue(designInterface.getValue());
 		 					pInterface.setManda(designInterface.isMandatory());
 		 					pInterface.setMessages(designInterface.getMyMessages());
-		 					//System.out.println("not equals .. ");
+		 					//
 		 				}
 		 			
 		 			}

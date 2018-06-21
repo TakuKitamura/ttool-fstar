@@ -1041,7 +1041,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     }
 
     private void addGenericTransaction(String trans) {
-		//System.out.println("trans " + trans);
+		//
         int index0;
         String tmp, tmp1, tmp2;
         long value;
@@ -1094,7 +1094,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
             gt.startingTime = Long.valueOf(tmp);
             gt.finishTime = Long.valueOf(tmp);
         } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage() + " on transaction " + trans);
+            
             return;
         }
 
@@ -1219,7 +1219,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     }
 
     private void addEntityNameIfApplicable(String _entityName) {
-    	//System.out.println("Names " + entityNames);
+    	//
         for(String name: entityNames) {
             //TraceManager.addDev("Examining name= " + name + " entityName=" + _entityName);
             if (name.compareTo(_entityName) ==0) {

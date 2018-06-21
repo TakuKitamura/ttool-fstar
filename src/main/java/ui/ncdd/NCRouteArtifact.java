@@ -125,17 +125,17 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 		int w  = g.getFontMetrics().stringWidth(value);
 		int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
 
-		//System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+		//
 		if (w1 != width) { 
 			width = w1;
 			resizeWithFather();
 		}
-		//System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+		//
 	}
 
 	public void resizeWithFather() {
 		if ((father != null) && ((father instanceof NCEqNode) || (father instanceof NCSwitchNode))) {
-			//System.out.println("cdRect comp");
+			//
 			setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
 			//setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
 			setMoveCd(x, y);
@@ -224,7 +224,7 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 
 	@Override
 	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-		//System.out.println("*** load extra synchro ***");
+		//
 		try {
 			NodeList nli;
 			Node n1, n2;
@@ -235,12 +235,12 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 
 			for(int i=0; i<nl.getLength(); i++) {
 				n1 = nl.item(i);
-				//System.out.println(n1);
+				//
 				if (n1.getNodeType() == Node.ELEMENT_NODE) {
 					nli = n1.getChildNodes();
 					for(int j=0; j<nli.getLength(); j++) {
 						n2 = nli.item(j);
-						//System.out.println(n2);
+						//
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("route")) {
@@ -259,7 +259,7 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 			}
 
 		} catch (Exception e) {
-			System.out.println("Decoding route: failed");
+			
 			throw new MalformedModelingException();
 		}
 		//makeFullValue();

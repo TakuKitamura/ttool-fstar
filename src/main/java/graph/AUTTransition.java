@@ -102,10 +102,10 @@ public class AUTTransition implements Comparable<AUTTransition> {
         index1 = s.indexOf(">");
 
         if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
-            //System.out.println("0 s=" + s);
+            //TraceManager.addDev("0 s=" + s);
             return s;
         }
-        //System.out.println("1 s=" + s);
+        //TraceManager.addDev("1 s=" + s);
         return s.substring(0, index0);
     }
 
@@ -122,10 +122,10 @@ public class AUTTransition implements Comparable<AUTTransition> {
         int cpt = 0;
         int a;
         for (int i = 0; i < ss.length; i++) {
-            //System.out.println("ss[" + i + "] =" + ss[i]);
+            //TraceManager.addDev("ss[" + i + "] =" + ss[i]);
             try {
                 a = Integer.decode(ss[i].trim()).intValue();
-                //System.out.println(">" + ss[i] + "< This is an int!");
+                //TraceManager.addDev(">" + ss[i] + "< This is an int!");
                 cpt++;
             } catch (Exception e) {
             }
@@ -146,7 +146,7 @@ public class AUTTransition implements Comparable<AUTTransition> {
         int cpt = 0;
         int a;
         for (int i = 0; i < ss.length; i++) {
-            //System.out.println("gip ss[" + i + "] =" + ss[i]);
+            //TraceManager.addDev("gip ss[" + i + "] =" + ss[i]);
             try {
                 a = Integer.decode(ss[i].trim()).intValue();
                 if (cpt == _index) {

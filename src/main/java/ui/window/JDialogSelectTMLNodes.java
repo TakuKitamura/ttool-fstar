@@ -112,7 +112,7 @@ public class JDialogSelectTMLNodes extends JDialogBase implements ActionListener
 
         for (int i = 0; i < list.size(); i++) {
             tgc = list.get(i);
-            //System.out.println(tgc);
+            //
             if (tgc instanceof TMLArchiNode) {
                 v.addElement(tgc);
             }
@@ -145,7 +145,7 @@ public class JDialogSelectTMLNodes extends JDialogBase implements ActionListener
 
             if (((tgc instanceof TMLArchiNode) || (tgc instanceof TGComponentPlugin)) && (!added.contains(tgc)) && (!notSource.contains(tgc))) {
                 added.addElement(tgc);
-                //System.out.println("New element");
+                //
             }
         }
     }

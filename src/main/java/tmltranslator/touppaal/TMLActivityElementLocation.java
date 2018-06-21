@@ -54,8 +54,6 @@ public class TMLActivityElementLocation {
 	public TMLActivityElement elt;
 	public UPPAALLocation beginloc;
 	public UPPAALLocation endloc;
-    
-	public TMLActivityElementLocation() {}
 	
 	public TMLActivityElementLocation(TMLActivityElement _elt, UPPAALLocation _beginloc, UPPAALLocation _endloc) {
 		elt = _elt;

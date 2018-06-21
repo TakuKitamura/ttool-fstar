@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.oscd;
 
 
@@ -61,8 +59,9 @@ import java.util.LinkedList;
  * Class TOSClass
  * TClass to be used in TURTLEOS class diagram
  * Creation: 03/10/2006
- * @version 1.0 03/10/2006
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 03/10/2006
  */
 public class TOSClass extends TGCWithInternalComponent implements TClassInterface {
     public String oldValue;
@@ -76,7 +75,7 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
     protected int period;
     protected int deadline;
 
-    public static final String [] stereotypes = {"unset", "periodic", "sporadic", "env", "sche. engine", "protected obj.", "protected obj. man.", "Evt manager"} ;
+    public static final String[] stereotypes = {"unset", "periodic", "sporadic", "env", "sche. engine", "protected obj.", "protected obj. man.", "Evt manager"};
     public final static int PERIODIC = 1;
     public final static int SPORADIC = 2;
     public final static int ENV = 3;
@@ -86,10 +85,11 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
     public final static int EVT_MANAGER = 7;
 
 
-    public TOSClass(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public TOSClass(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 150; height = 30;
+        width = 150;
+        height = 30;
         minWidth = 150;
         minDesiredWidth = 150;
         minDesiredHeight = 30;
@@ -110,16 +110,16 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
         int h = 1;
         TOSCDAttributeGateBox tgc1;
         TOSCDAttributeBox tgc0;
-        tgc0 = new TOSCDAttributeBox(x, y+height+h, 0, 0, height + h, height+h, true, this, _tdp);
+        tgc0 = new TOSCDAttributeBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
         tgcomponent[0] = tgc0;
         h += tgcomponent[0].getHeight() + 1;
-        tgc1 = new TOSCDAttributeGateBox(x, y+height + h, 0, 0, height + h, height + h, true, this, _tdp);
+        tgc1 = new TOSCDAttributeGateBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
         tgcomponent[1] = tgc1;
         h += tgcomponent[1].getHeight() + 1;
-        TGComponent tgc = new TOSCDOperationBox(x, y+height + h, 0, 0, height + h, height + h, true, this, _tdp);
+        TGComponent tgc = new TOSCDOperationBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
         tgcomponent[2] = tgc;
         h += tgcomponent[2].getHeight() + 1;
-        tgc = new TOSCDActivityDiagramBox(x, y+height + h, 0, 0, height + h, height + h, true, this, _tdp);
+        tgc = new TOSCDActivityDiagramBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
         tgcomponent[3] = tgc;
 
         /* setting attributes dependences */
@@ -141,19 +141,19 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
     }
 
     public void recalculateSize() {
-        //System.out.println("Recalculate size of " + this);
+        //TraceManager.addDev("Recalculate size of " + this);
         int i;//, j;
 
-        for(i=0; i<nbInternalTGComponent; i++) {
+        for (i = 0; i < nbInternalTGComponent; i++) {
             tgcomponent[i].calculateMyDesiredSize();
         }
 
         int minW = getMyDesiredWidth();
-        for(i=0; i<nbInternalTGComponent; i++) {
+        for (i = 0; i < nbInternalTGComponent; i++) {
             minW = Math.max(minW, tgcomponent[i].getMinDesiredWidth());
         }
 
-        for(i=0; i<nbInternalTGComponent; i++) {
+        for (i = 0; i < nbInternalTGComponent; i++) {
             tgcomponent[i].forceSize(minW, tgcomponent[i].getMinDesiredHeight());
         }
 
@@ -161,7 +161,7 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
 
         // Reposition all internal components
         int h = getHeight();
-        for(i=0; i<nbInternalTGComponent; i++) {
+        for (i = 0; i < nbInternalTGComponent; i++) {
             tgcomponent[i].setCdRectangle(0, 0, h, h);
             tgcomponent[i].setCd(tgcomponent[i].getX(), h);
             h += tgcomponent[i].getHeight();
@@ -193,12 +193,12 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
             graphics = g;
         }
 
-        //System.out.println("My width = " + width + " this=" + this);
+        //TraceManager.addDev("My width = " + width + " this=" + this);
         Font f = g.getFont();
-    //    int size = f.getSize();
+        //    int size = f.getSize();
         g.drawRect(x, y, width, height);
         g.setColor(Color.yellow);
-        g.fillRect(x+1, y+1, width-1, height-1);
+        g.fillRect(x + 1, y + 1, width - 1, height - 1);
         g.drawImage(IconManager.img8, x + width - 20, y + 6, Color.yellow, null);
         ColorManager.setColor(g, getState(), 0);
         g.setFont(f.deriveFont(Font.BOLD));
@@ -206,8 +206,8 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
         g.setFont(f);
 
         // Stereotype
-        String s =getStereotypeFullString();
-        int w  =  g.getFontMetrics().stringWidth(s);
+        String s = getStereotypeFullString();
+        int w = g.getFontMetrics().stringWidth(s);
         g.drawString(s, x + width - w - 5, y + textY + stereotypeFontSize);
         g.setFont(f);
     }
@@ -221,63 +221,63 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
         }
 
         JDialogTOSClass jdtosc = new JDialogTOSClass(frame, text, this);
-     //   jdtosc.setSize(350, 400);
+        //   jdtosc.setSize(350, 400);
         GraphicLib.centerOnParent(jdtosc, 350, 400);
         jdtosc.setVisible(true);
-        //System.out.println("toto");
+        //TraceManager.addDev("toto");
 
         if (jdtosc.changeMade()) {
-          //System.out.println("Change made");
-          boolean ret = true;
-          String s = jdtosc.getName();
-          if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            //boolean b;
-            if (!TAttribute.isAValidId(s, false, false)) {
-                  JOptionPane.showMessageDialog(frame,
-                  "Could not change the name of the TClass: the new name is not a valid name",
-                  "Error",
-                  JOptionPane.INFORMATION_MESSAGE);
-                  ret = false;
+            //TraceManager.addDev("Change made");
+            boolean ret = true;
+            String s = jdtosc.getName();
+            if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+                //boolean b;
+                if (!TAttribute.isAValidId(s, false, false)) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not change the name of the TClass: the new name is not a valid name",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    ret = false;
+                }
+
+                if (!tdp.isTOSClassNameUnique(s)) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not change the name of the TClass: the new name is already in use",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    ret = false;
+                }
+
+                setValue(s);
+                recalculateSize();
+
+                if (!tdp.actionOnDoubleClick(this)) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not change the name of the class: this name is already in use",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    setValue(oldValue);
+                    ret = false;
+                }
             }
-  
-            if (!tdp.isTOSClassNameUnique(s)) {
-                  JOptionPane.showMessageDialog(frame,
-                  "Could not change the name of the TClass: the new name is already in use",
-                  "Error",
-                  JOptionPane.INFORMATION_MESSAGE);
-                  ret = false;
+
+            myStereotype = jdtosc.getIndexStereotype();
+
+            try {
+                period = Integer.decode(jdtosc.getPeriod()).intValue();
+            } catch (Exception e) {
+                ret = false;
             }
-  
-            setValue(s);
-            recalculateSize();
-  
-            if (!tdp.actionOnDoubleClick(this)) {
-                  JOptionPane.showMessageDialog(frame,
-                  "Could not change the name of the class: this name is already in use",
-                  "Error",
-                  JOptionPane.INFORMATION_MESSAGE);
-                  setValue(oldValue);
-                  ret = false;
+
+            try {
+                deadline = Integer.decode(jdtosc.getDeadline()).intValue();
+            } catch (Exception e) {
+                ret = false;
             }
-          }
 
-          myStereotype =  jdtosc.getIndexStereotype();
-
-          try {
-              period = Integer.decode(jdtosc.getPeriod()).intValue();
-          } catch (Exception e) {
-            ret = false;
-          }
-
-          try {
-              deadline = Integer.decode(jdtosc.getDeadline()).intValue();
-          } catch (Exception e) {
-            ret = false;
-          }
-
-          return ret;
+            return ret;
         }
-        //System.out.println("returning false");
+        //TraceManager.addDev("returning false");
         return false;
     }
 
@@ -306,40 +306,40 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
     }
 
     public int setStereotype(String s) {
-           int i=0;
-           while(i<stereotypes.length) {
-             //System.out.println("Comparing " + s + "with " + stereotypes[i]);
-             if (stereotypes[i].compareTo(s) == 0) {
+        int i = 0;
+        while (i < stereotypes.length) {
+            //TraceManager.addDev("Comparing " + s + "with " + stereotypes[i]);
+            if (stereotypes[i].compareTo(s) == 0) {
                 return i;
-             }
-             i++;
-           }
-           return 0;
+            }
+            i++;
+        }
+        return 0;
     }
 
-    public  int getType() {
+    public int getType() {
         return TGComponentManager.TOSCD_TCLASS;
     }
 
-    public java.util.List<TAttribute> getAttributes(){
-        return ((TGCAttributeBox)(tgcomponent[0])).getAttributeList();
+    public java.util.List<TAttribute> getAttributes() {
+        return ((TGCAttributeBox) (tgcomponent[0])).getAttributeList();
     }
 
     public java.util.List<TAttribute> getGates() {
-        return ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
+        return ((TGCAttributeBox) (tgcomponent[1])).getAttributeList();
     }
 
     public void checkSizeOfSons() {
-        ((TGCAttributeBox)(tgcomponent[0])).checkMySize();
-        ((TGCAttributeBox)(tgcomponent[1])).checkMySize();
+        ((TGCAttributeBox) (tgcomponent[0])).checkMySize();
+        ((TGCAttributeBox) (tgcomponent[1])).checkMySize();
     }
 
     public void setAttributes(LinkedList<TAttribute> attributes) {
-        ((TGCAttributeBox)(tgcomponent[0])).setAttributeList(attributes);
+        ((TGCAttributeBox) (tgcomponent[0])).setAttributeList(attributes);
     }
 
     public void setGates(LinkedList<TAttribute> gates) {
-        ((TGCAttributeBox)(tgcomponent[1])).setAttributeList(gates);
+        ((TGCAttributeBox) (tgcomponent[1])).setAttributeList(gates);
     }
 
     // builds a new Vector
@@ -350,8 +350,8 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
     } */
 
     public TAttribute getGateById(String name) {
-    	java.util.List<TAttribute> list = ((TGCAttributeBox)(tgcomponent[1])).getAttributeList();
-        for (TAttribute ta: list)
+        java.util.List<TAttribute> list = ((TGCAttributeBox) (tgcomponent[1])).getAttributeList();
+        for (TAttribute ta : list)
             if (ta.getId().equals(name))
                 return ta;
 
@@ -410,25 +410,25 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         try {
             NodeList nli;
             Node n1, n2;
             Element elt;
             String ste, ste1, ste2;
 
-            //System.out.println("Loading tclass " + getValue());
-            //System.out.println(nl.toString());
+            //TraceManager.addDev("Loading tclass " + getValue());
+            //TraceManager.addDev(nl.toString());
 
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                          elt = (Element) n2;
-                          //System.out.println("Loading tag=" + elt.getTagName());
+                            elt = (Element) n2;
+                            //TraceManager.addDev("Loading tag=" + elt.getTagName());
 
                             if (elt.getTagName().equals("Stereotype")) {
                                 ste = elt.getAttribute("data");
@@ -450,25 +450,22 @@ public class TOSClass extends TGCWithInternalComponent implements TClassInterfac
             throw new MalformedModelingException();
         }
     }
-    
+
     public int getStereotype() {
-      return myStereotype;
+        return myStereotype;
     }
 
     public TURTLEOSActivityDiagramPanel getActivityDiagramPanel() {
-        return ((TURTLEOSDesignPanel)(tdp.tp)).getTURTLEOSActivityDiagramPanel(getClassName());
+        return ((TURTLEOSDesignPanel) (tdp.tp)).getTURTLEOSActivityDiagramPanel(getClassName());
     }
-    
+
     public ActivityDiagramPanelInterface getBehaviourDiagramPanel() {
-      return getActivityDiagramPanel();
+        return getActivityDiagramPanel();
     }
-    
+
     public boolean isStart() {
         return true;
     }
-    
-
-
 
 
 }

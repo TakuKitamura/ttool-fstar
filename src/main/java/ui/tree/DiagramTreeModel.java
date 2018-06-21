@@ -80,7 +80,7 @@ public class DiagramTreeModel implements TreeModel {
      * Returns the child of parent at index index in the parent's child array.
      */
     public Object getChild(Object parent, int index) {
-        //System.out.println("GetChild");
+        //
         if (parent instanceof GenericTree) {
             return ((GenericTree) parent).getChild(index);
         } else if (parent instanceof GTURTLEModeling) {
@@ -93,7 +93,7 @@ public class DiagramTreeModel implements TreeModel {
      * Returns the number of children of parent.
      */
     public int getChildCount(Object parent) {
-        //System.out.println("GetChild count");
+        //
         if (parent instanceof GenericTree) {
             return ((GenericTree) parent).getChildCount();
         } else if (parent instanceof GTURTLEModeling) {
@@ -207,6 +207,6 @@ public class DiagramTreeModel implements TreeModel {
      * identified by path to newValue.  Not used by this model.
      */
     public void valueForPathChanged(TreePath path, Object newValue) {
-        //System.out.println("*** valueForPathChanged : " + path + " --> " + newValue);
+        //
     }
 }

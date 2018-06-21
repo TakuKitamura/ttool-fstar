@@ -37,8 +37,6 @@
  */
 
 
-
-
 package launcher;
 
 import myutil.TraceManager;
@@ -52,14 +50,15 @@ import java.net.UnknownHostException;
  * Class RshClient
  * For remote execution of processes
  * Creation: 2001
- * @version 2 22/05/2015
+ *
  * @author Ludovic APVRILLE
+ * @version 2 22/05/2015
  */
 public class RshClient {
 
     public static String sk; //Secret key for communicating with the launcher
 
-	private static String NO_HOST = "Application has no execution host";
+    private static String NO_HOST = "Application has no execution host";
     private static String INET = "Bad internet address for host ";
     private static String SERV_NOT_RESP = "Server not responding on ";
     private static String IO_ERROR = "Communication pb with server ";
@@ -82,16 +81,14 @@ public class RshClient {
     private PrintStream out;
     //private int offset = 0;
 
-   // private boolean go;
-    
+    // private boolean go;
+
     public RshClient(String _cmd, String _host) {
-        //System.out.println("Using port: " + port);
         cmd = _cmd;
         host = _host;
     }
 
     public RshClient(String _host) {
-        //System.out.println("Using port: " + port);
         host = _host;
     }
 
@@ -104,9 +101,9 @@ public class RshClient {
     }
 
     public void stopCommand()
-    throws LauncherException {
+            throws LauncherException {
         sendKillProcessRequest();
-        
+
         // Issue #18: Socket is already closed by kiss process method
         //go = false;
         //closeConnect();
@@ -114,85 +111,84 @@ public class RshClient {
 
     public int getId() throws LauncherException {
         connect();
-        send( RequestCode.GET_SESSION_ID );
+        send(RequestCode.GET_SESSION_ID);
         int id = readId();
         closeConnect();
-        
+
         return id;
     }
 
     public int freeId(int id) throws LauncherException {
         connect();
-        send( RequestCode.FREE_SESSION_ID, Integer.toString( id ) );
+        send(RequestCode.FREE_SESSION_ID, Integer.toString(id));
         int idret = readId();
-        
+
         if (idret != id) {
             throw new LauncherException(ID_FAILED);
         }
-        
+
         return idret;
 
     }
 
     public void sendExecuteCommandRequest()
-    throws LauncherException {
-    	sendExecuteCommandRequest( false );
+            throws LauncherException {
+        sendExecuteCommandRequest(false);
     }
-    
-    public void sendExecuteCommandRequest( final boolean checkReturnCode )
-    throws LauncherException {
+
+    public void sendExecuteCommandRequest(final boolean checkReturnCode)
+            throws LauncherException {
         connect();
-        
-        if ( checkReturnCode ) {
-        	send( RequestCode.PROCESS_CREATE, cmd );
+
+        if (checkReturnCode) {
+            send(RequestCode.PROCESS_CREATE, cmd);
             readPortString();
             closeConnect();
-            
-            final String procIdStr = Integer.toString( portString );
+
+            final String procIdStr = Integer.toString(portString);
             connect();
-        	send( RequestCode.PROCESS_CHECK_RETURN_CODE, procIdStr );
-        	readServerResponse();
+            send(RequestCode.PROCESS_CHECK_RETURN_CODE, procIdStr);
+            readServerResponse();
             closeConnect();
-            
+
             connect();
-        	send( RequestCode.PROCESS_START, procIdStr );
-        	readServerResponse();
-        }
-        else {
-        	send( RequestCode.PROCESS_CREATE_START, cmd );
+            send(RequestCode.PROCESS_START, procIdStr);
+            readServerResponse();
+        } else {
+            send(RequestCode.PROCESS_CREATE_START, cmd);
             readPortString();
         }
-        
+
         closeConnect();
     }
 
-    public void sendExecutePipedCommandsRequest(	String cmd1,
-    												String cmd2 )
-    throws LauncherException {
+    public void sendExecutePipedCommandsRequest(String cmd1,
+                                                String cmd2)
+            throws LauncherException {
         connect();
-        send( RequestCode.PROCESS_CREATE, cmd1 );
+        send(RequestCode.PROCESS_CREATE, cmd1);
         readPortString();
         final int id1 = portString;
         closeConnect();
 
         connect();
-        send( RequestCode.PROCESS_CREATE, cmd2);
+        send(RequestCode.PROCESS_CREATE, cmd2);
         readPortString();
         final int id2 = portString;
         closeConnect();
 
         connect();
-        send( RequestCode.PROCESS_PIPE, id1 + " " + id2 );
+        send(RequestCode.PROCESS_PIPE, id1 + " " + id2);
         readServerResponse();
         closeConnect();
 
         connect();
-        send( RequestCode.PROCESS_START, Integer.toString( id1 ) );
+        send(RequestCode.PROCESS_START, Integer.toString(id1));
         readServerResponse();
         closeConnect();
 
         connect();
-        send( RequestCode.PROCESS_START, Integer.toString( id2 ) );
+        send(RequestCode.PROCESS_START, Integer.toString(id2));
         readServerResponse();
         closeConnect();
 
@@ -201,122 +197,114 @@ public class RshClient {
     }
 
     public Integer getProcessReturnCode()
-    throws LauncherException {
+            throws LauncherException {
         connect();
-    	send( RequestCode.PROCESS_GET_RETURN_CODE, Integer.toString( portString ) );
-    	
-    	try {
-    		final String s = inReader.readLine();
-    		final ResponseCode code = SocketComHelper.responseCode( s );
-    		
-    		if ( code != ResponseCode.SUCCESS ) {
-                throw new LauncherException( FAILED );
-    		}
-    		
-    		final String retCodeStr = SocketComHelper.message( code, s );
-    		
-    		return Integer.decode( retCodeStr );
-        }
-        catch( IOException io) {
-            throw new LauncherException( IO_ERROR, io );
-        }
-    	catch( final NumberFormatException ex ) {
-    		return null;
-    	}
-    	finally {
+        send(RequestCode.PROCESS_GET_RETURN_CODE, Integer.toString(portString));
+
+        try {
+            final String s = inReader.readLine();
+            final ResponseCode code = SocketComHelper.responseCode(s);
+
+            if (code != ResponseCode.SUCCESS) {
+                throw new LauncherException(FAILED);
+            }
+
+            final String retCodeStr = SocketComHelper.message(code, s);
+
+            return Integer.decode(retCodeStr);
+        } catch (IOException io) {
+            throw new LauncherException(IO_ERROR, io);
+        } catch (final NumberFormatException ex) {
+            return null;
+        } finally {
             closeConnect();
 
             sendKillProcessRequest();
-    	}
-  }
+        }
+    }
 
     public void sendFileData(String fileName, String data) throws LauncherException {
         connect();
-        send( RequestCode.FILE_PUT, fileName );
+        send(RequestCode.FILE_PUT, fileName);
         sendFileData(data);
-        send( RequestCode.FILE_SAVE, fileName );
+        send(RequestCode.FILE_SAVE, fileName);
         readServerResponse();
         closeConnect();
     }
 
     public String getFileData(String fileName) throws LauncherException {
         connect();
-        send( RequestCode.FILE_GET, fileName );
+        send(RequestCode.FILE_GET, fileName);
         String s = readDataUntilCompletion();
         closeConnect();
-        
+
         return s;
     }
 
     public void deleteFile(String fileName) throws LauncherException {
         connect();
-        send( RequestCode.FILE_DELETE, fileName );
+        send(RequestCode.FILE_DELETE, fileName);
         readServerResponse();
         closeConnect();
     }
 
     public void sendKillProcessRequest()
-    throws LauncherException {
-    	connect();
-        send( RequestCode.PROCESS_KILL, Integer.toString( portString ) );
-        
+            throws LauncherException {
+        connect();
+        send(RequestCode.PROCESS_KILL, Integer.toString(portString));
+
         try {
-        	readServerResponse();
-        }
-        finally {
-        	closeConnect();
-	        
-	        if ( portString2 != -1 ) {
-	            connect();
-	            send( RequestCode.PROCESS_KILL, Integer.toString( portString2 ) );
-	            
-	            try {
-	            	readServerResponse();
-	            }
-	            finally {
-	            	closeConnect();
-	            }
-	        }
+            readServerResponse();
+        } finally {
+            closeConnect();
+
+            if (portString2 != -1) {
+                connect();
+                send(RequestCode.PROCESS_KILL, Integer.toString(portString2));
+
+                try {
+                    readServerResponse();
+                } finally {
+                    closeConnect();
+                }
+            }
         }
     }
 
     public void sendKillAllProcessRequest() throws LauncherException {
         connect();
-        send( RequestCode.PROCESS_KILL_ALL );
+        send(RequestCode.PROCESS_KILL_ALL);
         readServerResponse();
         closeConnect();
     }
-    
-    private BufferedReader createBufferedReader( final Socket socket ) 
-    throws IOException {
-    	return new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
+
+    private BufferedReader createBufferedReader(final Socket socket)
+            throws IOException {
+        return new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     public String getDataFromProcess()
-    throws LauncherException {
-       // go = true;
+            throws LauncherException {
+        // go = true;
         StringBuffer bf = new StringBuffer();
 
-        //System.out.println("Connect");
-        final Socket socket = connect( portString );
-        
+
+        final Socket socket = connect(portString);
+
         try {
-	        final BufferedReader reader = createBufferedReader( socket );
-	
-	        String data;
-	
-	        //System.out.println("Waiting for data");
-	        while ( ( data = readProcessData( reader ) ) != null /*&& go*/ ) {
-	            bf.append( data + "\n" );
-	        }
-	
-	        return new String(bf);
-        }
-        catch ( final IOException ex ) {
-        	throw new LauncherException( IO_ERROR, ex );
-        }
-        finally {
-	        closeConnect( socket );
+            final BufferedReader reader = createBufferedReader(socket);
+
+            String data;
+
+            while ((data = readProcessData(reader)) != null /*&& go*/) {
+                bf.append(data + "\n");
+            }
+
+            return new String(bf);
+        } catch (final IOException ex) {
+            throw new LauncherException(IO_ERROR, ex);
+        } finally {
+            closeConnect(socket);
         }
     }
 
@@ -324,96 +312,75 @@ public class RshClient {
         Socket socket = connect(portString);
         try {
             return new RshClientReader(socket);
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new LauncherException(IO_ERROR, e);
         }
     }
 
-    public void writeCommandMessages( final Writer output )
-    throws LauncherException {
-    	
-    	// Issue #18: the interruption is sent on the server side and we just continue writing until there is no more messages 
-    	// to empty the stream. 
+    public void writeCommandMessages(final Writer output)
+            throws LauncherException {
+
+        // Issue #18: the interruption is sent on the server side and we just continue writing until there is no more messages
+        // to empty the stream.
         //go = true;
 
-    	// Issue #18: There was a problem when killing the remote process since the old code would override the socked created 
-    	// by the killing command 
-    	final Socket socket = connect( portString );
+        // Issue #18: There was a problem when killing the remote process since the old code would override the socked created
+        // by the killing command
+        final Socket socket = connect(portString);
         //connect(portString);
 
         try {
-	        final BufferedReader reader = createBufferedReader( socket );
-	        String readLine = reader.readLine();
-	
-	        while ( readLine != null ) {
-	        	final ResponseCode code = SocketComHelper.responseCode( readLine );
-	        	final String message = SocketComHelper.message( code, readLine );
-	        	
-	        	switch ( code ) {
-					case PROCESS_OUTPUT_ERROR :
-						output.append( message + "\n" );
-						
-						break;
-		
-					default:
-						output.append( message + "\n" );
-	
-			            break;
-				}
-	        	
-	        	readLine = reader.readLine();
-	        }
-        }
-        catch( final IOException io ) {
-            throw new LauncherException( IO_ERROR, io );
-        }
-        finally {
-	        closeConnect( socket );
+            final BufferedReader reader = createBufferedReader(socket);
+            String readLine = reader.readLine();
+
+            while (readLine != null) {
+                final ResponseCode code = SocketComHelper.responseCode(readLine);
+                final String message = SocketComHelper.message(code, readLine);
+
+                switch (code) {
+                    case PROCESS_OUTPUT_ERROR:
+                        output.append(message + "\n");
+
+                        break;
+
+                    default:
+                        output.append(message + "\n");
+
+                        break;
+                }
+
+                readLine = reader.readLine();
+            }
+        } catch (final IOException io) {
+            throw new LauncherException(IO_ERROR, io);
+        } finally {
+            closeConnect(socket);
         }
     }
-// Issue #18: This does the same as the method above so commented out
-//    public void fillJTAByLine(JTextArea jta) throws LauncherException {
-//        go = true;
-//
-//        //System.out.println("Connect");
-//        connect(portString);
-//
-//        String s;
-//
-//        //System.out.println("Waiting for data");
-//        while (((s = readProcessData()) != null) && go ) {
-//            jta.append(s + "\n");
-//        }
-//
-//        //System.out.println("no more data : stopped");
-//        closeConnect();
-//        //System.out.println("Closed");
-//
-//    }
+
 
     public void closeConnect()
-    throws LauncherException {
-    	closeConnect( clientSocket );
+            throws LauncherException {
+        closeConnect(clientSocket);
     }
 
-    private void closeConnect( final Socket socket )
-    throws LauncherException {
+    private void closeConnect(final Socket socket)
+            throws LauncherException {
         try {
-        	socket.close();
-        }
-        catch ( IOException io ) {
-            throw new LauncherException( SERV_NOT_RESP + host, io );
+            socket.close();
+        } catch (IOException io) {
+            throw new LauncherException(SERV_NOT_RESP + host, io);
         }
     }
 
-    private void send(final RequestCode code )
-    throws LauncherException {
-    	send( code, "" );
+    private void send(final RequestCode code)
+            throws LauncherException {
+        send(code, "");
     }
 
-    private void send(	final RequestCode code,
-    					String message )
-    throws LauncherException {
+    private void send(final RequestCode code,
+                      String message)
+            throws LauncherException {
         //TraceManager.addDev( "Sending message: " + message );
 //        message = code.name() + message;
 //	
@@ -424,12 +391,11 @@ public class RshClient {
 //		}
 
         try {
-        	SocketComHelper.send( out, code, message, sk );
+            SocketComHelper.send(out, code, message, sk);
 //            out.println( message);
 //            out.flush();
-        }
-        catch ( Throwable th ) {
-            throw new LauncherException( IO_ERROR, th );
+        } catch (Throwable th) {
+            throw new LauncherException(IO_ERROR, th);
         }
     }
 
@@ -437,65 +403,63 @@ public class RshClient {
         StringReader sr = new StringReader(data);
         BufferedReader br = new BufferedReader(sr);
         String s;
-        
+
         try {
-            while((s = br.readLine()) != null) {
-                send( RequestCode.FILE_APPEND, s );
+            while ((s = br.readLine()) != null) {
+                send(RequestCode.FILE_APPEND, s);
 //                send("8" + s);
             }
         } catch (Exception e) {
-            throw new  LauncherException( FILE_FAILED, e );
+            throw new LauncherException(FILE_FAILED, e);
         }
     }
 
-    private static String readProcessData( BufferedReader reader )
-    throws LauncherException {
+    private static String readProcessData(BufferedReader reader)
+            throws LauncherException {
         //int nb;
         //String s = null;
-        
+
         try {
             final String line = reader.readLine();
-            
-            final ResponseCode code = SocketComHelper.responseCode( line );
+
+            final ResponseCode code = SocketComHelper.responseCode(line);
             //nb = Integer.decode(s.substring(0,1)).intValue();
 
-            if ( code == ResponseCode.PROCESS_END ) {
-            //if (nb == 5) {
+            if (code == ResponseCode.PROCESS_END) {
+                //if (nb == 5) {
                 return null;
             }
 
-            String message =  SocketComHelper.message( code, line ); //s = s.substring(1, s.length());
-            
+            String message = SocketComHelper.message(code, line); //s = s.substring(1, s.length());
+
 //            if ( message == null ) {
 //            	message = "";
 //            }
 
             return message;
-        }
-        catch( final IOException io ) {
-            throw new LauncherException( IO_ERROR, io );
+        } catch (final IOException io) {
+            throw new LauncherException(IO_ERROR, io);
         }
     }
 
     private String readDataUntilCompletion()
-    throws LauncherException {
+            throws LauncherException {
         try {
 //            int nbTotal, cpt = 0;
             StringBuffer ret = new StringBuffer();
 
-            //System.out.println("Reading first data ");
+
             String s = inReader.readLine();
-            
-            final ResponseCode code = SocketComHelper.responseCode( s );
+
+            final ResponseCode code = SocketComHelper.responseCode(s);
 //            nb = Integer.decode(s.substring(0,1)).intValue();
-            
-            if ( ResponseCode.FILE_DATA == code ) {
-            //if (nb == 8) {
-                char[] c = new char[BUFSIZE+1];
+
+            if (ResponseCode.FILE_DATA == code) {
+                //if (nb == 8) {
+                char[] c = new char[BUFSIZE + 1];
                 int read;
                 int cpt = 0;
-                int nbTotal = Integer.decode( SocketComHelper.message( code, s ) );//Integer.decode(s.substring(1,s.length())).intValue();
-                //System.out.println("Total= " + nbTotal);
+                int nbTotal = Integer.decode(SocketComHelper.message(code, s));//Integer.decode(s.substring(1,s.length())).intValue();
                 while (((cpt < nbTotal) && (read = inReader.read(c, 0, Math.min(BUFSIZE, nbTotal - cpt))) > -1)) {
                     ret.append(c, 0, read);
                     cpt += read;
@@ -510,56 +474,48 @@ public class RshClient {
             }
 
             return new String(ret);
-        }
-        catch(IOException io) {
-            throw new LauncherException( IO_ERROR, io );
+        } catch (IOException io) {
+            throw new LauncherException(IO_ERROR, io);
         }
     }
 
     private void readServerResponse()
-    throws LauncherException {
-       // int nb;
+            throws LauncherException {
+        // int nb;
         //String s = null;
 
         try {
             final String s = inReader.readLine();
             TraceManager.addDev("Got from Server:" + s);
-            
-            final ResponseCode code = SocketComHelper.responseCode( s );
+
+            final ResponseCode code = SocketComHelper.responseCode(s);
             //nb = Integer.decode(s.substring(0,1)).intValue();
 
-            if ( code != ResponseCode.SUCCESS ) {
-            	throw new LauncherException( FAILED );
+            if (code != ResponseCode.SUCCESS) {
+                throw new LauncherException(FAILED);
             }
+        } catch (IOException io) {
+            throw new LauncherException(IO_ERROR, io);
         }
-        catch( IOException io ) {
-            throw new LauncherException( IO_ERROR, io );
-        }
-//
-//        if (nb != 3) {
-//            System.out.println("Exception 1");
-//            throw new LauncherException(FILE_FAILED);
-//        }
-//        return nb;
+
     }
 
     private int readId()
-    throws LauncherException {
+            throws LauncherException {
 //        int nb;
 //        String s = null;
 
         try {
             final String s = inReader.readLine();
-            final int nb = Integer.decode(s.substring(0,1));
+            final int nb = Integer.decode(s.substring(0, 1));
 
-            if ( nb == 0 ) {
+            if (nb == 0) {
                 throw new LauncherException(ID_FAILED);
             }
-            
+
             return nb;
-        }
-        catch( IOException io ) {
-            throw new LauncherException( IO_ERROR, io );
+        } catch (IOException io) {
+            throw new LauncherException(IO_ERROR, io);
         }
 //
 //        return nb;
@@ -584,48 +540,46 @@ public class RshClient {
 //    }
 
     private void readPortString() throws LauncherException {
-       // int nb;
+        // int nb;
         //String s = null;
-        
+
         try {
             final String s = inReader.readLine();
-            final ResponseCode code = SocketComHelper.responseCode( s );
+            final ResponseCode code = SocketComHelper.responseCode(s);
             //nb = Integer.decode(s.substring(0,1)).intValue();
 
-            if ( code == ResponseCode.FAILED ) {
-            //if (nb == 2) {
-                throw new LauncherException( PROC_FAILED );
+            if (code == ResponseCode.FAILED) {
+                //if (nb == 2) {
+                throw new LauncherException(PROC_FAILED);
             }
 
             //portString = -1;
             portString2 = -1;
-            
-            portString = Integer.decode( SocketComHelper.message( code, s ) );//// Integer.decode(s.substring(1, s.length())).intValue();
 
-            if ( portString < 1)  {
-                throw new LauncherException( PROC_FAILED );
+            portString = Integer.decode(SocketComHelper.message(code, s));//// Integer.decode(s.substring(1, s.length())).intValue();
+
+            if (portString < 1) {
+                throw new LauncherException(PROC_FAILED);
             }
-        }
-        catch( IOException io ) {
-            throw new LauncherException( IO_ERROR, io );
+        } catch (IOException io) {
+            throw new LauncherException(IO_ERROR, io);
         }
     }
-    
+
     private void connect()
-    throws LauncherException {
-    	clientSocket = connect( port );
+            throws LauncherException {
+        clientSocket = connect(port);
 
-    	try {
-    		inReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-    		out = new PrintStream(clientSocket.getOutputStream());
-    	}
-    	catch ( IOException ex ) {
-    		throw new LauncherException(SERV_NOT_RESP+host, ex );
-    	}
+        try {
+            inReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            out = new PrintStream(clientSocket.getOutputStream());
+        } catch (IOException ex) {
+            throw new LauncherException(SERV_NOT_RESP + host, ex);
+        }
     }
 
-    private Socket connect( final int portNet )
-    throws LauncherException {
+    private Socket connect(final int portNet)
+            throws LauncherException {
         if (host == null) {
             throw new LauncherException(NO_HOST);
         }
@@ -634,14 +588,12 @@ public class RshClient {
             final InetAddress ina = InetAddress.getByName(host);
 
             try {
-                return new Socket( ina, portNet );
+                return new Socket(ina, portNet);
+            } catch (IOException ex) {
+                throw new LauncherException(SERV_NOT_RESP + host, ex);
             }
-            catch ( IOException ex ) {
-                throw new LauncherException(SERV_NOT_RESP+host, ex );
-            }
-        }
-        catch (UnknownHostException e) {
-            throw new LauncherException(INET + host, e );
+        } catch (UnknownHostException e) {
+            throw new LauncherException(INET + host, e);
         }
     }
 }

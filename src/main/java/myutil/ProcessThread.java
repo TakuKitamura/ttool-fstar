@@ -108,7 +108,7 @@ public class ProcessThread extends Thread {
             et.stopProcess();
             
         } catch (Exception e) {
-            System.out.println("Exception [" + e.getMessage() + "] occured when executing " + cmd);
+            System.out.println("Exception [" + e.getMessage() + "] occurred when executing " + cmd);
         }
         System.out.println("Ending command " + cmd);
         

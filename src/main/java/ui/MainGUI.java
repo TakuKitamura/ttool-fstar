@@ -4175,7 +4175,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
         TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel) tp;
         String name = getCurrentTDiagramPanel().getName();
-        System.out.println("Name " + name);
+        
         return tmlcomp.getAllOutChannels(name);
     }
 
@@ -8525,19 +8525,19 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public synchronized void addLatencyVals(int id, String[] latency) {
         if (latencyMap != null) {
-            //System.out.println("Adding latency...");
+            //
             if (!latencyMap.containsKey(id)) {
                 ConcurrentHashMap<String, String> map = new ConcurrentHashMap<String, String>();
                 latencyMap.put(id, map);
             }
             latencyMap.get(id).put(latency[0], latency[1]);
-            //System.out.println(latencyMap);
+            //
         }
-        //      System.out.println(latencyMap);
+        //      
     }
 
     public synchronized ConcurrentHashMap<String, String> getLatencyVals(int id) {
-        //      System.out.println(id + " " + latencyMap);
+        //      
         if (latencyMap != null) {
             return latencyMap.get(id);
         }

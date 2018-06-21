@@ -41,6 +41,7 @@
 
 package sdtranslator;
 
+import myutil.TraceManager;
 import sddescription.*;
 import translator.*;
 
@@ -79,52 +80,52 @@ public class SDTranslator {
         tm = new TURTLEModeling();
     //    actionInstances = new LinkedList<Instance>();
         //renameMessages(); //should be unique -> a from I1 to I2 : a__I1__to__I2
-        //System.out.println("\n\ntoTURTLEModeling:\nMaking instances");
+        //TraceManager.addDev("\n\ntoTURTLEModeling:\nMaking instances");
         addClasses();
-        //System.out.println("Making time constraints");
+        //TraceManager.addDev("Making time constraints");
         makeTimeConstraints();
-        //System.out.println("Making tclass behaviour");
+        //TraceManager.addDev("Making tclass behaviour");
         makeInstancesBehavior();
-        //System.out.println("Making relations between tclasses");
+        //TraceManager.addDev("Making relations between tclasses");
         makeInstancesRelations();
-        //System.out.println("Making channels");
+        //TraceManager.addDev("Making channels");
         makeChannelsBehaviour();
         //makeChannelsRelations(); -> not needed anymore: channels are implementd within one classe
-        //System.out.println("Translating timers");
+        //TraceManager.addDev("Translating timers");
         makeTimers();
-        //System.out.println("Checking timers");
+        //TraceManager.addDev("Checking timers");
         checkForTimers();
-        //System.out.println("Managing infinite loops");
+        //TraceManager.addDev("Managing infinite loops");
         /*manageInfiniteLoops();*/
-        //System.out.println("\n\n\n\n******DEBUG*****\n");
+        //TraceManager.addDev("\n\n\n\n******DEBUG*****\n");
         tm.print("Sequence Data save");
 		tm.makeSequenceWithDataSave();
 		
         tm.removeInfiniteLoops();
         //tm.print("LcmgClient");
-        //System.out.println("Remove leading to stops:");
+        //TraceManager.addDev("Remove leading to stops:");
         tm.removeChoicesLeadingToStop();
-        //System.out.println("Leading to stops done");
-        //System.out.println("\n*** Optimizing TURTLE modeling ***");
+        //TraceManager.addDev("Leading to stops done");
+        //TraceManager.addDev("\n*** Optimizing TURTLE modeling ***");
         //tm.print();
         //tm.optimize();
 		tm.simplify(false, false);
-        //System.out.println("\n*** Optimization done ***");
+        //TraceManager.addDev("\n*** Optimization done ***");
         //tm.print();
         return tm;
     }
     
     public String toRTLOTOS() {
-        //System.out.println("\n*** Building TURTLE modeling ***");
+        //TraceManager.addDev("\n*** Building TURTLE modeling ***");
         try {
             //TURTLEModeling tm = toTURTLEModeling();
         	tm = toTURTLEModeling();
             //tm.print();
         } catch (SDTranslationException e) {
-            System.out.println("Exception during translation:" + e.getMessage());
+            TraceManager.addDev("Exception during translation:" + e.getMessage());
             return null;
         }
-        //System.out.println("\n*** Building RTLOTOS Specification ***");
+        //TraceManager.addDev("\n*** Building RTLOTOS Specification ***");
         TURTLETranslator tt = new TURTLETranslator(tm);
         return tt.generateRTLOTOS();
     }
@@ -140,7 +141,7 @@ public class SDTranslator {
         while(iterator.hasNext()) {
             ins = iterator.next();
             t = new TClass(ins.getName(), true);
-            //System.out.println("Adding TClass: " + t.getName());
+            //TraceManager.addDev("Adding TClass: " + t.getName());
             tm.addTClass(t);
         }
     }
@@ -152,7 +153,7 @@ public class SDTranslator {
         while(iterator.hasNext()) {
             ins = iterator.next();
             t = tm.getTClassWithName(ins.getName());
-            //System.out.println("Managing instance: " + ins.getName());
+            //TraceManager.addDev("Managing instance: " + ins.getName());
             makeInstanceBehavior(ins, t);
         }
     }
@@ -261,19 +262,19 @@ public class SDTranslator {
         
         while(iterator.hasNext()) {
             node = iterator.next();
-            //System.out.println("node (node to node)= " + node.getName());
+            //TraceManager.addDev("node (node to node)= " + node.getName());
             index = nodes.indexOf(node);
             adc1 = adcomponents.get(index);
             adc.addNext(adc1);
             if (adc instanceof ADChoice) {
-                //System.out.println("Node guard with i=" + i + " and size=" + n.sizeNodeGuard() + " on " + n.getName());
+                //TraceManager.addDev("Node guard with i=" + i + " and size=" + n.sizeNodeGuard() + " on " + n.getName());
                 if (n.sizeNodeGuard() > i) {
                     guard = n.getNodeGuard(i);
                     guard = getGuard(ins, guard);
-                    //System.out.println("Choice found with Node guard=" + n.getNodeGuard(i) + " and resultant guard=" + guard);
+                    //TraceManager.addDev("Choice found with Node guard=" + n.getNodeGuard(i) + " and resultant guard=" + guard);
                     ((ADChoice)adc).addGuard(guard);
                 }
-                //System.out.println("End node guard");
+                //TraceManager.addDev("End node guard");
             }
             i++;
         }
@@ -330,12 +331,12 @@ public class SDTranslator {
         adc.addNext(first);
         
         if (adc instanceof ADChoice) {
-            //System.out.println("ADChoice node=" + n.getName() + " next Node = " + node.getName());   
+            //TraceManager.addDev("ADChoice node=" + n.getName() + " next Node = " + node.getName());   
             if (n.sizeMSCGuard() > id) {
-                //System.out.println("Choice found with MSC guard=" + n.getMSCGuard(id) + " for id=" + id);
+                //TraceManager.addDev("Choice found with MSC guard=" + n.getMSCGuard(id) + " for id=" + id);
                 guard = n.getMSCGuard(id);
                 guard = getGuard(ins, guard);
-                //System.out.println("Choice found with MSC guard=" + n.getMSCGuard(id) + " and resultant guard=" + guard);
+                //TraceManager.addDev("Choice found with MSC guard=" + n.getMSCGuard(id) + " and resultant guard=" + guard);
                 ((ADChoice)adc).addGuard(guard);
             }
         }
@@ -364,7 +365,7 @@ public class SDTranslator {
         // no action ?
         if (actions.size() ==0) {
             // link the first bar to the last one
-            //System.out.println("Instance " + ins.getName() + " has no action in scenario " + msc.getName());
+            //TraceManager.addDev("Instance " + ins.getName() + " has no action in scenario " + msc.getName());
             first.addNext(last);
         }
         
@@ -373,10 +374,10 @@ public class SDTranslator {
         orders = msc.getOrders();
         Iterator<Order> ordIterator = orders.listIterator();
         
-        //System.out.println("Dealing with order ");
+        //TraceManager.addDev("Dealing with order ");
         while(ordIterator.hasNext()) {
             order1 = ordIterator.next();
-            //System.out.println("order ");
+            //TraceManager.addDev("order ");
             // if the two evts are involved -> used at activity diagram level
             Iterator<ActionEvt> actIt = actions.listIterator();
             aevt1 = null; aevt2 = null;
@@ -388,7 +389,7 @@ public class SDTranslator {
                     aevt2 = aevt;
             }
             if ((aevt1 != null) && (aevt2 != null)) {
-                //System.out.println("Order found: dealing with order ");
+                //TraceManager.addDev("Order found: dealing with order ");
 				// Is it a guard?
 				if (!aevt2.evt.isAGuardEvt()) { 
 					aevt1.getLast().addNext(aevt2.getFirst());
@@ -437,15 +438,15 @@ public class SDTranslator {
             //order before?
             if (ad.getNbComponentLeadingTo(aevt.getFirst()) == 0) {
                 first.addNext(aevt.getFirst());
-                //System.out.println("Adding first");
+                //TraceManager.addDev("Adding first");
             }
             
             //order at the end?
             if (aevt.getLast().getNbNext() == 0) {
                 aevt.getLast().addNext(last);
-                //System.out.println("Adding last");
+                //TraceManager.addDev("Adding last");
             } else {
-                //System.out.println("No last: " + aevt.getLast().getNext(0).hashCode());
+                //TraceManager.addDev("No last: " + aevt.getLast().getNext(0).hashCode());
                 
             }
         }
@@ -468,7 +469,7 @@ public class SDTranslator {
             tmp = tmp.substring(tmp.indexOf('[') + 1, index);
             tmp = tmp.trim();
             
-            //System.out.println("Found instance: " + tmp + "and intance= " + ins.getName());
+            //TraceManager.addDev("Found instance: " + tmp + "and intance= " + ins.getName());
             
             if (tmp.compareTo(ins.getName()) ==0) {
                 return ("[" + s.substring(index +1, s.length())).trim();
@@ -565,7 +566,7 @@ public class SDTranslator {
 							}
 						} else {
 							if (tin == null) {
-								System.out.println("TClassInfiniteFIFO is used");
+								//TraceManager.addDev("TClassInfiniteFIFO is used");
 								TClassInfiniteFIFO tinbuf = new TClassInfiniteFIFO("Channel__" + evtlk1.g.getName() + "__INOUT");
 								tin = tinbuf;
 								tout = tinbuf;
@@ -623,7 +624,7 @@ public class SDTranslator {
         
         for(int i=0; i<tm.classNb(); i++) {
             t = tm.getTClassAtIndex(i);
-            //System.out.println("Making Activity Diagram of " + t.getName());
+            //TraceManager.addDev("Making Activity Diagram of " + t.getName());
             if (t instanceof TClassBuffer) {
                 ((TClassBuffer)t).makeTClass();
             }
@@ -645,14 +646,14 @@ public class SDTranslator {
 //                for(j=0; j<tm.classNb(); j++) {
 //                    tout = tm.getTClassAtIndex(j);
 //                    if (tout instanceof TClassBufferOut) {
-//                        //System.out.println("Found corresponding tin and tout");
+//                        //TraceManager.addDev("Found corresponding tin and tout");
 //                        sin = tin.getName();
 //                        sin = sin.substring(0, sin.length() - 2);
 //                        sout = tout.getName();
 //                        sout = sout.substring(0, sout.length() - 3);
-//                        //System.out.println("name tin = " + sin + " name tout = " + sout);
+//                        //TraceManager.addDev("name tin = " + sin + " name tout = " + sout);
 //                        if (sin.compareTo(sout) ==0) {
-//                            //System.out.println("Same name!");
+//                            //TraceManager.addDev("Same name!");
 //                            r = tm.syncRelationBetween(tin, tout);
 //                            if (r == null) {
 //                                r = new Relation(Relation.SYN, tin, tout, false);
@@ -693,17 +694,17 @@ public class SDTranslator {
         while(iterator1.hasNext()) {
             evtlink = iterator1.next();
             if (evtlink.evt.getType() == Evt.TIMER_SET) {
-                //System.out.println("Timer set");
+                //TraceManager.addDev("Timer set");
                 timerName = evtlink.evt.getTimerName();
                 tclassName = BasicTimer.makeTimerTClassName(timerName);
-                //System.out.println("TClass name = " + tclassName);
+                //TraceManager.addDev("TClass name = " + tclassName);
                 t = tm.getTClassWithName(tclassName);
                 if (t == null) {
                     t = new BasicTimer(tclassName, true);
                     ((BasicTimer)t).setInstanceSet(evtlink.t.getName());
                     tm.addTClass(t);
                 } else {
-                    //System.out.println("Class found: " + t.getName());
+                    //TraceManager.addDev("Class found: " + t.getName());
                     // Does the set action of the timer corresponds to this instance?
                     if (!(t instanceof BasicTimer)) {
                         throw new SDTranslationException("Error on timers (error #1)");
@@ -729,16 +730,16 @@ public class SDTranslator {
                 g = ((BasicTimer)t).getGateSet();
                 if (!(r.gatesConnected(evtlink.g, g))) {
                     r.addGates(evtlink.g, g);
-                    //System.out.println("Adding set gates between " + evtlink.t.getName() + " and " + t.getName());
+                    //TraceManager.addDev("Adding set gates between " + evtlink.t.getName() + " and " + t.getName());
                 }
             }
             
             if (evtlink.evt.getType() == Evt.TIMER_EXP) {
-                //System.out.println("Timer exp");
+                //TraceManager.addDev("Timer exp");
                 timerName = evtlink.evt.getTimerName();
-                //System.out.println("Timer name (exp): " + timerName);
+                //TraceManager.addDev("Timer name (exp): " + timerName);
                 tclassName = BasicTimer.makeTimerTClassName(timerName);
-                //System.out.println("Timer name (exp): " + tclassName);
+                //TraceManager.addDev("Timer name (exp): " + tclassName);
                 t = tm.getTClassWithName(tclassName);
                 if (t == null) {
                     t = new BasicTimer(tclassName, true);
@@ -772,15 +773,15 @@ public class SDTranslator {
                 g = ((BasicTimer)t).getGateExp();
                 if (!(r.gatesConnected(evtlink.g, g))) {
                     r.addGates(evtlink.g, g);
-                    //System.out.println("Adding exp gates between " + evtlink.t.getName() + " and " + t.getName());
+                    //TraceManager.addDev("Adding exp gates between " + evtlink.t.getName() + " and " + t.getName());
                 }
             }
             
             if (evtlink.evt.getType() == Evt.TIMER_RESET) {
                 timerName = evtlink.evt.getTimerName();
-                //System.out.println("Timer name (exp): " + timerName);
+                //TraceManager.addDev("Timer name (exp): " + timerName);
                 tclassName = BasicTimer.makeTimerTClassName(timerName);
-                //System.out.println("Timer name (exp): " + tclassName);
+                //TraceManager.addDev("Timer name (exp): " + tclassName);
                 t = tm.getTClassWithName(tclassName);
                 if (t == null) {
                     t = new BasicTimer(tclassName, true);
@@ -814,7 +815,7 @@ public class SDTranslator {
                 g = ((BasicTimer)t).getGateReset();
                 if (!(r.gatesConnected(evtlink.g, g))) {
                     r.addGates(evtlink.g, g);
-                    //System.out.println("Adding reset gates between " + evtlink.t.getName() + " and " + t.getName());
+                    //TraceManager.addDev("Adding reset gates between " + evtlink.t.getName() + " and " + t.getName());
                 }
             }
             
@@ -853,7 +854,7 @@ public class SDTranslator {
                     //throw new SDTranslationException("Error on timers: expiration is never used (error #3)");
                 }
                 if (!resetIsUsed) {
-                    //System.out.println("\n\n\nReset is not used\n\n\n");
+                    //TraceManager.addDev("\n\n\nReset is not used\n\n\n");
                     bt.removeReset();
                 }
             }
@@ -881,7 +882,7 @@ public class SDTranslator {
             Iterator<TimeConstraint> iterator2 = tcs.listIterator();
             while(iterator2.hasNext()) {
                 tc = iterator2.next();
-                //System.out.println("tc found");
+                //TraceManager.addDev("tc found");
                 tcl = new TimeConstraintLink(tc, msc);
                 tcl.build();
                 tctolink.add(tcl);
@@ -904,7 +905,7 @@ public class SDTranslator {
                 evt1 = tclink.msc.hasExactlyOnePreviousEvt(tclink.tc.evt2);
                 if ((evt1 != null) && (evt1 ==tclink.tc.evt1)){
                     if (tclink.msc.isEndOfExactlyOneRelativeTC(tclink.tc.evt2)) {
-                        //System.out.println("Basic tc found");
+                        //TraceManager.addDev("Basic tc found");
                         tclink.basicTC = true;
                         tm.removeTClass(tclink.t); // A TERMINER !!!!
                     }
@@ -924,11 +925,11 @@ public class SDTranslator {
         while(iterator1.hasNext()) {
             tclink = iterator1.next();
             if (tclink.tc.type == TimeConstraint.RELATIVE) {
-                //System.out.println("*** -> Relative time constraint");
+                //TraceManager.addDev("*** -> Relative time constraint");
                 if (tclink.tc.evt1 == aevt.evt) {
                     // evt begin
                     if (!tclink.basicTC) {
-                        //System.out.println("Managing begin with " + tclink.g1);
+                        //TraceManager.addDev("Managing begin with " + tclink.g1);
                         //p = t.addParameterGenerateName("cpt_begin_" + tclink.t.getName(), Param.NAT, "0");
                         //aevt.addBeginCallTo(tclink.g1, p);
 						aevt.addBeginRTCCallTo(tclink.g1);
@@ -936,7 +937,7 @@ public class SDTranslator {
                     }
                 } else if (tclink.tc.evt2 == aevt.evt) {                 
                     // evt end
-                    //System.out.println("Managing end with " + tclink.g2);
+                    //TraceManager.addDev("Managing end with " + tclink.g2);
                     if (!tclink.basicTC) {
                     // Param
                     //p = t.addParameterGenerateName("cpt_end_" + tclink.t.getName(), Param.NAT, "0");
@@ -946,13 +947,13 @@ public class SDTranslator {
 					tm.addSynchroRelation(t, tclink.g4, tclink.t, tclink.t.getGateG4());
                     //tm.addSynchroRelation(t, tclink.g4, tclink.t, tclink.t.getGateG4());
                     } else {
-                        //System.out.println("Managing end with basic TC");
+                        //TraceManager.addDev("Managing end with basic TC");
                         aevt.addBasicTCTo(tclink.tc.time1, tclink.tc.time2);
                     }
                 }
             } else { // Absolute time constraint
                 if (tclink.tc.evt1 == aevt.evt) {
-                    //System.out.println("Managing end with " + tclink.g2);
+                    //TraceManager.addDev("Managing end with " + tclink.g2);
                     //p = t.addParameterGenerateName("cpt_end_" + tclink.t.getName(), Param.NAT, "0");
 					// Before : addEndCall(tclink.g2, tclink.g3, p);
                     aevt.addAbsoluteCallTo(tclink.g2, tclink.g3, tclink.g4);
@@ -1009,11 +1010,11 @@ public class SDTranslator {
 //                    
 //                    // synchro link between the two tclasses
 //                    tm.addSynchroRelation(ai1.t, g1, ai2.t, g2);
-//                    //System.out.println("Adding synchro relation between " + ai1.t.getName() + " and " + ai2.t.getName());
+//                    //TraceManager.addDev("Adding synchro relation between " + ai1.t.getName() + " and " + ai2.t.getName());
 //                    
 //                } else {
 //                    // potential infinite loop
-//                    System.out.println("Warning: instance " + ai1.ins + " has no action in scenario " + ai1.msc.getName());
+//                    TraceManager.addDev("Warning: instance " + ai1.ins + " has no action in scenario " + ai1.msc.getName());
 //                    ai1.first.addNext(ai1.last);
 //                }
 //            }

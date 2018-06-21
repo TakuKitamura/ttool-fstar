@@ -342,7 +342,7 @@ public class JDialogAttributeProCSD extends javax.swing.JDialog implements Actio
                     }
                     if (j == TAttribute.OTHER) {
                         a = new TAttribute(i, s, value, o2.toString());
-                        //System.out.println("New attribute: " + o2.toString());
+                        //
                     } else {
                         a = new TAttribute(i, s, value, j);
                     }
@@ -467,7 +467,7 @@ public class JDialogAttributeProCSD extends javax.swing.JDialog implements Actio
         String s;
         for(int i=0; i<jcb.getItemCount(); i++) {
             s = (String)(jcb.getItemAt(i));
-            //System.out.println("String found: *" + s + "* *" + text + "*");
+            //
             if (s.equals(text)) {
                 jcb.setSelectedIndex(i);
                 return;

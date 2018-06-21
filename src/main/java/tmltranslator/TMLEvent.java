@@ -91,7 +91,7 @@ public class TMLEvent extends TMLCommunicationElement {
         destinationPorts = new ArrayList<TMLPort>();
         ports = new ArrayList<TMLCPrimitivePort>();
         checkConf=false;
-        //System.out.println("New event: " + name + " max=" + _maxEvt + " blocking=" + isBlocking);
+        //TraceManager.addDev("New event: " + name + " max=" + _maxEvt + " blocking=" + isBlocking);
     }
 
     public int getNbOfParams() {

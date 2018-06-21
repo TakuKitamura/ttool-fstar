@@ -140,7 +140,7 @@ public class CorrespondanceTGElement implements CorrespondanceElement<TGComponen
      */
     public ADComponent getADComponentByName(String name, String panelName)
     {
-    	System.out.println("Looking by name for component "+name+" in panel "+panelName);
+    	
     	for (int i=0;i<tg.size();i++)
     	{
     		
@@ -250,13 +250,13 @@ public class CorrespondanceTGElement implements CorrespondanceElement<TGComponen
 		
 		for(TGComponent tgc:_list) {
 			listADs = getADComponents(tgc);
-			//System.out.println("List size:" + listADs.size());
+			//
 			if (listADs.size() > 0) {
 				listAD.addAll(listADs);
 			}
 		}
 		
-		//System.out.println("Final List size:" + listAD.size());
+		//
 		return listAD;
 	}
 	
@@ -271,7 +271,7 @@ public class CorrespondanceTGElement implements CorrespondanceElement<TGComponen
 			elt = getTMLActivityElement(tgc);
 			if (elt != null) {
 				listED.add(elt);
-				//System.out.println("Adding adc=" + adc + " from tgc=" + tgc);
+				//
 			}
 		}
 		
@@ -490,7 +490,7 @@ public class CorrespondanceTGElement implements CorrespondanceElement<TGComponen
 				o1 = tg.get(i);
 				if ((o1 != null) && !(list.contains(o1))){
 					de = (DIPLOElement)(o0);
-					//System.out.println("Putting DIPLO ID on " + o1 + ": " + de.getID());
+					//
 					tgc = (TGComponent)(o1);
 					tgc.setDIPLOID(de.getID());
 					list.add(tgc);
@@ -510,7 +510,7 @@ public class CorrespondanceTGElement implements CorrespondanceElement<TGComponen
 				o1 = tg.get(i);
 				if ((o1 != null) && !(list.contains(o1))){
 					te = (TEPEComponent)(o0);
-					//System.out.println("Putting DIPLO ID on " + o1 + ": " + de.getID());
+					//
 					tgc = (TGComponent)(o1);
 					tgc.setTEPEID(te.getID());
 					list.add(tgc);

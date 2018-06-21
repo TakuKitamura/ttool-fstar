@@ -740,7 +740,7 @@ public class GTURTLEModeling {
     }
 
     public TMLMapping<TGComponent> drawFirewall(TMLMapping<TGComponent> map) {
-        //  System.out.println("DRAWING FIREWALL");
+        //  
         TGComponent comp = map.getTMLModeling().getTGComponent();
         TMLComponentDesignPanel tmlcdp = (TMLComponentDesignPanel) comp.getTDiagramPanel().tp;
         // TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
@@ -858,12 +858,12 @@ public class GTURTLEModeling {
                         for (TGComponent tg : tcp.tmlctdp.getComponentList()) {
                             if (tg instanceof TMLCPrimitiveComponent) {
                                 if (tg.getValue().equals(newChan.getOriginTask().getName().split("__")[1])) {
-                                	System.out.println(newChan.getName() + " " + tg.getValue());
+                                	
                                     originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, tg, tcp.tmlctdp);
                                     originPort.commName = newChan.getName();
                                     tcp.tmlctdp.addComponent(originPort, tg.getX(), tg.getY(), true, true);
                                 } else if (tg.getValue().equals(firewallNode.getName())) {
-                                	System.out.println(newChan.getName() + tg.getValue());
+                                	
                                     destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, tg, tcp.tmlctdp);
                                     destPort.isOrigin = false;
                                     destPort.commName = newChan.getName();
@@ -871,7 +871,7 @@ public class GTURTLEModeling {
                                 }
                             }
                         }
-                        System.out.println("Ports " + originPort + " " + destPort);
+                        
                         TMLCPortConnector conn = new TMLCPortConnector(0, 0, tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, null, tcp.tmlctdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector<Point>());
                         tcp.tmlctdp.addComponent(conn, 0, 0, false, true);
                         
@@ -883,12 +883,12 @@ public class GTURTLEModeling {
                         for (TGComponent tg : tcp.tmlctdp.getComponentList()) {
                             if (tg instanceof TMLCPrimitiveComponent) {
                                 if (tg.getValue().equals(firewallNode.getName())) {
-                                    System.out.println(newChan.getName() + tg.getValue());
+                                    
                                     originPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, tg, tcp.tmlctdp);
                                     originPort.commName = wrChan.getName();
                                     tcp.tmlctdp.addComponent(originPort, tg.getX(), tg.getY(), true, true);
                                 } else if (tg.getValue().equals(wrChan.getDestinationTask().getName().split("__")[1])) {
-                                    System.out.println(wrChan.getName() + " "+ tg.getValue());
+                                    
                                     destPort = new TMLCChannelOutPort(tg.getX(), tg.getY(), tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, tg, tcp.tmlctdp);
                                     destPort.isOrigin = false;
                                     destPort.commName = wrChan.getName();
@@ -897,7 +897,7 @@ public class GTURTLEModeling {
                             }
                         }
                         
-                        System.out.println("Ports " + originPort + " " + destPort);
+                        
                         conn = new TMLCPortConnector(0, 0, tcp.tmlctdp.getMinX(), tcp.tmlctdp.getMaxX(), tcp.tmlctdp.getMinY(), tcp.tmlctdp.getMaxX(), true, null, tcp.tmlctdp, originPort.getTGConnectingPointAtIndex(0), destPort.getTGConnectingPointAtIndex(0), new Vector<Point>());
                         tcp.tmlctdp.addComponent(conn, 0, 0, false, true);
                         
@@ -1169,7 +1169,7 @@ public class GTURTLEModeling {
             done.add(curr);
         }
         if (path.size() == 0) {
-            System.out.println("no path");
+            
             return true;
         } else {
             HwBus bus;
@@ -1197,7 +1197,7 @@ public class GTURTLEModeling {
         if (tmlm.securityTaskMap == null) {
             return;
         }
-        //      System.out.println(tmlm.securityTaskMap);
+        //      
         for (SecurityPattern sp : tmlm.securityTaskMap.keySet()) {
             if (sp.type.contains("Symmetric Encryption") || sp.type.equals("MAC")) {
                 TraceManager.addDev("Adding keys for " + sp.name);
@@ -1259,7 +1259,7 @@ public class GTURTLEModeling {
                             memNode.tdp.addComponent(key, memNode.x, memNode.y, true, true);
                             memNode.tdp.repaint();
                         } else {
-                            System.out.println("Can't map key to memory for " + sp.name + " on task " + t.getName());
+                            
                             UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Cannot map key in memory for " + sp.name + " on task " + t.getName());
                             ce.setTDiagramPanel(tmap.getCorrespondanceList().getTG(tmap.getArch().getFirstCPU()).getTDiagramPanel());
                             ce.setTGComponent(null);
@@ -1326,7 +1326,7 @@ public class GTURTLEModeling {
                             memNode.tdp.addComponent(key, memNode.x, memNode.y, true, true);
                             memNode.tdp.repaint();
                         } else {
-                            System.out.println("Can't map key to memory for " + sp.name + " on task " + t.getName());
+                            
                             UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Cannot map key in memory for " + sp.name + " on task " + t.getName());
                             ce.setTDiagramPanel(tmap.getCorrespondanceList().getTG(tmap.getArch().getFirstCPU()).getTDiagramPanel());
                             ce.setTGComponent(null);
@@ -1355,7 +1355,7 @@ public class GTURTLEModeling {
     }
 
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, boolean allowPrivateChannelDuplication, String loopLimit) {
-        //      System.out.println(avatarspec);
+        //      
         if (avatarspec != null) {
             //use avspec
         } else if (tmap != null) {
@@ -7984,7 +7984,7 @@ public class GTURTLEModeling {
                 tgcomp = smdrs;
                 smp.addComponent(smdrs, x, y, false, true);
                 //                              String name=sig.minString();
-                //System.out.println("signal values" +((AvatarActionOnSignal)asme).getValues());
+                //
                 String parameters = "";
                 if (((AvatarActionOnSignal) asme).getValues().size() > 0) {
                     parameters += ((AvatarActionOnSignal) asme).getValues().get(0);
@@ -8070,7 +8070,7 @@ public class GTURTLEModeling {
         if (!(asme instanceof AvatarTransition)) {
             for (AvatarStateMachineElement el : asme.getNexts()) {
                 if (!(el instanceof AvatarTransition)) {
-                    System.out.println("ERROR: non-Transition " + asme + " connected to non-Transition " + el);
+                    
                 }
             }
         }
@@ -8133,7 +8133,7 @@ public class GTURTLEModeling {
     }
 
     public void drawPanel(AvatarSpecification avspec, AvatarDesignPanel adp) {
-        //System.out.println(avspec.toString());
+        //
         hasCrypto = false;
         Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
         Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
@@ -8195,9 +8195,9 @@ public class GTURTLEModeling {
                     } else {
 
                         AvatarBDBlock father = blockMap.get(ab.getFather().getName().split("__")[ab.getFather().getName().split("__").length - 1]);
-                        //System.out.println("blockmap " + blockMap);
+                        //
                         if (father == null) {
-                            //System.out.println("Missing father block " + ab.getFather().getName());
+                            //
                             continue;
                         }
                         AvatarBDBlock bl = new AvatarBDBlock(father.getX() + blockIncMap.get(ab.getFather()), father.getY() + 10, abd.getMinX(), abd.getMaxX(), abd.getMinY(), abd.getMaxY(), false, father, abd);
@@ -8237,7 +8237,7 @@ public class GTURTLEModeling {
         for (String bl1 : originDestMap.keySet()) {
             for (String bl2 : originDestMap.get(bl1)) {
                 Vector<Point> points = new Vector<Point>();
-                //      System.out.println("Finding " + bl1 + " and bl2 "+ bl2);
+                //      
                 if (blockMap.get(bl1) == null || blockMap.get(bl2) == null) {
                     continue;
                 }
@@ -8267,14 +8267,14 @@ public class GTURTLEModeling {
                         conn.setBlocking(ar.isBlocking());
                         conn.setPrivate(ar.isPrivate());
                         conn.setSizeOfFIFO(ar.getSizeOfFIFO());
-                        //System.out.println(bl1 +" "+ ar.block1.getName() + " "+ ar.block2.getName());
+                        //
                         for (int i = 0; i < ar.nbOfSignals(); i++) {
-                            //System.out.println("Adding relation " + ar.getSignal1(i).toString() + " " + ar.getSignal2(i).toBasicString());
+                            //
                             conn.addSignal(ar.getSignal1(i).toString(), ar.getSignal1(i).getInOut() == 0, ar.block1.getName().contains(bl1));
                             conn.addSignal(ar.getSignal2(i).toString(), ar.getSignal2(i).getInOut() == 0, !ar.block1.getName().contains(bl1));
-                            //  System.out.println("adding signal " +ar.getSignal1(i).toBasicString());
+                            //  
                         }
-                        //System.out.println("Added Signals");
+                        //
                         conn.updateAllSignals();
 
 
@@ -8359,7 +8359,7 @@ public class GTURTLEModeling {
         int smy = 40;
 
         if (smp == null) {
-            System.out.println("can't find");
+            
             return;
         }
         smp.removeAll();
@@ -8398,14 +8398,14 @@ public class GTURTLEModeling {
             }
             Vector<Point> points = new Vector<Point>();
             if (p1 == null || p2 == null) {
-                System.out.println(tranSourceMap.get(t) + " " + locMap.get(tranDestMap.get(t)));
+                
 
-                System.out.println("Missing point " + p1 + " " + p2);
+                
                 return;
             }
             AvatarSMDConnector SMDcon = new AvatarSMDConnector(p1.getX(), p1.getY(), p1.getX(), p1.getY(), p1.getX(), p1.getY(), true, null, smp, p1, p2, points);
-            //System.out.println(tranSourceMap.get(t)+" "+locMap.get(tranDestMap.get(t)));
-            ///System.out.println("FREE " +p1.isFree() + " "+ p2.isFree());
+            //
+            ///
             p1.setFree(false);
             p2.setFree(false);
             String action = "";

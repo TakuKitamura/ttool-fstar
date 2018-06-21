@@ -210,7 +210,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 		
 		if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
 			currentFontSize = tdp.getFontSize();
-			//System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
+			//
 			myFont = f.deriveFont((float)currentFontSize);
 			myFontB = myFont.deriveFont(Font.BOLD);
 			
@@ -501,15 +501,15 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     public boolean eventOnPopup(ActionEvent e) {
         String s = e.getActionCommand();
         if (s.indexOf("regular") > -1) {
-            //System.out.println("Set to regular");
+            //
             reqType = 0;
         } else {
 			if (s.indexOf("formal") > 1) {
-				//System.out.println("Set to formal");
+				//
 				reqType = 1;
 			} else {
 				if (s.indexOf("security") > 1) {
-				//System.out.println("Set to formal");
+				//
 				reqType = 2;
 				} else {
 					if (e.getSource() == menuNonSatisfied) {
@@ -613,8 +613,8 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
             text = "";
 			String s;
             
-            //System.out.println("Loading tclass " + getValue());
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -632,63 +632,63 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
                                     reqType = 0;
                                 }
                             } else if (elt.getTagName().equals("type")) {
-                                //System.out.println("Analyzing line0");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     reqType = 0;
                                 }
 								reqType = Integer.decode(s).intValue();
                             } else if (elt.getTagName().equals("textline")) {
-                                //System.out.println("Analyzing line0");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     s = "";
                                 }
                                 text += GTURTLEModeling.decodeString(s) + "\n";
                             } else if (elt.getTagName().equals("kind")) {
-                                //System.out.println("Analyzing line1");
+                                //
                                 kind = elt.getAttribute("data");
                                 if (kind.equals("null")) {
                                     kind = "";
                                 }
                             } else if (elt.getTagName().equals("criticality")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 criticality = elt.getAttribute("data");
                                 if (criticality.equals("null")) {
                                     criticality = "";
                                 }
                             } else if (elt.getTagName().equals("violated")) {
-                                //System.out.println("Analyzing line3");
+                                //
                                 violatedAction = elt.getAttribute("data");
                                 if (violatedAction.equals("null")) {
                                     violatedAction = "";
                                 }
-								//System.out.println("Analyzing line4");
+								//
                             } else if (elt.getTagName().equals("id")) {
-                                //System.out.println("Analyzing line3");
+                                //
                                 id = elt.getAttribute("data");
                                 if (id.equals("null")) {
                                     id = "";
                                 }
-								//System.out.println("Analyzing line4");
+								//
 							} else if (elt.getTagName().equals("attackTreeNode")) {
-                                //System.out.println("Analyzing line3");
+                                //
                                 attackTreeNode = elt.getAttribute("data");
                                 if (attackTreeNode.equals("null")) {
                                     attackTreeNode = "";
                                 }
-								//System.out.println("Analyzing line4");
+								//
 							} else if (elt.getTagName().equals("satisfied")) {
-                                //System.out.println("Analyzing line3");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     satisfied = false;
                                 } else {
                                     satisfied = s.equals("true");
 								}
-								//System.out.println("Analyzing line4");
+								//
 							} else if (elt.getTagName().equals("verified")) {
-                                //System.out.println("Analyzing line3");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     verified = false;
@@ -696,7 +696,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
                                     verified = s.equals("true");
 								}
 							}
-								//System.out.println("Analyzing line4");
+								//
                         }
                     }
                 }
@@ -705,7 +705,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
                 text = oldtext;
             }
         } catch (Exception e) {
-			System.out.println("Failed when loading requirement extra parameters");
+			
             throw new MalformedModelingException();
         }
 		
@@ -733,7 +733,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 	}
     
     public int getCriticality() {
-        //System.out.println("Criticality=" + criticality);
+        //
         if (criticality.compareTo("High") == 0) {
             return Requirement.HIGH;
         } else if (criticality.compareTo("Medium") == 0) {
@@ -759,7 +759,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 	}
 	
 	public void autoAdjust(int mode) {
-		//System.out.println("Auto adjust in mode = " + mode);
+		//
 		
 		if (graphics == null) {
 			return;

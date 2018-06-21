@@ -161,7 +161,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
             a = myAttributes.get (i);
             value = value + a + "\n";
         }
-        //System.out.println("Value = " + value);
+        //
     }
     
     public boolean areVisible() {
@@ -178,7 +178,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
         }
         
         if ((myAttributes.size() == 0) || (!areVisible())) {
-            //System.out.println("Min resize" + toString());
+            //
             minDesiredWidth = minWidth;
             minDesiredHeight = minHeight;
             lastVisible = areVisible();
@@ -187,7 +187,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
         
         lastVisible = areVisible();
         
-        //System.out.println("Regular resize" + toString());
+        //
         int desiredWidth = minWidth;
         int h = myG.getFontMetrics().getHeight();
         int desiredHeight =  Math.max(minHeight, h * (myAttributes.size() -1) + minHeight);
@@ -249,9 +249,9 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
         value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for(int i=0; i<myAttributes.size(); i++) {
-            //System.out.println("Attribute:" + i);
+            //
             a = myAttributes.get (i);
-            //System.out.println("Attribute:" + i + " = " + a.getId());
+            //
             value = value + a + "\n";
             sb.append("<Attribute access=\"");
             sb.append(a.getAccess());
@@ -279,21 +279,21 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
             String typeOther;
             String id, valueAtt;
             
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Attribute")) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 access = Integer.decode(elt.getAttribute("access")).intValue();
                                 type = Integer.decode(elt.getAttribute("type")).intValue();
                                 try {
@@ -308,9 +308,9 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
                                     valueAtt = "";
                                 }
 								
-								//System.out.println("Studying attribute " + id);
+								//
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
-                                    //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
+                                    //
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     myAttributes.add (ta);
                                 }

@@ -156,7 +156,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 		
 		if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
 			currentFontSize = tdp.getFontSize();
-			//System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
+			//
 			myFont = f.deriveFont((float)currentFontSize);
 			myFontB = myFont.deriveFont(Font.BOLD);
 			
@@ -373,28 +373,28 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
             //String id, valueAtt;
             String s;
             
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("diagramText")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     s = "";
                                 }
                                diagramText = s;
                             } else if (elt.getTagName().equals("violated")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 violatedAction = elt.getAttribute("data");
                                 if (violatedAction.equals("null")) {
                                     violatedAction = "";
@@ -418,7 +418,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 	}
 	
 	public void autoAdjust(int mode) {
-		//System.out.println("Auto adjust in mode = " + mode);
+		//
 		
 		if (graphics == null) {
 			return;

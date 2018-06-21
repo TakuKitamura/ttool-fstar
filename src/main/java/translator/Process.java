@@ -326,7 +326,7 @@ public class Process {
                     }
                 }
             }
-            //System.out.println("s=" + s);
+            //
             if (!find) {
                 if (i == 0) {
                     s = s + par.getLotosName();
@@ -334,7 +334,7 @@ public class Process {
                     s = s + SEP2P + par.getLotosName();
                 }
             }
-            //System.out.println("s=" + s);
+            //
         }
         return s;
     }

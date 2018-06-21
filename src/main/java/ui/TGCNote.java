@@ -253,16 +253,16 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Line")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 s = elt.getAttribute("value");
                                 if (s.equals("null")) {
                                     s = "";

@@ -180,7 +180,7 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
 	}
 	
 	public boolean editOndoubleClick(JFrame frame) {
-	//System.out.println("Double click");
+	//
         String oldName = name;
 		String tmp;
         

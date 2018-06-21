@@ -64,10 +64,10 @@ public class TGConnectingPointMessageSD extends  TGConnectingPointWidthHeight {
         //TraceManager.addDev("is compatible with " + type);
         if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SDZV)  || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SDZV)) {
 	    //TraceManager.addDev("is compatible with " + type + " x= " + getX() + " y=" + getY()) ;
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
-        //System.out.println("is compatible with:false");
+        //
         return false;
     }
 

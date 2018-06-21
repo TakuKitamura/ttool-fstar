@@ -90,7 +90,7 @@ public class TToolUpdater extends Thread {
             
             // Reading document
             while ((inputLine = in.readLine()) != null) {
-                //System.out.println(inputLine);
+                //
                 doc.append(inputLine);
             }
             in.close();
@@ -110,19 +110,19 @@ public class TToolUpdater extends Thread {
             
             s = s.substring(0, index2);
             s = s.trim();
-            //System.out.println("Updated version number: " + s + " current version number: " + DefaultText.getVersion());
+            //
             
             int compare = s.compareTo(DefaultText.getVersion());
             if (compare == 0) {
-                System.out.println("Your version of TTool is up to date");
+                
             } else if (compare > 0) {
-                System.out.println("A new version of TTool has been released. Please, update as soon as possible");
+                
                 JOptionPane.showMessageDialog(f,
                 "A new version of TTool has been released. Please, update as soon as possible",
                 "New version!",
                 JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("You're currently working with a non-official version of TTool");
+                
             }
             
             // Dealing with counter / statistics
@@ -133,7 +133,7 @@ public class TToolUpdater extends Thread {
             in.close();
             
         } catch (Exception e) {
-            System.out.println("Couldn't check for a new version of TTool: " + e.getMessage());
+            
         }
         
     }

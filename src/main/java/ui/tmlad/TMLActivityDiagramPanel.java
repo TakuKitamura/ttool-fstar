@@ -119,7 +119,7 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
     }
     
     public void enhance() {
-        //System.out.println("enhance");
+        //
         Vector<TGComponent> v = new Vector<TGComponent>();
         TGComponent o;
         Iterator<TGComponent> iterator = componentList.iterator();
@@ -140,7 +140,7 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
         TGConnector tgcon;
         int i;
         
-        //System.out.println("Enhancing: " + tgc);
+        //
         
         if (tgc == null) {
             return;
@@ -152,7 +152,7 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
         
         v.add(tgc);
         
-        //System.out.println("Nb of nexts: " + tgc.getNbNext());
+        //
         if (!(tgc instanceof TMLADStartState)) {
             for(i=0; i<tgc.getNbNext(); i++) {
                 tgc1 = getNextTGComponent(tgc, i);

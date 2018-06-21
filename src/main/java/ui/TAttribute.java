@@ -211,7 +211,7 @@ public class TAttribute {
             case ADDRESS:
                 return value.matches("\\d*");
             case BOOLEAN:
-                //System.out.println("Evaluation boolean");
+                //
                 return ((value.equals("true")) || (value.equals("false")) || (value.equals("")));
             case GATE:
             case OUTGATE:

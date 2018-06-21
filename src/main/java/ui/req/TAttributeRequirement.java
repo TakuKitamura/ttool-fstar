@@ -183,7 +183,7 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
 			text = "Text";
 		}
         
-        //System.out.println("Regular resize" + toString());
+        //
         int desiredWidth = minWidth;
         int h = myG.getFontMetrics().getHeight();
         int desiredHeight =  Math.max(minHeight, h * (texts.length +1) + minHeight);
@@ -213,7 +213,7 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
     
     public void checkMySize() {
         calculateMyDesiredSize();
-        //System.out.println("I check my size");
+        //
         
         TGComponent tgc = getTopFather();
         
@@ -291,40 +291,40 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
             String oldtext = text;
             text = "";
             
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("textline")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     s = "";
                                 }
                                 text += GTURTLEModeling.decodeString(s) + "\n";
                             } else if (elt.getTagName().equals("kind")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 kind = elt.getAttribute("data");
                                 if (kind.equals("null")) {
                                     kind = "";
                                 }
                             } else if (elt.getTagName().equals("criticality")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 criticality = elt.getAttribute("data");
                                 if (criticality.equals("null")) {
                                     criticality = "";
                                 }
                             }else if (elt.getTagName().equals("violated")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 violatedAction = elt.getAttribute("data");
                                 if (violatedAction.equals("null")) {
                                     violatedAction = "";
@@ -355,7 +355,7 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
     }
     
     public int getCriticality() {
-        //System.out.println("Criticality=" + criticality);
+        //
         if (criticality.compareTo("High") == 0) {
             return Requirement.HIGH;
         } else if (criticality.compareTo("Medium") == 0) {

@@ -37,17 +37,15 @@
  */
 
 
-
-
 package ddtranslator;
 
 
+import myutil.TraceManager;
 import translator.*;
 import ui.*;
 import ui.cd.TCDTClass;
 import ui.dd.TDDNode;
 import ui.dd.TGConnectorLinkNode;
-import ui.CorrespondanceTGElement;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -56,24 +54,25 @@ import java.util.List;
 /**
  * Class DDTranslator
  * Creation: 31/05/2004
- * @version 1.0 31/05/2004
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 31/05/2004
  */
 public class DDTranslator {
-    
+
     private TURTLEModeling tm;
     private DeploymentPanel dp;
     private CorrespondanceTGElement listE;
-    
+
     public DDTranslator(DeploymentPanel _dp, TURTLEModeling _tm, CorrespondanceTGElement _listE) {
         dp = _dp;
         tm = _tm;
         listE = _listE;
     }
-    
-    
+
+
     public void translateLinks() throws DDSyntaxException {
-        
+
         // We go throughout links
         List<TGConnectorLinkNode> ll;
         Iterator<TGConnectorLinkNode> iterator;
@@ -82,33 +81,33 @@ public class DDTranslator {
         VectorLRArtifactTClassGate assocs;
         LRArtifactTClassGate lratg;
         TClassLinkNode t;
-       // TClass tcl;
+        // TClass tcl;
         int i;
-        
+
         ll = dp.tddp.getListOfLinks();
         iterator = ll.listIterator();
-        
+
         TClassLinkNode.reinitName();
-        
+
         // Loop on links
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             link = iterator.next();
             assocs = link.getList();
-            System.out.println("assocs=" + assocs);
+            TraceManager.addDev("assocs=" + assocs);
             if (assocs.size() > 0) {
-                System.out.println("translateLinks : assocs > 0");
+                TraceManager.addDev("translateLinks : assocs > 0");
                 t = new TClassLinkNode(TClassLinkNode.generateName());
                 t.setDelay(link.getDelay());
                 tm.addTClass(t);
                 t.prepareTClass();
-                for(i=0; i<assocs.size(); i++) {
+                for (i = 0; i < assocs.size(); i++) {
                     lratg = assocs.getElementAt(i);
                     makeSynchro(link, lratg, t, link.getOriginNode(), link.getDestinationNode());
                 }
                 t.finishTClass();
             }
         }
-        
+
         // Loop on TClassLinkNode
        /* for(i=0; i<tm.classNb(); i++) {
             tcl = getTClassAtIndex(i);
@@ -118,7 +117,7 @@ public class DDTranslator {
             }
         }*/
     }
-    
+
     private void makeSynchro(TGConnectorLinkNode link, LRArtifactTClassGate lratg, TClassLinkNode t, TDDNode node1, TDDNode node2) {
         // Find all possible receiving at destination side
         TCDTClass gtclass, gtclass2;
@@ -131,41 +130,41 @@ public class DDTranslator {
         int maxBool = 0;
         int maxNat = 0;
         int id;
-        
-        System.out.println("Making synchro");
+
+        TraceManager.addDev("Making synchro");
 
         // Prepare struct
         DDStructLink ddsl = new DDStructLink();
-        
+
         gtclass = findTClass(lratg.left.art, lratg.left.tcl);
         TClass tclass1 = listE.getTClass(gtclass);
-        
+
         gtclass2 = findTClass(lratg.right.art, lratg.right.tcl);
         TClass tclass2 = listE.getTClass(gtclass2);
-        
-        System.out.println("Making synchro: step 1 gtclass="+ gtclass.getClassName() + "gtclass2="+ gtclass2.getClassName());
-        
+
+        TraceManager.addDev("Making synchro: step 1 gtclass=" + gtclass.getClassName() + "gtclass2=" + gtclass2.getClassName());
+
         if ((tclass1 == null) || (tclass2 == null)) {
             return;
         }
-        
-        System.out.println("Making synchro: step 1 tclass1="+ tclass1.getName() + "tclass2="+ tclass2.getName());
-        
-        
+
+        TraceManager.addDev("Making synchro: step 1 tclass1=" + tclass1.getName() + "tclass2=" + tclass2.getName());
+
+
         ddsl.lgate = tclass1.getGateByName(lratg.left.gat);
         ddsl.rgate = tclass2.getGateByName(lratg.right.gat);
-        
+
         if ((ddsl.lgate == null) || (ddsl.rgate == null)) {
             return;
         }
-        
-        System.out.println("Making synchro: step 2");
-        
+
+        TraceManager.addDev("Making synchro: step 2");
+
         // Create gates for the link;
         id = t.getIdGate();
         ddsl.linklg = t.addNewGateIfApplicable("g_l_" + id);
         ddsl.linkrg = t.addNewGateIfApplicable("g_r_" + id);
-        
+
         // Set the right protocol on gates
         ddsl.lgate.setProtocolJava(link.getImplementation());
         ddsl.lgate.setLocalPortJava(link.getOriginPort());
@@ -177,105 +176,103 @@ public class DDTranslator {
         ddsl.rgate.setDestPortJava(link.getOriginPort());
         ddsl.rgate.setDestHostJava(tclass1.getName().substring(0, tclass1.getName().indexOf('_')));
         ddsl.rgate.setLocalHostJava(tclass2.getName().substring(0, tclass2.getName().indexOf('_')));
-        
-        System.out.println("*** -> Protocol = " + link.getImplementation());
-        System.out.println("*** -> hosts = host1=" + ddsl.lgate.getDestHostJava() + " host2=" +  ddsl.rgate.getDestHostJava());
-        
-        System.out.println("Toto01 -> looking for gate " + lratg.left.gat);
-  
+
+        TraceManager.addDev("*** -> Protocol = " + link.getImplementation());
+        TraceManager.addDev("*** -> hosts = host1=" + ddsl.lgate.getDestHostJava() + " host2=" + ddsl.rgate.getDestHostJava());
+
+        TraceManager.addDev("Toto01 -> looking for gate " + lratg.left.gat);
+
         // Analyse Tclass1
-        
-        System.out.println("Toto02");
+
+        TraceManager.addDev("Toto02");
         List<DDStructSynchro> synchros = new LinkedList<DDStructSynchro>();
         ad = tclass1.getActivityDiagram();
-        
-        for(i=0; i<ad.size(); i++) {
+
+        for (i = 0; i < ad.size(); i++) {
             adc = ad.elementAt(i);
             g = null;
             if (adc instanceof ADActionStateWithGate) {
-                g = ((ADActionStateWithGate)adc).getGate();
-                actionOnGate = ((ADActionStateWithGate)adc).getActionValue();
+                g = ((ADActionStateWithGate) adc).getGate();
+                actionOnGate = ((ADActionStateWithGate) adc).getActionValue();
             }
             if (adc instanceof ADTLO) {
-                g = ((ADTLO)adc).getGate();
-                actionOnGate = ((ADTLO)adc).getAction();
+                g = ((ADTLO) adc).getGate();
+                actionOnGate = ((ADTLO) adc).getAction();
             }
             if (g != null) {
                 if (g.getName().compareTo(lratg.left.gat) == 0) {
-                    System.out.println("Gate=" + g.getName() + " action on gate=" + actionOnGate);
+                    TraceManager.addDev("Gate=" + g.getName() + " action on gate=" + actionOnGate);
                     synchro = new DDStructSynchro(actionOnGate, tclass1);
                     if ((!(synchro.isInList(synchros))) && (synchro.size() > 0)) {
                         synchros.add(synchro);
-                        
+
                         maxBool = Math.max(synchro.nbBool(), maxBool);
                         maxNat = Math.max(synchro.nbNat(), maxNat);
-                        
-                        System.out.println("Adding gate management");
+
+                        TraceManager.addDev("Adding gate management");
                         ddsl.added = true;
                         t.addGateManagement(ddsl.linkrg, synchro.getRegularCall(), ddsl.linklg);
                     }
                 }
             }
         }
-        
+
         // Do the same at receiving side
-        
-        //System.out.println("Toto03");
+
+        //TraceManager.addDevln("Toto03");
         synchros = new LinkedList<>();
         ad = tclass2.getActivityDiagram();
-        
-        for(i=0; i<ad.size(); i++) {
+
+        for (i = 0; i < ad.size(); i++) {
             adc = ad.elementAt(i);
             g = null;
             if (adc instanceof ADActionStateWithGate) {
-                g = ((ADActionStateWithGate)adc).getGate();
-                actionOnGate = ((ADActionStateWithGate)adc).getActionValue();
+                g = ((ADActionStateWithGate) adc).getGate();
+                actionOnGate = ((ADActionStateWithGate) adc).getActionValue();
             }
             if (adc instanceof ADTLO) {
-                g = ((ADTLO)adc).getGate();
-                actionOnGate = ((ADTLO)adc).getAction();
+                g = ((ADTLO) adc).getGate();
+                actionOnGate = ((ADTLO) adc).getAction();
             }
             if (g != null) {
                 if (g.getName().compareTo(lratg.right.gat) == 0) {
                     synchro = new DDStructSynchro(actionOnGate, tclass2);
                     if ((!(synchro.isInList(synchros))) && (synchro.size() > 0)) {
                         synchros.add(synchro);
-                        
+
                         maxBool = Math.max(synchro.nbBool(), maxBool);
                         maxNat = Math.max(synchro.nbNat(), maxNat);
-                        
+
                         ddsl.added = true;
-                        //System.out.println("Adding gate management");
+                        //TraceManager.addDevln("Adding gate management");
                         t.addGateManagement(ddsl.linklg, synchro.getRegularCall(), ddsl.linkrg);
                     }
                 }
             }
         }
-        
-        
+
+
         // Add necessary parameters to the tclass
         t.makeBoolParameters(maxBool);
         t.makeNatParameters(maxNat);
-        
+
         // Add synchro relations
         if (ddsl.added == true) {
-            //System.out.println("Adding synchro relation g1_save = " + g1_save + " g1=" + g1);
-            //System.out.println("Adding synchro relation g1_save = " + g2_save + " g3=" + g3);
+            //TraceManager.addDevln("Adding synchro relation g1_save = " + g1_save + " g1=" + g1);
+            //TraceManager.addDevln("Adding synchro relation g1_save = " + g2_save + " g3=" + g3);
             tm.addSynchroRelation(tclass1, ddsl.lgate, t, ddsl.linklg);
             tm.addSynchroRelation(t, ddsl.linkrg, tclass2, ddsl.rgate);
-        }      
+        }
     }
-    
+
     private TCDTClass findTClass(String artifact, String tclass) {
         DesignPanel dpan = dp.tddp.getGUI().getDesignPanel(artifact);
         if (dpan == null) {
             return null;
         }
-        
+
         return dpan.getTCDTClass(tclass);
     }
-    
-    
-    
-    
+
+
 }

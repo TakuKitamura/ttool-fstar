@@ -119,7 +119,7 @@ public class TClass {
         }
         p = new Param(name, type, value);
         addParameter(p);
-		//System.out.println("Added param:" + name);
+		//
         return p;
     }
 	
@@ -172,7 +172,7 @@ public class TClass {
 				} else {
 					paramName = s;
 				}
-				//System.out.println("ParamName=" + paramName);
+				//
 				if (Param.isAValidParamName(paramName)) {
 					addNewParamIfApplicable(paramName, Param.NAT, "0");
 				}
@@ -208,7 +208,7 @@ public class TClass {
     	
     	for(int i=0; i<paramList.size(); i++) {
             p = paramList.elementAt(i);
-            //System.out.println("Param=" + p.getName() + " vs " + name);
+            //
             
             if (p.getName().startsWith(name)) {
                 v.add(p);
@@ -307,7 +307,7 @@ public class TClass {
 	
 	public void removeParam(int index) {
 		//Param p = getParam(index);
-		//System.out.println("Removing param:" + p.getName());
+		//
 		paramList.removeElementAt(index);
 	}
     
@@ -541,7 +541,7 @@ public class TClass {
         
         for(int i=0; i<paramList.size(); i++) {
             p = paramList.elementAt(i);
-            System.out.println("Param #" + i + "= |" + p.getName() + "|");
+            
            
         }
        
@@ -552,7 +552,7 @@ public class TClass {
         
         for(int i=0; i<paramList.size(); i++) {
             p = paramList.elementAt(i);
-            System.out.println("Param #" + i + "= |" + p.getName() + "=" + p.getValue() + "|");
+            
            
         }
        
@@ -563,7 +563,7 @@ public class TClass {
         
         for(int i=0; i<gateList.size(); i++) {
             g = gateList.elementAt(i);
-            System.out.println("Gate #" + i + "= |" + g.getName() + "|");
+            
            
         }
        

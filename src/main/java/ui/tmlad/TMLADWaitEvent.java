@@ -315,7 +315,7 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro *** " + getId());
+        //
         try {
             NodeList nli;
             Node n1, n2;
@@ -323,17 +323,17 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
             int k;
             String s;
 
-            //System.out.println("Loading Synchronization gates");
-            //System.out.println(nl.toString());
+            //
+            //
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {

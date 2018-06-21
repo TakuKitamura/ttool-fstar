@@ -234,7 +234,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
             currentFontSize = tdp.getFontSize();
-            //System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
+            //
             myFont = f.deriveFont((float) currentFontSize);
             myFontB = myFont.deriveFont(Font.BOLD);
 
@@ -640,44 +640,44 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("textline")) {
-                                //System.out.println("Analyzing line0");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     s = "";
                                 }
                                 text += GTURTLEModeling.decodeString(s) + "\n";
                             } else if (elt.getTagName().equals("kind")) {
-                                //System.out.println("Analyzing line1");
+                                //
                                 kind = elt.getAttribute("data");
                                 if (kind.equals("null")) {
                                     kind = "";
                                 }
                             } else if (elt.getTagName().equals("criticality")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 criticality = elt.getAttribute("data");
                                 if (criticality.equals("null")) {
                                     criticality = "";
                                 }
                             } else if (elt.getTagName().equals("violatedAction")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 violatedAction = elt.getAttribute("data");
                                 if (violatedAction.equals("null")) {
                                     violatedAction = "";
                                 }
                             } else if (elt.getTagName().equals("attackTreeNode")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 attackTreeNode = elt.getAttribute("data");
                                 if (attackTreeNode.equals("null")) {
                                     attackTreeNode = "";
                                 }
                             } else if (elt.getTagName().equals("referenceElements")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 referenceElements = elt.getAttribute("data");
                                 if (referenceElements.equals("null")) {
                                     referenceElements = "";
                                 }
                             } else if (elt.getTagName().equals("reqType")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     reqType = REGULAR_REQ;
@@ -693,23 +693,23 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                 }
 
                             } else if (elt.getTagName().equals("id")) {
-                                //System.out.println("Analyzing line3");
+                                //
                                 id = elt.getAttribute("data");
                                 if (id.equals("null")) {
                                     id = "";
                                 }
-                                //System.out.println("Analyzing line4");
+                                //
                             } else if (elt.getTagName().equals("satisfied")) {
-                                //System.out.println("Analyzing line3");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     satisfied = false;
                                 } else {
                                     satisfied = s.equals("true");
                                 }
-                                //System.out.println("Analyzing line4");
+                                //
                             } else if (elt.getTagName().equals("verified")) {
-                                //System.out.println("Analyzing line3");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     verified = false;
@@ -717,7 +717,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                     verified = s.equals("true");
                                 }
                             }
-                            //System.out.println("Analyzing line4");
+                            //
                         }
                     }
                 }
@@ -759,7 +759,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     }
 
     public int getCriticality() {
-        //System.out.println("Criticality=" + criticality);
+        //
         if (criticality.compareTo("High") == 0) {
             return AvatarRDRequirement.HIGH;
         } else if (criticality.compareTo("Medium") == 0) {
@@ -785,7 +785,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     }
 
     public void autoAdjust(int mode) {
-        //System.out.println("Auto adjust in mode = " + mode);
+        //
 
         if (graphics == null) {
             return;

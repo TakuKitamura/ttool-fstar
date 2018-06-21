@@ -93,7 +93,7 @@ public class TURTLEModeling {
         Relation r = syncRelationBetween(t1, t2);
         
         
-        //System.out.println("****  TOTOTOTOTOTOTOTOTOTOT\n\n\n");
+        //
         
         if (r == null) {
             r = new Relation(Relation.SYN, t1, t2, false);
@@ -102,7 +102,7 @@ public class TURTLEModeling {
             return;
         }
         
-        //System.out.println("TOTOTOTOTOTOTOTOTOTOT\n\n\n");
+        //
         
         if (r.type != Relation.SYN) {
             return;
@@ -162,7 +162,7 @@ public class TURTLEModeling {
             tmp = tclass.elementAt(i);
 			if (tmp.getName().endsWith(end)) {
 				tclasses.add(tmp);
-				System.out.println("Adding tclass:" + tmp.getName());
+				
 			}
         }
 	}
@@ -312,9 +312,9 @@ public class TURTLEModeling {
 				if (!choicesDeterministic) {
 					if (!adchoice.isSpecialChoiceDelay(variableAsActions)) {
 						if (!adchoice.isElseChoice()) {
-							System.out.println("Choice is not regular");
+							
 							for(int j=0; j<adchoice.getNbNext(); j++) {
-								System.out.println("guard[" + j + "]=" + adchoice.getGuard(j));
+								
 							}
 							return false;
 						}
@@ -669,7 +669,7 @@ public class TURTLEModeling {
     public static String manageDataStructures(TClass t, String s) {
         // *.* -> *__*
         s = Conversion.replaceAllChar(s, '.', "__");
-        //System.out.println("Returning data: " + s);
+        //
         return s;
     }
     
@@ -681,7 +681,7 @@ public class TURTLEModeling {
         // g!pdu.x -> g!pdu__x
         s = Conversion.replaceAllChar(s, '.', "__");
         
-        //System.out.println("s=" + s);
+        //
         
         // g!pdu -> g!pdu__x!pdu__y
         s = manageGateDataStructuresChar(t, s, '!');
@@ -689,7 +689,7 @@ public class TURTLEModeling {
             return null;
         }
         
-        //System.out.println("s=" + s);
+        //
         
         // g?pdu -> g?pdu__x?pdu__y
         s = manageGateDataStructuresChar(t, s, '?');
@@ -697,12 +697,12 @@ public class TURTLEModeling {
             return null;
         }
         
-        //System.out.println("Returning " + s);
+        //
         return s;
     }
     
     private static String manageGateDataStructuresChar(TClass t, String s, char c) {
-        //System.out.println("Manage data structure with " + c + " on " + s);
+        //
         String ret = "";
         String stmp, paramName;
         Param p;
@@ -738,7 +738,7 @@ public class TURTLEModeling {
 					paramName = s.substring(index+1, index4+index+1);
 					paramName = paramName.trim();
 					
-					//System.out.println("Param = " + paramName);
+					//
 					
 					// Numerical param ?
 					int param;
@@ -887,7 +887,7 @@ public class TURTLEModeling {
     
     // Assumes only one link is linked to component to which tclass is c
     public void removeAllElement(Class c, ADComponent adc2, ActivityDiagram ad) {
-        //System.out.println("Removing all elements of type " + c);
+        //
         
         ADComponent adc, adc1;
         int i = 0;
@@ -895,7 +895,7 @@ public class TURTLEModeling {
             adc = ad.elementAt(i);
             if (c.isInstance(adc)) {
                 //if (adc instanceof ADStop) {
-					//System.out.println("Found an addstop");
+					//
 					adc1 = ad.getFirstComponentLeadingTo(adc);
 					if (adc1 != null) {
 						adc1.updateNext(adc, adc2);
@@ -912,9 +912,9 @@ public class TURTLEModeling {
     // synchronization bar with only one incoming branch and one output branch -> removed
     public void optimize() {
         // synchronization bar with only one incoming branch and one output branch -> removed
-        //System.out.println("Working on parallels");
+        //
         removeUselessParallel();
-        //System.out.println("Working on junctions");
+        //
         removeUselessJunction();
         
         removeUselessSequence();
@@ -924,7 +924,7 @@ public class TURTLEModeling {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
-            //System.out.println("t=" + t.getName());
+            //
             removeUselessParallel(t.getActivityDiagram());
         }
     }
@@ -933,7 +933,7 @@ public class TURTLEModeling {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
-            //System.out.println("t=" + t.getName());
+            //
             removeUselessJunction(t.getActivityDiagram());
         }
     }
@@ -942,7 +942,7 @@ public class TURTLEModeling {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
-            //System.out.println("t=" + t.getName());
+            //
             removeUselessSequence(t.getActivityDiagram());
         }
     }
@@ -960,7 +960,7 @@ public class TURTLEModeling {
             if (adc instanceof ADParallel) {
                 if ((adc.getNbNext() == 1) && (ad.getNbComponentLeadingTo(adc) == 1)) {
                     adc1 = ad.getFirstComponentLeadingTo(adc);
-                    //System.out.println(adc1.hashCode() + " leads to " + adc1.getNext(0).hashCode() + " and " + adc.hashCode() + "leads to");
+                    //
                     if (adc1 != null) {
                         adc1.updateNext(adc, adc.getNext(0));
                         ad.removeElement(adc);
@@ -981,9 +981,9 @@ public class TURTLEModeling {
             adc = ad.elementAt(i);
             if (adc instanceof ADJunction) {
                 if (ad.getNbComponentLeadingTo(adc) == 1) {
-                    //System.out.println("Found a junction to remove");
+                    //
                     adc1 = ad.getFirstComponentLeadingTo(adc);
-                    //System.out.println("Component leading to junction:" +  adc1);
+                    //
                     if (adc1 != null) {
                         adc1.updateNext(adc, adc.getNext(0));
                         ad.removeElement(adc);
@@ -1004,9 +1004,9 @@ public class TURTLEModeling {
             adc = ad.elementAt(i);
             if (adc instanceof ADSequence) {
                 if ((adc.getNbNext() == 1) && (ad.getNbComponentLeadingTo(adc) == 1)) {
-                    //System.out.println("Found a sequence to remove");
+                    //
                     adc1 = ad.getFirstComponentLeadingTo(adc);
-                    //System.out.println("Component leading to junction:" +  adc1);
+                    //
                     if (adc1 != null) {
                         adc1.updateNext(adc, adc.getNext(0));
                         ad.removeElement(adc);
@@ -1034,7 +1034,7 @@ public class TURTLEModeling {
         int i = 0;
         int j, k;
         
-		//System.out.println("Remove All useless components");
+		//
         if (specialChoices) {
 			ad.makeSpecialChoices(false);
         }
@@ -1050,7 +1050,7 @@ public class TURTLEModeling {
             if ((adc instanceof ADParallel) || (adc instanceof ADPreempt) || (adc instanceof ADSequence) || (adc instanceof ADJunction)) {
                 if (adc instanceof ADParallel) {
 					if (debug)
-                        System.out.println("Found a parallel " + adc + " nbLeadingto" + ad.getNbComponentLeadingTo(adc) + " nbNext=" + adc.getNbNext());    
+                        
                 }
 				if ((adc.getNbNext() > 1) && ((adc instanceof ADParallel) || (adc instanceof ADSequence))) {
 					int branch = oneBranchAlwaysLeadingToStop(adc);
@@ -1061,9 +1061,9 @@ public class TURTLEModeling {
 					
 					if (adc instanceof ADSequence) {
 						branch = branchNeverLeadingToStop(adc);
-						//System.out.println("branch=" + branch);
+						//
 						if ((branch > -1) && (branch != adc.getNbNext()-1)){
-							System.out.println("Removing nexts branch=" + branch);
+							
 							adc.removeAllNextAfter(branch);
 							return removeAllUselessComponent(ad, debug, specialChoices);
 						}
@@ -1072,20 +1072,20 @@ public class TURTLEModeling {
 	
                 if ((adc.getNbNext() == 1) && (ad.getNbComponentLeadingTo(adc) == 1)) {
                     if (debug)
-                        System.out.println("Only one leading to and exiting from " + adc);
+                        
                     adc1 = ad.getFirstComponentLeadingTo(adc);
-                    //System.out.println(adc1.hashCode() + " leads to " + adc1.getNext(0).hashCode() + " and " + adc.hashCode() + "leads to");
+                    //
                     if (adc1 != null) {
                         adc1.updateNext(adc, adc.getNext(0));
                         if (debug)
-                            System.out.println("removing " + adc);
+                            
                         ad.removeElement(adc);
                         return removeAllUselessComponent(ad, debug, specialChoices);
                     }
                 } else if (adc instanceof ADJunction) {
                     // Junction looping on itself?
                     if (debug)
-						System.out.println("Managing junction");
+						
 					
 						if (adc.getNext(0) == adc) {
 							adstop = new ADStop();
@@ -1099,7 +1099,7 @@ public class TURTLEModeling {
 						adc1 = adc.getNext(0);
 						if (adc1 instanceof ADJunction) {
 							if (debug) {
-								System.out.println("Next is also a junction next1st= " + ad.getNbComponentLeadingTo(adc)+ " next 2nd=" + ad.getNbComponentLeadingTo(adc1));
+								
 							}
 							
 							if ((ad.getNbComponentLeadingTo(adc) + ad.getNbComponentLeadingTo(adc1)) < 5) {
@@ -1123,11 +1123,11 @@ public class TURTLEModeling {
                     }
                     if ((guard == null) ||(guard.compareTo("[]") ==0) || (guard.compareTo("[ ]")==0)) {
                         adc1 = ad.getFirstComponentLeadingTo(adc);
-                        //System.out.println(adc1.hashCode() + " leads to " + adc1.getNext(0).hashCode() + " and " + adc.hashCode() + "leads to");
+                        //
                         if (adc1 != null) {
                             adc1.updateNext(adc, adc.getNext(0));
                             if (debug)
-                                System.out.println("removing " + adc);
+                                
                             ad.removeElement(adc);
                             return removeAllUselessComponent(ad, debug, specialChoices);
                         }
@@ -1136,7 +1136,7 @@ public class TURTLEModeling {
                 
                 
                 if (debug) {
-                    System.out.println("choice=" + adcc.toString());
+                    
                 }
                 // Choice with the same next components and the same guard
                 if (adc.getNbNext() > 1) {
@@ -1147,12 +1147,12 @@ public class TURTLEModeling {
                             
                             if ((adc1 == adc2) && (adcc.getGuard(j).compareTo(adcc.getGuard(k)) ==0)){
                                 if (debug) {
-                                    System.out.println("adc1=" + adc1 +  " = adc2=" + adc2);
-                                    System.out.println("removing next of choice " + adc1);
+                                    
+                                    
                                 }
                                 adcc.removeNext(adc2);
                                 if (debug) {
-                                    System.out.println("NOW: choice=" + adcc.toString());
+                                    
                                 }
                                 return removeAllUselessComponent(ad, debug, specialChoices);
                             }
@@ -1200,22 +1200,22 @@ public class TURTLEModeling {
 		Param p; 
 		CheckingError error;
 		
-		//System.out.println("Analyzing variables in " + t.getName());
+		//
 		for(i=0; i<t.paramNb(); i++) {
 			p = t.getParam(i);
-			//System.out.println("Analyzing p=" + p.getName() + " i=" + i);
+			//
 			
 			if (p.isNat() || p.isBool()) {
-				//System.out.println("Getting usage");
+				//
 				usage = getUsageOfParam(t, p);
-				//System.out.println("End getting usage");
+				//
 				if (usage == 0) {
 					if (warnings != null) {
 						error = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Param " + p.getName() + " of tclass " + t.getName() + " is never used -> removing");
 						error.setTClass(t);
 						warnings.add(error);
 					}
-					//System.out.println("Param " + p.getName() + " of tclass " + t.getName() + " is never used -> removing");
+					//
 					t.removeParam(i);
 					i--;
 				} else if (usage ==1) {
@@ -1230,7 +1230,7 @@ public class TURTLEModeling {
 				}
 			}
 		}
-		//System.out.println("End analyzing variables in " + t.getName());
+		//
 	}
 	
 	// Returns how a given parameter is used in a class
@@ -1414,18 +1414,18 @@ public class TURTLEModeling {
 				adag.setActionValue(putParamValueInString(adag.getActionValue(), p));
 			} else if (adc instanceof ADActionStateWithParam) {
 				adap = (ADActionStateWithParam)adc;
-				//System.out.println("Param=" + p.getName() + " before=" + adap.getActionValue());
+				//
 				adap.setActionValue(putParamValueInString(adap.getActionValue(), p));
-				//System.out.println("Param=" + p.getName() + " after=" + adap.getActionValue());
+				//
 			} else if (adc instanceof ADChoice) {
 				adch = (ADChoice)adc;
 				for(j=0; j<adch.getNbGuard(); j++) {
 					//v1 = adch.getGuard(j);
-					//System.out.println("Param=" + p.getName() + " before=" + adch.getGuard(j));
+					//
 					adch.setGuard(putParamValueInString(adch.getGuard(j), p), j);
 					//v2 = adch.getGuard(j);
 					/*if ((v1.compareTo(v2) != 0) || ((p.getName().indexOf("nbOfComputed") > -1) && v1.indexOf("nbOfComputed") > -1)){
-						System.out.println("Param=" + p.getName() + " before=" + v1 + " after=" +v2);
+						
 					}*/
 				}
 			} else if (adc instanceof ADDelay) {
@@ -1493,11 +1493,11 @@ public class TURTLEModeling {
 		Gate g;
 		CheckingError error;
 		
-		//System.out.println("Removing useless gates");
+		//
 		
 		for(i=0; i<t.gateNb(); i++) {
 			g = t.getGate(i);
-			//System.out.println("Gate=" + g.getName());
+			//
 			if (usageGate(t, g, warnings) == 0) {
 				if (warnings != null) {
 					error = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Gate " + g.getName() + " of tclass " + t.getName() + " is never used -> removing");
@@ -1598,7 +1598,7 @@ public class TURTLEModeling {
         
         for(i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
-            System.out.println("\nTClass " + t.getName());
+            
 			t.printParamsValues();
 			t.printGates();
 			//t.getActivityDiagram().print();
@@ -1606,7 +1606,7 @@ public class TURTLEModeling {
         
         for(i=0; i<relation.size(); i++) {
             r = relation.elementAt(i);
-            //System.out.println("\nTClass " + t.getName());
+            //
             r.print();
         }
     }
@@ -1620,7 +1620,7 @@ public class TURTLEModeling {
         for(i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
             if (t.getName().compareTo(className) ==0) {
-                System.out.println("\nTClass " + t.getName());
+                
                 t.getActivityDiagram().print();
             }
         }
@@ -1642,7 +1642,7 @@ public class TURTLEModeling {
         sb.append("\n\nRelations:\n");
         for(i=0; i<relation.size(); i++) {
             r = relation.elementAt(i);
-            //System.out.println("\nTClass " + t.getName());
+            //
             r.printToStringBuffer(sb);
         }
         return sb;
@@ -1652,7 +1652,7 @@ public class TURTLEModeling {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
-            System.out.println("\nSimplifying 1  t=" + t.getName());
+            
             removeAllUselessComponent(t.getActivityDiagram(), false);
         }
     }
@@ -1663,13 +1663,13 @@ public class TURTLEModeling {
             t = tclass.elementAt(i);
 			
             if (debug) {
-				System.out.println("\n********************** Simplifying t=" + t.getName());
-				System.out.println("***** nbOfjunctions=" + t.getNbOfJunctions());
+				
+				
             }
-			System.out.println("Simplify 2");
+			
             removeAllUselessComponent(t.getActivityDiagram(), debug);
             if (debug) {
-				System.out.println("\n***** nbOfjunctions=" + t.getNbOfJunctions());
+				
             }
         }
     }
@@ -1680,12 +1680,12 @@ public class TURTLEModeling {
             t = tclass.elementAt(i);
 			
             if (debug) {
-				System.out.println("\n********************** Simplifying t=" + t.getName());
-				System.out.println("***** nbOfjunctions=" + t.getNbOfJunctions());
+				
+				
             }
             removeAllUselessComponent(t.getActivityDiagram(), debug, specialChoices);
             if (debug) {
-				System.out.println("\n***** nbOfjunctions=" + t.getNbOfJunctions());
+				
             }
         }
     }
@@ -1694,15 +1694,15 @@ public class TURTLEModeling {
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
-			System.out.println("\n********************** Counting for t=" + t.getName());
-			System.out.println("***** nbOfjunctions=" + t.getNbOfJunctions());
+			
+			
         }
     }
     
     
     
     public void simplify(ActivityDiagram ad, boolean debug) {
-		//System.out.println("Simplify 3");
+		//
         removeAllUselessComponent(ad, debug, false);
     }
     
@@ -1710,7 +1710,7 @@ public class TURTLEModeling {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
-            //System.out.println("Testing " + t.getName());
+            //
             /*if (t.getName().compareTo("StreamDataServ") == 0) {
                 removeInfiniteLoopsAD(t.getActivityDiagram(), true);
             } else {*/
@@ -1725,10 +1725,10 @@ public class TURTLEModeling {
         
         while((modified) && (i<5000)) {
             // simplify the ad
-            //System.out.println("Simplify");
+            //
             simplify(ad, debug);
             // Remove unnecessary loops -> unroll non blocking components
-            //System.out.println("Unroll");
+            //
             modified = unrollComponents(ad, debug);
             //modified = false; // for debug -> to be removed
             i++;
@@ -1743,10 +1743,10 @@ public class TURTLEModeling {
         for(int i=0; i<ad.size(); i++) {
             adc = ad.elementAt(i);
             if ((adc instanceof ADChoice) ||(adc instanceof ADParallel) ||(adc instanceof ADSequence) || (adc instanceof ADPreempt)){
-                //System.out.println("Needs unrolling?");
+                //
                 path = needsUnrolling(ad, adc);
                 if (path != null) {
-                    //System.out.println("Necessary unrolling found");
+                    //
                     unroll(ad, adc, path, debug);
                     return true;
                 }
@@ -1798,11 +1798,11 @@ public class TURTLEModeling {
         ADJunction adj;
         ADComponent toModify;
         
-        //System.out.println("Size of path=" + path.size() + " from " + adcStartingLoop.toString() + "/" + adcStartingLoop.hashCode());
+        //
         
         
         if (path.size() <1) {
-            System.out.println("Internal error at unroll");
+            
             System.exit(-1);
         }
         
@@ -1813,7 +1813,7 @@ public class TURTLEModeling {
         }
         
         /*for(int k=0; k<path.size(); k++) {
-            System.out.println("" + k + "\t elt = " + path.elementAt(k).toString() + "/" + path.elementAt(k).hashCode());
+            
         }*/
         
         
@@ -1823,7 +1823,7 @@ public class TURTLEModeling {
         // We assume a junction is in the path
         // Otherwise -> error !
         
-        //System.out.println("Complex path");
+        //
         
         ADComponent adc = null;
         for(i=path.size()-1; i>0; i--) {
@@ -1833,7 +1833,7 @@ public class TURTLEModeling {
             }
         }
         if (!(adc instanceof ADJunction)) {
-            //System.out.println("AD could not be modified -> no junction");
+            //
             return;
         }
         
@@ -1841,7 +1841,7 @@ public class TURTLEModeling {
         toModify = (ADComponent)(path.elementAt(i-1));
         
         //From junction -> rebuild a new AD !
-        //System.out.println("Substitute to null");
+        //
         ad.setAllSubstituteToNull();
         
         Vector<ADComponent> pathOld = new Vector<>();
@@ -1849,18 +1849,18 @@ public class TURTLEModeling {
         
         pathOld.add(adc.getNext(0)); // A junction has only one next component
         
-        /*System.out.println("*** print initial AD ***");
+        /*
         ad.print();*/
         
-        //System.out.println("Rebuild");
+        //
         RebuildADFrom(ad, pathOld, adc, debug);
-        //System.out.println("End rebuild");
+        //
         
-        /*System.out.println("*** print AD ***");
+        /*
         ad.print();*/
         
         // Remove all nexts leading to stop
-        //System.out.println("Remove next stop");
+        //
         removeNextToADStopInSubstitute(ad);
         
         // Add elements to the AD
@@ -1871,21 +1871,21 @@ public class TURTLEModeling {
             }
         }
         
-        /*System.out.println("*** print AD ***");
+        /*
         ad.print();*/
         
         // Add junctions where necessary
         ad.setRegularJunctions();
         
-        /*System.out.println("print");
+        /*
         ad.print();*/
         
         // Link from the beginning to the new structure
-        //System.out.println("Linking to the beginning");
+        //
         int index = toModify.getAllNext().indexOf(adj);
-        //System.out.println("Linking to the beginning index=" + index);
+        //
         if (adj.getNext(0).substitute == null) {
-            //System.out.println("NULLLLLLLLLLLLLLLLLLLLLLLL nextADJ:" + adj.getNext(0).toString());
+            //
             //toModify.setNextAtIndex(adj.getNext(0), index);
             // Add junctions where necessary
             //ad.setRegularJunctions();
@@ -1895,12 +1895,12 @@ public class TURTLEModeling {
         } else {
             toModify.setNextAtIndex(adj.getNext(0).substitute, index);
         }
-        /*System.out.println("print");
+        /*
         ad.print();*/
         // Remove all non referenced elements
         ad.removeAllNonReferencedElts();
         
-        /*System.out.println("Last print:");
+        /*
         ad.print();*/
     }
     
@@ -1914,7 +1914,7 @@ public class TURTLEModeling {
         if (!(adc instanceof NonBlockingADComponent)) {
             // Create the right path if necessary and add the right components to the new ad, and the old one;
             createAD(path, adc, adcToAvoid, debug);
-            //System.out.println("Found path to " + adc.toString() + "/" + adc.hashCode());
+            //
             return;
         } else {
             if (adc == adcToAvoid) {
@@ -1984,7 +1984,7 @@ public class TURTLEModeling {
                     }
                     adc.substitute = adj;
                 } else {
-                    System.out.println("Operator not taken into acount:" + adc);
+                    
                     System.exit(-1);
                 }
                 
@@ -2010,7 +2010,7 @@ public class TURTLEModeling {
         adc1 = path.elementAt(path.size()-2);
         adc3 = adc1.substitute;
         index = adc1.getAllNext().indexOf(finalAdc);
-        //System.out.println("Index:" + index);
+        //
         adc3.setNextAtIndex(finalAdc, index);
     }
     
@@ -2096,7 +2096,7 @@ public class TURTLEModeling {
 				
 				
                 // we go back on the path until we find the first component having several next components or being back to the last one ...
-                //System.out.println("Performing unrolling");
+                //
                 //ad.print();
                 found = false;
                 i = path.size()-1;
@@ -2115,12 +2115,12 @@ public class TURTLEModeling {
                     try {
 						adcclone = (ADComponent)(adctest.clone());
                     } catch (Exception e) {
-                        System.out.println("Exception cloning");
+                        
                         System.exit(0);
                     }
                     ad.add(adcclone);
                     if (debug)
-                        System.out.println("Adding component");
+                        
 						if (i == (path.size()-1)) {
 							adcclone.removeNext(ad2);
 						} else {
@@ -2137,7 +2137,7 @@ public class TURTLEModeling {
 						}
                 } else {
                     if (debug)
-						System.out.println("Removing component");
+						
 						if (path.size() > 1) {
 							ad2.removeNext((ADComponent)(path.elementAt(1)));
 						} else {
@@ -2145,7 +2145,7 @@ public class TURTLEModeling {
 						}
                 }
                 if (debug)
-					System.out.println("Unrolling done");
+					
                 //ad.print();
                 return true;*/
             /*}
@@ -2226,7 +2226,7 @@ public class TURTLEModeling {
     }*/
     
     /*public String makeGuard(String g) {
-        System.out.println("guard = " + g);
+        
         return "[ ]";
     }*/
     
@@ -2235,7 +2235,7 @@ public class TURTLEModeling {
         TClass t;
         for(int i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
-            //System.out.println("----------------------- Testing choices of " + t.getName());
+            //
             removeChoicesLeadingToStopAD(t.getActivityDiagram());
         }
     }
@@ -2263,14 +2263,14 @@ public class TURTLEModeling {
             adc = ad.elementAt(i);
             if (adc instanceof ADChoice) {
                 adch = (ADChoice)adc;
-                //System.out.println("Testing " + adch.toString() + "/" + adch.hashCode());
+                //
                 adPathAction = getPathAction(adch);
                 adPathStop = getPathStop(adch);
                 //ystem.out.println("Exploring paths adPathAction=" + adPathAction + " adPathStop=" + adPathStop);
                 if ((adPathAction > -1) && (adPathStop > -1) && (adPathAction != adPathStop)) {
-                    //System.out.println("Choices with action and stop paths found");
+                    //
                     if (!adch.isGuarded(adPathStop)) {
-                        //System.out.println("Removing path");
+                        //
                         adch.removeNext(adch.getNext(adPathStop));
                         return true;
                     }
@@ -2342,7 +2342,7 @@ public class TURTLEModeling {
             foundAction = explorePathAction(adc, path, adch);
             path.removeAllElements();
             foundStop = explorePathStop(adc, path, adch);
-            //System.out.println("foundAction=" + foundAction + " foundStop=" + foundStop);
+            //
             if ((!foundAction) && (foundStop)){
                 return i;
             }
@@ -2360,7 +2360,7 @@ public class TURTLEModeling {
         }
         
         if (adc instanceof ADStop) {
-            //System.out.println("Stop found");
+            //
             return true;
         }
         
@@ -2385,31 +2385,31 @@ public class TURTLEModeling {
         
         int nb1 = myutil.Conversion.nbChar(value, '!');
         int nb2 = myutil.Conversion.nbChar(value, '?');
-        //System.out.println("Nb of synchro of " + value + " = " + (nb1 + nb2));
+        //
         return nb1 + nb2;
     }
     
     public boolean isSendingSynchro(String value, int index) {
         
-        //System.out.println("IsSending value=" + value + " index=" + index);
+        //
         value = getSynchroAt(value, index);
         
         if (value.length() < 1) {
-            //System.out.println("error");
+            //
             return false;
         }
         
         if (value.charAt(0) == '!') {
-            //System.out.println("Is sending!");
+            //
             return true;
         }
         
-        //System.out.println("Is not sending!");
+        //
         return false;
     }
     
     public String getSynchroAt(String value, int index) {
-        //System.out.println("getSynchroAt value=" + value + " index=" + index);
+        //
         //int ind;
         //int total = index;
         String s;
@@ -2429,7 +2429,7 @@ public class TURTLEModeling {
             if (index == 0) {
                 value = value.substring(ind5, value.length());
                 s = value.substring(1, value.length());
-                //System.out.println("value = " + value + " s=" + s);
+                //
                 ind1 = s.indexOf('!');
                 ind2 = s.indexOf('?');
                 if (ind1 == -1)
@@ -2443,7 +2443,7 @@ public class TURTLEModeling {
 						ind2 = ind2 + 1;
 					ind5 = Math.min(ind1, ind2);
 					value = value.substring(0, ind5).trim();
-					//System.out.println("returning 2 " + value);
+					//
 					return value;
 					
             }
@@ -2455,7 +2455,7 @@ public class TURTLEModeling {
             ind1 = value.indexOf('!');
             ind2 = value.indexOf('?');
         }
-        //System.out.println("Error");
+        //
         return "";
     }
     
@@ -2468,26 +2468,26 @@ public class TURTLEModeling {
             value = value.substring(0, ind);
         }
         
-        //System.out.println("Nat? : " + value);
+        //
         
         if (value.equals("true") || value.equals("false")) {
-            //System.out.println("bool");
+            //
             return false;
         }
         
         Param p = t.getParamByName(value);
         if (p == null) {
             // numerical value or malformed tm
-            //System.out.println("numeric / malformed");
+            //
             return true;
         }
         
         if (p.getType() == Param.NAT) {
-            //System.out.println("Nat !");
+            //
             return true;
         }
         
-        //System.out.println("Bool !");
+        //
         return false;
     }
     
@@ -2556,7 +2556,7 @@ public class TURTLEModeling {
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
 			t = tclass.elementAt(i);
-			//System.out.println("----------------------- Testing choices of " + t.getName());
+			//
 			unrollRecursions(t.getActivityDiagram(), n);
         }
     }
@@ -2576,7 +2576,7 @@ public class TURTLEModeling {
 			adc = ad.elementAt(i);
 			if (adc instanceof ADParallel) {
 				if (hasRecursion(adc)) {
-					System.out.println("Recursion found -> unrolling " + n + " times");
+					
 					return unroll(adc, n);
 				}
 			}
@@ -2682,7 +2682,7 @@ public class TURTLEModeling {
     }
 	
 	public void unmergeChoices() {
-		System.out.println("Unmerging choices: algorithm");
+		
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
 			t = tclass.elementAt(i);
@@ -2713,7 +2713,7 @@ public class TURTLEModeling {
     }
 	
 	public void unmergeChoices(ActivityDiagram ad, ADChoice adch) {
-		//System.out.println("Nb of next=" + adch.getNbNext());
+		//
 		// We remove the three first ones
 		ADChoice tmp = new ADChoice();
 		ad.add(tmp);
@@ -2731,13 +2731,13 @@ public class TURTLEModeling {
     }
 	
 	public void mergeAllChoices() {
-		System.out.println("Merging choices: algorithm");
+		
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
 			t = tclass.elementAt(i);
 			mergeChoices(t.getActivityDiagram());
         }
-		System.out.println("End merging choices: algorithm");
+		
     }
 	
 	
@@ -2768,7 +2768,7 @@ public class TURTLEModeling {
 	public void mergeChoices(ActivityDiagram ad, ADChoice adch1, int index) {
 		String g1, g2;
 		ADChoice adch2 = (ADChoice)(adch1.getNext(index));
-		System.out.println("Merging adch1=" + adch1 + " with adch2=" + adch2 + " of index=" + index);
+		
 		
 		ADComponent adc;
 		for (int i=0; i<adch2.getNbNext(); i++) {
@@ -2800,7 +2800,7 @@ public class TURTLEModeling {
 		adch1.removeNext(adch2);
 		ad.remove(adch2);
 		
-		System.out.println("New choice:" + adch1.toString());
+		
 	}
 	
 	public void makeSequenceWithDataSave() {
@@ -2961,7 +2961,7 @@ public class TURTLEModeling {
 		// Test whether it should be removed or not
 		if (canBeRemovedDataSave1(ad, ads)) {
 			removeSequenceDataSave(ad, ads);
-			//System.out.println("Symplifying one sequence");
+			//
 			simplify(ad, false);
 			return true;
 		}
@@ -3165,7 +3165,7 @@ public class TURTLEModeling {
 		// and we skip to next word
 		String ret = "", var = "";
 		
-		//System.out.println("Analyzing action=" + action);
+		//
 		action = action + " ";
 		char[] chars= action.toCharArray();
 		

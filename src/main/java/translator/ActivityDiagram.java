@@ -256,7 +256,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         
         while ((found == false) && (i<size())) {
             adc = elementAt(i);
-            //System.out.println("i=" + i);
+            //
             i++;
             if (adc instanceof ADActionStateWithMultipleParam) {
                 found = true;
@@ -270,11 +270,11 @@ public class ActivityDiagram extends Vector<ADComponent>{
                 // creating regular action states
                 for(j=0; j<nbActions; j++) {
                     action = admp.getAction(j);
-                    //System.out.println("j= " + j + " action =**" + action + "** parent=" + parent);
+                    //
                     
                     p = parent.getParamFromActionState(action);
                     if (p == null) {
-                        System.out.println("Translation error at translateActionStatesWithMultipleParams level");
+                        
                         return;
                     }
                     adsp[j] = new ADActionStateWithParam(p);
@@ -286,13 +286,13 @@ public class ActivityDiagram extends Vector<ADComponent>{
                 
                 // adding new regular action states
                 for(j=0; j<nbActions; j++) {
-                    //System.out.println("Adding " + adsp[j]);
+                    //
                     add(adsp[j]);
                 }
                 
                 // updating links
                 for (j=1; j<nbActions; j++) {
-                    //System.out.println("Updating link j=" + j);
+                    //
                     adsp[j-1].addNext(adsp[j]);
                 }
                 adsp[nbActions-1].setNewNext(admp.getAllNext());
@@ -313,12 +313,12 @@ public class ActivityDiagram extends Vector<ADComponent>{
     public void print() {
         StringBuffer sb = new StringBuffer();
         printToStringBuffer(sb);
-        System.out.println(sb);
+        
         /*ADComponent adc;
         for(int i=0; i<size(); i++) {
             adc = (ADComponent)(elementAt(i));
-            System.out.println(adc.toString() + "/" + adc.hashCode() + " ");
-            System.out.println(printNextsToStringBuffer(adc));     
+            
+            
         }*/
         
     }
@@ -328,7 +328,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         for(int i=0; i<size(); i++) {
             adc = elementAt(i);
             sb.append(adc.toString() + "/" + adc.hashCode() + " ");
-            //System.out.println("appending i main=" + i + " component" + adc.toString());
+            //
             sb.append(printNextsToStringBuffer(adc));
         }
     }
@@ -337,7 +337,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         String s = "";
         Vector<ADComponent> v = adc.getAllNext();
         ADComponent adcbis;
-        //System.out.println("Size of v:" + v.size());
+        //
         s = s+"\n\tNext: ";
         if (v.size() == 0) {
             return new StringBuffer(s + "none\n");
@@ -345,7 +345,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         
         for(int i=0; i<v.size(); i++) {
             adcbis = v.elementAt(i);
-            //System.out.println("appending i=" + i + " component" + adcbis.toString());
+            //
             if (adcbis != null) {
                 s = s + adcbis.toString() + "/" + adcbis.hashCode() + " ";
             } else {
@@ -359,7 +359,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
         ADComponent adc;
         while((adc = hasNonReferencedElts()) != null) {
             remove(adc);
-			System.out.println("removed: " + adc);
+			
         }
     }
     
@@ -536,7 +536,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
       ADActionStateWithGate adag, adag1;
       ADJunction adj;
 
-      //System.out.println("Working on choice=" + adch);
+      //
 
       for(int i=0; i<adch.getNbGuard(); i++) {
         delay = 0;
@@ -559,14 +559,14 @@ public class ActivityDiagram extends Vector<ADComponent>{
                }
              }
            }
-           //System.out.println("->Found choice=" + adch);
+           //
            if ((adc instanceof ADChoice) && (delay <1) && (adc != adch)) {
              // Combine choices together
              adch1 = (ADChoice)adc;
              if (adch1.isSpecialChoice(variableAsActions)) {
                //Good!
                //adch.removeGuard(i);
-               //System.out.println("Working on it...");
+               //
                for(int j=0; j<adch1.getNbGuard(); j++) {
                  adj = new ADJunction();
                  adag = adch1.getADActionStateWithGate(j);
@@ -592,9 +592,9 @@ public class ActivityDiagram extends Vector<ADComponent>{
                  add(adag1);
                  add(adj);
                  if (adch.isSpecialChoice(variableAsActions)) {
-                    //System.out.println("Now, special choice!");
+                    //
                  } else {
-                   //System.out.println("Still not a special choice!");
+                   //
                  }
                }
                adch.removeGuard(i);
@@ -624,9 +624,9 @@ public class ActivityDiagram extends Vector<ADComponent>{
              add(adj);
 
              if (adch.isSpecialChoice(variableAsActions)) {
-                System.out.println("Now, special choice!");
+                
              } else {
-               System.out.println("Still not a special choice!");
+               
              }
            }
         }
@@ -702,25 +702,25 @@ public class ActivityDiagram extends Vector<ADComponent>{
 			if (get(i) instanceof ADStart) {
 				ad.setRawStartState((ADStart)(ad.get(i)));
 			}
-			//System.out.println("i=" + i + " component=" + ad.get(i));
+			//
 		}
 		
 		// Must link components
 		for(i=0; i<ad.size(); i++) {
 			ad1 = ad.get(i);
-			//System.out.println("Nb opf next of " + ad1 + " = " + ad1.getNbNext());
+			//
 			ad2 = get(i);
 			
 			for(j=0; j<ad2.getNbNext(); j++) {
 				ad3 = ad2.getNext(j);
 				index = indexOf(ad3);
 				if (index > -1) {
-					//System.out.println("Linking i,j" + i + "," + j);
+					//
 					ad4 = ad.get(index);
 					ad1.addNext(ad4);
-					//System.out.println("Next of " + ad1 + " = " + ad4);
+					//
 				} else {
-					//System.out.println("Wrong index");
+					//
 				}
 			}
 		}
@@ -822,7 +822,7 @@ public class ActivityDiagram extends Vector<ADComponent>{
 		
 		remove(_multi);
 		
-		System.out.println("Multi removed");
+		
 		
 	}*/
 }

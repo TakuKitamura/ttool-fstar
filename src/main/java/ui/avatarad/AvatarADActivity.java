@@ -149,7 +149,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         Font f = g.getFont();
         Font fold = f;
 
-        //System.out.println("width=" + width + " height=" + height);
+        //
 
         /*if ((rescaled) && (!tdp.isScaled())) {
 
@@ -167,7 +167,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
             int w0, w1, w2;
             f = f.deriveFont((float)maxCurrentFontSize);
             g.setFont(f);
-            //System.out.println("max current font size:" + maxCurrentFontSize);
+            //
             while(maxCurrentFontSize > (minFontSize-1)) {
                 w0 = g.getFontMetrics().stringWidth(value);
                 if (w0 < (width - (2*textX))) {
@@ -189,7 +189,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
 
 	    }*/
 
-        //System.out.println("Current font size:" + currentFontSize);
+        //
 
         //Color c = g.getColor();
         //g.setColor(ColorManager.AVATAR_STATE);
@@ -311,7 +311,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
             return false;
         }
 
-        //System.out.println("Add swallow component");
+        //
         // Choose its position
 
         // Make it an internal component

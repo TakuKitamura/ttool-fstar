@@ -189,27 +189,27 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
     public void goElement() {
         if (graph == null) {
             graph = new AUTGraph();
-            //System.out.println("Building graph : " + data);
+            //
             graph.buildGraph(data);
             graph.computeStates();
-            //System.out.println("Build is done");
+            //
             if (stopped) {
                 return;
             }
         }
         graphDone = true;
-        //System.out.println("making components");
+        //
         makeComponents();
-        //System.out.println("setting finished");
+        //
         setFinished();
-        //System.out.println("Done");
+        //
     }
 
     public JFrameStatistics(String title, String dataAUT, AUTGraph graphAUT) {
         super(title);
         data = dataAUT;
         graph = graphAUT;
-        //System.out.println("dataAUT = " + dataAUT);
+        //
         stopAsSoonAsPossible = false;
     }
 
@@ -220,7 +220,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
 
 
         //jstat = new JStatisticsPanel(this, data);
-        //System.out.println("Building statistical elements");
+        //
         //tm = new StatisticsTableModel(data);
         tm = new StatisticsTableModel();
         tm.analyzeData(graph);
@@ -312,7 +312,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
         }
 
         // Table
-        //System.out.println("Building deadlock elements");
+        //
         JPanel jp1 = new JPanel();
         JPanel jp2 = new JPanel();
         JPanel jp3 = new JPanel();
@@ -342,7 +342,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
             return;
         }
 
-        //System.out.println("Deadlock table");
+        //
 
         ((jtableDeadlock.getColumnModel()).getColumn(0)).setPreferredWidth(Math.max(maxLengthColumn(framePanel, tmDeadlock, 0) + 20, 50));
         ((jtableDeadlock.getColumnModel()).getColumn(1)).setPreferredWidth(Math.max(maxLengthColumn(framePanel, tmDeadlock, 1) + 15, 100));
@@ -356,7 +356,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
             return;
         }
 
-        //System.out.println("End Deadlock table");
+        //
 
         // shortest paths
         GridBagLayout gridbag1 = new GridBagLayout();
@@ -382,7 +382,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
             return;
         }
 
-        //System.out.println("Graphical");
+        //
 
         /*/Integer[] tab1 = new Integer[graph.getNbState()];
 
@@ -449,20 +449,20 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
         c2.gridheight = 1;
 
         cycleDone = true;
-        //System.out.println("Searching for cycles");
+        //
         if (graph.getNbOfTransitions() < MAX_TRANSITIONS) {
             hasCycle = GraphAlgorithms.hasCycle(graph);
             cycleComputed = true;
         } else {
             cycleComputed = false;
         }
-        //System.out.println("End searching for cycles");
+        //
 
         if (shouldIStop()) {
             return;
         }
 
-        //System.out.println("G comp");
+        //
 
         label2 = new JLabel("Longest path from ");
         jp3.add(label2, c2);
@@ -550,12 +550,12 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
 
         pack();
 
-        System.out.println("G comp done");
+        
     }
 
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
-        //System.out.println("Command:" + command);
+        //
 
         if (command.equals("Close")) {
             dispose();
@@ -754,7 +754,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
             dss = GraphAlgorithms.LongestPathFrom(graph, from);
         }
 
-        //System.out.println("from=" + from + " to=" + to + " id=" + id);
+        //
 
         if (dss == null) {
             setPath("Paths calculation cancelled ...", id);
@@ -791,7 +791,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
             st = nextState;
         }
 
-        //System.out.println("Graph=" + automata.toAUT());
+        //
         if (id == 1) {
             lastShortestAutomata = automata;
             savePath.setEnabled(true);

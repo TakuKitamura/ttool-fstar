@@ -88,19 +88,19 @@ public class EBRDDERC extends EBRDDComponent {
 	
 	public boolean makeRoot() {
 		if (treeElements.size() ==0) {
-			System.out.println("Empty tree");
+			
 			return false;
 		}
 
 		if (treeElements.size() == 1) {
 			ERCElement elt = treeElements.get(0);
 			if (elt instanceof ESO) {
-				System.out.println("ESO with no leaf");
+				
 				return false;
 			}
 			
 			// Must add a new ESO
-			System.out.println("Default ESO added to ERC");
+			
 			ESO eso = new ESO("ESO", null);
 			eso.addSon(elt);
 			addTreeElement(eso);
@@ -118,7 +118,7 @@ public class EBRDDERC extends EBRDDComponent {
 				if (cpt != 1) {
 					// The ERB is the son of several ESOs or
 					// The ERB is not attached to an ESO
-					System.out.println("Malformed ERB: " + cpt);
+					
 					return false;
 				}
 			}
@@ -126,7 +126,7 @@ public class EBRDDERC extends EBRDDComponent {
 			if (elt instanceof ESO) {
 				// Must check that all ESO have at least one son
 				if (((ESO)elt).getNbOfSons() == 0) {
-					System.out.println("ESO with no son");
+					
 					return false;
 				}
 				
@@ -136,7 +136,7 @@ public class EBRDDERC extends EBRDDComponent {
 				if (isRoot((ESO)elt)) {
 					if (root != null) {
 						// Second root!!
-						System.out.println("More than one root");
+						
 						return false;
 					} else {
 						root = (ESO)elt;
@@ -147,7 +147,7 @@ public class EBRDDERC extends EBRDDComponent {
 		
 		// no root found!
 		if (root == null) {
-			System.out.println("no root found");
+			
 			return false;
 		}
 		
@@ -156,7 +156,7 @@ public class EBRDDERC extends EBRDDComponent {
 		// Must check that there is no cycle in the tree
 		ArrayList<ERCElement> mets = new ArrayList<ERCElement>();
 		if (hasCycle(root, mets)) {
-			System.out.println("hasCycle");
+			
 			return false;
 		}
 		

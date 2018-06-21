@@ -119,7 +119,7 @@ public class JDialogSelectCPDiagrams extends JDialogBase implements ActionListen
 
         for( int i = 0; i < list.size(); i++ ) {
             tgc = list.get(i);
-            //System.out.println(tgc);
+            //
             if ( ( tgc instanceof TMLCPRefSD ) || ( tgc instanceof TMLCPRefAD ) ) {
                 v.addElement( tgc );
             }
@@ -178,7 +178,7 @@ public class JDialogSelectCPDiagrams extends JDialogBase implements ActionListen
             tgc = source.get(i);
             if( ( tgc instanceof TMLCPRefSD ) && ( tgc instanceof TMLCPRefAD ) && ( !added.contains(tgc) ) && ( !notSource.contains(tgc) ) )    {
                 added.addElement( tgc );
-                //System.out.println("New element");
+                //
             }
         }
     }

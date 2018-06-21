@@ -121,7 +121,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
     }
 	
 	public boolean editOndoubleClick(JFrame frame) {
-        //System.out.println("Double click");
+        //
         int oldCapacity = capacity;
 		int oldParameter = parameter;
         String oldInterfaceName = interfaceName;
@@ -192,7 +192,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
     }
 	
 	public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-        //System.out.println("Extra");
+        //
         if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2)-maxWidthValue/2, ((p1.getY() + p2.getY()) / 2) - h/2 -heightValue + 2, maxWidthValue, heightValue)) {
             return this;
         }
@@ -220,7 +220,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 	
     @Override
 	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             
             NodeList nli;
@@ -233,12 +233,12 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
@@ -282,7 +282,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
             }
             
         } catch (Exception e) {
-			System.out.println("Error in NCNodeLink");
+			
             throw new MalformedModelingException();
         }
     }

@@ -41,6 +41,7 @@
 package ui;
 
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.tmlad.TMLActivityDiagramPanel;
 import ui.tmlad.TMLActivityDiagramToolBar;
 import ui.tmlcompd.TMLCPrimitiveComponent;
@@ -106,10 +107,8 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
     }
 
     public TMLActivityDiagramPanel getReferencedTMLActivityDiagramPanel(TDiagramPanel _tdp, String _name) {
-        //System.out.println("Searching for activity diagram of:" + _name);
         TMLActivityDiagramPanel tmladp = getTMLActivityDiagramPanel(_name);
         if (tmladp != null) {
-            //System.out.println("Locally found");
             return tmladp;
         }
 
@@ -118,7 +117,6 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
     }
 
     public void addTMLActivityDiagram(String s) {
-        //System.out.println("Adding TML diagram panel = " + s);
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
 
@@ -236,12 +234,11 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
             //if (tgc instanceof TMLCPrimitiveComponent) {
             tmlcpc = iterator.next();
             if (tmlcpc.getDIPLOID() != -1) {
-                //System.out.println("Searching for ad of name: " + tmlcpc.getValue());
                 tmladp = mgui.getReferencedTMLActivityDiagramPanel(tmlcpc.getTDiagramPanel(), tmlcpc.getValue());
                 if (tmladp != null) {
                     tmladp.getListOfBreakPoints(points, tmlcpc.getDIPLOID());
                 } else {
-                    System.out.println("Unknown panel:" + tmlcpc.getValue());
+                    TraceManager.addDev("Unknown panel:" + tmlcpc.getValue());
                 }
             }
 //            }

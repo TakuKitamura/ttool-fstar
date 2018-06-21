@@ -69,7 +69,7 @@ public class TURTLEOSClassDiagramPanel extends TDiagramPanel implements ClassDia
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        //System.out.println("Action");
+        //TraceManager.addDev("Action");
         if (tgc instanceof TOSClass) {
             TOSClass t = (TOSClass)tgc;
             return mgui.newTOSClassName(tp, t.oldValue, t.getValue());
@@ -85,7 +85,7 @@ public class TURTLEOSClassDiagramPanel extends TDiagramPanel implements ClassDia
     public boolean actionOnAdd(TGComponent tgc) {
         if (tgc instanceof TOSClass) {
             TOSClass tgcc = (TOSClass)(tgc);
-            //System.out.println(" *** add tclass *** name=" + tgcc.getClassName());
+            //TraceManager.addDev(" *** add tclass *** name=" + tgcc.getClassName());
             mgui.addTOSClass(tp, tgcc.getClassName());
             return true;
         }

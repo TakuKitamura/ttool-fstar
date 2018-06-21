@@ -313,7 +313,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
         //TraceManager.addDev("Element 1" + tgc + " added to SDInstance");
 
-        //System.out.println("Add swallow component");
+        //
         // Choose its position
         int realY = Math.max(y, getY() + spacePt());
         realY = Math.min(realY, getY() + height + spacePt());
@@ -379,7 +379,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
         for(int i=0; i<nbInternalTGComponent; i++) {
             tgc = tgcomponent[i];
             if (tgc instanceof SDCoregion) {
-                //System.out.println("Coregion found from " + tgc.getY() + " to " + (tgc.getY() + tgc.getHeight()));
+                //
                 if (tgc.isOnMe(tgc.getX(), yy) != null) {
                     return true;
                 }
@@ -389,16 +389,16 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
     }
 
     public boolean isInSameCoregion(int y1, int y2) {
-        //System.out.println("Is in same coregion y1=" + y1 + " y2=" + y2);
+        //
         int y11 = Math.min(y1, y2);
         int y22 = Math.max(y1, y2) +1;
         for(int i=y11; i<y22; i++) {
             if (!isInCoregion(i)) {
-                //System.out.println("No!");
+                //
                 return false;
             }
         }
-        //System.out.println("YES !");
+        //
         return true;
     }
 
@@ -485,7 +485,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
     // Method called when there is a resize order
     public void setUserResize(int desired_x, int desired_y, int desired_width, int desired_height) {
-        //System.out.println("newx = " + desired_x + " newy = " + desired_y + " minWidth = " + minWidth);
+        //
 
         setCd(desired_x, desired_y);
         actionOnUserResize(desired_width, desired_height);
@@ -562,7 +562,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             NodeList nli;
             Node n1, n2;
@@ -570,12 +570,12 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Actor")) {

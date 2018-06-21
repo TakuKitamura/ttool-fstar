@@ -184,7 +184,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
         {
 	    //Currently, at least one crossbar -> clustered
 	    if (crossbar instanceof AvatarCrossbar){
-		System.out.println("Clustered Interconnect found");
+		
 		crossbars.add((AvatarCrossbar)crossbar);
 		//crossbar.setClusterIndex(i); 
 		//i++;
@@ -220,7 +220,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       for (AvatarComponent copro : components )
         {
 	    if (copro instanceof AvatarCoproMWMR){
-			System.out.println("Coproc added to specification");
+			
 			//DG 19.09. associate HW task name 
 			//copro.putName(blockname);
             copros.add((AvatarCoproMWMR)copro);
@@ -236,7 +236,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       for (DiploComponent hwa : diplocomponents )
         {
 	    if (hwa instanceof DiploHWA){
-			System.out.println("Hardware accelerator added to specification");
+			
 
             hwas.add((DiploHWA)hwa);
 	    }

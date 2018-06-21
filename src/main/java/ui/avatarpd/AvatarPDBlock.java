@@ -135,7 +135,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		Font f = g.getFont();
 		Font fold = f;
 		
-		//System.out.println("width=" + width + " height=" + height);
+		//
 		
 		if ((rescaled) && (!tdp.isScaled())) {
 			
@@ -153,7 +153,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 			int w0, w1, w2;
 			f = f.deriveFont((float)maxCurrentFontSize);
 			g.setFont(f);
-			//System.out.println("max current font size:" + maxCurrentFontSize);
+			//
 			while(maxCurrentFontSize > (minFontSize-1)) {
 				w0 = g.getFontMetrics().stringWidth(value);
 				w1 = g.getFontMetrics().stringWidth(ster);
@@ -177,7 +177,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 			
 		}
 		
-		//System.out.println("Current font size:" + currentFontSize);
+		//
 		
 		Color c = g.getColor();
 		
@@ -490,7 +490,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 			return false;
 		}
 		
-        //System.out.println("Add swallow component");
+        //
         // Choose its position
         
         // Make it an internal component
@@ -501,7 +501,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
         //Set its coordinates
         if (tgc instanceof AvatarPDBlock) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
+            //
             tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
@@ -509,7 +509,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		
 		if (tgc instanceof AvatarPDAttribute) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
+            //
             tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
@@ -517,7 +517,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		
 		if (tgc instanceof AvatarPDSignal) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
+            //
             tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);

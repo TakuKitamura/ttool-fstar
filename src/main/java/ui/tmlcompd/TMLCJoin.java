@@ -107,7 +107,7 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
 
         // Draw arrow showing the connection if necessary
         //if (outp != null ){
-        //      System.out.println("non null outp CurrentOrientation=" + currentOrientation);
+        //      
         //}
 
 

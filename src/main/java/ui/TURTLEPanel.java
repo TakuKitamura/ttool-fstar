@@ -131,7 +131,7 @@ public abstract class TURTLEPanel implements GenericTree {
             tdp = panels.elementAt(i);
             s = tdp.saveInXML();
             if (s == null) {
-                //System.out.println("Null diagram");
+                //
                 return null;
             }
             sb.append(s);
@@ -151,7 +151,7 @@ public abstract class TURTLEPanel implements GenericTree {
         tdp = panels.elementAt(indexOfDiagram);
         s = tdp.saveInXML();
         if (s == null) {
-            //System.out.println("Null diagram");
+            //
             return null;
         }
         sb.append(s);
@@ -220,7 +220,7 @@ public abstract class TURTLEPanel implements GenericTree {
     }
 
     public void requestMoveRightTab(int index) {
-        //System.out.println("Move right");
+        //
         if (index > panels.size()-2) {
             return;
         }
@@ -229,7 +229,7 @@ public abstract class TURTLEPanel implements GenericTree {
     }
 
     public void requestMoveLeftTab(int index) {
-        //System.out.println("Move left");
+        //
         if (index < 1) {
             return;
         }

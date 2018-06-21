@@ -179,7 +179,7 @@ public class TMLCPRefSD extends TGCOneLineText {
 
 	@Override public boolean editOndoubleClick(JFrame frame) {
 		
-		//System.out.println("Double click");
+		//
      String text = "Reference to a SD: ";
     if( hasFather() ) {
 			text = getTopLevelName() + " / " + text;

@@ -133,7 +133,7 @@ public class SecurityGeneration implements Runnable {
             TraceManager.addDev("all results displayed");
 
         } catch (Exception e) {
-            System.out.println("ProVerif Analysis Failed " + e);
+            
         }
     }
 	
@@ -224,10 +224,10 @@ public class SecurityGeneration implements Runnable {
                     if (writeChannel.getSecurityContext().equals("")) {
 
                         TMLChannel chan = tmlmodel.getChannelByName(tabName + "__" + writeChannel.getChannelName());
-                        //System.out.println("channel " + chan);
+                        //
                         if (chan != null) {
                             if (chan.checkConf && autoConf) {
-                                //        System.out.println(chan.getOriginTask().getName().split("__")[1]);
+                                //        
                                 if (nonSecChans.contains(chan.getOriginTask().getName().split("__")[1] + "__" + writeChannel.getChannelName() + "_chData") && !secInChannels.get(chan.getDestinationTask()).contains(writeChannel.getChannelName())) {
                                     //                                                                                            if (!securePath(map, chan.getOriginTask(), chan.getDestinationTask())){
                                     secOutChannels.get(chan.getOriginTask()).add(writeChannel.getChannelName());
@@ -264,7 +264,7 @@ public class SecurityGeneration implements Runnable {
         TraceManager.addDev("noncein " + nonceInChannels);
         TraceManager.addDev("nonceout " + nonceOutChannels);
 
-        //        System.out.println(secOutChanannels.toString());
+        //        
         //        int num=0;
         //int nonceNum=0;
         //Create reverse channels on component diagram to send nonces if they don't already exist
@@ -748,11 +748,11 @@ public class SecurityGeneration implements Runnable {
                 map.addTaskToHwExecutionNode(newmodel.getTMLTaskByName(task.getName().replace(tabName, tabName + "_" + name)), node);
                 map.removeTask(task);
             } else {
-                System.out.println("Can't find " + task.getName());
+                
             }
         }
         //map.setTMLModeling(newmodel);
-        //System.out.println(map);
+        //
         //TMLMapping newMap = gtm.translateToTMLMapping();
         map.setTMLModeling(newmodel);
         return;

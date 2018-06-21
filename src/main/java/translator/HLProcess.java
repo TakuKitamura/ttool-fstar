@@ -85,9 +85,9 @@ public class HLProcess extends Process {
         for(int i=0; i<gateList.size(); i++) {
             g = gateList.elementAt(i);
             if (!g.isInternal()) {
-                //System.out.println("My TC: " + tc.getLotosName() +  " g:" +g.getLotosName());
+                //
                 g = mgm.getMasterGateOf(tc, g);
-                //System.out.println("Master g:" + g.getLotosName());
+                //
                 if (!find) {
                     find = true;
                     s = s + g.getLotosName();

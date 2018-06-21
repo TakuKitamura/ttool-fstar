@@ -597,7 +597,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
                 testGo();
 
                 selectedUnit = units.getSelectedIndex();
-                //System.out.println("Selected item=" + selectedItem);
+                //
                 //AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
 
                 // Generating code
@@ -718,7 +718,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
         checkMode();
         setButtons();
 
-        //System.out.println("Selected item=" + selectedItem);
+        //
     }
 
     protected void processCmd(String cmd, JTextArea _jta) throws LauncherException {

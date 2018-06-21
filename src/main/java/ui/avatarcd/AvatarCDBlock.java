@@ -136,7 +136,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         Font f = g.getFont();
         Font fold = f;
 
-        //System.out.println("width=" + width + " height=" + height);
+        //
 
         if ((rescaled) && (!tdp.isScaled())) {
 
@@ -154,7 +154,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
             int w0, w1, w2;
             f = f.deriveFont((float) maxCurrentFontSize);
             g.setFont(f);
-            //System.out.println("max current font size:" + maxCurrentFontSize);
+            //
             while (maxCurrentFontSize > (minFontSize - 1)) {
                 w0 = g.getFontMetrics().stringWidth(value);
                 w1 = g.getFontMetrics().stringWidth(ster);
@@ -178,7 +178,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 
         }
 
-        //System.out.println("Current font size:" + currentFontSize);
+        //
 
         Color c = g.getColor();
 
@@ -372,7 +372,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
             return false;
         }
 
-        //System.out.println("Add swallow component");
+        //
         // Choose its position
 
         // Make it an internal component
@@ -383,7 +383,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         //Set its coordinates
         if (tgc instanceof AvatarCDBlock) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
+            //
             tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
@@ -513,7 +513,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
 
             NodeList nli;
@@ -526,12 +526,12 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("stereotype")) {

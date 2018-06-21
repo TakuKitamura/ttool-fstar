@@ -236,7 +236,7 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         int w = Math.max(g.getFontMetrics().stringWidth(value), g.getFontMetrics().stringWidth(ster));
         int w1 = Math.max((int) (minWidth * tdp.getZoom()), w + 2 * textX);
 
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+        //
         if (w1 != width) {
             width = w1;
             resizeWithFather();
@@ -245,12 +245,12 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
 
         g.setFont(f0);
 
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+        //
     }
 
     public void resizeWithFather() {
         if ((father != null) && (father instanceof ATDBlock)) {
-            //System.out.println("cdRect comp");
+            //
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
             setMoveCd(x, y);
@@ -340,8 +340,8 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
             description = "";
             String s;
 
-            //System.out.println("Loading tclass " + getValue());
-            //System.out.println(nl.toString());
+            //
+            //
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -352,14 +352,14 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("textline")) {
-                                //System.out.println("Analyzing line0");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     s = "";
                                 }
                                 description += GTURTLEModeling.decodeString(s) + "\n";
                             }
-                            //System.out.println("Analyzing line4");
+                            //
                         }
                     }
                 }

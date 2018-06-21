@@ -259,18 +259,18 @@ public class TMLSyntaxChecking {
             int n = tactivity.nElements();
             for (int i = 0; i < n; i++) {
                 elt = tactivity.get(i);
-                //System.out.println("Task= " + t.getName() + " element=" + elt);
+                //TraceManager.addDev("Task= " + t.getName() + " element=" + elt);
 
                 if (elt instanceof TMLWriteChannel) {
                     for (int j = 0; j < ((TMLWriteChannel) elt).getNbOfChannels(); j++) {
                         ch = ((TMLWriteChannel) elt).getChannel(j);
                         if (ch.isBasicChannel()) {
-                            //System.out.println("Write in channel" + ch.getName());
+                            //TraceManager.addDev("Write in channel" + ch.getName());
                             if (ch.getOriginTask() != t) {
-                                //System.out.println("Origin task=" + ch.getOriginTask().getName() + " / task = " + t.getName() + "tch=" + ch.getOriginTask() + " t=" + t);
-                                //System.out.println("tml:" + tmlm.toString());
+                                //TraceManager.addDev("Origin task=" + ch.getOriginTask().getName() + " / task = " + t.getName() + "tch=" + ch.getOriginTask() + " t=" + t);
+                                //TraceManager.addDev("tml:" + tmlm.toString());
                                 //  TMLTextSpecification  tmlt = new TMLTextSpecification("toto");
-                                //System.out.println("tml:" + tmlt.toTextFormat(tmlm));
+                                //TraceManager.addDev("tml:" + tmlt.toTextFormat(tmlm));
                                 addError(t, elt, ch.getName() + ": " + WRONG_ORIGIN_CHANNEL, TMLError.ERROR_BEHAVIOR);
                             }
                         }
@@ -280,7 +280,7 @@ public class TMLSyntaxChecking {
                 if (elt instanceof TMLReadChannel) {
                     ch = ((TMLReadChannel) elt).getChannel(0);
                     if (ch.isBasicChannel()) {
-                        //System.out.println("Read channel");
+                        //TraceManager.addDev("Read channel");
                         if (ch.getDestinationTask() != t) {
                             addError(t, elt, ch.getName() + ": " + WRONG_DESTINATION_CHANNEL, TMLError.ERROR_BEHAVIOR);
                         }
@@ -319,7 +319,7 @@ public class TMLSyntaxChecking {
 
                 if (elt instanceof TMLNotifiedEvent) {
                     evt = ((TMLNotifiedEvent) elt).getEvent();
-                    //System.out.println("Write channel");
+                    //TraceManager.addDev("Write channel");
                     if (evt.getDestinationTask() != t) {
                         addError(t, elt, evt.getName() + ": " + WRONG_DESTINATION_EVENT, TMLError.ERROR_BEHAVIOR);
                     }
@@ -327,7 +327,7 @@ public class TMLSyntaxChecking {
 
                 if (elt instanceof TMLSendRequest) {
                     request = ((TMLSendRequest) elt).getRequest();
-                    //System.out.println("Write channel");
+                    //TraceManager.addDev("Write channel");
                     if (!request.isAnOriginTask(t)) {
                         addError(t, elt, request.getName() + ": " + WRONG_ORIGIN_REQUEST, TMLError.ERROR_BEHAVIOR);
                     }
@@ -367,10 +367,10 @@ public class TMLSyntaxChecking {
 
 
             int n = tactivity.nElements();
-            //System.out.println("Task" + t.getName());
+            //TraceManager.addDev("Task" + t.getName());
             for (int i = 0; i < n; i++) {
                 elt = tactivity.get(i);
-                //System.out.println("elt=" + elt);
+                //TraceManager.addDev("elt=" + elt);
                 if (elt instanceof TMLActionState) {
                     action = ((TMLActivityElementWithAction) elt).getAction();
                     parsingAssignment(t, elt, action);
@@ -380,7 +380,7 @@ public class TMLSyntaxChecking {
                     parsing(t, elt, "actionnat", action);
 
                 } else if (elt instanceof TMLActivityElementWithIntervalAction) {
-                    //System.out.println("Parsing TMLActivityElementWithIntervalAction");
+                    //TraceManager.addDev("Parsing TMLActivityElementWithIntervalAction");
                     action = ((TMLActivityElementWithIntervalAction) elt).getMinDelay();
                     parsing(t, elt, "actionnat", action);
                     action = ((TMLActivityElementWithIntervalAction) elt).getMaxDelay();
@@ -416,7 +416,7 @@ public class TMLSyntaxChecking {
                 } else if (elt instanceof TMLWaitEvent) {
                     tmlwe = (TMLWaitEvent) elt;
                     evt = tmlwe.getEvent();
-                    //System.out.println("Nb of params of wait event:" + tmlwe.getNbOfParams());
+                    //TraceManager.addDev("Nb of params of wait event:" + tmlwe.getNbOfParams());
                     for (j = 0; j < tmlwe.getNbOfParams(); j++) {
                         action = tmlwe.getParam(j).trim();
                         if ((action != null) && (action.length() > 0)) {
@@ -428,9 +428,9 @@ public class TMLSyntaxChecking {
                                 if (attr == null) {
                                     addError(t, elt, UNDECLARED_VARIABLE + " :" + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
                                 } else {
-                                    //System.out.println("Nb of params:" + tmlwe.getEvent().getNbOfParams() + " j:" + j);
+                                    //TraceManager.addDev("Nb of params:" + tmlwe.getEvent().getNbOfParams() + " j:" + j);
                                     if (tmlwe.getEvent().getType(j).getType() == 0) {
-                                        System.out.println("0");
+                                        TraceManager.addDev("0");
                                     }
                                     if (attr.getType().getType() != tmlwe.getEvent().getType(j).getType()) {
                                         TraceManager.addDev("Type0:" + attr.getType().getType() + " type1:" + tmlwe.getEvent().getType(j).getType());

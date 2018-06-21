@@ -161,7 +161,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
         if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
             currentFontSize = tdp.getFontSize() + 1;
-            //System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
+            //
             //            myFont = f.deriveFont((float)currentFontSize);
             //myFontB = myFont.deriveFont(Font.BOLD);
 
@@ -251,7 +251,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         g.drawString("Security Property", x + textX, y + textY + (i + 1) * currentFontSize);
         g.setFont(fold);
         i++;
-//		System.out.println("syntax errors " + syntaxErrors.toString()); 
+//		
         for (String s : properties) {
             if (authStrongMap.containsKey(s) || authWeakMap.containsKey(s)) {
                 g.setFont(new Font("tmp", Font.PLAIN, 7));
@@ -456,16 +456,16 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Line")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 s = elt.getAttribute("value");
                                 if (s.equals("null")) {
                                     s = "";

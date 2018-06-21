@@ -37,7 +37,6 @@
  */
 
 
-
 package myutil.externalSearch;
 
 import myutil.TraceManager;
@@ -54,15 +53,16 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
-   * JDialogSearchBox
-   * dialog for external search with key words
-   * Creation: 11/03/2015
-   * @version 1.0 11/03/2015
-   * @author Dan VO & Huy TRUONG
+ * JDialogSearchBox
+ * dialog for external search with key words
+ * Creation: 11/03/2015
+ *
+ * @author Dan VO & Huy TRUONG
+ * @version 1.0 11/03/2015
  */
 public class Client {
-    public  byte[] parserAnswerMessageAsBytes(Message answerMsg) {
-        if (answerMsg ==null){
+    public byte[] parserAnswerMessageAsBytes(Message answerMsg) {
+        if (answerMsg == null) {
             return null;
         }
 
@@ -80,10 +80,10 @@ public class Client {
         return null;
     }
 
-    public  ArrayList<Record> parserAnswerMessage(Message answerMsg) {
+    public ArrayList<Record> parserAnswerMessage(Message answerMsg) {
         //Analyse the message from the server,
         //Depends on the cmd, we can determine the values
-        if (answerMsg ==null){
+        if (answerMsg == null) {
             return null;
         }
 
@@ -95,7 +95,7 @@ public class Client {
         } else if (cmd.equals(Message.RESULT_SEARCH)) {
             ArrayList<Record> lrecord = new ArrayList<>();
             //get content of return result
-            String resultxml = (String)answerMsg.getContent().get(0);
+            String resultxml = (String) answerMsg.getContent().get(0);
             Document doc = Jsoup.parse(resultxml);
             //parser content to get value by tag name.
             for (Element e : doc.select("Row")) {
@@ -117,7 +117,7 @@ public class Client {
         } else if (cmd.equals(Message.RESULT_DETAIL)) {
             Record r = new Record();
             //get content of return result
-            String resultxml = (String)answerMsg.getContent().get(0);
+            String resultxml = (String) answerMsg.getContent().get(0);
 
             //parser content to get value by tag name.
             Document doc = Jsoup.parse(resultxml);
@@ -173,25 +173,21 @@ public class Client {
     }
 
     /**
-     *
      * @param cmd     strings in Message class.
      * @param options list of options corresponds to list of values.
      * @param values
-     * @return  Message.
+     * @return Message.
      */
-    public  Message createRequestMessage(String cmd, ArrayList<String> options, ArrayList<String> values)
-    {
-        Message requestMsg = new Message(cmd,options,values);
-        //System.out.println(Message.SUC_CREATE_REQ_MESSAGE);
+    public Message createRequestMessage(String cmd, ArrayList<String> options, ArrayList<String> values) {
+        Message requestMsg = new Message(cmd, options, values);
         return requestMsg;
     }
 
     /**
-     *
-     * @param msg       Message
-     * @param server    server address
-     * @param port      port of service
-     * @return  Message from Server.
+     * @param msg    Message
+     * @param server server address
+     * @param port   port of service
+     * @return Message from Server.
      * @throws IOException
      * @throws ClassNotFoundException
      */
@@ -199,14 +195,14 @@ public class Client {
 
         ObjectOutputStream outputStream;
         ObjectInputStream inputStream;
-	Socket client = null;
-	SSLSocket sslClient = null;
+        Socket client = null;
+        SSLSocket sslClient = null;
 
         if (ssl) {
-            
+
             //Create a ssl socket.
-            SSLSocketFactory sslSocketFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
-            sslClient = (SSLSocket)sslSocketFactory.createSocket(server,port);
+            SSLSocketFactory sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            sslClient = (SSLSocket) sslSocketFactory.createSocket(server, port);
             sslClient.setEnabledCipherSuites(sslClient.getSupportedCipherSuites());
             TraceManager.addDev("Client has been created successfully!");
 
@@ -214,12 +210,11 @@ public class Client {
             inputStream = new ObjectInputStream(sslClient.getInputStream());
         } else {
             client = new Socket("LocalHost", port);
-            System.out.println("Client has been created successfully!");
+            TraceManager.addDev("Client has been created successfully!");
 
             outputStream = new ObjectOutputStream(client.getOutputStream());
             inputStream = new ObjectInputStream(client.getInputStream());
         }
-
 
 
         outputStream.writeObject(msg);
@@ -229,12 +224,12 @@ public class Client {
 
         outputStream.close();
         inputStream.close();
-	if (ssl) {
-	    sslClient.close();
-	} else {
-	    client.close();
-	}
-        
+        if (ssl) {
+            sslClient.close();
+        } else {
+            client.close();
+        }
+
         return answerMsg;
     }
 

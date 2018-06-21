@@ -1060,7 +1060,6 @@ public class BoolExpressionEvaluator {
             try {
                 currentValue = Integer.valueOf(s).intValue();
                 currentType = NUMBER_TOKEN;
-                //System.out.println("value:" + s);
             }
             catch (NumberFormatException x) {
                 errorMessage = "Illegal format for a number.";
@@ -1522,7 +1521,6 @@ public class BoolExpressionEvaluator {
                 try {
                     currentValue = Integer.valueOf(s).intValue();
                     currentType = NUMBER_TOKEN;
-                    //System.out.println("value:" + s);
                 }
                 catch (NumberFormatException x) {
                     errorMessage = "Illegal format for a number.";

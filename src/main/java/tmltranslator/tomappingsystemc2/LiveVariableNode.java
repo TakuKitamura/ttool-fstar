@@ -276,26 +276,10 @@ public class LiveVariableNode {
 
     public void printKillEntries() {
         //TraceManager.addDev("++++++++++ Kill definitions list ++++++++++");
-        System.out.print(getStatementDescr() + "  kills definitions: " + printDefList(_killDefs));
+        TraceManager.addDev(getStatementDescr() + "  kills definitions: " + printDefList(_killDefs));
         TraceManager.addDev("");
     }
 
-    public void printReachingEntries() {
-        //TraceManager.addDev("++++++++++ Reaching definitions list ++++++++++");
-        //if(_linkedElem!=null && (_linkedElem instanceof TMLReadChannel || _linkedElem instanceof TMLWriteChannel|| _linkedElem instanceof TMLSendEvent || _linkedElem instanceof TMLWaitEvent || _linkedElem instanceof TMLSendRequest)){
-        System.out.print(getStatementDescr());
-        /*printDefList(_inVars);
-		System.out.print("  outvars: ");
-		printDefList(_outVars);
-		System.out.print("  defVars: ");
-		printDefList(_defVars);
-		System.out.print("  useVars: ");
-		printDefList(_useVars);*/
-        //+ "  reached by definitions: ");
-        //printDefList(_inDefs);
-        TraceManager.addDev("");
-        //}
-    }
 
     private String printDefList(int[] iList) {
         String aResult = "";
@@ -629,10 +613,7 @@ public class LiveVariableNode {
         boolean aPredInvalidated = false;
         if (!_valid) {
             _valid = true;
-			/*if (_linkedElem==null)
-				System.out.print("recalculate waitRequest invalidate: ");
-			else 
-				System.out.print("recalculate " + _linkedElem.getName() + " " + _linkedElem.getID() + "invalidate: ");*/
+
             for (LiveVariableNode aSucc : _succList) {
                 int[] aSuccInVars = aSucc.getInVars();
                 for (int i = 0; i < aSuccInVars.length; i++) {
@@ -646,10 +627,7 @@ public class LiveVariableNode {
             if (aPredInvalidated) {
                 for (LiveVariableNode aPred : _predList) {
                     aPred.invalidate();
-					/*if (aPred.getLinkedElement()==null)
-						System.out.print("waitRequest, ");
-					else
-						System.out.print(aPred.getLinkedElement().getID() + ", ");*/
+
                 }
             }
             //TraceManager.addDev();
@@ -774,11 +752,6 @@ public class LiveVariableNode {
     }
 
     public String getLiveVariableString() {
-		/*System.out.print("Numbers: ");
-		for (int aPos=0; aPos<_outVars.length; aPos++){
-			System.out.print(Integer.toHexString(_outVars[aPos]) + ", ");
-		}
-		TraceManager.addDev();*/
         return intArrayToHexString(_outVars);
     }
 

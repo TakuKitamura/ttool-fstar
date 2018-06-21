@@ -129,7 +129,7 @@ public class TIFExchange {
 			
 			for(i=0; i<nl.getLength(); i++) {
 				node = nl.item(i);
-				//System.out.println("Node = " + dnd);
+				//
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					// create design, and get an index for it
 					loadTClass(node);
@@ -140,7 +140,7 @@ public class TIFExchange {
 			
 			for(i=0; i<nl.getLength(); i++) {
 				node = nl.item(i);
-				//System.out.println("Node = " + dnd);
+				//
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					// create design, and get an index for it
 					loadRelation(node);
@@ -148,10 +148,10 @@ public class TIFExchange {
 			}
 			
 		} catch (IOException e) {
-			System.out.println("500 ");
+			
 			throw new MalformedTIFException();
 		} catch (SAXException saxe) {
-			System.out.println("501 " + saxe.getMessage());
+			
 			throw new MalformedTIFException();
 		}
 		return true;
@@ -366,7 +366,7 @@ public class TIFExchange {
 		try {
 			// Gather all informations
 			for(int j=0; j<diagramNl.getLength(); j++) {
-				//System.out.println("Ndes: " + j);
+				//
 				node = diagramNl.item(j);
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					elt = (Element)node;
@@ -414,12 +414,12 @@ public class TIFExchange {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
+			
 			throw new MalformedTIFException();
 		}
 		
 		// Create the tclass
-		//System.out.println("TClass name=" + name);
+		//
 		
 		// WARNING: must handle special TClasses
 		TClass t = new TClass(name, active);
@@ -430,7 +430,7 @@ public class TIFExchange {
 			t.addParameter(pa);
 		}
 		for(Gate ga: gates) {
-			//System.out.println("adding gate:" + ga.getName());
+			//
 			t.addGate(ga);
 		}
 		
@@ -461,14 +461,14 @@ public class TIFExchange {
 		ArrayList<ADComponent> adcomponents = new ArrayList<ADComponent>();
 		ArrayList<String> ids = new ArrayList<String>();
 		
-		//System.out.println("Node1 = " + node);
+		//
 		ActivityDiagram ad = t.getActivityDiagram();
 		
 		try {
 			// Create all components
 			for(j=0; j<diagramNl.getLength(); j++) {
 				node = diagramNl.item(j);
-				//System.out.println("Node=" + node);
+				//
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					elt = (Element)node;
 					if (elt.getTagName().compareTo("adcomponent") == 0) {
@@ -478,12 +478,12 @@ public class TIFExchange {
 			}
 			
 			// Make links between components
-			//System.out.println("Making links");
+			//
 			for(i=0; i<ad.size(); i++) {
 				adc = ad.getADComponent(i);
-				//System.out.println("ADC=" + adc + " i=" + i + " size= " + ad.size());
+				//
 				for(j=0; j<adc.getNbNext(); j++) {
-					//System.out.println("nb next=" + adc.getNbNext() + " j=" + j);
+					//
 					tmp = findRealComponent(adc.getNext(j), adcomponents, ids);
 					if (tmp == null) {
 						throw new MalformedTIFException("NULL next: " + adc);
@@ -493,7 +493,7 @@ public class TIFExchange {
 			}
 			
 		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
+			
 			throw new MalformedTIFException();
 		}
 	}
@@ -538,7 +538,7 @@ public class TIFExchange {
 		
 		ActivityDiagram ad = t.getActivityDiagram();
 		
-		//System.out.println("Making adcomponents");
+		//
 		
 		try {
 			for(int j=0; j<diagramNl.getLength(); j++) {
@@ -547,7 +547,7 @@ public class TIFExchange {
 					elt = (Element)node;
 					if (elt.getTagName().compareTo("common") == 0) {
 						type = elt.getAttribute("type");
-						//System.out.println("Found a component type = " + type);
+						//
 						id = elt.getAttribute("id");
 						adc = newADComponent(type);
 						ad.add(adc);
@@ -645,7 +645,7 @@ public class TIFExchange {
 			}
 			
 		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
+			
 			throw new MalformedTIFException();
 		}
 		
@@ -656,15 +656,15 @@ public class TIFExchange {
 	}
 	
 	public ADComponent newADComponent(String type) {
-		//System.out.println("New ADComponent. Type= " + type);
+		//
 		try {
 			ClassLoader cl = ClassLoader.getSystemClassLoader();
-			//System.out.println("1");
+			//
 			Class c = cl.loadClass(type);
-			//System.out.println("2");
+			//
 			return (ADComponent)(c.newInstance());
 		} catch (Exception e) {
-			System.out.println("Could not create an instance if " + type + " because " + e.getMessage()); 
+			
 		}
 		return null;
 	}
@@ -729,7 +729,7 @@ public class TIFExchange {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
+			
 			throw new MalformedTIFException();
 		}
 	}
