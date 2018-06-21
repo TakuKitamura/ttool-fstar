@@ -87,7 +87,6 @@ public class JDialogELNComponentIdealTransformer extends JDialog implements Acti
 	public JDialogELNComponentIdealTransformer(ELNComponentIdealTransformer _idealTransformer) {
 		/** Set JDialog **/
 		setTitle("Setting the ideal transformer");
-		setSize(500, 150);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -177,7 +176,7 @@ public class JDialogELNComponentIdealTransformer extends JDialog implements Acti
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

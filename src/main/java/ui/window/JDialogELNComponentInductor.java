@@ -93,7 +93,6 @@ public class JDialogELNComponentInductor extends JDialog implements ActionListen
 	public JDialogELNComponentInductor(ELNComponentInductor _l) {
 		/** Set JDialog **/
 		setTitle("Setting the inductor");
-		setSize(500, 190);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -275,7 +274,7 @@ public class JDialogELNComponentInductor extends JDialog implements ActionListen
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

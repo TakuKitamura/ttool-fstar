@@ -87,7 +87,6 @@ public class JDialogELNComponentVoltageControlledVoltageSource extends JDialog i
 	public JDialogELNComponentVoltageControlledVoltageSource(ELNComponentVoltageControlledVoltageSource _vcvs) {
 		/** Set JDialog **/
 		setTitle("Setting the voltage controlled voltage source");
-		setSize(500, 150);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -177,7 +176,7 @@ public class JDialogELNComponentVoltageControlledVoltageSource extends JDialog i
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

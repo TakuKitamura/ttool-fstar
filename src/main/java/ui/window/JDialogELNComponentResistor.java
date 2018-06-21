@@ -90,7 +90,6 @@ public class JDialogELNComponentResistor extends JDialog implements ActionListen
 	public JDialogELNComponentResistor(ELNComponentResistor _r) {
 		/** Set JDialog **/
 		setTitle("Setting the resistance");
-		setSize(500, 150);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -218,7 +217,7 @@ public class JDialogELNComponentResistor extends JDialog implements ActionListen
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

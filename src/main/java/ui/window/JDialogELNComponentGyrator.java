@@ -93,7 +93,6 @@ public class JDialogELNComponentGyrator extends JDialog implements ActionListene
 	public JDialogELNComponentGyrator(ELNComponentGyrator _gyrator) {
 		/** Set JDialog **/
 		setTitle("Setting the gyrator");
-		setSize(500, 190);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -275,7 +274,7 @@ public class JDialogELNComponentGyrator extends JDialog implements ActionListene
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

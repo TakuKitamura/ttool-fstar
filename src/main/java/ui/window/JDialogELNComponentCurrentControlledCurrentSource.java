@@ -87,7 +87,6 @@ public class JDialogELNComponentCurrentControlledCurrentSource extends JDialog i
 	public JDialogELNComponentCurrentControlledCurrentSource(ELNComponentCurrentControlledCurrentSource _cccs) {
 		/** Set JDialog **/
 		setTitle("Setting the current controlled current source");
-		setSize(500, 150);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -177,7 +176,7 @@ public class JDialogELNComponentCurrentControlledCurrentSource extends JDialog i
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

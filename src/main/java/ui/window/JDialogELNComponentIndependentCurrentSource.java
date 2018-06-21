@@ -99,7 +99,6 @@ public class JDialogELNComponentIndependentCurrentSource extends JDialog impleme
 	public JDialogELNComponentIndependentCurrentSource(ELNComponentIndependentCurrentSource _isource) {
 		/** Set JDialog **/
 		setTitle("Setting the independent current source");
-		setSize(500, 390);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -372,7 +371,7 @@ public class JDialogELNComponentIndependentCurrentSource extends JDialog impleme
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

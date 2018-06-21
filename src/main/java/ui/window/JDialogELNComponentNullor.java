@@ -85,7 +85,6 @@ public class JDialogELNComponentNullor extends JDialog implements ActionListener
 	public JDialogELNComponentNullor(ELNComponentNullor _nullor) {
 		/** Set JDialog **/
 		setTitle("Setting the nullor");
-		setSize(500, 120);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -159,7 +158,7 @@ public class JDialogELNComponentNullor extends JDialog implements ActionListener
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

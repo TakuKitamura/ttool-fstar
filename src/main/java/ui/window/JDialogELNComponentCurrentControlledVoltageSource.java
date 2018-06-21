@@ -90,7 +90,6 @@ public class JDialogELNComponentCurrentControlledVoltageSource extends JDialog i
 	public JDialogELNComponentCurrentControlledVoltageSource(ELNComponentCurrentControlledVoltageSource _ccvs) {
 		/** Set JDialog **/
 		setTitle("Setting the current controlled voltage source");
-		setSize(500, 150);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -218,7 +217,7 @@ public class JDialogELNComponentCurrentControlledVoltageSource extends JDialog i
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

@@ -95,7 +95,6 @@ public class JDialogELNComponentTransmissionLine extends JDialog implements Acti
 	public JDialogELNComponentTransmissionLine(ELNComponentTransmissionLine _transmission_line) {
 		/** Set JDialog **/
 		setTitle("Setting the transmission line");
-		setSize(500, 220);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -293,7 +292,7 @@ public class JDialogELNComponentTransmissionLine extends JDialog implements Acti
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

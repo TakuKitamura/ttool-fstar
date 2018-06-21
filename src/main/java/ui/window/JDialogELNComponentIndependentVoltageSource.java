@@ -99,7 +99,6 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 	public JDialogELNComponentIndependentVoltageSource(ELNComponentIndependentVoltageSource _vsource) {
 		/** Set JDialog **/
 		setTitle("Setting the independent voltage source");
-		setSize(500, 390);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -372,7 +371,7 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 

@@ -93,7 +93,6 @@ public class JDialogELNComponentCapacitor extends JDialog implements ActionListe
 	public JDialogELNComponentCapacitor(ELNComponentCapacitor _c) {
 		/** Set JDialog **/
 		setTitle("Setting the capacitor");
-		setSize(500, 190);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setAlwaysOnTop(true);
@@ -275,7 +274,7 @@ public class JDialogELNComponentCapacitor extends JDialog implements ActionListe
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		
+		pack();
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 
