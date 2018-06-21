@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "request.h"
-#include "mytimelib.h"
-#include "myerrors.h"
-#include "random.h"
-#include "debug.h"
+#include "include/request.h"
+#include "include/mytimelib.h"
+#include "include/myerrors.h"
+#include "include/random.h"
+#include "include/debug.h"
 
 
 request *getNewRequest(int ID, int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params) {

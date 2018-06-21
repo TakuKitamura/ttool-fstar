@@ -33,7 +33,6 @@ void *mainFunc__Block0(struct mwmr_s *channels_Block0[]){
   while(__currentState != STATE__STOP__STATE) {
     switch(__currentState) {
       case STATE__START__STATE: 
-      debug2Msg(__myname, "-> (=====) Entering state + state0");
       __currentState = STATE__state0;
       break;
       

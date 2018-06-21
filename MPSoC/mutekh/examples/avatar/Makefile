@@ -1,1 +1,1 @@
-objs = main.o InterfaceDevice.o SmartCard.o TCPIP.o TCPPacketManager.o Application.o SmartCardController.o Timer__mainTimer__TCPIP.o Timer__timerP__TCPPacketManager.o 
+objs = main.o Block1.o Block0.o 

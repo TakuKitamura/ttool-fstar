@@ -45,7 +45,6 @@ void *mainFunc__InputEngine(struct mwmr_s *channels_InputEngine[]){
   while(__currentState != STATE__STOP__STATE) {
     switch(__currentState) {
       case STATE__START__STATE: 
-      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       
@@ -66,12 +65,10 @@ void *mainFunc__InputEngine(struct mwmr_s *channels_InputEngine[]){
       __returnRequest = executeListOfRequests(&__list);
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
-        debug2Msg(__myname, "-> (=====) Entering state + ProcessPacket");
         __currentState = STATE__ProcessPacket;
         
       }
       else  if (__returnRequest == &__req1) {
-        debug2Msg(__myname, "-> (=====) Entering state + ProcessPacket");
         __currentState = STATE__ProcessPacket;
         
       }
@@ -92,7 +89,6 @@ void *mainFunc__InputEngine(struct mwmr_s *channels_InputEngine[]){
       __returnRequest = executeOneRequest(&__list, &__req0);
       debug2Msg(__myname, "-> (=====)after executeOneRequest");
       clearListOfRequests(&__list);
-      debug2Msg(__myname, "-> (=====) Entering state + Waiting");
       __currentState = STATE__Waiting;
       break;
       

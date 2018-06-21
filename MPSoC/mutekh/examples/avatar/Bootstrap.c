@@ -38,7 +38,6 @@ void *mainFunc__Bootstrap(struct mwmr_s *channels_Bootstrap[]){
   while(__currentState != STATE__STOP__STATE) {
     switch(__currentState) {
       case STATE__START__STATE: 
-      debug2Msg(__myname, "-> (=====) Entering state + bootstrap");
       __currentState = STATE__bootstrap;
       break;
       
@@ -59,7 +58,6 @@ void *mainFunc__Bootstrap(struct mwmr_s *channels_Bootstrap[]){
       __returnRequest = executeListOfRequests(&__list);
       clearListOfRequests(&__list);
        if (__returnRequest == &__req0) {
-        debug2Msg(__myname, "-> (=====) Entering state + bootstrap");
         __currentState = STATE__bootstrap;
         
       }
@@ -81,7 +79,6 @@ void *mainFunc__Bootstrap(struct mwmr_s *channels_Bootstrap[]){
       debug2Msg(__myname, "-> (=====)after executeOneRequest");
       clearListOfRequests(&__list);
       counter = counter-1;
-      debug2Msg(__myname, "-> (=====) Entering state + choice__0");
       __currentState = STATE__choice__0;
       break;
       

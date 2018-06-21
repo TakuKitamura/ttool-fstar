@@ -1,0 +1,1 @@
+SOCLIB_CPU_COUNT = 2

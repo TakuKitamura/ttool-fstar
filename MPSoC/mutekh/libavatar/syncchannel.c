@@ -1,8 +1,8 @@
 #include <stdlib.h>
-#include "syncchannel.h"
-#include "request.h"
-#include "myerrors.h"
-#include "debug.h"
+#include "include/syncchannel.h"
+#include "include/request.h"
+#include "include/myerrors.h"
+#include "include/debug.h"
 #include "mwmr.h"
 
 /* this function empties a channel and is called after one send or receive transaction
