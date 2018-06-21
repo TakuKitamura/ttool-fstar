@@ -58,11 +58,11 @@ public class TURTLE2Java {
     private int idPar = 0;
     
     private TURTLEModeling tm;
-    private LinkedList javaClasses;
+    private LinkedList<JavaClass> javaClasses;
     private MasterGateManager mgm;
-    private Vector mainclasses;
+    private Vector<MainClass> mainclasses;
     //private MainClass mainclass;
-    private Vector components;
+    private Vector<ComponentId> components;
 	private String header;
     
     private long millis;
@@ -98,8 +98,8 @@ public class TURTLE2Java {
         nanos = _nanos;
         longforint = false;
 		header = _header;
-        components = new Vector();
-        mainclasses = new Vector();
+        components = new Vector<ComponentId>();
+        mainclasses = new Vector<MainClass>();
     }
     
     public void saveJavaClasses(String path) throws FileException {
@@ -118,7 +118,7 @@ public class TURTLE2Java {
         String s = "";
         MainClass tmpc;
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             s += path + tmpc.getName() + ".java ";
         }
         return s;
@@ -154,7 +154,7 @@ public class TURTLE2Java {
         mgm = new MasterGateManager(tm, false);
         mgm.sort();
         
-        javaClasses = new LinkedList();
+        javaClasses = new LinkedList<JavaClass>();
         
         // Creating classes & attributes & operations
         generateConstantClass();
@@ -261,7 +261,7 @@ public class TURTLE2Java {
         Relation r;
         //TClass t1;
         
-        LinkedList tclasses = new LinkedList();
+        LinkedList<JavaClass> tclasses = new LinkedList<JavaClass>();
         
         for(i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
@@ -510,9 +510,9 @@ public class TURTLE2Java {
                 if ((jc1 != null) && (jc2 != null)) {
                     if (toTakeIntoAccountJC.contains(jc1) && toTakeIntoAccountJC.contains(jc2)) {
                         for(j=0; j<r.gatesOfT1.size(); j++) {
-                            TraceManager.addDev("Gates 1)" + ((Gate)(r.gatesOfT1.elementAt(j))).getName() + " 2:" + ((Gate)(r.gatesOfT2.elementAt(j))).getName());
-                            jg1 = jc1.foundJGate(((Gate)(r.gatesOfT1.elementAt(j))).getName());
-                            jg2 = jc2.foundJGate(((Gate)(r.gatesOfT2.elementAt(j))).getName());
+                            //TraceManager.addDev("Gates 1)" + ((Gate)(r.gatesOfT1.elementAt(j))).getName() + " 2:" + ((Gate)(r.gatesOfT2.elementAt(j))).getName());
+                            jg1 = jc1.foundJGate(((r.gatesOfT1.elementAt(j))).getName());
+                            jg2 = jc2.foundJGate(((r.gatesOfT2.elementAt(j))).getName());
                             //TraceManager.addDev("foundJGate");
                             if ((jg1 != null) && (jg2 != null)) {
                                 //TraceManager.addDev("master");
@@ -566,7 +566,7 @@ public class TURTLE2Java {
         JavaClass jc;
         String s = "";
         LinkedList ll;
-        LinkedList one;
+        LinkedList<JavaClass> one;
         
         s += "\n";
         s += JKeyword.INDENT + JKeyword.INDENT + "/* Sequence operator */ ";
@@ -590,7 +590,7 @@ public class TURTLE2Java {
                     jc.addStartingSequenceCode(generateTClassStarting(ll, false, false));
                     jc.addStartingSequenceCode(JKeyword.INDENT + JKeyword.STOP_CODE_N);
                     if ((!onlyActiveClasses) || (onlyActiveClasses && jc.isActive())) {
-                        one = new LinkedList();
+                        one = new LinkedList<JavaClass>();
                         one.add(jc);
                         s+= generateCodeStartingSeq(one);//JKeyword.INDENT + JKeyword.INDENT + jc.getJavaName().toLowerCase() + ".setStartingSequence(true)" + JKeyword.END_OP + "\n";
                     }
@@ -616,7 +616,7 @@ public class TURTLE2Java {
         //TClass t1, t2;
         Relation r;
         JavaClass jc;
-        LinkedList ll = new LinkedList();
+        LinkedList<JavaClass> ll = new LinkedList<JavaClass>();
         for(int i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
             if (r.type == Relation.SEQ) {
@@ -1397,7 +1397,7 @@ public class TURTLE2Java {
         ComponentId cid;
         
         for(int i=0; i<components.size(); i++) {
-            cid = (ComponentId)(components.elementAt(i));
+            cid = components.elementAt(i);
             if (cid.adc == adc) {
                 return cid;
             }
@@ -1414,7 +1414,7 @@ public class TURTLE2Java {
         //Gate g;
         
         for(i=0; i<ad.size(); i++) {
-            adc = (ADComponent)(ad.elementAt(i));
+            adc = ad.elementAt(i);
             if (adc instanceof ADParallel) {
                 cid = new ComponentId(adc, idPar);
                 
@@ -1459,7 +1459,7 @@ public class TURTLE2Java {
     private void generateBasicCodeMainClasses() {
         MainClass tmpc;
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             tmpc.generateBasicCode();
         }
     }
@@ -1467,7 +1467,7 @@ public class TURTLE2Java {
     private void generateOperationCodeMainClasses() {
         MainClass tmpc;
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             tmpc.generateOperationCode();
         }
     }
@@ -1475,7 +1475,7 @@ public class TURTLE2Java {
     private MainClass foundMainClassByPackageName(String packageName) {
         MainClass tmpc;
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             if (tmpc.getName().compareTo(MAIN_CLASS + packageName) == 0) {
                 return tmpc;
             }
@@ -1486,13 +1486,13 @@ public class TURTLE2Java {
     private void saveAsFileInMainClasses(String path) throws FileException {
         MainClass tmpc;
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             tmpc.saveAsFileIn(path);
         }
     }
     
     private LinkedList listJavaClassesSamePackageName(MainClass tmpc) {
-        LinkedList ll = new LinkedList();
+        LinkedList<JavaClass> ll = new LinkedList<JavaClass>();
         ListIterator iterator1 = javaClasses.listIterator();
         JavaClass jc;
         
@@ -1511,7 +1511,7 @@ public class TURTLE2Java {
         ListIterator iterator1;
         
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             
             // we consider all classes of the package of tmpc
             ll = listJavaClassesSamePackageName(tmpc);
@@ -1529,7 +1529,7 @@ public class TURTLE2Java {
         JavaClass jc;
         
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             
             // we consider all classes of the package of tmpc
             ll = listJavaClassesSamePackageName(tmpc);
@@ -1547,7 +1547,7 @@ public class TURTLE2Java {
         ListIterator iterator1;
         
         for(int i=0; i<mainclasses.size(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             ll = listJavaClassesSamePackageName(tmpc);
             
             if (ll.size() > 0) {
@@ -1567,7 +1567,7 @@ public class TURTLE2Java {
     private void printMainClasses() {
         MainClass tmpc;
         for(int i=0; i<tm.classNb(); i++) {
-            tmpc = (MainClass)(mainclasses.elementAt(i));
+            tmpc = mainclasses.elementAt(i);
             TraceManager.addDev(tmpc.getName() + ":\n" + tmpc.toString() + "\n\n");
         }
     }

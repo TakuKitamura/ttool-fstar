@@ -59,11 +59,11 @@ public class TURTLE2SimuJava {
     //private int idPar = 0;
     
     private TURTLEModeling tm;
-    private LinkedList processes;
+    private LinkedList<TJavaProcess> processes;
     private MasterGateManager mgm;
     private MainClassSimu mainClass;
     //private MainClass mainclass;
-    private Vector components;
+    private Vector<ComponentId> components;
     
     private boolean debug;
     private boolean longforint;
@@ -90,7 +90,7 @@ public class TURTLE2SimuJava {
     public TURTLE2SimuJava(TURTLEModeling _tm) {
         tm = _tm;
         longforint = false;
-        components = new Vector();
+        components = new Vector<ComponentId>();
     }
     
     public void saveJavaClasses(String path) throws FileException {
@@ -137,7 +137,7 @@ public class TURTLE2SimuJava {
         mgm = new MasterGateManager(tm, false);
         mgm.sort();
         
-        processes = new LinkedList();
+        processes = new LinkedList<TJavaProcess>();
         
         // Creating classes & attributes & operations
         generateMainClass();
@@ -500,9 +500,9 @@ public class TURTLE2SimuJava {
                 if ((tjp1 != null) && (tjp2 != null)) {
                     if (toTakeIntoAccountJC.contains(tjp1) && toTakeIntoAccountJC.contains(tjp2)) {
                         for(j=0; j<r.gatesOfT1.size(); j++) {
-                            TraceManager.addDev("Gates 1)" + ((Gate)(r.gatesOfT1.elementAt(j))).getName() + " 2:" + ((Gate)(r.gatesOfT2.elementAt(j))).getName());
-                            jg1 = tjp1.foundJGate(((Gate)(r.gatesOfT1.elementAt(j))).getName());
-                            jg2 = tjp2.foundJGate(((Gate)(r.gatesOfT2.elementAt(j))).getName());
+                            //TraceManager.addDev("Gates 1)" + ((Gate)(r.gatesOfT1.elementAt(j))).getName() + " 2:" + ((Gate)(r.gatesOfT2.elementAt(j))).getName());
+                            jg1 = tjp1.foundJGate(((r.gatesOfT1.elementAt(j))).getName());
+                            jg2 = tjp2.foundJGate(((r.gatesOfT2.elementAt(j))).getName());
                             //TraceManager.addDev("foundJGate");
                             if ((jg1 != null) && (jg2 != null)) {
                                 s += JKeyword.INDENT + JKeyword.INDENT + jg1.getJName() + ".synchroGate = " + jg2.getJName() + JKeyword.END_OP + "\n";
@@ -1357,7 +1357,7 @@ public class TURTLE2SimuJava {
         ComponentId cid;
         
         for(int i=0; i<components.size(); i++) {
-            cid = (ComponentId)(components.elementAt(i));
+            cid = components.elementAt(i);
             if (cid.adc == adc) {
                 return cid;
             }
