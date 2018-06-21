@@ -41,9 +41,8 @@
 
 package ui.interactivesimulation;
 
-import common.ConfigurationTTool;
 import myutil.FileUtils;
-import myutil.SVGGeneration;
+import myutilsvg.SVGGeneration;
 import myutil.TraceManager;
 import ui.ColorManager;
 import ui.MainGUI;

@@ -39,6 +39,7 @@
 package ui;
 
 import myutil.*;
+import myutilsvg.*;
 import ui.atd.ATDAttack;
 import ui.atd.ATDBlock;
 import ui.avatarad.AvatarADActivity;
