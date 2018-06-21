@@ -3789,7 +3789,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame,
                                 "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
                                 "Syntax analysis successful on TML designs",
@@ -3827,7 +3827,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame,
                                 "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
                                 "Syntax analysis successful on TML designs",
@@ -3944,7 +3944,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame,
                                 "0 error, " + getCheckingWarnings().size() + " warning(s). You can now perform verifications (safety, security, performance) or generate executable code",
                                 "Syntax analysis successful on TML mapping",
@@ -3986,7 +3986,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame, "0 error, " + getCheckingWarnings().size() +
                                         " warning(s). You can now perform verifications (safety, security, performance) or generate executable code",
                                 "Syntax analysis successful on TML mapping",

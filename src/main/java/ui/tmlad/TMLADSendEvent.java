@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.tmlad;
 
 import myutil.GraphicLib;
@@ -55,22 +53,23 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 /**
-   * Class TMLADSendEvent
-   * Action of sending an event
-   * Creation: 21/11/2005
-   * @version 1.0 21/11/2005
-   * @author Ludovic APVRILLE
+ * Class TMLADSendEvent
+ * Action of sending an event
+ * Creation: 21/11/2005
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 21/11/2005
  */
 public class TMLADSendEvent extends TGCWithoutInternalComponent implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+    protected int textX = 5;
+    protected int textY = 15;
     protected int arc = 5;
     protected int linebreak = 10;
 
     protected String eventName = "evt";
     int nParam = 5;
-    protected String [] params = new String[nParam];
+    protected String[] params = new String[nParam];
 
     protected int stateOfError = 0; // Not yet checked
 
@@ -80,7 +79,7 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
 
     public int reachabilityInformation;
 
-    public TMLADSendEvent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public TMLADSendEvent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         width = 30;
@@ -92,7 +91,7 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
 
-        for(int i=0; i<nParam; i++) {
+        for (int i = 0; i < nParam; i++) {
             params[i] = "";
         }
         //params[0] = "1";
@@ -109,26 +108,26 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
 
     public void internalDrawing(Graphics g) {
 
-        int w  = g.getFontMetrics().stringWidth(value);
+        int w = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
+            setCd(x + width / 2 - w1 / 2, y);
             width = w1;            //updateConnectingPoints();
         }
 
 
-        if (stateOfError > 0)  {
+        if (stateOfError > 0) {
             Color c = g.getColor();
-            switch(stateOfError) {
-            case ErrorHighlight.OK:
-                g.setColor(ColorManager.TML_PORT_EVENT);
-                break;
-            default:
-                g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+            switch (stateOfError) {
+                case ErrorHighlight.OK:
+                    g.setColor(ColorManager.TML_PORT_EVENT);
+                    break;
+                default:
+                    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
             }
             // Making the polygon
-            int [] px1 = {x, x+width-linebreak, x+width, x+width-linebreak, x};
-            int [] py1 = {y, y, y+(height/2), y+height, y+height};
+            int[] px1 = {x, x + width - linebreak, x + width, x + width - linebreak, x};
+            int[] py1 = {y, y, y + (height / 2), y + height, y + height};
             g.fillPolygon(px1, py1, 5);
             g.setColor(c);
         }
@@ -137,8 +136,8 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         Color c = g.getColor();
         //System.out.println("Color=" + c);
 
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
 
         /*if (g.getColor().equals(ColorManager.NORMAL_0)) {
           g.setColor(ColorManager.TML_PORT_EVENT);
@@ -149,58 +148,58 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         int height1 = height;
         int width1 = width;
         g.setColor(ColorManager.TML_PORT_EVENT);
-        g.drawLine(x1, y1, x1+width1-linebreak, y1);
-        g.drawLine(x1, y1+height1, x1+width1-linebreak, y1+height1);
-        g.drawLine(x1, y1, x1, y1+height1);
-        g.drawLine(x1+width1-linebreak, y1, x1+width1, y1+height1/2);
-        g.drawLine(x1+width1-linebreak, y1+height1, x1+width1, y1+height1/2);
+        g.drawLine(x1, y1, x1 + width1 - linebreak, y1);
+        g.drawLine(x1, y1 + height1, x1 + width1 - linebreak, y1 + height1);
+        g.drawLine(x1, y1, x1, y1 + height1);
+        g.drawLine(x1 + width1 - linebreak, y1, x1 + width1, y1 + height1 / 2);
+        g.drawLine(x1 + width1 - linebreak, y1 + height1, x1 + width1, y1 + height1 / 2);
         g.setColor(c);
 
-        g.drawLine(x, y, x+width-linebreak, y);
-        g.drawLine(x, y+height, x+width-linebreak, y+height);
-        g.drawLine(x, y, x, y+height);
-        g.drawLine(x+width-linebreak, y, x+width, y+height/2);
-        g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
+        g.drawLine(x, y, x + width - linebreak, y);
+        g.drawLine(x, y + height, x + width - linebreak, y + height);
+        g.drawLine(x, y, x, y + height);
+        g.drawLine(x + width - linebreak, y, x + width, y + height / 2);
+        g.drawLine(x + width - linebreak, y + height, x + width, y + height / 2);
 
 
+        g.drawString("evt", x + (width - w) / 2, y);
+        g.drawString(value, x + (width - w) / 2, y + textY);
 
-        g.drawString("evt", x+(width-w) / 2, y);
-        g.drawString(value, x + (width - w) / 2 , y + textY);
-	
-	drawReachabilityInformation(g);
+        drawReachabilityInformation(g);
 
     }
- 
+
     public void drawReachabilityInformation(Graphics g) {
         if (reachabilityInformation > 0) {
 
             Color c = g.getColor();
             Color c1;
-            switch(reachabilityInformation) {
-            case REACHABLE:
-                c1 = Color.green;
-                break;
-            case NOT_REACHABLE:
-                c1 = Color.red;
-                break;
-            default:
-                return;
+            switch (reachabilityInformation) {
+                case REACHABLE:
+                    c1 = Color.green;
+                    break;
+                case NOT_REACHABLE:
+                    c1 = Color.red;
+                    break;
+                default:
+                    return;
             }
 
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x-30, y-3, x-15, y-3, true);
-            g.drawOval(x-11, y-10, 7, 9);
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x - 30, y - 3, x - 15, y - 3, true);
+            g.drawOval(x - 11, y - 10, 7, 9);
             g.setColor(c1);
-            g.fillRect(x-12, y-7, 9, 7);
+            g.fillRect(x - 12, y - 7, 9, 7);
             g.setColor(c);
-            g.drawRect(x-12, y-7, 9, 7);
+            g.drawRect(x - 12, y - 7, 9, 7);
         }
     }
+
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
         }
 
-        if ((int)(Line2D.ptSegDistSq(x+(width/2), y-lineLength, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
+        if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x, _y)) < distanceSelected) {
             return this;
         }
 
@@ -210,7 +209,7 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
     public void makeValue() {
         boolean first = true;
         value = eventName + "(";
-        for(int i=0; i<nParam; i++) {
+        for (int i = 0; i < nParam; i++) {
             if (params[i].length() > 0) {
                 if (!first) {
                     value += ", " + params[i];
@@ -245,12 +244,12 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
 
     public String getRealParamValue(int index) {
         int cpt = 0;
-        for(int i=0; i<nParam; i++) {
+        for (int i = 0; i < nParam; i++) {
             if (params[i].length() > 0) {
                 if (cpt == index) {
                     return params[i];
                 }
-                cpt ++;
+                cpt++;
             }
         }
         return "";
@@ -258,9 +257,9 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
 
     public int realNbOfParams() {
         int cpt = 0;
-        for(int i=0; i<nParam; i++) {
+        for (int i = 0; i < nParam; i++) {
             if (params[i].length() > 0) {
-                cpt ++;
+                cpt++;
             }
         }
         return cpt;
@@ -271,28 +270,28 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-        String [] labels = new String[nParam + 1];
-        String [] values = new String[nParam + 1];
+        String[] labels = new String[nParam + 1];
+        String[] values = new String[nParam + 1];
         labels[0] = "Event name";
         values[0] = eventName;
-        for(int i=0; i<nParam; i++) {
-            labels[i+1] = "Param #" + (i+1);
-            values[i+1] = params[i];
+        for (int i = 0; i < nParam; i++) {
+            labels[i + 1] = "Param #" + (i + 1);
+            values[i + 1] = params[i];
         }
-	ArrayList<String []> help = new ArrayList<String []>();
-	String[] allOutEvents = tdp.getMGUI().getAllOutEvents();
-	help.add(allOutEvents);
-	
-	
-        JDialogMultiString jdms = new JDialogMultiString(frame, "Setting event's properties", nParam+1, labels, values, help);
-      //  jdms.setSize(450, 300);
+        ArrayList<String[]> help = new ArrayList<String[]>();
+        String[] allOutEvents = tdp.getMGUI().getAllOutEvents();
+        help.add(allOutEvents);
+
+
+        JDialogMultiString jdms = new JDialogMultiString(frame, "Setting event's properties", nParam + 1, labels, values, help);
+        //  jdms.setSize(450, 300);
         GraphicLib.centerOnParent(jdms, 450, 300);
-        jdms.setVisible( true ); // blocked until dialog has been closed
+        jdms.setVisible(true); // blocked until dialog has been closed
 
         if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
             eventName = jdms.getString(0);
-            for(int i=0; i<nParam; i++) {
-                params[i] = jdms.getString(i+1);
+            for (int i = 0; i < nParam; i++) {
+                params[i] = jdms.getString(i + 1);
             }
 
             makeValue();
@@ -310,7 +309,7 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         sb.append("\" nbOfParams=\"");
         sb.append(nbOfParams());
         sb.append("\" />\n");
-        for(int i=0; i<nParam; i++) {
+        for (int i = 0; i < nParam; i++) {
             if (params[i].length() > 0) {
                 sb.append("<Param index=\"");
                 sb.append(i);
@@ -324,7 +323,7 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         //System.out.println("*** load extra synchro *** " + getId());
         try {
 
@@ -337,12 +336,12 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
             //System.out.println("Loading Synchronization gates");
             //System.out.println(nl.toString());
 
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {

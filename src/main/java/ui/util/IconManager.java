@@ -190,6 +190,10 @@ public class IconManager {
     						imgic8019, imgic8020, imgic8021, imgic8022;
     
     //private static String icon7 = "turtle_large.gif";
+    private static String ttoolStringIcon = "starting_logo.gif";
+    public static ImageIcon ttoolImageIcon;
+    public static Image ttoolImage;
+
     private static String icon8 = "turtle_16.gif";
     private static String icon9 = "diplodocus2_16.gif";
     //Added by Solange
@@ -713,6 +717,10 @@ public class IconManager {
     }
 
     public static void loadImg() {
+
+        ttoolImageIcon = getIcon(ttoolStringIcon);
+        ttoolImage = ttoolImageIcon.getImage();
+
         imgic8 = getIcon(icon8);
         imgic9 = getIcon(icon9);
         if (imgic8 != null) {

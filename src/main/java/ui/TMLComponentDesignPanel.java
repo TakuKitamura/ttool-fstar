@@ -38,8 +38,6 @@
  */
 
 
-
-
 package ui;
 
 import myutil.GraphicLib;
@@ -60,47 +58,47 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
-   * Class TMLComponentDesignPanel
-   * Managenemt of TML component-based design panels
-   * Creation: 10/03/2008
-   * @version 1.0 10/03/2008
-   * @author Ludovic APVRILLE, Andrea ENRICI
-   * @see MainGUI
+ * Class TMLComponentDesignPanel
+ * Managenemt of TML component-based design panels
+ * Creation: 10/03/2008
+ *
+ * @author Ludovic APVRILLE, Andrea ENRICI
+ * @version 1.0 10/03/2008
+ * @see MainGUI
  */
 public class TMLComponentDesignPanel extends TURTLEPanel {
-    
-	public TMLComponentTaskDiagramPanel tmlctdp;
-    
-	public Vector<TGComponent> validated, ignored;
+
+    public TMLComponentTaskDiagramPanel tmlctdp;
+
+    public Vector<TGComponent> validated, ignored;
 
     public TMLComponentDesignPanel(MainGUI _mgui) {
         super(_mgui);
-        
-    	// Issue #41 Ordering of tabbed panes 
+
+        // Issue #41 Ordering of tabbed panes
         tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-        
+
         cl = new ChangeListener() {
-        	
-        	@Override
-        	public void stateChanged(ChangeEvent e){
-        		mgui.paneDesignAction(e);
-        	}
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneDesignAction(e);
+            }
         };
-        
+
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-        
+
         // Issue #41: Ordering of tabbed panes
-        tabbedPane.setTabLayoutPolicy( JTabbedPane.SCROLL_TAB_LAYOUT );
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
     }
 
-	
 
     public TMLActivityDiagramPanel getTMLActivityDiagramPanel(String _name) {
         TMLActivityDiagramPanel tmladp;
-        for(int i=1; i<panels.size(); i++) {
-            tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
-            if (tmladp.getName().compareTo(_name) ==0 || _name.endsWith(tmladp.getName())) {
+        for (int i = 1; i < panels.size(); i++) {
+            tmladp = (TMLActivityDiagramPanel) (panels.elementAt(i));
+            if (tmladp.getName().compareTo(_name) == 0 || _name.endsWith(tmladp.getName())) {
                 return tmladp;
             }
         }
@@ -124,7 +122,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
 
-        TMLActivityDiagramToolBar toolBarActivity       = new TMLActivityDiagramToolBar(mgui);
+        TMLActivityDiagramToolBar toolBarActivity = new TMLActivityDiagramToolBar(mgui);
         toolbars.add(toolBarActivity);
 
         TMLActivityDiagramPanel tmladp = new TMLActivityDiagramPanel(mgui, toolBarActivity);
@@ -133,7 +131,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmladp);
         tmladp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
         toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         panels.add(tmladp);
@@ -160,7 +158,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmlctdp);
         tmlctdp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
         toolBarPanel.add(toolBarTML, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("TML Component Task Diagram", IconManager.imgic1208, toolBarPanel, "Opens TML component task diagram");
@@ -171,12 +169,12 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         //jsp.setVisible(true);
     }
 
-     public String saveHeaderInXml(String extensionToName) {
-	 if (extensionToName == null) {
-	     return "<Modeling type=\"TML Component Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
-	 }
-	 return "<Modeling type=\"TML Component Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-	 
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"TML Component Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        }
+        return "<Modeling type=\"TML Component Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+
     }
 
     public String saveTailInXml() {
@@ -184,7 +182,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
     }
 
     public String toString() {
-        return mgui.getTitleAt(this) +  "(DIPLODOCUS Component Application diagram)";
+        return mgui.getTitleAt(this) + "(DIPLODOCUS Component Application diagram)";
     }
 
     public java.util.List<String> getAllNonMappedTMLPrimitiveComponentNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
@@ -195,45 +193,46 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         return tmlctdp.getPrimitiveComponentByName(_name);
     }
 
-	public String[] getCompOutChannels(){
-		return tmlctdp.getCompOutChannels();
-	}
+    public String[] getCompOutChannels() {
+        return tmlctdp.getCompOutChannels();
+    }
 
-	public String[] getCompInChannels(){
-		return tmlctdp.getCompInChannels();
-	}
+    public String[] getCompInChannels() {
+        return tmlctdp.getCompInChannels();
+    }
 
     public java.util.List<String> getAllTMLCommunicationNames(String _name) {
         return tmlctdp.getAllTMLCommunicationNames(_name);
     }
 
-    public java.util.List<String> getAllTMLInputPorts( String _name ) {
-        return tmlctdp.getAllTMLInputPorts( _name );
+    public java.util.List<String> getAllTMLInputPorts(String _name) {
+        return tmlctdp.getAllTMLInputPorts(_name);
     }
 
-    public java.util.List<String> getAllTMLEventNames( String _name ) {
-        return tmlctdp.getAllTMLEventNames( _name );
+    public java.util.List<String> getAllTMLEventNames(String _name) {
+        return tmlctdp.getAllTMLEventNames(_name);
     }
 
     public java.util.List<String> getAllCompositeComponent(String _name) {
         return tmlctdp.getAllCompositeComponent(_name);
     }
-		
-		public Vector<String> getAllTMLTasksAttributes() {
-			return tmlctdp.getAllTMLTasksAttributes();
-		}
-    public java.util.List<String> getAllTMLTaskNames(String _name) {
-	return tmlctdp.getAllTMLTaskNames(_name);
+
+    public Vector<String> getAllTMLTasksAttributes() {
+        return tmlctdp.getAllTMLTasksAttributes();
     }
 
-    public void getListOfBreakPoints( java.util.List<Point> points ) {
-       // TGComponent tgc;
+    public java.util.List<String> getAllTMLTaskNames(String _name) {
+        return tmlctdp.getAllTMLTaskNames(_name);
+    }
+
+    public void getListOfBreakPoints(java.util.List<Point> points) {
+        // TGComponent tgc;
         Iterator<TMLCPrimitiveComponent> iterator = tmlctdp.getPrimitiveComponentList().listIterator();
         TMLCPrimitiveComponent tmlcpc;
         TMLActivityDiagramPanel tmladp;
 
-        while(iterator.hasNext()) {
-           // tgc = (TGComponent)(iterator.next());
+        while (iterator.hasNext()) {
+            // tgc = (TGComponent)(iterator.next());
             //if (tgc instanceof TMLCPrimitiveComponent) {
             tmlcpc = iterator.next();
             if (tmlcpc.getDIPLOID() != -1) {
@@ -248,58 +247,58 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
 //            }
         }
     }
-    
-    public java.util.List<String> getAllCryptoConfig(){
-    	java.util.List<String> cryptoConfigs=new ArrayList<String>();
-    	TMLActivityDiagramPanel tmladp;
-        
-    	for(int i=1; i<panels.size(); i++) {
-            tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
+
+    public java.util.List<String> getAllCryptoConfig() {
+        java.util.List<String> cryptoConfigs = new ArrayList<String>();
+        TMLActivityDiagramPanel tmladp;
+
+        for (int i = 1; i < panels.size(); i++) {
+            tmladp = (TMLActivityDiagramPanel) (panels.elementAt(i));
             cryptoConfigs.addAll(tmladp.getAllCryptoConfig());
         }
-	
-    	return cryptoConfigs;
-    }
-    
-    public java.util.List<String> getAllNonce(){
-    	java.util.List<String> ns=new ArrayList<String>();
-    	TMLActivityDiagramPanel tmladp;
-        
-    	for(int i=1; i<panels.size(); i++) {
-            tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
-            ns.addAll(tmladp.getAllNonce());
-        }
-	return ns;
+
+        return cryptoConfigs;
     }
 
-    public ArrayList<String> getAllKeys(){
-	ArrayList<String> ns=new ArrayList<String>();
-	TMLActivityDiagramPanel tmladp;
-        for(int i=1; i<panels.size(); i++) {
-            tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
+    public java.util.List<String> getAllNonce() {
+        java.util.List<String> ns = new ArrayList<String>();
+        TMLActivityDiagramPanel tmladp;
+
+        for (int i = 1; i < panels.size(); i++) {
+            tmladp = (TMLActivityDiagramPanel) (panels.elementAt(i));
+            ns.addAll(tmladp.getAllNonce());
+        }
+        return ns;
+    }
+
+    public ArrayList<String> getAllKeys() {
+        ArrayList<String> ns = new ArrayList<String>();
+        TMLActivityDiagramPanel tmladp;
+        for (int i = 1; i < panels.size(); i++) {
+            tmladp = (TMLActivityDiagramPanel) (panels.elementAt(i));
             ns.addAll(tmladp.getAllKeys());
         }
-	return ns;
+        return ns;
     }
 
     public String[] getAllOutEvents(String nameOfComponent) {
-	return tmlctdp.getAllOutEvents(nameOfComponent);
+        return tmlctdp.getAllOutEvents(nameOfComponent);
     }
 
     public String[] getAllInEvents(String nameOfComponent) {
-	return tmlctdp.getAllInEvents(nameOfComponent);
+        return tmlctdp.getAllInEvents(nameOfComponent);
     }
 
     public String[] getAllOutChannels(String nameOfComponent) {
-	return tmlctdp.getAllOutChannels(nameOfComponent);
+        return tmlctdp.getAllOutChannels(nameOfComponent);
     }
 
     public String[] getAllInChannels(String nameOfComponent) {
-	return tmlctdp.getAllInChannels(nameOfComponent);
+        return tmlctdp.getAllInChannels(nameOfComponent);
     }
 
     public String[] getAllOutRequests(String nameOfComponent) {
-	return tmlctdp.getAllOutRequests(nameOfComponent);
+        return tmlctdp.getAllOutRequests(nameOfComponent);
     }
-  
+
 }

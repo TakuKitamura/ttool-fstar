@@ -837,6 +837,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         return TGComponentManager.CONNECTOR_PORT_TMLC;
     }
 
+
     public String getAttributes() {
         String attr = "";
         if (isOrigin()) {
