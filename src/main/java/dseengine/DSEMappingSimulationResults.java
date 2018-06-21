@@ -42,6 +42,7 @@
 package dseengine;
 
 import myutil.Conversion;
+import myutil.TraceManager;
 import tmltranslator.TMLMapping;
 
 import java.util.Vector;

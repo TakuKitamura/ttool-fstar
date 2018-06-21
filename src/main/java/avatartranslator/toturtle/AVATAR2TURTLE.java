@@ -1,61 +1,58 @@
-/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
- * ludovic.apvrille AT enst.fr
- * 
- * This software is a computer program whose purpose is to allow the
- * edition of TURTLE analysis, design and deployment diagrams, to
- * allow the generation of RT-LOTOS or Java code from this diagram,
- * and at last to allow the analysis of formal validation traces
- * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
- * from INRIA Rhone-Alpes.
- * 
- * This software is governed by the CeCILL  license under French law and
- * abiding by the rules of distribution of free software.  You can  use,
- * modify and/ or redistribute the software under the terms of the CeCILL
- * license as circulated by CEA, CNRS and INRIA at the following URL
- * "http://www.cecill.info".
- * 
- * As a counterpart to the access to the source code and  rights to copy,
- * modify and redistribute granted by the license, users are provided only
- * with a limited warranty  and the software's author,  the holder of the
- * economic rights,  and the successive licensors  have only  limited
- * liability.
- * 
- * In this respect, the user's attention is drawn to the risks associated
- * with loading,  using,  modifying and/or developing or reproducing the
- * software by the user in light of its specific status of free software,
- * that may mean  that it is complicated to manipulate,  and  that  also
- * therefore means  that it is reserved for developers  and  experienced
- * professionals having in-depth computer knowledge. Users are therefore
- * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systems and/or
- * data to be ensured and,  more generally, to use and operate it in the
- * same conditions as regards security.
- * 
- * The fact that you are presently reading this means that you have had
- * knowledge of the CeCILL license and that you accept its terms.
- */
-
-
-
-
-package avatartranslator.toturtle;
-
-import avatartranslator.AvatarBlock;
-import avatartranslator.AvatarSpecification;
-import translator.ActivityDiagram;
-import translator.TClass;
-import translator.TURTLEModeling;
-
-import java.util.Vector;
-
-
-/**
+/**Copyright or  or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+*
+* ludovic.apvrille AT enst.fr
+*
+* This software is a computer program whose purpose is to allow the
+* edition of TURTLE analysis, design and deployment diagrams, to
+* allow the generation of RT-LOTOS or Java code from this diagram,
+* and at last to allow the analysis of formal validation traces
+* obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+* from INRIA Rhone-Alpes.
+*
+* This software is governed by the CeCILL  license under French law and
+* abiding by the rules of distribution of free software.  You can  use,
+* modify and/ or redistribute the software under the terms of the CeCILL
+* license as circulated by CEA, CNRS and INRIA at the following URL
+* "http://www.cecill.info".
+*
+* As a counterpart to the access to the source code and  rights to copy,
+* modify and redistribute granted by the license, users are provided only
+* with a limited warranty  and the software's author,  the holder of the
+* economic rights,  and the successive licensors  have only  limited
+* liability.
+*
+* In this respect, the user's attention is drawn to the risks associated
+* with loading,  using,  modifying and/or developing or reproducing the
+* software by the user in light of its specific status of free software,
+* that may mean  that it is complicated to manipulate,  and  that  also
+* therefore means  that it is reserved for developers  and  experienced
+* professionals having in-depth computer knowledge. Users are therefore
+* encouraged to load and test the software's suitability as regards their
+* requirements in conditions enabling the security of their systems and/or
+* data to be ensured and,  more generally, to use and operate it in the
+* same conditions as regards security.
+*
+* The fact that you are presently reading this means that you have had
+* knowledge of the CeCILL license and that you accept its terms.
+*
+* /**
 * Class AVATAR2TURTLE
 * Creation: 21/05/2010
 * @version 1.0 21/05/2010
 * @author Ludovic APVRILLE
- */
+* @see
+*/
+
+package avatartranslator.toturtle;
+
+import java.util.*;
+
+import avatartranslator.*;
+import myutil.*;
+import translator.*;
+import ui.*;
+
+
 public class AVATAR2TURTLE {
     
     //private static int gateId;
@@ -75,7 +72,7 @@ public class AVATAR2TURTLE {
     
     
     public TURTLEModeling generateTURTLEModeling() {
-		//
+		//System.out.println("generate TM");
 		//tmlmodeling.removeAllRandomSequences();
 		spec.removeCompositeStates();
         spec.removeLibraryFunctionCalls ();
@@ -85,17 +82,17 @@ public class AVATAR2TURTLE {
         
         // Create TClasses -> same name as TML tasks
         //nbClass = 0;
-        //
+        //System.out.println("Tclasses");
         createTClasses();
-        //
+        //System.out.println("Channels");
         /*createChannelTClasses();
-        //
+        //System.out.println("Events");
         createEventTClasses();
-        //
+        //System.out.println("Requests");
         createRequestTClasses();
-        //
+        //System.out.println("AD of tclasses");
         createADOfTClasses();
-        //
+        //System.out.println("All done");*/
         
         return tm;
     }
@@ -223,9 +220,9 @@ public class AVATAR2TURTLE {
         
         for(int i=0; i<nbClass; i++) {
             t = tm.getTClassAtIndex(i);
-            //
+            //System.out.println("Create AD");
             createADOfTClass(t, (TMLTask)(tmlmodeling.getTasks().get(i)));
-            //
+            //System.out.println("End create AD");
         }
     }
     
@@ -234,15 +231,15 @@ public class AVATAR2TURTLE {
         Vector newElements = new Vector(); // elements of AD
         Vector baseElements = new Vector(); // elements of basic task
         
-        //
+        //System.out.println("Making AD of " + tclass.getName());
         translateAD(newElements, baseElements, tclass, task, task.getActivityDiagram().getFirst(), null, null);
         
         // DANGER: if task may be requested, the AD must be modified!!!!
-        //
+        //System.out.println("task requested?");
         if (task.isRequested()) {
             setADRequested(tclass, task);
         }
-        //
+        //System.out.println("end task requested?");
         
         setGatesToTask(tclass, task);
     }
@@ -284,7 +281,7 @@ public class AVATAR2TURTLE {
         
         // START STATE
         
-        //
+        //System.out.println("Call to TMLE=" + tmle.toString());
         try {
 			
 			if (tmle instanceof TMLStartState) {
@@ -331,20 +328,20 @@ public class AVATAR2TURTLE {
 				
 				// CHOICE
 			} else if (tmle instanceof TMLChoice) {
-				//
+				//System.out.println("TML Choice!");
 				tmlchoice = (TMLChoice)tmle;
 				adchoice = new ADChoice();
 				newElements.add(adchoice);
 				baseElements.add(tmle);
 				tclass.getActivityDiagram().add(adchoice);
 				
-				//
+				//System.out.println("Get guards nb=" + tmlchoice.getNbGuard());
 				//String guard = "";
 				
 				if (tmlchoice.getNbGuard() !=0 ) {
 					int index1 = tmlchoice.getElseGuard(), index2 = tmlchoice.getAfterGuard();
 					if (index2 != -1) {
-						//
+						//System.out.println("Managing after");
 						adj = new ADJunction();
 						adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(index2), adchoice, adj);
 						tclass.getActivityDiagram().add(adj);
@@ -353,8 +350,8 @@ public class AVATAR2TURTLE {
 					}
 					
 					for(i=0; i<tmlchoice.getNbGuard(); i++) {
-						//
-						//
+						//System.out.println("Get guards i=" + i);
+						//System.out.println("ADjunc=" + adjunc);
 						if (i==index1) {
 							action = modifyString(tmlchoice.getValueOfElse());
 						} else {
@@ -367,9 +364,9 @@ public class AVATAR2TURTLE {
 						}
 						adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i), adchoice, adj);
 						if (adc1 == null) {
-							//
+							//System.out.println("Null adc1");
 						} else {
-							//
+							//System.out.println("adc1 = " +adc1);
 						}
 						g = tclass.addNewGateIfApplicable("branching");
 						adag = new ADActionStateWithGate(g);
@@ -379,7 +376,7 @@ public class AVATAR2TURTLE {
 						adchoice.addGuard(action);
 						adchoice.addNext(adag);
 					}
-					//
+					//System.out.println("Return adchoice ...");
 					return adchoice;
 				} else {
 					return endOfActivity(newElements, baseElements, tclass, adjunc);
@@ -510,10 +507,10 @@ public class AVATAR2TURTLE {
             } else if (tmle instanceof TMLForLoop) {
                 tmlforloop = (TMLForLoop)tmle;
                 action = modifyString(tmlforloop.getInit());
-                //
+                //System.out.println("FOR action = " + action);
                 parameter = null;
                 if ((action.length() == 0) || ((parameter = paramAnalyzer(action, tclass)) != null)) {
-                    //
+                    //System.out.println("parameter1 ok");
 					if (action.length() != 0) {
 						adacparam1 = new ADActionStateWithParam(parameter);
 						adacparam1.setActionValue(getActionValueParam(action, tclass));
@@ -524,7 +521,7 @@ public class AVATAR2TURTLE {
                     action = modifyString(tmlforloop.getIncrement());
                     parameter = null;
                     if ((action.length() == 0) || ((parameter = paramAnalyzer(action, tclass)) != null)) {
-                        //
+                        //System.out.println("New loop");
 						if (action.length() != 0) {
 							adacparam2 = new ADActionStateWithParam(parameter);
 							adacparam2.setActionValue(getActionValueParam(action, tclass));
@@ -600,7 +597,7 @@ public class AVATAR2TURTLE {
                 
                 // TML Sequence
             } else if (tmle instanceof TMLSequence) {
-                //
+                //System.out.println("TML sequence !");
                 tmlseq = (TMLSequence)tmle;
                 
                 if (tmlseq.getNbNext() == 0) {
@@ -760,10 +757,10 @@ public class AVATAR2TURTLE {
                 TClass tcl = tm.getTClassWithName(nameRequest + tmlreq.getRequest().getName());
                 //g1 = tcl.getGateByName("sendReq");
                 //int index = tmlreq.getRequest().getOriginTasks().indexOf(task);
-                //
+                //System.out.println("task=" + task.getName() + " index=" + index);
                 //g1 = (Gate)(((TClassRequest)tcl).getGatesWrite().get(index));
 				g1 = (Gate)(((TClassRequest)tcl).getGateWrite(task.getName()));
-                //
+                //System.out.println("task=" + task.getName() + " index=" + index + "gate=" + g.getName());
                 tm.addSynchroRelation(tclass, g, tcl, g1);
                 
 				adacparam2 = null;
@@ -947,7 +944,7 @@ public class AVATAR2TURTLE {
                 }
             }
 		} catch (Exception e) {
-			
+			System.out.println("Exception in AD diagram analysis -> " + e.getMessage());
 			return null;
 		}
 		
@@ -993,11 +990,11 @@ public class AVATAR2TURTLE {
 		adag.setActionValue(action);
 		
 		// Search for all adcomponents which next is a stop ... Replace this next to a next to the first adjunction
-		//
+		//System.out.println("Remove all elements ..");
 		try {
 			tm.removeAllElement(Class.forName("translator.ADStop"), adj, tclass.getActivityDiagram());
             } catch (ClassNotFoundException cnfe ) {}
-            //
+            //System.out.println("All elements removed ...");
             tclass.getActivityDiagram().add(adag);
             tclass.getActivityDiagram().add(adj);
             
@@ -1062,9 +1059,9 @@ public class AVATAR2TURTLE {
 			//g1 = tcl.getGateByName("sendReq");
 			index = request.getOriginTasks().indexOf(task);
 			if (index != -1) {
-                //
+                //System.out.println("task=" + task.getName() + " index=" + index);
                 g1 = (Gate)(((TClassRequest)tcl).getGatesWrite().get(index));
-                //
+                //System.out.println("task=" + task.getName() + " index=" + index + "gate=" + g.getName());
                 tm.addSynchroRelation(tclass, g, tcl, g1);
 			}
 		}
@@ -1149,7 +1146,7 @@ public class AVATAR2TURTLE {
 			tmla = (TMLAttribute)(iterator.next());
 			switch (tmla.type.getType()) {
 			case TMLType.NATURAL:
-				//
+				//System.out.println("Adding nat attribute:" + modifyString(tmla.name));
 				tcl.addNewParamIfApplicable(modifyString(tmla.name), "nat", modifyString(tmla.initialValue));
 				break;
 			default:

@@ -1049,7 +1049,7 @@ public class TURTLEModeling {
 			
             if ((adc instanceof ADParallel) || (adc instanceof ADPreempt) || (adc instanceof ADSequence) || (adc instanceof ADJunction)) {
                 if (adc instanceof ADParallel) {
-					if (debug)
+
                         
                 }
 				if ((adc.getNbNext() > 1) && ((adc instanceof ADParallel) || (adc instanceof ADSequence))) {
@@ -1071,20 +1071,20 @@ public class TURTLEModeling {
 				}
 	
                 if ((adc.getNbNext() == 1) && (ad.getNbComponentLeadingTo(adc) == 1)) {
-                    if (debug)
+
                         
                     adc1 = ad.getFirstComponentLeadingTo(adc);
-                    //
+
                     if (adc1 != null) {
                         adc1.updateNext(adc, adc.getNext(0));
-                        if (debug)
+
                             
                         ad.removeElement(adc);
                         return removeAllUselessComponent(ad, debug, specialChoices);
                     }
                 } else if (adc instanceof ADJunction) {
                     // Junction looping on itself?
-                    if (debug)
+
 						
 					
 						if (adc.getNext(0) == adc) {
@@ -1098,9 +1098,7 @@ public class TURTLEModeling {
 						// Two junctions are set after the other, and the number of leading components to them may fit on only one junction.
 						adc1 = adc.getNext(0);
 						if (adc1 instanceof ADJunction) {
-							if (debug) {
-								
-							}
+
 							
 							if ((ad.getNbComponentLeadingTo(adc) + ad.getNbComponentLeadingTo(adc1)) < 5) {
 								// The first junction is kept, and the second is removed
@@ -1135,9 +1133,7 @@ public class TURTLEModeling {
                 }
                 
                 
-                if (debug) {
-                    
-                }
+
                 // Choice with the same next components and the same guard
                 if (adc.getNbNext() > 1) {
                     for(j=0; j<adc.getNbNext()-1; j++) {
@@ -1146,14 +1142,9 @@ public class TURTLEModeling {
                             adc2 = adc.getNext(k);
                             
                             if ((adc1 == adc2) && (adcc.getGuard(j).compareTo(adcc.getGuard(k)) ==0)){
-                                if (debug) {
-                                    
-                                    
-                                }
+
                                 adcc.removeNext(adc2);
-                                if (debug) {
-                                    
-                                }
+
                                 return removeAllUselessComponent(ad, debug, specialChoices);
                             }
                         }
@@ -1662,15 +1653,10 @@ public class TURTLEModeling {
         for(int i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
 			
-            if (debug) {
-				
-				
-            }
+
 			
             removeAllUselessComponent(t.getActivityDiagram(), debug);
-            if (debug) {
-				
-            }
+
         }
     }
     
@@ -1679,14 +1665,9 @@ public class TURTLEModeling {
         for(int i=0; i<tclass.size(); i++) {
             t = tclass.elementAt(i);
 			
-            if (debug) {
-				
-				
-            }
+
             removeAllUselessComponent(t.getActivityDiagram(), debug, specialChoices);
-            if (debug) {
-				
-            }
+
         }
     }
     
@@ -2119,7 +2100,7 @@ public class TURTLEModeling {
                         System.exit(0);
                     }
                     ad.add(adcclone);
-                    if (debug)
+
                         
 						if (i == (path.size()-1)) {
 							adcclone.removeNext(ad2);
@@ -2136,7 +2117,7 @@ public class TURTLEModeling {
 							adtmp.addNext(adcclone);
 						}
                 } else {
-                    if (debug)
+
 						
 						if (path.size() > 1) {
 							ad2.removeNext((ADComponent)(path.elementAt(1)));
@@ -2144,7 +2125,7 @@ public class TURTLEModeling {
 							ad2.removeNext((ADComponent)(path.elementAt(0)));
 						}
                 }
-                if (debug)
+
 					
                 //ad.print();
                 return true;*/
