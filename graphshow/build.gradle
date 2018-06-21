@@ -20,11 +20,6 @@ dependencies {
     compileOnly name: 'commons-io-2.5'
     compileOnly name: 'commons-codec-1.10'
     compileOnly name: 'jsoup-1.8.1'
-    compile name: 'batik-xml'
-    compile name: 'batik-util' 
-    compile name: 'batik-svggen'
-    compile name: 'batik-dom'
-    compile name: 'batik-awt-util'
 }
 
 jar {
