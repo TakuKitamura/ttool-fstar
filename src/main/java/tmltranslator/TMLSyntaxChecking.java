@@ -546,20 +546,22 @@ public class TMLSyntaxChecking {
         SimpleNode root;
 
         // First parsing
-        parser = new TMLExprParser(new StringReader(parseCmd + " " + action));
-        try {
-            //System.out.println("\nParsing :" + parseCmd + " " + action);
-            root = parser.CompilationUnit();
-            //root.dump("pref=");
-            //System.out.println("Parse ok");
-        } catch (ParseException e) {
-            //System.out.println("ParseException --------> Parse error in :" + parseCmd + " " + action);
-            addError(t, elt, SYNTAX_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
-            return;
-        } catch (TokenMgrError tke) {
-            //System.out.println("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
-            addError(t, elt, SYNTAX_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
-            return;
+        if (!(parseCmd.startsWith("guard"))) {
+            parser = new TMLExprParser(new StringReader(parseCmd + " " + action));
+            try {
+                TraceManager.addDev("\nParsing :" + parseCmd + " " + action);
+                root = parser.CompilationUnit();
+                //root.dump("pref=");
+                TraceManager.addDev("Parse ok");
+            } catch (ParseException e) {
+                TraceManager.addDev("ParseException --------> Parse error in: " + parseCmd + " " + action);
+                addError(t, elt, SYNTAX_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                return;
+            } catch (TokenMgrError tke) {
+                TraceManager.addDev("TokenMgrError --------> Parse error in: " + parseCmd + " " + action);
+                addError(t, elt, SYNTAX_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                return;
+            }
         }
 
         // Second parsing
@@ -591,16 +593,16 @@ public class TMLSyntaxChecking {
         }
         parser = new TMLExprParser(new StringReader(parseCmd + " " + modif));
         try {
-            //System.out.println("\nParsing :" + parseCmd + " " + modif);
+            TraceManager.addDev("\nParsing :" + parseCmd + " " + modif);
             root = parser.CompilationUnit();
             //root.dump("pref=");
-            //System.out.println("Parse ok");
+            TraceManager.addDev("Parse ok");
         } catch (ParseException e) {
-            //System.out.println("ParseException --------> Parse error in :" + parseCmd + " " + action);
+            TraceManager.addDev("ParseException --------> Parse error in :" + parseCmd + " " + action);
             addError(t, elt, VARIABLE_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
             return;
         } catch (TokenMgrError tke) {
-            //System.out.println("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
+            TraceManager.addDev("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
             addError(t, elt, VARIABLE_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
             return;
         }
