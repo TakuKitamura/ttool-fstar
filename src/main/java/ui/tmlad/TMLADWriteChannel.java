@@ -70,6 +70,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     protected int textY = 15;
     protected int arc = 5;
     protected int linebreak = 10;
+    protected int decSec = 4;
 
 
     private ConcurrentHashMap<String, String> latencyVals;
@@ -175,7 +176,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
         }
         g.drawString(value, x + (width - w) / 2, y + textY);
         if (!securityContext.equals("")) {
-            g.drawString("sec:" + securityContext, x + 3 * width / 4, y + height + textY);
+            g.drawString("sec:" + securityContext, x + 3 * width / 4, y + height + textY - decSec);
         }
 
         if (getCheckLatency()) {

@@ -549,10 +549,10 @@ public class TMLSyntaxChecking {
         if (!(parseCmd.startsWith("guard"))) {
             parser = new TMLExprParser(new StringReader(parseCmd + " " + action));
             try {
-                TraceManager.addDev("\nParsing :" + parseCmd + " " + action);
+                //TraceManager.addDev("\nParsing :" + parseCmd + " " + action);
                 root = parser.CompilationUnit();
                 //root.dump("pref=");
-                TraceManager.addDev("Parse ok");
+                //TraceManager.addDev("Parse ok");
             } catch (ParseException e) {
                 TraceManager.addDev("ParseException --------> Parse error in: " + parseCmd + " " + action);
                 addError(t, elt, SYNTAX_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
@@ -593,10 +593,10 @@ public class TMLSyntaxChecking {
         }
         parser = new TMLExprParser(new StringReader(parseCmd + " " + modif));
         try {
-            TraceManager.addDev("\nParsing :" + parseCmd + " " + modif);
+            //TraceManager.addDev("\nParsing :" + parseCmd + " " + modif);
             root = parser.CompilationUnit();
             //root.dump("pref=");
-            TraceManager.addDev("Parse ok");
+            //TraceManager.addDev("Parse ok");
         } catch (ParseException e) {
             TraceManager.addDev("ParseException --------> Parse error in :" + parseCmd + " " + action);
             addError(t, elt, VARIABLE_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);

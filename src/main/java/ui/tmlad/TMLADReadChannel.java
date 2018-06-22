@@ -73,6 +73,8 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
     protected int textY1 = 15;
     protected int linebreak = 10;
 
+    protected int decSec = 4;
+
     protected int latencyX = 30;
     protected int latencyY = 25;
     protected int textWidth = 10;
@@ -180,7 +182,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         g.drawString(value, x + linebreak + textX0, y + textY1);
 
         if (!securityContext.equals("")) {
-            g.drawString("sec:" + securityContext, x + 3 * width / 4, y + height + textY1);
+            g.drawString("sec:" + securityContext, x + 3 * width / 4, y + height + textY1 - decSec);
         }
         drawReachabilityInformation(g);
         if (getCheckLatency()) {
