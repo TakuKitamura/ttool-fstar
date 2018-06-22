@@ -47,6 +47,8 @@ import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogMultiString;
 import myutil.*;
+import ui.window.JDialogMultiStringAndTabs;
+import ui.window.TabInfo;
 
 import javax.swing.*;
 import java.awt.*;
@@ -261,59 +263,60 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-
-        String[] labels = new String[4];
-        String[] values = new String[4];
+        TabInfo tab1 = new TabInfo("Name and samples");
+        String[] labels = new String[2];
+        String[] values = new String[2];
         labels[0] = "Channel name";
         values[0] = channelName;
         labels[1] = "Nb of samples";
         values[1] = nbOfSamples;
-        labels[2] = "Security Pattern";
-        values[2] = securityContext;
-        labels[3] = "Attacker?";
-        values[3] = isAttacker ? "Yes" : "No";
-
+        tab1.labels=labels;
+        tab1.values =  values;
         ArrayList<String[]> help = new ArrayList<String[]>();
         String[] allInChannels = tdp.getMGUI().getAllInChannels();
-        TraceManager.addDev("isAttacker " + isAttacker);
         if (isAttacker) {
             allInChannels = tdp.getMGUI().getAllCompInChannels();
-
         }
         help.add(allInChannels);
         help.add(null);
-        help.add(tdp.getMGUI().getCurrentCryptoConfig());
+        tab1.help = help;
+
+        TabInfo tab2 = new TabInfo("Security");
+        labels = new String[2];
+        values = new String[2];
+        labels[0] = "Security Pattern";
+        values[0] = securityContext;
+        labels[1] = "Attacker?";
+        values[1] = isAttacker ? "Yes" : "No";
+        help = new ArrayList<String[]>();
         String[] choice = new String[]{"Yes", "No"};
+        help.add(tdp.getMGUI().getCurrentCryptoConfig());
         help.add(choice);
-        // JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
+        tab2.labels=labels;
+        tab2.values =  values;
+        tab2.help = help;
 
-        JDialogMultiString jdms = new JDialogMultiString(frame, "Setting channel's properties", 4, labels, values, help);
+        ArrayList<TabInfo> tabs = new ArrayList<>();
+        tabs.add(tab1);
+        tabs.add(tab2);
+
+        //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
+        JDialogMultiStringAndTabs jdmsat = new JDialogMultiStringAndTabs(frame, "Write in channel", tabs);
         //jdms.setSize(600, 300);
-        GraphicLib.centerOnParent(jdms, 600, 300);
-        jdms.setVisible(true); // blocked until dialog has been closed
+        GraphicLib.centerOnParent(jdmsat, 600, 300);
+        jdmsat.setVisible(true); // blocked until dialog has been closed
 
-        if (jdms.hasBeenSet() && (jdms.hasValidString(0))) {
-            channelName = jdms.getString(0);
-            nbOfSamples = jdms.getString(1);
-            securityContext = jdms.getString(2);
-            isAttacker = jdms.getString(3).equals("Yes");
+        if (jdmsat.hasBeenSet() && (jdmsat.hasValidString(0))) {
+            channelName = jdmsat.getString(0, 0);
+            nbOfSamples = jdmsat.getString(0, 1);
+            securityContext = jdmsat.getString(1, 0);
+            isAttacker = jdmsat.getString(1, 1).equals("Yes");
             makeValue();
             return true;
         }
 
-        /*jdts.setSize(350, 300);
-        GraphicLib.centerOnParent(jdts);
-        jdts.show(); // blocked until dialog has been closed
-
-        if (jdts.hasBeenSet() && (jdts.hasValidString())) {
-            channelName = jdts.getString1();
-            nbOfSamples = jdts.getString2();
-
-            makeValue();
-            return true;
-	    }*/
-
         return false;
+
 
     }
 
