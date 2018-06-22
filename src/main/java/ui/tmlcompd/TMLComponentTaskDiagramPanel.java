@@ -1014,6 +1014,16 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
     }
 
+    public TMLCPath findPathWith(TGComponent tgc) {
+        List<TMLCPath> paths = makePaths();
+        for (TMLCPath path : paths) {
+            if (path.contains(tgc)) {
+                return path;
+            }
+        }
+        return null;
+    }
+
     public void updatePorts_oldVersion() {
 
         //TraceManager.addDev("Update ports / nb of components = " + componentList.size());

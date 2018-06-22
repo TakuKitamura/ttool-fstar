@@ -965,7 +965,16 @@ public class GTMLModeling {
 
                             // Channel attributes
                             port = portstome.get(0);
+                            TraceManager.addDev("Fork sample?");
                             channel = new TMLChannel(name, port1);
+                            TMLCPath path = tmlc.findPathWith(port);
+                            if (path != null) {
+                                TMLCFork fork = path.getFork(0);
+                                if (fork != null) {
+                                    TraceManager.addDev("Setting fork sample");
+                                    channel.setNumberOfSamples(fork.getNumberOfSamples());
+                                }
+                            }
                             channel.ports.add(port1);
                             for (j = 0; j < portstome.size(); j++) {
                                 TMLCPrimitivePort p = portstome.get(j);
@@ -1761,13 +1770,12 @@ public class GTMLModeling {
                 String name = tmltask.getName() + ":" + tgc.getName();
                 name = name.replaceAll(" ", "");
                 //TraceManager.addDev("To check " + name);
-                if (tgc.getValue().contains("(")){
-                	tmlm.addCheckedActivity(tgc, name+":" + tgc.getValue().split("\\(")[0]);
-                }
-                else {
-                	if (tgc instanceof TMLADExecI){
-	                	tmlm.addCheckedActivity(tgc, ((TMLADExecI) tgc).getDelayValue());
-	                }
+                if (tgc.getValue().contains("(")) {
+                    tmlm.addCheckedActivity(tgc, name + ":" + tgc.getValue().split("\\(")[0]);
+                } else {
+                    if (tgc instanceof TMLADExecI) {
+                        tmlm.addCheckedActivity(tgc, ((TMLADExecI) tgc).getDelayValue());
+                    }
                 }
             }
             if (tgc instanceof TMLADActionState) {
@@ -1959,7 +1967,7 @@ public class GTMLModeling {
                 //TMLADReadChannel rd = (TMLADReadChannel) tgc;
                 channel = tmlm.getChannelByName(getFromTable(tmltask, ((TMLADReadChannel) tgc).getChannelName()));
                 /*if (rd.isAttacker()){
-					channel = tmlm.getChannelByName(getAttackerChannel(((TMLADReadChannel)tgc).getChannelName()));
+                    channel = tmlm.getChannelByName(getAttackerChannel(((TMLADReadChannel)tgc).getChannelName()));
 				}*/
                 if (channel == null) {
                     if (Conversion.containsStringInList(removedChannels, ((TMLADReadChannel) tgc).getChannelName())) {

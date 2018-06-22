@@ -56,7 +56,8 @@ import java.awt.*;
  */
 public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
     protected int radius = 11;
-    protected int decPoint = 3;
+    protected int numberOfSamples = 1; // Indicates the number of samples being read in each
+    // input before being written in output channels
 
 
     public TMLCJoin(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -148,27 +149,9 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
         return TGComponentManager.TMLCTD_JOIN;
     }
 
-
-
-    /*public String getAttributeList() {
-      if (conflict) {
-      return conflictMessage;
-      }
-
-      String s = "";
-      if (inp != null) {
-      s = s + inp.getAttributeList();
-      if (outp != null) {
-      s = s + "\n";
-      }
-      }
-
-      if (outp != null) {
-      s = s + outp.getAttributeList();
-      }
-
-      return s;
-      }*/
+    public int getNumberOfSamples() {
+        return numberOfSamples;
+    }
 
 
 
