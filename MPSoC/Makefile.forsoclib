@@ -17,8 +17,7 @@ updateruntime:
 	cp mutekh/libmwmr/*.c mutekh/examples/avatar
 	cp mutekh/libmwmr/include/mwmr/mwmr.h mutekh/examples/avatar
 	cp src/*.c ~/TTool/MPSoC/mutekh/libavatar/
-	cp src/*.h ~/TTool/MPSoC/mutekh/libavatar/include/
-	cp libavatar/*.o ~/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/libavatar
+	cp src/*.h ~/TTool/MPSoC/mutekh/libavatar/
 
 	
 updategeneratedcode:
