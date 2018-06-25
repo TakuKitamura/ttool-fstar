@@ -131,17 +131,17 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
         int w  = g.getFontMetrics().stringWidth(value);
 		int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
 		
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+        //
         if (w1 != width) { 
             width = w1;
             resizeWithFather();
         }
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+        //
     }
     
     public void resizeWithFather() {
         if ((father != null) && ((father instanceof NCEqNode) || (father instanceof NCSwitchNode))) {
-            //System.out.println("cdRect comp");
+            //
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
             setMoveCd(x, y);
@@ -240,7 +240,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
     
    @Override
    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-	   //System.out.println("*** load extra synchro ***");
+	   //
 	   try {
 		   NodeList nli;
 		   Node n1, n2;
@@ -250,12 +250,12 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 
 		   for(int i=0; i<nl.getLength(); i++) {
 			   n1 = nl.item(i);
-			   //System.out.println(n1);
+			   //
 			   if (n1.getNodeType() == Node.ELEMENT_NODE) {
 				   nli = n1.getChildNodes();
 				   for(int j=0; j<nli.getLength(); j++) {
 					   n2 = nli.item(j);
-					   //System.out.println(n2);
+					   //
 					   if (n2.getNodeType() == Node.ELEMENT_NODE) {
 						   elt = (Element) n2;
 						   if (elt.getTagName().equals("info")) {
@@ -269,21 +269,21 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 							   s6 = elt.getAttribute("period");
 							   s7 = elt.getAttribute("periodUnit");
 						   }
-						   //System.out.println("Decoding traffic s0=" + s0 + " s1=" + s1 + " s2=" + s2 + " s3=" + s3);
+						   //
 						   if (svalue != null) {
 							   value = svalue;
 						   } 
-						   //System.out.println("Decoding traffic s0=" + s0 + " s1=" + s1 + " s2=" + s2 + " s3=" + s3);
+						   //
 
 						   if (s0 != null){
 							   periodicType = Integer.decode(s0).intValue();
 						   }
-						   //System.out.println("Decoding traffic s0=" + s0 + " s1=" + s1 + " s2=" + s2 + " s3=" + s3);
+						   //
 
 						   if (s6 != null){
 							   period = Integer.decode(s6).intValue();
 						   }
-						   //System.out.println("Decoding traffic s0=" + s0 + " s1=" + s1 + " s2=" + s2 + " s3=" + s3);
+						   //
 
 						   if ((s7 != null) && (s7.length() > 0)) {
 							   periodUnit = s7;
@@ -292,7 +292,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 						   if (s1 != null){
 							   deadline = Integer.decode(s1).intValue();
 						   }
-						   //System.out.println("Decoding traffic s0=" + s0 + " s1=" + s1 + " s2=" + s2 + " s3=" + s3);
+						   //
 
 						   if ((s4 != null) && (s4.length() > 0)) {
 							   deadlineUnit = s4;
@@ -305,7 +305,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 						   if (s2 != null){
 							   maxPacketSize = Integer.decode(s2).intValue();
 						   }
-						   //System.out.println("Decoding traffic s0=" + s0 + " s1=" + s1 + " s2=" + s2 + " s3=" + s3);
+						   //
 
 						   if (s3 != null){
 							   priority = Integer.decode(s3).intValue();
@@ -316,7 +316,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 		   }
 
 	   } catch (Exception e) {
-		   System.out.println("Decoding traffic: failed");
+		   
 
 		   throw new MalformedModelingException();
 	   }

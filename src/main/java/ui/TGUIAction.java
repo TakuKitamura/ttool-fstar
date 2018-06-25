@@ -1332,7 +1332,7 @@ public class TGUIAction extends AbstractAction {
     }
 
     public void actionPerformed(ActionEvent evt)  {
-        //System.out.println("Action performed");
+        //
         if (listeners != null) {
             Object[] listenerList = listeners.getListenerList();
 

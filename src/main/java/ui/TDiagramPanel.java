@@ -39,6 +39,7 @@
 package ui;
 
 import myutil.*;
+import myutilsvg.*;
 import ui.atd.ATDAttack;
 import ui.atd.ATDBlock;
 import ui.avatarad.AvatarADActivity;
@@ -2318,7 +2319,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     actionOnRemove(t);
                     tgcon.getTGConnectingPointP1().setFree(true);
                     tgcon.getTGConnectingPointP2().setFree(true);
-                    System.out.println("removing...");
+                    
                     TraceManager.addDev("Removed one connector!");
                     for (int k = 0; k < tgcon.getNbConnectingPoint(); k++)
                         removeOneConnector(tgcon.tgconnectingPointAtIndex(k));

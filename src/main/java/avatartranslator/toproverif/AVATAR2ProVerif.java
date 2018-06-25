@@ -1216,11 +1216,11 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     } else
                         // Else use the function as is
                         proVerifRightHand = AVATAR2ProVerif.translateTerm (rightHand, arg.attributeCmp);
-			//System.out.println("right hand "+ proVerifRightHand);
+			//
                 } else {
                     // If it's not a function, use it as is
                     proVerifRightHand = AVATAR2ProVerif.translateTerm (rightHand, arg.attributeCmp);
-		//System.out.println(" not right hand "+ proVerifRightHand);
+		//
 		}
                 // Compute left hand part of the assignment
                 LinkedList<ProVerifVar> proVerifLeftHand = new LinkedList<ProVerifVar> ();

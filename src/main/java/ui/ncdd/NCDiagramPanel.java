@@ -67,7 +67,7 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 	}
 
 	public boolean actionOnDoubleClick(TGComponent tgc) {
-		//System.out.println("Action");
+		//
         /*if (tgc instanceof TCDTClass) {
             TCDTClass t = (TCDTClass)tgc;
             return mgui.newTClassName(tp, t.oldValue, t.getValue());
@@ -89,7 +89,7 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 	public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
-            //System.out.println(" *** add tclass *** name=" + tgcc.getClassName());
+            //
             mgui.addTClass(tp, tgcc.getClassName());
             return true;
         }*/
@@ -146,15 +146,15 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 
 	public void loadExtraParameters(Element elt) {
 		String s;
-		//System.out.println("Extra parameter");
+		//
 		try {
 			s = elt.getAttribute("attributes");
-			//System.out.println("S=" + s);
+			//
 			int attr = Integer.decode(s).intValue();
 			setAttributes(attr % 3);
 		} catch (Exception e) {
 			// Model was saved in an older version of TTool
-			//System.out.println("older format");
+			//
 			setAttributes(0);
 		}
 	}

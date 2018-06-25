@@ -116,11 +116,11 @@ public abstract class TGCScalableWithoutInternalComponentOneLineText extends TGC
             s = Conversion.removeFirstSpaces(s);
         }
 
-        //System.out.println("emptytext=" + emptyText);
+        //
 
         if ((s != null) && ((emptyText) || s.length() > 0) && (!s.equals(oldValue))) {
             setValue(s);
-            //System.out.println("Value ok");
+            //
             return true;
         }
 

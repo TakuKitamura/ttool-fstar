@@ -142,7 +142,7 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
     
     
     public boolean editOndoubleClick(JFrame frame) {
-		//System.out.println("Double click");
+		//
         String text = getName() + ": ";
         if (hasFather()) {
             text = getTopLevelName() + " / " + text;
@@ -173,7 +173,7 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
 			return false;
 		}
 		
-        //System.out.println("Add swallow component");
+        //
         // Choose its position
         
         // Make it an internal component
@@ -184,7 +184,7 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
         //Set its coordinates
         if (tgc instanceof EBRDDESO) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
+            //
             tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
@@ -192,7 +192,7 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
 		
 		if (tgc instanceof EBRDDERB) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
+            //
             tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);

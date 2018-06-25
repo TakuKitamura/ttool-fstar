@@ -90,13 +90,13 @@ public  class FTDCountermeasureConnector extends TGConnectorWithCommentConnectio
     }
 
     public void rescale(double scaleFactor){
-        //System.out.println("Rescale connector");
+        //
         int xx, yy;
 
         for(int i=0; i<nbInternalTGComponent; i++) {
             xx = tgcomponent[i].getX();
             yy = tgcomponent[i].getY();
-            //System.out.println("Internal comp xx= " + xx + "  y==" + yy);
+            //
             tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
             tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
             xx = (int)(tgcomponent[i].dx);
@@ -106,7 +106,7 @@ public  class FTDCountermeasureConnector extends TGConnectorWithCommentConnectio
 
             tgcomponent[i].setCd(xx, yy);
 
-            //System.out.println("Internal comp xx= " + xx + "  y==" + yy);
+            //
         }
 
         oldScaleFactor = scaleFactor;

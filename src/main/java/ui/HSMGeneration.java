@@ -117,7 +117,7 @@ public class HSMGeneration implements Runnable {
             TraceManager.addDev("all results displayed");
 
         } catch (Exception e) {
-            System.out.println("ProVerif Analysis Failed " + e);
+            
         }
     }
     
@@ -207,11 +207,11 @@ public class HSMGeneration implements Runnable {
                 }
             }
             if (comps.size() == 0) {
-                //System.out.println("No Components found");
+                //
                 continue;
             }
-            //  System.out.println("nonAuthChans " + nonAuthChans);
-            //System.out.println("nonSecChans "+ nonSecChans);
+            //  
+            //
             for (TMLCPrimitiveComponent comp : comps) {
 
                 Map<String, HSMChannel> compChannels = new HashMap<String, HSMChannel>();
@@ -253,7 +253,7 @@ public class HSMGeneration implements Runnable {
                                 }
                             }
                         } else {
-                            //System.out.println("security context:"+writeChannel.securityContext);
+                            //
                             fromStart = tad.findTGConnectorEndingAt(tg.getTGConnectingPointAtIndex(0));
                             if (fromStart != null) {
                                 channelInstances.add(tg);
@@ -324,8 +324,8 @@ public class HSMGeneration implements Runnable {
                     }
                 }
                 
-               // System.out.println("channelIndex " + channelIndexMap);
-                //System.out.println("compchannels " +compChannels);
+               // 
+                //
                 List<ChannelData> hsmChans = new ArrayList<ChannelData>();
                 ChannelData chd = new ChannelData("startHSM_" + cpuName, false, false);
                 hsmChans.add(chd);
@@ -800,7 +800,7 @@ public class HSMGeneration implements Runnable {
         //For all the tasks that receive encrypted data, decrypt it, assuming it has no associated HSM
         for (TMLTask task : tmap.getTMLModeling().getTasks()) {
             int xpos, ypos;
-            //System.out.println("loop 2");
+            //
             TMLActivityDiagramPanel tad = t.getTMLActivityDiagramPanel(task.getName());
             HashSet<TGComponent> channelInstances = new HashSet<TGComponent>();
             for (String chan : secChannels.keySet()) {

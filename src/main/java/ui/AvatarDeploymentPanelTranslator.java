@@ -115,8 +115,8 @@ public class AvatarDeploymentPanelTranslator {
 
 				avcpu = new AvatarCPU(cpuName, nbOfIRQs, ICacheWays, ICacheSets, ICacheWords, dCacheWays, dCacheSets, dCacheWords, nb_init, addCPUNode.getIndex(), addCPUNode.getMonitored());
 			
-				System.out.println("CPU name : "+ cpuName);
-				System.out.println("CPU index : "+ addCPUNode.getIndex());
+				
+				
 				Vector<ADDBlockArtifact> tasks = addCPUNode.getArtifactList();
 			
 				for (int i = 0; i < tasks.size(); i++) {
@@ -165,7 +165,7 @@ public class AvatarDeploymentPanelTranslator {
 				int nbOfAttachedTargets = bus.getNbOfAttachedTargets();
 				int fifoDepth = bus.getFifoDepth();
 				int minLatency = bus.getMinLatency();
-				System.out.println("vgsb read"+  nbOfAttachedTargets);
+				
 				AvatarBus avbus = new AvatarBus(busName, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency);
 				avatarMap.put(dp, avbus);
 				avatarComponents.add(avbus);
@@ -179,7 +179,7 @@ public class AvatarDeploymentPanelTranslator {
 				int nbOfAttachedTargets = vgmn.getNbOfAttachedTargets();
 				int fifoDepth = vgmn.getFifoDepth();
 				int minLatency = vgmn.getMinLatency();
-				System.out.println("vgmn read "+  nbOfAttachedTargets);
+				
 				AvatarVgmn avvgmn = new AvatarVgmn(vgmnName, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency);
 				avatarMap.put(dp, avvgmn);
 				avatarComponents.add(avvgmn);
@@ -201,7 +201,7 @@ public class AvatarDeploymentPanelTranslator {
 
 				AvatarCrossbar avcrossbar = new AvatarCrossbar(crossbarName, nbOfAttachedInitiators, nbOfAttachedTargets, cluster_index, cluster_address);
 				nb_clusters++;
-				System.out.println("nb crossbars read in" + nb_clusters);
+				
 				avatarMap.put(dp, avcrossbar);
 				avatarComponents.add(avcrossbar);
 			} else if (dp instanceof ADDICUNode) {
@@ -280,9 +280,9 @@ public class AvatarDeploymentPanelTranslator {
 					String name = addRamNode.getNodeName();
 					int index = addRamNode.getIndex();
 					int byteDataSize = addRamNode.getDataSize();
-					System.out.println("ADD RAM Data Size" + byteDataSize);
+					
 					//int monitored = addRamNode.getMonitored();
-  System.out.println("ADD RAM  monitored "+ addRamNode.getMonitored());
+  
   AvatarRAM avram = new AvatarRAM(name, index, byteDataSize, index, index, addRamNode.getMonitored());//DG 3.7.
   avram.setNo_ram(index);
 					int cluster_index = avram.getIndex();
@@ -320,7 +320,7 @@ public class AvatarDeploymentPanelTranslator {
 				TGComponent owner_p1 = avatarddDiagramPanel.getComponentToWhichBelongs(connectingPoint1);
 				TGComponent owner_p2 = avatarddDiagramPanel.getComponentToWhichBelongs(connectingPoint2);
 
-				//System.out.println(owner_p1.getName()+" connected to "+owner_p2.getName());	
+				//
 
 				AvatarComponent avowner_p1 = avatarMap.get(owner_p1);	
 				AvatarComponent avowner_p2 = avatarMap.get(owner_p2);
@@ -334,12 +334,12 @@ public class AvatarDeploymentPanelTranslator {
 				// monitored = 2 MWMR stats
 				boolean spy = connector.hasASpy();
 				int monitored = 0;
-				//System.out.println("@@@ avowner "+ avowner_p1);
+				//
 			
 				if (spy == true) {
 					monitored = 1; 	
-					//System.out.println("@@@ owner "+ owner_p1.getName()+" monitored");
-					//System.out.println("@@@ avowner "+ avowner_p1+" monitored");
+					//
+					//
 									
 				}				
 				AvatarConnector avconnector = new AvatarConnector(avConnectingPoint1, avConnectingPoint2, monitored);			
@@ -347,7 +347,7 @@ public class AvatarDeploymentPanelTranslator {
 				if (avowner_p1 instanceof AvatarRAM) {	
 				    //if stats mode selected beforehand in menu of component or spy				   	
 				    AvatarRAM ram1=(AvatarRAM) avowner_p1;
-				    //System.out.println("@@@@@@@@@@@@@@ RAM no "+ram1.getNo_ram()+" @@@@@@@@@@@@@@@@@");
+				    //
 				    if ((((AvatarRAM)avowner_p1).getMonitored() == 2)||(spy == true)) 
 					//if (((AvatarRAM)avowner_p1).getMonitored() == 2)
 					{   
@@ -357,7 +357,7 @@ public class AvatarDeploymentPanelTranslator {
 				   
 					    (((AvatarRAM) avowner_p1)).setMonitored(monitored); 
 					    
-					    //System.out.println("@@@@@@@@@@@@@@ RAM no "+ram1.getNo_ram()+" monitored@@@@@@@@@@@@@@@@@");
+					    //
 					   
 					}
 				}

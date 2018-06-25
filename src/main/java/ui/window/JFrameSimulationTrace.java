@@ -127,7 +127,7 @@ public	class JFrameSimulationTrace extends JFrame	implements ActionListener {
                     }
                     
                     actionNumber = s.substring(ind2+2);
-                    //System.out.println("Action *" + gateId + "* time *" + timeId + "* id*" + gateId + "* num*" + actionNumber);
+                    //
                     t = Integer.decode(timeId).intValue();
                     act = Integer.decode(actionNumber).intValue();
                     g = mgm.getGate(gateId);
@@ -137,7 +137,7 @@ public	class JFrameSimulationTrace extends JFrame	implements ActionListener {
                         if (gog != null ) {
                             gst = gstOfGate(g);
                             if (gst == null) {
-                                //System.out.println("New GST : " + g.getName() + " gog " + gog.printAll());
+                                //
                                 gst = new GateSimulationTrace(g, gog);
                                 trace.add(gst);
                             }
@@ -147,7 +147,7 @@ public	class JFrameSimulationTrace extends JFrame	implements ActionListener {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception when reading simulation trace: " + e.getMessage());
+            
             return false;
         }
         return true;
@@ -267,7 +267,7 @@ public	class JFrameSimulationTrace extends JFrame	implements ActionListener {
     
     public void	actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
-        //System.out.println("Command:" + command);
+        //
         
         if (command.equals("Close")) {
             dispose();

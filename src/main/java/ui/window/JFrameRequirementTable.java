@@ -207,7 +207,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	@Override
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();
-		//System.out.println("Command:" + command);
+		//
 		
 		if (command.equals("Close")) {
 			dispose();

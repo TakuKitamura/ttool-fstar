@@ -132,8 +132,8 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
         
         pack();
         
-        //System.out.println("Row table:" + rowTable.toString());
-        //System.out.println("Value table:" + valueTable.toString());
+        //
+        //
 	}
     
     private	void initActions() {

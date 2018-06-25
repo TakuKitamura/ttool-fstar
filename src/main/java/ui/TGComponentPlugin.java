@@ -262,20 +262,15 @@ public class TGComponentPlugin extends TGComponent implements ComponentPluginInt
             //boolean mustAddCryptoFunctions = false;
 
 
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
-
             //TraceManager.addDev("LEP Begin Block  = " + this + " trace=");
             //Thread.currentThread().dumpStack();
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("PluginName")) {

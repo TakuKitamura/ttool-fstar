@@ -37,8 +37,6 @@
  */
 
 
-
-
 package tmltranslator;
 
 import java.util.Vector;
@@ -47,10 +45,11 @@ import java.util.Vector;
 /**
  * Class TMLSequence
  * Creation: 14/03/2006
- * @version 1.0 14/03/2006
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 14/03/2006
  */
-public class TMLSequence extends TMLActivityElement{
+public class TMLSequence extends TMLActivityElement {
     private Vector<Integer> indexes;
 
     public TMLSequence(String _name, Object _referenceObject) {
@@ -67,8 +66,6 @@ public class TMLSequence extends TMLActivityElement{
             return;
         }
 
-        //System.out.println("Nb of indexes" + indexes.size());
-        //System.out.println("Nb of nexts" + nexts.size());
         Vector<TMLActivityElement> nextsbis = new Vector<TMLActivityElement>();
 
         // Sort according to index stored in indexes
@@ -77,13 +74,13 @@ public class TMLSequence extends TMLActivityElement{
         int index;
         int i;
 
-        while(indexes.size() > 0) {
+        while (indexes.size() > 0) {
             i0 = new Integer(1000);
             index = -1;
-            for(i=0; i<indexes.size(); i++) {
-                if ( indexes.elementAt( i ).compareTo( i0 ) < 0 ) {
+            for (i = 0; i < indexes.size(); i++) {
+                if (indexes.elementAt(i).compareTo(i0) < 0) {
                     index = i;
-                    i0 = indexes.elementAt( i );
+                    i0 = indexes.elementAt(i);
                 }
             }
             nextsbis.addElement(nexts.elementAt(index));
@@ -93,12 +90,9 @@ public class TMLSequence extends TMLActivityElement{
 
         nexts = nextsbis;
 
-        //for(i=0; i<nexts.size(); i++){
-        // System.out.println("sequence #" + i + " = " + nexts.elementAt(i));
-        //}
     }
 
     public String customExtraToXML() {
-	return "";
+        return "";
     }
 }

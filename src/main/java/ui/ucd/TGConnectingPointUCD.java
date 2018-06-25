@@ -60,12 +60,12 @@ public class TGConnectingPointUCD extends  TGConnectingPointWidthHeight{
 	}
     
     public boolean isCompatibleWith(int type) {
-        //System.out.println("is compatible with " + type);
+        //
         if ((type == TGComponentManager.CONNECTOR_ACTOR_UCD) ||(type == TGComponentManager.CONNECTOR_INCLUDE_UCD) || (type == TGComponentManager.CONNECTOR_SPECIA_UCD) || (type == TGComponentManager.CONNECTOR_EXTEND_UCD)) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
-        //System.out.println("is compatible with:false");
+        //
         return false;
     }   
 }

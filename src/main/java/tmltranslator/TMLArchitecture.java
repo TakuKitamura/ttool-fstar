@@ -72,7 +72,7 @@ public class TMLArchitecture {
         TMLArchiTextSpecification architxt = new TMLArchiTextSpecification(/*"spec.tarchi"*/);
         String s = architxt.toTextFormat(this);
         hashCode = s.hashCode();
-        //System.out.println("TARCHI hashcode = " + hashCode);
+        //TraceManager.addDev("TARCHI hashcode = " + hashCode);
     }
 
     public int getHashCode() {

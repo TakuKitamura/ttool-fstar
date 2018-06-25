@@ -133,7 +133,7 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
             int w0, w1, w2;
             f = f.deriveFont((float)maxCurrentFontSize);
             g.setFont(f);
-            //System.out.println("max current font size:" + maxCurrentFontSize);
+            //
             while(maxCurrentFontSize > (minFontSize-1)) {
                 w0 = g.getFontMetrics().stringWidth(value);
                 w1 = g.getFontMetrics().stringWidth(ster);
@@ -233,12 +233,12 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max((int)(minWidth*tdp.getZoom()), w + 2 * textX);
 
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+        //
         if (w1 != width) {
             width = w1;
             resizeWithFather();
         }
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+        //
     }
 
     public boolean editOndoubleClick(JFrame frame) {
@@ -302,8 +302,8 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
             Element elt;
             String s;
 
-            //System.out.println("Loading tclass " + getValue());
-            //System.out.println(nl.toString());
+            //
+            //
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -314,7 +314,7 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("liveness")) {
-                                //System.out.println("Analyzing line1");
+                                //
                                 s = elt.getAttribute("data");
 
                                 //TraceManager.addDev("s=" + s);
@@ -337,11 +337,11 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
                                 //TraceManager.addDev("Loaded kind=" + kind);
                             }
                             if (elt.getTagName().equals("not")) {
-                                //System.out.println("Analyzing line1");
+                                //
                                 s = elt.getAttribute("data");
                                 not = s.equals("true");
                             }
-                            //System.out.println("Analyzing line4");
+                            //
                         }
                     }
                 }

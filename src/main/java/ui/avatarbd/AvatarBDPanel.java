@@ -79,10 +79,10 @@ public class AvatarBDPanel extends TDiagramPanel {
     }
 
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        //System.out.println("Action");
+        //
         if (tgc instanceof AvatarBDBlock) {
             AvatarBDBlock b = (AvatarBDBlock)tgc;
-            //System.out.println("oldValue:" + b.oldValue);
+            //
             return this.changeStateMachineTabName (b.oldValue, b.getValue());
         } else if (tgc instanceof AvatarBDLibraryFunction) {
             return true;
@@ -211,9 +211,9 @@ public class AvatarBDPanel extends TDiagramPanel {
             if (!(tgc instanceof TGConnector))
                 list.add(tgc);
 
-        //System.out.println("Putting to back ...");
+        //
         for(TGComponent tgc1: list) {
-            //System.out.println("Putting to back: " + tgc1);
+            //
             componentList.remove(tgc1);
             componentList.add(tgc1);
         }

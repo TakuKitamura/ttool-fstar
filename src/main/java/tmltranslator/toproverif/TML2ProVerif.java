@@ -133,7 +133,7 @@ public class TML2ProVerif {
     			//	        List<HwBus> buses = new ArrayList<HwBus>();
     			HwNode node2 = tmlmap.getHwNodeOf(t);
     			if (node1==node2){
-    				System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is confidential");
+    				TraceManager.addDev("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is confidential");
     				channelMap.put(channel.getName(), channelPrivate);
     			}
     			if (node1!=node2){
@@ -180,7 +180,7 @@ public class TML2ProVerif {
     						done.add(curr);
     					}
     				if (path.size() ==0){
-    					System.out.println("Path does not exist for channel " + channel.getName() + " between Task " + a.getTaskName() + " and Task " + t.getTaskName());
+    					TraceManager.addDev("Path does not exist for channel " + channel.getName() + " between Task " + a.getTaskName() + " and Task " + t.getTaskName());
     					channelMap.put(channel.getName(), channelUnreachable);
     				}
     				else {
@@ -190,7 +190,7 @@ public class TML2ProVerif {
     					for (HwNode n: path){
     						if (n instanceof HwBus){
     							bus = (HwBus) n;
-    							System.out.println("BUS PRIVACY "+bus.privacy);
+    							TraceManager.addDev("BUS PRIVACY "+bus.privacy);
     							if (bus.privacy ==0){
     								priv=0;
     								break;
@@ -198,7 +198,7 @@ public class TML2ProVerif {
     						}
     					}
     					channelMap.put(channel.getName(), priv);
-    					System.out.println("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is " + (priv==1 ? "confidential" : "not confidential"));
+    					TraceManager.addDev("Channel "+channel.getName() + " between Task "+ a.getTaskName() + " and Task " + t.getTaskName() + " is " + (priv==1 ? "confidential" : "not confidential"));
     				}
     			}
     		}
@@ -207,7 +207,7 @@ public class TML2ProVerif {
 
     public boolean saveInFile(String path) throws FileException {
     	//Our hash is saved in config
-    	System.out.println(this.spec);
+    	//TraceManager.addDev(this.spec.toString());
     	String hashCode= Integer.toString(this.spec.getStringSpec().hashCode());
     	File file = new File(path);
     	BufferedReader br;
@@ -254,7 +254,7 @@ public class TML2ProVerif {
     }
 
     public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, boolean _stateReachability, boolean _typed) {
-	System.out.println("generating spec...");
+	TraceManager.addDev("generating spec...");
 
        // this.stateReachability = _stateReachability;
        // this.warnings = new Vector();
@@ -356,12 +356,12 @@ public class TML2ProVerif {
         for (TMLTask task: tmlmodel.getTasks()){
 	    int stateNum=0;
 	    TMLActivity act= task.getActivityDiagram();
-	    System.out.println("ACT "+act);
+	    TraceManager.addDev("ACT "+act);
 	    TMLActivityElement ae = act.getFirst();
-	    System.out.println("FIRST "+ae);
+	    TraceManager.addDev("FIRST "+ae);
 
 	    while (ae!=null){
-		System.out.println("EVENT "+ae.getName());
+		TraceManager.addDev("EVENT "+ae.getName());
                 this.spec.addDeclaration (new ProVerifQueryEv    (new ProVerifVar[] {}, "enteringState__" + task.getName() + "__" + stateNum));
                 this.spec.addDeclaration (new ProVerifEvDecl     ("enteringState__" + task.getName() + "__" + stateNum, new String[] {}));
                 TraceManager.addDev("|    event (enteringState__" + task.getName() + "__" + stateNum + ")"); 

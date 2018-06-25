@@ -78,10 +78,10 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
     }
     
     public void removeNext(Object o) {
-        //System.out.println("removing next");
+        //
         int index = next.indexOf(o);
         if (index > -1) {
-            //System.out.println("Removed!");
+            //
             next.removeElement(o);
             removeGuard(index);
         }
@@ -89,7 +89,7 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 	
 	public void removeNext(int index) {
         if (index > -1) {
-            //System.out.println("Removed!");
+            //
             next.removeElementAt(index);
             removeGuard(index);
         }
@@ -312,7 +312,7 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 	// Choice with only two guards and one is exactly the other one but
 	// with a not() on the condition
 	public boolean isElseChoice() {  
-		//System.out.println("Testing else choice");
+		//
 		if (getNbGuard() != 2) {
 			return false;
 		}
@@ -324,7 +324,7 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 		String g0 = new String(getGuard(0));
 		String g1 = new String(getGuard(1));
 		
-		//System.out.println("Else choice? g0=" + g0 + " g1=" + g1);
+		//
 		
 		if ((g0.indexOf("not") < 0) && (g1.indexOf("not") < 0)) {
 			return false;
@@ -343,7 +343,7 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 			g1 = g1.substring(4, g1.length()-1);
 		}
 
-        //System.out.println("Else guards g0=" + g0 + " g1=" + g1);
+        //
         return g0.compareTo(g1) == 0;
 	}
     

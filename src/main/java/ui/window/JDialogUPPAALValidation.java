@@ -770,18 +770,18 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         String finQuery=query+" ";
         /*      String[] split = query.split("[\\s-()=]+");
                 for (String s: split){
-                System.out.println(s);
+                
                 } */
         /*      Pattern p = Pattern.compile("[\\s-()=]+");
                 Matcher m = p.matcher(query);
                 int index1=0;
                 int index2=m.start();
                 while (m.find()){
-                System.out.println("Finding ...");
+                
                 index2=m.start();
                 String rep = hash.get(finQuery.substring(index1, index2));
                 if (rep !=null){
-                System.out.println(finQuery.substring(index1, index2) + "--" + rep);
+                
                 finQuery = finQuery.substring(0,index1) + rep + finQuery.substring(index2, finQuery.length());
                 }
                 index1=index2;

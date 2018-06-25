@@ -202,23 +202,20 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         }
 
         //if (dialog.getMonitored().length() != 0) {
-		if (dialog.getMonitored() != 0) {
-	        try {
-	            tmp = monitored;
-	            System.out.println("@@@@ ADDMemoryNode monitored"+monitored);
-	            monitored = dialog.getMonitored();//Integer.decode(dialog.getMonitored()).intValue();
-	            System.out.println("@@@@ ADDMemoryNode monitored"+monitored);
-	
-	            if (index < 0) {
-	                monitored = tmp;
-	                error = true;
-	                errors += "monitored ";
-	            }
-	        } catch (Exception e) {
-	            error = true;
-	            errors += "monitored  ";
-	        }
-	    }
+	if (dialog.getMonitored() != 0) {
+            try {
+                tmp = monitored;
+                monitored = dialog.getMonitored();//Integer.decode(dialog.getMonitored()).intValue();
+                if (index < 0) {
+                    monitored = tmp;
+                    error = true;
+                    errors += "monitored ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "monitored  ";
+            }
+        }
 
         if (error) {
             JOptionPane.showMessageDialog(frame,
@@ -245,7 +242,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
     }
 
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             NodeList nli;
             Node n1, n2;
@@ -257,12 +254,12 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {

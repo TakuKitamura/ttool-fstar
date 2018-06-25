@@ -117,7 +117,7 @@ public class TURTLE2UPPAAL {
 //		SpecConfigTTool.checkAndCreateUPPAALDir(path);
 		FileUtils.saveFile(path + "spec.xml", spec.makeSpec());
 		
-		//System.out.println("spec.xml generated:\n" + spec.getFullSpec());
+		//
 	}
 
 	public RelationTIFUPPAAL getRelationTIFUPPAAL () {
@@ -130,12 +130,12 @@ public class TURTLE2UPPAAL {
 	
 	public void setChoiceDeterministic(boolean _b) {
 		choicesDeterministic = _b;
-		System.out.println("choices are assumed to be deterministic:" + choicesDeterministic);
+		
 	}
 	
 	public void setVariablesAsActions(boolean _b) {
 		variableAsActions = _b;
-		System.out.println("Branch of choices may be selected according to variable setting: " + variableAsActions);
+		
 	}
 	
 	public UPPAALSpec generateUPPAAL(boolean _debug, int _nb) {
@@ -174,7 +174,7 @@ public class TURTLE2UPPAAL {
 		// Analyze the tm spcification
 		isRegular = tm.isARegularTIFSpec(choicesDeterministic, variableAsActions);
 		idPar = 0;
-		System.out.println("Regular spec:" + isRegular);
+		
 		
 		// Deal with tclasses
 		translateTClasses();
@@ -195,11 +195,11 @@ public class TURTLE2UPPAAL {
 		//makeParallel(nb);
 		makeSystem(effectiveNb);
 		
-		System.out.println("Enhancing graphical representation ...");
-		spec.enhanceGraphics();
-		System.out.println("Enhancing graphical representation done");
 		
-		//System.out.println("relations:" + table.toString());
+		spec.enhanceGraphics();
+		
+		
+		//
 		
 		return spec;
 	}
@@ -617,9 +617,9 @@ public class TURTLE2UPPAAL {
 	
 	public void makeBehaviour(TClass t, UPPAALTemplate template, ADComponent adc) {
 		// Request is not yet taken into account
-		//System.out.println("Making special choices for " + t.getName());
+		//
 		//t.getActivityDiagram().makeSpecialChoices();
-		//System.out.println("Done special choices");
+		//
 		
 		initXY();
 		paras = new ArrayList<ADParallel>();
@@ -649,7 +649,7 @@ public class TURTLE2UPPAAL {
 		boolean stopJunc;
 		String name;
 		
-		//System.out.println("Making behavior of " + t.getName() + " elt = " + elt);
+		//
 		
 		if (elt == null) {
 			return;
@@ -934,7 +934,7 @@ public class TURTLE2UPPAAL {
 			previous.setCommitted();
 			tr = addRTransition(template, previous, loc);
 			if (adap.getParam() == null) {
-				System.out.println("Unknown param");
+				
 				name = "unknown";
 			} else {
 				name = adap.getParam().getName();
@@ -948,7 +948,7 @@ public class TURTLE2UPPAAL {
 			
 			// Choice
 		} else if (elt instanceof ADChoice) {
-			//System.out.println("ADChoice");
+			//
 			adch = (ADChoice)elt;
 			
 			if (adch.getNbGuard() == 1) {
@@ -975,12 +975,12 @@ public class TURTLE2UPPAAL {
 				}
 			} else {
 				if (adch.isSpecialChoiceDelay(variableAsActions)) {
-					System.out.println("Special choice found");
+					
 					// Must check whether some actions are delayed or not
 					if (adch.isSpecialChoiceAction(variableAsActions)) {
 						
 						for(i=0; i<elt.getNbNext(); i++){
-							System.out.println("Special choice action / Task " + t.getName() + ": guard i=" + i + " =" + adch.getGuard(i));
+							
 							
 							
 							String gua = null;
@@ -992,7 +992,7 @@ public class TURTLE2UPPAAL {
 							currentX += 2 * STEP_LOOP_X;
 						}
 					} else {
-						System.out.println("Special choice delay");
+						
 						
 						/* Current limitation: at most two delays */
 						
@@ -1008,7 +1008,7 @@ public class TURTLE2UPPAAL {
 						// Initialization
 						String init = "h__ = 0";
 						for(i=0; i<elt.getNbNext(); i++){
-							System.out.println("Special choice delay / Task " + t.getName() + ": guard i=" + i + " =" + adch.getGuard(i));
+							
 							
 							elt1 = elt.getNext(i);
 							
@@ -1108,13 +1108,13 @@ public class TURTLE2UPPAAL {
 						loc1.setInvariant(inv);
 						
 					}
-					//System.out.println("ADChoice: testing");
+					//
 				} else if ((choicesDeterministic) || (adch.isElseChoice())) {
-					//System.out.println("Choice is deterministic");
+					//
 					int tmpX = currentX;
 					previous.setCommitted();
 					for(i=0; i<elt.getNbNext(); i++){
-						//System.out.println("Task " + t.getName() + ": Choice is deterministic i=" + i + " with guard =" + adch.getGuard(i));
+						//
 						String gua = null;
 						if (adch.isGuarded(i)) {
 							gua = convertGuard(adch.getGuard(i));
@@ -1127,7 +1127,7 @@ public class TURTLE2UPPAAL {
 						gua = gua.trim();
 						
 						if (gua.length() == 0) {
-							//System.out.println("New choice system");
+							//
 							if (elt.getNext(i) instanceof ADChoice) {
 								makeElementBehavior(t, template, elt.getNext(i), previous, end, null);
 							} else {
@@ -1152,7 +1152,7 @@ public class TURTLE2UPPAAL {
 					}
 				} else {
 					
-					System.out.println("Irregular choice");
+					
 					setMultiProcess(template);
 					addParallel(t, template);
 					
@@ -1168,7 +1168,7 @@ public class TURTLE2UPPAAL {
 					addAssignment(tr1, "gotasks__ = 0, \nstartingid__ = myid__,\npreemptid__ = myid__,\ngroupid__= mygroupid__");
 					loc = loc3;
 					
-					//System.out.println("Managing preempt");
+					//
 					index = currentX;
 					for(i=1; i<elt.getNbNext(); i++){
 						loc2 = makePreemptFromInit(t, template);
@@ -1188,15 +1188,15 @@ public class TURTLE2UPPAAL {
 						loc = loc3;
 						currentX += 2 * STEP_LOOP_X;
 						// Manage guard if applicable
-						//System.out.println("Guard #" + i);
+						//
 						if (adch.isGuarded(i)) {
 							loc4 = addRLocation(template);
 							tr1 = addTransition(template, loc2, loc4);
 							action = convertGuard(adch.getGuard(i));
-							//System.out.println("action=" + action);
+							//
 							setGuard(tr1, action);
 							loc2.setUrgent();
-							//System.out.println("guard set");
+							//
 							loc5 = addRLocation(template);
 							tr1 = addTransition(template, loc2, loc5);
 							action = convertGuard("!(" + adch.getGuard(i) + ")");
@@ -1383,7 +1383,7 @@ public class TURTLE2UPPAAL {
 					loc = loc3;
 					
 					int tmpx = currentX;
-					//System.out.println("Managing parallel");
+					//
 					for(i=0; i<elt.getNbNext(); i++){
 						
 						loc2 = makeParaFromInit(t, template, adp, i);
@@ -1452,7 +1452,7 @@ public class TURTLE2UPPAAL {
 				addAssignment(tr1, "gotasks__ = 0, \nstartingid__ = myid__,\npreemptid__ = myid__,\ngroupid__= mygroupid__");
 				loc = loc3;
 				
-				System.out.println("Managing preempt");
+				
 				index = currentX;
 				for(i=1; i<elt.getNbNext(); i++){
 					loc2 = makePreemptFromInit(t, template);
@@ -1529,7 +1529,7 @@ public class TURTLE2UPPAAL {
 			return;
 			
 		} else {
-			System.out.println("Warning: elt = " + elt + " is not yet taken into account -> skipping");
+			
 			table.addADComponentLocation(elt, previous, previous);
 			makeElementBehavior(t, template, elt.getNext(0), previous, end, null);
 			return;
@@ -1922,7 +1922,7 @@ public class TURTLE2UPPAAL {
 		
 		maxSentInt = Math.max(nb, maxSentInt);
 		tmp = Conversion.cutIntoSectionsBeginningWith(s, '!');
-		//System.out.println("s=" + s);
+		//
 		
 		for(i=0; i<nb; i++) {
 			if (i!=0) {
@@ -1966,7 +1966,7 @@ public class TURTLE2UPPAAL {
 			
 			// Data receiving only
 		} else if ((index1 == -1) && (index2 != -1)) {
-			System.out.println("Receiving = " + action);
+			
 			
 			tmp = Conversion.cutIntoSectionsBeginningWith(action, '?');
 			gate = getGlobalGateName(t, r, g);
@@ -2320,7 +2320,7 @@ public class TURTLE2UPPAAL {
 		while(iterator.hasNext()) {
 			template = iterator.next();
 			t = tm.getTClassWithName(template.getName());
-			System.out.println("temp=" + template.getName());
+			
 			if (t != null) {
 				if (templatesWithMultipleProcesses.contains(template)) {
 					table.setIds(template, id, id+nb-1);
@@ -2339,7 +2339,7 @@ public class TURTLE2UPPAAL {
 						table.setIds(template, id, id);
 						id += nb;
 					} else {
-						//System.out.println("temp=" + template.getName());
+						//
 						dec += template.getName() + "__" + id + " = " + template.getName() + "();\n";
 						system += template.getName() + "__" + id;
 						table.setIds(template, id, id);
@@ -2347,7 +2347,7 @@ public class TURTLE2UPPAAL {
 					}
 				}
 			} else {
-				System.out.println("temp=" + template.getName());
+				
 				template.removeParameter();
 				dec += template.getName() + "__" + id + " = " + template.getName() + "();\n";
 				system += template.getName() + "__" + id;
@@ -2363,7 +2363,7 @@ public class TURTLE2UPPAAL {
 	}
 	
 	public void setMultiProcess(UPPAALTemplate t) {
-		System.out.println("Setting multiprocess: " + t.getName());
+		
 		if (!(templatesWithMultipleProcesses.contains(t))) {
 			templatesWithMultipleProcesses.add(t);
 		}
@@ -2380,9 +2380,9 @@ public class TURTLE2UPPAAL {
 			_input = Conversion.replaceAllStringNonAlphanumerical(_input, "mod", "%");
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Exception when changing binary operator in " + _input);
+			
 		}
-		//System.out.println("Modified string=" + _input);
+		//
 		return _input;
 	}
 	

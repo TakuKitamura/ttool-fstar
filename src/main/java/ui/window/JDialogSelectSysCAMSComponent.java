@@ -132,7 +132,7 @@ public class JDialogSelectSysCAMSComponent extends JDialogBase implements Action
 
         for(int i=0; i<list.size(); i++) {
             tgc = list.get(i);
-            //System.out.println(tgc);
+            //
             if (tgc instanceof SysCAMSBlockTDF) {
                 v.addElement(tgc);
             }
@@ -164,7 +164,7 @@ public class JDialogSelectSysCAMSComponent extends JDialogBase implements Action
             
             if (((tgc instanceof SysCAMSBlockTDF) || (tgc instanceof SysCAMSBlockDE)) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
                 added.addElement( tgc ) ;
-                //System.out.println("New element");
+                //
             }
         }
     }

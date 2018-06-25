@@ -700,7 +700,7 @@ public class IconManager {
         if (url != null) {
             return new ImageIcon(url);
         } else {
-            System.out.println("Could not load " + s);
+            
         }
 
         return null;
@@ -710,9 +710,9 @@ public class IconManager {
         ImageIcon imc = new ImageIcon(IconManager.icon12);
         Image im = imc.getImage();
         if (im == null) {
-            System.out.println("Cannot load icons");
+            
         } else {
-            System.out.println("Icons loaded");
+            
         }
     }
 

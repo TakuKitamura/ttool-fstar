@@ -102,7 +102,7 @@ public abstract class TGConnectorMessageSD extends TGConnector {
     }
 
     public boolean isMessageWellFormed() {
-        //System.out.println("Analyzing message:" + value);
+        //
 
         int index0 = value.indexOf('(');
         String name;
@@ -133,7 +133,7 @@ public abstract class TGConnectorMessageSD extends TGConnector {
         String[] params = tmp.split(",");
         for(int i=0; i<params.length; i++) {
             tmp = params[i].trim();
-            //System.out.println("First=" + tmp);
+            //
             if (!TAttribute.isAValidId(tmp, false, false)) {
                 return false;
             }
@@ -145,7 +145,7 @@ public abstract class TGConnectorMessageSD extends TGConnector {
 
 
     public boolean editOndoubleClick(JFrame frame) {
-        //System.out.println("Double click");
+        //
         String text = getName() + ": ";
         if (hasFather()) {
             text = getTopLevelName() + " / " + text;
@@ -162,7 +162,7 @@ public abstract class TGConnectorMessageSD extends TGConnector {
     }
 
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-        //System.out.println("Extra");
+        //
         if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5 - heightValue, widthValue, heightValue)) {
             return this;
         }

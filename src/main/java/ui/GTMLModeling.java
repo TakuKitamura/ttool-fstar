@@ -122,7 +122,7 @@ public class GTMLModeling {
 
     public GTMLModeling(TMLArchiPanel _tmlap, boolean resetList) {
         tmlap = _tmlap;
-        //System.out.println(tmlap.getMainGUI());
+        //
         //TURTLEPanel tup = (TURTLEPanel)(tmlap.getMainGUI().getTURTLEPanel(namePanel));
         //if (tup instanceof TMLDesignPanel) {
         //tmldp = tmlap.getMainGUI().
@@ -149,35 +149,35 @@ public class GTMLModeling {
     }
 
     public void processAttacker() {
-        //System.out.println("processing...");
-        //System.out.println(tmlm.getAttackerTasks());
+        //
+        //
         if (tmlm == null) {
             return;
         }
         List<TMLTask> attackers = tmlm.getAttackerTasks();
         for (TMLTask attacker : attackers) {
-            //System.out.println(attacker.getName());
+            //
             TMLCPrimitiveComponent atcomp = tmlcdp.getPrimitiveComponentByName(attacker.getName().split("__")[1]);
-            //System.out.println("comp " + attacker.getName().split("__")[1]);
+            //
             if (atcomp != null) {
                 //Find activity diagram
                 TMLActivityDiagramPanel tadp = tmlcdp.getTMLActivityDiagramPanel(attacker.getName().split("__")[1]);
                 List<TGComponent> list = tadp.getComponentList();
-                //System.out.println("list " + list);
+                //
                 for (TGComponent tgc : list) {
                     if (tgc instanceof TMLADWriteChannel) {
                         TMLADWriteChannel wr = (TMLADWriteChannel) tgc;
                         if (wr.isAttacker()) {
-                            //System.out.println("channel " + wr.getChannelName());
+                            //
                             String channelToAdd = wr.getChannelName();
 
 
                             //Find ports to attach
                             List<TMLCPrimitivePort> ports = tmlcdp.tmlctdp.getPortsByName(channelToAdd);
-                            //System.out.println("orts " + ports);
+                            //
                             if (ports.size() != 2) {
                                 //throw error
-                                //System.out.println("ERROR");
+                                //
                                 continue;
                             }
 
@@ -212,16 +212,16 @@ public class GTMLModeling {
                     } else if (tgc instanceof TMLADReadChannel) {
                         TMLADReadChannel rd = (TMLADReadChannel) tgc;
                         if (rd.isAttacker()) {
-                            //System.out.println("channel " + rd.getChannelName());
+                            //
                             String channelToAdd = rd.getChannelName();
 
 
                             //Find ports to attach
                             List<TMLCPrimitivePort> ports = tmlcdp.tmlctdp.getPortsByName(channelToAdd);
-                            //System.out.println("orts " + ports);
+                            //
                             if (ports.size() != 2) {
                                 //throw error
-                                //System.out.println("ERROR");
+                                //
                                 continue;
                             }
 
@@ -965,7 +965,16 @@ public class GTMLModeling {
 
                             // Channel attributes
                             port = portstome.get(0);
+                            TraceManager.addDev("Fork sample?");
                             channel = new TMLChannel(name, port1);
+                            TMLCPath path = tmlc.findPathWith(port);
+                            if (path != null) {
+                                TMLCFork fork = path.getFork(0);
+                                if (fork != null) {
+                                    TraceManager.addDev("Setting fork sample");
+                                    channel.setNumberOfSamples(fork.getNumberOfSamples());
+                                }
+                            }
                             channel.ports.add(port1);
                             for (j = 0; j < portstome.size(); j++) {
                                 TMLCPrimitivePort p = portstome.get(j);
@@ -1761,13 +1770,12 @@ public class GTMLModeling {
                 String name = tmltask.getName() + ":" + tgc.getName();
                 name = name.replaceAll(" ", "");
                 //TraceManager.addDev("To check " + name);
-                if (tgc.getValue().contains("(")){
-                	tmlm.addCheckedActivity(tgc, name+":" + tgc.getValue().split("\\(")[0]);
-                }
-                else {
-                	if (tgc instanceof TMLADExecI){
-	                	tmlm.addCheckedActivity(tgc, ((TMLADExecI) tgc).getDelayValue());
-	                }
+                if (tgc.getValue().contains("(")) {
+                    tmlm.addCheckedActivity(tgc, name + ":" + tgc.getValue().split("\\(")[0]);
+                } else {
+                    if (tgc instanceof TMLADExecI) {
+                        tmlm.addCheckedActivity(tgc, ((TMLADExecI) tgc).getDelayValue());
+                    }
                 }
             }
             if (tgc instanceof TMLADActionState) {
@@ -1959,7 +1967,7 @@ public class GTMLModeling {
                 //TMLADReadChannel rd = (TMLADReadChannel) tgc;
                 channel = tmlm.getChannelByName(getFromTable(tmltask, ((TMLADReadChannel) tgc).getChannelName()));
                 /*if (rd.isAttacker()){
-					channel = tmlm.getChannelByName(getAttackerChannel(((TMLADReadChannel)tgc).getChannelName()));
+                    channel = tmlm.getChannelByName(getAttackerChannel(((TMLADReadChannel)tgc).getChannelName()));
 				}*/
                 if (channel == null) {
                     if (Conversion.containsStringInList(removedChannels, ((TMLADReadChannel) tgc).getChannelName())) {
@@ -2613,7 +2621,7 @@ public class GTMLModeling {
                     exec.setValue("100");
                     act.replaceElement(elem, exec);
                 }
-                //System.out.println("activity " +  act.toXML());
+                //
             }
         }
 
@@ -3809,7 +3817,7 @@ public class GTMLModeling {
                                 //TraceManager.addDev("Added key of " + key.getValue());
                             }
                         } else {
-                            //System.out.println("Can't map key " + key.getValue());
+                            //
                         }
                     }
                 }

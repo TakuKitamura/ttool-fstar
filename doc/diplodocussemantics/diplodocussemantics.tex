@@ -1,0 +1,751 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{txfonts}
+\usepackage{wasysym}
+\usepackage{adjustbox}
+\usepackage{ragged2e}
+\usepackage{tabularx}
+\usepackage{hhline}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{fancyhdr}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,bindingoffset=0.2in,headsep=0.5cm,left=1in,right=1in,bottom=3cm,top=2cm,headheight=2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+
+\lstset{language=C,basicstyle=\scriptsize\ttfamily,keywordstyle=\bfseries, commentstyle=\textit,stringstyle=\ttfamily, showspaces=false,showstringspaces=false, frame=single,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+\everymath{\displaystyle}
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{Page \thepage}
+\begin{document}
+\sloppy 
+
+\begin{center}
+
+\includegraphics[width=0.2\textwidth]{figures/logotpt}
+\vspace{10 pt}\\
+\Huge TTool \\
+\vspace{10 pt}
+\Large \url{ttool.telecom-paristech.fr}
+\vspace{20 pt}\\
+\underline{\Large DIPLODOCUS Semantics}
+\vspace{30 pt}
+\end{center}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{1.6cm}|p{6.0cm}|p{4.2cm}|p{4.2cm}| }
+\hhline{----}
+ & \textbf{Document Manager} & \textbf{Contributors}  & \textbf{Checked by}  \\ 
+\hhline{----}
+\textbf{Name}   & Ludovic APVRILLE & \multirow{2}{*}{Ludovic APVRILLE} &
+\multirow{2}{*}{Ludovic APVRILLE} \\
+\hhline{--~~}
+\textbf{Contact} & ludovic.apvrille@telecom-paristech.fr &  &  \\ 
+\hhline{--~~}
+\textbf{Date} & \today &  &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\newpage
+\tableofcontents
+
+% \newpage
+% \listoffigures
+
+\newpage
+\section{Preface}
+
+\subsection{Table of Versions}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{1.5cm}|p{2.5cm}|p{9.0cm}|p{3.0cm}| }
+\hhline{----}
+\textbf{Version} & \textbf{Date} & \textbf{Description  $  \&  $  Rationale of
+Modifications} & \textbf{Sections Modified} \\
+\hhline{----}
+1.0 & 13/06/2017 & First draft started from a first document written by Elisa di Bella &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Table of References and Applicable Documents}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{2.66in}|p{2.66in}|p{0.95in}|p{0.43in}| }
+\hhline{----}
+\textbf{Reference} & \textbf{Title  $  \&  $  Edition} & \textbf{Author or
+Editor} & \textbf{Year}
+\\
+\hhline{----}
+ &  &  &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Acronyms and glossary}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{1.24in}|p{5.45in}| }
+\hhline{--}
+\textbf{Term} & \textbf{Description} \\ 
+\hhline{--}
+ &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Summary}
+
+This document describes the semantics of the DIPLODOCUS profile of TTool. The semantics is described considering it at the most abstract level, when modeling the application only. Once the hardware architecture is defined and it is mapped on the platform, DIPLODOCUS instructions can be further specified. 
+
+The DIPLODOCUS syntax and the related grammar are specified at the end of the document.
+
+\newpage
+
+         
+
+
+\section{Basic features}
+
+It is here introduced the DIPLODOCUS semantics for task description. To model the application at its most abstract level (when modeling the application only), it is possible to use an intermediate language, the Task Modeling Language (TML), that is equivalent to a DIPLODOCUS description of an application. The TML semantics here presented has been defined with data abstraction in mind and it's mainly based on the following features. \\ 
+
+\subsection{Tasks}
+
+A task can be defined as the modular element in a TML description. A TML program contains a global declaration part (for channels, events and requests) and a list of tasks. Each task contains a declaration part for the task variables and a body.\\
+ 
+
+\subsection{Channels}
+
+Channels are characterized by a point to point communication between 2 tasks.\\
+
+A channel is declared by:	channel ch\_name ch\_width  ch\_type\\
+
+The possible types for a channel are: 
+ 
+\begin{itemize}
+\item BR-NBW (infinite FIFO)
+  
+\item NBR-NBW (shared memory) 
+
+\item BR-BW (finite FIFO)
+
+\end{itemize}
+
+\noindent 
+where B stands for Blocking, R stands for Read, W stands for Write and N stands for Non.\\
+
+
+%\noindent
+To exchange data, 2 basic instructions are specified.
+\begin{itemize}  
+\item Write operation: 
+WR nb\_of\_data\_samples MAX\_nb$_{optional}$ destination\_channel
+
+\item Read operation:  
+RD  nb\_of\_data\_samples MAX\_nb$_{optional}$ source\_channel\\
+
+\end{itemize}
+
+%\noindent
+The parameters to be specified are the number of data samples (to be written or read), and the maximum number of samples to be written before blocking (this second one for BR-BW only).\\
+
+
+Concerning these operations (read and write), it is always true that:
+\begin{itemize}
+	\item WR(n) = n WR(1)
+	
+	\item RD(n) = n RD(1)
+\end{itemize}
+
+
+
+\subsection{Events}
+
+%\noindent
+Events are characterized by a point to point asynchronous unidirectional communication between two tasks. Multiple events arriving at the same task at a given moment are managed using a FIFO, which can be finite or infinite.
+
+\begin{itemize}
+\item In the case of infinite FIFO, events are never lost.
+
+\item When using a finite FIFO, events arriving at the FIFO are stored in it. Two semantics are defined for finite FIFO:
+\begin{itemize}
+\item When the FIFO is full, the first (oldest) element is removed to leave space for the new one that is added.
+\item When the FIFO is full, no event may be added: the event sender is blocked until the FIFO is not full.
+\end{itemize} 
+
+\item In the case of a single element FIFO, with first event removal, it is equivalent to a hardware interrupt or a Unix signal.\\
+\end{itemize}
+
+%\noindent
+
+An event is declared by: event evt\_name param\_type$_{optional}$\\
+
+Three optional parameters can be specified for an event, and they can be Integer or Boolean. The Boolean type is defined as an Integer, where the integer value '0' means false, while any other integer value means true.\\
+
+%\noindent
+There are 4 main instructions: 
+
+\begin{itemize}
+
+\item NOTIFY evt: sends an event. Its declaration is NOTIFY event\_ name
+
+\item WAIT evt: receives an event. Its declaration is WAIT event\_name
+
+\item NOTIFIED evt: tests if the event FIFO is not empty, returning a boolean value: if the FIFO is empty returns false, else returns true. Its declaration is NOTIFIED event\_name\\
+
+\item SELECT evt1, evt2,..., evtn: waits for one of the listed event to be available in corresponding FIFOs. If several events may be read, then one among possible is randomly read. Thus, SELECT consumes the event. SELECT returns an integer whose value corresponds to the event index in the provided list.
+\end{itemize}
+
+
+\subsection{Requests}
+
+Requests are characterized by a multipoint to one point asynchronous unidirectional communication between two tasks. Multiple requests arriving to one task at a given moment are stored in an infinite FIFO (a FIFO is defined for each destination task). They can be executed straight or after the previously stored requests. Anyway, since the FIFO is infinite, requests are never lost.\\
+
+Requests are never blocking for the sender.\\
+
+A request is declared by: request req\_name param\_type$_{optional}$\\
+
+Three optional parameters can be specified for a request, and they can be Integer or Boolean. \\
+
+The instruction to send a request is: REQ name\_req param$_{optional}$
+
+
+
+
+
+\newpage
+
+
+
+
+
+
+
+\section{Operators \& control flow structures}
+
+\subsection{Conditional structure}
+
+The conditional structure is specified as:\\
+
+IF cond THEN stat ELSEIF cond THEN stat ELSE stat ENDIF\\
+
+Where `cond' stands for condition and `stat' stands for statement.
+The comparison is always made by comparing 32-bit operands, using conditional operators.\\
+
+\subsubsection{Conditional operators}
+The conditional operators to be used with IF-ELSE  are listed in the table.\\
+
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{|c|c|}
+  \hline
+  Condition & Symbol \\
+  \hline
+  \hline
+  Equality &  ==  \\
+  \hline
+  Non equality & !=\\
+  \hline
+  Less than &  $<$ \\
+  \hline
+  Greater than & $>$ \\
+  \hline
+  Less than or equal & $<$= \\
+  \hline
+  Greater than or equal&  $>$=\\
+  \hline
+
+\end{tabular}
+\end{center}
+\caption{Symbols for conditional operators.}
+\end{table}
+
+
+
+\subsection{Repetition structure}
+Two repetition structures are specified.
+
+\subsubsection{Repeat N times}
+The Repeat structure is specified as:\\
+
+REPEAT N TIMES stat END REPEAT\\
+
+where N can be a 32 bit immediate value or a 32-bit DIPLODOCUS variable. The instruction performs repeated execution of a sequence of TML instructions for N times. \\
+
+
+\subsubsection{Infinite loops}
+
+Infinite loops are specified as: 
+REPEAT stat END REPEAT\\
+
+\subsection{Data manipulations operators}
+
+All manipulations in TML are on 32-bit fixed-point numbers. Variables are 32-bit signed or unsigned integer values.\\
+
+
+\subsubsection{Data manipulation operators}
+The data manipulation operators are listed in the following table.
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{|c|c|}
+  \hline
+  Manipulation & Symbol \\
+  \hline
+  \hline
+  Assignment &  $:=$  \\
+  \hline
+  Addition & $+$\\
+  \hline
+  Subtraction &  $-$ \\
+  \hline
+  Multiplication & $*$ \\
+  \hline
+  Division & $/$ \\
+  \hline
+  AND & $\&$ \\
+  \hline
+  OR & $||$ \\
+  \hline
+  NOT & $!$ \\
+  \hline
+
+\end{tabular}
+\end{center}
+\caption{Symbols for data manipulation operators.}
+\end{table}
+
+\section{Instructions}
+
+The only instruction specified at this level is EXEC, which represents the time consumed by a processing node to execute a sequence of computations in an application. It models the execution and it is customizable through the use of 3 variants: EXECI, EXECF, EXECC. These variants will be specified at lower level, after the mapping of the application onto the architecture. \\
+
+At a glance, we can say EXECI specifies we are dealing with integers, EXECF specifies we are executing computations in floating point, while EXECC is a customized instruction. \\
+
+When using an EXEC instruction, the integer parameter specifying the number of executions must always be specified. 
+
+\begin{twocolumn}
+
+\section{Code example}
+
+
+
+\begin{verbatim}
+
+channel ch1 2 BR-NBW            
+channel ch2 16 BR-NBW            
+channel ch3 16 NBR-NBW         
+event written int int
+request action1 int 
+request checkup 
+ 
+TASK T1 {
+variable i int 
+variable flag bool
+channel ch1: output
+channel ch2: output
+channel ch3: input
+event written: output
+request action1: input 
+request checkup: input
+
+i := 0
+flag := 0
+
+REPEAT 8 TIMES
+if (i<=3) then 
+	EXECI 15
+	if (flag) then
+		EXECI 2
+		WR 1 ch1
+		NOTIFY written 1 1 
+	else
+		EXECI 80
+		WR 64 ch2
+		NOTIFY written 64 2
+	endif
+	flag := ^flag
+else 
+	EXECI 60
+	NOTIFY 3 3
+endif
+i := i + 1
+END REPEAT
+}
+
+
+ 
+ 
+TASK T2 {
+variable p_sample int 
+variable p_ch int 
+channel ch1: input
+channel ch2: input
+channel ch3: output
+event written: input
+request action1: output
+request checkup: output
+
+REPEAT 
+WAIT written p_sample p_ch
+if (p_sample==1 & p_ch==1) then
+	RD 1 ch1
+	REQ action1 1
+	EXECI 150
+elsif (p_sample==64 & p_ch==2)
+	RD 64 ch2
+	REQ action1 4
+	EXECI 400
+else
+	REQ checkup 
+	WR 64 ch3
+	EXECI 4
+endif
+END REPEAT
+}
+
+
+
+
+\end{verbatim}
+
+\end{twocolumn}
+
+
+
+\newpage
+
+
+
+
+
+\begin{onecolumn}
+
+
+
+\section{Syntax and related grammar}
+
+\subsection{Channels, read and write operations}
+
+\textbf{Channel declaration}\\
+
+\noindent $<$ch$>$ := \textbf{channel} $<$name$>$ $<$width$>$ $<$type$>$\\
+
+$<$name$>$ := [a \ldots z, A \ldots Z, \_][a \ldots z, A \ldots Z, 0 \ldots 9, \_]* 
+
+$<$width$>$ := [1 \ldots 256]
+
+$<$type$>$ := \indent BR - NBW 
+
+\indent \indent \indent \indent \indent $|$ NBR - NBW 
+
+\indent \indent \indent \indent \indent $|$ BR - BW\\
+
+\noindent \textbf{Channel operations}\\
+
+\noindent $<$write$>$ := \textbf{WR} $<$nb\_data\_samples$>$ [$<$max\_nb\_bb$>$] $<$ch$>$\\
+
+$<$nb\_data\_samples$>$ := $<$integer\_4B$>$  
+
+$<$max\_nb\_bb$>$ := $<$integer\_4B$>$ 
+
+$<$ch$>$ is here intended to be the destination channel 
+
+\indent \indent $<$integer\_4B$>$ := [0 \ldots $2^{32}-1$] \\ 
+
+
+\noindent $<$read$>$ := \textbf{RD} $<$nb\_data\_samples$>$ [$<$max\_nb\_bb$>$] $<$ch$>$
+
+$<$ch$>$ is here intended to be the source channel
+
+
+\subsection{Events and related instructions}
+
+\textbf{Event declaration}\\
+
+\noindent $<$evt\_dec$>$ := \textbf{event} $<$name$>$ [$<$global\_type$>$] [$<$global\_type$>$] [$<$global\_type$>$]\\
+
+\indent $<$global\_type$>$ := \textbf{int} 
+
+\indent \indent \indent \indent \indent \indent $|$ \textbf{uint}
+
+\indent \indent \indent \indent \indent \indent $|$ \textbf{bool}\\
+
+\noindent $<$evt$>$ := $<$name$>$ [$<$param$>$] [$<$param$>$] [$<$param$>$]\\
+
+\indent $<$param$>$ := $<$integer\_4B$>$   
+
+\indent \indent \indent \indent \indent $|$ $<$boolean$>$ 
+
+\indent \indent \indent \indent \indent $|$ $<$arithm\_expr$>$\\    
+
+\indent \indent $<$boolean$>$ := 0
+
+\indent \indent \indent \indent \indent \indent $|$ [1 \ldots $2^{32}-1$] \\
+
+
+
+
+
+
+
+
+\noindent \textbf{Instructions on events }
+
+\noindent $<$notify$>$ := \textbf{NOTIFY} $<$evt$>$\\
+
+\noindent $<$wait$>$ := \textbf{WAIT} $<$evt$>$\\
+
+\noindent $<$notified$>$ := \textbf{NOTIFIED} $<$evt$>$\\
+
+\subsection{Request}
+
+\textbf{Request declaration}
+
+\noindent $<$req\_dec$>$ := \textbf{request} $<$name$>$ [$<$global\_type$>$] [$<$global\_type$>$] [$<$global\_type$>$]\\
+
+\noindent \textbf{Request operation: send a request}
+
+\noindent $<$request$>$ := \textbf{REQ} $<$name$>$ [$<$param$>$] [$<$param$>$] [$<$param$>$]\\
+
+\subsection{Operators and control flow structures}
+
+\subsubsection{Conditional structure}
+
+$<$cond\_struct$>$ := 
+
+\textbf{if} $<$cond$>$ \textbf{then} [$<$stat$>$ $+$]
+
+[\textbf{elsif} $<$cond$>$ \textbf{then} [$<$stat$>$ $+$]]
+
+\textbf{else} [$<$stat$>$ $+$] \textbf{endif}\\
+
+$<$cond$>$ := $<$cond$>$ $<$operator$>$ $<$cond$>$
+
+\indent \indent \indent \indent $|$ \textbf{(}$<$cond$>$\textbf{)}
+
+\indent \indent \indent \indent $|$ $<$operand$>$ \\
+
+
+\indent \indent $<$operand$>$ := $<$integer\_4B$>$ 
+
+\indent \indent \indent \indent \indent \indent $|$ $<$boolean$>$
+
+\indent \indent $<$operator$>$ := \textbf{==} $|$ \textbf{!=} $|$ \textbf{$<$} $|$ \textbf{$>$} $|$  \textbf{$<$=} $|$ \textbf{$>$=}\\
+
+
+$<$stat$>$ := $<$data\_manipulation$>$ 
+
+\indent \indent \indent \indent $|$ $<$cond\_struct$>$ 
+
+\indent \indent \indent \indent $|$ $<$finite\_loop$>$ 
+
+\indent \indent \indent \indent $|$ $<$infinite\_loop$>$ 
+
+\indent \indent \indent \indent $|$ $<$write$>$ 
+
+\indent \indent \indent \indent $|$ $<$read$>$ 
+
+\indent \indent \indent \indent $|$ $<$notify$>$ 
+
+\indent \indent \indent \indent $|$ $<$wait$>$ 
+
+\indent \indent \indent \indent $|$ $<$notified$>$ 
+
+\indent \indent \indent \indent $|$ $<$request$>$ \\
+
+
+\indent \indent $<$data\_manipulation$>$ := $<$assignment$>$ 
+
+\indent \indent \indent \indent \indent \indent \indent \indent \indent $|$ $<$arithm\_expr$>$\\
+
+\indent \indent \indent $<$assignment$>$ := $<$var$>$ \textbf{:=} $<$arithm\_expr$>$
+
+\indent \indent \indent \indent \indent \indent \indent \indent $|$ $<$var$>$ \textbf{:=} $<$var$>$ 
+
+\indent \indent \indent \indent \indent \indent \indent \indent $|$ $<$boolean$>$ \textbf{:=} $<$notified$>$ 
+
+\indent \indent \indent \indent \indent \indent \indent \indent $|$ $<$boolean$>$ \textbf{:=} $<$boolean$>$ \\
+
+\indent \indent \indent \indent $<$var$>$ := (+ $|$ -) [0 \ldots $2^{31}-1$] 
+
+\indent \indent \indent \indent \indent \indent \indent $|$ $<$integer\_4B$>$ 
+
+\indent \indent \indent \indent \indent \indent \indent 32-bit (un)signed integer\\ 
+
+\indent \indent \indent $<$arithm\_expr$>$ := $<$arithm\_expr$>$ $<$operator\_arithm $>$ $<$arithm\_expr$>$
+
+\indent \indent \indent \indent \indent \indent \indent \indent $|$ \textbf{(}$<$arithm\_expr$>$\textbf{)}
+
+\indent \indent \indent \indent \indent \indent \indent \indent $|$ $<$var$>$ \\
+
+\indent \indent \indent \indent $<$operator\_arithm $>$ := $+$ $|$ $-$ $|$ $*$ $|$ $/$ $|$ \& $|$ $|$ $|$ $\sim$ $|$ $\hat{}$ (1 byte)\\
+
+\noindent Note that priority (that has been taken into consideration during the work) is not reported in this version of the grammar. Anyway, the priority list, from maximum to minimum priority, is the following (in addition to this list brackets have always the maximum priority):\\
+
+$*$ $/$
+
+$+$ $-$
+
+$<$ $>$ $<$= $>$=
+
+==  !=
+
+$\hat{}$
+
+\&
+
+$\sim$
+
+$|$ \\
+ 
+ 
+
+\subsubsection{Repetition structure}
+
+\noindent $<$finite\_loop$>$ := 
+
+\textbf{REPEAT} $<$N$>$ \textbf{TIMES} 
+
+[$<$stat$>$ $+$]
+
+\textbf{END REPEAT}\\
+
+$<$N$>$ := $<$integer\_4B$>$\\
+
+\noindent $<$infinite\_loop$>$ := 
+
+\textbf{REPEAT} [$<$stat$>$ $+$]  \textbf{END REPEAT}
+
+\subsubsection{Variable declaration}
+
+\noindent $<$variable\_dec$>$ := \textbf{variable} $<$name$>$ $<$global\_type$>$\\
+
+
+
+
+\subsection{Instructions}
+
+$<$execute$>$ := $<$exec\_command$>$ $<$nb\_of\_executions$>$\\
+
+$<$nb\_of\_executions$>$ := $<$integer\_4B$>$
+
+$<$exec\_command$>$ := \textbf{EXEC}
+
+\indent \indent \indent \indent \indent \indent \indent $|$ \textbf{EXECI}
+
+\indent \indent \indent \indent \indent \indent \indent $|$ \textbf{EXECF}
+
+\indent \indent \indent \indent \indent \indent \indent $|$ \textbf{EXECC}
+
+
+
+
+\subsection{Task}
+
+\noindent $<$task$>$ := \textbf{TASK} $<$task$>$ \textbf{\{} [$<$variable\_dec$>$$+$] [$<$io\_dec$>$$+$] $<$stat$>$$+$\textbf{\}} \\
+
+\indent $<$io\_dec$>$ := $<$name\_obj$>$ $<$name$>$ \textbf{:} $<$io\_type$>$\\
+
+\indent \indent $<$name\_obj$>$ := \textbf{channel}
+
+\indent \indent \indent \indent \indent \indent $|$ \textbf{event}
+
+\indent \indent \indent \indent \indent \indent $|$ \textbf{request}
+
+\indent \indent $<$io\_type$>$ := \textbf{input}
+
+\indent \indent \indent \indent \indent \indent $|$ \textbf{output}
+
+
+\subsection{DIPLODOCUS\_spec}
+
+\noindent $<$DIPLODOCUS\_spec$>$ := $<$global\_declaration$>$ $<$task$>$$+$\\
+
+$<$global\_declaration$>$ := [$<$ch$>$$+$] [$<$evt\_dec$>$$+$] [$<$req\_dec$>$$+$]
+
+
+
+\newpage
+
+
+
+
+\section{Open issues}
+
+Open issues are various. Examples are:\\
+\begin{itemize}
+	\item Is it possible to unify Requests and Events or is it better to keep them divided because their behaviors are semantically different?\\
+	
+	\item Shall we use a FIFO for each event or share the same FIFO among different events?\\
+	
+	\item Should we consider other data types? Should we introduce structs (as in the c code)?\\
+	
+	\item Would it be useful to have point to multipont channels?\\
+	
+	\item Should we introduce a hierarchical structure? How can hierarchy be managed?\\
+	
+	\item How can the internal parallelism be managed?\\
+
+	\item ...\\
+	
+	\item   
+
+\end{itemize}
+
+
+%\section{}
+%\subsection{}
+%\subsubsection{}
+%\paragraph{}
+%\subparagraph{}
+
+%\section{R\' ef\' erences}
+
+%\bibliographystyle{plain} %se voglio indicare stile bibliografia
+%\bibliography{stlong} se li prendo dalla biblioteca che mi costruisco separatamente stlong.bib
+
+\begin{thebibliography}{99}
+
+\bibitem{Diplodocus} L.~Apvrille, M.~Waseem, R.~Ameur-Boulifa, S.~Coudert and R.~Pacalet, ``A UML-based Environment for System Design Space Exploration'', \emph{ICECS'2006, Paper (December 2006)}
+
+\bibitem{papTML} M.~Waseem, L.~Apvrille, R.~Ameur-Boulifa, S.~Coudert and R.~Pacalet, ``Abstract Application Modeling for System Design Space Exploration'', \emph{ECDSD, Paper (August 2006)}
+
+%\bibitem{tesiW} M.~Waseem, System Design Space Exploration, \textit{Master thesis (2005)}
+
+
+\end{thebibliography}
+
+\end{onecolumn}
+
+\end{document}

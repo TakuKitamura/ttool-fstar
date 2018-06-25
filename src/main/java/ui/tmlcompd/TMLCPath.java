@@ -81,7 +81,9 @@ public class TMLCPath  {
                                "Events are not compatible with fork/join",
                                "Requests are not compatible with fork/join",
                                "Events/requests must all have the same parameters",
-                               "Channels and events can have only one input and one output"
+                               "Channels and events can have only one input and one output",
+                                "At most one join by path",
+                                "At most one fork by path"
     };
 
     public TMLCPath() {
@@ -116,6 +118,18 @@ public class TMLCPath  {
         }
 
 
+    }
+
+    public TMLCFork getFork(int index) {
+        if (forks == null) {
+            return null;
+        }
+
+        if (forks.size() == 0) {
+            return null;
+        }
+
+        return forks.get(index);
     }
 
     public void setErrorOfConnection(boolean _err) {
@@ -316,6 +330,20 @@ public class TMLCPath  {
                 }
 
             }
+        }
+
+
+
+        // rule10: at most one join
+        if (joins.size() > 1) {
+            errorNumber = 10;
+            faultyComponent = joins.get(0);
+        }
+
+        // rule11: at most one fork
+        if (forks.size() > 1) {
+            errorNumber = 11;
+            faultyComponent = forks.get(0);
         }
 
     }

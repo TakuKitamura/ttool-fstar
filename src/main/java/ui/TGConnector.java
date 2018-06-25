@@ -92,10 +92,10 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
 //        tgcomponent = new TGComponent[nbInternalTGComponent];
 //
 //        Point p;
-//        //System.out.println("nbInternalTGComponent" + nbInternalTGComponent);
+//        //TraceManager.addDev("nbInternalTGComponent" + nbInternalTGComponent);
 //        for(int i=0; i<nbInternalTGComponent; i++) {
 //            p = _listPoint.elementAt(i);
-//            //System.out.println("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
+//            //TraceManager.addDev("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
 //            tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, _minX, _maxX, _minY, _maxY, false, this, _tdp);
 //        }
         name = "connector";
@@ -108,10 +108,10 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         nbInternalTGComponent = _listPoint.size();
         tgcomponent = new TGComponent[nbInternalTGComponent];
 
-        //System.out.println("nbInternalTGComponent" + nbInternalTGComponent);
+        //TraceManager.addDev("nbInternalTGComponent" + nbInternalTGComponent);
         for(int i=0; i<nbInternalTGComponent; i++) {
             final Point p = _listPoint.elementAt(i);
-            //System.out.println("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
+            //TraceManager.addDev("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
             tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp );
         }
     }
@@ -343,7 +343,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     		// We need only two points
     		// we complete to two Points if dist_x is really grater than dist_y
 
-    		//System.out.println("Algo1");
+    		//TraceManager.addDev("Algo1");
 
     		/*if ((dist_x != 0) && ((dist_y/5) > dist_x))  {
               completePointsTo(2);
@@ -358,7 +358,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     			points[i].setCd(p2.getX(), p1.getY() + dist_y / 2);
     		}
     	} else {
-    		//System.out.println("Algo2");
+    		//TraceManager.addDev("Algo2");
     		// Algorithm 2: more complex
     		// we need at least 4 points
     		//TraceManager.addDev("Making square ...");
@@ -532,7 +532,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     }
 
     public boolean areAllInRectangle(int x1, int y1, int width1, int height1) {
-        //System.out.println("width: " + width + " height: " + height);
+        //TraceManager.addDev("width: " + width + " height: " + height);
         TGComponent p3, p4;
 
         if (hasTGCPointOfConnector()) {
@@ -635,9 +635,9 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     private boolean addTGCPointOfConnector(int x, int y) {
         //TraceManager.addDev("Adding point of connector at "+  x + "," + y);
         CDElement [] pt = getPointedSegment(x, y);
-        /*System.out.println("Two pts");
-          System.out.println("p1  x=" + pt[0].x + " y=" + pt[0].y);
-          System.out.println("p2  x=" + pt[1].x + " y=" + pt[1].y);*/
+        /*TraceManager.addDev("Two pts");
+          TraceManager.addDev("p1  x=" + pt[0].x + " y=" + pt[0].y);
+          TraceManager.addDev("p2  x=" + pt[1].x + " y=" + pt[1].y);*/
         if (pt != null) {
             Point p = new Point((pt[0].getX() + pt[1].getX()) / 2, (pt[0].getY() + pt[1].getY()) / 2);
             int distance1 = (int)(new Point(x, y).distance(pt[0].getX(), pt[0].getY()));

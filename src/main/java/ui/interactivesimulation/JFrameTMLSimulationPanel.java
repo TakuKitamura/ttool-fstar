@@ -41,9 +41,8 @@
 
 package ui.interactivesimulation;
 
-import common.ConfigurationTTool;
 import myutil.FileUtils;
-import myutil.SVGGeneration;
+import myutilsvg.SVGGeneration;
 import myutil.TraceManager;
 import ui.ColorManager;
 import ui.MainGUI;
@@ -140,8 +139,8 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
         
         pack();
         
-        //System.out.println("Row table:" + rowTable.toString());
-        //System.out.println("Value table:" + valueTable.toString());
+        //
+        //
 	}
 
 	public JSimulationTMLPanel getSDPanel(){

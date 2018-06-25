@@ -39,7 +39,6 @@
 
 package tmltranslator.tomappingsystemc2;
 
-import myutil.TraceManager;
 import tmltranslator.*;
 
 import java.util.ArrayList;
@@ -78,7 +77,7 @@ public class StaticAnalysis {
     }
 
 	/*public int getNbOfDefs(){
-		return _nextDefID;
+        return _nextDefID;
 	}*/
 
     public int getBytesForDefs() {
@@ -123,19 +122,16 @@ public class StaticAnalysis {
         if (!(iExpr == null || iExpr.isEmpty())) {
             //TraceManager.addDev("Examine expression: " + iExpr);
             Matcher matcher = _varPattern.matcher(iExpr);
-            //System.out.print("Found tokens: ");
+
             while (matcher.find()) {
                 String token = iExpr.substring(matcher.start(), matcher.end());
-                //System.out.print(token + ", ");
                 int aVarSeqNo = getVarSeqNoByName(token);
                 if (aVarSeqNo >= 0) aResMap[aVarSeqNo >>> 5] |= 1 << (aVarSeqNo & 0x1F);
             }
             //TraceManager.addDev();
             //TraceManager.addDev("Byte sequence: ");
         }
-		/*for(int i=0; i<_bytesForVars; i++)
-			System.out.print(((int)aResMap[i]) + ", ");
-		TraceManager.addDev();*/
+
         return aResMap;
     }
 
@@ -341,10 +337,9 @@ public class StaticAnalysis {
                 if ((aStatResult & 2) != 0) aNbOfCheckPoints++;
             }
         }
-        if (aNbOfCandidates == 0)  {
+        if (aNbOfCandidates == 0) {
             //TraceManager.addDev("No checkpoint candidates");
-        }
-		else {
+        } else {
             //TraceManager.addDev("a: " + _task.getAttributes().size() + " c: " + _channels.size() + " e: " + _events.size());
             //int aNbOfLiveElements = _task.getAttributeList().size() + _channels.size() + _events.size();
             int nbOfVars = 0, nbOfChannels = 0, nbOfEvents = 0;

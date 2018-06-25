@@ -64,7 +64,7 @@ public class MappingTable {
     int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
     int nb_ram =TopCellGenerator.avatardd.getAllRAM().size();
 
-    System.out.println("Number of clusters : "+ nb_clusters);
+    
     if(nb_clusters == 0){
 	mapping = CR2 + "//-----------------------mapping table------------------------" + CR2;
 	mapping = mapping + "// ppc segments" + CR2;

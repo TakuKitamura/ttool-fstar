@@ -74,6 +74,8 @@ public class TMLChannel extends TMLCommunicationElement {
     // Used for 1 -> many channel, or for many -> 1 channel
     protected ArrayList<TMLTask> originTasks, destinationTasks;
     protected ArrayList<TMLPort> originPorts, destinationPorts;
+    protected int nbOfSamples; // Represent how many samples are read (join) or written (fork) at once
+
 
     private String TAB = "\t";
     private String TAB2 = "\t\t";
@@ -173,6 +175,10 @@ public class TMLChannel extends TMLCommunicationElement {
 
         return allTasks;
 
+    }
+
+    public void setNumberOfSamples(int nbOfSamples) {
+        this.nbOfSamples = nbOfSamples;
     }
 
     public TMLTask getDestinationTask(int index) {

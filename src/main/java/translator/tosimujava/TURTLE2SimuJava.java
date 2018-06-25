@@ -1,26 +1,26 @@
-/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,33 +31,27 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- */
-
-
-
-
-package translator.tosimujava;
-
-import myutil.Conversion;
-import myutil.FileException;
-import translator.*;
-import translator.tojava.ComponentId;
-import translator.tojava.JAttribute;
-import translator.JKeyword;
-import translator.tojava.JOperation;
-
-import java.util.LinkedList;
-import java.util.Vector;
-
-/**
+ *
+ * /**
  * Class TURTLE2SimuJava
  * Creation: 19/06/2006
  * @version 1.0 19/06/2006
  * @author Ludovic APVRILLE
+ * @see
  */
+
+package translator.tosimujava;
+
+import java.util.*;
+
+//import ddtranslator.*;
+import myutil.*;
+import translator.*;
+import translator.tojava.*;
+
 public class TURTLE2SimuJava {
     
     //private static int gateId;
@@ -96,11 +90,15 @@ public class TURTLE2SimuJava {
     public TURTLE2SimuJava(TURTLEModeling _tm) {
         tm = _tm;
         longforint = false;
-        components = new Vector<>();
+        components = new Vector<ComponentId>();
     }
     
     public void saveJavaClasses(String path) throws FileException {
-        for (TJavaProcess tjc: this.processes) {
+        ListIterator iterator = processes.listIterator();
+        TJavaProcess tjc;
+        
+        while(iterator.hasNext()) {
+            tjc = (TJavaProcess)(iterator.next());
             tjc.saveAsFileIn(path);
         }
         
@@ -116,8 +114,12 @@ public class TURTLE2SimuJava {
     }
     
     public void printJavaClasses() {
-        for (TJavaProcess tjp: this.processes) {
-            System.out.println(tjp.getJavaName() + ":\n" + tjp.toString() + "\n\n");
+        ListIterator iterator = processes.listIterator();
+        TJavaProcess tjp;
+        
+        while(iterator.hasNext()) {
+            tjp = (TJavaProcess)(iterator.next());
+            TraceManager.addDev(tjp.getJavaName() + ":\n" + tjp.toString() + "\n\n");
         }
         
         printMainClass();    
@@ -135,7 +137,7 @@ public class TURTLE2SimuJava {
         mgm = new MasterGateManager(tm, false);
         mgm.sort();
         
-        processes = new LinkedList<>();
+        processes = new LinkedList<TJavaProcess>();
         
         // Creating classes & attributes & operations
         generateMainClass();
@@ -191,9 +193,9 @@ public class TURTLE2SimuJava {
             tjp = foundTJProcess(t.getName());
             if (tjp != null) {
                 //generateExternalPreemption(t, jc);
-                //System.out.println("Generate operations for " + jc.getJavaName());
+                //TraceManager.addDev("Generate operations for " + jc.getJavaName());
                 generateOperations(t, tjp);
-                //System.out.println("Done");
+                //TraceManager.addDev("Done");
             }
         }
     }
@@ -238,11 +240,11 @@ public class TURTLE2SimuJava {
      
         for(i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
-            System.out.println("t = " + t.getName() + " Relation=" + r);
+            TraceManager.addDev("t = " + t.getName() + " Relation=" + r);
             if ((r.type == Relation.PRE) && (r.t1 == t)) {
-                //System.out.println("Preemption from t to " + r.t2.getName());
+                //TraceManager.addDev("Preemption from t to " + r.t2.getName());
                 jc1 = foundJClass(r.t2.getName());
-                //System.out.println("jc1 = " + jc1.getJavaName());
+                //TraceManager.addDev("jc1 = " + jc1.getJavaName());
                 tclasses.add(jc1);
             }
         }
@@ -251,7 +253,7 @@ public class TURTLE2SimuJava {
             return;
         }
      
-        //System.out.println("Size=" + tclasses.size());
+        //TraceManager.addDev("Size=" + tclasses.size());
      
         // Create the necessary operation
         jc.addStartingPreemptionCode(JKeyword.INDENT + DECL_CODE_04 + "\n");
@@ -326,7 +328,7 @@ public class TURTLE2SimuJava {
     }
     
     private void generateStandardOperationsRec(TClass t, TJavaProcess tjp, ActivityDiagram ad, ADComponent adc, ADComponent last, JOperation jo, int dec, boolean endNeeded) {
-        System.out.println("Generating std op rec " + jo.getName());
+        TraceManager.addDev("Generating std op rec " + jo.getName());
         if (adc instanceof ADActionStateWithGate) {
             ADActionStateWithGate adaswg = (ADActionStateWithGate)adc;
             indent(jo, dec);
@@ -340,8 +342,8 @@ public class TURTLE2SimuJava {
         } else if (adc instanceof ADActionStateWithParam) {
             ADActionStateWithParam adaswp = (ADActionStateWithParam) adc;
             indent(jo, dec);
-            //System.out.println("java expr: " + adaswp.brutToString());
-            //System.out.println(" Modified java expr: " + makeJavaExpression(adaswp.brutToString()));
+            //TraceManager.addDev("java expr: " + adaswp.brutToString());
+            //TraceManager.addDev(" Modified java expr: " + makeJavaExpression(adaswp.brutToString()));
             jo.addCode(makeJavaExpression(adaswp.brutToString()) + JKeyword.END_OP_N);
             generateStandardOperationsRec(t, tjp, ad, adc.getNext(0), adc, jo, dec, endNeeded);
         } /*else if (adc instanceof ADChoice) {
@@ -381,7 +383,7 @@ public class TURTLE2SimuJava {
         } /*else if (adc instanceof ADPreempt) {
             makePreemptionCode(t, tjp, ad, (ADPreempt)adc, last, jo, dec, endNeeded);
         } else {
-            System.out.println("Operator not supported: " + adc.toString());
+            TraceManager.addDev("Operator not supported: " + adc.toString());
             if (endNeeded) {
                 makeEndCode(jo, dec, true);
             }
@@ -439,12 +441,16 @@ public class TURTLE2SimuJava {
         //addGateCodeMainClass(generateJGateCreation(javaClasses));
     }
     
-    private String generateJGateCreation(LinkedList<TJavaProcess> toTakeIntoAccountJC) {
+    private String generateJGateCreation(LinkedList toTakeIntoAccountJC) {
+        TJavaProcess tjp;
         int j;
         JSimuGate jg;
         String s = "";
         
-        for (TJavaProcess tjp: this.processes) {
+        ListIterator iterator = processes.listIterator();
+        
+        while(iterator.hasNext()) {
+            tjp = (TJavaProcess)(iterator.next());
             if (toTakeIntoAccountJC.contains(tjp)) {
                 for(j=0; j<tjp.getGateNb(); j++) {
                     jg = tjp.getGateAt(j);
@@ -469,7 +475,7 @@ public class TURTLE2SimuJava {
         //mainclass.addSynchroCode(generateJGateSynchronisation(javaClasses));
     }
     
-    private String generateJGateSynchronisation(LinkedList<TJavaProcess> toTakeIntoAccountJC) {
+    private String generateJGateSynchronisation(LinkedList toTakeIntoAccountJC) {
         // Assume that all invocation operations have been removed
         //TClass t;
         Relation r;
@@ -494,10 +500,10 @@ public class TURTLE2SimuJava {
                 if ((tjp1 != null) && (tjp2 != null)) {
                     if (toTakeIntoAccountJC.contains(tjp1) && toTakeIntoAccountJC.contains(tjp2)) {
                         for(j=0; j<r.gatesOfT1.size(); j++) {
-                            System.out.println("Gates 1)" + r.gatesOfT1.elementAt(j).getName() + " 2:" + r.gatesOfT2.elementAt(j).getName());
-                            jg1 = tjp1.foundJGate(r.gatesOfT1.elementAt(j).getName());
-                            jg2 = tjp2.foundJGate(r.gatesOfT2.elementAt(j).getName());
-                            //System.out.println("foundJGate");
+                            //TraceManager.addDev("Gates 1)" + ((Gate)(r.gatesOfT1.elementAt(j))).getName() + " 2:" + ((Gate)(r.gatesOfT2.elementAt(j))).getName());
+                            jg1 = tjp1.foundJGate(((r.gatesOfT1.elementAt(j))).getName());
+                            jg2 = tjp2.foundJGate(((r.gatesOfT2.elementAt(j))).getName());
+                            //TraceManager.addDev("foundJGate");
                             if ((jg1 != null) && (jg2 != null)) {
                                 s += JKeyword.INDENT + JKeyword.INDENT + jg1.getJName() + ".synchroGate = " + jg2.getJName() + JKeyword.END_OP + "\n";
                                 s += JKeyword.INDENT + JKeyword.INDENT + jg2.getJName() + ".synchroGate = " + jg1.getJName() + JKeyword.END_OP + "\n";
@@ -558,7 +564,7 @@ public class TURTLE2SimuJava {
             jc = (JavaClass)(iterator.next());
             if (toTakeIntoAccount.contains(jc)) {
                 ll = listClassesStartingAt(jc.getJavaName());
-                System.out.println("Getting list for" + jc.getJavaName());
+                TraceManager.addDev("Getting list for" + jc.getJavaName());
                 if ((ll != null) && (ll.size() > 0)) {
                     jc.addStartingSequenceCode(JKeyword.INDENT + DECL_CODE_03 + "\n");
                     jc.addStartingSequenceCode(generateJGateCreation(ll));
@@ -598,7 +604,7 @@ public class TURTLE2SimuJava {
         for(int i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
             if (r.type == Relation.SEQ) {
-                System.out.println("Found one seq relation");
+                TraceManager.addDev("Found one seq relation");
                 if(r.t1.getName().equals(name)) {
                     jc = foundJClass(r.t2.getName());
                     if (jc != null) {
@@ -614,10 +620,14 @@ public class TURTLE2SimuJava {
         generateProcessStartingMainClass();
     }
     
-    private String generateProcessCreation(LinkedList<TJavaProcess> toTakeIntoAccount, boolean onlyActiveClasses) {
+    private String generateProcessCreation(LinkedList toTakeIntoAccount, boolean onlyActiveClasses) {
+        TJavaProcess tjc;
         String s = "";
         
-        for (TJavaProcess tjc: this.processes) {
+        ListIterator iterator = processes.listIterator();
+        
+        while(iterator.hasNext()) {
+            tjc = (TJavaProcess)(iterator.next());
             if (toTakeIntoAccount.contains(tjc)) {
                 if ((!onlyActiveClasses) || (onlyActiveClasses && tjc.isActive())) {
                     s += tjc.getCreationCode(tjc.getJavaName().toLowerCase()) + "\n";
@@ -650,7 +660,11 @@ public class TURTLE2SimuJava {
     
     
     private TJavaProcess foundTJProcess(String name) {
-        for (TJavaProcess tjp: this.processes) {
+        TJavaProcess tjp;
+        ListIterator iterator = processes.listIterator();
+        
+        while(iterator.hasNext()) {
+            tjp = (TJavaProcess)(iterator.next());
             if (tjp.getTURTLEName().equals(name)) {
                 return tjp;
             }
@@ -768,7 +782,7 @@ public class TURTLE2SimuJava {
      
         indent(jo, dec);
         if (debug)
-            jo.addCode("System.out.println(\"Call terminated for" + jc.getJavaName() + "\");\n");
+            jo.addCode("TraceManager.addDev(\"Call terminated for" + jc.getJavaName() + "\");\n");
      
         if (delay != null) {
             indent(jo, dec);
@@ -1129,7 +1143,7 @@ public class TURTLE2SimuJava {
                 jo.addCode(name+ ".join();\n");
                 dec --;
                 indent(jo, dec);
-                jo.addCode("} catch (InterruptedException ie) {System.out.println(\"Interrupted\");}\n");
+                jo.addCode("} catch (InterruptedException ie) {TraceManager.addDev(\"Interrupted\");}\n");
                 idSeq ++;
                 indent(jo, dec);
                 jo.addCode("\n");
@@ -1180,7 +1194,7 @@ public class TURTLE2SimuJava {
         if (adpar.getNbNext() > 1) {
             // We assume that there is no synchronization
             boolean b = true;//adpar.isAValidMotif(t);
-            System.out.println("Nb of gates = " + adpar.nbGate() + " valueGate=" + adpar.getValueGate());
+            TraceManager.addDev("Nb of gates = " + adpar.nbGate() + " valueGate=" + adpar.getValueGate());
             if ((adpar.nbGate() == 0) ||(adpar.getNbNext() > 2) || (!b)) {
                 indent(jo, dec);
                 jo.addCode("int []tab = new int[" + adpar.getNbNext() + "];\n");
@@ -1190,14 +1204,14 @@ public class TURTLE2SimuJava {
                     idop = tjp.getOperationNb() - 1;
                     indent(jo, dec);
                     jo.addCode("tab[" + i + "] = " + idop + ";\n");
-                    //System.out.println("Parallel with next = " + adpar.getNext(i).toString());
+                    //TraceManager.addDev("Parallel with next = " + adpar.getNext(i).toString());
                     generateStandardOperationsRec(t, tjp, ad, adpar.getNext(i), adpar, jo1, 2, true);
                 }
                 indent(jo, dec);
                 jo.addCode("jse.addParallelProcess(tab);\n");       
                 basicFinishJO(jo, dec);
             } else {
-                System.out.println("Parallel - synchro");
+                TraceManager.addDev("Parallel - synchro");
                 // Synchronization
                 // adpar : nb next == 2
                 // Creation of new synchronization gates
@@ -1378,7 +1392,7 @@ public class TURTLE2SimuJava {
     
     private void generateMainClass() {
         mainClass = new MainClassSimu(MAIN_CLASS);
-        System.out.println("Adding mainclass :" + MAIN_CLASS);
+        TraceManager.addDev("Adding mainclass :" + MAIN_CLASS);
     }
     
     private void generateBasicCodeMainClass() {
@@ -1418,7 +1432,7 @@ public class TURTLE2SimuJava {
     
     
     private void printMainClass() {
-        System.out.println(mainClass.getName() + ":\n" + mainClass.toString() + "\n\n");
+        TraceManager.addDev(mainClass.getName() + ":\n" + mainClass.toString() + "\n\n");
     }
     
 }

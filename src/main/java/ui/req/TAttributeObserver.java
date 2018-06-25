@@ -152,7 +152,7 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
             return;
         }
         
-        //System.out.println("Regular resize" + toString());
+        //
         int desiredWidth = minWidth;
         int h = myG.getFontMetrics().getHeight();
         int desiredHeight =  Math.max(minHeight, h * (texts.length +1) + minHeight);
@@ -176,7 +176,7 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
     
     public void checkMySize() {
         calculateMyDesiredSize();
-        //System.out.println("I check my size");
+        //
         
         TGComponent tgc = getTopFather();
         
@@ -245,28 +245,28 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
             String oldtext = text;
             text = "";
             
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("textline")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     s = "";
                                 }
                                 text += GTURTLEModeling.decodeString(s) + "\n";
                             } else if (elt.getTagName().equals("violated")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 violatedAction = elt.getAttribute("data");
                                 if (violatedAction.equals("null")) {
                                     violatedAction = "";

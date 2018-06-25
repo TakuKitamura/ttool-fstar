@@ -159,7 +159,7 @@ public abstract class SysmlsecMethodologyDiagramReference extends TGCScalableWit
 
         if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
             currentFontSize = tdp.getFontSize();
-            //System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
+            //
             myFont = f.deriveFont((float)currentFontSize);
             myFontB = myFont.deriveFont(Font.BOLD);
 

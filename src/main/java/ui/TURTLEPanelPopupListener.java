@@ -168,7 +168,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     }
 
     private void updateMenu(int index) {
-        //System.out.println("UpdateMenu index=" + index);
+        //
         if (tp.canFirstDiagramBeMoved()) {
             if (index < 1) {
                 moveLeft.setEnabled(false);

@@ -98,7 +98,7 @@ public class TMLChannelProperties extends TGCWithoutInternalComponent {
     public void internalDrawing(Graphics g) {
         if (((TMLTaskDiagramPanel)(tdp)).areChannelsVisible()) {
             ColorManager.setColor(g, getState(), 0);
-            //System.out.println("value=" + value);
+            //
             h = g.getFontMetrics().getHeight();
             g.drawString(value, x, y + h);
             
@@ -189,34 +189,34 @@ public class TMLChannelProperties extends TGCWithoutInternalComponent {
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro *** " + getId());
+        //
         try {
             
             NodeList nli;
             Node n1, n2;
             Element elt;
             
-            //System.out.println("Loading Synchronization gates");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Prop")) {
                                 type = Integer.decode(elt.getAttribute("type")).intValue();
                                 size = Integer.decode(elt.getAttribute("size")).intValue();
-                                //System.out.println("before error?");
+                                //
                                 if (elt.getAttribute("maxElt").toString().compareTo("") != 0) { // test for compatibility with older versions
                                    maxElt = Integer.decode(elt.getAttribute("maxElt")).intValue();
                                 }
-                                //System.out.println("after error?");
+                                //
                                 channelName = elt.getAttribute("name");
                             }
                         }
@@ -225,7 +225,7 @@ public class TMLChannelProperties extends TGCWithoutInternalComponent {
             }
             
         } catch (Exception e) {
-          //System.out.println("Exception ...");
+          //
             throw new MalformedModelingException();
         }
         makeValue();

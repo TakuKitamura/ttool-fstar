@@ -136,7 +136,7 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
 
         //g.drawRoundRect(x, y, width, height, arc, arc);
         Color c = g.getColor();
-        //System.out.println("Color=" + c);
+        //
 
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
@@ -239,7 +239,7 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
 						if (sig1.replaceAll(": ","-").trim().equalsIgnoreCase(s.split(":")[0].trim())){
 							//Compare times
 							int tActual=Integer.valueOf(latencyVals.get(s));
-							//System.out.println(refNum + " " + tActual);
+							//
 							if (refNum>0){
 								if (lessThan){
 									if (tActual < refNum){
@@ -262,10 +262,10 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
 					}
 				}
 				if (reference instanceof TMLADWriteChannel){
-					//	System.out.println("ref " + reference.toString().split(": ")[1].split("\\(")[0] + " " + s.split("-")[1].split(":")[0]);
+					//	
 					TMLADWriteChannel rc = (TMLADWriteChannel) reference;
 					ConcurrentHashMap<String, String> refLats =rc.getLatencyMap();
-					//System.out.println("referencelats " + refLats);
+					//
 					for (String checkpoint:refLats.keySet()){
 						if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split(":")[1].split(" ")[0])){
 							String time=refLats.get(checkpoint);
@@ -360,7 +360,7 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
 		
 		Vector<TGComponent> refs = new Vector<TGComponent>();
 		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
-            //System.out.println("req " + req);
+            //
             if (req instanceof AvatarRDRequirement){
                 refs.add((AvatarRDRequirement) req);
             }
@@ -424,7 +424,7 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
       }
 
       public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-      //System.out.println("*** load extra synchro *** " + getId());
+      //
       try {
 
       NodeList nli;
@@ -433,17 +433,17 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
       int k;
       String s;
 
-      //System.out.println("Loading Synchronization gates");
-      //System.out.println(nl.toString());
+      //
+      //
 
       for(int i=0; i<nl.getLength(); i++) {
       n1 = nl.item(i);
-      //System.out.println(n1);
+      //
       if (n1.getNodeType() == Node.ELEMENT_NODE) {
       nli = n1.getChildNodes();
       for(int j=0; i<nli.getLength(); i++) {
       n2 = nli.item(i);
-      //System.out.println(n2);
+      //
       if (n2.getNodeType() == Node.ELEMENT_NODE) {
       elt = (Element) n2;
       if (elt.getTagName().equals("Data")) {

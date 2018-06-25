@@ -184,12 +184,12 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         }
         if (p11 == null) {
             p11 = new Point(p1.getX(), p1.getY());
-            //System.out.println("null point");
+            //
         }
         Point p22 = GraphicLib.intersectionRectangleSegment(x2 - (cz / 2), y2 - (cz / 2), cz, cz, x1, y1, x2, y2);
         if (p22 == null) {
             p22 = new Point(p2.getX(), p2.getY());
-            //System.out.println("null point");
+            //
         }
 
         g.drawLine(p11.x, p11.y, p22.x, p22.y);
@@ -332,7 +332,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             assoc = v.get(i);
             as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
             as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
-            System.out.println(as1 + " " + as2 + " " + assoc);
+            
             if ((as1 != null) && (as2 != null)) {
                 index = assoc.indexOf("->");
                 if (index > -1) {
@@ -414,17 +414,17 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             blockingFIFO = false;
             asynchronous = false;
 
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("iso")) {
@@ -519,13 +519,13 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     }
 
     public void rescale(double scaleFactor) {
-        //System.out.println("Rescale connector");
+        //
         int xx, yy;
 
         for (int i = 0; i < nbInternalTGComponent; i++) {
             xx = tgcomponent[i].getX();
             yy = tgcomponent[i].getY();
-            //System.out.println("Internal comp xx= " + xx + "  y==" + yy);
+            //
             tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
             tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
             xx = (int) (tgcomponent[i].dx);
@@ -535,7 +535,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
             tgcomponent[i].setCd(xx, yy);
 
-            //System.out.println("Internal comp xx= " + xx + "  y==" + yy);
+            //
         }
 
         oldScaleFactor = scaleFactor;
@@ -654,7 +654,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     public void updateAllSignals() {
         try {
             Vector<String> v = getAssociationSignals();
-            //	System.out.println(inSignalsAtOrigin + " " + inSignalsAtDestination + " " + outSignalsAtOrigin + " " + outSignalsAtDestination);
+            //	
             inSignalsAtOrigin.clear();
             inSignalsAtDestination.clear();
             outSignalsAtOrigin.clear();

@@ -272,7 +272,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         int w  = Math.max(g.getFontMetrics().stringWidth(value), g.getFontMetrics().stringWidth(ster));
         int w1 = Math.max((int)(minWidth*tdp.getZoom()), w + 2 * textX);
 
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+        //
         if (w1 != width) {
             width = w1;
             resizeWithFather();
@@ -281,12 +281,12 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
 
         g.setFont(f0);
 
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+        //
     }
 
     public void resizeWithFather() {
         if ((father != null) && (father instanceof FTDBlock)) {
-            //System.out.println("cdRect comp");
+            //
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
             setMoveCd(x, y);
@@ -366,7 +366,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
 
             NodeList nli;
@@ -380,12 +380,12 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {

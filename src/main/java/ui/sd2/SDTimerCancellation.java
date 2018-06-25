@@ -185,7 +185,7 @@ public class SDTimerCancellation extends TGCScalableWithoutInternalComponent imp
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra timer name ***");
+        //
 		boolean timerSet = false;
 		
         try {
@@ -195,23 +195,23 @@ public class SDTimerCancellation extends TGCScalableWithoutInternalComponent imp
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
 
                     // Issue #17 copy-paste error on j index
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
-							//System.out.println("towards Interval");
+							//
                             elt = (Element) n2;
-							//System.out.println("No more Interval");
+							//
                             if (elt.getTagName().equals("Interval")) {
-								//System.out.println("working on Interval");
+								//
                                 timer = elt.getAttribute("timer");
 								timerSet = true;
-								//System.out.println("timer=" + timer);
+								//
                             }
                         }
                     }
@@ -219,7 +219,7 @@ public class SDTimerCancellation extends TGCScalableWithoutInternalComponent imp
             }
             
         } catch (Exception e) {
-			//System.out.println("Exception =" + e.getMessage());
+			//
 			if (!timerSet) {
 				throw new MalformedModelingException();
 			}

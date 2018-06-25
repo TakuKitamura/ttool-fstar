@@ -511,7 +511,7 @@ public class DSEConfiguration implements Runnable  {
 
     private boolean loadMapping(boolean _optimize) {
         boolean ret = false;
-        //System.out.println("load");
+        //TraceManager.addDev("load");
         String inputData = FileUtils.loadFileData(mappingFile);
         TMLMappingTextSpecification<TGComponent> spec = new TMLMappingTextSpecification<>("LoadedSpecification");
         ret = spec.makeTMLMapping(inputData, modelPath);
@@ -523,16 +523,16 @@ public class DSEConfiguration implements Runnable  {
         }
 
         if (ret) {
-            //System.out.println("Format OK");
+            //TraceManager.addDev("Format OK");
             tmap = spec.getTMLMapping();
             tmlm = tmap.getTMLModeling();
             if (tmap==null || tmlm ==null){
                 return false;
             }
-            //System.out.println("\n\n*** TML Modeling *** \n");
+            //TraceManager.addDev("\n\n*** TML Modeling *** \n");
             //TMLTextSpecification textspec = new TMLTextSpecification("toto");
             //String s = textspec.toTextFormat(tmlm);
-            //System.out.println(s);
+            //TraceManager.addDev(s);
 
             // Checking syntax
             TraceManager.addDev("--- Checking syntax of the whole specification (TML, TARCHI, TMAP)---");
@@ -555,7 +555,7 @@ public class DSEConfiguration implements Runnable  {
                 TraceManager.addDev(tmlm.printSummary(warnings));
             }
             //spec.toTextFormat(tmlm);
-            //System.out.println("TMLModeling=" + spec);
+            //TraceManager.addDev("TMLModeling=" + spec);
         }
 
         return true;
@@ -563,7 +563,7 @@ public class DSEConfiguration implements Runnable  {
 
     private boolean loadTaskModel(boolean _optimize) {
         boolean ret = false;
-        //System.out.println("load");
+        //TraceManager.addDev("load");
         List<TMLError> warnings;
         if (tmlm == null) {
             String inputData = FileUtils.loadFileData(taskModelFile);
@@ -577,12 +577,12 @@ public class DSEConfiguration implements Runnable  {
             }
 
             if (ret) {
-                //System.out.println("Format OK");
+                //TraceManager.addDev("Format OK");
                 taskModel = tmlts.getTMLModeling();
-                //System.out.println("\n\n*** TML Modeling *** \n");
+                //TraceManager.addDev("\n\n*** TML Modeling *** \n");
                 //TMLTextSpecification textspec = new TMLTextSpecification("toto");
                 //String s = textspec.toTextFormat(tmlm);
-                //System.out.println(s);
+                //TraceManager.addDev(s);
 
                 // Checking syntax
                 TraceManager.addDev("--- Checking syntax of the whole specification (TML, TARCHI, TMAP)---");
@@ -605,7 +605,7 @@ public class DSEConfiguration implements Runnable  {
                     TraceManager.addDev(taskModel.printSummary(warnings));
                 }
                 //spec.toTextFormat(tmlm);
-                //System.out.println("TMLModeling=" + spec);
+                //TraceManager.addDev("TMLModeling=" + spec);
             }
         } else {
             taskModel = tmlm;
@@ -801,7 +801,7 @@ public class DSEConfiguration implements Runnable  {
             map.generateSystemC(_debug, _optimize);
             map.saveFile(pathToSimulator, "appmodel");
         } catch (Exception e) {
-            System.out.println("SystemC generation failed: " + e + " msg=" + e.getMessage());
+            TraceManager.addDev("SystemC generation failed: " + e + " msg=" + e.getMessage());
             e.printStackTrace();
             return -1;
         }
@@ -1041,7 +1041,7 @@ public class DSEConfiguration implements Runnable  {
         double remain = (double)nbOfRemainingSimulation;
         progression = (int)(((total - remain)/total)*100);
 
-        //System.out.println("progression = " + progression + " total=" + total +  " remain=" + remain);
+        //TraceManager.addDev("progression = " + progression + " total=" + total +  " remain=" + remain);
 
         if (nbOfRemainingSimulation == 0) {
             return 0;
@@ -1079,7 +1079,7 @@ public class DSEConfiguration implements Runnable  {
                     sres =  DSESimulationResult.getAllExplanationHeader() + "\n";
                     sres += "#Mapping description: " + dsemapresults.getMapping(i).getSummaryTaskMapping() + "\n";
                     sres += res.getAllComments() + "\n" + res.getAllResults();
-                    System.out.println("saving file " + pathToResults + "alldseresults_mapping" + cpt + ".txt");
+                    TraceManager.addDev("saving file " + pathToResults + "alldseresults_mapping" + cpt + ".txt");
                     FileUtils.saveFile(pathToResults + "alldseresults_mapping" + cpt + ".txt", sres);
                 } catch (Exception e){
                     TraceManager.addDev("Error when saving results file" + e.getMessage());
@@ -1462,7 +1462,7 @@ public class DSEConfiguration implements Runnable  {
                     resultsID ++;
                 }
 
-                //System.out.println("After Current TML Mapping: " + tmla.getSummaryTaskMapping());
+                //TraceManager.addDev("After Current TML Mapping: " + tmla.getSummaryTaskMapping());
 
                 dsemapresults.addElement("Mapping #" + (cpt-1), results, tmla);
                 nbOfSimulations = nbOfSimulationsPerMapping;
@@ -1498,7 +1498,7 @@ public class DSEConfiguration implements Runnable  {
                 //                   tmla.tmlap = tmlap;
                 //              tmlcdp = (TMLComponentDesignPanel) mainGUI.tabs.get(0);
                 //     tmla.setTMLDesignPanel(tmlcdp);
-                // System.out.println("tmlcdp " + tmlcdp);
+                // TraceManager.addDev("tmlcdp " + tmlcdp);
                 //
                 //Repeat for secured mapping
                 TMLMapping<TGComponent> secMapping = mainGUI.gtm.autoSecure(mainGUI, "mapping" +(cpt-1),tmla, newArch, encComp, overhead, decComp,true,false,false);
@@ -1511,7 +1511,7 @@ public class DSEConfiguration implements Runnable  {
                         resultsID ++;
                     }
 
-                    //System.out.println("After Current TML Mapping: " + tmla.getSummaryTaskMapping());
+                    //TraceManager.addDev("After Current TML Mapping: " + tmla.getSummaryTaskMapping());
 
                     dsemapresults.addElement("Secured Mapping #" + (cpt-1), results, secMapping);
                     nbOfSimulations = nbOfSimulationsPerMapping;
@@ -1619,7 +1619,7 @@ public class DSEConfiguration implements Runnable  {
 
             while ((str = proc_in.readLine()) != null){
                 if (showSimulatorRawOutput) {
-                    System.out.println("Out " + str);
+                    TraceManager.addDev("Out " + str);
                 }
                 //mpi.appendOut(str+"\n");
             }

@@ -163,7 +163,7 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
     }
     
     public void recalculateSize() {
-        //System.out.println("Recalculate size of " + this);
+        //
         int i;//, j;
         
         for(i=0; i<nbInternalTGComponent; i++) {
@@ -534,8 +534,8 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
             Element elt;
             String startS;
             
-            //System.out.println("Loading tclass " + getValue());
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -557,12 +557,12 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
                                 startS = elt.getAttribute("name");
                                 tmpMaster = startS;
                                 toBeChecked = true;
-                                //System.out.println("Setting tmpMaster to " + startS);
-                                //System.out.println("Loading masterclass of TObject");
+                                //
+                                //
                                 if (startS.compareTo("null") == 0) {
                                     masterTClass = null;
                                 } else {
-                                    //System.out.println("Searching for " + startS);
+                                    //
                                     masterTClass = tdp.findTClassByName(startS);
                                 }
                                 makeValue();
@@ -609,8 +609,8 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
             Element elt;
             String startS;
             
-            //System.out.println("Loading tclass " + getValue());
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -652,15 +652,15 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
             return;
         }
         toBeChecked = false;
-        //System.out.println("Post Loading processing");
-        //System.out.println("Searching for " + tmpMaster + " on diagram " + tdp.getName());
+        //
+        //
         if ((tmpMaster ==  null) || (tmpMaster.equals("")) || (tmpMaster.equals(" null")) || (tmpMaster.equals("null"))) {
             makeValue();
             return;
         }
         masterTClass = tdp.findTClassByName(tmpMaster);
         if (masterTClass == null) {
-            System.out.println("Raising exception!");
+            
             throw new MalformedModelingException();
         }
         makeValue();

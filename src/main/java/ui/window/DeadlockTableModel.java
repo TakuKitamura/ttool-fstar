@@ -109,15 +109,15 @@ public class DeadlockTableModel extends AbstractTableModel {
         if (graph.getNbOfTransitions() < maxTransitions) {
             dss = GraphAlgorithms.ShortestPathFrom(graph, 0);
         }
-        //System.out.println(dss.toString());
+        //
 
         /*for(int k=0; k<dss.length; k++) {
-          System.out.println(dss[k]);
+          
           }*/
 
-        //System.out.println("Getting vector potential deadlocks");
+        //
         int [] states = graph.getVectorPotentialDeadlocks();
-        //System.out.println("Got vector potential deadlocks");
+        //
         int i, j, size, state;
         String path;
 

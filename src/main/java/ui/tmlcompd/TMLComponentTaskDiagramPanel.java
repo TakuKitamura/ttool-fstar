@@ -67,9 +67,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
 
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        /*System.out.println("Action on double click!");
+        /*TraceManager.addDev("Action on double click!");
           if (tgc instanceof TMLCPrimitiveComponent) {
-          System.out.println("Action on double click primitive");
+          TraceManager.addDev("Action on double click primitive");
           TMLCPrimitiveComponent t = (TMLCPrimitiveComponent)tgc;
           return (t.oldValue.compareTo(t.getValue()) == 0);
           }*/
@@ -78,14 +78,14 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
 
     public boolean actionOnAdd(TGComponent tgc) {
-        //System.out.println("Action on add! value=" + tgc.getValue());
+        //TraceManager.addDev("Action on add! value=" + tgc.getValue());
         if (tgc instanceof TMLCPrimitiveComponent) {
             TMLCPrimitiveComponent tmcpc = (TMLCPrimitiveComponent) (tgc);
-            //System.out.println(" *** Add component *** name=" + tmcpc.getValue());
+            //TraceManager.addDev(" *** Add component *** name=" + tmcpc.getValue());
             mgui.addTMLCPrimitiveComponent(tp, tmcpc.getValue());
             return true;
         } /*else if (tgc instanceof TMLCPortConnector) {
-            System.out.println("Bringing to front");
+            TraceManager.addDev("Bringing to front");
             bringToFront(tgc);
             }*/
         //updatePorts();
@@ -99,7 +99,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
 
     public boolean actionOnRemove(TGComponent tgc) {
-        //System.out.println("Action on remove tgc=" + tgc + " value=" + tgc.getValue());
+        //TraceManager.addDev("Action on remove tgc=" + tgc + " value=" + tgc.getValue());
         if (tgc instanceof TMLCPrimitiveComponent) {
             TMLCPrimitiveComponent tmcpc = (TMLCPrimitiveComponent) (tgc);
             mgui.removeTMLCPrimitiveComponent(tp, tmcpc.getValue());
@@ -132,12 +132,12 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         }
 
         if (tgc instanceof TMLCCompositePort) {
-            //System.out.println("tgc.getFather() = " + tgc.getFather());
+            //TraceManager.addDev("tgc.getFather() = " + tgc.getFather());
             updatePorts();
-            //System.out.println("fatherOfRemoved = " + fatherOfRemoved);
+            //TraceManager.addDev("fatherOfRemoved = " + fatherOfRemoved);
             if (fatherOfRemoved instanceof TMLCCompositeComponent) {
                 getMGUI().updateReferenceToTMLCCompositeComponent((TMLCCompositeComponent) (fatherOfRemoved));
-                //System.out.println("Shall do the update");
+                //TraceManager.addDev("Shall do the update");
             }
         }
 
@@ -168,7 +168,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
 
     public boolean actionOnValueChanged(TGComponent tgc) {
-        //System.out.println("Action on value changed on component:" + tgc);
+        //TraceManager.addDev("Action on value changed on component:" + tgc);
         if (tgc instanceof TMLCPrimitiveComponent) {
             TMLCPrimitiveComponent t = (TMLCPrimitiveComponent) tgc;
             mgui.newTMLTaskName(tp, t.oldValue, t.getValue());
@@ -484,7 +484,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
             if (tgc instanceof TMLCPortConnector) {
                 portco = (TMLCPortConnector) tgc;
-                //System.out.println("portco");
+                //TraceManager.addDev("portco");
                 tgc1 = getComponentToWhichBelongs(components, portco.getTGConnectingPointP1());
                 tgc2 = getComponentToWhichBelongs(components, portco.getTGConnectingPointP2());
                 if ((tgc1 != null) && (tgc2 != null)) {
@@ -498,7 +498,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
                         tgc2 = ((TMLCRemoteCompositeComponent) tgc2).getPortOf(portco.getTGConnectingPointP2());
                     }
 
-                    //System.out.println("tgc1=" + tgc1 + " tgc2=" + tgc2);
+                    //TraceManager.addDev("tgc1=" + tgc1 + " tgc2=" + tgc2);
 
                     if ((!ll.contains(tgc2) && (tgc2 != _port) && ((tgc1 == _port) || (ll.contains(tgc1))))) {
                         ll.add(tgc2);
@@ -727,7 +727,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
 
     public void updateReferenceToTMLCCompositeComponent(TMLCCompositeComponent tmlcc) {
-        //System.out.println("Update from " + tmlcc.getValue());
+        //TraceManager.addDev("Update from " + tmlcc.getValue());
         Iterator<TGComponent> iterator = componentList.listIterator();
         TGComponent tgc;
 
@@ -806,9 +806,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     /*public TMLTaskInterface getTask1ToWhichIamConnected(TMLCompositionOperator co) {
       TGConnectorTMLAssociationNav tgctmlan = getTGConnectorAssociationOf(co);
       TGComponent tgc;
-      //System.out.println("tmlan t1?");
+      //TraceManager.addDev("tmlan t1?");
       if (tgctmlan != null) {
-      //System.out.println("tmlan found t1");
+      //TraceManager.addDev("tmlan found t1");
       tgc = getTopComponentToWhichBelongs(tgctmlan.getTGConnectingPointP1());
       if ((tgc != null) && (tgc instanceof TMLTaskInterface)) {
       return (TMLTaskInterface) tgc;
@@ -820,9 +820,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
       public TMLTaskInterface getTask2ToWhichIamConnected(TMLCompositionOperator co) {
       TGConnectorTMLAssociationNav tgctmlan = getTGConnectorAssociationOf(co);
       TGComponent tgc;
-      //System.out.println("tmlan t2?");
+      //TraceManager.addDev("tmlan t2?");
       if (tgctmlan != null) {
-      //System.out.println("tmlan found t2");
+      //TraceManager.addDev("tmlan found t2");
       tgc = getTopComponentToWhichBelongs(tgctmlan.getTGConnectingPointP2());
       if ((tgc != null) && (tgc instanceof TMLTaskInterface)) {
       return (TMLTaskInterface) tgc;
@@ -839,14 +839,14 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
       TGComponent tgc;
 
       for(i=0; i<tcd.getNbConnectingPoint(); i++) {
-      //System.out.println("titi");
+      //TraceManager.addDev("titi");
       p1 = tcd.tgconnectingPointAtIndex(i);
       tgco = getConnectorConnectedTo(p1);
       if (tgco != null) {
-      //System.out.println("Found tgco");
+      //TraceManager.addDev("Found tgco");
       }
       if ((tgco != null) && (tgco instanceof TGConnectorTMLCompositionOperator)){
-      //System.out.println("toto");
+      //TraceManager.addDev("toto");
       tgcoco = (TGConnectorTMLCompositionOperator)tgco;
       if (p1 == tgcoco.getTGConnectingPointP1()) {
       p2 = tgcoco.getTGConnectingPointP2();
@@ -857,7 +857,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
       // p2 now contains the connecting point of a association
       tgc = getComponentToWhichBelongs(p2);
       if ((tgc != null) && (!p2.isFree()) && (tgc instanceof TGConnectorTMLAssociationNav)) {
-      //System.out.println("tutu");
+      //TraceManager.addDev("tutu");
       return (TGConnectorTMLAssociationNav)tgc;
       }
       }
@@ -913,10 +913,10 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
     public void loadExtraParameters(Element elt) {
         String s;
-        //System.out.println("Extra parameter");
+        //TraceManager.addDev("Extra parameter");
         try {
             s = elt.getAttribute("channels");
-            //System.out.println("S=" + s);
+            //TraceManager.addDev("S=" + s);
             if (s.compareTo("false") == 0) {
                 setChannelsVisible(false);
             } else {
@@ -937,7 +937,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
         } catch (Exception e) {
             // Model was saved in an older version of TTool
-            //System.out.println("older format");
+            //TraceManager.addDev("older format");
             setChannelsVisible(true);
             setEventsVisible(true);
             setRequestsVisible(true);
@@ -947,7 +947,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     public void setConnectorsToFront() {
         TGComponent tgc;
 
-        //System.out.println("list size=" + componentList.size());
+        //TraceManager.addDev("list size=" + componentList.size());
 
         Iterator<TGComponent> iterator = componentList.listIterator();
 
@@ -962,9 +962,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         }
 
 
-        //System.out.println("Putting to back ...");
+        //TraceManager.addDev("Putting to back ...");
         for (TGComponent tgc1 : list) {
-            //System.out.println("Putting to back: " + tgc1);
+            //TraceManager.addDev("Putting to back: " + tgc1);
             componentList.remove(tgc1);
             componentList.add(tgc1);
         }
@@ -1012,6 +1012,16 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
         return faultyPaths;
 
+    }
+
+    public TMLCPath findPathWith(TGComponent tgc) {
+        List<TMLCPath> paths = makePaths();
+        for (TMLCPath path : paths) {
+            if (path.contains(tgc)) {
+                return path;
+            }
+        }
+        return null;
     }
 
     public void updatePorts_oldVersion() {
@@ -1072,21 +1082,21 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         TGConnectingPoint tp;
         String conflictMessage;
 
-        //System.out.println("pports size=" + pports.size() + " ports size=" + ports.size());
+        //TraceManager.addDev("pports size=" + pports.size() + " ports size=" + ports.size());
 
         for (TMLCPrimitivePort pport : pports) {
-            //System.out.println("port id=" + pport.getId());
+            //TraceManager.addDev("port id=" + pport.getId());
             for (int i = 0; i < pport.getNbConnectingPoint(); i++) {
                 tp = pport.getTGConnectingPointAtIndex(i);
                 connector = findTGConnectorUsing(tp);
                 if (connector != null) {
-                    //System.out.println("Connector");
+                    //TraceManager.addDev("Connector");
                     mets.clear();
                     conflictMessage = propagate(pport, tp, connector, mets);
                     TraceManager.addDev("Conflict=" + conflictMessage);
                     analysePorts(pport, mets, (conflictMessage != null), conflictMessage);
                 } else {
-                    //System.out.println("no connector");
+                    //TraceManager.addDev("no connector");
                 }
             }
         }
@@ -1115,15 +1125,15 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         }
 
         // Cycle?
-        //System.out.println("cycle?");
+        //TraceManager.addDev("cycle?");
         if (mets.contains(tgc)) {
-            //System.out.println("Conflict issue -1");
+            //TraceManager.addDev("Conflict issue -1");
             return "Connection contains a cycle";
         }
 
-        //System.out.println("Composite port? tgc=" + tgc);
+        //TraceManager.addDev("Composite port? tgc=" + tgc);
         if (tgc instanceof TMLCCompositePort) {
-            //System.out.println("Composite port!");
+            //TraceManager.addDev("Composite port!");
             cp = (TMLCChannelFacility) tgc;
             mets.add(cp);
 
@@ -1131,21 +1141,21 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
             outindex = cp.getOutpIndex();
             // Already positionned port?
             if (pport.isOrigin()) {
-                //System.out.println("Origin port");
+                //TraceManager.addDev("Origin port");
                 if (cp.getOutPort() != null) {
-                    //System.out.println("Two ports: pport.getType() = " +  pport.getType());
+                    //TraceManager.addDev("Two ports: pport.getType() = " +  pport.getType());
                     if (pport.getPortType() != 2) {
                         //conflict = true;
                         conflictMessage = "Conflicting ports types";
-                        //System.out.println("Conflict issue 0");
+                        //TraceManager.addDev("Conflict issue 0");
                     } else {
                         if (cp.getOutPort().getPortType() != 2) {
                             conflictMessage = "More than two sending non-request ports ";
-                            //System.out.println("Conflict issue 1");
+                            //TraceManager.addDev("Conflict issue 1");
                         } else {
                             if ((outindex < 5 && index > 4) || (outindex > 4 && index < 5)) {
                                 conflictMessage = "Sending ports on both side of a composite port";
-                                //System.out.println("Conflict issue 2");
+                                //TraceManager.addDev("Conflict issue 2");
                             }
                         }
                     }
@@ -1153,28 +1163,28 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
                     if (inindex > -1) {
                         if ((inindex < 5 && index < 5) || (inindex > 4 && index > 4)) {
                             conflictMessage = "Sending and receiving ports on the same side of a composite port";
-                            //System.out.println("Conflict issue 3");
+                            //TraceManager.addDev("Conflict issue 3");
                         }
                     }
-                    //System.out.println("Setting out port");
+                    //TraceManager.addDev("Setting out port");
                     cp.setOutPort(pport);
                     cp.setOutpIndex(index);
                 }
-                //System.out.println("Explore next");
+                //TraceManager.addDev("Explore next");
                 conflictMessageTmp = explore(pport, tp2, cp, mets);
-                //System.out.println("Explore done");
+                //TraceManager.addDev("Explore done");
                 if (conflictMessageTmp != null) {
                     conflictMessage = conflictMessageTmp;
                 }
             } else {
                 if (cp.getInPort() != null) {
                     conflictMessage = "More than two receiving ports ";
-                    //System.out.println("Conflict issue 4");
+                    //TraceManager.addDev("Conflict issue 4");
                 } else {
                     if (outindex > -1) {
                         if ((index < 5 && outindex < 5) || (index > 4 && outindex > 4)) {
                             conflictMessage = "Sending and receiving ports on the same side of a composite port";
-                            //System.out.println("Conflict issue 5");
+                            //TraceManager.addDev("Conflict issue 5");
                         }
                     }
                     cp.setInPort(pport);
@@ -1205,16 +1215,16 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
             if (pport.isOrigin()) {
 
-                //System.out.println("Origin port");
+                //TraceManager.addDev("Origin port");
                 if ((cp.getInPort() != null) && (cp.getInPort() != pport)) {
                     conflictMessage = "More than two sending ports  in a fork architecture";
                 }
 
                 cp.setInPort(pport);
 
-                //System.out.println("Explore next");
+                //TraceManager.addDev("Explore next");
                 conflictMessageTmp = explore(pport, tp2, cp, mets);
-                //System.out.println("Explore done");
+                //TraceManager.addDev("Explore done");
                 if (conflictMessageTmp != null) {
                     conflictMessage = conflictMessageTmp;
                 }
@@ -1241,16 +1251,16 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
             if (!pport.isOrigin()) {
 
-                //System.out.println("Origin port");
+                //TraceManager.addDev("Origin port");
                 if ((cp.getOutPort() != null) && (cp.getOutPort() != pport)) {
                     conflictMessage = "More than two receiving ports in a join architecture";
                 }
                 cp.setOutPort(pport);
 
 
-                //System.out.println("Explore next");
+                //TraceManager.addDev("Explore next");
                 conflictMessageTmp = explore(pport, tp2, cp, mets);
-                //System.out.println("Explore done");
+                //TraceManager.addDev("Explore done");
                 if (conflictMessageTmp != null) {
                     conflictMessage = conflictMessageTmp;
                 }
@@ -1665,7 +1675,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
 
     public void getPanelsUsingAComponent(TMLCCompositeComponent tmlcc, ArrayList<TMLComponentTaskDiagramPanel> panels) {
-        //System.out.println("Update from " + tmlcc.getValue());
+        //TraceManager.addDev("Update from " + tmlcc.getValue());
         Iterator<TGComponent> iterator = componentList.listIterator();
         TGComponent tgc;
 

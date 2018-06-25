@@ -408,16 +408,16 @@ public class JDialogGraphModification extends JDialog implements ActionListener,
             graph.mergeWriteTransitions();
             graph.mergeReadTransitions();
             graph.removeInternalTransitions();
-            //System.out.println("Printing graph:\n" + graph.toAUTStringFormat());
+            //
             jta.append("Splitting transitions\n");
             graph.splitTransitions();
             //modifiedGraphAUT = graph.toAUTStringFormat();
-            //System.out.println("Printing graph:\n" + modifiedGraphAUT);
+            //
 
             jta.append("Reordering transitions\n");
             graph.putFirstStateFirst();
             modifiedGraphAUT = graph.toAUTStringFormat();
-            //System.out.println("Printing graph:\n" + modifiedGraphAUT);
+            //
 
             jta.append("Translation in DOT format\n");
 
@@ -434,7 +434,7 @@ public class JDialogGraphModification extends JDialog implements ActionListener,
                 modifiedGraphDOT = data;
                 jta.append("All done\n");
             } catch (LauncherException le) {
-                System.out.println("Error: conversion failed\n");
+                
             }
         }
 

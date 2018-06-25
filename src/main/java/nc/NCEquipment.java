@@ -97,7 +97,7 @@ public class NCEquipment extends NCLinkedElement  {
 	}
 	
 	public static String getStringType(int _type) {
-		//System.out.println("type=" + _type);
+		//
 		return Types[_type];
 	}
 	

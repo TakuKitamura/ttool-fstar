@@ -342,7 +342,7 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
                     }
                     if (j == TAttribute.OTHER) {
                         a = new TAttribute(i, s, value, o2.toString());
-                        //System.out.println("New attribute: " + o2.toString());
+                        //
                     } else {
                         a = new TAttribute(i, s, value, j);
                     }
@@ -465,7 +465,7 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         String s;
         for(int i=0; i<jcb.getItemCount(); i++) {
             s = jcb.getItemAt(i);
-            //System.out.println("String found: *" + s + "* *" + text + "*");
+            //
             if (s.equals(text)) {
                 jcb.setSelectedIndex(i);
                 return;

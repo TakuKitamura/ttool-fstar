@@ -186,12 +186,12 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
        int w  = g.getFontMetrics().stringWidth(value);
        int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
 
-       //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+       //
        if (w1 != width) {
        width = w1;
        resizeWithFather();
        }
-       //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+       //
        }*/
 
 
@@ -291,7 +291,7 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
 
             NodeList nli;
@@ -305,12 +305,12 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
@@ -336,7 +336,7 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
 
     public void resizeWithFather() {
         if ((father != null) && (father instanceof FTDBlock)) {
-            //System.out.println("cdRect comp");
+            //
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
             setMoveCd(x, y);

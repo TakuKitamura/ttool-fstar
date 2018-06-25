@@ -41,6 +41,8 @@
 
 package sddescription;
 
+import myutil.TraceManager;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -195,7 +197,7 @@ public class HMSC {
         
         while(iterator.hasNext()) {
             n = iterator.next();
-            System.out.println(n.toString());
+            TraceManager.addDev(n.toString());
         }
         
     }

@@ -64,17 +64,17 @@ public  class TGConnectorProCSD extends TGConnectorAssociationProCSD {
     
     public TGConnectorProCSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, new Vector<Point>(0));
-       // System.out.println("constructor"); 
-      //  System.out.println("list points "+_listPoint.toString());
+       // 
+      //  
         myImageIcon = IconManager.imgic2110;
         automaticDrawing = false;
         
-       // System.out.println(p1.getFather().toString());
+       // 
         //is it in the wrong direction?
     
         //_tdp.finishAddingConnector(_p1);
     
-   // System.out.println("Connector created: from "+p1.getFather().toString()+" to "+p2.getFather().toString());
+   // 
   
          updateConnectedPorts();
     
@@ -159,7 +159,7 @@ public  class TGConnectorProCSD extends TGConnectorAssociationProCSD {
     catch (Exception e)
     {
     	//we have an exception here when loading an xml file
-    	System.out.println("Error in connectors's connecting points. ");
+    	
     }
     
     
@@ -213,7 +213,7 @@ public  class TGConnectorProCSD extends TGConnectorAssociationProCSD {
 	//	cp =connectingPoint[1];
 	// }
   //	 else {
-	//	 System.out.println("Error!!!!!");
+	//	 
   //		 return null;
   //	 }
 	  
@@ -391,7 +391,7 @@ public  class TGConnectorProCSD extends TGConnectorAssociationProCSD {
     		
     					}
     	}
-    	 	//System.out.println("x1="+x1+" y1="+y1+" x2="+x2+" y2="+y2);
+    	 	//
     	
     	//super.internalDrawing(g);
     	// drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());

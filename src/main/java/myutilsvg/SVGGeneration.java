@@ -39,7 +39,9 @@
 
 
 
-package myutil;
+package myutilsvg;
+
+import myutil.*;
 
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;

@@ -737,7 +737,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             return false;
         }
 
-        //System.out.println("Add swallow component");
+        //
         // Choose its position
 
         // Make it an internal component
@@ -748,7 +748,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         //Set its coordinates
         if (tgc instanceof AvatarBDBlock) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
+            //
             tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
@@ -862,20 +862,20 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             //boolean mustAddCryptoFunctions = false;
 
 
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
 
             //TraceManager.addDev("LEP Begin Block  = " + this + " trace=");
             //Thread.currentThread().dumpStack();
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("CryptoBlock")) {
@@ -885,7 +885,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 }
                             }
                             if (elt.getTagName().equals("Attribute")) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 access = Integer.decode(elt.getAttribute("access")).intValue();
                                 type = Integer.decode(elt.getAttribute("type")).intValue();
                                 try {
@@ -910,7 +910,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 }
                             }
                             if (elt.getTagName().equals("Method")) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 method = elt.getAttribute("value");
 
                                 if (method.equals("null")) {
@@ -939,7 +939,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 }
                             }
                             if (elt.getTagName().equals("Signal")) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 signal = elt.getAttribute("value");
                                 attached = elt.getAttribute("attached");
 
@@ -957,7 +957,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 }
                             }
                             if (elt.getTagName().equals("globalCode")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 s = elt.getAttribute("value");
                                 if (s.equals("null")) {
                                     s = "";
@@ -1205,7 +1205,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         _id = _id.trim();
         //TraceManager.addDev("Searching for signal with id=" + _id);
         for (AvatarSignal as : this.mySignals) {
-            //	System.out.println(as.getId() + " "
+            //	
             if (as.getId().compareTo(_id) == 0)
                 return as;
         }

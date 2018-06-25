@@ -375,13 +375,13 @@ public class DatabaseCreation {
             /* Store Table REFERENCESS                                           */
             ps = conn.prepareStatement("CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
             ps.setString(1, null);
-            ps.setString(2, "REFERENCESS");
+            ps.setString(2, "REFERENCES");
             ps.setString(3, referencesSqlFile.getCanonicalPath());
             ps.setString(4, ";");
             ps.setString(5, null);
             ps.setString(6, "UTF-8");
             ps.execute();
-            System.out.println("Table: REFERENCESS is stored in file: " + referencesSqlFile.getCanonicalPath());
+            System.out.println("Table: REFERENCES is stored in file: " + referencesSqlFile.getCanonicalPath());
 
             /* If myDatabase.sql file already exists then delete it!             */
             if (softwaresSqlFile.exists()) {
@@ -397,7 +397,7 @@ public class DatabaseCreation {
             ps.setString(5, null);
             ps.setString(6, "UTF-8");
             ps.execute();
-            System.out.println("Table: SOFTWARES is stored in file: " + softwaresSqlFile.getCanonicalPath());
+            System.out.println("Table: SOFTWARE is stored in file: " + softwaresSqlFile.getCanonicalPath());
 
         } catch (IOException exp) {
             TraceManager.addDev("Failure when storing data bin sql files");

@@ -135,7 +135,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
     }
     
     public void recalculateSize() {
-        //System.out.println("Recalculate size of " + this);
+        //
         int i;
         
         for(i=0; i<nbInternalTGComponent; i++) {
@@ -189,14 +189,14 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
             graphics = g;
         }
         
-        //System.out.println("My width = " + width + " this=" + this);
+        //
         Font f = g.getFont();
         //int size = f.getSize();
         g.drawRect(x, y, width, height);
         g.setColor(Color.yellow);
         g.fillRect(x+1, y+1, width-1, height-1);
         g.drawImage(IconManager.img9, x + width - 20, y + 6, Color.yellow, null);
-		//System.out.println("hello");
+		//
         ColorManager.setColor(g, getState(), 0);
         g.setFont(f.deriveFont(Font.BOLD));
         g.drawString(value, x + textX, y + textY);
@@ -323,8 +323,8 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
             Element elt;
             String startS;
             
-            //System.out.println("Loading tclass " + getValue());
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);

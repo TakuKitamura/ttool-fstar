@@ -56,7 +56,10 @@ import java.awt.*;
  */
 public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
     protected int radius = 11;
-    protected int decPoint = 3;
+
+    protected int numberOfSamples = 1; // Indicates the number of samples being read before they
+    // are written to destination. The default is 1.
+
 
 
     public TMLCFork(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -128,6 +131,10 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 
     public int getType() {
         return TGComponentManager.TMLCTD_FORK;
+    }
+
+    public int getNumberOfSamples() {
+        return numberOfSamples;
     }
 
 

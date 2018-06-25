@@ -392,12 +392,12 @@ public class JDialogLinkNode extends JDialog implements ActionListener, ListSele
         
         for(i=0; i<lothers.size(); i++) {
             gatesBox1.addItem(lothers.elementAt(i));
-            //System.out.println("lothers +" + lothers.elementAt(i));
+            //
         }
         
         for(i=0; i<rothers.size(); i++) {
             gatesBox2.addItem(rothers.elementAt(i));
-            //System.out.println("lothers +" + rothers.elementAt(i));
+            //
         }
     }
     

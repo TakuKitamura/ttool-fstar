@@ -86,7 +86,6 @@ public class TGCTimeInterval extends TGCScalableWithoutInternalComponent{
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 1);
         if ((w1 != width) && (!tdp.isScaled())) {
-          //System.out.println("x=" + x + " y=" + y + " width=" + width + " height=" + height);
             //setCd(x + width/2 - w1/2, g.getFontMetrics().getHeight());
             width = w1;
             height = g.getFontMetrics().getHeight();
@@ -172,7 +171,7 @@ public class TGCTimeInterval extends TGCScalableWithoutInternalComponent{
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             NodeList nli;
             Node n1, n2;
@@ -180,14 +179,12 @@ public class TGCTimeInterval extends TGCScalableWithoutInternalComponent{
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
 
                     // Issue #17 copy-paste error on j index
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Interval")) {

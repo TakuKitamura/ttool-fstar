@@ -147,7 +147,7 @@ public class AVATAR2UPPAAL {
     public void saveInFile(String path) throws FileException {
     	SpecConfigTTool.checkAndCreateUPPAALDir(path);
         FileUtils.saveFile(path + "spec.xml", spec.makeSpec());
-        //System.out.println("spec.xml generated:\n" + spec.getFullSpec());
+        //
     }
 
 
@@ -220,7 +220,7 @@ public class AVATAR2UPPAAL {
         spec.enhanceGraphics();
         //TraceManager.addDev("Enhancing graphical representation done");
 
-        //System.out.println("relations:" + table.toString());
+        //
 
         return spec;
     }
@@ -659,7 +659,7 @@ public class AVATAR2UPPAAL {
                 hash.put(_elt, _previous);
 	        translateString.put(_block.getName()+"."+_elt.getName(),_block.getName()+"."+_previous.name);
             }
-	    //System.out.println(_block.getName()+"."+_elt.getName()+":"+_block.getName()+"."+_previous.name);
+	    //
             state = (AvatarState)_elt;
 
 
@@ -1384,9 +1384,9 @@ public class AVATAR2UPPAAL {
             _input = Conversion.replaceAllStringNonAlphanumerical(_input, "mod", "%");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Exception when changing binary operator in " + _input);
+            
         }
-        //System.out.println("Modified string=" + _input);
+        //
         return _input;
     }
 

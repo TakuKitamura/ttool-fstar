@@ -37,8 +37,6 @@
  */
 
 
-
-
 package tmltranslator.touppaal;
 
 import tmltranslator.TMLActivityElement;
@@ -49,76 +47,76 @@ import uppaaldesc.UPPAALTemplate;
 import java.util.ArrayList;
 
 /**
-* Class RelationTMLUPPAAL
-* Creation: 21/05/2007
-* @version 1.1 21/05/2007
-* @author Ludovic APVRILLE
+ * Class RelationTMLUPPAAL
+ * Creation: 21/05/2007
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.1 21/05/2007
  */
 public class RelationTMLUPPAAL {
-    
-	private ArrayList<TMLTaskTemplate> tts;
-	private ArrayList<TMLActivityElementLocation> taeltls;
-    
+
+    private ArrayList<TMLTaskTemplate> tts;
+    private ArrayList<TMLActivityElementLocation> taeltls;
+
     public RelationTMLUPPAAL() {
         tts = new ArrayList<TMLTaskTemplate>();
-		taeltls = new ArrayList<TMLActivityElementLocation>();
+        taeltls = new ArrayList<TMLActivityElementLocation>();
     }
-	
-	public void addTMLTaskTemplate(TMLTaskTemplate tt) {
-		tts.add(tt);
-	}
-	
-	public void addTMLTaskTemplate(TMLTask _task, UPPAALTemplate _template) {
-		tts.add(new TMLTaskTemplate(_task, _template));
-	}
-	
-	public void addADComponentLocation(TMLActivityElementLocation _eltl) {
-		taeltls.add(_eltl);
-	}
-	
-	public void addTMLActivityElementLocation(TMLActivityElement _elt, UPPAALLocation _loc1, UPPAALLocation _loc2) {
-		taeltls.add(new TMLActivityElementLocation(_elt, _loc1, _loc2));
-	}
-	
-	public TMLTaskTemplate getFirstTMLTaskTemplate(TMLTask _t) {
-		for(TMLTaskTemplate ttt:tts) {
-			if (ttt.task == _t) {
-				return ttt;
-			}
-		}
-		return null;
-	}
-	
-	public TMLActivityElementLocation getFirstTMLActivityElementLocation(TMLActivityElement _elt) {
-		for(TMLActivityElementLocation eltl:taeltls) {
-			if (eltl.elt == _elt) {
-				return eltl;
-			}
-		}
-		return null;
-	}
-	
-	
-	
-	public void setIds(UPPAALTemplate _template, int _beginid, int _endid) {
-		for(TMLTaskTemplate ttt:tts) {
-			if (ttt.template == _template) {
-				ttt.beginid = _beginid;
-				ttt.endid = _endid;
-				return;
-			}
-		}
-	}
-	
-	public String getRQuery(TMLTask _t, TMLActivityElement _elt) {
-		TMLActivityElementLocation eltl = getFirstTMLActivityElementLocation(_elt);
-		TMLTaskTemplate ttt = getFirstTMLTaskTemplate(_t);
-		if ((ttt == null) || (eltl == null)) {
-			return null;
-		}
-		
-		return ttt.template.getName() + "__" + ttt.template.getIdInstanciation() + "." + eltl.endloc.name;
-		/*String q="";
+
+    public void addTMLTaskTemplate(TMLTaskTemplate tt) {
+        tts.add(tt);
+    }
+
+    public void addTMLTaskTemplate(TMLTask _task, UPPAALTemplate _template) {
+        tts.add(new TMLTaskTemplate(_task, _template));
+    }
+
+    public void addADComponentLocation(TMLActivityElementLocation _eltl) {
+        taeltls.add(_eltl);
+    }
+
+    public void addTMLActivityElementLocation(TMLActivityElement _elt, UPPAALLocation _loc1, UPPAALLocation _loc2) {
+        taeltls.add(new TMLActivityElementLocation(_elt, _loc1, _loc2));
+    }
+
+    public TMLTaskTemplate getFirstTMLTaskTemplate(TMLTask _t) {
+        for (TMLTaskTemplate ttt : tts) {
+            if (ttt.task == _t) {
+                return ttt;
+            }
+        }
+        return null;
+    }
+
+    public TMLActivityElementLocation getFirstTMLActivityElementLocation(TMLActivityElement _elt) {
+        for (TMLActivityElementLocation eltl : taeltls) {
+            if (eltl.elt == _elt) {
+                return eltl;
+            }
+        }
+        return null;
+    }
+
+
+    public void setIds(UPPAALTemplate _template, int _beginid, int _endid) {
+        for (TMLTaskTemplate ttt : tts) {
+            if (ttt.template == _template) {
+                ttt.beginid = _beginid;
+                ttt.endid = _endid;
+                return;
+            }
+        }
+    }
+
+    public String getRQuery(TMLTask _t, TMLActivityElement _elt) {
+        TMLActivityElementLocation eltl = getFirstTMLActivityElementLocation(_elt);
+        TMLTaskTemplate ttt = getFirstTMLTaskTemplate(_t);
+        if ((ttt == null) || (eltl == null)) {
+            return null;
+        }
+
+        return ttt.template.getName() + "__" + ttt.template.getIdInstanciation() + "." + eltl.endloc.name;
+        /*String q="";
 		for(int i=ttt.beginid; i<ttt.endid+1; i++) {
 			q += ttt.template.getName() + "__" + i;
 			q += "." + eltl.endloc.name;
@@ -127,18 +125,18 @@ public class RelationTMLUPPAAL {
 			}
 		}
 		return q;*/
-	}
-	
-	public String toString() {
-		String s="TClass / Templates\n";
-		for(TMLTaskTemplate ttt:tts) {
-			s+=ttt.toString() + "\n";
-		}
-		s+="\nADComponents vc locations:\n";
-		for(TMLActivityElementLocation eltl:taeltls) {
-			s+=eltl.toString() + "\n";
-		}
-		return s;
-	}
-    
+    }
+
+    public String toString() {
+        String s = "TClass / Templates\n";
+        for (TMLTaskTemplate ttt : tts) {
+            s += ttt.toString() + "\n";
+        }
+        s += "\nADComponents vc locations:\n";
+        for (TMLActivityElementLocation eltl : taeltls) {
+            s += eltl.toString() + "\n";
+        }
+        return s;
+    }
+
 }

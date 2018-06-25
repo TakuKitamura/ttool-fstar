@@ -658,7 +658,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         checkMode();
         setButtons();
 
-        //System.out.println("Selected item=" + selectedItem);
+        //
     }
 
     protected void handleReachability(Object _o, SpecificationReachabilityType _res) {

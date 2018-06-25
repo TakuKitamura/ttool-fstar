@@ -63,7 +63,7 @@ public class InteractionOverviewDiagramPanel extends TDiagramPanel {
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        //System.out.println("Action");
+        //
         /*if (tgc instanceof TCDTClass) {
             TCDTClass t = (TCDTClass)tgc;
             return mgui.newTClassName(t.oldValue, t.getValue());
@@ -224,7 +224,7 @@ public class InteractionOverviewDiagramPanel extends TDiagramPanel {
    }
    
    public void enhance() {
-        //System.out.println("enhance");
+        //
         Vector<TGComponent> v = new Vector<>();
         Object o;
         Iterator iterator = componentList.listIterator();
@@ -245,7 +245,7 @@ public class InteractionOverviewDiagramPanel extends TDiagramPanel {
         TGConnector tgcon;
         int i;
         
-        //System.out.println("Enhancing: " + tgc);
+        //
         
         if (tgc == null) {
             return;
@@ -257,7 +257,7 @@ public class InteractionOverviewDiagramPanel extends TDiagramPanel {
         
         v.add(tgc);
         
-        //System.out.println("Nb of nexts: " + tgc.getNbNext());
+        //
         if (!(tgc instanceof IODStartState)) {
             for(i=0; i<tgc.getNbNext(); i++) {
                 tgc1 = getNextTGComponent(tgc, i);

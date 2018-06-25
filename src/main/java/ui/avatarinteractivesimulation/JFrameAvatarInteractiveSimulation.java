@@ -46,11 +46,7 @@ import myutil.FileUtils;
 import myutil.GraphicLib;
 import myutil.TableSorter;
 import myutil.TraceManager;
-import myutil.SVGGeneration;
-import org.apache.batik.dom.GenericDOMImplementation;
-import org.apache.batik.svggen.SVGGraphics2D;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
+import myutilsvg.SVGGeneration;
 import ui.*;
 import ui.avatarbd.AvatarBDPortConnector;
 import ui.interactivesimulation.LatencyTableModel;
@@ -406,7 +402,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         //framePanel.setBackground(ColorManager.InteractiveSimulationBackground);
         //framePanel.setForeground(new Color(255, 166, 38));
 
-        //System.out.println("Button start created");
+        //
         //buttonStart = new JButton(actions[InteractiveSimulationActions.ACT_RUN_SIMU]);
         buttonStopAndClose = new JButton(actions[AvatarInteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL]);
         //buttonStopAndClose = new JButton(buttonStopAndCloseS, IconManager.imgic27);
@@ -1522,8 +1518,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                     if ((trans.executedElement != null) && (trans.executedElement.getReferenceObject() != null)) {
                         //                        String id = ((TGComponent)trans.executedElement.getReferenceObject()).getName() + ":"+Integer.toString(trans.executedElement.getID());
                         String id = Integer.toString(trans.executedElement.getID());
-                        //  System.out.println(id + " " + transTimes.keySet());
-                        //  System.out.println("transaction " + trans.executedElement.getID() + " " + trans.initialClockValue);
+                        //  
+                        //  
                         String key = "";
                         for (String s : transTimes.keySet()) {
                             String tmpid = s.split(":")[1];
@@ -1539,7 +1535,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                     }
                 }
             }
-            //  System.out.println(transTimes);
+            //  
             for (String st1 : transTimes.keySet()) {
                 for (String st2 : transTimes.keySet()) {
                     if (st1 != st2 && nameLatencyMap.containsKey(st1 + "--" + st2)) {
@@ -1562,7 +1558,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                                     minTimes.add(time);
                                 }
                             }
-                            //  System.out.println(transTimes.get(st1) + " " + transTimes.get(st2) + " " + minTimes);
+                            //  
                             if (minTimes.size() > 0) {
                                 int sum = 0;
                                 sl.setMinTime(Integer.toString(Collections.min(minTimes)));

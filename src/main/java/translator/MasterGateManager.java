@@ -109,7 +109,7 @@ public class MasterGateManager {
         for(int k=0; k<topMaster.size(); k++) {
             mgm = topMaster.get(k);
             for(i=0; i<mgm.nbMasterGate(); i++) {
-                //System.out.println("i:" + i + "k:" + k);
+                //
                 g = mgm.getMasterGateAtIndex(i);
                 if ((g.getName()).equals(name)) {
                     return g;
@@ -133,7 +133,7 @@ public class MasterGateManager {
             mgm = ite.next();
             
             for(i=0; i<mgm.nbMasterGate(); i++) {
-                //System.out.println("i:" + i + "k:" + k);
+                //
                 g = mgm.getMasterGateAtIndex(i);
                 if ((g.getName().toLowerCase()).equals(name)) {
                     cpt ++;
@@ -153,7 +153,7 @@ public class MasterGateManager {
         while(ite.hasNext()) {
             mgm = ite.next();
             for(i=0; i<mgm.nbMasterGate(); i++) {
-                //System.out.println("i:" + i + "k:" + k);
+                //
                 g = mgm.getMasterGateAtIndex(i);
                 ht.put(g.getName().toUpperCase(), g);
             }
@@ -174,7 +174,7 @@ public class MasterGateManager {
             mgm = ite.next();
             
             for(i=0; i<mgm.nbMasterGate(); i++) {
-                //System.out.println("i:" + i + "k:" + k);
+                //
                 g = mgm.getMasterGateAtIndex(i);
                 if ((g.getName().toLowerCase()).equals(name)) {
                     return g;
@@ -266,7 +266,7 @@ public class MasterGateManager {
         Relation r;
         GroupOfGates gog, gog1, gog2;
         
-        //System.out.println("initGate");
+        //
         
         for(int i=0; i<tm.classNb(); i++) {
             tc = tm.getTClassAtIndex(i);
@@ -275,7 +275,7 @@ public class MasterGateManager {
                 list1 = tc.getGateList();
                 for(int j=0; j<list1.size(); j++) {
                     g = list1.elementAt(j);
-                    //System.out.println("Tclass:" + tc.getLotosName() + " Gate:" + g.getLotosName());
+                    //
                     
                     //if (!g.isInternal()) {
                     // look for synchro relation with the gate
@@ -286,33 +286,33 @@ public class MasterGateManager {
                         if (tmp_g != null) {
                             tmp_tc = r.otherTClass(tc);
                             cpt ++;
-                            //System.out.println("corresponding Tclass:" + tmp_tc.getLotosName() + " Gate:" + tmp_g.getLotosName());
+                            //
                             gog1 = groupOf(tc, g);
                             gog2 = groupOf(tmp_tc, tmp_g);
-                            //System.out.println("gog nb:" + groups.size());
-                            //System.out.println("2 gog");
+                            //
+                            //
                             
                             if ((gog1 == null) && (gog2 == null)) {
-                                //System.out.println("gog case 1");
+                                //
                                 gog = addToANewGroup(tc, g);
                                 gog.addTClassGate(tmp_tc, tmp_g);
                             }
                             
                             if ((gog1 != null) && (gog2 == null)) {
-                                //System.out.println("gog case 2");
+                                //
                                 gog1.addTClassGate(tmp_tc, tmp_g);
                             }
                             
                             if ((gog1 == null) && (gog2 != null)) {
-                                //System.out.println("gog case 3");
+                                //
                                 gog2.addTClassGate(tc, g);
                             }
                             
                             if ((gog1 != null) && (gog2 != null)) {
                                 if (gog1 != gog2) {
-                                    //System.out.println("gog case 4");
+                                    //
                                     merge(gog1, gog2);
-                                    //System.out.println("end gog case 4");
+                                    //
                                 }
                             }
                             
@@ -375,7 +375,7 @@ public class MasterGateManager {
                 return name;
             }
             gateId ++;
-            //System.out.println("Gate Id:" +gateId);
+            //
         }
         return "WRONG NAME";
     }
@@ -481,7 +481,7 @@ public class MasterGateManager {
         Gate g;
         
         for(int i=0; i<gog2.size(); i++){
-            //System.out.println("gog:" + i);
+            //
             g = gog2.getGateAt(i);
             t = gog2.getTClassAt(i);
             gog1.addTClassGate(t, g);
@@ -493,7 +493,7 @@ public class MasterGateManager {
     
     private GroupOfGates addToANewGroup(TClass tc, Gate g) {
         GroupOfGates gog = new GroupOfGates();
-        //System.out.println("New Group TClass:" + tc.getLotosName() + " Gate:" + g.getLotosName());
+        //
         gog.addTClassGate(tc, g);
         groups.add(gog);
         return gog;

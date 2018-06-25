@@ -94,7 +94,7 @@ public class TMLEventProperties extends TGCWithoutInternalComponent {
     public void internalDrawing(Graphics g) {
         if (((TMLTaskDiagramPanel)(tdp)).areEventsVisible()) {
             ColorManager.setColor(g, getState(), 0);
-            //System.out.println("value=" + value);
+            //
             h = g.getFontMetrics().getHeight();
             g.drawString(valueOCL, x, y + h);
             
@@ -138,7 +138,7 @@ public class TMLEventProperties extends TGCWithoutInternalComponent {
         }
         valueOCL += "}";
         value = valueOCL;
-        //System.out.println("Make value=" + value + " valueOCL=" + valueOCL);
+        //
     }
     
     public boolean editOndoubleClick(JFrame frame) {
@@ -196,9 +196,9 @@ public class TMLEventProperties extends TGCWithoutInternalComponent {
         sb.append("\" maxSamples=\"" + maxSamples);
         sb.append("\" />\n");
         for(int i=0; i<nbMaxAttribute; i++) {
-            //System.out.println("Attribute:" + i);
+            //
             a = list[i];
-            //System.out.println("Attribute:" + i + " = " + a.getId());
+            //
             //val = val + a + "\n";
             sb.append("<Type");
             sb.append(" type=\"");
@@ -224,21 +224,21 @@ public class TMLEventProperties extends TGCWithoutInternalComponent {
 
             int nbAttribute = 0;
             
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if ((elt.getTagName().equals("Type")) && (nbAttribute < nbMaxAttribute)) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 type = Integer.decode(elt.getAttribute("type")).intValue();
                                 try {
                                     typeOther = elt.getAttribute("typeOther");
@@ -295,7 +295,7 @@ public class TMLEventProperties extends TGCWithoutInternalComponent {
         String s = "";
         int nb = 0;
         for(int i=0; i<nbMaxAttribute; i++) {
-            //System.out.println("Attribute:" + i);
+            //
             tt = list[i];
             if (tt.getType() != TType.NONE) {
                 if (nb != 0) {
@@ -305,7 +305,7 @@ public class TMLEventProperties extends TGCWithoutInternalComponent {
                 nb ++;
             }
         }
-        //System.out.println("Returning=" + s);
+        //
         return s;
     }
     

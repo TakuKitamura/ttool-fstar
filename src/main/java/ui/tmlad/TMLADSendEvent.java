@@ -134,7 +134,7 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
 
         //g.drawRoundRect(x, y, width, height, arc, arc);
         Color c = g.getColor();
-        //System.out.println("Color=" + c);
+        //
 
         g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
         g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
@@ -324,7 +324,7 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-        //System.out.println("*** load extra synchro *** " + getId());
+        //
         try {
 
             NodeList nli;
@@ -333,17 +333,17 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
             int k;
             String s;
 
-            //System.out.println("Loading Synchronization gates");
-            //System.out.println(nl.toString());
+            //
+            //
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {

@@ -1035,7 +1035,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
             this.results = this.pvoa.getResults();
             
-            //System.out.println(results);
+            //
             
             for (AvatarPragma pragma : this.results.keySet()) {
                 if (pragma instanceof AvatarPragmaReachability) {

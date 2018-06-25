@@ -116,10 +116,10 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
 		p.y = (int)(y2+Ey);
 		
 		if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-			//System.out.println("p.x=" + p.x + " x1=" + x1 + "p.y=" + p.y + " y1=" + y1);
+			//
 			if ((x2 != x1) || (y2 != y1)) {
 				g.drawLine(x1, y1, p.x, p.y);
-				//System.out.println("drawn");
+				//
 			}
         } else {
 			//g.drawLine(x1, y1, p.x, p.y);
@@ -176,13 +176,13 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
     }
 	
 	public void rescale(double scaleFactor){
-		//System.out.println("Rescale connector");
+		//
 		int xx, yy;
 		
 		for(int i=0; i<nbInternalTGComponent; i++) {
 			xx = tgcomponent[i].getX();
 			yy = tgcomponent[i].getY();
-			//System.out.println("Internal comp xx= " + xx + "  y==" + yy);
+			//
 			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
 			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
 			xx = (int)(tgcomponent[i].dx);
@@ -192,7 +192,7 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
 			
 			tgcomponent[i].setCd(xx, yy);
 			
-			//System.out.println("Internal comp xx= " + xx + "  y==" + yy);
+			//
         }
 		
 		oldScaleFactor = scaleFactor;

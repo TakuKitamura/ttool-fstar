@@ -99,29 +99,18 @@ public class TML2UPPAAL {
     public void saveInFile(String path) throws FileException {
     	SpecConfigTTool.checkAndCreateUPPAALDir(path);
         FileUtils.saveFile(path + "spec.xml", spec.makeSpec());
-        //System.out.println("spec.xml generated:\n" + spec.getFullSpec());
+
     }
 
     public void saveInPathFile(String PathFile) throws FileException {
         FileUtils.saveFile(PathFile, spec.makeSpec());
-        //System.out.println("spec.xml generated:\n" + spec.getFullSpec());
+
     }
 
     public String getUPPAALSpec() {
         return spec.makeSpec();
     }
 
-    public void print() {
-        /*// Print each automatas
-          ListIterator iterator = automatas.listIterator();
-          Automata aut;
-
-          while(iterator.hasNext()) {
-          aut = (Automata)(iterator.next());
-          System.out.println("Automata: " + aut.getName());
-          System.out.println(aut.toAUT());
-          }*/
-    }
 
     public void setSizeInfiniteFIFO(int _size) {
         sizeInfiniteFIFO = _size;
@@ -290,11 +279,11 @@ public class TML2UPPAAL {
         if (task.isRequested()) {
             TMLRequest req = task.getRequest();
 
-            //System.out.println(task.getAttributeString());
+
 
             for(int i=0; i<req.getNbOfParams(); i++) {
                 if (task.getAttributeByName("arg" + (i+1) + "__req") == null) {
-                    //System.out.println("Adding attribute for the request:" + " arg" + (i+1) + "__req");
+
                     template.addDeclaration(req.getType(i).toString() + "arg" + (i+1) + "__req;\n");
                 }
             }
@@ -351,7 +340,7 @@ public class TML2UPPAAL {
         TMLSequence seq;
         TMLRandom random;
 
-        //System.out.println("Making behavior of " + task.getName() + " elt = " + elt);
+
 
         if (elt == null) {
             return;
@@ -581,7 +570,6 @@ public class TML2UPPAAL {
             makeElementBehavior(task, template, elt.getNextElement(seq.getNbNext()-1), loc, end);
 
             for (int i=seq.getNbNext()-2; i>=0; i--) {
-                System.out.println("Making sequence i=" + i);
                 currentX -= STEP_LOOP_X;
                 loc1 = addLocation(template);
                 makeElementBehavior(task, template, elt.getNextElement(i), loc1, loc);
@@ -678,7 +666,7 @@ public class TML2UPPAAL {
                         for(int j=0; j<choice.getNbGuard(); j++) {
                             if ((j != index2) && (j != index1)) {
                                 g = choice.getGuard(j);
-                                //System.out.println("Got guard = " + g);
+
                                 g = Conversion.replaceAllChar(g, '[', "(");
                                 g = Conversion.replaceAllChar(g, ']', ")");
                                 if (cpt == 0) {
@@ -690,7 +678,6 @@ public class TML2UPPAAL {
                             }
                         }
                         gs = "!" + gs;
-                        //System.out.println("Else guard=" + gs);
                         loc1 = addLocation(template);
                         tr1 = addTransition(template, previous, loc1);
                         setGuard(tr1, gs);
@@ -702,7 +689,7 @@ public class TML2UPPAAL {
             }
 
         } else {
-            System.out.println("Warning: elt = " + elt + " is not yet taken into account .. skipping");
+            TraceManager.addDev("Warning: elt = " + elt + " is not yet taken into account .. skipping");
             rtu.addTMLActivityElementLocation(elt, previous, previous);
             makeElementBehavior(task, template, elt.getNextElement(0), previous, end);
         }
@@ -804,14 +791,14 @@ public class TML2UPPAAL {
     }
 
     public String modifyString(String _input) {
-        //System.out.println("Modify string=" + _input);
+
         try {
             _input = Conversion.changeBinaryOperatorWithUnary(_input, "div", "/");
             _input = Conversion.changeBinaryOperatorWithUnary(_input, "mod", "%");
         } catch (Exception e) {
-            System.out.println("Exception when changing binary operator in " + _input);
+            TraceManager.addDev("Exception when changing binary operator in " + _input);
         }
-        //System.out.println("Modified string=" + _input);
+
         return _input;
     }
 

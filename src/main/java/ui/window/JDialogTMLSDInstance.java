@@ -544,7 +544,7 @@ public abstract class JDialogTMLSDInstance extends JDialog implements ActionList
                     }
                     if( j == TAttribute.OTHER )	{
                         a = new TAttribute(i, s, value, o2.toString());
-                        //System.out.println("New attribute: " + o2.toString());
+                        //
                     }
                     else	{
                         a = new TAttribute(i, s, value, j);

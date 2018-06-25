@@ -367,7 +367,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-        //System.out.println("*** load extra synchro *** " + getId());
+        //
         String tmpFilesToInclude = "";
         String tmpCodeToInclude = "";
 
@@ -380,14 +380,14 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
             String s;
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
 
                     // Issue #17 copy-paste error on j index
                     for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("guard")) {
@@ -434,7 +434,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
                             }
 
                             /*if (elt.getTagName().equals("filesToIncludeLine")) {
-                            //System.out.println("Analyzing line");
+                            //
                             s = elt.getAttribute("value");
                             if (s.equals("null")) {
                             s = "";
@@ -443,7 +443,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
                             }
 
                             if (elt.getTagName().equals("codeToIncludeLine")) {
-                            //System.out.println("Analyzing line");
+                            //
                             s = elt.getAttribute("value");
                             if (s.equals("null")) {
                             s = "";

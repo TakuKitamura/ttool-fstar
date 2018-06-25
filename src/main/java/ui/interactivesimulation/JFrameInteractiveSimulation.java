@@ -304,7 +304,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         //framePanel.setBackground(ColorManager.InteractiveSimulationBackground);
         //framePanel.setForeground(new Color(255, 166, 38));
 
-        //System.out.println("Button start created");
+        //
         buttonStart = new JButton(actions[InteractiveSimulationActions.ACT_START_ALL]);
         buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_ALL]);
         buttonStopAndClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL]);
@@ -996,8 +996,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         
         pack();
 
-        //System.out.println("Row table:" + rowTable.toString());
-        //System.out.println("Value table:" + valueTable.toString());
+        //
+        //
 	}
     private void initActions() {
         actions = new InteractiveSimulationActions[InteractiveSimulationActions.NB_ACTION];
@@ -1044,7 +1044,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                     rc.disconnect();
                 } catch (RemoteConnectionException rce) {
                 }
-                //System.out.println("Disconnected");
+                //
                 rc = null;
             }
         }
@@ -1174,7 +1174,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                     jta.append("Could not read data from host: " + hostSystemC + ".... Aborting\n");
                     busyMode = 0;
                     setLabelColors();
-                    //System.out.println("rc left");
+                    //
                 }
             } else if (threadMode == 1) {
                 threadStarted();
@@ -1203,7 +1203,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             jta.append("Interrupted\n");
         }
 
-        //System.out.println("rc left threadMode=" + threadMode);
+        //
 
     }
 
@@ -1306,21 +1306,21 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 
     protected void analyzeServerAnswer(String s) {
-        //System.out.println("From server:" + s);
+        //
         int index0 = s.indexOf("<?xml");
 
         if (index0 != -1) {
-            //System.out.println("toto1");
+            //
             ssxml = s.substring(index0, s.length()) + "\n";
         } else {
-            //System.out.println("toto2");
+            //
             ssxml = ssxml + s + "\n";
         }
 
         index0 = ssxml.indexOf("</siminfo>");
 
         if (index0 != -1) {
-            //System.out.println("toto3");
+            //
             ssxml = ssxml.substring(0, index0+10);
             loadXMLInfoFromServer(ssxml);
             ssxml = "";
@@ -1362,7 +1362,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
             for(i=0; i<nl.getLength(); i++) {
                 node = nl.item(i);
-                //System.out.println("Node = " + dnd);
+                //
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     // create design, and get an index for it
                     return loadConfiguration(node);
@@ -1429,8 +1429,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					return i.compareTo(j);
     			}
 			});
-			//System.out.println(simtraces);
-			//System.out.println(simtraces.size());
+			//
+			//
 			if (simtraces.size()>2000){
 				//Only write last 2000 simulations
 				int numTraces = simtraces.size();
@@ -1455,7 +1455,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 		}
 		catch (Exception e){
-			System.out.println("Could not write sim trace " + e + " " + simtraces.get(simIndex) + " " +simIndex);
+			
 		}
 	}
 	
@@ -1463,7 +1463,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 /*
 	public void processDeviceTraces(SimulationTransaction tran){
-		System.out.println("tran " + tran.command + " " + tran.channelName);
+		
 		String command = tran.command;
 		if (command.contains(" ")){
 			command = command.split(" ")[0];
@@ -1505,7 +1505,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						else {
 							trace = "time=" + tran.endTime+ " block="+ tran.deviceName.replaceAll("_0","") + " type="+asynchType+ " blockdestination="+ tmap.getHwNodeOf(destTask).getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
 						}
-						//	System.out.println("sending asynch " + trace);
+						//	
 							if (!simtraces.contains(trace)){
 								simtraces.add(trace);
 								if (!msgTimes.containsKey(tran.channelName)){
@@ -1535,10 +1535,10 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				}
 			}
 			else {
-				System.out.println("UNHANDLED COMMAND " + tran.command);
+				
 			}
 		} catch (Exception e){
-			System.out.println("Exception " + e);
+			
 		}
 	}*/
     
@@ -1580,7 +1580,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							else {
 								trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
 							}
-							//	System.out.println("sending asynch " + trace);
+							//	
 							if (!simtraces.contains(trace)){
 								simtraces.add(trace);
 								if (!msgTimes.containsKey(tran.channelName)){
@@ -1628,7 +1628,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							else {
 								trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";
 							}
-							//	System.out.println("sending asynch " + trace);
+							//	
 							if (!simtraces.contains(trace)){
 								simtraces.add(trace);
 								if (!msgTimes.containsKey(tran.channelName)){
@@ -1656,7 +1656,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							req=request;
 						}
 					}
-				//	System.out.println(tran.channelName + " " + request.getDestinationTask().getName() + " " + tran.taskName + " " +  request.getOriginTasks().get(0).getName());
+				//	
 				}
 
 				if (req!=null) {
@@ -1685,7 +1685,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							else {
 								trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
 							}
-							//	System.out.println("sending asynch " + trace);
+							//	
 							if (!simtraces.contains(trace)){
 								simtraces.add(trace);
 								if (!msgTimes.containsKey(tran.channelName)){
@@ -1707,7 +1707,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			else {
 				//TraceManager.addDev("UNHANDLED COMMAND " + tran.command + " " + tran.deviceName + " " + tran.nodeType);
 			}
-			//System.out.println("Simulation command " + tran.command + " " + tran.channelName + " " + tran.length);
+			//
 
 
 			//	bw.write("#1 time=0.000000000 block=Attacker blockdestination=Bob type=synchro channel= params=\"Attacker.m2");
@@ -1717,7 +1717,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			//pos.close();
 		}
 		catch (Exception e){
-			System.out.println(e);
+			
 		}
 		String nodename = tran.deviceName;
 		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
@@ -1783,7 +1783,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         
                         if ((nl != null) && (nl.getLength() > 0)) {
                             node0 = nl.item(0);
-                            //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                            //
 
                             makeStatus(node0.getTextContent());
                         }
@@ -1791,7 +1791,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         nl = elt.getElementsByTagName("brkreason");
                         if ((nl != null) && (nl.getLength() > 0)) {
                             node0 = nl.item(0);
-                            //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                            //
 
                             makeBrkReason(node0.getTextContent());
                         }
@@ -1800,7 +1800,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         if ((nl != null) && (nl.getLength() > 0)) {
                             gotTimeAnswerFromServer = true;
                             node0 = nl.item(0);
-                            //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                            //
                             time.setText(node0.getTextContent());
                         }
 
@@ -1809,7 +1809,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         if ((nl != null) && (nl.getLength() > 0)) {
                             gotTimeAnswerFromServer = true;
                             node0 = nl.item(0);
-                            //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                            //
                             minT = node0.getTextContent();
                             //time.setText(minT + " ... " + maxT);
                         }
@@ -1819,7 +1819,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         if ((nl != null) && (nl.getLength() > 0)) {
                             gotTimeAnswerFromServer = true;
                             node0 = nl.item(0);
-                            //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                            //
 						    maxT = node0.getTextContent();
 						    
 						    if (minT.compareTo(maxT) != 0) {
@@ -1873,7 +1873,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                     if (hashOK) {
                         if (elt.getTagName().compareTo(SIMULATION_TASK) == 0) {
                             //                                  for (int i=0; i<elt.getAttributes().getLength(); i++){
-                            //                                                  System.out.println(elt.getAttributes().item(i));
+                            //                                                  
                             //                                                  }
                             id = null;
                             name = null;
@@ -1895,42 +1895,42 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                 if ((nl != null) && (nl.getLength() > 0)) {
                                     node0 = nl.item(0);
                                     progression = node0.getTextContent();
-                                    //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                    //
                                 }
                                 nl = elt.getElementsByTagName("starttime");
                                 if ((nl != null) && (nl.getLength() > 0)) {
                                     node0 = nl.item(0);
                                     startTime = node0.getTextContent();
-                                    //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                    //
                                 }
                                 nl = elt.getElementsByTagName("finishtime");
                                 if ((nl != null) && (nl.getLength() > 0)) {
                                     node0 = nl.item(0);
                                     finishTime = node0.getTextContent();
-                                    //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                    //
                                 }
                                 nl = elt.getElementsByTagName("transstarttime");
                                 if ((nl != null) && (nl.getLength() > 0)) {
                                     node0 = nl.item(0);
                                     transStartTime = node0.getTextContent();
-                                    //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                    //
                                 }
                                 nl = elt.getElementsByTagName("transfinishtime");
                                 if ((nl != null) && (nl.getLength() > 0)) {
                                     node0 = nl.item(0);
                                     transFinishTime = node0.getTextContent();
-                                    //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                    //
                                 }
                                 nl = elt.getElementsByTagName("nextcmd");
                                 if ((nl != null) && (nl.getLength() > 0)) {
                                     node0 = nl.item(0);
                                     nextCommand = node0.getTextContent();
-                                    //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                    //
                                 }
 
                             }
 
-                            //System.out.println("Got info on task " + id + " command=" + command);
+                            //
                             extime = null;
                             nl = elt.getElementsByTagName("extime");
                             if ((nl != null) && (nl.getLength() > 0)) {
@@ -2015,9 +2015,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             st.startTime = elt.getAttribute("starttime");
                             st.endTime = elt.getAttribute("endtime");
                             String taskId= elt.getAttribute("id");
-                            //System.out.println(elt.getAttribute("id"));
+                            //
                             if (checkTable.containsKey(taskId)){
-                                //System.out.println("added trans " + commandT + " " +st.endTime);
+                                //
                                 if (!transTimes.containsKey(taskId)){
                                     ArrayList<String> timeList = new ArrayList<String>();
                                     transTimes.put(taskId, timeList);
@@ -2025,7 +2025,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                 if (!transTimes.get(taskId).contains(st.endTime)){
                                     transTimes.get(taskId).add(st.endTime);
                                 }
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                //
 
                             }
                             st.length = elt.getAttribute("length");
@@ -2043,10 +2043,10 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         }
 
 
-                        //System.out.println("toto2");
+                        //
                         if (elt.getTagName().compareTo(SIMULATION_TRANS_NB) == 0) {
                             transInfo = true;
-                            //System.out.println("toto2.1");
+                            //
                             name = elt.getAttribute("nb");
                             try {
                                 int nb = Integer.decode(name).intValue();
@@ -2072,17 +2072,17 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             nl = elt.getElementsByTagName("util");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 node0 = nl.item(0);
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                //
                                 util = node0.getTextContent();
                             }
                             nl = elt.getElementsByTagName("energy");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 node0 = nl.item(0);
-                                //System.out.println("energy NL? nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                //
                                 usedEnergy = node0.getTextContent();
                             }
 
-                            //System.out.println("toto12");
+                            //
                             nl = elt.getElementsByTagName("contdel");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 nl = elt.getElementsByTagName("contdel");
@@ -2090,11 +2090,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                 elt0 = (Element)node0;
                                 busid = elt0.getAttribute("busID");
                                 busname = elt0.getAttribute("busName");
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                //
                                 contdel = node0.getTextContent();
                             }
 
-                            //System.out.println("contdel: " + contdel + " busID:" + busid + " busName:" + busname);
+                            //
 
 
                             if ((id != null) && (util != null)) {
@@ -2113,11 +2113,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             nl = elt.getElementsByTagName("util");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 node0 = nl.item(0);
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                //
                                 util = node0.getTextContent();
                             }
 
-                            //System.out.println("Got info on bus " + id + " util=" + util);
+                            //
 
                             if ((id != null) && (util != null)) {
                                 updateBusState(id, util);
@@ -2256,7 +2256,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         t = new Thread(this);
         t.start();
         threadStarted = false;
-        //System.out.println("thread of mode:" + threadMode);
+        //
         while(threadStarted == false) {
             try {
                 wait();
@@ -2275,7 +2275,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 
     public void makeStatus(String s) {
-        //System.out.println("busystatus="  + busyStatus);
+        //
 
         if (s.equals("busy")) {
             status.setText("Busy");
@@ -2286,7 +2286,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         if (s.equals("ready")) {
             status.setText("Ready");
             if (busyMode == 2) {
-                //System.out.println("Sending time command");
+                //
                 askForUpdate();
                 //sendCommand("time");
             }
@@ -2302,7 +2302,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             busyMode = 3;
             setBusyStatus();
 
-            //System.out.println("**** TERM ****");
+            //
         }
         setLabelColors();
     }
@@ -2691,8 +2691,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private void processLatency(){
 
 //        TraceManager.addDev(transTimes.toString());
-		//System.out.println(transTimes.toString());
-		//System.out.println(checkTable.toString());
+		//
+		//
         for (Object o: latencies){
             SimulationLatency sl = (SimulationLatency) o;
             sl.setMinTime("??");
@@ -2718,8 +2718,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	                }
 	            }
 	        }
-	       // System.out.println("times1 " + times1);
-	       //System.out.println("times2 " + times2);
+	       // 
+	       //
 	        List<Integer> minTimes = new ArrayList<Integer>();
 	        for (int time1 : times1){
 				//Find the first subsequent transaction
@@ -2801,7 +2801,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         if ((i != null) && (c != null)) {
             try {
-                //System.out.println("Searching for old value");
+                //
                 Integer old = runningTable.get(i);
                 if(old != null) {
                     mgui.removeRunningId(old);
@@ -2809,7 +2809,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 }
 
                 runningTable.put(i, c);
-                //System.out.println("Adding running command: " +c);
+                //
                 mgui.addRunningID(c, nc, progression, startTime, finishTime, transStartTime, transFinishTime, _state);
             } catch (Exception e) {
                 TraceManager.addDev("Exception updateRunningCommand: " + e.getMessage());
@@ -2819,7 +2819,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 
     private void updateOpenDiagram(String name, String _command, String _progression, String _startTime, String _finishTime, String _transStartTime, String _transFinishTime) {
-        //System.out.println("UpdateOpenDiagram name=" + name + " for command:" + command);
+        //
         if (tmap == null) {
             return;
         }
@@ -2858,7 +2858,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 diag = tab.substring(0, index);
                 tab = tab.substring(index+2, tab.length());
             }
-            //System.out.println("Opening diagram " + tab + " for command:" + command);
+            //
 
             mgui.openTMLTaskActivityDiagram(diag, tab);
         }
@@ -2961,7 +2961,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             try {
                 valueTable.remove(i);
                 valueTable.put(i, _value);
-                //System.out.println("Searching for old row");
+                //
                 row = (rowTable.get(i)).intValue();
                 tvtm.fireTableCellUpdated(row, 4);
             } catch (Exception e) {
@@ -2988,7 +2988,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             try {
                 valueTable.remove(i);
                 valueTable.put(i, s);
-                //System.out.println("Searching for old row");
+                //
                 row = rowTable.get(i).intValue();
                 if (_state != null) {
                     tasktm.fireTableCellUpdated(row, 2);
@@ -3023,7 +3023,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                     info += "; Cont. delay on " + busName + " (" + busID + "): " + contdel;
                 }
                 valueTable.put(i, info);
-                //System.out.println("Searching for old row");
+                //
                 row = (rowTable.get(i)).intValue();
                 cputm.fireTableCellUpdated(row, 2);
                 if (_usedEnergy == null) {

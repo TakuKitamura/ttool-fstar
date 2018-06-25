@@ -42,6 +42,7 @@
 package sdtranslator;
 
 import myutil.Conversion;
+import myutil.TraceManager;
 import sddescription.Evt;
 import translator.*;
 
@@ -170,10 +171,10 @@ public class ActionEvt {
                 etl = new EvtToLink(evt, t, g, EvtToLink.SYNC);
                 break;
             case Evt.SEND_SYNC:
-				//System.out.println("Init action send = " + action);
+				//TraceManager.addDev("Init action send = " + action);
 				action = transformToTURTLEFormat(action, true);
 				t.addParamFromAction(action);
-				//System.out.println("Modified action send = " + action);
+				//TraceManager.addDev("Modified action send = " + action);
                 gs = t.getGateNameFromActionState(action);
                 g = t.addNewGateIfApplicable(gs);
                 adsg = new ADActionStateWithGate(g);
@@ -187,10 +188,10 @@ public class ActionEvt {
                 etl = new EvtToLink(evt, t, g, EvtToLink.SYNC);
                 break;
             case Evt.RECV_SYNC:
-				//System.out.println("Init action recv = " + action);
+				//TraceManager.addDev("Init action recv = " + action);
 				action = transformToTURTLEFormat(action, false);
 				t.addParamFromAction(action);
-				//System.out.println("Modified action recv = " + action);
+				//TraceManager.addDev("Modified action recv = " + action);
                 gs = t.getGateNameFromActionState(action);
                 g = t.addNewGateIfApplicable(gs);
                 adsg = new ADActionStateWithGate(g);
@@ -344,13 +345,13 @@ public class ActionEvt {
         ad.add(adlat);
         
         if (firstActionAfterTC != null) {
-            //System.out.println("Limit added to first action gate: " + firstActionAfterTC.getGate().getName());
+            //TraceManager.addDev("Limit added to first action gate: " + firstActionAfterTC.getGate().getName());
             firstActionAfterTC.setLimitOnGate("{" + (time2-time1) + "}");
         }
     }
     
     public void addBeginCallTo(Gate g, Param p) {
-        System.out.println("Modifying begin with " + g);
+        TraceManager.addDev("Modifying begin with " + g);
         t.addGate(g);
         ADActionStateWithGate adsg = new ADActionStateWithGate(g);
         adsg.setActionValue("!"+p.getName());
@@ -366,7 +367,7 @@ public class ActionEvt {
     }
 	
 	 public void addBeginRTCCallTo(Gate g) {
-        System.out.println("Modifying begin with " + g);
+        TraceManager.addDev("Modifying begin with " + g);
         t.addGate(g);
         ADActionStateWithGate adsg = new ADActionStateWithGate(g);
         last.addNext(adsg);
@@ -406,7 +407,7 @@ public class ActionEvt {
 	}
 	
     public void addEndCallTo(Gate g_go, Gate g_ok, Param p) {
-        System.out.println("Modifying end with " + g_go);
+        TraceManager.addDev("Modifying end with " + g_go);
         t.addGate(g_go);
         t.addGate(g_ok);
         

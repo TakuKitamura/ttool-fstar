@@ -133,7 +133,7 @@ public class AvatarSpecificationSimulation {
         }
         //TraceManager.addDev("computeSelectedSimulationBlocks: Nb of selected blocks: " + selectedBlocks.size() + "\n");
         //for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-        //      System.out.println(ste);
+        //      
         //}
     }
 

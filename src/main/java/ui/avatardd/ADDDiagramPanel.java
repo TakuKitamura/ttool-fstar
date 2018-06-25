@@ -38,8 +38,6 @@
  */
 
 
-
-
 package ui.avatardd;
 
 
@@ -51,16 +49,17 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 /**
-   * Class ADDDiagramPanel
-   * Panel for drawing an avatar dd
-   * Creation: 30/06/2014
-   * @version 1.0 30/06/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
+ * Class ADDDiagramPanel
+ * Panel for drawing an avatar dd
+ * Creation: 30/06/2014
+ *
+ * @author Ludovic APVRILLE, Andrea ENRICI
+ * @version 1.0 30/06/2014
  */
 public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
     private int masterClockFrequency = 200; // in MHz
 
-    public  ADDDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    public ADDDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
         /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
           addMouseListener(tdmm);
@@ -68,7 +67,7 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
     }
 
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        //System.out.println("Action");
+        //
         /*if (tgc instanceof TCDTClass) {
           TCDTClass t = (TCDTClass)tgc;
           return mgui.newTClassName(tp, t.oldValue, t.getValue());
@@ -90,7 +89,7 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           TCDTClass tgcc = (TCDTClass)(tgc);
-          //System.out.println(" *** add tclass *** name=" + tgcc.getClassName());
+          //
           mgui.addTClass(tp, tgcc.getClassName());
           return true;
           }*/
@@ -162,84 +161,29 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
 
     public void loadExtraParameters(Element elt) {
         String s;
-        //System.out.println("Extra parameter");
+        //
         try {
             s = elt.getAttribute("attributes");
-            //System.out.println("S=" + s);
+            //
             int attr = Integer.decode(s).intValue();
             setAttributes(attr % 3);
         } catch (Exception e) {
             // Model was saved in an older version of TTool
-            //System.out.println("older format");
+            //
             setAttributes(0);
         }
 
         try {
             s = elt.getAttribute("masterClockFrequency");
-            //System.out.println("S=" + s);
+            //
             masterClockFrequency = Math.abs(Integer.decode(s).intValue());
         } catch (Exception e) {
             // Model was saved in an older version of TTool
-            //System.out.println("older format");
+            //
             masterClockFrequency = 200;
         }
     }
 
-    /*public boolean isFree(ArtifactTClassGate atg) {
-      TGConnectorLinkNode tgco;
-      TGComponent tgc;
-      Iterator iterator = componentList.listIterator();
-
-      while(iterator.hasNext()) {
-      tgc = (TGComponent)(iterator.next());
-      if (tgc instanceof TGConnectorLinkNode) {
-      tgco = (TGConnectorLinkNode)tgc;
-      if (tgco.hasArtifactTClassGate(atg)) {
-      return false;
-      }
-      }
-      }
-
-      return true;
-      }*/
-
-    /*public LinkedList getListOfNodes() {
-      LinkedList ll = new LinkedList();
-      TGComponent tgc;
-      Iterator iterator = componentList.listIterator();
-
-      while(iterator.hasNext()) {
-      tgc = (TGComponent)(iterator.next());
-      if (tgc instanceof TMLArchiCPUNode) {
-      ll.add(tgc);
-      }
-
-      if (tgc instanceof TMLArchiHWANode) {
-      ll.add(tgc);
-      }
-
-      if (tgc instanceof TMLArchiCommunicationNode) {
-      ll.add(tgc);
-      }
-      }
-
-      return ll;
-      }
-
-      public LinkedList getListOfLinks() {
-      LinkedList ll = new LinkedList();
-      TGComponent tgc;
-      Iterator iterator = componentList.listIterator();
-
-      while(iterator.hasNext()) {
-      tgc = (TGComponent)(iterator.next());
-      if (tgc instanceof TMLArchiConnectorNode) {
-      ll.add(tgc);
-      }
-      }
-
-      return ll;
-      }*/
 
     public boolean isMapped(String _ref, String _name) {
         ListIterator iterator = componentList.listIterator();
@@ -250,12 +194,12 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         int i;
         String name = _ref + "::" + _name;
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
             if (tgc instanceof ADDCPUNode) {
-                v =  ((ADDCPUNode)(tgc)).getArtifactList();
-                for(i=0; i<v.size(); i++) {
-                    artifact = (ADDBlockArtifact)(v.get(i));
+                v = ((ADDCPUNode) (tgc)).getArtifactList();
+                for (i = 0; i < v.size(); i++) {
+                    artifact = (ADDBlockArtifact) (v.get(i));
                     if (artifact.getValue().equals(name)) {
                         return true;
                     }
@@ -275,13 +219,13 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         int i;
         String name = _ref + "::" + _name;
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
             if (tgc instanceof ADDRAMNode) {
-                v =  ((ADDRAMNode)(tgc)).getArtifactList();
-                for(i=0; i<v.size(); i++) {
-                    artifact = (ADDChannelArtifact)(v.get(i));
-		    TraceManager.addDev("Comparing "  + artifact.getLongChannelName() + " with " + name);
+                v = ((ADDRAMNode) (tgc)).getArtifactList();
+                for (i = 0; i < v.size(); i++) {
+                    artifact = (ADDChannelArtifact) (v.get(i));
+                    TraceManager.addDev("Comparing " + artifact.getLongChannelName() + " with " + name);
                     if (artifact.getLongChannelName().equals(name)) {
                         return true;
                     }
@@ -309,10 +253,10 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
       if ((node instanceof TMLArchiCPUNode) || (node instanceof TMLArchiHWANode)) {
       if (node instanceof TMLArchiCPUNode) {
       v =  ((TMLArchiCPUNode)(node)).getArtifactList();
-      //System.out.println("CPU:" + node.getName() +  " v:" + v.size());
+      //
       } else {
       v =  ((TMLArchiHWANode)(node)).getArtifactList();
-      //System.out.println("HWA:" + node.getName() + " v:" + v.size());
+      //
       }
 
       for(i=0; i<v.size(); i++) {

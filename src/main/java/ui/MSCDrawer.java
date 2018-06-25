@@ -95,19 +95,19 @@ public class MSCDrawer {
         gelements = new Vector<>();
         try {
             //makeDrawable();
-            //System.out.println("design");
+            //
             addAnalysis(_analysisNb);
-            //System.out.println("classes");
+            //
             drawBasicHMSC();
 
             makeMSC(hmsc, msc);
-            //System.out.println("ad");
+            //
             //drawActivityDiagrams();
-            //System.out.println("relations");
+            //
             //drawRelations();
-            //System.out.println("all done");
+            //
         } catch (MalformedSDException msde) {
-            System.out.println(msde.getMessage());
+            
             return false;
         }
 
@@ -116,7 +116,7 @@ public class MSCDrawer {
 
     private void addAnalysis(int _analysisNb) throws MalformedSDException {
         indexAnalysis = mgui.createAnalysis("Analysis " + _analysisNb);
-        //System.out.println("indexDesign=" + indexDesign);
+        //
         if (indexAnalysis < 0) {
             throw new MalformedSDException("bad index");
         }
@@ -278,10 +278,10 @@ public class MSCDrawer {
                     msg = (TGConnectorMessageSD)(TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD, sdp, p1, p2, new Vector<Point>()));
                     msg.setValue(evt1.getActionId());
                     sdp.addBuiltComponent(msg);
-                    System.out.println("added a synchronous message");
+                    
                 }
             } else {
-                System.out.println("Badly formed linkevt");
+                
             }
         }
 
@@ -424,10 +424,10 @@ public class MSCDrawer {
       }
 
       // make component from adc
-      //System.out.println("Make component");
+      //
       TGComponent tgc = addToAD(adc, tadp);
       if (tgc ==null) {
-      System.out.println("null component");
+      
       throw new MalformedTURTLEModelingException("null component");
       }
 
@@ -455,7 +455,7 @@ public class MSCDrawer {
       if (adc instanceof ADActionStateWithGate) {
       ADActionStateWithGate adasw = (ADActionStateWithGate)adc;
       TADActionState tadas = (TADActionState)(TGComponentManager.addComponent(10, 10, TGComponentManager.TAD_ACTION_STATE, tadp));
-      //System.out.println("action = " + adasw.getActionValue()
+      //
       try {
       tadas.setValue(adasw.getGate().getName() + adasw.getLimitOnGate() + adasw.getActionValue());
       } catch (Exception e) {
@@ -471,8 +471,8 @@ public class MSCDrawer {
       ADActionStateWithParam adawp = ((ADActionStateWithParam)adc);
       TADActionState tadas = (TADActionState)(TGComponentManager.addComponent(10, 10, TGComponentManager.TAD_ACTION_STATE, tadp));
       try {
-      //System.out.println("name = " + adawp.getParam().getName());
-      //System.out.println("action=" + adawp.getActionValue());
+      //
+      //
       tadas.setValue(adawp.getParam().getName() + " = " + adawp.getActionValue());
       } catch (Exception e) {
       tadas.setValue("unknown = unknown");
@@ -481,7 +481,7 @@ public class MSCDrawer {
       } else if (adc instanceof ADChoice) {
       TADChoice tadc = (TADChoice)(TGComponentManager.addComponent(10, 10, TGComponentManager.TAD_CHOICE, tadp));
       /*if (adc.getNbNext() > 3) {
-      System.out.println("Malformed choice... : TOO MANY next");
+      
       }*/
     /*for(i=0; i<3; i++) {
       if (((ADChoice)(adc)).isGuarded(i)) {
@@ -501,7 +501,7 @@ public class MSCDrawer {
       return tadnd;
       } else if (adc instanceof ADParallel) {
       TADParallel tadpl = (TADParallel)(TGComponentManager.addComponent(10, 10, TGComponentManager.TAD_PARALLEL, tadp));
-      //System.out.println("Value gate = " + ((ADParallel)adc).getValueGate());
+      //
       tadpl.setValueGate(((ADParallel)adc).getValueGate());
       return tadpl;
       } else if (adc instanceof ADPreempt) {
@@ -529,7 +529,7 @@ public class MSCDrawer {
       return adti;
       }
 
-      System.out.println("adc = " + adc);
+      
       throw new MalformedTURTLEModelingException("unknown component ->"+adc);
       }
 
@@ -668,7 +668,7 @@ public class MSCDrawer {
       }
 
       if (decY > tadp.getMaxY()) {
-      //System.out.println("Increasing vertical size");
+      //
       tadp.setMaxY(tadp.getMaxY() + 500);
       tadp.updateSize();
       }
@@ -711,7 +711,7 @@ public class MSCDrawer {
       TCDTClass t2 = (TCDTClass)(gelements.elementAt(index2));
 
       // Make connector
-      //System.out.println("Make association between " + t1.getValue() + " and " + t2.getValue());
+      //
       TGConnector tgco = makeAssociation(r, t1, t2);
       tgco.makeSquareWithoutMovingTGComponents();
       dp.tcdp.addBuiltConnector(tgco);

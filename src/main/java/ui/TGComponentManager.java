@@ -2331,31 +2331,31 @@ public class TGComponentManager {
                 break;
             case CONNECTOR_INTERACTION:
                 tgc = new TGConnectorInteraction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_ASYNC_SD:
                 tgc = new ui.sd.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_SYNC_SD:
                 tgc = new ui.sd.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_RELATIVE_TIME_SD:
                 tgc = new ui.sd.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_ASYNC_SDZV:
                 tgc = new ui.sd2.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_SYNC_SDZV:
                 tgc = new ui.sd2.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_RELATIVE_TIME_SDZV:
                 tgc = new ui.sd2.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
 
             case CONNECTOR_ACTOR_UCD:

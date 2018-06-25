@@ -85,7 +85,6 @@ public class TimeConstraintLink {
            g2 = new Gate("check__tc__" + INDEX, Gate.GATE, false);
            g3 = new Gate("end__tc__" + INDEX, Gate.GATE, false);
            g4 = new Gate("expire__tc__" + INDEX, Gate.GATE, false);
-           //System.out.println("New Relative TC TClass");
            t = new RelativeTimeConstraintTClass("RTC__" + INDEX, tc.time1, tc.time2);
            INDEX ++;
        }
@@ -95,7 +94,6 @@ public class TimeConstraintLink {
            g3 = new Gate("end__tc__" + INDEX, Gate.GATE, false);
            g4 = new Gate("expire__tc__" + INDEX, Gate.GATE, false);
            g1 = g2;
-           System.out.println("New Absolute TC TClass");
            t = new AbsoluteTimeConstraintTClass("ATC__" + INDEX, tc.time1, tc.time2);
            INDEX ++;
        }

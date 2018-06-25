@@ -273,7 +273,7 @@ public class JDialogTPNValidation extends JDialog implements ActionListener, Run
                   data = processCmd(cmd1);
                   data = rshc.getFileData(fileName + ".aut");
                   data = mgui.gtm.convertCADP_AUT_to_RTL_AUT(data);
-                  //System.out.println("graph AUT=" + data);
+                  //
                   mgui.gtm.setRGAut(data);
                   mgui.saveRGAut();
                   p = FormatManager.nbStateTransitionRGAldebaran(data);
