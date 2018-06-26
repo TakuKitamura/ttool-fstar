@@ -45,50 +45,84 @@ package ui.sysmlsecmethodology;
 import ui.*;
 
 /**
-   * Class SysmlsecMethodologyReferenceToRequirement
-   * Diagram reference requirement: Used to reference diagrams from the
-   * Sysmlsecmethodology
-   * Creation: 26/01/2016
-   * @version 1.0 26/01/2016
+   * Class SysmlsecMethodologyReferenceToFault
+   * Diagram reference analysis: Used to reference diagrams from the
+   * Sysmlsec methodology
+   * Creation: 26/06/2018
+   * @version 1.0 26/06/2018
    * @author Ludovic APVRILLE
  */
-public class SysmlsecMethodologyReferenceToRequirement extends SysmlsecMethodologyDiagramReference  {
+public class SysmlsecMethodologyReferenceToFault extends SysmlsecMethodologyDiagramReference  {
 
 
-    public SysmlsecMethodologyReferenceToRequirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public SysmlsecMethodologyReferenceToFault(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+                                           TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         initScaling(200, 70);
 
-        nbConnectingPoint = 5;
+        nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 1.0, 0.5, TGConnectingPoint.WEST);
-        connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 1.0, TGConnectingPoint.WEST);
-        connectingPoint[2] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 1.0, TGConnectingPoint.WEST);
-        connectingPoint[3] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 0.0, TGConnectingPoint.WEST);
-        connectingPoint[4] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.3, 0.0, TGConnectingPoint.WEST);
+        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 1.0, TGConnectingPoint.WEST);
+        connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 1.0, TGConnectingPoint.WEST);
 
-        typeOfReference = REQUIREMENT;
+        typeOfReference = FAULT;
 
         addTGConnectingPointsCommentTop();
 
     }
 
     public  int getType() {
-        return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_REQUIREMENT;
+        return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_FAULT;
     }
 
     public boolean isAValidPanelType(TURTLEPanel panel) {
-        return panel instanceof AvatarRequirementPanel;
+        return panel instanceof FaultTreePanel;
 
     }
 
     public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
-        dn.setValidationsNumber(0);
+	dn.setValidationsNumber(3);
+        dn.setValidationsInfo(0, SysmlsecMethodologyDiagramName.SIM_ANIM);
+        dn.setValidationsInfo(1, SysmlsecMethodologyDiagramName.INTERNAL_MODEL_CHECKER);
+        dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.UPP);
     }
 
     public boolean makeCall(String diagramName, int index) {
-        return true;
+
+        switch (index) {
+            case 0:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarSimulation();
+                    return true;
+                }
+                return false;
+            case 1:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarModelChecker();
+                    return true;
+                }
+                return false;
+            case 2:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarUPPAALVerification();
+                    return true;
+                }
+                return false;
+
+
+            default:
+                return false;
+        }
     }
 
 }

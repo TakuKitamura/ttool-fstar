@@ -62,8 +62,8 @@ public class SysmlsecMethodologyReferenceToAttack extends SysmlsecMethodologyDia
 
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 0, TGConnectingPoint.WEST);
-        connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 0, TGConnectingPoint.WEST);
+        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 0.0, TGConnectingPoint.WEST);
+        connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 0.0, TGConnectingPoint.WEST);
 
         typeOfReference = ATTACK;
 
