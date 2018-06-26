@@ -53,111 +53,112 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class ELNComponentIndependentVoltageSource
- * Independent voltage source to be used in ELN diagrams
+ * Class ELNComponentIndependentVoltageSource 
+ * Independent voltage source to be used in ELN diagrams 
  * Creation: 15/06/2018
  * @version 1.0 15/06/2018
  * @author Irina Kit Yan LEE
  */
 
 public class ELNComponentIndependentVoltageSource extends TGCScalableWithInternalComponent implements ActionListener {
-    protected Color myColor;
-    protected int orientation;
+	protected Color myColor;
+	protected int orientation;
 	private int maxFontSize = 14;
-    private int minFontSize = 4;
-    private int currentFontSize = -1;
+	private int minFontSize = 4;
+	private int currentFontSize = -1;
 
-    private int textX = 15; 
-    private double dtextX = 0.0;
-    protected int decPoint = 3;
+	private int textX = 15;
+	private double dtextX = 0.0;
+	protected int decPoint = 3;
 
 	private double initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmplitude;
 	private String delay;
 	private String unit0;
-	
+
 	private int position = 0;
 	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false, fh_1_3 = false;
 	private int old;
 	private boolean first;
-    
-    public ELNComponentIndependentVoltageSource(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(40, 80);
+	public ELNComponentIndependentVoltageSource(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+			boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        dtextX = textX * oldScaleFactor;
-        textX = (int)dtextX;
-        dtextX = dtextX - textX;
-        
-        minWidth = 1;
-        minHeight = 1;
+		initScaling(40, 80);
 
-        initConnectingPoint(2);
-                
-        addTGConnectingPointsComment();
+		dtextX = textX * oldScaleFactor;
+		textX = (int) dtextX;
+		dtextX = dtextX - textX;
 
-        moveable = true;
-        editable = true;
-        removable = true;
-        userResizable = false;
-        value = tdp.findELNComponentName("VSource");
-        
-        setInitValue(0.0);
-        setOffset(0.0);
-        setAmplitude(0.0);
-        setFrequency(0.0);
-        setUnit0("Hz");
-        setPhase(0.0);
-        setDelay("sc_core::SC_ZERO_TIME");
-        setAcAmplitude(0.0);
-        setAcPhase(0.0);
-        setAcNoiseAmplitude(0.0);
-        
-        old = width;
+		minWidth = 1;
+		minHeight = 1;
+
+		initConnectingPoint(2);
+
+		addTGConnectingPointsComment();
+
+		moveable = true;
+		editable = true;
+		removable = true;
+		userResizable = false;
+		value = tdp.findELNComponentName("VSource");
+
+		setInitValue(0.0);
+		setOffset(0.0);
+		setAmplitude(0.0);
+		setFrequency(0.0);
+		setUnit0("Hz");
+		setPhase(0.0);
+		setDelay("sc_core::SC_ZERO_TIME");
+		setAcAmplitude(0.0);
+		setAcPhase(0.0);
+		setAcNoiseAmplitude(0.0);
+
+		old = width;
 		width = height;
 		height = old;
-    }
+	}
 
-    public void initConnectingPoint(int nb) {
-        nbConnectingPoint = nb;
-        connectingPoint = new TGConnectingPoint[nb];
-        connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 0.0, "p");
-        connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, "n");
-    }
+	public void initConnectingPoint(int nb) {
+		nbConnectingPoint = nb;
+		connectingPoint = new TGConnectingPoint[nb];
+		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 0.0, "p");
+		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, "n");
+	}
 
-    public Color getMyColor() {
-        return myColor;
-    }
+	public Color getMyColor() {
+		return myColor;
+	}
 
-    public void internalDrawing(Graphics g) {
-        Font f = g.getFont();
-        Font fold = f;
-        
-    	if (this.rescaled && !this.tdp.isScaled()) {
-            this.rescaled = false;
-            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
-            f = f.deriveFont((float) maxCurrentFontSize);
+	public void internalDrawing(Graphics g) {
+		Font f = g.getFont();
+		Font fold = f;
 
-            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
-            	if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
-            		break;
-            	}
-                maxCurrentFontSize--;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
+		if (this.rescaled && !this.tdp.isScaled()) {
+			this.rescaled = false;
+			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+			f = f.deriveFont((float) maxCurrentFontSize);
 
-            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
-                maxCurrentFontSize++;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
-            g.setFont(f);
-            this.currentFontSize = maxCurrentFontSize;
-        } else {
-            f = f.deriveFont(this.currentFontSize);
-    	}
+			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+				if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
+					break;
+				}
+				maxCurrentFontSize--;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
 
-    	Color c = g.getColor();
-        double w0 = ((ELNConnectingPoint) connectingPoint[0]).getW();
+			if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+				maxCurrentFontSize++;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
+			g.setFont(f);
+			this.currentFontSize = maxCurrentFontSize;
+		} else {
+			f = f.deriveFont(this.currentFontSize);
+		}
+
+		Color c = g.getColor();
+		double w0 = ((ELNConnectingPoint) connectingPoint[0]).getW();
 		double h0 = ((ELNConnectingPoint) connectingPoint[0]).getH();
 		double w1 = ((ELNConnectingPoint) connectingPoint[1]).getW();
 		double h1 = ((ELNConnectingPoint) connectingPoint[1]).getH();
@@ -190,32 +191,36 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateTop(g);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y+height+sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+						y + height + sh1);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateBottomFlip(g);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y+height+sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+						y + height + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateTopFlip(g);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y+height+sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+						y + height + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateBottom(g);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y+height+sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+						y + height + sh0);
 			}
 		} else if (position == 1) {
 			if (first == false) {
@@ -310,32 +315,36 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateBottom(g);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y+height+sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+						y + height + sh0);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateTopFlip(g);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y+height+sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+						y + height + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateBottomFlip(g);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y+height+sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+						y + height + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateTop(g);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y+height+sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+						y + height + sh1);
 			}
 		} else if (position == 3) {
 			if (first == false) {
@@ -403,222 +412,248 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 						y + height / 2 + height / 4 + sh1);
 			}
 		}
-        g.setColor(c);
-        g.setFont(fold);
-    }
+		g.setColor(c);
+		g.setFont(fold);
+	}
 
-    private void rotateTop(Graphics g) {
-    	 int [] ptx0 = {x+width/2, x+width/2};
-         int [] pty0 = {y, y+height};
-         g.drawPolygon(ptx0, pty0, 2);
-         int [] ptx1 = {x+width/2+width/4, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width};
-         int [] pty1 = {y+height/4-height/8, y+height/4-height/8, y+height/4-height/8-width/8, y+height/4-height/8+width/8, y+height/4-height/8, y+height/4-height/8};
-         g.drawPolygon(ptx1, pty1, 6);
-         int [] ptx2 = {x+width/2+width/4, x+width};
-         int [] pty2 = {y+3*height/4+height/8, y+3*height/4+height/8};
-         g.drawPolygon(ptx2, pty2, 2);
-         g.drawOval(x, y+height/4, width, height/2);
-    }
-    
-    private void rotateTopFlip(Graphics g) {
-    	int [] ptx0 = {x+width/2, x+width/2};
-    	int [] pty0 = {y, y+height};
-    	g.drawPolygon(ptx0, pty0, 2);
-    	int [] ptx1 = {x+width/2+width/4, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width};
-    	int [] pty1 = {y+3*height/4+height/8, y+3*height/4+height/8, y+3*height/4+height/8+width/8, y+3*height/4+height/8+width/8, y+3*height/4+height/8, y+3*height/4+height/8};
-    	g.drawPolygon(ptx1, pty1, 6);
-    	int [] ptx2 = {x+width/2+width/4, x+width};
-    	int [] pty2 = {y+height/8, y+height/8};
-    	g.drawPolygon(ptx2, pty2, 2);
-    	g.drawOval(x, y+height/4, width, height/2);
-    }
-    
-    private void rotateBottom(Graphics g) {
-    	 int [] ptx0 = {x+width/2, x+width/2};
-         int [] pty0 = {y, y+height};
-         g.drawPolygon(ptx0, pty0, 2);
-         int [] ptx1 = {x+width/2+width/4, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width};
-         int [] pty1 = {y+3*height/4+height/8, y+3*height/4+height/8, y+3*height/4+height/8+width/8, y+3*height/4+height/8-width/8, y+3*height/4+height/8, y+3*height/4+height/8};
-         g.drawPolygon(ptx1, pty1, 6);
-         int [] ptx2 = {x+width/2+width/4, x+width};
-         int [] pty2 = {y+height/4-height/8, y+height/4-height/8};
-         g.drawPolygon(ptx2, pty2, 2);
-         g.drawOval(x, y+height/4, width, height/2);
-    }
-    
-    private void rotateBottomFlip(Graphics g) {
-    	int [] ptx0 = {x+width/2, x+width/2};
-    	int [] pty0 = {y, y+height};
-    	g.drawPolygon(ptx0, pty0, 2);
-    	int [] ptx1 = {x+width/2+width/4, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width};
-    	int [] pty1 = {y+height/8, y+height/8, y+height/8+width/8, y+height/8-width/8, y+height/8, y+height/8};
-    	g.drawPolygon(ptx1, pty1, 6);
-    	int [] ptx2 = {x+width/2+width/4, x+width};
-    	int [] pty2 = {y+3*height/4+height/8, y+3*height/4+height/8};
-    	g.drawPolygon(ptx2, pty2, 2);
-    	g.drawOval(x, y+height/4, width, height/2);
-    }
-    
-    private void rotateRight(Graphics g) {
-    	int [] ptx0 = {x, x+width};
-        int [] pty0 = {y+height/2, y+height/2};
-        g.drawPolygon(ptx0, pty0, 2);
-        int [] ptx1 = {x+width-width/8, x+width-width/8, x+width-width/8-height/8, x+width-width/8+height/8, x+width-width/8, x+width-width/8};
-        int [] pty1 = {y+height/2+height/4, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height};
-        g.drawPolygon(ptx1, pty1, 6);
-        int [] ptx2 = {x+width/8, x+width/8};
-        int [] pty2 = {y+height/2+height/4, y+height};
-        g.drawPolygon(ptx2, pty2, 2);
-        g.drawOval(x+width/4, y, width/2, height);
-    }
-    
-    private void rotateRightFlip(Graphics g) {
-    	int [] ptx0 = {x, x+width};
-    	int [] pty0 = {y+height/2, y+height/2};
-    	g.drawPolygon(ptx0, pty0, 2);
-    	int [] ptx1 = {x+width-width/8, x+width-width/8, x+width-width/8-height/8, x+width-width/8+height/8, x+width-width/8, x+width-width/8};
-    	int [] pty1 = {y+height/4, y+height/4+height/8, y+height/4+height/8, y+height/4+height/8, y+height/4+height/8, y};
-    	g.drawPolygon(ptx1, pty1, 6);
-    	int [] ptx2 = {x+width/8, x+width/8};
-    	int [] pty2 = {y+height/4, y};
-    	g.drawPolygon(ptx2, pty2, 2);
-    	g.drawOval(x+width/4, y, width/2, height);
-    }
-    
-    private void rotateLeft(Graphics g) {
-        int [] ptx0 = {x, x+width};
-        int [] pty0 = {y+height/2, y+height/2};
-        g.drawPolygon(ptx0, pty0, 2);
-        int [] ptx1 = {x+width/4-width/8, x+width/4-width/8, x+width/4-width/8-height/8, x+width/4-width/8+height/8, x+width/4-width/8, x+width/4-width/8};
-        int [] pty1 = {y+height/2-height/4, y+height/2-height/4-height/8, y+height/2-height/4-height/8, y+height/2-height/4-height/8, y+height/2-height/4-height/8, y};
-        g.drawPolygon(ptx1, pty1, 6);
-        int [] ptx2 = {x+3*width/4+width/8, x+3*width/4+width/8};
-        int [] pty2 = {y+height/2-height/4, y};
-        g.drawPolygon(ptx2, pty2, 2);
-        g.drawOval(x+width/4, y, width/2, height);
-    }
-    
-    private void rotateLeftFlip(Graphics g) {
-    	int [] ptx0 = {x, x+width};
-    	int [] pty0 = {y+height/2, y+height/2};
-    	g.drawPolygon(ptx0, pty0, 2);
-    	int [] ptx1 = {x+width/4-width/8, x+width/4-width/8, x+width/4-width/8-height/8, x+width/4-width/8+height/8, x+width/4-width/8, x+width/4-width/8};
-    	int [] pty1 = {y+height/2+height/4, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height};
-    	g.drawPolygon(ptx1, pty1, 6);
-    	int [] ptx2 = {x+3*width/4+width/8, x+3*width/4+width/8};
-    	int [] pty2 = {y+height/2+height/4, y+height};
-    	g.drawPolygon(ptx2, pty2, 2);
-    	g.drawOval(x+width/4, y, width/2, height);
-    }
-    
-    public TGComponent isOnOnlyMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    public int getType() {
-    	return TGComponentManager.ELN_INDEPENDENT_VOLTAGE_SOURCE;
-    }
+	private void rotateTop(Graphics g) {
+		int[] ptx0 = { x + width / 2, x + width / 2 };
+		int[] pty0 = { y, y + height };
+		g.drawPolygon(ptx0, pty0, 2);
+		int[] ptx1 = { x + width / 2 + width / 4, x + width / 2 + width / 4 + width / 8,
+				x + width / 2 + width / 4 + width / 8, x + width / 2 + width / 4 + width / 8,
+				x + width / 2 + width / 4 + width / 8, x + width };
+		int[] pty1 = { y + height / 4 - height / 8, y + height / 4 - height / 8,
+				y + height / 4 - height / 8 - width / 8, y + height / 4 - height / 8 + width / 8,
+				y + height / 4 - height / 8, y + height / 4 - height / 8 };
+		g.drawPolygon(ptx1, pty1, 6);
+		int[] ptx2 = { x + width / 2 + width / 4, x + width };
+		int[] pty2 = { y + 3 * height / 4 + height / 8, y + 3 * height / 4 + height / 8 };
+		g.drawPolygon(ptx2, pty2, 2);
+		g.drawOval(x, y + height / 4, width, height / 2);
+	}
 
-    public boolean editOndoubleClick(JFrame frame) {
-    	JDialogELNComponentIndependentVoltageSource jde = new JDialogELNComponentIndependentVoltageSource(this);
-    	jde.setVisible(true);
-        return true;
-    }
-    
-    public StringBuffer encode(String data) {
-    	StringBuffer databuf = new StringBuffer(data);
-    	StringBuffer buffer = new StringBuffer("");
-        for(int pos = 0; pos != data.length(); pos++) {
-        	char c = databuf.charAt(pos);
-            switch(c) {
-                case '\u03BC' : 
-                	buffer.append("&#x3BC;");      
-                	break;
-                default :   
-                	buffer.append(databuf.charAt(pos)); 
-                	break;
-            }
-        }
-        return buffer;
-    }
+	private void rotateTopFlip(Graphics g) {
+		int[] ptx0 = { x + width / 2, x + width / 2 };
+		int[] pty0 = { y, y + height };
+		g.drawPolygon(ptx0, pty0, 2);
+		int[] ptx1 = { x + width / 2 + width / 4, x + width / 2 + width / 4 + width / 8,
+				x + width / 2 + width / 4 + width / 8, x + width / 2 + width / 4 + width / 8,
+				x + width / 2 + width / 4 + width / 8, x + width };
+		int[] pty1 = { y + 3 * height / 4 + height / 8, y + 3 * height / 4 + height / 8,
+				y + 3 * height / 4 + height / 8 + width / 8, y + 3 * height / 4 + height / 8 + width / 8,
+				y + 3 * height / 4 + height / 8, y + 3 * height / 4 + height / 8 };
+		g.drawPolygon(ptx1, pty1, 6);
+		int[] ptx2 = { x + width / 2 + width / 4, x + width };
+		int[] pty2 = { y + height / 8, y + height / 8 };
+		g.drawPolygon(ptx2, pty2, 2);
+		g.drawOval(x, y + height / 4, width, height / 2);
+	}
 
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<attributes init_value=\"" + initValue);
-        sb.append("\" offset=\"" + offset);
-        sb.append("\" amplitude=\"" + amplitude);
-        sb.append("\" frequency=\"" + frequency);
-        sb.append("\" unit0=\"" + encode(unit0));
-        sb.append("\" phase=\"" + phase);
-        sb.append("\" delay=\"" + delay);
-        sb.append("\" ac_amplitude=\"" + acAmplitude);
-        sb.append("\" ac_phase=\"" + acPhase);
+	private void rotateBottom(Graphics g) {
+		int[] ptx0 = { x + width / 2, x + width / 2 };
+		int[] pty0 = { y, y + height };
+		g.drawPolygon(ptx0, pty0, 2);
+		int[] ptx1 = { x + width / 2 + width / 4, x + width / 2 + width / 4 + width / 8,
+				x + width / 2 + width / 4 + width / 8, x + width / 2 + width / 4 + width / 8,
+				x + width / 2 + width / 4 + width / 8, x + width };
+		int[] pty1 = { y + 3 * height / 4 + height / 8, y + 3 * height / 4 + height / 8,
+				y + 3 * height / 4 + height / 8 + width / 8, y + 3 * height / 4 + height / 8 - width / 8,
+				y + 3 * height / 4 + height / 8, y + 3 * height / 4 + height / 8 };
+		g.drawPolygon(ptx1, pty1, 6);
+		int[] ptx2 = { x + width / 2 + width / 4, x + width };
+		int[] pty2 = { y + height / 4 - height / 8, y + height / 4 - height / 8 };
+		g.drawPolygon(ptx2, pty2, 2);
+		g.drawOval(x, y + height / 4, width, height / 2);
+	}
+
+	private void rotateBottomFlip(Graphics g) {
+		int[] ptx0 = { x + width / 2, x + width / 2 };
+		int[] pty0 = { y, y + height };
+		g.drawPolygon(ptx0, pty0, 2);
+		int[] ptx1 = { x + width / 2 + width / 4, x + width / 2 + width / 4 + width / 8,
+				x + width / 2 + width / 4 + width / 8, x + width / 2 + width / 4 + width / 8,
+				x + width / 2 + width / 4 + width / 8, x + width };
+		int[] pty1 = { y + height / 8, y + height / 8, y + height / 8 + width / 8, y + height / 8 - width / 8,
+				y + height / 8, y + height / 8 };
+		g.drawPolygon(ptx1, pty1, 6);
+		int[] ptx2 = { x + width / 2 + width / 4, x + width };
+		int[] pty2 = { y + 3 * height / 4 + height / 8, y + 3 * height / 4 + height / 8 };
+		g.drawPolygon(ptx2, pty2, 2);
+		g.drawOval(x, y + height / 4, width, height / 2);
+	}
+
+	private void rotateRight(Graphics g) {
+		int[] ptx0 = { x, x + width };
+		int[] pty0 = { y + height / 2, y + height / 2 };
+		g.drawPolygon(ptx0, pty0, 2);
+		int[] ptx1 = { x + width - width / 8, x + width - width / 8, x + width - width / 8 - height / 8,
+				x + width - width / 8 + height / 8, x + width - width / 8, x + width - width / 8 };
+		int[] pty1 = { y + height / 2 + height / 4, y + height / 2 + height / 4 + height / 8,
+				y + height / 2 + height / 4 + height / 8, y + height / 2 + height / 4 + height / 8,
+				y + height / 2 + height / 4 + height / 8, y + height };
+		g.drawPolygon(ptx1, pty1, 6);
+		int[] ptx2 = { x + width / 8, x + width / 8 };
+		int[] pty2 = { y + height / 2 + height / 4, y + height };
+		g.drawPolygon(ptx2, pty2, 2);
+		g.drawOval(x + width / 4, y, width / 2, height);
+	}
+
+	private void rotateRightFlip(Graphics g) {
+		int[] ptx0 = { x, x + width };
+		int[] pty0 = { y + height / 2, y + height / 2 };
+		g.drawPolygon(ptx0, pty0, 2);
+		int[] ptx1 = { x + width - width / 8, x + width - width / 8, x + width - width / 8 - height / 8,
+				x + width - width / 8 + height / 8, x + width - width / 8, x + width - width / 8 };
+		int[] pty1 = { y + height / 4, y + height / 4 + height / 8, y + height / 4 + height / 8,
+				y + height / 4 + height / 8, y + height / 4 + height / 8, y };
+		g.drawPolygon(ptx1, pty1, 6);
+		int[] ptx2 = { x + width / 8, x + width / 8 };
+		int[] pty2 = { y + height / 4, y };
+		g.drawPolygon(ptx2, pty2, 2);
+		g.drawOval(x + width / 4, y, width / 2, height);
+	}
+
+	private void rotateLeft(Graphics g) {
+		int[] ptx0 = { x, x + width };
+		int[] pty0 = { y + height / 2, y + height / 2 };
+		g.drawPolygon(ptx0, pty0, 2);
+		int[] ptx1 = { x + width / 4 - width / 8, x + width / 4 - width / 8, x + width / 4 - width / 8 - height / 8,
+				x + width / 4 - width / 8 + height / 8, x + width / 4 - width / 8, x + width / 4 - width / 8 };
+		int[] pty1 = { y + height / 2 - height / 4, y + height / 2 - height / 4 - height / 8,
+				y + height / 2 - height / 4 - height / 8, y + height / 2 - height / 4 - height / 8,
+				y + height / 2 - height / 4 - height / 8, y };
+		g.drawPolygon(ptx1, pty1, 6);
+		int[] ptx2 = { x + 3 * width / 4 + width / 8, x + 3 * width / 4 + width / 8 };
+		int[] pty2 = { y + height / 2 - height / 4, y };
+		g.drawPolygon(ptx2, pty2, 2);
+		g.drawOval(x + width / 4, y, width / 2, height);
+	}
+
+	private void rotateLeftFlip(Graphics g) {
+		int[] ptx0 = { x, x + width };
+		int[] pty0 = { y + height / 2, y + height / 2 };
+		g.drawPolygon(ptx0, pty0, 2);
+		int[] ptx1 = { x + width / 4 - width / 8, x + width / 4 - width / 8, x + width / 4 - width / 8 - height / 8,
+				x + width / 4 - width / 8 + height / 8, x + width / 4 - width / 8, x + width / 4 - width / 8 };
+		int[] pty1 = { y + height / 2 + height / 4, y + height / 2 + height / 4 + height / 8,
+				y + height / 2 + height / 4 + height / 8, y + height / 2 + height / 4 + height / 8,
+				y + height / 2 + height / 4 + height / 8, y + height };
+		g.drawPolygon(ptx1, pty1, 6);
+		int[] ptx2 = { x + 3 * width / 4 + width / 8, x + 3 * width / 4 + width / 8 };
+		int[] pty2 = { y + height / 2 + height / 4, y + height };
+		g.drawPolygon(ptx2, pty2, 2);
+		g.drawOval(x + width / 4, y, width / 2, height);
+	}
+
+	public TGComponent isOnOnlyMe(int _x, int _y) {
+		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+			return this;
+		}
+		return null;
+	}
+
+	public int getType() {
+		return TGComponentManager.ELN_INDEPENDENT_VOLTAGE_SOURCE;
+	}
+
+	public boolean editOndoubleClick(JFrame frame) {
+		JDialogELNComponentIndependentVoltageSource jde = new JDialogELNComponentIndependentVoltageSource(this);
+		jde.setVisible(true);
+		return true;
+	}
+
+	public StringBuffer encode(String data) {
+		StringBuffer databuf = new StringBuffer(data);
+		StringBuffer buffer = new StringBuffer("");
+		for (int pos = 0; pos != data.length(); pos++) {
+			char c = databuf.charAt(pos);
+			switch (c) {
+			case '\u03BC':
+				buffer.append("&#x3BC;");
+				break;
+			default:
+				buffer.append(databuf.charAt(pos));
+				break;
+			}
+		}
+		return buffer;
+	}
+
+	protected String translateExtraParam() {
+		StringBuffer sb = new StringBuffer("<extraparam>\n");
+		sb.append("<attributes init_value=\"" + initValue);
+		sb.append("\" offset=\"" + offset);
+		sb.append("\" amplitude=\"" + amplitude);
+		sb.append("\" frequency=\"" + frequency);
+		sb.append("\" unit0=\"" + encode(unit0));
+		sb.append("\" phase=\"" + phase);
+		sb.append("\" delay=\"" + delay);
+		sb.append("\" ac_amplitude=\"" + acAmplitude);
+		sb.append("\" ac_phase=\"" + acPhase);
 		sb.append("\" ac_noise_amplitude=\"" + acNoiseAmplitude + "\"");
-        sb.append("/>\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
+		sb.append("/>\n");
+		sb.append("</extraparam>\n");
+		return new String(sb);
+	}
 
-	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
-            double initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmplitude;
-        	String delay;
-        	String unit0;
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+		try {
+			NodeList nli;
+			Node n1, n2;
+			Element elt;
 
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("attributes")) {
-                            	initValue = Double.parseDouble(elt.getAttribute("init_value"));
-                            	offset = Double.parseDouble(elt.getAttribute("offset"));
-                            	amplitude = Double.parseDouble(elt.getAttribute("amplitude"));
-                            	frequency = Double.parseDouble(elt.getAttribute("frequency"));
-                            	unit0 = elt.getAttribute("unit0");
-                            	phase = Double.parseDouble(elt.getAttribute("phase"));
-                            	delay = elt.getAttribute("delay");
-                            	acAmplitude = Double.parseDouble(elt.getAttribute("ac_amplitude"));
-                            	acPhase = Double.parseDouble(elt.getAttribute("ac_phase"));
-                            	acNoiseAmplitude = Double.parseDouble(elt.getAttribute("ac_noise_amplitude"));
+			double initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmplitude;
+			String delay;
+			String unit0;
+
+			for (int i = 0; i < nl.getLength(); i++) {
+				n1 = nl.item(i);
+				if (n1.getNodeType() == Node.ELEMENT_NODE) {
+					nli = n1.getChildNodes();
+					for (int j = 0; j < nli.getLength(); j++) {
+						n2 = nli.item(j);
+						if (n2.getNodeType() == Node.ELEMENT_NODE) {
+							elt = (Element) n2;
+							if (elt.getTagName().equals("attributes")) {
+								initValue = Double.parseDouble(elt.getAttribute("init_value"));
+								offset = Double.parseDouble(elt.getAttribute("offset"));
+								amplitude = Double.parseDouble(elt.getAttribute("amplitude"));
+								frequency = Double.parseDouble(elt.getAttribute("frequency"));
+								unit0 = elt.getAttribute("unit0");
+								phase = Double.parseDouble(elt.getAttribute("phase"));
+								delay = elt.getAttribute("delay");
+								acAmplitude = Double.parseDouble(elt.getAttribute("ac_amplitude"));
+								acPhase = Double.parseDouble(elt.getAttribute("ac_phase"));
+								acNoiseAmplitude = Double.parseDouble(elt.getAttribute("ac_noise_amplitude"));
 								setInitValue(initValue);
 								setOffset(offset);
 								setAmplitude(amplitude);
 								setFrequency(frequency);
-                            	setUnit0(unit0);
-                            	setPhase(phase);
+								setUnit0(unit0);
+								setPhase(phase);
 								setDelay(delay);
 								setAcAmplitude(acAmplitude);
 								setAcPhase(acPhase);
 								setAcNoiseAmplitude(acNoiseAmplitude);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-    }
-	
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new MalformedModelingException();
+		}
+	}
+
 	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 		componentMenu.addSeparator();
 
-		JMenuItem rotateright = new JMenuItem("Rotate right 90°");
+		JMenuItem rotateright = new JMenuItem("Rotate right 90Â°");
 		rotateright.addActionListener(this);
 		componentMenu.add(rotateright);
 
-		JMenuItem rotateleft = new JMenuItem("Rotate left 90°");
+		JMenuItem rotateleft = new JMenuItem("Rotate left 90Â°");
 		rotateleft.addActionListener(this);
 		componentMenu.add(rotateleft);
 
@@ -634,12 +669,12 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Rotate right 90°")) {
+		if (e.getActionCommand().equals("Rotate right 90Â°")) {
 			position++;
 			position %= 4;
 			first = false;
 		}
-		if (e.getActionCommand().equals("Rotate left 90°")) {
+		if (e.getActionCommand().equals("Rotate left 90Â°")) {
 			position = position + 3;
 			position %= 4;
 			first = false;
@@ -678,9 +713,9 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 		}
 	}
 
-    public int getDefaultConnector() {
-        return TGComponentManager.ELN_CONNECTOR;
-    }
+	public int getDefaultConnector() {
+		return TGComponentManager.ELN_CONNECTOR;
+	}
 
 	public double getInitValue() {
 		return initValue;
