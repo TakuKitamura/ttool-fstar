@@ -45,6 +45,7 @@ import myutil.GraphicLib;
 import ui.*;
 import ui.util.IconManager;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -57,7 +58,7 @@ import java.awt.*;
 public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
     protected int radius = 11;
 
-    protected int numberOfSamples = 1; // Indicates the number of samples being read before they
+     // value Indicates the number of samples being read before they
     // are written to destination. The default is 1.
 
 
@@ -83,14 +84,18 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 
         nbInternalTGComponent = 0;
 
-        value = "F";
+        value = "1";
         name = "Composite port";
+        editable = true;
 
         //insides = new ArrayList<TMLCPrimitivePort>();
         //outsides = new ArrayList<TMLCPrimitivePort>();
 
         myImageIcon = IconManager.imgic1204;
     }
+
+
+
 
     public void internalDrawing(Graphics g) {
 
@@ -128,13 +133,36 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 
     }
 
+    public boolean editOndoubleClick(JFrame frame) {
+        String oldValue = value;
+
+        String s = (String) JOptionPane.showInputDialog(frame, "Number of samples per round",
+                "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null,
+                getValue());
+        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+            try {
+                int testI = Integer.decode(value).intValue();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(frame,
+                        "Could not change the number of samples: invalid value",
+                        "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                value = oldValue;
+                return false;
+            }
+
+        }
+        return true;
+
+    }
+
 
     public int getType() {
         return TGComponentManager.TMLCTD_FORK;
     }
 
     public int getNumberOfSamples() {
-        return numberOfSamples;
+        return Integer.decode(value).intValue();
     }
 
 

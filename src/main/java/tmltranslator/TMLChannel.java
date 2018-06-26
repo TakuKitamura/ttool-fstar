@@ -181,6 +181,8 @@ public class TMLChannel extends TMLCommunicationElement {
         this.nbOfSamples = nbOfSamples;
     }
 
+    public int getNumberOfSamples() { return nbOfSamples;}
+
     public TMLTask getDestinationTask(int index) {
         return destinationTasks.get(index);
     }

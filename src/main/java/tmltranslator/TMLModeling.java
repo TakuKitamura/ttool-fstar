@@ -2205,14 +2205,14 @@ public class TMLModeling<E> {
         TMLReadChannel read = new TMLReadChannel("ReadOfFork", null);
         forkActivity.addElement(read);
         read.addChannel(_ch);
-        read.setNbOfSamples("1");
+        read.setNbOfSamples("" + _ch.getNumberOfSamples());
 
         TMLWriteChannel []writes = new TMLWriteChannel[nb];
 
         for(i=0; i<nb; i++) {
             writes[i] = new TMLWriteChannel("WriteOfFork" + SEP1 + i, null);
             writes[i].addChannel(chans[i]);
-            writes[i].setNbOfSamples("1");
+            writes[i].setNbOfSamples("" + _ch.getNumberOfSamples());
             forkActivity.addElement(writes[i]);
         }
 
