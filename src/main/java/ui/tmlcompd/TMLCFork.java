@@ -142,12 +142,12 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
             try {
                 int testI = Integer.decode(value).intValue();
+                value = s;
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame,
                         "Could not change the number of samples: invalid value",
                         "Error",
                         JOptionPane.INFORMATION_MESSAGE);
-                value = oldValue;
                 return false;
             }
 
