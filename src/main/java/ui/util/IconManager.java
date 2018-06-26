@@ -186,14 +186,9 @@ public class IconManager {
     public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic8007,	imgic8008;
 
     // ELN
-    public static ImageIcon imgic8010, imgic8011, imgic8012, imgic8013, imgic8014, imgic8015, imgic8016, imgic8017, imgic8018,
-    						imgic8019, imgic8020, imgic8021, imgic8022;
+    public static ImageIcon imgic8010, imgic8011, imgic8012, imgic8013, imgic8014, imgic8015, imgic8016, imgic8017, imgic8018;
     
     //private static String icon7 = "turtle_large.gif";
-    private static String ttoolStringIcon = "starting_logo.gif";
-    public static ImageIcon ttoolImageIcon;
-    public static Image ttoolImage;
-
     private static String icon8 = "turtle_16.gif";
     private static String icon9 = "diplodocus2_16.gif";
     //Added by Solange
@@ -680,14 +675,10 @@ public class IconManager {
     private static String icon8012 = "elninductor.gif";
     private static String icon8013 = "elnvcvs.gif";
     private static String icon8014 = "elnvccs.gif";
-    private static String icon8015 = "elnccvs.gif";
-    private static String icon8016 = "elncccs.gif";
-    private static String icon8017 = "elnnullor.gif";
-    private static String icon8018 = "elngyrator.gif";
-    private static String icon8019 = "elnidealtransformer.gif";
-    private static String icon8020 = "elntransmissionline.gif";
-    private static String icon8021 = "elnvsource.gif";
-    private static String icon8022 = "elnisource.gif";
+    private static String icon8015 = "elnidealtransformer.gif";
+    private static String icon8016 = "elntransmissionline.gif";
+    private static String icon8017 = "elnvsource.gif";
+    private static String icon8018 = "elnisource.gif";
 
     public IconManager() {
 
@@ -700,7 +691,7 @@ public class IconManager {
         if (url != null) {
             return new ImageIcon(url);
         } else {
-            
+            System.out.println("Could not load " + s);
         }
 
         return null;
@@ -710,17 +701,13 @@ public class IconManager {
         ImageIcon imc = new ImageIcon(IconManager.icon12);
         Image im = imc.getImage();
         if (im == null) {
-            
+            System.out.println("Cannot load icons");
         } else {
-            
+            System.out.println("Icons loaded");
         }
     }
 
     public static void loadImg() {
-
-        ttoolImageIcon = getIcon(ttoolStringIcon);
-        ttoolImage = ttoolImageIcon.getImage();
-
         imgic8 = getIcon(icon8);
         imgic9 = getIcon(icon9);
         if (imgic8 != null) {
@@ -1190,11 +1177,8 @@ public class IconManager {
         imgic8016 = getIcon(icon8016);
         imgic8017 = getIcon(icon8017);
         imgic8018 = getIcon(icon8018);
-        imgic8019 = getIcon(icon8019);
-        imgic8020 = getIcon(icon8020);
-        imgic8021 = getIcon(icon8021);
-        imgic8022 = getIcon(icon8022);
     }
 
 } // Class
+
 

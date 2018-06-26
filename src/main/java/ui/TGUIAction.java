@@ -293,14 +293,10 @@ public class TGUIAction extends AbstractAction {
     public static final int ELN_INDUCTOR = 486;
     public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 487;
     public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 488;
-    public static final int ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE = 489;
-    public static final int ELN_CURRENT_CONTROLLED_CURRENT_SOURCE = 490;
-    public static final int ELN_NULLOR = 491;
-    public static final int ELN_GYRATOR = 492;
-    public static final int ELN_IDEAL_TRANSFORMER = 493; 
-    public static final int ELN_TRANSMISSION_LINE = 494; 
-    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 495; 
-    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 496; 
+    public static final int ELN_IDEAL_TRANSFORMER = 489; 
+    public static final int ELN_TRANSMISSION_LINE = 490; 
+    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 491; 
+    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 492; 
     
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
@@ -655,7 +651,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 498;
+    public static final int NB_ACTION = 493;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1131,14 +1127,10 @@ public class TGUIAction extends AbstractAction {
         actions[ELN_INDUCTOR] = new TAction("eln-inductor", "Add a inductor", IconManager.imgic8012, IconManager.imgic8012, "Self", "Add a inductor to the currently opened ELN Diagram", 0);
         actions[ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE] = new TAction("eln-VCVS", "Add a voltage controlled voltage source", IconManager.imgic8013, IconManager.imgic8013, "Voltage controlled voltage source", "Add a voltage controlled voltage source to the currently opened ELN Diagram", 0);
         actions[ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE] = new TAction("eln-VCCS", "Add a voltage controlled current source", IconManager.imgic8014, IconManager.imgic8014, "Voltage controlled current source", "Add a voltage controlled current source to the currently opened ELN Diagram", 0);
-        actions[ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE] = new TAction("eln-CCVS", "Add a current controlled voltage source", IconManager.imgic8015, IconManager.imgic8015, "Current controlled voltage source", "Add a current controlled voltage source to the currently opened ELN Diagram", 0);
-        actions[ELN_CURRENT_CONTROLLED_CURRENT_SOURCE] = new TAction("eln-CCCS", "Add a current controlled current source", IconManager.imgic8016, IconManager.imgic8016, "Current controlled current source", "Add a current controlled current source to the currently opened ELN Diagram", 0);
-        actions[ELN_NULLOR] = new TAction("eln-nullor", "Add a nullor", IconManager.imgic8017, IconManager.imgic8017, "Nullor", "Add a nullor to the currently opened ELN Diagram", 0);
-        actions[ELN_GYRATOR] = new TAction("eln-gyrator", "Add a gyrator", IconManager.imgic8018, IconManager.imgic8018, "Gyrator", "Add a gyrator to the currently opened ELN Diagram", 0);
-        actions[ELN_IDEAL_TRANSFORMER] = new TAction("eln-ideal-transformer", "Add a ideal transformer", IconManager.imgic8019, IconManager.imgic8019, "Ideal transformer", "Add a ideal transformer to the currently opened ELN Diagram", 0);
-        actions[ELN_TRANSMISSION_LINE] = new TAction("eln-transmission-line", "Add a transmission line", IconManager.imgic8020, IconManager.imgic8020, "Transmission line", "Add a transmission line to the currently opened ELN Diagram", 0);
-        actions[ELN_INDEPENDENT_VOLTAGE_SOURCE] = new TAction("eln-vsource", "Add a independent voltage source", IconManager.imgic8021, IconManager.imgic8021, "Independent voltage source", "Add a independent voltage source to the currently opened ELN Diagram", 0);
-        actions[ELN_INDEPENDENT_CURRENT_SOURCE] = new TAction("eln-isource", "Add a independent current source", IconManager.imgic8022, IconManager.imgic8022, "Independent current source", "Add a independent current source to the currently opened ELN Diagram", 0);
+        actions[ELN_IDEAL_TRANSFORMER] = new TAction("eln-ideal-transformer", "Add a ideal transformer", IconManager.imgic8015, IconManager.imgic8015, "Ideal transformer", "Add a ideal transformer to the currently opened ELN Diagram", 0);
+        actions[ELN_TRANSMISSION_LINE] = new TAction("eln-transmission-line", "Add a transmission line", IconManager.imgic8016, IconManager.imgic8016, "Transmission line", "Add a transmission line to the currently opened ELN Diagram", 0);
+        actions[ELN_INDEPENDENT_VOLTAGE_SOURCE] = new TAction("eln-vsource", "Add a independent voltage source", IconManager.imgic8017, IconManager.imgic8017, "Independent voltage source", "Add a independent voltage source to the currently opened ELN Diagram", 0);
+        actions[ELN_INDEPENDENT_CURRENT_SOURCE] = new TAction("eln-isource", "Add a independent current source", IconManager.imgic8018, IconManager.imgic8018, "Independent current source", "Add a independent current source to the currently opened ELN Diagram", 0);
         
         //ProActive State Machine Diagram
         actions[PROSMD_EDIT] = new TAction("edit-prosmd-diagram", "Edit ProActive state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit ProActive state machine diagram", "Make it possible to edit the currently opened ProActive state machine diagram", 0);
@@ -1332,7 +1324,7 @@ public class TGUIAction extends AbstractAction {
     }
 
     public void actionPerformed(ActionEvent evt)  {
-        //
+        //System.out.println("Action performed");
         if (listeners != null) {
             Object[] listenerList = listeners.getListenerList();
 
@@ -1360,4 +1352,5 @@ public class TGUIAction extends AbstractAction {
         listeners.remove(ActionListener.class, l);
     }
 }
+
 

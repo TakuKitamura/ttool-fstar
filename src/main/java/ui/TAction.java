@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui;
 
 import javax.swing.*;
@@ -47,10 +45,11 @@ import javax.swing.*;
  * Class TAction
  * Definition of an action to be used in Menu, toolbar, etc.
  * Creation: 15/12/2003
- * @version 1.0 15/12/2003
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 15/12/2003
  */
-public class TAction  {
+public class TAction {
 
     // Action parameters
     public String ACTION_COMMAND_KEY;
@@ -74,7 +73,7 @@ public class TAction  {
         SHORT_DESCRIPTION = shortDescription;
         LONG_DESCRIPTION = longDescription;
         MNEMONIC_KEY = mneKey;
-        KEY = (char)mneKey;
+        KEY = (char) mneKey;
         hasControl = false;
     }
 
@@ -86,7 +85,7 @@ public class TAction  {
         SHORT_DESCRIPTION = shortDescription;
         LONG_DESCRIPTION = longDescription;
         MNEMONIC_KEY = mneKey;
-        KEY = (char)mneKey;
+        KEY = (char) mneKey;
         hasControl = _hasControl;
     }
 
