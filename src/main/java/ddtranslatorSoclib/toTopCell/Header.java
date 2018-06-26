@@ -83,9 +83,7 @@ int nb_clusters=5;
 	    + "#include \"mapping_table.h\"" + CR
 				+ "#include \"vci_fdt_rom.h\"" + CR + "#include \"vci_xcache_wrapper.h\"" + CR
 				+ "#include \"vci_ram.h\"" + CR + "#include \"vci_heterogeneous_rom.h\"" + CR
-	      + "#include \"vci_multi_tty.h\"" + CR
-	    //+ "#include \"vci_locks.h\"" + CR
-	    + "#include \"vci_xicu.h\""+ CR
+	    + "#include \"vci_multi_tty.h\"" + CR + "#include \"vci_locks.h\"" + CR + "#include \"vci_xicu.h\""+ CR
 	    + "#include \"vci_mwmr_stats.h\""+ CR;//DG 20.09.
 	    if (with_vgsb>0){
 		header +="#include \"vci_vgsb.h\""+ CR;
@@ -94,8 +92,7 @@ int nb_clusters=5;
 		header +="#include \"vci_vgmn.h\""+ CR;
 	    }
 	   int with_hw_accellerator = 1; //DG 23.08. a la main
-	   if (with_hw_accellerator>0){
-	       header +="#include \"mwmr_controller.h\""+ CR;
+	   if (with_hw_accellerator>0){  
 	       header +="#include \"vci_mwmr_controller.h\""+ CR;
 	   }
 	   //include statements for all coprocessors found
@@ -103,7 +100,7 @@ int nb_clusters=5;
 	   // if (with_hw_accellerator>0){  
 	   //DG 23.08. actuellement il ne les trouve pas!
 	   int hwas=0;
-	   header +="#include \"fifo_virtual_copro_wrapper.h\""+ CR;
+	   //header +="#include \"fifo_virtual_copro_wrapper.h\""+ CR;
 
 	   for (AvatarCoproMWMR HWAccelerator : TopCellGenerator.avatardd.getAllCoproMWMR()) {
 	       //	   String name = HWAccelerator.getCoprocName();
@@ -115,23 +112,13 @@ int nb_clusters=5;
 
 	       /* can be found in /users/outil/soc/soclib/soclib/module/internal_component/fifo* */
 	       //header +="#include \"fifo_virtual_copro_wrapper.h\""+ CR;
-	       if(HWAccelerator.getCoprocType()==0)
-		   { header +="#include \"vci_input_engine.h\""+ CR;
-		       header +="#include \"papr_slot.h\""+ CR;
-		   header +="#include \"generic_fifo.h\""+ CR;
-		   header +="#include \"network_io.h\""+ CR;}
-	       else {
-		   if(HWAccelerator.getCoprocType()==1)
-		       { header +="#include \"vci_output_engine.h\""+ CR;}
-	       
-	       
-	       else{
-	       header +="#include \"my_hwa"+hwas+".h\""+ CR;
+	       header +="#include \"my_hwa.h\""+ CR;
 	       hwas++;
-	       }
 	   }
+	   if (hwas>0)
+	   header +="#include \"fifo_virtual_copro_wrapper.h\""+ CR;
 	   //  }
-	   }
+	   
 	    header+= "#include \"vci_block_device.h\"" + CR
 		+ "#include \"vci_simhelper.h\"" + CR + "#include \"vci_fd_access.h\"" + CR
 		+ "#include \"vci_ethernet.h\"" + CR
