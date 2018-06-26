@@ -181,18 +181,15 @@ public class IconManager {
 
     // Image of the help button for the ports (Solange)
     public static ImageIcon imgic2111; //New icon created by Solange
-    
-    // SystemC-AMS
-    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic8007, imgic8008;
 
-    // ELN
-    public static ImageIcon imgic8010, imgic8011, imgic8012, imgic8013, imgic8014, imgic8015, imgic8016, imgic8017, imgic8018;
-    
+		// SystemC-AMS
+    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005;
+
     //private static String icon7 = "turtle_large.gif";
     private static String ttoolStringIcon = "starting_logo.gif";
     public static ImageIcon ttoolImageIcon;
     public static Image ttoolImage;
-    
+
     private static String icon8 = "turtle_16.gif";
     private static String icon9 = "diplodocus2_16.gif";
     //Added by Solange
@@ -670,19 +667,7 @@ public class IconManager {
     private static String icon8003 = "camsconverterportE.gif";
     private static String icon8004 = "camsconverterportN.gif";
     private static String icon8005 = "camsconverterportS.gif";
-    private static String icon8006 = "camsclusterblock.gif";
-    private static String icon8007 = "camstdfblock.gif";
-    private static String icon8008 = "camsdeblock.gif";
 
-    private static String icon8010 = "elnresistor.gif";
-    private static String icon8011 = "elncapacitor.gif";
-    private static String icon8012 = "elninductor.gif";
-    private static String icon8013 = "elnvcvs.gif";
-    private static String icon8014 = "elnvccs.gif";
-    private static String icon8015 = "elnidealtransformer.gif";
-    private static String icon8016 = "elntransmissionline.gif";
-    private static String icon8017 = "elnvsource.gif";
-    private static String icon8018 = "elnisource.gif";
 
     public IconManager() {
 
@@ -695,7 +680,7 @@ public class IconManager {
         if (url != null) {
             return new ImageIcon(url);
         } else {
-        
+            
         }
 
         return null;
@@ -705,17 +690,17 @@ public class IconManager {
         ImageIcon imc = new ImageIcon(IconManager.icon12);
         Image im = imc.getImage();
         if (im == null) {
-        
+            
         } else {
-        
+            
         }
     }
 
     public static void loadImg() {
-    
-    	ttoolImageIcon = getIcon(ttoolStringIcon);
+
+        ttoolImageIcon = getIcon(ttoolStringIcon);
         ttoolImage = ttoolImageIcon.getImage();
-    
+
         imgic8 = getIcon(icon8);
         imgic9 = getIcon(icon9);
         if (imgic8 != null) {
@@ -726,9 +711,10 @@ public class IconManager {
         }
 
         //Added by Solange
-        imgic0 = getIcon(icon0);
+       	imgic0 = getIcon(icon0);
+        
         //Added by Solange, the component icon
-        imgic1 = getIcon(icon1);
+       	imgic1 = getIcon(icon1);
 
         //Added by Solange
         if ( imgic0 != null ) {
@@ -1177,19 +1163,6 @@ public class IconManager {
         imgic8003 = getIcon(icon8003);
         imgic8004 = getIcon(icon8004);
         imgic8005 = getIcon(icon8005);
-        imgic8006 = getIcon(icon8006);
-        imgic8007 = getIcon(icon8007);
-        imgic8008 = getIcon(icon8008);
-
-        imgic8010 = getIcon(icon8010);
-        imgic8011 = getIcon(icon8011);
-        imgic8012 = getIcon(icon8012);
-        imgic8013 = getIcon(icon8013);
-        imgic8014 = getIcon(icon8014);
-        imgic8015 = getIcon(icon8015);
-        imgic8016 = getIcon(icon8016);
-        imgic8017 = getIcon(icon8017);
-        imgic8018 = getIcon(icon8018);
     }
 
 } // Class
