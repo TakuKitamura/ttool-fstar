@@ -40,7 +40,7 @@ package ui;
 
 import myutil.GenericTree;
 import myutil.GraphicLib;
-import myutil.SVGGraphics;
+import myutilsvg.SVGGraphics;
 import myutil.TraceManager;
 import ui.atd.ATDBlock;
 import ui.avatarad.AvatarADActivity;
