@@ -181,14 +181,18 @@ public class IconManager {
 
     // Image of the help button for the ports (Solange)
     public static ImageIcon imgic2111; //New icon created by Solange
-
-	// SystemC-AMS
-    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic8007,	imgic8008;
+    
+    // SystemC-AMS
+    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic8007, imgic8008;
 
     // ELN
     public static ImageIcon imgic8010, imgic8011, imgic8012, imgic8013, imgic8014, imgic8015, imgic8016, imgic8017, imgic8018;
     
     //private static String icon7 = "turtle_large.gif";
+    private static String ttoolStringIcon = "starting_logo.gif";
+    public static ImageIcon ttoolImageIcon;
+    public static Image ttoolImage;
+    
     private static String icon8 = "turtle_16.gif";
     private static String icon9 = "diplodocus2_16.gif";
     //Added by Solange
@@ -691,7 +695,7 @@ public class IconManager {
         if (url != null) {
             return new ImageIcon(url);
         } else {
-            System.out.println("Could not load " + s);
+        
         }
 
         return null;
@@ -701,13 +705,17 @@ public class IconManager {
         ImageIcon imc = new ImageIcon(IconManager.icon12);
         Image im = imc.getImage();
         if (im == null) {
-            System.out.println("Cannot load icons");
+        
         } else {
-            System.out.println("Icons loaded");
+        
         }
     }
 
     public static void loadImg() {
+    
+    	ttoolImageIcon = getIcon(ttoolStringIcon);
+        ttoolImage = ttoolImageIcon.getImage();
+    
         imgic8 = getIcon(icon8);
         imgic9 = getIcon(icon9);
         if (imgic8 != null) {
@@ -723,8 +731,13 @@ public class IconManager {
         imgic1 = getIcon(icon1);
 
         //Added by Solange
-        img0 = imgic0.getImage();
-        img1 = imgic1.getImage();
+        if ( imgic0 != null ) {
+        	img0 = imgic0.getImage();
+        }
+
+        if ( imgic1 != null ) {
+        	img1 = imgic1.getImage();
+        }
 
         imgic13 = getIcon(icon13);
         imgic14 = getIcon(icon14);
@@ -1180,5 +1193,3 @@ public class IconManager {
     }
 
 } // Class
-
-

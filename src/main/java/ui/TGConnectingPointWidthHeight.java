@@ -84,4 +84,3 @@ public class TGConnectingPointWidthHeight extends TGConnectingPoint{
     	return h;
     }
 } // Class
-
