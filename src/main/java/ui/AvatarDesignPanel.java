@@ -406,7 +406,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
 								//Check if the latency statement is true
 								int refTime = pragma.getTime();
 								float time = 0;
-								//
+								//System.out.println("time " + latency.getAverageTime() + " " + refTime);
 								try {
 									time = Float.valueOf(latency.getAverageTime());
 								} catch (Exception e){
