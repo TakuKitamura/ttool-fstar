@@ -945,14 +945,6 @@ public class ActionPerformer {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE);
         } else if (command.equals(mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE].getActionCommand())){
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_CURRENT_CONTROLLED_CURRENT_SOURCE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CURRENT_CONTROLLED_CURRENT_SOURCE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_NULLOR].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_NULLOR);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_GYRATOR].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_GYRATOR);
         } else if (command.equals(mgui.actions[TGUIAction.ELN_IDEAL_TRANSFORMER].getActionCommand())){
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_IDEAL_TRANSFORMER);
         } else if (command.equals(mgui.actions[TGUIAction.ELN_TRANSMISSION_LINE].getActionCommand())){
@@ -1102,3 +1094,4 @@ public class ActionPerformer {
         }
     }
 }
+

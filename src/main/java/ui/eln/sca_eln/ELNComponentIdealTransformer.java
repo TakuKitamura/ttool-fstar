@@ -45,276 +45,740 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.eln.ELNConnectingPoint;
-import ui.util.IconManager;
 import ui.window.JDialogELNComponentIdealTransformer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
- * Class ELNComponentIdealTransformer
- * Ideal transformer to be used in ELN diagrams
+ * Class ELNComponentIdealTransformer 
+ * Ideal transformer to be used in ELN diagrams 
  * Creation: 13/06/2018
  * @version 1.0 13/06/2018
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentIdealTransformer extends TGCScalableWithInternalComponent {
-    protected Color myColor;
-    protected int orientation;
+public class ELNComponentIdealTransformer extends TGCScalableWithInternalComponent implements ActionListener {
+	protected Color myColor;
+	protected int orientation;
 	private int maxFontSize = 14;
-    private int minFontSize = 4;
-    private int currentFontSize = -1;
-//    protected int oldx, oldy;
-//    protected int currentOrientation = GraphicLib.NORTH;
+	private int minFontSize = 4;
+	private int currentFontSize = -1;
 
-    private int textX = 15; // border for ports
-    private double dtextX = 0.0;
-    protected int decPoint = 3;
+	private int textX = 15;
+	private double dtextX = 0.0;
+	protected int decPoint = 3;
 
-    private int fact = 2;
-    
-	// Parameter
 	private double ratio;
-    
-    public ELNComponentIdealTransformer(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(50*fact, 50*fact);
+	private int position = 0;
+	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false, fh_1_3 = false;
+	private int old;
+	private boolean first;
 
-        dtextX = textX * oldScaleFactor;
-        textX = (int)dtextX;
-        dtextX = dtextX - textX;
-        
-        minWidth = 1;
-        minHeight = 1;
+	public ELNComponentIdealTransformer(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+			TGComponent _father, TDiagramPanel _tdp) {
+		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initConnectingPoint(4);
-                
-        addTGConnectingPointsComment();
+		initScaling(100, 100);
 
-        moveable = true;
-        editable = true;
-        removable = true;
-        userResizable = false;
-        value = tdp.findELNComponentName("IdealTransformer");
-        
-        myImageIcon = IconManager.imgic1206;
-        
-        // Initialization of ideal transformer attributes
-        setRatio(1.0);
-    }
+		dtextX = textX * oldScaleFactor;
+		textX = (int) dtextX;
+		dtextX = dtextX - textX;
 
-    public void initConnectingPoint(int nb) {
-        nbConnectingPoint = nb;
-        connectingPoint = new TGConnectingPoint[nb];
-        connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.0);
-        connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 1.0, 0.0);
-        connectingPoint[2] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 1.0);
-        connectingPoint[3] = new ELNConnectingPoint(this, 0, 0, true, true, 1.0, 1.0);
-    }
+		minWidth = 1;
+		minHeight = 1;
 
-    public Color getMyColor() {
-        return myColor;
-    }
+		initConnectingPoint(4);
 
-    public void internalDrawing(Graphics g) {
-        Font f = g.getFont();
-        Font fold = f;
-        
-//    	if ((x != oldx) | (oldy != y)) {
-//            // Component has moved!
-//            manageMove();
-//            oldx = x;
-//            oldy = y;
-//        }
+		addTGConnectingPointsComment();
 
-    	if (this.rescaled && !this.tdp.isScaled()) {
-            this.rescaled = false;
-            // Must set the font size...
-            // Incrementally find the biggest font not greater than max_font size
-            // If font is less than min_font, no text is displayed
+		moveable = true;
+		editable = true;
+		removable = true;
+		userResizable = false;
+		value = tdp.findELNComponentName("IdealTransformer");
 
-            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
-            f = f.deriveFont((float) maxCurrentFontSize);
+		setRatio(1.0);
 
-            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
-            	if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
-            		break;
-            	}
-                maxCurrentFontSize--;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
+		old = width;
+		width = height;
+		height = old;
+	}
 
-            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
-                maxCurrentFontSize++;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
-            g.setFont(f);
-            this.currentFontSize = maxCurrentFontSize;
-        } else {
-            f = f.deriveFont(this.currentFontSize);
-    	}
+	public void initConnectingPoint(int nb) {
+		nbConnectingPoint = nb;
+		connectingPoint = new TGConnectingPoint[nb];
+		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.0, "p1");
+		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 1.0, 0.0, "p2");
+		connectingPoint[2] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 1.0, "n1");
+		connectingPoint[3] = new ELNConnectingPoint(this, 0, 0, true, true, 1.0, 1.0, "n2");
+	}
 
-        // Zoom is assumed to be computed
-        Color c = g.getColor();
-        int [] ptx0 = {x, x+width/5, x+width/5, x+width/5};
-        int [] pty0 = {y, y, y+height/5, y};
-        g.drawPolygon(ptx0, pty0, 4);
-        int [] ptx1 = {x, x+width/5, x+width/5, x+width/5};
-        int [] pty1 = {y+height, y+height, y+4*height/5, y+height};
-        g.drawPolygon(ptx1, pty1, 4);
-        int [] ptx2 = {x+width, x+4*width/5, x+4*width/5, x+4*width/5};
-        int [] pty2 = {y, y, y+height/5, y};
-        g.drawPolygon(ptx2, pty2, 4);
-        int [] ptx3 = {x+width, x+4*width/5, x+4*width/5, x+4*width/5};
-        int [] pty3 = {y+height, y+height, y+4*height/5, y+height};
-        g.drawPolygon(ptx3, pty3, 4);
-        g.drawArc(x, y+height/5, 2*width/5, height/5, 270, 180);
-        g.drawArc(x, y+2*height/5, 2*width/5, height/5, 270, 180);
-        g.drawArc(x, y+3*height/5, 2*width/5, height/5, 270, 180);
-        g.drawArc(x+3*width/5, y+height/5, 2*width/5, height/5, 90, 180);
-        g.drawArc(x+3*width/5, y+2*height/5, 2*width/5, height/5, 90, 180);
-        g.drawArc(x+3*width/5, y+3*height/5, 2*width/5, height/5, 90, 180);
-        g.drawOval(x+2*width/5-width/(10*fact), y+width/(10*fact), width/(5*fact), width/(5*fact));
-        g.fillOval(x+2*width/5-width/(10*fact), y+width/(10*fact), width/(5*fact), width/(5*fact));
-        g.drawOval(x+3*width/5-width/(10*fact), y+width/(10*fact), width/(5*fact), width/(5*fact));
-        g.fillOval(x+3*width/5-width/(10*fact), y+width/(10*fact), width/(5*fact), width/(5*fact));
-        g.drawArc(x+width/5+width/10, y+4*height/5, 2*width/5, height/5, 180, 180);
-        int [] ptx4 = {x+width/5+width/10, x+width/5+width/10, x+width/5+width/10+width/10};
-        int [] pty4 = {y+4*height/5+height/10+height/10, y+4*height/5+height/10, y+4*height/5+height/10};
-        g.drawPolygon(ptx4, pty4, 3); 
-        g.fillPolygon(ptx4, pty4, 3); 
-        int [] ptx5 = {x+width/5+width/10+2*width/5, x+width/5+width/10+2*width/5, x+width/5+width/10+2*width/5-width/10};
-        int [] pty5 = {y+4*height/5+height/10+height/10, y+4*height/5+height/10, y+4*height/5+height/10};
-        g.drawPolygon(ptx5, pty5, 3); 
-        g.fillPolygon(ptx5, pty5, 3); 
-        g.setColor(c);
-      
-    	// Set font size
-        int attributeFontSize = this.currentFontSize * 5 / 6;
-        int w = g.getFontMetrics().stringWidth(value);
-        g.setFont(f.deriveFont((float) attributeFontSize));
-        g.setFont(f);
-    	g.setFont(f.deriveFont(Font.BOLD));
-    	g.drawString(value, x+(width-w)/2, y-height/(5*fact));
-    	w = g.getFontMetrics().stringWidth(Double.toString(ratio));
-    	g.setFont(f.deriveFont(Font.PLAIN));
-    	g.drawString(Double.toString(ratio), x+(width-w)/2, y+height+attributeFontSize+height/(5*fact));
-        g.setFont(fold);
-    }
+	public Color getMyColor() {
+		return myColor;
+	}
 
-//    public void manageMove() {
-//        if (father != null) {
-//            Point p = GraphicLib.putPointOnRectangle(x+(width/2), y+(height/2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
-//
-//            x = p.x - width/2;
-//            y = p.y - height/2;
-//
-//            setMoveCd(x, y);
-//
-//            int orientation = GraphicLib.getCloserOrientation(x+(width/2), y+(height/2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
-//            if (orientation != currentOrientation) {
-////                setOrientation(orientation);
-//            }
-//        }
-//    }
+	public void internalDrawing(Graphics g) {
+		Font f = g.getFont();
+		Font fold = f;
 
-    // TGConnecting points ..
-    // TODO : change the orientation of the component
-//    public void setOrientation(int orientation) {
-//        currentOrientation = orientation;
-//        double w0, h0, w1, h1;
-//
-////        switch(orientation) {
-//////        case GraphicLib.NORTH:
-//////            w0 = 0.5;
-//////            h0 = 0.0;
-//////            break;
-////        case GraphicLib.WEST:
-////            w0 = 0.0;
-////            h0 = 0.5;
-////            break;
-//////        case GraphicLib.SOUTH:
-//////            w0 = 0.5;
-//////            h0 = 1.0;
-//////            break;
-////        case GraphicLib.EAST:
-////        default:
-////            w0 = 1.0;
-////            h0 = 0.5;
-////        }
-//
-//        w0 = 0.0;
-//        h0 = 0.5;
-//        w1 = 1.0;
-//        h1 = 0.5;
-//        System.out.println(connectingPoint.length);
-//		((ELNConnectingPoint) connectingPoint[0]).setW(w0);
-//		((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-//		((ELNConnectingPoint) connectingPoint[1]).setW(w1);
-//		((ELNConnectingPoint) connectingPoint[1]).setH(h1);
-//    }
+		if (this.rescaled && !this.tdp.isScaled()) {
+			this.rescaled = false;
+			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+			f = f.deriveFont((float) maxCurrentFontSize);
 
-    public TGComponent isOnOnlyMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    public int getType() {
-    	return TGComponentManager.ELN_IDEAL_TRANSFORMER;
-    }
+			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+				if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
+					break;
+				}
+				maxCurrentFontSize--;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
 
-    public boolean editOndoubleClick(JFrame frame) {
-    	JDialogELNComponentIdealTransformer jde = new JDialogELNComponentIdealTransformer(this);
-    	jde.setVisible(true);
-        return true;
-    }
-    
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<attributes ratio=\"" + ratio + "\"");
-        sb.append("/>\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
+			if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+				maxCurrentFontSize++;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
+			g.setFont(f);
+			this.currentFontSize = maxCurrentFontSize;
+		} else {
+			f = f.deriveFont(this.currentFontSize);
+		}
 
-	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
-            double ratio;
+		Color c = g.getColor();
+		double w0 = ((ELNConnectingPoint) connectingPoint[0]).getW();
+		double h0 = ((ELNConnectingPoint) connectingPoint[0]).getH();
+		double w1 = ((ELNConnectingPoint) connectingPoint[1]).getW();
+		double h1 = ((ELNConnectingPoint) connectingPoint[1]).getH();
+		double w2 = ((ELNConnectingPoint) connectingPoint[2]).getW();
+		double h2 = ((ELNConnectingPoint) connectingPoint[2]).getH();
+		double w3 = ((ELNConnectingPoint) connectingPoint[3]).getW();
+		double h3 = ((ELNConnectingPoint) connectingPoint[3]).getH();
 
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("attributes")) {
-                            	ratio = Double.parseDouble(elt.getAttribute("ratio"));
+		if (position == 0) {
+			if (first == false) {
+				first = true;
+				old = width;
+				width = height;
+				height = old;
+			}
+
+			((ELNConnectingPoint) connectingPoint[0]).setW(w0);
+			((ELNConnectingPoint) connectingPoint[0]).setH(h0);
+			((ELNConnectingPoint) connectingPoint[1]).setW(w1);
+			((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+			((ELNConnectingPoint) connectingPoint[2]).setW(w2);
+			((ELNConnectingPoint) connectingPoint[2]).setH(h2);
+			((ELNConnectingPoint) connectingPoint[3]).setW(w3);
+			((ELNConnectingPoint) connectingPoint[3]).setH(h3);
+
+			int attributeFontSize = this.currentFontSize * 5 / 6;
+			int sw0 = g.getFontMetrics().stringWidth("p1");
+			int sh0 = g.getFontMetrics().getAscent();
+			int sw1 = g.getFontMetrics().stringWidth("p2");
+			int sh1 = g.getFontMetrics().getAscent();
+			int sw2 = g.getFontMetrics().stringWidth("n1");
+			int sh2 = g.getFontMetrics().getAscent();
+			int sw3 = g.getFontMetrics().stringWidth("n2");
+			int sh3 = g.getFontMetrics().getAscent();
+			int w = g.getFontMetrics().stringWidth(value);
+			g.setFont(f.deriveFont((float) attributeFontSize));
+			g.setFont(f);
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + (width - w) / 2, y - height / 5);
+			g.setFont(f.deriveFont(Font.PLAIN));
+
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
+				rotateTop(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - height / 8 - sw0, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + height / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - height / 8 - sw2,
+						y + height + sh2);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + height / 8,
+						y + height + sh3);
+			}
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
+				rotateTop(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - height / 8 - sw1, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + height / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - height / 8 - sw3,
+						y + height + sh3);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + height / 8,
+						y + height + sh2);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
+				rotateBottom(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - height / 8 - sw2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + height / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - height / 8 - sw0,
+						y + height + sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + height / 8,
+						y + height + sh1);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
+				rotateBottom(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - height / 8 - sw3, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + height / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - height / 8 - sw1,
+						y + height + sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + height / 8,
+						y + height + sh0);
+			}
+		} else if (position == 1) {
+			if (first == false) {
+				first = true;
+				old = width;
+				width = height;
+				height = old;
+			}
+
+			((ELNConnectingPoint) connectingPoint[0]).setW(h0);
+			((ELNConnectingPoint) connectingPoint[0]).setH(w0);
+			((ELNConnectingPoint) connectingPoint[1]).setW(h1);
+			((ELNConnectingPoint) connectingPoint[1]).setH(w1);
+			((ELNConnectingPoint) connectingPoint[2]).setW(h2);
+			((ELNConnectingPoint) connectingPoint[2]).setH(w2);
+			((ELNConnectingPoint) connectingPoint[3]).setW(h3);
+			((ELNConnectingPoint) connectingPoint[3]).setH(w3);
+
+			int attributeFontSize = this.currentFontSize * 5 / 6;
+			int sw0 = g.getFontMetrics().stringWidth("p1");
+			int sh0 = g.getFontMetrics().getAscent();
+			int sw1 = g.getFontMetrics().stringWidth("p2");
+			int sh1 = g.getFontMetrics().getAscent();
+			int sw2 = g.getFontMetrics().stringWidth("n1");
+			int sh2 = g.getFontMetrics().getAscent();
+			int sw3 = g.getFontMetrics().stringWidth("n2");
+			int sh3 = g.getFontMetrics().getAscent();
+			int w = g.getFontMetrics().stringWidth(value);
+			g.setFont(f.deriveFont((float) attributeFontSize));
+			g.setFont(f);
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + (width - w) / 2, y - height / 5);
+			g.setFont(f.deriveFont(Font.PLAIN));
+
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
+				rotateRight(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - width / 8 - sw2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + width / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - width / 8 - sw3,
+						y + height + sh3);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + width / 8,
+						y + height + sh1);
+			}
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
+				rotateRight(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - width / 8 - sw3, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + width / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - width / 8 - sw2,
+						y + height + sh2);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + width / 8,
+						y + height + sh0);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
+				rotateLeft(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - width / 8 - sw0, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + width / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - width / 8 - sw1,
+						y + height + sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + width / 8,
+						y + height + sh3);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
+				rotateLeft(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - width / 8 - sw1, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + width / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - width / 8 - sw0,
+						y + height + sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + width / 8,
+						y + height + sh2);
+			}
+		} else if (position == 2) {
+			if (first == false) {
+				first = true;
+				old = width;
+				width = height;
+				height = old;
+			}
+
+			((ELNConnectingPoint) connectingPoint[0]).setW(w0);
+			((ELNConnectingPoint) connectingPoint[0]).setH(h0);
+			((ELNConnectingPoint) connectingPoint[1]).setW(w1);
+			((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+			((ELNConnectingPoint) connectingPoint[2]).setW(w2);
+			((ELNConnectingPoint) connectingPoint[2]).setH(h2);
+			((ELNConnectingPoint) connectingPoint[3]).setW(w3);
+			((ELNConnectingPoint) connectingPoint[3]).setH(h3);
+
+			int attributeFontSize = this.currentFontSize * 5 / 6;
+			int sw0 = g.getFontMetrics().stringWidth("p1");
+			int sh0 = g.getFontMetrics().getAscent();
+			int sw1 = g.getFontMetrics().stringWidth("p2");
+			int sh1 = g.getFontMetrics().getAscent();
+			int sw2 = g.getFontMetrics().stringWidth("n1");
+			int sh2 = g.getFontMetrics().getAscent();
+			int sw3 = g.getFontMetrics().stringWidth("n2");
+			int sh3 = g.getFontMetrics().getAscent();
+			int w = g.getFontMetrics().stringWidth(value);
+			g.setFont(f.deriveFont((float) attributeFontSize));
+			g.setFont(f);
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + (width - w) / 2, y - height / 5);
+			g.setFont(f.deriveFont(Font.PLAIN));
+
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
+				rotateBottom(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - height / 8 - sw3, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + height / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - height / 8 - sw1,
+						y + height + sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + height / 8,
+						y + height + sh0);
+			}
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
+				rotateBottom(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - height / 8 - sw2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + height / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - height / 8 - sw0,
+						y + height + sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + height / 8,
+						y + height + sh1);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
+				rotateTop(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - height / 8 - sw1, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + height / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - height / 8 - sw3,
+						y + height + sh3);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + height / 8,
+						y + height + sh2);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
+				rotateTop(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - height / 8 - sw0, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + height / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - height / 8 - sw2,
+						y + height + sh2);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + height / 8,
+						y + height + sh3);
+			}
+		} else if (position == 3) {
+			if (first == false) {
+				first = true;
+				old = width;
+				width = height;
+				height = old;
+			}
+
+			((ELNConnectingPoint) connectingPoint[0]).setW(h0);
+			((ELNConnectingPoint) connectingPoint[0]).setH(w0);
+			((ELNConnectingPoint) connectingPoint[1]).setW(h1);
+			((ELNConnectingPoint) connectingPoint[1]).setH(w1);
+			((ELNConnectingPoint) connectingPoint[2]).setW(h2);
+			((ELNConnectingPoint) connectingPoint[2]).setH(w2);
+			((ELNConnectingPoint) connectingPoint[3]).setW(h3);
+			((ELNConnectingPoint) connectingPoint[3]).setH(w3);
+
+			int attributeFontSize = this.currentFontSize * 5 / 6;
+			int sw0 = g.getFontMetrics().stringWidth("p1");
+			int sh0 = g.getFontMetrics().getAscent();
+			int sw1 = g.getFontMetrics().stringWidth("p2");
+			int sh1 = g.getFontMetrics().getAscent();
+			int sw2 = g.getFontMetrics().stringWidth("n1");
+			int sh2 = g.getFontMetrics().getAscent();
+			int sw3 = g.getFontMetrics().stringWidth("n2");
+			int sh3 = g.getFontMetrics().getAscent();
+			int w = g.getFontMetrics().stringWidth(value);
+			g.setFont(f.deriveFont((float) attributeFontSize));
+			g.setFont(f);
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + (width - w) / 2, y - height / 5);
+			g.setFont(f.deriveFont(Font.PLAIN));
+
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
+				rotateLeft(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - width / 8 - sw1, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + width / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - width / 8 - sw0,
+						y + height + sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + width / 8,
+						y + height + sh2);
+			}
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
+				rotateLeft(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - width / 8 - sw0, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + width / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - width / 8 - sw1,
+						y + height + sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + width / 8,
+						y + height + sh3);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
+				rotateRight(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - width / 8 - sw3, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + width / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - width / 8 - sw2,
+						y + height + sh2);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + width / 8,
+						y + height + sh0);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
+				rotateRight(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - width / 8 - sw2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + width / 8, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - width / 8 - sw3,
+						y + height + sh3);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + width / 8,
+						y + height + sh1);
+			}
+		}
+		g.setColor(c);
+		g.setFont(fold);
+	}
+
+	private void rotateTop(Graphics g) {
+		int[] ptx0 = { x, x + width / 5, x + width / 5, x + width / 5 };
+		int[] pty0 = { y, y, y + height / 5, y };
+		g.drawPolygon(ptx0, pty0, 4);
+		int[] ptx1 = { x, x + width / 5, x + width / 5, x + width / 5 };
+		int[] pty1 = { y + height, y + height, y + 4 * height / 5, y + height };
+		g.drawPolygon(ptx1, pty1, 4);
+		int[] ptx2 = { x + width, x + 4 * width / 5, x + 4 * width / 5, x + 4 * width / 5 };
+		int[] pty2 = { y, y, y + height / 5, y };
+		g.drawPolygon(ptx2, pty2, 4);
+		int[] ptx3 = { x + width, x + 4 * width / 5, x + 4 * width / 5, x + 4 * width / 5 };
+		int[] pty3 = { y + height, y + height, y + 4 * height / 5, y + height };
+		g.drawPolygon(ptx3, pty3, 4);
+		g.drawArc(x, y + height / 5, 2 * width / 5, height / 5, 270, 180);
+		g.drawArc(x, y + 2 * height / 5, 2 * width / 5, height / 5, 270, 180);
+		g.drawArc(x, y + 3 * height / 5, 2 * width / 5, height / 5, 270, 180);
+		g.drawArc(x + 3 * width / 5, y + height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawArc(x + 3 * width / 5, y + 2 * height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawOval(x + 2 * width / 5 - width / 20, y + width / 20, width / 10, width / 10);
+		g.fillOval(x + 2 * width / 5 - width / 20, y + width / 20, width / 10, width / 10);
+		g.drawOval(x + 3 * width / 5 - width / 20, y + width / 20, width / 10, width / 10);
+		g.fillOval(x + 3 * width / 5 - width / 20, y + width / 20, width / 10, width / 10);
+		g.drawArc(x + width / 5 + width / 10, y + 4 * height / 5, 2 * width / 5, height / 5, 180, 180);
+		int[] ptx4 = { x + width / 5 + width / 10, x + width / 5 + width / 10,
+				x + width / 5 + width / 10 + width / 10 };
+		int[] pty4 = { y + 4 * height / 5 + height / 10 + height / 10, y + 4 * height / 5 + height / 10,
+				y + 4 * height / 5 + height / 10 };
+		g.drawPolygon(ptx4, pty4, 3);
+		g.fillPolygon(ptx4, pty4, 3);
+		int[] ptx5 = { x + width / 5 + width / 10 + 2 * width / 5, x + width / 5 + width / 10 + 2 * width / 5,
+				x + width / 5 + width / 10 + 2 * width / 5 - width / 10 };
+		int[] pty5 = { y + 4 * height / 5 + height / 10 + height / 10, y + 4 * height / 5 + height / 10,
+				y + 4 * height / 5 + height / 10 };
+		g.drawPolygon(ptx5, pty5, 3);
+		g.fillPolygon(ptx5, pty5, 3);
+
+		int w = g.getFontMetrics().stringWidth(Double.toString(ratio));
+		int h = g.getFontMetrics().getAscent();
+		g.drawString(Double.toString(ratio), x + (width - w) / 2, y + height + height / 10 + h);
+	}
+
+	private void rotateBottom(Graphics g) {
+		int[] ptx0 = { x, x + width / 5, x + width / 5, x + width / 5 };
+		int[] pty0 = { y, y, y + height / 5, y };
+		g.drawPolygon(ptx0, pty0, 4);
+		int[] ptx1 = { x, x + width / 5, x + width / 5, x + width / 5 };
+		int[] pty1 = { y + height, y + height, y + 4 * height / 5, y + height };
+		g.drawPolygon(ptx1, pty1, 4);
+		int[] ptx2 = { x + width, x + 4 * width / 5, x + 4 * width / 5, x + 4 * width / 5 };
+		int[] pty2 = { y, y, y + height / 5, y };
+		g.drawPolygon(ptx2, pty2, 4);
+		int[] ptx3 = { x + width, x + 4 * width / 5, x + 4 * width / 5, x + 4 * width / 5 };
+		int[] pty3 = { y + height, y + height, y + 4 * height / 5, y + height };
+		g.drawPolygon(ptx3, pty3, 4);
+		g.drawArc(x, y + height / 5, 2 * width / 5, height / 5, 270, 180);
+		g.drawArc(x, y + 2 * height / 5, 2 * width / 5, height / 5, 270, 180);
+		g.drawArc(x, y + 3 * height / 5, 2 * width / 5, height / 5, 270, 180);
+		g.drawArc(x + 3 * width / 5, y + height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawArc(x + 3 * width / 5, y + 2 * height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawOval(x + 2 * width / 5 - width / 20, y + width - width / 20 - width / 10, width / 10, width / 10);
+		g.fillOval(x + 2 * width / 5 - width / 20, y + width - width / 20 - width / 10, width / 10, width / 10);
+		g.drawOval(x + 3 * width / 5 - width / 20, y + width - width / 20 - width / 10, width / 10, width / 10);
+		g.fillOval(x + 3 * width / 5 - width / 20, y + width - width / 20 - width / 10, width / 10, width / 10);
+		g.drawArc(x + width / 5 + width / 10, y, 2 * width / 5, height / 5, 0, 180);
+		int[] ptx4 = { x + width / 5 + width / 10, x + width / 5 + width / 10,
+				x + width / 5 + width / 10 + width / 10 };
+		int[] pty4 = { y + height / 5 - height / 10 - height / 10, y + height / 5 - height / 10,
+				y + height / 5 - height / 10 };
+		g.drawPolygon(ptx4, pty4, 3);
+		g.fillPolygon(ptx4, pty4, 3);
+		int[] ptx5 = { x + width / 5 + width / 10 + 2 * width / 5, x + width / 5 + width / 10 + 2 * width / 5,
+				x + width / 5 + width / 10 + 2 * width / 5 - width / 10 };
+		int[] pty5 = { y + height / 5 - height / 10 - height / 10, y + height / 5 - height / 10,
+				y + height / 5 - height / 10 };
+		g.drawPolygon(ptx5, pty5, 3);
+		g.fillPolygon(ptx5, pty5, 3);
+
+		int w = g.getFontMetrics().stringWidth(Double.toString(ratio));
+		g.drawString(Double.toString(ratio), x + (width - w) / 2, y - height / 20);
+	}
+
+	private void rotateRight(Graphics g) {
+		int[] ptx0 = { x, x, x + width / 5, x };
+		int[] pty0 = { y, y + height / 5, y + height / 5, y + height / 5 };
+		g.drawPolygon(ptx0, pty0, 4);
+		int[] ptx1 = { x + width, x + width, x + 4 * width / 5, x + width };
+		int[] pty1 = { y, y + height / 5, y + height / 5, y + height / 5 };
+		g.drawPolygon(ptx1, pty1, 4);
+		int[] ptx2 = { x, x, x + width / 5, x };
+		int[] pty2 = { y + height, y + 4 * height / 5, y + 4 * height / 5, y + 4 * height / 5 };
+		g.drawPolygon(ptx2, pty2, 4);
+		int[] ptx3 = { x + width, x + width, x + 4 * width / 5, x + width };
+		int[] pty3 = { y + height, y + 4 * height / 5, y + 4 * height / 5, y + 4 * height / 5 };
+		g.drawPolygon(ptx3, pty3, 4);
+		g.drawArc(x + width / 5, y, width / 5, 2 * height / 5, 180, 180);
+		g.drawArc(x + 2 * width / 5, y, width / 5, 2 * height / 5, 180, 180);
+		g.drawArc(x + 3 * width / 5, y, width / 5, 2 * height / 5, 180, 180);
+		g.drawArc(x + width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawArc(x + 2 * width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawOval(x + width - width / 10 - width / 20, y + 2 * height / 5 - height / 20, width / 10, height / 10);
+		g.fillOval(x + width - width / 10 - width / 20, y + 2 * height / 5 - height / 20, width / 10, height / 10);
+		g.drawOval(x + width - width / 10 - width / 20, y + 3 * height / 5 - height / 20, width / 10, height / 10);
+		g.fillOval(x + width - width / 10 - width / 20, y + 3 * height / 5 - height / 20, width / 10, height / 10);
+		g.drawArc(x, y + height / 5 + height / 10, width / 5, 2 * height / 5, 90, 180);
+		int[] ptx4 = { x + width / 5 - width / 10 - width / 10, x + width / 5 - width / 10,
+				x + width / 5 - width / 10 };
+		int[] pty4 = { y + height / 5 + height / 10, y + height / 5 + height / 10,
+				y + height / 5 + height / 10 + height / 10 };
+		g.drawPolygon(ptx4, pty4, 3);
+		g.fillPolygon(ptx4, pty4, 3);
+		int[] ptx5 = { x + width / 5 - width / 10 - width / 10, x + width / 5 - width / 10,
+				x + width / 5 - width / 10 };
+		int[] pty5 = { y + height / 5 + height / 10 + 2 * height / 5, y + height / 5 + height / 10 + 2 * height / 5,
+				y + height / 5 + height / 10 + 2 * height / 5 - height / 10 };
+		g.drawPolygon(ptx5, pty5, 3);
+		g.fillPolygon(ptx5, pty5, 3);
+
+		int w = g.getFontMetrics().stringWidth(Double.toString(ratio));
+		int h = g.getFontMetrics().getAscent();
+		g.drawString(Double.toString(ratio), x - width / 10 - w, y + height / 2 + h / 2);
+	}
+
+	private void rotateLeft(Graphics g) {
+		int[] ptx0 = { x, x, x + width / 5, x };
+		int[] pty0 = { y, y + height / 5, y + height / 5, y + height / 5 };
+		g.drawPolygon(ptx0, pty0, 4);
+		int[] ptx1 = { x + width, x + width, x + 4 * width / 5, x + width };
+		int[] pty1 = { y, y + height / 5, y + height / 5, y + height / 5 };
+		g.drawPolygon(ptx1, pty1, 4);
+		int[] ptx2 = { x, x, x + width / 5, x };
+		int[] pty2 = { y + height, y + 4 * height / 5, y + 4 * height / 5, y + 4 * height / 5 };
+		g.drawPolygon(ptx2, pty2, 4);
+		int[] ptx3 = { x + width, x + width, x + 4 * width / 5, x + width };
+		int[] pty3 = { y + height, y + 4 * height / 5, y + 4 * height / 5, y + 4 * height / 5 };
+		g.drawPolygon(ptx3, pty3, 4);
+		g.drawArc(x + width / 5, y, width / 5, 2 * height / 5, 180, 180);
+		g.drawArc(x + 2 * width / 5, y, width / 5, 2 * height / 5, 180, 180);
+		g.drawArc(x + 3 * width / 5, y, width / 5, 2 * height / 5, 180, 180);
+		g.drawArc(x + width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawArc(x + 2 * width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawOval(x + width / 20, y + 2 * height / 5 - height / 20, width / 10, height / 10);
+		g.fillOval(x + width / 20, y + 2 * height / 5 - height / 20, width / 10, height / 10);
+		g.drawOval(x + width / 20, y + 3 * height / 5 - height / 20, width / 10, height / 10);
+		g.fillOval(x + width / 20, y + 3 * height / 5 - height / 20, width / 10, height / 10);
+		g.drawArc(x + 4 * width / 5, y + height / 5 + height / 10, width / 5, 2 * height / 5, 270, 180);
+		int[] ptx4 = { x + 4 * width / 5 + width / 10 + width / 10, x + 4 * width / 5 + width / 10,
+				x + 4 * width / 5 + width / 10 };
+		int[] pty4 = { y + height / 5 + height / 10, y + height / 5 + height / 10,
+				y + height / 5 + height / 10 + height / 10 };
+		g.drawPolygon(ptx4, pty4, 3);
+		g.fillPolygon(ptx4, pty4, 3);
+		int[] ptx5 = { x + 4 * width / 5 + width / 10 + width / 10, x + 4 * width / 5 + width / 10,
+				x + 4 * width / 5 + width / 10 };
+		int[] pty5 = { y + height / 5 + height / 10 + 2 * height / 5, y + height / 5 + height / 10 + 2 * height / 5,
+				y + height / 5 + height / 10 + 2 * height / 5 - height / 10 };
+		g.drawPolygon(ptx5, pty5, 3);
+		g.fillPolygon(ptx5, pty5, 3);
+
+		int h = g.getFontMetrics().getAscent();
+		g.drawString(Double.toString(ratio), x + width + width / 10, y + height / 2 + h / 2);
+	}
+
+	public TGComponent isOnOnlyMe(int _x, int _y) {
+		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+			return this;
+		}
+		return null;
+	}
+
+	public int getType() {
+		return TGComponentManager.ELN_IDEAL_TRANSFORMER;
+	}
+
+	public boolean editOndoubleClick(JFrame frame) {
+		JDialogELNComponentIdealTransformer jde = new JDialogELNComponentIdealTransformer(this);
+		jde.setVisible(true);
+		return true;
+	}
+
+	protected String translateExtraParam() {
+		StringBuffer sb = new StringBuffer("<extraparam>\n");
+		sb.append("<attributes ratio=\"" + ratio + "\"");
+		sb.append("/>\n");
+		sb.append("</extraparam>\n");
+		return new String(sb);
+	}
+
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+		try {
+			NodeList nli;
+			Node n1, n2;
+			Element elt;
+
+			double ratio;
+
+			for (int i = 0; i < nl.getLength(); i++) {
+				n1 = nl.item(i);
+				if (n1.getNodeType() == Node.ELEMENT_NODE) {
+					nli = n1.getChildNodes();
+					for (int j = 0; j < nli.getLength(); j++) {
+						n2 = nli.item(j);
+						if (n2.getNodeType() == Node.ELEMENT_NODE) {
+							elt = (Element) n2;
+							if (elt.getTagName().equals("attributes")) {
+								ratio = Double.parseDouble(elt.getAttribute("ratio"));
 								setRatio(ratio);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-    }
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new MalformedModelingException();
+		}
+	}
 
-    public int getDefaultConnector() {
-        return TGComponentManager.ELN_CONNECTOR;
-    }
-    
-    public double getRatio() {
+	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+		componentMenu.addSeparator();
+
+		JMenuItem rotateright = new JMenuItem("Rotate right 90°");
+		rotateright.addActionListener(this);
+		componentMenu.add(rotateright);
+
+		JMenuItem rotateleft = new JMenuItem("Rotate left 90°");
+		rotateleft.addActionListener(this);
+		componentMenu.add(rotateleft);
+
+		componentMenu.addSeparator();
+
+		JMenuItem rotatevertically = new JMenuItem("Flip vertically");
+		rotatevertically.addActionListener(this);
+		componentMenu.add(rotatevertically);
+
+		JMenuItem rotatehorizontally = new JMenuItem("Flip horizontally");
+		rotatehorizontally.addActionListener(this);
+		componentMenu.add(rotatehorizontally);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("Rotate right 90°")) {
+			position++;
+			position %= 4;
+			first = false;
+		}
+		if (e.getActionCommand().equals("Rotate left 90°")) {
+			position = position + 3;
+			position %= 4;
+			first = false;
+		}
+		if (e.getActionCommand().equals("Flip vertically")) {
+			if (position == 0 || position == 2) {
+				if (fv_0_2 == false) {
+					fv_0_2 = true;
+				} else {
+					fv_0_2 = false;
+				}
+			}
+			if (position == 1 || position == 3) {
+				if (fv_1_3 == false) {
+					fv_1_3 = true;
+				} else {
+					fv_1_3 = false;
+				}
+			}
+		}
+		if (e.getActionCommand().equals("Flip horizontally")) {
+			if (position == 0 || position == 2) {
+				if (fh_0_2 == false) {
+					fh_0_2 = true;
+				} else {
+					fh_0_2 = false;
+				}
+			}
+			if (position == 1 || position == 3) {
+				if (fh_1_3 == false) {
+					fh_1_3 = true;
+				} else {
+					fh_1_3 = false;
+				}
+			}
+		}
+	}
+
+	public int getDefaultConnector() {
+		return TGComponentManager.ELN_CONNECTOR;
+	}
+
+	public double getRatio() {
 		return ratio;
 	}
 

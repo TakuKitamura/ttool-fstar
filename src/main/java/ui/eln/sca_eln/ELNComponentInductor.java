@@ -45,291 +45,569 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.eln.ELNConnectingPoint;
-import ui.util.IconManager;
 import ui.window.JDialogELNComponentInductor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
- * Class ELNComponentSelf
- * Self to be used in ELN diagrams
+ * Class ELNComponentInductor 
+ * Inductor to be used in ELN diagrams 
  * Creation: 12/06/2018
  * @version 1.0 12/06/2018
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentInductor extends TGCScalableWithInternalComponent {
-    protected Color myColor;
-    protected int orientation;
+public class ELNComponentInductor extends TGCScalableWithInternalComponent implements ActionListener {
+	protected Color myColor;
+	protected int orientation;
 	private int maxFontSize = 14;
-    private int minFontSize = 4;
-    private int currentFontSize = -1;
-//    protected int oldx, oldy;
-//    protected int currentOrientation = GraphicLib.NORTH;
+	private int minFontSize = 4;
+	private int currentFontSize = -1;
 
-    private int textX = 15; // border for ports
-    private double dtextX = 0.0;
-    protected int decPoint = 3;
+	private int textX = 15;
+	private double dtextX = 0.0;
+	protected int decPoint = 3;
 
-    private int fact = 2;
-    
-	// Parameters
 	private double val, phi0;
 	private String unit0, unit1;
-    
-    public ELNComponentInductor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(50*fact, 20*fact);
+	private int position = 0;
+	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false, fh_1_3 = false;
+	private int old;
+	private boolean first;
 
-        dtextX = textX * oldScaleFactor;
-        textX = (int)dtextX;
-        dtextX = dtextX - textX;
-        
-        minWidth = 1;
-        minHeight = 1;
+	public ELNComponentInductor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+			TGComponent _father, TDiagramPanel _tdp) {
+		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initConnectingPoint(2);
-                
-        addTGConnectingPointsComment();
+		initScaling(100, 20);
 
-        moveable = true;
-        editable = true;
-        removable = true;
-        userResizable = false;
-        value = tdp.findELNComponentName("L");
-        
-        myImageIcon = IconManager.imgic1206;
-        
-        // Initialization of inductor attributes
-        setVal(1.0);
-        setPhi0(0.0);
-        setUnit0("H");
-        setUnit1("Wb");
-    }
+		dtextX = textX * oldScaleFactor;
+		textX = (int) dtextX;
+		dtextX = dtextX - textX;
 
-    public void initConnectingPoint(int nb) {
-        nbConnectingPoint = nb;
-        connectingPoint = new TGConnectingPoint[nb];
-        connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-    }
+		minWidth = 1;
+		minHeight = 1;
 
-    public Color getMyColor() {
-        return myColor;
-    }
+		initConnectingPoint(2);
 
-    public void internalDrawing(Graphics g) {
-        Font f = g.getFont();
-        Font fold = f;
-        
-//    	if ((x != oldx) | (oldy != y)) {
-//            // Component has moved!
-//            manageMove();
-//            oldx = x;
-//            oldy = y;
-//        }
+		addTGConnectingPointsComment();
 
-    	if (this.rescaled && !this.tdp.isScaled()) {
-            this.rescaled = false;
-            // Must set the font size...
-            // Incrementally find the biggest font not greater than max_font size
-            // If font is less than min_font, no text is displayed
+		moveable = true;
+		editable = true;
+		removable = true;
+		userResizable = false;
+		value = tdp.findELNComponentName("L");
 
-            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
-            f = f.deriveFont((float) maxCurrentFontSize);
+		setVal(1.0);
+		setPhi0(0.0);
+		setUnit0("H");
+		setUnit1("Wb");
 
-            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
-            	if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
-            		break;
-            	}
-                maxCurrentFontSize--;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
+		old = width;
+		width = height;
+		height = old;
+	}
 
-            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
-                maxCurrentFontSize++;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
-            g.setFont(f);
-            this.currentFontSize = maxCurrentFontSize;
-        } else {
-            f = f.deriveFont(this.currentFontSize);
-    	}
+	public void initConnectingPoint(int nb) {
+		nbConnectingPoint = nb;
+		connectingPoint = new TGConnectingPoint[nb];
+		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.5, "p");
+		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 1.0, 0.5, "n");
+	}
 
-        // Zoom is assumed to be computed
-    	Color c = g.getColor();
-    	g.drawLine(x, y+height/2, x+width/5, y+height/2);
-    	g.drawLine(x+4*width/5, y+height/2, x+width, y+height/2);
-    	g.drawArc(x+width/5, y, width/5, height, 0, 180);
-    	g.drawArc(x+2*width/5, y, width/5, height, 0, 180);
-    	g.drawArc(x+3*width/5, y, width/5, height, 0, 180);
-    	g.setColor(c);
-      
-    	// Set font size
-        int attributeFontSize = this.currentFontSize * 5 / 6;
-        int w = g.getFontMetrics().stringWidth(value);
-        g.setFont(f.deriveFont((float) attributeFontSize));
-        g.setFont(f);
-    	g.setFont(f.deriveFont(Font.BOLD));
-    	g.drawString(value, x + (width - w)/2, y-height/(2*fact));
+	public Color getMyColor() {
+		return myColor;
+	}
 
-        g.setFont(fold);
-    }
+	public void internalDrawing(Graphics g) {
+		Font f = g.getFont();
+		Font fold = f;
 
-//    public void manageMove() {
-//        if (father != null) {
-//            Point p = GraphicLib.putPointOnRectangle(x+(width/2), y+(height/2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
-//
-//            x = p.x - width/2;
-//            y = p.y - height/2;
-//
-//            setMoveCd(x, y);
-//
-//            int orientation = GraphicLib.getCloserOrientation(x+(width/2), y+(height/2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
-//            if (orientation != currentOrientation) {
-////                setOrientation(orientation);
-//            }
-//        }
-//    }
+		if (this.rescaled && !this.tdp.isScaled()) {
+			this.rescaled = false;
+			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+			f = f.deriveFont((float) maxCurrentFontSize);
 
-    // TGConnecting points ..
-    // TODO : change the orientation of the component
-//    public void setOrientation(int orientation) {
-//        currentOrientation = orientation;
-//        double w0, h0, w1, h1;
-//
-////        switch(orientation) {
-//////        case GraphicLib.NORTH:
-//////            w0 = 0.5;
-//////            h0 = 0.0;
-//////            break;
-////        case GraphicLib.WEST:
-////            w0 = 0.0;
-////            h0 = 0.5;
-////            break;
-//////        case GraphicLib.SOUTH:
-//////            w0 = 0.5;
-//////            h0 = 1.0;
-//////            break;
-////        case GraphicLib.EAST:
-////        default:
-////            w0 = 1.0;
-////            h0 = 0.5;
-////        }
-//
-//        w0 = 0.0;
-//        h0 = 0.5;
-//        w1 = 1.0;
-//        h1 = 0.5;
-//        System.out.println(connectingPoint.length);
-//		((ELNConnectingPoint) connectingPoint[0]).setW(w0);
-//		((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-//		((ELNConnectingPoint) connectingPoint[1]).setW(w1);
-//		((ELNConnectingPoint) connectingPoint[1]).setH(h1);
-//    }
+			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+				if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
+					break;
+				}
+				maxCurrentFontSize--;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
 
-    public TGComponent isOnOnlyMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    public int getType() {
-    	return TGComponentManager.ELN_INDUCTOR;
-    }
+			if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+				maxCurrentFontSize++;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
+			g.setFont(f);
+			this.currentFontSize = maxCurrentFontSize;
+		} else {
+			f = f.deriveFont(this.currentFontSize);
+		}
 
-    public boolean editOndoubleClick(JFrame frame) {
-    	JDialogELNComponentInductor jde = new JDialogELNComponentInductor(this);
-    	jde.setVisible(true);
-        return true;
-    }
-    
-    public StringBuffer encode(String data) {
-    	StringBuffer databuf = new StringBuffer(data);
-    	StringBuffer buffer = new StringBuffer("");
-        for(int pos = 0; pos != data.length(); pos++) {
-        	char c = databuf.charAt(pos);
-            switch(c) {
-                case '\u03BC' : 
-                	buffer.append("&#x3BC;");      
-                	break;
-                default :   
-                	buffer.append(databuf.charAt(pos)); 
-                	break;
-            }
-        }
-        return buffer;
-    }
+		Color c = g.getColor();
+		double w0 = ((ELNConnectingPoint) connectingPoint[0]).getW();
+		double h0 = ((ELNConnectingPoint) connectingPoint[0]).getH();
+		double w1 = ((ELNConnectingPoint) connectingPoint[1]).getW();
+		double h1 = ((ELNConnectingPoint) connectingPoint[1]).getH();
 
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<attributes value=\"" + val); 
-        sb.append("\" unit0=\"");
-        sb.append(encode(unit0));
-        sb.append("\" phi0=\"" + phi0);
-        sb.append("\" unit1=\"");
-        sb.append(encode(unit1));
-        sb.append("\"");
-        sb.append("/>\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
+		if (position == 0) {
+			if (first == false) {
+				first = true;
+				old = width;
+				width = height;
+				height = old;
+			}
 
-	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
-            double value, phi0;
-            String unit0, unit1;
+			((ELNConnectingPoint) connectingPoint[0]).setW(w0);
+			((ELNConnectingPoint) connectingPoint[0]).setH(h0);
+			((ELNConnectingPoint) connectingPoint[1]).setW(w1);
+			((ELNConnectingPoint) connectingPoint[1]).setH(h1);
 
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("attributes")) {
-                            	value = Double.parseDouble(elt.getAttribute("value"));
-                            	phi0 = Double.parseDouble(elt.getAttribute("phi0"));
+			int attributeFontSize = this.currentFontSize * 5 / 6;
+			int sw0 = g.getFontMetrics().stringWidth("p");
+			int sh0 = g.getFontMetrics().getAscent();
+			int sw1 = g.getFontMetrics().stringWidth("n");
+			int sh1 = g.getFontMetrics().getAscent();
+			int w = g.getFontMetrics().stringWidth(value);
+			g.setFont(f.deriveFont((float) attributeFontSize));
+			g.setFont(f);
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + (width - w) / 2, y - height);
+			g.setFont(f.deriveFont(Font.PLAIN));
+
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
+				rotateTop(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
+						y + height / 2 + height / 4 + sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
+						y + height / 2 + height / 4 + sh1);
+			}
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
+				rotateTop(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
+						y + height / 2 + height / 4 + sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
+						y + height / 2 + height / 4 + sh0);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
+				rotateBottom(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
+						y + height / 2 + height / 4 + sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
+						y + height / 2 + height / 4 + sh1);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
+				rotateBottom(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
+						y + height / 2 + height / 4 + sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
+						y + height / 2 + height / 4 + sh0);
+			}
+		} else if (position == 1) {
+			if (first == false) {
+				first = true;
+				old = width;
+				width = height;
+				height = old;
+			}
+
+			((ELNConnectingPoint) connectingPoint[0]).setW(h0);
+			((ELNConnectingPoint) connectingPoint[0]).setH(w0);
+			((ELNConnectingPoint) connectingPoint[1]).setW(h1);
+			((ELNConnectingPoint) connectingPoint[1]).setH(w1);
+
+			int attributeFontSize = this.currentFontSize * 5 / 6;
+			int sh0 = g.getFontMetrics().getAscent();
+			int sh1 = g.getFontMetrics().getAscent();
+			int w = g.getFontMetrics().stringWidth(value);
+			g.setFont(f.deriveFont((float) attributeFontSize));
+			g.setFont(f);
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + (width - w) / 2, y - height / 5);
+			g.setFont(f.deriveFont(Font.PLAIN));
+
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
+				rotateRight(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+						y + height + sh1);
+			}
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
+				rotateRight(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+						y + height + sh0);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
+				rotateLeft(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+						y + height + sh1);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
+				rotateLeft(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+						y + height + sh0);
+			}
+		} else if (position == 2) {
+			if (first == false) {
+				first = true;
+				old = width;
+				width = height;
+				height = old;
+			}
+
+			((ELNConnectingPoint) connectingPoint[0]).setW(w0);
+			((ELNConnectingPoint) connectingPoint[0]).setH(h0);
+			((ELNConnectingPoint) connectingPoint[1]).setW(w1);
+			((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+
+			int attributeFontSize = this.currentFontSize * 5 / 6;
+			int sw0 = g.getFontMetrics().stringWidth("p");
+			int sh0 = g.getFontMetrics().getAscent();
+			int sw1 = g.getFontMetrics().stringWidth("n");
+			int sh1 = g.getFontMetrics().getAscent();
+			int w = g.getFontMetrics().stringWidth(value);
+			g.setFont(f.deriveFont((float) attributeFontSize));
+			g.setFont(f);
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + (width - w) / 2, y - height);
+			g.setFont(f.deriveFont(Font.PLAIN));
+
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
+				rotateBottom(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
+						y + height / 2 + height / 2 + sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
+						y + height / 2 + height / 2 + sh0);
+			}
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
+				rotateBottom(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
+						y + height / 2 + height / 2 + sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
+						y + height / 2 + height / 2 + sh1);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
+				rotateTop(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
+						y + height / 2 + height / 2 + sh1);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
+						y + height / 2 + height / 2 + sh0);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
+				rotateTop(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
+						y + height / 2 + height / 2 + sh0);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
+						y + height / 2 + height / 2 + sh1);
+			}
+		} else if (position == 3) {
+			if (first == false) {
+				first = true;
+				old = width;
+				width = height;
+				height = old;
+			}
+
+			((ELNConnectingPoint) connectingPoint[0]).setW(h0);
+			((ELNConnectingPoint) connectingPoint[0]).setH(w0);
+			((ELNConnectingPoint) connectingPoint[1]).setW(h1);
+			((ELNConnectingPoint) connectingPoint[1]).setH(w1);
+
+			int attributeFontSize = this.currentFontSize * 5 / 6;
+			int sh0 = g.getFontMetrics().getAscent();
+			int sh1 = g.getFontMetrics().getAscent();
+			int w = g.getFontMetrics().stringWidth(value);
+			g.setFont(f.deriveFont((float) attributeFontSize));
+			g.setFont(f);
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + (width - w) / 2, y - height / 5);
+			g.setFont(f.deriveFont(Font.PLAIN));
+
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
+				rotateLeft(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+						y + height + sh0);
+			}
+			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
+				rotateLeft(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+						y + height + sh1);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
+				rotateRight(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+						y + height + sh0);
+			}
+			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
+					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
+					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
+				rotateRight(g);
+				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
+				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+						y + height + sh1);
+			}
+		}
+		g.setColor(c);
+		g.setFont(fold);
+	}
+
+	private void rotateTop(Graphics g) {
+		g.drawLine(x, y + height / 2, x + width / 5, y + height / 2);
+		g.drawLine(x + 4 * width / 5, y + height / 2, x + width, y + height / 2);
+		g.drawArc(x + width / 5, y, width / 5, height, 0, 180);
+		g.drawArc(x + 2 * width / 5, y, width / 5, height, 0, 180);
+		g.drawArc(x + 3 * width / 5, y, width / 5, height, 0, 180);
+	}
+
+	private void rotateBottom(Graphics g) {
+		g.drawLine(x, y + height / 2, x + width / 5, y + height / 2);
+		g.drawLine(x + 4 * width / 5, y + height / 2, x + width, y + height / 2);
+		g.drawArc(x + width / 5, y, width / 5, height, 180, 180);
+		g.drawArc(x + 2 * width / 5, y, width / 5, height, 180, 180);
+		g.drawArc(x + 3 * width / 5, y, width / 5, height, 180, 180);
+	}
+
+	private void rotateRight(Graphics g) {
+		g.drawLine(x + width / 2, y, x + width / 2, y + height / 5);
+		g.drawLine(x + width / 2, y + 4 * height / 5, x + width / 2, y + height);
+		g.drawArc(x, y + height / 5, width, height / 5, 270, 180);
+		g.drawArc(x, y + 2 * height / 5, width, height / 5, 270, 180);
+		g.drawArc(x, y + 3 * height / 5, width, height / 5, 270, 180);
+	}
+
+	private void rotateLeft(Graphics g) {
+		g.drawLine(x + width / 2, y, x + width / 2, y + height / 5);
+		g.drawLine(x + width / 2, y + 4 * height / 5, x + width / 2, y + height);
+		g.drawArc(x, y + height / 5, width, height / 5, 90, 180);
+		g.drawArc(x, y + 2 * height / 5, width, height / 5, 90, 180);
+		g.drawArc(x, y + 3 * height / 5, width, height / 5, 90, 180);
+	}
+
+	public TGComponent isOnOnlyMe(int _x, int _y) {
+		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+			return this;
+		}
+		return null;
+	}
+
+	public int getType() {
+		return TGComponentManager.ELN_INDUCTOR;
+	}
+
+	public boolean editOndoubleClick(JFrame frame) {
+		JDialogELNComponentInductor jde = new JDialogELNComponentInductor(this);
+		jde.setVisible(true);
+		return true;
+	}
+
+	public StringBuffer encode(String data) {
+		StringBuffer databuf = new StringBuffer(data);
+		StringBuffer buffer = new StringBuffer("");
+		for (int pos = 0; pos != data.length(); pos++) {
+			char c = databuf.charAt(pos);
+			switch (c) {
+			case '\u03BC':
+				buffer.append("&#x3BC;");
+				break;
+			default:
+				buffer.append(databuf.charAt(pos));
+				break;
+			}
+		}
+		return buffer;
+	}
+
+	protected String translateExtraParam() {
+		StringBuffer sb = new StringBuffer("<extraparam>\n");
+		sb.append("<attributes value=\"" + val);
+		sb.append("\" unit0=\"");
+		sb.append(encode(unit0));
+		sb.append("\" phi0=\"" + phi0);
+		sb.append("\" unit1=\"");
+		sb.append(encode(unit1));
+		sb.append("\"");
+		sb.append("/>\n");
+		sb.append("</extraparam>\n");
+		return new String(sb);
+	}
+
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+		try {
+			NodeList nli;
+			Node n1, n2;
+			Element elt;
+
+			double value, phi0;
+			String unit0, unit1;
+
+			for (int i = 0; i < nl.getLength(); i++) {
+				n1 = nl.item(i);
+				if (n1.getNodeType() == Node.ELEMENT_NODE) {
+					nli = n1.getChildNodes();
+					for (int j = 0; j < nli.getLength(); j++) {
+						n2 = nli.item(j);
+						if (n2.getNodeType() == Node.ELEMENT_NODE) {
+							elt = (Element) n2;
+							if (elt.getTagName().equals("attributes")) {
+								value = Double.parseDouble(elt.getAttribute("value"));
+								phi0 = Double.parseDouble(elt.getAttribute("phi0"));
 								unit0 = elt.getAttribute("unit0");
 								unit1 = elt.getAttribute("unit1");
 								setVal(value);
 								setPhi0(phi0);
 								setUnit0(unit0);
 								setUnit1(unit1);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-    }
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new MalformedModelingException();
+		}
+	}
 
-    public int getDefaultConnector() {
-        return TGComponentManager.ELN_CONNECTOR;
-    }
-    
-    public double getVal() {
+	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+		componentMenu.addSeparator();
+
+		JMenuItem rotateright = new JMenuItem("Rotate right 90°");
+		rotateright.addActionListener(this);
+		componentMenu.add(rotateright);
+
+		JMenuItem rotateleft = new JMenuItem("Rotate left 90°");
+		rotateleft.addActionListener(this);
+		componentMenu.add(rotateleft);
+
+		componentMenu.addSeparator();
+
+		JMenuItem rotatevertically = new JMenuItem("Flip vertically");
+		rotatevertically.addActionListener(this);
+		componentMenu.add(rotatevertically);
+
+		JMenuItem rotatehorizontally = new JMenuItem("Flip horizontally");
+		rotatehorizontally.addActionListener(this);
+		componentMenu.add(rotatehorizontally);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("Rotate right 90°")) {
+			position++;
+			position %= 4;
+			first = false;
+		}
+		if (e.getActionCommand().equals("Rotate left 90°")) {
+			position = position + 3;
+			position %= 4;
+			first = false;
+		}
+		if (e.getActionCommand().equals("Flip vertically")) {
+			if (position == 0 || position == 2) {
+				if (fv_0_2 == false) {
+					fv_0_2 = true;
+				} else {
+					fv_0_2 = false;
+				}
+			}
+			if (position == 1 || position == 3) {
+				if (fv_1_3 == false) {
+					fv_1_3 = true;
+				} else {
+					fv_1_3 = false;
+				}
+			}
+		}
+		if (e.getActionCommand().equals("Flip horizontally")) {
+			if (position == 0 || position == 2) {
+				if (fh_0_2 == false) {
+					fh_0_2 = true;
+				} else {
+					fh_0_2 = false;
+				}
+			}
+			if (position == 1 || position == 3) {
+				if (fh_1_3 == false) {
+					fh_1_3 = true;
+				} else {
+					fh_1_3 = false;
+				}
+			}
+		}
+	}
+
+	public int getDefaultConnector() {
+		return TGComponentManager.ELN_CONNECTOR;
+	}
+
+	public double getVal() {
 		return val;
 	}
 
 	public void setVal(double _val) {
 		val = _val;
 	}
-	
+
 	public double getPhi0() {
 		return phi0;
 	}
-	
+
 	public void setPhi0(double _phi0) {
 		phi0 = _phi0;
 	}
@@ -341,11 +619,11 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent {
 	public void setUnit0(String _unit0) {
 		unit0 = _unit0;
 	}
-	
+
 	public String getUnit1() {
 		return unit1;
 	}
-	
+
 	public void setUnit1(String _unit1) {
 		unit1 = _unit1;
 	}

@@ -72,10 +72,6 @@ public class ELNDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ELN_INDUCTOR].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_CURRENT_CONTROLLED_CURRENT_SOURCE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_NULLOR].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_GYRATOR].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_IDEAL_TRANSFORMER].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_TRANSMISSION_LINE].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_INDEPENDENT_VOLTAGE_SOURCE].setEnabled(b);
@@ -113,18 +109,6 @@ public class ELNDiagramToolBar extends TToolBar {
 		button.addMouseListener(mgui.mouseHandler);
 		
 		button = this.add(mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_CURRENT_CONTROLLED_CURRENT_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_NULLOR]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_GYRATOR]);
 		button.addMouseListener(mgui.mouseHandler);
 		
 		button = this.add(mgui.actions[TGUIAction.ELN_IDEAL_TRANSFORMER]);

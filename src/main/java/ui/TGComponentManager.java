@@ -351,14 +351,10 @@ public class TGComponentManager {
     public static final int ELN_INDUCTOR = 1613;
     public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 1614;
     public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 1615;
-    public static final int ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE = 1616;
-    public static final int ELN_CURRENT_CONTROLLED_CURRENT_SOURCE = 1617;
-    public static final int ELN_NULLOR = 1618;
-    public static final int ELN_GYRATOR = 1619;
-    public static final int ELN_IDEAL_TRANSFORMER = 1620;
-    public static final int ELN_TRANSMISSION_LINE = 1621;
-    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 1622;
-    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 1623;
+    public static final int ELN_IDEAL_TRANSFORMER = 1616;
+    public static final int ELN_TRANSMISSION_LINE = 1617;
+    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 1618;
+    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 1619;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -1289,18 +1285,6 @@ public class TGComponentManager {
             case ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE:
             	tgc = new ELNComponentVoltageControlledCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;	
-            case ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE:
-            	tgc = new ELNComponentCurrentControlledVoltageSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
-            case ELN_CURRENT_CONTROLLED_CURRENT_SOURCE:
-            	tgc = new ELNComponentCurrentControlledCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
-            case ELN_NULLOR:
-            	tgc = new ELNComponentNullor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
-            case ELN_GYRATOR:
-            	tgc = new ELNComponentGyrator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
             case ELN_IDEAL_TRANSFORMER: 
             	tgc = new ELNComponentIdealTransformer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;	
@@ -1721,14 +1705,6 @@ public class TGComponentManager {
         	return ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE;
         } else if (tgc instanceof ELNComponentInductor) {
         	return ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE;
-        } else if (tgc instanceof ELNComponentInductor) {
-        	return ELN_CURRENT_CONTROLLED_VOLTAGE_SOURCE;
-        } else if (tgc instanceof ELNComponentInductor) {
-        	return ELN_CURRENT_CONTROLLED_CURRENT_SOURCE;
-        } else if (tgc instanceof ELNComponentNullor) {
-        	return ELN_NULLOR;
-        } else if (tgc instanceof ELNComponentGyrator) {
-        	return ELN_GYRATOR;
         } else if (tgc instanceof ELNComponentIdealTransformer) {
         	return ELN_IDEAL_TRANSFORMER;
         } else if (tgc instanceof ELNComponentTransmissionLine) {
@@ -2331,31 +2307,31 @@ public class TGComponentManager {
                 break;
             case CONNECTOR_INTERACTION:
                 tgc = new TGConnectorInteraction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //TraceManager.addDev("Connector interaction");
+                //System.out.println("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_ASYNC_SD:
                 tgc = new ui.sd.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //TraceManager.addDev("Connector interaction");
+                //System.out.println("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_SYNC_SD:
                 tgc = new ui.sd.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //TraceManager.addDev("Connector interaction");
+                //System.out.println("Connector interaction");
                 break;
             case CONNECTOR_RELATIVE_TIME_SD:
                 tgc = new ui.sd.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //TraceManager.addDev("Connector interaction");
+                //System.out.println("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_ASYNC_SDZV:
                 tgc = new ui.sd2.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //TraceManager.addDev("Connector interaction");
+                //System.out.println("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_SYNC_SDZV:
                 tgc = new ui.sd2.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //TraceManager.addDev("Connector interaction");
+                //System.out.println("Connector interaction");
                 break;
             case CONNECTOR_RELATIVE_TIME_SDZV:
                 tgc = new ui.sd2.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //TraceManager.addDev("Connector interaction");
+                //System.out.println("Connector interaction");
                 break;
 
             case CONNECTOR_ACTOR_UCD:
@@ -2489,3 +2465,4 @@ public class TGComponentManager {
     }*/
 
 } // Class
+
