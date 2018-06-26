@@ -776,7 +776,15 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<attributes value=\"" + val);
-		sb.append("\" unit=\"" + encode(unit) + "\"");
+		sb.append("\" unit=\"" + encode(unit));
+		sb.append("\" position=\"" + position);
+		sb.append("\" width=\"" + width);
+		sb.append("\" height=\"" + height);
+		sb.append("\" fv_0_2=\"" + fv_0_2);
+		sb.append("\" fv_1_3=\"" + fv_1_3);
+		sb.append("\" fh_0_2=\"" + fh_0_2);
+		sb.append("\" fh_1_3=\"" + fh_1_3);
+		sb.append("\" first=\"" + first + "\"");
 		sb.append("/>\n");
 		sb.append("</extraparam>\n");
 		return new String(sb);
@@ -790,6 +798,8 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 
 			double value;
 			String unit;
+			int position, width, height;
+			boolean fv_0_2, fv_1_3, fh_0_2, fh_1_3, first;
 
 			for (int i = 0; i < nl.getLength(); i++) {
 				n1 = nl.item(i);
@@ -802,8 +812,24 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 							if (elt.getTagName().equals("attributes")) {
 								value = Double.parseDouble(elt.getAttribute("value"));
 								unit = elt.getAttribute("unit");
+								position = Integer.parseInt(elt.getAttribute("position"));
+								width = Integer.parseInt(elt.getAttribute("width"));
+								height = Integer.parseInt(elt.getAttribute("height"));
+								fv_0_2 = Boolean.parseBoolean(elt.getAttribute("fv_0_2"));
+								fv_1_3 = Boolean.parseBoolean(elt.getAttribute("fv_1_3"));
+								fh_0_2 = Boolean.parseBoolean(elt.getAttribute("fh_0_2"));
+								fh_1_3 = Boolean.parseBoolean(elt.getAttribute("fh_1_3"));
+								first = Boolean.parseBoolean(elt.getAttribute("first"));
 								setVal(value);
 								setUnit(unit);
+								setPosition(position);
+								this.width = width;
+								this.height = height;
+								setFv_0_2(fv_0_2);
+								setFv_1_3(fv_1_3);
+								setFh_0_2(fh_0_2);
+								setFh_1_3(fh_1_3);
+								setFirst(first);
 							}
 						}
 					}
@@ -899,5 +925,53 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 
 	public void setUnit(String _unit) {
 		unit = _unit;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
+	public boolean isFv_0_2() {
+		return fv_0_2;
+	}
+
+	public void setFv_0_2(boolean fv_0_2) {
+		this.fv_0_2 = fv_0_2;
+	}
+
+	public boolean isFv_1_3() {
+		return fv_1_3;
+	}
+
+	public void setFv_1_3(boolean fv_1_3) {
+		this.fv_1_3 = fv_1_3;
+	}
+
+	public boolean isFh_0_2() {
+		return fh_0_2;
+	}
+
+	public void setFh_0_2(boolean fh_0_2) {
+		this.fh_0_2 = fh_0_2;
+	}
+
+	public boolean isFh_1_3() {
+		return fh_1_3;
+	}
+
+	public void setFh_1_3(boolean fh_1_3) {
+		this.fh_1_3 = fh_1_3;
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public void setFirst(boolean first) {
+		this.first = first;
 	}
 }

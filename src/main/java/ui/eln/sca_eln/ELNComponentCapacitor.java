@@ -365,7 +365,12 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent impl
 		sb.append("\" q0=\"" + q0);
 		sb.append("\" unit1=\"");
 		sb.append(encode(unit1));
-		sb.append("\"");
+		sb.append("\" position=\"" + position);
+		sb.append("\" width=\"" + width);
+		sb.append("\" height=\"" + height);
+		sb.append("\" fv=\"" + fv);
+		sb.append("\" fh=\"" + fh);
+		sb.append("\" first=\"" + first + "\"");
 		sb.append("/>\n");
 		sb.append("</extraparam>\n");
 		return new String(sb);
@@ -379,6 +384,8 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent impl
 
 			double value, q0;
 			String unit0, unit1;
+			int position, width, height;
+			boolean fv, fh, first;
 
 			for (int i = 0; i < nl.getLength(); i++) {
 				n1 = nl.item(i);
@@ -393,10 +400,22 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent impl
 								q0 = Double.parseDouble(elt.getAttribute("q0"));
 								unit0 = elt.getAttribute("unit0");
 								unit1 = elt.getAttribute("unit1");
+								position = Integer.parseInt(elt.getAttribute("position"));
+								width = Integer.parseInt(elt.getAttribute("width"));
+								height = Integer.parseInt(elt.getAttribute("height"));
+								fv = Boolean.parseBoolean(elt.getAttribute("fv"));
+								fh = Boolean.parseBoolean(elt.getAttribute("fh"));
+								first = Boolean.parseBoolean(elt.getAttribute("first"));
 								setVal(value);
 								setQ0(q0);
 								setUnit0(unit0);
 								setUnit1(unit1);
+								setPosition(position);
+								this.width = width;
+								this.height = height;
+								setFv(fv);
+								setFh(fh);
+								setFirst(first);
 							}
 						}
 					}
@@ -492,5 +511,37 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent impl
 
 	public void setUnit1(String _unit1) {
 		unit1 = _unit1;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
+	public boolean isFv() {
+		return fv;
+	}
+
+	public void setFv(boolean fv) {
+		this.fv = fv;
+	}
+
+	public boolean isFh() {
+		return fh;
+	}
+
+	public void setFh(boolean fh) {
+		this.fh = fh;
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public void setFirst(boolean first) {
+		this.first = first;
 	}
 }

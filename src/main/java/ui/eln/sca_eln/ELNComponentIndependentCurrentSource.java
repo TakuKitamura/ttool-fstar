@@ -668,7 +668,15 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		sb.append("\" delay=\"" + delay);
 		sb.append("\" ac_amplitude=\"" + acAmplitude);
 		sb.append("\" ac_phase=\"" + acPhase);
-		sb.append("\" ac_noise_amplitude=\"" + acNoiseAmplitude + "\"");
+		sb.append("\" ac_noise_amplitude=\"" + acNoiseAmplitude);
+		sb.append("\" position=\"" + position);
+		sb.append("\" width=\"" + width);
+		sb.append("\" height=\"" + height);
+		sb.append("\" fv_0_2=\"" + fv_0_2);
+		sb.append("\" fv_1_3=\"" + fv_1_3);
+		sb.append("\" fh_0_2=\"" + fh_0_2);
+		sb.append("\" fh_1_3=\"" + fh_1_3);
+		sb.append("\" first=\"" + first + "\"");
 		sb.append("/>\n");
 		sb.append("</extraparam>\n");
 		return new String(sb);
@@ -683,6 +691,8 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 			double initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmplitude;
 			String delay;
 			String unit0;
+			int position, width, height;
+			boolean fv_0_2, fv_1_3, fh_0_2, fh_1_3, first;
 
 			for (int i = 0; i < nl.getLength(); i++) {
 				n1 = nl.item(i);
@@ -703,6 +713,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 								acAmplitude = Double.parseDouble(elt.getAttribute("ac_amplitude"));
 								acPhase = Double.parseDouble(elt.getAttribute("ac_phase"));
 								acNoiseAmplitude = Double.parseDouble(elt.getAttribute("ac_noise_amplitude"));
+								position = Integer.parseInt(elt.getAttribute("position"));
+								width = Integer.parseInt(elt.getAttribute("width"));
+								height = Integer.parseInt(elt.getAttribute("height"));
+								fv_0_2 = Boolean.parseBoolean(elt.getAttribute("fv_0_2"));
+								fv_1_3 = Boolean.parseBoolean(elt.getAttribute("fv_1_3"));
+								fh_0_2 = Boolean.parseBoolean(elt.getAttribute("fh_0_2"));
+								fh_1_3 = Boolean.parseBoolean(elt.getAttribute("fh_1_3"));
+								first = Boolean.parseBoolean(elt.getAttribute("first"));
 								setInitValue(initValue);
 								setOffset(offset);
 								setAmplitude(amplitude);
@@ -713,6 +731,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 								setAcAmplitude(acAmplitude);
 								setAcPhase(acPhase);
 								setAcNoiseAmplitude(acNoiseAmplitude);
+								setPosition(position);
+								this.width = width;
+								this.height = height;
+								setFv_0_2(fv_0_2);
+								setFv_1_3(fv_1_3);
+								setFh_0_2(fh_0_2);
+								setFh_1_3(fh_1_3);
+								setFirst(first);
 							}
 						}
 					}
@@ -726,11 +752,11 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 		componentMenu.addSeparator();
 
-		JMenuItem rotateright = new JMenuItem("Rotate right 90Â°");
+		JMenuItem rotateright = new JMenuItem("Rotate right 90°");
 		rotateright.addActionListener(this);
 		componentMenu.add(rotateright);
 
-		JMenuItem rotateleft = new JMenuItem("Rotate left 90Â°");
+		JMenuItem rotateleft = new JMenuItem("Rotate left 90°");
 		rotateleft.addActionListener(this);
 		componentMenu.add(rotateleft);
 
@@ -746,12 +772,12 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Rotate right 90Â°")) {
+		if (e.getActionCommand().equals("Rotate right 90°")) {
 			position++;
 			position %= 4;
 			first = false;
 		}
-		if (e.getActionCommand().equals("Rotate left 90Â°")) {
+		if (e.getActionCommand().equals("Rotate left 90°")) {
 			position = position + 3;
 			position %= 4;
 			first = false;
@@ -872,5 +898,53 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 
 	public void setUnit0(String _unit0) {
 		unit0 = _unit0;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
+	public boolean isFv_0_2() {
+		return fv_0_2;
+	}
+
+	public void setFv_0_2(boolean fv_0_2) {
+		this.fv_0_2 = fv_0_2;
+	}
+
+	public boolean isFv_1_3() {
+		return fv_1_3;
+	}
+
+	public void setFv_1_3(boolean fv_1_3) {
+		this.fv_1_3 = fv_1_3;
+	}
+
+	public boolean isFh_0_2() {
+		return fh_0_2;
+	}
+
+	public void setFh_0_2(boolean fh_0_2) {
+		this.fh_0_2 = fh_0_2;
+	}
+
+	public boolean isFh_1_3() {
+		return fh_1_3;
+	}
+
+	public void setFh_1_3(boolean fh_1_3) {
+		this.fh_1_3 = fh_1_3;
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public void setFirst(boolean first) {
+		this.first = first;
 	}
 }
