@@ -166,7 +166,6 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 				width = height;
 				height = old;
 			}
-			;
 
 			((ELNConnectingPoint) connectingPoint[0]).setW(w0);
 			((ELNConnectingPoint) connectingPoint[0]).setH(h0);

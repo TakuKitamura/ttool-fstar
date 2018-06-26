@@ -459,7 +459,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ADD_CHANNELARTIFACT = 411;
     public static final int ADD_VGMNNODE = 401;
     public static final int ADD_CROSSBARNODE = 421;
-    public static final int ADD_CLUSTERNODE = 497;
+    public static final int ADD_CLUSTERNODE = 493;
 
     // -------------------------------------------------------------
     public static final int DEPLOY_AVATAR_DIAGRAM = 418;
@@ -651,7 +651,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 493;
+    public static final int NB_ACTION = 494;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
