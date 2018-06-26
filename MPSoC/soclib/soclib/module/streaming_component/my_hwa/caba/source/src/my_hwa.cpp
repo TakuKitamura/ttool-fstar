@@ -2,15 +2,15 @@
 namespace dsx { namespace caba {
 
 
-#define tmpl(...) __VA_ARGS__ MyHWA1
+#define tmpl(...) __VA_ARGS__ MyHWA
 
-tmpl(/**/)::~MyHWA1()
+tmpl(/**/)::~MyHWA()
 {
 }
 
     //intArray(1,1) there is one element (here an integer) of size 4 OCTETs/Quentin: attention cela a change c'est un MOT dans la version VM
 
-tmpl(/**/)::MyHWA1(sc_core::sc_module_name insname)
+tmpl(/**/)::MyHWA(sc_core::sc_module_name insname)
            :dsx::caba::FifoVirtualCoprocessorWrapper(insname, stringArray(NULL), NULL, stringArray("input", NULL), intArray(1,4))
 {
 }

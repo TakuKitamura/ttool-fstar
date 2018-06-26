@@ -1,5 +1,5 @@
-#ifndef _HWA0_H
-#define _HWA0_H
+#ifndef _HWA_H
+#define _HWA_H
 
 #include <systemc>
 
@@ -7,13 +7,13 @@
 
 namespace dsx { namespace caba {
 
-class MyHWA0
+class MyHWA
     : public dsx::caba::FifoVirtualCoprocessorWrapper
 {
 
     public:
-    ~MyHWA0();
-    MyHWA0(sc_core::sc_module_name insname);
+    ~MyHWA();
+    MyHWA(sc_core::sc_module_name insname);
 
 
     private:
@@ -23,3 +23,4 @@ class MyHWA0
 
 }}
 #endif
+
