@@ -197,7 +197,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
-				rotateTop(g);
+				rotateBottomFlip(g);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y+height+sh1);
 			}
@@ -205,7 +205,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
-				rotateBottom(g);
+				rotateTopFlip(g);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y+height+sh0);
 			}
@@ -256,7 +256,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
-				rotateRight(g);
+				rotateRightFlip(g);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
 						y + height / 2 + height / 4 + sh0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
@@ -266,7 +266,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
-				rotateLeft(g);
+				rotateLeftFlip(g);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
 						y + height / 2 + height / 4 + sh1);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
@@ -317,7 +317,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
-				rotateBottom(g);
+				rotateTopFlip(g);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y+height+sh0);
 			}
@@ -325,7 +325,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
-				rotateTop(g);
+				rotateBottomFlip(g);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x+width/2+width/2, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x+width/2+width/2, y+height+sh1);
 			}
@@ -376,7 +376,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
-				rotateLeft(g);
+				rotateLeftFlip(g);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
 						y + height / 2 + height / 4 + sh1);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
@@ -386,7 +386,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
-				rotateRight(g);
+				rotateRightFlip(g);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw0,
 						y + height / 2 + height / 4 + sh0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
@@ -420,6 +420,19 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
          g.drawOval(x, y+height/4, width, height/2);
     }
     
+    private void rotateTopFlip(Graphics g) {
+    	int [] ptx0 = {x+width/2, x+width/2};
+    	int [] pty0 = {y, y+height};
+    	g.drawPolygon(ptx0, pty0, 2);
+    	int [] ptx1 = {x+width/2+width/4, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width};
+    	int [] pty1 = {y+3*height/4+height/8, y+3*height/4+height/8, y+3*height/4+height/8+width/8, y+3*height/4+height/8+width/8, y+3*height/4+height/8, y+3*height/4+height/8};
+    	g.drawPolygon(ptx1, pty1, 6);
+    	int [] ptx2 = {x+width/2+width/4, x+width};
+    	int [] pty2 = {y+height/8, y+height/8};
+    	g.drawPolygon(ptx2, pty2, 2);
+    	g.drawOval(x, y+height/4, width, height/2);
+    }
+    
     private void rotateBottom(Graphics g) {
     	 int [] ptx0 = {x+width/2, x+width/2};
          int [] pty0 = {y, y+height};
@@ -433,8 +446,47 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
          g.drawOval(x, y+height/4, width, height/2);
     }
     
+    private void rotateBottomFlip(Graphics g) {
+    	int [] ptx0 = {x+width/2, x+width/2};
+    	int [] pty0 = {y, y+height};
+    	g.drawPolygon(ptx0, pty0, 2);
+    	int [] ptx1 = {x+width/2+width/4, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width/2+width/4+width/8, x+width};
+    	int [] pty1 = {y+height/8, y+height/8, y+height/8+width/8, y+height/8-width/8, y+height/8, y+height/8};
+    	g.drawPolygon(ptx1, pty1, 6);
+    	int [] ptx2 = {x+width/2+width/4, x+width};
+    	int [] pty2 = {y+3*height/4+height/8, y+3*height/4+height/8};
+    	g.drawPolygon(ptx2, pty2, 2);
+    	g.drawOval(x, y+height/4, width, height/2);
+    }
+    
     private void rotateRight(Graphics g) {
     	int [] ptx0 = {x, x+width};
+        int [] pty0 = {y+height/2, y+height/2};
+        g.drawPolygon(ptx0, pty0, 2);
+        int [] ptx1 = {x+width-width/8, x+width-width/8, x+width-width/8-height/8, x+width-width/8+height/8, x+width-width/8, x+width-width/8};
+        int [] pty1 = {y+height/2+height/4, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height};
+        g.drawPolygon(ptx1, pty1, 6);
+        int [] ptx2 = {x+width/8, x+width/8};
+        int [] pty2 = {y+height/2+height/4, y+height};
+        g.drawPolygon(ptx2, pty2, 2);
+        g.drawOval(x+width/4, y, width/2, height);
+    }
+    
+    private void rotateRightFlip(Graphics g) {
+    	int [] ptx0 = {x, x+width};
+    	int [] pty0 = {y+height/2, y+height/2};
+    	g.drawPolygon(ptx0, pty0, 2);
+    	int [] ptx1 = {x+width-width/8, x+width-width/8, x+width-width/8-height/8, x+width-width/8+height/8, x+width-width/8, x+width-width/8};
+    	int [] pty1 = {y+height/4, y+height/4+height/8, y+height/4+height/8, y+height/4+height/8, y+height/4+height/8, y};
+    	g.drawPolygon(ptx1, pty1, 6);
+    	int [] ptx2 = {x+width/8, x+width/8};
+    	int [] pty2 = {y+height/4, y};
+    	g.drawPolygon(ptx2, pty2, 2);
+    	g.drawOval(x+width/4, y, width/2, height);
+    }
+    
+    private void rotateLeft(Graphics g) {
+        int [] ptx0 = {x, x+width};
         int [] pty0 = {y+height/2, y+height/2};
         g.drawPolygon(ptx0, pty0, 2);
         int [] ptx1 = {x+width/4-width/8, x+width/4-width/8, x+width/4-width/8-height/8, x+width/4-width/8+height/8, x+width/4-width/8, x+width/4-width/8};
@@ -446,17 +498,17 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
         g.drawOval(x+width/4, y, width/2, height);
     }
     
-    private void rotateLeft(Graphics g) {
+    private void rotateLeftFlip(Graphics g) {
     	int [] ptx0 = {x, x+width};
-        int [] pty0 = {y+height/2, y+height/2};
-        g.drawPolygon(ptx0, pty0, 2);
-        int [] ptx1 = {x+width-width/8, x+width-width/8, x+width-width/8-height/8, x+width-width/8+height/8, x+width-width/8, x+width-width/8};
-        int [] pty1 = {y+height/2-height/4, y+height/2-height/4-height/8, y+height/2-height/4-height/8, y+height/2-height/4-height/8, y+height/2-height/4-height/8, y};
-        g.drawPolygon(ptx1, pty1, 6);
-        int [] ptx2 = {x+width/8, x+width/8};
-        int [] pty2 = {y+height/2-height/4, y};
-        g.drawPolygon(ptx2, pty2, 2);
-        g.drawOval(x+width/4, y, width/2, height);
+    	int [] pty0 = {y+height/2, y+height/2};
+    	g.drawPolygon(ptx0, pty0, 2);
+    	int [] ptx1 = {x+width/4-width/8, x+width/4-width/8, x+width/4-width/8-height/8, x+width/4-width/8+height/8, x+width/4-width/8, x+width/4-width/8};
+    	int [] pty1 = {y+height/2+height/4, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height/2+height/4+height/8, y+height};
+    	g.drawPolygon(ptx1, pty1, 6);
+    	int [] ptx2 = {x+3*width/4+width/8, x+3*width/4+width/8};
+    	int [] pty2 = {y+height/2+height/4, y+height};
+    	g.drawPolygon(ptx2, pty2, 2);
+    	g.drawOval(x+width/4, y, width/2, height);
     }
     
     public TGComponent isOnOnlyMe(int _x, int _y) {
