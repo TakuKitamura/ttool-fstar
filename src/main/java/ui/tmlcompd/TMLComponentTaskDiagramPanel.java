@@ -1010,6 +1010,8 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
             path.setColor();
         }
 
+
+
         return faultyPaths;
 
     }

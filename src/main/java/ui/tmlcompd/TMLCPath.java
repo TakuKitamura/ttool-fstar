@@ -348,6 +348,21 @@ public class TMLCPath  {
 
     }
 
+    public boolean isChannel() {
+        if (hasError()) {
+            return false;
+        }
+
+        if (producerPorts.size() < 1) {
+            return false;
+        }
+
+        TMLCPrimitivePort port = producerPorts.get(0);
+        int t = port.getPortType();
+        return t==0;
+
+    }
+
     public void setColor() {
         /*if (hasError()) {
         // Setting the red color
@@ -358,7 +373,11 @@ public class TMLCPath  {
         // if no error: set conflict to false
         // If error -> set the conflict to true
 
+        boolean isChannel = isChannel();
+
         for(TMLCFork fork: forks) {
+            fork.setAsChannel(isChannel);
+
             if (producerPorts.size() > 0) {
                 fork.setOutPort(producerPorts.get(0));
             } else {

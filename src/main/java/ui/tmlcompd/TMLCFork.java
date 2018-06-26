@@ -58,6 +58,8 @@ import java.awt.*;
 public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
     protected int radius = 11;
 
+    protected boolean isChannel = false;
+
      // value Indicates the number of samples being read before they
     // are written to destination. The default is 1.
 
@@ -134,25 +136,41 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-        String oldValue = value;
+        if (isChannel) {
+            String oldValue = value;
+            String s = (String) JOptionPane.showInputDialog(frame, "Nb of samples (positive int): ",
+                    "Nb of samples per round", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null,
+                    getValue());
+            if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+                try {
+                    int testI = Integer.decode(value).intValue();
+                    if (testI > 0) {
+                        value = s;
+                    } else {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the number of samples: the number must be >0",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
 
-        String s = (String) JOptionPane.showInputDialog(frame, "Number of samples per round",
-                "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null,
-                getValue());
-        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            try {
-                int testI = Integer.decode(value).intValue();
-                value = s;
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(frame,
-                        "Could not change the number of samples: invalid value",
-                        "Error",
-                        JOptionPane.INFORMATION_MESSAGE);
-                return false;
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not change the number of samples: " + s + " is not a number",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+
             }
-
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(frame,
+                    "Only data channel forks can be configured",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return true;
         }
-        return true;
 
     }
 
@@ -165,6 +183,9 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
         return Integer.decode(value).intValue();
     }
 
+    public void setAsChannel(boolean b) {
+        isChannel = b;
+    }
 
 
 }
