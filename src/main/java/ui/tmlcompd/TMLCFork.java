@@ -180,7 +180,12 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
     }
 
     public int getNumberOfSamples() {
-        return Integer.decode(value).intValue();
+        try {
+            return Integer.decode(value).intValue();
+        } catch (Exception e) {
+            value = "1";
+            return 1;
+        }
     }
 
     public void setAsChannel(boolean b) {
