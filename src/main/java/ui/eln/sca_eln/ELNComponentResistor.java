@@ -361,12 +361,17 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 		sb.append("<attributes value=\"" + val);
 		sb.append("\" unit=\"");
 		sb.append(encode(unit));
-		sb.append("\"");
+		sb.append("\" position=\"" + position);
+		sb.append("\" width=\"" + width);
+		sb.append("\" height=\"" + height);
+		sb.append("\" fv=\"" + fv);
+		sb.append("\" fh=\"" + fh);
+		sb.append("\" first=\"" + first + "\"");
 		sb.append("/>\n");
 		sb.append("</extraparam>\n");
 		return new String(sb);
 	}
-
+	
 	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
 		try {
 			NodeList nli;
@@ -375,7 +380,9 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 
 			double value;
 			String unit;
-
+			int position, width, height;
+			boolean fv, fh, first;
+			
 			for (int i = 0; i < nl.getLength(); i++) {
 				n1 = nl.item(i);
 				if (n1.getNodeType() == Node.ELEMENT_NODE) {
@@ -387,8 +394,20 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 							if (elt.getTagName().equals("attributes")) {
 								value = Double.parseDouble(elt.getAttribute("value"));
 								unit = elt.getAttribute("unit");
+								position = Integer.parseInt(elt.getAttribute("position"));
+								width = Integer.parseInt(elt.getAttribute("width"));
+								height = Integer.parseInt(elt.getAttribute("height"));
+								fv = Boolean.parseBoolean(elt.getAttribute("fv"));
+								fh = Boolean.parseBoolean(elt.getAttribute("fh"));
+								first = Boolean.parseBoolean(elt.getAttribute("first"));
 								setVal(value);
 								setUnit(unit);
+								setPosition(position);
+								this.width = width;
+								this.height = height;
+								setFv(fv);
+								setFh(fh);
+								setFirst(first);
 							}
 						}
 					}
@@ -468,5 +487,37 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 
 	public void setUnit(String _unit) {
 		unit = _unit;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
+	public boolean isFv() {
+		return fv;
+	}
+
+	public void setFv(boolean fv) {
+		this.fv = fv;
+	}
+
+	public boolean isFh() {
+		return fh;
+	}
+
+	public void setFh(boolean fh) {
+		this.fh = fh;
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public void setFirst(boolean first) {
+		this.first = first;
 	}
 }
