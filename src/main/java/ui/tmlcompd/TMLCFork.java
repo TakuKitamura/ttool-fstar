@@ -143,7 +143,7 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
                     getValue());
             if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
                 try {
-                    int testI = Integer.decode(value).intValue();
+                    int testI = Integer.decode(s).intValue();
                     if (testI > 0) {
                         value = s;
                     } else {

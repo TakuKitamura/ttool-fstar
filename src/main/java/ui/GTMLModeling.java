@@ -974,6 +974,11 @@ public class GTMLModeling {
                                     TraceManager.addDev("Setting fork sample");
                                     channel.setNumberOfSamples(fork.getNumberOfSamples());
                                 }
+                                TMLCJoin join = path.getJoin(0);
+                                if (join != null) {
+                                    TraceManager.addDev("Setting join sample");
+                                    channel.setNumberOfSamples(join.getNumberOfSamples());
+                                }
                             }
                             channel.ports.add(port1);
                             for (j = 0; j < portstome.size(); j++) {

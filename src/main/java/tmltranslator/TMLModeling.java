@@ -2400,13 +2400,13 @@ public class TMLModeling<E> {
         TMLWriteChannel write = new TMLWriteChannel("WriteOfJoin", null);
         joinActivity.addElement(write);
         write.addChannel(_ch);
-        write.setNbOfSamples("1");
+        write.setNbOfSamples("" + _ch.getNumberOfSamples());
 
         TMLReadChannel []reads = new TMLReadChannel[nb];
         for(i=0; i<nb; i++) {
             reads[i] = new TMLReadChannel("ReadOfJoin" + SEP1 + i, null);
             reads[i].addChannel(chans[i]);
-            reads[i].setNbOfSamples("1");
+            reads[i].setNbOfSamples("" + _ch.getNumberOfSamples());
             joinActivity.addElement(reads[i]);
         }
 
