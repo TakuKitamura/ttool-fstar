@@ -25,11 +25,11 @@
 #### LINE 25 IS HERE ####
 
 # Target architecture
-#TARGET=mipsel
-TARGET=powerpc
+TARGET=mipsel
+#TARGET=powerpc
 
 # Install PATH
-PREFIX=/users/enseig/genius/TTool/MPSoC/mutekh
+PREFIX=/opt/mutekh
 
 # Temp directory
 WORKDIR=/tmp/crossgen
