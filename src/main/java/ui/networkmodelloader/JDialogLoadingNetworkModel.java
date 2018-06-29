@@ -316,7 +316,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
                         }
                     }
 
-                    //System.out.println(inputLine);
+                    //
 
                 }
 

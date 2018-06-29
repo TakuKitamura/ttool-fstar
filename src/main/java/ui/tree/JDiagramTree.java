@@ -236,16 +236,16 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
             try {
                 l_path = l_keys.next();
                 TreePath parent = l_path.getParentPath();
-                //System.out.println("Path: " + l_path);
-                //System.out.println("Parent path: " + parent);
+                //
+                //
                 if ((l_path.getPathCount() == 2) || (m_expandedTreePaths.contains(parent))) {
                     //TraceManager.addDev("Path=" + l_path);
                     expandPath(l_path);
                 }
             } catch (Exception e) {
-                //System.out.println("Exception " + e.getMessage());
+                //
                 if (l_path != null) {
-                    //System.out.println("Removing path " + l_path);
+                    //
                     m_expandedTreePaths.remove(l_path);
                 }
             }
@@ -310,7 +310,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 }
             } catch (Exception e) {
                 if (l_path != null) {
-                    //System.out.println("Removing path " + l_path);
+                    //
                     m_expandedTreePaths.remove(l_path);
                 }
             }

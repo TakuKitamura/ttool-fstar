@@ -37,8 +37,6 @@
  */
 
 
-
-
 package uppaaldesc;
 
 import myutil.Conversion;
@@ -51,8 +49,9 @@ import java.util.List;
 /**
  * Class UPPAALSpec
  * Creation: 03/11/2006
- * @version 1.0 03/11/2006
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 03/11/2006
  */
 public class UPPAALSpec {
     private String header = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
@@ -77,8 +76,7 @@ public class UPPAALSpec {
         globalDeclaration = "<declaration>\n//Global declarations\n" + Conversion.transformToXMLString(globalDeclaration) + "</declaration>\n";
         StringBuffer templatesString = new StringBuffer("");
 
-        while(iterator.hasNext()) {
-            //System.out.println("Template!");
+        while (iterator.hasNext()) {
             template = iterator.next();
             templatesString.append(template.makeTemplate());
         }
@@ -102,7 +100,7 @@ public class UPPAALSpec {
         UPPAALTemplate template;
         Iterator<UPPAALTemplate> ite = templates.listIterator();
 
-        while(ite.hasNext()){
+        while (ite.hasNext()) {
             template = ite.next();
             if (template.getName().compareTo(name) == 0) {
                 return template;
@@ -131,8 +129,7 @@ public class UPPAALSpec {
         Iterator<UPPAALTemplate> iterator = templates.listIterator();
         UPPAALTemplate template;
 
-        while(iterator.hasNext()) {
-            //System.out.println("Template!");
+        while (iterator.hasNext()) {
             template = iterator.next();
             template.enhanceGraphics();
         }
@@ -142,8 +139,7 @@ public class UPPAALSpec {
         Iterator<UPPAALTemplate> iterator = templates.listIterator();
         UPPAALTemplate template;
 
-        while(iterator.hasNext()) {
-            //System.out.println("Template!");
+        while (iterator.hasNext()) {
             template = iterator.next();
             template.optimize();
         }

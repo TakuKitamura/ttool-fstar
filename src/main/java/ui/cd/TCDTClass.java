@@ -133,7 +133,7 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
     }
     
     public void recalculateSize() {
-        //System.out.println("Recalculate size of " + this);
+        //
         int i;//, j;
      
         for(i=0; i<nbInternalTGComponent; i++) {
@@ -185,7 +185,7 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
             graphics = g;
         }
         
-        //System.out.println("My width = " + width + " this=" + this);
+        //
         Font f = g.getFont();
       //  int size = f.getSize();
         g.drawRect(x, y, width, height);
@@ -408,8 +408,8 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
             Element elt;
             String startS;
             
-            //System.out.println("Loading tclass " + getValue());
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);

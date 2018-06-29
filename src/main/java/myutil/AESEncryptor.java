@@ -37,9 +37,7 @@
  */
 
 
-
-
-     package myutil;
+package myutil;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -48,14 +46,15 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
-Code taken initially taken from stack overflow
- *
- * 
+ * Code taken initially taken from stack overflow
+ * <p>
+ * <p>
  * Class AESEncryptor
  * For remote execution of processes
  * Creation: 2015
- * @version 1 21/05/2015
+ *
  * @author Ludovic APVRILLE
+ * @version 1 21/05/2015
  */
 public class AESEncryptor {
     public static String encrypt(String key1, String key2, String value) {
@@ -67,8 +66,8 @@ public class AESEncryptor {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
             byte[] encrypted = cipher.doFinal(value.getBytes());
-            /*System.out.println("encrypted string:"
-	      + Base64.encodeBase64String(encrypted));*/
+            /*TraceManager.addDev("encrypted string:"
+          + Base64.encodeBase64String(encrypted));*/
             return Base64.encodeBase64String(encrypted);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -97,7 +96,7 @@ public class AESEncryptor {
 
         String key1 = "Bar12345Bar12345"; // 128 bit key
         String key2 = "ThisIsASecretKet";
-        System.out.println(decrypt(key1, key2,
+        TraceManager.addDev(decrypt(key1, key2,
                 encrypt(key1, key2, "Hello World")));
     }
 }

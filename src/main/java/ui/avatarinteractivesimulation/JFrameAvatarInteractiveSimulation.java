@@ -42,14 +42,11 @@ package ui.avatarinteractivesimulation;
 import avatartranslator.*;
 import avatartranslator.directsimulation.*;
 import common.ConfigurationTTool;
-import myutil.*;
-import org.apache.batik.dom.GenericDOMImplementation;
-import org.apache.batik.svggen.SVGGraphics2D;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
-
-import java.io.*;
-
+import myutil.FileUtils;
+import myutil.GraphicLib;
+import myutil.TableSorter;
+import myutil.TraceManager;
+import myutilsvg.SVGGeneration;
 import ui.*;
 import ui.avatarbd.AvatarBDPortConnector;
 import ui.interactivesimulation.LatencyTableModel;
@@ -64,6 +61,10 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.*;
 import java.util.List;
 
@@ -401,7 +402,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         //framePanel.setBackground(ColorManager.InteractiveSimulationBackground);
         //framePanel.setForeground(new Color(255, 166, 38));
 
-        //System.out.println("Button start created");
+        //
         //buttonStart = new JButton(actions[InteractiveSimulationActions.ACT_RUN_SIMU]);
         buttonStopAndClose = new JButton(actions[AvatarInteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL]);
         //buttonStopAndClose = new JButton(buttonStopAndCloseS, IconManager.imgic27);
@@ -1517,8 +1518,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                     if ((trans.executedElement != null) && (trans.executedElement.getReferenceObject() != null)) {
                         //                        String id = ((TGComponent)trans.executedElement.getReferenceObject()).getName() + ":"+Integer.toString(trans.executedElement.getID());
                         String id = Integer.toString(trans.executedElement.getID());
-                        //  System.out.println(id + " " + transTimes.keySet());
-                        //  System.out.println("transaction " + trans.executedElement.getID() + " " + trans.initialClockValue);
+                        //  
+                        //  
                         String key = "";
                         for (String s : transTimes.keySet()) {
                             String tmpid = s.split(":")[1];
@@ -1534,7 +1535,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                     }
                 }
             }
-            //  System.out.println(transTimes);
+            //  
             for (String st1 : transTimes.keySet()) {
                 for (String st2 : transTimes.keySet()) {
                     if (st1 != st2 && nameLatencyMap.containsKey(st1 + "--" + st2)) {
@@ -1557,7 +1558,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                                     minTimes.add(time);
                                 }
                             }
-                            //  System.out.println(transTimes.get(st1) + " " + transTimes.get(st2) + " " + minTimes);
+                            //  
                             if (minTimes.size() > 0) {
                                 int sum = 0;
                                 sl.setMinTime(Integer.toString(Collections.min(minTimes)));
@@ -1837,7 +1838,9 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             return;
         }
 
-        newSVGSave(fileName);
+        SVGGeneration gen = new SVGGeneration();
+        gen.saveInSVG(sdpanel, fileName);
+        //newSVGSave(fileName);
 
 
         /*StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
@@ -1880,7 +1883,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
     }
 
     // FileName must be valid
-    private void newSVGSave(String fileName) {
+    /*private void newSVGSave(String fileName) {
         TraceManager.addDev("New SVG save in " + fileName);
         // Get a DOMImplementation.
         DOMImplementation domImpl =
@@ -1895,8 +1898,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
         // Ask the test to render into the SVG Graphics2D implementation.
         sdpanel.paint(svgGenerator);
-        /*TestSVGGen test = new TestSVGGen();
-        test.paint(svgGenerator);*/
+
 
         // Finally, stream out SVG to the standard output using
         // UTF-8 encoding.
@@ -1909,7 +1911,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         } catch (Exception e) {
             TraceManager.addDev("SVG generation failed: " + e.getMessage());
         }
-    }
+    }*/
 
     public void actSaveSDPNG() {
         //Saving PNG file;

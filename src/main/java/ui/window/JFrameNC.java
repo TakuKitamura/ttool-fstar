@@ -164,19 +164,19 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 	
 	public void goElement() {
 		graph = new AUTGraph();
-		//System.out.println("Building graph : " + data);
+		//
 		graph.buildGraph(data);
 		graph.computeStates();
-		//System.out.println("Build is done");
+		//
 		if (stopped) {
 			return;
 		}
 		graphDone = true;
-		//System.out.println("making components");
+		//
 		makeComponents();
-		//System.out.println("setting finished");
+		//
 		setFinished();
-		//System.out.println("Done");
+		//
 	}*/
 	
 	public JFrameNC(String title, NCStructure _ncs) {
@@ -192,7 +192,7 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 		
 		
 		//jstat = new JStatisticsPanel(this, data);
-		//System.out.println("Building statistical elements");
+		//
 		//tm = new StatisticsTableModel(data);
 		/*tm = new StatisticsTableModel();
 		tm.analyzeData(graph);
@@ -366,7 +366,7 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 		
 		/*
 		// Table
-		//System.out.println("Building deadlock elements");
+		//
 		JPanel jp1 = new JPanel();
 		JPanel jp2 = new JPanel();
 		JPanel jp3 = new JPanel();
@@ -396,7 +396,7 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 				return;
 			}
 			
-			//System.out.println("Deadlock table");
+			//
 			
 			((jtableDeadlock.getColumnModel()).getColumn(0)).setPreferredWidth(Math.max(maxLengthColumn(framePanel, tmDeadlock, 0) + 20, 50));
 			((jtableDeadlock.getColumnModel()).getColumn(1)).setPreferredWidth(Math.max(maxLengthColumn(framePanel, tmDeadlock, 1) + 15, 100));
@@ -410,7 +410,7 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 				return;
 			}
 			
-			//System.out.println("End Deadlock table");
+			//
 			
 			// shortest paths
 			GridBagLayout gridbag1 = new GridBagLayout();
@@ -436,7 +436,7 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 				return;
 			}
 			
-			//System.out.println("Graphical");
+			//
 			
 			Integer[] tab1 = new Integer[graph.getNbState()];
 			
@@ -503,20 +503,20 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 			c2.gridheight = 1;
 			
 			cycleDone = true;
-			//System.out.println("Searching for cycles");
+			//
 			if (graph.getNbTransition() < MAX_TRANSITIONS) {
 				hasCycle = GraphAlgorithms.hasCycle(graph);
 				cycleComputed = true;
 			} else {
 				cycleComputed = false;
 			}
-			//System.out.println("End searching for cycles");
+			//
 			
 			if (shouldIStop()) {
 				return;
 			}
 			
-			//System.out.println("G comp");
+			//
 			
 			label2 = new JLabel("Longest path from ");
 			jp3.add(label2, c2);
@@ -584,7 +584,7 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 		//}
 		
 		
-		//System.out.println("Making last elements");
+		//
 		
 		mainTabbedPane = new JTabbedPane();
 		mainTabbedPane.addTab("General info.", IconManager.imgic13, jp, "# states, #transitions");
@@ -614,12 +614,12 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 		
 		pack();
 		
-		System.out.println("GG comp done");
+		
 	}
 	
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();
-		//System.out.println("Command:" + command);
+		//
 		
 		if (command.equals("Close")) {
 			dispose();

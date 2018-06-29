@@ -130,22 +130,22 @@ public class DSESimulationResult {
     }
 
     protected void analyzeServerAnswer(String s) {
-        //System.out.println("From server:" + s);
+        //
         int index0 = s.indexOf("<?xml");
         String ssxml = "";
 
         if (index0 != -1) {
-            //System.out.println("toto1");
+            //
             ssxml = s.substring(index0, s.length()) + "\n";
         } else {
-            //System.out.println("toto2");
+            //
             ssxml = ssxml + s + "\n";
         }
 
         index0 = ssxml.indexOf("</siminfo>");
 
         if (index0 != -1) {
-            //System.out.println("toto3");
+            //
             ssxml = ssxml.substring(0, index0 + 10);
             loadXMLInfoFromServer(ssxml);
             ssxml = "";
@@ -159,7 +159,7 @@ public class DSESimulationResult {
 
         // Compute results!
 
-        //System.out.println("toto4");
+        //
 
     }
 
@@ -227,7 +227,7 @@ public class DSESimulationResult {
 
         try {
             for (int j = 0; j < diagramNl.getLength(); j++) {
-                //System.out.println("Ndes: " + j);
+                //
                 node = diagramNl.item(j);
 
                 if (node == null) {
@@ -284,7 +284,7 @@ public class DSESimulationResult {
 
         try {
             for (int j = 0; j < diagramNl.getLength(); j++) {
-                //System.out.println("Ndes: " + j);
+                //
                 node = diagramNl.item(j);
 
                 if (node == null) {
@@ -300,7 +300,7 @@ public class DSESimulationResult {
                     // Status
                     if (elt.getTagName().compareTo(SIMULATION_DURATION) == 0) {
                         simdur = elt.getTextContent();
-                        //System.out.println("Simulation duration=" + simdur);
+                        //
                         simulationDurations.add(new Long(simdur));
                     }
                     if (elt.getTagName().compareTo("EndTime") == 0) {
@@ -323,11 +323,11 @@ public class DSESimulationResult {
                             nl = elt.getElementsByTagName("util");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 node0 = nl.item(0);
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                //
                                 util = node0.getTextContent();
                             }
 
-                            //System.out.println("toto12");
+                            //
                             nl = elt.getElementsByTagName("contdel");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 nl = elt.getElementsByTagName("contdel");
@@ -335,7 +335,7 @@ public class DSESimulationResult {
                                 elt0 = (Element) node0;
                                 busid = elt0.getAttribute("busID");
                                 busname = elt0.getAttribute("busName");
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                //
                                 contdel = node0.getTextContent();
                             }
 
@@ -379,7 +379,7 @@ public class DSESimulationResult {
                             nl = elt.getElementsByTagName("util");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 node0 = nl.item(0);
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                //
                                 util = node0.getTextContent();
                             }
 
@@ -411,14 +411,14 @@ public class DSESimulationResult {
                             nl = elt.getElementsByTagName("extime");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 node0 = nl.item(0);
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                //
                                 extime = node0.getTextContent();
                             }
 
                             nl = elt.getElementsByTagName("tskstate");
                             if ((nl != null) && (nl.getLength() > 0)) {
                                 node0 = nl.item(0);
-                                //System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+                                //
                                 state = node0.getTextContent();
                             }
 

@@ -153,7 +153,7 @@ public class IODChoice extends TGCWithInternalComponent {
     
     public String getGuard(int i) {
         if ((i>=0) && (i<nbInternalTGComponent)) {
-            //System.out.println("guard name: " + tgcomponent[i].getName());
+            //
             return tgcomponent[i].getValue();
         }
         return "";
@@ -176,7 +176,7 @@ public class IODChoice extends TGCWithInternalComponent {
                 }
                 s = s.substring(1, index);
                 s = s.trim();
-                //System.out.println("Matches ? s=" +s );
+                //
                 if (!TAttribute.isAValidId(s, false, false)) {
                 //if (!s.matches("(\\w)+*(\\s)*")) {
                     return g;

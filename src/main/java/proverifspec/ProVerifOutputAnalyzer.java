@@ -136,7 +136,7 @@ public class ProVerifOutputAnalyzer {
             {
                 if (str.isEmpty())
                     continue;
-             //   System.out.println("OUTPUT " + str);
+
                 Matcher m = procPattern.matcher(str);
 
                 if (isInTrace && (str.startsWith("A more detailed") || str.startsWith("Could not find")))

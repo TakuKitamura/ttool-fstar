@@ -186,7 +186,7 @@ public	class JPanelSetVariables extends JPanel implements ActionListener {
 		try {
 			return Integer.decode(in).intValue();
 		} catch (Exception e) {
-			System.out.println("Wrong string: "+ in);
+			
 		}
 		
 		return -1;

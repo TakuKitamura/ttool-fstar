@@ -43,6 +43,7 @@ package graph;
 
 import myutil.FileException;
 import myutil.FileUtils;
+import myutil.TraceManager;
 import vcd.VCDContent;
 import vcd.VCDTimeChange;
 import vcd.VCDVariable;
@@ -178,13 +179,13 @@ public class VCDGenerator  {
 		
 		ArrayList<AUTState> met = new ArrayList<AUTState>();
 		
-		System.out.println("Computing states");
+		TraceManager.addDev("Computing states");
 		activity = "Computing states";
 		graph.computeStates();
 		
 		currentState = graph.findFirstOriginState();
 		
-		System.out.println("Searches for info");
+		TraceManager.addDev("Searches for info");
 		activity = "Searches for system info on graph";
 		while((!cycle) && (!deadlock) && (!infoFound) && (go)) {
 			met.add(currentState);
@@ -194,7 +195,7 @@ public class VCDGenerator  {
 			} else {
 				label = tr.getLabel();
 				if (label.toUpperCase().equals(info)) {
-					//System.out.println("[info search] [state = " + currentState.id + "] currentStateFound label = " + label + " int param=" + tr.getNbOfIntParameters());
+					//TraceManager.addDev("[info search] [state = " + currentState.id + "] currentStateFound label = " + label + " int param=" + tr.getNbOfIntParameters());
 					if (tr.getNbOfIntParameters() == 2) {
 						nbOfTasks = tr.getIntParameter(0);
 						nbOfCores = tr.getIntParameter(1);
@@ -214,12 +215,12 @@ public class VCDGenerator  {
 		}
 		
 		if (deadlock) {
-			System.out.println("Deadlock");
+			TraceManager.addDev("Deadlock");
 			return -1;
 		}
 		
 		if (cycle) {
-			System.out.println("Cycle");
+			TraceManager.addDev("Cycle");
 			return -2;
 		}
 		
@@ -244,7 +245,7 @@ public class VCDGenerator  {
 		}
 		
 		// Now simulate the graph ...
-		System.out.println("Simulate the graph tasks:" + nbOfTasks + " cores:" + nbOfCores);
+		TraceManager.addDev("Simulate the graph tasks:" + nbOfTasks + " cores:" + nbOfCores);
 		currentTime = 0;
 		VCDTimeChange currentTC;
 		int time;
@@ -282,7 +283,7 @@ public class VCDGenerator  {
 						currentTC = new VCDTimeChange("" + currentTime);
 						vcd.addTimeChange(currentTC);
 						activity = "Simulation: Current time=" + currentTime + "   Nb of analyzed transitions=" + nbOfStates;
-						//System.out.println("CurrentTime " + currentTime + " nbOfStates: " + nbOfStates);
+						//TraceManager.addDev("CurrentTime " + currentTime + " nbOfStates: " + nbOfStates);
 					}
 				
 				// Info on cores
@@ -406,7 +407,7 @@ public class VCDGenerator  {
 						// Must be from LOW to HIGH
 						if (val < NB_OF_MODES) {
 							pcs[index].addPowerConsumption(val, newTime - oldTime);
-							//System.out.println("Adding power consumption to core #" + index + " mode = " + val + " value = " + (newTime - oldTime)); 
+							//TraceManager.addDev("Adding power consumption to core #" + index + " mode = " + val + " value = " + (newTime - oldTime)); 
 						}
 					} catch (NumberFormatException nfe) {
 					}

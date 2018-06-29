@@ -597,7 +597,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         //if (aStatistics[2] != 0) TraceManager.addDev("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
         //if (aStatistics[4] != 0) TraceManager.addDev("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);
         //if (aStatistics[6] != 0)
-         //   TraceManager.addDev("Global gain checkpoints " + 100 * aStatistics[7] / aStatistics[6]);
+        //   TraceManager.addDev("Global gain checkpoints " + 100 * aStatistics[7] / aStatistics[6]);
 
         //Declaration of EBRDDs
         /*declaration += "//Declaration of EBRDDs" + CR;
@@ -785,7 +785,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
             path.add(currNode);
             //if (memory!=null) path.add(memory);
             commNodes.remove(currNode);
-            //for (int i=0; i<path.size(); i++) System.out.print("  ");
+
             //TraceManager.addDev(currNode.getName());
             if (exploreBuses(depth + 1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
             path.remove(currNode);
@@ -801,7 +801,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 if (_bus != null) {
                     //TraceManager.addDev(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
                 }
-                    //TraceManager.addDev(_channel.getName() + " is mapped onto " + commNode.getName() + ": " + tmlmapping.isCommNodeMappedOn(_channel, commNode));
+                //TraceManager.addDev(_channel.getName() + " is mapped onto " + commNode.getName() + ": " + tmlmapping.isCommNodeMappedOn(_channel, commNode));
                 if ((_bus == null || tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus))
                         && tmlmapping.isCommNodeMappedOn(_channel, commNode)) {
                     return (HwMemory) commNode;

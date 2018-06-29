@@ -121,13 +121,13 @@ public class AUTGraph implements myutil.Graph {
         int cpt, mod;
 
         /* read header */
-        //System.out.println("Building graph");
+        //TraceManager.addDev("Building graph");
         try {
             while ((s = br.readLine()) != null) {
                 index1 = s.indexOf("des");
-                //System.out.println("Searching for des");
+                //TraceManager.addDev("Searching for des");
                 if (index1 == 0) {
-                    //System.out.println("des found");
+                    //TraceManager.addDev("des found");
                     s1 = s.substring(s.indexOf(',') + 1, s.length());
                     s1 = s1.substring(0, s1.indexOf(','));
                     s1 = Conversion.removeFirstSpaces(s1);
@@ -162,7 +162,7 @@ public class AUTGraph implements myutil.Graph {
 
 
             while ((s = br.readLine()) != null) {
-                //System.out.println("realine:" + s);
+                //TraceManager.addDev("realine:" + s);
                 array = AUTGraph.decodeLine(s);
                 at = new AUTTransition(array[0], array[1], array[2]);
                 transitions.add(at);
@@ -171,7 +171,7 @@ public class AUTGraph implements myutil.Graph {
                 cpt++;
                 if ((cpt % mod) == 0) {
                     percentage = (int) ((cpt * 100) / nbTransition);
-                    //System.out.println("percentage=" + percentage + "cpt=" + cpt + "nbTransition=" + nbTransition);
+                    //TraceManager.addDev("percentage=" + percentage + "cpt=" + cpt + "nbTransition=" + nbTransition);
                 }
             }
         } catch (Exception e) {
@@ -198,18 +198,18 @@ public class AUTGraph implements myutil.Graph {
         // guillemets ?
         index1 = s.indexOf("\"");
         if (index1 > -1) {
-            //System.out.println("Guillemets on " + s);
+            //TraceManager.addDev("Guillemets on " + s);
             s2 = s.substring(index1 + 1, s.length());
             s2 = s2.substring(0, s2.indexOf("\""));
-            //System.out.println("Guillemets on " + s2);
+            //TraceManager.addDev("Guillemets on " + s2);
             /*index2 = s2.indexOf("(");
               if (index2 > -1) {
               s2 = s2.substring(index2+1, s2.indexOf(")"));
               }*/
-            //System.out.println("Guillemets on " + s2);
+            //TraceManager.addDev("Guillemets on " + s2);
 
         } else {
-            //System.out.println("No Guillemets on " + s);
+            //TraceManager.addDev("No Guillemets on " + s);
             index1 = s.indexOf(",");
             if ((index2 = s.indexOf("(")) >= 0) {
                 s2 = s.substring(index2 + 1, index1 - 2);
@@ -223,13 +223,13 @@ public class AUTGraph implements myutil.Graph {
         }
 
         s = s.substring(s.indexOf(s2) + s2.length(), s.length());
-        //System.out.println("s=" + s);
+        //TraceManager.addDev("s=" + s);
         index1 = s.indexOf(",");
         //index2 = s.indexOf(")");
         //s2 = s.substring(0, index1-1);
         s3 = s.substring(index1 + 1, s.length() - 1);
         s3 = Conversion.removeFirstSpaces(s3);
-        //System.out.println("s1=" + s1 + " s2=" + s2 + " s3=" + s3);
+        //TraceManager.addDev("s1=" + s1 + " s2=" + s2 + " s3=" + s3);
 
         String[] array = new String[3];
         array[0] = s1;
@@ -331,7 +331,7 @@ public class AUTGraph implements myutil.Graph {
 
     public int[] getVectorPotentialDeadlocks() {
         int nbPotentialDeadlock = getNbPotentialDeadlocks();
-        //System.out.println("nb of deadlocks: " + nbPotentialDeadlock);
+        //TraceManager.addDev("nb of deadlocks: " + nbPotentialDeadlock);
         int[] states = new int[nbPotentialDeadlock];
         int index = 0;
 
@@ -451,7 +451,7 @@ public class AUTGraph implements myutil.Graph {
 
         for (int i = 0; i < states.size(); i++) {
             state = states.get(i);
-            //System.out.println("id=" + state.id + " transitions to me = " +state.inTransitions.size());
+            //TraceManager.addDev("id=" + state.id + " transitions to me = " +state.inTransitions.size());
             if (state.inTransitions.size() == 0) {
                 return state;
             }

@@ -264,7 +264,7 @@ public class ProCSDInPort extends ProCSDPort implements SwallowedTGComponent, Ac
     //to write:
      public void resizeWithFather() {
         if ((father != null) && (father instanceof ProCSDComponent)) {
-            //System.out.println("cdRect comp");
+            //
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
              setMoveCd(x, y);
@@ -348,10 +348,10 @@ public class ProCSDInPort extends ProCSDPort implements SwallowedTGComponent, Ac
     
     public void setMoveCd(int _x, int _y) {
   
-    	//System.out.println("father: "+father.getWidth()+"  "+father.getHeight());
-    	//System.out.println("old xy: "+_x+"  "+_y);
+    	//
+    	//
     	 int []xy=computeXY(_x,_y);
-    	//System.out.println("new xy: "+xy[0]+"  "+xy[1]);
+    	//
     	//super.setMoveCd(xy[0], xy[1], false);
         x=xy[0];
         y=xy[1];
@@ -360,10 +360,10 @@ public class ProCSDInPort extends ProCSDPort implements SwallowedTGComponent, Ac
         
     public void setCd(int _x, int _y) {
     	  
-    	//System.out.println("father: "+father.getWidth()+"  "+father.getHeight());
-    	//System.out.println("old xy: "+_x+"  "+_y);
+    	//
+    	//
     	 int []xy=computeXY(_x,_y);
-    	//System.out.println("new xy: "+xy[0]+"  "+xy[1]);
+    	//
     	//super.setMoveCd(xy[0], xy[1], false);
         x=xy[0];
         y=xy[1];

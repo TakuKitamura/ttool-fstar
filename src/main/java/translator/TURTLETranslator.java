@@ -135,10 +135,10 @@ public class TURTLETranslator {
 
 	public String generateLOTOS(boolean xtendedNatural) {
 		
-		//System.out.println("Printing TM");
-		//System.out.println("null? generate");
+		//
+		//
 		//tm.print();
-		//System.out.println("end null?");
+		//
 		
 		buildLOTOS(xtendedNatural);
 		
@@ -163,25 +163,25 @@ public class TURTLETranslator {
 		tm.translateInvocationIntoSynchronization();
 		tm.translateActionStatesWithMultipleParams();
 		
-		//System.out.println("null? generate 1");
+		//
 		//tm.print();
-		//System.out.println("end null?");
+		//
 		
 		tm.removeUselessVariables();
 		
-		//System.out.println("null? generate 12");
+		//
 		//tm.print();
-		//System.out.println("end null?");
+		//
 		
 		//tm.removeUselessGates();
 		
-		//System.out.println("null? generate 2");
+		//
 		//tm.print();
-		//System.out.println("end null?");
+		//
 
 		mgm = new MasterGateManager(tm, false);
 		mgm.sort();
-		//System.out.println(mgm.toString());
+		//
 
 		// Activity Diagrams
 		for(i=0; i<tm.classNb(); i++) {
@@ -207,9 +207,9 @@ public class TURTLETranslator {
 		// spec dec
 		translation.append(BEHAVIOUR);
 
-		//System.out.println("translate main PSI");
+		//
 		translation.append(translatePSI(tm, mgm, true));
-		//System.out.println("main PSI translated");
+		//
 
 		translation.append(WHERE);
 
@@ -227,7 +227,7 @@ public class TURTLETranslator {
 
 		translation.append(END);
 		
-		//System.out.println("TRANSLATION=" + translation);
+		//
 
 		return new String(translation);
 	}
@@ -258,7 +258,7 @@ public class TURTLETranslator {
 
 		mgm = new MasterGateManager(tm, false);
 		mgm.sort();
-		//System.out.println(mgm.toString());
+		//
 
 		// Activity Diagrams
 		for(i=0; i<tm.classNb(); i++) {
@@ -286,9 +286,9 @@ public class TURTLETranslator {
 			translation.append(" in\n\n");
 		}
 
-		//System.out.println("translate main PSI");
+		//
 		translation.append(translatePSI(tm, mgm, true));
-		//System.out.println("main PSI translated");
+		//
 
 		translation.append(WHERE);
 
@@ -401,7 +401,7 @@ public class TURTLETranslator {
 	private void makePrempt(TClass tc) {
 		TURTLEModeling localtm = getSubProcessTURTLEModelingPre(tc, Relation.PRE);
 		MasterGateManager localmgm = new MasterGateManager(localtm);
-		//System.out.println("localmgm");
+		//
 		localmgm.allGatesToString();
 		String  orPreemp = translatePreempt(localtm, localmgm);
 		makeHiddenGates(tc, localmgm);
@@ -500,7 +500,7 @@ public class TURTLETranslator {
 	}
 
 	private void recursiveTranslatePSI(int i, StringBuffer sb, TURTLEModeling tumo, MasterGateManager magama, boolean active) {
-		//System.out.println("PSI " + i);
+		//
 		TClass t =  tumo.getTClassAtIndex(i);
 		
 		if (t == null) {
@@ -528,7 +528,7 @@ public class TURTLETranslator {
 		Vector<Gate> v;
 
 		for(k=0; k<tumo.relationNb(); k++) {
-			//System.out.println("Relation " + k);
+			//
 			r = tumo.getRelationAtIndex(k);
 
 			if ((r.type == Relation.SYN) && ((r.t1 == t) || (r.t2 == t))) {
@@ -551,9 +551,9 @@ public class TURTLETranslator {
 					v = r.gatesOfT1;
 					for(l=0; l<v.size(); l++) {
 						g = v.elementAt(l);
-						//System.out.println("Looking for gate");
+						//
 						gates.add(magama.getMasterGateOf(r.t1, g));
-						//System.out.println("Got gate");
+						//
 					}
 				}
 
@@ -641,7 +641,7 @@ public class TURTLETranslator {
 
 	/* note: the model MUST have been checked before*/
 	private Vector<Process> translateActivityDiagram(TClass t) {
-		//System.out.println("Translating activity diagram of " + t.getName());
+		//
 		Vector<Process> v = new Vector<>();
 		index = 0;
 		int i, j;
@@ -676,9 +676,9 @@ public class TURTLETranslator {
 				params_fifo[i].setLotosName("fifo_" + (i + 1));
 				params_nat[i] = new Param("fifo_val_" + (i + 1), Param.NAT, "0");
 				params_nat[i].setLotosName("fifo_val_" + (i + 1));
-				//System.out.println("Adding param " + params_fifo[i]);
+				//
 				paramss.add(params_fifo[i]);
-				//System.out.println("Adding param " + params_nat[i]);
+				//
 				paramss.add(params_nat[i]);
 			}
 		}
@@ -704,15 +704,15 @@ public class TURTLETranslator {
 				params_fifo[i].setLotosName("fifo_" + (i + 1));
 				params_nat[i] = new Param("fifo_val_" + (i + 1), Param.NAT, "0");
 				params_nat[i].setLotosName("fifo_val_" + (i + 1));
-				//System.out.println("Adding param " + params_fifo[i]);
+				//
 				paramss.add(params_fifo[i]);
-				//System.out.println("Adding param " + params_nat[i]);
+				//
 				paramss.add(params_nat[i]);
 			}
 		}
 
 		if ((languageID == LOTOS) && (t instanceof FIFOFiniteAndGetSizeTClass)) {
-			System.out.println("FIFO finite + " + t.getName());
+			
 			//t.removeAllGates();
 			//t.removeAllAttributes();
 			paramss = new Vector<>();
@@ -735,9 +735,9 @@ public class TURTLETranslator {
 				params_fifo[i].setLotosName("fifo_" + (i + 1));
 				params_nat[i] = new Param("fifo_val_" + (i + 1), Param.NAT, "0");
 				params_nat[i].setLotosName("fifo_val_" + (i + 1));
-				//System.out.println("Adding param " + params_fifo[i]);
+				//
 				paramss.add(params_fifo[i]);
-				//System.out.println("Adding param " + params_nat[i]);
+				//
 				paramss.add(params_nat[i]);
 			}
 			nb = new Param("nb", "nat", "0");
@@ -751,7 +751,7 @@ public class TURTLETranslator {
 
 
 		Process main = new Process(generateProcessName("p_" + index + "_" + t.getLotosName()), gatess, paramss, languageID);
-		//System.out.println("Parameters=" + main.listParameters());
+		//
 		t.setProcess(main);
 		v.add(main);
 		allProcesses.add(main);
@@ -811,7 +811,7 @@ public class TURTLETranslator {
 			}
 			bodyLotos +="\n";
 
-			//System.out.println("Body lotos=" + bodyLotos);
+			//
 
 			main.setBody(bodyLotos);
 
@@ -896,7 +896,7 @@ public class TURTLETranslator {
 			}
 
 			bodyLotos +="\n";
-			//System.out.println("Body lotos=" + bodyLotos);
+			//
 			main.setBody(bodyLotos);
 
 			// Return process
@@ -904,7 +904,7 @@ public class TURTLETranslator {
 		}
 
 		if ((languageID == LOTOS) && (t instanceof FIFOFiniteAndGetSizeTClass)) {
-			System.out.println("FIFO finite + " + t.getName());
+			
 			// Translation of AD is calculated
 			//main.setBody(...
 			String bodyLotos="";
@@ -1018,7 +1018,7 @@ public class TURTLETranslator {
 			}
 
 			bodyLotos +="\n";
-			//System.out.println("Body lotos=" + bodyLotos);
+			//
 			main.setBody(bodyLotos);
 
 			// Return process
@@ -1048,7 +1048,7 @@ public class TURTLETranslator {
 			return v;
 		} else {
 			// At least one parallel component
-			//System.out.println("Translation with Parallel");
+			//
 
 			int cpt;
 			ADParallel adp;
@@ -1094,7 +1094,7 @@ public class TURTLETranslator {
 					for(j=0; j<ad.size(); j++) {
 						adc2 = ad.elementAt(j);
 						if (adc2.hasNextTo(adp)) {
-							//System.out.println("Leading to par: " +adc2.toString());
+							//
 							//creates a new Gate for it
 							g1 = new Gate("par" + i +"_g" + cpt, Gate.GATE, false);
 							g2 = new Gate("par" + i +"_g" + cpt, Gate.GATE, true);
@@ -1246,7 +1246,7 @@ public class TURTLETranslator {
 		if ((s == null) || (s.length() == 0)){
 			return ad.getGate().getLotosName() + modifyAction(ad.getActionValue(), languageID) + "; " + translateActivity(ad.getNext(0), ad);
 		} else {
-			//System.out.println("Limit on Gate: " + s);
+			//
 			if (languageID == LOTOS) {
 				CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time limited action with value " + ad.getActionValue() +  " and time limit of " + s + " has been modified with no time limitation");
 				warning.add(error);
@@ -1261,7 +1261,7 @@ public class TURTLETranslator {
 		String s;
 		
 		Process p = ad.getProcess();
-		//System.out.println("ActionValue=*" + ad.getActionValue() + "*");
+		//
 		if (p != null) {
 			if ((params == null) || (actions == null)) {
 				s = p.getCallToMe(ad.getParam(), modifyAction(ad.getActionValue(), languageID));
@@ -1281,12 +1281,12 @@ public class TURTLETranslator {
 				// End added May 2008
 			}
 			/*if (p.getName().indexOf("67") > -1)
-			System.out.println(p.getName() + " -> " + s);
+			
             if (s == null) {
-				System.out.println("*** NULL S (PROCESS) ***");
+				
             }
             if (s.startsWith("null")) {
-                System.out.println("*** NULL S1 (PROCESS) ***");
+                
             }*/
 			return s;
 		} else {
@@ -1301,7 +1301,7 @@ public class TURTLETranslator {
 				return translateADActionStateWithParam((ADActionStateWithParam)(ad.getNext(0)));
 				// end added May 2008
 			} else {
-				System.out.println("*** NULL PROCESS ***");
+				
 				return "";
 			}
 		}
@@ -1312,7 +1312,7 @@ public class TURTLETranslator {
 		if (ad.realNbOfNext() < 1)
 			return "";
 
-		//System.out.println("GUARD=" + ad.getGuard(0));
+		//
 		if (ad.realNbOfNext() == 1) {
 			if (Conversion.replaceAllString(ad.getGuard(0), " ", "").compareTo("[]") == 0) {
 				translateActivity(ad.getNext(0), ad);
@@ -1490,7 +1490,7 @@ public class TURTLETranslator {
 			if (adc instanceof ADJunction) {
 				adj = (ADJunction)adc;
 				p = new Process("p_" + index + "_" + t.getLotosName(), gateList, paramList, languageID);
-				//System.out.println("New process junction: " + p.getName());
+				//
 				v.add(p);
 				index ++;
 				adj.setProcess(p);
@@ -1532,17 +1532,17 @@ public class TURTLETranslator {
 					par = ads.getParam();
 					if (adsnext.getParam() != par) {
 						// One must verify that the second does not use the Param declared in the first one!
-						//System.out.println("Param " + par.getName()+  " in use in " + adsnext.getActionValue() + "?");
+						//
 						if (!paramIsUsedIn(par, adsnext.getActionValue())) {
 								makeProcess = false;
-								//System.out.println("no");
+								//
 						}
 
 						// Must check also in the next ones of the next.
 						if (makeProcess == false) {
 							while(adsnext.getNext(0) instanceof ADActionStateWithParam) {
 								adsnext = (ADActionStateWithParam)(adsnext.getNext(0));
-								//System.out.println("Param " + par.getName()+  " in use in " + adsnext.getActionValue() + "?");
+								//
 								if (paramIsUsedIn(par, adsnext.getActionValue())) {
 									makeProcess = true;
 								}
@@ -1553,7 +1553,7 @@ public class TURTLETranslator {
 				if(makeProcess) {
 					p = new Process("p_" + index + "_" + t.getLotosName(), myGates, paramList, languageID);
 					//System.out.print("New process action state: " + p.getName() + "param=" + ads.getParam().getName() + " action=" + ads.getActionValue());
-					//System.out.println("  Next: " + ads.getNext(0));
+					//
 					v.add(p);
 					index ++;
 					ads.setProcess(p);
@@ -1590,20 +1590,20 @@ public class TURTLETranslator {
 			if (adc instanceof ADActionStateWithParam) {
 				ads = (ADActionStateWithParam)adc;
 				p = ads.getProcess();
-				//System.out.println("Translating " + p.getName());
+				//
 				if (p != null) {
 
 					String s = translateActivity(ads.getNext(0), ads);
-					//System.out.println("Result = " + s);
+					//
 					/*if (s == null) {
-                        System.out.println("s is null!");
+                        
                     }
                     if (s.trim().compareTo("null") == 0) {
-                         System.out.println("s is equal to null!");
+                         
                     }*/
 					p.setBody(s);
 				} else {
-					//System.out.println("p is null!");
+					//
 				}
 			}
 		}
@@ -1757,7 +1757,7 @@ public class TURTLETranslator {
 					}
 
 					tmp1 = s.substring(index0-1, index1);
-					//System.out.println("tmp1=" + tmp1);
+					//
 
 					tmp2 = "";
 					for(i=0; i<tmp1.length(); i++) {
@@ -1779,7 +1779,7 @@ public class TURTLETranslator {
 					if (tmp2.length() > 0) {
 						tmp2 = "(" + tmp2 + ")";
 					}
-					//System.out.println("tmp2=" + tmp2);
+					//
 
 					if (index0 == 1) {
 						tmp5 = "";
@@ -1791,7 +1791,7 @@ public class TURTLETranslator {
 						tmp5 = tmp5 + s.substring(index1, s.length());
 					}
 
-					//System.out.println("tmp5=" + tmp5);
+					//
 
 					// Then, recursive call
 					return modifyNatural(tmp5, languageID);

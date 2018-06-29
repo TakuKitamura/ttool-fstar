@@ -177,8 +177,8 @@ public class ConfigurationTTool {
 
 
     public static void makeDefaultConfiguration() {
-        //System.out.println(Paths.get("").toAbsolutePath().toString());
-        //System.out.println("User.dir path:" + System.getProperty("user.dir"));
+        //TraceManager.addDev(Paths.get("").toAbsolutePath().toString());
+        //TraceManager.addDev("User.dir path:" + System.getProperty("user.dir"));
         //Path currentRelativePath = Paths.get("");
         //String s = currentRelativePath.toAbsolutePath().toString();
         //String s = System.getProperty("user.dir");
@@ -350,7 +350,7 @@ public class ConfigurationTTool {
     }
 
     public static void printConfiguration(boolean systemcOn) {
-        System.out.println(getConfiguration(systemcOn));
+        TraceManager.addDev(getConfiguration(systemcOn));
     }
 
     public static String getConfiguration(boolean systemcOn) {

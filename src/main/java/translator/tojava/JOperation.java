@@ -72,7 +72,7 @@ public class JOperation  {
     }
     
     public void addNonFormattedCode(int dec, String code) {
-        //System.out.println("Original code=" + code);
+        //
         String deca = "";
         for(int i=0; i<dec; i++) {
             deca += translator.JKeyword.INDENT;
@@ -81,7 +81,7 @@ public class JOperation  {
         code = Conversion.insertAfterAll(code, '\n', deca);
         //code = Conversion.insertAfterAll(code, '\n', "<toto>");
         addCode(code);
-        //System.out.println("Final code=" + code);
+        //
     }
     
     public void addRegularIndent() {

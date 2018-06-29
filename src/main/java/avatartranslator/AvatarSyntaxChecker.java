@@ -216,10 +216,10 @@ public class AvatarSyntaxChecker  {
         // First parsing
         parser = new TMLExprParser(new StringReader(_parseCmd + " " + _action));
         try {
-            //System.out.println("\nParsing :" + parseCmd + " " + action);
+            //
             root = parser.CompilationUnit();
             //root.dump("pref=");
-            //System.out.println("Parse ok");
+            //
         } catch (ParseException e) {
             TraceManager.addDev("\nAvatar Parsing :" + _parseCmd + " " + _action);
             TraceManager.addDev("ParseException --------> Parse error in :" + _parseCmd + " " + _action);
@@ -248,10 +248,10 @@ public class AvatarSyntaxChecker  {
 
         parser = new TMLExprParser(new StringReader(_parseCmd + " " + modif));
         try {
-            //System.out.println("\nParsing :" + parseCmd + " " + modif);
+            //
             root = parser.CompilationUnit();
             //root.dump("pref=");
-            //System.out.println("Parse ok");
+            //
         } catch (ParseException e) {
             TraceManager.addDev("\nAvatar Parsing :" + _parseCmd + " " + modif);
             TraceManager.addDev("\n(Original parsing :" + _parseCmd + " " + _action + ")");

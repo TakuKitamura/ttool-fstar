@@ -42,6 +42,7 @@ package tmltranslator;
 import myutil.Conversion;
 import myutil.FileException;
 import myutil.FileUtils;
+import myutil.TraceManager;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -98,7 +99,7 @@ public class TMLArchiTextSpecification {
 //    }
 
     public void saveFile(String path, String filename) throws FileException {
-        System.out.println("Saving architecture spec file in " + path + filename);
+        TraceManager.addDev("Saving architecture spec file in " + path + filename);
         FileUtils.saveFile(path + filename, spec);
     }
 
@@ -249,9 +250,9 @@ public class TMLArchiTextSpecification {
         String set;
         List<HwLink> hwlinks = tmla.getHwLinks();
 
-        //System.out.println("Making links");
+        //TraceManager.addDev("Making links");
         for (HwLink link : hwlinks) {
-            //System.out.println("Link");
+            //TraceManager.addDev("Link");
             if (link instanceof HwLink) {
                 if ((link.hwnode != null) && (link.bus != null)) {
                     name = prepareString(link.getName());
@@ -263,7 +264,7 @@ public class TMLArchiTextSpecification {
                 }
             }
         }
-        //System.out.println("Links:done");
+        //TraceManager.addDev("Links:done");
 
         return code;
     }
@@ -278,7 +279,7 @@ public class TMLArchiTextSpecification {
         warnings = new ArrayList<TMLTXTError>();
 
         spec = Conversion.removeComments(spec);
-        //System.out.println(spec);
+        //TraceManager.addDev(spec);
         browseCode();
 
         return (errors.size() == 0);
@@ -339,17 +340,17 @@ public class TMLArchiTextSpecification {
             while ((s = br.readLine()) != null) {
                 if (s != null) {
                     s = s.trim();
-                    //System.out.println("s=" + s);
+                    //TraceManager.addDev("s=" + s);
                     s = removeUndesiredWhiteSpaces(s, lineNb);
                     s1 = Conversion.replaceAllString(s, "\t", " ");
                     s1 = Conversion.replaceRecursiveAllString(s1, "  ", " ");
-                    //System.out.println("s1=" + s1);
+                    //TraceManager.addDev("s1=" + s1);
                     if (s1 != null) {
                         split = s1.split("\\s");
                         if (split.length > 0) {
-                            //System.out.println("analyse");
+                            //TraceManager.addDev("analyse");
                             analyseInstruction(s, lineNb, split);
-                            //System.out.println("end analyse");
+                            //TraceManager.addDev("end analyse");
                         }
                     }
 
@@ -357,7 +358,7 @@ public class TMLArchiTextSpecification {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception when reading specification: " + e.getMessage());
+            TraceManager.addDev("Exception when reading specification: " + e.getMessage());
             addError(0, lineNb, 0, "Exception when reading specification");
         }
     }
@@ -406,7 +407,7 @@ public class TMLArchiTextSpecification {
                 return -1;
             }
 
-            //System.out.println("Master clock frequency = " + value);
+            //TraceManager.addDev("Master clock frequency = " + value);
             tmla.setMasterClockFrequency(value);
 
             // NODE
@@ -720,7 +721,7 @@ public class TMLArchiTextSpecification {
         } // SET
 
         // Other command
-        //System.out.println("ERROR hm hm");
+        //TraceManager.addDev("ERROR hm hm");
         if ((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
             error = "Syntax error: unrecognized instruction: " + _split[0];
             addError(0, _lineNb, 0, error);
@@ -773,15 +774,15 @@ public class TMLArchiTextSpecification {
                 case 4:
                     if (!isAValidId(getEvtId(_split[_parameter]))) {
                         err = true;
-                        //System.out.println("Unvalid id");
+                        //TraceManager.addDev("Unvalid id");
                     } else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
-                        //System.out.println("Unvalid param");
+                        //TraceManager.addDev("Unvalid param");
                         err = true;
                     }
                     break;
                 case 5:
                     if (!(_split[_parameter].equals("="))) {
-                        System.out.println("Error of =");
+                        TraceManager.addDev("Error of =");
                         err = true;
                     }
                     break;
@@ -899,7 +900,7 @@ public class TMLArchiTextSpecification {
     }
 
     private String getParams(String _input) {
-        //System.out.println("input=" + _input);
+        //TraceManager.addDev("input=" + _input);
         int index0 = _input.indexOf('(');
         int index1 = _input.indexOf(')');
         if ((index0 == -1) || (index1 == -1)) {

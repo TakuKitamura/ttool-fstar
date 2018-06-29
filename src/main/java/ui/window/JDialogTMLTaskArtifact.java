@@ -121,13 +121,13 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	// Issue #41 Ordering of tabbed panes 
     	tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 
-    	c1.gridwidth = 1;
+		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
     	c1.gridheight = 1;
     	c1.weighty = 1.0;
     	c1.weightx = 1.0;
     	c1.fill = GridBagConstraints.HORIZONTAL;
     	panel2.add(new JLabel("Task:"), c1);
-    	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+    	//c1.gridwidth = GridBagConstraints.REMAINDER; //end row
     	Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllNonMappedTMLTaskNames((TMLArchiDiagramPanel)(artifact.getTDiagramPanel()), artifact.getReferenceTaskName(), artifact.getTaskName());
     	int index = 0;
     	if (list.size() == 0) {
@@ -146,7 +146,7 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	for(int i=0; i<11; i++) {
     		list.add(""+i);
     	}
-    	c1.gridwidth = 1;//GridBagConstraints.REMAINDER; //end row
+    	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
     	panel2.add(new JLabel("Priority:"), c1);
     	//c1.gridwidth = GridBagConstraints.REMAINDER; //end row
     	priority = new JComboBox<String>(list);
@@ -162,7 +162,7 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	c3.weighty = 1.0;
     	c3.weightx = 1.0;
     	c3.fill = GridBagConstraints.HORIZONTAL;
-    	//c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+    	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
     	panel3.add(new JLabel("<html>Task Extension<br>Construct:</html>"), c3);
     	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
     	Vector<String> operationsListS = new Vector<String>();

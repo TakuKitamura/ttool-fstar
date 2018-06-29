@@ -134,7 +134,7 @@ public	class JFrameText extends JFrame	implements ActionListener {
     
     public void	actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
-        //System.out.println("Command:" + command);
+        //
         
         if (command.equals("Close")) {
             dispose();

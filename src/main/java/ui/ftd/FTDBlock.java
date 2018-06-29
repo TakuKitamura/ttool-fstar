@@ -120,7 +120,7 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
         Font f = g.getFont();
         Font fold = f;
 
-        //System.out.println("width=" + width + " height=" + height);
+        //
 
         if ((rescaled) && (!tdp.isScaled())) {
 
@@ -138,7 +138,7 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
             int w0, w1, w2;
             f = f.deriveFont((float)maxCurrentFontSize);
             g.setFont(f);
-            //System.out.println("max current font size:" + maxCurrentFontSize);
+            //
             while(maxCurrentFontSize > (minFontSize-1)) {
                 w0 = g.getFontMetrics().stringWidth(value);
                 w1 = g.getFontMetrics().stringWidth(ster);
@@ -162,7 +162,7 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
 
         }
 
-        //System.out.println("Current font size:" + currentFontSize);
+        //
 
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);

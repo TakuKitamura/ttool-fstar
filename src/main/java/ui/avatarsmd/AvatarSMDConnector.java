@@ -85,7 +85,7 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
        if (nbInternalTGComponent>0) {
        p3 = tgcomponent[0];
        p4 = tgcomponent[0];
-       //System.out.println("p3.x " + p3.getX() + " p3.y " + p3.getY());
+       //
        if (!(tgcomponent[0] instanceof AvatarSMDTransitionInfo)) {
        drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
        }  else {

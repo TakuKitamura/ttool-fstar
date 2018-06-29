@@ -49,7 +49,7 @@ import ui.*;
    * Diagram reference analysis: Used to reference diagrams from the
    * Sysmlsec methodology
    * Creation: 28/01/2016
-   * @version 1.0 28/01/2016
+   * @version 1.1 14/06/2018
    * @author Ludovic APVRILLE
  */
 public class SysmlsecMethodologyReferenceToAttack extends SysmlsecMethodologyDiagramReference  {
@@ -62,8 +62,8 @@ public class SysmlsecMethodologyReferenceToAttack extends SysmlsecMethodologyDia
 
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 0, TGConnectingPoint.WEST);
-        connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 0, TGConnectingPoint.WEST);
+        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 0.0, TGConnectingPoint.WEST);
+        connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 0.0, TGConnectingPoint.WEST);
 
         typeOfReference = ATTACK;
 
@@ -81,13 +81,47 @@ public class SysmlsecMethodologyReferenceToAttack extends SysmlsecMethodologyDia
     }
 
     public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
-	dn.setValidationsNumber(2);
+	dn.setValidationsNumber(3);
         dn.setValidationsInfo(0, SysmlsecMethodologyDiagramName.SIM_ANIM);
-        dn.setValidationsInfo(1, SysmlsecMethodologyDiagramName.UPP);
+        dn.setValidationsInfo(1, SysmlsecMethodologyDiagramName.INTERNAL_MODEL_CHECKER);
+        dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.UPP);
     }
 
     public boolean makeCall(String diagramName, int index) {
-        return true;
+
+        switch (index) {
+            case 0:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarSimulation();
+                    return true;
+                }
+                return false;
+            case 1:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarModelChecker();
+                    return true;
+                }
+                return false;
+            case 2:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarUPPAALVerification();
+                    return true;
+                }
+                return false;
+
+
+            default:
+                return false;
+        }
     }
 
 }

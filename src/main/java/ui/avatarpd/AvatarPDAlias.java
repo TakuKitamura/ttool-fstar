@@ -136,7 +136,7 @@ public class AvatarPDAlias extends TGCScalableWithInternalComponent implements C
 			int w0, w1, w2;
 			f = f.deriveFont((float)maxCurrentFontSize);
 			g.setFont(f);
-			//System.out.println("max current font size:" + maxCurrentFontSize);
+			//
 			while(maxCurrentFontSize > (minFontSize-1)) {
 				w0 = g.getFontMetrics().stringWidth(value);
 				w1 = g.getFontMetrics().stringWidth(ster);
@@ -215,12 +215,12 @@ public class AvatarPDAlias extends TGCScalableWithInternalComponent implements C
         int w  = g.getFontMetrics().stringWidth(value);
 		int w1 = Math.max((int)(minWidth*tdp.getZoom()), w + 2 * textX);
 		
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+        //
         if (w1 != width) { 
             width = w1;
             resizeWithFather();
         }
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+        //
     }
 
     

@@ -92,7 +92,7 @@ public class TMLCReferencePortConnectingPoint extends TMLCPortConnectingPoint{
 	public static double getDecY(TMLCCompositePort _port) {
 		if (_port != null) {
 			TGComponent tgc = _port.getFather();
-			//System.out.println("getY");
+			//
 			if (tgc != null) {
 				int y1 = _port.getY() + _port.getHeight()/2;
 				int y2 = tgc.getY();

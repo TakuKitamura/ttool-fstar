@@ -61,12 +61,12 @@ public class TGConnectingPointTimeConstraintSD extends  TGConnectingPoint{
     }
     
     public boolean isCompatibleWith(int type) {
-        //System.out.println("is compatible with " + type);
+        //
         if (type == TGComponentManager.CONNECTOR_RELATIVE_TIME_SDZV) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
-        //System.out.println("is compatible with:false");
+        //
         return false;
     }
     

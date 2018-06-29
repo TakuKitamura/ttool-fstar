@@ -90,7 +90,7 @@ public class JavaClass {
 	
 	public void setUserHeader(String _header) {
 		userHeader = "// User headers \n" + _header + "\n// End of user headers\n\n";
-		//System.out.println("user header = " + userHeader);
+		//
 	}
     
     public boolean isActive() {

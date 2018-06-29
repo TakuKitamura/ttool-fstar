@@ -159,7 +159,7 @@ public class AUTMappingGraph  extends AUTGraph {
 	}
 	
 	public void mergeTransitionsInPath(AUTState state, String keyword) {
-		//System.out.println("in state: " + state.id);
+		//TraceManager.addDev("in state: " + state.id);
 		AUTState state1;
 		AUTTransition autnext;
 		
@@ -213,7 +213,7 @@ public class AUTMappingGraph  extends AUTGraph {
 			return;
 		}
 		
-		//System.out.println("Found two transitions to merge: " + aut1.transition + " and " + aut2.transition);
+		//TraceManager.addDev("Found two transitions to merge: " + aut1.transition + " and " + aut2.transition);
 		
 		// Must check that this is the same channel
 		String tmp1 = aut1.transition.substring(index1 + keyword.length(), aut1.transition.length());
@@ -230,7 +230,7 @@ public class AUTMappingGraph  extends AUTGraph {
 		}
 		tmp2 = tmp2.substring(0, index2);
 		
-		//System.out.println("The two channel names are:" + tmp1 + " and " + tmp2);
+		//TraceManager.addDev("The two channel names are:" + tmp1 + " and " + tmp2);
 		
 		if (!tmp1.equals(tmp2)) {
 			return;
@@ -258,7 +258,7 @@ public class AUTMappingGraph  extends AUTGraph {
 		tmp2 += "<" + (p1.x + p2.x) + ", " + p2.y + ">";
 		aut2.transition = tmp2;
 		
-		//System.out.println("The second transition is now:" + aut2.transition);
+		//TraceManager.addDev("The second transition is now:" + aut2.transition);
 		
 	}
 	
@@ -324,7 +324,7 @@ public class AUTMappingGraph  extends AUTGraph {
 		
 		p = getValues(transition.transition);
 		
-		//System.out.println("p.x=" + p.x +  " p.y=" + p.y);
+		//TraceManager.addDev("p.x=" + p.x +  " p.y=" + p.y);
 		
 		if ((p.x == -1) || (p.y == -1)) {
 			return false;
@@ -345,7 +345,7 @@ public class AUTMappingGraph  extends AUTGraph {
 		newTransition = transition.transition.substring(0, index1);
 		transition.transition = newTransition;
 		
-		//System.out.println("new Transition =" + newTransition);
+		//TraceManager.addDev("new Transition =" + newTransition);
 		
 		transition.destination = nbState;
 		AUTTransition tr = null;
@@ -355,7 +355,7 @@ public class AUTMappingGraph  extends AUTGraph {
 			value ++;
 		}
 		
-		//System.out.println("value" + value);
+		//TraceManager.addDev("value" + value);
 		
 		for(int i=0; i<value; i++) {
 			if ((i == (value-1)) && ((p.x % p.y) != 0)) {
@@ -427,14 +427,14 @@ public class AUTMappingGraph  extends AUTGraph {
 		computeStates();
 		AUTState state = findFirstOriginState();
 		if (state == null) {
-			//System.out.println("no first state");
+			//TraceManager.addDev("no first state");
 			return;
 		}
 		
-		//System.out.println("First state = " + state.id);
+		//TraceManager.addDev("First state = " + state.id);
 		
 		if ((state != null) && (state != states.get(0))){
-			//System.out.println("First state = " + state.id);
+			//TraceManager.addDev("First state = " + state.id);
 			states.remove(state);
 			states.add(0, state);
 			updateStateIds();

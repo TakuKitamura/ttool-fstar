@@ -38,10 +38,9 @@
 
 package ui;
 
-import myutil.GenericTree;
-import myutil.GraphicLib;
-import myutil.SVGGraphics;
-import myutil.TraceManager;
+import myutil.*;
+import myutilsvg.*;
+import ui.atd.ATDAttack;
 import ui.atd.ATDBlock;
 import ui.avatarad.AvatarADActivity;
 import ui.avatarbd.AvatarBDBlock;
@@ -52,16 +51,17 @@ import ui.avatarmad.AvatarMADAssumption;
 import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
 import ui.cd.*;
-import ui.syscams.SysCAMSBlockDE;
-import ui.syscams.SysCAMSBlockTDF;
-import ui.syscams.SysCAMSCompositeComponent;
-import ui.syscams.SysCAMSRecordComponent;
+import ui.ftd.FTDFault;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
 import ui.ncdd.NCSwitchNode;
 import ui.ncdd.NCTrafficArtifact;
 import ui.oscd.TOSClass;
 import ui.req.Requirement;
+import ui.syscams.SysCAMSBlockDE;
+import ui.syscams.SysCAMSBlockTDF;
+import ui.syscams.SysCAMSCompositeComponent;
+import ui.syscams.SysCAMSRecordComponent;
 import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
@@ -184,7 +184,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected int y2;
     protected Vector<Point> listPoint;
     protected TGConnectingPoint p1, p2;
-   /* protected CAMSConnectingPoint cp1, cp2;*/
+    /* protected CAMSConnectingPoint cp1, cp2;*/
     protected int type;
 
     // For component selection
@@ -1276,7 +1276,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         ySel = y;
         for (TGComponent tgc : this.componentList)
             if (tgc.isSelected()) {
-                if ((xSel-oldX != 0 ) || (ySel-oldY != 0 )) {
+                if ((xSel - oldX != 0) || (ySel - oldY != 0)) {
                     /*TraceManager.addDev("" + tgc + " is selected oldX=" + xSel +
                             " oldY=" + oldY + " xSel=" + xSel + " ySel=" + ySel);*/
                 }
@@ -2317,7 +2317,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     actionOnRemove(t);
                     tgcon.getTGConnectingPointP1().setFree(true);
                     tgcon.getTGConnectingPointP2().setFree(true);
-                    System.out.println("removing...");
+                    
                     TraceManager.addDev("Removed one connector!");
                     for (int k = 0; k < tgcon.getNbConnectingPoint(); k++)
                         removeOneConnector(tgcon.tgconnectingPointAtIndex(k));
@@ -2597,11 +2597,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof TMLCRecordComponent && this.checkTMLCRecordComponent((TMLCRecordComponent) o, name))
                     || (o instanceof TMLCCompositeComponent && this.checkTMLCCompositeComponent((TMLCCompositeComponent) o, name))
                     || (o instanceof TMLTaskInterface && this.checkTMLTaskInterface((TMLTaskInterface) o, name))
-                	  || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
+                    || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
                     || (o instanceof SysCAMSBlockDE && this.checkSysCAMSBlockDEComponent((SysCAMSBlockDE) o, name))
                     || (o instanceof SysCAMSRecordComponent && this.checkSysCAMSRecordComponent((SysCAMSRecordComponent) o, name))
                     || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
                     || (o instanceof ATDBlock && this.checkATDBlock((ATDBlock) o, name))
+                    || (o instanceof ATDAttack && this.checkATDAttack((ATDAttack) o, name))
+                    || (o instanceof FTDFault && this.checkFTDFault((FTDFault) o, name))
                     || (o instanceof AvatarBDBlock && this.checkAvatarBDBlock((AvatarBDBlock) o, name))
                     || (o instanceof AvatarCDBlock && this.checkAvatarCDBlock((AvatarCDBlock) o, name))
                     || (o instanceof AvatarSMDState && this.checkAvatarSMDState((AvatarSMDState) o, name))
@@ -2649,24 +2651,32 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         public boolean checkTMLTaskInterface(TMLTaskInterface o, String name) {
             return false;
         }
-        
+
         public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
-        	return false;
+            return false;
         }
-        
+
         public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
-        	return false;
+            return false;
         }
-        
+
         public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
-        	return false;
+            return false;
         }
-        
+
         public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
-        	return false;
+            return false;
         }
 
         public boolean checkATDBlock(ATDBlock o, String name) {
+            return false;
+        }
+
+        public boolean checkATDAttack(ATDAttack o, String name) {
+            return false;
+        }
+
+        public boolean checkFTDFault(FTDFault o, String name) {
             return false;
         }
 
@@ -2788,27 +2798,43 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         });
     }
 
-		 public String findSysCAMSPrimitiveComponentName(String name) {
-    	return this.findGoodName(name, new NameChecker() {
-    		public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
-    			return o.getValue().equals(name);
-    		}
-    		
-    		public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
-    			return o.getValue().equals(name);
-    		}
-    		
-    		public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
-    			return o.getValue().equals(name);
-    		}
-    		
-    		public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
-    			for (int i = 0; i < o.getNbInternalTGComponent(); i++)
-    				if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
-    					return true;
-    			return false;
-    		}
-    	});
+    public String findSysCAMSPrimitiveComponentName(String name) {
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
+                return o.getValue().equals(name);
+            }
+
+            public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
+                return o.getValue().equals(name);
+            }
+
+            public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
+                return o.getValue().equals(name);
+            }
+
+            public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
+                for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+                    if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+                        return true;
+                return false;
+            }
+        });
+    }
+
+    public String findAttackName(String name) {
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkATDAttack(ATDAttack o, String name) {
+                return o.getValue().equals(name);
+            }
+        });
+    }
+
+    public String findFaultName(String name) {
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkFTDFault(FTDFault o, String name) {
+                return o.getValue().equals(name);
+            }
+        });
     }
 
     public String findBlockName(String name) {
@@ -3529,6 +3555,53 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public String svgCapture() {
+        int w = this.getWidth();
+        int h = this.getHeight();
+        int x = getRealMinX();
+        int y = getRealMinY();
+        w = getRealMaxX() - x;
+        h = getRealMaxY() - y;
+        //TraceManager.addDev("x=" + x + " y=" + y + " w=" + w + " h=" + h + " getWidth = " + this.getWidth() + " getHeight = " + this.getHeight());
+        x = x - 5;
+        y = y - 5;
+        w = w + 10;
+        h = h + 10;
+        w = Math.max(0, w);
+        h = Math.max(0, h);
+        x = Math.max(5, x);
+        y = Math.max(5, y);
+        w = Math.min(w, getWidth() - x);
+        h = Math.min(h, getHeight() - y);
+
+
+        /*StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+        sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
+        //sb.append(" width=\"" + (w+x) + "\" height=\"" + (h+y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
+        sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"");
+        sb.append(" width=\"" + (w + x) + "\" height=\"" + (h + y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
+
+        // Issue #14 point 10: Somehow the last graphics that was used is different than the actual one leading
+        // to an error in calculating string lengths
+        final SVGGraphics svgg = new SVGGraphics((Graphics2D) getGraphics());
+//      SVGGraphics svgg = new SVGGraphics((Graphics2D)lastGraphics);
+
+        RepaintManager.currentManager(this).setDoubleBufferingEnabled(false);
+        //this.paint(svgg);
+        //TraceManager.addDev("Painting for svg");
+        basicPaintMyComponents(svgg);
+        //TraceManager.addDev("Painting for svg done");
+        sb.append(svgg.getSVGString());
+        RepaintManager.currentManager(this).setDoubleBufferingEnabled(true);
+
+        sb.append("</svg>");
+
+        return sb.toString();*/
+
+        SVGGeneration gen = new SVGGeneration();
+        return gen.getSVGString(this);
+    }
+
+    public String oldSvgCapture() {
         int w = this.getWidth();
         int h = this.getHeight();
         int x = getRealMinX();

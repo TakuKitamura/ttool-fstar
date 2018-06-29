@@ -507,6 +507,7 @@ public class TGComponentManager {
     public static final int SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW = 5710;
     public static final int SYSMLSEC_METHODOLOGY_REF_CP_VIEW = 5711;
     public static final int SYSMLSEC_METHODOLOGY_REF_ATTACK = 5712;
+    public static final int SYSMLSEC_METHODOLOGY_REF_FAULT = 5719;
     public static final int SYSMLSEC_METHODOLOGY_CONNECTOR = 5718;
 
     // PLUGIN
@@ -784,6 +785,9 @@ public class TGComponentManager {
                 break;
             case SYSMLSEC_METHODOLOGY_REF_ATTACK:
                 tgc = new SysmlsecMethodologyReferenceToAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_FAULT:
+                tgc = new SysmlsecMethodologyReferenceToFault(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case SYSMLSEC_METHODOLOGY_DIAGRAM_NAME:
                 tgc = new SysmlsecMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1522,6 +1526,8 @@ public class TGComponentManager {
             return SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToAttack) {
             return SYSMLSEC_METHODOLOGY_REF_ATTACK;
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToFault) {
+            return SYSMLSEC_METHODOLOGY_REF_FAULT;
 
 
             // AVATAR MAD
@@ -2244,31 +2250,31 @@ public class TGComponentManager {
                 break;
             case CONNECTOR_INTERACTION:
                 tgc = new TGConnectorInteraction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_ASYNC_SD:
                 tgc = new ui.sd.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_SYNC_SD:
                 tgc = new ui.sd.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_RELATIVE_TIME_SD:
                 tgc = new ui.sd.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_ASYNC_SDZV:
                 tgc = new ui.sd2.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_SYNC_SDZV:
                 tgc = new ui.sd2.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_RELATIVE_TIME_SDZV:
                 tgc = new ui.sd2.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
 
             case CONNECTOR_ACTOR_UCD:

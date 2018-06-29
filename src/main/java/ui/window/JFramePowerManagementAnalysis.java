@@ -303,7 +303,7 @@ public	class JFramePowerManagementAnalysis extends JFrame implements ActionListe
     
     public void actionPerformed(ActionEvent evt)  {
         //String command = evt.getActionCommand();
-        //System.out.println("Command:" + command);
+        //
         
         if (evt.getSource() == close) {
 			if (mode == STARTED) {
@@ -317,7 +317,7 @@ public	class JFramePowerManagementAnalysis extends JFrame implements ActionListe
     }
 	
 	private void setMode() {
-		//System.out.println("Setting mode");
+		//
 		stop.setEnabled(mode == STARTED);
 		start.setEnabled(mode == NOT_STARTED);
 		close.setEnabled(true);
@@ -423,7 +423,7 @@ public	class JFramePowerManagementAnalysis extends JFrame implements ActionListe
 		
 		if (ret == 0) {
 			jta.append("VCD generated... \n");
-			//System.out.println(generator.getVCDString());
+			//
 			jta.append("Saving VCD in " + SpecConfigTTool.VCDPath + "spec.vcd \n");
 			try {
 				generator.saveInFile(SpecConfigTTool.VCDPath, "spec.vcd");

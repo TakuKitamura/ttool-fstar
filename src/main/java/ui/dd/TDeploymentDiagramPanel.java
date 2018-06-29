@@ -65,7 +65,7 @@ public class TDeploymentDiagramPanel extends TDiagramPanel {
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        //System.out.println("Action");
+        //
         /*if (tgc instanceof TCDTClass) {
             TCDTClass t = (TCDTClass)tgc;
             return mgui.newTClassName(tp, t.oldValue, t.getValue());
@@ -87,7 +87,7 @@ public class TDeploymentDiagramPanel extends TDiagramPanel {
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
-            //System.out.println(" *** add tclass *** name=" + tgcc.getClassName());
+            //
             mgui.addTClass(tp, tgcc.getClassName());
             return true;
         }*/

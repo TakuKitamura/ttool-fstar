@@ -128,18 +128,18 @@ public class JBirdPanel extends JPanel implements MouseListener, MouseMotionList
     }
     
     public void mousePressed(MouseEvent e) {
-        //System.out.println("pressed");
+        //
         //startX = e.getX();
         //startY = e.getY();
         if ((currentTdp != null) && (currentTdp.jsp != null)) {
-            //System.out.println("config ok");
+            //
             horizontal = currentTdp.jsp.getHorizontalScrollBar();
             vertical = currentTdp.jsp.getVerticalScrollBar();
             centerRectangle(e.getX(), e.getY());
             //valueH = horizontal.getValue();
             //valueV = vertical.getValue();
         } else {
-            //System.out.println("config ko");
+            //
             horizontal = null;
             vertical = null;
         }

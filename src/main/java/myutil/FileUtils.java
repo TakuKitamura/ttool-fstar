@@ -40,10 +40,6 @@
 package myutil;
 
 import java.io.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 
 
 /**
@@ -222,7 +218,6 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
             return false;
         }
         String fileName = f.getAbsolutePath();
-        //System.out.println(fileName);
         return fileName.endsWith("." + extension);
     }
 
@@ -314,7 +309,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
         // if the directory does not exist, create it
         if (!theDir.exists()) {
-                theDir.mkdir();
+            theDir.mkdir();
         }
 
     }

@@ -219,7 +219,7 @@ public class EBRDDERB extends TGCOneLineText implements SwallowedTGComponent {
 	
 	public void resizeWithFather() {
         if ((father != null) && (father instanceof EBRDDERC)) {
-            //System.out.println("cdRect comp");
+            //
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
             setMoveCd(x, y);
@@ -238,7 +238,7 @@ public class EBRDDERB extends TGCOneLineText implements SwallowedTGComponent {
 	
     @Override
 	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             
             NodeList nli;
@@ -249,27 +249,27 @@ public class EBRDDERB extends TGCOneLineText implements SwallowedTGComponent {
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("elements")) {
                                 val = elt.getAttribute("evt");
-								//System.out.println("val=" + val);
+								//
 								if (val != null) {
 									evt = val;
 								}
 								val = elt.getAttribute("cond");
-								//System.out.println("val=" + val);
+								//
 								if (val != null) {
 									condition = val;
 								}
 								val = elt.getAttribute("action");
-								//System.out.println("val=" + val);
+								//
 								if (val != null) {
 									action = val;
 								}

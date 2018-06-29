@@ -102,24 +102,24 @@ public class TopCellGenerator
 	
 	/* first test validity of the hardware platform*/
 	if(TopCellGenerator.avatardd.getNbCPU()==0){
-	    System.out.println("***Warning: require at least one CPU***");
+	    
 	}
 	    if(TopCellGenerator.avatardd.getNbRAM()==0){
-		System.out.println("***Warning: require at least one RAM***");
+		
 	    }
 	    if(TopCellGenerator.avatardd.getNbTTY()==0){
-		System.out.println("***Warning: require at least one TTY***");
+		
 	    }
 	    /* if there is one VGMN, this is the central interconnect */
 	    if(TopCellGenerator.avatardd.getNbVgmn()>1){
-		 System.out.println("***Warning: No more than one central VGMN***");
+		 
 	    }
             if(TopCellGenerator.avatardd.getNbVgmn()==1){
-                System.out.println("***VGMN based***");
+                
 		icn="vgmn";
 	    }
 	    else{
-		System.out.println("***VGSB based ***");
+		
 		icn="vgsb";
 	    }
 	    
@@ -146,25 +146,25 @@ public class TopCellGenerator
 		    //comp2 devrait toujours etre un interconnect
 		    if (comp1 instanceof AvatarRAM){
 			AvatarRAM comp1ram = (AvatarRAM)comp1;
-			System.out.println("RAM  monitored "+comp1ram.getMonitored());
+			
 			
 		    }
 		    
 		    if (comp1 instanceof AvatarCPU){ 
 			AvatarCPU comp1cpu = (AvatarCPU)comp1;
-			System.out.println("CPU monitored "+comp1cpu.getMonitored());
+			
 			
 		    }
 		    
 		    /*	if (comp2 instanceof AvatarRAM){ 
 			AvatarRAM comp2ram = (AvatarRAM)comp1;
-			System.out.println("RAM2 topcell monitored "+comp2ram.getMonitored());
+			
 			comp2ram.setMonitored(comp2ram.getMonitored());
 			}
 			
 			if (comp2 instanceof AvatarCPU){ 
 			AvatarCPU comp2cpu = (AvatarCPU)comp2;
-			System.out.println("CPU2 topcell monitored "+comp2cpu.getMonitored());
+			
 			comp2cpu.setMonitored(comp2cpu.getMonitored());
 			}*/
 		}
@@ -173,7 +173,7 @@ public class TopCellGenerator
 	    /* Central interconnect or local crossbars */
 	    
 	    if(TopCellGenerator.avatardd.getNbCrossbar()>0){
-		System.out.println("***Clustered Interconnect***");
+		
 	    }
 	    makeVCIparameters();
 	    makeConfig();
@@ -196,7 +196,7 @@ public class TopCellGenerator
 		    BufferedReader in = new BufferedReader(new FileReader(MAPPING_TXT));
 		    String line = null;
 			while ((line = in.readLine()) != null) {
-			    System.out.println(" Line read : " + line);
+			    
 			    mappingLines.add(line);// read one line of the file;
 			}
 			in.close();

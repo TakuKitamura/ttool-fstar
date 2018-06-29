@@ -137,13 +137,13 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
     }
     
     public String getAction(ADComponent ad) {
-        //System.out.println("Action on parallel");
+        //
         int index = component.indexOf(ad);
         if ((index >= 0) && (index < gateList.size())){
             Gate g = gateList.elementAt(index);
             return g.getName() + ";";
         }
-        //System.out.println("No action on parallel " +index);
+        //
         return "";
     }
     
@@ -179,7 +179,7 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
     }
     
     public boolean isAValidMotif(TClass t) {
-        //System.out.println("Is a valid motif!");
+        //
         if (valueGate == null) {
             valueGate = "[]";
         }
@@ -199,7 +199,7 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
         }
         
         s = s.substring(1, s.length()-1);
-        //System.out.println("new Synchro gates: " + s);
+        //
         
         String [] array = s.split(",");
         
@@ -208,25 +208,25 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
         for(int i=0; i<array.length; i++) {
             if (!array[i].equals("")) {
                 g = t.getGateByName(array[i]);
-                //System.out.println("gate = " + g.getName());
+                //
                 if (g == null) {
                     return false;
                 }
                 if (gates.contains(g)) {
                     return false;
                 } else {
-                    //System.out.println("Adding gate = " + g.getName());
+                    //
                     gates.addElement(g);
                 }
             }
         }
         
         synchroGate = gates;
-        //System.out.println("OK");
+        //
 
         /*for(int j=0; j<gates.size(); j++) {
                 g = (Gate)(gates.elementAt(j));
-                System.out.println("j=" + j + " gate=" + g.getName());
+                
         }*/
 
         return true;

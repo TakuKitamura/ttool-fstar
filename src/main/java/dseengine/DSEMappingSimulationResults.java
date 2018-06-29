@@ -42,6 +42,7 @@
 package dseengine;
 
 import myutil.Conversion;
+import myutil.TraceManager;
 import tmltranslator.TMLMapping;
 
 import java.util.Vector;
@@ -629,7 +630,7 @@ public class DSEMappingSimulationResults  {
 		
 		for(DSESimulationResult dserr: results) {
 			valuetmp = dserr.getMinSimulationDuration();
-			System.out.println("MIN SIMULATION DURATION " + valuetmp);
+			TraceManager.addDev("MIN SIMULATION DURATION " + valuetmp);
 			if (valuetmp > value) {
 				value = valuetmp;
 				index = currentIndex;
@@ -722,7 +723,7 @@ public class DSEMappingSimulationResults  {
 		
 		for(DSESimulationResult dserr: results) {
 			valuetmp = dserr.getMaxSimulationDuration();
-			System.out.println("MAX SIMULATION DURATION " + valuetmp);
+			TraceManager.addDev("MAX SIMULATION DURATION " + valuetmp);
 			if (valuetmp > value) {
 				value = valuetmp;
 				index = currentIndex;
@@ -842,7 +843,7 @@ public class DSEMappingSimulationResults  {
 			return;
 		}
 		
-		System.out.println("Computing grades of ID=" + ID + " tap=" + tap + " length=" + cumulativeGrades.length);
+		TraceManager.addDev("Computing grades of ID=" + ID + " tap=" + tap + " length=" + cumulativeGrades.length);
 		
 		mind = Long.MAX_VALUE; maxd = 0;
 		for(i=0; i<cumulativeGrades.length; i++) {
@@ -851,13 +852,13 @@ public class DSEMappingSimulationResults  {
 		}
 		
 		// If min = max, no difference between mappings -> no grade to give
-		System.out.println("mind= " + mind + " maxd= " + maxd);
+		TraceManager.addDev("mind= " + mind + " maxd= " + maxd);
 		if (mind != maxd) {
 			a = 100 / (mind - maxd);b = - a * maxd;
 			for(i=0; i<cumulativeGrades.length; i++) {
 				valued = getDoubleResultValueByID(ID, i);
 				y = (int)(a * valued + b);
-				System.out.println("Giving grade at " + i + " = " + tap * y);
+				TraceManager.addDev("Giving grade at " + i + " = " + tap * y);
 				cumulativeGrades[i] += tap * y; 
 			}
 		}
@@ -929,7 +930,7 @@ public class DSEMappingSimulationResults  {
 		
 		// Printing grades
 		for(i=0; i<nb; i++) {
-			System.out.println("grade #" + i + ": " + cumulativeGrades[i]);
+			TraceManager.addDev("grade #" + i + ": " + cumulativeGrades[i]);
 		}
 		
 	}

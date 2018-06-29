@@ -120,7 +120,7 @@ public class TADTimeLimitedOfferWithLatency extends TGCWithInternalComponent imp
     }
     
     public void internalDrawing(Graphics g) {
-        //System.out.println("Value=" + value);
+        //
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
         int w2 = width;

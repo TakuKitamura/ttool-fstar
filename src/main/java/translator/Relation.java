@@ -229,7 +229,7 @@ public class Relation {
     }
     
     public void print() {
-        System.out.println("Relation: " + name +" between   " + t1.getName() + "   and   " + t2.getName());
+        
     }
     
     public void printToStringBuffer(StringBuffer sb) {

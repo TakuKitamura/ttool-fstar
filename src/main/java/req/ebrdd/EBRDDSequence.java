@@ -69,8 +69,8 @@ public class EBRDDSequence extends EBRDDComponent{
       return;
     }
     
-    //System.out.println("Nb of indexes" + indexes.size());
-    //System.out.println("Nb of nexts" + nexts.size());
+    //
+    //
       ArrayList<EBRDDComponent> nextsbis = new ArrayList<EBRDDComponent>();
       
       // Sort according to index stored in indexes
@@ -96,7 +96,7 @@ public class EBRDDSequence extends EBRDDComponent{
       nexts = nextsbis;
 	  
 	  //for(i=0; i<nexts.size(); i++){
-		 // System.out.println("sequence #" + i + " = " + nexts.elementAt(i));
+		 // 
 	  //}
       
     }

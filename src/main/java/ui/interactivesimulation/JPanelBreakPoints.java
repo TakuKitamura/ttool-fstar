@@ -245,7 +245,7 @@ public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSel
 		try {
 			return Integer.decode(in).intValue();
 		} catch (Exception e) {
-			System.out.println("Wrong string: "+ in);
+			
 		}
 		
 		return -1;

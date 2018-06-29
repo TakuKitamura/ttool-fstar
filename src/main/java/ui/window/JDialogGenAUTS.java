@@ -324,7 +324,7 @@ public class JDialogGenAUTS extends JDialog implements ActionListener, Runnable 
                 cmd1 = cmdBcgio + " -bcg " + basicFileName + ".bcg" + " -fc2 " + saveFileName + ".fc2";
                 data = processCmd(cmd1);
                 data = rshc.getFileData(saveFileName + ".fc2");
-                //System.out.println("Got data!");
+                //
                 mgui.gtm.saveInFile(new File(path, saveFileName + ".fc2"), data);
             }
             jta.append("Done for " + taskName + "\n\n");

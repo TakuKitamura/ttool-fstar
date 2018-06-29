@@ -186,6 +186,10 @@ public class IconManager {
     public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005;
 
     //private static String icon7 = "turtle_large.gif";
+    private static String ttoolStringIcon = "starting_logo.gif";
+    public static ImageIcon ttoolImageIcon;
+    public static Image ttoolImage;
+
     private static String icon8 = "turtle_16.gif";
     private static String icon9 = "diplodocus2_16.gif";
     //Added by Solange
@@ -676,7 +680,7 @@ public class IconManager {
         if (url != null) {
             return new ImageIcon(url);
         } else {
-            System.out.println("Could not load " + s);
+            
         }
 
         return null;
@@ -686,13 +690,17 @@ public class IconManager {
         ImageIcon imc = new ImageIcon(IconManager.icon12);
         Image im = imc.getImage();
         if (im == null) {
-            System.out.println("Cannot load icons");
+            
         } else {
-            System.out.println("Icons loaded");
+            
         }
     }
 
     public static void loadImg() {
+
+        ttoolImageIcon = getIcon(ttoolStringIcon);
+        ttoolImage = ttoolImageIcon.getImage();
+
         imgic8 = getIcon(icon8);
         imgic9 = getIcon(icon9);
         if (imgic8 != null) {

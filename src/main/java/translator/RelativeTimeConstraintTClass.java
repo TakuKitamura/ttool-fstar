@@ -151,7 +151,7 @@ public  class RelativeTimeConstraintTClass extends TimeConstraintTClass {
 
 		
         
-        //System.out.println("Activity diagram of TC with time1=" + time1 + " and time2=" + time2);
+        //
         
         /*// Gates
         g1 = new Gate("begin_tc", Gate.GATE, false);

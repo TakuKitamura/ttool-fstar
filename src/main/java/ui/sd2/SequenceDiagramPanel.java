@@ -66,7 +66,7 @@ public class SequenceDiagramPanel extends TDiagramPanel {
     }
 
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        //System.out.println("Action");
+        //
         /*if (tgc instanceof TCDTClass) {
           TCDTClass t = (TCDTClass)tgc;
           return mgui.newTClassName(t.oldValue, t.getValue());
@@ -299,17 +299,17 @@ public class SequenceDiagramPanel extends TDiagramPanel {
     public TGComponent getActionCloserTo(int y, SDInstance sdi) {
         int distance = 25;
         TGComponent tgc, found = null;
-        //System.out.println("GetActionCloserTo y=" + y);
+        //
         for(int i=0; i<sdi.getNbInternalTGComponent(); i++) {
             tgc = sdi.getInternalTGComponent(i) ;
-            //System.out.println("tgc=" + tgc.getName() + " y=" + tgc.getY());
+            //
             if (tgc instanceof SDActionState) {
                 if (Math.abs(y-tgc.getY()) < distance) {
-                    //System.out.println("Found!");
+                    //
                     found = tgc;
                     distance = Math.abs(y-tgc.getY());
                 } else {
-                    //System.out.println("Not found!");
+                    //
                 }
             }
         }

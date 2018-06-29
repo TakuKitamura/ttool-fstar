@@ -37,8 +37,6 @@
  */
 
 
-
-
 package tmltranslator;
 
 import java.util.Vector;
@@ -47,10 +45,11 @@ import java.util.Vector;
 /**
  * Class TMLRandomSequence
  * Creation: 07/05/2010
- * @version 1.0 07/05/2010
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 07/05/2010
  */
-public class TMLRandomSequence extends TMLActivityElement{
+public class TMLRandomSequence extends TMLActivityElement {
     private Vector<Integer> indexes;
 
     public TMLRandomSequence(String _name, Object _referenceObject) {
@@ -67,8 +66,8 @@ public class TMLRandomSequence extends TMLActivityElement{
             return;
         }
 
-        //System.out.println("Nb of indexes" + indexes.size());
-        //System.out.println("Nb of nexts" + nexts.size());
+        //TraceManager.addDev("Nb of indexes" + indexes.size());
+        //TraceManager.addDev("Nb of nexts" + nexts.size());
         Vector<TMLActivityElement> nextsbis = new Vector<TMLActivityElement>();
 
         // Sort according to index stored in indexes
@@ -77,11 +76,11 @@ public class TMLRandomSequence extends TMLActivityElement{
         int index;
         int i;
 
-        while(indexes.size() > 0) {
+        while (indexes.size() > 0) {
             i0 = new Integer(1000);
             index = -1;
-            for(i=0; i<indexes.size(); i++) {
-                if ( indexes.elementAt(i).compareTo(i0) < 0 ) {
+            for (i = 0; i < indexes.size(); i++) {
+                if (indexes.elementAt(i).compareTo(i0) < 0) {
                     index = i;
                     i0 = indexes.elementAt(i);
                 }
@@ -94,7 +93,7 @@ public class TMLRandomSequence extends TMLActivityElement{
         nexts = nextsbis;
 
         //for(i=0; i<nexts.size(); i++){
-        // System.out.println("sequence #" + i + " = " + nexts.elementAt(i));
+        // TraceManager.addDev("sequence #" + i + " = " + nexts.elementAt(i));
         //}
     }
 

@@ -195,7 +195,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         Font fold = f;
 
         f = f.deriveFont(minFontSize);
-        //System.out.println("width=" + width + " height=" + height);
+        //
 
         if ((rescaled) && (!tdp.isScaled())) {
 
@@ -213,7 +213,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             int w0;//, w1, w2;
             f = f.deriveFont((float)maxCurrentFontSize);
             g.setFont(f);
-            //System.out.println("max current font size:" + maxCurrentFontSize);
+            //
             while(maxCurrentFontSize > (minFontSize-1)) {
                 w0 = g.getFontMetrics().stringWidth(value);
                 if (w0 < (width - (2*textX))) {
@@ -235,7 +235,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
         }
 
-        //System.out.println("Current font size:" + currentFontSize);
+        //
 
         Color c = g.getColor();
         //g.setColor(ColorManager.AVATAR_STATE);
@@ -450,7 +450,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             return false;
         }
 
-        //System.out.println("Add swallow component");
+        //
         // Choose its position
 
         // Make it an internal component
@@ -642,7 +642,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro *** " + getId());
+        //
         //String tmpGlobalCode = "";
         String tmpEntryCode = "";
 
@@ -654,20 +654,20 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             String s;
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
 
                     // Issue #17 copy-paste error on j index
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element)n2;
 
 
                             /*if (elt.getTagName().equals("globalCode")) {
-                            //System.out.println("Analyzing line");
+                            //
                             s = elt.getAttribute("value");
                             if (s.equals("null")) {
                             s = "";
@@ -676,7 +676,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
                             }*/
 
                             if (elt.getTagName().equals("entryCode")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 s = elt.getAttribute("value");
                                 if (s.equals("null")) {
                                     s = "";

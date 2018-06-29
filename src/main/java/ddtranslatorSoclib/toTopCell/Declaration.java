@@ -275,8 +275,8 @@ declaration += "dsx::caba::MyHWA"+hwa_no+" hwa"+hwa_no+"(\"hwa"+hwa_no+"\");"+ C
 if(nb_clusters==0){
 
 	  for  (AvatarBus bus : TopCellGenerator.avatardd.getAllBus()) {
-          System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
-          System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
+          
+          
 	  
 	  //declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+");" + CR2;
 	  //	  declaration += "soclib::caba::VciVgsb<vci_param> vgsb(\"" + bus.getBusName() + "\"" + " , maptab, cpus.size()+3," + (TopCellGenerator.avatardd.getNb_target()+4)+ ");" + CR2;
@@ -292,11 +292,11 @@ if(nb_clusters==0){
 	  }	
 
          for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
-	     //System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
-	     //System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
+	     //
+	     //
 	  /* The user might have forgotten to specify the following, thus set default values */
-	     System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
-	     System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
+	     
+	     
 	     
 
 	  if(vgmn.getMinLatency()<2)
@@ -354,8 +354,8 @@ else {
     }	
          
     for  (AvatarVgmn vgmn : TopCellGenerator.avatardd.getAllVgmn()) {
-          System.out.println("initiators: "+TopCellGenerator.avatardd.getNb_init());	
-          System.out.println("targets: "+TopCellGenerator.avatardd.getNb_target());
+          
+          
       	 
 	  declaration += "soclib::caba::VciVgmn<vci_param> vgmn (\"" + vgmn.getVgmnName() + "\"" + " , maptab, "+ nb_clusters +"," + nb_clusters +
 	      "," + vgmn.getMinLatency() + "," + vgmn.getFifoDepth() + ");" + CR2;
@@ -381,8 +381,8 @@ else {
 	      crossbar.setNbOfAttachedTargets(1);
 	  }
 
-          System.out.println("initiators: "+crossbar.getNbOfAttachedInitiators());	
-          System.out.println("targets: "+crossbar.getNbOfAttachedTargets());
+          
+          
 	
 	  declaration += "soclib::caba::VciLocalCrossbar<vci_param> crossbar"+crossbar.getClusterIndex()+"(\"" + crossbar.getCrossbarName() + "\"" + " , maptab, IntTab("+ crossbar.getClusterIndex()+"),IntTab("+crossbar.getClusterIndex()+"), "+crossbar.getNbOfAttachedInitiators()+", "+crossbar.getNbOfAttachedTargets()+");" + CR2;
 
@@ -397,7 +397,7 @@ int  i=0;
 	  for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) { 
 	     
 	      if (cpu.getMonitored()==1){
-		  System.out.println("Spy CPU");
+		  
 		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
 		  i++;	      
 	      }		    
@@ -410,13 +410,13 @@ int  i=0;
  
 	     }
 	      if (ram.getMonitored()==1){
-		  System.out.println("Spy RAM : Logger");
+		  
 		  declaration += "soclib::caba::VciLogger<vci_param> logger"+i+"(\"logger" + i+"\",maptab);" + CR2;
 		  i++;	      
 	      }	
 	      else{
 		  if (ram.getMonitored()==2){		      
-		      System.out.println("Spy RAM : Stats");
+		      
 		      String strArray="";
 		    
 		      for(AvatarRelation ar: avspec.getRelations()) {

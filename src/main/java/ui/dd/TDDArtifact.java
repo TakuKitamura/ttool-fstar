@@ -132,17 +132,17 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
         int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
         int w2 = g.getFontMetrics().stringWidth(totalValue) + 2 * textX;
         w1 = Math.max(w1, w2);
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+        //
         if (w1 != width) { 
             width = w1;
             resizeWithFather();
         }
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+        //
     }
     
     public void resizeWithFather() {
         if ((father != null) && (father instanceof TDDNode)) {
-            //System.out.println("cdRect comp");
+            //
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
             setMoveCd(x, y);
@@ -151,7 +151,7 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
     
     
      public boolean editOndoubleClick(JFrame frame) {
-        //System.out.println("Double click");
+        //
 
         boolean ret = true;
 
@@ -221,7 +221,7 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             
             NodeList nli;
@@ -232,12 +232,12 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
@@ -275,7 +275,7 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
             return v;
         }
         
-        //System.out.println("DesignPanel ok");
+        //
         java.util.List<TGComponent> ll = dp.tcdp.getComponentList();
         TCDTClass tc;
         ArtifactTClassGate atg;
@@ -284,7 +284,7 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
         for (TGComponent tgc: ll) {
             if (tgc instanceof TCDTClass) {
                 tc = (TCDTClass)tgc;
-                //System.out.println("Found class = " + tc.getClassName());
+                //
                 listGates = tc.getGates();
                 for (TAttribute ta: listGates) {
                     if (ta.getAccess() == TAttribute.PUBLIC) {

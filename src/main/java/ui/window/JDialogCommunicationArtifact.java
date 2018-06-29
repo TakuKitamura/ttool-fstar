@@ -79,7 +79,7 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
         frame = _frame;
         artifact = _artifact;
 		
-		//System.out.println("New window");
+		//
         
 		TraceManager.addDev("init components");
 		
@@ -133,7 +133,7 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
 		} else {
 			
 			index = indexOf(list, artifact.getFullValue());
-			//System.out.println("name=" + artifact.getFullValue() + " index=" + index);
+			//
 		}
 		
 		TraceManager.addDev("Got communications");
@@ -149,6 +149,7 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
 		for(int i=0; i<11; i++) {
 			list.add(""+i);
 		}
+		panel2.add(new JLabel("Priority:"), c1);
 		priority = new JComboBox<>(list);
 		priority.setSelectedIndex(artifact.getPriority());
 		panel2.add(priority, c1);
@@ -170,6 +171,7 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c0.fill = GridBagConstraints.BOTH;
         c.add(panel2, c0);
         
         c0.gridwidth = 1;
@@ -203,7 +205,7 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
 	
 	
 	public void selectPriority() {
-		//System.out.println("Select priority");
+		//
 		int index = ((TMLArchiDiagramPanel)artifact.getTDiagramPanel()).getMaxPriority((String)(referenceCommunicationName.getSelectedItem()));
 		priority.setSelectedIndex(index);
 	}
@@ -245,7 +247,7 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
 		if (index > -1) {
 			tmp = tmp.substring(0, index).trim();
 		}
-		//System.out.println("tmp=" + tmp);
+		//
 		return tmp;
     }
 	

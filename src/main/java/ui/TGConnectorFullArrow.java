@@ -72,7 +72,7 @@ public  class TGConnectorFullArrow extends TGConnector implements TGConnectorBet
 	}
 	
 	public int getType() {
-            //System.out.println("Ask for my type ADADADAD !");
+            //
             return TGComponentManager.CONNECTOR_AD_DIAGRAM;
 	}
 }

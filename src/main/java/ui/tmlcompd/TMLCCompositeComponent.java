@@ -148,7 +148,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 				w = g.getFontMetrics().stringWidth(value);
 				//w = fm.stringWidth(value);
 				c = width - iconSize - (2 * textX);
-				//System.out.println("Font size=" + maxCurrentFontSize + " w=" + w + " c=" + c + "value=" + value);
+				//
 				if (w < c) {
 					break;
 				}
@@ -175,7 +175,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 			f = f.deriveFont((float)currentFontSize);
 			g.setFont(f);
 			w = g.getFontMetrics().stringWidth(value);
-			//System.out.println("Display text: Font size=" + currentFontSize + " w=" + w + " value=" + value);
+			//
 			if (!(w < (width - 2 * (iconSize + textX)))) {
 				g.drawString(value, x + textX + 1, y + currentFontSize + textX);
 			} else {
@@ -294,7 +294,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 			return false;
 		}
 		
-        //System.out.println("Add swallow component");
+        //
         // Choose its position
         
         // Make it an internal component
@@ -333,7 +333,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
     }
     
     public void removeSwallowedTGComponent(TGComponent tgc) {
-		//System.out.println("removeSwallowedTGComponent");
+		//
 		if (tgc instanceof TMLCCompositePort) {
 			portRemoved();
 		}
@@ -558,7 +558,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 	}
 	
 	public void drawInternalComponentsWhenHidden(Graphics g) {
-		//System.out.println("Draw when hidden");
+		//
 		for(int i=0; i<nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof TMLCCompositePort) {
 				//ColorManager.setColor(g, tgcomponent[i].getState(), 0);
@@ -577,7 +577,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             
             NodeList nli;
@@ -587,12 +587,12 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
@@ -612,7 +612,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
     }
 	
 	public void drawTGConnectingPoint(Graphics g, int type) {
-        //System.out.println("I am " + getName());
+        //
         for (int i=0; i<nbConnectingPoint; i++) {
             if (connectingPoint[i].isCompatibleWith(type)) {
                 connectingPoint[i].draw(g);

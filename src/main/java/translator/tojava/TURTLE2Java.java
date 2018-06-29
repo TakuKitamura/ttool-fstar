@@ -1,26 +1,26 @@
-/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,32 +31,26 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
- */
-
-
-
-
-package translator.tojava;
-
-import ddtranslator.TClassLinkNode;
-import myutil.Conversion;
-import myutil.FileException;
-import translator.*;
-import translator.JKeyword;
-
-import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.Vector;
-
-/**
+ *
+ * /**
  * Class TURTLE2Java
  * Creation: 03/03/2005
  * @version 1.0 03/03/2005
  * @author Ludovic APVRILLE
+ * @see
  */
+
+package translator.tojava;
+
+import java.util.*;
+
+import ddtranslator.*;
+import myutil.*;
+import translator.*;
+
 public class TURTLE2Java {
     
     //private static int gateId;
@@ -104,13 +98,17 @@ public class TURTLE2Java {
         nanos = _nanos;
         longforint = false;
 		header = _header;
-        components = new Vector<>();
-        mainclasses = new Vector<>();
+        components = new Vector<ComponentId>();
+        mainclasses = new Vector<MainClass>();
     }
     
     public void saveJavaClasses(String path) throws FileException {
-        for (JavaClass jc: this.javaClasses) {
-             jc.saveAsFileIn(path);
+        ListIterator iterator = javaClasses.listIterator();
+        JavaClass jc;
+        
+        while(iterator.hasNext()) {
+            jc = (JavaClass)(iterator.next());
+            jc.saveAsFileIn(path);
         }
         
         saveAsFileInMainClasses(path);
@@ -131,11 +129,17 @@ public class TURTLE2Java {
     }
     
     public void printJavaClasses() {
-        for (JavaClass jc: this.javaClasses) {
-            System.out.println(jc.getJavaName() + ":\n" + jc.toString() + "\n\n");
+        ListIterator iterator = javaClasses.listIterator();
+        JavaClass jc;
+        
+        while(iterator.hasNext()) {
+            jc = (JavaClass)(iterator.next());
+            TraceManager.addDev(jc.getJavaName() + ":\n" + jc.toString() + "\n\n");
         }
         
         printMainClasses();
+        //TraceManager.addDev(mainclass.getName() + ":\n" + mainclass.toString() + "\n\n");
+        
     }
     
     public void generateJava(boolean _debug) {
@@ -150,7 +154,7 @@ public class TURTLE2Java {
         mgm = new MasterGateManager(tm, false);
         mgm.sort();
         
-        javaClasses = new LinkedList<>();
+        javaClasses = new LinkedList<JavaClass>();
         
         // Creating classes & attributes & operations
         generateConstantClass();
@@ -210,9 +214,9 @@ public class TURTLE2Java {
             jc = foundJClass(t.getName());
             if (jc != null) {
                 generateExternalPreemption(t, jc);
-                //System.out.println("Generate operations for " + jc.getJavaName());
+                //TraceManager.addDev("Generate operations for " + jc.getJavaName());
                 generateOperations(t, jc);
-                //System.out.println("Done");
+                //TraceManager.addDev("Done");
             }
         }
     }
@@ -257,15 +261,15 @@ public class TURTLE2Java {
         Relation r;
         //TClass t1;
         
-        LinkedList<JavaClass> tclasses = new LinkedList<>();
+        LinkedList<JavaClass> tclasses = new LinkedList<JavaClass>();
         
         for(i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
-            System.out.println("t = " + t.getName() + " Relation=" + r);
+            TraceManager.addDev("t = " + t.getName() + " Relation=" + r);
             if ((r.type == Relation.PRE) && (r.t1 == t)) {
-                //System.out.println("Preemption from t to " + r.t2.getName());
+                //TraceManager.addDev("Preemption from t to " + r.t2.getName());
                 jc1 = foundJClass(r.t2.getName());
-                //System.out.println("jc1 = " + jc1.getJavaName());
+                //TraceManager.addDev("jc1 = " + jc1.getJavaName());
                 tclasses.add(jc1);
             }
         }
@@ -274,10 +278,10 @@ public class TURTLE2Java {
             return;
         }
         
-        //System.out.println("Size=" + tclasses.size());
+        //TraceManager.addDev("Size=" + tclasses.size());
         
         // Create the necessary operation
-        jc.addStartingPreemptionCode(translator.JKeyword.INDENT + DECL_CODE_04 + "\n");
+        jc.addStartingPreemptionCode(JKeyword.INDENT + DECL_CODE_04 + "\n");
         
         // Create all new threads
         jc.addStartingPreemptionCode(generateJGateCreation(tclasses));
@@ -288,18 +292,18 @@ public class TURTLE2Java {
         ListIterator iterator1;
         while(iterator.hasNext())  {
             jc1 = (JavaClass)(iterator.next());
-            jc.addStartingPreemptionCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + jc1.getJavaName().toLowerCase() + ".setToPreempt(this);\n");
+            jc.addStartingPreemptionCode(JKeyword.INDENT + JKeyword.INDENT + jc1.getJavaName().toLowerCase() + ".setToPreempt(this);\n");
             iterator1 = tclasses.listIterator();
             while(iterator1.hasNext())  {
                 jc2 = (JavaClass)(iterator1.next());
                 if (jc2 != jc1) {
-                    jc.addStartingPreemptionCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + jc1.getJavaName().toLowerCase() + ".setToPreempt(" + jc2.getJavaName().toLowerCase() + ");\n");
+                    jc.addStartingPreemptionCode(JKeyword.INDENT + JKeyword.INDENT + jc1.getJavaName().toLowerCase() + ".setToPreempt(" + jc2.getJavaName().toLowerCase() + ");\n");
                 }
             }
             
         }
         jc.addStartingPreemptionCode(generateTClassStarting(tclasses, false, false));
-        jc.addStartingPreemptionCode(translator.JKeyword.INDENT + translator.JKeyword.STOP_CODE_N);
+        jc.addStartingPreemptionCode(JKeyword.INDENT + JKeyword.STOP_CODE_N);
         
     }
     
@@ -312,7 +316,7 @@ public class TURTLE2Java {
     
     private void addRunOperation(JavaClass jc) {
         JOperation jo = new JOperation("runMe");
-        jo.addCode(translator.JKeyword.INDENT + translator.JKeyword.PUBLIC + " void " + jo.name + " () " + TH_EXCEPTION + " " + translator.JKeyword.START_CODE + "\n");
+        jo.addCode(JKeyword.INDENT + JKeyword.PUBLIC + " void " + jo.name + " () " + TH_EXCEPTION + " " + JKeyword.START_CODE + "\n");
         jc.addOperation(jo);
     }
     
@@ -334,7 +338,7 @@ public class TURTLE2Java {
     }
     
     private void generateStandardOperationsRec(TClass t, JavaClass jc, ActivityDiagram ad, ADComponent adc, ADComponent last, JOperation jo, int dec, boolean endNeeded) {
-        System.out.println("Generating std op rec " + jo.getName());
+        TraceManager.addDev("Generating std op rec " + jo.getName());
         if (adc instanceof ADActionStateWithGate) {
             ADActionStateWithGate adaswg = (ADActionStateWithGate)adc;
             indent(jo, dec);
@@ -348,9 +352,9 @@ public class TURTLE2Java {
         } else if (adc instanceof ADActionStateWithParam) {
             ADActionStateWithParam adaswp = (ADActionStateWithParam) adc;
             indent(jo, dec);
-            //System.out.println("java expr: " + adaswp.brutToString());
-            //System.out.println(" Modified java expr: " + makeJavaExpression(adaswp.brutToString()));
-            jo.addCode(makeJavaExpression(adaswp.brutToString()) + translator.JKeyword.END_OP_N);
+            //TraceManager.addDev("java expr: " + adaswp.brutToString());
+            //TraceManager.addDev(" Modified java expr: " + makeJavaExpression(adaswp.brutToString()));
+            jo.addCode(makeJavaExpression(adaswp.brutToString()) + JKeyword.END_OP_N);
             generateStandardOperationsRec(t, jc, ad, adc.getNext(0), adc, jo, dec, endNeeded);
         } else if (adc instanceof ADChoice) {
             ADChoice adch = (ADChoice) adc;
@@ -387,7 +391,7 @@ public class TURTLE2Java {
         } else if (adc instanceof ADPreempt) {
             makePreemptionCode(t, jc, ad, (ADPreempt)adc, last, jo, dec, endNeeded);
         } else {
-            System.out.println("Operator not supported: " + adc.toString());
+            TraceManager.addDev("Operator not supported: " + adc.toString());
             if (endNeeded) {
                 makeEndCode(jo, dec, true);
             }
@@ -396,7 +400,7 @@ public class TURTLE2Java {
     
     private void indent(JOperation jo, int d) {
         while(d>0) {
-            jo.addCode(translator.JKeyword.INDENT);
+            jo.addCode(JKeyword.INDENT);
             d --;
         }
     }
@@ -404,7 +408,7 @@ public class TURTLE2Java {
     private String addThread(String name, int dec) {
         String s = "";
         while(dec>0) {
-            s += translator.JKeyword.INDENT;
+            s += JKeyword.INDENT;
             dec --;
         }
         s+="internalThreads.add(" + name + ");\n";
@@ -416,28 +420,28 @@ public class TURTLE2Java {
         int i;
         JOperation run0 = jc.getOperationAt(0);
         //run0.addCode(JKeyword.INDENT + JKeyword.INDENT + "try " + JKeyword.START_CODE_N);
-        run0.addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + "while(" + TURTLE2Java.T__GO + " == true)" + translator.JKeyword.START_CODE_N);
-        run0.addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT + "switch(" + TURTLE2Java.T__STATE + ")" + translator.JKeyword.START_CODE_N);
+        run0.addCode(JKeyword.INDENT + JKeyword.INDENT + "while(" + TURTLE2Java.T__GO + " == true)" + JKeyword.START_CODE_N);
+        run0.addCode(JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT + "switch(" + TURTLE2Java.T__STATE + ")" + JKeyword.START_CODE_N);
         
         for(i=1; i<jc.getOperationNb(); i++) {
-            run0.addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT);
+            run0.addCode(JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT);
             run0.addCode("case " + (i-1) + ":\n");
-            run0.addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT + "  ");
+            run0.addCode(JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT + "  ");
             run0.addCode(jc.getCallToOp(i));
-            run0.addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT + "  ");
-            run0.addCode("break" + translator.JKeyword.END_OP_N);
+            run0.addCode(JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT + "  ");
+            run0.addCode("break" + JKeyword.END_OP_N);
         }
         
-        run0.addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT);
+        run0.addCode(JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT);
         run0.addCode("default:\n");
-        run0.addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT + "  ");
-        run0.addCode(TURTLE2Java.T__GO + " = false" + translator.JKeyword.END_OP_N);
+        run0.addCode(JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT + "  ");
+        run0.addCode(TURTLE2Java.T__GO + " = false" + JKeyword.END_OP_N);
         
-        run0.addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.STOP_CODE_N);
-        run0.addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + translator.JKeyword.STOP_CODE_N);
+        run0.addCode(JKeyword.INDENT + JKeyword.INDENT + JKeyword.INDENT + JKeyword.STOP_CODE_N);
+        run0.addCode(JKeyword.INDENT + JKeyword.INDENT + JKeyword.STOP_CODE_N);
         //run0.addCode(JKeyword.INDENT + JKeyword.INDENT + OP_SEQ + JKeyword.END_OP_N);
         //run0.addCode(JKeyword.INDENT + JKeyword.INDENT + "} catch (PreemptionException pe) {}\n");
-        run0.addCode(translator.JKeyword.INDENT + translator.JKeyword.STOP_CODE);
+        run0.addCode(JKeyword.INDENT + JKeyword.STOP_CODE);
     }
     
     private void generateJGateCreation() {
@@ -445,23 +449,27 @@ public class TURTLE2Java {
         //addGateCodeMainClass(generateJGateCreation(javaClasses));
     }
     
-    private String generateJGateCreation(LinkedList<JavaClass> toTakeIntoAccountJC) {
+    private String generateJGateCreation(LinkedList toTakeIntoAccountJC) {
+        JavaClass jc;
         int j;
         JGate jg;
         String s = "";
         
-        for (JavaClass jc: this.javaClasses) {
+        ListIterator iterator = javaClasses.listIterator();
+        
+        while(iterator.hasNext()) {
+            jc = (JavaClass)(iterator.next());
             if (toTakeIntoAccountJC.contains(jc)) {
                 for(j=0; j<jc.getGateNb(); j++) {
                     jg = jc.getGateAt(j);
                     jg.setJName(jc.getJavaName() + "__" + jg.getName());
-                    s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + "JGate " + jg.getJName() + " = new JGate(\"" + jg.getJName() + "\")" + translator.JKeyword.END_OP + "\n";
+                    s += JKeyword.INDENT + JKeyword.INDENT + "JGate " + jg.getJName() + " = new JGate(\"" + jg.getJName() + "\")" + JKeyword.END_OP + "\n";
                     if (jg.hasAProtocol()) {
-                        s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg.getJName() + ".setProtocol(" + jg.getProtocol() + ")" + translator.JKeyword.END_OP + "\n";
-                        s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg.getJName() + ".setLocalPort(" + jg.getLocalPort() + ")" + translator.JKeyword.END_OP + "\n";
-                        s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg.getJName() + ".setDestPort(" + jg.getDestPort() + ")" + translator.JKeyword.END_OP + "\n";
-                        s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg.getJName() + ".setDestHost(\"" + jg.getDestHost() + "\")" + translator.JKeyword.END_OP + "\n";
-                        s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg.getJName() + ".setLocalHost(\"" + jg.getLocalHost() + "\")" + translator.JKeyword.END_OP + "\n";
+                        s += JKeyword.INDENT + JKeyword.INDENT + jg.getJName() + ".setProtocol(" + jg.getProtocol() + ")" + JKeyword.END_OP + "\n";
+                        s += JKeyword.INDENT + JKeyword.INDENT + jg.getJName() + ".setLocalPort(" + jg.getLocalPort() + ")" + JKeyword.END_OP + "\n";
+                        s += JKeyword.INDENT + JKeyword.INDENT + jg.getJName() + ".setDestPort(" + jg.getDestPort() + ")" + JKeyword.END_OP + "\n";
+                        s += JKeyword.INDENT + JKeyword.INDENT + jg.getJName() + ".setDestHost(\"" + jg.getDestHost() + "\")" + JKeyword.END_OP + "\n";
+                        s += JKeyword.INDENT + JKeyword.INDENT + jg.getJName() + ".setLocalHost(\"" + jg.getLocalHost() + "\")" + JKeyword.END_OP + "\n";
                     }
                 }
             }
@@ -472,14 +480,15 @@ public class TURTLE2Java {
     
     private void generateJGateSynchronisation() {
         generateJGateSynchronisationMainClasses();
+        //mainclass.addSynchroCode(generateJGateSynchronisation(javaClasses));
     }
     
-    private String generateJGateSynchronisation(LinkedList<JavaClass> toTakeIntoAccountJC) {
+    private String generateJGateSynchronisation(LinkedList toTakeIntoAccountJC) {
         // Assume that all invocation operations have been removed
         //TClass t;
         Relation r;
         int i, j;
-        JavaClass jc2;
+        JavaClass jc1, jc2;
         JGate jg1, jg2;
         int id;
         //Gate g;
@@ -491,28 +500,28 @@ public class TURTLE2Java {
             return "";
         }
         
-        tmpc=getMainClassOf(toTakeIntoAccountJC.get(0));
+        tmpc=getMainClassOf((JavaClass)(toTakeIntoAccountJC.get(0)));
         
         for(i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
             if (r.type == Relation.SYN) {
-                JavaClass jc1 = foundJClass(r.t1.getName());
+                jc1 = foundJClass(r.t1.getName());
                 jc2 = foundJClass(r.t2.getName());
                 if ((jc1 != null) && (jc2 != null)) {
                     if (toTakeIntoAccountJC.contains(jc1) && toTakeIntoAccountJC.contains(jc2)) {
                         for(j=0; j<r.gatesOfT1.size(); j++) {
-                            System.out.println("Gates 1)" + r.gatesOfT1.elementAt(j).getName() + " 2:" + r.gatesOfT2.elementAt(j).getName());
-                            jg1 = jc1.foundJGate(r.gatesOfT1.elementAt(j).getName());
-                            jg2 = jc2.foundJGate(r.gatesOfT2.elementAt(j).getName());
-                            //System.out.println("foundJGate");
+                            //TraceManager.addDev("Gates 1)" + ((Gate)(r.gatesOfT1.elementAt(j))).getName() + " 2:" + ((Gate)(r.gatesOfT2.elementAt(j))).getName());
+                            jg1 = jc1.foundJGate(((r.gatesOfT1.elementAt(j))).getName());
+                            jg2 = jc2.foundJGate(((r.gatesOfT2.elementAt(j))).getName());
+                            //TraceManager.addDev("foundJGate");
                             if ((jg1 != null) && (jg2 != null)) {
-                                //System.out.println("master");
+                                //TraceManager.addDev("master");
                                 id = tmpc.getUniqueGateId();
-                                s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + "JMasterGate " + "mgate__" + id + " = new JMasterGate()" + translator.JKeyword.END_OP + "\n";
-                                s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg1.getJName() + ".setMasterGate(" + "mgate__" + id + ")" + translator.JKeyword.END_OP + "\n";
-                                s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg1.getJName() + ".setLeft()" + translator.JKeyword.END_OP + "\n";
-                                s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg2.getJName() + ".setMasterGate(" + "mgate__" + id + ")" + translator.JKeyword.END_OP + "\n";
-                                s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg2.getJName() + ".setRight()" + translator.JKeyword.END_OP + "\n";
+                                s += JKeyword.INDENT + JKeyword.INDENT + "JMasterGate " + "mgate__" + id + " = new JMasterGate()" + JKeyword.END_OP + "\n";
+                                s += JKeyword.INDENT + JKeyword.INDENT + jg1.getJName() + ".setMasterGate(" + "mgate__" + id + ")" + JKeyword.END_OP + "\n";
+                                s += JKeyword.INDENT + JKeyword.INDENT + jg1.getJName() + ".setLeft()" + JKeyword.END_OP + "\n";
+                                s += JKeyword.INDENT + JKeyword.INDENT + jg2.getJName() + ".setMasterGate(" + "mgate__" + id + ")" + JKeyword.END_OP + "\n";
+                                s += JKeyword.INDENT + JKeyword.INDENT + jg2.getJName() + ".setRight()" + JKeyword.END_OP + "\n";
                             }
                         }
                     }
@@ -524,10 +533,12 @@ public class TURTLE2Java {
         //Vector v;
         String name, nameSearched;
         
-        tmpc.addSynchroCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT + "/* Parallel operators of activity diagrams */\n");
+        tmpc.addSynchroCode(JKeyword.INDENT + JKeyword.INDENT + "/* Parallel operators of activity diagrams */\n");
+        ListIterator iterator = javaClasses.listIterator();
         //JavaClass jc;
         
-        for (JavaClass jc1: this.javaClasses) {
+        while(iterator.hasNext()) {
+            jc1 = (JavaClass)(iterator.next());
             if (toTakeIntoAccountJC.contains(jc1)) {
                 for(i=0; i<jc1.getGateNb(); i++) {
                     jg1 = jc1.getGateAt(i);
@@ -537,11 +548,11 @@ public class TURTLE2Java {
                         jg2 = jc1.foundJGate(nameSearched);
                         if (jg2 != null) {
                             id = getMainClassOf(jc1).getUniqueGateId();
-                            s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + "JMasterGate " + "mgate__" + id + " = new JMasterGate()" + translator.JKeyword.END_OP + "\n";
-                            s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg1.getJName() + ".setMasterGate(" + "mgate__" + id + ")" + translator.JKeyword.END_OP + "\n";
-                            s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg1.getJName() + ".setLeft()" + translator.JKeyword.END_OP + "\n";
-                            s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg2.getJName() + ".setMasterGate(" + "mgate__" + id + ")" + translator.JKeyword.END_OP + "\n";
-                            s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jg2.getJName() + ".setRight()" + translator.JKeyword.END_OP + "\n";
+                            s += JKeyword.INDENT + JKeyword.INDENT + "JMasterGate " + "mgate__" + id + " = new JMasterGate()" + JKeyword.END_OP + "\n";
+                            s += JKeyword.INDENT + JKeyword.INDENT + jg1.getJName() + ".setMasterGate(" + "mgate__" + id + ")" + JKeyword.END_OP + "\n";
+                            s += JKeyword.INDENT + JKeyword.INDENT + jg1.getJName() + ".setLeft()" + JKeyword.END_OP + "\n";
+                            s += JKeyword.INDENT + JKeyword.INDENT + jg2.getJName() + ".setMasterGate(" + "mgate__" + id + ")" + JKeyword.END_OP + "\n";
+                            s += JKeyword.INDENT + JKeyword.INDENT + jg2.getJName() + ".setRight()" + JKeyword.END_OP + "\n";
                         }
                     }
                 }
@@ -551,30 +562,35 @@ public class TURTLE2Java {
         return s;
     }
     
-    private String generateExternalSequence(LinkedList<JavaClass> toTakeIntoAccount, boolean onlyActiveClasses) {
+    private String generateExternalSequence(LinkedList toTakeIntoAccount, boolean onlyActiveClasses) {
+        JavaClass jc;
         String s = "";
-        LinkedList<JavaClass> ll;
+        LinkedList ll;
         LinkedList<JavaClass> one;
         
         s += "\n";
-        s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + "/* Sequence operator */ ";
+        s += JKeyword.INDENT + JKeyword.INDENT + "/* Sequence operator */ ";
         // Sequence code
         s+= "\n";
-
-        for (JavaClass jc: this.javaClasses) {
+        
+        
+        ListIterator iterator = javaClasses.listIterator();
+        
+        while(iterator.hasNext()) {
+            jc = (JavaClass)(iterator.next());
             if (toTakeIntoAccount.contains(jc)) {
                 ll = listClassesStartingAt(jc.getJavaName());
-                System.out.println("Getting list for" + jc.getJavaName());
+                TraceManager.addDev("Getting list for" + jc.getJavaName());
                 if ((ll != null) && (ll.size() > 0)) {
-                    jc.addStartingSequenceCode(translator.JKeyword.INDENT + DECL_CODE_03 + "\n");
+                    jc.addStartingSequenceCode(JKeyword.INDENT + DECL_CODE_03 + "\n");
                     jc.addStartingSequenceCode(generateJGateCreation(ll));
                     jc.addStartingSequenceCode(generateJGateSynchronisation(ll));
                     jc.addStartingSequenceCode(generateTClassCreation(ll, false));
                     jc.addStartingSequenceCode(generateCodeStartingSeq(ll));
                     jc.addStartingSequenceCode(generateTClassStarting(ll, false, false));
-                    jc.addStartingSequenceCode(translator.JKeyword.INDENT + translator.JKeyword.STOP_CODE_N);
+                    jc.addStartingSequenceCode(JKeyword.INDENT + JKeyword.STOP_CODE_N);
                     if ((!onlyActiveClasses) || (onlyActiveClasses && jc.isActive())) {
-                        one = new LinkedList<>();
+                        one = new LinkedList<JavaClass>();
                         one.add(jc);
                         s+= generateCodeStartingSeq(one);//JKeyword.INDENT + JKeyword.INDENT + jc.getJavaName().toLowerCase() + ".setStartingSequence(true)" + JKeyword.END_OP + "\n";
                     }
@@ -584,24 +600,27 @@ public class TURTLE2Java {
         return s;
     }
     
-    private String generateCodeStartingSeq(LinkedList<JavaClass> ll) {
+    private String generateCodeStartingSeq(LinkedList ll) {
         String s = "";
-
-        for (JavaClass jc: ll) {
-            s+= translator.JKeyword.INDENT + translator.JKeyword.INDENT + jc.getJavaName().toLowerCase() + ".setStartingSequence(true)" + translator.JKeyword.END_OP + "\n";
+        JavaClass jc;
+        ListIterator iterator = ll.listIterator();
+        
+        while(iterator.hasNext()) {
+            jc = (JavaClass)(iterator.next());
+            s+= JKeyword.INDENT + JKeyword.INDENT + jc.getJavaName().toLowerCase() + ".setStartingSequence(true)" + JKeyword.END_OP + "\n";
         }
         return s;
     }
     
-    private LinkedList<JavaClass> listClassesStartingAt(String name) {
+    private LinkedList listClassesStartingAt(String name) {
         //TClass t1, t2;
         Relation r;
         JavaClass jc;
-        LinkedList<JavaClass> ll = new LinkedList<>();
+        LinkedList<JavaClass> ll = new LinkedList<JavaClass>();
         for(int i=0; i<tm.relationNb(); i++) {
             r = tm.getRelationAtIndex(i);
             if (r.type == Relation.SEQ) {
-                System.out.println("Found one seq relation");
+                TraceManager.addDev("Found one seq relation");
                 if(r.t1.getName().equals(name)) {
                     jc = foundJClass(r.t2.getName());
                     if (jc != null) {
@@ -621,10 +640,14 @@ public class TURTLE2Java {
         //mainclass.addStartingCode(generateTClassStarting(javaClasses, true, true));
     }
     
-    private String generateTClassCreation(LinkedList<JavaClass> toTakeIntoAccount, boolean onlyActiveClasses) {
+    private String generateTClassCreation(LinkedList toTakeIntoAccount, boolean onlyActiveClasses) {
+        JavaClass jc;
         String s = "";
         
-        for (JavaClass jc: this.javaClasses) {
+        ListIterator iterator = javaClasses.listIterator();
+        
+        while(iterator.hasNext()) {
+            jc = (JavaClass)(iterator.next());
             if (toTakeIntoAccount.contains(jc)) {
                 if ((!onlyActiveClasses) || (onlyActiveClasses && jc.isActive())) {
                     s += jc.getCreationCode(jc.getJavaName().toLowerCase()) + "\n";
@@ -636,15 +659,18 @@ public class TURTLE2Java {
     }
     
     
-    private String generateTClassStarting(LinkedList<JavaClass> toTakeIntoAccount, boolean onlyActiveClasses, boolean internal) {
+    private String generateTClassStarting(LinkedList toTakeIntoAccount, boolean onlyActiveClasses, boolean internal) {
+        JavaClass jc;
         String s = "";
-        for (JavaClass jc: this.javaClasses) {
+        ListIterator iterator = javaClasses.listIterator();
+        while(iterator.hasNext()) {
+            jc = (JavaClass)(iterator.next());
             if (toTakeIntoAccount.contains(jc)) {
                 if ((!onlyActiveClasses) || (onlyActiveClasses && jc.isActive())) {
                     if (internal) {
                         s += addThread(jc.getJavaName().toLowerCase(), 2);
                     }
-                    s += translator.JKeyword.INDENT + translator.JKeyword.INDENT + jc.getJavaName().toLowerCase() + ".start()" + translator.JKeyword.END_OP + "\n";
+                    s += JKeyword.INDENT + JKeyword.INDENT + jc.getJavaName().toLowerCase() + ".start()" + JKeyword.END_OP + "\n";
                 }
             }
         }
@@ -654,7 +680,11 @@ public class TURTLE2Java {
     
     
     private JavaClass foundJClass(String name) {
-        for (JavaClass jc: this.javaClasses) {
+        JavaClass jc;
+        ListIterator iterator = javaClasses.listIterator();
+        
+        while(iterator.hasNext()) {
+            jc = (JavaClass)(iterator.next());
             if (jc.getTURTLEName().equals(name)) {
                 return jc;
             }
@@ -837,10 +867,10 @@ public class TURTLE2Java {
     
     public void makeEndCode(JOperation jo, int dec, boolean endNeeded) {
         indent(jo, dec);
-        jo.addCode(TURTLE2Java.T__GO + " = false" + translator.JKeyword.END_OP_N);
+        jo.addCode(TURTLE2Java.T__GO + " = false" + JKeyword.END_OP_N);
         if (endNeeded) {
             indent(jo, dec-1);
-            jo.addCode(translator.JKeyword.STOP_CODE_N);
+            jo.addCode(JKeyword.STOP_CODE_N);
         }
     }
     
@@ -1134,9 +1164,9 @@ public class TURTLE2Java {
                 jo.addCode(jc.getCreationCodeWithSpecialStateCurrentValues(name, currentJc, dec) + "\n");
                 jo.addCode(addThread(name, dec));
                 indent(jo, dec);
-				jo.addCode(name + ".setState(" + currentJc +")" + translator.JKeyword.END_OP + "\n");
+				jo.addCode(name + ".setState(" + currentJc +")" + JKeyword.END_OP + "\n");
                 indent(jo, dec);
-                jo.addCode(name + ".start()" + translator.JKeyword.END_OP + "\n");
+                jo.addCode(name + ".start()" + JKeyword.END_OP + "\n");
                 indent(jo, dec);
                 jo.addCode("try {\n");
                 dec ++;
@@ -1195,7 +1225,7 @@ public class TURTLE2Java {
         if (adpar.getNbNext() > 1) {
             // We assume that there are no synchronization
             boolean b = true;//adpar.isAValidMotif(t);
-            System.out.println("Nb of gates = " + adpar.nbGate() + " valueGate=" + adpar.getValueGate());
+            TraceManager.addDev("Nb of gates = " + adpar.nbGate() + " valueGate=" + adpar.getValueGate());
             if ((adpar.nbGate() == 0) ||(adpar.getNbNext() > 2) || (!b)) {
                 indent(jo, dec);
                 jo.addCode("\n");
@@ -1206,23 +1236,23 @@ public class TURTLE2Java {
                     jo1 = makeNewJOperation(jc);
                     jo1.addStandardCode();
                     idop = jc.getOperationNb() - 2;
-                    //System.out.println("Parallel with next = " + adpar.getNext(i).toString());
+                    //TraceManager.addDev("Parallel with next = " + adpar.getNext(i).toString());
                     generateStandardOperationsRec(t, jc, ad, adpar.getNext(i), adpar, jo1, 2, true);
                     //indent(jo, dec);
                     name = jc.getJavaName().toLowerCase() + "__" + idPar;
                     jo.addCode(jc.getCreationCodeWithSpecialStateCurrentValues(name, idop, dec) + "\n");
                     jo.addCode(addThread(name, dec));
                     indent(jo, dec);
-                    jo.addCode(name + ".setState(" + idop +")" + translator.JKeyword.END_OP + "\n");
+                    jo.addCode(name + ".setState(" + idop +")" + JKeyword.END_OP + "\n");
                     indent(jo, dec);
-                    jo.addCode(name + ".start()" + translator.JKeyword.END_OP + "\n");
+                    jo.addCode(name + ".start()" + JKeyword.END_OP + "\n");
                     idPar ++;
                     indent(jo, dec);
                     jo.addCode("\n");
                 }
                 generateStandardOperationsRec(t, jc, ad, adpar.getNext(0), adpar, jo, dec, endNeeded);
             } else {
-                System.out.println("Parallel - synchro");
+                TraceManager.addDev("Parallel - synchro");
                 // Synchronization
                 // adpar : nb next == 2
                 // Creation of new synchronization gates
@@ -1240,11 +1270,11 @@ public class TURTLE2Java {
                         indent(jo, dec);
                         jo.addCode(jg1.getJName() +  "= new JGate(\"" + jg1.getName()+ "\");\n");
                         indent(jo, dec);
-                        jo.addCode("JMasterGate " + "mgate__" + id + " = new JMasterGate()" + translator.JKeyword.END_OP + "\n");
+                        jo.addCode("JMasterGate " + "mgate__" + id + " = new JMasterGate()" + JKeyword.END_OP + "\n");
                         indent(jo, dec);
-                        jo.addCode(jg1.getJName() + ".setMasterGate(" + "mgate__" + id + ")" + translator.JKeyword.END_OP + "\n");
+                        jo.addCode(jg1.getJName() + ".setMasterGate(" + "mgate__" + id + ")" + JKeyword.END_OP + "\n");
                         indent(jo, dec);
-                        jo.addCode(jg1.getJName() + ".setLeft()" + translator.JKeyword.END_OP + "\n");
+                        jo.addCode(jg1.getJName() + ".setLeft()" + JKeyword.END_OP + "\n");
                     }
                 }
                 
@@ -1266,9 +1296,9 @@ public class TURTLE2Java {
                         indent(jo, dec);
                         jo.addCode(jg1.getJName() +  "= new JGate(\"" + jg1.getName()+ "\");\n");
                         indent(jo, dec);
-                        jo.addCode(jg1.getJName() + ".setMasterGate(" + "mgate__" + (idp  + i) + ")" + translator.JKeyword.END_OP + "\n");
+                        jo.addCode(jg1.getJName() + ".setMasterGate(" + "mgate__" + (idp  + i) + ")" + JKeyword.END_OP + "\n");
                         indent(jo, dec);
-                        jo.addCode(jg1.getJName() + ".setRight()" + translator.JKeyword.END_OP + "\n");
+                        jo.addCode(jg1.getJName() + ".setRight()" + JKeyword.END_OP + "\n");
                     }
                 }
                 
@@ -1277,9 +1307,9 @@ public class TURTLE2Java {
                 
                 jo.addCode(addThread(name, dec));
                 indent(jo, dec);
-                jo.addCode(name + ".setState(" + idop +")" + translator.JKeyword.END_OP + "\n");
+                jo.addCode(name + ".setState(" + idop +")" + JKeyword.END_OP + "\n");
                 indent(jo, dec);
-                jo.addCode(name + ".start()" + translator.JKeyword.END_OP + "\n");
+                jo.addCode(name + ".start()" + JKeyword.END_OP + "\n");
                 idPar ++;
                 indent(jo, dec);
                 jo.addCode("\n");
@@ -1410,7 +1440,7 @@ public class TURTLE2Java {
                 if (tmpc == null) {
                     tmpc = new MainClass(MAIN_CLASS + t.getPackageName());
                     mainclasses.add(tmpc);
-                    System.out.println("Adding mainclass :" + MAIN_CLASS + t.getPackageName());
+                    TraceManager.addDev("Adding mainclass :" + MAIN_CLASS + t.getPackageName());
                 }
             }
         }
@@ -1461,10 +1491,13 @@ public class TURTLE2Java {
         }
     }
     
-    private LinkedList<JavaClass> listJavaClassesSamePackageName(MainClass tmpc) {
-        LinkedList<JavaClass> ll = new LinkedList<>();
-
-        for (JavaClass jc: this.javaClasses) {
+    private LinkedList listJavaClassesSamePackageName(MainClass tmpc) {
+        LinkedList<JavaClass> ll = new LinkedList<JavaClass>();
+        ListIterator iterator1 = javaClasses.listIterator();
+        JavaClass jc;
+        
+        while(iterator1.hasNext()) {
+            jc = (JavaClass)(iterator1.next());
             if (tmpc.getName().compareTo(MAIN_CLASS+jc.getPackageName()) == 0) {
                 ll.add(jc);
             }
@@ -1474,8 +1507,9 @@ public class TURTLE2Java {
     
     private void generateJGateCreationMainClasses() {
         MainClass tmpc;
-        LinkedList<JavaClass> ll;
-
+        LinkedList ll;
+        ListIterator iterator1;
+        
         for(int i=0; i<mainclasses.size(); i++) {
             tmpc = mainclasses.elementAt(i);
             
@@ -1490,8 +1524,10 @@ public class TURTLE2Java {
     
     private void generateJGateSynchronisationMainClasses() {
         MainClass tmpc;
-        LinkedList<JavaClass> ll;
-
+        LinkedList ll;
+        ListIterator iterator1;
+        JavaClass jc;
+        
         for(int i=0; i<mainclasses.size(); i++) {
             tmpc = mainclasses.elementAt(i);
             
@@ -1507,8 +1543,9 @@ public class TURTLE2Java {
     
     private void generateTClassStartingMainClasses() {
         MainClass tmpc;
-        LinkedList<JavaClass> ll;
-
+        LinkedList ll;
+        ListIterator iterator1;
+        
         for(int i=0; i<mainclasses.size(); i++) {
             tmpc = mainclasses.elementAt(i);
             ll = listJavaClassesSamePackageName(tmpc);
@@ -1531,7 +1568,7 @@ public class TURTLE2Java {
         MainClass tmpc;
         for(int i=0; i<tm.classNb(); i++) {
             tmpc = mainclasses.elementAt(i);
-            System.out.println(tmpc.getName() + ":\n" + tmpc.toString() + "\n\n");
+            TraceManager.addDev(tmpc.getName() + ":\n" + tmpc.toString() + "\n\n");
         }
     }
     

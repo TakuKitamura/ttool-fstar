@@ -176,7 +176,7 @@ public class TMLCPRefAD extends TGCOneLineText {
 
     @Override public boolean editOndoubleClick( JFrame frame ) {
 
-        //System.out.println("Double click");
+        //
         String text = "Reference to AD: ";
         if( hasFather() ) {
             text = getTopLevelName() + " / " + text;

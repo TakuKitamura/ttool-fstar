@@ -37,19 +37,18 @@
  */
 
 
-
-
 package myutil;
 
 import java.util.ArrayList;
 
 
 /**
-   * Class GraphAlgorithms
-   *
-   * Creation: 16/09/2004
-   * @version 1.0 16/09/2004
-   * @author Ludovic APVRILLE
+ * Class GraphAlgorithms
+ * <p>
+ * Creation: 16/09/2004
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 16/09/2004
  */
 public class GraphAlgorithms {
     public static boolean go = true;
@@ -57,9 +56,9 @@ public class GraphAlgorithms {
 
     // Assume that states are numbered from 0 to nbState - 1
 
-    public static boolean hasCycle(Graph g){
+    public static boolean hasCycle(Graph g) {
         int nbState = g.getNbOfStates();
-        int i,j;
+        int i, j;
 
         if (nbState == 0) {
             return false;
@@ -68,7 +67,7 @@ public class GraphAlgorithms {
         TraceManager.addDev("cycle0? Nb state = " + nbState + "\n");
         DijkstraState[] states = new DijkstraState[nbState];
 
-        for(i=0; i<nbState; i++) {
+        for (i = 0; i < nbState; i++) {
             states[i] = new DijkstraState(i);
             states[i].previous = -1;
             states[i].used = false;
@@ -82,14 +81,14 @@ public class GraphAlgorithms {
         TraceManager.addDev("cycle1? Nb state = " + nbState + "\n");
         // Succ
         int succ;
-        for(i=0; i<nbState; i++) {
+        for (i = 0; i < nbState; i++) {
             /*if ((i % 100) == 0) {
-              System.out.println("i=" + i);
+              TraceManager.addDev("i=" + i);
               }*/
-            for(j=0; j<nbState; j++) {
+            for (j = 0; j < nbState; j++) {
                 succ = g.getWeightOfTransition(i, j);
                 if (succ > 0) {
-                    states[j].weight ++;
+                    states[j].weight++;
                 }
             }
         }
@@ -100,51 +99,50 @@ public class GraphAlgorithms {
 
         int nb = 0;
         ArrayList<Integer> list = new ArrayList<Integer>();
-        TraceManager.addDev("cycle2? Nb state = " + nbState+ "\n");
-        for(i=0; i<nbState; i++) {
+        TraceManager.addDev("cycle2? Nb state = " + nbState + "\n");
+        for (i = 0; i < nbState; i++) {
             if (states[i].weight == 0) {
                 list.add(new Integer(i));
-                nb ++;
+                nb++;
             }
         }
 
-        TraceManager.addDev("cycle3? Nb state = " + nbState +  " nb=" + nb + "\n");
+        TraceManager.addDev("cycle3? Nb state = " + nbState + " nb=" + nb + "\n");
         int index;
-        while((list.size() > 0) && (go == true)){
+        while ((list.size() > 0) && (go == true)) {
             index = list.get(0).intValue();
             list.remove(0);
-            for(j=0; j<nbState; j++) {
+            for (j = 0; j < nbState; j++) {
                 succ = g.getWeightOfTransition(index, j);
                 if (succ > 0) {
-                    states[j].weight --;
+                    states[j].weight--;
                     if (states[j].weight == 0) {
                         list.add(new Integer(j));
-                        nb ++;
+                        nb++;
                     }
                 }
             }
         }
 
-        TraceManager.addDev("cycle4? Nb state = " + nbState +  " nb=" + nb + "\n");
+        TraceManager.addDev("cycle4? Nb state = " + nbState + " nb=" + nb + "\n");
 
         return !(nb == nbState);
 
     }
 
 
-
-    public static DijkstraState[] ShortestPathFrom(Graph g, int startState){
+    public static DijkstraState[] ShortestPathFrom(Graph g, int startState) {
 
         int nbState = g.getNbOfStates();
         if (nbState == 0) {
             return null;
         }
-        //System.out.println("Nb state = " + nbState + " startState = " + startState);
+        //TraceManager.addDev("Nb state = " + nbState + " startState = " + startState);
         DijkstraState[] states = new DijkstraState[nbState];
         int i;
 
         /* init of states */
-        for(i=0; i<nbState; i++) {
+        for (i = 0; i < nbState; i++) {
             states[i] = new DijkstraState(i);
             states[i].previous = -1;
             states[i].used = false;
@@ -160,14 +158,13 @@ public class GraphAlgorithms {
         }
 
 
-
         if (go == true) {
             computePaths(states, startState);
         }
 
 
         if (go == false) {
-            //System.out.println("Algorithm stopped");
+            //TraceManager.addDev("Algorithm stopped");
             return null;
         }
         return states;
@@ -180,14 +177,14 @@ public class GraphAlgorithms {
         int currentState;
 
         while (((currentState = getNextStateToCompute(states, startState)) != -1) && (go == true)) {
-            //System.out.println("State managed:" + currentState);
+            //TraceManager.addDev("State managed:" + currentState);
             states[currentState].used = true;
-            for(int i=0; (i<states.length) && (go == true); i++) {
+            for (int i = 0; (i < states.length) && (go == true); i++) {
                 weight = g.getWeightOfTransition(currentState, i);
                 // adjacent state
                 if (weight > 0) {
                     if (!states[i].used) {
-                        if((states[currentState].weight + weight) < states[i].weight) {
+                        if ((states[currentState].weight + weight) < states[i].weight) {
                             states[i].weight = states[currentState].weight + weight;
                             states[i].previous = currentState;
                         }
@@ -203,29 +200,29 @@ public class GraphAlgorithms {
     private static int getNextStateToCompute(DijkstraState[] states, int startState) {
         int minWeight = Integer.MAX_VALUE;
         int state = -1;
-        for(int i=0; i<states.length; i++) {
+        for (int i = 0; i < states.length; i++) {
             if (go == false) {
                 return 0;
             }
             if ((!states[i].used) && (states[i].weight <= minWeight)) {
                 state = i;
                 minWeight = states[i].weight;
-                //System.out.println("MinWeight = " + minWeight + " state=" + i);
+                //TraceManager.addDev("MinWeight = " + minWeight + " state=" + i);
             }
         }
         return state;
     }
 
     // Assumes no cycle!
-    public static DijkstraState[] LongestPathFrom(Graph g, int startState){
+    public static DijkstraState[] LongestPathFrom(Graph g, int startState) {
 
-        //System.out.println("Cycle detection");
+        //TraceManager.addDev("Cycle detection");
         /*boolean result = hasCycle(g);
           if (result) {
-          System.out.println("The graph contains cycles");
+          TraceManager.addDev("The graph contains cycles");
           return null;
           } else {
-          System.out.println("The graph has no cycle");
+          TraceManager.addDev("The graph has no cycle");
           }*/
 
 
@@ -233,12 +230,12 @@ public class GraphAlgorithms {
         if (nbState == 0) {
             return null;
         }
-        //System.out.println("Longest path Nb state = " + nbState + " startState = " + startState);
+        //TraceManager.addDev("Longest path Nb state = " + nbState + " startState = " + startState);
         DijkstraState[] states = new DijkstraState[nbState];
         int i;
 
         /* init of states */
-        for(i=0; i<nbState; i++) {
+        for (i = 0; i < nbState; i++) {
             states[i] = new DijkstraState(i);
             states[i].previous = -1;
             states[i].used = false;
@@ -254,14 +251,13 @@ public class GraphAlgorithms {
         }
 
 
-
         if (go == true) {
             computePaths(states, startState);
         }
 
 
         if (go == false) {
-            //System.out.println("Algorithm stopped");
+            //TraceManager.addDev("Algorithm stopped");
             return null;
         }
         return states;
@@ -275,20 +271,20 @@ public class GraphAlgorithms {
         int tmp;
 
         while (((currentState = getNextLongestStateToCompute(states, startState)) != -1) && (go == true)) {
-            //System.out.println("State managed:" + currentState + " weight=" + states[currentState].weight);
+            //TraceManager.addDev("State managed:" + currentState + " weight=" + states[currentState].weight);
             states[currentState].used = true;
-            for(int i=0; (i<states.length) && (go == true); i++) {
+            for (int i = 0; (i < states.length) && (go == true); i++) {
                 weight = g.getWeightOfTransition(currentState, i);
                 // adjacent state
                 if (weight > 0) {
                     //if (!states[i].used) {
-                    if(states[currentState].weight + weight > states[i].weight) {
-                        tmp =  states[i].weight;
+                    if (states[currentState].weight + weight > states[i].weight) {
+                        tmp = states[i].weight;
                         //if (!states[i].used) {
                         states[i].weight = states[currentState].weight + weight;
                         states[i].previous = currentState;
                         states[i].used = false;
-                        //System.out.println("Changing weight of state " + i + " former=" +  tmp + " new=" +states[i].weight);
+                        //TraceManager.addDev("Changing weight of state " + i + " former=" +  tmp + " new=" +states[i].weight);
                         //}
                     }
                     //}
@@ -303,14 +299,14 @@ public class GraphAlgorithms {
     private static int getNextLongestStateToCompute(DijkstraState[] states, int startState) {
         int maxWeight = -2;
         int state = -1;
-        for(int i=0; i<states.length; i++) {
+        for (int i = 0; i < states.length; i++) {
             if (go == false) {
                 return 0;
             }
             if ((!states[i].used) && (states[i].weight > maxWeight)) {
                 state = i;
                 maxWeight = states[i].weight;
-                //System.out.println("MaxWeight = " + maxWeight + " state=" + i);
+                //TraceManager.addDev("MaxWeight = " + maxWeight + " state=" + i);
             }
         }
         return state;
@@ -318,15 +314,15 @@ public class GraphAlgorithms {
 
     private static void computePaths(DijkstraState[] states, int startState) {
         int size;
-        int [] path;
+        int[] path;
 
-        for(int i=0; (i<states.length) && (go == true); i++) {
+        for (int i = 0; (i < states.length) && (go == true); i++) {
             size = computePathLength(states, i, startState);
-            //System.out.println("i = " + i + " size=" + size);
-            if (size ==0) {
+            //TraceManager.addDev("i = " + i + " size=" + size);
+            if (size == 0) {
                 states[i].path = new int[0];
             } else {
-                path = new int[size+1];
+                path = new int[size + 1];
                 states[i].path = path;
                 makePath(states, i, path, path.length - 1);
             }
@@ -335,7 +331,7 @@ public class GraphAlgorithms {
     }
 
     private static int computePathLength(DijkstraState[] states, int state, int startState) {
-        //System.out.println("Compute path, state = " + state);
+        //TraceManager.addDev("Compute path, state = " + state);
         if (go == false) {
             return 0;
         }
@@ -354,10 +350,10 @@ public class GraphAlgorithms {
         }
     }
 
-    private static void makePath(DijkstraState[] states, int state, int [] path, int index) {
-        while(index>=0) {
+    private static void makePath(DijkstraState[] states, int state, int[] path, int index) {
+        while (index >= 0) {
             path[index] = state;
-            index --;
+            index--;
             state = states[state].previous;
         }
     }

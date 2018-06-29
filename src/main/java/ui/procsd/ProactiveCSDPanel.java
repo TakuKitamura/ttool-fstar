@@ -193,7 +193,7 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
 //        sb.append(tgc.saveInXML());
 //        sb.append("\n");
 //        sb.append(getXMLTail());
-//        //System.out.println("sb=\n" + sb);
+//        //
 //        
         
         
@@ -326,7 +326,7 @@ public class ProactiveCSDPanel extends TDiagramPanel implements ActionListener {
              }//else if procsdComp
              
          }
-         //System.out.println("making copy sb=\n" + sb);
+         //
          return sb;
      }
      

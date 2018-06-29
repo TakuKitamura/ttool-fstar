@@ -68,7 +68,7 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
     }
     
     public boolean actionOnAdd(TGComponent tgc) {
-		System.out.println("Adding " + tgc);
+		
         return false;
     }
     public boolean actionOnValueChanged(TGComponent tgc) {
@@ -131,10 +131,10 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
     
     public void loadExtraParameters(Element elt) {
         String s;
-        //System.out.println("Extra parameter");
+        //
         try {
             s = elt.getAttribute("java");
-            //System.out.println("S=" + s);
+            //
             if (s.compareTo("true") ==0) {
                 setJavaVisible(true);
             } else {
@@ -142,13 +142,13 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
             }
         } catch (Exception e) {
             // Model was saved in an older version of TTool
-            //System.out.println("older format");
+            //
             setJavaVisible(false);
         }
     }
     
     public void enhance() {
-        //System.out.println("enhance");
+        //
         Vector<TGComponent> v = new Vector<TGComponent>();
         TGComponent o;
         Iterator<TGComponent> iterator = componentList.listIterator();
@@ -169,7 +169,7 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
         TGConnector tgcon;
         int i;
         
-        //System.out.println("Enhancing: " + tgc);
+        //
         
         if (tgc == null) {
             return;
@@ -181,7 +181,7 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
         
         v.add(tgc);
         
-        //System.out.println("Nb of nexts: " + tgc.getNbNext());
+        //
         if (!(tgc instanceof TADStartState)) {
             for(i=0; i<tgc.getNbNext(); i++) {
                 tgc1 = getNextTGComponent(tgc, i);

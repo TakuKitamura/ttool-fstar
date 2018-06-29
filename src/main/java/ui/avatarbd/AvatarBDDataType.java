@@ -125,7 +125,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
         Font f = g.getFont();
         Font fold = f;
 
-        //System.out.println("width=" + width + " height=" + height);
+        //
 
         if ((rescaled) && (!tdp.isScaled())) {
 
@@ -143,7 +143,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
             int w0, w1, w2;
             f = f.deriveFont((float) maxCurrentFontSize);
             g.setFont(f);
-            //System.out.println("max current font size:" + maxCurrentFontSize);
+            //
             while (maxCurrentFontSize > (minFontSize - 1)) {
                 w0 = g.getFontMetrics().stringWidth(value);
                 w1 = g.getFontMetrics().stringWidth(ster);
@@ -167,7 +167,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
 
         }
 
-        //System.out.println("Current font size:" + currentFontSize);
+        //
 
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
@@ -367,13 +367,13 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
     protected String translateExtraParam() {
         TAttribute a;
 
-        //System.out.println("Loading extra params of " + value);
+        //
         //value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for (int i = 0; i < myAttributes.size(); i++) {
-            //System.out.println("Attribute:" + i);
+            //
             a = myAttributes.get(i);
-            //System.out.println("Attribute:" + i + " = " + a.getId());
+            //
             //value = value + a + "\n";
             sb.append("<Attribute access=\"");
             sb.append(a.getAccess());
@@ -401,21 +401,21 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
             String typeOther;
             String id, valueAtt;
 
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Attribute")) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 access = Integer.decode(elt.getAttribute("access")).intValue();
                                 type = Integer.decode(elt.getAttribute("type")).intValue();
                                 try {
@@ -430,7 +430,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
                                     valueAtt = "";
                                 }
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
-                                    //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
+                                    //
                                     if (type == TAttribute.NATURAL) {
                                         type = TAttribute.INTEGER;
                                     }

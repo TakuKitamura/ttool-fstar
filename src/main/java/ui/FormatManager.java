@@ -73,7 +73,7 @@ public class FormatManager {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception nbActionSimulation");
+            
         }
         return nbAction;
     }
@@ -95,15 +95,15 @@ public class FormatManager {
                 if (index != -1) {
                     //
                     s1 = s.substring(0, s.indexOf(" states,"));
-                    //System.out.println("s1 = *" + s1 + "*");
+                    //
                     nbState = new Integer(s1).intValue();
                     s2 = s.substring(s.indexOf("states,") + 8, index - 1);
-                    //System.out.println("s2 = *" + s2 + "*");
+                    //
                     nbTransition = new Integer(s2).intValue();
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception nbStateTransitionDTA");
+            
         }
         return new Point(nbState, nbTransition);
     }
@@ -127,7 +127,7 @@ public class FormatManager {
                     nbState ++;
             }
         } catch (Exception e) {
-            System.out.println("Exception nbStateTransitionRGDefault");
+            
         }
         return new Point(nbState, nbTransition);
     }
@@ -146,9 +146,9 @@ public class FormatManager {
         try {
             while((s = br.readLine()) != null) {
                 index = s.indexOf("des");
-                //System.out.println("Searching for des");
+                //
                 if (index == 0) {
-                    //System.out.println("des found");
+                    //
                     s1 = s.substring(s.indexOf(',') + 1, s.length());
                     s1 = s1.substring(0, s1.indexOf(','));
                     s1 = Conversion.removeFirstSpaces(s1);
@@ -161,7 +161,7 @@ public class FormatManager {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception nbStateTransitionRGDefault");
+            
         }
         return new Point(nbState, nbTransition);
     }

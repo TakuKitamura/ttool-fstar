@@ -63,7 +63,7 @@ public class ADSequence extends ADComponent implements NonBlockingADComponent, M
     }
     
     public void addNextAtIndex(ADComponent adc, int index) {
-        //System.out.println("Adding with index " + index);
+        //
         // perform sorting when adding the component
         if (sort.size()  == 0) {
             next.addElement(adc);

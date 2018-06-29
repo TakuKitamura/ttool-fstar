@@ -37,16 +37,12 @@
  */
 
 
-
-
-
 package tmltranslator.toturtle;
 
 import myutil.Conversion;
 import myutil.TraceManager;
 import tmltranslator.*;
 import translator.*;
-import translator.CheckingError;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -56,8 +52,9 @@ import java.util.List;
 /**
  * Class Mapping2TIF
  * Creation: 14/01/2008
- * @version 1.0 14/01/2008
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 14/01/2008
  */
 public class Mapping2TIF {
 
@@ -100,7 +97,7 @@ public class Mapping2TIF {
     private String maxCountTickValue;
     private boolean randomTasks = false;
 
- //   private TClass clock;
+    //   private TClass clock;
     private TClass system;
     private ActivityDiagram systemad;
     private ArrayList<TMLCommunicationElement> allcommunications;
@@ -207,11 +204,11 @@ public class Mapping2TIF {
         // Optimize TML modeling
         //tmlmodeling.optimize();
         tmlmapping.removeAllRandomSequences();
-	tmlmapping.removeForksAndJoins();
+        tmlmapping.removeForksAndJoins();
 
         //TraceManager.addDev("generate TM");
         tm = new TURTLEModeling();
-        checkingErrors = new LinkedList<CheckingError> ();
+        checkingErrors = new LinkedList<CheckingError>();
 
         // Init structures
         prepareSystemTClass();
@@ -312,7 +309,7 @@ public class Mapping2TIF {
         Param p;
 
         // Init all bus sizes
-        for(HwBus bus: allbuses) {
+        for (HwBus bus : allbuses) {
             if (bus != fakeBus) {
                 if (!met.contains(bus)) {
                     met.add(bus);
@@ -341,29 +338,29 @@ public class Mapping2TIF {
         previous = adap;
 
         if (showChannelState) {
-            for(TMLChannel channel: localChannels) {
+            for (TMLChannel channel : localChannels) {
                 system.addNewGateIfApplicable("channelState__" + channel.getName());
                 chvar = "n__" + channel.getName() + "__";
                 guard0 = "";
-                p = system.getParamByName(chvar+"tmpor");
-                if (p!= null) {
-                    guard0 += "!"+chvar+"tmpor";
+                p = system.getParamByName(chvar + "tmpor");
+                if (p != null) {
+                    guard0 += "!" + chvar + "tmpor";
                 }
-                p = system.getParamByName(chvar+"or");
-                if (p!= null) {
-                    guard0 += "!"+chvar+"or";
+                p = system.getParamByName(chvar + "or");
+                if (p != null) {
+                    guard0 += "!" + chvar + "or";
                 }
-                p = system.getParamByName(chvar+"dest");
-                if (p!= null) {
-                    guard0 += "!"+chvar+"dest";
+                p = system.getParamByName(chvar + "dest");
+                if (p != null) {
+                    guard0 += "!" + chvar + "dest";
                 }
-                p = system.getParamByName(chvar+"tmpdest");
-                if (p!= null) {
-                    guard0 += "!"+chvar+"tmpdest";
+                p = system.getParamByName(chvar + "tmpdest");
+                if (p != null) {
+                    guard0 += "!" + chvar + "tmpdest";
                 }
-                p = system.getParamByName(chvar+"total");
-                if (p!= null) {
-                    guard0 += "!"+chvar+"total";
+                p = system.getParamByName(chvar + "total");
+                if (p != null) {
+                    guard0 += "!" + chvar + "total";
                 }
                 TraceManager.addDev("Info for channel " + channel.getName() + " = " + guard0);
                 actiong0 = getActionGate(tcpu, ad, "channelState__" + channel.getName(), guard0);
@@ -375,12 +372,12 @@ public class Mapping2TIF {
         // Managing bus tranfers
         index = 0;
         TMLChannel ch;
-        for(TMLCommunicationElement tmle: allcommunications) {
+        for (TMLCommunicationElement tmle : allcommunications) {
             if (tmle instanceof TMLChannel) {
                 //index = allcommunications.indexOf(channel);
-                ch = (TMLChannel)tmle;
+                ch = (TMLChannel) tmle;
                 chvar = "n__" + ch.getName() + "__";
-                bus0 =  getBusOf(ch);
+                bus0 = getBusOf(ch);
                 if ((bus0 != null) && (bus0 != fakeBus)) {
                     if ((ch.getType() == TMLChannel.BRBW) || (ch.getType() == TMLChannel.BRNBW)) {
                         adap = getActionStateWithParam(tcpu, ad, chvar + "tmpdest", chvar + "tmpdest + " + chvar + "dest");
@@ -452,7 +449,7 @@ public class Mapping2TIF {
                     previous = adap;
 
                     if (showBusTransfers) {
-                        actiong0 = getActionGate(tcpu, ad, "transferOn__" + bus0.getName(), "!" + index + "!n__tmpbus!" +"n__" + bus0.getName());
+                        actiong0 = getActionGate(tcpu, ad, "transferOn__" + bus0.getName(), "!" + index + "!n__tmpbus!" + "n__" + bus0.getName());
                         previous.addNext(actiong0);
                         actiong0.addNext(adj);
                     } else {
@@ -520,10 +517,10 @@ public class Mapping2TIF {
                     }
                 }
             }
-            index ++;
+            index++;
         }
 
-        for(TMLChannel channel: localChannels) {
+        for (TMLChannel channel : localChannels) {
             if (channel.isBlockingAtOrigin()) {
                 index = allcommunications.indexOf(channel);
                 //adap = getActionStateWithParam(tcpu, ad, "n__" + channel.getName() + "__tmp", "n__" + channel.getName());
@@ -616,29 +613,29 @@ public class Mapping2TIF {
         }
 
         if (showChannelState) {
-            for(TMLChannel channel: localChannels) {
+            for (TMLChannel channel : localChannels) {
                 system.addNewGateIfApplicable("channelState__" + channel.getName());
                 chvar = "n__" + channel.getName() + "__";
                 guard0 = "";
-                p = system.getParamByName(chvar+"tmpor");
-                if (p!= null) {
-                    guard0 += "!"+chvar+"tmpor";
+                p = system.getParamByName(chvar + "tmpor");
+                if (p != null) {
+                    guard0 += "!" + chvar + "tmpor";
                 }
-                p = system.getParamByName(chvar+"or");
-                if (p!= null) {
-                    guard0 += "!"+chvar+"or";
+                p = system.getParamByName(chvar + "or");
+                if (p != null) {
+                    guard0 += "!" + chvar + "or";
                 }
-                p = system.getParamByName(chvar+"dest");
-                if (p!= null) {
-                    guard0 += "!"+chvar+"dest";
+                p = system.getParamByName(chvar + "dest");
+                if (p != null) {
+                    guard0 += "!" + chvar + "dest";
                 }
-                p = system.getParamByName(chvar+"tmpdest");
-                if (p!= null) {
-                    guard0 += "!"+chvar+"tmpdest";
+                p = system.getParamByName(chvar + "tmpdest");
+                if (p != null) {
+                    guard0 += "!" + chvar + "tmpdest";
                 }
-                p = system.getParamByName(chvar+"total");
-                if (p!= null) {
-                    guard0 += "!"+chvar+"total";
+                p = system.getParamByName(chvar + "total");
+                if (p != null) {
+                    guard0 += "!" + chvar + "total";
                 }
                 TraceManager.addDev("Info for channel " + channel.getName() + " = " + guard0);
                 actiong0 = getActionGate(tcpu, ad, "channelState__" + channel.getName(), guard0);
@@ -648,7 +645,7 @@ public class Mapping2TIF {
         }
 
         // Events
-        for(TMLEvent event: localEvents) {
+        for (TMLEvent event : localEvents) {
             //adap = getActionStateWithParam(tcpu, ad, "n__" + event.getName() + "__tmp", "n__" + event.getName());
             //previous.addNext(adap);
             //previous = adap;
@@ -745,7 +742,7 @@ public class Mapping2TIF {
         }
 
         // Requests
-        for(TMLRequest request: localRequests) {
+        for (TMLRequest request : localRequests) {
             index = allcommunications.indexOf(request);
             adap = getActionStateWithParam(tcpu, ad, "n__" + request.getName() + "__tmp", "n__" + request.getName());
             previous.addNext(adap);
@@ -816,11 +813,11 @@ public class Mapping2TIF {
         afterCommManager.addNext(beforeBehavior);
 
         // Go from the end of init to the beginning of behavior
-        ADJunction junc0 = initJuncs.get(initJuncs.size()-1);
+        ADJunction junc0 = initJuncs.get(initJuncs.size() - 1);
         junc0.addNext(afterInit);
 
         // Go from the end of behavior to the beginning of comm manager
-        junc0 = behaviorJuncs.get(behaviorJuncs.size()-1);
+        junc0 = behaviorJuncs.get(behaviorJuncs.size() - 1);
         junc0.addNext(afterBehavior);
         if (isEndClocked) {
             adag = getActionGate(system, systemad, "system__endTick", "");
@@ -855,7 +852,7 @@ public class Mapping2TIF {
         guard = "";
         int cpt = 0;
         List<HwNode> executions = tmlarchitecture.getHwNodes();
-        for(HwNode node : executions) {
+        for (HwNode node : executions) {
             if (node instanceof HwCPU) {
                 if (cpt == 0) {
                     guard += "(" + node.getName();
@@ -863,7 +860,7 @@ public class Mapping2TIF {
                     guard += " and (" + node.getName();
                 }
                 guard += "__selected == 2)";
-                cpt ++;
+                cpt++;
             }
         }
 
@@ -919,7 +916,7 @@ public class Mapping2TIF {
             previous.addNext(adj);
         }
 
-        if((isCountTick) || (hasMaxCountTick)) {
+        if ((isCountTick) || (hasMaxCountTick)) {
             Param p = system.getParamByName("count__tick");
             ADActionStateWithParam actions = new ADActionStateWithParam(p);
             systemad.add(actions);
@@ -976,22 +973,22 @@ public class Mapping2TIF {
     private void makeCPUs(ArrayList<TMLChannel> localChannels, ArrayList<TMLEvent> localEvents, ArrayList<TMLRequest> localRequests) {
         List<HwNode> executions = tmlarchitecture.getHwNodes();
 
-        int cpt =0;
+        int cpt = 0;
 
-        for(HwNode node : executions) {
+        for (HwNode node : executions) {
             if (node instanceof HwCPU) {
                 TraceManager.addDev("CPU=" + node.getName() + " cpt=" + cpt);
-                prepareCPU((HwCPU)node, cpt);
+                prepareCPU((HwCPU) node, cpt);
             }
-            cpt ++;
+            cpt++;
         }
 
         cpt = 0;
-        for(HwNode node : executions) {
+        for (HwNode node : executions) {
             TraceManager.addDev("Node=" + node.getName() + " cpt=" + cpt);
             if (node instanceof HwCPU) {
-                makeCPU((HwCPU)node, cpt, localChannels, localEvents, localRequests);
-                cpt ++;
+                makeCPU((HwCPU) node, cpt, localChannels, localEvents, localRequests);
+                cpt++;
             }
         }
     }
@@ -1002,16 +999,16 @@ public class Mapping2TIF {
         initJuncs.add(junc);
         systemad.add(junc);
 
-        junc =  new ADJunction();
+        junc = new ADJunction();
         behaviorJuncs.add(junc);
         systemad.add(junc);
 
         List<TMLTask> tasks = new ArrayList<TMLTask>();
 
         List<HwExecutionNode> executions = tmlmapping.getNodes();
-        List<TMLTask> mappedtasks  = tmlmapping.getMappedTasks();
+        List<TMLTask> mappedtasks = tmlmapping.getMappedTasks();
 
-        for(int i=0; i<executions.size(); i++) {
+        for (int i = 0; i < executions.size(); i++) {
             if (executions.get(i) == cpu) {
                 tasks.add(mappedtasks.get(i));
             }
@@ -1027,9 +1024,9 @@ public class Mapping2TIF {
         List<TMLTask> tasks = new ArrayList<TMLTask>();
 
         List<HwExecutionNode> executions = tmlmapping.getNodes();
-        List<TMLTask> mappedtasks  = tmlmapping.getMappedTasks();
+        List<TMLTask> mappedtasks = tmlmapping.getMappedTasks();
 
-        for(int i=0; i<executions.size(); i++) {
+        for (int i = 0; i < executions.size(); i++) {
             if (executions.get(i) == cpu) {
                 tasks.add(mappedtasks.get(i));
             }
@@ -1051,7 +1048,7 @@ public class Mapping2TIF {
         }
         HwNode node = tmlmapping.getNodes().get(index);
         if (node instanceof HwCPU) {
-            return (HwCPU)node;
+            return (HwCPU) node;
         }
         TraceManager.addDev("****** Unknown node");
         return null;
@@ -1060,9 +1057,9 @@ public class Mapping2TIF {
 
     private void fillCommunicationArrays(TClass tcpu, List<TMLChannel> localChannels, List<TMLEvent> localEvents, List<TMLRequest> localRequests) {
         HwBus bus;
-        List<TMLTask> tasks  = tmlmapping.getMappedTasks();
+        List<TMLTask> tasks = tmlmapping.getMappedTasks();
 
-        for(TMLChannel ch: tmlmodeling.getChannels()) {
+        for (TMLChannel ch : tmlmodeling.getChannels()) {
             if (tasks.contains(ch.getOriginTask()) && tasks.contains(ch.getDestinationTask())) {
                 localChannels.add(ch);
                 allcommunications.add(ch);
@@ -1080,7 +1077,7 @@ public class Mapping2TIF {
         // Sort list of channels -> first channel has the highest priority, etc.
         sortChannels();
 
-        for(TMLEvent evt: tmlmodeling.getEvents()) {
+        for (TMLEvent evt : tmlmodeling.getEvents()) {
             if (tasks.contains(evt.getOriginTask()) && tasks.contains(evt.getDestinationTask())) {
                 localEvents.add(evt);
                 allcommunications.add(evt);
@@ -1088,10 +1085,10 @@ public class Mapping2TIF {
             }
         }
 
-        for(TMLRequest req: tmlmodeling.getRequests()) {
+        for (TMLRequest req : tmlmodeling.getRequests()) {
             if (tasks.contains(req.getDestinationTask())) {
                 boolean ok = true;
-                for(TMLTask task: req.getOriginTasks()) {
+                for (TMLTask task : req.getOriginTasks()) {
                     if (!tasks.contains(task)) {
                         ok = false;
                         break;
@@ -1106,14 +1103,14 @@ public class Mapping2TIF {
         }
 
         int cpt = 0;
-        for(TMLCommunicationElement tmle: allcommunications) {
+        for (TMLCommunicationElement tmle : allcommunications) {
             if (tmle.isBlockingAtOrigin()) {
-                tcpu.addNewParamIfApplicable("blockedOn__" + (2*cpt), "bool", "false");
-                tcpu.addNewParamIfApplicable("blockedOn__" + (2*cpt) + "__tmp", "bool", "false");
+                tcpu.addNewParamIfApplicable("blockedOn__" + (2 * cpt), "bool", "false");
+                tcpu.addNewParamIfApplicable("blockedOn__" + (2 * cpt) + "__tmp", "bool", "false");
             }
             if (tmle.isBlockingAtDestination()) {
-                tcpu.addNewParamIfApplicable("blockedOn__" + (2*cpt+1), "bool", "false");
-                tcpu.addNewParamIfApplicable("blockedOn__" + (2*cpt+1) + "__tmp", "bool", "false");
+                tcpu.addNewParamIfApplicable("blockedOn__" + (2 * cpt + 1), "bool", "false");
+                tcpu.addNewParamIfApplicable("blockedOn__" + (2 * cpt + 1) + "__tmp", "bool", "false");
             }
             cpt++;
         }
@@ -1127,7 +1124,7 @@ public class Mapping2TIF {
         HwCPU cpu;
         HwLink link;
 
-        for(int i=0; i<allcommunications.size(); i++) {
+        for (int i = 0; i < allcommunications.size(); i++) {
             tmle = allcommunications.get(i);
             if (!(tmle instanceof TMLChannel)) {
                 tmpcommunications.add(tmle);
@@ -1136,12 +1133,12 @@ public class Mapping2TIF {
             }
         }
 
-        while(allcommunications.size() > 0) {
+        while (allcommunications.size() > 0) {
             currentIndex = 0;
             index = -1;
             prio = -1;
-            for(TMLCommunicationElement tmlee: allcommunications) {
-                ch = (TMLChannel)tmlee;
+            for (TMLCommunicationElement tmlee : allcommunications) {
+                ch = (TMLChannel) tmlee;
                 cpu = cpuof(ch.getOriginTask());
                 if (cpu == null) {
                     myprio = 0;
@@ -1159,17 +1156,17 @@ public class Mapping2TIF {
                     index = currentIndex;
                 }
 
-                currentIndex ++;
+                currentIndex++;
             }
             tmpcommunications.add(allcommunications.get(index));
             allcommunications.remove(index);
         }
         allcommunications = tmpcommunications;
 
-        for(int i=0; i<allcommunications.size(); i++) {
+        for (int i = 0; i < allcommunications.size(); i++) {
             tmle = allcommunications.get(i);
             if (tmle instanceof TMLChannel) {
-                ch = (TMLChannel)tmle;
+                ch = (TMLChannel) tmle;
                 TraceManager.addDev("Channel #" + i + " = " + ch.getName());
             }
 
@@ -1181,16 +1178,16 @@ public class Mapping2TIF {
         // Per CPU
         tcpu.addNewParamIfApplicable(cpu.getName() + "__selected", "nat", "0");
         tcpu.addNewParamIfApplicable(cpu.getName() + "__turn", "nat", "0");
-        tcpu.addNewParamIfApplicable(cpu.getName() + "__sizeCPU", "nat", ""+cpu.byteDataSize);
+        tcpu.addNewParamIfApplicable(cpu.getName() + "__sizeCPU", "nat", "" + cpu.byteDataSize);
         tcpu.addNewParamIfApplicable(cpu.getName() + "__nTick", "nat", "0");
-        tcpu.addNewParamIfApplicable(cpu.getName() + "__byteDataSize", "nat", ""+cpu.byteDataSize);
+        tcpu.addNewParamIfApplicable(cpu.getName() + "__byteDataSize", "nat", "" + cpu.byteDataSize);
 
-        if ((cpu.branchingPredictionPenalty > 0) && (cpu.pipelineSize>0)) {
+        if ((cpu.branchingPredictionPenalty > 0) && (cpu.pipelineSize > 0)) {
             if (showBranching) {
                 system.addNewGateIfApplicable(cpu.getName() + "__branching");
             }
             tcpu.addNewParamIfApplicable(cpu.getName() + "__branchingCycle", "nat", "0");
-            tcpu.addNewParamIfApplicable(cpu.getName() + "__branchingMiss", "nat", "" + (99/cpu.branchingPredictionPenalty));
+            tcpu.addNewParamIfApplicable(cpu.getName() + "__branchingMiss", "nat", "" + (99 / cpu.branchingPredictionPenalty));
             tcpu.addNewParamIfApplicable(cpu.getName() + "__branchingPenalty", "nat", "" + cpu.pipelineSize);
         }
 
@@ -1203,85 +1200,85 @@ public class Mapping2TIF {
     }
 
     private void makeTaskAttributes(TClass tcpu, List<TMLTask> tasks) {
-      //  int i;
+        //  int i;
         String init;
 
-        for(TMLTask task: tasks) {
+        for (TMLTask task : tasks) {
             tcpu.addNewParamIfApplicable(task.getName() + "__state", "nat", "0");
             tcpu.addNewParamIfApplicable(task.getName() + "__istate", "nat", "0");
             //tcpu.addNewParamIfApplicable(task.getName() + "__blockedOn", "nat", "0");
 
-            for(TMLAttribute attribute:task.getAttributes()) {
+            for (TMLAttribute attribute : task.getAttributes()) {
                 init = attribute.initialValue;
                 if ((init == null) || (init.length() == 0)) {
                     init = attribute.getDefaultInitialValue();
                 }
-                switch(attribute.type.getType()) {
-                case TMLType.NATURAL:
-                    //TraceManager.addDev("Adding nat attribute:" + attribute.name+ " init=" + attribute.initialValue);
-                    if (attribute.name.equals("i")) {
-                        tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name + "_0", "nat", modifyString(init, task));
-                    } else {
-                        tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name, "nat", modifyString(init, task));
-                    }
+                switch (attribute.type.getType()) {
+                    case TMLType.NATURAL:
+                        //TraceManager.addDev("Adding nat attribute:" + attribute.name+ " init=" + attribute.initialValue);
+                        if (attribute.name.equals("i")) {
+                            tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name + "_0", "nat", modifyString(init, task));
+                        } else {
+                            tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name, "nat", modifyString(init, task));
+                        }
 
-                    break;
-                default:
-                    //TraceManager.addDev("Adding other attribute:" + attribute.name + " init=" + init);
-                    tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name, "bool", modifyString(init, task));
+                        break;
+                    default:
+                        //TraceManager.addDev("Adding other attribute:" + attribute.name + " init=" + init);
+                        tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name, "bool", modifyString(init, task));
                 }
             }
         }
     }
 
-    private void makeCommunicationAttributes(TClass tcpu,  ArrayList<TMLChannel> localChannels, ArrayList<TMLEvent> localEvents, ArrayList<TMLRequest> localRequests) {
+    private void makeCommunicationAttributes(TClass tcpu, ArrayList<TMLChannel> localChannels, ArrayList<TMLEvent> localEvents, ArrayList<TMLRequest> localRequests) {
         // Channels
-        for(TMLChannel channel: localChannels) {
+        for (TMLChannel channel : localChannels) {
             tcpu.addNewParamIfApplicable("toWrite__" + channel.getName(), "nat", "0");
             tcpu.addNewParamIfApplicable("toRead__" + channel.getName(), "nat", "0");
             if (showSampleChannels) {
                 tcpu.addNewParamIfApplicable("totalWritten__" + channel.getName(), "nat", "0");
                 tcpu.addNewParamIfApplicable("totalRead__" + channel.getName(), "nat", "0");
             }
-            switch(channel.getType()) {
-            case TMLChannel.BRBW:
-                //TraceManager.addDev("BRBW");
-                //TraceManager.addDev("Adding max parameters");
-                tcpu.addNewParamIfApplicable("max__" + channel.getName(), "nat", "" + (channel.getSize() * channel.getMax()));
-                tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpor", "bool", "false");
-                tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpdest", "nat", "0");
-                tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__total", "nat", "0");
-                tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__or", "nat", "0");
-                if (isMapped(channel)) {
-                    tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__dest", "nat", "0");
-                }
-                break;
-            case TMLChannel.BRNBW:
-                //TraceManager.addDev("BRNBW");
-                //tcpu.addNewParamIfApplicable("max__" + channel.getName(), "nat", "" + channel.getSize() + "*" + channel.getMax());
-                tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpor", "bool", "false");
-                tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpdest", "nat", "0");
-                /*if (isMapped(channel)) {*/
-                tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__or", "nat", "0");
-                tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__dest", "nat", "0");
-                //}
-                break;
-            case TMLChannel.NBRNBW:
-                //tcpu.addNewParamIfApplicable("max__" + channel.getName(), "nat", "" + channel.getSize() + "*" + channel.getMax());
-
-                if (isMapped(channel)) {
+            switch (channel.getType()) {
+                case TMLChannel.BRBW:
+                    //TraceManager.addDev("BRBW");
+                    //TraceManager.addDev("Adding max parameters");
+                    tcpu.addNewParamIfApplicable("max__" + channel.getName(), "nat", "" + (channel.getSize() * channel.getMax()));
+                    tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpor", "bool", "false");
+                    tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpdest", "nat", "0");
+                    tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__total", "nat", "0");
                     tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__or", "nat", "0");
-                    //tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpor", "bool", "false");
-                    //tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpdest", "nat", "0");
-                    //tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__or", "nat", "0");
-                    //tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__dest", "nat", "0");
-                }
-                break;
+                    if (isMapped(channel)) {
+                        tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__dest", "nat", "0");
+                    }
+                    break;
+                case TMLChannel.BRNBW:
+                    //TraceManager.addDev("BRNBW");
+                    //tcpu.addNewParamIfApplicable("max__" + channel.getName(), "nat", "" + channel.getSize() + "*" + channel.getMax());
+                    tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpor", "bool", "false");
+                    tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpdest", "nat", "0");
+                /*if (isMapped(channel)) {*/
+                    tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__or", "nat", "0");
+                    tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__dest", "nat", "0");
+                    //}
+                    break;
+                case TMLChannel.NBRNBW:
+                    //tcpu.addNewParamIfApplicable("max__" + channel.getName(), "nat", "" + channel.getSize() + "*" + channel.getMax());
+
+                    if (isMapped(channel)) {
+                        tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__or", "nat", "0");
+                        //tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpor", "bool", "false");
+                        //tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__tmpdest", "nat", "0");
+                        //tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__or", "nat", "0");
+                        //tcpu.addNewParamIfApplicable("n__" + channel.getName() + "__dest", "nat", "0");
+                    }
+                    break;
             }
         }
 
         // Events
-        for(TMLEvent event: localEvents) {
+        for (TMLEvent event : localEvents) {
             tcpu.addNewParamIfApplicable("n__" + event.getName(), "nat", "0");
             tcpu.addNewParamIfApplicable("n__" + event.getName() + "__tmp", "nat", "0");
 
@@ -1289,18 +1286,18 @@ public class Mapping2TIF {
                 tcpu.addNewParamIfApplicable("max__" + event.getName(), "nat", "" + event.getMaxSize());
             }
 
-            for(int i=0; i<event.getNbOfParams(); i++) {
+            for (int i = 0; i < event.getNbOfParams(); i++) {
                 tcpu.addNewParamIfApplicable("fifo" + i + "__" + event.getName(), "Queue_nat", "nil");
             }
         }
 
         // Requests
-        for(TMLRequest request: localRequests) {
+        for (TMLRequest request : localRequests) {
             tcpu.addNewParamIfApplicable("n__" + request.getName(), "nat", "0");
             tcpu.addNewParamIfApplicable("n__" + request.getName() + "__tmp", "nat", "0");
-            for(int i=0; i<request.getNbOfParams(); i++) {
-                tcpu.addNewParamIfApplicable("fifo" + (i+1) + "__" + request.getName(), "Queue_nat", "nil");
-                tcpu.addNewParamIfApplicable(modifyString("arg" + (i+1) + "__req", request.getDestinationTask()), "nat", "0");
+            for (int i = 0; i < request.getNbOfParams(); i++) {
+                tcpu.addNewParamIfApplicable("fifo" + (i + 1) + "__" + request.getName(), "Queue_nat", "nil");
+                tcpu.addNewParamIfApplicable(modifyString("arg" + (i + 1) + "__req", request.getDestinationTask()), "nat", "0");
             }
         }
     }
@@ -1319,13 +1316,13 @@ public class Mapping2TIF {
             if (cpu.taskSwitchingTime > 0) {
                 tcpu.addNewGateIfApplicable(cpu.getName() + "__switching");
             }
-            for(TMLTask task: tasks) {
+            for (TMLTask task : tasks) {
                 tcpu.addNewGateIfApplicable(task.getName() + "__selected");
             }
         }
 
         if (showTaskState) {
-            for(TMLTask task: tasks) {
+            for (TMLTask task : tasks) {
                 tcpu.addNewGateIfApplicable(task.getName() + "__startState");
                 tcpu.addNewGateIfApplicable(task.getName() + "__endState");
                 tcpu.addNewGateIfApplicable(task.getName() + "__terminated");
@@ -1339,7 +1336,7 @@ public class Mapping2TIF {
 
         // Channels
         if (showChannels) {
-            for(TMLChannel channel: localChannels) {
+            for (TMLChannel channel : localChannels) {
                 if (tasks.contains(channel.getOriginTask())) {
                     tcpu.addNewGateIfApplicable(cpu.getName() + "__" + channel.getOriginTask().getName() + "__wr__" + channel.getName());
                 }
@@ -1351,24 +1348,24 @@ public class Mapping2TIF {
 
         // Events
         if (showEvents) {
-            for(TMLEvent event: localEvents) {
+            for (TMLEvent event : localEvents) {
                 if (tasks.contains(event.getOriginTask())) {
                     tcpu.addNewGateIfApplicable(cpu.getName() + "__" + event.getOriginTask().getName() + "__notify__" + event.getName());
                 }
                 if (tasks.contains(event.getDestinationTask())) {
                     tcpu.addNewGateIfApplicable(cpu.getName() + "__" + event.getDestinationTask().getName() + "__wait__" + event.getName());
-                    tcpu.addNewGateIfApplicable(cpu.getName() + "__"  + event.getDestinationTask().getName() + "__notified__" + event.getName());
+                    tcpu.addNewGateIfApplicable(cpu.getName() + "__" + event.getDestinationTask().getName() + "__notified__" + event.getName());
                 }
             }
         }
 
         // Requests
         if (showRequests) {
-            for(TMLRequest request: localRequests) {
+            for (TMLRequest request : localRequests) {
                 if (tasks.contains(request.getDestinationTask())) {
                     tcpu.addNewGateIfApplicable(cpu.getName() + "__" + request.getDestinationTask().getName() + "__waitReq__" + request.getName());
                 }
-                for(TMLTask task: request.getOriginTasks()) {
+                for (TMLTask task : request.getOriginTasks()) {
                     if (tasks.contains(task)) {
                         tcpu.addNewGateIfApplicable(cpu.getName() + "__" + task.getName() + "__sendReq__" + request.getName());
                     }
@@ -1386,7 +1383,7 @@ public class Mapping2TIF {
         if (index == 0) {
             maincpujunc = beforeBehavior;
         } else {
-            maincpujunc = behaviorJuncs.get(index-1);
+            maincpujunc = behaviorJuncs.get(index - 1);
         }
 
         ADJunction endjunc = behaviorJuncs.get(index);
@@ -1411,13 +1408,13 @@ public class Mapping2TIF {
         if (index == 0) {
             start = beforeInit;
         } else {
-            start = initJuncs.get(index-1);
+            start = initJuncs.get(index - 1);
         }
         ADComponent follow = start;
 
         Param p = tcpu.getParamByName(cpu.getName() + "__turn");
 
-        if (randomTasks && (p!= null) && (cpu.schedulingPolicy == HwCPU.BASIC_ROUND_ROBIN)) {
+        if (randomTasks && (p != null) && (cpu.schedulingPolicy == HwCPU.BASIC_ROUND_ROBIN)) {
             ADChoice choice = new ADChoice();
             ad.add(choice);
             follow.addNext(choice);
@@ -1429,11 +1426,11 @@ public class Mapping2TIF {
             ADActionStateWithParam actions;
             int cpt = 0;
 
-            for(TMLTask task: tasks) {
+            for (TMLTask task : tasks) {
                 actions = new ADActionStateWithParam(p);
                 ad.add(actions);
                 actions.setActionValue("" + cpt);
-                cpt ++;
+                cpt++;
                 choice.addNext(actions);
                 choice.addGuard("[ ]");
                 actions.addNext(junction);
@@ -1444,7 +1441,7 @@ public class Mapping2TIF {
     }
 
     private void makeCPUADSelection(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADJunction mainJunction, ADJunction endjunc, ADChoice selectedChoice, List<TMLTask> tasks) {
-      //  int cpt = 0;
+        //  int cpt = 0;
         ADComponent previous = mainJunction;
         String guard0, guard1;
         ADActionStateWithParam adap1, adap2;
@@ -1476,7 +1473,7 @@ public class Mapping2TIF {
         }
 
         // Branching penalty
-        if ((cpu.branchingPredictionPenalty > 0) && (cpu.pipelineSize>0)) {
+        if ((cpu.branchingPredictionPenalty > 0) && (cpu.pipelineSize > 0)) {
             name = cpu.getName() + "__";
             choice0 = new ADChoice();
             ad.add(choice0);
@@ -1495,7 +1492,7 @@ public class Mapping2TIF {
 
             choice0.addGuard(guard0);
             if (showBranching) {
-                adag = new  ADActionStateWithGate(tcpu.getGateByName(name + "branching"));
+                adag = new ADActionStateWithGate(tcpu.getGateByName(name + "branching"));
                 adag.setActionValue("!" + name + "branchingPenalty");
                 ad.add(adag);
                 choice0.addNext(adag);
@@ -1552,7 +1549,7 @@ public class Mapping2TIF {
             choice0.addNext(adap1);
             previoustmp = adap1;
             if (showScheduling) {
-                adag = new  ADActionStateWithGate(tcpu.getGateByName(cpu.getName() + "__switching"));
+                adag = new ADActionStateWithGate(tcpu.getGateByName(cpu.getName() + "__switching"));
                 adag.setActionValue("!" + cpu.getName() + "__switchingTime");
                 ad.add(adag);
                 previoustmp.addNext(adag);
@@ -1572,8 +1569,8 @@ public class Mapping2TIF {
             String selected = "!" + cpu.getName() + "__selected";
             TraceManager.addDev("First value= cpu selected or not");
             TraceManager.addDev("Runnable=0, running=1, blocked=2, terminated=3");
-      //      cpt ++;
-            for(TMLTask task: tasks) {
+            //      cpt ++;
+            for (TMLTask task : tasks) {
                 TraceManager.addDev("task #i = " + task.getName());
                 selected += "!" + task.getName() + "__state";
             }
@@ -1594,7 +1591,7 @@ public class Mapping2TIF {
         if (showBlockedCPU) {
             ADActionStateWithGate terminate = new ADActionStateWithGate(tcpu.getGateByName(cpu.getName() + "__allBlocked"));
             String states = "";
-            for(TMLTask task: tasks) {
+            for (TMLTask task : tasks) {
                 states += "!" + task.getName() + "__state";
             }
             terminate.setActionValue(states);
@@ -1620,7 +1617,7 @@ public class Mapping2TIF {
         int cpt;
 
 
-        for(TMLTask task: tasks) {
+        for (TMLTask task : tasks) {
             guard0 = "[" + task.getName() + "__state == 1]";
             guard1 = "[not(" + task.getName() + "__state == 1)]";
             action = "0";
@@ -1663,12 +1660,12 @@ public class Mapping2TIF {
         guard0 = "";
         cpt = 0;
 
-        for(TMLTask task: tasks) {
+        for (TMLTask task : tasks) {
             if (cpt > 0) {
                 guard0 += " and ";
             }
             guard0 += "(" + task.getName() + "__state > 1)";
-            cpt ++;
+            cpt++;
         }
 
         guard1 = "[not(" + guard0 + ")]";
@@ -1699,7 +1696,7 @@ public class Mapping2TIF {
 
             cpt = 0;
 
-            for(TMLTask task: tasks) {
+            for (TMLTask task : tasks) {
                 finished = new ADChoice();
                 ad.add(finished);
                 guard0 = "[" + cpu.getName() + "__turn == " + cpt + "]";
@@ -1713,7 +1710,7 @@ public class Mapping2TIF {
 
                 // Changing turn
                 if (cpt < (tasks.size() - 1)) {
-                    action = "" + (cpt+1);
+                    action = "" + (cpt + 1);
                 } else {
                     action = "0";
                 }
@@ -1763,7 +1760,7 @@ public class Mapping2TIF {
                 } else {
                     previoustmp.addNext(mainJunction);
                 }
-                cpt ++;
+                cpt++;
             }
 
             // Priority-based scheduling
@@ -1771,16 +1768,16 @@ public class Mapping2TIF {
             // Tasks are classified according to their priority
             int index = 0;
             int priority = -1;
-            ArrayList<TMLTask> prios = new  ArrayList<TMLTask>();
-            while(tasks.size() > 0) {
+            ArrayList<TMLTask> prios = new ArrayList<TMLTask>();
+            while (tasks.size() > 0) {
                 cpt = 0;
                 index = 0;
-                for(TMLTask task: tasks) {
+                for (TMLTask task : tasks) {
                     if (task.getPriority() > priority) {
                         index = cpt;
                         priority = task.getPriority();
                     }
-                    cpt ++;
+                    cpt++;
                 }
                 prios.add(tasks.get(index));
                 tasks.remove(index);
@@ -1791,7 +1788,7 @@ public class Mapping2TIF {
             //junction = new ADJunction();
             //ad.add(junction);
 
-            for(TMLTask task: prios) {
+            for (TMLTask task : prios) {
                 tasks.add(task);
                 test = new ADChoice();
                 ad.add(test);
@@ -1927,9 +1924,9 @@ public class Mapping2TIF {
           nextJunction = mainJunction;
           }*/
 
-        for(TMLTask task: tasks) {
+        for (TMLTask task : tasks) {
             makeCPUADTask(tcpu, cpu, ad, taskChoice, nextJunction, task, cpt, tasks);
-            cpt ++;
+            cpt++;
         }
     }
 
@@ -1996,7 +1993,7 @@ public class Mapping2TIF {
     }
 
     private void makeCPUADTaskBehavior(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice stateChoice, ADJunction endJunction, TMLTask task, int cpt, List<TMLTask> tasks) {
-       // ADStart start = ad.getStartState();
+        // ADStart start = ad.getStartState();
 
         int stateId = 0;
 //        String gateName;
@@ -2039,16 +2036,16 @@ public class Mapping2TIF {
             ADComponent previous = actionp1;
             ADActionStateWithParam actionp2, actionp3;
 
-            for(int i=0; i<req.getNbOfParams(); i++) {
-                actionp2 = getReqFirstActionStateWithParam(tcpu, ad, task, req, i+1);
-                actionp3 = getReqDequeueActionStateWithParam(tcpu, ad, task, req, i+1);
+            for (int i = 0; i < req.getNbOfParams(); i++) {
+                actionp2 = getReqFirstActionStateWithParam(tcpu, ad, task, req, i + 1);
+                actionp3 = getReqDequeueActionStateWithParam(tcpu, ad, task, req, i + 1);
                 previous.addNext(actionp2);
                 actionp2.addNext(actionp3);
                 previous = actionp3;
             }
 
             ADActionStateWithParam actionp5 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             if (showRequests) {
                 ADActionStateWithGate actiong = getWaitReqActionStateWithGate(tcpu, cpu, ad, task, req);
                 previous.addNext(actiong);
@@ -2076,7 +2073,7 @@ public class Mapping2TIF {
         ADActionStateWithParam actionp0, actionp1, actionp2, actionp3, actionp4, actionp5, actionp6, actionp7, actionp8, actionp9;
         ADActionStateWithParam actionpspe = null;
         ADActionStateWithGate actiong0, /*actiong1, actiong2,*/ actiongd;
-     //   Gate g0, g1, g2;
+        //   Gate g0, g1, g2;
         TMLSendRequest sendreq;
         ADComponent previous;
         TMLRequest req;
@@ -2111,7 +2108,7 @@ public class Mapping2TIF {
                 actionp0 = getStateIdActionState(tcpu, ad, task, branchStateId);
                 stateIdGuard(stateChoice, actionp0, stateId, task);
                 actionp0.addNext(endJunction);
-                stateId ++;
+                stateId++;
                 return stateId;
             } else {
                 if (task.isRequested()) {
@@ -2119,14 +2116,14 @@ public class Mapping2TIF {
                     actionp0 = getInitialStateIdActionState(tcpu, ad, task);
                     stateIdGuard(stateChoice, actionp0, stateId, task);
                     actionp0.addNext(endJunction);
-                    stateId ++;
+                    stateId++;
                     //stateId = 0;
                 } else {
                     //TraceManager.addDev("Task not requested");
                     // End of the activity
                     actionp0 = getStateActionStateWithParam(tcpu, ad, task, "3");
                     stateIdGuard(stateChoice, actionp0, stateId, task);
-                    stateId ++;
+                    stateId++;
 
                     if (showTaskState) {
                         actiong0 = getActionGate(tcpu, ad, task.getName() + "__terminated", "");
@@ -2139,8 +2136,8 @@ public class Mapping2TIF {
             }
 
             // Write Channel
-        }  else if (element instanceof TMLWriteChannel) {
-            tmlwc = (TMLWriteChannel)(element);
+        } else if (element instanceof TMLWriteChannel) {
+            tmlwc = (TMLWriteChannel) (element);
             // Multiwrite channels are not yet supported
             ch = tmlwc.getChannel(0);
             name = ch.getName();
@@ -2165,7 +2162,7 @@ public class Mapping2TIF {
                 ad.add(choice1);
                 adj1.addNext(choice1);
 
-                guard0 = "[ " + nameTot  + " < " + ch.getSize() + "]";
+                guard0 = "[ " + nameTot + " < " + ch.getSize() + "]";
                 guard1 = "[ not(" + nameTot + " < " + ch.getSize() + ")]";
 
                 choice1.addGuard(guard1);
@@ -2184,14 +2181,14 @@ public class Mapping2TIF {
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
             actionp1.addNext(actionp2);
             actionp2.addNext(endJunction);
-            stateId ++;
+            stateId++;
 
             // debug?
             if (showTaskState) {
                 tcpu.addNewGateIfApplicable("writeInfo");
                 if (ch.getType() == TMLChannel.NBRNBW) {
                     actiongd = getActionGate(tcpu, ad, "writeInfo", "!toWrite__" + name);
-                } else if (ch.getType() == TMLChannel.BRNBW){
+                } else if (ch.getType() == TMLChannel.BRNBW) {
                     actiongd = getActionGate(tcpu, ad, "writeInfo", "!toWrite__" + name + "!n__" + name + "__or");
                 } else {
                     actiongd = getActionGate(tcpu, ad, "writeInfo", "!toWrite__" + name + "!n__" + name + "__total!max__" + name);
@@ -2206,7 +2203,7 @@ public class Mapping2TIF {
                 actionp3 = getNextStateIdActionState(tcpu, ad, task);
                 choice0.addNext(actionp3);
                 actionp3.addNext(endJunction);
-                stateId ++;
+                stateId++;
             } else {
                 // Test: data to write?
                 choice0 = new ADChoice();
@@ -2218,7 +2215,7 @@ public class Mapping2TIF {
                 actionp3 = getNextStateIdActionState(tcpu, ad, task);
                 choice0.addNext(actionp3);
                 actionp3.addNext(endJunction);
-                stateId ++;
+                stateId++;
             }
 
             // ->data to write
@@ -2226,124 +2223,124 @@ public class Mapping2TIF {
             // Make on action on write, deduce the number of samples written and make a tick
             // Block if cannot write
             choice0.addGuard("[not(" + guard0 + ")]");
-            switch(ch.getType()) {
-            case TMLChannel.BRBW:
-                //TraceManager.addDev("BRBW");
-                //tcpu.addNewParamIfApplicable("max__" + channel.getName(), "nat", "" + channel.getSize() + "*" + channel.getMax());
-                //tcpu.addNewParamIfApplicable("n__" + channel.getName(), "nat", "0");
-                //Channel is full?
-                choice2 = new ADChoice();
-                ad.add(choice2);
-                choice0.addNext(choice2);
+            switch (ch.getType()) {
+                case TMLChannel.BRBW:
+                    //TraceManager.addDev("BRBW");
+                    //tcpu.addNewParamIfApplicable("max__" + channel.getName(), "nat", "" + channel.getSize() + "*" + channel.getMax());
+                    //tcpu.addNewParamIfApplicable("n__" + channel.getName(), "nat", "0");
+                    //Channel is full?
+                    choice2 = new ADChoice();
+                    ad.add(choice2);
+                    choice0.addNext(choice2);
 
-                if(isMapped(ch)) {
-                    guard0 = "(n__" + name + "__or + n__" + name + "__total) == (max__" + name + ")";
-                } else {
-                    guard0 = "(n__" + name + "__total) == (max__" + name + ")";
-                }
-                guard1 = "[ " + guard0 + " ]";
-                guard2 = "[not(" + guard0 + ")]";
+                    if (isMapped(ch)) {
+                        guard0 = "(n__" + name + "__or + n__" + name + "__total) == (max__" + name + ")";
+                    } else {
+                        guard0 = "(n__" + name + "__total) == (max__" + name + ")";
+                    }
+                    guard1 = "[ " + guard0 + " ]";
+                    guard2 = "[not(" + guard0 + ")]";
 
-                // -> channel is full
-                // must block on write
-                actionp1 = getStateActionStateWithParam(tcpu, ad, task, "2");
-                choice2.addNext(actionp1);
-                choice2.addGuard(guard1);
-                index = allcommunications.indexOf(ch);
-                actionp0 = getBlockedOnActionStateWithParam(tcpu, ad, 2 * index);
-                actionp1.addNext(actionp0);
-                actionp0.addNext(endJunction);
+                    // -> channel is full
+                    // must block on write
+                    actionp1 = getStateActionStateWithParam(tcpu, ad, task, "2");
+                    choice2.addNext(actionp1);
+                    choice2.addGuard(guard1);
+                    index = allcommunications.indexOf(ch);
+                    actionp0 = getBlockedOnActionStateWithParam(tcpu, ad, 2 * index);
+                    actionp1.addNext(actionp0);
+                    actionp0.addNext(endJunction);
 
 
-                // channel is not full
-                actionp5 = getActionStateWithParam(tcpu, ad, "written", "min(min(" + paramName + ", " +cpu.getName() + "__byteDataSize), max__" + name + " - (n__" + name + "__or + n__" + name + "__total))");
-                choice2.addNext(actionp5);
-                choice2.addGuard(guard2);
-                actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
-                if (showSampleChannels) {
-                    choice1.addNext(actionp6);
-                    previous = actionpspe;
-                } else {
-                    previous = actionp6;
-                }
-                if (showChannels) {
-                    actiong0 = getActionGate(tcpu, ad, gateName, "!written!" + ch.getSize());
-                    actionp5.addNext(actiong0);
-                    actiong0.addNext(previous);
-                } else {
-                    actionp5.addNext(previous);
-                }
-                actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - written");
-                actionp6.addNext(actionp7);
-                actionp8 = getActionStateWithParam(tcpu, ad, "n__" + name + "__or", "n__" + name + "__or + written");
-                actionp7.addNext(actionp8);
-                actionp9 = getActionStateWithParam(tcpu, ad, "n__" + name + "__tmpor", "true");
-                actionp8.addNext(actionp9);
-                actionp9.addNext(endJunction);
-
-                break;
-            case TMLChannel.BRNBW:
-                //TraceManager.addDev("BRNBW");
-                actionp5 = getActionStateWithParam(tcpu, ad, "written", "min(" + paramName + ", " + cpu.getName() + "__byteDataSize)");
-                choice0.addNext(actionp5);
-                actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
-                if (showSampleChannels) {
-                    choice1.addNext(actionp6);
-                    previous = actionpspe;
-                } else {
-                    previous = actionp6;
-                }
-                if (showChannels) {
-                    actiong0 = getActionGate(tcpu, ad, gateName, "!written!" + ch.getSize());
-                    actionp5.addNext(actiong0);
-                    actiong0.addNext(previous);
-                } else {
-                    actionp5.addNext(previous);
-                }
-                actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - written");
-                actionp6.addNext(actionp7);
-                actionp8 = getActionStateWithParam(tcpu, ad, "n__" + name + "__or", "n__" + name+ "__or + written");
-                actionp7.addNext(actionp8);
-                actionp9 = getActionStateWithParam(tcpu, ad, "n__" + name + "__tmpor", "true");
-                actionp8.addNext(actionp9);
-                actionp9.addNext(endJunction);
-                break;
-
-            case TMLChannel.NBRNBW:
-                //TraceManager.addDev("NBRNBW");
-                actionp5 = getActionStateWithParam(tcpu, ad, "written", "min(" + paramName + ", " + cpu.getName() + "__byteDataSize)");
-                choice0.addNext(actionp5);
-                actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
-                if (showSampleChannels) {
-                    choice1.addNext(actionp6);
-                    previous = actionpspe;
-                } else {
-                    previous = actionp6;
-                }
-                if (showChannels) {
-                    actiong0 = getActionGate(tcpu, ad, gateName, "!written!" + ch.getSize());
-                    actionp5.addNext(actiong0);
-                    actiong0.addNext(previous);
-                } else {
-                    actionp5.addNext(previous);
-                }
-                actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - written");
-                actionp6.addNext(actionp7);
-                if (isMapped(ch)) {
-                    actionp8 = getActionStateWithParam(tcpu, ad, "n__" + name + "__or", "n__" + name+ "__or + written");
+                    // channel is not full
+                    actionp5 = getActionStateWithParam(tcpu, ad, "written", "min(min(" + paramName + ", " + cpu.getName() + "__byteDataSize), max__" + name + " - (n__" + name + "__or + n__" + name + "__total))");
+                    choice2.addNext(actionp5);
+                    choice2.addGuard(guard2);
+                    actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
+                    if (showSampleChannels) {
+                        choice1.addNext(actionp6);
+                        previous = actionpspe;
+                    } else {
+                        previous = actionp6;
+                    }
+                    if (showChannels) {
+                        actiong0 = getActionGate(tcpu, ad, gateName, "!written!" + ch.getSize());
+                        actionp5.addNext(actiong0);
+                        actiong0.addNext(previous);
+                    } else {
+                        actionp5.addNext(previous);
+                    }
+                    actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - written");
+                    actionp6.addNext(actionp7);
+                    actionp8 = getActionStateWithParam(tcpu, ad, "n__" + name + "__or", "n__" + name + "__or + written");
                     actionp7.addNext(actionp8);
-                    actionp8.addNext(endJunction);
-                } else {
-                    actionp7.addNext(endJunction);
-                }
-                break;
+                    actionp9 = getActionStateWithParam(tcpu, ad, "n__" + name + "__tmpor", "true");
+                    actionp8.addNext(actionp9);
+                    actionp9.addNext(endJunction);
+
+                    break;
+                case TMLChannel.BRNBW:
+                    //TraceManager.addDev("BRNBW");
+                    actionp5 = getActionStateWithParam(tcpu, ad, "written", "min(" + paramName + ", " + cpu.getName() + "__byteDataSize)");
+                    choice0.addNext(actionp5);
+                    actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
+                    if (showSampleChannels) {
+                        choice1.addNext(actionp6);
+                        previous = actionpspe;
+                    } else {
+                        previous = actionp6;
+                    }
+                    if (showChannels) {
+                        actiong0 = getActionGate(tcpu, ad, gateName, "!written!" + ch.getSize());
+                        actionp5.addNext(actiong0);
+                        actiong0.addNext(previous);
+                    } else {
+                        actionp5.addNext(previous);
+                    }
+                    actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - written");
+                    actionp6.addNext(actionp7);
+                    actionp8 = getActionStateWithParam(tcpu, ad, "n__" + name + "__or", "n__" + name + "__or + written");
+                    actionp7.addNext(actionp8);
+                    actionp9 = getActionStateWithParam(tcpu, ad, "n__" + name + "__tmpor", "true");
+                    actionp8.addNext(actionp9);
+                    actionp9.addNext(endJunction);
+                    break;
+
+                case TMLChannel.NBRNBW:
+                    //TraceManager.addDev("NBRNBW");
+                    actionp5 = getActionStateWithParam(tcpu, ad, "written", "min(" + paramName + ", " + cpu.getName() + "__byteDataSize)");
+                    choice0.addNext(actionp5);
+                    actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
+                    if (showSampleChannels) {
+                        choice1.addNext(actionp6);
+                        previous = actionpspe;
+                    } else {
+                        previous = actionp6;
+                    }
+                    if (showChannels) {
+                        actiong0 = getActionGate(tcpu, ad, gateName, "!written!" + ch.getSize());
+                        actionp5.addNext(actiong0);
+                        actiong0.addNext(previous);
+                    } else {
+                        actionp5.addNext(previous);
+                    }
+                    actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - written");
+                    actionp6.addNext(actionp7);
+                    if (isMapped(ch)) {
+                        actionp8 = getActionStateWithParam(tcpu, ad, "n__" + name + "__or", "n__" + name + "__or + written");
+                        actionp7.addNext(actionp8);
+                        actionp8.addNext(endJunction);
+                    } else {
+                        actionp7.addNext(endJunction);
+                    }
+                    break;
             }
 
             return makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(0));
 
             // Read Channel
-        }  else if (element instanceof TMLReadChannel) {
-            tmlrc = (TMLReadChannel)(element);
+        } else if (element instanceof TMLReadChannel) {
+            tmlrc = (TMLReadChannel) (element);
             ch = tmlrc.getChannel(0);
             name = ch.getName();
 
@@ -2369,7 +2366,7 @@ public class Mapping2TIF {
                 ad.add(choice1);
                 adj1.addNext(choice1);
 
-                guard0 = "[ " + nameTot  + " < " + ch.getSize() + "]";
+                guard0 = "[ " + nameTot + " < " + ch.getSize() + "]";
                 guard1 = "[ not(" + nameTot + " < " + ch.getSize() + ")]";
 
                 choice1.addGuard(guard1);
@@ -2388,7 +2385,7 @@ public class Mapping2TIF {
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
             actionp1.addNext(actionp2);
             actionp2.addNext(endJunction);
-            stateId ++;
+            stateId++;
 
             // Test: data to read?
             choice0 = new ADChoice();
@@ -2400,63 +2397,63 @@ public class Mapping2TIF {
             actionp3 = getNextStateIdActionState(tcpu, ad, task);
             choice0.addNext(actionp3);
             actionp3.addNext(endJunction);
-            stateId ++;
+            stateId++;
 
             // ->data to read
-            switch(ch.getType()) {
-            case TMLChannel.BRBW:
-            case TMLChannel.BRNBW:
-                choice0.addGuard("[not(" + guard0 + ")]");
-                choice2 = new ADChoice();
-                ad.add(choice2);
-                choice0.addNext(choice2);
+            switch (ch.getType()) {
+                case TMLChannel.BRBW:
+                case TMLChannel.BRNBW:
+                    choice0.addGuard("[not(" + guard0 + ")]");
+                    choice2 = new ADChoice();
+                    ad.add(choice2);
+                    choice0.addNext(choice2);
 
-                guard2 = "n__" + name + "__tmpdest == 0";
-                guard0 = "[" + guard2 + "]";
-                guard1 = "[not(" + guard2 + ")]";
+                    guard2 = "n__" + name + "__tmpdest == 0";
+                    guard0 = "[" + guard2 + "]";
+                    guard1 = "[not(" + guard2 + ")]";
 
-                // If nothing in channel -> must block
-                // Blocked branch
-                actionp1 = getStateActionStateWithParam(tcpu, ad, task, "2");
-                choice2.addNext(actionp1);
-                choice2.addGuard(guard0);
-                index = allcommunications.indexOf(ch);
-                actionp0 = getBlockedOnActionStateWithParam(tcpu, ad, (2 * index) + 1);
-                actionp1.addNext(actionp0);
-                actionp0.addNext(endJunction);
-
-                // Not blocked branch
-                actionp5 = getActionStateWithParam(tcpu, ad, "read", "min(min(" + paramName + ", " + cpu.getName() + "__byteDataSize), n__" + name + "__tmpdest)");
-                choice2.addNext(actionp5);
-                choice2.addGuard(guard1);
-                actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
-                if (showSampleChannels) {
-                    choice1.addNext(actionp6);
-                    previous = actionpspe;
-                } else {
-                    previous = actionp6;
-                }
-                if (showChannels) {
-                    actiong0 = getActionGate(tcpu, ad, gateName, "!read!" + ch.getSize());
-                    actionp5.addNext(actiong0);
-                    actiong0.addNext(previous);
-                } else {
-                    actionp5.addNext(previous);
-                }
-                actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - read");
-                actionp6.addNext(actionp7);
-                actionp8 = getActionStateWithParam(tcpu, ad, "n__" + name + "__tmpdest", "n__" + name + "__tmpdest - read");
-                actionp7.addNext(actionp8);
-
-                if (!ch.isBlockingAtOrigin()) {
-                    actionp8.addNext(endJunction);
-                } else {
-                    // Must signal the origin task if it was blocked...
-
+                    // If nothing in channel -> must block
+                    // Blocked branch
+                    actionp1 = getStateActionStateWithParam(tcpu, ad, task, "2");
+                    choice2.addNext(actionp1);
+                    choice2.addGuard(guard0);
                     index = allcommunications.indexOf(ch);
-                    actionp9 = getActionStateWithParam(tcpu, ad, "blockedOn__" + (index * 2) + "__tmp", "true");
-                    actionp8.addNext(actionp9);
-                    actionp9.addNext(endJunction);
+                    actionp0 = getBlockedOnActionStateWithParam(tcpu, ad, (2 * index) + 1);
+                    actionp1.addNext(actionp0);
+                    actionp0.addNext(endJunction);
+
+                    // Not blocked branch
+                    actionp5 = getActionStateWithParam(tcpu, ad, "read", "min(min(" + paramName + ", " + cpu.getName() + "__byteDataSize), n__" + name + "__tmpdest)");
+                    choice2.addNext(actionp5);
+                    choice2.addGuard(guard1);
+                    actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
+                    if (showSampleChannels) {
+                        choice1.addNext(actionp6);
+                        previous = actionpspe;
+                    } else {
+                        previous = actionp6;
+                    }
+                    if (showChannels) {
+                        actiong0 = getActionGate(tcpu, ad, gateName, "!read!" + ch.getSize());
+                        actionp5.addNext(actiong0);
+                        actiong0.addNext(previous);
+                    } else {
+                        actionp5.addNext(previous);
+                    }
+                    actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - read");
+                    actionp6.addNext(actionp7);
+                    actionp8 = getActionStateWithParam(tcpu, ad, "n__" + name + "__tmpdest", "n__" + name + "__tmpdest - read");
+                    actionp7.addNext(actionp8);
+
+                    if (!ch.isBlockingAtOrigin()) {
+                        actionp8.addNext(endJunction);
+                    } else {
+                        // Must signal the origin task if it was blocked...
+
+                        index = allcommunications.indexOf(ch);
+                        actionp9 = getActionStateWithParam(tcpu, ad, "blockedOn__" + (index * 2) + "__tmp", "true");
+                        actionp8.addNext(actionp9);
+                        actionp9.addNext(endJunction);
 
                     /*choice2 = new ADChoice();
                       ad.add(choice2);
@@ -2482,51 +2479,51 @@ public class Mapping2TIF {
                       actionp2.addNext(actionp3);
                       actionp3.addNext(actionp4);
                       actionp4.addNext(endJunction);*/
-                }
-                break;
-            case TMLChannel.NBRNBW:
-                //TraceManager.addDev("NBRNBW");
-                actionp5 = getActionStateWithParam(tcpu, ad, "read", "min(" + paramName + ", " + cpu.getName() + "__byteDataSize)");
-                choice0.addNext(actionp5);
-                choice0.addGuard("[not(" + guard0 + ")]");
-                actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
-                if (showSampleChannels) {
-                    choice1.addNext(actionp6);
-                    previous = actionpspe;
-                } else {
-                    previous = actionp6;
-                }
-                if (showChannels) {
-                    actiong0 = getActionGate(tcpu, ad, gateName, "!read!" + ch.getSize());
-                    actionp5.addNext(actiong0);
-                    actiong0.addNext(previous);
-                } else {
-                    actionp5.addNext(previous);
-                }
-                actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - read");
-                actionp6.addNext(actionp7);
-                actionp7.addNext(endJunction);
-                break;
+                    }
+                    break;
+                case TMLChannel.NBRNBW:
+                    //TraceManager.addDev("NBRNBW");
+                    actionp5 = getActionStateWithParam(tcpu, ad, "read", "min(" + paramName + ", " + cpu.getName() + "__byteDataSize)");
+                    choice0.addNext(actionp5);
+                    choice0.addGuard("[not(" + guard0 + ")]");
+                    actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
+                    if (showSampleChannels) {
+                        choice1.addNext(actionp6);
+                        previous = actionpspe;
+                    } else {
+                        previous = actionp6;
+                    }
+                    if (showChannels) {
+                        actiong0 = getActionGate(tcpu, ad, gateName, "!read!" + ch.getSize());
+                        actionp5.addNext(actiong0);
+                        actiong0.addNext(previous);
+                    } else {
+                        actionp5.addNext(previous);
+                    }
+                    actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - read");
+                    actionp6.addNext(actionp7);
+                    actionp7.addNext(endJunction);
+                    break;
             }
             return makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(0));
 
             // SEND REQUEST
-        }  else if (element instanceof TMLSendRequest) {
-            sendreq = (TMLSendRequest)element;
+        } else if (element instanceof TMLSendRequest) {
+            sendreq = (TMLSendRequest) element;
             req = sendreq.getRequest();
 
             actionp1 = getActionStateWithParam(tcpu, ad, "n__" + req.getName(), "n__" + req.getName() + " + 1");
             stateIdGuard(stateChoice, actionp1, stateId, task);
             previous = actionp1;
 
-            for(i=0; i<req.getNbOfParams(); i++) {
-                actionp2 = getReqEnqueueActionStateWithParam(tcpu, ad, task, sendreq, i+1);
+            for (i = 0; i < req.getNbOfParams(); i++) {
+                actionp2 = getReqEnqueueActionStateWithParam(tcpu, ad, task, sendreq, i + 1);
                 previous.addNext(actionp2);
                 previous = actionp2;
             }
 
             actionp5 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             if (showRequests) {
                 actiong0 = getSendReqActionStateWithGate(tcpu, cpu, ad, task, sendreq);
                 previous.addNext(actiong0);
@@ -2574,9 +2571,9 @@ public class Mapping2TIF {
 
 
             // SEND EVENT
-        }  else if (element instanceof TMLSendEvent) {
+        } else if (element instanceof TMLSendEvent) {
             //TraceManager.addDev("*********** TML send Evt");
-            sendevt = (TMLSendEvent)element;
+            sendevt = (TMLSendEvent) element;
             evt = sendevt.getEvent();
 
             if (evt.isInfinite()) {
@@ -2584,14 +2581,14 @@ public class Mapping2TIF {
                 stateIdGuard(stateChoice, actionp1, stateId, task);
                 previous = actionp1;
 
-                for(i=0; i<evt.getNbOfParams(); i++) {
+                for (i = 0; i < evt.getNbOfParams(); i++) {
                     actionp2 = getEvtEnqueueActionStateWithParam(tcpu, ad, task, sendevt, i);
                     previous.addNext(actionp2);
                     previous = actionp2;
                 }
 
                 actionp5 = getNextStateIdActionState(tcpu, ad, task);
-                stateId ++;
+                stateId++;
                 if (showEvents) {
                     actiong0 = getSendEvtActionStateWithGate(tcpu, cpu, ad, task, sendevt);
                     previous.addNext(actiong0);
@@ -2657,14 +2654,14 @@ public class Mapping2TIF {
                     choice1.addNext(actionp1);
                     choice1.addGuard(guard1);
                     previous = actionp1;
-                    for(i=0; i<evt.getNbOfParams(); i++) {
+                    for (i = 0; i < evt.getNbOfParams(); i++) {
                         actionp2 = getEvtEnqueueActionStateWithParam(tcpu, ad, task, sendevt, i);
                         previous.addNext(actionp2);
                         previous = actionp2;
                     }
 
                     actionp5 = getNextStateIdActionState(tcpu, ad, task);
-                    stateId ++;
+                    stateId++;
                     if (showEvents) {
                         actiong0 = getSendEvtActionStateWithGate(tcpu, cpu, ad, task, sendevt);
                         previous.addNext(actiong0);
@@ -2736,7 +2733,7 @@ public class Mapping2TIF {
                     choice1.addNext(actionp1);
                     choice1.addGuard(guard1);
                     previous = actionp1;
-                    for(i=0; i<evt.getNbOfParams(); i++) {
+                    for (i = 0; i < evt.getNbOfParams(); i++) {
                         actionp2 = getEvtEnqueueActionStateWithParam(tcpu, ad, task, sendevt, i);
                         previous.addNext(actionp2);
                         previous = actionp2;
@@ -2753,7 +2750,7 @@ public class Mapping2TIF {
                     // FIFO is full
                     previous = choice1;
                     choice1.addGuard(guard0);
-                    for(i=0; i<evt.getNbOfParams(); i++) {
+                    for (i = 0; i < evt.getNbOfParams(); i++) {
                         actionp2 = getEvtEnqueueDequeueActionStateWithParam(tcpu, ad, task, sendevt, i);
                         previous.addNext(actionp2);
                         previous = actionp2;
@@ -2769,7 +2766,7 @@ public class Mapping2TIF {
 
                     // Both cases
                     actionp5 = getNextStateIdActionState(tcpu, ad, task);
-                    stateId ++;
+                    stateId++;
                     adj0.addNext(actionp5);
 
                     actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
@@ -2813,7 +2810,7 @@ public class Mapping2TIF {
 
             // WAIT EVENT
         } else if (element instanceof TMLWaitEvent) {
-            evt = ((TMLWaitEvent)(element)).getEvent();
+            evt = ((TMLWaitEvent) (element)).getEvent();
 
             choice0 = new ADChoice();
             ad.add(choice0);
@@ -2838,8 +2835,8 @@ public class Mapping2TIF {
             choice0.addGuard(guard1);
 
             previous = actionp1;
-            for(i=0; i<evt.getNbOfParams(); i++) {
-                actionp2 = getEvtFirstActionStateWithParam(tcpu, ad, task, (TMLWaitEvent)(element), evt, i);
+            for (i = 0; i < evt.getNbOfParams(); i++) {
+                actionp2 = getEvtFirstActionStateWithParam(tcpu, ad, task, (TMLWaitEvent) (element), evt, i);
                 actionp3 = getEvtDequeueActionStateWithParam(tcpu, ad, task, evt, i);
                 previous.addNext(actionp2);
                 actionp2.addNext(actionp3);
@@ -2847,10 +2844,10 @@ public class Mapping2TIF {
             }
 
             actionp5 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             //TraceManager.addDev("StateId=" + stateId +  "comp=" + element);
             if (showEvents) {
-                actiong0 = getWaitEvtActionStateWithGate(tcpu, cpu, ad, task, (TMLWaitEvent)(element), evt);
+                actiong0 = getWaitEvtActionStateWithGate(tcpu, cpu, ad, task, (TMLWaitEvent) (element), evt);
                 previous.addNext(actiong0);
                 actiong0.addNext(actionp5);
             } else {
@@ -2904,13 +2901,13 @@ public class Mapping2TIF {
 
             // NOTIFIED EVENT
         } else if (element instanceof TMLNotifiedEvent) {
-            evt = ((TMLNotifiedEvent)element).getEvent();
-            paramName = modifyString(((TMLNotifiedEvent)element).getVariable(), task);
+            evt = ((TMLNotifiedEvent) element).getEvent();
+            paramName = modifyString(((TMLNotifiedEvent) element).getVariable(), task);
             actionp1 = getActionStateWithParam(tcpu, ad, paramName, "n__" + evt.getName() + "__tmp");
             stateIdGuard(stateChoice, actionp1, stateId, task);
 
             actionp3 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             if (showEvents) {
                 actiong0 = getNotifiedEvtActionStateWithGate(tcpu, cpu, ad, task, paramName, evt);
                 actionp1.addNext(actiong0);
@@ -2927,16 +2924,16 @@ public class Mapping2TIF {
 
             // SELECT EVENT
         } else if (element instanceof TMLSelectEvt) {
-            tmlse = (TMLSelectEvt)element;
+            tmlse = (TMLSelectEvt) element;
             choice0 = new ADChoice();
             ad.add(choice0);
             stateIdGuard(stateChoice, choice0, stateId, task);
-            stateId ++;
+            stateId++;
 
             // Making main guard -> is one of the event available?
             guard0 = "";
-            for(i=0; i<element.getNbNext(); i++) {
-                if (i!=0) {
+            for (i = 0; i < element.getNbNext(); i++) {
+                if (i != 0) {
                     guard0 += " and ";
                 }
                 guard0 += "(n__" + tmlse.getEvent(i).getName() + "__tmp == 0)";
@@ -2947,7 +2944,7 @@ public class Mapping2TIF {
             // No event
             choice0.addGuard(guard0);
             previous = choice0;
-            for(i=0; i<element.getNbNext(); i++) {
+            for (i = 0; i < element.getNbNext(); i++) {
                 index = allcommunications.indexOf(tmlse.getEvent(i));
                 actionp2 = getActionStateWithParam(tcpu, ad, "blockedOn__" + (index * 2 + 1), "true");
                 previous.addNext(actionp2);
@@ -2973,7 +2970,7 @@ public class Mapping2TIF {
             //previous.addNext(choice1);
             choice0.addNext(choice1);
             choice0.addGuard(guard1);
-            for(i=0; i<tmlse.getNbNext(); i++) {
+            for (i = 0; i < tmlse.getNbNext(); i++) {
                 index = allcommunications.indexOf(tmlse.getEvent(i));
                 choice1.addGuard("[ n__" + tmlse.getEvent(i).getName() + "__tmp > 0]");
                 actionp1 = getStateIdActionState(tcpu, ad, task, stateId);
@@ -2988,7 +2985,7 @@ public class Mapping2TIF {
             // RANDOM
         } else if (element instanceof TMLRandom) {
 
-            tmlrandom = (TMLRandom)element;
+            tmlrandom = (TMLRandom) element;
 
             param0 = tcpu.addNewParamIfApplicable("min__random", Param.NAT, "0");
             param1 = tcpu.addNewParamIfApplicable("max__random", Param.NAT, "0");
@@ -3004,7 +3001,7 @@ public class Mapping2TIF {
             actionp4 = getActionStateWithParam(tcpu, ad, param0.getName(), modifyString("min__random + 1", null));
 
             actionp5 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
 
             adj0 = new ADJunction();
             ad.add(adj0);
@@ -3036,10 +3033,10 @@ public class Mapping2TIF {
             }
 
             // Init
-            actionp1 = getActionStateWithParam(tcpu, ad, paramName, modifyString(((TMLExecI)(element)).getAction() + " * (" + cpu.getExeciTime() + ")", task));
+            actionp1 = getActionStateWithParam(tcpu, ad, paramName, modifyString(((TMLExecI) (element)).getAction() + " * (" + cpu.getExeciTime() + ")", task));
             stateIdGuard(stateChoice, actionp1, stateId, task);
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             actionp1.addNext(actionp2);
             actionp2.addNext(endJunction);
 
@@ -3050,7 +3047,7 @@ public class Mapping2TIF {
 
             choice0.addGuard("[ " + paramName + " == 0]");
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             choice0.addNext(actionp2);
             actionp2.addNext(endJunction);
 
@@ -3082,10 +3079,10 @@ public class Mapping2TIF {
             }
 
             // Init
-            actionp1 = getActionStateWithParam(tcpu, ad, paramName, modifyString(((TMLExecC)(element)).getAction()+ " * (" + cpu.getExeccTime() + ")", task));
+            actionp1 = getActionStateWithParam(tcpu, ad, paramName, modifyString(((TMLExecC) (element)).getAction() + " * (" + cpu.getExeccTime() + ")", task));
             stateIdGuard(stateChoice, actionp1, stateId, task);
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             actionp1.addNext(actionp2);
             actionp2.addNext(endJunction);
 
@@ -3096,7 +3093,7 @@ public class Mapping2TIF {
 
             choice0.addGuard("[ " + paramName + " == 0]");
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             choice0.addNext(actionp2);
             actionp2.addNext(endJunction);
 
@@ -3128,14 +3125,14 @@ public class Mapping2TIF {
                 tcpu.addNewGateIfApplicable(gateName);
             }
 
-            String smin = modifyString(((TMLExecIInterval)(element)).getMinDelay(), task);
-            String smax = modifyString(((TMLExecIInterval)(element)).getMaxDelay(), task);
+            String smin = modifyString(((TMLExecIInterval) (element)).getMinDelay(), task);
+            String smax = modifyString(((TMLExecIInterval) (element)).getMaxDelay(), task);
 
             // Init
             actionp1 = getActionStateWithParam(tcpu, ad, paramName, "(" + smax + ") * (" + cpu.getExeciTime() + ")");
             stateIdGuard(stateChoice, actionp1, stateId, task);
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             actionp1.addNext(actionp2);
             actionp2.addNext(endJunction);
 
@@ -3145,10 +3142,10 @@ public class Mapping2TIF {
             stateIdGuard(stateChoice, choice0, stateId, task);
 
 
-            cpts = "(((" + cpu.getExeciTime() + ")*((" + smax  + ")-("  + smin + "))) + 1)";
+            cpts = "(((" + cpu.getExeciTime() + ")*((" + smax + ")-(" + smin + "))) + 1)";
             choice0.addGuard("[(" + paramName + " < " + cpts + ") and ( (" + paramName + " % " + cpu.getExeciTime() + ") == 0)]");
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             choice0.addNext(actionp2);
             actionp2.addNext(endJunction);
 
@@ -3179,14 +3176,14 @@ public class Mapping2TIF {
                 tcpu.addNewGateIfApplicable(gateName);
             }
 
-            String smin = modifyString(((TMLExecCInterval)(element)).getMinDelay(), task);
-            String smax = modifyString(((TMLExecCInterval)(element)).getMaxDelay(), task);
+            String smin = modifyString(((TMLExecCInterval) (element)).getMinDelay(), task);
+            String smax = modifyString(((TMLExecCInterval) (element)).getMaxDelay(), task);
 
             // Init
             actionp1 = getActionStateWithParam(tcpu, ad, paramName, "(" + smax + ") * (" + cpu.getExeccTime() + ")");
             stateIdGuard(stateChoice, actionp1, stateId, task);
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             actionp1.addNext(actionp2);
             actionp2.addNext(endJunction);
 
@@ -3196,10 +3193,10 @@ public class Mapping2TIF {
             stateIdGuard(stateChoice, choice0, stateId, task);
 
 
-            cpts = "(((" + cpu.getExeccTime() + ")*((" + smax  + ")-("  + smin + "))) + 1)";
+            cpts = "(((" + cpu.getExeccTime() + ")*((" + smax + ")-(" + smin + "))) + 1)";
             choice0.addGuard("[(" + paramName + " < " + cpts + ") and ( (" + paramName + " % " + cpu.getExeccTime() + ") == 0)]");
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             choice0.addNext(actionp2);
             actionp2.addNext(endJunction);
 
@@ -3223,7 +3220,7 @@ public class Mapping2TIF {
 
         } else if (element instanceof TMLForLoop) {
 
-            tmlforloop = (TMLForLoop)element;
+            tmlforloop = (TMLForLoop) element;
 
             action1 = modifyString(tmlforloop.getInit(), task);
             action2 = modifyString(tmlforloop.getCondition(), task);
@@ -3267,21 +3264,21 @@ public class Mapping2TIF {
             // Init
             actionp1 = getActionStateWithParam(tcpu, ad, param1.getName(), getActionValueParam(action1, tcpu));
             stateIdGuard(stateChoice, actionp1, stateId, task);
-            actionp2 = getStateIdActionState(tcpu, ad, task, stateId+3);
+            actionp2 = getStateIdActionState(tcpu, ad, task, stateId + 3);
             actionp1.addNext(actionp2);
             actionp2.addNext(endJunction);
-            stateId ++;
+            stateId++;
 
             // We keep a state for the end of the loop
             index = stateId;
-            stateId ++;
+            stateId++;
 
             actionp5 = getNextStateIdActionState(tcpu, ad, task);
             stateIdGuard(stateChoice, actionp5, stateId, task);
             actionp6 = getActionStateWithParam(tcpu, ad, param3.getName(), getActionValueParam(action3, tcpu));
             actionp5.addNext(actionp6);
             actionp6.addNext(endJunction);
-            stateId ++;
+            stateId++;
 
 
             // Test condition of the loop
@@ -3290,7 +3287,7 @@ public class Mapping2TIF {
             stateIdGuard(stateChoice, choice0, stateId, task);
             choice0.addGuard("[ " + action2 + "]");
             actionp3 = getNextStateIdActionState(tcpu, ad, task);
-            stateId ++;
+            stateId++;
             choice0.addNext(actionp3);
             actionp3.addNext(endJunction);
             choice0.addGuard("[ not(" + action2 + ")]");
@@ -3300,7 +3297,7 @@ public class Mapping2TIF {
 
             // Translate the inner of the loop
             //TraceManager.addDev("Loop branch to " + index);
-            stateId = makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, index+1, element.getNextElement(0));
+            stateId = makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, index + 1, element.getNextElement(0));
             //TraceManager.addDev("StateId = " + stateId);
 
             actionp7 = getStateIdActionState(tcpu, ad, task, stateId);
@@ -3319,16 +3316,16 @@ public class Mapping2TIF {
                 // At least two elements
                 // Reserved as many states are required to manage next elements
 
-                for(i=1; i<element.getNbNext(); i++) {
-                    actionp1 = getStateIdActionState(tcpu, ad, task, stateId+2);
+                for (i = 1; i < element.getNbNext(); i++) {
+                    actionp1 = getStateIdActionState(tcpu, ad, task, stateId + 2);
                     stateIdGuard(stateChoice, actionp1, stateId, task);
                     actionp1.addNext(endJunction);
-                    stateId ++;
+                    stateId++;
 
                     index = stateId;
-                    stateId ++;
+                    stateId++;
 
-                    stateId = makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, index, element.getNextElement(i-1));
+                    stateId = makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, index, element.getNextElement(i - 1));
 
                     //TraceManager.addDev("Ending sequence with index=" + index +  " stateId=" + stateId);
                     actionp2 = getStateIdActionState(tcpu, ad, task, stateId);
@@ -3336,24 +3333,24 @@ public class Mapping2TIF {
                     actionp2.addNext(endJunction);
                 }
                 //TraceManager.addDev("Ending loop");
-                return makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(element.getNbNext()-1));
+                return makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(element.getNbNext() - 1));
 
             }
 
             // CHOICE
         } else if (element instanceof TMLChoice) {
-            tmlchoice = (TMLChoice)element;
-            if (tmlchoice.getNbGuard() !=0 ) {
+            tmlchoice = (TMLChoice) element;
+            if (tmlchoice.getNbGuard() != 0) {
                 int index1 = tmlchoice.getElseGuard(), index2 = tmlchoice.getAfterGuard();
                 if (index2 != -1) {
                     index = stateId;
 
-                    stateId ++;
-                    actionp1 = getStateIdActionState(tcpu, ad, task, stateId+2);
+                    stateId++;
+                    actionp1 = getStateIdActionState(tcpu, ad, task, stateId + 2);
                     stateIdGuard(stateChoice, actionp1, stateId, task);
                     actionp1.addNext(endJunction);
 
-                    stateId ++;
+                    stateId++;
                     // Translating the after guard
                     stateId = makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(index2));
 
@@ -3370,10 +3367,10 @@ public class Mapping2TIF {
                 choice0 = new ADChoice();
                 ad.add(choice0);
                 stateIdGuard(stateChoice, choice0, stateId, task);
-                stateId ++;
-                for(i=0; i<tmlchoice.getNbGuard(); i++) {
+                stateId++;
+                for (i = 0; i < tmlchoice.getNbGuard(); i++) {
                     if (i != index2) {
-                        if (i==index1) {
+                        if (i == index1) {
                             /* else guard */
                             guard0 = modifyString(tmlchoice.getValueOfElse(), task);
                             //TraceManager.addDev("modified else guard=" + guard0);
@@ -3399,7 +3396,7 @@ public class Mapping2TIF {
 
             // ACTION STATE
         } else if (element instanceof TMLActionState) {
-            action1 = ((TMLActionState)(element)).getAction();
+            action1 = ((TMLActionState) (element)).getAction();
             action1 = modifyString(action1, task);
 
             if ((param1 = paramAnalyzer(action1, tcpu)) == null) {
@@ -3414,7 +3411,7 @@ public class Mapping2TIF {
             actionp2 = getNextStateIdActionState(tcpu, ad, task);
             actionp1.addNext(actionp2);
             actionp2.addNext(endJunction);
-            stateId ++;
+            stateId++;
 
             return makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(0));
 
@@ -3422,7 +3419,7 @@ public class Mapping2TIF {
         } else {
             // Unknown element: skipped
             TraceManager.addDev("UNKNOWN ELEMENT: " + element);
-	    // Stopping generation
+            // Stopping generation
             //return makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(0));
         }
 
@@ -3448,8 +3445,8 @@ public class Mapping2TIF {
         Gate g = tcpu.getGateByName(cpu.getName() + "__" + task.getName() + "__waitReq__" + req.getName());
         ADActionStateWithGate adag = new ADActionStateWithGate(g);
         String actionValue = "";
-        for(int i=0; i<req.getNbOfParams(); i++) {
-            actionValue += "!" + modifyString("arg" + (i+1) + "__" + req.getName(), task);
+        for (int i = 0; i < req.getNbOfParams(); i++) {
+            actionValue += "!" + modifyString("arg" + (i + 1) + "__" + req.getName(), task);
         }
         adag.setActionValue(actionValue);
         ad.add(adag);
@@ -3460,7 +3457,7 @@ public class Mapping2TIF {
         Gate g = tcpu.getGateByName(cpu.getName() + "__" + task.getName() + "__wait__" + evt.getName());
         ADActionStateWithGate adag = new ADActionStateWithGate(g);
         String actionValue = "";
-        for(int i=0; i<evt.getNbOfParams(); i++) {
+        for (int i = 0; i < evt.getNbOfParams(); i++) {
             actionValue += "!" + modifyString(waitEvt.getParam(i), task);
         }
         //actionValue += "!n__" + evt.getName();
@@ -3483,7 +3480,7 @@ public class Mapping2TIF {
         ADActionStateWithGate adag = new ADActionStateWithGate(g);
         String actionValue = "";
         String tmp = "";
-        for(int i=0; i<sendevt.getEvent().getNbOfParams(); i++) {
+        for (int i = 0; i < sendevt.getEvent().getNbOfParams(); i++) {
             tmp = sendevt.getParam(i);
             tmp = modifyString(tmp, task);
             actionValue += "!" + tmp;
@@ -3498,7 +3495,7 @@ public class Mapping2TIF {
         ADActionStateWithGate adag = new ADActionStateWithGate(g);
         String actionValue = "";
         String tmp = "";
-        for(int i=0; i<sendreq.getRequest().getNbOfParams(); i++) {
+        for (int i = 0; i < sendreq.getRequest().getNbOfParams(); i++) {
             tmp = sendreq.getParam(i);
             tmp = modifyString(tmp, task);
             actionValue += "!" + tmp;
@@ -3535,7 +3532,7 @@ public class Mapping2TIF {
     private ADActionStateWithParam getStateIdActionState(TClass tcpu, ActivityDiagram ad, TMLTask task, int id) {
         Param p = tcpu.getParamByName(task.getName() + "__istate");
         ADActionStateWithParam actionp = new ADActionStateWithParam(p);
-        actionp.setActionValue(""+id);
+        actionp.setActionValue("" + id);
         ad.add(actionp);
         return actionp;
     }
@@ -3588,7 +3585,7 @@ public class Mapping2TIF {
     private ADActionStateWithParam getReqEnqueueActionStateWithParam(TClass tcpu, ActivityDiagram ad, TMLTask task, TMLSendRequest sendreq, int index) {
         Param p = tcpu.getParamByName("fifo" + index + "__" + sendreq.getRequest().getName());
         ADActionStateWithParam actionp = new ADActionStateWithParam(p);
-        actionp.setActionValue("Enqueue(" + modifyString(sendreq.getParam(index-1), task) + ", fifo" + index + "__" + sendreq.getRequest().getName() + ")");
+        actionp.setActionValue("Enqueue(" + modifyString(sendreq.getParam(index - 1), task) + ", fifo" + index + "__" + sendreq.getRequest().getName() + ")");
         ad.add(actionp);
         return actionp;
     }
@@ -3673,7 +3670,7 @@ public class Mapping2TIF {
             }
         }
 
-        return action = action.substring(index+1, action.length()).trim();
+        return action = action.substring(index + 1, action.length()).trim();
     }
 
     private boolean isMapped(TMLChannel _ch) {
@@ -3698,7 +3695,7 @@ public class Mapping2TIF {
         _input = Conversion.replaceAllString(_input, ">>", "/");
 
         // Replaces &&, || and !
-        _input = Conversion.replaceAllString(_input,"&&", "and");
+        _input = Conversion.replaceAllString(_input, "&&", "and");
         _input = Conversion.replaceAllString(_input, "||", "or");
         _input = Conversion.replaceAllString(_input, "!", "not");
         _input = Conversion.replaceAllStringNonAlphanumerical(_input, "i", "i_0");

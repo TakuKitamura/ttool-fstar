@@ -65,7 +65,7 @@ public class Param {
         name = _name;
         type = _type;
         value = _value;
-        //System.out.println("New param : name=" + name + " value=" + value);
+        //
     }
     
     public String getName() {
@@ -78,7 +78,7 @@ public class Param {
     
     public void setAccess(String s) {
         access = s;
-        //System.out.println("Setting access of " + name + " to " + s);
+        //
     }
     
     public String getAccess() {

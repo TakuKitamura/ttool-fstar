@@ -79,7 +79,7 @@ public class JDialogArchiKey extends JDialogBase implements ActionListener  {
         frame = _frame;
         artifact = _artifact;
 		
-		//System.out.println("New window");
+		//
         
 		TraceManager.addDev("init components");
 		
@@ -132,7 +132,7 @@ public class JDialogArchiKey extends JDialogBase implements ActionListener  {
 		} else {
 			
 			index = list.indexOf(artifact.getFullValue());
-			//System.out.println("name=" + artifact.getFullValue() + " index=" + index);
+			//
 		}
 		*/
 		TraceManager.addDev("Got keyss");
@@ -240,7 +240,7 @@ public class JDialogArchiKey extends JDialogBase implements ActionListener  {
 		if (index > -1) {
 			tmp = tmp.substring(0, index).trim();
 		}
-		//System.out.println("tmp=" + tmp);
+		//
 		return tmp;
     }
 	

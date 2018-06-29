@@ -44,6 +44,7 @@ package tmltranslator.toautomata;
 import automata.Automata;
 import myutil.FileException;
 import myutil.FileUtils;
+import myutil.TraceManager;
 import tmltranslator.TMLModeling;
 import tmltranslator.TMLTask;
 import translator.TURTLEModeling;
@@ -80,7 +81,7 @@ public class TML2AUTviaLOTOS {
         tmlmodeling = _tmlmodeling;
         tm = _tm;
         if (_tm == null) {
-           System.out.println("tm = null!");
+           TraceManager.addDev("tm = null!");
         }
     }
 
@@ -97,7 +98,7 @@ public class TML2AUTviaLOTOS {
             aut = iterator.next();
             name = aut.getName() + "." + AUT_EXTENSION;
             ll.add(name);
-            System.out.println("File: " + path + aut.getName() + "." + AUT_EXTENSION);
+            TraceManager.addDev("File: " + path + aut.getName() + "." + AUT_EXTENSION);
             FileUtils.saveFile(path + aut.getName() + "." + AUT_EXTENSION, aut.toAUT());
         }
         
@@ -112,8 +113,8 @@ public class TML2AUTviaLOTOS {
         
         while(iterator.hasNext()) {
             aut = iterator.next();
-            System.out.println("Automata: " + aut.getName());
-            System.out.println(aut.toAUT());
+            TraceManager.addDev("Automata: " + aut.getName());
+            TraceManager.addDev(aut.toAUT());
         }
     }
     

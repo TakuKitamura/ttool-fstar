@@ -37,11 +37,10 @@
  */
 
 
-
-
 package tmltranslator.tosystemc;
 
 import myutil.Conversion;
+import myutil.TraceManager;
 import tmltranslator.*;
 
 import java.util.ListIterator;
@@ -50,68 +49,69 @@ import java.util.ListIterator;
 /**
  * Class SystemCTask
  * Creation: 24/11/2005
- * @version 1.0 24/11/2005
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 24/11/2005
  */
 public class SystemCTask {
     public TMLTask task;
     public String reference;
-    
+
     private boolean debug;
-    
-    
+
+
     public SystemCTask(TMLTask _task) {
         task = _task;
         reference = "task__" + task.getName();
     }
-    
-    
+
+
     public void generateSystemC(boolean _debug) {
         debug = _debug;
-        
+
     }
-    
+
     public void print() {
-        System.out.println(getFullCode());
+        TraceManager.addDev(getFullCode());
     }
-    
+
     public String getFullCode() {
-        int i ;
-        
+        int i;
+
         String output = "// ******** TASK: " + task.getName() + " **********\n// task reference = " + reference + "\n";
         output += "void " + task.getName() + "() {\n";
-        
+
         String endTask = reference + ".STOP();\n";
-        
+
         if (task.exits()) {
             endTask += "exit(0);\n";
         }
-        
-        
+
+
         String outputend = "}\n";
-        
+
         String translatecode = calculateCode(task.getActivityDiagram().getFirst()) + endTask;
-        
+
         // add start + attributes
         //...
         String attributecode = calculateAttributesCode();
-        
+
         //Task is requested ?
-        
+
         if (task.isRequested()) {
             String requestcode = "while(1) {\n";
 
             requestcode += reference + ".START();\n";
             requestcode += "wait(SC_ZERO_TIME);\n";
             // reading requests parameters
-            for(i=0; i<task.getRequest().getNbOfParams(); i++) {
-                requestcode += "arg" + (i+1) + "_req = task__" + (task.getRequest().getOriginTasks()).get(0).getName() + ".rq" + (i+1) + ".read();\n";
+            for (i = 0; i < task.getRequest().getNbOfParams(); i++) {
+                requestcode += "arg" + (i + 1) + "_req = task__" + (task.getRequest().getOriginTasks()).get(0).getName() + ".rq" + (i + 1) + ".read();\n";
             }
             requestcode += "\n";
-            
+
             //adding regular code;
             requestcode += translatecode;
-            
+
             requestcode += "\n";
             //requestcode += reference + ".STOP();\n";
             requestcode += "wait(" + task.getRequest().getName() + ");\n";
@@ -121,101 +121,101 @@ public class SystemCTask {
         } else {
             translatecode = reference + ".START();\n" + translatecode;
         }
-        
-        translatecode = output + "// attributes\n" + attributecode + "\n// code \n" + translatecode + outputend ;
-        
+
+        translatecode = output + "// attributes\n" + attributecode + "\n// code \n" + translatecode + outputend;
+
         return translatecode;
     }
-    
+
     private String calculateAttributesCode() {
         String code = "";
         TMLAttribute att;
         int i;
-        
+
         ListIterator iterator = task.getAttributes().listIterator();
-        
-        while(iterator.hasNext()) {
-            att = (TMLAttribute)(iterator.next());
+
+        while (iterator.hasNext()) {
+            att = (TMLAttribute) (iterator.next());
             code += TMLType.getStringType(att.type.getType()) + " " + att.name;
             if (att.hasInitialValue()) {
                 code += " = " + att.initialValue;
             }
             code += ";\n";
         }
-        
+
         //adding request arguments
         if (task.isRequested()) {
-            for(i=0; i<task.getRequest().getNbOfParams(); i++) {
-                code += TMLType.getStringType(task.getRequest().getType(i).getType()) + " arg" + (i+1) + "_req;\n";
+            for (i = 0; i < task.getRequest().getNbOfParams(); i++) {
+                code += TMLType.getStringType(task.getRequest().getType(i).getType()) + " arg" + (i + 1) + "_req;\n";
             }
         }
-        
-        
+
+
         return code;
     }
-    
+
     public String calculateCode(TMLActivityElement _tmlae) {
-        String code="", code1;
+        String code = "", code1;
         int i;
-        
+
         if (_tmlae instanceof TMLStartState) {
             code = calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLStopState) {
-            
+
         } else if (_tmlae instanceof TMLActionState) {
-            code1 = ((TMLActionState)_tmlae).getAction();
+            code1 = ((TMLActionState) _tmlae).getAction();
             code1 = addSemicolonIfNecessary(code1);
             code1 = modifyString(code1);
-            code = code1 + "\n" + calculateCode( _tmlae.getNextElement(0));
+            code = code1 + "\n" + calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLExecI) {
-            code1 = reference + ".EXECI(" + ((TMLExecI)_tmlae).getAction() + ");\n";
+            code1 = reference + ".EXECI(" + ((TMLExecI) _tmlae).getAction() + ");\n";
             code = code1 + calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLExecIInterval) {
-            code1 = "rnd__0 = TML_tasks::myrand(" + ((TMLExecIInterval)_tmlae).getMinDelay() + ", " + ((TMLExecIInterval)_tmlae).getMaxDelay() + ");\n";
+            code1 = "rnd__0 = TML_tasks::myrand(" + ((TMLExecIInterval) _tmlae).getMinDelay() + ", " + ((TMLExecIInterval) _tmlae).getMaxDelay() + ");\n";
             code1 = code1 + reference + ".EXECI(rnd__0);\n";
             code = code1 + calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLForLoop) {
-            TMLForLoop tmlfl = (TMLForLoop)_tmlae;
+            TMLForLoop tmlfl = (TMLForLoop) _tmlae;
             code = "for (" + tmlfl.getInit() + ";" + tmlfl.getCondition() + ";" + tmlfl.getIncrement() + ") {\n";
             code = code + calculateCode(_tmlae.getNextElement(0));
             code += "}\n";
             code += calculateCode(_tmlae.getNextElement(1));
         } else if (_tmlae instanceof TMLReadChannel) {
-            code = reference + ".RD(" + ((TMLReadChannel)_tmlae).getNbOfSamples() + ", " + ((TMLReadChannel)_tmlae).getChannel(0).getName()+ ");\n";
+            code = reference + ".RD(" + ((TMLReadChannel) _tmlae).getNbOfSamples() + ", " + ((TMLReadChannel) _tmlae).getChannel(0).getName() + ");\n";
             code += calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLSendEvent) {
-            code = reference + ".NOTIFY(" + ((TMLSendEvent)_tmlae).getEvent().getName()+ ");\n";
+            code = reference + ".NOTIFY(" + ((TMLSendEvent) _tmlae).getEvent().getName() + ");\n";
             // parameters ?
             code += calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLSendRequest) {
-            code = reference + ".REQ(" + ((TMLSendRequest)_tmlae).getRequest().getName();
-            for(i=0; i<((TMLSendRequest)_tmlae).getNbOfParams(); i++) {
-                if (((TMLSendRequest)_tmlae).getParam(i).length() > 0) {
-                    code += ", " + ((TMLSendRequest)_tmlae).getParam(i);
+            code = reference + ".REQ(" + ((TMLSendRequest) _tmlae).getRequest().getName();
+            for (i = 0; i < ((TMLSendRequest) _tmlae).getNbOfParams(); i++) {
+                if (((TMLSendRequest) _tmlae).getParam(i).length() > 0) {
+                    code += ", " + ((TMLSendRequest) _tmlae).getParam(i);
                 }
             }
             code += ");\n";
             code += calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLWaitEvent) {
-            code = reference + "._WAIT(" + ((TMLWaitEvent)_tmlae).getEvent().getName()+ ");\n";
+            code = reference + "._WAIT(" + ((TMLWaitEvent) _tmlae).getEvent().getName() + ");\n";
             //parameters ?
             code += calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLWriteChannel) {
-            code = reference + ".WR(" + ((TMLWriteChannel)_tmlae).getNbOfSamples() + ", " + ((TMLWriteChannel)_tmlae).getChannel(0).getName()+ ");\n";
+            code = reference + ".WR(" + ((TMLWriteChannel) _tmlae).getNbOfSamples() + ", " + ((TMLWriteChannel) _tmlae).getChannel(0).getName() + ");\n";
             code += calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLChoice) {
-            TMLChoice choice = (TMLChoice)_tmlae;
-            //System.out.println("nb of guards = " + choice.getNbGuard() + " nb of nexts =" + choice.getNbNext());
-            if (choice.getNbGuard() !=0 ) {
+            TMLChoice choice = (TMLChoice) _tmlae;
+            //TraceManager.addDev("nb of guards = " + choice.getNbGuard() + " nb of nexts =" + choice.getNbNext());
+            if (choice.getNbGuard() != 0) {
                 code = "";
                 int index1 = choice.getElseGuard(), index2 = choice.getAfterGuard();
-                for(i=0; i<choice.getNbGuard(); i++) {
+                for (i = 0; i < choice.getNbGuard(); i++) {
                     code1 = choice.getGuard(i);
                     code1 = Conversion.replaceAllChar(code1, '[', "(");
                     code1 = Conversion.replaceAllChar(code1, ']', ")");
-                    //System.out.println("guard = " + code1 + " i=" + i);
+                    //TraceManager.addDev("guard = " + code1 + " i=" + i);
                     if (i != index2) {
-                        if (i==0) {
+                        if (i == 0) {
                             code += "if " + code1;
                         } else {
                             code += " else ";
@@ -226,38 +226,38 @@ public class SystemCTask {
                         code += " {\n";
                         code += calculateCode(_tmlae.getNextElement(i));
                         code += "}";
-                    } 
+                    }
                 }
-                code +="\n";
+                code += "\n";
                 if (index2 > -1) {
                     code += calculateCode(_tmlae.getNextElement(index2));
                 }
             }
         } else if (_tmlae instanceof TMLSequence) {
-            TMLSequence tmlseq = (TMLSequence)_tmlae;
-            
+            TMLSequence tmlseq = (TMLSequence) _tmlae;
+
             if (tmlseq.getNbNext() == 0) {
                 return code;
             } else {
-                
-                
+
+
                 if (tmlseq.getNbNext() == 1) {
                     return calculateCode(_tmlae.getNextElement(0));
                 } else {
                     tmlseq.sortNexts();
                     // At least 2 next elements
-                    for(i=1; i<tmlseq.getNbNext(); i++) {
+                    for (i = 1; i < tmlseq.getNbNext(); i++) {
                         code += calculateCode(_tmlae.getNextElement(i));
                     }
                 }
             }
         } else {
-            System.out.println("Operator: " + _tmlae + " is not managed in SystemC");
+            TraceManager.addDev("Operator: " + _tmlae + " is not managed in SystemC");
         }
-        
+
         return code;
     }
-    
+
     public String addSemicolonIfNecessary(String _input) {
         String code1 = _input.trim();
         if (!(code1.endsWith(";"))) {
@@ -265,13 +265,13 @@ public class SystemCTask {
         }
         return code1;
     }
-    
+
     public String modifyString(String _input) {
-        //System.out.println("Modify string=" + _input);
+        //TraceManager.addDev("Modify string=" + _input);
         _input = Conversion.changeBinaryOperatorWithUnary(_input, "div", "/");
         _input = Conversion.changeBinaryOperatorWithUnary(_input, "mod", "%");
-        //System.out.println("Modified string=" + _input);
+        //TraceManager.addDev("Modified string=" + _input);
         return _input;
     }
-      
+
 }

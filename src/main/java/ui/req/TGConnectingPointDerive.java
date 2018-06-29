@@ -62,22 +62,22 @@ public class TGConnectingPointDerive extends  TGConnectingPointWidthHeight {
     }
     
     public boolean isCompatibleWith(int type) {
-        //System.out.println("is compatible with " + type);
+        //
         if (type == TGComponentManager.CONNECTOR_DERIVE_REQ) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
 		
 		if (type == TGComponentManager.CONNECTOR_COMPOSITION_REQ) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
 		
 		if (type == TGComponentManager.CONNECTOR_COPY_REQ) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
-        //System.out.println("is compatible with:false");
+        //
         return false;
     }
 }

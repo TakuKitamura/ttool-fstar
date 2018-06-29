@@ -41,6 +41,7 @@
 
 package ui.oscd;
 
+import myutil.TraceManager;
 import ui.*;
 import ui.util.IconManager;
 
@@ -102,7 +103,7 @@ public  class TOSConnectorAssociation extends TGConnector {
 	}
 
 	public void pointHasBeenRemoved(TGCPointOfConnector tgc) {
-		System.out.println("Internal Points:" + nbInternalTGComponent);
+		TraceManager.addDev("Internal Points:" + nbInternalTGComponent);
 
 		int i, index = 0;
 		TGConnectingPointTwoFathers cp1, cp2;

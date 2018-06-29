@@ -75,7 +75,7 @@ public class SearchTree implements GenericTree {
     }
     
     public int getChildCount() {
-      //System.out.println("Get child count validation");
+      //
       if (elements == null) {
       	  return 0;
       }
@@ -83,7 +83,7 @@ public class SearchTree implements GenericTree {
     }
     
     public Object getChild(int index) {
-    //System.out.println("Get child validation");
+    //
         if (elements != null) {
             return elements.get(index);
         }
@@ -91,7 +91,7 @@ public class SearchTree implements GenericTree {
     }
     
     public int getIndexOfChild(Object child) {
-    	//System.out.println("Get index of child validation");
+    	//
     	if (elements != null) {
     		return elements.indexOf(child);
     	}

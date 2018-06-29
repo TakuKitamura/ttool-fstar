@@ -3755,7 +3755,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame,
                                 "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
                                 "Syntax analysis successful on TML designs",
@@ -3793,7 +3793,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame,
                                 "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
                                 "Syntax analysis successful on TML designs",
@@ -3872,7 +3872,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame,
                                 "0 error, " + getCheckingWarnings().size() + " warning(s). You can now perform verifications (safety, security, performance) or generate executable code",
                                 "Syntax analysis successful on TML mapping",
@@ -3914,7 +3914,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame, "0 error, " + getCheckingWarnings().size() +
                                         " warning(s). You can now perform verifications (safety, security, performance) or generate executable code",
                                 "Syntax analysis successful on TML mapping",
@@ -4175,7 +4175,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
         TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel) tp;
         String name = getCurrentTDiagramPanel().getName();
-        System.out.println("Name " + name);
+        
         return tmlcomp.getAllOutChannels(name);
     }
 
@@ -4768,7 +4768,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
         JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), SpecConfigTTool.TGraphPath, experimentalOn);
         // jmc.setSize(550, 600);
-        GraphicLib.centerOnParent(jmc, 550, 600);
+        GraphicLib.centerOnParent(jmc, 650, 600);
         jmc.setVisible(true);
     }
 
@@ -8525,19 +8525,19 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public synchronized void addLatencyVals(int id, String[] latency) {
         if (latencyMap != null) {
-            //System.out.println("Adding latency...");
+            //
             if (!latencyMap.containsKey(id)) {
                 ConcurrentHashMap<String, String> map = new ConcurrentHashMap<String, String>();
                 latencyMap.put(id, map);
             }
             latencyMap.get(id).put(latency[0], latency[1]);
-            //System.out.println(latencyMap);
+            //
         }
-        //      System.out.println(latencyMap);
+        //      
     }
 
     public synchronized ConcurrentHashMap<String, String> getLatencyVals(int id) {
-        //      System.out.println(id + " " + latencyMap);
+        //      
         if (latencyMap != null) {
             return latencyMap.get(id);
         }

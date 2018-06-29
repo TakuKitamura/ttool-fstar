@@ -131,7 +131,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 		
 		// Draw arrow showing the connection if necessary
 		//if (outp != null ){
-		//	System.out.println("non null outp CurrentOrientation=" + currentOrientation);
+		//	
 		//}
 		if ((!conflict) && (outp != null || inp != null)) {
 			int wayTo = currentOrientation;
@@ -295,7 +295,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
     }
 	
 	public void purge() {
-		//System.out.println("purging port id=" + getId());
+		//
 		inp = null;
 		outp = null;
 		conflict = false;
@@ -313,7 +313,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 			TMLCPrimitivePort port = inp;
 			if (port == null) {
 				port = outp;
-				//System.out.println("Outp =" + outp + " id=" + getId());
+				//
 			}
 			if (port == null) {
 				portColor = null;
@@ -342,7 +342,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 	public void setOutPort(TMLCPrimitivePort _outp) {
 		outp = _outp;
 		calculatePortColor();
-		//System.out.println("outp is set outp=" + outp + "id=" + +getId());
+		//
 	}
 	
 	public TMLCPrimitivePort getInPort() {

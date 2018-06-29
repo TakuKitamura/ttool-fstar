@@ -76,12 +76,12 @@ public class ValidationDataTree implements GenericTree {
     }
 
     public int getChildCount() {
-        //System.out.println("Get child count validation");
+        //
         return 5;
     }
 
     public Object getChild(int index) {
-        //System.out.println("Get child validation");
+        //
         switch (index) {
         case 0:
             return tvdt;
@@ -98,7 +98,7 @@ public class ValidationDataTree implements GenericTree {
     }
 
     public int getIndexOfChild(Object child) {
-        //System.out.println("Get index of child validation");
+        //
         if (child instanceof TClassesValidationDataTree) {
             return 0;
         }       else if (child instanceof SyntaxAnalysisTree) {

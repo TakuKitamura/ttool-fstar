@@ -83,7 +83,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	public ProCSDInterface(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-	       // System.out.println("constructor"); 
+	       // 
 	     
 	        myImageIcon = IconManager.imgic2104;
 	        
@@ -324,7 +324,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	  
 	    public void checkMySize() {
 	        calculateMyDesiredSize();
-	        //System.out.println("I check my size");
+	        //
 	 
 	        
 	        TGComponent tgc = getTopFather();
@@ -350,14 +350,14 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	        }
 	        
 	        if ((myMessages.size() == 0) || (!showMessages)) {
-	            //System.out.println("Min resize" + toString());
+	            //
 	            minDesiredWidth = minWidth;
 	            minDesiredHeight = minHeight;
 	            return;
 	        }
 	        
 	        lastVisible = showMessages;
-	        //System.out.println("Regular resize" + toString());
+	        //
 	        int desiredWidth = minWidth;
 	        int h = myG.getFontMetrics().getHeight();
 	        int desiredHeight =  Math.max(minHeight, h * (myMessages.size() -1) + minHeight);
@@ -448,10 +448,10 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	        
             
 	        for(int i=0; i<myMessages.size(); i++) {
-	            //System.out.println("Attribute:" + i);
+	            //
                 //Changed from TAttribute, by Solange
 	            a = myMessages.get (i);
-	            //System.out.println("Attribute:" + i + " = " + a.getId());        
+	            //
 	            sb.append("<Attribute access=\"");
 	            sb.append(a.getAccess());
 	            sb.append("\" id=\"");
@@ -482,17 +482,17 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	            String typeOther;
 	            String id, valueAtt;
 	            
-	        //    System.out.println("Loading attributes interface");
-	        //    System.out.println(nl.toString());
+	        //    
+	        //    
 	            
 	            for(int i=0; i<nl.getLength(); i++) {
 	                n1 = nl.item(i);
-	                //System.out.println(n1);
+	                //
 	                if (n1.getNodeType() == Node.ELEMENT_NODE) {
 	                    nli = n1.getChildNodes();
 	                    for(int j=0; j<nli.getLength(); j++) {
 	                        n2 = nli.item(j);
-	                        //System.out.println(n2);
+	                        //
 	                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
 	                            elt = (Element) n2;
 	                            
@@ -509,7 +509,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	                
 	                            
 	                            if (elt.getTagName().equals("Attribute")) {
-	                                //System.out.println("Analyzing attribute");
+	                                //
 	                                access = Integer.decode(elt.getAttribute("access")).intValue();
 	                                type = Integer.decode(elt.getAttribute("type")).intValue();
 
@@ -525,7 +525,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	                                    valueAtt = "";
 	                                }
 	                                if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
-	                                    //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
+	                                    //
 	                                	
 	                                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
 	                                    myMessages.add (ta);

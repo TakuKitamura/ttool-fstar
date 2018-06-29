@@ -132,12 +132,12 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
     public void valueChanged() {
         TOneAttribute tt;
         
-        //System.out.println("Checking if gates are still declared");
+        //
         
         for(int i=0; i<gates.size(); i++) {
             tt = gates.elementAt(i);
             if ((tt.t1.getGateById(tt.ta1.getId()) == null)) {
-                //System.out.println("Removing gate " + tt.ta1.getId();
+                //
                 gates.remove(tt);
                 i --;
             }
@@ -148,7 +148,7 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
         t1 = _t1;
         if (t1 != oldt1)  {
             gates = new Vector<TOneAttribute>();
-            //System.out.println("New gates");
+            //
             makeValue();
         }
         oldt1 = t1;
@@ -202,7 +202,7 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             gatesTmp = new Vector<TOneAttribute>();
             
@@ -213,19 +213,19 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
             String g1;
             TOneAttribute tt;
             
-            //System.out.println("Loading Synchronization gates");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
 
                     // Issue #17 copy-paste error on j index
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             t1id = -1;  g1 = null;
@@ -236,7 +236,7 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
                             if ((t1id != -1) && (g1 != null)) {
                                 t1id += decId;
                              
-                                //System.out.println("New Gate");
+                                //
                                 tt = new TOneAttribute(t1id, g1);
                                 gatesTmp.add(tt);
                             } else {
@@ -254,7 +254,7 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
     }
     
     public void postLoading(int decId) throws MalformedModelingException {
-        //System.out.println("Post loading");
+        //
         TOneAttribute tt;
         TAttribute a;
               

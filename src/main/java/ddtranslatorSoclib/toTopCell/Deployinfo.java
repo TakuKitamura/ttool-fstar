@@ -158,7 +158,7 @@ public class Deployinfo {
 	    //ram.setDataSize(0);
 	    size = ram.getDataSize(); // this is the hardware RAM size 
 	    
-	    System.out.println("***hardware RAM size"+size);
+	    
 	    
 	    String string_size_half = (Integer.toHexString(size/2)); //segments on this are half uram, half cram
 	    
@@ -193,11 +193,11 @@ public class Deployinfo {
 	int nb_signals=0;
 	deployinfo_map += "#define MAP_A\\" + CR;		
 
-System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
+
 	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
 	    //if (!(ram.getChannels().isEmpty())){	
 	    //	for (AvatarChannel channel : ram.getChannels()) {
-System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");	   
+
  //DG 15.05.2017	   	
 	    	for (AvatarRelation relation : avspec.getRelations()) {
 		    //if (!(ram.getRelations().isEmpty())){
@@ -212,13 +212,13 @@ System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
 		}
 		
 		i=0;nb_signals=0;
-System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
+
 //	for (AvatarChannel channel : ram.getChannels()) {
 	for (AvatarRelation relation : avspec.getRelations()) {
 //DG 15.05.2017
-System.out.println("@@@@@@@@   @@@@@@@@@@@@@@@@@");
+
   for(i=0; i<relation.nbOfSignals() ; i++) {//DG 15.05.2017
-      System.out.println("@@@@@@@@ 2  @@@@@@@@@@@@@@@@@");
+      
 
 		    deployinfo_map = deployinfo_map +"\n .lock"+nb_signals+" : { \\" + CR;
 		    deployinfo_map = deployinfo_map + "*(section_lock"+nb_signals+ ")\\"+ CR;		   
