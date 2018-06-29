@@ -85,7 +85,7 @@ public class AvatarSecurityTranslationTests {
 	
 	@Before
 	public void setupDiploMapping (){
-		MainGUI mgui = new MainGUI(false, false, false, false, false, false, false, false, false, true, false, false);
+		MainGUI mgui = new MainGUI(false, false, false, false, false, false, false, false, false, false, true, false, false);
 		mgui.initActions();
         mgui.panelForTab = new JPanel();
 		mgui.frame = new JFrame();
