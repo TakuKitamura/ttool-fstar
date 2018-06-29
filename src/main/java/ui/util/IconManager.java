@@ -683,7 +683,7 @@ public class IconManager {
     private static String icon8016 = "elntransmissionline.gif";
     private static String icon8017 = "elnvsource.gif";
     private static String icon8018 = "elnisource.gif";
-    private static String icon8019 = "elnground.gif"
+    private static String icon8019 = "elnground.gif";
 
     public IconManager() {
 
