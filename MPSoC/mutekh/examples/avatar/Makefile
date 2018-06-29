@@ -1,1 +1,0 @@
-objs = main.o Block1.o Block0.o 

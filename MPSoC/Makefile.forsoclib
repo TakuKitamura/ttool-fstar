@@ -1,8 +1,8 @@
-#SOCLIB_CPU=ppc
-#MUTEKH_CPU=ppc
+SOCLIB_CPU=ppc
+MUTEKH_CPU=ppc
 
-SOCLIB_CPU=mips32el
-MUTEKH_CPU=mips
+#SOCLIB_CPU=mips32el
+#MUTEKH_CPU=mips32el
 
 include generated_topcell/procinfo.mk
 
@@ -16,8 +16,8 @@ export PATH
 updateruntime:
 	cp mutekh/libmwmr/*.c mutekh/examples/avatar
 	cp mutekh/libmwmr/include/mwmr/mwmr.h mutekh/examples/avatar
-	cp src/*.c ~/TTool/MPSoC/mutekh/libavatar/
-	cp src/*.h ~/TTool/MPSoC/mutekh/libavatar/
+	cp src/*.c ~/TTool/MPSoC/mutekh/examples/avatar
+	cp src/*.h ~/TTool/MPSoC/mutekh/examples/avatar
 
 	
 updategeneratedcode:
