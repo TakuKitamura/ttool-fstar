@@ -298,6 +298,8 @@ public class TGUIAction extends AbstractAction {
     public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 491; 
     public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 492; 
     public static final int ELN_NODE_REF = 494; 
+    public static final int ELN_TDF_VOLTAGE_SINK = 495; 
+    public static final int ELN_TDF_CURRENT_SINK = 496; 
     
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
@@ -652,7 +654,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 495;
+    public static final int NB_ACTION = 497;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1132,7 +1134,10 @@ public class TGUIAction extends AbstractAction {
         actions[ELN_TRANSMISSION_LINE] = new TAction("eln-transmission-line", "Add a transmission line", IconManager.imgic8016, IconManager.imgic8016, "Transmission line", "Add a transmission line to the currently opened ELN Diagram", 0);
         actions[ELN_INDEPENDENT_VOLTAGE_SOURCE] = new TAction("eln-vsource", "Add a independent voltage source", IconManager.imgic8017, IconManager.imgic8017, "Independent voltage source", "Add a independent voltage source to the currently opened ELN Diagram", 0);
         actions[ELN_INDEPENDENT_CURRENT_SOURCE] = new TAction("eln-isource", "Add a independent current source", IconManager.imgic8018, IconManager.imgic8018, "Independent current source", "Add a independent current source to the currently opened ELN Diagram", 0);
-        actions[ELN_NODE_REF] = new TAction("eln-node-ref", "Add a reference node", IconManager.imgic8019, IconManager.imgic8019, "Reference node", "Add a reference node to the currently opened ELN Diagram", 0);
+        actions[ELN_NODE_REF] = new TAction("eln-node-ref", "Add a reference node", IconManager.imgic8019, IconManager.imgic8019, "Reference node", "Add a reference node to the currently opened ELN Diagram", 0);        
+	actions[ELN_TDF_VOLTAGE_SINK] = new TAction("eln-tdf-vsink", "Add a conversion voltage to a TDF output signal", IconManager.imgic8020, IconManager.imgic8020, "Converts voltage to a TDF output signal", "Add a converts voltage to a TDF output signal to the currently opened ELN Diagram", 0);
+	actions[ELN_TDF_CURRENT_SINK] = new TAction("eln-tdf-isink", "Add a conversion current to a TDF output signal", IconManager.imgic8021, IconManager.imgic8021, "Converts current to a TDF output signal", "Add a converts current to a TDF output signal to the currently opened ELN Diagram", 0);
+
 
         //ProActive State Machine Diagram
         actions[PROSMD_EDIT] = new TAction("edit-prosmd-diagram", "Edit ProActive state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit ProActive state machine diagram", "Make it possible to edit the currently opened ProActive state machine diagram", 0);

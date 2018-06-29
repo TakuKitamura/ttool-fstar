@@ -61,6 +61,7 @@ import ui.diplodocusmethodology.*;
 import ui.ebrdd.*;
 import ui.eln.*;
 import ui.eln.sca_eln.*;
+import ui.eln.sca_eln_sca_tdf.*;
 import ui.ftd.*;
 import ui.iod.*;
 import ui.ncdd.*;
@@ -356,6 +357,8 @@ public class TGComponentManager {
     public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 1618;
     public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 1619;
     public static final int ELN_NODE_REF = 1620;
+    public static final int ELN_TDF_VOLTAGE_SINK = 1621;
+    public static final int ELN_TDF_CURRENT_SINK = 1622;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -1305,6 +1308,12 @@ public class TGComponentManager {
             case ELN_NODE_REF: 
             	tgc = new ELNComponentNodeRef(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
+            case ELN_TDF_VOLTAGE_SINK: 
+            	tgc = new ELNComponentVoltageSinkTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_TDF_CURRENT_SINK: 
+            	tgc = new ELNComponentCurrentSinkTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
             // Communication patterns + SD
             case TMLCP_CHOICE:
                 tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1725,6 +1734,10 @@ public class TGComponentManager {
         	return ELN_INDEPENDENT_CURRENT_SOURCE;
 	} else if (tgc instanceof ELNComponentNodeRef) {
         	return ELN_NODE_REF;
+	} else if (tgc instanceof ELNComponentVoltageSinkTDF) {
+        	return ELN_TDF_VOLTAGE_SINK;
+	} else if (tgc instanceof ELNComponentCurrentSinkTDF) {
+        	return ELN_TDF_CURRENT_SINK;
         	
         	// Others
         } else if (tgc instanceof TADDeterministicDelay) {
