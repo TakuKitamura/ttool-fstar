@@ -1063,6 +1063,15 @@ public class ActionPerformer {
             JOptionPane.showMessageDialog(mgui.getFrame(), "In Port: Color CYAN\nOut Port: Color LIGHT GRAY", "Help color of the ports", JOptionPane.INFORMATION_MESSAGE);
         }   else if (command.endsWith(".dot")) {
             mgui.viewAutomata(command);
+
+            // Last open
+        } else {
+            for(int i=0; i<mgui.actionsLast.length; i++) {
+                if (command.equals(mgui.actionsLast[i].getActionCommand())) {
+                    mgui.openLastProject(i);
+                    break;
+                }
+            }
         }
     }
 }

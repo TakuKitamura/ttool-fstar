@@ -41,6 +41,7 @@ package ui;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
+import myutil.TraceManager;
 
 import javax.swing.*;
 //import javax.swing.event.*;
@@ -79,19 +80,10 @@ public class JMenuBarTurtle extends JMenuBar {
     }
 
 
-    // Menus
-    private void buildMenus(MainGUI mgui) {
-        // Main menu
-        file = new JMenu("File");
-        edit = new JMenu("Edit");
-        diagram = new JMenu("Diagram");
-        vAndV = new JMenu("V&V");
-        codeG = new JMenu("Code Generation");
-        view = new JMenu("View");
-        tool = new JMenu("Tool");
-        help = new JMenu("Help");
-
+    public void makeFileMenu(MainGUI mgui) {
         JMenuItem menuItem;
+
+        file.removeAll();
 
         // FILE
         menuItem = file.add(mgui.actions[TGUIAction.ACT_NEW]);
@@ -158,15 +150,36 @@ public class JMenuBarTurtle extends JMenuBar {
 
         if (ConfigurationTTool.LastOpenFileDefined) {
             file.addSeparator();
-
-            menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_LAST]);
-            menuItem.addMouseListener(mgui.mouseHandler);
+            for(int i=0; i<ConfigurationTTool.LastOpenFiles.length;i++){
+                //TraceManager.addDev("Considering last open file: " + ConfigurationTTool.LastOpenFiles[i]);
+                if ((ConfigurationTTool.LastOpenFiles[i] != null) && (ConfigurationTTool.LastOpenFiles[i].length() > 0)) {
+                    menuItem = file.add(mgui.actionsLast[i]);
+                    menuItem.addMouseListener(mgui.mouseHandler);
+                }
+            }
         }
 
         file.addSeparator();
 
         menuItem = file.add(mgui.actions[TGUIAction.ACT_QUIT]);
         menuItem.addMouseListener(mgui.mouseHandler);
+    }
+
+    // Menus
+    private void buildMenus(MainGUI mgui) {
+        // Main menu
+        file = new JMenu("File");
+        edit = new JMenu("Edit");
+        diagram = new JMenu("Diagram");
+        vAndV = new JMenu("V&V");
+        codeG = new JMenu("Code Generation");
+        view = new JMenu("View");
+        tool = new JMenu("Tool");
+        help = new JMenu("Help");
+
+        JMenuItem menuItem;
+
+        makeFileMenu(mgui);
 
         //Edit
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_CUT]);

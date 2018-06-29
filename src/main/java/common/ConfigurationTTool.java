@@ -164,6 +164,8 @@ public class ConfigurationTTool {
 
     public static String LastOpenFile = "";
     public static boolean LastOpenFileDefined = false;
+    public static int NB_LAST_OPEN_FILE = 10;
+    public static String [] LastOpenFiles = new String[NB_LAST_OPEN_FILE];
 
     public static String LastWindowAttributesX = "", LastWindowAttributesY = "";
     public static String LastWindowAttributesWidth = "", LastWindowAttributesHeight = "";
@@ -223,7 +225,25 @@ public class ConfigurationTTool {
         }
 
 
-        index0 = data.indexOf("LastOpenFile");
+
+        while ( (index0 = data.indexOf("<LastOpenFile")) != -1) {
+            index1 = data.indexOf("/>", index0+1);
+            if (index1 == -1) {
+                break; // pb in the configuration?
+            }
+            data = data.substring(0, index0) + data.substring(index1+2, data.length());
+        }
+
+        index0 = data.indexOf("</TURTLECONFIGURATION>");
+        String toBeAdded = "";
+        // Adding configuration there
+        for(int i=0; i<LastOpenFiles.length; i++) {
+            String file = LastOpenFiles[i];
+            if ((file != null) && (file.length() > 0)) {
+                toBeAdded = toBeAdded + "<LastOpenFile data=\"" + file + "\" />\n";
+            }
+        }
+        data = data.substring(0, index0-1) + toBeAdded + data.substring(index0, data.length());
 
         //sb.append("data = " + data + " ConfigurationTTool.LastOpenFile=" + ConfigurationTTool.LastOpenFile);
 
@@ -493,7 +513,14 @@ public class ConfigurationTTool {
         sb.append("ExternalCommand2: " + ExternalCommand2 + "\n");
 
         sb.append("\nInformation saved by TTool:\n");
-        sb.append("LastOpenFile: " + LastOpenFile + "\n");
+
+        if (LastOpenFiles != null) {
+            for(int i=0; i<LastOpenFiles.length; i++) {
+                if (LastOpenFiles[i] != null) {
+                    sb.append("LastOpenFile #" + i + ": " + LastOpenFiles[i] + "\n");
+                }
+            }
+        }
         sb.append("LastWindowAttributesX: " + LastWindowAttributesX + "\n");
         sb.append("LastWindowAttributesY: " + LastWindowAttributesY + "\n");
         sb.append("LastWindowAttributesWidth: ").append(LastWindowAttributesWidth).append("\n");
@@ -795,6 +822,10 @@ public class ConfigurationTTool {
             if (nl.getLength() > 0)
                 URLModel(nl);
 
+
+            for(int i=0;i<NB_LAST_OPEN_FILE; i++) {
+                LastOpenFiles[i] = "";
+            }
             nl = doc.getElementsByTagName("LastOpenFile");
             if (nl.getLength() > 0)
                 LastOpenFile(nl);
@@ -1558,9 +1589,14 @@ public class ConfigurationTTool {
 
     private static void LastOpenFile(NodeList nl) throws MalformedConfigurationException {
         try {
-            Element elt = (Element) (nl.item(0));
-            LastOpenFile = elt.getAttribute("data");
-            LastOpenFileDefined = true;
+            for(int i=0; i<Math.min(nl.getLength(), NB_LAST_OPEN_FILE); i++) {
+                Element elt = (Element) (nl.item(i));
+                if (i == 0) {
+                    LastOpenFile = elt.getAttribute("data");
+                    LastOpenFileDefined = true;
+                }
+                LastOpenFiles[i] = elt.getAttribute("data");
+            }
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
@@ -1601,6 +1637,31 @@ public class ConfigurationTTool {
 
     public static boolean isConfigured(String s) {
         return ((s != null) && (s.trim().length() > 0));
+    }
+
+    public static void decLastFiles() {
+        String[] tmp = new String[NB_LAST_OPEN_FILE];
+        String[] tmp1 = new String[NB_LAST_OPEN_FILE];
+        for(int i=0; i<NB_LAST_OPEN_FILE; i++) {
+            tmp[i] = LastOpenFiles[i];
+        }
+
+        for (int j=0;j<NB_LAST_OPEN_FILE; j++) {
+            tmp1[j] = "";
+            LastOpenFiles[j] = "";
+        }
+
+        int cpt = 0;
+        for(int k=0; k<NB_LAST_OPEN_FILE; k++) {
+            if (tmp[k].length() > 0) {
+                tmp1[cpt] = tmp[k];
+                cpt ++;
+            }
+        }
+
+        for(int l=NB_LAST_OPEN_FILE-1; l>0; l--) {
+            LastOpenFiles[l] = tmp1[l-1];
+        }
     }
 
 } //
