@@ -158,10 +158,6 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		}
 
 		Color c = g.getColor();
-		double w0 = ((ELNConnectingPoint) connectingPoint[0]).getW();
-		double h0 = ((ELNConnectingPoint) connectingPoint[0]).getH();
-		double w1 = ((ELNConnectingPoint) connectingPoint[1]).getW();
-		double h1 = ((ELNConnectingPoint) connectingPoint[1]).getH();
 
 		if (position == 0) {
 			if (first == false) {
@@ -186,10 +182,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateTop(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(w0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(w1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 3 + width / 6, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 3 + width / 6,
 						y + height + sh1);
@@ -199,10 +195,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateBottomFlip(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 - w0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 - w1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + 2 * width / 3 + width / 6, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + 2 * width / 3 + width / 6,
 						y + height + sh1);
@@ -212,10 +208,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateTopFlip(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(w0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(w1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 3 + width / 6, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 3 + width / 6,
 						y + height + sh0);
@@ -225,10 +221,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateBottom(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 - w0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 - w1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + 2 * width / 3 + width / 6, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + 2 * width / 3 + width / 6,
 						y + height + sh0);
@@ -258,10 +254,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateRight(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(w0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(w1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 / 3.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
 						y + height / 3 + height / 6 + sh1);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
@@ -272,10 +268,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateRightFlip(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 - w0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 - w1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 / 3.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
 						y + 2 * height / 3 + height / 6 + sh1);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
@@ -286,10 +282,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateLeftFlip(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(w0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(w1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(2.0 / 3.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
 						y + height / 3 + height / 6 + sh0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
@@ -300,10 +296,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateLeft(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 - w0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 - w1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(2.0 / 3.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
 						y + 2 * height / 3 + height / 6 + sh0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
@@ -332,10 +328,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateBottom(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 - w0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 - w1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + 2 * width / 3 + width / 6, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + 2 * width / 3 + width / 6,
 						y + height + sh0);
@@ -345,10 +341,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateTopFlip(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(w0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(w1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 3 + width / 6, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 3 + width / 6,
 						y + height + sh0);
@@ -358,10 +354,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateBottomFlip(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 - w0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 - w1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + 2 * width / 3 + width / 6, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + 2 * width / 3 + width / 6,
 						y + height + sh1);
@@ -371,10 +367,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateTop(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(w0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(w1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(h1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 3 + width / 6, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 3 + width / 6,
 						y + height + sh1);
@@ -386,11 +382,6 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				width = height;
 				height = old;
 			}
-
-			((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-			((ELNConnectingPoint) connectingPoint[0]).setH(w0);
-			((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-			((ELNConnectingPoint) connectingPoint[1]).setH(w1);
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
 			int sw0 = g.getFontMetrics().stringWidth("p");
@@ -409,10 +400,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateLeft(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 - w0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 - w1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(2.0 / 3.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
 						y + 2 * height / 3 + height / 6 + sh0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
@@ -423,10 +414,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateLeftFlip(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(w0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(w1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(2.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(2.0 / 3.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
 						y + height / 3 + height / 6 + sh0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
@@ -437,10 +428,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateRightFlip(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 - w0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 - w1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 / 3.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
 						y + 2 * height / 3 + height / 6 + sh1);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
@@ -451,10 +442,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateRight(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(w0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-				((ELNConnectingPoint) connectingPoint[1]).setH(w1);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 / 3.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 / 3.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
 						y + height / 3 + height / 6 + sh1);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,

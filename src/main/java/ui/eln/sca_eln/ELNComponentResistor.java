@@ -149,10 +149,6 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 		}
 
 		Color c = g.getColor();
-		double w0 = ((ELNConnectingPoint) connectingPoint[0]).getW();
-		double h0 = ((ELNConnectingPoint) connectingPoint[0]).getH();
-		double w1 = ((ELNConnectingPoint) connectingPoint[1]).getW();
-		double h1 = ((ELNConnectingPoint) connectingPoint[1]).getH();
 
 		if (position == 0) {
 			if (first == false) {
@@ -163,11 +159,6 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 			}
 
 			rotateTopBottom(g);
-
-			((ELNConnectingPoint) connectingPoint[0]).setW(w0);
-			((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-			((ELNConnectingPoint) connectingPoint[1]).setW(w1);
-			((ELNConnectingPoint) connectingPoint[1]).setH(h1);
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
 			int sw0 = g.getFontMetrics().stringWidth("p");
@@ -182,11 +173,19 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if (fh == true) {
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
 						y + height / 2 + height / 2 + sh1);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
 						y + height / 2 + height / 2 + sh0);
 			} else {
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
 						y + height / 2 + height / 2 + sh0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
@@ -202,11 +201,6 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 
 			rotateRightLeft(g);
 
-			((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-			((ELNConnectingPoint) connectingPoint[0]).setH(w0);
-			((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-			((ELNConnectingPoint) connectingPoint[1]).setH(w1);
-
 			int attributeFontSize = this.currentFontSize * 5 / 6;
 			int sh0 = g.getFontMetrics().getAscent();
 			int sh1 = g.getFontMetrics().getAscent();
@@ -218,10 +212,18 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if (fv == true) {
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
 						y + height + sh0);
 			} else {
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
 						y + height + sh1);
@@ -236,11 +238,6 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 
 			rotateTopBottom(g);
 
-			((ELNConnectingPoint) connectingPoint[0]).setW(w0);
-			((ELNConnectingPoint) connectingPoint[0]).setH(h0);
-			((ELNConnectingPoint) connectingPoint[1]).setW(w1);
-			((ELNConnectingPoint) connectingPoint[1]).setH(h1);
-
 			int attributeFontSize = this.currentFontSize * 5 / 6;
 			int sw0 = g.getFontMetrics().stringWidth("p");
 			int sh0 = g.getFontMetrics().getAscent();
@@ -254,11 +251,19 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if (fh == true) {
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw1,
 						y + height / 2 + height / 2 + sh1);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
 						y + height / 2 + height / 2 + sh0);
 			} else {
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw0,
 						y + height / 2 + height / 2 + sh0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
@@ -274,11 +279,6 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 
 			rotateRightLeft(g);
 
-			((ELNConnectingPoint) connectingPoint[0]).setW(h0);
-			((ELNConnectingPoint) connectingPoint[0]).setH(w0);
-			((ELNConnectingPoint) connectingPoint[1]).setW(h1);
-			((ELNConnectingPoint) connectingPoint[1]).setH(w1);
-
 			int attributeFontSize = this.currentFontSize * 5 / 6;
 			int sh0 = g.getFontMetrics().getAscent();
 			int sh1 = g.getFontMetrics().getAscent();
@@ -290,10 +290,18 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if (fv == true) {
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
 						y + height + sh0);
 			} else {
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
 				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
 				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
 						y + height + sh1);
