@@ -138,6 +138,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public static boolean experimentalOn;
     public static boolean avatarOnly;
     public static boolean turtleOn;
+    public static boolean openLast;
 
     public boolean isxml = false;
 
@@ -339,8 +340,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     //public static PluginManager pluginManager;
 
 
-    public MainGUI(boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
+    public MainGUI(boolean _openLast, boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn,
+                   boolean
+            _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
             _avatarOnly, boolean _experimental) {
+        openLast = _openLast;
         turtleOn = _turtleOn;
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
@@ -528,6 +532,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         // Creating menus
         jmenubarturtle = new JMenuBarTurtle(this);
         frame.setJMenuBar(jmenubarturtle);
+
+        // if openLast, must open the latest specification (if it exists)
+        if (ConfigurationTTool.LastOpenFileDefined) {
+            openLastProject();
+        }
 
         //split1.setLastDividerLocation(split1.getHeight() * 4 / 5);
         //split1.setLastDividerLocation(900);
