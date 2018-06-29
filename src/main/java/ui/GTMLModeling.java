@@ -923,7 +923,7 @@ public class GTMLModeling {
                                 }
                             }
                         } else {
-                            // Complex channel "1 -> many"
+                            // Complex channel "1 -> many" or "many -> 1"
                             TMLCPrimitivePort port;
 
 
