@@ -45,6 +45,7 @@ import myutil.GraphicLib;
 import ui.*;
 import ui.util.IconManager;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -57,7 +58,9 @@ import java.awt.*;
 public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
     protected int radius = 11;
 
-    protected int numberOfSamples = 1; // Indicates the number of samples being read before they
+    protected boolean isChannel = false;
+
+     // value Indicates the number of samples being read before they
     // are written to destination. The default is 1.
 
 
@@ -83,14 +86,18 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 
         nbInternalTGComponent = 0;
 
-        value = "F";
+        value = "1";
         name = "Composite port";
+        editable = true;
 
         //insides = new ArrayList<TMLCPrimitivePort>();
         //outsides = new ArrayList<TMLCPrimitivePort>();
 
         myImageIcon = IconManager.imgic1204;
     }
+
+
+
 
     public void internalDrawing(Graphics g) {
 
@@ -128,15 +135,62 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 
     }
 
+    public boolean editOndoubleClick(JFrame frame) {
+        if (isChannel) {
+            String oldValue = value;
+            String s = (String) JOptionPane.showInputDialog(frame, "Nb of samples (positive int): ",
+                    "Nb of samples per round", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null,
+                    getValue());
+            if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+                try {
+                    int testI = Integer.decode(s).intValue();
+                    if (testI > 0) {
+                        value = s;
+                    } else {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the number of samples: the number must be >0",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not change the number of samples: " + s + " is not a number",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+
+            }
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(frame,
+                    "Only data channel forks can be configured",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        }
+
+    }
+
 
     public int getType() {
         return TGComponentManager.TMLCTD_FORK;
     }
 
     public int getNumberOfSamples() {
-        return numberOfSamples;
+        try {
+            return Integer.decode(value).intValue();
+        } catch (Exception e) {
+            value = "1";
+            return 1;
+        }
     }
 
+    public void setAsChannel(boolean b) {
+        isChannel = b;
+    }
 
 
 }

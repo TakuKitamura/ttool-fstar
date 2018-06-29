@@ -923,7 +923,7 @@ public class GTMLModeling {
                                 }
                             }
                         } else {
-                            // Complex channel "1 -> many"
+                            // Complex channel "1 -> many" or "many -> 1"
                             TMLCPrimitivePort port;
 
 
@@ -973,6 +973,11 @@ public class GTMLModeling {
                                 if (fork != null) {
                                     TraceManager.addDev("Setting fork sample");
                                     channel.setNumberOfSamples(fork.getNumberOfSamples());
+                                }
+                                TMLCJoin join = path.getJoin(0);
+                                if (join != null) {
+                                    TraceManager.addDev("Setting join sample");
+                                    channel.setNumberOfSamples(join.getNumberOfSamples());
                                 }
                             }
                             channel.ports.add(port1);

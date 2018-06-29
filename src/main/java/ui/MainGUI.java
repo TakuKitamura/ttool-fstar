@@ -110,6 +110,8 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static myutil.FileUtils.checkFileForOpen;
+
 // AVATAR
 
 /**
@@ -136,6 +138,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public static boolean experimentalOn;
     public static boolean avatarOnly;
     public static boolean turtleOn;
+    public static boolean openLast;
 
     public boolean isxml = false;
 
@@ -337,8 +340,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     //public static PluginManager pluginManager;
 
 
-    public MainGUI(boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
+    public MainGUI(boolean _openLast, boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn,
+                   boolean
+            _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
             _avatarOnly, boolean _experimental) {
+        openLast = _openLast;
         turtleOn = _turtleOn;
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
@@ -529,6 +535,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         // Creating menus
         jmenubarturtle = new JMenuBarTurtle(this);
         frame.setJMenuBar(jmenubarturtle);
+
+        // if openLast, must open the latest specification (if it exists)
+        if (ConfigurationTTool.LastOpenFileDefined) {
+            openLastProject();
+        }
 
         //split1.setLastDividerLocation(split1.getHeight() * 4 / 5);
         //split1.setLastDividerLocation(900);
@@ -2597,61 +2608,73 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            file = jfc.getSelectedFile();
-            openProjectFromFile(file);
+            File tmpFile = jfc.getSelectedFile();
+            openProjectFromFile(tmpFile);
         }
 
     }
 
     public void openProjectFromFile(File _f) {
+        String data = null;
+        File tmpFile;
+
         if (FileUtils.getExtension(_f).equals("ttool")) {
-            dir = _f;
-            SpecConfigTTool.setDirConfig(dir);
-            String filename = dir.getAbsolutePath() + "/" + dir.getName().replaceAll(".ttool", ".xml");
-            file = new File(filename);
-            config = new File(dir.getAbsolutePath() + "/project_config.xml");
-            try {
-                SpecConfigTTool.loadConfigFile(config);
-            } catch (MalformedConfigurationException e) {
-                System.err.println(e.getMessage() + " : Can't load config file.");
-            }
+            File tmpDir = _f;
+            //SpecConfigTTool.setDirConfig(dir);
+            String filename = tmpDir.getAbsolutePath() + "/" + tmpDir.getName().replaceAll(".ttool", ".xml");
+            tmpFile = new File(filename);
         } else {
-            dir = null;
-            config = null;
-            SpecConfigTTool.setBasicConfig(systemcOn);
-            file = _f;
+            tmpFile = _f;
         }
 
-        if (checkFileForOpen(file)) {
-            String s = null;
+        if (!checkFileForOpen(tmpFile)) {
+            JOptionPane.showMessageDialog(frame, "File " + tmpFile.getAbsolutePath() +  " could not be opened ", "File Error", JOptionPane
+                    .INFORMATION_MESSAGE);
+            return;
+        }
 
+        try {
+            FileInputStream fis = new FileInputStream(tmpFile);
+            int nb = fis.available();
+
+            byte[] ba = new byte[nb];
+            fis.read(ba);
+            fis.close();
+            data = new String(ba, "UTF-8");
+            //TraceManager.addDev("Mode:" + s);
+        } catch (Exception e) {
+            //TraceManager.addDev("Open file error");
+            JOptionPane.showMessageDialog(frame, "File " + tmpFile.getAbsolutePath() + " could not be opened", "File Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        if (FileUtils.getExtension(_f).equals("ttool")) {
+            File tmpDir = _f;
+            config = new File(tmpDir.getAbsolutePath() + "/project_config.xml");
             try {
-                FileInputStream fis = new FileInputStream(file);
-                int nb = fis.available();
-
-                byte[] ba = new byte[nb];
-                fis.read(ba);
-                fis.close();
-                s = new String(ba, "UTF-8");
-                //TraceManager.addDev("Mode:" + s);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
-                return;
+                    SpecConfigTTool.loadConfigFile(config);
+            } catch (MalformedConfigurationException e) {
+                    System.err.println(e.getMessage() + " : Can't load config file.");
             }
+            SpecConfigTTool.setDirConfig(tmpDir);
+        }
 
-            // close current modeling
-            closeTurtleModeling();
+        file = tmpFile;
 
-            // open the new TURTLE modeling
-            newTurtleModeling();
+        // close current modeling
+        closeTurtleModeling();
+
+        // open the new TURTLE modeling
+        newTurtleModeling();
 
             //            gtm.enableUndo(false);
 
             // Update configuration
-            updateLastOpenFile(file);
+        updateLastOpenFile(file);
 
             // Issue #41: Moved to common method
-            loadModels(s, "loaded");
+        loadModels(data, "loaded");
             //            // load the new TURTLE modeling
             //            try {
             //                gtm.loadModelingFromXML(s);
@@ -2671,9 +2694,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             //            gtm.enableUndo(true);
             //            gtm.saveOperation(getCurrentSelectedPoint());
             //            dtree.forceUpdate();
-            if (getCurrentTDiagramPanel() != null)
-                getCurrentTDiagramPanel().repaint();
-        }
+        if (getCurrentTDiagramPanel() != null)
+            getCurrentTDiagramPanel().repaint();
+
     }
 
     public void openLastProject() {

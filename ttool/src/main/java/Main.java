@@ -81,6 +81,7 @@ public class Main implements ActionListener {
     public static boolean experimental = false;
     public static boolean avataronly = false;
     public static boolean turtle = false;
+    public static boolean openLast = false;
 
     public static void main(String[] args) {
 
@@ -102,7 +103,7 @@ public class Main implements ActionListener {
         Image img;
         //System.out.println("helli");
         if (imageURL != null) {
-            //System.out.println("hellu");
+
             img = (new ImageIcon(imageURL)).getImage();
             splashFrame = JStartingWindow.splash(img, "Loading TTool's elements");
             //splashFrame.setLicenceMessage("An open-source toolkit from:");
@@ -238,6 +239,10 @@ public class Main implements ActionListener {
                 turtle = true;
             }
 
+            if (args[i].compareTo("-openlast") == 0) {
+                openLast = true;
+            }
+
         }
 
         // Icons
@@ -290,7 +295,7 @@ public class Main implements ActionListener {
         if (splashFrame != null) {
             splashFrame.setMessage("Creating main window");
         }
-        MainGUI mainGUI = new MainGUI(turtle, systemc, lotos, proactive, tpn, os, uppaal, nc, avatar, proverif, avataronly, experimental);
+        MainGUI mainGUI = new MainGUI(openLast, turtle, systemc, lotos, proactive, tpn, os, uppaal, nc, avatar, proverif, avataronly, experimental);
         if (splashFrame != null) {
             splashFrame.setMessage("Building graphical components");
         }

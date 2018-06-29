@@ -2205,14 +2205,14 @@ public class TMLModeling<E> {
         TMLReadChannel read = new TMLReadChannel("ReadOfFork", null);
         forkActivity.addElement(read);
         read.addChannel(_ch);
-        read.setNbOfSamples("1");
+        read.setNbOfSamples("" + _ch.getNumberOfSamples());
 
         TMLWriteChannel []writes = new TMLWriteChannel[nb];
 
         for(i=0; i<nb; i++) {
             writes[i] = new TMLWriteChannel("WriteOfFork" + SEP1 + i, null);
             writes[i].addChannel(chans[i]);
-            writes[i].setNbOfSamples("1");
+            writes[i].setNbOfSamples("" + _ch.getNumberOfSamples());
             forkActivity.addElement(writes[i]);
         }
 
@@ -2400,13 +2400,13 @@ public class TMLModeling<E> {
         TMLWriteChannel write = new TMLWriteChannel("WriteOfJoin", null);
         joinActivity.addElement(write);
         write.addChannel(_ch);
-        write.setNbOfSamples("1");
+        write.setNbOfSamples("" + _ch.getNumberOfSamples());
 
         TMLReadChannel []reads = new TMLReadChannel[nb];
         for(i=0; i<nb; i++) {
             reads[i] = new TMLReadChannel("ReadOfJoin" + SEP1 + i, null);
             reads[i].addChannel(chans[i]);
-            reads[i].setNbOfSamples("1");
+            reads[i].setNbOfSamples("" + _ch.getNumberOfSamples());
             joinActivity.addElement(reads[i]);
         }
 
