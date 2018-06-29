@@ -67,6 +67,7 @@ public class ELNDiagramToolBar extends TToolBar {
 
 		mgui.actions[TGUIAction.ELN_EDIT].setEnabled(b);
 		mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_CONNECTOR].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_RESISTOR].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_CAPACITOR].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_INDUCTOR].setEnabled(b);
@@ -76,6 +77,7 @@ public class ELNDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ELN_TRANSMISSION_LINE].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_INDEPENDENT_VOLTAGE_SOURCE].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_NODE_REF].setEnabled(b);
 
 		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
@@ -122,5 +124,14 @@ public class ELNDiagramToolBar extends TToolBar {
 		
 		button = this.add(mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE]);
 		button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_NODE_REF]);
+		button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_CONNECTOR]);
+		button.addMouseListener(mgui.mouseHandler);
 	}
 }
+

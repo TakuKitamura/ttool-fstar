@@ -75,12 +75,4 @@ public class TGConnectingPointWidthHeight extends TGConnectingPoint{
     public void setH(double _h) {
         h = _h;
     }
-    
-    public double getW() {
-    	return w;
-    }
-    
-    public double getH() {
-    	return h;
-    }
 } // Class

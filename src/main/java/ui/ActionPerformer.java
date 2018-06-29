@@ -953,6 +953,8 @@ public class ActionPerformer {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_INDEPENDENT_VOLTAGE_SOURCE);
         } else if (command.equals(mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE].getActionCommand())){
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_INDEPENDENT_CURRENT_SOURCE);
+  	} else if (command.equals(mgui.actions[TGUIAction.ELN_NODE_REF].getActionCommand())){
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_NODE_REF);
 
             // Attack Tree Diagrams
         } else if (command.equals(mgui.actions[TGUIAction.ATD_BLOCK].getActionCommand())) {
