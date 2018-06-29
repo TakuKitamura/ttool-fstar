@@ -20,11 +20,30 @@
  * SOCLIB_LGPL_HEADER_END
  *
  * Copyright (c) UPMC, Lip6, Asim
- *         Nicolas Pouillon <nipo@ssji.net>, 2007-2009
- *         Alain Greiner <alain.greiner@lip6.fr> 2005 & 2013
+ *         Alain Greiner <alain.greiner@lip6.fr> 2005 
+ *         Nicolas Pouillon <nipo@ssji.net> 2007-2009
+ *         Alain Greiner <alain.greiner@lip6.fr> 2013
  *
  * Maintainers: alain
  */
+
+/////////////////////////////////////////////////////////////////////////////////
+// Implementation note:
+// The VciVgmn component contains two independant micro-network for CMD & RSP.
+// Each micro-network is composed of a variable number of "input ports"
+// and a variable number of "output ports".
+// - Each Input Port contains an input generic fifo, a routing function, 
+//   and a dedicated FSM to handle (sequencial) broadcast.
+// - Each Output Port contains several intermediate fifos (one per input port),
+//   an allocation FSM, and an output fifo acting as a delay line.
+// The two micro-networks have three template parameters:
+// - CMD network: vci_flit_t   == VciCmdBuffer
+//                vci_input_t  == VciTarget
+//                vci_output_t == VciInitiator
+// - RSP network: vci_flit_t   == VciRspBuffer
+//                vci_input_t  == VciInitiator
+//                vci_output_t == VciTarget   
+/////////////////////////////////////////////////////////////////////////////////
 
 #include <systemc>
 #include <vector>
@@ -35,6 +54,7 @@
 namespace soclib { namespace caba {
 
 using namespace sc_core;
+using namespace soclib::common;
 
 ////////////////////////////////////////////
 template<typename data_t> class DelayLine
@@ -174,7 +194,7 @@ public:
 // An output module is associated to each output port of a micro-network 
 // Each output module implements a separate allocation mechanism, and
 // contains as many intermediate FIFOs as the number of input ports, 
-// and one single output delay line.
+// and one single output fifo acting as a delay line.
 // For a CMD micro-network:  vci_flit_t   == VciCmdBuffer
 //                           vci_output_t == VciInitiator
 // For a RSP micro-network:  vci_flit_t   == VciRspBuffer
@@ -374,15 +394,15 @@ public:
         size_t out;
         if( r_is_cmd )
         {
-            soclib::common::AddressDecodingTable<uint32_t, int>* routing_table =
-                   (soclib::common::AddressDecodingTable<uint32_t, int>*)r_rt;
-            out = (size_t)(routing_table->get_value( (uint32_t)flit.dest() ));
+            AddressDecodingTable<uint64_t, size_t>* rt =
+                (AddressDecodingTable<uint64_t, size_t>*)r_rt;
+            out = rt->get_value( (uint64_t)flit.dest() );
         }
         else
         {
-            soclib::common::AddressMaskingTable<uint32_t>*  masking_table =
-                   (soclib::common::AddressMaskingTable<uint32_t>*)r_rt;
-            out = (size_t)(masking_table->get_value( (uint32_t)flit.dest() ));
+            AddressDecodingTable<uint32_t, size_t>* rt =
+                (AddressDecodingTable<uint32_t, size_t>*)r_rt;
+            out = rt->get_value( (uint32_t)flit.dest() );
         }  
         return out;
     }
@@ -488,14 +508,6 @@ public:
     }
 };    // end class InputModule
 
-/////////////////////////////////////////////////////////////////////////////////
-// The VciVgmn component contains two independant micro-network for CMD & RSP
-// - CMD network: vci_flit_t   == VciCmdBuffer
-//                vci_input_t  == VciTarget
-//                vci_output_t == VciInitiator
-// - RSP network: vci_flit_t   == VciRspBuffer
-//                vci_input_t  == VciInitiator
-//                vci_output_t == VciTarget   
 /////////////////////////////////////////////////////////////////////////////////
 template<typename vci_flit_t,   
          typename vci_input_t,
@@ -624,16 +636,21 @@ tmpl(void)::print_trace()
 //////////////////////////////////////////////////////////////
 tmpl(/**/)::VciVgmn( sc_module_name                     name,
                      const soclib::common::MappingTable &mt,
-                     size_t                             nb_attached_initiat,
-                     size_t                             nb_attached_target,
+                     size_t                             nb_attached_initiators,
+                     size_t                             nb_attached_targets,
                      size_t                             min_latency,
                      size_t                             fifo_depth,
-                     const soclib::common::IntTab       &default_index)
+                     const size_t                       default_index)
    : soclib::caba::BaseModule(name),
-     m_nb_initiat(nb_attached_initiat),
-     m_nb_target(nb_attached_target)
+     m_nb_initiators( nb_attached_initiators ),
+     m_nb_targets( nb_attached_targets ),
+     m_cmd_rt( mt.getGlobalIndexFromAddress( default_index ) ),
+     m_rsp_rt( mt.getGlobalIndexFromSrcid() )
 {
-    std::cout << "  - Building VciVgmn : " << name << std::endl;
+    std::cout << "  - Building VciVgmn : " << name << std::dec << std::endl
+              << "    => targets        = "  << nb_attached_targets << std::endl
+              << "    => initiators     = "  << nb_attached_initiators << std::endl
+              << "    => default target = "  << default_index << std::endl;
 
     assert( (min_latency > 2) and
     "VCI_VGMN error : min_latency cannot be smaller than 3 cycles");
@@ -642,43 +659,28 @@ tmpl(/**/)::VciVgmn( sc_module_name                     name,
     "VCI_VGMN error : fifo_depth cannot be  smaller than 2 slots");
 
     p_to_initiator = soclib::common::alloc_elems<soclib::caba::VciTarget<vci_param> >(
-                     "to_initiator", nb_attached_initiat);
+                     "to_initiator", nb_attached_initiators);
     p_to_target = soclib::common::alloc_elems<soclib::caba::VciInitiator<vci_param> >(
-                     "to_target", nb_attached_target);
+                     "to_target", nb_attached_targets);
 
-    // build cmd routing table and cmd network
-
-    
-    m_cmd_routing_table = mt.getRoutingTable( soclib::common::IntTab(), 
-                                              mt.indexForId(default_index) );
-
-    // m_cmd_routing_table = mt.getRoutingTable( soclib::common::IntTab(), 
-    //                                     0 );
-   
+    // build  cmd network and rsp network 
 
     m_cmd_mn = new VgmnMicroNetwork<VciCmdBuffer<vci_param>,
                                     VciTarget<vci_param>,
-                                    VciInitiator<vci_param> >( nb_attached_initiat, 
-                                                               nb_attached_target,
+                                    VciInitiator<vci_param> >( nb_attached_initiators, 
+                                                               nb_attached_targets,
                                                                min_latency-2, 
                                                                fifo_depth,
-                                                               (void*)(&m_cmd_routing_table),
+                                                               (void*)(&m_cmd_rt),
                                                                true );
-
-
-    // build rsp routing table and rsp network
-    m_rsp_routing_table = mt.getIdMaskingTable(0);
-    
     m_rsp_mn = new VgmnMicroNetwork<VciRspBuffer<vci_param>, 
                                     VciInitiator<vci_param>,
-                                    VciTarget<vci_param> >( nb_attached_target, 
-                                                            nb_attached_initiat,
+                                    VciTarget<vci_param> >( nb_attached_targets, 
+                                                            nb_attached_initiators,
                                                             min_latency-2, 
                                                             fifo_depth,
-                                                            (void*)(&m_rsp_routing_table),
+                                                            (void*)(&m_rsp_rt),
                                                             false );
-
- 
     SC_METHOD(transition);
     dont_initialize();
     sensitive << p_clk.pos();
@@ -693,8 +695,8 @@ tmpl(/**/)::~VciVgmn()
 {
     delete m_rsp_mn;
     delete m_cmd_mn;
-    soclib::common::dealloc_elems(p_to_initiator, m_nb_initiat);
-    soclib::common::dealloc_elems(p_to_target, m_nb_target);
+    soclib::common::dealloc_elems( p_to_initiator, m_nb_initiators );
+    soclib::common::dealloc_elems( p_to_target, m_nb_targets );
 }
 
 }}

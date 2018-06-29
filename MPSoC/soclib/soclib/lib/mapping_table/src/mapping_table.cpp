@@ -20,10 +20,21 @@
  * SOCLIB_LGPL_HEADER_END
  *
  * Copyright (c) UPMC, Lip6, Asim
- *         Nicolas Pouillon <nipo@ssji.net>, 2007
+ *         Alain Greiner <alain.greiner@lip6.fr> 2005 
+ *         Nicolas Pouillon <nipo@ssji.net> 2007
+ *         Alain Greiner <alain.greiner@lip6.fr> 2013
  *
- * Based on previous works by Francois Pecheux & Alain Greiner
+ * Maintainers: alain
  */
+
+/////////////////////////////////////////////////////////////////////////////
+// Implementation Note (October 2013)
+// 1) Regarding the various ADDRESS or SRCID decoding tables:
+//   - ADDRESSES values are supposed to use uint64_t type
+//   - SRCID values     are supposed to use uint32_t type
+// 2) Regarding SRCID decoding, the m_srcid[array] is always used.
+//    Identity mapping is handled as a default value: m_srcid_array[i] = i
+/////////////////////////////////////////////////////////////////////////////
 
 #include <cassert>
 #include <sstream>
@@ -32,28 +43,37 @@
 namespace soclib { namespace common {
 
 ///////////////////////////
-MappingTable::MappingTable(
-    size_t addr_width,
-    const IntTab &level_addr_bits,
-    const IntTab &level_id_bits,
-    const addr64_t cacheability_mask )
+MappingTable::MappingTable( size_t         addr_width,
+                            const IntTab   &level_addr_bits,
+                            const IntTab   &level_id_bits,
+                            const uint64_t cacheability_mask )
         : m_segment_list(),
-          m_addr_width(addr_width),
-          m_addr_mask((addr_width == 64) ? ((addr64_t)-1) : (((addr64_t)1<<addr_width)-1)),
-          m_level_addr_bits(level_addr_bits),
-          m_level_id_bits(level_id_bits),
-          m_cacheability_mask(cacheability_mask),
-          m_used(false)
+          m_addr_width( addr_width ),
+          m_srcid_width( level_id_bits.sum() ),
+          m_addr_mask((addr_width == 64) ? ((uint64_t)-1) : (((uint64_t)1<<addr_width)-1)),
+          m_level_addr_bits( level_addr_bits ),
+          m_level_id_bits( level_id_bits ),
+          m_cacheability_mask( cacheability_mask ),
+          m_used( false )
 {
-    m_rt_size = 1ULL << (addr_width - m_level_addr_bits.sum());
-    addr64_t cm_rt_size = 1 << AddressMaskingTable<addr64_t>(m_cacheability_mask).getDrop();
-    m_rt_size = std::min<addr64_t>(cm_rt_size, m_rt_size);
+    assert( (addr_width <= 64) and
+    "ERROR in mapping table : address larger than 64 bits not supported\n");
 
-    m_srcid_array = new size_t[1<<m_level_id_bits.sum()];
+    m_rt_size = 1ULL << (addr_width - m_level_addr_bits.sum());
+    uint64_t cm_rt_size = 1 << AddressMaskingTable<uint64_t>(m_cacheability_mask).getDrop();
+    m_rt_size = std::min<uint64_t>(cm_rt_size, m_rt_size);
+
+    size_t srcid_size  = 1<<m_srcid_width;
+
+    m_srcid_array = new size_t[srcid_size];
+
+    // set identity default values
+    for( size_t i=0 ; i<srcid_size ; i++ ) m_srcid_array[i] = i;
 }
 
-
-MappingTable::~MappingTable() {
+/////////////////////////////
+MappingTable::~MappingTable() 
+{
     delete [] m_srcid_array;
 }
 
@@ -86,11 +106,14 @@ const MappingTable &MappingTable::operator=( const MappingTable &ref )
 
 /////////////////////////////////////////////////////
 void MappingTable::srcid_map( const IntTab   &srcid,
-                              size_t         portid )
+                              const IntTab   &portid )
 {
-    m_srcid_array[indexForId(srcid)] = portid;
+    const int index = indexForId(srcid);
+    assert((index < (1 << m_srcid_width)) &&
+           "srcid do not fit the srcid width");
+    m_srcid_array[index] = indexForId(portid);
 }
- 
+
 /////////////////////////////////////////////
 void MappingTable::add( const Segment &_seg )
 {
@@ -102,9 +125,9 @@ void MappingTable::add( const Segment &_seg )
 
     if ( seg.index().level() != m_level_addr_bits.level() ) 
     {
-        std::ostringstream o;
-        o << seg << " is not the same level as the mapping table.";
-        throw soclib::exception::ValueError(o.str());
+        std::cout << "ERROR in mapping table for segment " << seg
+                  << " : inconsistent level" << std::endl;
+        exit(0);
     }
 
     for ( i = m_segment_list.begin();
@@ -112,18 +135,19 @@ void MappingTable::add( const Segment &_seg )
           i++ ) 
     {
         Segment &s = *i;
-        if ( s.isOverlapping(seg) ) {
-            std::ostringstream o;
-            o << seg << " bumps in " << s;
-            throw soclib::exception::Collision(o.str());
+        if ( s.isOverlapping(seg) ) 
+        {
+            std::cout << "ERROR in mapping table for segment " << seg
+                      << " : bumps in segment " << s << std::endl;
+            exit(0);
         }
 
-        for ( addr64_t address = s.baseAddress() & ~(m_rt_size-1);
+        for ( uint64_t address = s.baseAddress() & ~(m_rt_size-1);
               (address < s.baseAddress()+s.size()) &&
                   (address >= (s.baseAddress() & ~(m_rt_size-1)));
               address += m_rt_size ) 
         {
-            for ( addr64_t segaddress = seg.baseAddress() & ~(m_rt_size-1);
+            for ( uint64_t segaddress = seg.baseAddress() & ~(m_rt_size-1);
                   (segaddress < seg.baseAddress()+seg.size()) &&
                       (segaddress >= (seg.baseAddress() & ~(m_rt_size-1)));
                   segaddress += m_rt_size ) 
@@ -131,11 +155,10 @@ void MappingTable::add( const Segment &_seg )
                 if ( (m_cacheability_mask & address) == (m_cacheability_mask & segaddress)
                     && s.cacheable() != seg.cacheable() ) 
                 {
-                    std::ostringstream oss;
-                    oss << "Segment " << s
-                        << " has a different cacheability attribute with same MSBs than " 
-                        << seg << std::endl;
-                    throw soclib::exception::RunTimeError(oss.str());
+                    std::cout << "ERROR in mapping table for segment " << seg
+                              << " : has different cacheability with same mask "
+                              << " bits than segment " << s << std::endl;
+                    exit(0);
                 }
             }
         }
@@ -183,7 +206,9 @@ Segment MappingTable::getSegment( const IntTab &index ) const
 
     const_cast<MappingTable*>(this)->m_used = true;
 
-    assert(list.size() == 1);
+    assert( (list.size() == 1) and
+    "ERROR in getSegment() : more than one segment allocated to target\n");
+
     return list.front();
 }
 
@@ -195,17 +220,18 @@ Segment MappingTable::getSegment( const IntTab &index ) const
 // This ADT can depend on the cluster_id.
 ///////////////////////////////////////////////////////////////////////////
 AddressDecodingTable<uint64_t,size_t> 
-MappingTable::getPortidFromAddress( const size_t cluster_id, 
-                                    const size_t default_tgt_id ) const
+MappingTable::getLocalIndexFromAddress( const size_t cluster_id, 
+                                        const size_t default_target_id ) const
 {
-    // checking mapping table (two levels interconnect)
+    // checking two levels interconnect
     if ( m_level_addr_bits.level() != 2 )
     {
-        std::cout << "ERROR in Mapping Table : the getPortidfromAddress() function"
+        std::cout << "ERROR in Mapping Table : the getLocalIndexFromAddress() function"
                   << " requires a two levels interconnect" << std::endl;
-        std::cout << *this << std::endl;
         exit(0);
     }
+
+    const_cast<MappingTable*>(this)->m_used = true;
 
     size_t global_bits  = m_level_addr_bits[0];   // number of address global bits
     size_t local_bits   = m_level_addr_bits[1];   // number of address local bits
@@ -213,14 +239,12 @@ MappingTable::getPortidFromAddress( const size_t cluster_id,
     // ADT to be returned
     AddressDecodingTable<uint64_t,size_t> 
     adt( local_bits, m_addr_width - global_bits - local_bits );
-	adt.reset( default_tgt_id );
+	adt.reset( default_target_id );
 
     // temporary ADT for checking
     AddressDecodingTable<uint64_t,bool>
     done( local_bits, m_addr_width - global_bits - local_bits );
 	done.reset( false );
-
-    const_cast<MappingTable*>(this)->m_used = true;
 
     // loop on all segments
     std::list<Segment>::const_iterator seg;
@@ -231,11 +255,9 @@ MappingTable::getPortidFromAddress( const size_t cluster_id,
         // skip segment if cluster_id does not match
         if ( (size_t)seg->index()[0] != cluster_id )    continue; 
 
-        uint64_t base = seg->baseAddress() & ~(m_rt_size-1);
-
         // loop on all possible values for the address local bits
-        for ( uint64_t addr = base ;
-              (addr < base + seg->size()) and (addr >= base);
+        for ( uint64_t addr = seg->baseAddress() & ~(m_rt_size-1);
+              addr < (seg->baseAddress() + seg->size());
               addr += m_rt_size ) 
         {
             size_t port_id = seg->index()[1];
@@ -244,233 +266,274 @@ MappingTable::getPortidFromAddress( const size_t cluster_id,
             {
                 std::cout << "ERROR in Mapping Table : segment " << *seg
                           << " allocated to a different target than another segment"
-                          << " with the same routing bits" << std::endl;
-                std::cout << *this << std::endl;
+                          << " with the same local routing bits" << std::endl;
+                exit(0);
             }
             adt.set( addr, port_id );
             done.set( addr, true );
         }
 	}
-
     return adt;
-}
+} // end getLocalIndexFromAddress()
 
 ///////////////////////////////////////////////////////////////////////////
 // This function returns an ADT that can be used to get
-// the local port_id for an initiator identified by the VCI srcid
+// the local port_id for an initiator identified by the SRCID
 // in a clusterized architecture (two levels interconnect).
-// Only the local bits in the srcid are decoded.
+// Only the local bits in the SRCID are decoded.
 // This ADT can depend on the cluster_id.
 ///////////////////////////////////////////////////////////////////////////
-AddressDecodingTable<uint64_t, size_t> 
-MappingTable::getPortidFromSrcid( const size_t cluster_id ) const
+AddressDecodingTable<uint32_t, size_t> 
+MappingTable::getLocalIndexFromSrcid( const size_t cluster_id ) const
 {
-    // checking mapping table (two levels interconnect)
+    // checking two levels interconnect
     if ( m_level_addr_bits.level() != 2 )
     {
-        std::cout << "ERROR in Mapping Table : the getPortidfromSrcid() function"
+        std::cout << "ERROR in Mapping Table : the getLocalIndexFromSrcid() function"
                   << " requires a two levels interconnect" << std::endl;
-        std::cout << *this << std::endl;
         exit(0);
     }
 
-    size_t local_id_bits  = m_level_id_bits[1];   // number of local bits in SRCID 
-    size_t local_id_max   = 1<<local_id_bits;     // adt size
-
     const_cast<MappingTable*>(this)->m_used = true;
 
+    size_t local_width  = m_level_id_bits[1];   // number of local bits in SRCID 
+    size_t adt_size   = 1<<local_width;         // number of entries in adt
+    size_t local_mask = adt_size - 1;           // SRCID mask for local bits
+
     // ADT to be returned
-    AddressDecodingTable<uint64_t, size_t> adt(local_id_bits, 0);
+    AddressDecodingTable<uint32_t, size_t> 
+    adt(local_width, 0);
 
-    for ( size_t loc = 0 ; loc < local_id_max ; loc++ )
+    // loop on all possible local index values
+    for ( size_t i = 0 ; i < adt_size ; i++ )
     {
-        uint64_t srcid = (cluster_id<<local_id_bits) + loc;
-        adt.set( srcid , m_srcid_array[srcid] );
+        size_t srcid = (cluster_id<<local_width) + i;
+        adt.set( srcid, m_srcid_array[srcid] & local_mask );
     }
-
     return adt;
-}
+} // end getLocalIndexFromSrcid()
 
 ////////////////////////////////////////////////////////////
 // This function returns an ADT that can be used to get
-// the cacheability attribute from a physical address
+// the "is_local" condition from a physical address
+// in a clusterized architecture (two levels interconnect).
+// Only the global bits in the address are decoded.
 ////////////////////////////////////////////////////////////
-template<typename desired_addr_t>
-AddressDecodingTable<desired_addr_t, bool> 
-MappingTable::getCacheabilityTable() const
+AddressDecodingTable<uint64_t, bool>
+MappingTable::getLocalMatchFromAddress( const size_t cluster_id ) const
 {
+    // checking two levels interconnect
+    if ( m_level_addr_bits.level() != 2 )
+    {
+        std::cout << "ERROR in Mapping Table : the getLocalMatchFromAddress() function"
+                  << " requires a two levels interconnect" << std::endl;
+        exit(0);
+    }
+
+    const_cast<MappingTable*>(this)->m_used = true;
+
+    // number of global bits in physical address
+	size_t global_bits = m_level_addr_bits[0];
+
     // ADT to be returned
-    AddressDecodingTable<desired_addr_t, bool> adt(m_cacheability_mask);
+    AddressDecodingTable<uint64_t, bool> 
+    adt( global_bits, m_addr_width - global_bits );
 	adt.reset(false);
 
     // temporary ADT for checking
-    AddressDecodingTable<desired_addr_t, bool> done(m_cacheability_mask);
+    AddressDecodingTable<uint64_t, bool> 
+    done( global_bits, m_addr_width - global_bits );
+	done.reset(false);
+
+    // loop on all segments
+    std::list<Segment>::const_iterator seg;
+    for ( seg = m_segment_list.begin();
+          seg != m_segment_list.end();
+          seg++ ) 
+    {
+        bool local = ( (size_t)(seg->index()[0]) == cluster_id );
+
+        for ( uint64_t addr = seg->baseAddress() & ~(m_rt_size-1);
+              addr < (seg->baseAddress() + seg->size());
+              addr += m_rt_size ) 
+        {
+            if ( done[addr] && adt[addr] != local ) 
+            {
+                std::cout << "ERROR in Mapping Table : segment " << *seg
+                          << " allocated to a different target than another segment"
+                          << " with the same global routing bits" << std::endl;
+                exit(0);
+            }
+            adt.set( addr, local );
+            done.set( addr, true );
+        }
+	}
+    return adt;
+} // end getLocalMatchFromAddress()
+
+////////////////////////////////////////////////////////////
+// This function returns an ADT that can be used to get
+// the "is_local" condition from the SRCID value
+// in a clusterized architecture (two levels interconnect).
+// Only the global bits in the SRCID are decoded.
+// We do not asssume identity mapping for m_srcid_array[]
+////////////////////////////////////////////////////////////
+AddressDecodingTable<uint32_t, bool>
+MappingTable::getLocalMatchFromSrcid( const size_t cluster_id ) const
+{
+    // checking two levels interconnect
+    if ( m_level_addr_bits.level() != 2 )
+    {
+        std::cout << "ERROR in Mapping Table : the getLocalMatchFromSrcid() function"
+                  << " requires a two levels interconnect" << std::endl;
+        exit(0);
+    }
+
+    const_cast<MappingTable*>(this)->m_used = true;
+
+	size_t global_width = m_level_id_bits[0];  // number of global bits in SRCID
+	size_t local_width  = m_level_id_bits[1];  // number of local bits in SRCID
+    size_t adt_size     = 1<<global_width;     // number of entries in adt
+
+    // ADT to be returned
+    AddressDecodingTable<uint32_t, bool> 
+    adt( global_width, local_width );
+
+    // loop on all possible global index values)
+    for ( size_t i = 0 ; i < adt_size ; i++ )
+    {
+        bool match = ( cluster_id == (m_srcid_array[i<<local_width]>>local_width) );
+        adt.set( i<<local_width , match );
+    }
+    return adt;
+} // end getLocalMatchFromAddress()
+
+//////////////////////////////////////////////////////////////////
+// This function returns an ADT that can be used to get
+// the target port index from the MSB bits of a physical address.
+// It can be used in a flat (non clusterized) interconnect,
+// or in a two level interconnect to perform global routing.
+// Only the global bits in the address are decoded.
+//////////////////////////////////////////////////////////////////
+AddressDecodingTable<uint64_t, size_t>
+MappingTable::getGlobalIndexFromAddress( const size_t default_id ) const
+{
+    const_cast<MappingTable*>(this)->m_used = true;
+
+	size_t global_bits = m_level_addr_bits[0];
+
+    //  ADT to be returned 
+    AddressDecodingTable<uint64_t, size_t> 
+    adt( global_bits, m_addr_width - global_bits );
+	adt.reset( default_id );
+
+    // temporary ADT for checking
+    AddressDecodingTable<uint64_t, bool>
+    done( global_bits, m_addr_width - global_bits );
+	done.reset(false);
+
+    // loop on all segments
+    std::list<Segment>::const_iterator seg;
+    for ( seg = m_segment_list.begin();
+          seg != m_segment_list.end();
+          seg++ ) 
+    {
+        size_t global_id = (size_t)(seg->index()[0]);
+
+        for ( uint64_t addr = seg->baseAddress() & ~(m_rt_size-1);
+              addr < (seg->baseAddress() + seg->size());
+              addr += m_rt_size ) 
+        {
+            if ( done[addr] && adt[addr] != global_id ) 
+            {
+                std::cout << "ERROR in Mapping Table : segment " << *seg
+                          << " allocated to a different target than another segment"
+                          << " with the same global routing bits" << std::endl;
+                exit(0);
+            }
+            adt.set( addr, global_id );
+            done.set( addr, true );
+        }
+	}
+    return adt;
+} // end getGlobaIndexFromAddress()
+
+//////////////////////////////////////////////////////////////////
+// This function returns an ADT that can be used to get
+// the initiator port index from the MSB bits of a SRCID.
+// It can be used in a flat (non clusterized) interconnect,
+// or in a two level interconnect to perform global routing.
+// Only the global bits in the SRCID are decoded.
+//////////////////////////////////////////////////////////////////
+AddressDecodingTable<uint32_t, size_t>
+MappingTable::getGlobalIndexFromSrcid() const
+{
+    const_cast<MappingTable*>(this)->m_used = true;
+
+    size_t global_width = m_level_id_bits[0];
+    size_t local_width  = m_srcid_width - global_width;
+    size_t adt_size     = 1<<global_width;
+
+    //  ADT to be returned 
+    AddressDecodingTable<uint32_t, size_t> 
+    adt( global_width, local_width );
+
+    // loop on all possible global index values)
+    for ( size_t i = 0 ; i < adt_size ; i++ )
+    {
+        size_t global_id = m_srcid_array[i<<local_width]>>local_width;
+        adt.set( i<<local_width , global_id );
+    }
+    return adt;
+} // end getGlobaIndexFromSrcid()
+
+////////////////////////////////////////////////////////////////////////
+// This function returns an ADT that can be used to get
+// the cacheability attribute from a physical address.
+// Only the bits corresponding to the cacheability mask are decoded.
+////////////////////////////////////////////////////////////////////////
+AddressDecodingTable<uint64_t, bool> 
+MappingTable::getCacheabilityTable() const
+{
+    // ADT to be returned
+    AddressDecodingTable<uint64_t, bool> 
+    adt(m_cacheability_mask);
+	adt.reset(false);
+
+    // temporary ADT for checking
+    AddressDecodingTable<uint64_t, bool> 
+    done(m_cacheability_mask);
 	done.reset(false);
 
     const_cast<MappingTable*>(this)->m_used = true;
 
-    std::list<Segment>::const_iterator i;
-    for ( i = m_segment_list.begin();
-          i != m_segment_list.end();
-          i++ ) 
+    // loop on all segments
+    std::list<Segment>::const_iterator seg;
+    for ( seg = m_segment_list.begin();
+          seg != m_segment_list.end();
+          seg++ ) 
     {
-        for ( desired_addr_t addr = i->baseAddress() & ~(m_rt_size-1);
-              (addr < i->baseAddress()+i->size()) &&
-                  (addr >= (i->baseAddress() & ~(m_rt_size-1)));
+        for ( uint64_t addr = seg->baseAddress() & ~(m_rt_size-1);
+              addr < (seg->baseAddress() + seg->size());
               addr += m_rt_size ) 
         {
-            if ( done[addr] && adt[addr] != i->cacheable() ) 
+            if ( done[addr] and adt[addr] != seg->cacheable() ) 
             {
-                std::ostringstream oss;
-                oss << "Incoherent Mapping Table:" << std::endl
-                    << "Segment " << *i 
-                    << " has different cacheability than other segment with same mask"
-                    << std::endl
-                    << "Mapping table:" << std::endl
-                    << *this;
-                throw soclib::exception::RunTimeError(oss.str());
+                std::cout << "ERROR in Mapping Table : segment " << *seg
+                          << " has different cacheability than other segment "
+                          << " with the same cacheability mask" << std::endl;
+                exit(0);
             }
-            adt.set( addr, i->cacheable() );
+            adt.set( addr, seg->cacheable() );
             done.set( addr, true );
         }
     }
     return adt;
-}
-
-////////////////////////////////////////////////////////////
-/// This function returns an ADT that can be used to get
-// the local condition from a physical address
-////////////////////////////////////////////////////////////
-template<typename desired_addr_t> 
-AddressDecodingTable<desired_addr_t, bool>
-MappingTable::getLocalityTable( const IntTab &index ) const
-{
-	size_t nbits = m_level_addr_bits.sum(index.level());
-
-    // ADT to be returned
-    AddressDecodingTable<desired_addr_t, bool> adt(nbits, m_addr_width - nbits);
-	adt.reset(true);
-
-    // temporary ADT for checking
-    AddressDecodingTable<desired_addr_t, bool> done(nbits, m_addr_width - nbits);
-	done.reset(false);
-
-    const_cast<MappingTable*>(this)->m_used = true;
-
-    std::list<Segment>::const_iterator i;
-    for ( i = m_segment_list.begin();
-          i != m_segment_list.end();
-          i++ ) 
-    {
-        for ( desired_addr_t addr = i->baseAddress() & ~(m_rt_size-1);
-              (addr < i->baseAddress()+i->size()) &&
-                  (addr >= (i->baseAddress() & ~(m_rt_size-1)));
-              addr += m_rt_size ) 
-        {
-            bool val = (i->index().idMatches(index) );
-
-            if ( done[addr] && adt[addr] != val ) 
-            {
-                std::ostringstream oss;
-                oss << "Incoherent Mapping Table:" << std::endl
-                    << "Segment " << *i 
-                    << " targets different component than other segments with same MSBs" 
-                    << std::endl
-                    << "Mapping table:" << std::endl
-                    << *this;
-                throw soclib::exception::RunTimeError(oss.str());
-            }
-            adt.set( addr, val );
-            done.set( addr, true );
-        }
-	}
-    return adt;
-}
-
-///////////////////////////////////////////////////////////
-// This function returns an ADT that can be used to get
-// the target port index from a physical address
-///////////////////////////////////////////////////////////
-template<typename desired_addr_t>
-AddressDecodingTable<desired_addr_t, int>
-MappingTable::getRoutingTable( const IntTab &index, int default_index ) const
-{
-#ifdef SOCLIB_MODULE_DEBUG
-    std::cout << __FUNCTION__ << std::endl;
-#endif
-	size_t before = m_level_addr_bits.sum(index.level());
-	size_t at     = m_level_addr_bits[index.level()];
-
-    //  ADT to be returned 
-    AddressDecodingTable<desired_addr_t, int> adt(at, m_addr_width - at - before);
-	adt.reset(default_index);
-
-    // temporary ADT for checking
-    AddressDecodingTable<desired_addr_t, bool> done(at, m_addr_width - at - before);
-	done.reset(false);
-
-    const_cast<MappingTable*>(this)->m_used = true;
-
-    std::list<Segment>::const_iterator i;
-    for ( i = m_segment_list.begin();
-          i != m_segment_list.end();
-          i++ ) 
-    {
-#ifdef SOCLIB_MODULE_DEBUG
-        std::cout << *i
-                  << ", m_rt_size=" << m_rt_size
-                  << ", m_rt_mask=" << ~(m_rt_size-1)
-                  << std::endl;
-#endif
-        if ( ! i->index().idMatches(index) ) 
-        {
-#ifdef SOCLIB_MODULE_DEBUG
-			std::cout << i->index() << " does not match " << index << std::endl;
-#endif
-			continue;
-		}
-
-        #ifdef SOCLIB_MODULE_DEBUG
-        std::cout
-            << ' ' << (i->baseAddress() & ~(m_rt_size-1))
-            << ' ' << (i->baseAddress() + i->size())
-            << ' ' << (((i->baseAddress() & ~(m_rt_size-1)) < i->baseAddress()+i->size()))
-            << ' ' << (((i->baseAddress() & ~(m_rt_size-1)) >= (i->baseAddress() & ~(m_rt_size-1))))
-            << std::endl;
-        #endif
-
-        for ( desired_addr_t addr = i->baseAddress() & ~(m_rt_size-1);
-              (addr < i->baseAddress()+i->size()) &&
-                  (addr >= (i->baseAddress() & ~(m_rt_size-1)));
-              addr += m_rt_size ) 
-        {
-            int val = i->index()[index.level()];
-
-            #ifdef SOCLIB_MODULE_DEBUG
-			std::cout << addr << " -> " << val << std::endl;
-            #endif
-
-            if ( done[addr] && adt[addr] != val ) 
-            {
-                std::ostringstream oss;
-                oss << "Incoherent Mapping Table: for " << index << std::endl
-                    << "Segment " << *i << " targets different target (or cluster) than other segments with same routing bits" << std::endl
-                    << "Mapping table:" << std::endl
-                    << *this;
-                  throw soclib::exception::RunTimeError(oss.str());
-            }
-            adt.set( addr, val );
-            done.set( addr, true );
-        }
-#ifdef SOCLIB_MODULE_DEBUG
-        std::cout << std::endl;
-#endif
-	}
-    return adt;
-}
+} // end getCacheabilityFromAddress() 
 
 //////////////////////////////////////////////////
 void MappingTable::print( std::ostream &o ) const
+//////////////////////////////////////////////////
 {
     std::list<Segment>::const_iterator i;
 
@@ -480,64 +543,12 @@ void MappingTable::print( std::ostream &o ) const
       << std::endl;
     for ( i = m_segment_list.begin();
           i != m_segment_list.end();
-          i++ ) {
+          i++ ) 
+    {
         o << " " << (*i) << std::endl;
     }
 }
 
-/////////////////////////////////////////////////////////
-AddressMaskingTable<uint32_t> 
-MappingTable::getIdMaskingTable( const int level ) const
-{
-    int use = m_level_id_bits[level];
-    int drop = 0;
-    const_cast<MappingTable*>(this)->m_used = true;
-
-    for ( size_t i=level+1; i<m_level_id_bits.level(); ++i )
-        drop += m_level_id_bits[i];
-    return AddressMaskingTable<uint32_t>( use, drop );
-}
-
-/////////////////////////////////////
-AddressDecodingTable<uint32_t, bool> 
-MappingTable::getIdLocalityTable( const IntTab &index ) const
-{
-    size_t 	nbits = m_level_id_bits.sum(index.level());
-    size_t 	id_width = m_level_id_bits.sum();
-    IntTab	complete_index(index, 0);
-    uint32_t 	match = (uint32_t)indexForId(complete_index);
-    const_cast<MappingTable*>(this)->m_used = true;
-
-    AddressDecodingTable<uint32_t, bool> adt(nbits, id_width-nbits);
-    adt.reset(false);
-    adt.set(match, true);
-    return adt;
-}
-
-template
-AddressDecodingTable<uint64_t, bool>
-MappingTable::getCacheabilityTable<uint64_t>() const;
-
-template
-AddressDecodingTable<uint64_t, bool>
-MappingTable::getLocalityTable<uint64_t>( const IntTab &index ) const;
-
-template
-AddressDecodingTable<uint64_t, int>
-MappingTable::getRoutingTable<uint64_t>( const IntTab &index, int default_index ) const;
-    
-template
-AddressDecodingTable<uint32_t, bool>
-MappingTable::getCacheabilityTable<uint32_t>() const;
-
-template
-AddressDecodingTable<uint32_t, bool>
-MappingTable::getLocalityTable<uint32_t>( const IntTab &index ) const;
-
-template
-AddressDecodingTable<uint32_t, int>
-MappingTable::getRoutingTable<uint32_t>( const IntTab &index, int default_index ) const;
-    
 }}
 
 // Local Variables:

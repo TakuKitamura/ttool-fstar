@@ -30,6 +30,7 @@
 
 #include <vector>
 #include "exception.h"
+#include <cstdlib>
 
 namespace soclib { namespace common {
 
@@ -126,7 +127,8 @@ private:
                 return;
             }
         }
-        throw soclib::exception::ValueError("Too much levels");
+        std::cout << "ERROR IntTab.init() function : Too much levels" << std::endl;
+        exit(0);
     }
 
 public:
@@ -134,7 +136,10 @@ public:
     value_t operator[]( size_t level ) const
     {
         if ( level > m_level )
-            throw soclib::exception::ValueError("Level out of bounds");
+        {
+            std::cout << "ERROR IntTab.[] operator : level too large" << std::endl;
+            exit(0);
+        }
         return m_values[level];
     }
 
@@ -142,7 +147,10 @@ public:
     value_t operator*( const IntTab &widths ) const
     {
         if ( widths.level() != m_level )
-            throw soclib::exception::ValueError("Levels not matching");
+        {
+            std::cout << "ERROR IntTab.* operator : levels not matching" << std::endl;
+            exit(0);
+        }
         value_t ret = 0;
 
         for ( size_t l=0; l<m_level; ++l ) {
