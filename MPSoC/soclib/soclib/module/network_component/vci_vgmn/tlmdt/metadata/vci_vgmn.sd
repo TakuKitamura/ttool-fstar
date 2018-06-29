@@ -20,24 +20,22 @@
 # 
 # SOCLIB_LGPL_HEADER_END
 #
-# Maintainers: fpecheux, nipo, alinevieiramello@hotmail.com, hgioja
+# Maintainers: fpecheux, nipo, alinevieiramello@hotmail.com, hgioja, alain
 #
 # Copyright (c) UPMC / Lip6, 2008
 #     Francois Pecheux <francois.pecheux@lip6.fr>
 #     Nicolas Pouillon <nipo@ssji.net>
 #     Aline Vieira de Mello <aline.vieira-de-mello@lip6.fr>
 #     Hermann Gioja <hermann.gioja@lip6.fr>
+#     Alain.Greiner <alain.greiner@lip6.fr>
 
-
-__id__ = "$Id: vci_vgmn.sd 917 2009-03-12 10:10:06Z nipo $"
-__version__ = "$Revision: 917 $"
 
 Module('tlmdt:vci_vgmn',
        classname = 'soclib::tlmdt::VciVgmn',
        header_files = [ '../source/include/vci_vgmn.h', ],
        implementation_files = ['../source/src/vci_vgmn.cpp', ],
        uses = [ Uses('common:tlmdt'),
-		Uses('tlmdt:interconnect'),
-		],
-      #debug = True,
+                Uses('common:mapping_table'),
+                Uses('tlmdt:centralized_buffer'),
+		      ],
        )

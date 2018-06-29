@@ -106,7 +106,7 @@ public:
 private:
 
     // STRUCTURAL PARAMETERS
-    const soclib::common::AddressDecodingTable<uint32_t, bool>  m_cacheability_table;
+    const soclib::common::AddressDecodingTable<uint64_t, bool>  m_cacheability_table;
     iss_t                                                       m_iss;
     const uint32_t                                              m_srcid;
 
@@ -122,6 +122,10 @@ private:
     typename iss_t::InstructionResponse         m_irsp;
     typename iss_t::DataRequest                 m_dreq;
     typename iss_t::DataResponse                m_drsp;
+
+    // Debug variables
+    bool                                        m_debug_previous_i_hit;
+    bool                                        m_debug_previous_d_hit;
 
     // REGISTERS
     sc_signal<int>          r_dcache_fsm;
@@ -168,7 +172,6 @@ private:
     // Activity counters
     uint32_t m_cpt_icache_read;             // ICACHE READ
     uint32_t m_cpt_icache_write;            // ICACHE WRITE
-
     uint32_t m_cpt_dcache_read;             // DCACHE READ
     uint32_t m_cpt_dcache_write;            // DCACHE WRITE
 
@@ -180,24 +183,18 @@ private:
     uint32_t m_cpt_write;                   // total number of write instructions
     uint32_t m_cpt_data_miss;               // number of read miss
     uint32_t m_cpt_ins_miss;                // number of instruction miss
-    uint32_t m_cpt_unc_read;                // number of read uncached
+    uint32_t m_cpt_data_unc;                // number of data read/write uncached
+    uint32_t m_cpt_ins_unc;                 // number of instruction uncached
     uint32_t m_cpt_write_cached;            // number of cached write
 
     uint32_t m_cost_write_frz;              // frozen cycles related to write buffer
     uint32_t m_cost_data_miss_frz;          // frozen cycles related to data miss
-    uint32_t m_cost_unc_read_frz;           // frozen cycles related to uncached read
     uint32_t m_cost_ins_miss_frz;           // frozen cycles related to ins miss
+    uint32_t m_cost_data_unc_frz;           // frozen cycles related to uncached R/W
+    uint32_t m_cost_ins_unc_frz;            // frozen cycles related to uncached ins
 
-    uint32_t m_cpt_imiss_transaction;       // VCI instruction miss transactions
-    uint32_t m_cpt_dmiss_transaction;       // VCI data miss transactions
-    uint32_t m_cpt_unc_transaction;         // VCI uncached read transactions
     uint32_t m_cpt_write_transaction;       // VCI write transactions
-
-    uint32_t m_cost_imiss_transaction;      // cumulated duration IMISS transactions
-    uint32_t m_cost_dmiss_transaction;      // cumulated duration DMISS transactions
-    uint32_t m_cost_unc_transaction;        // cumulated duration UNC transactions
-    uint32_t m_cost_write_transaction;      // cumulated duration WRITE transactions
-    uint32_t m_length_write_transaction;    // cumulated length   WRITE transactions
+    uint32_t m_length_write_transaction;    // cumulated length VCI write transactions
 
 
 protected:
@@ -221,10 +218,10 @@ public:
 
     void print_cpi();
     void print_stats();
-    void print_latency();//DG
     void print_trace(size_t mode = 0);
     void file_stats(FILE* file);
     void file_trace(FILE* file);
+    void cache_monitor( addr_t addr);
 
 private:
 

@@ -21,12 +21,13 @@
  * SOCLIB_LGPL_HEADER_END
  *
  * Copyright (c) UPMC, Lip6, Asim
- *         Nicolas Pouillon <nipo@ssji.net>, 2007
+ *         Alain Greiner <alain.greiner@lip6.fr> 2005
+ *         Nicolas Pouillon <nipo@ssji.net> 2007
+ *         Alain Greiner <alain.greiner@lip6.fr> 2013
  *
- * Based on previous works by Laurent Mortiez & Alain Greiner, 2005
- *
- * Maintainers: nipo
+ * Maintainers: alain
  */
+
 #ifndef SOCLIB_CABA_VCI_VGMN_H_
 #define SOCLIB_CABA_VCI_VGMN_H_
 
@@ -34,8 +35,7 @@
 #include "caba_base_module.h"
 #include "vci_initiator.h"
 #include "vci_target.h"
-#include "vci_buffers.h" 
-//#include "vci_buffers_vgmn.h" //DG 31.08. we require a different kind of buffer than the vci_local_crossbar
+#include "vci_buffers.h"
 #include "address_decoding_table.h"
 #include "address_masking_table.h"
 #include "mapping_table.h"
@@ -51,6 +51,7 @@ template<typename vci_flit_t,
          typename vci_input_t,
          typename vci_output_t> class VgmnMicroNetwork;
 
+///////////////////////////////////
 template<typename vci_param>
 class VciVgmn
     : public soclib::caba::BaseModule
@@ -63,11 +64,11 @@ public:
     VciTarget<vci_param>                        *p_to_initiator;
 
 private:
-    const size_t                                m_nb_initiat;
-    const size_t                                m_nb_target;
+    const size_t                                m_nb_initiators;
+    const size_t                                m_nb_targets;
 
-    AddressDecodingTable<uint32_t, int>         m_cmd_routing_table;
-    AddressMaskingTable<uint32_t>               m_rsp_routing_table;
+    AddressDecodingTable<uint64_t, size_t>      m_cmd_rt;
+    AddressDecodingTable<uint32_t, size_t>      m_rsp_rt;
  
     VgmnMicroNetwork<VciCmdBuffer<vci_param>,
                      VciTarget<vci_param>,
@@ -86,13 +87,13 @@ protected:
 public:
     void print_trace();
 
-    VciVgmn( sc_module_name name,
+    VciVgmn( sc_module_name                      name,
               const soclib::common::MappingTable &mt,
-              size_t nb_initiat,
-              size_t nb_target,
-              size_t min_latency,
-              size_t fifo_depth,
-              const soclib::common::IntTab &default_index = 0);
+              size_t                             nb_initiators,
+              size_t                             nb_targets,
+              size_t                             min_latency,
+              size_t                             fifo_depth,
+              const size_t                       default_index = 0 );
 
     ~VciVgmn();
 };

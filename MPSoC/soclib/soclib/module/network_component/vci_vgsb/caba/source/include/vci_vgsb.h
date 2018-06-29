@@ -102,9 +102,9 @@ class VciVgsb
 	sc_signal<uint32_t>						r_cycle;
 	
 	// constants
-	const soclib::common::AddressDecodingTable<uint32_t, int> 	m_routing_table;
-	const size_t 							m_nb_initiator;	
-	const size_t 							m_nb_target;
+	const soclib::common::AddressDecodingTable<uint64_t, size_t> m_routing_table;
+	const size_t 							                     m_nb_initiator;	
+	const size_t 							                     m_nb_target;
 
 protected:
 
@@ -122,7 +122,8 @@ public:
 	VciVgsb( sc_module_name                 name,
              soclib::common::MappingTable 	&maptab,
              size_t	                        nb_master,
-             size_t	                        nb_slave );
+             size_t	                        nb_slave,
+             size_t                         default_target = 0 );
 
 	~VciVgsb();
 
@@ -132,7 +133,7 @@ public:
 	void genMealy_rspack();
 	void genMealy_cmdval();
 	void genMealy_cmdack();
-        void print_trace();
+    void print_trace();
 
 }; // end class VciVgsb
 

@@ -31,39 +31,43 @@
 #ifndef __INTERCONNECT_H__ 
 #define __INTERCONNECT_H__
 
-#include <tlmdt>	                                        // TLM-DT headers
-#include "mapping_table.h"                                      // mapping table
-#include "centralized_buffer.h"                                 // centralized buffer
+#include <tlmdt>	            // TLM-DT headers
+#include "mapping_table.h"                        
+#include "centralized_buffer.h"          
 
 namespace soclib { namespace tlmdt {
 
-class Interconnect                                              // Interconnect
-  : public sc_core::sc_module           	                // inherit from SC module base clase
+////////////////////
+class Interconnect 
+////////////////////
+  : public sc_core::sc_module  
+  , virtual public tlm::tlm_fw_transport_if<tlm::tlm_base_protocol_types> 
+  , virtual public tlm::tlm_bw_transport_if<tlm::tlm_base_protocol_types> 
 {
 private:
  
-  typedef soclib::common::AddressDecodingTable<uint32_t, int>  routing_table_t;     
-  typedef soclib::common::AddressDecodingTable<uint32_t, bool> locality_table_t;   
-  typedef soclib::common::AddressMaskingTable<uint32_t>        resp_routing_table_t; 
-  typedef soclib::common::AddressDecodingTable<uint32_t, bool> resp_locality_table_t;
+  typedef soclib::common::AddressDecodingTable<uint64_t, size_t> cmd_routing_table_t;     
+  typedef soclib::common::AddressDecodingTable<uint32_t, bool>   cmd_locality_table_t;   
+  typedef soclib::common::AddressDecodingTable<uint32_t, size_t> rsp_routing_table_t; 
+  typedef soclib::common::AddressDecodingTable<uint32_t, bool>   rsp_locality_table_t;
 
   /////////////////////////////////////////////////////////////////////////////////////
   // Member Variables
   /////////////////////////////////////////////////////////////////////////////////////
-  int 				m_id;                 	// identifier
-  int 				m_inits;              	// number of initiiators
-  int 				m_targets;            	// number of targets
-  size_t 			m_delay;              	// interconnect delay
-  size_t 			m_local_delta_time;	// minimal time between send & response LOCAL
-  size_t  			m_no_local_delta_time;  // minimal time between send & response NOT LOCAL
-  bool                          m_is_local_crossbar;  	// true if the module is a loca interconnect
+  size_t                        m_id;                 	// identifier
+  size_t                        m_inits;              	// number of initiiators
+  size_t                        m_targets;            	// number of targets
+  size_t                        m_delay;              	// interconnect delay
+  size_t                        m_local_delta_time;	    // minimal time between cmd/rsp
+  size_t                        m_no_local_delta_time;  // minimal time between cmd/rsp
+  bool                          m_is_local_crossbar;  	// true if local interconnect
 
-  centralized_buffer 		m_centralized_buffer; 	// centralized buffer
-  const routing_table_t         m_routing_table;      	// routing table
-  const locality_table_t        m_locality_table;     	// locality table
-  const resp_routing_table_t    m_resp_routing_table; 	// response routing table
-  const resp_locality_table_t   m_resp_locality_table;	// response locality table
-  pdes_local_time*              m_pdes_local_time;    	// local time
+  centralized_buffer            m_centralized_buffer; 	// centralized buffer
+  const cmd_routing_table_t     m_cmd_routing_table;    // command routing table
+  const cmd_locality_table_t    m_cmd_locality_table;   // command locality table
+  const rsp_routing_table_t     m_rsp_routing_table; 	// response routing table
+  const rsp_locality_table_t    m_rsp_locality_table;	// response locality table
+  pdes_local_time*              m_pdes_local_time;    	// local time (pointer)
 
   // instrumentation counters
   size_t                        m_msg_count;
@@ -91,78 +95,84 @@ private:
   /////////////////////////////////////////////////////////////////////////////////////
   void init();
 
-  void behavior(void);
+  void execLoop(void);
 
-  void routing
-  ( size_t                   from,      // port source
-    tlm::tlm_generic_payload &payload,   // payload
-    tlm::tlm_phase           &phase,     // phase
-    sc_core::sc_time         &time);     // time
+  void route ( size_t                   from,       // port source
+               tlm::tlm_generic_payload &payload,   // payload
+               tlm::tlm_phase           &phase,     // phase
+               sc_core::sc_time         &time);     // time
 
   void create_token();
 
   /////////////////////////////////////////////////////////////////////////////////////
-  // Fuction  tlm::tlm_fw_transport_if (VCI TARGET SOCKET)
+  // Function executed when receiving command from VCI initiator
   /////////////////////////////////////////////////////////////////////////////////////
-  tlm::tlm_sync_enum nb_transport_fw     // receive command from initiator
-  ( int                       id,        // socket id
-    tlm::tlm_generic_payload &payload,   // payload
-    tlm::tlm_phase           &phase,     // phase
-    sc_core::sc_time         &time);     // time
+  tlm::tlm_sync_enum nb_transport_fw ( int                      id,         // socket id
+                                       tlm::tlm_generic_payload &payload,   // payload
+                                       tlm::tlm_phase           &phase,     // phase
+                                       sc_core::sc_time         &time);     // time
  
   /////////////////////////////////////////////////////////////////////////////////////
-  // Virtual Fuctions  tlm::tlm_bw_transport_if (VCI INITIATOR SOCKET)
+  // Function executed when receiving response from VCI target
   /////////////////////////////////////////////////////////////////////////////////////
-  tlm::tlm_sync_enum nb_transport_bw     // receive answer from target
-  ( int                       id,        // socket id
-    tlm::tlm_generic_payload &payload,   // payload
-    tlm::tlm_phase           &phase,     // phase
-    sc_core::sc_time         &time);     // time
+  tlm::tlm_sync_enum nb_transport_bw ( int                       id,        // socket id
+                                       tlm::tlm_generic_payload &payload,   // payload
+                                       tlm::tlm_phase           &phase,     // phase
+                                       sc_core::sc_time         &time);     // time
 
  protected:
+
   SC_HAS_PROCESS(Interconnect);
+
 public:  
 
-  std::vector<tlm_utils::simple_target_socket_tagged<Interconnect,32,tlm::tlm_base_protocol_types> *> p_to_initiator;
-  std::vector<tlm_utils::simple_initiator_socket_tagged<Interconnect,32,tlm::tlm_base_protocol_types> *> p_to_target;
+  std::vector<tlm_utils::simple_target_socket_tagged
+  <Interconnect,32,tlm::tlm_base_protocol_types> *>       p_to_initiator;
 
-  Interconnect(                                                // constructor
-	       sc_core::sc_module_name module_name             // SC module name
-	       , int id                                        // identifier
-	       , const routing_table_t &rt                     // routing table
-	       , const resp_routing_table_t &rrt               // response routing table
-	       , size_t n_inits                                // number of inits
-	       , size_t n_targets                              // number of targets
-	       , size_t delay);                                // interconnect delay
+  std::vector<tlm_utils::simple_initiator_socket_tagged
+  <Interconnect,32,tlm::tlm_base_protocol_types> *>       p_to_target;
 
-  Interconnect(                                                // constructor
-	       sc_core::sc_module_name module_name             // SC module name
-	       , const routing_table_t &rt                     // routing table
-	       , const resp_routing_table_t &rrt               // response routing table
-	       , size_t n_inits                                // number of inits
-	       , size_t n_targets                              // number of targets
-	       , size_t delay);                                // interconnect delay
-  
-  Interconnect(                                                // constructor
-	       sc_core::sc_module_name module_name             // SC module name
-	       , int id                                        // identifier
-	       , const routing_table_t &rt                     // routing table
-	       , const locality_table_t &lt                    // locality table
-	       , const resp_routing_table_t &rrt               // response routing table
-	       , const resp_locality_table_t &rlt              // response locality table
-	       , size_t n_inits                                // number of inits
-	       , size_t n_targets                              // number of targets
-	       , size_t delay);                                // interconnect delay
+  ////////////////////////////////
+  // Constructors
+  ////////////////////////////////
 
-  Interconnect(                                                // constructor
-	       sc_core::sc_module_name module_name             // SC module name
-	       , const routing_table_t &rt                     // routing table
-	       , const locality_table_t &lt                    // locality table
-	       , const resp_routing_table_t &rrt               // response routing table
-	       , const resp_locality_table_t &rlt              // response locality table
-	       , size_t n_inits                                // number of inits
-	       , size_t n_targets                              // number of targets
-	       , size_t delay);                                // interconnect delay
+  // Global interconnect
+  Interconnect( sc_core::sc_module_name     module_name,   // module name
+	            const size_t                id,            // identifier
+	            const cmd_routing_table_t   &cmd_rt,       // command routing table
+	            const rsp_routing_table_t   &rsp_rt,       // response routing table
+	            const size_t                n_inits,       // number of initiators
+	            const size_t                n_targets,     // number of targets
+	            const size_t                delay );       // interconnect latency
+
+  // Global interconnect without identifier
+  Interconnect( sc_core::sc_module_name     module_name,   // module name
+	            const cmd_routing_table_t   &cmd_rt,       // command routing table
+	            const rsp_routing_table_t   &rsp_rt,       // response routing table
+	            const size_t                n_inits,       // number of initiators
+	            const size_t                n_targets,     // number of targets
+	            const size_t                delay );       // interconnect latency
+
+  // Local interconnect
+  Interconnect( sc_core::sc_module_name     module_name,   // module name
+	            const size_t                id,            // identifier
+	            const cmd_routing_table_t   &cmd_rt,       // command routing table
+	            const cmd_locality_table_t  &cmd_lt,       // command locality table
+	            const rsp_routing_table_t   &rsp_rt,       // response routing table
+	            const rsp_locality_table_t  &rsp_lt,       // response locality table
+	            const size_t                n_inits,       // number of initators
+	            const size_t                n_targets,     // number of targets
+	            const size_t                delay );       // interconnect latency
+
+  // Local interconnect without identifier
+  Interconnect( sc_core::sc_module_name     module_name,   // module name
+	            const cmd_routing_table_t   &cmd_rt,       // command routing table
+	            const cmd_locality_table_t  &cmd_lt,       // command locality table
+	            const rsp_routing_table_t   &rsp_rt,       // response routing table
+	            const rsp_locality_table_t  &rsp_lt,       // response locality table
+	            size_t                      n_inits,       // number of initators
+	            size_t                      n_targets,     // number of targets
+	            size_t                      delay );       // interconnect latency
 
   ~Interconnect();
 

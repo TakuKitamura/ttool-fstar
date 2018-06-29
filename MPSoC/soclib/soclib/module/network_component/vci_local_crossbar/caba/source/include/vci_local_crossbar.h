@@ -21,12 +21,12 @@
  * SOCLIB_LGPL_HEADER_END
  *
  * Copyright (c) UPMC, Lip6, Asim
+ *         Alain Greiner <alain.greiner@lip6.fr>, 2005
  *         Nicolas Pouillon <nipo@ssji.net>, 2008
  *
- * Based on previous works by Alain Greiner, 2005
- *
- * Maintainers: nipo
+ * Maintainers: alain
  */
+
 #ifndef SOCLIB_CABA_VCI_LOCAL_CROSSBAR_H_
 #define SOCLIB_CABA_VCI_LOCAL_CROSSBAR_H_
 
@@ -36,41 +36,49 @@
 #include "vci_target.h"
 #include "vci_buffers.h"
 #include "mapping_table.h"
+#include "address_decoding_table.h"
 
 namespace soclib { namespace caba {
 
-namespace _local_crossbar {
-template<typename pkt_t> class Crossbar;
-}
+using namespace soclib::common;
 
+template<typename pkt_t> class SimpleCrossbar;
+
+////////////////////////////////////
 template<typename vci_param>
 class VciLocalCrossbar
+////////////////////////////////////
     : public BaseModule
 {
 public:
-    sc_in<bool> p_clk;
-    sc_in<bool> p_resetn;
 
-    VciInitiator<vci_param> *p_to_target;
-    VciTarget<vci_param> *p_to_initiator;
-    VciTarget<vci_param> p_target_to_up;
-    VciInitiator<vci_param> p_initiator_to_up;
+    sc_in<bool>                               p_clk;
+    sc_in<bool>                               p_resetn;
+
+    VciInitiator<vci_param>                  *p_to_target;
+    VciTarget<vci_param>                     *p_to_initiator;
+    VciTarget<vci_param>                      p_target_to_up;
+    VciInitiator<vci_param>                   p_initiator_to_up;
 
 private:
-    size_t m_nb_attached_initiat;
-    size_t m_nb_attached_target;
 
-    VciInitiator<vci_param> **m_ports_to_target;
-    VciTarget<vci_param> **m_ports_to_initiator;
+    size_t                                    m_nb_attached_initiators;
+    size_t                                    m_nb_attached_targets;
 
-    typedef _local_crossbar::Crossbar<VciCmdBuffer<vci_param> > cmd_crossbar_t;
-    typedef _local_crossbar::Crossbar<VciRspBuffer<vci_param> > rsp_crossbar_t;
+    AddressDecodingTable<uint64_t, size_t>    m_cmd_rt;   // command routing table
+    AddressDecodingTable<uint64_t, bool>      m_cmd_lt;   // command locality table
+
+    AddressDecodingTable<uint32_t, size_t>    m_rsp_rt;   // response routing table
+    AddressDecodingTable<uint32_t, bool>      m_rsp_lt;   // response locality table
+
+    VciInitiator<vci_param>                 **m_ports_to_target;
+    VciTarget<vci_param>                    **m_ports_to_initiator;
+
+    SimpleCrossbar<VciCmdBuffer<vci_param> > *m_cmd_crossbar;
+    SimpleCrossbar<VciRspBuffer<vci_param> > *m_rsp_crossbar;
 
     void transition();
     void genMealy();
-
-	cmd_crossbar_t *m_cmd_crossbar;
-	rsp_crossbar_t *m_rsp_crossbar;
 
 protected:
     SC_HAS_PROCESS(VciLocalCrossbar);
@@ -78,12 +86,12 @@ protected:
 public:
     void print_trace();
 
-    VciLocalCrossbar( sc_module_name name,
-					  const soclib::common::MappingTable &mt,
-					  const soclib::common::IntTab &srcid,
-					  const soclib::common::IntTab &tgtid,
-					  size_t nb_attached_initiat,
-					  size_t nb_attached_target );
+    VciLocalCrossbar( sc_core::sc_module_name             name,
+					  const soclib::common::MappingTable  &mt,
+					  const size_t                        cluster_id,
+					  const size_t                        nb_attached_initiators,
+					  const size_t                        nb_attached_targets,
+                      const size_t                        default_target_id );
     ~VciLocalCrossbar();
 };
 

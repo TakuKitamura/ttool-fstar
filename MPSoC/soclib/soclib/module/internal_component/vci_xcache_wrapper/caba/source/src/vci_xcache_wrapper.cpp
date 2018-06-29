@@ -1,4 +1,3 @@
-
 /* -*- c++ -*-
  *
  * SOCLIB_LGPL_HEADER_BEGIN
@@ -187,8 +186,9 @@ tmpl(/**/)::VciXcacheWrapper(
       r_icache("icache", icache_ways, icache_sets, icache_words),
       r_dcache("dcache", dcache_ways, dcache_sets, dcache_words)
 {
-    assert((icache_words*vci_param::B) < (1<<vci_param::K) and "I need more PLEN bits");
+    std::cout << "  - Building VciXcacheWrapper " << name << std::endl;
 
+    assert((icache_words*vci_param::B) < (1<<vci_param::K) and "I need more PLEN bits");
 
     SC_METHOD(transition);
     dont_initialize();
@@ -213,7 +213,51 @@ tmpl(/**/)::VciXcacheWrapper(
 tmpl(/**/)::~VciXcacheWrapper()
 /////////////////////////////////
 {
-     print_stats();
+}
+
+//////////////////////////////////////////
+tmpl(void)::cache_monitor( addr_t addr )
+//////////////////////////////////////////
+{
+    bool        cache_hit;
+    size_t	    cache_way = 0;
+    size_t	    cache_set = 0;
+    size_t	    cache_word = 0;
+    uint32_t	cache_rdata = 0;
+
+    cache_hit = r_dcache.read_neutral( addr,
+                                       &cache_rdata,
+                                       &cache_way,
+                                       &cache_set,
+                                       &cache_word );
+
+    if ( cache_hit != m_debug_previous_d_hit )
+    {
+        std::cout << "Monitor PROC " << name()
+                  << " DCACHE at cycle " << std::dec << m_cpt_total_cycles
+                  << " / HIT = " << cache_hit 
+                  << " / PADDR = " << std::hex << addr
+                  << " / DATA = " << cache_rdata 
+                  << " / WAY = " << cache_way << std::endl;
+	    m_debug_previous_d_hit = cache_hit;
+    }
+
+    cache_hit = r_icache.read_neutral( addr,
+                                       &cache_rdata,
+                                       &cache_way,
+                                       &cache_set,
+                                       &cache_word );
+
+    if ( cache_hit != m_debug_previous_i_hit )
+    {
+        std::cout << "Monitor PROC " << name()
+                  << " ICACHE at cycle " << std::dec << m_cpt_total_cycles
+                  << " / HIT = " << cache_hit 
+                  << " / PADDR = " << std::hex << addr
+                  << " / DATA = " << cache_rdata 
+                  << " / WAY = " << cache_way << std::endl;
+	    m_debug_previous_i_hit = cache_hit;
+    }
 }
 
 //////////////////////////////////
@@ -236,14 +280,14 @@ tmpl(void)::file_stats(FILE* file)
 //////////////////////////////////
 {
     float imiss_rate 	= (float)m_cpt_ins_miss / (float)(m_cpt_exec_ins);
-    float dmiss_rate 	= (float)m_cpt_data_miss / (float)(m_cpt_read - m_cpt_unc_read);
+    float dmiss_rate 	= (float)m_cpt_data_miss / (float)(m_cpt_read);
     float cpi		= (float)m_cpt_total_cycles / (float)(m_cpt_exec_ins);
 
     fprintf(file,"%8d %8d %8d %8d %8d    %f    %f    %f \n", 
             m_cpt_total_cycles, 
             m_cpt_exec_ins,
             m_cpt_ins_miss,
-            m_cpt_read-m_cpt_unc_read,
+            m_cpt_read,
             m_cpt_data_miss,
             imiss_rate, 
             dmiss_rate,
@@ -257,29 +301,25 @@ tmpl(void)::print_cpi()
 
               << (float)m_cpt_total_cycles/(float)(m_cpt_exec_ins) << std::endl;
 }
-
 ////////////////////////
 tmpl(void)::print_stats()
 ////////////////////////
 {
-    std::cout << "------------------------------------" << std:: dec << std::endl;
-    std::cout << name() << " / Time = " << m_cpt_total_cycles << std::endl;
-    std::cout << "- CPI                = " << (float)m_cpt_total_cycles/m_cpt_exec_ins << std::endl ;
-    std::cout << "- READ RATE          = " << (float)m_cpt_read/m_cpt_exec_ins << std::endl ;
-    std::cout << "- WRITE RATE         = " << (float)m_cpt_write/m_cpt_exec_ins << std::endl;
-    std::cout << "- UNCACHED READ RATE = " << (float)m_cpt_unc_read/m_cpt_read << std::endl ;
-    std::cout << "- CACHED WRITE RATE  = " << (float)m_cpt_write_cached/m_cpt_write << std::endl ;
-    std::cout << "- IMISS_RATE         = " << (float)m_cpt_ins_miss/m_cpt_exec_ins << std::endl;
-    std::cout << "- DMISS RATE         = " << (float)m_cpt_data_miss/(m_cpt_read-m_cpt_unc_read) << std::endl ;
-    std::cout << "- INS MISS COST      = " << (float)m_cost_ins_miss_frz/m_cpt_ins_miss << std::endl;
-    std::cout << "- IMISS TRANSACTION  = " << (float)m_cost_imiss_transaction/m_cpt_imiss_transaction << std::endl;
-    std::cout << "- DMISS COST         = " << (float)m_cost_data_miss_frz/m_cpt_data_miss << std::endl;
-    std::cout << "- DMISS TRANSACTION  = " << (float)m_cost_dmiss_transaction/m_cpt_dmiss_transaction << std::endl;
-    std::cout << "- UNC COST           = " << (float)m_cost_unc_read_frz/m_cpt_unc_read << std::endl;
-    std::cout << "- UNC TRANSACTION    = " << (float)m_cost_unc_transaction/m_cpt_unc_transaction << std::endl;
-    std::cout << "- WRITE COST         = " << (float)m_cost_write_frz/m_cpt_write << std::endl;
-    std::cout << "- WRITE TRANSACTION  = " << (float)m_cost_write_transaction/m_cpt_write_transaction << std::endl;
-    std::cout << "- WRITE LENGTH       = " << (float)m_length_write_transaction/m_cpt_write_transaction << std::endl;
+    std::cout << "------------------------------------" << std:: dec << std::endl
+    << name() << " / Time = " << m_cpt_total_cycles << std::endl
+    << "- CPI               = " << (float)m_cpt_total_cycles/m_cpt_exec_ins << std::endl
+    << "- READ RATE         = " << (float)m_cpt_read/m_cpt_exec_ins << std::endl 
+    << "- WRITE RATE        = " << (float)m_cpt_write/m_cpt_exec_ins << std::endl
+    << "- UNC RATE          = " << (float)m_cpt_data_unc/m_cpt_exec_ins << std::endl 
+    << "- CACHED WRITE RATE = " << (float)m_cpt_write_cached/m_cpt_write << std::endl
+    << "- IMISS_RATE        = " << (float)m_cpt_ins_miss/m_cpt_exec_ins << std::endl
+    << "- DMISS RATE        = " << (float)m_cpt_data_miss/m_cpt_read << std::endl 
+    << "- INS MISS COST     = " << (float)m_cost_ins_miss_frz/m_cpt_ins_miss << std::endl
+    << "- DMISS COST        = " << (float)m_cost_data_miss_frz/m_cpt_data_miss << std::endl
+    << "- UNC COST          = " << (float)m_cost_data_unc_frz/m_cpt_data_unc << std::endl
+    << "- WRITE COST        = " << (float)m_cost_write_frz/m_cpt_write << std::endl
+    << "- WRITE LENGTH      = " << (float)m_length_write_transaction/m_cpt_write_transaction 
+    << std::endl;
 }
 ////////////////////////////////////
 tmpl(void)::print_trace(size_t mode)
@@ -350,6 +390,10 @@ tmpl(void)::transition()
         r_icache_updated	= false;
         r_dcache_updated	= false;
 
+        // Debug variables
+        m_debug_previous_i_hit = false;
+        m_debug_previous_d_hit = false;
+
         // activity counters
         m_cpt_dcache_read  = 0;
         m_cpt_dcache_write = 0;
@@ -363,23 +407,17 @@ tmpl(void)::transition()
         m_cpt_write = 0;
         m_cpt_data_miss = 0;
         m_cpt_ins_miss = 0;
-        m_cpt_unc_read = 0;
+        m_cpt_data_unc = 0;
+        m_cpt_ins_unc = 0;
         m_cpt_write_cached = 0;
 
         m_cost_write_frz = 0;
         m_cost_data_miss_frz = 0;
-        m_cost_unc_read_frz = 0;
+        m_cost_data_unc_frz = 0;
         m_cost_ins_miss_frz = 0;
+        m_cost_ins_unc_frz = 0;
 
-        m_cpt_imiss_transaction = 0;
-        m_cpt_dmiss_transaction = 0;
-        m_cpt_unc_transaction = 0;
         m_cpt_write_transaction = 0;
-
-        m_cost_imiss_transaction = 0;
-        m_cost_dmiss_transaction = 0;
-        m_cost_unc_transaction = 0;
-        m_cost_write_transaction = 0;
         m_length_write_transaction = 0;
 
         return;
@@ -394,14 +432,14 @@ tmpl(void)::transition()
     bool       vci_rsp_fifo_data_put       = false;
     data_t     vci_rsp_fifo_data_data      = 0;
 
-    #ifdef SOCLIB_MODULE_DEBUG
+#ifdef SOCLIB_MODULE_DEBUG
     std::cout
         << name()
         << " dcache fsm: " << dcache_fsm_state_str[r_data_fsm]
         << " icache fsm: " << icache_fsm_state_str[r_icache_fsm]
         << " cmd fsm: " << cmd_fsm_state_str[r_vci_cmd_fsm]
         << " rsp fsm: " << rsp_fsm_state_str[r_vci_rsp_fsm] << std::endl;
-    #endif
+#endif
 
     m_cpt_total_cycles++;
 
@@ -439,7 +477,7 @@ tmpl(void)::transition()
     m_irsp.instruction = 0;
 
     switch(r_icache_fsm) 
-        {
+    {
     /////////////////
     case ICACHE_IDLE:
     {
@@ -450,7 +488,7 @@ tmpl(void)::transition()
 
             m_cpt_icache_read++;
 
-            bool    icache_cacheable = m_cacheability_table[m_ireq.addr];
+            bool    icache_cacheable = m_cacheability_table[(uint64_t)m_ireq.addr];
 
             if ( icache_cacheable )    // cacheable access
             {
@@ -473,6 +511,9 @@ tmpl(void)::transition()
             }
             else                        // non cacheable access 
             {
+                m_cpt_ins_unc++;
+                m_cost_ins_unc_frz++;
+
                 r_icache_addr_save = m_ireq.addr;
                 r_icache_fsm       = ICACHE_UNC_WAIT;
                 r_icache_unc_req   = true;
@@ -523,7 +564,8 @@ tmpl(void)::transition()
         {
             m_irsp.valid          = true;
             m_irsp.error          = true;
-            r_vci_rsp_ins_error = false;
+            r_vci_rsp_ins_error   = false;
+            r_icache_fsm          = ICACHE_IDLE;
         }
         else if ( r_vci_rsp_fifo_ins.rok() )   // available instruction 
         {
@@ -561,7 +603,8 @@ tmpl(void)::transition()
         else if ( r_vci_rsp_fifo_ins.rok() ) // instruction available
         {
             vci_rsp_fifo_ins_get = true;
-            if ( m_ireq.valid and (m_ireq.addr == r_icache_addr_save.read()) ) // unmodified
+            if ( m_ireq.valid and 
+                 (m_ireq.addr == r_icache_addr_save.read()) ) // unmodified
             {
                 m_irsp.valid       = true;
                 m_irsp.instruction = r_vci_rsp_fifo_ins.read();
@@ -646,7 +689,6 @@ tmpl(void)::transition()
     /////////////////
     case DCACHE_IDLE:
     {
-
         if ( m_dreq.valid ) 
         {
             bool        dcache_cacheable;
@@ -682,6 +724,8 @@ tmpl(void)::transition()
 
                 if ( m_dreq.type == iss_t::DATA_READ )        // cacheable read
                 {
+                    m_cpt_read++;
+
                     if ( not dcache_hit )   // read miss
                     {
                         m_cpt_data_miss++;
@@ -702,6 +746,8 @@ tmpl(void)::transition()
                 }
                 else if ( m_dreq.type == iss_t::DATA_WRITE )  // cacheable write
                 {
+                    m_cpt_write++;
+
                     if ( not dcache_hit )   // write miss
                     {
                         m_drsp.valid        = true;
@@ -709,6 +755,8 @@ tmpl(void)::transition()
                     }
                     else                    // write hit
                     {
+                        m_cpt_write_cached++;
+
                         m_drsp.valid        = true;
                         r_dcache_fsm        = DCACHE_WRITE_UPDT;
                         r_dcache_way_save   = dcache_way;
@@ -726,7 +774,6 @@ tmpl(void)::transition()
             } 
             else                    // uncacheable request
             {
-                r_dcache_cacheable_save = false;
                 switch( m_dreq.type ) 
                 {
                 // we expect a single word rdata for these 3 requests
@@ -734,8 +781,8 @@ tmpl(void)::transition()
                 case iss_t::DATA_LL:
                 case iss_t::DATA_SC:
                 {
-                    m_cpt_unc_read++;
-                    m_cost_unc_read_frz++;
+                    m_cpt_data_unc++;
+                    m_cost_data_unc_frz++;
 
                     r_dcache_unc_req   = true;
                     r_dcache_addr_save = m_dreq.addr;
@@ -774,7 +821,7 @@ tmpl(void)::transition()
                 }
                 case iss_t::DATA_WRITE:
                 {
-                    m_cpt_write++;
+                    m_cpt_data_unc++;
 
                     r_dcache_fsm = DCACHE_WRITE_REQ;
                     m_drsp.valid = true;
@@ -843,10 +890,10 @@ tmpl(void)::transition()
 
         if ( r_vci_rsp_data_error.read() )       // error reported
         {
-            assert(m_dreq.valid);
             m_drsp.valid         = true;
             m_drsp.error         = true;
             r_vci_rsp_data_error = false;
+            r_dcache_fsm         = DCACHE_IDLE;
         }
         else if ( r_vci_rsp_fifo_data.rok() )    // available data 
         {
@@ -872,22 +919,21 @@ tmpl(void)::transition()
     /////////////////////
     case DCACHE_UNC_WAIT:   // wait rdata for LL, SC, or uncacheable read
     {
-        m_cost_unc_read_frz++;
+        m_cost_data_unc_frz++;
 
         if ( r_vci_rsp_data_error.read() )      // error reported
         {
-            r_vci_rsp_data_error  = false;
-            assert(m_dreq.valid);
             m_drsp.valid          = true;
             m_drsp.error          = true;
+            r_vci_rsp_data_error  = false;
             r_dcache_fsm          = DCACHE_IDLE;
         }
         else if ( r_vci_rsp_fifo_data.rok() )   // available data
         {
             vci_rsp_fifo_data_get = true;
-            if ( m_dreq.valid and (m_dreq.addr == r_dcache_addr_save.read()) ) // request unmodified
+            if ( m_dreq.valid and 
+                 (m_dreq.addr == r_dcache_addr_save.read()) ) // request unmodified
             {
-                assert(m_dreq.valid);
                 m_drsp.valid = true;
                 m_drsp.rdata = r_vci_rsp_fifo_data.read();
             }
@@ -916,7 +962,6 @@ tmpl(void)::transition()
         else		// miss : nothing to do
         {
             r_dcache_fsm      = DCACHE_IDLE;
-            assert(m_dreq.valid);
             m_drsp.valid      = true;
         }
         break;
@@ -929,7 +974,6 @@ tmpl(void)::transition()
                         r_dcache_set_save.read(),
                         &nline );
         r_dcache_fsm = DCACHE_IDLE;
-        assert(m_dreq.valid);
         m_drsp.valid = true;
         break;
     }
@@ -939,14 +983,7 @@ tmpl(void)::transition()
     std::cout << name() << " Data Response: " << m_drsp << std::endl;
 #endif
 
-    /////////// execute one iss cycle /////////////////////////////////
-    uint32_t it = 0;
-    for (size_t i=0; i<(size_t)iss_t::n_irq; i++)
-    {
-            if(p_irq[i].read()) it |= (1<<i);
-    }
-    m_iss.executeNCycles(1, m_irsp, m_drsp, it);
-
+    ////////// Compute number of executed instructions ////////////////
     if ( (m_ireq.valid and m_irsp.valid) and 
          (!m_dreq.valid or m_drsp.valid) and 
          (m_ireq.addr != m_pc_previous) )
@@ -954,6 +991,14 @@ tmpl(void)::transition()
         m_cpt_exec_ins++;
         m_pc_previous = m_ireq.addr;
     }
+
+    /////////// execute one iss cycle /////////////////////////////////
+    uint32_t it = 0;
+    for (size_t i=0; i<(size_t)iss_t::n_irq; i++)
+    {
+            if(p_irq[i].read()) it |= (1<<i);
+    }
+    m_iss.executeNCycles(1, m_irsp, m_drsp, it);
 
     ////////////////////////////////////////////////////////////////////////////
     // This FSM handles requests from both the DCACHE FSM & the ICACHE FSM.
@@ -985,13 +1030,11 @@ tmpl(void)::transition()
         r_vci_cmd_cpt = 0;
         if ( r_icache_miss_req ) 
         {
-            m_cpt_imiss_transaction++;
             r_vci_cmd_fsm     = CMD_INS_MISS;
             r_icache_miss_req = false;
         } 
         else if ( r_icache_unc_req ) 
         {
-            m_cpt_imiss_transaction++;
             r_vci_cmd_fsm    = CMD_INS_UNC;
             r_icache_unc_req = false;
         } 
@@ -1006,14 +1049,11 @@ tmpl(void)::transition()
         } 
         else if ( r_dcache_miss_req ) 
         {
-            m_cpt_dmiss_transaction++;
-            
             r_vci_cmd_fsm     = CMD_DATA_MISS;
             r_dcache_miss_req = false;
         } 
         else if ( r_dcache_unc_req ) 
         {
-            m_cpt_unc_transaction++;
             r_vci_cmd_fsm    = CMD_DATA_UNC;
             r_dcache_unc_req = false;
         }
@@ -1089,7 +1129,6 @@ tmpl(void)::transition()
     //////////////////
     case RSP_INS_MISS:
     {
-        m_cost_imiss_transaction++;
         if ( p_vci.rspval.read() )
         {
             if ( (p_vci.rerror.read()&0x1) != 0 )       // error reported
@@ -1101,15 +1140,15 @@ tmpl(void)::transition()
             {
                 if ( r_vci_rsp_fifo_ins.wok() )
                 {
-                    assert( (r_vci_rsp_cpt.read() < m_dcache_words) and
-                    "The VCI response packet for data miss is too long");
+                    assert( (r_vci_rsp_cpt.read() < m_icache_words) and
+                    "The VCI response packet for instruction miss is too long");
                     r_vci_rsp_cpt              = r_vci_rsp_cpt.read() + 1;
                     vci_rsp_fifo_ins_put       = true,
                     vci_rsp_fifo_ins_data      = p_vci.rdata.read();
                     if ( p_vci.reop.read() )
                     {
-                        assert( (r_vci_rsp_cpt.read() == m_dcache_words - 1) and
-                        "The VCI response packet for data miss is too short");
+                        assert( (r_vci_rsp_cpt.read() == (m_icache_words - 1)) and
+                        "The VCI response packet for instruction miss is too short");
                         r_vci_rsp_fsm     = RSP_IDLE;
                     }
                 }
@@ -1120,7 +1159,6 @@ tmpl(void)::transition()
     /////////////////
     case RSP_INS_UNC:
     {
-        m_cost_imiss_transaction++;
         if ( p_vci.rspval.read() )
         {
             assert(p_vci.reop.read() and
@@ -1145,7 +1183,6 @@ tmpl(void)::transition()
     ///////////////////
     case RSP_DATA_MISS:
     {
-        m_cost_dmiss_transaction++;
         if ( p_vci.rspval.read() )
         {
             if ( (p_vci.rerror.read()&0x1) != 0 )       // error reported
@@ -1176,7 +1213,6 @@ tmpl(void)::transition()
     ////////////////////
     case RSP_DATA_WRITE:
     {
-        m_cost_write_transaction++;
         if (  p_vci.rspval.read() )
         {
             if ( (p_vci.rerror.read() & 0x1) == 0x1 ) m_iss.setWriteBerr(); 
@@ -1187,7 +1223,6 @@ tmpl(void)::transition()
     //////////////////
     case RSP_DATA_UNC:
     {
-        m_cost_dmiss_transaction++;
         if ( p_vci.rspval.read() )
         {
             assert(p_vci.reop.read() and
@@ -1219,7 +1254,7 @@ tmpl(void)::transition()
     r_vci_rsp_fifo_data.update(vci_rsp_fifo_data_get,
                                vci_rsp_fifo_data_put,
                                vci_rsp_fifo_data_data);
-    
+
 } // end transition()
 
 //////////////////////////////////////////////////////////////////////////////////

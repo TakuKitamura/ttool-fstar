@@ -27,28 +27,28 @@
  *     Aline Vieira de Mello <aline.vieira-de-mello@lip6.fr>
  */
 
-#include "interconnect.h"                           // our header
+#include "interconnect.h" 
                     
-//#define SOCLIB_MODULE_DEBUG 1
+#define SOCLIB_MODULE_DEBUG 1
 
 namespace soclib { namespace tlmdt {
 
 #define tmpl(x) x Interconnect
 
 /////////////////////////////////////////////////////////////////////////////////////
-// Constructor
+//             Constructors
 /////////////////////////////////////////////////////////////////////////////////////
-tmpl(/**/)::Interconnect
-( sc_core::sc_module_name module_name               // module name
-  , int id                                          // identifier
-  , const routing_table_t &rt                       // routing table
-  , const locality_table_t &lt                      // locality table
-  , const resp_routing_table_t &rrt                 // response routing table
-  , const resp_locality_table_t &rlt                // response locality table
-  , size_t n_inits                                  // number of inits
-  , size_t n_targets                                // number of targets
-  , size_t delay                                    // interconnect delay
-  ) 
+
+// Local interconnect
+tmpl(/**/)::Interconnect( sc_core::sc_module_name    module_name,
+                          const size_t               id,
+                          const cmd_routing_table_t  &cmd_rt,
+                          const cmd_locality_table_t &cmd_lt,
+                          const rsp_routing_table_t  &rsp_rt,
+                          const rsp_locality_table_t &rsp_lt,
+                          const size_t               n_inits,
+                          const size_t               n_targets,
+                          const size_t               delay )
   : sc_module(module_name)
   , m_id(id)
   , m_inits(n_inits)
@@ -56,10 +56,10 @@ tmpl(/**/)::Interconnect
   , m_delay(delay)
   , m_is_local_crossbar(true)
   , m_centralized_buffer("centralized_buffer", n_inits)
-  , m_routing_table(rt)
-  , m_locality_table(lt)
-  , m_resp_routing_table(rrt)
-  , m_resp_locality_table(rlt)
+  , m_cmd_routing_table(cmd_rt)
+  , m_cmd_locality_table(cmd_lt)
+  , m_rsp_routing_table(rsp_rt)
+  , m_rsp_locality_table(rsp_lt)
   , m_msg_count(0)
   , m_local_msg_count(0)
   , m_non_local_msg_count(0)
@@ -68,16 +68,15 @@ tmpl(/**/)::Interconnect
   init();
 }
 
-tmpl(/**/)::Interconnect
-( sc_core::sc_module_name module_name               // module name
-  , const routing_table_t &rt                       // routing table
-  , const locality_table_t &lt                      // locality table
-  , const resp_routing_table_t &rrt                 // response routing table
-  , const resp_locality_table_t &rlt                // response locality table
-  , size_t n_inits                                  // number of inits
-  , size_t n_targets                                // number of targets
-  , size_t delay                                    // interconnect delay
-  ) 
+// Local interconnect without identfier
+tmpl(/**/)::Interconnect( sc_core::sc_module_name    module_name,
+                          const cmd_routing_table_t  &cmd_rt,
+                          const cmd_locality_table_t &cmd_lt,
+                          const rsp_routing_table_t  &rsp_rt,
+                          const rsp_locality_table_t &rsp_lt,
+                          const size_t               n_inits,
+                          const size_t               n_targets,
+                          const size_t               delay )
   : sc_module(module_name)
   , m_id(0)
   , m_inits(n_inits)
@@ -85,10 +84,10 @@ tmpl(/**/)::Interconnect
   , m_delay(delay)
   , m_is_local_crossbar(true)
   , m_centralized_buffer("centralized_buffer", n_inits)
-  , m_routing_table(rt)
-  , m_locality_table(lt)
-  , m_resp_routing_table(rrt)
-  , m_resp_locality_table(rlt)
+  , m_cmd_routing_table(cmd_rt)
+  , m_cmd_locality_table(cmd_lt)
+  , m_rsp_routing_table(rsp_rt)
+  , m_rsp_locality_table(rsp_lt)
   , m_msg_count(0)
   , m_local_msg_count(0)
   , m_non_local_msg_count(0)
@@ -97,15 +96,14 @@ tmpl(/**/)::Interconnect
   init();
 }
 
-tmpl(/**/)::Interconnect
-( sc_core::sc_module_name module_name               // module name
-  , int id                                          // identifier
-  , const routing_table_t &rt                       // routing table
-  , const resp_routing_table_t &rrt                 // response routing table
-  , size_t n_inits                                  // number of inits
-  , size_t n_targets                                // number of targets
-  , size_t delay                                    // interconnect delay
-  ) 
+// Global interconnect
+tmpl(/**/)::Interconnect( sc_core::sc_module_name    module_name,
+                          const size_t               id,
+                          const cmd_routing_table_t  &cmd_rt,
+                          const rsp_routing_table_t  &rsp_rt,
+                          const size_t               n_inits,
+                          const size_t               n_targets,
+                          const size_t               delay )
   : sc_module(module_name)
   , m_id(id)
   , m_inits(n_inits)
@@ -113,8 +111,8 @@ tmpl(/**/)::Interconnect
   , m_delay(delay)
   , m_is_local_crossbar(false)
   , m_centralized_buffer("centralized_buffer", n_inits)
-  , m_routing_table(rt)
-  , m_resp_routing_table(rrt)
+  , m_cmd_routing_table(cmd_rt)
+  , m_rsp_routing_table(rsp_rt)
   , m_msg_count(0)
   , m_local_msg_count(0)
   , m_non_local_msg_count(0)
@@ -123,14 +121,13 @@ tmpl(/**/)::Interconnect
   init();
 }
 
-tmpl(/**/)::Interconnect
-( sc_core::sc_module_name module_name               // module name
-  , const routing_table_t &rt                       // routing table
-  , const resp_routing_table_t &rrt                 // response routing table
-  , size_t n_inits                                  // number of inits
-  , size_t n_targets                                // number of targets
-  , size_t delay                                    // interconnect delay
-  ) 
+// Global interconnect without identifier
+tmpl(/**/)::Interconnect( sc_core::sc_module_name    module_name,
+                          const cmd_routing_table_t  &cmd_rt,
+                          const rsp_routing_table_t  &rsp_rt,
+                          const size_t               n_inits,
+                          const size_t               n_targets,
+                          const size_t               delay )
   : sc_module(module_name)
   , m_id(0)
   , m_inits(n_inits)
@@ -138,8 +135,8 @@ tmpl(/**/)::Interconnect
   , m_delay(delay)
   , m_is_local_crossbar(false)
   , m_centralized_buffer("centralized_buffer", n_inits)
-  , m_routing_table(rt)
-  , m_resp_routing_table(rrt)
+  , m_cmd_routing_table(cmd_rt)
+  , m_rsp_routing_table(rsp_rt)
   , m_msg_count(0)
   , m_local_msg_count(0)
   , m_non_local_msg_count(0)
@@ -148,30 +145,35 @@ tmpl(/**/)::Interconnect
   init();
 }
 
-tmpl(/**/)::~Interconnect(){
-}
+tmpl(/**/)::~Interconnect(){ }
 
 ///////////////////
 tmpl(void)::init()
 {
-    // bind VCI TARGET SOCKETS
-    for(int i=0;i<m_inits;i++)
+    // allocate & bind p_to_initiator[i] VCI ports
+    for(size_t i=0;i<m_inits;i++)
     {
-        std::ostringstream target_name;
-        target_name << "target" << i;
+        std::ostringstream name;
+        name << "p_to_initiator_" << i;
         p_to_initiator.push_back(new tlm_utils::simple_target_socket_tagged
-           <Interconnect,32,tlm::tlm_base_protocol_types>(target_name.str().c_str()));
-        p_to_initiator[i]->register_nb_transport_fw(this, &Interconnect::nb_transport_fw, i);
+           <Interconnect,32,tlm::tlm_base_protocol_types>(name.str().c_str()));
+
+        p_to_initiator[i]->register_nb_transport_fw( this, 
+                                                     &Interconnect::nb_transport_fw, 
+                                                     i );
     }
 
-    // bind VCI INITIATOR SOCKETS
-    for(int i=0;i<m_targets;i++)
+    // allocate & bind p_to_target[i] VCI ports
+    for(size_t i=0;i<m_targets;i++)
     {
-        std::ostringstream init_name;
-        init_name << "init" << i;
+        std::ostringstream name;
+        name << "p_to_target_" << i;
         p_to_target.push_back(new tlm_utils::simple_initiator_socket_tagged
-           <Interconnect,32,tlm::tlm_base_protocol_types>(init_name.str().c_str()));
-        p_to_target[i]->register_nb_transport_bw(this, &Interconnect::nb_transport_bw, i);
+           <Interconnect,32,tlm::tlm_base_protocol_types>(name.str().c_str()));
+
+        p_to_target[i]->register_nb_transport_bw( this, 
+                                                  &Interconnect::nb_transport_bw, 
+                                                  i );
     }
 
     // minimal local latency
@@ -196,25 +198,32 @@ tmpl(void)::init()
     }
 
     // register thread process
-    SC_THREAD(behavior);                  
+    SC_THREAD(execLoop);                  
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
-// Functions
+// Instrumentation Functions
 /////////////////////////////////////////////////////////////////////////////////////
-tmpl(uint32_t)::getLocalMsgCounter(){
+tmpl(uint32_t)::getLocalMsgCounter()
+{
   return m_local_msg_count;
 }
 
-tmpl(uint32_t)::getNonLocalMsgCounter(){
+///////////////////////////////////////
+tmpl(uint32_t)::getNonLocalMsgCounter()
+{
   return m_non_local_msg_count;
 }
 
-tmpl(uint32_t)::getTokenMsgCounter(){
+////////////////////////////////////
+tmpl(uint32_t)::getTokenMsgCounter()
+{
   return m_token_msg_count;
 }
 
-tmpl(void)::print(){
+///////////////////
+tmpl(void)::print()
+{
   uint32_t local_msg_count     = getLocalMsgCounter();
   uint32_t non_local_msg_count = getNonLocalMsgCounter();
   uint32_t token_msg_count     = getTokenMsgCounter();
@@ -227,36 +236,41 @@ tmpl(void)::print(){
 
 }
 
-///////////////////////////////////////////////////////
-tmpl(void)::routing( size_t                       from,      
-                     tlm::tlm_generic_payload    &payload, 
-                     tlm::tlm_phase              &phase,  
-                     sc_core::sc_time            &time)  
+////////////////////////////////////////////////////////////////////////////////
+// This function analyses the transaction poped from the the central buffer,
+// and execute the required action.
+////////////////////////////////////////////////////////////////////////////////
+tmpl(void)::route( size_t                     from,      
+                   tlm::tlm_generic_payload   &payload, 
+                   tlm::tlm_phase             &phase,  
+                   sc_core::sc_time           &time)  
 {
-    bool 	send;
-    int 	dest;
+    bool 	send_required; 
+    size_t  dest;
 
     // get payload extension
     soclib_payload_extension *extension_ptr;
     payload.get_extension(extension_ptr);
 
-    ///////////////////////////////////////////////////////////////
-    // if transaction command is activation/deactivation
-    // the source is actived or desactived and no transaction is sent
+    /////////////////////////////////////////////////////////////////////////
+    // if message is activation/deactivation, the corresponding
+    // initiator port is actived/desactived, but no message is sent.
     if(extension_ptr->is_active() || extension_ptr->is_inactive())
     {
 
 #ifdef SOCLIB_MODULE_DEBUG
-printf("[%s] time = %d  HANDLING ACTIVITY MSG from = %d\n", 
+printf("[%s] / time = %d / HANDLING ACTIVITY MSG from port %d\n", 
        name(), (int)time.value(), (int)from);
 #endif
-
-        send = false;
+        // initiator port activation/deactivation 
         m_centralized_buffer.set_activity(from, extension_ptr->is_active());
+
+        send_required = false;
     }
 
-    /////////////////////////////////////////////////////////////////////////
-    // if transaction command is a token, it must be sent to the target[from]
+    ////////////////////////////////////////////////////////////////////////////
+    // if transaction command is a token, it must be sent to the target
+    // corresponding to the source initiator
     else if(extension_ptr->is_token_message())
     {
 
@@ -268,7 +282,7 @@ printf("[%s] time = %d  HANDLING TOKEN MSG from = %d\n",
         // set the delta_time which this init wont send another message
         m_centralized_buffer.set_delta_time(from, time);
 
-        send = true;
+        send_required = true;
 
         m_msg_count++;
         m_token_msg_count++;
@@ -276,7 +290,7 @@ printf("[%s] time = %d  HANDLING TOKEN MSG from = %d\n",
         if ( m_is_local_crossbar )
         {
             dest = m_targets - 1;
-            extension_ptr->set_pkt_id(extension_ptr->get_pkt_id()+1);
+            extension_ptr->set_pkt_id(extension_ptr->get_pkt_id()+1); // ??? AG
         }
         else
         {
@@ -285,8 +299,8 @@ printf("[%s] time = %d  HANDLING TOKEN MSG from = %d\n",
     }
 
     //////////////////////////////////////////////////////////////////////////////////
-    // if transaction command is a null message, the response is sent to the initiator
-    // to synchronize it, but this null message is not transmited
+    // if transaction command is a null message, a response is sent to the initiator
+    // to synchronize it, but this null message is not transmited.
     else if(extension_ptr->is_null_message())
     {
 
@@ -301,59 +315,63 @@ printf("[%s] time = %d  HANDLING NULL MSG from = %d\n",
         // send the response
         (*p_to_initiator[from])->nb_transport_bw(payload, phase, time);
 
-        send = false;
+        send_required = false;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // if transaction is a VCI command, it must be sent to appropriated target
-    // no response is sent to the initiator
+    // no response is sent to the initiator.
     else
     {
-        send = true;
+        send_required = true;
+
         if(m_is_local_crossbar)  // local interconnect
         {
-            if (!m_locality_table[payload.get_address()]) // non local target
+            if ( not m_cmd_locality_table[payload.get_address()] ) // non local target
             {
-	        if(from == m_centralized_buffer.get_nslots()-1)
+	            if(from == m_centralized_buffer.get_nslots()-1)
                 {
-	            // set the delta_time which this init wont send another message
-	            m_centralized_buffer.set_delta_time(from, time);
-	        }
-	        else
+	                // set the delta_time which this init wont send another message
+	                m_centralized_buffer.set_delta_time(from, time);
+	            }
+	            else
                 {
-	            // set the delta_time which this init wont send another message
-	            m_centralized_buffer.set_delta_time(from, time + (m_no_local_delta_time*UNIT_TIME));
-	        }
+	                // set the delta_time which this init wont send another message
+	                m_centralized_buffer.set_delta_time(from, 
+                        time + (m_no_local_delta_time*UNIT_TIME));
+	            }
 	
-	        m_msg_count++;
-	        m_non_local_msg_count++;
-	        dest = m_targets - 1;
+                m_msg_count++;
+                m_non_local_msg_count++;
+                dest = m_targets - 1;
             }
             else  // local target
             {
-	        if(from == m_centralized_buffer.get_nslots()-1)
+	            if(from == m_centralized_buffer.get_nslots()-1)
                 {
-	            //set the delta_time which this init wont send another message
-	            m_centralized_buffer.set_delta_time(from, time);
-	        }
-	        else
+	                //set the delta_time which this init wont send another message
+	                m_centralized_buffer.set_delta_time(from, time);
+	            }
+	            else
                 {
-	            //set the delta_time which this init wont send another message
-	            m_centralized_buffer.set_delta_time(from, time + (m_local_delta_time*UNIT_TIME));
-	        }
+	                //set the delta_time which this init wont send another message
+	                m_centralized_buffer.set_delta_time(from, 
+                         time + (m_local_delta_time*UNIT_TIME));
+	            }
 	
-	        m_msg_count++;
-	        m_local_msg_count++;
-	        dest = m_routing_table[payload.get_address()];
-	        assert( dest >= 0 && dest < m_targets );
+	            m_msg_count++;
+	            m_local_msg_count++;
+	            dest = m_cmd_routing_table[payload.get_address()];
+	            assert( dest >= 0 && dest < m_targets );
             }
         }
-        else  // global interconnect
+        else                 // global interconnect
         {
             // set the delta_time which this init wont send another message
             m_centralized_buffer.set_delta_time(from, time);
-            dest = m_routing_table[payload.get_address()];
-            assert( dest >= 0 && dest < m_targets );
+
+            dest = m_cmd_routing_table[payload.get_address()];
+            assert( dest < m_targets );
 	
             m_msg_count++;
             m_local_msg_count++;
@@ -366,17 +384,17 @@ printf("[%s] time = %d  ROUTING VCI MSG from = %d to %d\n",
 	
     }
 
-    if (send)  // transmit the command to the selected target
+    if (send_required)  // transmit the command to the selected target
     {
         time = time + (m_delay*UNIT_TIME);
         (*p_to_target[dest])->nb_transport_fw(payload, phase, time);
     }
-}  // end routing()
+}  // end route()
   
 //////////////////////////
 tmpl(void)::create_token()
 {
-  // create token message in beginning of simulation
+  // create token message at beginning of simulation
   m_extension_token.set_token_message();
   m_extension_token.set_src_id(m_id);
   m_extension_token.set_pkt_id(0);
@@ -390,15 +408,16 @@ printf("[%s] send Token time = %d\n", name(), (int)m_time_token.value());
 
   //push a token in the centralized buffer
   m_centralized_buffer.push(m_inits-1, m_payload_token, m_phase_token, m_time_token);
+
 #ifdef SOCLIB_MODULE_DEBUG
-  printf("[%s] send Token time = %d\n", name(), (int)m_time_token.value());
+printf("[%s] send Token time = %d\n", name(), (int)m_time_token.value());
 #endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
-//  consumer thread 
+//      PDES process 
 /////////////////////////////////////////////////////////////////////////////////////
-tmpl(void)::behavior()  
+tmpl(void)::execLoop()  
 {
     size_t                    	from;
     tlm::tlm_generic_payload* 	payload_ptr;
@@ -413,36 +432,39 @@ printf("[%s] WHILE CONSUMER\n", name());
 #endif
 
         // pop the earliest transaction from centralized buffer
-        while(m_centralized_buffer.pop(from, payload_ptr, phase_ptr, time_ptr))
+        while( m_centralized_buffer.pop( from, payload_ptr, phase_ptr, time_ptr) )
         {
             m_pop_count++;
 
-            assert(!(*time_ptr < m_pdes_local_time->get()) 
-                   && "Transaction time must not be smaller than the interconnect time");
+            assert( not (*time_ptr < m_pdes_local_time->get()) 
+            && "Transaction time must not be smaller than the interconnect time");
  
             // update local time
             m_pdes_local_time->set(*time_ptr);
 
             // process the transaction
-            routing(from, *payload_ptr, *phase_ptr, *time_ptr);
+            route( from, *payload_ptr, *phase_ptr, *time_ptr);
+
         } // end while buffer not empty
     
         // send periodically NULL messages to all local targets 
-        // if it is a local interconnect
+        // if this interconnect is a local interconnect
         if ( m_is_local_crossbar && m_pdes_local_time->need_sync() )
         {
             m_pdes_local_time->reset_sync();
             m_null_time = m_pdes_local_time->get();
-            for ( int i=0 ; i<(m_targets-1) ; i++ )
+            for ( size_t i=0 ; i<(m_targets-1) ; i++ )
+            {
                 (*p_to_target[i])->nb_transport_fw(m_null_payload, 
                                                    m_null_phase, 
                                                    m_null_time);
+            }
         }
 
 #ifdef SOCLIB_MODULE_DEBUG
 printf("[%s] CONSUMER WAITING id = %d\n", name(), (int)from);
 #endif
-
+        // deschedule if buffer empty
         sc_core::wait(sc_core::SC_ZERO_TIME);
 
 #ifdef SOCLIB_MODULE_DEBUG
@@ -453,8 +475,8 @@ printf("[%s] CONSUMER WAKE-UP\n", name());
 }
     
 /////////////////////////////////////////////////////////////////////////////////////
-// Interface function executed when receiving a command on an initiator port
-// It registers the command in the central buffer
+// Interface function executed when receiving a command from a VCI initiator.
+// It registers the command in the central buffer, to make time filtering.
 /////////////////////////////////////////////////////////////////////////////////////
 tmpl(tlm::tlm_sync_enum)::nb_transport_fw   (int                         id,          
                                              tlm::tlm_generic_payload    &payload,    
@@ -467,31 +489,32 @@ tmpl(tlm::tlm_sync_enum)::nb_transport_fw   (int                         id,
     {
 
 #ifdef SOCLIB_MODULE_DEBUG
-printf("[%s] time = %d RECEIVE a COMMAND on port %d\n", name(), (int)time.value(), id);
+printf( "[%s] RECEIVE COMMAND from INITIATOR %d / time = %d \n", 
+       name(), id, (int)time.value() );
 #endif
 
-        //push a transaction in the centralized buffer
+        // push a transaction in the centralized buffer
         push = m_centralized_buffer.push(id, payload, phase, time);
 
-        if(!push)
+        if( not push )
         {
             try_push++;
 
 #ifdef SOCLIB_MODULE_DEBUG
-printf("[%s] PRODUCER id = %d <<<<<<<<< NOT PUSH >>>>>>>> try_push = %d \n",name(),id, try_push);
+printf("[%s] INITIATOR %d <<<<<<<<< CANNOT PUSH >>>>>>>>\n", name(),id);
 #endif
 
-            sc_core::wait(sc_core::SC_ZERO_TIME);
+            sc_core::wait( sc_core::SC_ZERO_TIME );
         }
-    } while (!push);
+    } while ( not push );
 
     return  tlm::TLM_COMPLETED;
 
 } //end nb_transport_fw
 
 /////////////////////////////////////////////////////////////////////////////////////
-// Interface function executed when receiving a response on a target port
-// It directly routes the response to the proper initiator
+// Interface function executed when receiving a response from target port.
+// It directly routes the response to the proper VCI initiator (no time filtering).
 /////////////////////////////////////////////////////////////////////////////////////
 tmpl(tlm::tlm_sync_enum)::nb_transport_bw ( int                        id,   
                                             tlm::tlm_generic_payload   &payload,  
@@ -507,25 +530,25 @@ tmpl(tlm::tlm_sync_enum)::nb_transport_bw ( int                        id,
     srcid = resp_extension_ptr->get_src_id();
   
 #ifdef SOCLIB_MODULE_DEBUG
-printf("[%s] time = %d  RECEIVE RESPONSE on port %d / srcid = %d\n", 
+printf("[%s] / time = %d / RECEIVE RESPONSE from port %d for initiator %d\n", 
         name(), (int)time.value(), id, srcid);
 #endif
 
     if(m_is_local_crossbar)
     {
-        if (!m_resp_locality_table[srcid])  	dest = m_inits - 1;
-        else  					dest = m_resp_routing_table[srcid]; 
+        if (!m_rsp_locality_table[srcid]) dest = m_inits - 1;
+        else                              dest = m_rsp_routing_table[srcid]; 
     }
     else	// global interconnect
     {
-    						dest = m_resp_routing_table[srcid];
+        dest = m_rsp_routing_table[srcid];
     }
 
     // update the transaction time
     time = time + (m_delay*UNIT_TIME);
   
 #ifdef SOCLIB_MODULE_DEBUG
-printf("[%s] time = %d  SEND RESPONSE on port %d / srcid = %d\n", 
+printf("[%s] / time = %d / SEND RESPONSE on port %d\n", 
         name(), (int)time.value(), dest, srcid);
 #endif
 
