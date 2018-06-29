@@ -44,6 +44,7 @@ package tmltranslator;
 import avatartranslator.AvatarAttribute;
 import avatartranslator.AvatarPragmaAuthenticity;
 import avatartranslator.AvatarPragmaSecret;
+import avatartranslator.AvatarPragmaReachability;
 import myutil.Conversion;
 import myutil.TraceManager;
 import proverifspec.ProVerifOutputAnalyzer;
@@ -760,6 +761,7 @@ public class TMLModeling<E> {
         Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
 
         for (AvatarPragmaSecret pragma: confResults.keySet()) {
+        //	System.out.println("pragma "  +pragma);
             ProVerifQueryResult result = confResults.get(pragma);
             if (!result.isProved())
                 continue;
@@ -768,9 +770,40 @@ public class TMLModeling<E> {
             AvatarAttribute attr = pragma.getArg();
 
             TMLChannel channel = getChannelByShortName(attr.getName().replaceAll("_chData",""));
+            boolean invalidate=false;
+            //If an attribute is confidential because it has never been sent on that channel, do not backtrace that result since it is misleading
             if (channel!=null){
+            	//Mark the result only if the writechannel operator is reachable
+            	Map<AvatarPragmaReachability, ProVerifQueryResult> reachResults = pvoa.getReachabilityResults();
+            	if (reachResults.size()>0){
+	            	for (AvatarPragmaReachability reachPragma: reachResults.keySet()){
+    	        		if (reachPragma.getState().getName().equals("aftersignalstate_reachannel_"+channel.getName())){
+    	        			if (!reachResults.get(reachPragma).isSatisfied()){
+    	        				invalidate=true;
+    	        			}	
+            			}
+            		}
+            	}
+            	//Next check if there exists a writechannel operator that sends unencrypted data
+            	boolean found=false;
+            	for (TMLTask task: getTasks()){
+            		TMLActivity act = task.getActivityDiagram();
+            		for (TMLActivityElement elem: act.getElements()){
+            			if (elem instanceof TMLWriteChannel){
+            				TMLWriteChannel wr = (TMLWriteChannel) elem;
+            				if(wr.getChannel(0).getName().equals(channel.getName())){
+            					if (wr.securityPattern==null){
+            						found=true;
+            					}
+            				}
+            			}
+            		}
+            	}
+            	if (!found){
+            		invalidate=true;
+            	}
                 for (TMLCPrimitivePort port:channel.ports){
-                    if (port.checkConf){
+                    if (port.checkConf && !invalidate){
                         port.checkConfStatus = r;
                         port.mappingName= mappingName;
                     }
@@ -796,6 +829,7 @@ public class TMLModeling<E> {
                     ev.port2.mappingName=mappingName;
                 }
             }
+            
             List<String> channels=secChannelMap.get(attr.getName());
             if (channels != null) {
                 for (String channelName: channels) {
@@ -810,7 +844,7 @@ public class TMLModeling<E> {
                     }
                 }
             }
-            for (TMLTask t:getTasks()){
+            /*for (TMLTask t:getTasks()){
                 if (t.getReferenceObject()==null){
                     continue;
                 }
@@ -821,7 +855,7 @@ public class TMLModeling<E> {
                         if (a.getId().equals(attr.getName()))
                             a.setConfidentialityVerification(result.isSatisfied() ? TAttribute.CONFIDENTIALITY_OK : TAttribute.CONFIDENTIALITY_KO);
                 }
-            }
+            }*/
         }
     }
 	public TGComponent getTGComponent(){
@@ -896,7 +930,6 @@ public class TMLModeling<E> {
                             for (TMLCPrimitivePort port:channel.ports){
                                 if (port.checkAuth && port.checkStrongAuthStatus==1){
                                     port.checkStrongAuthStatus = 3;
-                                    System.out.println("not verified " + signalName);
                                     port.secName= signalName;
                                 }
                             }
@@ -978,7 +1011,6 @@ public class TMLModeling<E> {
                         }
                     }
                     signalName = s.toString().split("__decrypt")[0];
-                    System.out.println("signalName " +signalName);
                     /*for (TMLTask t: getTasks()){
                       if (signalName.contains(t.getName())){
                       signalName = signalName.replace(t.getName()+"__","");

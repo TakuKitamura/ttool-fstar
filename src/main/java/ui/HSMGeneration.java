@@ -173,7 +173,7 @@ public class HSMGeneration implements Runnable {
 
         TGConnector fromStart;
         Map<String, HSMChannel> secChannels = new HashMap<String, HSMChannel>();
-        //Add a HSM for each selected CPU on the component diagram
+        //Add a HSM Task for each selected CPU on the component diagram
         for (String cpuName : selectedCpuTasks.keySet()) {
             Map<String, HSMChannel> hsmChannels = new HashMap<String, HSMChannel>();
             TMLCPrimitiveComponent hsm = new TMLCPrimitiveComponent(0, 500, tcdp.getMinX(), tcdp.getMaxX(), tcdp.getMinY(), tcdp.getMaxY(), false, null, tcdp);
@@ -210,8 +210,7 @@ public class HSMGeneration implements Runnable {
                 //System.out.println("No Components found");
                 continue;
             }
-            //  System.out.println("nonAuthChans " + nonAuthChans);
-            //System.out.println("nonSecChans "+ nonSecChans);
+
             for (TMLCPrimitiveComponent comp : comps) {
 
                 Map<String, HSMChannel> compChannels = new HashMap<String, HSMChannel>();
@@ -473,15 +472,9 @@ public class HSMGeneration implements Runnable {
                     }
                     TGConnectingPoint point = fromStart.getTGConnectingPointP2();
 
-                    //Set isEnc to false
+
                     int yShift = 50;
-              //      TMLADActionState act = new TMLADActionState(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
-                //    act.setValue("isEnc=false");
-                  //  tad.addComponent(act, xpos, ypos + yShift, false, true);
-                    //fromStart.setP2(act.getTGConnectingPointAtIndex(0));
 
-
-                    //Add send request operator
 
                     yShift += 50;
                     TMLADSendRequest req = new TMLADSendRequest(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
@@ -493,11 +486,8 @@ public class HSMGeneration implements Runnable {
                     tad.addComponent(req, xpos, ypos + yShift, false, true);
 
 
-                    //Add connection
-                   // fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
-                  //  fromStart.setP1(act.getTGConnectingPointAtIndex(1));
                     fromStart.setP2(req.getTGConnectingPointAtIndex(0));
-                  //  tad.addComponent(fromStart, xpos, ypos, false, true);
+
 
 
                     yShift += 50;
@@ -547,9 +537,6 @@ public class HSMGeneration implements Runnable {
                     tad.setMaxPanelSize(tad.getMaxX(), tad.getMaxY() + yShift);
                     tad.repaint();
                 }
-                //for (String chan: chanNames){
-                //                        hsmChannels.put(chan, compName);
-                //}
             }
 
             int xpos = 0;

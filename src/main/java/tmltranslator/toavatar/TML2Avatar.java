@@ -1836,7 +1836,7 @@ import java.util.regex.Pattern;
 							}
 						}
 					}
-					System.out.println("Signals " +sig1 + " " + sig2);
+
 					if (sig1.size()==1 && sig2.size()==1){
 						if (channel.getType()==TMLChannel.NBRNBW && mc){
 							AvatarSignal read = fifo.getSignalByName("readSignal");
@@ -1848,7 +1848,6 @@ import java.util.regex.Pattern;
 							AvatarSignal write = fifo.getSignalByName("writeSignal");
 							//set OUT signal with write
 							ar2.addSignals(write, sig2.get(0));
-							System.out.println("Set " + sig2.get(0) + " and write");
 							ar2.setAsynchronous(false);
 							avspec.addRelation(ar2);
 						}

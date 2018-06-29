@@ -289,7 +289,6 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
 		values[3] = isAttacker ? "Yes" : "No";
         ArrayList<String []> help = new ArrayList<String []>();
 		String[] allOutChannels = tdp.getMGUI().getAllOutChannels();
-		System.out.println("isAttacker "+ isAttacker);
 		if (isAttacker){
 			allOutChannels =tdp.getMGUI().getAllCompOutChannels();
 		}
