@@ -4681,7 +4681,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void avatarUPPAALVerification() {
-        TraceManager.addDev("Avatar uppaal fv");
+        //TraceManager.addDev("Avatar uppaal fv");
         boolean result = gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
         if (result) {
             formalValidation(true);
