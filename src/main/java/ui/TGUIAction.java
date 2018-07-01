@@ -673,6 +673,41 @@ public class TGUIAction extends AbstractAction {
         putValue(Action.LONG_DESCRIPTION, _t.LONG_DESCRIPTION);
     }
 
+    public TGUIAction(int id, String name) {
+        if (actions[0] == null) {
+            init();
+        }
+        if (actions[id] == null) {
+            return ;
+        }
+
+        putValue(Action.ACTION_COMMAND_KEY, name);
+
+        putValue(Action.NAME, name);
+        putValue(Action.SMALL_ICON, actions[id].SMALL_ICON);
+        putValue(LARGE_ICON, actions[id].LARGE_ICON);
+        putValue(Action.SHORT_DESCRIPTION, name);
+        putValue(Action.LONG_DESCRIPTION, name);
+        //putValue(Action.MNEMONIC_KEY, new Integer(actions[id].MNEMONIC_KEY));
+        if (actions[id].MNEMONIC_KEY != 0) {
+            if (actions[id].hasControl) {
+                putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY, java.awt.event.InputEvent.CTRL_MASK));
+            } else {
+                if ((actions[id].MNEMONIC_KEY >= 37 && actions[id].MNEMONIC_KEY <= 40) || actions[id].MNEMONIC_KEY == KeyEvent.VK_DELETE) //handling for arrow and delete keys
+                    putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].MNEMONIC_KEY, 0));
+                else
+                    putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY));
+            }
+        }
+
+        if ((id == EXTERNAL_ACTION_1) && (ConfigurationTTool.ExternalCommand1 != null) && (ConfigurationTTool.ExternalCommand1.length()) > 0) {
+            setLongDescription(EXTERNAL_ACTION_1, ConfigurationTTool.ExternalCommand1);
+        }
+        if ((id == EXTERNAL_ACTION_2) && (ConfigurationTTool.ExternalCommand2 != null) && (ConfigurationTTool.ExternalCommand2.length()) > 0) {
+            setLongDescription(EXTERNAL_ACTION_2, ConfigurationTTool.ExternalCommand2);
+        }
+    }
+
     public TGUIAction(int id) {
         if (actions[0] == null) {
             init();
@@ -680,6 +715,7 @@ public class TGUIAction extends AbstractAction {
         if (actions[id] == null) {
             return ;
         }
+
 
         putValue(Action.NAME, actions[id].NAME);
         putValue(Action.SMALL_ICON, actions[id].SMALL_ICON);

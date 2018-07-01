@@ -1437,6 +1437,7 @@ public class GTURTLEModeling {
         ArrayList<TClass> tclasses;
         if (considerAll) {
             tp.getAllCheckableTGComponent(list);
+            TraceManager.addDev("Nb of checkable elements:" + list.size());
         } else {
             tp.getAllCheckedTGComponent(list);
         }

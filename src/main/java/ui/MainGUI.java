@@ -167,6 +167,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     // Actions
     public TGUIAction[] actions;
+    public TGUIAction[] actionsLast;
     public MouseHandler mouseHandler;
     public KeyListener keyHandler;
 
@@ -561,6 +562,16 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             actions[i].addActionListener(this);
             //actions[i].addKeyListener(this);
         }
+        actionsLast = new TGUIAction[ConfigurationTTool.NB_LAST_OPEN_FILE];
+        for (int j = 0; j < actionsLast.length; j++) {
+            actionsLast[j] = new TGUIAction(TGUIAction.ACT_OPEN_LAST, "Open recent: " + ConfigurationTTool.LastOpenFiles[j]);
+            actionsLast[j].addActionListener(this);
+            //actions[i].addKeyListener(this);
+        }
+        if (jmenubarturtle != null) {
+            jmenubarturtle.makeFileMenu(this);
+        }
+
     }
 
     public String getTitle() {
@@ -2403,6 +2414,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void updateLastOpenFile(File file) {
         if (ConfigurationTTool.LastOpenFileDefined) {
+
+
             ConfigurationTTool.LastOpenFile = file.getPath();
             if (ConfigurationTTool.LastOpenFile.contains(".ttool" + File.separator)) {
                 int last = 0;
@@ -2414,6 +2427,29 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
             // Change name of action
             actions[TGUIAction.ACT_OPEN_LAST].setName(TGUIAction.ACT_OPEN_LAST, ConfigurationTTool.LastOpenFile);
+
+            // is the new name already in the list of opened files?
+            for(int i=0; i<ConfigurationTTool.LastOpenFiles.length; i++) {
+                if (ConfigurationTTool.LastOpenFiles[i].compareTo(ConfigurationTTool.LastOpenFile) == 0) {
+                    ConfigurationTTool.LastOpenFiles[i] = "";
+                }
+            }
+
+            // Dec all files
+            ConfigurationTTool.decLastFiles();
+            ConfigurationTTool.LastOpenFiles[0] = ConfigurationTTool.LastOpenFile;
+
+            // We need to update the actions
+            for (int j = 0; j < actionsLast.length; j++) {
+                actionsLast[j] = new TGUIAction(TGUIAction.ACT_OPEN_LAST, "Open recent: " + ConfigurationTTool.LastOpenFiles[j]);
+                actionsLast[j].addActionListener(this);
+                //actions[i].addKeyListener(this);
+            }
+
+            if (jmenubarturtle != null) {
+                jmenubarturtle.makeFileMenu(this);
+            }
+
         }
     }
 
@@ -2700,6 +2736,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void openLastProject() {
+        openLastProject(0);
+    }
+
+    public void openLastProject(int id) {
         // Check if a current modeling is opened
         boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
         if (b) {
@@ -2708,7 +2748,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
         }
 
-        file = new File(ConfigurationTTool.LastOpenFile);
+        file = new File(ConfigurationTTool.LastOpenFiles[id]);
 
         if (checkFileForOpen(file)) {
             String s = null;
@@ -2758,6 +2798,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             gtm.enableUndo(false);
 
             // Issue #41: Moved to common method
+            updateLastOpenFile(file);
             loadModels(s, "loaded");
             //TraceManager.addDev("Loading");
             // load the new TURTLE modeling
@@ -4712,7 +4753,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void avatarUPPAALVerification() {
-        TraceManager.addDev("Avatar uppaal fv");
+        //TraceManager.addDev("Avatar uppaal fv");
         boolean result = gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
         if (result) {
             formalValidation(true);
