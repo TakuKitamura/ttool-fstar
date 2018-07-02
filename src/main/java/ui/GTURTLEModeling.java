@@ -1118,7 +1118,6 @@ public class GTURTLEModeling {
         //move to another thread
         SecurityGeneration secgen = new SecurityGeneration(gui, name, map, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth, selectedCpuTasks);
         tmap = secgen.startThread();
-        System.out.println("security generation finished");
         autoMapKeys();
         return tmap;
     }
@@ -1191,16 +1190,12 @@ public class GTURTLEModeling {
     }
 
     public void autoMapKeys() {
-        System.out.println("auto map keys");
         if (tmap == null) {
-        	System.out.println(tmap);
             return;
         }
         List<HwLink> links = tmap.getArch().getHwLinks();
         //Find all Security Patterns, if they don't have an associated memory at encrypt and decrypt, map them
         TMLModeling<TGComponent> tmlm = tmap.getTMLModeling();
-        
-        System.out.println(tmlm.securityTaskMap);
         
         if (tmlm.securityTaskMap == null) {
             return;
@@ -1385,6 +1380,9 @@ public class GTURTLEModeling {
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
         proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _typed, allowPrivateChannelDuplication);
+        
+       // System.out.println(proverif.getStringSpec());
+        
         warnings = avatar2proverif.getWarnings();
         languageID = PROVERIF;
         mgui.setMode(MainGUI.EDIT_PROVERIF_OK);

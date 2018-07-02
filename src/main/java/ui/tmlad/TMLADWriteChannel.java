@@ -284,10 +284,10 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
         labels[1] = "Nb of samples";
         values[1] = nbOfSamples;
 
-        labels[2] = "Security Pattern";
+      /*  labels[2] = "Security Pattern";
         values[2] = securityContext;
 		labels[3] = "Attacker?";
-		values[3] = isAttacker ? "Yes" : "No";
+		values[3] = isAttacker ? "Yes" : "No"; */
         ArrayList<String []> help = new ArrayList<String []>();
 		String[] allOutChannels = tdp.getMGUI().getAllOutChannels();
 		if (isAttacker){
@@ -296,8 +296,8 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
 		String[] choice = new String[]{"Yes", "No"};
 		help.add(allOutChannels);
 		help.add(null);
-		help.add(tdp.getMGUI().getCurrentCryptoConfig());
-		help.add(choice);
+	//	help.add(tdp.getMGUI().getCurrentCryptoConfig());
+		//help.add(choice);
 
         tab1.labels=labels;
         tab1.values =  values;
@@ -335,6 +335,9 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
             securityContext = jdmsat.getString(1, 0);
             isAttacker = jdmsat.getString(1, 1).equals("Yes");
             makeValue();
+            
+            System.out.println(channelName + " " + securityContext + " " + isAttacker);
+            
             return true;
         }
 

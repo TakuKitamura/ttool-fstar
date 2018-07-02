@@ -445,6 +445,7 @@ public class SecurityGeneration implements Runnable {
                         originPort.typep = 2;
                         destPort.typep = 2;
                         originPort.setParam(0, new TType(1));
+                        destPort.setParam(0, new TType(1));
                     }
                     destPort.isOrigin = !hsmChan.isOrigin;
 
@@ -868,10 +869,10 @@ public class SecurityGeneration implements Runnable {
                     //Receive any nonces if ensuring authenticity           
                     if (nonceOutChannels.get(task).contains(channel)) {
                     	//Read nonce from rec task
-
+                        yShift+=50;
                         
                         List<TMLChannel> matches = tmlmodel.getChannels(tmlc.getDestinationTask(), tmlc.getOriginTask());
-
+						rd = new TMLADReadChannel(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                         if (matches.size() > 0) {
                             rd.setChannelName(matches.get(0).getName().replaceAll(title + "__", ""));
                         } else {
@@ -888,7 +889,7 @@ public class SecurityGeneration implements Runnable {
                         
                         //Also send nonce to hsm
                         yShift+=50;
-                        
+ 		                wr2 = new TMLADWriteChannel(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);       
                     	wr2.setChannelName("data_" + chanName + "_" + task.getName().split("__")[1]);
                     	wr2.setSecurityContext(channelSecMap.get(chanName));
                     	tad.addComponent(wr2, xpos, ypos + yShift, false, true);
@@ -1011,11 +1012,13 @@ public class SecurityGeneration implements Runnable {
 
  					//If needed, forge nonce, send it to receiving task
                     TMLADEncrypt nonce = new TMLADEncrypt(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+                    TMLADWriteChannel wr3 = new TMLADWriteChannel(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     TMLADWriteChannel wr2 = new TMLADWriteChannel(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     
                     if (nonceInChannels.get(task).contains(channel)) {
                         //Create a nonce operator and a write channel operator
-                        
+                        yShift+=60;
+                        nonce = new TMLADEncrypt(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                         nonce.securityContext = "nonce_" + tmlc.getDestinationTask().getName().split("__")[1] + "_" + tmlc.getOriginTask().getName().split("__")[1];
                         nonce.type = "Nonce";
                         nonce.message_overhead = overhead;
@@ -1024,33 +1027,34 @@ public class SecurityGeneration implements Runnable {
                         tad.addComponent(nonce, xpos, ypos + yShift, false, true);
                         fromStart.setP2(nonce.getTGConnectingPointAtIndex(0));
                         yShift += 50;
-                        wr = new TMLADWriteChannel(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+                        
+                        wr3 = new TMLADWriteChannel(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                         //Send nonce along channel, the newly created nonce channel or an existing channel with the matching sender and receiver
                         //Find matching channels
                         List<TMLChannel> matches = tmlmodel.getChannels(tmlc.getDestinationTask(), tmlc.getOriginTask());
 
                         if (matches.size() > 0) {
-                            wr.setChannelName(matches.get(0).getName().replaceAll(title + "__", ""));
+                            wr3.setChannelName(matches.get(0).getName().replaceAll(title + "__", ""));
                         } else {
-                            wr.setChannelName("nonceCh" + tmlc.getDestinationTask().getName().split("__")[1] + "_" + tmlc.getOriginTask().getName().split("__")[1]);
+                            wr3.setChannelName("nonceCh" + tmlc.getDestinationTask().getName().split("__")[1] + "_" + tmlc.getOriginTask().getName().split("__")[1]);
                         }
                         //send the nonce along the channel
-                        wr.setSecurityContext("nonce_" + tmlc.getDestinationTask().getName().split("__")[1] + "_" + tmlc.getOriginTask().getName().split("__")[1]);
-                        tad.addComponent(wr, xpos, ypos + yShift, false, true);
+                        wr3.setSecurityContext("nonce_" + tmlc.getDestinationTask().getName().split("__")[1] + "_" + tmlc.getOriginTask().getName().split("__")[1]);
+                        tad.addComponent(wr3, xpos, ypos + yShift, false, true);
                         
-                        wr.makeValue();
-                        TGConnector tmp = new TGConnectorTMLAD(wr.getX(), wr.getY() + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, nonce.getTGConnectingPointAtIndex(1), wr.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                        wr3.makeValue();
+                        TGConnector tmp = new TGConnectorTMLAD(wr3.getX(), wr3.getY() + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, nonce.getTGConnectingPointAtIndex(1), wr3.getTGConnectingPointAtIndex(0), new Vector<Point>());
                         tad.addComponent(tmp, xpos, ypos, false, true);
                         
                         
                         //Also send nonce to hsm
                         yShift+=50;
-                        
+                        wr2 = new TMLADWriteChannel(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     	wr2.setChannelName("data_" + chanName + "_" + task.getName().split("__")[1]);
                     	wr2.setSecurityContext("nonce_" + tmlc.getDestinationTask().getName().split("__")[1] + "_" + tmlc.getOriginTask().getName().split("__")[1]);
                     	tad.addComponent(wr2, xpos, ypos + yShift, false, true);
                     	
-                    	tmp = new TGConnectorTMLAD(wr2.getX(), wr2.getY() + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, wr.getTGConnectingPointAtIndex(1), wr2.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                    	tmp = new TGConnectorTMLAD(wr2.getX(), wr2.getY() + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, wr3.getTGConnectingPointAtIndex(1), wr2.getTGConnectingPointAtIndex(0), new Vector<Point>());
                         tad.addComponent(tmp, xpos, ypos, false, true);
                         
                         fromStart = new TGConnectorTMLAD(wr2.getX(), wr.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, wr2.getTGConnectingPointAtIndex(1), null, new Vector<Point>());
@@ -1064,12 +1068,12 @@ public class SecurityGeneration implements Runnable {
                         
                         
                         
-                        //Shift everything from the read channel on down
+                      /*  //Shift everything from the read channel on down
                         for (TGComponent tg : tad.getComponentList()) {
-                            if (tg.getY() >= ypos && tg != nonce && tg != wr && tg != wr2) {
+                            if (tg.getY() >= ypos && tg != nonce && tg != wr2 && tg!=wr3) {
                                 tg.setCd(tg.getX(), tg.getY() + yShift);
                             }
-                        }
+                        }*/
                     }
 
 
@@ -1098,7 +1102,7 @@ public class SecurityGeneration implements Runnable {
                     fromStart.setP2(point);
                     //Shift components down to make room for the added ones, and add security contexts to write channels
                     for (TGComponent tg : tad.getComponentList()) {
-                        if (tg.getY() >= ypos && tg != wr && tg != req && tg != rd && tg!=wr2 && tg!=nonce) {
+                        if (tg.getY() >= ypos && tg != wr && tg != req && tg != rd && tg!=wr2 && tg!=nonce && tg!=wr3) {
                             tg.setCd(tg.getX(), tg.getY() + yShift);
                         }
                     }
@@ -1511,8 +1515,7 @@ public class SecurityGeneration implements Runnable {
 
                     fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
                     fromStart.setP1(choice.getTGConnectingPointAtIndex(i));
-                    fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
-                    tad.addComponent(rd, xc, 300, false, true);                  
+                    fromStart.setP2(rd.getTGConnectingPointAtIndex(0));              
                     tad.addComponent(fromStart, xc, 300, false, true);
                     
                     

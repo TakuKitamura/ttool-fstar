@@ -1692,10 +1692,13 @@ public class TML2Avatar {
 					asm.setStartState((AvatarStartState) elementList.get(0));
 				}
 				for (SecurityPattern secPattern: secPatterns){
-					AvatarAttribute sec = new AvatarAttribute(secPattern.name, AvatarType.INTEGER, block, null);
-					AvatarAttribute enc = new AvatarAttribute(secPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
-					block.addAttribute(sec);
-					block.addAttribute(enc);
+					AvatarAttribute sec = block.getAvatarAttributeWithName(secPattern.name);
+					if (sec==null){
+						sec = new AvatarAttribute(secPattern.name, AvatarType.INTEGER, block, null);
+						AvatarAttribute enc = new AvatarAttribute(secPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
+						block.addAttribute(sec);
+						block.addAttribute(enc);
+					}
 					avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ secPattern.name, null, sec));
 				}
 
