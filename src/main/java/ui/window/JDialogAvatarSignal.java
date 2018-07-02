@@ -44,6 +44,7 @@ package ui.window;
 import ui.AvatarSignal;
 import ui.util.IconManager;
 import ui.TGComponent;
+import myutil.TraceManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -176,9 +177,12 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		refChecks = new JComboBox<TGComponent>(refs);
 		refChecks.insertItemAt(null, 0);
-		if (reference!=null){
+		TraceManager.addDev("Reference=" + reference);
+		if (reference != null){
 			refChecks.setSelectedItem(reference);
-		}
+		} else {
+		    refChecks.setSelectedIndex(0);
+        }
 		panel1.add(refChecks,c1);
 
 
