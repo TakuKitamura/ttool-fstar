@@ -226,9 +226,11 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 				}
 				if (periodValueInteger == false) {
 					block.setPeriod(Integer.parseInt(periodTextField.getText()));
+					block.setTime((String) periodComboBoxString.getSelectedItem());
 				}
 			} else {
 				block.setPeriod(-1);
+				block.setTime((String) periodComboBoxString.getSelectedItem());
 			}
 
 			this.dispose();
