@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,12 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
 
 
 package myutil;
@@ -44,10 +42,11 @@ package myutil;
 import java.util.StringTokenizer;
 
 /**
-   * Class BoolExpressionEvaluator
-   * Creation: 13/12/2010
-   * Version 2.0 13/12/2010
-   * @author Ludovic APVRILLE
+ * Class BoolExpressionEvaluator
+ * Creation: 13/12/2010
+ * Version 2.0 13/12/2010
+ *
+ * @author Ludovic APVRILLE
  */
 public class BoolExpressionEvaluator {
 
@@ -60,9 +59,9 @@ public class BoolExpressionEvaluator {
         public static final int BOOL_BINARY_OP = 4;
         public static final int BOOL_UNARY_OP = 5;
         public static final int OPEN_PARENTHESIS = 6;
-	public static final int UNKNOWN_TERM = 7;
+        public static final int UNKNOWN_TERM = 7;
 
-        public int id = (int)(Math.ceil(Math.random() * 10000000));
+        public int id = (int) (Math.ceil(Math.random() * 10000000));
         public int i = -18;
         public boolean b;
         public int res; //-1: available, 0:int, 2:bool, 3:ko, others : OPs
@@ -72,7 +71,6 @@ public class BoolExpressionEvaluator {
         public IntBoolRes left;
         public IntBoolRes right;
         public IntBoolRes father;
-
 
 
         public IntBoolRes() {
@@ -98,18 +96,17 @@ public class BoolExpressionEvaluator {
             father = _father;
         }
 
-	public IntBoolRes(String val, IntBoolRes _father) {
-	    symb = val;
+        public IntBoolRes(String val, IntBoolRes _father) {
+            symb = val;
             res = UNKNOWN_TERM;
             father = _father;
         }
 
-	public  IntBoolRes getTop() {
-	    if (father == null) {
-		return this;
-	    }
-	    else return father.getTop();
-	}
+        public IntBoolRes getTop() {
+            if (father == null) {
+                return this;
+            } else return father.getTop();
+        }
 
         public IntBoolRes addTerminalInt(int _value) {
             if (isFull()) {
@@ -141,8 +138,8 @@ public class BoolExpressionEvaluator {
             }
             return news;
         }
-	
-	public IntBoolRes addTerminalUnknown(String val) {
+
+        public IntBoolRes addTerminalUnknown(String val) {
             if (isFull()) {
                 return null;
             }
@@ -155,7 +152,7 @@ public class BoolExpressionEvaluator {
             }
             return news;
         }
-	
+
 
         public IntBoolRes addOpenParenthesis() {
             if ((left != null) && (right != null)) {
@@ -195,7 +192,7 @@ public class BoolExpressionEvaluator {
             if (right != null) {
                 // Must change the tree structure according to the operator priority
                 IntBoolRes newE = new IntBoolRes(INT_BINARY_OP, _op, this);
-		return addBinaryChangeTreeStruct(newE);
+                return addBinaryChangeTreeStruct(newE);
                 /*newE.left = right;
                 newE.father = right.father;
                 right.father = newE;
@@ -209,14 +206,14 @@ public class BoolExpressionEvaluator {
             if (!isAvailable()) {
                 return null;
             }
-	    
+
             res = INT_BINARY_OP;
             op = _op;
             return this;
         }
 
-	public IntBoolRes addUnaryOperator(int _op) {
-	    if ((left != null) && (right != null)) {
+        public IntBoolRes addUnaryOperator(int _op) {
+            if ((left != null) && (right != null)) {
                 return null;
             }
 
@@ -238,7 +235,7 @@ public class BoolExpressionEvaluator {
             newE.left = topPar;
 
             return topPar;
-	}
+        }
 
         public IntBoolRes addBinaryOperator(int _op) {
             // Must have at least one right operator
@@ -260,7 +257,7 @@ public class BoolExpressionEvaluator {
             if (!isAvailable()) {
                 return null;
             }
-	    
+
             res = BOOL_BINARY_OP;
             op = _op;
             return this;
@@ -269,7 +266,7 @@ public class BoolExpressionEvaluator {
         public IntBoolRes addBinaryChangeTreeStruct(IntBoolRes newE) {
 
             // Look for the father
-            if (isABinaryOperator() && (newE.getPriority()>=getPriority())) {
+            if (isABinaryOperator() && (newE.getPriority() >= getPriority())) {
                 newE.left = right;
                 right.father = newE;
                 this.right = newE;
@@ -282,22 +279,22 @@ public class BoolExpressionEvaluator {
                 IntBoolRes targetF = this.father;
 
                 boolean go = true;
-                while(go == true) {
-		    TraceManager.addDev("in loop targetF=" + targetF);
+                while (go == true) {
+                    TraceManager.addDev("in loop targetF=" + targetF);
                     if (targetF == null) {
                         go = false;
                     } else {
                         if (!(targetF.isABinaryOperator())) {
                             go = false;
                         } else if (targetF.hasAHigherPriorityThan(newE)) {
-			    IntBoolRes nexT = targetF.father;
-			    if (nexT == targetF) {
-				go = false;
-			    }
-			    targetF = nexT;
+                            IntBoolRes nexT = targetF.father;
+                            if (nexT == targetF) {
+                                go = false;
+                            }
+                            targetF = nexT;
                         } else {
-			    go = false;
-			}
+                            go = false;
+                        }
                     }
                 }
 
@@ -306,7 +303,7 @@ public class BoolExpressionEvaluator {
                 if (targetF == null) {
                     newE.left = top;
                     top.father = newE;
-		    newE.father = null;
+                    newE.father = null;
                     top = newE;
                     return top;
                 } else {
@@ -358,7 +355,7 @@ public class BoolExpressionEvaluator {
             return false;
         }
 
-        public boolean isABinaryOperator(){
+        public boolean isABinaryOperator() {
             return (res == INT_BINARY_OP) || (res == BOOL_BINARY_OP);
         }
 
@@ -388,7 +385,7 @@ public class BoolExpressionEvaluator {
             if (res == 0) {
                 return "" + i;
             }
-            return ""+b;
+            return "" + b;
         }
 
         public Object getObjectValue() {
@@ -404,9 +401,9 @@ public class BoolExpressionEvaluator {
 
         private int analysisArg(Object ob1) {
             if (ob1 instanceof Integer) {
-                return ((Integer)ob1).intValue();
+                return ((Integer) ob1).intValue();
             } else {
-                if (((Boolean)ob1).booleanValue()) {
+                if (((Boolean) ob1).booleanValue()) {
                     return 1;
                 } else {
                     return 0;
@@ -414,35 +411,33 @@ public class BoolExpressionEvaluator {
             }
         }
 
-	private Boolean makeUnaryOp(int op, int elt1) {
-	    if (op == NOT_TOKEN) {
-		if (elt1 == 0) {
-		    return new Boolean(true);
-		}
-		else
-		    return new Boolean(false);
-	    }
-	    return null;
-	}
-	
+        private Boolean makeUnaryOp(int op, int elt1) {
+            if (op == NOT_TOKEN) {
+                if (elt1 == 0) {
+                    return new Boolean(true);
+                } else
+                    return new Boolean(false);
+            }
+            return null;
+        }
+
 
         private Boolean makeBinaryOp(int op, int elt1, int elt2) {
             if (op == EQUAL_TOKEN) {
                 return new Boolean(elt1 == elt2);
             }
 
-	    if (op == NOT_EQUAL_TOKEN) {
+            if (op == NOT_EQUAL_TOKEN) {
                 return new Boolean(elt1 != elt2);
             }
 
-	    if (op == OR_TOKEN) {
+            if (op == OR_TOKEN) {
                 return new Boolean((elt1 != 0) || (elt2 != 0));
             }
 
-	    if (op == AND_TOKEN) {
+            if (op == AND_TOKEN) {
                 return new Boolean((elt1 != 0) && (elt2 != 0));
             }
-
 
 
             return null;
@@ -462,30 +457,30 @@ public class BoolExpressionEvaluator {
             }
 
             if (op == DIV_TOKEN) {
-		//TraceManager.addDev("Div token .. elt1 = " + elt1 + " elt2 = " + elt2 + " res=" +  new Integer(elt1 / elt2).intValue());		
+                //TraceManager.addDev("Div token .. elt1 = " + elt1 + " elt2 = " + elt2 + " res=" +  new Integer(elt1 / elt2).intValue());
                 return new Integer(elt1 / elt2);
             }
 
-	    return null;
-	}
+            return null;
+        }
 
-	private Boolean makeIntegerToBooleanOp(int op, int elt1, int elt2) {
+        private Boolean makeIntegerToBooleanOp(int op, int elt1, int elt2) {
 
-	    if (op == LT_TOKEN) {
-		return new Boolean(elt1 < elt2);
-	    }
+            if (op == LT_TOKEN) {
+                return new Boolean(elt1 < elt2);
+            }
 
-	     if (op == GT_TOKEN) {
-		return new Boolean(elt1 > elt2);
-	    }
+            if (op == GT_TOKEN) {
+                return new Boolean(elt1 > elt2);
+            }
 
-	     if (op == LTEQ_TOKEN) {
-		return new Boolean(elt1 <= elt2);
-	    }
+            if (op == LTEQ_TOKEN) {
+                return new Boolean(elt1 <= elt2);
+            }
 
-	     if (op == GTEQ_TOKEN) {
-		return new Boolean(elt1 >= elt2);
-	    }
+            if (op == GTEQ_TOKEN) {
+                return new Boolean(elt1 >= elt2);
+            }
 
             return null;
         }
@@ -496,21 +491,21 @@ public class BoolExpressionEvaluator {
                 return getObjectValue();
             }
 
-	    if (res == BOOL_UNARY_OP) {
-		if (left == null) {
-		    errorMessage = "Badly formatted unary boolean operator";
+            if (res == BOOL_UNARY_OP) {
+                if (left == null) {
+                    errorMessage = "Badly formatted unary boolean operator";
                     return null;
-		}
-		Object ob1 = left.computeValue();
-		if (!(ob1 instanceof Boolean)) {
-		    errorMessage = "Bad operand for  unary boolean operator";
+                }
+                Object ob1 = left.computeValue();
+                if (!(ob1 instanceof Boolean)) {
+                    errorMessage = "Bad operand for  unary boolean operator";
                     return null;
-		}
-		int elt1 = analysisArg(ob1);
-		Boolean result = makeUnaryOp(op, elt1);
-		TraceManager.addDev("Result unary=" + result);
-		return result;
-	    }
+                }
+                int elt1 = analysisArg(ob1);
+                Boolean result = makeUnaryOp(op, elt1);
+                TraceManager.addDev("Result unary=" + result);
+                return result;
+            }
 
             if (res == BOOL_BINARY_OP) {
                 if ((right == null) || (left == null)) {
@@ -521,7 +516,7 @@ public class BoolExpressionEvaluator {
                 Object ob2 = left.computeValue();
                 if ((ob1 == null) || (ob2 == null))
                     return null;
-                if (((ob1 instanceof Integer) && (ob2 instanceof Integer)) ||  ((ob1 instanceof Boolean) && (ob2 instanceof Boolean))) {
+                if (((ob1 instanceof Integer) && (ob2 instanceof Integer)) || ((ob1 instanceof Boolean) && (ob2 instanceof Boolean))) {
                     int elt1 = analysisArg(ob1);
                     int elt2 = analysisArg(ob2);
 
@@ -548,10 +543,10 @@ public class BoolExpressionEvaluator {
                     int elt1 = analysisArg(ob1);
                     int elt2 = analysisArg(ob2);
 
-		    if (isIntToBooleanOperator(op)) {
-			Boolean resB = makeIntegerToBooleanOp(op, elt1, elt2);
-			return resB;
-		    }
+                    if (isIntToBooleanOperator(op)) {
+                        Boolean resB = makeIntegerToBooleanOp(op, elt1, elt2);
+                        return resB;
+                    }
 
                     Integer result = makeIntegerOp(op, elt1, elt2);
                     TraceManager.addDev("Result int=" + result);
@@ -570,7 +565,7 @@ public class BoolExpressionEvaluator {
                 return left.computeValue();
             }
 
-	    if (res == AVAILABLE) {
+            if (res == AVAILABLE) {
                 if (left == null) {
                     return null;
                 }
@@ -604,17 +599,17 @@ public class BoolExpressionEvaluator {
             s += " type:" + res + " op:" + toStringAction(op) + " int:" + i + " bool:" + b;
 
             if (left != null) {
-                s += left.toString(dec+1);
+                s += left.toString(dec + 1);
             }
             if (right != null) {
-                s += right.toString(dec+1);
+                s += right.toString(dec + 1);
             }
             return s;
         }
 
         private String newLine(int dec) {
             String s = "";
-            for (int i=0; i<dec; i++) {
+            for (int i = 0; i < dec; i++) {
                 s += "\t";
             }
             return s;
@@ -629,7 +624,6 @@ public class BoolExpressionEvaluator {
 
     public static final int TRUE_VALUE = 1;
     public static final int FALSE_VALUE = 0;
-
 
 
     public static final int NUMBER_TOKEN = -1;
@@ -652,10 +646,10 @@ public class BoolExpressionEvaluator {
     public static final int DIV_TOKEN = -17;
     public static final int MULT_TOKEN = -18;
 
-    public static final String [] VAL_S = {"true", "false", "nb", "bool", "==", "<", ">", "not", "or", "and", "=<", ">=", "eol", "(", ")", " ", "!=", "-", "/", "*", "+"};
+    public static final String[] VAL_S = {"true", "false", "nb", "bool", "==", "<", ">", "not", "or", "and", "=<", ">=", "eol", "(", ")", " ", "!=", "-", "/", "*", "+"};
 
     public static final boolean isIntToBooleanOperator(int op) {
-	return ((op == LT_TOKEN) || (op == GT_TOKEN) || (op == LTEQ_TOKEN) || (op == GTEQ_TOKEN));
+        return ((op == LT_TOKEN) || (op == GT_TOKEN) || (op == LTEQ_TOKEN) || (op == GTEQ_TOKEN));
     }
 
     public static String toStringAction(int val) {
@@ -688,7 +682,7 @@ public class BoolExpressionEvaluator {
     }
 
     public void setSupportUnknownTerminal(boolean support) {
-	supportUnknownTerminal = support;
+        supportUnknownTerminal = support;
     }
 
 
@@ -701,7 +695,7 @@ public class BoolExpressionEvaluator {
             return errorMessage;
         }
 
-        return errorMessage.substring(index+1, errorMessage.length());
+        return errorMessage.substring(index + 1, errorMessage.length());
     }
 
     public String getFullError() {
@@ -718,6 +712,8 @@ public class BoolExpressionEvaluator {
 
     public boolean getResultOf(String _expr) {
         //TraceManager.addDev("Evaluating bool expr: " + _expr);
+
+        String origin = _expr;
         _expr = Conversion.replaceAllString(_expr, "not", "!").trim();
 
         nbOpen = 0;
@@ -748,28 +744,27 @@ public class BoolExpressionEvaluator {
         int index;
         int indexPar;
 
-        while((index = _expr.indexOf("not(")) != -1) {
-            indexPar = Conversion.findMatchingParenthesis(_expr, index+3, '(', ')');
-            if( indexPar == -1) {
+        while ((index = _expr.indexOf("not(")) != -1) {
+            indexPar = Conversion.findMatchingParenthesis(_expr, index + 3, '(', ')');
+            if (indexPar == -1) {
                 errorMessage = "Parenthesis not maching at index " + (index + 3) + " in expression: " + _expr;
                 return false;
             }
 
-            _expr = _expr.substring(0, index) + "(!" + _expr.substring(index+3, indexPar) + ")" + _expr.substring(indexPar, _expr.length());
+            _expr = _expr.substring(0, index) + "(!" + _expr.substring(index + 3, indexPar) + ")" + _expr.substring(indexPar, _expr.length());
         }
-
 
 
         //TraceManager.addDev("Computing:" + _expr);
 
-        tokens = new java.util.StringTokenizer(_expr," \t\n\r!$=&|<>():;tf",true);
+        tokens = new java.util.StringTokenizer(_expr, " \t\n\r!$=&|<>():;tf", true);
 
         //TraceManager.addDev("Evaluating bool bool bool expr: " + _expr);
 
         int result = parseRootExpr1();
 
         if (getError() != null) {
-            TraceManager.addDev("Error: " + getError());
+            TraceManager.addDev("Error: " + getError() + " in expr=" + origin + " modified=" + _expr);
         }
 
         if (result == TRUE_VALUE) {
@@ -995,7 +990,7 @@ public class BoolExpressionEvaluator {
                 }
                 result[1] = BOOL_TOKEN;
 
-            }else if (typeOfOp == LT_TOKEN) {
+            } else if (typeOfOp == LT_TOKEN) {
                 if (result[0] < resultRight[0]) {
                     result[0] = 1;
                 } else {
@@ -1040,7 +1035,6 @@ public class BoolExpressionEvaluator {
     }
 
 
-
     public void computeNextToken1() {
         // If we're at the end, make it an EOLN_TOKEN.
         if (!tokens.hasMoreTokens()) {
@@ -1060,8 +1054,7 @@ public class BoolExpressionEvaluator {
             try {
                 currentValue = Integer.valueOf(s).intValue();
                 currentType = NUMBER_TOKEN;
-            }
-            catch (NumberFormatException x) {
+            } catch (NumberFormatException x) {
                 errorMessage = "Illegal format for a number.";
             }
             return;
@@ -1138,7 +1131,7 @@ public class BoolExpressionEvaluator {
 
         if (s.compareTo(")") == 0) {
             currentType = CLOSE_PAR_TOKEN;
-            nbOpen --;
+            nbOpen--;
             if (nbOpen < 0) {
                 TraceManager.addDev("Boolean expr: Found pb with a parenthesis");
                 errorMessage = "Parenthesis mismatch";
@@ -1151,7 +1144,7 @@ public class BoolExpressionEvaluator {
         if (s.compareTo("(") == 0) {
             //TraceManager.addDev("opening par token");
             currentType = OPEN_PAR_TOKEN;
-            nbOpen ++;
+            nbOpen++;
             return;
         }
 
@@ -1168,7 +1161,6 @@ public class BoolExpressionEvaluator {
         // Invalid token
         errorMessage = "Unknown element: " + s;
     }
-
 
 
     /**
@@ -1189,7 +1181,7 @@ public class BoolExpressionEvaluator {
         if (currentType != token) {
             if (token == EOLN_TOKEN)
                 errorMessage =
-                    "Unexpected text after the expression.";
+                        "Unexpected text after the expression.";
             else if (token == NUMBER_TOKEN)
                 errorMessage = "Expected an integer number.";
             else if (token == BOOL_TOKEN)
@@ -1199,7 +1191,7 @@ public class BoolExpressionEvaluator {
             else if (token == NOT_EQUAL_TOKEN)
                 errorMessage = "Expected an not equal.";
             else errorMessage =
-                     "Expected a " + ((char) token) + ".";
+                        "Expected a " + ((char) token) + ".";
             return;
         }
 
@@ -1229,14 +1221,12 @@ public class BoolExpressionEvaluator {
                 if (hasError()) return result;
                 result += parseMulexp();
                 if (hasError()) return result;
-            }
-            else if (currentType == '-') {
+            } else if (currentType == '-') {
                 match('-');
                 if (hasError()) return result;
                 result -= parseMulexp();
                 if (hasError()) return result;
-            }
-            else return result;
+            } else return result;
         }
     }
 
@@ -1309,7 +1299,7 @@ public class BoolExpressionEvaluator {
                     return FALSE_VALUE;
                 }
 
-            }else if (currentType == LT_TOKEN) {
+            } else if (currentType == LT_TOKEN) {
                 match(LT_TOKEN);
                 if (errorMessage != null) return result;
 
@@ -1393,7 +1383,7 @@ public class BoolExpressionEvaluator {
                 if (errorMessage != null) return result;
 
 
-                if ((result != 0)  && (resulttmp != 0)) {
+                if ((result != 0) && (resulttmp != 0)) {
                     return TRUE_VALUE;
                 } else {
                     return FALSE_VALUE;
@@ -1417,7 +1407,7 @@ public class BoolExpressionEvaluator {
                   errorMessage = "Expression on the right is not a boolean (result=" + intresult + ")";
                   }*/
 
-                if (((int)(resulttmp)) == 0) {
+                if (((int) (resulttmp)) == 0) {
                     return TRUE_VALUE;
                 } else {
                     return FALSE_VALUE;
@@ -1433,8 +1423,7 @@ public class BoolExpressionEvaluator {
                 if (errorMessage != null) return result;
                 result /= parseRootexp();
                 if (errorMessage != null) return result;
-            }
-            else return result;
+            } else return result;
         }
     }
 
@@ -1462,7 +1451,7 @@ public class BoolExpressionEvaluator {
 
         // <rootexp> ::= number
 
-        else if (currentType==NUMBER_TOKEN){
+        else if (currentType == NUMBER_TOKEN) {
             result = currentValue;
             if (errorMessage != null) return result;
             match(NUMBER_TOKEN);
@@ -1471,14 +1460,12 @@ public class BoolExpressionEvaluator {
 
         // <rootexp> ::= bool
 
-        else if (currentType==BOOL_TOKEN){
+        else if (currentType == BOOL_TOKEN) {
             result = currentValue;
             if (errorMessage != null) return result;
             match(BOOL_TOKEN);
             if (errorMessage != null) return result;
-        }
-
-        else if (currentType==NOT_TOKEN){
+        } else if (currentType == NOT_TOKEN) {
             match(NOT_TOKEN);
             result = parseExpression();
             if (result == TRUE_VALUE) {
@@ -1489,17 +1476,12 @@ public class BoolExpressionEvaluator {
             if (errorMessage != null) return result;
             //match(NEG_TOKEN);
             if (errorMessage != null) return result;
-        }
-
-        else {
+        } else {
             errorMessage = "Expected a value or a parenthesis.";
         }
 
         return result;
     }
-
-
-
 
 
     public void computeNextToken() {
@@ -1521,13 +1503,11 @@ public class BoolExpressionEvaluator {
                 try {
                     currentValue = Integer.valueOf(s).intValue();
                     currentType = NUMBER_TOKEN;
-                }
-                catch (NumberFormatException x) {
+                } catch (NumberFormatException x) {
                     errorMessage = "Illegal format for a number.";
                 }
                 return;
             }
-
 
 
             if (s.compareTo(TRUE) == 0) {
@@ -1599,7 +1579,7 @@ public class BoolExpressionEvaluator {
 
             if (s.compareTo(")") == 0) {
                 currentType = c1;
-                nbOpen --;
+                nbOpen--;
                 if (nbOpen < 0) {
                     TraceManager.addDev("Boolean expr: Found pb with a parenthesis");
                 }
@@ -1608,7 +1588,7 @@ public class BoolExpressionEvaluator {
 
             if (s.compareTo("(") == 0) {
                 currentType = c1;
-                nbOpen ++;
+                nbOpen++;
                 return;
             }
 
@@ -1635,7 +1615,7 @@ public class BoolExpressionEvaluator {
             errorMessage = "Not a boolean expression because it contains \"=\" operators";
             return false;
         }
-	_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
+        _expr = Conversion.replaceAllString(_expr, "not", "!").trim();
         _expr = Conversion.replaceAllString(_expr, "true", "t").trim();
         _expr = Conversion.replaceAllString(_expr, "false", "f").trim();
         _expr = Conversion.replaceAllString(_expr, "||", "|").trim();
@@ -1647,17 +1627,17 @@ public class BoolExpressionEvaluator {
         _expr = Conversion.replaceAllString(_expr, ">=", ":").trim();
         _expr = Conversion.replaceAllString(_expr, "<=", ";").trim();
 
-        while((index = _expr.indexOf("not(")) != -1) {
-            indexPar = Conversion.findMatchingParenthesis(_expr, index+3, '(', ')');
-            if( indexPar == -1) {
+        while ((index = _expr.indexOf("not(")) != -1) {
+            indexPar = Conversion.findMatchingParenthesis(_expr, index + 3, '(', ')');
+            if (indexPar == -1) {
                 errorMessage = "Parenthesis not maching at index " + (index + 3) + " in expression: " + _expr;
                 return false;
             }
 
-            _expr = _expr.substring(0, index) + "(!" + _expr.substring(index+3, indexPar) + ")" + _expr.substring(indexPar, _expr.length());
+            _expr = _expr.substring(0, index) + "(!" + _expr.substring(index + 3, indexPar) + ")" + _expr.substring(indexPar, _expr.length());
         }
 
-        tokens = new java.util.StringTokenizer(_expr," \t\n\r!$=&|<>():;+-/*tf",true);
+        tokens = new java.util.StringTokenizer(_expr, " \t\n\r!$=&|<>():;+-/*tf", true);
 
         IntBoolRes resIBR = parseRootExprInt();
         if (resIBR == null) {
@@ -1676,7 +1656,7 @@ public class BoolExpressionEvaluator {
 
         TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
 
-        if(res instanceof Integer) {
+        if (res instanceof Integer) {
             errorMessage = "Integer expression. Was expecting a boolean expression";
         }
 
@@ -1685,7 +1665,7 @@ public class BoolExpressionEvaluator {
         }
 
         if (res instanceof Boolean) {
-            boolean result = ((Boolean)(res)).booleanValue();
+            boolean result = ((Boolean) (res)).booleanValue();
             return result;
         }
 
@@ -1705,13 +1685,12 @@ public class BoolExpressionEvaluator {
     }
 
 
-
     public IntBoolRes parseRootExprInt() {
         top = new IntBoolRes();
         IntBoolRes res = top;
 
         boolean go = true;
-        while(go) {
+        while (go) {
             String s = getNextToken();
             if (s == null) {
                 go = false;
@@ -1732,8 +1711,8 @@ public class BoolExpressionEvaluator {
     public IntBoolRes parseAndMakeTree(IntBoolRes current, String token) {
         ID = 0;
         IntBoolRes newElt;
-	
-	//TraceManager.addDev(current.getTop().toString());
+
+        //TraceManager.addDev(current.getTop().toString());
         //TraceManager.addDev("<><><><><><> Dealing with token:" + token + " current=" + current);
 
         char c1 = token.charAt(0);
@@ -1806,7 +1785,7 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-	if (c1 == '<') {
+        if (c1 == '<') {
             newElt = current.addIntOperator(LT_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed int operator:" + token;
@@ -1815,7 +1794,7 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-	if (c1 == '>') {
+        if (c1 == '>') {
             newElt = current.addIntOperator(GT_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed int operator:" + token;
@@ -1824,7 +1803,7 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-	if (c1 == '>') {
+        if (c1 == '>') {
             newElt = current.addIntOperator(GT_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed int operator:" + token;
@@ -1833,7 +1812,7 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-	if (c1 == ';') {
+        if (c1 == ';') {
             newElt = current.addIntOperator(LTEQ_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed int operator:" + token;
@@ -1842,7 +1821,7 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-	if (c1 == ':') {
+        if (c1 == ':') {
             newElt = current.addIntOperator(GTEQ_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed int operator:" + token;
@@ -1851,7 +1830,6 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-	
 
         // BOOL BINARY OP
         if (c1 == '=') {
@@ -1863,7 +1841,7 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-	if (c1 == '&') {
+        if (c1 == '&') {
             newElt = current.addBinaryOperator(AND_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed bool operator:" + token;
@@ -1872,7 +1850,7 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-	if (c1 == '|') {
+        if (c1 == '|') {
             newElt = current.addBinaryOperator(OR_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed bool operator:" + token;
@@ -1881,8 +1859,8 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-	// Bool unary op
-	if (c1 == '!') {
+        // Bool unary op
+        if (c1 == '!') {
             newElt = current.addUnaryOperator(NOT_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed bool unary operator:" + token;
@@ -1906,7 +1884,7 @@ public class BoolExpressionEvaluator {
             // Must find corresponding parenthesis
             // Looking for father of the correspoing parenthesis;
             IntBoolRes father = current.father;
-            while(father != null) {
+            while (father != null) {
                 if (father.op == OPEN_PAR_TOKEN) {
                     break;
                 }
@@ -1918,16 +1896,16 @@ public class BoolExpressionEvaluator {
             return father.father;
         }
 
-	if (supportUnknownTerminal) {
-	    TraceManager.addDev("Adding unknown term:" + token);
-	    newElt = current.addTerminalUnknown(token);
-	    
-	    if (newElt == null) {
-		errorMessage = "Badly placed unknown term:" + token;
-		return null;
-	    }
-	    return current;
-	}
+        if (supportUnknownTerminal) {
+            TraceManager.addDev("Adding unknown term:" + token);
+            newElt = current.addTerminalUnknown(token);
+
+            if (newElt == null) {
+                errorMessage = "Badly placed unknown term:" + token;
+                return null;
+            }
+            return current;
+        }
 
         return null;
 
