@@ -346,6 +346,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
             _avatarOnly, boolean _experimental) {
         openLast = _openLast;
+        TraceManager.addDev("openLast=" + openLast);
         turtleOn = _turtleOn;
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
@@ -529,7 +530,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //split1.setLastDividerLocation(500);
         //panelForTree.add(scrollPane, BorderLayout.CENTER);
 
-        split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, split1, panelForTab);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, split1, panelForTab);
         framePanel.add(split, BorderLayout.CENTER);
         //split1.resetToPreferredSizes();
 
@@ -538,12 +539,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         frame.setJMenuBar(jmenubarturtle);
 
         // if openLast, must open the latest specification (if it exists)
-        if (ConfigurationTTool.LastOpenFileDefined) {
+        if ((ConfigurationTTool.LastOpenFileDefined) && (openLast)) {
             openLastProject();
+            dtree.update();
+            split.setDividerLocation(200);
         }
 
-        //split1.setLastDividerLocation(split1.getHeight() * 4 / 5);
-        //split1.setLastDividerLocation(900);
+        //
 
         // ToolBar
         //toolbarDesign = new Vector();

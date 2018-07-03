@@ -178,10 +178,11 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     //security generation buttons
     ButtonGroup secGroup;
 
-    protected JCheckBox autoConf, autoWeakAuth, autoStrongAuth, custom;
-	protected JRadioButton autoSec, autoMapKeys, addHSM;
+    protected JCheckBox autoConf, autoWeakAuth, autoStrongAuth, custom, addHSM;
+	protected JRadioButton autoSec, autoMapKeys;
     protected JTextField encTime, decTime, secOverhead;
     protected JComboBox<String> addtoCPU;
+	protected JButton allValidated, addOneValidated, allIgnored, addOneIgnored;
 
     protected JCheckBox removeForkAndJoin;
 
@@ -347,19 +348,17 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         jp02.add(autoStrongAuth, c01);
 
 		autoStrongAuth.addActionListener(this);
-        autoMapKeys= new JRadioButton("Add Keys");
-		autoMapKeys.addActionListener(this);
-        jp02.add(autoMapKeys, c01);
-		secGroup.add(autoMapKeys);
-        addHSM = new JRadioButton("Add HSM");
-        jp02.add(addHSM,c01);
-		addHSM.addActionListener(this);
-		secGroup.add(addHSM);
-		jp02.add(new JLabel("Add HSM to component:"),c01);
+		
+		addHSM = new JCheckBox("Add HSM to component:");
+		addHSM.setEnabled(false);
+		jp02.add(addHSM, c01);
+		
+		
 		listIgnored = new JList<String>(ignoredTasks);
 
 
 		listPanel = new JPanel();
+		listPanel.setPreferredSize(new Dimension(250, 200));
 		GridBagConstraints c02 = new GridBagConstraints();
 		c02.gridwidth=1;
 		c02.gridheight=1;
@@ -375,27 +374,36 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         GridBagConstraints c13 = new GridBagConstraints();
         c13.gridwidth = GridBagConstraints.REMAINDER;
         c13.gridheight = 1;
-        JButton allValidated = new JButton(IconManager.imgic50);
+        
+        allValidated = new JButton(IconManager.imgic50);
         allValidated.setPreferredSize(new Dimension(50, 25));
         allValidated.addActionListener(this);
         allValidated.setActionCommand("allValidated");
         buttonPanel.add(allValidated, c13);
 
-        JButton addOneValidated = new JButton(IconManager.imgic48);
+		allValidated.setEnabled(false);
+		
+
+        addOneValidated = new JButton(IconManager.imgic48);
         addOneValidated.setPreferredSize(new Dimension(50, 25));
         addOneValidated.addActionListener(this);
         addOneValidated.setActionCommand("addOneValidated");
         buttonPanel.add(addOneValidated, c13);
 
+
+		addOneValidated.setEnabled(false);
+
         buttonPanel.add(new JLabel(" "), c13);
 
-        JButton addOneIgnored = new JButton(IconManager.imgic46);
+        addOneIgnored = new JButton(IconManager.imgic46);
         addOneIgnored.addActionListener(this);
         addOneIgnored.setPreferredSize(new Dimension(50, 25));
         addOneIgnored.setActionCommand("addOneIgnored");
         buttonPanel.add(addOneIgnored, c13);
 
-        JButton allIgnored = new JButton(IconManager.imgic44);
+		addOneIgnored.setEnabled(false);
+
+        allIgnored = new JButton(IconManager.imgic44);
         allIgnored.addActionListener(this);
         allIgnored.setPreferredSize(new Dimension(50, 25));
         allIgnored.setActionCommand("allIgnored");
@@ -403,6 +411,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         listPanel.add(buttonPanel, c02);
         buttonPanel.setPreferredSize(new Dimension(50, 200));
 
+		allIgnored.setEnabled(false);
+		
         listSelected = new JList<String>(selectedTasks);
 
         //listValidated.setPreferredSize(new Dimension(200, 250));
@@ -417,6 +427,31 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         jp02.add(listPanel, c01);
         c02.gridheight = 1;
 		
+		custom = new JCheckBox("Custom performance attributes");
+        jp02.add(custom, c01);
+        custom.addActionListener(this);
+
+        jp02.add(new JLabel("Encryption Computational Complexity"), c01);
+        encTime = new JTextField(encCC);
+        encTime.setEnabled(false);
+        jp02.add(encTime, c01);
+
+        jp02.add(new JLabel("Decryption Computational Complexity"), c01);
+        decTime = new JTextField(decCC);
+        decTime.setEnabled(false);
+        jp02.add(decTime, c01);
+
+        jp02.add(new JLabel("Data Overhead (bits)"), c01);
+        secOverhead = new JTextField(secOv);
+        secOverhead.setEnabled(false);
+        jp02.add(secOverhead, c01);
+		
+		
+        autoMapKeys= new JRadioButton("Add Keys Only");
+		autoMapKeys.addActionListener(this);
+        jp02.add(autoMapKeys, c01);
+		secGroup.add(autoMapKeys);
+
 		
 /*
 		for (String cpuName: cpuTaskMap.keySet()){
@@ -442,30 +477,13 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         //     addToComp = new JTextField(compName);
         //jp01.add(addToComp,c01);
 
-        removeForkAndJoin = new JCheckBox("Remove fork and join operators");
+   /*     removeForkAndJoin = new JCheckBox("Remove fork and join operators");
         if (mgui.isExperimentalOn()) {
             //jp02.add(removeForkAndJoin, c01);
             //removeForkAndJoin.addActionListener(this);
-        }
+        }*/
 
-        custom = new JCheckBox("Custom performance attributes");
-        jp02.add(custom, c01);
-        custom.addActionListener(this);
-
-        jp02.add(new JLabel("Encryption Computational Complexity"), c01);
-        encTime = new JTextField(encCC);
-        encTime.setEnabled(false);
-        jp02.add(encTime, c01);
-
-        jp02.add(new JLabel("Decryption Computational Complexity"), c01);
-        decTime = new JTextField(decCC);
-        decTime.setEnabled(false);
-        jp02.add(decTime, c01);
-
-        jp02.add(new JLabel("Data Overhead (bits)"), c01);
-        secOverhead = new JTextField(secOv);
-        secOverhead.setEnabled(false);
-        jp02.add(secOverhead, c01);
+       
 
 
         JPanel jp01 = new JPanel();
@@ -715,14 +733,17 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                 } else if (command.equals("allIgnored")) {
                     allIgnored();
                 }
-                if (evt.getSource() == addHSM) {
-                    listPanel.setEnabled(addHSM.isSelected());
-                }
-                if (evt.getSource() == autoConf || evt.getSource() == autoSec || evt.getSource() == autoMapKeys || evt.getSource() == addHSM || evt.getSource() == autoWeakAuth) {
+                if (evt.getSource() == autoConf || evt.getSource() == autoSec || evt.getSource() == autoMapKeys || evt.getSource() == autoWeakAuth) {
                     //autoWeakAuth.setEnabled(autoConf.isSelected());
                     autoConf.setEnabled(autoSec.isSelected());
+                    addHSM.setEnabled(autoSec.isSelected());
+                    addOneValidated.setEnabled(autoSec.isSelected());
+                    allValidated.setEnabled(autoSec.isSelected());
+                    addOneIgnored.setEnabled(autoSec.isSelected());
+                    allIgnored.setEnabled(autoSec.isSelected());
                     autoWeakAuth.setEnabled(autoSec.isSelected());
                     autoStrongAuth.setEnabled(autoWeakAuth.isSelected());
+                    
                     if (!autoSec.isSelected()) {
                         autoConf.setSelected(false);
                         autoWeakAuth.setSelected(false);
@@ -788,50 +809,38 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     public void run() {
         TraceManager.addDev("Thread started");
         File testFile;
+        Map<String, java.util.List<String>> selectedCpuTasks = new HashMap<String, java.util.List<String>>();
         try {
             if (jp1.getSelectedIndex() == 1) {
-                encCC = encTime.getText();
-                decCC = decTime.getText();
-                secOv = secOverhead.getText();
-                TMLMapping map;
-                if (autoConf.isSelected() || autoWeakAuth.isSelected() || autoStrongAuth.isSelected()) {
-                    if (custom.isSelected()) {
-                        map = mgui.gtm.autoSecure(mgui, encCC, secOv, decCC, autoConf.isSelected(), autoWeakAuth.isSelected(), autoStrongAuth
-                                .isSelected());
-                    } else {
-                        map = mgui.gtm.autoSecure(mgui, autoConf.isSelected(), autoWeakAuth.isSelected(), autoStrongAuth.isSelected());
-                    }
-                } else if (addHSM.isSelected()) {
+            	if (autoSec.isSelected()){
+	                encCC = encTime.getText();
+	                decCC = decTime.getText();
+	                secOv = secOverhead.getText();
+	                TMLMapping map;
+	                if (addHSM.isSelected() && selectedTasks.size()>0) {
+	                	
 
-                    //	ArrayList<String> comps = new ArrayList<String>();
-                    //	comps.add(addToComp.getText());
-                    Map<String, java.util.List<String>> selectedCpuTasks = new HashMap<String, java.util.List<String>>();
-
-                    for (String task : selectedTasks) {
-                        String cpu = taskCpuMap.get(task);
-                        if (selectedCpuTasks.containsKey(cpu)) {
-                            selectedCpuTasks.get(cpu).add(task);
-                        } else {
-                            ArrayList<String> tasks = new ArrayList<String>();
-                            tasks.add(task);
-                            selectedCpuTasks.put(cpu, tasks);
-                        }
-                    }
-				/*for (JCheckBox cpu: cpuTaskObjs.keySet()){
-					ArrayList<String> tasks = new ArrayList<String>();	
-					for (JCheckBox task: cpuTaskObjs.get(cpu)){
-						if (task.isSelected()){
-							tasks.add(task.getText());
-						}
-					}
-					if (tasks.size()>0){
-						selectedCpuTasks.put(cpu.getText(), tasks);
-					}
-				}
-				mgui.gtm.addHSM(mgui, selectedCpuTasks);*/
-                    mgui.gtm.addHSM(mgui, selectedCpuTasks);
-                }
-                if (autoMapKeys.isSelected()) {
+                    	for (String task : selectedTasks) {
+                        	String cpu = taskCpuMap.get(task);
+                        	if (selectedCpuTasks.containsKey(cpu)) {
+                            	selectedCpuTasks.get(cpu).add(task);
+                        	} else {
+                            	ArrayList<String> tasks = new ArrayList<String>();
+                            	tasks.add(task);
+                            	selectedCpuTasks.put(cpu, tasks);
+                        	}
+                    	}
+                    	//mgui.gtm.addHSM(mgui, selectedCpuTasks);
+	                }
+		            if (autoConf.isSelected() || autoWeakAuth.isSelected() || autoStrongAuth.isSelected()) {
+                    	if (custom.isSelected()) {
+                    	    map = mgui.gtm.autoSecure(mgui, encCC, secOv, decCC, autoConf.isSelected(), autoWeakAuth.isSelected(), autoStrongAuth.isSelected(), selectedCpuTasks);
+                    	} else {
+                        	map = mgui.gtm.autoSecure(mgui, "100", "0", "100", autoConf.isSelected(), autoWeakAuth.isSelected(), autoStrongAuth.isSelected(), selectedCpuTasks);
+                    	}
+                	}
+                } 
+                else if (autoMapKeys.isSelected()) {
                     mgui.gtm.autoMapKeys();
                 }
                 mode = NOT_STARTED;
@@ -839,11 +848,6 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
             else {
                 testGo();
                 pathCode = code1.getText().trim();
-
-                // Issue #131: Not needed. Would duplicate file name
-//                if (pathCode.isEmpty()) {
-//                    pathCode += "pvspec";
-//                }
 
                 SpecConfigTTool.checkAndCreateProverifDir(pathCode);
 

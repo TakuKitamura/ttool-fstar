@@ -365,7 +365,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
         //add it
         addInternalComponent(tgc, 0);
-        TraceManager.addDev("Element " + tgc + " added to SDInstance");
+        //TraceManager.addDev("Element " + tgc + " added to SDInstance");
 
         return true;
     }

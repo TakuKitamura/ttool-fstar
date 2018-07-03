@@ -166,6 +166,8 @@ public class ProVerifOutputAnalyzer {
                 {
                     // Remove 'RESULT ' at the begining
                     str = str.substring(7);
+                    
+                    
                     ProVerifQueryResult result = new ProVerifQueryResult(true, true);
 
                     // This concerns an enteringState event
@@ -246,7 +248,9 @@ public class ProVerifOutputAnalyzer {
                             {
                                 if (pragma instanceof AvatarPragmaSecret)
                                 {
+
                                     String trueName = this.avatar2proverif.getTrueName(((AvatarPragmaSecret) pragma).getArg());
+                                    
                                     if (trueName != null && trueName.equals(attributeName))
                                     {
                                         this.results.put(pragma, result);
