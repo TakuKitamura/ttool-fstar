@@ -153,7 +153,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         // Icon
         //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
         g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
 
         c = g.getColor();
 
