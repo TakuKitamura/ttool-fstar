@@ -122,7 +122,6 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		JPanel attributesMainPanel = new JPanel(new GridLayout());
 		mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
 		
-		// Left Side
 		Box box = Box.createVerticalBox();
 		box.setBorder(BorderFactory.createTitledBorder("Setting converter input port attributes"));
 
@@ -136,19 +135,19 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
 							GridBagConstraints.CENTER,
 							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+							new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(labelName, constraints);
 		boxPanel.add(labelName);
 
-	   	 if (port.getPortName().toString().equals("")) { // name empty
+	   	 if (port.getPortName().toString().equals("")) { 
 			nameTextField = new JTextField(10);
 		} else {
-			nameTextField = new JTextField(port.getPortName().toString(), 10); // name not empty
+			nameTextField = new JTextField(port.getPortName().toString(), 10);
 		}
 	   	constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
 							GridBagConstraints.CENTER,
 							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+							new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(nameTextField, constraints);
 		boxPanel.add(nameTextField);
 	   
@@ -160,10 +159,10 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		gridBag.setConstraints(periodLabel, constraints);
 	    	boxPanel.add(periodLabel);
 
-	    	if (port.getPeriod() == -1) { // name empty 		// port.getName().toString().equals("") ||
+	    	if (port.getPeriod() == -1) { 
 			periodTextField = new JTextField(10);
 		} else {
-			periodTextField = new JTextField("" + port.getPeriod(), 10); // name not empty
+			periodTextField = new JTextField("" + port.getPeriod(), 10); 
 		}
 	    	constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
 							GridBagConstraints.CENTER,
@@ -199,19 +198,19 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 							GridBagConstraints.BOTH,
 							new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(rateLabel, constraints);
-		boxPanel.add(rateLabel); // add label to box
+		boxPanel.add(rateLabel);
 
-		if (port.getRate() == -1) { // name empty	
+		if (port.getRate() == -1) {	
 			rateTextField = new JTextField(10);
 		} else {
-			rateTextField = new JTextField("" + port.getRate(), 10); // name not empty
+			rateTextField = new JTextField("" + port.getRate(), 10);
 		}
 		constraints = new GridBagConstraints(1, 2, 2, 1, 1.0, 1.0,
 							GridBagConstraints.CENTER,
 							GridBagConstraints.BOTH,
 							new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(rateTextField, constraints);
-		boxPanel.add(rateTextField); // add text to box
+		boxPanel.add(rateTextField); 
 
 		JLabel delayLabel = new JLabel("Delay : ");
 		constraints = new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
@@ -219,19 +218,19 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 							GridBagConstraints.BOTH,
 							new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(delayLabel, constraints);
-		boxPanel.add(delayLabel); // add label to box
+		boxPanel.add(delayLabel);
 		
-		if (port.getDelay() == -1) { // name empty			// port.getName().toString().equals("") || 
+		if (port.getDelay() == -1) { 
 			delayTextField = new JTextField(10);
 		} else {
-			delayTextField = new JTextField("" + port.getDelay(), 10); // name not empty
+			delayTextField = new JTextField("" + port.getDelay(), 10);
 		}
 		constraints = new GridBagConstraints(1, 3, 2, 1, 1.0, 1.0,
 							GridBagConstraints.CENTER,
 							GridBagConstraints.BOTH,
 							new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(delayTextField, constraints);
-		boxPanel.add(delayTextField); // add text to box
+		boxPanel.add(delayTextField);
 
 		JLabel typeLabel = new JLabel("Type : ");
 		constraints = new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
@@ -239,7 +238,7 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 							GridBagConstraints.BOTH,
 							new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(typeLabel, constraints);
-		boxPanel.add(typeLabel); // add label to box
+		boxPanel.add(typeLabel);
 		
 		listTypeString = new String[4];
 		listTypeString[0] = "int";
@@ -266,15 +265,15 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 							GridBagConstraints.BOTH,
 							new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(typeComboBoxString, constraints);
-		boxPanel.add(typeComboBoxString); // add combo to box
+		boxPanel.add(typeComboBoxString);
 		
 		JLabel orginLabel = new JLabel("Origin : ");
 		constraints = new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0,
 							GridBagConstraints.CENTER,
 							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+							new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(orginLabel, constraints);
-		boxPanel.add(orginLabel); // add label to box
+		boxPanel.add(orginLabel);
 		
 		listOriginString = new String[2];
 		listOriginString[0] = "Input";
@@ -290,14 +289,13 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		constraints = new GridBagConstraints(1, 5, 2, 1, 1.0, 1.0,
 							GridBagConstraints.CENTER,
 							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+							new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(originComboBoxString, constraints);
-		boxPanel.add(originComboBoxString); // add combo to box
+		boxPanel.add(originComboBoxString);
 		
-		box.add(boxPanel); // add border to box
-		attributesMainPanel.add(box); // add grid to grid
+		box.add(boxPanel);
+		attributesMainPanel.add(box);
 
-		// Down Side
 		JPanel downPanel = new JPanel(new FlowLayout());
 
 		JButton saveCloseButton = new JButton("Save and close");
@@ -392,4 +390,3 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		}
 	}
 }
-

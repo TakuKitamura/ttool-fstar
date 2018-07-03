@@ -335,7 +335,8 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
             sb.append(isAttacker() ? "Yes": "No");
 	        sb.append("\" />\n");
             sb.append("<Attribute period=\"");
-            sb.append(this.getPeriod());
+            sb.append(getPeriod());
+            sb.append("\" time=\"" + getTime());
             sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -346,7 +347,9 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
             NodeList nli;
             Node n1, n2;
             Element elt;
+            
             int period;
+            String time;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -361,7 +364,9 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 							}
                             if (elt.getTagName().equals("Attribute")) {
                                 period = Integer.decode(elt.getAttribute("period")).intValue();
+                                time = elt.getAttribute("time");
                                 setPeriod(period);
+                                setTime(time);
                             }
                         }
                     }
@@ -413,8 +418,8 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		return period;
 	}
 
-	public void setPeriod(int period) {
-		this.period = period;
+	public void setPeriod(int _period) {
+		period = _period;
 	}
 
 	public String getAttributes() {
@@ -425,8 +430,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		return time;
 	}
 
-	public void setTime(String time) {
-		this.time = time;
+	public void setTime(String _time) {
+		time = _time;
 	}
 }
-

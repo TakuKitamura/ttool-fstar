@@ -39,11 +39,10 @@
 package ui.window;
 
 import ui.syscams.*;
-import ui.util.IconManager;
-
+import ui.util.*;
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -67,13 +66,11 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 	private String listPeriodString[];
 	private JComboBox<String> periodComboBoxString;
 
-	//
 	private JTextField nameParameterTextField;
 	private JTextField valueParameterTextField;
 	private JRadioButton constantParameterRadioButton;
 	private String listTypeParameterString[];
 	private JComboBox<String> typeParameterComboBoxString;
-	//
 	private JList<String> listParameters;
 	private DefaultListModel<String> listModel;
 	private JButton upButton, downButton, removeButton;
@@ -207,7 +204,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 		JLabel labelName = new JLabel("Name : ");
 		constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(labelName, constraints);
 		attributesBoxPanel.add(labelName);
 
@@ -217,13 +214,13 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 			nameTextField = new JTextField(block.getValue().toString(), 10);
 		}
 		constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(nameTextField, constraints);
 		attributesBoxPanel.add(nameTextField);
 
 		JLabel periodLabel = new JLabel("Period Tp : ");
 		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(periodLabel, constraints);
 		attributesBoxPanel.add(periodLabel);
 
@@ -233,7 +230,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 			periodTextField = new JTextField("" + block.getPeriod(), 10); 
 		}
 		constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(periodTextField, constraints);
 		attributesBoxPanel.add(periodTextField);
 
@@ -246,13 +243,13 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 			periodComboBoxString.setSelectedIndex(0);
 		} else if (block.getTime().equals("ms")) {
 			periodComboBoxString.setSelectedIndex(1);
-		} else {
+		} else if (block.getTime().equals("s")) {
 			periodComboBoxString.setSelectedIndex(2);
 		}
 		periodComboBoxString.setActionCommand("time");
 		periodComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(periodComboBoxString, constraints);
 		attributesBoxPanel.add(periodComboBoxString);
 
@@ -265,6 +262,8 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		Box parametersBox = Box.createVerticalBox();
 		parametersBox.setBorder(BorderFactory.createTitledBorder("Setting TDF block parameters"));
 
+		JPanel blockPanel = new JPanel(new BorderLayout());
+
 		GridBagLayout gridBagParameter = new GridBagLayout();
 		GridBagConstraints constraintParameter = new GridBagConstraints();
 		JPanel parameterBoxPanel = new JPanel();
@@ -273,7 +272,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 		JLabel nameParameterLabel = new JLabel("identifier");
 		constraintParameter = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(nameParameterLabel, constraintParameter);
 		parameterBoxPanel.add(nameParameterLabel);
 
@@ -291,7 +290,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 		JLabel valueParameterLabel = new JLabel("value");
 		constraintParameter = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(valueParameterLabel, constraintParameter);
 		parameterBoxPanel.add(valueParameterLabel);
 
@@ -309,7 +308,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 		JLabel constantLabel = new JLabel("const");
 		constraintParameter = new GridBagConstraints(4, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(constantLabel, constraintParameter);
 		parameterBoxPanel.add(constantLabel);
 
@@ -324,7 +323,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 		JLabel typeParameterLabel = new JLabel("type");
 		constraintParameter = new GridBagConstraints(5, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(typeParameterLabel, constraintParameter);
 		parameterBoxPanel.add(typeParameterLabel);
 
@@ -346,11 +345,12 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		addModifyButton.setActionCommand("Add_Modify");
 		addModifyButton.addActionListener(this);
 		constraintParameter = new GridBagConstraints(0, 2, 6, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(addModifyButton, constraintParameter);
 		parameterBoxPanel.add(addModifyButton);
 
-		parametersBox.add(parameterBoxPanel); 
+		blockPanel.add(parameterBoxPanel, BorderLayout.NORTH);
+		parametersBox.add(blockPanel); 
 		parametersMainPanel.add(parametersBox, BorderLayout.WEST); 
 
 		Box managingParametersBox = Box.createVerticalBox();
@@ -360,40 +360,47 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		JPanel managingParameterBoxPanel = new JPanel(borderLayout);
 		managingParameterBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
 
-		listModel = new DefaultListModel<String>();
+		listModel = block.getListParameters();
 		listParameters = new JList<String>(listModel);
 		listParameters.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listParameters.setLayoutOrientation(JList.VERTICAL);
-		listParameters.setVisibleRowCount(10);
 		listParameters.addListSelectionListener(this);
 		JScrollPane scrollPane = new JScrollPane(listParameters);
-		scrollPane.setBorder(BorderFactory.createCompoundBorder(scrollPane.getBorder(), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-		managingParameterBoxPanel.add(scrollPane, BorderLayout.NORTH);
+		managingParameterBoxPanel.add(scrollPane, BorderLayout.CENTER);
 
-		GridLayout gridLayout = new GridLayout(3, 1, 5, 10);
-		JPanel buttonPanel = new JPanel(gridLayout);
-		
+		GridBagLayout buttonGridBag = new GridBagLayout();
+		GridBagConstraints buttonconstraints = new GridBagConstraints();
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+		buttonPanel.setLayout(buttonGridBag);
+
 		upButton = new JButton("Up");
 		upButton.setActionCommand("Up");
 		upButton.setEnabled(false);
 		upButton.addActionListener(this);
-		upButton.setBorder(BorderFactory.createCompoundBorder(upButton.getBorder(), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+		buttonconstraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		buttonGridBag.setConstraints(upButton, buttonconstraints);
 		buttonPanel.add(upButton);
 
 		downButton = new JButton("Down");
 		downButton.setActionCommand("Down");
 		downButton.setEnabled(false);
 		downButton.addActionListener(this);
-		downButton.setBorder(BorderFactory.createCompoundBorder(downButton.getBorder(), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+		buttonconstraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		buttonGridBag.setConstraints(downButton, buttonconstraints);
 		buttonPanel.add(downButton);
 
 		removeButton = new JButton("Remove parameter");
 		removeButton.setActionCommand("Remove");
 		removeButton.setEnabled(false);
 		removeButton.addActionListener(this);
-		removeButton.setBorder(BorderFactory.createCompoundBorder(removeButton.getBorder(), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+		buttonconstraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		buttonGridBag.setConstraints(removeButton, buttonconstraints);
 		buttonPanel.add(removeButton);
-		
+
 		managingParameterBoxPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 		managingParametersBox.add(managingParameterBoxPanel); 
@@ -403,11 +410,9 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		processMainPanel.setLayout(new BorderLayout());
 
 		Box codeBox = Box.createVerticalBox();
-		codeBox.setBorder(BorderFactory.createTitledBorder("Generating code"));
+		codeBox.setBorder(BorderFactory.createTitledBorder("Behavior function of TDF block"));
 
 		JPanel codeBoxPanel = new JPanel(new BorderLayout());
-
-		codeBoxPanel.add(new JLabel("Behavior function of TDF block : "), BorderLayout.NORTH);
 
 		StringBuffer stringbuf = encode(block.getProcessCode());
 		String beginString = stringbuf.toString();
@@ -424,7 +429,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		JScrollPane processScrollPane = new JScrollPane(processCodeTextArea);
 		processScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		processScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		processScrollPane.setPreferredSize(new Dimension(200, 150));
+		processScrollPane.setPreferredSize(new Dimension(200, 300));
 
 		codeBoxPanel.add(processScrollPane, BorderLayout.SOUTH);
 
@@ -538,7 +543,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 				}
 			} else {
 				listModel.remove(alreadyExistId);
-				
+
 				try {
 					if (type.equals("bool")) {
 						Boolean.parseBoolean(valueParameterTextField.getText());
@@ -599,7 +604,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 				}
 			}
 		}
-		
+
 		if ("Remove".equals(e.getActionCommand())) {
 			if (listModel.getSize() >= 1) {
 				listModel.remove(listParameters.getSelectedIndex());
@@ -618,7 +623,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 						JOptionPane.WARNING_MESSAGE);
 			}
 		}
-		
+
 		if ("Down".equals(e.getActionCommand())) {
 			if (listParameters.getSelectedIndex() < listModel.getSize()-1) {
 				String snext = listModel.get(listParameters.getSelectedIndex()+1);
@@ -631,12 +636,10 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 						JOptionPane.WARNING_MESSAGE);
 			}
 		}
-		
+
 		if ("Save_Close".equals(e.getActionCommand())) {
-			/** Save the name of the block into listNameTDF **/
 			block.setValue(new String(nameTextField.getText()));
 
-			/** Save the period of the block into listPeriodTmTDF **/
 			if (!(periodTextField.getText().isEmpty())) {
 				Boolean periodValueInteger = false;
 				try {
@@ -654,11 +657,11 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 				}
 			} else {
 				block.setPeriod(-1);
-				block.setTime((String) periodComboBoxString.getSelectedItem());
+				block.setTime("");
 			}
 
-			/** Save the process code into listProcessCodeTDF **/
 			block.setProcessCode(processCodeTextArea.getText());
+			block.setListParameters(listModel);
 
 			this.dispose();
 		}
@@ -675,6 +678,37 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 				downButton.setEnabled(false);
 				removeButton.setEnabled(false);
 			} else {
+				String select = listModel.get(listParameters.getSelectedIndex());
+				String[] splita = select.split(" = ");
+				nameParameterTextField.setText(splita[0]);
+				String[] splitb = splita[1].split(" : ");
+				valueParameterTextField.setText(splitb[0]);
+				String[] splitc = splitb[1].split(" ");
+
+				if (splitc[0].equals("const")) {
+					constantParameterRadioButton.setSelected(true);
+					if (splitc[1].equals("bool")) {
+						typeParameterComboBoxString.setSelectedIndex(0);
+					} else if (splitc[1].equals("int")) {
+						typeParameterComboBoxString.setSelectedIndex(1);
+					} else if (splitc[1].equals("double")) {
+						typeParameterComboBoxString.setSelectedIndex(2);
+					} else if (splitc[1].equals("long")) {
+						typeParameterComboBoxString.setSelectedIndex(3);
+					}
+				} else {
+					constantParameterRadioButton.setSelected(false);
+					if (splitc[0].equals("bool")) {
+						typeParameterComboBoxString.setSelectedIndex(0);
+					} else if (splitc[0].equals("int")) {
+						typeParameterComboBoxString.setSelectedIndex(1);
+					} else if (splitc[0].equals("double")) {
+						typeParameterComboBoxString.setSelectedIndex(2);
+					} else if (splitc[0].equals("long")) {
+						typeParameterComboBoxString.setSelectedIndex(3);
+					}
+				}
+				
 				if (listModel.getSize() >= 2) {
 					upButton.setEnabled(true);
 					downButton.setEnabled(true);

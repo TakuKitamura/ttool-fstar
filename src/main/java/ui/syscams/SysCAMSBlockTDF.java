@@ -64,6 +64,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	private int period;
 	private String time;
 	private String processCode;
+	private DefaultListModel<String> listParameters;
 	
 	private int maxFontSize = 14;
     private int minFontSize = 4;
@@ -113,6 +114,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
         setPeriod(-1);
         setProcessCode("void processing() {\n\n}");
         setTime("");
+        setListParameters(new DefaultListModel<String>());
         
         myImageIcon = IconManager.imgic1202;
 
@@ -356,16 +358,28 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		sb.append("<Data isAttacker=\"");
         sb.append(isAttacker() ? "Yes": "No");
         sb.append("\" />\n");
-        sb.append("<Attribute period=\"");
-        sb.append(this.getPeriod());
-        sb.append("\" processCode=\"");
-        proc = encode(this.getProcessCode());
-        sb.append(proc);
+        sb.append("<Attribute period=\"" + getPeriod());
+        sb.append("\" time=\"" + time);
+        sb.append("\" processCode=\"" + encode(getProcessCode()));
+        sb.append("\" listParameters=\"" + splitParameters(listParameters));
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
 
+    public String splitParameters(DefaultListModel listParameters) {
+    	String s = "";
+    	
+    	for (int i = 0; i < listParameters.getSize(); i++) {
+    		if (i < listParameters.getSize()-1) {
+    			s = s + listParameters.get(i) + "|";
+    		} else {
+    			s = s + listParameters.get(i);
+    		}
+    	}
+    	return s;
+    }
+    
     public StringBuffer encode(String data) {
     	StringBuffer databuf = new StringBuffer(data);
     	StringBuffer buffer = new StringBuffer("");
@@ -471,8 +485,9 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
             NodeList nli;
             Node n1, n2;
             Element elt;
+            
             int period;
-            String processCode;
+            String time, processCode, listParameters;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -487,10 +502,19 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 							}
                             if (elt.getTagName().equals("Attribute")) {
                                 period = Integer.decode(elt.getAttribute("period")).intValue();
+                                time = elt.getAttribute("time");
                                 processCode = elt.getAttribute("processCode");
+                                listParameters = elt.getAttribute("listParameters");
                                 setPeriod(period);
+                                setTime(time);
                                 processCode = decode(processCode).toString();
                                 setProcessCode(processCode);
+                                String[] split = listParameters.split("\\|");
+                                DefaultListModel<String> list = new DefaultListModel<String>();
+                                for (String s : split) {
+                                	list.addElement(s);
+                                }
+                                setListParameters(list);
                             }
                         }
                     }
@@ -575,16 +599,16 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		return processCode;
 	}
 
-	public void setProcessCode(String processCode) {
-		this.processCode = processCode;
+	public void setProcessCode(String _processCode) {
+		processCode = _processCode;
 	}
 
 	public int getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(int period) {
-		this.period = period;
+	public void setPeriod(int _period) {
+		period = _period;
 	}
 
 	public String getAttributes() {
@@ -595,8 +619,15 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		return time;
 	}
 
-	public void setTime(String time) {
-		this.time = time;
+	public void setTime(String _time) {
+		time = _time;
+	}
+
+	public DefaultListModel<String> getListParameters() {
+		return listParameters;
+	}
+
+	public void setListParameters(DefaultListModel<String> _listParameters) {
+		listParameters = _listParameters;
 	}
 }
-
