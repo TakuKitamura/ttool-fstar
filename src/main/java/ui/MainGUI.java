@@ -151,7 +151,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public JFrame frame; //Main Frame
     public Container framePanel; //Main pane
     public Container panelForTab, panelForTree; //panelForAnalysisTab; //panelForDesignTab;
-    public JSplitPane split;
+    public JSplitPane split, split1;
 
     // Multi analysis / design / deployment
     public Vector<TURTLEPanel> tabs;
@@ -522,13 +522,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         scrollPane.setMinimumSize(new Dimension(25, 200));
         jbp = new JBirdPanel(this);
         jbp.setPreferredSize(new Dimension(200, 200));
-        JSplitPane split1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, scrollPane, jbp);
+        split1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, scrollPane, jbp);
 
-        //split1.setLastDividerLocation(500);
+        //split1.setDividerLocation(700);
+        split1.setResizeWeight(0.1);
+        //split1.setOneTouchExpandable(true);
         //panelForTree.add(scrollPane, BorderLayout.CENTER);
 
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, split1, panelForTab);
+        split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, split1, panelForTab);
         framePanel.add(split, BorderLayout.CENTER);
+        split.setDividerLocation(250);
+        split1.setResizeWeight(0.9);
+        split.setOneTouchExpandable(true);
         //split1.resetToPreferredSizes();
 
         // Creating menus
@@ -539,7 +544,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         if ((ConfigurationTTool.LastOpenFileDefined) && (openLast)) {
             openLastProject();
             dtree.update();
-            split.setDividerLocation(200);
+            //split1.setDividerLocation(600);
+            //split.setDividerLocation(220);
         }
 
         //
@@ -1715,6 +1721,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
         frame.setVisible(true);
+
+        //split1.setDividerLocation(0.90);
+        //split.setDividerLocation(0.2);
+
+
+
     }
 
     public void newTurtleModeling() {

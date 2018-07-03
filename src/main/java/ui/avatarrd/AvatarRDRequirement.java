@@ -85,8 +85,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     private int currentFontSize = -1;
     private boolean displayText = true;
 
-    protected final static String[] REQ_TYPE_STR = {"<<Requirement>>", "<<Safety Requirement>>", "<<Security Requirement>>"};
-    protected final static int NB_REQ_TYPE = 3;
+    protected static String[] REQ_TYPE_STR = {"<<Requirement>>", "<<SafetyRequirement>>", "<<SecurityRequirement>>"};
+    protected static int NB_REQ_TYPE = 3;
 
     protected final static int REGULAR_REQ = 0;
     protected final static int SAFETY_REQ = 1;
