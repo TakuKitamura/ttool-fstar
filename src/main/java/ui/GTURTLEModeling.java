@@ -1075,12 +1075,12 @@ public class GTURTLEModeling {
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch) {
-        return autoSecure(gui, name, map, newarch, "100", "0", "100", true, false, false);
+        return autoSecure(gui, name, map, newarch, "100", "0", "100", true, false, false, new HashMap<String, java.util.List<String>>());
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, boolean autoConf,
                                               boolean autoWeakAuth, boolean autoStrongAuth) {
-        return autoSecure(gui, name, map, newarch, "100", "0", "100", autoConf, autoWeakAuth, autoStrongAuth);
+        return autoSecure(gui, name, map, newarch, "100", "0", "100", autoConf, autoWeakAuth, autoStrongAuth,new HashMap<String, java.util.List<String>>());
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String encComp, String overhead, String decComp) {
@@ -1091,11 +1091,11 @@ public class GTURTLEModeling {
         int arch = gui.tabs.indexOf(tmlap);
         gui.cloneRenameTab(arch, "enc");
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size() - 1);
-        return autoSecure(gui, "enc", tmap, newarch, encComp, overhead, decComp, true, false, false);
+        return autoSecure(gui, "enc", tmap, newarch, encComp, overhead, decComp, true, false, false,new HashMap<String, java.util.List<String>>());
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth,
-                                              boolean autoStrongAuth) {
+                                              boolean autoStrongAuth,Map<String, List<String>> selectedCpuTasks ) {
         if (tmap == null) {
             return null;
         }
@@ -1103,20 +1103,23 @@ public class GTURTLEModeling {
         int arch = gui.tabs.indexOf(tmlap);
         gui.cloneRenameTab(arch, "enc");
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size() - 1);
-        return autoSecure(gui, "enc", tmap, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth);
+        return autoSecure(gui, "enc", tmap, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth, selectedCpuTasks);
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String
             overhead, String decComp) {
-        return autoSecure(gui, name, tmap, newarch, encComp, overhead, decComp, true, false, false);
+        return autoSecure(gui, name, tmap, newarch, encComp, overhead, decComp, true, false, false, new HashMap<String, java.util.List<String>>());
     }
 
-    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth) {
+
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth, Map<String, List<String>> selectedCpuTasks ) {
     
             
         //move to another thread
-        SecurityGeneration secgen = new SecurityGeneration(gui, name, map, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth);
-        return secgen.startThread();
+        SecurityGeneration secgen = new SecurityGeneration(gui, name, map, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth, selectedCpuTasks);
+        tmap = secgen.startThread();
+        autoMapKeys();
+        return tmap;
     }
 
 
@@ -1187,13 +1190,13 @@ public class GTURTLEModeling {
     }
 
     public void autoMapKeys() {
-        TraceManager.addDev("auto map keys");
         if (tmap == null) {
             return;
         }
         List<HwLink> links = tmap.getArch().getHwLinks();
         //Find all Security Patterns, if they don't have an associated memory at encrypt and decrypt, map them
         TMLModeling<TGComponent> tmlm = tmap.getTMLModeling();
+        
         if (tmlm.securityTaskMap == null) {
             return;
         }
@@ -1377,6 +1380,9 @@ public class GTURTLEModeling {
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
         proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _typed, allowPrivateChannelDuplication);
+        
+       // System.out.println(proverif.getStringSpec());
+        
         warnings = avatar2proverif.getWarnings();
         languageID = PROVERIF;
         mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
