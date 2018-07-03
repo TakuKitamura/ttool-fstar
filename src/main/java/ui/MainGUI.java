@@ -527,7 +527,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //split1.setLastDividerLocation(500);
         //panelForTree.add(scrollPane, BorderLayout.CENTER);
 
-        split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, split1, panelForTab);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, split1, panelForTab);
         framePanel.add(split, BorderLayout.CENTER);
         //split1.resetToPreferredSizes();
 
@@ -538,10 +538,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         // if openLast, must open the latest specification (if it exists)
         if ((ConfigurationTTool.LastOpenFileDefined) && (openLast)) {
             openLastProject();
+            dtree.update();
+            split.setDividerLocation(200);
         }
 
-        //split1.setLastDividerLocation(split1.getHeight() * 4 / 5);
-        //split1.setLastDividerLocation(900);
+        //
 
         // ToolBar
         //toolbarDesign = new Vector();
