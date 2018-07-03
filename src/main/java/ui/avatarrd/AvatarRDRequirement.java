@@ -54,6 +54,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -105,8 +106,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     protected String referenceElements = "";
     protected String id = "";
 
-    protected LinkedList<String> extraParamIDs;
-    protected LinkedList<String> extraParamValues;
+    protected ArrayList<String> extraParamIDs;
+    protected ArrayList<String> extraParamValues;
 
     protected boolean satisfied = false;
     protected boolean verified = false;
@@ -137,8 +138,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         minWidth = 1;
         minHeight = lineHeight;
 
-        extraParamIDs = new LinkedList<>();
-        extraParamValues = new LinkedList<>();
+        extraParamIDs = new ArrayList<>();
+        extraParamValues = new ArrayList<>();
 
         nbConnectingPoint = 40;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
@@ -353,6 +354,16 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             }
         }
 
+        // Extra attributes
+        for (i = 0; i < extraParamIDs.size(); i++) {
+            if (size < (height - 2)) {
+                s = extraParamIDs.get(i) + ":" + extraParamValues.get(i);
+                drawLimitedString(g, s, x + textX, y + size, width, 0);
+            }
+            size += currentFontSize;
+
+        }
+
 
         g.setFont(f);
     }
@@ -450,6 +461,27 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         text = jdr.getText();
         kind = jdr.getKind();
         criticality = jdr.getCriticality();
+
+        // Filling extra attributes
+        String extras = jdr.getExtraAttributes();
+        extraParamValues.clear();
+        extraParamIDs.clear();
+        String[] lines = extras.split(System.getProperty("line.separator"));
+        for(String line: lines) {
+            int index0 = line.indexOf(':');
+            if (index0 >  -1) {
+                String id = line.substring(0, index0).trim();
+                if (id.length() > 0) {
+                    String val = line.substring(index0+1, line.length()).trim();
+                    if (val.length() > 0) {
+                        extraParamIDs.add(id);
+                        extraParamValues.add(val);
+                    }
+
+                }
+            }
+        }
+
 
         makeValue();
         return true;
@@ -624,6 +656,13 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         sb.append("<referenceElements data=\"");
         sb.append(referenceElements);
         sb.append("\" />\n");
+        for(int i=0; i<extraParamIDs.size(); i++) {
+            sb.append("<extraAttribute id=\"");
+            sb.append(extraParamIDs.get(i));
+            sb.append("\" value=\"");
+            sb.append(extraParamValues.get(i));
+            sb.append("\" />\n");
+        }
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -684,6 +723,18 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                 if (referenceElements.equals("null")) {
                                     referenceElements = "";
                                 }
+
+                            } else if (elt.getTagName().equals("extraAttribute")) {
+                                //
+                                String tmp1 = elt.getAttribute("id");
+                                String tmp2 = elt.getAttribute("value");
+                                if ((tmp1 != null) && (tmp2 != null)) {
+                                    if (tmp1.length() > 0) {
+                                        extraParamIDs.add(tmp1);
+                                        extraParamValues.add(tmp2);
+                                    }
+                                }
+
                             } else if (elt.getTagName().equals("reqType")) {
                                 //
                                 s = elt.getAttribute("data");
@@ -789,6 +840,10 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         if (reqType == SECURITY_REQ) {
             attr += "Attack tree node(s)= " + attackTreeNode + "\n";
         }
+        for(int i=0; i<extraParamIDs.size(); i++) {
+            attr += extraParamIDs.get(i) + ": " + extraParamValues.get(i) + "\n";
+        }
+
         return attr;
     }
 
