@@ -47,6 +47,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 //import javax.swing.event.*;
 //import java.util.*;
@@ -74,6 +75,9 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
     private String text;
 	private String id;
     private int type;
+
+    protected LinkedList<String> extraParamIDs, extraParamValues;
+    protected LinkedList<JTextField> extraParamTextFields;
     
     // Panel1
     protected JTextArea jta;
@@ -85,7 +89,8 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
     private JTextField idBox, violatedActionBox, attackTreeNodeBox, referenceElementsBox;
     
     /** Creates new form  */
-    public JDialogRequirement(Frame _frame, String _title, String _id, String _text, String _kind, String _criticality, String _violatedAction, int _type, String _attackTreeNode, String _referenceElements) {
+    public JDialogRequirement(Frame _frame, String _title, String _id, String _text, String _kind, String _criticality, String _violatedAction, int
+            _type, String _attackTreeNode, String _referenceElements, LinkedList<String> _extraParamIDs, LinkedList<String> _extraParamValues) {
         super(_frame, _title, true);
         frame = _frame;
 		id = _id;
@@ -96,6 +101,10 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
         type = _type;
 		attackTreeNode = _attackTreeNode;
 		referenceElements = _referenceElements;
+
+		extraParamIDs = _extraParamIDs;
+		extraParamValues = _extraParamValues;
+		extraParamTextFields = new LinkedList<JTextField>();
         
         initComponents();
         myInitComponents();

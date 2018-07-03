@@ -54,6 +54,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 /**
  * Class AvatarRDRequirement
@@ -104,6 +105,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     protected String referenceElements = "";
     protected String id = "";
 
+    protected LinkedList<String> extraParamIDs;
+    protected LinkedList<String> extraParamValues;
+
     protected boolean satisfied = false;
     protected boolean verified = false;
 
@@ -132,6 +136,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         minWidth = 1;
         minHeight = lineHeight;
+
+        extraParamIDs = new LinkedList<>();
+        extraParamValues = new LinkedList<>();
 
         nbConnectingPoint = 40;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
@@ -421,7 +428,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             va = violatedAction;
         }
 
-        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id, text, kind, criticality, va, reqType, atn, referenceElements);
+        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id,
+                text, kind, criticality, va, reqType, atn, referenceElements, extraParamIDs, extraParamValues);
         // jdr.setSize(750, 400);
         GraphicLib.centerOnParent(jdr, 800, 400);
         jdr.setVisible(true);

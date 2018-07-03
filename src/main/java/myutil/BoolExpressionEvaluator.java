@@ -115,10 +115,10 @@ public class BoolExpressionEvaluator {
 
             IntBoolRes news = new IntBoolRes(_value, this);
             if (left == null) {
-                TraceManager.addDev("Adding on the left:" + _value);
+                //TraceManager.addDev("Adding on the left:" + _value);
                 left = news;
             } else {
-                TraceManager.addDev("Adding on the right:" + _value);
+                //TraceManager.addDev("Adding on the right:" + _value);
                 right = news;
             }
             return news;
@@ -183,9 +183,9 @@ public class BoolExpressionEvaluator {
 
         public IntBoolRes addIntOperator(int _op) {
             // Must have at least one right operator
-            TraceManager.addDev("Add int op");
+            //TraceManager.addDev("Add int op");
             if (left == null) {
-                TraceManager.addDev("No left terminal!");
+                //TraceManager.addDev("No left terminal!");
                 return null;
             }
 
@@ -239,9 +239,9 @@ public class BoolExpressionEvaluator {
 
         public IntBoolRes addBinaryOperator(int _op) {
             // Must have at least one right operator
-            TraceManager.addDev("Add binary op");
+            //TraceManager.addDev("Add binary op");
             if (left == null) {
-                TraceManager.addDev("No left terminal!");
+                //TraceManager.addDev("No left terminal!");
                 return null;
             }
 
@@ -275,12 +275,12 @@ public class BoolExpressionEvaluator {
                 // We must find the father where to add the operator
                 // We thus look for the first father with no binary operator
                 // or with a binary operator that has a higher priority
-                TraceManager.addDev("----- Must find a target");
+                //TraceManager.addDev("----- Must find a target");
                 IntBoolRes targetF = this.father;
 
                 boolean go = true;
                 while (go == true) {
-                    TraceManager.addDev("in loop targetF=" + targetF);
+                    //TraceManager.addDev("in loop targetF=" + targetF);
                     if (targetF == null) {
                         go = false;
                     } else {
@@ -298,7 +298,7 @@ public class BoolExpressionEvaluator {
                     }
                 }
 
-                TraceManager.addDev("**************** Considering targetF=" + targetF);
+                //TraceManager.addDev("**************** Considering targetF=" + targetF);
 
                 if (targetF == null) {
                     newE.left = top;
@@ -314,7 +314,7 @@ public class BoolExpressionEvaluator {
                         targetF.father = newE;
                         return newE;
                     } else {
-                        TraceManager.addDev("Unaryoperator");
+                        //TraceManager.addDev("Unaryoperator");
                         newE.left = targetF.left;
                         targetF.left = newE;
                         newE.father = targetF;
@@ -372,7 +372,7 @@ public class BoolExpressionEvaluator {
                 if ((op == PLUS_TOKEN) || (op == MINUS_TOKEN))
                     return 2;
                 else {
-                    TraceManager.addDev("HAVE PRIORITY 3");
+                    //TraceManager.addDev("HAVE PRIORITY 3");
                     return 3;
                 }
             }
@@ -503,7 +503,7 @@ public class BoolExpressionEvaluator {
                 }
                 int elt1 = analysisArg(ob1);
                 Boolean result = makeUnaryOp(op, elt1);
-                TraceManager.addDev("Result unary=" + result);
+                //TraceManager.addDev("Result unary=" + result);
                 return result;
             }
 
@@ -521,13 +521,13 @@ public class BoolExpressionEvaluator {
                     int elt2 = analysisArg(ob2);
 
                     Boolean result = makeBinaryOp(op, elt1, elt2);
-                    TraceManager.addDev("Result binary=" + result);
+                    //TraceManager.addDev("Result binary=" + result);
                     return result;
                 }
             }
 
             if (res == INT_BINARY_OP) {
-                TraceManager.addDev("Found binary int expr");
+                //TraceManager.addDev("Found binary int expr");
                 if ((right == null) || (left == null)) {
                     errorMessage = "Badly formatted binary int operator";
                     TraceManager.addDev("Found binary int expr in null");
@@ -549,7 +549,7 @@ public class BoolExpressionEvaluator {
                     }
 
                     Integer result = makeIntegerOp(op, elt1, elt2);
-                    TraceManager.addDev("Result int=" + result);
+                    //TraceManager.addDev("Result int=" + result);
                     return result;
                 } else {
                     errorMessage = "Invalid operands in integer operations";
@@ -1645,7 +1645,7 @@ public class BoolExpressionEvaluator {
         }
 
 
-        TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
+        //TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
 
 
         Object res = resIBR.computeValue();
@@ -1654,7 +1654,7 @@ public class BoolExpressionEvaluator {
             return false;
         }
 
-        TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
+        //TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
 
         if (res instanceof Integer) {
             errorMessage = "Integer expression. Was expecting a boolean expression";
@@ -1695,7 +1695,7 @@ public class BoolExpressionEvaluator {
             if (s == null) {
                 go = false;
             } else {
-                TraceManager.addDev("Working on token:" + s);
+                //TraceManager.addDev("Working on token:" + s);
                 res = parseAndMakeTree(res, s);
                 if (res == null) {
                     go = false;
@@ -1724,7 +1724,7 @@ public class BoolExpressionEvaluator {
 
         // Terminal symbol
         if (Character.isDigit(c1)) {
-            TraceManager.addDev("Adding number:" + token);
+            //TraceManager.addDev("Adding number:" + token);
             try {
                 newElt = current.addTerminalInt(Integer.valueOf(token).intValue());
             } catch (NumberFormatException x) {
@@ -1897,7 +1897,7 @@ public class BoolExpressionEvaluator {
         }
 
         if (supportUnknownTerminal) {
-            TraceManager.addDev("Adding unknown term:" + token);
+            //TraceManager.addDev("Adding unknown term:" + token);
             newElt = current.addTerminalUnknown(token);
 
             if (newElt == null) {
