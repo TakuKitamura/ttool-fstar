@@ -346,6 +346,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
             _avatarOnly, boolean _experimental) {
         openLast = _openLast;
+        TraceManager.addDev("openLast=" + openLast);
         turtleOn = _turtleOn;
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
@@ -535,7 +536,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         frame.setJMenuBar(jmenubarturtle);
 
         // if openLast, must open the latest specification (if it exists)
-        if (ConfigurationTTool.LastOpenFileDefined) {
+        if ((ConfigurationTTool.LastOpenFileDefined) && (openLast)) {
             openLastProject();
         }
 

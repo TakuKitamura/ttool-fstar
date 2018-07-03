@@ -364,7 +364,6 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         }
 
-
         g.setFont(f);
     }
 
