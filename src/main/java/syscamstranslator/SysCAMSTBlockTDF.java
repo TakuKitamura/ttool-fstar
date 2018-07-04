@@ -40,6 +40,8 @@ package syscamstranslator;
 
 import java.util.LinkedList;
 
+import javax.swing.DefaultListModel;
+
 /**
  * Class SysCAMSTBlockTDF
  * Parameters of a SystemC-AMS block TDF
@@ -53,16 +55,18 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	private String name;
 	private int period;
 	private String processCode;
+	private DefaultListModel<String> listParameters;
 	
 	private SysCAMSTCluster cluster;
 	
 	private LinkedList<SysCAMSTPortTDF> portTDF;
 	private LinkedList<SysCAMSTPortConverter> portConverter;
 	
-	public SysCAMSTBlockTDF(String _name, int _period, String _processCode, SysCAMSTCluster _cluster) {
+	public SysCAMSTBlockTDF(String _name, int _period, String _processCode, DefaultListModel<String> _listParameters, SysCAMSTCluster _cluster) {
 		name = _name;
 		period = _period;
 		processCode = _processCode;
+		listParameters = _listParameters;
 		cluster = _cluster;
 		portTDF = new LinkedList<SysCAMSTPortTDF>();
 		portConverter = new LinkedList<SysCAMSTPortConverter>();
@@ -78,6 +82,10 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 
 	public String getName() {
 		return name;
+	}
+
+	public DefaultListModel<String> getListParameters() {
+		return listParameters;
 	}
 
 	public SysCAMSTCluster getCluster() {

@@ -43,13 +43,15 @@ import ui.syscams.*;
 
 import java.util.*;
 
+import javax.swing.DefaultListModel;
+
 /**
  * Class SysCAMSPanelTranslator
  * Translation of semantics of SystemC-AMS Diagrams
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class SysCAMSPanelTranslator {
 
@@ -60,7 +62,7 @@ public class SysCAMSPanelTranslator {
 
 	public SysCAMSPanelTranslator(SysCAMSComponentTaskDiagramPanel _syscamsDiagramPanel) {
 		tgcComponents = _syscamsDiagramPanel.getComponentList();
-		
+
 		syscamsComponents = new LinkedList<SysCAMSTComponent>();
 		syscamsConnectors = new LinkedList<SysCAMSTConnector>();
 
@@ -70,38 +72,38 @@ public class SysCAMSPanelTranslator {
 	private void MakeListOfComponent(SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel) {
 
 		Map<TGComponent, SysCAMSTComponent> syscamsMap = new HashMap<TGComponent, SysCAMSTComponent>();
-				
-		TGComponent tgc;
-        Iterator<TGComponent> iterator1 = tgcComponents.listIterator();
-        Iterator<TGComponent> iterator2 = tgcComponents.listIterator();
-        List<TGComponent> list = new ArrayList<TGComponent>();
 
-        while(iterator1.hasNext()) {
-            tgc = iterator1.next();
-            if (!(tgc instanceof TGConnector)) {
-                list.add(tgc);
-            }
-        }
-        while(iterator2.hasNext()) {
-            tgc = iterator2.next();
-            if (tgc instanceof TGConnector) {
-                list.add(tgc);
-            }
-        }	
-		
+		TGComponent tgc;
+		Iterator<TGComponent> iterator1 = tgcComponents.listIterator();
+		Iterator<TGComponent> iterator2 = tgcComponents.listIterator();
+		List<TGComponent> list = new ArrayList<TGComponent>();
+
+		while(iterator1.hasNext()) {
+			tgc = iterator1.next();
+			if (!(tgc instanceof TGConnector)) {
+				list.add(tgc);
+			}
+		}
+		while(iterator2.hasNext()) {
+			tgc = iterator2.next();
+			if (tgc instanceof TGConnector) {
+				list.add(tgc);
+			}
+		}	
+
 		for (TGComponent dp : list) {
 			if (dp instanceof SysCAMSBlockDE) {
 				SysCAMSBlockDE blockDE = (SysCAMSBlockDE) dp;
-				
+
 				String blockDEName = blockDE.getValue();
 				int periodBlock = blockDE.getPeriod();
-				
+
 				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, periodBlock);
-				
+
 				List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 				for (int i = 0; i < portsDE.size(); i++) {
 					SysCAMSPortDE portDE = portsDE.get(i);
-					
+
 					String portName = portDE.getPortName();
 					int periodPort = portDE.getPeriod();
 					String time = portDE.getTime();
@@ -109,9 +111,9 @@ public class SysCAMSPanelTranslator {
 					int delay = portDE.getDelay();
 					String type = portDE.getDEType();
 					int origin = portDE.getOrigin();
-					
+
 					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, periodPort, time, rate, delay, origin, type, syscamsBlockDE);
-					
+
 					syscamsMap.put(portDE, syscamsPortDE);
 					syscamsBlockDE.addPortDE(syscamsPortDE);
 					syscamsComponents.add(syscamsPortDE);
@@ -120,25 +122,26 @@ public class SysCAMSPanelTranslator {
 				syscamsComponents.add(syscamsBlockDE);
 			} else if (dp instanceof SysCAMSCompositeComponent) {
 				SysCAMSCompositeComponent cluster = (SysCAMSCompositeComponent) dp;
-				
+
 				String clusterName = cluster.getValue();
-				
+
 				SysCAMSTCluster syscamsCluster = new SysCAMSTCluster(clusterName);
-				
+
 				List<SysCAMSBlockTDF> blocksTDF = cluster.getAllBlockTDFComponents();
 				for (int i = 0; i < blocksTDF.size(); i++) {
 					SysCAMSBlockTDF blockTDF = blocksTDF.get(i);
-					
+
 					String blockTDFName = blockTDF.getValue();
 					int periodBlock = blockTDF.getPeriod();
 					String processCode = blockTDF.getProcessCode();
-					
-					SysCAMSTBlockTDF syscamsBlockTDF = new SysCAMSTBlockTDF(blockTDFName, periodBlock, processCode, syscamsCluster);				
-				
+					DefaultListModel<String> listParameters = blockTDF.getListParameters();
+
+					SysCAMSTBlockTDF syscamsBlockTDF = new SysCAMSTBlockTDF(blockTDFName, periodBlock, processCode, listParameters, syscamsCluster);				
+
 					List<SysCAMSPortTDF> portsTDF = blockTDF.getAllInternalPortsTDF();
 					for (int j = 0; j < portsTDF.size(); j++) {
 						SysCAMSPortTDF portTDF = portsTDF.get(j);
-						
+
 						String portName = portTDF.getPortName();
 						int periodPort = portTDF.getPeriod();
 						String time = portTDF.getTime();
@@ -146,9 +149,9 @@ public class SysCAMSPanelTranslator {
 						int delay = portTDF.getDelay();
 						String type = portTDF.getTDFType();
 						int origin = portTDF.getOrigin();
-						
+
 						SysCAMSTPortTDF syscamsPortTDF = new SysCAMSTPortTDF(portName, periodPort, time, rate, delay, origin, type, syscamsBlockTDF);
-					
+
 						syscamsMap.put(portTDF, syscamsPortTDF);
 						syscamsBlockTDF.addPortTDF(syscamsPortTDF);
 						syscamsComponents.add(syscamsPortTDF);
@@ -156,7 +159,7 @@ public class SysCAMSPanelTranslator {
 					List<SysCAMSPortConverter> portsConverter = blockTDF.getAllInternalPortsConv();
 					for (int j = 0; j < portsConverter.size(); j++) {
 						SysCAMSPortConverter portConverter = portsConverter.get(j);
-						
+
 						String portName = portConverter.getPortName();
 						int periodPort = portConverter.getPeriod();
 						String time = portConverter.getTime();
@@ -164,9 +167,9 @@ public class SysCAMSPanelTranslator {
 						int delay = portConverter.getDelay();
 						String type = portConverter.getConvType();
 						int origin = portConverter.getOrigin();
-						
+
 						SysCAMSTPortConverter syscamsPortConverter = new SysCAMSTPortConverter(portName, periodPort, time, rate, delay, origin, type, syscamsBlockTDF);
-						
+
 						syscamsMap.put(portConverter, syscamsPortConverter);
 						syscamsBlockTDF.addPortConverter(syscamsPortConverter);
 						syscamsComponents.add(syscamsPortConverter);
@@ -179,10 +182,10 @@ public class SysCAMSPanelTranslator {
 				syscamsComponents.add(syscamsCluster);
 			} else if (dp instanceof SysCAMSPortConnector) {
 				SysCAMSPortConnector connector = (SysCAMSPortConnector) dp;
-			
-				TGConnectingPoint connectingPoint1 =  connector.get_p1();
-				TGConnectingPoint connectingPoint2 =  connector.get_p2();	
-	
+
+				TGConnectingPoint connectingPoint1 = connector.get_p1();
+				TGConnectingPoint connectingPoint2 = connector.get_p2();	
+
 				TGComponent owner_p1 = syscamsDiagramPanel.getComponentToWhichBelongs(connectingPoint1);
 				TGComponent owner_p2 = syscamsDiagramPanel.getComponentToWhichBelongs(connectingPoint2);
 
@@ -191,7 +194,7 @@ public class SysCAMSPanelTranslator {
 
 				SysCAMSTConnectingPoint avConnectingPoint1 = new SysCAMSTConnectingPoint(avowner_p1);
 				SysCAMSTConnectingPoint avConnectingPoint2 = new SysCAMSTConnectingPoint(avowner_p2);
-			
+
 				SysCAMSTConnector avconnector = new SysCAMSTConnector(avConnectingPoint1, avConnectingPoint2);			
 				syscamsConnectors.add(avconnector);
 			}
