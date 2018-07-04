@@ -48,6 +48,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
+import ui.window.JDialogIDAndStereotype;
 import ui.window.JDialogRequirement;
 
 import javax.swing.*;
@@ -55,6 +56,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -85,8 +87,10 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     private int currentFontSize = -1;
     private boolean displayText = true;
 
-    protected static String[] REQ_TYPE_STR = {"<<Requirement>>", "<<SafetyRequirement>>", "<<SecurityRequirement>>"};
-    protected static int NB_REQ_TYPE = 3;
+    //protected static String[] DEFAULT_REQ = {"<<Requirement>>", "<<SafetyRequirement>>", "<<SecurityRequirement>>"};
+    protected static ArrayList<String> REQ_TYPE_STR = new ArrayList<String>(Arrays.asList("Requirement", "SafetyRequirement",
+            "SecurityRequirement"));
+    //protected static int NB_REQ_TYPE = 3;
 
     protected final static int REGULAR_REQ = 0;
     protected final static int SAFETY_REQ = 1;
@@ -271,7 +275,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             size = currentFontSize - 2;
             g.setFont(myFont.deriveFont((float) (myFont.getSize() - 2)));
 
-            drawLimitedString(g, REQ_TYPE_STR[reqType], x, y + size, width, 1);
+            drawLimitedString(g, "<<" + REQ_TYPE_STR.get(reqType) + ">>", x, y + size, width, 1);
 
             size += currentFontSize;
             g.setFont(myFontB);
@@ -376,52 +380,103 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             if (hasFather()) {
                 text = getTopLevelName() + " / " + text;
             }
-            String s = (String) JOptionPane.showInputDialog(frame, text,
+            /*String s = (String) JOptionPane.showInputDialog(frame, text,
                     "Setting requirement name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
                     null,
-                    getValue());
+                    getValue());*/
 
-            if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+            JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Requirement ID", REQ_TYPE_STR.toArray(new String[0]), getValue
+                    (), reqType);
+            //dialog.setSize(400, 300);
+            GraphicLib.centerOnParent(dialog, 400, 300);
+            // dialog.show(); // blocked until dialog has been closed
+            dialog.setVisible(true);
+
+            if (dialog.hasBeenCancelled()) {
+                return false;
+            }
+
+            String s = dialog.getName();
+
+            if ((s != null) && (s.length() > 0)){
                 //boolean b;
-                if (!TAttribute.isAValidId(s, false, false)) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the Requirement: the new name is not a valid name",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    return false;
+                if (!s.equals(oldValue)) {
+                    if (!TAttribute.isAValidId(s, false, false)) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the name of the Requirement: the new name is not a valid name",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+
+                    if (!tdp.isRequirementNameUnique(s)) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the name of the Requirement: the new name is already in use",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+
+
+                    int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
+                    minDesiredWidth = Math.max(size, minWidth);
+                    if (minDesiredWidth != width) {
+                        newSizeForSon(null);
+                    }
+                    setValue(s);
                 }
 
-                if (!tdp.isRequirementNameUnique(s)) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the Requirement: the new name is already in use",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    return false;
-                }
-
-
-                int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
-                minDesiredWidth = Math.max(size, minWidth);
-                if (minDesiredWidth != width) {
-                    newSizeForSon(null);
-                }
-                setValue(s);
-
-                if (tdp.actionOnDoubleClick(this)) {
-                    return true;
-                } else {
+                if (!(tdp.actionOnDoubleClick(this))) {
                     JOptionPane.showMessageDialog(frame,
                             "Could not change the name of the Requirement: this name is already in use",
                             "Error",
                             JOptionPane.INFORMATION_MESSAGE);
                     setValue(oldValue);
+                    return false;
                 }
+
+                // Setting stereotype
+                s = dialog.getStereotype().trim();
+
+                if (!TAttribute.isAValidId(s.substring(2, s.length()-2), false, false)) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not use the new stereotype: the new stereotype name is not valid",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+
+                addStereotype(s);
+
             }
             return false;
         }
 
         return editAttributes();
 
+    }
+
+    public boolean addStereotype(String s) {
+        int index = -1;
+        String sLower = s.toLowerCase();
+        for (int i=0; i<REQ_TYPE_STR.size(); i++) {
+            if (REQ_TYPE_STR.get(i).toLowerCase().compareTo(sLower) == 0) {
+                index = i;
+                break;
+            }
+        }
+
+        // Found stereotype
+        if (index != -1) {
+            reqType = index;
+            return false;
+
+        // Must add a new stereotype
+        } else {
+            REQ_TYPE_STR.add(s);
+            reqType = REQ_TYPE_STR.size()-1;
+            return true;
+        }
     }
 
     public boolean editAttributes() {
@@ -598,7 +653,6 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             return editAttributes();
         }
 
-
         return true;
     }
 
@@ -635,7 +689,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         sb.append(criticality);
         sb.append("\" />\n");
         sb.append("<reqType data=\"");
-        sb.append(reqType);
+        sb.append(REQ_TYPE_STR.get(reqType));
         sb.append("\" />\n");
         sb.append("<id data=\"");
         sb.append(id);
@@ -741,12 +795,12 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                     reqType = REGULAR_REQ;
                                 } else {
                                     try {
-                                        reqType = Integer.decode(s).intValue();
+                                        reqType = Integer.decode(s).intValue(); // default stereo: old way
                                     } catch (Exception e) {
-                                        reqType = REGULAR_REQ;
+                                        addStereotype(s);
                                     }
                                 }
-                                if (reqType > (NB_REQ_TYPE - 1)) {
+                                if (reqType > (REQ_TYPE_STR.size() - 1)) {
                                     reqType = REGULAR_REQ;
                                 }
 
@@ -860,7 +914,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         // Must find for both modes which width is desirable
         String s0, s1;
-        s0 = REQ_TYPE_STR[reqType];
+        s0 = "<<" + REQ_TYPE_STR.get(reqType) + ">>";
         s1 = "Text=";
 
         graphics.setFont(f2);
@@ -907,7 +961,6 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         } else {
             h = ((texts.length + 5) * currentFontSize) + lineHeight;
         }
-
 
         resize(w4, h);
 

@@ -143,18 +143,12 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         c1.fill = GridBagConstraints.BOTH;
         c1.gridheight = 1;
-        listSignals = new JComboBox<String>(showSignals.toArray (new String[0]));
+        c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel(" "), c1);
 
         // Combo box
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        listSignals = new JComboBox<String> (showSignals.toArray (new String[0]));
+        listSignals = new JComboBox<String> (showSignals.toArray (new String[showSignals.size()]));
         panel1.add(listSignals, c1);
 
 
