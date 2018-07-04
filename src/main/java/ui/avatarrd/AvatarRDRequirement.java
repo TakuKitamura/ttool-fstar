@@ -100,7 +100,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     protected String[] texts;
     protected String kind = "";
     protected String criticality = "";
-    protected int reqType = 0;
+    protected int reqType = 0; // Type of stereotype
     protected String violatedAction = "";
     protected String attackTreeNode = "";
     protected String referenceElements = "";
@@ -377,7 +377,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                 text = getTopLevelName() + " / " + text;
             }
             String s = (String) JOptionPane.showInputDialog(frame, text,
-                    "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+                    "Setting requirement name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
                     null,
                     getValue());
 
