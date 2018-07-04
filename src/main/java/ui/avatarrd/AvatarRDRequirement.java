@@ -881,6 +881,10 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         }
     }
 
+    public String getStereotype() {
+        return REQ_TYPE_STR.get(reqType);
+    }
+
     public String getAttributes() {
         String attr = "ID=" + id + "\n";
         attr += "Text= " + text + "\n";
@@ -898,6 +902,17 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         }
 
         return attr;
+    }
+
+    public String getExtraAttributes() {
+        String allAttr = "";
+        for (int i=0; i<extraParamIDs.size(); i++) {
+            if (i > 0) {
+                allAttr += " / ";
+            }
+            allAttr += extraParamIDs.get(i) + ":" + extraParamValues.get(i);
+        }
+        return allAttr;
     }
 
     public void autoAdjust(int mode) {
