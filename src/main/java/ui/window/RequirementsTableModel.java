@@ -136,6 +136,22 @@ public class RequirementsTableModel extends AbstractTableModel {
                     return "-";
                 case 12:
                     return "-";
+                case 13:
+                    return "-";
+                case 14:
+                    return "-";
+                case 15:
+                    return "-";
+                case 16:
+                    return "-";
+                case 17:
+                    return "-";
+                case 18:
+                    return "-";
+                case 19:
+                    return "-";
+                case 20:
+                    return "-";
             }
         }
 
@@ -188,6 +204,30 @@ public class RequirementsTableModel extends AbstractTableModel {
                 case 12:
                     //TraceManager.addDev("Getting Info on properties in rd=" + rd);
                     return rd.getStringOfAllElementsSatisfied();
+                case 13:
+                    //TraceManager.addDev("Getting Info on properties in rd=" + rd);
+                    return rd.getStringOfAllImmediateSons();
+                case 14:
+                    //TraceManager.addDev("Getting Info on properties in rd=" + rd);
+                    return rd.getStringOfAllSons();
+                case 15:
+                    //TraceManager.addDev("Getting Info on properties in rd=" + rd);
+                    return rd.getStringOfAllImmediateFathers();
+                case 16:
+                    //TraceManager.addDev("Getting Info on properties in rd=" + rd);
+                    return rd.getStringOfAllFathers();
+                case 17:
+                    //TraceManager.addDev("Getting Info on properties in rd=" + rd);
+                    return rd.getStringAllMeRefineOrigin();
+                case 18:
+                    //TraceManager.addDev("Getting Info on properties in rd=" + rd);
+                    return rd.getStringAllMeRefineDestination();
+                case 19:
+                    //TraceManager.addDev("Getting Info on properties in rd=" + rd);
+                    return rd.getStringAllMeDeriveOrigin();
+                case 20:
+                    //TraceManager.addDev("Getting Info on properties in rd=" + rd);
+                    return rd.getStringAllMeDeriveDestination();
             }
 
         }

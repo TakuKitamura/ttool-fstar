@@ -996,4 +996,124 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         return s;
     }
 
+    public ArrayList<AvatarRDRequirement> getAllImmediateSons() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllImmediateSons(this);
+    }
+
+    public String getStringOfAllImmediateSons() {
+        ArrayList<AvatarRDRequirement> list = getAllImmediateSons();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllSons() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllSons(this);
+    }
+
+    public String getStringOfAllSons() {
+        ArrayList<AvatarRDRequirement> list = getAllSons();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllImmediateFathers() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllImmediateFathers(this);
+    }
+
+    public String getStringOfAllImmediateFathers() {
+        ArrayList<AvatarRDRequirement> list = getAllImmediateFathers();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllFathers() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllFathers(this);
+    }
+
+    public String getStringOfAllFathers() {
+        ArrayList<AvatarRDRequirement> list = getAllFathers();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllMeRefineOrigin() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllMeRefine(this, 0);
+    }
+
+    public String getStringAllMeRefineOrigin() {
+        ArrayList<AvatarRDRequirement> list = getAllMeRefineOrigin();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllMeRefineDestination() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllMeRefine(this, 1);
+    }
+
+    public String getStringAllMeRefineDestination() {
+        ArrayList<AvatarRDRequirement> list = getAllMeRefineDestination();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllMeDeriveOrigin() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllMeDerive(this, 0);
+    }
+
+    public String getStringAllMeDeriveOrigin() {
+        ArrayList<AvatarRDRequirement> list = getAllMeDeriveOrigin();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllMeDeriveDestination() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllMeDerive(this, 1);
+    }
+
+    public String getStringAllMeDeriveDestination() {
+        ArrayList<AvatarRDRequirement> list = getAllMeDeriveDestination();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
 }
