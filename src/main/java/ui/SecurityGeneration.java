@@ -1375,6 +1375,19 @@ public class SecurityGeneration implements Runnable {
         TMLADStartState start = (TMLADStartState) tad.getComponentList().get(0);
         fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 
+		if (hsmChannelMap.get(cpuName).size() ==0){
+			TMLADStopState stop = new TMLADStopState(100, 100, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+            tad.addComponent(stop, 100, 100, false, true);
+
+
+			//Connect stop and start
+            fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
+            fromStart.setP1(start.getTGConnectingPointAtIndex(0));
+            fromStart.setP2(stop.getTGConnectingPointAtIndex(0));
+            tad.addComponent(fromStart, 100, 100, false, true);
+            return;
+		}
+
 
         TMLADReadRequestArg req = new TMLADReadRequestArg(300, 100, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
         tad.addComponent(req, 300, 100, false, true);

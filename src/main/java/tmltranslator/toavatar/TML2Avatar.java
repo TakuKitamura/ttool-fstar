@@ -1217,10 +1217,15 @@ public class TML2Avatar {
                         AvatarAttribute data = new AvatarAttribute("encryptedKey_" + ae.securityPattern.key, AvatarType.INTEGER, block, null);
                         block.addAttribute(data);
                     } else {
-                        //send encrypted data
-                        as.addValue(ae.securityPattern.name + "_encrypted");
-                        AvatarAttribute data = new AvatarAttribute(ae.securityPattern.name + "_encrypted", AvatarType.INTEGER, block, null);
-                        block.addAttribute(data);
+                        //send encrypted data or unecrypted security pattern
+                        //
+                        //if (){
+                      //  }
+                      //  else {
+                        	as.addValue(ae.securityPattern.name + "_encrypted");
+                        	AvatarAttribute data = new AvatarAttribute(ae.securityPattern.name + "_encrypted", AvatarType.INTEGER, block, null);
+                        	block.addAttribute(data);
+                        
                         if (!secChannelMap.containsKey(ae.securityPattern.name)) {
                             List<String> tmp = new ArrayList<String>();
                             secChannelMap.put(ae.securityPattern.name, tmp);
