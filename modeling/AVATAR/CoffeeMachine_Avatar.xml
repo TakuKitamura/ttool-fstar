@@ -4,8 +4,40 @@
 
 <Modeling type="Avatar Requirement" nameTab="AVATAR Requirements" >
 <AvatarRDPanel name="AVATAR RD" minX="10" maxX="1900" minY="10" maxY="900" zoom="1.0" >
+<CONNECTOR type="5208" id="1725" >
+<cdparam x="749" y="267" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="&lt;&lt;satisfy&gt;&gt;" />
+<TGConnectingPoint num="0" id="1726" />
+<P1  x="749" y="267" id="1711" />
+<P2  x="504" y="199" id="213" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<COMPONENT type="5207" id="1709" >
+<cdparam x="749" y="252" />
+<sizeparam width="150" height="30" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="107" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="AvatarElementReference" value="CoffeeMachine" />
+<TGConnectingPoint num="0" id="1710" />
+<TGConnectingPoint num="1" id="1711" />
+<TGConnectingPoint num="2" id="1712" />
+<TGConnectingPoint num="3" id="1713" />
+<TGConnectingPoint num="4" id="1714" />
+<TGConnectingPoint num="5" id="1715" />
+<TGConnectingPoint num="6" id="1716" />
+<TGConnectingPoint num="7" id="1717" />
+<TGConnectingPoint num="8" id="1718" />
+<TGConnectingPoint num="9" id="1719" />
+<TGConnectingPoint num="10" id="1720" />
+<TGConnectingPoint num="11" id="1721" />
+<TGConnectingPoint num="12" id="1722" />
+<TGConnectingPoint num="13" id="1723" />
+<TGConnectingPoint num="14" id="1724" />
+</COMPONENT>
+
 <COMPONENT type="5207" id="16" >
-<cdparam x="627" y="206" />
+<cdparam x="741" y="201" />
 <sizeparam width="150" height="30" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="57" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
@@ -147,8 +179,8 @@
 <criticality data="Low" />
 <reqType data="Requirement" />
 <id data="0.4" />
-<satisfied data="false" />
-<verified data="false" />
+<satisfied data="true" />
+<verified data="true" />
 <attackTreeNode data="" />
 <violatedAction data="" />
 <referenceElements data="" />
@@ -219,7 +251,7 @@
 </COMPONENT>
 
 <COMPONENT type="5201" id="164" >
-<cdparam x="705" y="405" />
+<cdparam x="678" y="396" />
 <sizeparam width="171" height="30" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="158" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
@@ -242,7 +274,7 @@
 </COMPONENT>
 
 <COMPONENT type="5201" id="180" >
-<cdparam x="599" y="264" />
+<cdparam x="628" y="308" />
 <sizeparam width="150" height="30" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="128" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
@@ -318,7 +350,7 @@
 <textline data="negative number of coins" />
 <kind data="Functional" />
 <criticality data="Low" />
-<reqType data="Requirement" />
+<reqType data="SafetyRequirement" />
 <id data="0.2" />
 <satisfied data="true" />
 <verified data="true" />
@@ -408,7 +440,7 @@
 <reqType data="AMSRequirement" />
 <id data="0.1" />
 <satisfied data="false" />
-<verified data="false" />
+<verified data="true" />
 <attackTreeNode data="" />
 <violatedAction data="" />
 <referenceElements data="" />
@@ -416,8 +448,8 @@
 </COMPONENT>
 
 <COMPONENT type="5200" id="328" >
-<cdparam x="206" y="295" />
-<sizeparam width="357" height="157" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
+<cdparam x="208" y="294" />
+<sizeparam width="357" height="174" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
 <infoparam name="Requirement" value="req2" />
@@ -472,13 +504,13 @@
 <textline data="machine." />
 <kind data="Functional" />
 <criticality data="Low" />
-<reqType data="Requirement" />
+<reqType data="SecurityRequirement" />
 <id data="0.3" />
-<satisfied data="false" />
-<verified data="false" />
+<satisfied data="true" />
+<verified data="true" />
 <attackTreeNode data="" />
 <violatedAction data="" />
-<referenceElements data="" />
+<referenceElements data="RefAttack" />
 <extraAttribute id="Hypothèse" value="le système ..." />
 </extraparam>
 </COMPONENT>
@@ -488,7 +520,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="&lt;&lt;satisfy&gt;&gt;" />
 <TGConnectingPoint num="0" id="329" />
-<P1  x="627" y="228" id="3" />
+<P1  x="741" y="223" id="3" />
 <P2  x="504" y="173" id="212" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -515,7 +547,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Requirement to Requirement" value="&lt;&lt;composition&gt;&gt;" />
 <TGConnectingPoint num="0" id="335" />
-<P1  x="206" y="334" id="285" />
+<P1  x="208" y="337" id="285" />
 <P2  x="160" y="272" id="110" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -542,8 +574,8 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from AvatarProperty to Requirement" value="&lt;&lt;verify&gt;&gt;" />
 <TGConnectingPoint num="0" id="341" />
-<P1  x="705" y="420" id="150" />
-<P2  x="563" y="373" id="301" />
+<P1  x="678" y="411" id="150" />
+<P2  x="565" y="381" id="301" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="5203" id="344" >
@@ -551,7 +583,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from AvatarProperty to Requirement" value="&lt;&lt;verify&gt;&gt;" />
 <TGConnectingPoint num="0" id="343" />
-<P1  x="599" y="279" id="166" />
+<P1  x="628" y="323" id="166" />
 <P2  x="504" y="199" id="197" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>

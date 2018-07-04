@@ -39,6 +39,7 @@
 
 package ui.window;
 
+import myutil.TraceManager;
 import ui.TGComponent;
 import ui.avatarrd.AvatarRDRequirement;
 import ui.req.Requirement;
@@ -128,9 +129,13 @@ public class RequirementsTableModel extends AbstractTableModel {
                         return "-";
                     }
                 case 9:
-                    return "None";
+                    return "-";
                 case 10:
-                    return "None";
+                    return "-";
+                case 11:
+                    return "-";
+                case 12:
+                    return "-";
             }
         }
 
@@ -177,6 +182,12 @@ public class RequirementsTableModel extends AbstractTableModel {
                     return rd.getReferenceElements();
                 case 10:
                     return rd.getExtraAttributes();
+                case 11:
+                    //TraceManager.addDev("Getting Info on properties in rd=" + rd);
+                    return rd.getStringOfAllPropertiesVerified();
+                case 12:
+                    //TraceManager.addDev("Getting Info on properties in rd=" + rd);
+                    return rd.getStringOfAllElementsSatisfied();
             }
 
         }

@@ -116,9 +116,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     protected boolean satisfied = false;
     protected boolean verified = false;
 
-    private JMenuItem isRegular = null;
+    /*private JMenuItem isRegular = null;
     private JMenuItem isSafety = null;
-    private JMenuItem isSecurity = null;
+    private JMenuItem isSecurity = null;*/
     private JMenuItem menuNonSatisfied = null;
     private JMenuItem menuSatisfied = null;
     private JMenuItem menuNonVerified = null;
@@ -342,16 +342,18 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                 if (size < (height - 2)) {
 
                     drawLimitedString(g, "Reference elements=\"" + referenceElements + "\"", x + textX, y + size, width, 0);
-
                     size += currentFontSize;
+
                     if (size < (height - 2)) {
 
                         if (reqType == SECURITY_REQ) {
                             drawLimitedString(g, "Targeted attacks=\"" + attackTreeNode + "\"", x + textX, y + size, width, 0);
+                            size += currentFontSize;
                         }
 
                         if (reqType == SAFETY_REQ) {
-                            drawLimitedString(g, "Violated action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
+                            drawLimitedString(g, "State violating req.=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
+                            size += currentFontSize;
                         }
                     }
                 }
@@ -591,18 +593,12 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         componentMenu.addSeparator();
 
-        isRegular = new JMenuItem("Set as regular requirement");
-        isSafety = new JMenuItem("Set as safety requirement");
-        isSecurity = new JMenuItem("Set as security requirement");
         menuNonSatisfied = new JMenuItem("Set as non satisfied");
         menuSatisfied = new JMenuItem("Set as satisfied");
         menuNonVerified = new JMenuItem("Set as non verified");
         menuVerified = new JMenuItem("Set as verified");
 
 
-        isRegular.addActionListener(menuAL);
-        isSafety.addActionListener(menuAL);
-        isSecurity.addActionListener(menuAL);
         menuNonSatisfied.addActionListener(menuAL);
         menuSatisfied.addActionListener(menuAL);
         menuNonVerified.addActionListener(menuAL);
@@ -611,9 +607,6 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         editAttributes = new JMenuItem("Edit attributes");
         editAttributes.addActionListener(menuAL);
 
-        isRegular.setEnabled(reqType != REGULAR_REQ);
-        isSafety.setEnabled(reqType != SAFETY_REQ);
-        isSecurity.setEnabled(reqType != SECURITY_REQ);
 
         menuNonSatisfied.setEnabled(satisfied);
         menuSatisfied.setEnabled(!satisfied);
@@ -621,9 +614,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         menuNonVerified.setEnabled(verified);
         menuVerified.setEnabled(!verified);
 
-        componentMenu.add(isRegular);
-        componentMenu.add(isSafety);
-        componentMenu.add(isSecurity);
+
         componentMenu.addSeparator();
         componentMenu.add(menuNonSatisfied);
         componentMenu.add(menuSatisfied);
@@ -643,12 +634,6 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             verified = false;
         } else if (e.getSource() == menuVerified) {
             verified = true;
-        } else if (e.getSource() == isRegular) {
-            reqType = REGULAR_REQ;
-        } else if (e.getSource() == isSafety) {
-            reqType = SAFETY_REQ;
-        } else if (e.getSource() == isSecurity) {
-            reqType = SECURITY_REQ;
         } else {
             return editAttributes();
         }
@@ -979,6 +964,36 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         resize(w4, h);
 
+    }
+
+    public ArrayList<AvatarRDProperty> getAllPropertiesVerified() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllPropertiesVerify(this);
+    }
+
+    public String getStringOfAllPropertiesVerified() {
+        ArrayList<AvatarRDProperty> list = getAllPropertiesVerified();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDElementReference> getAllElementsSatisfied() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllElementsSatified(this);
+    }
+
+    public String getStringOfAllElementsSatisfied() {
+        ArrayList<AvatarRDElementReference> list = getAllElementsSatisfied();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
     }
 
 }

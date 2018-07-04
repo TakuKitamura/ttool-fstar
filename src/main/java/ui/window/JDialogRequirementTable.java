@@ -59,14 +59,19 @@ import java.util.ArrayList;
  */
 public class JDialogRequirementTable extends JDialogBase implements ActionListener {
 
+    // Direct sons / fathers
+    // All sons / fathers
+    // Property verifiying the req
+    // Elements satisfying the req.
+
     static String[] items = {"none", "ID", "Stereotype", "Name",
             "Description", "Kind", "Criticality", "Violated action", "Targeted " +
-            "attacks", "Satisfied", "Reference elements", "Custom attributes"};
+            "attacks", "Satisfied", "Reference elements", "Custom attributes", "Verification Properties", "Satisfied by"};
     private static String[] sizes = {"0", "50", "100", "150", "200", "250", "300", "350", "400", "450", "500"};
    
-	private int nbColumn = 11;
-    private static int[] selectedItems = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-	private static int[] selectedSizes = {1, 3, 2, 6, 2, 2, 2, 2, 1, 6, 6};
+	private int nbColumn = 13;
+    private static int[] selectedItems = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+	private static int[] selectedSizes = {1, 3, 2, 6, 2, 2, 2, 2, 1, 5, 5, 5, 5};
 	
     // Panel1
     private ArrayList<JComboBox<String>> itemBoxes, sizeBoxes;
