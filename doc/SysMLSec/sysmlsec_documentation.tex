@@ -402,7 +402,31 @@ For each HSM to be added to perform security operations for one or more tasks, f
 
 Next, each task is modified, so that before each instance of sending a message which should be secure, the task first issues a request with the index of the channel (in the case of multiple channels to secure), and sends the data to the HSM. The HSM then performs the security operations, and returns the secured message to the task, which then sends the secured message to the receiving task. When a task receives data to be decrypted, it similarly sends the messages to the HSM, which then decrypts it and sends the message back, and which point the receiving task can understand the contents of the message.
 
-For example, using the model in our example, chose to ensure confidentiality, and add a HSM to each task. A new HSM task is added for each HSM in the Functional model as shown in Figure ??, and a secure bus, memory, and Hardware Accelerator are added for each CPU on the Architecture/Mapping model as shown in Figure ???. Figure ??? shows how the activity diagram of task t1 is modified to send communications to the HSM to be encrypted, and Figure ??? shows the activity diagram of the HSM. 
+For example, using the model in our example, chose to ensure confidentiality, and add a HSM to each task. A new HSM task is added for each HSM in the Functional model as shown in Figure \ref{fig:hsmfunc}, and a secure bus, memory, and Hardware Accelerator are added for each CPU on the Architecture/Mapping model as shown in Figure \ref{fig:hsmarch}. Figure \ref{fig:hsmt1act} shows how the activity diagram of task t1 is modified to send communications to the HSM to be encrypted the activity diagram of the HSM. 
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.99\textwidth]{build/hsmfunc-svg.pdf}
+\caption{Functional Model with added Hardware Security Module Tasks} \label{fig:hsmfunc}
+\end{figure*}
+
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.99\textwidth]{build/hsmarch-svg.pdf}
+\caption{Architecture Model with added Hardware Security Modules} \label{fig:hsmarch}
+\end{figure*}
+
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{build/hsmt1-svg.pdf}
+\includegraphics[width=0.4\textwidth]{build/hsmact-svg.pdf}
+\caption{Modified Activity Diagram of T1 and HSM} \label{fig:hsmt1act}
+\end{figure*}
+
+
+
 
 \subsubsection{Mapping Keys}
 
