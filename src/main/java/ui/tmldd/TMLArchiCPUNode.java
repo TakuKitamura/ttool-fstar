@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,12 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
 
 
 package ui.tmldd;
@@ -56,11 +54,12 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
-   * Class TMLArchiCPUNode
-   * Node. To be used in TML architecture diagrams.
-   * Creation: 02/05/2005
-   * @version 1.1 21/05/2008
-   * @author Ludovic APVRILLE
+ * Class TMLArchiCPUNode
+ * Node. To be used in TML architecture diagrams.
+ * Creation: 02/05/2005
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.1 21/05/2008
  */
 public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
     private int textY1 = 15;
@@ -82,7 +81,8 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     private int execcTime = HwCPU.DEFAULT_EXECC_TIME;
     private int cacheMiss = HwCPU.DEFAULT_CACHE_MISS;
     private int encryption = HwCPU.ENCRYPTION_NONE;
-    public TMLArchiCPUNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+
+    public TMLArchiCPUNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         width = 250;
@@ -142,22 +142,22 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 
         // Filling color
         g.setColor(ColorManager.CPU_BOX_1);
-        g.fill3DRect(x+1, y+1, width-1, height-1, true);
+        g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
         g.setColor(c);
 
         // Strings
         String ster = "<<" + stereotype + ">>";
-        int w  = g.getFontMetrics().stringWidth(ster);
+        int w = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        g.drawString(ster, x + (width - w) / 2, y + textY1);
         g.setFont(f);
-        w  = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w)/2, y + textY2);
+        w = g.getFontMetrics().stringWidth(name);
+        g.drawString(name, x + (width - w) / 2, y + textY2);
 
         // Icon
         g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 
     public TGComponent isOnOnlyMe(int x1, int y1) {
@@ -191,11 +191,11 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         int tmp;
         String tmpName;
 
-        JDialogCPUNode dialog = new JDialogCPUNode(frame, "Setting CPU attributes", this, MECType, transactions );
+        JDialogCPUNode dialog = new JDialogCPUNode(frame, "Setting CPU attributes", this, MECType, transactions);
         dialog.setSize(500, 450);
-        GraphicLib.centerOnParent(dialog, 500, 450 );
-       // dialog.show(); // blocked until dialog has been closed
-        dialog.setVisible( true );
+        GraphicLib.centerOnParent(dialog, 500, 450);
+        // dialog.show(); // blocked until dialog has been closed
+        dialog.setVisible(true);
         MECType = dialog.getMECType();
 
         if (!dialog.isRegularClose()) {
@@ -404,9 +404,9 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         encryption = dialog.getEncryption();
         if (error) {
             JOptionPane.showMessageDialog(frame,
-                                          "Invalid value for the following attributes: " + errors,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "Invalid value for the following attributes: " + errors,
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
 
@@ -444,17 +444,17 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 
     public Vector<TMLArchiArtifact> getArtifactList() {
         Vector<TMLArchiArtifact> v = new Vector<TMLArchiArtifact>();
-        
-        for(int i=0; i<nbInternalTGComponent; i++) {
+
+        for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLArchiArtifact) {
-                v.add( (TMLArchiArtifact) tgcomponent[i] );
+                v.add((TMLArchiArtifact) tgcomponent[i]);
             }
         }
         return v;
     }
 
     public void hasBeenResized() {
-        for(int i=0; i<nbInternalTGComponent; i++) {
+        for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLArchiArtifact) {
                 tgcomponent[i].resizeWithFather();
             }
@@ -486,24 +486,24 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         //
         try {
 
             NodeList nli;
             Node n1, n2;
             Element elt;
-           // int t1id;
+            // int t1id;
             String sstereotype = null, snodeName = null;
 
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
 
                     // Issue #17 copy-paste error on j index
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
@@ -515,7 +515,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                             if (sstereotype != null) {
                                 stereotype = sstereotype;
                             }
-                            if (snodeName != null){
+                            if (snodeName != null) {
                                 name = snodeName;
                             }
 
@@ -526,38 +526,37 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                                 } catch (Exception e) {
                                 }
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
-                                schedulingPolicy =Integer.decode(elt.getAttribute("schedulingPolicy")).intValue();
+                                schedulingPolicy = Integer.decode(elt.getAttribute("schedulingPolicy")).intValue();
                                 goIdleTime = Integer.decode(elt.getAttribute("goIdleTime")).intValue();
                                 pipelineSize = Integer.decode(elt.getAttribute("pipelineSize")).intValue();
                                 taskSwitchingTime = Integer.decode(elt.getAttribute("taskSwitchingTime")).intValue();
                                 branchingPredictionPenalty = Integer.decode(elt.getAttribute("branchingPredictionPenalty")).intValue();
-                                if ((elt.getAttribute("cacheMiss") != null) &&  (elt.getAttribute("cacheMiss").length() > 0)){
+                                if ((elt.getAttribute("cacheMiss") != null) && (elt.getAttribute("cacheMiss").length() > 0)) {
                                     cacheMiss = Integer.decode(elt.getAttribute("cacheMiss")).intValue();
                                 }
-                                if ((elt.getAttribute("execiTime") != null) &&  (elt.getAttribute("execiTime").length() > 0)){
+                                if ((elt.getAttribute("execiTime") != null) && (elt.getAttribute("execiTime").length() > 0)) {
                                     execiTime = Integer.decode(elt.getAttribute("execiTime")).intValue();
                                 }
-                                if ((elt.getAttribute("execcTime") != null) &&  (elt.getAttribute("execcTime").length() > 0)){
+                                if ((elt.getAttribute("execcTime") != null) && (elt.getAttribute("execcTime").length() > 0)) {
                                     execcTime = Integer.decode(elt.getAttribute("execcTime")).intValue();
                                 }
-                                if ((elt.getAttribute("maxConsecutiveIdleCycles") != null) &&  (elt.getAttribute("maxConsecutiveIdleCycles").length() > 0)){
+                                if ((elt.getAttribute("maxConsecutiveIdleCycles") != null) && (elt.getAttribute("maxConsecutiveIdleCycles").length() > 0)) {
                                     maxConsecutiveIdleCycles = Integer.decode(elt.getAttribute("maxConsecutiveIdleCycles")).intValue();
                                 }
-                                if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
+                                if ((elt.getAttribute("clockRatio") != null) && (elt.getAttribute("clockRatio").length() > 0)) {
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
-                                if ((elt.getAttribute("MECType") != null) &&  (elt.getAttribute("MECType").length() > 0)){
-                                    if( elt.getAttribute("MECType").length() > 1 )      {       //old format
+                                if ((elt.getAttribute("MECType") != null) && (elt.getAttribute("MECType").length() > 0)) {
+                                    if (elt.getAttribute("MECType").length() > 1) {       //old format
                                         MECType = ArchUnitMEC.Types.get(0);
-                                    }
-                                    else        {
-                                        MECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("MECType") ) );
+                                    } else {
+                                        MECType = ArchUnitMEC.Types.get(Integer.valueOf(elt.getAttribute("MECType")));
                                     }
                                 }
-                                if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
+                                if ((elt.getAttribute("sliceTime") != null) && (elt.getAttribute("sliceTime").length() > 0)) {
                                     sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
                                 }
-                                if ((elt.getAttribute("encryption") != null) &&  (elt.getAttribute("encryption").length() > 0)){
+                                if ((elt.getAttribute("encryption") != null) && (elt.getAttribute("encryption").length() > 0)) {
                                     encryption = Integer.decode(elt.getAttribute("encryption")).intValue();
                                 }
                             }
@@ -575,55 +574,55 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
     }
 
-    public int getNbOfCores(){
+    public int getNbOfCores() {
         return nbOfCores;
     }
 
-    public int getByteDataSize(){
+    public int getByteDataSize() {
         return byteDataSize;
     }
 
-    public int getPipelineSize(){
+    public int getPipelineSize() {
         return pipelineSize;
     }
 
-    public int getGoIdleTime(){
+    public int getGoIdleTime() {
         return goIdleTime;
     }
 
-    public int getMaxConsecutiveIdleCycles(){
+    public int getMaxConsecutiveIdleCycles() {
         return maxConsecutiveIdleCycles;
     }
 
-    public int getExeciTime(){
+    public int getExeciTime() {
         return execiTime;
     }
 
-    public int getExeccTime(){
+    public int getExeccTime() {
         return execcTime;
     }
 
-    public int getTaskSwitchingTime(){
+    public int getTaskSwitchingTime() {
         return taskSwitchingTime;
     }
 
-    public int getBranchingPredictionPenalty(){
+    public int getBranchingPredictionPenalty() {
         return branchingPredictionPenalty;
     }
 
-    public int getCacheMiss(){
+    public int getCacheMiss() {
         return cacheMiss;
     }
 
-    public int getSchedulingPolicy(){
+    public int getSchedulingPolicy() {
         return schedulingPolicy;
     }
 
-    public int getSliceTime(){
+    public int getSliceTime() {
         return sliceTime;
     }
 
-    public int getEncryption(){
+    public int getEncryption() {
         return encryption;
     }
 
@@ -645,12 +644,12 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         attr += "Cache miss (in %) = " + cacheMiss + "\n";
         attr += "Clock divider = " + clockRatio + "\n";
         attr += "MECType = " + MECType.getIndex() + "\n";
-        attr += "encryption = " + encryption+ "\n";
+        attr += "encryption = " + encryption + "\n";
         return attr;
 
     }
 
-    public int getComponentType()       {
+    public int getComponentType() {
         return CONTROLLER;
     }
 

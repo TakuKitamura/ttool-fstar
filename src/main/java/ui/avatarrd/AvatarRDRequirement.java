@@ -85,8 +85,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     private int currentFontSize = -1;
     private boolean displayText = true;
 
-    protected final static String[] REQ_TYPE_STR = {"<<Requirement>>", "<<Safety Requirement>>", "<<Security Requirement>>"};
-    protected final static int NB_REQ_TYPE = 3;
+    protected static String[] REQ_TYPE_STR = {"<<Requirement>>", "<<SafetyRequirement>>", "<<SecurityRequirement>>"};
+    protected static int NB_REQ_TYPE = 3;
 
     protected final static int REGULAR_REQ = 0;
     protected final static int SAFETY_REQ = 1;
@@ -100,7 +100,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     protected String[] texts;
     protected String kind = "";
     protected String criticality = "";
-    protected int reqType = 0;
+    protected int reqType = 0; // Type of stereotype
     protected String violatedAction = "";
     protected String attackTreeNode = "";
     protected String referenceElements = "";
@@ -377,7 +377,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                 text = getTopLevelName() + " / " + text;
             }
             String s = (String) JOptionPane.showInputDialog(frame, text,
-                    "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+                    "Setting requirement name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
                     null,
                     getValue());
 
