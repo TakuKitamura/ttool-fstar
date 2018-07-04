@@ -77,7 +77,7 @@ public class PrimitiveCode {
 			if (tdf.getListParameters().getSize() != 0) {
 				corpsPrimitive = corpsPrimitive + "\t struct parameters {" + CR;
 
-				String identifier, value, constant, type;
+				String identifier, value, type;
 				for (int i = 0; i < tdf.getListParameters().size(); i++) {
 					String select = tdf.getListParameters().get(i);
 					String[] splita = select.split(" = ");
@@ -86,10 +86,8 @@ public class PrimitiveCode {
 					value = splitb[0];
 					String[] splitc = splitb[1].split(" ");
 					if (splitc[0].equals("const")) {
-						constant = splitc[0];
 						type = splitc[1];
 					} else {
-						constant = "";
 						type = splitc[0];
 					}
 					corpsPrimitive = corpsPrimitive + "\t\t" + type + " " + identifier + ";" + CR;
@@ -105,10 +103,8 @@ public class PrimitiveCode {
 					value = splitb[0];
 					String[] splitc = splitb[1].split(" ");
 					if (splitc[0].equals("const")) {
-						constant = splitc[0];
 						type = splitc[1];
 					} else {
-						constant = "";
 						type = splitc[0];
 					}
 					if (i == 0) {

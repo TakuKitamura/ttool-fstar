@@ -65,6 +65,9 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	private String time;
 	private String processCode;
 	private DefaultListModel<String> listParameters;
+	private String nameTemplate;
+	private String typeTypedef;
+	private DefaultListModel<String> listTypedef;
 	
 	private int maxFontSize = 14;
     private int minFontSize = 4;
@@ -115,6 +118,9 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
         setProcessCode("void processing() {\n\n}");
         setTime("");
         setListParameters(new DefaultListModel<String>());
+        setNameTypedef("");
+        setTypeTypedef("");
+        setListTypedef(new DefaultListModel<String>());
         
         myImageIcon = IconManager.imgic1202;
 
@@ -359,9 +365,12 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
         sb.append(isAttacker() ? "Yes": "No");
         sb.append("\" />\n");
         sb.append("<Attribute period=\"" + getPeriod());
-        sb.append("\" time=\"" + time);
+        sb.append("\" time=\"" + getTime());
         sb.append("\" processCode=\"" + encode(getProcessCode()));
-        sb.append("\" listParameters=\"" + splitParameters(listParameters));
+        sb.append("\" listParameters=\"" + splitParameters(getListParameters()));
+        sb.append("\" nameTemplate=\"" + getNameTypedef());
+        sb.append("\" typeTypedef=\"" + getTypeTypedef());
+        sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -487,7 +496,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
             Element elt;
             
             int period;
-            String time, processCode, listParameters;
+            String time, processCode, listParameters, nameTemplate, typeTypedef, listTypedef;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -505,16 +514,27 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
                                 time = elt.getAttribute("time");
                                 processCode = elt.getAttribute("processCode");
                                 listParameters = elt.getAttribute("listParameters");
+                                nameTemplate = elt.getAttribute("nameTemplate");
+                                typeTypedef = elt.getAttribute("typeTypedef");
+                                listTypedef = elt.getAttribute("listTypedef");
                                 setPeriod(period);
                                 setTime(time);
                                 processCode = decode(processCode).toString();
                                 setProcessCode(processCode);
-                                String[] split = listParameters.split("\\|");
-                                DefaultListModel<String> list = new DefaultListModel<String>();
-                                for (String s : split) {
-                                	list.addElement(s);
+                                String[] splita = listParameters.split("\\|");
+                                DefaultListModel<String> lista = new DefaultListModel<String>();
+                                for (String s : splita) {
+                                	lista.addElement(s);
                                 }
-                                setListParameters(list);
+                                setListParameters(lista);
+                                setNameTypedef(nameTemplate);
+                                setTypeTypedef(typeTypedef);
+                                String[] splitb = listTypedef.split("\\|");
+                                DefaultListModel<String> listb = new DefaultListModel<String>();
+                                for (String s : splitb) {
+                                	listb.addElement(s);
+                                }
+                                setListTypedef(listb);
                             }
                         }
                     }
@@ -629,5 +649,29 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 
 	public void setListParameters(DefaultListModel<String> _listParameters) {
 		listParameters = _listParameters;
+	}
+
+	public String getNameTypedef() {
+		return nameTemplate;
+	}
+
+	public void setNameTemplate(String _nameTemplate) {
+		nameTemplate = _nameTemplate;
+	}
+
+	public String getTypeTemplate() {
+		return typeTypedef;
+	}
+
+	public void setTypeTypedef(String _typeTypedef) {
+		typeTypedef = _typeTypedef;
+	}
+
+	public DefaultListModel<String> getListTypedef() {
+		return listTypedef;
+	}
+
+	public void setListTypedef(DefaultListModel<String> _listTypedef) {
+		listTypedef = _listTypedef;
 	}
 }

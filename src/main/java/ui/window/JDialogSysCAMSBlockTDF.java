@@ -45,6 +45,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.border.*;
 
 import org.apache.derby.tools.sysinfo;
 
@@ -71,8 +72,22 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 	private JRadioButton constantParameterRadioButton;
 	private String listTypeParameterString[];
 	private JComboBox<String> typeParameterComboBoxString;
+	private ArrayList<String> listTmpStruct;
 	private JList<String> listParameters;
 	private DefaultListModel<String> listModel;
+	
+	private JTextField nameTemplateTextField;
+	private String listTypeTemplateString[];
+	private JComboBox<String> typeTemplateComboBoxString;
+	
+	private JTextField nameTypedefTextField;
+	private String listTypeTypedefString[];
+	private JComboBox<String> typeTypedefComboBoxString;
+	private JButton addModifyTypedefButton;
+	private ArrayList<String> listTmpTypedef;
+	private JList<String> listTypedef;
+	private DefaultListModel<String> typedefListModel;
+	
 	private JButton upButton, downButton, removeButton;
 
 	private JTextArea processCodeTextArea;
@@ -262,55 +277,60 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		Box parametersBox = Box.createVerticalBox();
 		parametersBox.setBorder(BorderFactory.createTitledBorder("Setting TDF block parameters"));
 
-		JPanel blockPanel = new JPanel(new BorderLayout());
+		JPanel blockPanel = new JPanel(new GridLayout(3, 1));
 
+		// Struct
+		JPanel structPanel = new JPanel();
+		structPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
 		GridBagLayout gridBagParameter = new GridBagLayout();
 		GridBagConstraints constraintParameter = new GridBagConstraints();
-		JPanel parameterBoxPanel = new JPanel();
-		parameterBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-		parameterBoxPanel.setLayout(gridBagParameter);
+		structPanel.setLayout(gridBagParameter);
+	    TitledBorder border = new TitledBorder("Structure :");
+	    border.setTitleJustification(TitledBorder.CENTER);
+	    border.setTitlePosition(TitledBorder.TOP);
+	    structPanel.setBorder(border);
 
 		JLabel nameParameterLabel = new JLabel("identifier");
 		constraintParameter = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(15, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(nameParameterLabel, constraintParameter);
-		parameterBoxPanel.add(nameParameterLabel);
+		structPanel.add(nameParameterLabel);
 
 		nameParameterTextField = new JTextField();
 		constraintParameter = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(nameParameterTextField, constraintParameter);
-		parameterBoxPanel.add(nameParameterTextField);
+		structPanel.add(nameParameterTextField);
 
 		JLabel egalLabel = new JLabel("=");
 		constraintParameter = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(egalLabel, constraintParameter);
-		parameterBoxPanel.add(egalLabel);
+		structPanel.add(egalLabel);
 
 		JLabel valueParameterLabel = new JLabel("value");
 		constraintParameter = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(15, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(valueParameterLabel, constraintParameter);
-		parameterBoxPanel.add(valueParameterLabel);
+		structPanel.add(valueParameterLabel);
 
 		valueParameterTextField = new JTextField();
 		constraintParameter = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(valueParameterTextField, constraintParameter);
-		parameterBoxPanel.add(valueParameterTextField);
+		structPanel.add(valueParameterTextField);
 
 		JLabel pointsLabel = new JLabel(":");
 		constraintParameter = new GridBagConstraints(3, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(pointsLabel, constraintParameter);
-		parameterBoxPanel.add(pointsLabel);
+		structPanel.add(pointsLabel);
 
 		JLabel constantLabel = new JLabel("const");
 		constraintParameter = new GridBagConstraints(4, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(15, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(constantLabel, constraintParameter);
-		parameterBoxPanel.add(constantLabel);
+		structPanel.add(constantLabel);
 
 		constantParameterRadioButton = new JRadioButton();
 		constantParameterRadioButton.setActionCommand("Const");
@@ -319,19 +339,21 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		constraintParameter = new GridBagConstraints(4, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(constantParameterRadioButton, constraintParameter);
-		parameterBoxPanel.add(constantParameterRadioButton);
+		structPanel.add(constantParameterRadioButton);
 
 		JLabel typeParameterLabel = new JLabel("type");
 		constraintParameter = new GridBagConstraints(5, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(15, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(typeParameterLabel, constraintParameter);
-		parameterBoxPanel.add(typeParameterLabel);
+		structPanel.add(typeParameterLabel);
 
-		listTypeParameterString = new String[4];
+		listTypeParameterString = new String[6];
 		listTypeParameterString[0] = "bool";
-		listTypeParameterString[1] = "int";
-		listTypeParameterString[2] = "double";
-		listTypeParameterString[3] = "long";
+		listTypeParameterString[1] = "double";
+		listTypeParameterString[2] = "float";
+		listTypeParameterString[3] = "int";
+		listTypeParameterString[4] = "long";
+		listTypeParameterString[5] = "short";
 		typeParameterComboBoxString = new JComboBox<String>(listTypeParameterString);
 		typeParameterComboBoxString.setSelectedIndex(0);
 		typeParameterComboBoxString.setActionCommand("type");
@@ -339,34 +361,175 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		constraintParameter = new GridBagConstraints(5, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(typeParameterComboBoxString, constraintParameter);
-		parameterBoxPanel.add(typeParameterComboBoxString);
+		structPanel.add(typeParameterComboBoxString);
 
 		JButton addModifyButton = new JButton("Add / Modify parameter");
 		addModifyButton.setActionCommand("Add_Modify");
 		addModifyButton.addActionListener(this);
 		constraintParameter = new GridBagConstraints(0, 2, 6, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(15, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBagParameter.setConstraints(addModifyButton, constraintParameter);
-		parameterBoxPanel.add(addModifyButton);
+		structPanel.add(addModifyButton);
 
-		blockPanel.add(parameterBoxPanel, BorderLayout.NORTH);
+		blockPanel.add(structPanel);
+		
+		// Template
+		JPanel templatePanel = new JPanel();
+		templatePanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+		GridBagLayout templateGridBag = new GridBagLayout();
+		GridBagConstraints templateConstraint = new GridBagConstraints();
+		templatePanel.setLayout(templateGridBag);
+	    TitledBorder templateBorder = new TitledBorder("Template :");
+	    templateBorder.setTitleJustification(TitledBorder.CENTER);
+	    templateBorder.setTitlePosition(TitledBorder.TOP);
+	    templatePanel.setBorder(templateBorder);
+
+		JLabel nameTemplateLabel = new JLabel("identifier");
+		templateConstraint = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		templateGridBag.setConstraints(nameTemplateLabel, templateConstraint);
+		templatePanel.add(nameTemplateLabel);
+
+		nameTemplateTextField = new JTextField();
+		templateConstraint = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		templateGridBag.setConstraints(nameTemplateTextField, templateConstraint);
+		templatePanel.add(nameTemplateTextField);
+		
+		JLabel pointsTemplateLabel = new JLabel(":");
+		templateConstraint = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		templateGridBag.setConstraints(pointsTemplateLabel, templateConstraint);
+		templatePanel.add(pointsTemplateLabel);
+		
+		JLabel typeTemplateLabel = new JLabel("type");
+		templateConstraint = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		templateGridBag.setConstraints(typeTemplateLabel, templateConstraint);
+		templatePanel.add(typeTemplateLabel);
+		
+		listTypeTemplateString = new String[1];
+		listTypeTemplateString[0] = "int";
+		typeTemplateComboBoxString = new JComboBox<String>(listTypeTemplateString);
+		typeTemplateComboBoxString.setSelectedIndex(0);
+		typeTemplateComboBoxString.setActionCommand("type");
+		typeTemplateComboBoxString.addActionListener(this);
+		templateConstraint = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		templateGridBag.setConstraints(typeTemplateComboBoxString, templateConstraint);
+		templatePanel.add(typeTemplateComboBoxString);
+
+		JButton OKButton = new JButton("OK");
+		OKButton.setActionCommand("OK");
+		OKButton.addActionListener(this);
+		templateConstraint = new GridBagConstraints(0, 2, 3, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		templateGridBag.setConstraints(OKButton, templateConstraint);
+		templatePanel.add(OKButton);
+
+		blockPanel.add(templatePanel);
+		
+		// Typedef
+		JPanel typedefPanel = new JPanel();
+		typedefPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+		GridBagLayout typedefGridBag = new GridBagLayout();
+		GridBagConstraints typedefConstraint = new GridBagConstraints();
+		typedefPanel.setLayout(typedefGridBag);
+	    TitledBorder typedefBorder = new TitledBorder("Typedef :");
+	    typedefBorder.setTitleJustification(TitledBorder.CENTER);
+	    typedefBorder.setTitlePosition(TitledBorder.TOP);
+	    typedefPanel.setBorder(typedefBorder);
+
+		JLabel nameTypedefLabel = new JLabel("identifier");
+		typedefConstraint = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		typedefGridBag.setConstraints(nameTypedefLabel, typedefConstraint);
+		typedefPanel.add(nameTypedefLabel);
+
+		nameTypedefTextField = new JTextField();
+		nameTypedefTextField.setEditable(false);
+		typedefConstraint = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		typedefGridBag.setConstraints(nameTypedefTextField, typedefConstraint);
+		typedefPanel.add(nameTypedefTextField);
+		
+		JLabel pointsTypedefLabel = new JLabel(":");
+		typedefConstraint = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		typedefGridBag.setConstraints(pointsTypedefLabel, typedefConstraint);
+		typedefPanel.add(pointsTypedefLabel);
+		
+		JLabel typeTypedefLabel = new JLabel("type");
+		typedefConstraint = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		typedefGridBag.setConstraints(typeTypedefLabel, typedefConstraint);
+		typedefPanel.add(typeTypedefLabel);
+		
+		listTypeTypedefString = new String[1];
+		listTypeTypedefString[0] = "sc_dt::int";
+		typeTypedefComboBoxString = new JComboBox<String>(listTypeTypedefString);
+		typeTypedefComboBoxString.setSelectedIndex(0);
+		typeTypedefComboBoxString.setEnabled(false);
+		typeTypedefComboBoxString.addActionListener(this);
+		typedefConstraint = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		typedefGridBag.setConstraints(typeTypedefComboBoxString, typedefConstraint);
+		typedefPanel.add(typeTypedefComboBoxString);
+
+		addModifyTypedefButton = new JButton("Add / Modify typedef");
+		addModifyTypedefButton.setActionCommand("Add_Modify_Typedef");
+		addModifyTypedefButton.addActionListener(this);
+		addModifyTypedefButton.setEnabled(false);
+		typedefConstraint = new GridBagConstraints(0, 2, 3, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		typedefGridBag.setConstraints(addModifyTypedefButton, typedefConstraint);
+		typedefPanel.add(addModifyTypedefButton);
+
+		blockPanel.add(typedefPanel);
+
 		parametersBox.add(blockPanel); 
 		parametersMainPanel.add(parametersBox, BorderLayout.WEST); 
 
 		Box managingParametersBox = Box.createVerticalBox();
-		managingParametersBox.setBorder(BorderFactory.createTitledBorder("Managing parameters"));
 
-		BorderLayout borderLayout = new BorderLayout(5, 10);
-		JPanel managingParameterBoxPanel = new JPanel(borderLayout);
+		JPanel managingParameterBoxPanel = new JPanel(new GridLayout(3, 1));
 		managingParameterBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
 
+		JPanel listStructPanel = new JPanel();
+	    TitledBorder listStructBorder = new TitledBorder("Managing struct :");
+	    listStructBorder.setTitleJustification(TitledBorder.CENTER);
+	    listStructBorder.setTitlePosition(TitledBorder.TOP);
+	    listStructPanel.setBorder(listStructBorder);
+		
 		listModel = block.getListParameters();
 		listParameters = new JList<String>(listModel);
 		listParameters.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listParameters.setLayoutOrientation(JList.VERTICAL);
+		listParameters.setVisibleRowCount(5);
 		listParameters.addListSelectionListener(this);
 		JScrollPane scrollPane = new JScrollPane(listParameters);
-		managingParameterBoxPanel.add(scrollPane, BorderLayout.CENTER);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		listStructPanel.add(scrollPane);
+		managingParameterBoxPanel.add(listStructPanel);
+		
+		JPanel listTypedefPanel = new JPanel();
+	    TitledBorder listTypedefBorder = new TitledBorder("Managing typedef :");
+	    listTypedefBorder.setTitleJustification(TitledBorder.CENTER);
+	    listTypedefBorder.setTitlePosition(TitledBorder.TOP);
+	    listTypedefPanel.setBorder(listTypedefBorder);
+		
+		typedefListModel = block.getListTypedef();
+		listTypedef = new JList<String>(typedefListModel);
+		listTypedef.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listTypedef.setLayoutOrientation(JList.VERTICAL);
+		listTypedef.setVisibleRowCount(5);
+		listTypedef.addListSelectionListener(this);
+		JScrollPane typedefScrollPane = new JScrollPane(listTypedef);
+		typedefScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		typedefScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		listTypedefPanel.add(typedefScrollPane);
+		managingParameterBoxPanel.add(listTypedefPanel);
 
 		GridBagLayout buttonGridBag = new GridBagLayout();
 		GridBagConstraints buttonconstraints = new GridBagConstraints();
@@ -397,11 +560,11 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		removeButton.setEnabled(false);
 		removeButton.addActionListener(this);
 		buttonconstraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 15, 10), 0, 0);
 		buttonGridBag.setConstraints(removeButton, buttonconstraints);
 		buttonPanel.add(removeButton);
 
-		managingParameterBoxPanel.add(buttonPanel, BorderLayout.SOUTH);
+		managingParameterBoxPanel.add(buttonPanel);
 
 		managingParametersBox.add(managingParameterBoxPanel); 
 		parametersMainPanel.add(managingParametersBox, BorderLayout.CENTER); 
@@ -430,6 +593,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		processScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		processScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		processScrollPane.setPreferredSize(new Dimension(200, 300));
+		processScrollPane.setBorder(new EmptyBorder(15, 10, 15, 10));
 
 		codeBoxPanel.add(processScrollPane, BorderLayout.SOUTH);
 
@@ -459,7 +623,14 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if ("OK".equals(e.getActionCommand())) {
+			nameTypedefTextField.setEditable(true);
+			typeTypedefComboBoxString.setEnabled(true);
+			addModifyTypedefButton.setEnabled(true);
+		}
+		
 		if ("Add_Modify".equals(e.getActionCommand())) {
+			listTmpStruct = new ArrayList<String>();
 			Boolean alreadyExist = false;
 			int alreadyExistId = -1;
 			String type = (String) typeParameterComboBoxString.getSelectedItem();
@@ -486,12 +657,16 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 				try {
 					if (type.equals("bool")) {
 						Boolean.parseBoolean(valueParameterTextField.getText());
-					} else if (type.equals("int")) {
-						Integer.parseInt(valueParameterTextField.getText());
 					} else if (type.equals("double")) {
 						Double.parseDouble(valueParameterTextField.getText());
+					} else if (type.equals("float")) {
+						Float.parseFloat(valueParameterTextField.getText());
+					} else if (type.equals("int")) {
+						Integer.parseInt(valueParameterTextField.getText());
 					} else if (type.equals("long")) {
 						Long.parseLong(valueParameterTextField.getText());
+					} else if (type.equals("short")) {
+						Short.parseShort(valueParameterTextField.getText());
 					}
 				} catch (NumberFormatException e1) {
 					if (type.equals("bool")) {
@@ -500,22 +675,34 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 						JOptionPane.showMessageDialog(msg, "The value of the parameter is not a Boolean", "Warning !",
 								JOptionPane.WARNING_MESSAGE);	
 						valueBoolean = true;
-					} else if (type.equals("int")) {
-						JDialog msg = new JDialog(this);
-						msg.setLocationRelativeTo(null);
-						JOptionPane.showMessageDialog(msg, "The value of the parameteris not a Integer", "Warning !",
-								JOptionPane.WARNING_MESSAGE);
-						valueInteger = true;
 					} else if (type.equals("double")) {
 						JDialog msg = new JDialog(this);
 						msg.setLocationRelativeTo(null);
-						JOptionPane.showMessageDialog(msg, "The value of the parameter is not a Double", "Warning !",
+						JOptionPane.showMessageDialog(msg, "The value of the parameteris not a Double", "Warning !",
+								JOptionPane.WARNING_MESSAGE);
+						valueInteger = true;
+					} else if (type.equals("float")) {
+						JDialog msg = new JDialog(this);
+						msg.setLocationRelativeTo(null);
+						JOptionPane.showMessageDialog(msg, "The value of the parameteris not a Float", "Warning !",
+								JOptionPane.WARNING_MESSAGE);
+						valueInteger = true;
+					} else if (type.equals("int")) {
+						JDialog msg = new JDialog(this);
+						msg.setLocationRelativeTo(null);
+						JOptionPane.showMessageDialog(msg, "The value of the parameter is not a Integer", "Warning !",
 								JOptionPane.WARNING_MESSAGE);		
 						valueDouble = true;
 					} else if (type.equals("long")) {
 						JDialog msg = new JDialog(this);
 						msg.setLocationRelativeTo(null);
 						JOptionPane.showMessageDialog(msg, "The value of the parameter is not a Long", "Warning !",
+								JOptionPane.WARNING_MESSAGE);
+						valueLong = true;
+					} else if (type.equals("short")) {
+						JDialog msg = new JDialog(this);
+						msg.setLocationRelativeTo(null);
+						JOptionPane.showMessageDialog(msg, "The value of the parameter is not a Short", "Warning !",
 								JOptionPane.WARNING_MESSAGE);
 						valueLong = true;
 					}
@@ -526,12 +713,16 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 					if (type.equals("bool")) {
 						s = s + Boolean.parseBoolean(valueParameterTextField.getText()) + " : ";
+					} else if (type.equals("double")) {	
+						s = s + Double.parseDouble(valueParameterTextField.getText()) + " : ";
+					} else if (type.equals("float")) {	
+						s = s + Float.parseFloat(valueParameterTextField.getText()) + " : ";
 					} else if (type.equals("int")) {
 						s = s + Integer.parseInt(valueParameterTextField.getText()) + " : ";
-					} else if (type.equals("double")) {
-						s = s + Double.parseDouble(valueParameterTextField.getText()) + " : ";
 					} else if (type.equals("long")) {
 						s = s + Long.parseLong(valueParameterTextField.getText()) + " : ";
+					} else if (type.equals("short")) {
+						s = s + Short.parseShort(valueParameterTextField.getText()) + " : ";
 					}
 
 					if (constantParameterRadioButton.isSelected()) {
@@ -540,19 +731,22 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 						s = s + type;
 					}
 					listModel.addElement(s);
+					listTmpStruct.add(s);
 				}
 			} else {
-				listModel.remove(alreadyExistId);
-
 				try {
 					if (type.equals("bool")) {
 						Boolean.parseBoolean(valueParameterTextField.getText());
-					} else if (type.equals("int")) {
-						Integer.parseInt(valueParameterTextField.getText());
 					} else if (type.equals("double")) {
 						Double.parseDouble(valueParameterTextField.getText());
+					} else if (type.equals("float")) {
+						Float.parseFloat(valueParameterTextField.getText());
+					} else if (type.equals("int")) {
+						Integer.parseInt(valueParameterTextField.getText());
 					} else if (type.equals("long")) {
 						Long.parseLong(valueParameterTextField.getText());
+					} else if (type.equals("short")) {
+						Short.parseShort(valueParameterTextField.getText());
 					}
 				} catch (NumberFormatException e1) {
 					if (type.equals("bool")) {
@@ -561,22 +755,34 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 						JOptionPane.showMessageDialog(msg, "The value of the parameter is not a Boolean", "Warning !",
 								JOptionPane.WARNING_MESSAGE);	
 						valueBoolean = true;
-					} else if (type.equals("int")) {
-						JDialog msg = new JDialog(this);
-						msg.setLocationRelativeTo(null);
-						JOptionPane.showMessageDialog(msg, "The value of the parameteris not a Integer", "Warning !",
-								JOptionPane.WARNING_MESSAGE);
-						valueInteger = true;
 					} else if (type.equals("double")) {
 						JDialog msg = new JDialog(this);
 						msg.setLocationRelativeTo(null);
-						JOptionPane.showMessageDialog(msg, "The value of the parameter is not a Double", "Warning !",
+						JOptionPane.showMessageDialog(msg, "The value of the parameteris not a Double", "Warning !",
+								JOptionPane.WARNING_MESSAGE);
+						valueInteger = true;
+					} else if (type.equals("float")) {
+						JDialog msg = new JDialog(this);
+						msg.setLocationRelativeTo(null);
+						JOptionPane.showMessageDialog(msg, "The value of the parameteris not a Float", "Warning !",
+								JOptionPane.WARNING_MESSAGE);
+						valueInteger = true;
+					} else if (type.equals("int")) {
+						JDialog msg = new JDialog(this);
+						msg.setLocationRelativeTo(null);
+						JOptionPane.showMessageDialog(msg, "The value of the parameter is not a Integer", "Warning !",
 								JOptionPane.WARNING_MESSAGE);		
 						valueDouble = true;
 					} else if (type.equals("long")) {
 						JDialog msg = new JDialog(this);
 						msg.setLocationRelativeTo(null);
 						JOptionPane.showMessageDialog(msg, "The value of the parameter is not a Long", "Warning !",
+								JOptionPane.WARNING_MESSAGE);
+						valueLong = true;
+					} else if (type.equals("short")) {
+						JDialog msg = new JDialog(this);
+						msg.setLocationRelativeTo(null);
+						JOptionPane.showMessageDialog(msg, "The value of the parameter is not a Short", "Warning !",
 								JOptionPane.WARNING_MESSAGE);
 						valueLong = true;
 					}
@@ -587,20 +793,25 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 					if (type.equals("bool")) {
 						s = s + Boolean.parseBoolean(valueParameterTextField.getText()) + " : ";
+					} else if (type.equals("double")) {	
+						s = s + Double.parseDouble(valueParameterTextField.getText()) + " : ";
+					} else if (type.equals("float")) {	
+						s = s + Float.parseFloat(valueParameterTextField.getText()) + " : ";
 					} else if (type.equals("int")) {
 						s = s + Integer.parseInt(valueParameterTextField.getText()) + " : ";
-					} else if (type.equals("double")) {
-						s = s + Double.parseDouble(valueParameterTextField.getText()) + " : ";
 					} else if (type.equals("long")) {
 						s = s + Long.parseLong(valueParameterTextField.getText()) + " : ";
+					} else if (type.equals("short")) {
+						s = s + Short.parseShort(valueParameterTextField.getText()) + " : ";
 					}
-
+					
 					if (constantParameterRadioButton.isSelected()) {
 						s = s + "const " + type;
 					} else {
 						s = s + type;
 					}
-					listModel.add(alreadyExistId, s);
+					listModel.setElementAt(s, alreadyExistId);
+					listTmpStruct.add(s);
 				}
 			}
 		}
@@ -662,22 +873,26 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 			block.setProcessCode(processCodeTextArea.getText());
 			block.setListParameters(listModel);
+			block.setN
+			block.setListTypedef(typedefListModel);
 
 			this.dispose();
 		}
 
 		if ("Cancel".equals(e.getActionCommand())) {
+			for (String s : listTmpStruct) {
+				listModel.removeElement(s);
+			}
+			for (String s : listTmpTypedef) {
+				typedefListModel.removeElement(s);
+			}
 			this.dispose();
 		}
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
 		if (e.getValueIsAdjusting() == false) {
-			if (listParameters.getSelectedIndex() == -1) {
-				upButton.setEnabled(false);
-				downButton.setEnabled(false);
-				removeButton.setEnabled(false);
-			} else {
+			if (listParameters.getSelectedIndex() != -1) {
 				String select = listModel.get(listParameters.getSelectedIndex());
 				String[] splita = select.split(" = ");
 				nameParameterTextField.setText(splita[0]);
@@ -689,23 +904,31 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 					constantParameterRadioButton.setSelected(true);
 					if (splitc[1].equals("bool")) {
 						typeParameterComboBoxString.setSelectedIndex(0);
-					} else if (splitc[1].equals("int")) {
-						typeParameterComboBoxString.setSelectedIndex(1);
 					} else if (splitc[1].equals("double")) {
+						typeParameterComboBoxString.setSelectedIndex(1);
+					} else if (splitc[1].equals("float")) {
 						typeParameterComboBoxString.setSelectedIndex(2);
-					} else if (splitc[1].equals("long")) {
+					} else if (splitc[1].equals("int")) {
 						typeParameterComboBoxString.setSelectedIndex(3);
+					} else if (splitc[1].equals("long")) {
+						typeParameterComboBoxString.setSelectedIndex(4);
+					} else if (splitc[1].equals("short")) {
+						typeParameterComboBoxString.setSelectedIndex(5);
 					}
 				} else {
 					constantParameterRadioButton.setSelected(false);
 					if (splitc[0].equals("bool")) {
 						typeParameterComboBoxString.setSelectedIndex(0);
-					} else if (splitc[0].equals("int")) {
-						typeParameterComboBoxString.setSelectedIndex(1);
 					} else if (splitc[0].equals("double")) {
+						typeParameterComboBoxString.setSelectedIndex(1);
+					} else if (splitc[0].equals("float")) {
 						typeParameterComboBoxString.setSelectedIndex(2);
-					} else if (splitc[0].equals("long")) {
+					} else if (splitc[0].equals("int")) {
 						typeParameterComboBoxString.setSelectedIndex(3);
+					} else if (splitc[0].equals("long")) {
+						typeParameterComboBoxString.setSelectedIndex(4);
+					} else if (splitc[0].equals("short")) {
+						typeParameterComboBoxString.setSelectedIndex(5);
 					}
 				}
 				
@@ -714,6 +937,22 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 					downButton.setEnabled(true);
 				}
 				removeButton.setEnabled(true);
+				listTypedef.getSelectedIndex() = -1;
+			} else if (listTypedef.getSelectedIndex() != -1) {
+				String select = typedefListModel.get(listTypedef.getSelectedIndex());
+				String[] split = select.split(" : ");
+				nameTypedefTextField.setText(split[0]);
+				
+				if (splitc[1].equals("int")) {
+					typeTypedefComboBoxString.setSelectedIndex(0);
+				}
+				
+				if (listModel.getSize() >= 2) {
+					upButton.setEnabled(true);
+					downButton.setEnabled(true);
+				}
+				removeButton.setEnabled(true);
+				listParameters.getSelectedIndex() = -1;
 			}
 		}
 	}
