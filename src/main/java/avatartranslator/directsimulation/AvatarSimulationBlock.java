@@ -697,7 +697,8 @@ public class AvatarSimulationBlock {
             TraceManager.addDev("Current block " + this.getBlock().getName() + " lastTransaction=" + lastTransaction);
         }
 
-        boolean result = bee.getResultOf(act);
+        boolean result = bee.getResultOfWithIntExpr(act);
+        //boolean result = bee.getResultOf(act);
         if (bee.getError() != null) {
             TraceManager.addDev("Error: " + bee.getError());
         }

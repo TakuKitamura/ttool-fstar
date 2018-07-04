@@ -145,7 +145,7 @@ public class TMLArchiDMANode extends TMLArchiCommunicationNode implements Swallo
         // Icon
         //g.drawImage(IconManager.imgic1108.getImage(), x + width - 20, y + 4, null);
         g.drawImage(IconManager.imgic1108.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 
     public TGComponent isOnOnlyMe(int x1, int y1) {

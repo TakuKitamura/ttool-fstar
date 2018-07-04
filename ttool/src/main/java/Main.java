@@ -322,8 +322,8 @@ public class Main implements ActionListener {
         }
 
         // Checking for update
-        TToolUpdater tu = new TToolUpdater(mainGUI.frame);
-        tu.start();
+        //TToolUpdater tu = new TToolUpdater(mainGUI.frame);
+        //tu.start();
     }
 
     public synchronized void waitFinish() {
