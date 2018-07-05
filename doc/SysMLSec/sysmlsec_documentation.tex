@@ -354,7 +354,7 @@ Without taking into account penalties of the hardware platform (e.g. cache miss,
 
 \subsection{Automatic Security Generation}
 
-Given security requirements and an unsecured model, our toolkit magically adds security elements. It can 1) add the security operators to a functional view, 2) Add an HSM performing all security operations, and 3) Automatically map keys securely. See the thesis of Letitia Li, `Safe and Secure Model-Driven Design for Embedded Systems' for the detailed algorithms on how to add security.
+Given security requirements and an unsecured model, our toolkit magically adds security elements. It can 1) add the security operators to a functional view, optionally with an added HSM performing all security operations, and 2) Automatically map keys securely. See the thesis of Letitia Li, `Safe and Secure Model-Driven Design for Embedded Systems' for the detailed algorithms on how to add security.
 
 \begin{figure*}[htbp]
 \centering
@@ -392,18 +392,47 @@ When the option to add security operators is selected, there are multiple option
 
 \subsubsection{Adding Hardware Security Modules} 
 
- After a designer models a system, our toolkit can automatically add
+For automatic security generation, there is also an option to add HSMs to perform all the security operators intead. 
+Our toolkit can automatically add
 HSMs to designated tasks, including making all of the modifications to the
 diagrams relating to sending the data to the HSM, generating the HSM's activity
 diagram, etc. A single Hardware Security Module is added to each processor which executes at least one of the designated tasks. If multiple tasks mapped to a single CPU are designated to have a HSM added to them, then only a single HSM will be added.
 
 For each HSM to be added to perform security operations for one or more tasks, first, the architectural diagram is modified to add a Hardware Accelerator and memory, with a connecting private bus.
 
-Next, each task is modified, so that before each instance of sending a message which should be secure, the task first sends the data to the HSM. The HSM then performs the security operations, and returns the secured message to the task, which then sends the secured message to the receiving task. When a task receives data to be decrypted, it similarly sends the messages to the HSM, which then decrypts it and sends the message back, and which point the receiving task can understand the contents of the message.
+Next, each task is modified, so that before each instance of sending a message which should be secure, the task first issues a request with the index of the channel (in the case of multiple channels to secure), and sends the data to the HSM. The HSM then performs the security operations, and returns the secured message to the task, which then sends the secured message to the receiving task. When a task receives data to be decrypted, it similarly sends the messages to the HSM, which then decrypts it and sends the message back, and which point the receiving task can understand the contents of the message.
+
+For example, using the model in our example, chose to ensure confidentiality, and add a HSM to each task. A new HSM task is added for each HSM in the Functional model as shown in Figure \ref{fig:hsmfunc}, and a secure bus, memory, and Hardware Accelerator are added for each CPU on the Architecture/Mapping model as shown in Figure \ref{fig:hsmarch}. Figure \ref{fig:hsmt1act} shows how the activity diagram of task t1 is modified to send communications to the HSM to be encrypted the activity diagram of the HSM. 
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.99\textwidth]{build/hsmfunc-svg.pdf}
+\caption{Functional Model with added Hardware Security Module Tasks} \label{fig:hsmfunc}
+\end{figure*}
+
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.99\textwidth]{build/hsmarch-svg.pdf}
+\caption{Architecture Model with added Hardware Security Modules} \label{fig:hsmarch}
+\end{figure*}
+
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{build/hsmt1-svg.pdf}
+\includegraphics[width=0.4\textwidth]{build/hsmact-svg.pdf}
+\caption{Modified Activity Diagram of T1 and HSM} \label{fig:hsmt1act}
+\end{figure*}
+
+
+
 
 \subsubsection{Mapping Keys}
 
 With multiple Cryptographic Configurations, it may become tedious to the map all of the keys to memory. Our toolkit therefore can find every Cryptographic Configuration used by a task, and then, depending on the type of the Cryptographic Configuration, map each applicable key to a memory that the task can securely access. For Cryptographic Configurations of type symmetric encryption or MAC, both the sending and receiving task will need to be able to access the key. For asymmetric encryption, however, all the sending tasks will need the public key while only the receiving task will need to access the private key. 
+
+At every security generation, keys are automatically generated and mapped securely. There is also the option to add keys alone after completing a design by hand.
 
 If a key is sent along a bus accessible to an attacker, then the key would be known to the attacker, so we wish to avoid sending keys along public buses. For each task which needs the key, the algorithm searches for securely accessible memories from the processor to which it is mapped. The algorithm traverses all possible private buses and bridges using breadth-first search, until it finds a memory. The key is then mapped to that memory. If all possible secure paths are searched and no memories are found, then a warning is issued saying it is impossible to map keys for that task.
 
