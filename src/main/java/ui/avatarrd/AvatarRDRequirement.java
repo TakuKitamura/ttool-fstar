@@ -440,7 +440,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                 // Setting stereotype
                 s = dialog.getStereotype().trim();
 
-                if (!TAttribute.isAValidId(s.substring(2, s.length()-2), false, false)) {
+                if (!TAttribute.isAValidId(s, false, false)) {
                     JOptionPane.showMessageDialog(frame,
                             "Could not use the new stereotype: the new stereotype name is not valid",
                             "Error",
