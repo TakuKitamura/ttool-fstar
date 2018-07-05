@@ -71,7 +71,7 @@ import javax.swing.KeyStroke;
  * Creation: 07/05/2018
  * @version 1.0 07/05/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 @SuppressWarnings("serial")
 
@@ -84,7 +84,7 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 	private JComboBox<String> periodComboBoxString;
 	private JTextField rateTextField;
 	private JTextField delayTextField;
-	private String listTypeString[];
+	private ArrayList<String> listArrrayTypeString;
 	private JComboBox<String> typeComboBoxString;
 	private String listOriginString[];
 	private JComboBox<String> originComboBoxString;
@@ -103,14 +103,14 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 
 		/** Parameters **/
 		this.port = port;
-		
+
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
 		getRootPane().getActionMap().put("close", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-		        dispose();
+				dispose();
 			}
 		});
-        
+
 		dialog();
 	}
 
@@ -118,10 +118,10 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		/** JPanel **/
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		this.add(mainPanel);
-		
+
 		JPanel attributesMainPanel = new JPanel(new GridLayout());
 		mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
-		
+
 		Box box = Box.createVerticalBox();
 		box.setBorder(BorderFactory.createTitledBorder("Setting converter input port attributes"));
 
@@ -133,44 +133,44 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 
 		JLabel labelName = new JLabel("Name : ");
 		constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(15, 10, 5, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(labelName, constraints);
 		boxPanel.add(labelName);
 
-	   	 if (port.getPortName().toString().equals("")) { 
+		if (port.getPortName().toString().equals("")) { 
 			nameTextField = new JTextField(10);
 		} else {
 			nameTextField = new JTextField(port.getPortName().toString(), 10);
 		}
-	   	constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(15, 10, 5, 10), 0, 0);
+		constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(nameTextField, constraints);
 		boxPanel.add(nameTextField);
-	   
+
 		JLabel periodLabel = new JLabel("Period Tp : ");
 		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(periodLabel, constraints);
-	    	boxPanel.add(periodLabel);
+		boxPanel.add(periodLabel);
 
-	    	if (port.getPeriod() == -1) { 
+		if (port.getPeriod() == -1) { 
 			periodTextField = new JTextField(10);
 		} else {
 			periodTextField = new JTextField("" + port.getPeriod(), 10); 
 		}
-	    	constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+		constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(periodTextField, constraints);
 		boxPanel.add(periodTextField);
-	    
+
 		listPeriodString = new String[3];
 		listPeriodString[0] = "us";
 		listPeriodString[1] = "ms";
@@ -186,17 +186,17 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		periodComboBoxString.setActionCommand("time");
 		periodComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(periodComboBoxString, constraints);
-	    	boxPanel.add(periodComboBoxString);
-	    
+		boxPanel.add(periodComboBoxString);
+
 		JLabel rateLabel = new JLabel("Rate : ");
 		constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(rateLabel, constraints);
 		boxPanel.add(rateLabel);
 
@@ -206,75 +206,83 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 			rateTextField = new JTextField("" + port.getRate(), 10);
 		}
 		constraints = new GridBagConstraints(1, 2, 2, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(rateTextField, constraints);
 		boxPanel.add(rateTextField); 
 
 		JLabel delayLabel = new JLabel("Delay : ");
 		constraints = new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(delayLabel, constraints);
 		boxPanel.add(delayLabel);
-		
+
 		if (port.getDelay() == -1) { 
 			delayTextField = new JTextField(10);
 		} else {
 			delayTextField = new JTextField("" + port.getDelay(), 10);
 		}
 		constraints = new GridBagConstraints(1, 3, 2, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(delayTextField, constraints);
 		boxPanel.add(delayTextField);
 
 		JLabel typeLabel = new JLabel("Type : ");
 		constraints = new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(typeLabel, constraints);
 		boxPanel.add(typeLabel);
-		
-		listTypeString = new String[4];
-		listTypeString[0] = "int";
-		listTypeString[1] = "bool";
-		listTypeString[2] = "double";
-		listTypeString[3] = "sc_dt::sc_logic";
-		typeComboBoxString = new JComboBox<String>(listTypeString);
-		if (port.getConvType().equals("") || port.getConvType().equals("int")) {
-			typeComboBoxString.setSelectedIndex(0);
+
+		listArrayTypeString = new ArrayList<String>();
+		listArrayTypeString.add("int");
+		listArrayTypeString.add("bool");
+		listArrayTypeString.add("double");
+		if (port.getFather() != null) {
+			if (port.getFather() instanceof SysCAMSBlockTDF) {
+				if (!((SysCAMSBlockTDF) port.getFather()).getListTypedef().isEmpty()) {
+					for (int i = 0; i < ((SysCAMSBlockTDF) port.getFather()).getListTypedef().getSize(); i++) {
+						String select = ((SysCAMSBlockTDF) port.getFather()).getListTypedef().get(i);
+						String[] split = select.split(" : ");
+						listArrayTypeString.add(split[0]);
+					}
+				}
+			}
 		}
-		if (port.getConvType().equals("bool")) {
-			typeComboBoxString.setSelectedIndex(1);
+		typeComboBoxString = new JComboBox<String>();
+		for (int i = 0; i < listArrayTypeString.size(); i++) {
+			typeComboBoxString.addItem(listArrayTypeString.get(i));
 		}
-		if (port.getConvType().equals("double")) {
-			typeComboBoxString.setSelectedIndex(2);
+		for (int i = 0; i < listArrayTypeString.size(); i++) {
+			if (port.getTDFType().equals("")) {
+				typeComboBoxString.setSelectedIndex(0);
+			}
+			if (port.getTDFType().equals(listArrayTypeString.get(i))) {
+				typeComboBoxString.setSelectedIndex(i);
+			}
 		}
-		if (port.getConvType().equals("sc_dt::sc_logic")) {
-			typeComboBoxString.setSelectedIndex(3);
-		}
-		typeComboBoxString.setActionCommand("type");
 		typeComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(1, 4, 2, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 5, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(typeComboBoxString, constraints);
 		boxPanel.add(typeComboBoxString);
-		
+
 		JLabel orginLabel = new JLabel("Origin : ");
 		constraints = new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 15, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(orginLabel, constraints);
 		boxPanel.add(orginLabel);
-		
+
 		listOriginString = new String[2];
 		listOriginString[0] = "Input";
 		listOriginString[1] = "Output";
@@ -287,12 +295,12 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		originComboBoxString.setActionCommand("origin");
 		originComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(1, 5, 2, 1, 1.0, 1.0,
-							GridBagConstraints.CENTER,
-							GridBagConstraints.BOTH,
-							new Insets(5, 10, 15, 10), 0, 0);
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(originComboBoxString, constraints);
 		boxPanel.add(originComboBoxString);
-		
+
 		box.add(boxPanel);
 		attributesMainPanel.add(box);
 
@@ -381,7 +389,7 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 			} else {
 				port.setOrigin(0);
 			}
-			
+
 			this.dispose();
 		}
 

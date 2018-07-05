@@ -39,31 +39,11 @@
 package ui.window;
 
 import ui.syscams.*;
-import ui.util.IconManager;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
+import ui.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
 
 /**
  * Class JDialogSystemCAMSPortTDF
@@ -84,7 +64,7 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 	private JComboBox<String> periodComboBoxString;
 	private JTextField rateTextField;
 	private JTextField delayTextField;
-	private String listTypeString[];
+	private ArrayList<String> listArrayTypeString;
 	private JComboBox<String> typeComboBoxString;
 	private String listOriginString[];
 	private JComboBox<String> originComboBoxString;
@@ -240,21 +220,33 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 		gridBag.setConstraints(typeLabel, constraints);
 		boxPanel.add(typeLabel);
 
-		listTypeString = new String[3];
-		listTypeString[0] = "int";
-		listTypeString[1] = "bool";
-		listTypeString[2] = "double";
-		typeComboBoxString = new JComboBox<String>(listTypeString);
-		if (port.getTDFType().equals("") || port.getTDFType().equals("int")) {
-			typeComboBoxString.setSelectedIndex(0);
+		listArrayTypeString = new ArrayList<String>();
+		listArrayTypeString.add("int");
+		listArrayTypeString.add("bool");
+		listArrayTypeString.add("double");
+		if (port.getFather() != null) {
+			if (port.getFather() instanceof SysCAMSBlockTDF) {
+				if (!((SysCAMSBlockTDF) port.getFather()).getListTypedef().isEmpty()) {
+					for (int i = 0; i < ((SysCAMSBlockTDF) port.getFather()).getListTypedef().getSize(); i++) {
+						String select = ((SysCAMSBlockTDF) port.getFather()).getListTypedef().get(i);
+						String[] split = select.split(" : ");
+						listArrayTypeString.add(split[0]);
+					}
+				}
+			}
 		}
-		if (port.getTDFType().equals("bool")) {
-			typeComboBoxString.setSelectedIndex(1);
+		typeComboBoxString = new JComboBox<String>();
+		for (int i = 0; i < listArrayTypeString.size(); i++) {
+			typeComboBoxString.addItem(listArrayTypeString.get(i));
 		}
-		if (port.getTDFType().equals("double")) {
-			typeComboBoxString.setSelectedIndex(2);
+		for (int i = 0; i < listArrayTypeString.size(); i++) {
+			if (port.getTDFType().equals("")) {
+				typeComboBoxString.setSelectedIndex(0);
+			}
+			if (port.getTDFType().equals(listArrayTypeString.get(i))) {
+				typeComboBoxString.setSelectedIndex(i);
+			}
 		}
-		typeComboBoxString.setActionCommand("type");
 		typeComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(1, 4, 2, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER,

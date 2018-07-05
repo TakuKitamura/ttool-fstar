@@ -50,9 +50,9 @@ import javax.swing.border.*;
 import org.apache.derby.tools.sysinfo;
 
 /**
- * Class JDialogSystemCAMSBlockTDF Dialog for managing of SystemC-AMS TDF Block
+ * Class JDialogSystemCAMSBlockTDF 
+ * Dialog for managing of SystemC-AMS TDF Block
  * Creation: 26/04/2018
- * 
  * @version 1.0 26/04/2018
  * @author Irina Kit Yan LEE
  */
