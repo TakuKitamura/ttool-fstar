@@ -3544,6 +3544,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return false;
     }
 
+	public void issueError(String error, String title){
+		JOptionPane.showMessageDialog(frame,
+                    error,
+                    title,
+                    JOptionPane.INFORMATION_MESSAGE);
+	}
+
     public boolean checkModelingSyntax(TURTLEPanel tp, boolean automatic) {
         //String msg = "";
         boolean b = false;

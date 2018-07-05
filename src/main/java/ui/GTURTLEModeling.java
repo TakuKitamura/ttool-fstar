@@ -1263,7 +1263,8 @@ public class GTURTLEModeling {
                             memNode.tdp.addComponent(key, memNode.x, memNode.y, true, true);
                             memNode.tdp.repaint();
                         } else {
-                            
+                             //
+                            mgui.issueError("Cannot map key in memory for " + sp.name + " on task " + t.getName(), "Key Mapping Error");
                             UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Cannot map key in memory for " + sp.name + " on task " + t.getName());
                             ce.setTDiagramPanel(tmap.getCorrespondanceList().getTG(tmap.getArch().getFirstCPU()).getTDiagramPanel());
                             ce.setTGComponent(null);

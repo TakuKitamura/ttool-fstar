@@ -308,7 +308,7 @@ public class JFrameRequirementTable extends JFrame implements ActionListener /*,
             for (i = 0; i < ts.getRowCount(); i++) {
                 for (j = 0; j < ts.getColumnCount(); j++) {
                     if (j != 0)
-                        sb.append(", ");
+                        sb.append("; ");
                     String tmp = ts.getValueAt(i, j).toString();
                     tmp = Conversion.replaceAllString(tmp, "\n", " ");
                     tmp = Conversion.replaceAllString(tmp, "\r", " ");

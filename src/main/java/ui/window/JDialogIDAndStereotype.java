@@ -47,69 +47,51 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
 
 /**
- * Class JDialogAvatarSignal
- * Dialog for managing several string components
- * Creation: 12/04/2010
- * @version 1.0 12/04/2010
+ * Class JDialogIDAndStereotype
+ * Dialog for managing several names and stereotype
+ * Creation: 04/07/2018
+ * @version 1.0 04/07/2018
  * @author Ludovic APVRILLE
  */
-public class JDialogAvatarSignal extends JDialogBase implements ActionListener  {
+public class JDialogIDAndStereotype extends JDialogBase implements ActionListener  {
 
-    private LinkedList<AvatarSignal> signals, realSignals;
-    private LinkedList<String> showSignals;
-    private String currentSignal;
-    private boolean isOut;
-	
-	private TGComponent reference;
-    private Vector<TGComponent> refs;
+    private String[] availableStereotypes;
+    private String currentName;
+    private int currentStereotype;
 
-    private boolean cancelled = true;
-
-	private JComboBox<TGComponent> refChecks;
 
     private JPanel panel1;
 
     // Panel1
-    private JComboBox<String> listSignals;
-    private JButton selectSignal;
-    private JTextField signal;
+    private JComboBox<String> listStereotypes;
+    private JButton selectStereotype;
+    private JTextField stereotype, name;
+
+
+    private boolean cancelled;
 
     /** Creates new form  */
-    public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, LinkedList<AvatarSignal> _signals, boolean _isOut, TGComponent _reference, Vector<TGComponent> _refs) {
+    public JDialogIDAndStereotype(Frame _f, String _title,
+                                  String[] _availableStereotypes, String _currentName,
+                                  int _currentStereotype) {
 
         super(_f, _title, true);
 
-        signals = _signals;
-        currentSignal = _currentSignal;
-        isOut = _isOut;
-		reference=_reference;
-		refs=_refs;
-
-
-        makeSignals();
+        availableStereotypes = _availableStereotypes;
+        currentName = _currentName;
+        currentStereotype = _currentStereotype;
 
         initComponents();
         myInitComponents();
 
         pack();
-    }
-
-
-    private void makeSignals() {
-        showSignals = new LinkedList<String> ();
-        realSignals = new LinkedList<AvatarSignal> ();
-
-        for (AvatarSignal as: signals)
-            if (((as.getInOut() == AvatarSignal.OUT) && (isOut)) ||  ((as.getInOut() == AvatarSignal.IN) && (!isOut))){
-                showSignals.add(as.toString());
-                realSignals.add(as);
-            }
     }
 
 
@@ -133,7 +115,7 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
 
-        panel1.setBorder(new javax.swing.border.TitledBorder("Signals"));
+        panel1.setBorder(new javax.swing.border.TitledBorder("Requirement"));
 
         //panel1.setPreferredSize(new Dimension(500, 250));
 
@@ -141,45 +123,34 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
         c1.gridheight = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel(" "), c1);
 
         // Combo box
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        listSignals = new JComboBox<String> (showSignals.toArray (new String[showSignals.size()]));
-        panel1.add(listSignals, c1);
+        listStereotypes = new JComboBox<String>(availableStereotypes);
+        listStereotypes.setSelectedIndex(currentStereotype);
+        panel1.add(listStereotypes, c1);
 
 
-        // Signal
+        // List of stereotypes
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        selectSignal = new JButton("Select signal");
-        panel1.add(selectSignal, c1);
-        selectSignal.setEnabled(showSignals.size() > 0);
-        selectSignal.addActionListener(this);
+        selectStereotype = new JButton("Select stereotype");
+        panel1.add(selectStereotype, c1);
+        selectStereotype.setEnabled(availableStereotypes.length > 0);
+        selectStereotype.addActionListener(this);
 
-        // Text
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        signal = new JTextField(currentSignal, 30);
-        panel1.add(signal, c1);
+        // Text of stereotype
+        stereotype = new JTextField(availableStereotypes[currentStereotype], 30);
+        panel1.add(stereotype, c1);
         //panel1.setEditable(true);
 
-		//Reference to DIPLODOCUS signal or Requirement
-		c1.gridwidth = 1;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-		panel1.add(new JLabel("Reference Requirement"),c1);
-		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		refChecks = new JComboBox<TGComponent>(refs);
-		refChecks.insertItemAt(null, 0);
-		TraceManager.addDev("Reference=" + reference);
-		if (reference != null){
-			refChecks.setSelectedItem(reference);
-		} else {
-		    refChecks.setSelectedIndex(0);
-        }
-		panel1.add(refChecks,c1);
+        // ID
+        name = new JTextField(currentName, 30);
+        panel1.add(name, c1);
+        //panel1.setEditable(true);
+
 
         c.add(panel1, BorderLayout.CENTER);
 
@@ -195,14 +166,14 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
             closeDialog();
         } else if (evt.getSource() == cancelButton)  {
             cancelDialog();
-        } else if (evt.getSource() == selectSignal)  {
-            selectSignal();
+        } else if (evt.getSource() == selectStereotype)  {
+            selectStereotype();
         }
     }
 
-    public void selectSignal() {
-        int index = listSignals.getSelectedIndex();
-        signal.setText(realSignals.get(index).getUseDescription());
+    public void selectStereotype() {
+        int index = listStereotypes.getSelectedIndex();
+        stereotype.setText(availableStereotypes[index]);
     }
 
     public void closeDialog() {
@@ -210,17 +181,17 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
         dispose();
     }
 
-    public String getSignal() {
-        return signal.getText();
+    public String getStereotype() {
+        return stereotype.getText();
     }
-	
-	public TGComponent getReference(){
-		return (TGComponent) refChecks.getSelectedItem();
-	}
+
+    public String getName() {
+        return name.getText();
+    }
 
 
     public boolean hasValidString() {
-        return signal.getText().length() > 0;
+        return stereotype.getText().length() > 0;
     }
 
     public boolean hasBeenCancelled() {
@@ -228,6 +199,7 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
     }
 
     public void cancelDialog() {
+        cancelled = true;
         dispose();
     }
 }
