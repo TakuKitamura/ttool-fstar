@@ -64,9 +64,9 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	private int period;
 	private String time;
 	private String processCode;
-	private DefaultListModel<String> listParameters;
+	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
-	private String typeTypedef;
+	private String typeTemplate;
 	private DefaultListModel<String> listTypedef;
 	
 	private int maxFontSize = 14;
@@ -117,9 +117,9 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
         setPeriod(-1);
         setProcessCode("void processing() {\n\n}");
         setTime("");
-        setListParameters(new DefaultListModel<String>());
-        setNameTypedef("");
-        setTypeTypedef("");
+        setListStruct(new DefaultListModel<String>());
+        setNameTemplate("");
+        setTypeTemplate("");
         setListTypedef(new DefaultListModel<String>());
         
         myImageIcon = IconManager.imgic1202;
@@ -367,23 +367,23 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
         sb.append("<Attribute period=\"" + getPeriod());
         sb.append("\" time=\"" + getTime());
         sb.append("\" processCode=\"" + encode(getProcessCode()));
-        sb.append("\" listParameters=\"" + splitParameters(getListParameters()));
-        sb.append("\" nameTemplate=\"" + getNameTypedef());
-        sb.append("\" typeTypedef=\"" + getTypeTypedef());
+        sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
+        sb.append("\" nameTemplate=\"" + getNameTemplate());
+        sb.append("\" typeTemplate=\"" + getTypeTemplate());
         sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
 
-    public String splitParameters(DefaultListModel listParameters) {
+    public String splitParameters(DefaultListModel listStruct) {
     	String s = "";
     	
-    	for (int i = 0; i < listParameters.getSize(); i++) {
-    		if (i < listParameters.getSize()-1) {
-    			s = s + listParameters.get(i) + "|";
+    	for (int i = 0; i < listStruct.getSize(); i++) {
+    		if (i < listStruct.getSize()-1) {
+    			s = s + listStruct.get(i) + "|";
     		} else {
-    			s = s + listParameters.get(i);
+    			s = s + listStruct.get(i);
     		}
     	}
     	return s;
@@ -496,7 +496,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
             Element elt;
             
             int period;
-            String time, processCode, listParameters, nameTemplate, typeTypedef, listTypedef;
+            String time, processCode, listStruct, nameTemplate, typeTemplate, listTypedef;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -513,22 +513,22 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
                                 period = Integer.decode(elt.getAttribute("period")).intValue();
                                 time = elt.getAttribute("time");
                                 processCode = elt.getAttribute("processCode");
-                                listParameters = elt.getAttribute("listParameters");
+                                listStruct = elt.getAttribute("listStruct");
                                 nameTemplate = elt.getAttribute("nameTemplate");
-                                typeTypedef = elt.getAttribute("typeTypedef");
+                                typeTemplate = elt.getAttribute("typeTemplate");
                                 listTypedef = elt.getAttribute("listTypedef");
                                 setPeriod(period);
                                 setTime(time);
                                 processCode = decode(processCode).toString();
                                 setProcessCode(processCode);
-                                String[] splita = listParameters.split("\\|");
+                                String[] splita = listStruct.split("\\|");
                                 DefaultListModel<String> lista = new DefaultListModel<String>();
                                 for (String s : splita) {
                                 	lista.addElement(s);
                                 }
-                                setListParameters(lista);
-                                setNameTypedef(nameTemplate);
-                                setTypeTypedef(typeTypedef);
+                                setListStruct(lista);
+                                setNameTemplate(nameTemplate);
+                                setTypeTemplate(typeTemplate);
                                 String[] splitb = listTypedef.split("\\|");
                                 DefaultListModel<String> listb = new DefaultListModel<String>();
                                 for (String s : splitb) {
@@ -643,15 +643,15 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		time = _time;
 	}
 
-	public DefaultListModel<String> getListParameters() {
-		return listParameters;
+	public DefaultListModel<String> getListStruct() {
+		return listStruct;
 	}
 
-	public void setListParameters(DefaultListModel<String> _listParameters) {
-		listParameters = _listParameters;
+	public void setListStruct(DefaultListModel<String> _listStruct) {
+		listStruct = _listStruct;
 	}
 
-	public String getNameTypedef() {
+	public String getNameTemplate() {
 		return nameTemplate;
 	}
 
@@ -660,11 +660,11 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	}
 
 	public String getTypeTemplate() {
-		return typeTypedef;
+		return typeTemplate;
 	}
 
-	public void setTypeTypedef(String _typeTypedef) {
-		typeTypedef = _typeTypedef;
+	public void setTypeTemplate(String _typeTemplate) {
+		typeTemplate = _typeTemplate;
 	}
 
 	public DefaultListModel<String> getListTypedef() {

@@ -71,15 +71,29 @@ public class PrimitiveCode {
 			int cpt = 0;
 			int cpt2 = 0;
 
+			if ((!tdf.getTypeTemplate().equals("")) || (!tdf.getNameTemplate().equals("")))  {
+				corpsPrimitive = "template<" + tdf.getTypeTemplate() + " " + tdf.getNameTemplate() + ">" + CR;
+			}
 			//corpsPrimitive = "SCA_TDF_MODULE(" + tdf.getName() + ") {" + CR2;
-			corpsPrimitive = "class " + tdf.getName() + " : public sca_tdf::sca_module {" + CR2 + "public:" + CR;
+			corpsPrimitive = corpsPrimitive + "class " + tdf.getName() + " : public sca_tdf::sca_module {" + CR2 + "public:" + CR;
 
-			if (tdf.getListParameters().getSize() != 0) {
-				corpsPrimitive = corpsPrimitive + "\t struct parameters {" + CR;
+			if (!tdf.getListTypedef().isEmpty()) {
+				for (int i = 0; i < tdf.getListTypedef().getSize(); i++) {
+					String select = tdf.getListTypedef().get(i);
+					String[] split = select.split(" : ");
+					corpsPrimitive = corpsPrimitive + "\ttypedef " + split[1] + "<" + tdf.getNameTemplate() + "> " + split[0] + ";" + CR;
+					if (i == tdf.getListTypedef().getSize()-1) {
+						corpsPrimitive = corpsPrimitive + CR;
+					}
+				}
+			}
+			
+			if (tdf.getListStruct().getSize() != 0) {
+				corpsPrimitive = corpsPrimitive + "\tstruct parameters {" + CR;
 
 				String identifier, value, type;
-				for (int i = 0; i < tdf.getListParameters().size(); i++) {
-					String select = tdf.getListParameters().get(i);
+				for (int i = 0; i < tdf.getListStruct().size(); i++) {
+					String select = tdf.getListStruct().get(i);
 					String[] splita = select.split(" = ");
 					identifier = splita[0];
 					String[] splitb = splita[1].split(" : ");
@@ -95,8 +109,8 @@ public class PrimitiveCode {
 
 				corpsPrimitive = corpsPrimitive + "\t\tparameters()" + CR;
 
-				for (int i = 0; i < tdf.getListParameters().size(); i++) {
-					String select = tdf.getListParameters().get(i);
+				for (int i = 0; i < tdf.getListStruct().size(); i++) {
+					String select = tdf.getListStruct().get(i);
 					String[] splita = select.split(" = ");
 					identifier = splita[0];
 					String[] splitb = splita[1].split(" : ");
@@ -110,18 +124,18 @@ public class PrimitiveCode {
 					if (i == 0) {
 						corpsPrimitive = corpsPrimitive + "\t\t: " + identifier + "(" + value + ")" + CR;
 					} 
-					if ((i > 0) && (i < tdf.getListParameters().getSize()-1)) {
+					if ((i > 0) && (i < tdf.getListStruct().getSize()-1)) {
 						corpsPrimitive = corpsPrimitive + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
-					if (i == tdf.getListParameters().getSize()-1) {
+					if (i == tdf.getListStruct().getSize()-1) {
 						corpsPrimitive = corpsPrimitive + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
 					}
 				}
-				corpsPrimitive = corpsPrimitive + "\t};" + CR2;
+				corpsPrimitive = corpsPrimitive + "\t};" + CR;
 			}
 
 			if (!tdfports.isEmpty()) {
-				corpsPrimitive = corpsPrimitive + "\t// TDF port declarations" + CR;
+				corpsPrimitive = corpsPrimitive + CR;
 				for (SysCAMSTPortTDF t : tdfports) {
 					if (t.getOrigin() == 0) {
 						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_in<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
@@ -131,7 +145,7 @@ public class PrimitiveCode {
 				}
 			}
 			if (!convports.isEmpty()) {
-				corpsPrimitive = corpsPrimitive + "\t// Converter port declarations" + CR;
+				corpsPrimitive = corpsPrimitive + CR;
 				for (SysCAMSTPortConverter conv : convports) {
 					if (conv.getOrigin() == 0) {
 						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
@@ -142,15 +156,15 @@ public class PrimitiveCode {
 			}
 
 			//corpsPrimitive = corpsPrimitive + CR + "\t// Constructor" + CR + "\tSCA_CTOR(" + tdf.getName() + ")" + CR;
-			corpsPrimitive = corpsPrimitive + CR + "\t// Constructor" + CR + "\texplicit " + tdf.getName() + "(sc_core::sc_module_name nm";
+			corpsPrimitive = corpsPrimitive + CR + "\texplicit " + tdf.getName() + "(sc_core::sc_module_name nm";
 
-			if (tdf.getListParameters().getSize() != 0) {
+			if (tdf.getListStruct().getSize() != 0) {
 				corpsPrimitive = corpsPrimitive + ", const parameters& p = parameters())" + CR;
 			} else {
 				corpsPrimitive = corpsPrimitive + ")" + CR;
 			}
 
-			if (!tdfports.isEmpty() || !convports.isEmpty() || !tdf.getListParameters().isEmpty()) {
+			if (!tdfports.isEmpty() || !convports.isEmpty() || !tdf.getListStruct().isEmpty()) {
 				corpsPrimitive = corpsPrimitive + "\t: ";
 				if (!tdfports.isEmpty()) {
 					for (int i = 0; i < tdfports.size(); i++) {
@@ -183,12 +197,12 @@ public class PrimitiveCode {
 					}
 				}
 				String identifier;
-				if (!tdf.getListParameters().isEmpty()) {
-					for (int i = 0; i < tdf.getListParameters().size(); i++) {
-						String select = tdf.getListParameters().get(i);
+				if (!tdf.getListStruct().isEmpty()) {
+					for (int i = 0; i < tdf.getListStruct().size(); i++) {
+						String select = tdf.getListStruct().get(i);
 						String[] splita = select.split(" = ");
 						identifier = splita[0];
-						if (tdf.getListParameters().getSize() > 1) {
+						if (tdf.getListStruct().getSize() > 1) {
 							if (cpt == 0) {
 								corpsPrimitive = corpsPrimitive + identifier + "(p." + identifier + ")" + CR;
 								cpt++;
@@ -329,12 +343,12 @@ public class PrimitiveCode {
 
 			corpsPrimitive = corpsPrimitive + "\t" + pc + CR;
 
-			if (tdf.getListParameters().getSize() != 0) {
+			if (tdf.getListStruct().getSize() != 0) {
 				corpsPrimitive = corpsPrimitive + "private:" + CR;
 
 				String identifier, type, constant;
-				for (int i = 0; i < tdf.getListParameters().size(); i++) {
-					String select = tdf.getListParameters().get(i);
+				for (int i = 0; i < tdf.getListStruct().size(); i++) {
+					String select = tdf.getListStruct().get(i);
 					String[] splita = select.split(" = ");
 					identifier = splita[0];
 					String[] splitb = splita[1].split(" : ");
@@ -346,7 +360,11 @@ public class PrimitiveCode {
 						constant = "";
 						type = splitc[0];
 					}
-					corpsPrimitive = corpsPrimitive + "\t" + constant + " " + type + " " + identifier + ";" + CR;
+					if (constant.equals("")) {
+						corpsPrimitive = corpsPrimitive + "\t" + type + " " + identifier + ";" + CR;
+					} else {
+						corpsPrimitive = corpsPrimitive + "\t" + constant + " " + type + " " + identifier + ";" + CR;
+					}
 				}
 			}
 			corpsPrimitive = corpsPrimitive + "};" + CR2 + "#endif" + " // " + tdf.getName().toUpperCase() + "_H";
