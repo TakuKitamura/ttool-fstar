@@ -429,11 +429,11 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 		componentMenu.addSeparator();
 
-		JMenuItem rotateright = new JMenuItem("Rotate right 90°");
+		JMenuItem rotateright = new JMenuItem("Rotate right 90\u00b0");
 		rotateright.addActionListener(this);
 		componentMenu.add(rotateright);
 
-		JMenuItem rotateleft = new JMenuItem("Rotate left 90°");
+		JMenuItem rotateleft = new JMenuItem("Rotate left 90\u00b0");
 		rotateleft.addActionListener(this);
 		componentMenu.add(rotateleft);
 
@@ -451,12 +451,12 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 	public void actionPerformed(ActionEvent e) {
 		fv = false;
 		fh = false;
-		if (e.getActionCommand().equals("Rotate right 90°")) {
+		if (e.getActionCommand().equals("Rotate right 90\u00b0")) {
 			position++;
 			position %= 4;
 			first = false;
 		}
-		if (e.getActionCommand().equals("Rotate left 90°")) {
+		if (e.getActionCommand().equals("Rotate left 90\u00b0")) {
 			position = position + 3;
 			position %= 4;
 			first = false;
