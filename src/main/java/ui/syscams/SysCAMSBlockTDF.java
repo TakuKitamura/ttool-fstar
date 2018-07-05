@@ -68,552 +68,556 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	private String nameTemplate;
 	private String typeTemplate;
 	private DefaultListModel<String> listTypedef;
-	
+
 	private int maxFontSize = 14;
-    private int minFontSize = 4;
-    private int currentFontSize = -1;
-    private Color myColor;
+	private int minFontSize = 4;
+	private int currentFontSize = -1;
+	private Color myColor;
 
 	private boolean isAttacker=false;
 
-    // Attributes
-    public HashMap<String, Integer> attrMap = new HashMap<String, Integer>();
-    public String mappingName;
-    private int textX = 15; // border for ports
-    private double dtextX = 0.0;
+	// Attributes
+	public HashMap<String, Integer> attrMap = new HashMap<String, Integer>();
+	public String mappingName;
+	private int textX = 15; // border for ports
+	private double dtextX = 0.0;
 
-    public String oldValue;
-	
-    public SysCAMSBlockTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+	public String oldValue;
 
-        initScaling(200, 150);
+	public SysCAMSBlockTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        oldScaleFactor = tdp.getZoom();
-        dtextX = textX * oldScaleFactor;
-        textX = (int)dtextX;
-        dtextX = dtextX - textX;
+		initScaling(200, 150);
 
-        minWidth = 1;
-        minHeight = 1;
+		oldScaleFactor = tdp.getZoom();
+		dtextX = textX * oldScaleFactor;
+		textX = (int)dtextX;
+		dtextX = dtextX - textX;
 
-        nbConnectingPoint = 0;
+		minWidth = 1;
+		minHeight = 1;
 
-        addTGConnectingPointsComment();
+		nbConnectingPoint = 0;
 
-        nbInternalTGComponent = 0;
+		addTGConnectingPointsComment();
 
-        moveable = true;
-        multieditable = true;
-        editable = true;
-        removable = true;
-        userResizable = true;
+		nbInternalTGComponent = 0;
 
-        value = tdp.findSysCAMSPrimitiveComponentName("Block_TDF_");
-        oldValue = value;
-        name = "Primitive component - Block TDF";
-        
-        // Initialization of port attributes
-        setPeriod(-1);
-        setProcessCode("void processing() {\n\n}");
-        setTime("");
-        setListStruct(new DefaultListModel<String>());
-        setNameTemplate("");
-        setTypeTemplate("");
-        setListTypedef(new DefaultListModel<String>());
-        
-        myImageIcon = IconManager.imgic1202;
+		moveable = true;
+		multieditable = true;
+		editable = true;
+		removable = true;
+		userResizable = true;
 
-        actionOnAdd();
-    }
+		value = tdp.findSysCAMSPrimitiveComponentName("Block_TDF_");
+		oldValue = value;
+		name = "Primitive component - Block TDF";
 
-    public void internalDrawing(Graphics g) {
-        int w;
-        Font f = g.getFont();
-        Font fold = f;
+		// Initialization of port attributes
+		setPeriod(-1);
+		setProcessCode("void processing() {\n\n}");
+		setTime("");
+		setListStruct(new DefaultListModel<String>());
+		setNameTemplate("");
+		setTypeTemplate("");
+		setListTypedef(new DefaultListModel<String>());
 
-        if (myColor == null) {
-    		myColor = Color.lightGray;
-        }
-        
-        if (this.rescaled && !this.tdp.isScaled()) {
-            this.rescaled = false;
-            // Must set the font size...
-            // Incrementally find the biggest font not greater than max_font size
-            // If font is less than min_font, no text is displayed
+		myImageIcon = IconManager.imgic1202;
 
-            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
-            f = f.deriveFont((float) maxCurrentFontSize);
+		actionOnAdd();
+	}
 
-            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
-            	if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
-            		break;
-            	}
-                maxCurrentFontSize--;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
+	public void internalDrawing(Graphics g) {
+		int w;
+		Font f = g.getFont();
+		Font fold = f;
 
-            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
-                maxCurrentFontSize++;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
-            g.setFont(f);
-            this.currentFontSize = maxCurrentFontSize;
-        } else {
-            f = f.deriveFont(this.currentFontSize);
-    	}
+		if (myColor == null) {
+			myColor = Color.lightGray;
+		}
 
-        // Zoom is assumed to be computed
-        Color c = g.getColor();
-        g.drawRect(x, y, width, height);
-        if ((width > 2) && (height > 2)) {
-            g.setColor(myColor);
-            g.fillRect(x+1, y+1, width-1, height-1);
-            g.setColor(c);
-        }
+		if (this.rescaled && !this.tdp.isScaled()) {
+			this.rescaled = false;
+			// Must set the font size...
+			// Incrementally find the biggest font not greater than max_font size
+			// If font is less than min_font, no text is displayed
 
-        // Set font size
-        int attributeFontSize = this.currentFontSize * 5 / 6;
-        g.setFont(f.deriveFont((float) attributeFontSize));
-        g.setFont(f);
-        w = g.getFontMetrics().stringWidth(value);
-        if (w > (width - 2 * textX)) {
-        	g.setFont(f.deriveFont(Font.BOLD));
-            g.drawString(value, x + textX + 1, y + currentFontSize + textX);
-            g.setFont(f.deriveFont(Font.PLAIN));
-        	String s = "Tm = " + this.getPeriod();
-        	g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
-        } else {
-        	g.setFont(f.deriveFont(Font.BOLD));
-            g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
-            g.setFont(f.deriveFont(Font.PLAIN));
-        	String s = "Tm = " + this.getPeriod();
-        	w = g.getFontMetrics().stringWidth(s);
-        	g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
-        }
+			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+			f = f.deriveFont((float) maxCurrentFontSize);
 
-        g.setFont(fold);
-    }
-     public void drawVerification(Graphics g, int x, int y, int checkConfStatus){
-        Color c = g.getColor();
-        Color c1;
-        switch(checkConfStatus) {
-        case TAttribute.CONFIDENTIALITY_OK:
-            c1 = Color.green;
-            break;
-        case TAttribute.CONFIDENTIALITY_KO:
-            c1 = Color.red;
-            break;
-        default:
-            return;
-        }
+			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+				if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
+					break;
+				}
+				maxCurrentFontSize--;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
+
+			if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+				maxCurrentFontSize++;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
+			g.setFont(f);
+			this.currentFontSize = maxCurrentFontSize;
+		} else {
+			f = f.deriveFont(this.currentFontSize);
+		}
+
+		// Zoom is assumed to be computed
+		Color c = g.getColor();
+		g.drawRect(x, y, width, height);
+		if ((width > 2) && (height > 2)) {
+			g.setColor(myColor);
+			g.fillRect(x+1, y+1, width-1, height-1);
+			g.setColor(c);
+		}
+
+		// Set font size
+		int attributeFontSize = this.currentFontSize * 5 / 6;
+		g.setFont(f.deriveFont((float) attributeFontSize));
+		g.setFont(f);
+		w = g.getFontMetrics().stringWidth(value);
+		if (w > (width - 2 * textX)) {
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+			g.setFont(f.deriveFont(Font.PLAIN));
+			if (this.getPeriod() != -1) { 
+				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
+				g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
+			}
+		} else {
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
+			g.setFont(f.deriveFont(Font.PLAIN));
+			if (this.getPeriod() != -1) { 
+				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
+				w = g.getFontMetrics().stringWidth(s);
+				g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
+			}
+		}
+
+		g.setFont(fold);
+	}
+	public void drawVerification(Graphics g, int x, int y, int checkConfStatus){
+		Color c = g.getColor();
+		Color c1;
+		switch(checkConfStatus) {
+		case TAttribute.CONFIDENTIALITY_OK:
+			c1 = Color.green;
+			break;
+		case TAttribute.CONFIDENTIALITY_KO:
+			c1 = Color.red;
+			break;
+		default:
+			return;
+		}
 		g.drawOval(x-10, y-10, 6, 9);
 		g.setColor(c1);
 		g.fillRect(x-12, y-5, 9, 7);
 		g.setColor(c);
 		g.drawRect(x-12, y-5, 9, 7);
-    }
+	}
 
-    public void rescale(double scaleFactor){
-        dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
-        textX = (int)(dtextX);
-        dtextX = dtextX - textX;
-        super.rescale(scaleFactor);
-    }
+	public void rescale(double scaleFactor){
+		dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
+		textX = (int)(dtextX);
+		dtextX = dtextX - textX;
+		super.rescale(scaleFactor);
+	}
 
-    public TGComponent isOnOnlyMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
+	public TGComponent isOnOnlyMe(int _x, int _y) {
+		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+			return this;
+		}
+		return null;
+	}
 
 	public boolean isAttacker(){
 		return isAttacker;
 	}
 
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
-    	// On the name ?
-        if (_y <= (y + currentFontSize + textX)) {
-            //TraceManager.addDev("Edit on double click x=" + _x + " y=" + _y);
-            oldValue = value;
-            String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
-                                                           JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
-                                                           null,
-                                                           getValue());
-            if ((s != null) && (s.length() > 0)) {
-                // Check whether this name is already in use, or not
+	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+		// On the name ?
+				if (_y <= (y + currentFontSize + textX)) {
+					//TraceManager.addDev("Edit on double click x=" + _x + " y=" + _y);
+					oldValue = value;
+					String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
+							JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
+							null,
+							getValue());
+					if ((s != null) && (s.length() > 0)) {
+						// Check whether this name is already in use, or not
 
-                if (!TAttribute.isAValidId(s, false, false)) {
-                    JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the component: the new name is not a valid name",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
-                    return false;
-                }
-                if (oldValue.compareTo(s) != 0) {
-                    if (((SysCAMSComponentTaskDiagramPanel)(tdp)).nameBlockTDFComponentInUse(oldValue, s)) {
-                        JOptionPane.showMessageDialog(frame,
-                                                      "Error: the name is already in use",
-                                                      "Name modification",
-                                                      JOptionPane.ERROR_MESSAGE);
-                        return false;
-                    }
-                }
-
-
-                //TraceManager.addDev("Set value with change");
-    			setComponentName(s);
-                setValueWithChange(s);
-				isAttacker = s.contains("Attacker");
-                rescaled = true;
-                //TraceManager.addDev("return true");
-                return true;
-
-            }
-            return false;
-        }
-    	
-    	JDialogSysCAMSBlockTDF jtdf = new JDialogSysCAMSBlockTDF(this);
-    	jtdf.setVisible(true);
-        rescaled = true;
-        return true;
-    }
-
-    public int getType() {
-		return TGComponentManager.CAMS_BLOCK_TDF;
-    }
-
-    public void wasSwallowed() {
-        myColor = null;
-    }
-
-    public void wasUnswallowed() {
-        myColor = null;
-        setFather(null);
-        TDiagramPanel tdp = getTDiagramPanel();
-        setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
-    }
-
-    public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-    	if (tgc instanceof SysCAMSPortTDF) {
-    		return tgc instanceof SysCAMSPortTDF;
-    	} else if (tgc instanceof SysCAMSPortConverter) {
-    		return tgc instanceof SysCAMSPortConverter;
-    	} else {
-    		return true;
-    	}
-    }
-
-    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-        //TraceManager.addDev("Add swallow component");
-        // Choose its position
-        // Make it an internal component
-        // It's one of my son
-        //Set its coordinates
-        if (tgc instanceof SysCAMSPortTDF) {
-            tgc.setFather(this);
-            tgc.setDrawingZone(true);
-            tgc.resizeWithFather();
-            addInternalComponent(tgc, 0);
-            return true;
-        }
-        if (tgc instanceof SysCAMSPortConverter) {
-        	tgc.setFather(this);
-        	tgc.setDrawingZone(true);
-        	tgc.resizeWithFather();
-        	addInternalComponent(tgc, 0);
-        	return true;
-        }
-        return false;
-    }
-
-    public void removeSwallowedTGComponent(TGComponent tgc) {
-        removeInternalComponent(tgc);
-    }
-
-    public void hasBeenResized() {
-        rescaled = true;
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof SysCAMSPortTDF) {
-                tgcomponent[i].resizeWithFather();
-            }
-            if (tgcomponent[i] instanceof SysCAMSPortConverter) {
-            	tgcomponent[i].resizeWithFather();
-            }
-        }
-        if (getFather() != null) {
-            resizeWithFather();
-        }
-    }
-
-    public void resizeWithFather() {
-        if ((father != null) && (father instanceof SysCAMSCompositeComponent)) {
-            // Too large to fit in the father? -> resize it!
-            resizeToFatherSize();
-
-            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-            setMoveCd(x, y);
-        }
-    }
-
-    protected String translateExtraParam() {
-    	StringBuffer proc;
-    	
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-		sb.append("<Data isAttacker=\"");
-        sb.append(isAttacker() ? "Yes": "No");
-        sb.append("\" />\n");
-        sb.append("<Attribute period=\"" + getPeriod());
-        sb.append("\" time=\"" + getTime());
-        sb.append("\" processCode=\"" + encode(getProcessCode()));
-        sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
-        sb.append("\" nameTemplate=\"" + getNameTemplate());
-        sb.append("\" typeTemplate=\"" + getTypeTemplate());
-        sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-
-    public String splitParameters(DefaultListModel listStruct) {
-    	String s = "";
-    	
-    	for (int i = 0; i < listStruct.getSize(); i++) {
-    		if (i < listStruct.getSize()-1) {
-    			s = s + listStruct.get(i) + "|";
-    		} else {
-    			s = s + listStruct.get(i);
-    		}
-    	}
-    	return s;
-    }
-    
-    public StringBuffer encode(String data) {
-    	StringBuffer databuf = new StringBuffer(data);
-    	StringBuffer buffer = new StringBuffer("");
-        for(int pos = 0; pos != data.length(); pos++) {
-        	char c = databuf.charAt(pos);
-            switch(c) {
-                case '&' :  
-                	buffer.append("&amp;");       
-                	break;
-                case '\"' : 
-                	buffer.append("&quot;");      
-                	break;
-                case '\'' : 
-                	buffer.append("&apos;");      
-                	break;
-                case '<' :  
-                	buffer.append("&lt;");        
-                	break;
-                case '>' :  
-                	buffer.append("&gt;");        
-                	break;
-                default :   
-                	buffer.append(databuf.charAt(pos)); 
-                	break;
-            }
-        }
-        return buffer;
-    }
-    
-    public StringBuffer decode(String data) {
-    	StringBuffer databuf = new StringBuffer(data);
-    	StringBuffer buffer = new StringBuffer("");
-    	int endline = 0;
-    	int nb_arobase = 0;
-    	int condition = 0;
-    	
-        for(int pos = 0; pos != data.length(); pos++) {
-        	char c = databuf.charAt(pos);
-            switch(c) {
-                case '\n' :
-                	break;
-                case '\t' :
-                	break;
-                case '{'  : 
-                	buffer.append("{\n"); 
-                	endline = 1;
-                	nb_arobase++;
-                	break;
-                case '}'  : 
-                	if (nb_arobase == 1) {
-                		buffer.append("}\n"); 
-                		endline = 0;
-                	} else {
-                		int i = nb_arobase;
-                		while (i > 1) {
-                			buffer.append("\t");
-                			i--;
-                		}
-                		buffer.append("}\n"); 
-                		endline = 1;
-                	}
-                	nb_arobase--;
-                	break;
-                case ';'  :
-                	if (condition == 1) {
-                		buffer.append(";");
-                	} else {
-                		buffer.append(";\n");
-                		endline = 1;
-                	}
-                	break;
-                case ' '  :
-                	if (endline == 0) {
-                		buffer.append(databuf.charAt(pos)); 
-                	}
-                	break;
-                case '(' :
-                	buffer.append("(");
-                	condition = 1;
-                	break;
-                case ')' :
-                	buffer.append(")");
-                	condition = 0;
-                	break;
-                default   : 
-                	if (endline == 1) {
-                		endline = 0;
-                		int i = nb_arobase;
-                		while (i >= 1) {
-                			buffer.append("\t");
-                			i--;
-                		}
-                	}
-                	buffer.append(databuf.charAt(pos)); 
-                	break;
-            }
-        }
-        return buffer;
-    }
-        
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
-            int period;
-            String time, processCode, listStruct, nameTemplate, typeTemplate, listTypedef;
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-							if (elt.getTagName().equals("Data")) {
-                                isAttacker = elt.getAttribute("isAttacker").equals("Yes");
+						if (!TAttribute.isAValidId(s, false, false)) {
+							JOptionPane.showMessageDialog(frame,
+									"Could not change the name of the component: the new name is not a valid name",
+									"Error",
+									JOptionPane.INFORMATION_MESSAGE);
+							return false;
+						}
+						if (oldValue.compareTo(s) != 0) {
+							if (((SysCAMSComponentTaskDiagramPanel)(tdp)).nameBlockTDFComponentInUse(oldValue, s)) {
+								JOptionPane.showMessageDialog(frame,
+										"Error: the name is already in use",
+										"Name modification",
+										JOptionPane.ERROR_MESSAGE);
+								return false;
 							}
-                            if (elt.getTagName().equals("Attribute")) {
-                                period = Integer.decode(elt.getAttribute("period")).intValue();
-                                time = elt.getAttribute("time");
-                                processCode = elt.getAttribute("processCode");
-                                listStruct = elt.getAttribute("listStruct");
-                                nameTemplate = elt.getAttribute("nameTemplate");
-                                typeTemplate = elt.getAttribute("typeTemplate");
-                                listTypedef = elt.getAttribute("listTypedef");
-                                setPeriod(period);
-                                setTime(time);
-                                processCode = decode(processCode).toString();
-                                setProcessCode(processCode);
-                                String[] splita = listStruct.split("\\|");
-                                DefaultListModel<String> lista = new DefaultListModel<String>();
-                                for (String s : splita) {
-                                	lista.addElement(s);
-                                }
-                                setListStruct(lista);
-                                setNameTemplate(nameTemplate);
-                                setTypeTemplate(typeTemplate);
-                                String[] splitb = listTypedef.split("\\|");
-                                DefaultListModel<String> listb = new DefaultListModel<String>();
-                                for (String s : splitb) {
-                                	listb.addElement(s);
-                                }
-                                setListTypedef(listb);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-    }
+						}
 
-    public int getCurrentFontSize() {
-        return currentFontSize;
-    }
 
-    public java.util.List<SysCAMSPortTDF> getAllTDFOriginPorts() {
-        return getAllTDFPorts(0, 1);
-    }
+						//TraceManager.addDev("Set value with change");
+						setComponentName(s);
+						setValueWithChange(s);
+						isAttacker = s.contains("Attacker");
+						rescaled = true;
+						//TraceManager.addDev("return true");
+						return true;
 
-    public java.util.List<SysCAMSPortTDF> getAllTDFDestinationPorts() {
-        return getAllTDFPorts(0, 0);
-    }
-    
-    public java.util.List<SysCAMSPortConverter> getAllConvOriginPorts() {
-    	return getAllConvPorts(0, 1);
-    }
-    
-    public java.util.List<SysCAMSPortConverter> getAllConvDestinationPorts() {
-    	return getAllConvPorts(0, 0);
-    }
+					}
+					return false;
+				}
 
-    public java.util.List<SysCAMSPortTDF> getAllTDFPorts(int _type, int _isOrigin) {
-    	java.util.List<SysCAMSPortTDF> ret = new LinkedList<SysCAMSPortTDF>();
-    	SysCAMSPortTDF port;
+				JDialogSysCAMSBlockTDF jtdf = new JDialogSysCAMSBlockTDF(this);
+				jtdf.setVisible(true);
+				rescaled = true;
+				return true;
+	}
 
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof SysCAMSPortTDF) {
-                port = (SysCAMSPortTDF)tgcomponent[i];
-                if ((port.getPortType() == _type) && (port.getOrigin() == _isOrigin)) {
-                    ret.add(port);
-                }
-            }
-        }
-        return ret;
-    }
-    
-    public java.util.List<SysCAMSPortConverter> getAllConvPorts(int _type, int _isOrigin) {
-    	java.util.List<SysCAMSPortConverter> ret = new LinkedList<SysCAMSPortConverter>();
-    	SysCAMSPortConverter port;
-    	
-    	for(int i=0; i<nbInternalTGComponent; i++) {
-    		if (tgcomponent[i] instanceof SysCAMSPortConverter) {
-    			port = (SysCAMSPortConverter)tgcomponent[i];
-    			if ((port.getPortType() == _type) && (port.getOrigin() == _isOrigin)) {
-    				ret.add(port);
-    			}
-    		}
-    	}
-    	return ret;
-    }
+	public int getType() {
+		return TGComponentManager.CAMS_BLOCK_TDF;
+	}
 
-    public java.util.List<SysCAMSPortTDF> getAllInternalPortsTDF() {
-    	java.util.List<SysCAMSPortTDF> list = new ArrayList<SysCAMSPortTDF>();
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof SysCAMSPortTDF) {
-                list.add((SysCAMSPortTDF)(tgcomponent[i]));
-            }
-        }
-        return list;
-    }
-    
-    public java.util.List<SysCAMSPortConverter> getAllInternalPortsConv() {
-    	java.util.List<SysCAMSPortConverter> list = new ArrayList<SysCAMSPortConverter>();
-    	for(int i=0; i<nbInternalTGComponent; i++) {
-    		if (tgcomponent[i] instanceof SysCAMSPortConverter) {
-    			list.add((SysCAMSPortConverter)(tgcomponent[i]));
-    		}
-    	}
-    	return list;
-    }
+	public void wasSwallowed() {
+		myColor = null;
+	}
+
+	public void wasUnswallowed() {
+		myColor = null;
+		setFather(null);
+		TDiagramPanel tdp = getTDiagramPanel();
+		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+	}
+
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof SysCAMSPortTDF) {
+			return tgc instanceof SysCAMSPortTDF;
+		} else if (tgc instanceof SysCAMSPortConverter) {
+			return tgc instanceof SysCAMSPortConverter;
+		} else {
+			return true;
+		}
+	}
+
+	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+		//TraceManager.addDev("Add swallow component");
+		// Choose its position
+		// Make it an internal component
+		// It's one of my son
+		//Set its coordinates
+		if (tgc instanceof SysCAMSPortTDF) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof SysCAMSPortConverter) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		return false;
+	}
+
+	public void removeSwallowedTGComponent(TGComponent tgc) {
+		removeInternalComponent(tgc);
+	}
+
+	public void hasBeenResized() {
+		rescaled = true;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof SysCAMSPortConverter) {
+				tgcomponent[i].resizeWithFather();
+			}
+		}
+		if (getFather() != null) {
+			resizeWithFather();
+		}
+	}
+
+	public void resizeWithFather() {
+		if ((father != null) && (father instanceof SysCAMSCompositeComponent)) {
+			// Too large to fit in the father? -> resize it!
+					resizeToFatherSize();
+
+			setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+			setMoveCd(x, y);
+		}
+	}
+
+	protected String translateExtraParam() {
+		StringBuffer proc;
+
+		StringBuffer sb = new StringBuffer("<extraparam>\n");
+		sb.append("<Data isAttacker=\"");
+		sb.append(isAttacker() ? "Yes": "No");
+		sb.append("\" />\n");
+		sb.append("<Attribute period=\"" + getPeriod());
+		sb.append("\" time=\"" + getTime());
+		sb.append("\" processCode=\"" + encode(getProcessCode()));
+		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
+		sb.append("\" nameTemplate=\"" + getNameTemplate());
+		sb.append("\" typeTemplate=\"" + getTypeTemplate());
+		sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
+		sb.append("\" />\n");
+		sb.append("</extraparam>\n");
+		return new String(sb);
+	}
+
+	public String splitParameters(DefaultListModel listStruct) {
+		String s = "";
+
+		for (int i = 0; i < listStruct.getSize(); i++) {
+			if (i < listStruct.getSize()-1) {
+				s = s + listStruct.get(i) + "|";
+			} else {
+				s = s + listStruct.get(i);
+			}
+		}
+		return s;
+	}
+
+	public StringBuffer encode(String data) {
+		StringBuffer databuf = new StringBuffer(data);
+		StringBuffer buffer = new StringBuffer("");
+		for(int pos = 0; pos != data.length(); pos++) {
+			char c = databuf.charAt(pos);
+			switch(c) {
+			case '&' :  
+				buffer.append("&amp;");       
+				break;
+			case '\"' : 
+				buffer.append("&quot;");      
+				break;
+			case '\'' : 
+				buffer.append("&apos;");      
+				break;
+			case '<' :  
+				buffer.append("&lt;");        
+				break;
+			case '>' :  
+				buffer.append("&gt;");        
+				break;
+			default :   
+				buffer.append(databuf.charAt(pos)); 
+				break;
+			}
+		}
+		return buffer;
+	}
+
+	public StringBuffer decode(String data) {
+		StringBuffer databuf = new StringBuffer(data);
+		StringBuffer buffer = new StringBuffer("");
+		int endline = 0;
+		int nb_arobase = 0;
+		int condition = 0;
+
+		for(int pos = 0; pos != data.length(); pos++) {
+			char c = databuf.charAt(pos);
+			switch(c) {
+			case '\n' :
+				break;
+			case '\t' :
+				break;
+			case '{'  : 
+				buffer.append("{\n"); 
+				endline = 1;
+				nb_arobase++;
+				break;
+			case '}'  : 
+				if (nb_arobase == 1) {
+					buffer.append("}\n"); 
+					endline = 0;
+				} else {
+					int i = nb_arobase;
+					while (i > 1) {
+						buffer.append("\t");
+						i--;
+					}
+					buffer.append("}\n"); 
+					endline = 1;
+				}
+				nb_arobase--;
+				break;
+			case ';'  :
+				if (condition == 1) {
+					buffer.append(";");
+				} else {
+					buffer.append(";\n");
+					endline = 1;
+				}
+				break;
+			case ' '  :
+				if (endline == 0) {
+					buffer.append(databuf.charAt(pos)); 
+				}
+				break;
+			case '(' :
+				buffer.append("(");
+				condition = 1;
+				break;
+			case ')' :
+				buffer.append(")");
+				condition = 0;
+				break;
+			default   : 
+				if (endline == 1) {
+					endline = 0;
+					int i = nb_arobase;
+					while (i >= 1) {
+						buffer.append("\t");
+						i--;
+					}
+				}
+				buffer.append(databuf.charAt(pos)); 
+				break;
+			}
+		}
+		return buffer;
+	}
+
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+		try {
+			NodeList nli;
+			Node n1, n2;
+			Element elt;
+
+			int period;
+			String time, processCode, listStruct, nameTemplate, typeTemplate, listTypedef;
+
+			for(int i=0; i<nl.getLength(); i++) {
+				n1 = nl.item(i);
+				if (n1.getNodeType() == Node.ELEMENT_NODE) {
+					nli = n1.getChildNodes();
+					for(int j=0; j<nli.getLength(); j++) {
+						n2 = nli.item(j);
+						if (n2.getNodeType() == Node.ELEMENT_NODE) {
+							elt = (Element) n2;
+							if (elt.getTagName().equals("Data")) {
+								isAttacker = elt.getAttribute("isAttacker").equals("Yes");
+							}
+							if (elt.getTagName().equals("Attribute")) {
+								period = Integer.decode(elt.getAttribute("period")).intValue();
+								time = elt.getAttribute("time");
+								processCode = elt.getAttribute("processCode");
+								listStruct = elt.getAttribute("listStruct");
+								nameTemplate = elt.getAttribute("nameTemplate");
+								typeTemplate = elt.getAttribute("typeTemplate");
+								listTypedef = elt.getAttribute("listTypedef");
+								setPeriod(period);
+								setTime(time);
+								processCode = decode(processCode).toString();
+								setProcessCode(processCode);
+								String[] splita = listStruct.split("\\|");
+								DefaultListModel<String> lista = new DefaultListModel<String>();
+								for (String s : splita) {
+									lista.addElement(s);
+								}
+								setListStruct(lista);
+								setNameTemplate(nameTemplate);
+								setTypeTemplate(typeTemplate);
+								String[] splitb = listTypedef.split("\\|");
+								DefaultListModel<String> listb = new DefaultListModel<String>();
+								for (String s : splitb) {
+									listb.addElement(s);
+								}
+								setListTypedef(listb);
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new MalformedModelingException();
+		}
+	}
+
+	public int getCurrentFontSize() {
+		return currentFontSize;
+	}
+
+	public java.util.List<SysCAMSPortTDF> getAllTDFOriginPorts() {
+		return getAllTDFPorts(0, 1);
+	}
+
+	public java.util.List<SysCAMSPortTDF> getAllTDFDestinationPorts() {
+		return getAllTDFPorts(0, 0);
+	}
+
+	public java.util.List<SysCAMSPortConverter> getAllConvOriginPorts() {
+		return getAllConvPorts(0, 1);
+	}
+
+	public java.util.List<SysCAMSPortConverter> getAllConvDestinationPorts() {
+		return getAllConvPorts(0, 0);
+	}
+
+	public java.util.List<SysCAMSPortTDF> getAllTDFPorts(int _type, int _isOrigin) {
+		java.util.List<SysCAMSPortTDF> ret = new LinkedList<SysCAMSPortTDF>();
+		SysCAMSPortTDF port;
+
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
+				port = (SysCAMSPortTDF)tgcomponent[i];
+				if ((port.getPortType() == _type) && (port.getOrigin() == _isOrigin)) {
+					ret.add(port);
+				}
+			}
+		}
+		return ret;
+	}
+
+	public java.util.List<SysCAMSPortConverter> getAllConvPorts(int _type, int _isOrigin) {
+		java.util.List<SysCAMSPortConverter> ret = new LinkedList<SysCAMSPortConverter>();
+		SysCAMSPortConverter port;
+
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSPortConverter) {
+				port = (SysCAMSPortConverter)tgcomponent[i];
+				if ((port.getPortType() == _type) && (port.getOrigin() == _isOrigin)) {
+					ret.add(port);
+				}
+			}
+		}
+		return ret;
+	}
+
+	public java.util.List<SysCAMSPortTDF> getAllInternalPortsTDF() {
+		java.util.List<SysCAMSPortTDF> list = new ArrayList<SysCAMSPortTDF>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
+				list.add((SysCAMSPortTDF)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+
+	public java.util.List<SysCAMSPortConverter> getAllInternalPortsConv() {
+		java.util.List<SysCAMSPortConverter> list = new ArrayList<SysCAMSPortConverter>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSPortConverter) {
+				list.add((SysCAMSPortConverter)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
 
 	public String getProcessCode() {
 		return processCode;

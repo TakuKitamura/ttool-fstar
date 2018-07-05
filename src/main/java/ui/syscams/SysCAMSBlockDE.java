@@ -169,15 +169,19 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
         	g.setFont(f.deriveFont(Font.BOLD));
             g.drawString(value, x + textX + 1, y + currentFontSize + textX);
             g.setFont(f.deriveFont(Font.PLAIN));
-        	String s = "Tm = " + this.getPeriod();
-        	g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
+            if (this.getPeriod() != -1) { 
+				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
+				g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
+			}
         } else {
         	g.setFont(f.deriveFont(Font.BOLD));
             g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
             g.setFont(f.deriveFont(Font.PLAIN));
-        	String s = "Tm = " + this.getPeriod();
-        	w = g.getFontMetrics().stringWidth(s);
-        	g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
+        	if (this.getPeriod() != -1) { 
+				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
+				w = g.getFontMetrics().stringWidth(s);
+				g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
+			}
         }
 
         g.setFont(fold);

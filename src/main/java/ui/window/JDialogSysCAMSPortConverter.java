@@ -39,31 +39,11 @@
 package ui.window;
 
 import ui.syscams.*;
-import ui.util.IconManager;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
+import ui.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
 
 /**
  * Class JDialogSystemCAMSPortConverterIn
@@ -84,7 +64,7 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 	private JComboBox<String> periodComboBoxString;
 	private JTextField rateTextField;
 	private JTextField delayTextField;
-	private ArrayList<String> listArrrayTypeString;
+	private ArrayList<String> listArrayTypeString;
 	private JComboBox<String> typeComboBoxString;
 	private String listOriginString[];
 	private JComboBox<String> originComboBoxString;
@@ -260,10 +240,10 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 			typeComboBoxString.addItem(listArrayTypeString.get(i));
 		}
 		for (int i = 0; i < listArrayTypeString.size(); i++) {
-			if (port.getTDFType().equals("")) {
+			if (port.getConvType().equals("")) {
 				typeComboBoxString.setSelectedIndex(0);
 			}
-			if (port.getTDFType().equals(listArrayTypeString.get(i))) {
+			if (port.getConvType().equals(listArrayTypeString.get(i))) {
 				typeComboBoxString.setSelectedIndex(i);
 			}
 		}
