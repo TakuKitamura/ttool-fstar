@@ -8545,16 +8545,24 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public Vector<SysCAMSComponentTaskDiagramPanel> getListSysCAMSPanel() {
     	Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagram = new Vector<SysCAMSComponentTaskDiagramPanel>(); 
-        TURTLEPanel tp = getTURTLEPanel("SystemC_AMS");
-        Vector<TDiagramPanel> ps = tp.panels;
-        for (TDiagramPanel panel : ps) {
-            if (panel instanceof SysCAMSComponentTaskDiagramPanel) {
-                syscamsDiagram.add((SysCAMSComponentTaskDiagramPanel) panel);
-            }
-        }
-        if (syscamsDiagram.size() == 0) 
-            System.err.println("No SysCAMS Panel found : MainGUI.getSysCAMSPanel()");
-        return syscamsDiagram;
+    	TURTLEPanel tp = getTURTLEPanel("SystemC_AMS");
+    	if (tp != null) {
+    		Vector<TDiagramPanel> ps = tp.panels;
+    		for (TDiagramPanel panel : ps) {
+    			if (panel instanceof SysCAMSComponentTaskDiagramPanel) {
+    				syscamsDiagram.add((SysCAMSComponentTaskDiagramPanel) panel);
+    			}
+    		}
+    		if (syscamsDiagram.size() == 0) 
+    			System.err.println("No SysCAMS Panel found : MainGUI.getSysCAMSPanel()");
+    		return syscamsDiagram;
+    	} else {
+    		JDialog msg = new JDialog();
+    		msg.setLocationRelativeTo(null);
+    		JOptionPane.showMessageDialog(msg, "There is no Systemc-AMS panel. Please add one.", "Warning !",
+    				JOptionPane.WARNING_MESSAGE);
+    		return null;
+    	}
     }
     
     public SysCAMSComponentTaskDiagramPanel getFirstSysCAMSPanelFound() {
