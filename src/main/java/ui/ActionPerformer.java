@@ -953,11 +953,11 @@ public class ActionPerformer {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_INDEPENDENT_VOLTAGE_SOURCE);
         } else if (command.equals(mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE].getActionCommand())){
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_INDEPENDENT_CURRENT_SOURCE);
-  	} else if (command.equals(mgui.actions[TGUIAction.ELN_NODE_REF].getActionCommand())){
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_NODE_REF].getActionCommand())){
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_NODE_REF);
-	} else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SINK].getActionCommand())){
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SINK].getActionCommand())){
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_VOLTAGE_SINK);
-	} else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK].getActionCommand())){
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK].getActionCommand())){
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_CURRENT_SINK);
 
             // Attack Tree Diagrams
