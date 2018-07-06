@@ -39,6 +39,7 @@
 package ui.window;
 
 import ui.AvatarSignal;
+import ui.ColorManager;
 import ui.util.IconManager;
 import ui.TGComponent;
 import myutil.TraceManager;
@@ -63,6 +64,7 @@ import java.util.Vector;
 public class JDialogIDAndStereotype extends JDialogBase implements ActionListener  {
 
     private String[] availableStereotypes;
+    private Color[] colors;
     private String currentName;
     private int currentStereotype;
 
@@ -73,6 +75,8 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
     private JComboBox<String> listStereotypes;
     private JButton selectStereotype;
     private JTextField stereotype, name;
+    private JButton colorButton;
+    private JButton useDefaultColor;
 
 
     private boolean cancelled;
@@ -80,11 +84,12 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
     /** Creates new form  */
     public JDialogIDAndStereotype(Frame _f, String _title,
                                   String[] _availableStereotypes, String _currentName,
-                                  int _currentStereotype) {
+                                  int _currentStereotype, Color[] _colors) {
 
         super(_f, _title, true);
 
         availableStereotypes = _availableStereotypes;
+        colors = _colors;
         currentName = _currentName;
         currentStereotype = _currentStereotype;
 
@@ -143,10 +148,23 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
 
         // Text of stereotype
         stereotype = new JTextField(availableStereotypes[currentStereotype], 30);
+        c1.gridwidth = 1;
         panel1.add(stereotype, c1);
+        colorButton = new JButton();
+        colorButton.setBackground(colors[currentStereotype]);
+        colorButton.addActionListener(this);
+        c1.gridwidth = GridBagConstraints.REMAINDER;
+        c1.fill = GridBagConstraints.BOTH;
+        panel1.add(colorButton, c1);
+
+        useDefaultColor = new JButton("Use default color");
+        useDefaultColor.setBackground(ColorManager.AVATAR_REQUIREMENT_TOP);
+        useDefaultColor.addActionListener(this);
+        panel1.add(useDefaultColor, c1);
         //panel1.setEditable(true);
 
         // ID
+        c1.fill = GridBagConstraints.HORIZONTAL;
         name = new JTextField(currentName, 30);
         panel1.add(name, c1);
         //panel1.setEditable(true);
@@ -168,12 +186,27 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
             cancelDialog();
         } else if (evt.getSource() == selectStereotype)  {
             selectStereotype();
+        } else if (evt.getSource() == colorButton)  {
+            selectColor();
+        } else if (evt.getSource() == useDefaultColor)  {
+            selectDefaultColor();
         }
+    }
+
+    public void selectColor() {
+        Color newColor = JColorChooser.showDialog
+                (null, "Background color of top box", colorButton.getBackground());
+        colorButton.setBackground(newColor);
+    }
+
+    public void selectDefaultColor() {
+        colorButton.setBackground(ColorManager.AVATAR_REQUIREMENT_TOP);
     }
 
     public void selectStereotype() {
         int index = listStereotypes.getSelectedIndex();
         stereotype.setText(availableStereotypes[index]);
+        colorButton.setBackground(colors[index]);
     }
 
     public void closeDialog() {
@@ -183,6 +216,10 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
 
     public String getStereotype() {
         return stereotype.getText();
+    }
+
+    public int getColor() {
+        return colorButton.getBackground().getRGB();
     }
 
     public String getName() {
