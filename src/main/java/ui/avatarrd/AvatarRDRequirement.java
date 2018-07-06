@@ -90,6 +90,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     //protected static String[] DEFAULT_REQ = {"<<Requirement>>", "<<SafetyRequirement>>", "<<SecurityRequirement>>"};
     protected static ArrayList<String> REQ_TYPE_STR = new ArrayList<String>(Arrays.asList("Requirement", "SafetyRequirement",
             "SecurityRequirement"));
+    protected static ArrayList<Color> REQ_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_REQUIREMENT_TOP, ColorManager
+            .AVATAR_REQUIREMENT_TOP, ColorManager.AVATAR_REQUIREMENT_TOP));
     //protected static int NB_REQ_TYPE = 3;
 
     protected final static int REGULAR_REQ = 0;
@@ -262,7 +264,14 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         g.drawRect(x, y, width, height);
 
         g.drawLine(x, y + lineHeight, x + width, y + lineHeight);
-        g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
+        Color topColor = REQ_TYPE_COLOR.get(reqType);
+        if (topColor == null) {
+            //TraceManager.addDev("Swithing back to default Color for:" + REQ_TYPE_STR.get(reqType));
+            topColor = ColorManager.AVATAR_REQUIREMENT_TOP;
+        } else {
+            //TraceManager.addDev("Using color: " + topColor.getRGB() + "for  " +REQ_TYPE_STR.get(reqType));
+        }
+        g.setColor(topColor);
         g.fillRect(x + 1, y + 1, width - 1, lineHeight - 1);
         g.setColor(ColorManager.AVATAR_REQUIREMENT_ATTRIBUTES);
         g.fillRect(x + 1, y + 1 + lineHeight, width - 1, height - 1 - lineHeight);
@@ -388,7 +397,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                     getValue());*/
 
             JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Requirement ID", REQ_TYPE_STR.toArray(new String[0]), getValue
-                    (), reqType);
+                    (), reqType,  REQ_TYPE_COLOR.toArray(new Color[0]));
             //dialog.setSize(400, 300);
             GraphicLib.centerOnParent(dialog, 400, 300);
             // dialog.show(); // blocked until dialog has been closed
@@ -448,7 +457,11 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                     return false;
                 }
 
-                addStereotype(s);
+                int rgb = dialog.getColor();
+
+                //TraceManager.addDev("RGBColor:" + rgb + " vs default color:" + ColorManager.REQ_TOP_BOX.getRGB());
+
+                addStereotype(s, rgb);
 
             }
             return false;
@@ -458,7 +471,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
     }
 
-    public boolean addStereotype(String s) {
+    public boolean addStereotype(String s, int rgb) {
         int index = -1;
         String sLower = s.toLowerCase();
         for (int i=0; i<REQ_TYPE_STR.size(); i++) {
@@ -471,11 +484,15 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         // Found stereotype
         if (index != -1) {
             reqType = index;
+            if (index > 0) {
+                REQ_TYPE_COLOR.set(index, new Color(rgb));
+            }
             return false;
 
         // Must add a new stereotype
         } else {
             REQ_TYPE_STR.add(s);
+            REQ_TYPE_COLOR.add(new Color(rgb));
             reqType = REQ_TYPE_STR.size()-1;
             return true;
         }
@@ -675,6 +692,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         sb.append("\" />\n");
         sb.append("<reqType data=\"");
         sb.append(REQ_TYPE_STR.get(reqType));
+        sb.append("\" color=\"");
+        sb.append(REQ_TYPE_COLOR.get(reqType).getRGB());
         sb.append("\" />\n");
         sb.append("<id data=\"");
         sb.append(id);
@@ -776,13 +795,19 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                             } else if (elt.getTagName().equals("reqType")) {
                                 //
                                 s = elt.getAttribute("data");
+                                String tmp3 = elt.getAttribute("color");
+                                int rgb = ColorManager.AVATAR_REQUIREMENT_TOP.getRGB();
+                                try {
+                                    rgb = Integer.decode(tmp3).intValue();
+                                } catch (Exception e) {
+                                }
                                 if (s.equals("null")) {
                                     reqType = REGULAR_REQ;
                                 } else {
                                     try {
                                         reqType = Integer.decode(s).intValue(); // default stereo: old way
                                     } catch (Exception e) {
-                                        addStereotype(s);
+                                        addStereotype(s, rgb);
                                     }
                                 }
                                 if (reqType > (REQ_TYPE_STR.size() - 1)) {
