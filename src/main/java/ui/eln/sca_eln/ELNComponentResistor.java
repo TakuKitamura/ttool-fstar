@@ -45,12 +45,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.eln.ELNConnectingPoint;
+import ui.eln.ELNPortTerminal;
 import ui.window.JDialogELNComponentResistor;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentListener;
 
 /**
  * Class ELNComponentResistor 
@@ -60,7 +62,7 @@ import java.awt.event.ActionListener;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentResistor extends TGCScalableWithInternalComponent implements ActionListener {
+public class ELNComponentResistor extends TGCScalableWithInternalComponent implements ActionListener, SwallowTGComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -77,7 +79,7 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 	private int position = 0;
 	private boolean fv = false, fh = false;
 	private int old;
-	private boolean first;
+	private boolean first, f = true;
 
 	public ELNComponentResistor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
 			TGComponent _father, TDiagramPanel _tdp) {
@@ -92,8 +94,7 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 		minWidth = 1;
 		minHeight = 1;
 
-		initConnectingPoint(2);
-
+//		initConnectingPoint(2);
 		addTGConnectingPointsComment();
 
 		moveable = true;
@@ -110,18 +111,26 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 		height = old;
 	}
 
-	public void initConnectingPoint(int nb) {
-		nbConnectingPoint = nb;
-		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.5, "p");
-		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 1.0, 0.5, "n");
-	}
+//	public void initConnectingPoint(int nb) {
+//		nbConnectingPoint = nb;
+//		connectingPoint = new TGConnectingPoint[nb];
+//		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.5, "p");
+//		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 1.0, 0.5, "n");
+//	}
 
 	public Color getMyColor() {
 		return myColor;
 	}
 
 	public void internalDrawing(Graphics g) {
+		if (f == true) {
+			ELNPortTerminal term0 = new ELNPortTerminal(x, y+width/2-width/4, this.minX, this.maxX, this.minY, this.maxY, false, this.father, this.tdp);
+			term0.setValue("p");
+			getTDiagramPanel().getComponentList().add(term0);
+			term0.getTDiagramPanel().addComponent(term0, x, y+width/2-width/4, true, false);
+			f = false;
+		}
+		
 		Font f = g.getFont();
 		Font fold = f;
 
@@ -173,23 +182,23 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if (fh == true) {
-				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
-						y + height / 2 + height / 2 + sh1);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
-						y + height / 2 + height / 2 + sh0);
+//				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+//				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
+//				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+//				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
+//						y + height / 2 + height / 2 + sh1);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
+//						y + height / 2 + height / 2 + sh0);
 			} else {
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
-						y + height / 2 + height / 2 + sh0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
-						y + height / 2 + height / 2 + sh1);
+//				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+//				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
+//				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+//				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
+//						y + height / 2 + height / 2 + sh0);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
+//						y + height / 2 + height / 2 + sh1);
 			}
 		} else if (position == 1) {
 			if (first == false) {
@@ -212,21 +221,21 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if (fv == true) {
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
-						y + height + sh0);
+//				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
+//				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
+//				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
+//				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+//						y + height + sh0);
 			} else {
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
-						y + height + sh1);
+//				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
+//				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+//				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
+//				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+//						y + height + sh1);
 			}
 		} else if (position == 2) {
 			if (first == false) {
@@ -251,23 +260,23 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if (fh == true) {
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw1,
-						y + height / 2 + height / 2 + sh1);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
-						y + height / 2 + height / 2 + sh0);
+//				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+//				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
+//				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+//				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw1,
+//						y + height / 2 + height / 2 + sh1);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
+//						y + height / 2 + height / 2 + sh0);
 			} else {
-				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw0,
-						y + height / 2 + height / 2 + sh0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
-						y + height / 2 + height / 2 + sh1);
+//				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+//				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
+//				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+//				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw0,
+//						y + height / 2 + height / 2 + sh0);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
+//						y + height / 2 + height / 2 + sh1);
 			}
 		} else if (position == 3) {
 			if (first == false) {
@@ -290,21 +299,21 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if (fv == true) {
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
-						y + height + sh0);
+//				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
+//				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+//				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
+//				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+//						y + height + sh0);
 			} else {
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
-						y + height + sh1);
+//				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
+//				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
+//				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
+//				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
+//				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+//						y + height + sh1);
 			}
 		}
 		g.setColor(c);
@@ -527,5 +536,40 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 
 	public void setFirst(boolean first) {
 		this.first = first;
+	}
+
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof ELNPortTerminal) {
+			return tgc instanceof ELNPortTerminal;
+		} else {
+			return true;
+		}
+	}
+
+	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+		if (tgc instanceof ELNPortTerminal) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		return false;
+	}
+
+	public void removeSwallowedTGComponent(TGComponent tgc) {
+		removeInternalComponent(tgc);
+	}
+	
+	public void hasBeenResized() {
+		rescaled = true;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNPortTerminal) {
+				tgcomponent[i].resizeWithFather();
+			}
+		}
+		if (getFather() != null) {
+			resizeWithFather();
+		}
 	}
 }
