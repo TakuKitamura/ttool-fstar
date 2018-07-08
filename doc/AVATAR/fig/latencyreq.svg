@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="170.92467"
+   height="121.43608"
+   viewbox="262 35 344 597"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="latencyreq.svg">
+  <metadata
+     id="metadata88">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs86" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1918"
+     inkscape:window-height="1040"
+     id="namedview84"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="2.1123696"
+     inkscape:cx="265.14424"
+     inkscape:cy="38.045502"
+     inkscape:window-x="123"
+     inkscape:window-y="52"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <rect
+     style="fill:#e4f1f2"
+     x="1.1852627"
+     y="0.21649158"
+     width="169.01634"
+     height="27.756596"
+     id="rect588" />
+  <rect
+     style="fill:#cdc46d"
+     x="1.1852627"
+     y="28.286575"
+     width="169.01634"
+     height="92.509399"
+     id="rect590" />
+  <line
+     style="fill:none;stroke:#000000;stroke-width:1"
+     x1="0.5"
+     y1="28.080811"
+     x2="170.42467"
+     y2="28.080811"
+     id="line586" />
+  <rect
+     style="fill:none;stroke:#000000;stroke-width:0.99999976"
+     x="0.50099754"
+     y="0.49999988"
+     width="169.72462"
+     height="120.43608"
+     id="rect584" />
+  <text
+     x="36.275017"
+     y="10.727005"
+     style="font-size:10px;font-family:SansSerif"
+     id="text592">&lt;&lt;Requirement&gt;&gt;</text>
+  <text
+     x="14.090246"
+     y="24.391359"
+     style="font-size:12px;font-family:SansSerif"
+     id="text594">LatencyCoffeeMachine</text>
+  <text
+     x="5.5013599"
+     y="40.080795"
+     style="font-size:12px;font-family:SansSerif"
+     id="text596">ID=17</text>
+  <text
+     x="3.716814"
+     y="52.794571"
+     style="font-size:12px;font-family:SansSerif"
+     id="text598">Text=&quot;The Coffee Machine</text>
+  <text
+     x="5.5013599"
+     y="63.501785"
+     style="font-size:12px;font-family:SansSerif"
+     id="text3263">must take less 10 seconds</text>
+  <text
+     x="4.7875233"
+     y="75.03212"
+     style="font-size:12px;font-family:SansSerif"
+     id="text600-6">to finish processing each</text>
+  <text
+     x="4.911459"
+     y="86.096458"
+     style="font-size:12px;font-family:SansSerif"
+     id="text602-8">order after payment is</text>
+  <text
+     x="5.148159"
+     y="97.458107"
+     style="font-size:12px;font-family:SansSerif"
+     id="text3066">received.&quot;</text>
+  <text
+     x="3.716814"
+     y="100.35051"
+     style="font-size:12px;font-family:SansSerif"
+     id="text3267" />
+  <text
+     x="4.0737324"
+     y="113.06432"
+     style="font-size:12px;font-family:SansSerif"
+     id="text604-3">Kind=&quot;Performance&quot;</text>
+</svg>

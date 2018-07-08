@@ -690,6 +690,7 @@ public class SecurityGeneration implements Runnable {
                             if (channel.equals(wChannel.getChannelName()) && wChannel.getSecurityContext().equals("")) {
                                 TraceManager.addDev("Securing write channel " + wChannel.getChannelName());
                                 wChannel.setSecurityContext(channelSecMap.get(channel));
+                                wChannel.setEncForm(true);
 
                             }
                         }
@@ -782,6 +783,7 @@ public class SecurityGeneration implements Runnable {
                             if (channel.equals(wChannel.getChannelName()) && wChannel.getSecurityContext().equals("")) {
                                 TraceManager.addDev("Securing write channel " + wChannel.getChannelName());
                                 wChannel.setSecurityContext(channelSecMap.get(channel));
+                                wChannel.setEncForm(true);
                                 tad.repaint();
                             }
                         }
@@ -813,6 +815,7 @@ public class SecurityGeneration implements Runnable {
                     String chanName = writeChannel.getChannelName();
                     TMLChannel tmlc = tmlmodel.getChannelByName(title + "__" + chanName);
                     writeChannel.setSecurityContext(channelSecMap.get(chanName));
+                    writeChannel.setEncForm(true);
                     xpos = chan.getX();
                     ypos = chan.getY();
                     fromStart = tad.findTGConnectorEndingAt(chan.getTGConnectingPointAtIndex(0));
@@ -832,7 +835,7 @@ public class SecurityGeneration implements Runnable {
                     tad.addComponent(req, xpos, ypos + yShift, false, true);
 
                     fromStart.setP2(req.getTGConnectingPointAtIndex(0));
-                    tad.addComponent(fromStart, xpos, ypos, false, true);
+                    //tad.addComponent(fromStart, xpos, ypos, false, true);
 
                     //Add connection
                     fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
@@ -850,6 +853,7 @@ public class SecurityGeneration implements Runnable {
                     //Add write channel operator
                     wr = new TMLADWriteChannel(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     wr.setChannelName("data_" + chanName + "_" + task.getName().split("__")[1]);
+                    wr.setEncForm(false);
                     wr.setSecurityContext(channelSecMap.get(chanName));
                     tad.addComponent(wr, xpos, ypos + yShift, false, true);
 
@@ -961,9 +965,10 @@ public class SecurityGeneration implements Runnable {
                     String chanName = readChannel.getChannelName();
                     TMLChannel tmlc = tmlmodel.getChannelByName(title + "__" + chanName);
                     readChannel.setSecurityContext(channelSecMap.get(chanName));
-                    xpos = chan.getX();
-                    ypos = chan.getY();
-                    fromStart = tad.findTGConnectorEndingAt(chan.getTGConnectingPointAtIndex(0));
+                    readChannel.setEncForm(true);
+                    xpos = chan.getX()+1;
+                    ypos = chan.getY()+1;
+                    fromStart = tad.findTGConnectorStartingAt(chan.getTGConnectingPointAtIndex(1));
                     point = fromStart.getTGConnectingPointP2();
 
                     int yShift = 50;
@@ -997,10 +1002,11 @@ public class SecurityGeneration implements Runnable {
                     wr.setSecurityContext(channelSecMap.get(chanName));
                     tad.addComponent(wr, xpos, ypos + yShift, false, true);
 
-
+					//Add connector between request and write
                     fromStart.setP2(wr.getTGConnectingPointAtIndex(0));
                     tad.addComponent(fromStart, xpos, ypos, false, true);
 
+					//Add connector between write and ???
                     fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
                     tad.addComponent(fromStart, xpos, ypos, false, true);
                     fromStart.setP1(wr.getTGConnectingPointAtIndex(1));
@@ -1085,6 +1091,7 @@ public class SecurityGeneration implements Runnable {
                     TMLADReadChannel rd = new TMLADReadChannel(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     rd.setChannelName("retData_" + chanName + "_" + task.getName().split("__")[1]);
                     rd.setSecurityContext(channelSecMap.get(chanName));
+                    rd.setEncForm(false);
                     tad.addComponent(rd, xpos, ypos + yShift, false, true);
 
                     fromStart.setP2(rd.getTGConnectingPointAtIndex(0));
@@ -1096,10 +1103,11 @@ public class SecurityGeneration implements Runnable {
                     fromStart.setP1(rd.getTGConnectingPointAtIndex(1));
                     yShift += 50;
 
-                    //Direct the last TGConnector back to the start of the read channel operator
+                    //Direct the last TGConnector back to the start of the operator after the read channel
 
 
                     fromStart.setP2(point);
+                    
                     //Shift components down to make room for the added ones, and add security contexts to write channels
                     for (TGComponent tg : tad.getComponentList()) {
                         if (tg.getY() >= ypos && tg != wr && tg != req && tg != rd && tg!=wr2 && tg!=nonce && tg!=wr3) {
@@ -1210,6 +1218,7 @@ public class SecurityGeneration implements Runnable {
                             if (channel.equals(readChannel.getChannelName()) && readChannel.getSecurityContext().equals("")) {
                                 TraceManager.addDev("Securing read channel " + readChannel.getChannelName());
                                 readChannel.setSecurityContext(channelSecMap.get(readChannel.getChannelName()));
+                                readChannel.setEncForm(true);
 
                             }
                         }
@@ -1300,6 +1309,7 @@ public class SecurityGeneration implements Runnable {
                     yShift = 40;
                     TraceManager.addDev("Securing read channel " + readChannel.getChannelName());
                     readChannel.setSecurityContext(channelSecMap.get(readChannel.getChannelName()));
+                    readChannel.setEncForm(true);
                     tad.repaint();
                     //Add decryption operator if it does not already exist
                     xpos = readChannel.getX();
@@ -1322,6 +1332,7 @@ public class SecurityGeneration implements Runnable {
                             if (channel.equals(readChannel.getChannelName()) && readChannel.getSecurityContext().equals("")) {
                                 TraceManager.addDev("Securing read channel " + readChannel.getChannelName());
                                 readChannel.setSecurityContext( channelSecMap.get(readChannel.getChannelName()));
+                                readChannel.setEncForm(true);
 
                             }
                         }
@@ -1524,8 +1535,14 @@ public class SecurityGeneration implements Runnable {
                     rd.setChannelName("data_" + ch.name + "_" + ch.task);
                     rd.setSecurityContext(channelSecMap.get(ch.name));
                     tad.addComponent(rd, xc, 300, false, true);
-                    //Connect choice and readchannel
 
+					//Recieve plaintext data if encrypting
+					if (ch.secType != HSMChannel.DEC) {
+						rd.setEncForm(false);
+					}
+
+                    //Connect choice and readchannel
+                  
                     fromStart = new TGConnectorTMLAD(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
                     fromStart.setP1(choice.getTGConnectingPointAtIndex(i));
                     fromStart.setP2(rd.getTGConnectingPointAtIndex(0));              
@@ -1559,6 +1576,10 @@ public class SecurityGeneration implements Runnable {
                     TMLADWriteChannel wr = new TMLADWriteChannel(xc, 600, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     wr.setChannelName("retData_" + ch.name + "_" + ch.task);
                     
+					//Return plaintext data if decrypting
+					if (ch.secType == HSMChannel.DEC) {
+						wr.setEncForm(false);
+					}
 
                     
                     tad.addComponent(wr, xc, 600, false, true);
