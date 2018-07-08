@@ -44,9 +44,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
-import ui.eln.ELNConnectingPoint;
+import ui.eln.*;
 import ui.window.JDialogELNComponentInductor;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -60,7 +59,7 @@ import java.awt.event.ActionListener;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentInductor extends TGCScalableWithInternalComponent implements ActionListener {
+public class ELNComponentInductor extends TGCScalableWithInternalComponent implements ActionListener, SwallowTGComponent, ELNComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -77,8 +76,11 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 	private int position = 0;
 	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false, fh_1_3 = false;
 	private int old;
-	private boolean first;
+	private boolean first, f = true;
 
+	private ELNPortTerminal term0;
+	private ELNPortTerminal term1;
+	
 	public ELNComponentInductor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
 			TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -92,8 +94,6 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 		minWidth = 1;
 		minHeight = 1;
 
-		initConnectingPoint(2);
-
 		addTGConnectingPointsComment();
 
 		moveable = true;
@@ -106,17 +106,6 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 		setPhi0(0.0);
 		setUnit0("H");
 		setUnit1("Wb");
-
-		old = width;
-		width = height;
-		height = old;
-	}
-
-	public void initConnectingPoint(int nb) {
-		nbConnectingPoint = nb;
-		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.5, "p");
-		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 1.0, 0.5, "n");
 	}
 
 	public Color getMyColor() {
@@ -124,6 +113,24 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 	}
 
 	public void internalDrawing(Graphics g) {
+		if (f == true) {
+			term0 = new ELNPortTerminal(x, y + height / 2 - height / 4, this.minX, this.maxX, this.minY, this.maxY,
+					false, this.father, this.tdp);
+			term0.setValue("p");
+			getTDiagramPanel().getComponentList().add(term0);
+			term0.getTDiagramPanel().addComponent(term0, x, y + height / 2 - height / 4, true, false);
+			term1 = new ELNPortTerminal(x + width - height / 2, y + height / 2 - height / 4, this.minX, this.maxX,
+					this.minY, this.maxY, false, this.father, this.tdp);
+			term1.setValue("n");
+			getTDiagramPanel().getComponentList().add(term1);
+			term1.getTDiagramPanel().addComponent(term1, x + width - height / 2, y + height / 2 - height / 4, true,
+					false);
+			old = width;
+			width = height;
+			height = old;
+			f = false;
+		}
+		
 		Font f = g.getFont();
 		Font fold = f;
 
@@ -177,56 +184,56 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateTop(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
-						y + height / 2 + height / 4 + sh0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
-						y + height / 2 + height / 4 + sh1);
+				term0.setMoveCd(x, y + height / 2 - height / 4, true);
+				term1.setMoveCd(x + width - height / 2, y + height / 2 - height / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				g.drawString(term0.getValue(), x - sw0, y + height / 2 + height / 2 + sh0);
+				g.drawString(term1.getValue(), x + width, y + height / 2 + height / 2 + sh1);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateTop(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
-						y + height / 2 + height / 4 + sh1);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
-						y + height / 2 + height / 4 + sh0);
+				term1.setMoveCd(x, y + height / 2 - height / 4, true);
+				term0.setMoveCd(x + width - height / 2, y + height / 2 - height / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				g.drawString(term1.getValue(), x - sw1, y + height / 2 + height / 2 + sh1);
+				g.drawString(term0.getValue(), x + width, y + height / 2 + height / 2 + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateBottom(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
-						y + height / 2 + height / 4 + sh0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
-						y + height / 2 + height / 4 + sh1);
+				term0.setMoveCd(x, y + height / 2 - height / 4, true);
+				term1.setMoveCd(x + width - height / 2, y + height / 2 - height / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				g.drawString(term0.getValue(), x - sw0, y + height / 2 + height / 2 + sh0);
+				g.drawString(term1.getValue(), x + width, y + height / 2 + height / 2 + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateBottom(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
-						y + height / 2 + height / 4 + sh1);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
-						y + height / 2 + height / 4 + sh0);
+				term1.setMoveCd(x, y + height / 2 - height / 4, true);
+				term0.setMoveCd(x + width - height / 2, y + height / 2 - height / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				g.drawString(term1.getValue(), x - sw1, y + height / 2 + height / 2 + sh1);
+				g.drawString(term0.getValue(), x + width, y + height / 2 + height / 2 + sh0);
 			}
 		} else if (position == 1) {
 			if (first == false) {
@@ -251,52 +258,56 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateRight(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
-						y + height + sh1);
+				term0.setMoveCd(x + width / 2 - width / 4, y, true);
+				term1.setMoveCd(x + width / 2 - width / 4, y + height - width / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(1.0);
+				g.drawString(term0.getValue(), x + width / 2 + width / 2, y);
+				g.drawString(term1.getValue(), x + width / 2 + width / 2, y + height + sh1);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateRight(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
-						y + height + sh0);
+				term1.setMoveCd(x + width / 2 - width / 4, y, true);
+				term0.setMoveCd(x + width / 2 - width / 4, y + height - width / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.0);
+				g.drawString(term1.getValue(), x + width / 2 + width / 2, y);
+				g.drawString(term0.getValue(), x + width / 2 + width / 2, y + height + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateLeft(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
-						y + height + sh1);
+				term0.setMoveCd(x + width / 2 - width / 4, y, true);
+				term1.setMoveCd(x + width / 2 - width / 4, y + height - width / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(1.0);
+				g.drawString(term0.getValue(), x + width / 2 + width / 2, y);
+				g.drawString(term1.getValue(), x + width / 2 + width / 2, y + height + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateLeft(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
-						y + height + sh0);
+				term1.setMoveCd(x + width / 2 - width / 4, y, true);
+				term0.setMoveCd(x + width / 2 - width / 4, y + height - width / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.0);
+				g.drawString(term1.getValue(), x + width / 2 + width / 2, y);
+				g.drawString(term0.getValue(), x + width / 2 + width / 2, y + height + sh0);
 			}
 		} else if (position == 2) {
 			if (first == false) {
@@ -323,56 +334,56 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateBottom(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
-						y + height / 2 + height / 2 + sh1);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
-						y + height / 2 + height / 2 + sh0);
+				term1.setMoveCd(x, y + height / 2 - height / 4, true);
+				term0.setMoveCd(x + width - height / 2, y + height / 2 - height / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				g.drawString(term1.getValue(), x - sw1, y + height / 2 + height / 2 + sh1);
+				g.drawString(term0.getValue(), x + width, y + height / 2 + height / 2 + sh0);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateBottom(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
-						y + height / 2 + height / 2 + sh0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
-						y + height / 2 + height / 2 + sh1);
+				term0.setMoveCd(x, y + height / 2 - height / 4, true);
+				term1.setMoveCd(x + width - height / 2, y + height / 2 - height / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				g.drawString(term0.getValue(), x - sw0, y + height / 2 + height / 2 + sh0);
+				g.drawString(term1.getValue(), x + width, y + height / 2 + height / 2 + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateTop(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
-						y + height / 2 + height / 2 + sh1);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
-						y + height / 2 + height / 2 + sh0);
+				term1.setMoveCd(x, y + height / 2 - height / 4, true);
+				term0.setMoveCd(x + width - height / 2, y + height / 2 - height / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				g.drawString(term1.getValue(), x - sw1, y + height / 2 + height / 2 + sh1);
+				g.drawString(term0.getValue(), x + width, y + height / 2 + height / 2 + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateTop(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.5);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
-						y + height / 2 + height / 2 + sh0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
-						y + height / 2 + height / 2 + sh1);
+				term0.setMoveCd(x, y + height / 2 - height / 4, true);
+				term1.setMoveCd(x + width - height / 2, y + height / 2 - height / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				g.drawString(term0.getValue(), x - sw0, y + height / 2 + height / 2 + sh0);
+				g.drawString(term1.getValue(), x + width, y + height / 2 + height / 2 + sh1);
 			}
 		} else if (position == 3) {
 			if (first == false) {
@@ -397,39 +408,42 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateLeft(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
-						y + height + sh0);
+				term1.setMoveCd(x + width / 2 - width / 4, y, true);
+				term0.setMoveCd(x + width / 2 - width / 4, y + height - width / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.0);
+				g.drawString(term1.getValue(), x + width / 2 + width / 2, y);
+				g.drawString(term0.getValue(), x + width / 2 + width / 2, y + height + sh0);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateLeft(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
-						y + height + sh1);
+				term0.setMoveCd(x + width / 2 - width / 4, y, true);
+				term1.setMoveCd(x + width / 2 - width / 4, y + height - width / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(1.0);
+				g.drawString(term0.getValue(), x + width / 2 + width / 2, y);
+				g.drawString(term1.getValue(), x + width / 2 + width / 2, y + height + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateRight(g);
-				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2,
-						y + height + sh0);
+				term1.setMoveCd(x + width / 2 - width / 4, y, true);
+				term0.setMoveCd(x + width / 2 - width / 4, y + height - width / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.0);
+				g.drawString(term1.getValue(), x + width / 2 + width / 2, y);
+				g.drawString(term0.getValue(), x + width / 2 + width / 2, y + height + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -437,12 +451,14 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateRight(g);
 				((ELNConnectingPoint) connectingPoint[0]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
-				((ELNConnectingPoint) connectingPoint[1]).setW(0.5);
-				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width / 2 + width / 2,
-						y + height + sh1);
+				term0.setMoveCd(x + width / 2 - width / 4, y, true);
+				term1.setMoveCd(x + width / 2 - width / 4, y + height - width / 4, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(1.0);
+				g.drawString(term0.getValue(), x + width / 2 + width / 2, y);
+				g.drawString(term1.getValue(), x + width / 2 + width / 2, y + height + sh1);
 			}
 		}
 		g.setColor(c);
@@ -697,47 +713,79 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 		return position;
 	}
 
-	public void setPosition(int position) {
-		this.position = position;
+	public void setPosition(int _position) {
+		position = _position;
 	}
 
 	public boolean isFv_0_2() {
 		return fv_0_2;
 	}
 
-	public void setFv_0_2(boolean fv_0_2) {
-		this.fv_0_2 = fv_0_2;
+	public void setFv_0_2(boolean _fv_0_2) {
+		fv_0_2 = _fv_0_2;
 	}
 
 	public boolean isFv_1_3() {
 		return fv_1_3;
 	}
 
-	public void setFv_1_3(boolean fv_1_3) {
-		this.fv_1_3 = fv_1_3;
+	public void setFv_1_3(boolean _fv_1_3) {
+		fv_1_3 = _fv_1_3;
 	}
 
 	public boolean isFh_0_2() {
 		return fh_0_2;
 	}
 
-	public void setFh_0_2(boolean fh_0_2) {
-		this.fh_0_2 = fh_0_2;
+	public void setFh_0_2(boolean _fh_0_2) {
+		fh_0_2 = _fh_0_2;
 	}
 
 	public boolean isFh_1_3() {
 		return fh_1_3;
 	}
 
-	public void setFh_1_3(boolean fh_1_3) {
-		this.fh_1_3 = fh_1_3;
+	public void setFh_1_3(boolean _fh_1_3) {
+		fh_1_3 = _fh_1_3;
 	}
 
 	public boolean isFirst() {
 		return first;
 	}
 
-	public void setFirst(boolean first) {
-		this.first = first;
+	public void setFirst(boolean _first) {
+		first = _first;
+	}
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof ELNPortTerminal) {
+			return tgc instanceof ELNPortTerminal;
+		} else {
+			return true;
+		}
+	}
+
+	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+		if (tgc instanceof ELNPortTerminal) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		return false;
+	}
+
+	public void removeSwallowedTGComponent(TGComponent tgc) {
+		removeInternalComponent(tgc);
+	}
+
+	public void hasBeenResized() {
+		rescaled = true;
+		for (int i = 0; i < nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNPortTerminal) {
+				tgcomponent[i].resizeWithFather();
+			}
+		}
 	}
 }

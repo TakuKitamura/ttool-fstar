@@ -45,7 +45,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * Class JDialogELNTerminal 
+ * Class JDialogELNPortTerminal 
  * Dialog for managing of ELN port terminal
  * Creation: 06/07/2018
  * @version 1.0 06/07/2018
@@ -54,13 +54,13 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 
-public class JDialogELNTerminal extends JDialog implements ActionListener {
+public class JDialogELNPortTerminal extends JDialog implements ActionListener {
 
 	private JTextField nameTextField;
 
 	private ELNPortTerminal term;
 
-	public JDialogELNTerminal(ELNPortTerminal term) {
+	public JDialogELNPortTerminal(ELNPortTerminal term) {
 		this.setTitle("Setting Port Terminal Attributes");
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
