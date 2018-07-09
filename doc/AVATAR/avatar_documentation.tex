@@ -173,7 +173,7 @@ To create a new project, click on the “new” button as shown in Figure \ref{f
 \caption{Create an AVATAR Methodology} \label{fig:createmethod}
 \end{figure*}
 
-To begin, we will start with the creation of a Methodology diagram as the one shown on Figure \ref{fig:methoddiagram}. In order to do this, right click on the design window and select “New AVATAR Methodology” (Figure \ref{fig:createmethod}). For each box on this diagram another diagram from the development of the project will be selected, however, this example will not include any properties or prototyping and therefore, these two boxes will remain blank. After all the other diagrams are created by following the steps in the remainder of this manual, one will go back to the methodology diagram, double click on each box, select the diagram corresponding to it and click on the arrow as shown in figure \ref{fig:selectdiagram} in order to select it. 
+To begin, we will start with the creation of a Methodology diagram as the one shown on Figure \ref{fig:methoddiagram}. In order to do this, right click on the design window and select “New AVATAR Methodology” (Figure \ref{fig:createmethod}). For each box on this diagram another diagram from the development of the project will be selected, however, this example will not include any properties or prototyping and therefore, these two boxes will remain blank. After all the other diagrams are created by following the steps in the remainder of this manual, one will go back to the methodology diagram, double click on each box, select the diagram corresponding to it and click on the arrow as shown in Figure \ref{fig:selectdiagram} in order to select it. 
 
 
 \begin{figure*}[htbp]
@@ -193,7 +193,7 @@ To begin, we will start with the creation of a Methodology diagram as the one sh
 \section{Analysis}
 \subsection{Assumptions}
 
-As shown in figure  \ref{fig:assumptionswindow}, right click on the panel tab and add a “New Modeling Assumptions” diagram. By right clicking on the panel it can be moved left or right. You will now have an Assumptions panel and underneath it an Assumptions diagram tab. You can right click on this tab in order to rename it, in this example, we changed its name to ‘System’. You will then add an assumption box by clicking on the AST button as shown in figure \ref{fig:assumptionswindow}. You can add as many assumptions as needed in order to fully explain what is being taken into account for the system. 
+As shown in Figure \ref{fig:assumptionswindow}, right click on the panel tab and add a “New Modeling Assumptions” diagram. By right clicking on the panel, it can be moved left or right. You will now have an Assumptions panel and underneath it an Assumptions diagram tab. You can right click on this tab in order to rename it, in this example, we changed its name to ‘System’. You will then add an assumption box by clicking on the AST button as shown in Figure \ref{fig:assumptionswindow}. You can add as many assumptions as needed in order to fully explain what is being taken into account for the system. 
 
 \begin{figure*}[htbp]
 \centering
@@ -214,7 +214,7 @@ As shown in figure  \ref{fig:assumptionswindow}, right click on the panel tab an
 \item Composition connector: relations between a diagram reference and elements references
 \end{enumerate}
 
-To edit each of these boxes one should double click on them. A window as the one shown in figure \ref{fig:assumptionsedit} will appear. In this window one can modify the name and type of the assumption, as well as other attributes such as durability, source, status and scope. Also, a little description of the assumption can be added in the box on the lower left corner. Furthermore, different types of links, or connections, can be added between the different boxes by clicking on the respective button shown in Figure \ref{fig:assumptionswindow} and then on the perimeter of each of the boxes you wish to link. 
+To edit each of these boxes, one should double click on them. A window like the one shown in Figure \ref{fig:assumptionsedit} will appear. In this window one can modify the name and type of the assumption, as well as other attributes such as durability, source, status and scope. Also, a little description of the assumption can be added in the box on the lower left corner. Furthermore, different types of links, or connections, can be added between the different boxes by clicking on the respective button shown in Figure \ref{fig:assumptionswindow} and then on the perimeter of each of the boxes you wish to link. 
 
 \begin{figure*}[htbp]
 \centering
@@ -223,17 +223,19 @@ To edit each of these boxes one should double click on them. A window as the one
 \end{figure*}
 
 Finally, in this example we have created two assumption diagrams; one for the system itself and one for the environment. The first one contains all the assumptions made directly about the system, while the second includes assumptions that may not be directly included in the system, but will affect its performance as shown in Figure \ref{fig:envassumptions}. One can add as many diagrams as one pleases by simply right clicking next to the existing diagram and selecting ``New AVATAR Modeling Assumptions Diagram'' and following the previously mentioned steps.
-It is important to keep in mind that these assumptions will allow the creator and others needing to interact with the system what was and was not considered during design. Therefore, one should attempt to be as descriptive as possible. This will make future improvements and changes easier while providing essential information about the system itself, resulting in a more complete design. 
 
-As shown in figure \ref{fig:systemassumptions}, the system assumptions made for the coffee are those who enable the system to perform without malfunction. In this case, the system designed is the controller
-The environment assumptions were divided in two main categories. The sensors and the actuators. In this example, due to the short number of environment assumptions, they were all created on the same diagram as shown on figure \ref{fig:envassumptions}. It should be noted that there could be three diagrams for the environment assumptions only. The first one would indicate the link between the environment and the two other diagrams, which would be the sensors diagram and the actuators diagram.
+It is important to keep in mind that these assumptions will allow the creator and others needing to interact with the system to keep track of what was and was not considered during design. Therefore, one should attempt to be as descriptive as possible. This will make future improvements and changes easier while providing essential information about the system itself, resulting in a more complete design. 
+
+As shown in Figure \ref{fig:systemassumptions}, the system assumptions made for the coffee machine are those who enable the system to perform without malfunction. For example, we have assumed the lack of failures due to power outages and connectivity failures. 
+
+The environment assumptions were divided in two main categories: the sensors and the actuators. In this example, due to the short number of environment assumptions, they were all created on the same diagram as shown in Figure \ref{fig:envassumptions}. It should be noted that there could be three diagrams for the environment assumptions only. The first one would indicate the link between the environment and the two other diagrams, which would be the sensors diagram and the actuators diagram.
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=0.99\textwidth]{fig/systemassumptions.jpg}
 \caption{System Assumptions} \label{fig:systemassumptions}
 \end{figure*}
 
-The coffee machine has two type of sensors, a currency detector and pushbuttons. Together, they allow the users to order a cup of coffee or a cup tea and to pay for it. For their part, the actuators shall allow the users to receive their order. This part was fulfilled by the mechanical device. A mechanism permitting a transfer of information to the users was added to improve the ease of use of the coffee machine. As for the system, the assumptions enable the system to perform without malfunction.
+The coffee machine has two type of sensors, a currency detector and pushbuttons. Together, they allow the users to order a cup of coffee or a cup of tea, and to pay for it. For their part, the actuators shall allow the users to receive their order. This part was fulfilled by the mechanical device. A mechanism permitting a transfer of information to the users was added to improve the ease of use of the coffee machine. As for the system, the assumptions enable the system to perform without malfunction.
 
 \begin{figure*}[htbp]
 \centering
@@ -259,10 +261,12 @@ A requirement is a capability or a condition that the system must satisfy. It ca
 \item Reference elements
 \end{itemize}
 
-There are two parts where the requirements can be expressed. The use cases, which is a part of the analysis diagram, can be useful to express the functional requirements. However, it is not suitable for non-functional requirements. For its part, the requirements diagram enables to introduce text-based requirements, providing a way to express the non-functional requirements. This diagram follows after setting up the assumptions for our system.
-	We will create one or several diagrams defining the requirements that the coffee machine controller will have. To do this, right click on the panel tab as before, but instead select “New Requirement Diagrams”. Just as before, a new diagram tab will appear underneath. Once again, this diagram tab can be renamed as preferred following the same steps we used in the assumption diagrams.
-	For the coffee machine, we will divide the requirements in three parts. The requirements related to the inputs, the control and the outputs.
-	The first diagram is named ``General Requirement Diagram''. It contains the link between the three parts mentioned above, which will all have their own requirements diagram. 
+There are two parts where the requirements can be expressed. The use cases, which is a part of the analysis diagram, can be useful to express the functional requirements. However, it is not suitable for non-functional requirements. For its part, the requirements diagram enables us to introduce text-based requirements, providing a way to express the non-functional requirements. This diagram follows after setting up the assumptions for our system.
+
+We will create one or several diagrams defining the requirements that the coffee machine controller will have. To do this, right click on the panel tab as before, but instead select “New Requirement Diagrams”. Just as before, a new diagram tab will appear underneath. Once again, this diagram tab can be renamed as preferred following the same steps we used in the assumption diagrams.
+	
+For the coffee machine, we will divide the requirements in three parts: the requirements related to the inputs, the control and the outputs.
+The first diagram is named ``General Requirement Diagram''. It contains the link between the three parts mentioned above, which will all have their own requirements diagram. 
 	
 		Figure \ref{fig:reqdiagram} shows the structural elements available to build the requirements diagram.
 
@@ -300,8 +304,8 @@ Figure \ref{fig:reqgeneral} represents the general requirement diagram obtained 
 \end{figure*}
 
 
-In a similar way to that of the assumptions, a new requirement can be added by selecting the requirement button shown in figure \ref{fig:reqdiagram}. Once created, it can also be modified by double clicking on it. When the new window pops up, one can provide a description and change the ID, Type, Risk and Reference attributes of each requirement.
-	The next step was to create the inputs diagram, the control diagram and the outputs diagram. By using the requirement box and relationships described in figure \ref{fig:reqdiagram}, we obtained the diagrams shown in Figures \ref{fig:inputreq} and \ref{fig:controlreq}. 
+In a similar way to that of the assumptions, a new requirement can be added by selecting the requirement button shown in Figure \ref{fig:reqdiagram}. Once created, it can also be modified by double clicking on it. When the new window pops up, one can provide a description and change the ID, Type, Risk and Reference attributes of each requirement.
+	The next step was to create the inputs diagram, the control diagram and the outputs diagram. By using the requirement box and relationships described in Figure \ref{fig:reqdiagram}, we obtained the diagrams shown in Figures \ref{fig:inputreq} and \ref{fig:controlreq}. 
 
 \begin{figure*}[htbp]
 \centering
@@ -322,7 +326,7 @@ In a similar way to that of the assumptions, a new requirement can be added by s
 \end{figure*}
 
 \subsection{Use Case}
-	Once again, right click on the panel tab. This time select the “New Analysis” option, which will give you a window like the one shown in Figure \ref{fig:createusecase}. We will begin the analysis process with a Use Case Diagram. To add it, right click on the window and select “New Use Case Diagram”. This diagram will allow us to represent the system, the actors acting on it and the different instances or use cases that will be modeled. All these elements can be observed in Figure \ref{fig:usecase}. To add each of them you should use the buttons shown in Figure \ref{fig:structusecase}. To change the names, double click on each on them.
+	Once again, right click on the panel tab. This time, select the “New Analysis” option, which will give you a window like the one shown in Figure \ref{fig:createusecase}. We will begin the analysis process with a Use Case Diagram. To add it, right click on the window and select “New Use Case Diagram”. This diagram will allow us to represent the system, the actors acting on it and the different instances or use cases that will be modeled. All these elements can be observed in Figure \ref{fig:usecase}. To add each of them you should use the buttons shown in Figure \ref{fig:structusecase}. To change the names, double click on each on them.
 	
 \begin{figure*}[htbp]
 \centering
@@ -358,7 +362,7 @@ In a similar way to that of the assumptions, a new requirement can be added by s
 \item Specialization: links a `parent' function whose specialized by a `child' function
 \end{enumerate}
 
-As it can be seen in the figure \ref{fig:usecase}, on the left hand of the diagram, one can find the actors that initialize a process, while on the right we have the actors or elements that are activated as a result of it. The box in the middle represents the enclosed system and the four bubbles inside of it are the use cases, they represent the actions that the system will perform and are linked to the actor(s) involved in them. They are usually one or two words working as a verb.
+As shown in Figure \ref{fig:usecase}, on the left hand of the diagram, one can find the actors that initialize a process, while on the right we have the actors or elements that are activated as a result of it. The box in the middle represents the enclosed system and the four bubbles inside of it are the use cases: they represent the actions that the system will perform and are linked to the actor(s) involved in them. The links are usually an action description in a few words.
 
 Once done, the next step is to create an activity diagram. Just as before, right click on the diagram tab and select “New Activity Diagram”.  In TTool, an activity diagram is portrayed in the form of what is commonly known as a flowchart. The elements that can be added to it are shown on the button tab and they include activities, partitions, the start and end of the activity, choices and tabs for whether there is a signal being sent or received. 
 
@@ -372,7 +376,7 @@ In the example shown in Figure \ref{fig:actdiagram}, only a start, activities an
 	The final section of the analysis is creating a scenario or sequence. As in previous, cases right click on the diagram tab and select “New Sequence Diagram.” This diagram will allow us to showcase the logical progression of actions as well as the different instances in which different actors or components come into play during the execution of the system. Using the different buttons at the top of the window one can add instances, timers and indicate whether the message being transmitted is synchronous or asynchronous1 among other elements. 
 To add an actor, click the “Instance” button and place it on the window. Then, double click as if to edit. When the pop up window appears, check the box that says “actor”. After setting up the main structure of the system use the arrows mentioned before to represent the messages being sent between the different elements, add text describing the process by double clicking on them after setting them in place. Though not shown in this example, when adding a timer one must also indicate the amount of time assigned to it and its attributes.
 
-As it can be observed in Figure \ref{fig:paymentseqdiagram} and \ref{fig:choiceseqdiagram}, the sequence diagram functions as a visual description of the flow of messages and information inside the system. If required, one can create more than one diagram in the same window, or add as many sequence diagrams as necessary.
+As shown in Figure \ref{fig:paymentseqdiagram} and \ref{fig:choiceseqdiagram}, the sequence diagram functions as a visual description of the flow of messages and information inside the system. If required, one can create more than one diagram in the same window, or add as many sequence diagrams as necessary.
 
 \begin{figure*}[htbp]
 \centering
@@ -387,7 +391,7 @@ As it can be observed in Figure \ref{fig:paymentseqdiagram} and \ref{fig:choices
 \end{figure*}
 
 \section{Design}
-	Just as with all the previous sections, to start the design one will right click on the panel tab and select “New Design”. This will open the window to create a “Block Diagram”-- here we will create the main structure of our system. To add a block, click on the block button shown in figure \ref{fig:blockdiagram}. You will create as many blocks as actors/parts you have determined in the previous parts of the creation process. 
+	Just as with all the previous sections, to start the design, one will right click on the panel tab and select “New Design”. This will open the window to create a “Block Diagram”-- here we will create the main structure of our system. To add a block, click on the block button shown in Figure \ref{fig:blockdiagram}. You will create as many blocks as actors/parts you have determined in the previous parts of the creation process. 
 
 
 \begin{figure*}[htbp]
@@ -437,7 +441,7 @@ Furthermore, the ‘signals’ represent the information being sent and received
 \end{figure*}
 
 
-	Finally, one will add port connections by clicking on the respective button shown in Figure21, and then selecting a point on the perimeter of the blocks being connected. Following, double click on the connector; a new window will pop up (Figure \ref{fig:portconn}). 
+	Finally, one will add port connections by clicking on the respective button shown in Figure \ref{fig:blockdiagram}, and then selecting a point on the perimeter of the blocks being connected. Next, double click on the connector; a new window will pop up (Figure \ref{fig:portconn}). 
 	
 	\begin{figure*}[htbp]
 \centering
@@ -514,7 +518,7 @@ Using as reference what was already indicated in the block diagram, we will dete
 \end{figure*}
 
 \section{Verification}
-	Finally, the last step of the process is to verify that the system we have created works properly and follows each of the steps we desire it to. In order to do this, we will use the “Syntax Analysis” tool, which is shown in Figure \ref{fig:syntaxanalysis}. After you click on it, a screen like the one in this same figure will appear. There you can select whether you want to check the syntax of the whole system or individual parts. After this is determined, click on start syntax analysis and wait a second. After the software is done it will either pop up an error message like the one in Figure \ref{fig:syntaxerror}, meaning that the system has not been designed correctly; or if no errors are found, the “Interactive Simulation” button (Figure \ref{fig:syntaxanalysis}), which was once greyed out, will now be blue and you will be able to click on it.
+	Finally, the last step of the process is to verify that the system we have created works properly and follows each of the steps we desire it to. In order to do this, we will use the “Syntax Analysis” tool, which is shown in Figure \ref{fig:syntaxanalysis}. After you click on it, a screen like the one in this same figure will appear. There you can select whether you want to check the syntax of the whole system or individual parts. After this is determined, click on start syntax analysis and wait a second. After the software is done, it will either pop up an error message like the one in Figure \ref{fig:syntaxerror}, meaning that the system has not been designed correctly; or if no errors are found, the “Interactive Simulation” button (Figure \ref{fig:syntaxanalysis}), which was once greyed out, will now be blue and you will be able to click on it.
 
 \begin{enumerate}
 \item Syntax Analysis
