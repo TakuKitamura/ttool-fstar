@@ -95,9 +95,7 @@ public class TML2Avatar {
 
         this.tmlmodel = tmlmap.getTMLModeling();
         
-        for (TMLTask task: this.tmlmodel.getTasks()){
-	        System.out.println("MOD " + task.getActivityDiagram().toXML());
-        }
+     
         allStates = new ArrayList<String>();
         attrsToCheck = new ArrayList<String>();
         mc = modelcheck;
@@ -1735,8 +1733,8 @@ public class TML2Avatar {
 
 			//Add authenticity pragmas
 			for (String s: signalAuthOriginMap.keySet()){
-				AvatarPragmaAuthenticity pragma = new AvatarPragmaAuthenticity("#Authenticity " + signalAuthOriginMap.get(s).getName() + " " + signalAuthDestMap.get(s).getName(), signalAuthOriginMap.get(s).getReferenceObject(), signalAuthOriginMap.get(s), signalAuthDestMap.get(s));
 				if (signalAuthDestMap.containsKey(s)){
+					AvatarPragmaAuthenticity pragma = new AvatarPragmaAuthenticity("#Authenticity " + signalAuthOriginMap.get(s).getName() + " " + signalAuthDestMap.get(s).getName(), signalAuthOriginMap.get(s).getReferenceObject(), signalAuthOriginMap.get(s), signalAuthDestMap.get(s));
 					if (secChannelMap.containsKey(s)){
 						for (String channel: secChannelMap.get(s)){
 							TMLChannel ch = tmlmodel.getChannelByShortName(channel);
