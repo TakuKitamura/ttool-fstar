@@ -92,8 +92,6 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		minWidth = 1;
 		minHeight = 1;
 
-		initConnectingPoint(2);
-
 		addTGConnectingPointsComment();
 
 		moveable = true;
@@ -109,12 +107,12 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		height = old;
 	}
 
-	public void initConnectingPoint(int nb) {
-		nbConnectingPoint = nb;
-		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.0, "p");
-		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 1.0, "n");
-	}
+//	public void initConnectingPoint(int nb) {
+//		nbConnectingPoint = nb;
+//		connectingPoint = new TGConnectingPoint[nb];
+//		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.0, "p");
+//		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 1.0, "n");
+//	}
 
 	public Color getMyColor() {
 		return myColor;
