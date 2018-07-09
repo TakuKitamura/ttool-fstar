@@ -758,11 +758,7 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 	}
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof ELNPortTerminal) {
-			return tgc instanceof ELNPortTerminal;
-		} else {
-			return true;
-		}
+		return tgc instanceof ELNPortTerminal;
 	}
 
 	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {

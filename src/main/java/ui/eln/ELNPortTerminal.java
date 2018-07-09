@@ -86,7 +86,7 @@ public class ELNPortTerminal extends TGCScalableWithInternalComponent implements
 
 		moveable = false;
 		editable = true;
-		removable = true;
+		removable = false;
 		userResizable = false;
 
 		setValue("");
