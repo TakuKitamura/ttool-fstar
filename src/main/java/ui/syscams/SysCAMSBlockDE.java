@@ -54,7 +54,7 @@ import java.util.LinkedList;
 
 /**
  * Class SysCAMSBlockDE
- * Primitive Component. To be used in SystemC-AMSdiagrams
+ * Primitive Component. To be used in SystemC-AMS diagrams
  * Creation: 13/05/2018
  * @version 1.0 13/05/2018
  * @author Irina Kit Yan LEE

@@ -344,6 +344,7 @@ public class TGComponentManager {
     public static final int CAMS_PORT_DE = 1605;
     public static final int CAMS_PORT_CONVERTER = 1606;
     public static final int CAMS_CLUSTER = 1607;
+    public static final int CAMS_BLOCK_GPIO2VCI = 1608;
 
     // ELN
     public static final int ELN_CONNECTOR = 1610;
@@ -1278,6 +1279,9 @@ public class TGComponentManager {
             case CAMS_CLUSTER:
             	tgc = new SysCAMSCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
+            case CAMS_BLOCK_GPIO2VCI:
+            	tgc = new SysCAMSBlockGPIO2VCI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
             // ELN
             case ELN_PORT_TERMINAL:
             	tgc = new ELNPortTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1714,6 +1718,8 @@ public class TGComponentManager {
         	return CAMS_PORT_CONVERTER;
         } else if (tgc instanceof SysCAMSCompositeComponent) {
         	return CAMS_CLUSTER;
+        } else if (tgc instanceof SysCAMSBlockGPIO2VCI) {
+        	return CAMS_BLOCK_GPIO2VCI;
 
         	// ELN
         } else if (tgc instanceof ELNConnector) {

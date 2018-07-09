@@ -927,6 +927,8 @@ public class ActionPerformer {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_CONVERTER);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_CLUSTER].getActionCommand())) {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_CLUSTER);
+        } else if (command.equals(mgui.actions[TGUIAction.CAMS_BLOCK_GPIO2VCI].getActionCommand())) {
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_GPIO2VCI);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_GENCODE].getActionCommand())){
             mgui.syscamsExecutableCodeGeneration();
 
