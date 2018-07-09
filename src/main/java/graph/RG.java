@@ -110,7 +110,7 @@ public class RG {
             return null;
         }
 
-        RG ret = new RG(name + "_Test");
+        RG ret = new RG("TestSeq_" + name);
         ret.graph = testSequencesGraph;
         return ret;
     }

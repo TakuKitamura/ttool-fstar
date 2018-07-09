@@ -101,6 +101,10 @@ public class JDialogBase extends JDialog {
 		return buttonPanel;
 	}
 
+	protected void renameSaveButton(String label) {
+		closeButton.setText(label);
+	}
+
 
 
 	protected void initButtons(Container c,

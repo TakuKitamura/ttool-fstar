@@ -48,12 +48,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
+import ui.window.JDialogIDAndStereotype;
 import ui.window.JDialogRequirement;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * Class AvatarRDRequirement
@@ -83,8 +87,12 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     private int currentFontSize = -1;
     private boolean displayText = true;
 
-    protected final static String[] REQ_TYPE_STR = {"<<Requirement>>", "<<Safety Requirement>>", "<<Security Requirement>>"};
-    protected final static int NB_REQ_TYPE = 3;
+    //protected static String[] DEFAULT_REQ = {"<<Requirement>>", "<<SafetyRequirement>>", "<<SecurityRequirement>>"};
+    protected static ArrayList<String> REQ_TYPE_STR = new ArrayList<String>(Arrays.asList("Requirement", "SafetyRequirement",
+            "SecurityRequirement"));
+    protected static ArrayList<Color> REQ_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_REQUIREMENT_TOP, ColorManager
+            .AVATAR_REQUIREMENT_TOP, ColorManager.AVATAR_REQUIREMENT_TOP));
+    //protected static int NB_REQ_TYPE = 3;
 
     protected final static int REGULAR_REQ = 0;
     protected final static int SAFETY_REQ = 1;
@@ -98,18 +106,21 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     protected String[] texts;
     protected String kind = "";
     protected String criticality = "";
-    protected int reqType = 0;
+    protected int reqType = 0; // Type of stereotype
     protected String violatedAction = "";
     protected String attackTreeNode = "";
     protected String referenceElements = "";
     protected String id = "";
 
+    protected ArrayList<String> extraParamIDs;
+    protected ArrayList<String> extraParamValues;
+
     protected boolean satisfied = false;
     protected boolean verified = false;
 
-    private JMenuItem isRegular = null;
+    /*private JMenuItem isRegular = null;
     private JMenuItem isSafety = null;
-    private JMenuItem isSecurity = null;
+    private JMenuItem isSecurity = null;*/
     private JMenuItem menuNonSatisfied = null;
     private JMenuItem menuSatisfied = null;
     private JMenuItem menuNonVerified = null;
@@ -132,6 +143,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         minWidth = 1;
         minHeight = lineHeight;
+
+        extraParamIDs = new ArrayList<>();
+        extraParamValues = new ArrayList<>();
 
         nbConnectingPoint = 40;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
@@ -250,7 +264,14 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         g.drawRect(x, y, width, height);
 
         g.drawLine(x, y + lineHeight, x + width, y + lineHeight);
-        g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
+        Color topColor = REQ_TYPE_COLOR.get(reqType);
+        if (topColor == null) {
+            //TraceManager.addDev("Swithing back to default Color for:" + REQ_TYPE_STR.get(reqType));
+            topColor = ColorManager.AVATAR_REQUIREMENT_TOP;
+        } else {
+            //TraceManager.addDev("Using color: " + topColor.getRGB() + "for  " +REQ_TYPE_STR.get(reqType));
+        }
+        g.setColor(topColor);
         g.fillRect(x + 1, y + 1, width - 1, lineHeight - 1);
         g.setColor(ColorManager.AVATAR_REQUIREMENT_ATTRIBUTES);
         g.fillRect(x + 1, y + 1 + lineHeight, width - 1, height - 1 - lineHeight);
@@ -263,7 +284,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             size = currentFontSize - 2;
             g.setFont(myFont.deriveFont((float) (myFont.getSize() - 2)));
 
-            drawLimitedString(g, REQ_TYPE_STR[reqType], x, y + size, width, 1);
+            drawLimitedString(g, "<<" + REQ_TYPE_STR.get(reqType) + ">>", x, y + size, width, 1);
 
             size += currentFontSize;
             g.setFont(myFontB);
@@ -330,22 +351,33 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                 if (size < (height - 2)) {
 
                     drawLimitedString(g, "Reference elements=\"" + referenceElements + "\"", x + textX, y + size, width, 0);
-
                     size += currentFontSize;
+
                     if (size < (height - 2)) {
 
                         if (reqType == SECURITY_REQ) {
                             drawLimitedString(g, "Targeted attacks=\"" + attackTreeNode + "\"", x + textX, y + size, width, 0);
+                            size += currentFontSize;
                         }
 
                         if (reqType == SAFETY_REQ) {
-                            drawLimitedString(g, "Violated action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
+                            drawLimitedString(g, "State violating req.=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
+                            size += currentFontSize;
                         }
                     }
                 }
             }
         }
 
+        // Extra attributes
+        for (i = 0; i < extraParamIDs.size(); i++) {
+            if (size < (height - 2)) {
+                s = extraParamIDs.get(i) + ":" + extraParamValues.get(i);
+                drawLimitedString(g, s, x + textX, y + size, width, 0);
+            }
+            size += currentFontSize;
+
+        }
 
         g.setFont(f);
     }
@@ -359,52 +391,111 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             if (hasFather()) {
                 text = getTopLevelName() + " / " + text;
             }
-            String s = (String) JOptionPane.showInputDialog(frame, text,
-                    "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+            /*String s = (String) JOptionPane.showInputDialog(frame, text,
+                    "Setting requirement name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
                     null,
-                    getValue());
+                    getValue());*/
 
-            if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+            JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Requirement ID", REQ_TYPE_STR.toArray(new String[0]), getValue
+                    (), reqType,  REQ_TYPE_COLOR.toArray(new Color[0]),ColorManager.AVATAR_REQUIREMENT_TOP);
+            //dialog.setSize(400, 300);
+            GraphicLib.centerOnParent(dialog, 400, 300);
+            // dialog.show(); // blocked until dialog has been closed
+            dialog.setVisible(true);
+
+            if (dialog.hasBeenCancelled()) {
+                return false;
+            }
+
+            String s = dialog.getName();
+
+            if ((s != null) && (s.length() > 0)){
                 //boolean b;
-                if (!TAttribute.isAValidId(s, false, false)) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the Requirement: the new name is not a valid name",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    return false;
+                if (!s.equals(oldValue)) {
+                    if (!TAttribute.isAValidId(s, false, false)) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the name of the Requirement: the new name is not a valid name",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+
+                    if (!tdp.isRequirementNameUnique(s)) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the name of the Requirement: the new name is already in use",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+
+
+                    int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
+                    minDesiredWidth = Math.max(size, minWidth);
+                    if (minDesiredWidth != width) {
+                        newSizeForSon(null);
+                    }
+                    setValue(s);
                 }
 
-                if (!tdp.isRequirementNameUnique(s)) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the Requirement: the new name is already in use",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    return false;
-                }
-
-
-                int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
-                minDesiredWidth = Math.max(size, minWidth);
-                if (minDesiredWidth != width) {
-                    newSizeForSon(null);
-                }
-                setValue(s);
-
-                if (tdp.actionOnDoubleClick(this)) {
-                    return true;
-                } else {
+                if (!(tdp.actionOnDoubleClick(this))) {
                     JOptionPane.showMessageDialog(frame,
                             "Could not change the name of the Requirement: this name is already in use",
                             "Error",
                             JOptionPane.INFORMATION_MESSAGE);
                     setValue(oldValue);
+                    return false;
                 }
+
+                // Setting stereotype
+                s = dialog.getStereotype().trim();
+
+                if (!TAttribute.isAValidId(s, false, false)) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not use the new stereotype: the new stereotype name is not valid",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+
+                int rgb = dialog.getColor();
+
+                //TraceManager.addDev("RGBColor:" + rgb + " vs default color:" + ColorManager.REQ_TOP_BOX.getRGB());
+
+                addStereotype(s, rgb);
+
             }
             return false;
         }
 
         return editAttributes();
 
+    }
+
+    public boolean addStereotype(String s, int rgb) {
+        int index = -1;
+        String sLower = s.toLowerCase();
+        for (int i=0; i<REQ_TYPE_STR.size(); i++) {
+            if (REQ_TYPE_STR.get(i).toLowerCase().compareTo(sLower) == 0) {
+                index = i;
+                break;
+            }
+        }
+
+        // Found stereotype
+        if (index != -1) {
+            reqType = index;
+            if (index > 0) {
+                REQ_TYPE_COLOR.set(index, new Color(rgb));
+            }
+            return false;
+
+        // Must add a new stereotype
+        } else {
+            REQ_TYPE_STR.add(s);
+            REQ_TYPE_COLOR.add(new Color(rgb));
+            reqType = REQ_TYPE_STR.size()-1;
+            return true;
+        }
     }
 
     public boolean editAttributes() {
@@ -421,7 +512,8 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             va = violatedAction;
         }
 
-        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id, text, kind, criticality, va, reqType, atn, referenceElements);
+        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id,
+                text, kind, criticality, va, reqType, atn, referenceElements, extraParamIDs, extraParamValues);
         // jdr.setSize(750, 400);
         GraphicLib.centerOnParent(jdr, 800, 400);
         jdr.setVisible(true);
@@ -442,6 +534,27 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         text = jdr.getText();
         kind = jdr.getKind();
         criticality = jdr.getCriticality();
+
+        // Filling extra attributes
+        String extras = jdr.getExtraAttributes();
+        extraParamValues.clear();
+        extraParamIDs.clear();
+        String[] lines = extras.split(System.getProperty("line.separator"));
+        for(String line: lines) {
+            int index0 = line.indexOf(':');
+            if (index0 >  -1) {
+                String id = line.substring(0, index0).trim();
+                if (id.length() > 0) {
+                    String val = line.substring(index0+1, line.length()).trim();
+                    if (val.length() > 0) {
+                        extraParamIDs.add(id);
+                        extraParamValues.add(val);
+                    }
+
+                }
+            }
+        }
+
 
         makeValue();
         return true;
@@ -497,18 +610,12 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         componentMenu.addSeparator();
 
-        isRegular = new JMenuItem("Set as regular requirement");
-        isSafety = new JMenuItem("Set as safety requirement");
-        isSecurity = new JMenuItem("Set as security requirement");
         menuNonSatisfied = new JMenuItem("Set as non satisfied");
         menuSatisfied = new JMenuItem("Set as satisfied");
         menuNonVerified = new JMenuItem("Set as non verified");
         menuVerified = new JMenuItem("Set as verified");
 
 
-        isRegular.addActionListener(menuAL);
-        isSafety.addActionListener(menuAL);
-        isSecurity.addActionListener(menuAL);
         menuNonSatisfied.addActionListener(menuAL);
         menuSatisfied.addActionListener(menuAL);
         menuNonVerified.addActionListener(menuAL);
@@ -517,9 +624,6 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         editAttributes = new JMenuItem("Edit attributes");
         editAttributes.addActionListener(menuAL);
 
-        isRegular.setEnabled(reqType != REGULAR_REQ);
-        isSafety.setEnabled(reqType != SAFETY_REQ);
-        isSecurity.setEnabled(reqType != SECURITY_REQ);
 
         menuNonSatisfied.setEnabled(satisfied);
         menuSatisfied.setEnabled(!satisfied);
@@ -527,9 +631,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         menuNonVerified.setEnabled(verified);
         menuVerified.setEnabled(!verified);
 
-        componentMenu.add(isRegular);
-        componentMenu.add(isSafety);
-        componentMenu.add(isSecurity);
+
         componentMenu.addSeparator();
         componentMenu.add(menuNonSatisfied);
         componentMenu.add(menuSatisfied);
@@ -549,16 +651,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             verified = false;
         } else if (e.getSource() == menuVerified) {
             verified = true;
-        } else if (e.getSource() == isRegular) {
-            reqType = REGULAR_REQ;
-        } else if (e.getSource() == isSafety) {
-            reqType = SAFETY_REQ;
-        } else if (e.getSource() == isSecurity) {
-            reqType = SECURITY_REQ;
         } else {
             return editAttributes();
         }
-
 
         return true;
     }
@@ -596,7 +691,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         sb.append(criticality);
         sb.append("\" />\n");
         sb.append("<reqType data=\"");
-        sb.append(reqType);
+        sb.append(REQ_TYPE_STR.get(reqType));
+        sb.append("\" color=\"");
+        sb.append(REQ_TYPE_COLOR.get(reqType).getRGB());
         sb.append("\" />\n");
         sb.append("<id data=\"");
         sb.append(id);
@@ -616,6 +713,13 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         sb.append("<referenceElements data=\"");
         sb.append(referenceElements);
         sb.append("\" />\n");
+        for(int i=0; i<extraParamIDs.size(); i++) {
+            sb.append("<extraAttribute id=\"");
+            sb.append(extraParamIDs.get(i));
+            sb.append("\" value=\"");
+            sb.append(extraParamValues.get(i));
+            sb.append("\" />\n");
+        }
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -676,19 +780,37 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                 if (referenceElements.equals("null")) {
                                     referenceElements = "";
                                 }
+
+                            } else if (elt.getTagName().equals("extraAttribute")) {
+                                //
+                                String tmp1 = elt.getAttribute("id");
+                                String tmp2 = elt.getAttribute("value");
+                                if ((tmp1 != null) && (tmp2 != null)) {
+                                    if (tmp1.length() > 0) {
+                                        extraParamIDs.add(tmp1);
+                                        extraParamValues.add(tmp2);
+                                    }
+                                }
+
                             } else if (elt.getTagName().equals("reqType")) {
                                 //
                                 s = elt.getAttribute("data");
+                                String tmp3 = elt.getAttribute("color");
+                                int rgb = ColorManager.AVATAR_REQUIREMENT_TOP.getRGB();
+                                try {
+                                    rgb = Integer.decode(tmp3).intValue();
+                                } catch (Exception e) {
+                                }
                                 if (s.equals("null")) {
                                     reqType = REGULAR_REQ;
                                 } else {
                                     try {
-                                        reqType = Integer.decode(s).intValue();
+                                        reqType = Integer.decode(s).intValue(); // default stereo: old way
                                     } catch (Exception e) {
-                                        reqType = REGULAR_REQ;
+                                        addStereotype(s, rgb);
                                     }
                                 }
-                                if (reqType > (NB_REQ_TYPE - 1)) {
+                                if (reqType > (REQ_TYPE_STR.size() - 1)) {
                                     reqType = REGULAR_REQ;
                                 }
 
@@ -769,6 +891,10 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         }
     }
 
+    public String getStereotype() {
+        return REQ_TYPE_STR.get(reqType);
+    }
+
     public String getAttributes() {
         String attr = "ID=" + id + "\n";
         attr += "Text= " + text + "\n";
@@ -781,7 +907,22 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         if (reqType == SECURITY_REQ) {
             attr += "Attack tree node(s)= " + attackTreeNode + "\n";
         }
+        for(int i=0; i<extraParamIDs.size(); i++) {
+            attr += extraParamIDs.get(i) + ": " + extraParamValues.get(i) + "\n";
+        }
+
         return attr;
+    }
+
+    public String getExtraAttributes() {
+        String allAttr = "";
+        for (int i=0; i<extraParamIDs.size(); i++) {
+            if (i > 0) {
+                allAttr += " / ";
+            }
+            allAttr += extraParamIDs.get(i) + ":" + extraParamValues.get(i);
+        }
+        return allAttr;
     }
 
     public void autoAdjust(int mode) {
@@ -798,7 +939,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 
         // Must find for both modes which width is desirable
         String s0, s1;
-        s0 = REQ_TYPE_STR[reqType];
+        s0 = "<<" + REQ_TYPE_STR.get(reqType) + ">>";
         s1 = "Text=";
 
         graphics.setFont(f2);
@@ -846,9 +987,158 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             h = ((texts.length + 5) * currentFontSize) + lineHeight;
         }
 
-
         resize(w4, h);
 
+    }
+
+    public ArrayList<AvatarRDProperty> getAllPropertiesVerified() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllPropertiesVerify(this);
+    }
+
+    public String getStringOfAllPropertiesVerified() {
+        ArrayList<AvatarRDProperty> list = getAllPropertiesVerified();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDElementReference> getAllElementsSatisfied() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllElementsSatified(this);
+    }
+
+    public String getStringOfAllElementsSatisfied() {
+        ArrayList<AvatarRDElementReference> list = getAllElementsSatisfied();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllImmediateSons() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllImmediateSons(this);
+    }
+
+    public String getStringOfAllImmediateSons() {
+        ArrayList<AvatarRDRequirement> list = getAllImmediateSons();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllSons() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllSons(this);
+    }
+
+    public String getStringOfAllSons() {
+        ArrayList<AvatarRDRequirement> list = getAllSons();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllImmediateFathers() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllImmediateFathers(this);
+    }
+
+    public String getStringOfAllImmediateFathers() {
+        ArrayList<AvatarRDRequirement> list = getAllImmediateFathers();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllFathers() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllFathers(this);
+    }
+
+    public String getStringOfAllFathers() {
+        ArrayList<AvatarRDRequirement> list = getAllFathers();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllMeRefineOrigin() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllMeRefine(this, 0);
+    }
+
+    public String getStringAllMeRefineOrigin() {
+        ArrayList<AvatarRDRequirement> list = getAllMeRefineOrigin();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllMeRefineDestination() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllMeRefine(this, 1);
+    }
+
+    public String getStringAllMeRefineDestination() {
+        ArrayList<AvatarRDRequirement> list = getAllMeRefineDestination();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllMeDeriveOrigin() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllMeDerive(this, 0);
+    }
+
+    public String getStringAllMeDeriveOrigin() {
+        ArrayList<AvatarRDRequirement> list = getAllMeDeriveOrigin();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllMeDeriveDestination() {
+        AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
+        return myPanel.getAllMeDerive(this, 1);
+    }
+
+    public String getStringAllMeDeriveDestination() {
+        ArrayList<AvatarRDRequirement> list = getAllMeDeriveDestination();
+        String s = "";
+        for(int i=0; i<list.size(); i++) {
+            if (i>0) s+= " / ";
+            s += list.get(i).getValue();
+        }
+        return s;
     }
 
 }

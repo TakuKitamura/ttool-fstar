@@ -40,6 +40,8 @@ package syscamstranslator;
 
 import java.util.LinkedList;
 
+import javax.swing.DefaultListModel;
+
 /**
  * Class SysCAMSTBlockTDF
  * Parameters of a SystemC-AMS block TDF
@@ -53,16 +55,24 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	private String name;
 	private int period;
 	private String processCode;
+	private DefaultListModel<String> listStruct;
+	private String nameTemplate;
+	private String typeTemplate;
+	private DefaultListModel<String> listTypedef;
 	
 	private SysCAMSTCluster cluster;
 	
 	private LinkedList<SysCAMSTPortTDF> portTDF;
 	private LinkedList<SysCAMSTPortConverter> portConverter;
 	
-	public SysCAMSTBlockTDF(String _name, int _period, String _processCode, SysCAMSTCluster _cluster) {
+	public SysCAMSTBlockTDF(String _name, int _period, String _processCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
 		name = _name;
 		period = _period;
 		processCode = _processCode;
+		listStruct = _listStruct;
+		nameTemplate = _nameTemplate;
+		typeTemplate = _typeTemplate;
+		listTypedef = _listTypedef;
 		cluster = _cluster;
 		portTDF = new LinkedList<SysCAMSTPortTDF>();
 		portConverter = new LinkedList<SysCAMSTPortConverter>();
@@ -78,6 +88,22 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 
 	public String getName() {
 		return name;
+	}
+
+	public DefaultListModel<String> getListStruct() {
+		return listStruct;
+	}
+
+	public String getNameTemplate() {
+		return nameTemplate;
+	}
+
+	public String getTypeTemplate() {
+		return typeTemplate;
+	}
+
+	public DefaultListModel<String> getListTypedef() {
+		return listTypedef;
 	}
 
 	public SysCAMSTCluster getCluster() {

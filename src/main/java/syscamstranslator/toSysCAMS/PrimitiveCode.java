@@ -55,7 +55,7 @@ import syscamstranslator.*;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class PrimitiveCode {
 	static private String corpsPrimitive;
@@ -70,11 +70,72 @@ public class PrimitiveCode {
 			LinkedList<SysCAMSTPortConverter> convports = tdf.getPortConverter();
 			int cpt = 0;
 			int cpt2 = 0;
+
+			if ((!tdf.getTypeTemplate().equals("")) || (!tdf.getNameTemplate().equals("")))  {
+				corpsPrimitive = "template<" + tdf.getTypeTemplate() + " " + tdf.getNameTemplate() + ">" + CR;
+			}
+			//corpsPrimitive = "SCA_TDF_MODULE(" + tdf.getName() + ") {" + CR2;
+			corpsPrimitive = corpsPrimitive + "class " + tdf.getName() + " : public sca_tdf::sca_module {" + CR2 + "public:" + CR;
+
+			if (!tdf.getListTypedef().isEmpty()) {
+				for (int i = 0; i < tdf.getListTypedef().getSize(); i++) {
+					String select = tdf.getListTypedef().get(i);
+					String[] split = select.split(" : ");
+					corpsPrimitive = corpsPrimitive + "\ttypedef " + split[1] + "<" + tdf.getNameTemplate() + "> " + split[0] + ";" + CR;
+					if (i == tdf.getListTypedef().getSize()-1) {
+						corpsPrimitive = corpsPrimitive + CR;
+					}
+				}
+			}
 			
-			corpsPrimitive = "SCA_TDF_MODULE(" + tdf.getName() + ") {" + CR2;
-			
+			if (tdf.getListStruct().getSize() != 0) {
+				corpsPrimitive = corpsPrimitive + "\tstruct parameters {" + CR;
+
+				String identifier, value, type;
+				for (int i = 0; i < tdf.getListStruct().size(); i++) {
+					String select = tdf.getListStruct().get(i);
+					String[] splita = select.split(" = ");
+					identifier = splita[0];
+					String[] splitb = splita[1].split(" : ");
+					value = splitb[0];
+					String[] splitc = splitb[1].split(" ");
+					if (splitc[0].equals("const")) {
+						type = splitc[1];
+					} else {
+						type = splitc[0];
+					}
+					corpsPrimitive = corpsPrimitive + "\t\t" + type + " " + identifier + ";" + CR;
+				}
+
+				corpsPrimitive = corpsPrimitive + "\t\tparameters()" + CR;
+
+				for (int i = 0; i < tdf.getListStruct().size(); i++) {
+					String select = tdf.getListStruct().get(i);
+					String[] splita = select.split(" = ");
+					identifier = splita[0];
+					String[] splitb = splita[1].split(" : ");
+					value = splitb[0];
+					String[] splitc = splitb[1].split(" ");
+					if (splitc[0].equals("const")) {
+						type = splitc[1];
+					} else {
+						type = splitc[0];
+					}
+					if (i == 0) {
+						corpsPrimitive = corpsPrimitive + "\t\t: " + identifier + "(" + value + ")" + CR;
+					} 
+					if ((i > 0) && (i < tdf.getListStruct().getSize()-1)) {
+						corpsPrimitive = corpsPrimitive + "\t\t, " + identifier + "(" + value + ")" + CR;
+					} 
+					if (i == tdf.getListStruct().getSize()-1) {
+						corpsPrimitive = corpsPrimitive + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
+					}
+				}
+				corpsPrimitive = corpsPrimitive + "\t};" + CR;
+			}
+
 			if (!tdfports.isEmpty()) {
-				corpsPrimitive = corpsPrimitive + "\t// TDF port declarations" + CR;
+				corpsPrimitive = corpsPrimitive + CR;
 				for (SysCAMSTPortTDF t : tdfports) {
 					if (t.getOrigin() == 0) {
 						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_in<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
@@ -84,7 +145,7 @@ public class PrimitiveCode {
 				}
 			}
 			if (!convports.isEmpty()) {
-				corpsPrimitive = corpsPrimitive + "\t// Converter port declarations" + CR;
+				corpsPrimitive = corpsPrimitive + CR;
 				for (SysCAMSTPortConverter conv : convports) {
 					if (conv.getOrigin() == 0) {
 						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
@@ -93,10 +154,17 @@ public class PrimitiveCode {
 					}
 				}
 			}
-			
-			corpsPrimitive = corpsPrimitive + CR + "\t// Constructor" + CR + "\tSCA_CTOR(" + tdf.getName() + ")" + CR;
-		
-			if (!tdfports.isEmpty() || !convports.isEmpty()) {
+
+			//corpsPrimitive = corpsPrimitive + CR + "\t// Constructor" + CR + "\tSCA_CTOR(" + tdf.getName() + ")" + CR;
+			corpsPrimitive = corpsPrimitive + CR + "\texplicit " + tdf.getName() + "(sc_core::sc_module_name nm";
+
+			if (tdf.getListStruct().getSize() != 0) {
+				corpsPrimitive = corpsPrimitive + ", const parameters& p = parameters())" + CR;
+			} else {
+				corpsPrimitive = corpsPrimitive + ")" + CR;
+			}
+
+			if (!tdfports.isEmpty() || !convports.isEmpty() || !tdf.getListStruct().isEmpty()) {
 				corpsPrimitive = corpsPrimitive + "\t: ";
 				if (!tdfports.isEmpty()) {
 					for (int i = 0; i < tdfports.size(); i++) {
@@ -128,10 +196,28 @@ public class PrimitiveCode {
 						}
 					}
 				}
-				corpsPrimitive = corpsPrimitive + "\t{}" + CR2;
+				String identifier;
+				if (!tdf.getListStruct().isEmpty()) {
+					for (int i = 0; i < tdf.getListStruct().size(); i++) {
+						String select = tdf.getListStruct().get(i);
+						String[] splita = select.split(" = ");
+						identifier = splita[0];
+						if (tdf.getListStruct().getSize() > 1) {
+							if (cpt == 0) {
+								corpsPrimitive = corpsPrimitive + identifier + "(p." + identifier + ")" + CR;
+								cpt++;
+							} else {
+								corpsPrimitive = corpsPrimitive + "\t, " + identifier + "(p." + identifier + ")" + CR;
+							}
+						} else {
+							corpsPrimitive = corpsPrimitive + identifier + "(p." + identifier + ")" + CR;
+							cpt++;
+						}
+					}
+				}
+				corpsPrimitive = corpsPrimitive + "\t{}" + CR2 + "protected:" + CR;
 			}
-			
-			// Block period 
+
 			if (tdf.getPeriod() != -1) {
 				corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_MS);" + CR;
 				cpt2++;
@@ -216,48 +302,72 @@ public class PrimitiveCode {
 					} 
 				}
 			}
-			
-			// Block processCode
+
 			if (cpt2 > 0) {
 				corpsPrimitive = corpsPrimitive + "\t}" + CR2;
 			}
-					
+
 			StringBuffer pcbuf = new StringBuffer(tdf.getProcessCode());
 			StringBuffer buffer = new StringBuffer("");
 			int tab = 0;
 			int begin = 0;
-			
-	        for(int pos = 0; pos != tdf.getProcessCode().length(); pos++) {
-	        	char c = pcbuf.charAt(pos);
-	            switch(c) {
-	                case '\t':  
-	                	begin = 1;
-	                	tab++;
-	                	break;
-	                default:  
-	                	if (begin == 1) {
-	                		int i = tab;
-	                		while (i >= 0) {
-	                			buffer.append("\t"); 
-	                			i--;
-	                		}
-	                		buffer.append(pcbuf.charAt(pos)); 	
-	                		begin = 0;
-	                		tab = 0;
-	                	} else {
-	                		if (c == '}') {
-	                			buffer.append("\t"); 
-	                		}
-	                		buffer.append(pcbuf.charAt(pos)); 	
-	                	}
-	                	break;
-	            }
-	        }
-			
-	        String pc = buffer.toString();
-	        
-			corpsPrimitive = corpsPrimitive + "\t" + pc + CR + "};" + CR2 + "#endif"
-					+ " // " + tdf.getName().toUpperCase() + "_H";
+
+			for(int pos = 0; pos != tdf.getProcessCode().length(); pos++) {
+				char c = pcbuf.charAt(pos);
+				switch(c) {
+				case '\t':  
+					begin = 1;
+					tab++;
+					break;
+				default:  
+					if (begin == 1) {
+						int i = tab;
+						while (i >= 0) {
+							buffer.append("\t"); 
+							i--;
+						}
+						buffer.append(pcbuf.charAt(pos)); 	
+						begin = 0;
+						tab = 0;
+					} else {
+						if (c == '}') {
+							buffer.append("\t"); 
+						}
+						buffer.append(pcbuf.charAt(pos)); 	
+					}
+					break;
+				}
+			}
+
+			String pc = buffer.toString();
+
+			corpsPrimitive = corpsPrimitive + "\t" + pc + CR;
+
+			if (tdf.getListStruct().getSize() != 0) {
+				corpsPrimitive = corpsPrimitive + "private:" + CR;
+
+				String identifier, type, constant;
+				for (int i = 0; i < tdf.getListStruct().size(); i++) {
+					String select = tdf.getListStruct().get(i);
+					String[] splita = select.split(" = ");
+					identifier = splita[0];
+					String[] splitb = splita[1].split(" : ");
+					String[] splitc = splitb[1].split(" ");
+					if (splitc[0].equals("const")) {
+						constant = splitc[0];
+						type = splitc[1];
+					} else {
+						constant = "";
+						type = splitc[0];
+					}
+					if (constant.equals("")) {
+						corpsPrimitive = corpsPrimitive + "\t" + type + " " + identifier + ";" + CR;
+					} else {
+						corpsPrimitive = corpsPrimitive + "\t" + constant + " " + type + " " + identifier + ";" + CR;
+					}
+				}
+			}
+			corpsPrimitive = corpsPrimitive + "};" + CR2 + "#endif" + " // " + tdf.getName().toUpperCase() + "_H";
 		} else {
 			corpsPrimitive = "";
 		}

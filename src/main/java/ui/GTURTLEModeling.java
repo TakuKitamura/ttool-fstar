@@ -739,9 +739,55 @@ public class GTURTLEModeling {
         }
         return path;
     }
+    
+    public boolean pathExists(TMLMapping<TGComponent> map, HwBridge firewallNode, TMLTask t1){
+		List<HwLink> links = map.getTMLArchitecture().getHwLinks();
+    	List<HwNode> found = new ArrayList<HwNode>();
+        List<HwNode> done = new ArrayList<HwNode>();
+        List<HwNode> path = new ArrayList<HwNode>();
+        
+        HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
+        
+        Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
+        for (HwLink link : links) {
+			if (link.hwnode == node1) {
+            	found.add(link.bus);
+            }
+        }
+        while (found.size() > 0) {
+        	System.out.println("found " + found);
+        	HwNode curr = found.remove(0);
+            for (HwLink link : links) {
+            	//System.out.println("LINK " + link.hwnode.getName() + " " + link.bus.getName());
+            	if (curr == link.bus) {
+            		
+                	if (link.hwnode.getName().equals(firewallNode.getName())) {
+                        return true;
+                    }
+                    if (!done.contains(link.hwnode) && !found.contains(link.hwnode) && link.hwnode instanceof HwBridge) {
+                    	found.add(link.hwnode);
+                    }
+                } else if (curr == link.hwnode) {
+                    if (!done.contains(link.bus) && !found.contains(link.bus)) {
+                       	found.add(link.bus);
+                    }
+            	}
+            }
+        	done.add(curr);
+        }
+        System.out.println("!pathExists " + t1.getName() + " " + firewallNode);
+    	return false;
+    }
 
     public TMLMapping<TGComponent> drawFirewall(TMLMapping<TGComponent> map) {
+    
+    
+    	Map<String, Integer> channelIndexMap = new HashMap<String, Integer>();
         //  
+        //Request Index indicates channel or update rules
+        //index = 0 : update rules 
+        //index = 1-n: channel
+        int index=1;
         TGComponent comp = map.getTMLModeling().getTGComponent();
         TMLComponentDesignPanel tmlcdp = (TMLComponentDesignPanel) comp.getTDiagramPanel().tp;
         // TMLComponentDesignPanel tmlcdp = map.getTMLCDesignPanel();
@@ -787,6 +833,8 @@ public class GTURTLEModeling {
                 HashMap<TMLChannel, TMLChannel> outChans = new HashMap<TMLChannel, TMLChannel>();
                 if (TraceManager.devPolicy == TraceManager.TO_CONSOLE) {
                     firewallComp = new TMLCPrimitiveComponent(tmlcdp.tmlctdp.getMaxX()-100, tmlcdp.tmlctdp.getMaxY()-100, tmlcdp.tmlctdp.getMinX(), tmlcdp.tmlctdp.getMaxX(), tmlcdp.tmlctdp.getMinY(), tmlcdp.tmlctdp.getMaxY(), false, null, tcp.tmlctdp);
+                    TAttribute reqIndex = new TAttribute(2, "index", "0", 0);
+            		firewallComp.getAttributeList().add(reqIndex);
                     tcp.tmlctdp.addComponent(firewallComp, 0, 0, false, true);
                     firewallComp.setValueWithChange(firewallNode.getName());
                     firewallADP = tcp.getTMLActivityDiagramPanel(firewallNode.getName());
@@ -803,9 +851,23 @@ public class GTURTLEModeling {
                 TMLActivity act = firewall.getActivityDiagram();
 
                 TraceManager.addDev("FirewallADP " + firewallADP);
+                
+                
                 for (TMLChannel chan : channelsCopy) {
+
+                	
+
                     TMLTask orig = chan.getOriginTask();
                     TMLTask dest = chan.getDestinationTask();
+                    
+                	//If firewall does not filter these tasks, continue on                    
+                    if (!pathExists(map, firewallNode, orig) && !pathExists(map, firewallNode, dest)){
+                		toAdd.add(chan);
+                		continue;
+                	}
+                	
+                	channelIndexMap.put(chan.getName(), index);
+                	index++;
                     TMLPort origPort = chan.getOriginPort();
                     TMLPort destPort = chan.getDestinationPort();
                     TMLChannel wr = new TMLChannel(chan.getName() + "_firewallIn", chan.getReferenceObject());
@@ -979,9 +1041,13 @@ public class GTURTLEModeling {
                 loop.setInfinite(true);
                 start.addNext(loop);
                 act.addElement(loop);
-                //Add choice
+                //Add choice for update or channel
+                
+                
+                
 
                 TMLChoice choice = new TMLChoice("chooseChannel", adChoice);
+//                choice.setGuard("[channelIndex=="+channelIndexMap.get(ch.name)+"]",i-1);
                 act.addElement(choice);
                 loop.addNext(choice);
                 map.getCorrespondanceList().addCor(choice, adChoice);
@@ -1033,9 +1099,13 @@ public class GTURTLEModeling {
             }
 
         }
+        //Replace channel operator with new firewallIn and firewallOut operators
+        
         //Redo all reference objects
 
-        map.getCorrespondanceList().useDIPLOIDs();
+        //map.getCorrespondanceList().useDIPLOIDs();
+        
+        //Redo syntax checking
         return map;
     }
 
@@ -1076,12 +1146,12 @@ public class GTURTLEModeling {
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch) {
-        return autoSecure(gui, name, map, newarch, "100", "0", "100", true, false, false);
+        return autoSecure(gui, name, map, newarch, "100", "0", "100", true, false, false, new HashMap<String, java.util.List<String>>());
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, boolean autoConf,
                                               boolean autoWeakAuth, boolean autoStrongAuth) {
-        return autoSecure(gui, name, map, newarch, "100", "0", "100", autoConf, autoWeakAuth, autoStrongAuth);
+        return autoSecure(gui, name, map, newarch, "100", "0", "100", autoConf, autoWeakAuth, autoStrongAuth,new HashMap<String, java.util.List<String>>());
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String encComp, String overhead, String decComp) {
@@ -1092,11 +1162,11 @@ public class GTURTLEModeling {
         int arch = gui.tabs.indexOf(tmlap);
         gui.cloneRenameTab(arch, "enc");
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size() - 1);
-        return autoSecure(gui, "enc", tmap, newarch, encComp, overhead, decComp, true, false, false);
+        return autoSecure(gui, "enc", tmap, newarch, encComp, overhead, decComp, true, false, false,new HashMap<String, java.util.List<String>>());
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth,
-                                              boolean autoStrongAuth) {
+                                              boolean autoStrongAuth,Map<String, List<String>> selectedCpuTasks ) {
         if (tmap == null) {
             return null;
         }
@@ -1104,20 +1174,23 @@ public class GTURTLEModeling {
         int arch = gui.tabs.indexOf(tmlap);
         gui.cloneRenameTab(arch, "enc");
         TMLArchiPanel newarch = (TMLArchiPanel) gui.tabs.get(gui.tabs.size() - 1);
-        return autoSecure(gui, "enc", tmap, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth);
+        return autoSecure(gui, "enc", tmap, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth, selectedCpuTasks);
     }
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String
             overhead, String decComp) {
-        return autoSecure(gui, name, tmap, newarch, encComp, overhead, decComp, true, false, false);
+        return autoSecure(gui, name, tmap, newarch, encComp, overhead, decComp, true, false, false, new HashMap<String, java.util.List<String>>());
     }
 
-    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth) {
+
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth, Map<String, List<String>> selectedCpuTasks ) {
     
             
         //move to another thread
-        SecurityGeneration secgen = new SecurityGeneration(gui, name, map, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth);
-        return secgen.startThread();
+        SecurityGeneration secgen = new SecurityGeneration(gui, name, map, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth, selectedCpuTasks);
+        tmap = secgen.startThread();
+        autoMapKeys();
+        return tmap;
     }
 
 
@@ -1188,13 +1261,13 @@ public class GTURTLEModeling {
     }
 
     public void autoMapKeys() {
-        TraceManager.addDev("auto map keys");
         if (tmap == null) {
             return;
         }
         List<HwLink> links = tmap.getArch().getHwLinks();
         //Find all Security Patterns, if they don't have an associated memory at encrypt and decrypt, map them
         TMLModeling<TGComponent> tmlm = tmap.getTMLModeling();
+        
         if (tmlm.securityTaskMap == null) {
             return;
         }
@@ -1260,7 +1333,8 @@ public class GTURTLEModeling {
                             memNode.tdp.addComponent(key, memNode.x, memNode.y, true, true);
                             memNode.tdp.repaint();
                         } else {
-                            
+                             //
+                            mgui.issueError("Cannot map key in memory for " + sp.name + " on task " + t.getName(), "Key Mapping Error");
                             UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Cannot map key in memory for " + sp.name + " on task " + t.getName());
                             ce.setTDiagramPanel(tmap.getCorrespondanceList().getTG(tmap.getArch().getFirstCPU()).getTDiagramPanel());
                             ce.setTGComponent(null);
@@ -1378,6 +1452,9 @@ public class GTURTLEModeling {
         //tml2uppaal.setChoiceDeterministic(choices);
         //tml2uppaal.setSizeInfiniteFIFO(_size);
         proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _typed, allowPrivateChannelDuplication);
+        
+       // System.out.println(proverif.getStringSpec());
+        
         warnings = avatar2proverif.getWarnings();
         languageID = PROVERIF;
         mgui.setMode(MainGUI.EDIT_PROVERIF_OK);

@@ -246,9 +246,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
         tgc.setDrawingZone(true);
         
         //Set its coordinates
-        if (tgc instanceof SysCAMSCompositeComponent) {
-            tgc.resizeWithFather();
-        }
 		if (tgc instanceof SysCAMSBlockTDF) {
             tgc.resizeWithFather();
         }
@@ -286,28 +283,12 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
     public void hasBeenResized() {
 		rescaled = true;
         for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
-				tgcomponent[i].resizeWithFather();
-			}
 			if (tgcomponent[i] instanceof SysCAMSBlockTDF) {
 				tgcomponent[i].resizeWithFather();
 			}
 			if (tgcomponent[i] instanceof SysCAMSBlockDE) {
 				tgcomponent[i].resizeWithFather();
 			}
-        }
-		if (getFather() != null) {
-			resizeWithFather();
-		}
-    }
-	
-	public void resizeWithFather() {
-        if ((father != null) && ((father instanceof SysCAMSCompositeComponent) || (father instanceof SysCAMSBlockTDF) || (father instanceof SysCAMSBlockDE))) {
-			// Too large to fit in the father? -> resize it!
-			resizeToFatherSize();
-			
-            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-            setMoveCd(x, y);
         }
     }
 	
@@ -508,4 +489,3 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
     	}
 	}
 }
-

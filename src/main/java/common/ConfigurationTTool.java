@@ -38,10 +38,7 @@
 
 package common;
 
-import myutil.FileUtils;
-import myutil.MalformedConfigurationException;
-import myutil.PluginManager;
-import myutil.TraceManager;
+import myutil.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -224,8 +221,6 @@ public class ConfigurationTTool {
             throw new MalformedConfigurationException("Filepb");
         }
 
-
-
         while ( (index0 = data.indexOf("<LastOpenFile")) != -1) {
             index1 = data.indexOf("/>", index0+1);
             if (index1 == -1) {
@@ -235,6 +230,7 @@ public class ConfigurationTTool {
         }
 
         index0 = data.indexOf("</TURTLECONFIGURATION>");
+
         String toBeAdded = "";
         // Adding configuration there
         for(int i=0; i<LastOpenFiles.length; i++) {
@@ -243,7 +239,7 @@ public class ConfigurationTTool {
                 toBeAdded = toBeAdded + "<LastOpenFile data=\"" + file + "\" />\n";
             }
         }
-        data = data.substring(0, index0-1) + toBeAdded + data.substring(index0, data.length());
+        data = data.substring(0, index0-1) + toBeAdded + "\n" + data.substring(index0, data.length());
 
         //sb.append("data = " + data + " ConfigurationTTool.LastOpenFile=" + ConfigurationTTool.LastOpenFile);
 
@@ -338,6 +334,9 @@ public class ConfigurationTTool {
                 write = true;
             }
         }
+
+        data = Conversion.replaceAllString(data, "\n\n", "\n");
+
         if (write) {
             //sb.append("Writing data=" + data);
             try {

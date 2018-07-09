@@ -114,16 +114,14 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
 		/** JTabbedPane **/
 		JPanel attributesMainPanel = new JPanel();
-		mainPanel.add(attributesMainPanel, BorderLayout.NORTH); // add tab to main panel
+		mainPanel.add(attributesMainPanel, BorderLayout.NORTH); 
 
-		// --- Attributes GridLayout ---//
+		// --- Attributes ---//
 		attributesMainPanel.setLayout(new BorderLayout());
 
-		// Box for Attributes
 		Box attributesBox = Box.createVerticalBox();
 		attributesBox.setBorder(BorderFactory.createTitledBorder("Setting DE block attributes"));
 
-		// BorderLayout for Adding Attributes
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
 		JPanel attributesBoxPanel = new JPanel();
@@ -132,33 +130,33 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
 		JLabel labelName = new JLabel("Name : ");
 		constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(labelName, constraints);
 		attributesBoxPanel.add(labelName);
 
-		if (block.getValue().toString().equals("")) { // name empty
+		if (block.getValue().toString().equals("")) {
 			nameTextField = new JTextField(10);
 		} else {
-			nameTextField = new JTextField(block.getValue().toString(), 10); // name not empty
+			nameTextField = new JTextField(block.getValue().toString(), 10); 
 		}
 		constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(nameTextField, constraints);
 		attributesBoxPanel.add(nameTextField);
 
 		JLabel periodLabel = new JLabel("Period Tp : ");
 		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(periodLabel, constraints);
 		attributesBoxPanel.add(periodLabel);
 
-		if (block.getPeriod() == -1) { // name empty // port.getName().toString().equals("") ||
+		if (block.getPeriod() == -1) { 
 			periodTextField = new JTextField(10);
 		} else {
-			periodTextField = new JTextField("" + block.getPeriod(), 10); // name not empty
+			periodTextField = new JTextField("" + block.getPeriod(), 10);
 		}
 		constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(periodTextField, constraints);
 		attributesBoxPanel.add(periodTextField);
 
@@ -171,21 +169,20 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 			periodComboBoxString.setSelectedIndex(0);
 		} else if (block.getTime().equals("ms")) {
 			periodComboBoxString.setSelectedIndex(1);
-		} else {
+		} else if (block.getTime().equals("s")) {
 			periodComboBoxString.setSelectedIndex(2);
 		}
 		periodComboBoxString.setActionCommand("time");
 		periodComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(periodComboBoxString, constraints);
 		attributesBoxPanel.add(periodComboBoxString);
 
 		attributesBox.add(attributesBoxPanel);
 
-		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); // add box to grid
+		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); 
 
-		// Down Side
 		JPanel downPanel = new JPanel(new FlowLayout());
 
 		JButton saveCloseButton = new JButton("Save and close");
@@ -226,9 +223,11 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 				}
 				if (periodValueInteger == false) {
 					block.setPeriod(Integer.parseInt(periodTextField.getText()));
+					block.setTime((String) periodComboBoxString.getSelectedItem());
 				}
 			} else {
 				block.setPeriod(-1);
+				block.setTime("");
 			}
 
 			this.dispose();
@@ -239,4 +238,3 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 		}
 	}
 }
-

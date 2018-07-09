@@ -54,7 +54,7 @@ import java.util.LinkedList;
 
 /**
  * Class SysCAMSBlockDE
- * Primitive Component. To be used in SystemC-AMSdiagrams
+ * Primitive Component. To be used in SystemC-AMS diagrams
  * Creation: 13/05/2018
  * @version 1.0 13/05/2018
  * @author Irina Kit Yan LEE
@@ -169,15 +169,19 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
         	g.setFont(f.deriveFont(Font.BOLD));
             g.drawString(value, x + textX + 1, y + currentFontSize + textX);
             g.setFont(f.deriveFont(Font.PLAIN));
-        	String s = "Tm = " + this.getPeriod();
-        	g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
+            if (this.getPeriod() != -1) { 
+				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
+				g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
+			}
         } else {
         	g.setFont(f.deriveFont(Font.BOLD));
             g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
             g.setFont(f.deriveFont(Font.PLAIN));
-        	String s = "Tm = " + this.getPeriod();
-        	w = g.getFontMetrics().stringWidth(s);
-        	g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
+        	if (this.getPeriod() != -1) { 
+				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
+				w = g.getFontMetrics().stringWidth(s);
+				g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
+			}
         }
 
         g.setFont(fold);
@@ -335,7 +339,8 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
             sb.append(isAttacker() ? "Yes": "No");
 	        sb.append("\" />\n");
             sb.append("<Attribute period=\"");
-            sb.append(this.getPeriod());
+            sb.append(getPeriod());
+            sb.append("\" time=\"" + getTime());
             sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -346,7 +351,9 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
             NodeList nli;
             Node n1, n2;
             Element elt;
+            
             int period;
+            String time;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -361,7 +368,9 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 							}
                             if (elt.getTagName().equals("Attribute")) {
                                 period = Integer.decode(elt.getAttribute("period")).intValue();
+                                time = elt.getAttribute("time");
                                 setPeriod(period);
+                                setTime(time);
                             }
                         }
                     }
@@ -413,8 +422,8 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		return period;
 	}
 
-	public void setPeriod(int period) {
-		this.period = period;
+	public void setPeriod(int _period) {
+		period = _period;
 	}
 
 	public String getAttributes() {
@@ -425,8 +434,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		return time;
 	}
 
-	public void setTime(String time) {
-		this.time = time;
+	public void setTime(String _time) {
+		time = _time;
 	}
 }
-

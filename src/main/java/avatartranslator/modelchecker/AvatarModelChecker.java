@@ -771,8 +771,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
     }
 
-
-    public boolean evaluateBoolExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
+    public boolean oldEvaluateBoolExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
         String act = _expr;
         int cpt = 0;
         for (AvatarAttribute at : _block.getAttributes()) {
@@ -800,6 +799,42 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         boolean result = bee.getResultOf(act);
+        if (bee.getError() != null) {
+            TraceManager.addDev("Error: " + bee.getError());
+        }
+
+        //TraceManager.addDev("Result of " + _expr + " = " + result);
+        return result;
+    }
+
+    public boolean evaluateBoolExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
+        String act = _expr;
+        int cpt = 0;
+        for (AvatarAttribute at : _block.getAttributes()) {
+            String val = "";
+            if (at.isInt()) {
+                val = "" + _sb.values[cpt + SpecificationBlock.ATTR_INDEX];
+                if (val.startsWith("-")) {
+                    val = "(0" + val + ")";
+                }
+            } else if (at.isBool()) {
+                if (_sb.values[cpt + SpecificationBlock.ATTR_INDEX] == 0) {
+                    val = "f";
+                } else {
+                    val = "t";
+                }
+            }
+            act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, _block.getAttribute(cpt).getName(), val);
+            cpt++;
+        }
+
+        BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
+
+        if (act.trim().startsWith("100")) {
+            //TraceManager.addDev("Current block " + _block.getName());
+        }
+
+        boolean result = bee.getResultOfWithIntExpr(act);
         if (bee.getError() != null) {
             TraceManager.addDev("Error: " + bee.getError());
         }

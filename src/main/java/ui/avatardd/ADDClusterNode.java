@@ -50,11 +50,11 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
-* Class ADDClusterNode
-* Node. To be used in Avatar deployment diagrams.
-* Creation: 18/06/2018
-* @version 1.0 18/06/2018
-* @author Irina Kit Yan LEE
+ * Class ADDClusterNode
+ * Node. To be used in Avatar deployment diagrams.
+ * Creation: 18/06/2018
+ * @version 1.0 18/06/2018
+ * @author Irina Kit Yan LEE
  */
 
 public class ADDClusterNode extends ADDNode implements WithAttributes {
@@ -63,22 +63,22 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 	private int derivationx = 2;
 	private int derivationy = 3;
 	private String stereotype = "SystemC-AMS Cluster";
-    private int currentFontSize = -1;
-    private int textX = 15; // border for ports
-	
+	private int currentFontSize = -1;
+	private int textX = 15; // border for ports
+
 	private int index = 0;
-	
+
 	public ADDClusterNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-		
+
 		width = 250;
 		height = 200;
 		minWidth = 150;
 		minHeight = 100;
-		
+
 		nbConnectingPoint = 16;
 		connectingPoint = new TGConnectingPoint[16];
-		
+
 		connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
 		connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
 		connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.0);
@@ -87,7 +87,7 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 1.0);
 		connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
 		connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 1.0);
-		
+
 		connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
 		connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
 		connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
@@ -96,39 +96,39 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
 		connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
 		connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
-		
+
 		addTGConnectingPointsComment();
-		
+
 		nbInternalTGComponent = 0;
-		
+
 		moveable = true;
 		multieditable = true;
 		editable = true;
 		removable = true;
 		userResizable = true;
-		
+
 		name = tdp.findNodeName("Cluster");
-        value = "name";
+		value = "name";
 	}
-	
+
 	public void internalDrawing(Graphics g) {
 		Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
-		
+
 		// Top lines
 		g.drawLine(x, y, x + derivationx, y - derivationy);
 		g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
 		g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
-		
+
 		// Right lines
 		g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
 		g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
-		
+
 		// Filling color
 		g.setColor(Color.lightGray);
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
-		
+
 		// Strings
 		String ster = "<<" + stereotype + ">>";
 		int w  = g.getFontMetrics().stringWidth(ster);
@@ -138,12 +138,12 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		g.setFont(f);
 		w  = g.getFontMetrics().stringWidth(name);
 		g.drawString(name, x + (width - w)/2, y + textY2);
-		
+
 		// Icon
 		g.drawImage(IconManager.imgic8006.getImage(), x + 4, y + 4, null);
 		g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
 	}
-	
+
 	public TGComponent isOnOnlyMe(int x1, int y1) {
 		Polygon pol = new Polygon();
 		pol.addPoint(x, y);
@@ -157,63 +157,66 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		}
 		return null;
 	}
-	
+
 	public String getStereotype() {
 		return stereotype;
 	}
-	
+
 	public String getNodeName() {
 		return name;
 	}
-	
+
 	public int getIndex() {
 		return index;
 	}
-	
+
 	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
 		int i;
 		MainGUI mgui = getTDiagramPanel().getMainGUI();
-		
+
 		// On the name ?
-        if (_y <= (y + currentFontSize + textX)) {
-            String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
-                                                           JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
-                                                           null,
-                                                           getName());
-            if ((s != null) && (s.length() > 0)) {
-                if (!TAttribute.isAValidId(s, false, false)) {
-                    JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the component: the new name is not a valid name",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
-                    return false;
-                }
-                setName(s);
-    			setComponentName(s);
-                setValueWithChange(s);
-                return true;
-            }
-            return false;
-        }
-        for (i = 0; i < mgui.getListSysCAMSPanel().size(); i++) {
-        	SysCAMSComponentTaskDiagramPanel tdp = mgui.getListSysCAMSPanel().get(i);
-        	if (tdp.getCompositeComponent().getValue().equals(getName())) {
-        		mgui.selectTab(tdp);
-        		return true;
-        	}
-        }
-        
-        JOptionPane.showMessageDialog(frame,
-                "Could not find a SystemC-AMS Component Diagram that correspond to the name : " + getName(),
-                "Warning message",
-                JOptionPane.WARNING_MESSAGE);
-        return false;
+		if (_y <= (y + currentFontSize + textX)) {
+			String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
+					JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
+					null,
+					getName());
+			if ((s != null) && (s.length() > 0)) {
+				if (!TAttribute.isAValidId(s, false, false)) {
+					JOptionPane.showMessageDialog(frame,
+							"Could not change the name of the component: the new name is not a valid name",
+							"Error",
+							JOptionPane.INFORMATION_MESSAGE);
+					return false;
+				}
+				setName(s);
+				setComponentName(s);
+				setValueWithChange(s);
+				return true;
+			}
+			return false;
+		}
+
+		if (mgui.getListSysCAMSPanel() != null) {
+			for (i = 0; i < mgui.getListSysCAMSPanel().size(); i++) {
+				SysCAMSComponentTaskDiagramPanel tdp = mgui.getListSysCAMSPanel().get(i);
+				if (tdp.getCompositeComponent().getValue().equals(getName())) {
+					mgui.selectTab(tdp);
+					return true;
+				}
+			}
+		}
+
+		JOptionPane.showMessageDialog(frame,
+				"Could not find a SystemC-AMS Component Diagram that correspond to the name : " + getName(),
+				"Warning message",
+				JOptionPane.WARNING_MESSAGE);
+		return false;
 	}
-	
+
 	public int getType() {
 		return TGComponentManager.ADD_CLUSTERNODE;
 	}
-	
+
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -223,14 +226,14 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		sb.append("</extraparam>\n");
 		return new String(sb);
 	}
-	
+
 	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
 		try {
 			NodeList nli;
 			Node n1, n2;
 			Element elt;
 			String sstereotype = null, snodeName = null;
-			
+
 			for(int i=0; i<nl.getLength(); i++) {
 				n1 = nl.item(i);
 				if (n1.getNodeType() == Node.ELEMENT_NODE) {
@@ -260,11 +263,11 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 			throw new MalformedModelingException();
 		}
 	}
-	
+
 	public int getDefaultConnector() {
 		return TGComponentManager.ADD_CONNECTOR;
 	}
-	
+
 	public String getAttributes() {
 		String attr = "";
 		attr += "index = " + index + "\n";

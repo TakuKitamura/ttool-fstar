@@ -76,18 +76,7 @@ public  class ELNConnector extends TGConnector implements ScalableTGComponent {
 	}
 
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-        int cz = (int) (tdp.getZoom() * c);
-        if (p1.getName().equals("")) {
-        	g.fillOval(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
- 	        g.drawLine(x1, y1, x2, y2);
-        } else if (p2.getName().equals("")) {
- 	        g.fillOval(x1 - (cz / 2), y1 - (cz / 2), cz, cz);
- 	        g.drawLine(x1, y1, x2, y2);
-        } else {
-	        g.fillOval(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
-	        g.fillOval(x1 - (cz / 2), y1 - (cz / 2), cz, cz);
-	        g.drawLine(x1, y1, x2, y2);
-        }
+        g.drawLine(x1, y1, x2, y2);
     }
 
     public void rescale(double scaleFactor){
