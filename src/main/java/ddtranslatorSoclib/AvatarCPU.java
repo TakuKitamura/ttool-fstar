@@ -63,11 +63,12 @@ public class AvatarCPU extends AvatarComponent{
     private int dCacheWords;
     private int nb_init;
     private int no_proc;
+    private int clusterIndex;
     public int monitored;
 
     private LinkedList<AvatarTask> tasksMapped;
 
-    public AvatarCPU(String _cpuName, int _nbOfIRQs,int _ICacheWays, int _ICacheSets, int _ICacheWords, int  _DCacheWays, int _DCacheSets, int _DCacheWords , int _nb_init , int _no_proc, int _monitored){
+    public AvatarCPU(String _cpuName, int _nbOfIRQs,int _ICacheWays, int _ICacheSets, int _ICacheWords, int  _DCacheWays, int _DCacheSets, int _DCacheWords , int _nb_init , int _no_proc, int _clusterIndex, int _monitored){
       
       cpuName = _cpuName;
       nbOfIRQs = _nbOfIRQs;
@@ -79,6 +80,7 @@ public class AvatarCPU extends AvatarComponent{
       dCacheWords = _DCacheWords;
       nb_init = _nb_init;
       no_proc = _no_proc;
+      clusterIndex = _clusterIndex;//DG 2.7.
       tasksMapped = new LinkedList<AvatarTask>(); 
       monitored=_monitored;
     }
@@ -89,8 +91,13 @@ public class AvatarCPU extends AvatarComponent{
 
     public int getNo_proc(){
       return  no_proc;
-    }
+      }
 
+    public int getClusterIndex(){
+	
+      return clusterIndex;
+    }  
+    
     public	String getCpuName(){
 	return cpuName;
 	}

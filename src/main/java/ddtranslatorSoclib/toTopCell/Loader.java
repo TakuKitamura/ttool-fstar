@@ -139,6 +139,7 @@ if(nb_clusters==0){
 }else{
     loader = loader + "  const size_t xicu_n_irq = "+(5*nb_clusters)+";" + CR2 ;
 }
+
         return loader;
 	}
 

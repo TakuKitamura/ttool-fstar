@@ -74,7 +74,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
 */
 
 /* initialization of counters, there are at least 6 targets */
-    int nb_target = 6; 
+    int nb_target;// = 6; 
     int nb_mwmr_segments = 0;
 	
     public AvatarddSpecification( List<AvatarComponent> _components, List<AvatarConnector> _connectors, List<AvatarMappedObject> _mappedObjects, int _nb_target, int _nb_init){
@@ -126,8 +126,10 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
         {
 	    if (tty instanceof AvatarTTY){ 		
 		ttys.add((AvatarTTY)tty);
+		nb_target++;
 	    }
         }
+     
       return ttys;
     }
 
@@ -148,7 +150,8 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       
     	for (AvatarComponent ram : components ) {
     		if (ram instanceof AvatarRAM){  
-    			rams.add((AvatarRAM)ram);	
+		    rams.add((AvatarRAM)ram);
+		    nb_target++;	
     		}
     	}    
       
@@ -179,15 +182,14 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
 
     public LinkedList<AvatarCrossbar> getAllCrossbar(){
       LinkedList<AvatarCrossbar> crossbars = new LinkedList<AvatarCrossbar>();
-      //int i=0;
+    
       for (AvatarComponent crossbar : components )
         {
-	    //Currently, at least one crossbar -> clustered
+	    
 	    if (crossbar instanceof AvatarCrossbar){
 		
 		crossbars.add((AvatarCrossbar)crossbar);
-		//crossbar.setClusterIndex(i); 
-		//i++;
+		nb_target++;
 	    }
 
         }
@@ -206,44 +208,26 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       }*/
 
   
-   //Currently, we define 1 crossbar = 1 cluster
+   
    public int getNbClusters(){      
        return getAllCrossbar().size();
     }
 
-    /* DG 23.08. les hardware accelerators proviennent en fait de la specification DIPLODOCUS */
 
-    //	    copro= new AvatarCoproMWMR("test",0,0,0,10,8,8,1,1,1,1,false);
-     
       public List<AvatarCoproMWMR> getAllCoproMWMR(){
       List<AvatarCoproMWMR> copros = new LinkedList<AvatarCoproMWMR>();
       for (AvatarComponent copro : components )
         {
 	    if (copro instanceof AvatarCoproMWMR){
-			
-			//DG 19.09. associate HW task name 
-			//copro.putName(blockname);
+		
             copros.add((AvatarCoproMWMR)copro);
+	    nb_target++;//DG 9.7. attention not all are target
 	    }
         }
       return copros;
       }
 
-    /* to do, actuellement c'est un hwa generique */
-    /* the hardware accelerators must be taken from DIPLODOCUS specification */
-    /* public List<DiploHWA> getAllHWA(){
-      List<DiploHWA> hwas = new LinkedList<DiploHWA>();
-      for (DiploComponent hwa : diplocomponents )
-        {
-	    if (hwa instanceof DiploHWA){
-			
-
-            hwas.add((DiploHWA)hwa);
-	    }
-        }
-      return hwas;
-      }*/
-
+   
     public int getNbCPU(){
       return (getAllCPU()).size();
     }

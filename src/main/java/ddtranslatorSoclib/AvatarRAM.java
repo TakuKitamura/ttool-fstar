@@ -64,12 +64,11 @@ public class AvatarRAM extends AvatarComponent{
 
     LinkedList<AvatarChannel> channelMapped ;
     
-    public AvatarRAM(String _memoryName, int _index, int _dataSize, int _no_ram, int _no_cluster, int _monitored)  {
+    public AvatarRAM(String _memoryName, int _dataSize, int _no_cluster, int _no_ram, int _monitored)  {
       memoryName = _memoryName;
-      index = _index;
       dataSize = _dataSize;
-      no_ram = _no_ram;
       no_cluster=_no_cluster;
+      no_ram = _no_ram;
       monitored=_monitored;
       channelMapped =  new LinkedList<AvatarChannel>();
     }
@@ -88,7 +87,7 @@ public class AvatarRAM extends AvatarComponent{
 
     public int getNo_cluster(){
       return no_cluster;
-    } 
+    }
 
     public void setNo_ram(int _no_ram){
       no_ram = _no_ram;

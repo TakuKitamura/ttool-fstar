@@ -68,15 +68,15 @@ public class AvatarDeploymentPanelTranslator
      * 
      * Other targets :
      * the simhelper segment (target 3)
-     * the icu segment (target 4)
-     * the timer segment (target 5)
-     * the fdt segment (target 6)
+     * the timer segment (target 4)
+     * the ICU segment (target 5)
+     * the DMA segment (target 6)
      * 
      * There always is a RAM0
      */
 
-    private int nb_target = 6;
-
+   
+    private int nb_target = 0;
     private int no_tty = 0;
 
     private int nb_clusters = 0;
@@ -126,6 +126,7 @@ public class AvatarDeploymentPanelTranslator
 				       ICacheSets, ICacheWords, dCacheWays,
 				       dCacheSets, dCacheWords, nb_init,
 				       addCPUNode.getIndex (),
+				       addCPUNode.getClusterIndex (),
 				       addCPUNode.getMonitored ());
 
 
@@ -160,7 +161,7 @@ public class AvatarDeploymentPanelTranslator
 		    int index = tty.getIndex ();
 		    String ttyName = tty.getNodeName ();
 
-		    AvatarTTY avtty = new AvatarTTY (ttyName, index, index, index);	//DG 3.7.
+		    AvatarTTY avtty = new AvatarTTY (ttyName, index, index, index);
 		    nb_target++;
 
 		    avatarMap.put (dp, avtty);
@@ -292,8 +293,10 @@ public class AvatarDeploymentPanelTranslator
 		    int nStatus = addCoproMWMRNode.getNStatus ();	// nb of status registers
 		    boolean useLLSC = addCoproMWMRNode.getUseLLSC ();	// more efficient protocol. 0: not used. 1 or more -> used
 		    int coprocType = addCoproMWMRNode.getCoprocType ();	//virtual or real?
+		    int cluster_address = addCoproMWMRNode.getClusterAddress ();
+		    
 		    nb_init++;
-		    nb_target += 2;	//DG 28.08. two targets as two segments of memory are created mwmr and mwmrd
+		    nb_target += 2;	
 		    AvatarCoproMWMR acpMWMR;
 
 		    //DG 19.09. map tasks to coproc
@@ -302,7 +305,7 @@ public class AvatarDeploymentPanelTranslator
 					     plaps, fifoToCoprocDepth,
 					     fifoFromCoprocDepth, nToCopro,
 					     nFromCopro, nConfig, nStatus,
-					     useLLSC, coprocType);
+					     useLLSC, coprocType, cluster_address);
 		    // DG 27.04. : pourquoi deux fois new coproc? Bien: on peut mapper les tasks :)
 
 		    Vector < ADDBlockArtifact > tasks =
@@ -331,7 +334,7 @@ public class AvatarDeploymentPanelTranslator
 					     plaps, fifoToCoprocDepth,
 					     fifoFromCoprocDepth, nToCopro,
 					     nFromCopro, nConfig, nStatus,
-					     useLLSC, coprocType);
+					     useLLSC, coprocType,cluster_address);
 
 		    avatarMap.put (dp, acpMWMR);
 		    avatarComponents.add (acpMWMR);
@@ -346,16 +349,18 @@ public class AvatarDeploymentPanelTranslator
 			  ADDRAMNode addRamNode = (ADDRAMNode) dp;
 			  String name = addRamNode.getNodeName ();
 			  int index = addRamNode.getIndex ();
+			  int cluster_index = addRamNode.getClusterIndex ();
 			  int byteDataSize = addRamNode.getDataSize ();
 
 			  //int monitored = addRamNode.getMonitored();
 
 			  AvatarRAM avram =
-			      new AvatarRAM (name, index, byteDataSize, index,
+			      new AvatarRAM (name, byteDataSize,
+					     cluster_index,
 					     index,
 					     addRamNode.getMonitored ());
 			  avram.setNo_ram (index);
-			  int cluster_index = avram.getIndex ();
+			
 
 
 			  nb_target++;
@@ -369,7 +374,7 @@ public class AvatarDeploymentPanelTranslator
 				String referenceDiagram =
 				    c.getReferenceDiagram ();
 				String channelName = c.getChannelName ();
-				//channel is inevitably on same cluster as RAM it is mapped on :)
+			
 				AvatarChannel avcl =
 				    new AvatarChannel (referenceDiagram,
 						       channelName, avram,
@@ -439,7 +444,7 @@ public class AvatarDeploymentPanelTranslator
 
 			  if ((((AvatarRAM) avowner_p1).getMonitored () == 2)
 			      || (spy == true))
-			      //if (((AvatarRAM)avowner_p1).getMonitored() == 2)
+			      
 			    {
 				monitored = 2;
 

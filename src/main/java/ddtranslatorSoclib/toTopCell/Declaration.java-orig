@@ -51,11 +51,6 @@ import avatartranslator.AvatarRelation;
 import avatartranslator.AvatarBlock;
 import avatartranslator.AvatarSignal;
 import avatartranslator.AvatarSpecification;
-//import ddtranslatorSoclib.AvatarCoproMWMR;
-import ddtranslatorSoclib.AvatarRAM;
-import ddtranslatorSoclib.AvatarTTY;
-import ddtranslatorSoclib.AvatarCrossbar;
-
 import myutil.TraceManager;
 
 public class Declaration
@@ -63,8 +58,7 @@ public class Declaration
     public static AvatarSpecification avspec;
     private static String CR = "\n";
     private static String CR2 = "\n\n";
-    public static AvatarddSpecification avatardd;
-    
+
     public static String generateName (AvatarRelation _ar, int _index)
     {
 	return _ar.block1.getName () + "_" +
@@ -72,49 +66,10 @@ public class Declaration
 	    _ar.block2.getName () + "_" + _ar.getSignal2 (_index).getName ();
     }
 
-
-     public static int cpus_in_cluster(AvatarddSpecification dd,int cluster_no){
-	avatardd = dd;
-	int cpus=0;
-	for  (AvatarConnector connector : avatardd.getConnectors()){		
-	    AvatarConnectingPoint my_p1= connector.get_p1(); 
-	    AvatarConnectingPoint my_p2= connector.get_p2(); 
-				
-	    AvatarComponent comp1 = my_p1.getComponent();
-	    AvatarComponent comp2 = my_p2.getComponent(); 
-	    if (comp1 instanceof AvatarCPU){ 
-		AvatarCPU comp1cpu = (AvatarCPU)comp1;
-		cpus++;
-	    }		    		
-	    
-	}
-	return cpus; 
-	}
-    
-public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
-	avatardd = dd;
-	int rams=0;
-	for  (AvatarConnector connector : avatardd.getConnectors()){		
-	    AvatarConnectingPoint my_p1= connector.get_p1(); 
-	    AvatarConnectingPoint my_p2= connector.get_p2(); 
-				
-	    AvatarComponent comp1 = my_p1.getComponent();
-	    AvatarComponent comp2 = my_p2.getComponent(); 
-	    if (comp1 instanceof AvatarRAM){ 
-		AvatarRAM comp1cpu = (AvatarRAM)comp1;
-		rams++;			
-	    }		    		
-	    
-	}
-	return rams; 
-	}
-    
-
-    
-    public static String getDeclarations (AvatarddSpecification _dd, AvatarSpecification _avspec)
+    public static String getDeclarations (AvatarSpecification _avspec)
     {
 	avspec = _avspec;
-	avatardd = _dd;
+
 	String declaration =
 	    "//----------------------------Instantiation-------------------------------"
 	    + CR2;
@@ -175,7 +130,7 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 	  {
 	      declaration =
 		  declaration +
-		  "caba::VciXicu<vci_param> vcixicu(\"vci_xicu\", maptab, IntTab(0,5), 1, xicu_n_irq, cpus.size(), cpus.size());"
+		  "caba::VciXicu<vci_param> vcixicu(\"vci_xicu\", maptab, IntTab(0,4), 1, xicu_n_irq, cpus.size(), cpus.size());"
 		  + CR;
 	  }
 
@@ -190,20 +145,20 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 	  {
 	      declaration =
 		  declaration +
-		  "caba::VciRtTimer<vci_param> vcirttimer    (\"vcirttimer\", IntTab(0,4), maptab, 1, true);"
+		  "caba::VciRtTimer<vci_param> vcirttimer    (\"vcirttimer\", IntTab(0,5), maptab, 1, true);"
 		  + CR2;
 	  }
 
 	if (nb_clusters == 0)
 	  {
 	      declaration +=
-		  "caba::VciFdtRom<vci_param> vcifdtrom(\"vci_fdt_rom\", IntTab(7), maptab);"
+		  "caba::VciFdtRom<vci_param> vcifdtrom(\"vci_fdt_rom\", IntTab(6), maptab);"
 		  + CR;
 	  }
 	else
 	  {
 	      declaration +=
-		  "caba::VciFdtRom<vci_param> vcifdtrom(\"vci_fdt_rom\", IntTab(0,7), maptab);"
+		  "caba::VciFdtRom<vci_param> vcifdtrom(\"vci_fdt_rom\", IntTab(0,6), maptab);"
 		  + CR;
 	  }
 
@@ -216,16 +171,25 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 		{
 		    declaration +=
 			"caba::VciMultiTty<vci_param> " + tty.getTTYName () +
-			"(\"" + tty.getTTYName () + "\", IntTab(" + 8 
-			//tty.getNo_target () + "), 		     
-			+ "), maptab, \"vci_multi_tty" +
+			"(\"" + tty.getTTYName () + "\", IntTab(" +
+			tty.getNo_target () + "), maptab, \"vci_multi_tty" +
 			i + "\", NULL);" + CR;
 		    i++;
 		    last_tty = tty.getNo_target () + 1;
 		}
 
 	      //target address depends on number of TTYs and RAMs
-	     
+
+	      if (nb_clusters == 0)
+		{
+		    // declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(TopCellGenerator.avatardd.getNb_target()+3)+"), maptab);" + CR;
+		    // declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab("+(last_tty+3)+"), maptab);" + CR;
+		}
+	      else
+		{
+		    //   declaration +=  "caba::VciLocks<vci_param> vcilocks(\"vcilocks\", IntTab(0,8), maptab);" + CR;
+		}
+
 	    for (AvatarRAM ram:TopCellGenerator.avatardd.
 		   getAllRAM ())
 		  if (ram.getIndex () == 0)
@@ -247,28 +211,16 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 	  }
 	else
 	  {
-	      
-	    for (AvatarTTY tty:TopCellGenerator.avatardd.getAllTTY ())
-		
-		{   int cluster_no=tty.getNo_cluster();
-		    int nb_ram =
-			rams_in_cluster(avatardd, cluster_no);
-
-		    if(cluster_no==0){
-			 declaration +=
-			"caba::VciMultiTty<vci_param> " + tty.getTTYName () +
-			"(\"" + tty.getTTYName () + "\", IntTab(" +
-			     tty.getNo_cluster () + "," +  (nb_ram+10)  +
-			"), maptab, \"vci_multi_tty" + cluster_no + "\", NULL);" + CR;
-		    }
-		    else{
+	      int i = 0;
+	    for (AvatarTTY tty:TopCellGenerator.avatardd.
+		   getAllTTY ())
+		{
 		    declaration +=
 			"caba::VciMultiTty<vci_param> " + tty.getTTYName () +
 			"(\"" + tty.getTTYName () + "\", IntTab(" +
-			tty.getNo_cluster () + "," +  nb_ram  +
-			"), maptab, \"vci_multi_tty" + cluster_no + "\", NULL);" + CR;
-		    }
-		
+			tty.getNo_cluster () + "," + tty.getNo_target () +
+			"), maptab, \"vci_multi_tty" + i + "\", NULL);" + CR;
+		    i++;
 		}
 
 	    for (AvatarRAM ram:TopCellGenerator.avatardd.
@@ -284,13 +236,13 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 
 	      declaration +=
 		  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(cpus.size()+1), IntTab("
-		  + 8 + "));" + CR;
+		  + last_tty + "));" + CR;
 	      declaration +=
 		  "caba::VciEthernet<vci_param> vcieth(\"vcieth\", maptab, IntTab(cpus.size()+2), IntTab("
-		  + 9 + "), \"soclib0\");" + CR;
+		  + (last_tty + 1) + "), \"soclib0\");" + CR;
 	      declaration +=
 		  "caba::VciBlockDevice<vci_param> vcibd(\"vcibd\", maptab, IntTab(cpus.size()), IntTab("
-		  + 10 + "),\"block0.iso\", 2048);" + CR;
+		  + (last_tty + 2) + "),\"block0.iso\", 2048);" + CR;
 
 	      //non-clustered version
 	      int hwa_no = 0;
@@ -371,13 +323,13 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 	else
 	  {
 	      declaration +=
-		  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(0,cpus.size()+1), IntTab(0,8));"
+		  "caba::VciFdAccess<vci_param> vcifd(\"vcifd\", maptab, IntTab(0,cpus.size()+1), IntTab(0,7));"
 		  + CR;
 	      declaration +=
-		  "caba::VciEthernet<vci_param> vcieth(\"vcieth\", maptab, IntTab(0,cpus.size()+2), IntTab(0,9), \"soclib0\");"
+		  "caba::VciEthernet<vci_param> vcieth(\"vcieth\", maptab, IntTab(0,cpus.size()+2), IntTab(0,8), \"soclib0\");"
 		  + CR;
 	      declaration +=
-		  "caba::VciBlockDevice<vci_param> vcibd(\"vcibd\", maptab, IntTab(0,cpus.size()), IntTab(0,10),\"block0.iso\", 2048);"
+		  "caba::VciBlockDevice<vci_param> vcibd(\"vcibd\", maptab, IntTab(0,cpus.size()), IntTab(0,9),\"block0.iso\", 2048);"
 		  + CR;
 
 	      int hwa_no = 0;
@@ -499,7 +451,7 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 	  {
 
     /***************************************/
-    /* clustered interconnect architecture */
+	      /* clustered interconnect architecture */
     /***************************************/
 
 
@@ -507,13 +459,6 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 		   getAllBus ())
 		{
 
-		    TraceManager.addDev ("VGSB initiators: " +
-					 TopCellGenerator.avatardd.
-					 getNb_init ());
-		    TraceManager.addDev ("VGSB targets: " +
-					 TopCellGenerator.avatardd.
-					 getNb_target ());
-		    
 		    declaration +=
 			"soclib::caba::VciVgsb<vci_param>  vgsb(\"" +
 			bus.getBusName () + "\"" + " , maptab, " +
@@ -526,8 +471,12 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 	    for (AvatarVgmn vgmn:TopCellGenerator.avatardd.
 		   getAllVgmn ())
 		{
-		    TraceManager.addDev ("VGMN initiators: " + nb_clusters);
-		    TraceManager.addDev ("VGMN targets: " +nb_clusters);
+		    TraceManager.addDev ("initiators: " +
+					 TopCellGenerator.avatardd.
+					 getNb_init ());
+		    TraceManager.addDev ("targets: " +
+					 TopCellGenerator.avatardd.
+					 getNb_target ());
 
 		    declaration +=
 			"soclib::caba::VciVgmn<vci_param> vgmn (\"" +
@@ -535,18 +484,34 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 			nb_clusters + "," + nb_clusters + "," +
 			vgmn.getMinLatency () + "," + vgmn.getFifoDepth () +
 			");" + CR2;
+
 		}
 
-	     
+	      int i = 0;
 	    for (AvatarCrossbar crossbar:TopCellGenerator.avatardd.
-		   getAllCrossbar())
-		{		  	   
-		    
-		    int cluster_no  = crossbar.getClusterIndex ();	
-		    TraceManager.addDev ("CROSSBAR" +cluster_no+" cpus: " +
-					 cpus_in_cluster(avatardd, cluster_no)					 );
-		    TraceManager.addDev ("CROSSBAR " +cluster_no+" rams: " +
-				rams_in_cluster(avatardd, cluster_no) 		 );
+		   getAllCrossbar
+		   ())
+		{
+
+		    crossbar.setClusterIndex (i);
+
+		    if (crossbar.getClusterIndex () == 0)
+		      {
+			  crossbar.setNbOfAttachedInitiators (nb_clusters);
+			  crossbar.setNbOfAttachedTargets (13);
+		      }
+		    else
+		      {
+
+			  crossbar.setNbOfAttachedInitiators (1);
+			  crossbar.setNbOfAttachedTargets (1);
+		      }
+
+		    TraceManager.addDev ("initiators: " +
+					 crossbar.
+					 getNbOfAttachedInitiators ());
+		    TraceManager.addDev ("targets: " +
+					 crossbar.getNbOfAttachedTargets ());
 
 		    declaration +=
 			"soclib::caba::VciLocalCrossbar<vci_param> crossbar" +
@@ -554,10 +519,17 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 			crossbar.getCrossbarName () + "\"" +
 			" , maptab, " + crossbar.getClusterIndex () +
 			"," + crossbar.getClusterIndex () + ", " +
-			cpus_in_cluster(avatardd, cluster_no) + ", " +
-			rams_in_cluster(avatardd, cluster_no) + ");" + CR2;
-		    //if CROSSBAR was not last in input file, update here
-		 
+			crossbar.getNbOfAttachedInitiators () + ", " +
+			crossbar.getNbOfAttachedTargets () + ");" + CR2;
+
+		    //if CROSSBAR was not last in input file, update here 
+		    crossbar.
+			setNbOfAttachedInitiators (TopCellGenerator.avatardd.
+						   getNb_init ());
+		    crossbar.
+			setNbOfAttachedTargets (TopCellGenerator.avatardd.
+						getNb_target ());
+		    i++;
 		}
 	  }
 	int i = 0;
