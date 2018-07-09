@@ -44,8 +44,8 @@ import avatartranslator.AvatarState;
 
 public class SecurityPattern {
 
-    public String name;
-    public String type;
+    public String name="";
+    public String type="";
     public int overhead=0;
     public int size=0;
     public int encTime=0;
@@ -88,8 +88,12 @@ public class SecurityPattern {
 	s += "\" encTime=\""  + encTime;
 	s += "\" decTime=\""  + decTime;
 	s += "\" originTask=\""  + originTask;
-	s += "\" state1=\""  + state1.getName();
-	s += "\" state2=\""  + state2.getName();
+	if (state1!=null){
+		s += "\" state1=\""  + state1.getName();
+	}
+	if (state2!=null){
+		s += "\" state2=\""  + state2.getName();
+	}
 	s += "\" nonce=\""  + nonce;
 	s += "\" formula=\""  + formula;
 	s += "\" key=\""  + key;

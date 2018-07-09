@@ -92,7 +92,10 @@ public class TML2Avatar {
 
     public TML2Avatar(TMLMapping<?> tmlmap, boolean modelcheck, boolean sec) {
         this.tmlmap = tmlmap;
+
         this.tmlmodel = tmlmap.getTMLModeling();
+        
+     
         allStates = new ArrayList<String>();
         attrsToCheck = new ArrayList<String>();
         mc = modelcheck;
@@ -1134,10 +1137,21 @@ public class TML2Avatar {
                             List<String> tmp = new ArrayList<String>();
                             secChannelMap.put(ae.securityPattern.name, tmp);
                         }
+                        
                         secChannelMap.get(ae.securityPattern.name).add(ch.getName());
-                        as.addValue(ae.securityPattern.name + "_encrypted");
-                        AvatarAttribute data = new AvatarAttribute(ae.securityPattern.name + "_encrypted", AvatarType.INTEGER, block, null);
-                        block.addAttribute(data);
+                        if (aec.getEncForm()){
+                        	as.addValue(ae.securityPattern.name + "_encrypted");
+                        	AvatarAttribute data = new AvatarAttribute(ae.securityPattern.name + "_encrypted", AvatarType.INTEGER, block, null);
+                        	block.addAttribute(data);
+                        }
+                        else {
+							if (block.getAvatarAttributeWithName(ae.securityPattern.name) == null){
+                       			AvatarAttribute data = new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null);
+								block.addAttribute(data);
+							}
+							as.addValue(ae.securityPattern.name);
+ 	                       
+                        }
                     }
                 } else {
                     as.addValue(getName(ch.getName()) + "_chData");
@@ -1217,14 +1231,21 @@ public class TML2Avatar {
                         AvatarAttribute data = new AvatarAttribute("encryptedKey_" + ae.securityPattern.key, AvatarType.INTEGER, block, null);
                         block.addAttribute(data);
                     } else {
-                        //send encrypted data or unecrypted security pattern
+                        //send encrypted data 
                         //
-                        //if (){
-                      //  }
-                      //  else {
+                        if (aec.getEncForm()){
                         	as.addValue(ae.securityPattern.name + "_encrypted");
                         	AvatarAttribute data = new AvatarAttribute(ae.securityPattern.name + "_encrypted", AvatarType.INTEGER, block, null);
                         	block.addAttribute(data);
+						}
+                        else {
+                        	//Send unecrypted form
+                        	if (block.getAvatarAttributeWithName(ae.securityPattern.name) == null){
+                       			AvatarAttribute data = new AvatarAttribute(ae.securityPattern.name, AvatarType.INTEGER, block, null);
+                        		block.addAttribute(data);
+                        	}
+                        	as.addValue(ae.securityPattern.name);
+                        }
                         
                         if (!secChannelMap.containsKey(ae.securityPattern.name)) {
                             List<String> tmp = new ArrayList<String>();
@@ -1714,8 +1735,21 @@ public class TML2Avatar {
 			for (String s: signalAuthOriginMap.keySet()){
 				if (signalAuthDestMap.containsKey(s)){
 					AvatarPragmaAuthenticity pragma = new AvatarPragmaAuthenticity("#Authenticity " + signalAuthOriginMap.get(s).getName() + " " + signalAuthDestMap.get(s).getName(), signalAuthOriginMap.get(s).getReferenceObject(), signalAuthOriginMap.get(s), signalAuthDestMap.get(s));
-					//System.out.println("adding pragma " + s);
-					avspec.addPragma(pragma);
+					if (secChannelMap.containsKey(s)){
+						for (String channel: secChannelMap.get(s)){
+							TMLChannel ch = tmlmodel.getChannelByShortName(channel);
+							if (ch!=null){
+								if (ch.checkAuth){
+									avspec.addPragma(pragma);	
+									break;
+								}
+							}
+						}
+						
+					}
+					else {
+						avspec.addPragma(pragma);
+					}
 				}
 			}
 

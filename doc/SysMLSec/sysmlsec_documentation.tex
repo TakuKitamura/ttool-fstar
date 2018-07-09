@@ -321,11 +321,21 @@ If you double-click on the SE operator of T1, the following windows should open 
 \item The use of \textbf{cryptographic material}: keys, nonces and precise algorithm (AES, etc.) 
 \end{itemize}
 
+Channels can be tagged with cryptographic configurations on the Security tab, with the options shown in Figure \ref{fig:channelsec}. By default, channels tagged with cryptographic configurations will send the data in their encrypted form. However, with the use of Hardware Security Modules described below, it may be necessary to send the unencrypted data to the HSM to encrypt, where 'Encrypted form' needs to be marked 'No'. In addition, if a task is to be an attacker task (see our paper in Modelsward 2018), channels can also be marked as `attacker channels'. If a channel sends data to be secured in the unencrypted form, on the activity diagram, the Cryptographic Configuration name is displayed in red. 
+
 
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=0.7\textwidth]{fig/ccdialog.png}
 \caption{Cryptographic configuration dialog window} \label{fig:ccdialog}
+\end{figure*}
+
+
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{fig/channelsecurityoptions.png}
+\caption{Channel security options dialog window} \label{fig:channelsec}
 \end{figure*}
 
 Let's now consider a third mapping (named "NonSecureArchitectureWithSecureFV") which basically consists in mapping the secure tasks to the non secure architecture (i.e., the one with the public bus). The result of the security verification of this system is given in Figure \ref{fig:fv3_result}. The confidentiality property is now verified.

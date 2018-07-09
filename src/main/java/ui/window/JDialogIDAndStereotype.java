@@ -67,6 +67,7 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
     private Color[] colors;
     private String currentName;
     private int currentStereotype;
+    private Color defaultColor;
 
 
     private JPanel panel1;
@@ -84,7 +85,7 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
     /** Creates new form  */
     public JDialogIDAndStereotype(Frame _f, String _title,
                                   String[] _availableStereotypes, String _currentName,
-                                  int _currentStereotype, Color[] _colors) {
+                                  int _currentStereotype, Color[] _colors, Color _defaultColor) {
 
         super(_f, _title, true);
 
@@ -92,6 +93,7 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
         colors = _colors;
         currentName = _currentName;
         currentStereotype = _currentStereotype;
+        defaultColor = _defaultColor;
 
         initComponents();
         myInitComponents();
@@ -158,7 +160,7 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
         panel1.add(colorButton, c1);
 
         useDefaultColor = new JButton("Use default color");
-        useDefaultColor.setBackground(ColorManager.AVATAR_REQUIREMENT_TOP);
+        useDefaultColor.setBackground(defaultColor);
         useDefaultColor.addActionListener(this);
         panel1.add(useDefaultColor, c1);
         //panel1.setEditable(true);
@@ -200,7 +202,7 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
     }
 
     public void selectDefaultColor() {
-        colorButton.setBackground(ColorManager.AVATAR_REQUIREMENT_TOP);
+        colorButton.setBackground(defaultColor);
     }
 
     public void selectStereotype() {
