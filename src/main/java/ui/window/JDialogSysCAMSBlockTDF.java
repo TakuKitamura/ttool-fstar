@@ -237,7 +237,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		gridBag.setConstraints(nameTextField, constraints);
 		attributesBoxPanel.add(nameTextField);
 
-		JLabel periodLabel = new JLabel("Period Tp : ");
+		JLabel periodLabel = new JLabel("Period Tm : ");
 		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(periodLabel, constraints);
