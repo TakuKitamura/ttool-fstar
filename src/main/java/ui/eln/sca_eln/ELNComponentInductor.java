@@ -80,9 +80,8 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 
 	private ELNPortTerminal term0;
 	private ELNPortTerminal term1;
-	
-	public ELNComponentInductor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-			TGComponent _father, TDiagramPanel _tdp) {
+
+	public ELNComponentInductor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(100, 20);
@@ -114,23 +113,20 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 
 	public void internalDrawing(Graphics g) {
 		if (f == true) {
-			term0 = new ELNPortTerminal(x, y + height / 2 - height / 4, this.minX, this.maxX, this.minY, this.maxY,
-					false, this.father, this.tdp);
+			term0 = new ELNPortTerminal(x, y + height / 2 - height / 4, this.minX, this.maxX, this.minY, this.maxY,	false, this.father, this.tdp);
 			term0.setValue("p");
 			getTDiagramPanel().getComponentList().add(term0);
 			term0.getTDiagramPanel().addComponent(term0, x, y + height / 2 - height / 4, true, false);
-			term1 = new ELNPortTerminal(x + width - height / 2, y + height / 2 - height / 4, this.minX, this.maxX,
-					this.minY, this.maxY, false, this.father, this.tdp);
+			term1 = new ELNPortTerminal(x + width - height / 2, y + height / 2 - height / 4, this.minX, this.maxX, this.minY, this.maxY, false, this.father, this.tdp);
 			term1.setValue("n");
 			getTDiagramPanel().getComponentList().add(term1);
-			term1.getTDiagramPanel().addComponent(term1, x + width - height / 2, y + height / 2 - height / 4, true,
-					false);
+			term1.getTDiagramPanel().addComponent(term1, x + width - height / 2, y + height / 2 - height / 4, true, false);
 			old = width;
 			width = height;
 			height = old;
 			f = false;
 		}
-		
+
 		Font f = g.getFont();
 		Font fold = f;
 
@@ -756,7 +752,7 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 	public void setFirst(boolean _first) {
 		first = _first;
 	}
-	
+
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
 		return tgc instanceof ELNPortTerminal;
 	}

@@ -51,16 +51,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class ELNComponentVoltageControlledCurrentSource Voltage controlled current
- * source to be used in ELN diagrams Creation: 13/06/2018
- * 
+ * Class ELNComponentVoltageControlledCurrentSource 
+ * Voltage controlled current source to be used in ELN diagrams 
+ * Creation: 13/06/2018
  * @version 1.0 13/06/2018
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentVoltageControlledCurrentSource extends
-		TGCScalableWithInternalComponent implements ActionListener,
-		SwallowTGComponent, ELNComponent {
+public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithInternalComponent implements ActionListener, SwallowTGComponent, ELNComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -75,8 +73,7 @@ public class ELNComponentVoltageControlledCurrentSource extends
 	private String unit;
 
 	private int position = 0;
-	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false,
-			fh_1_3 = false;
+	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false, fh_1_3 = false;
 	private int old;
 	private boolean first, f = true;
 
@@ -85,9 +82,7 @@ public class ELNComponentVoltageControlledCurrentSource extends
 	private ELNPortTerminal term2;
 	private ELNPortTerminal term3;
 
-	public ELNComponentVoltageControlledCurrentSource(int _x, int _y,
-			int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-			TGComponent _father, TDiagramPanel _tdp) {
+	public ELNComponentVoltageControlledCurrentSource(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(120, 80);
@@ -117,36 +112,25 @@ public class ELNComponentVoltageControlledCurrentSource extends
 
 	public void internalDrawing(Graphics g) {
 		if (f == true) {
-			term0 = new ELNPortTerminal(x, y, this.minX, this.maxX, this.minY,
-					this.maxY, false, this.father, this.tdp);
+			term0 = new ELNPortTerminal(x, y, this.minX, this.maxX, this.minY, this.maxY, false, this.father, this.tdp);
 			term0.setValue("ncp");
 			getTDiagramPanel().getComponentList().add(term0);
 			term0.getTDiagramPanel().addComponent(term0, x, y, true, false);
 
-			term1 = new ELNPortTerminal(x + width - width / 12, y, this.minX,
-					this.maxX, this.minY, this.maxY, false, this.father,
-					this.tdp);
+			term1 = new ELNPortTerminal(x + width - width / 12, y, this.minX, this.maxX, this.minY, this.maxY, false, this.father, this.tdp);
 			term1.setValue("np");
 			getTDiagramPanel().getComponentList().add(term1);
-			term1.getTDiagramPanel().addComponent(term1,
-					x + width - width / 12, y, true, false);
+			term1.getTDiagramPanel().addComponent(term1, x + width - width / 12, y, true, false);
 
-			term2 = new ELNPortTerminal(x, y + height - height / 8, this.minX,
-					this.maxX, this.minY, this.maxY, false, this.father,
-					this.tdp);
+			term2 = new ELNPortTerminal(x, y + height - height / 8, this.minX, this.maxX, this.minY, this.maxY, false, this.father, this.tdp);
 			term2.setValue("ncn");
 			getTDiagramPanel().getComponentList().add(term2);
-			term2.getTDiagramPanel().addComponent(term2, x,
-					y + height - height / 8, true, false);
+			term2.getTDiagramPanel().addComponent(term2, x, y + height - height / 8, true, false);
 
-			term3 = new ELNPortTerminal(x + width - width / 12, y + height
-					- height / 8, this.minX, this.maxX, this.minY, this.maxY,
-					false, this.father, this.tdp);
+			term3 = new ELNPortTerminal(x + width - width / 12, y + height - height / 8, this.minX, this.maxX, this.minY, this.maxY, false, this.father, this.tdp);
 			term3.setValue("nn");
 			getTDiagramPanel().getComponentList().add(term3);
-			term3.getTDiagramPanel().addComponent(term3,
-					x + width - width / 12, y + height - height / 8, true,
-					false);
+			term3.getTDiagramPanel().addComponent(term3, x + width - width / 12, y + height - height / 8, true, false);
 			old = width;
 			width = height;
 			height = old;
@@ -158,10 +142,7 @@ public class ELNComponentVoltageControlledCurrentSource extends
 
 		if (this.rescaled && !this.tdp.isScaled()) {
 			this.rescaled = false;
-			int maxCurrentFontSize = Math.max(
-					0,
-					Math.min(this.height,
-							(int) (this.maxFontSize * this.tdp.getZoom())));
+			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
 			f = f.deriveFont((float) maxCurrentFontSize);
 
 			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
@@ -216,30 +197,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term0.setMoveCd(x, y, true);
 				term1.setMoveCd(x + width - width / 12, y, true);
 				term2.setMoveCd(x, y + height - height / 8, true);
-				term3.setMoveCd(x + width - width / 12,
-						y + height - height / 8, true);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term3.setMoveCd(x + width - width / 12, y + height - height / 8, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term0.getValue(), x - height / 8 - sw0, y);
 				g.drawString(term1.getValue(), x + width + height / 8, y);
-				g.drawString(term2.getValue(), x - height / 8 - sw2, y + height
-						+ sh2);
-				g.drawString(term3.getValue(), x + width + height / 8, y
-						+ height + sh3);
+				g.drawString(term2.getValue(), x - height / 8 - sw2, y + height + sh2);
+				g.drawString(term3.getValue(), x + width + height / 8, y + height + sh3);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
@@ -249,30 +219,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term1.setMoveCd(x, y, true);
 				term0.setMoveCd(x + width - width / 12, y, true);
 				term3.setMoveCd(x, y + height - height / 8, true);
-				term2.setMoveCd(x + width - width / 12,
-						y + height - height / 8, true);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term2.setMoveCd(x + width - width / 12, y + height - height / 8, true);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term1.getValue(), x - height / 8 - sw1, y);
 				g.drawString(term0.getValue(), x + width + height / 8, y);
-				g.drawString(term3.getValue(), x - height / 8 - sw3, y + height
-						+ sh3);
-				g.drawString(term2.getValue(), x + width + height / 8, y
-						+ height + sh2);
+				g.drawString(term3.getValue(), x - height / 8 - sw3, y + height + sh3);
+				g.drawString(term2.getValue(), x + width + height / 8, y + height + sh2);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -282,30 +241,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term2.setMoveCd(x, y, true);
 				term3.setMoveCd(x + width - width / 12, y, true);
 				term0.setMoveCd(x, y + height - height / 8, true);
-				term1.setMoveCd(x + width - width / 12,
-						y + height - height / 8, true);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term1.setMoveCd(x + width - width / 12, y + height - height / 8, true);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term2.getValue(), x - height / 8 - sw2, y);
 				g.drawString(term3.getValue(), x + width + height / 8, y);
-				g.drawString(term0.getValue(), x - height / 8 - sw0, y + height
-						+ sh0);
-				g.drawString(term1.getValue(), x + width + height / 8, y
-						+ height + sh1);
+				g.drawString(term0.getValue(), x - height / 8 - sw0, y + height + sh0);
+				g.drawString(term1.getValue(), x + width + height / 8, y + height + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -315,30 +263,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term3.setMoveCd(x, y, true);
 				term2.setMoveCd(x + width - width / 12, y, true);
 				term1.setMoveCd(x, y + height - height / 8, true);
-				term0.setMoveCd(x + width - width / 12,
-						y + height - height / 8, true);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term0.setMoveCd(x + width - width / 12, y + height - height / 8, true);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term3.getValue(), x - height / 8 - sw3, y);
 				g.drawString(term2.getValue(), x + width + height / 8, y);
-				g.drawString(term1.getValue(), x - height / 8 - sw1, y + height
-						+ sh1);
-				g.drawString(term0.getValue(), x + width + height / 8, y
-						+ height + sh0);
+				g.drawString(term1.getValue(), x - height / 8 - sw1, y + height + sh1);
+				g.drawString(term0.getValue(), x + width + height / 8, y + height + sh0);
 			}
 		} else if (position == 1) {
 			if (first == false) {
@@ -372,30 +309,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term2.setMoveCd(x, y, true);
 				term0.setMoveCd(x + width - width / 8, y, true);
 				term3.setMoveCd(x, y + height - height / 12, true);
-				term1.setMoveCd(x + width - width / 8,
-						y + height - height / 12, true);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term1.setMoveCd(x + width - width / 8, y + height - height / 12, true);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term2.getValue(), x - width / 8 - sw2, y);
 				g.drawString(term0.getValue(), x + width + width / 8, y);
-				g.drawString(term3.getValue(), x - width / 8 - sw3, y + height
-						+ sh3);
-				g.drawString(term1.getValue(), x + width + width / 8, y
-						+ height + sh1);
+				g.drawString(term3.getValue(), x - width / 8 - sw3, y + height + sh3);
+				g.drawString(term1.getValue(), x + width + width / 8, y + height + sh1);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
@@ -405,30 +331,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term3.setMoveCd(x, y, true);
 				term1.setMoveCd(x + width - width / 8, y, true);
 				term2.setMoveCd(x, y + height - height / 12, true);
-				term0.setMoveCd(x + width - width / 8,
-						y + height - height / 12, true);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term0.setMoveCd(x + width - width / 8, y + height - height / 12, true);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term3.getValue(), x - width / 8 - sw3, y);
 				g.drawString(term1.getValue(), x + width + width / 8, y);
-				g.drawString(term2.getValue(), x - width / 8 - sw2, y + height
-						+ sh2);
-				g.drawString(term0.getValue(), x + width + width / 8, y
-						+ height + sh0);
+				g.drawString(term2.getValue(), x - width / 8 - sw2, y + height + sh2);
+				g.drawString(term0.getValue(), x + width + width / 8, y + height + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -438,30 +353,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term0.setMoveCd(x, y, true);
 				term2.setMoveCd(x + width - width / 8, y, true);
 				term1.setMoveCd(x, y + height - height / 12, true);
-				term3.setMoveCd(x + width - width / 8,
-						y + height - height / 12, true);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term3.setMoveCd(x + width - width / 8, y + height - height / 12, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term0.getValue(), x - width / 8 - sw0, y);
 				g.drawString(term2.getValue(), x + width + width / 8, y);
-				g.drawString(term1.getValue(), x - width / 8 - sw1, y + height
-						+ sh1);
-				g.drawString(term3.getValue(), x + width + width / 8, y
-						+ height + sh3);
+				g.drawString(term1.getValue(), x - width / 8 - sw1, y + height + sh1);
+				g.drawString(term3.getValue(), x + width + width / 8, y + height + sh3);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -471,30 +375,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term1.setMoveCd(x, y, true);
 				term3.setMoveCd(x + width - width / 8, y, true);
 				term0.setMoveCd(x, y + height - height / 12, true);
-				term2.setMoveCd(x + width - width / 8,
-						y + height - height / 12, true);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term2.setMoveCd(x + width - width / 8, y + height - height / 12, true);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term1.getValue(), x - width / 8 - sw1, y);
 				g.drawString(term3.getValue(), x + width + width / 8, y);
-				g.drawString(term0.getValue(), x - width / 8 - sw0, y + height
-						+ sh0);
-				g.drawString(term2.getValue(), x + width + width / 8, y
-						+ height + sh2);
+				g.drawString(term0.getValue(), x - width / 8 - sw0, y + height + sh0);
+				g.drawString(term2.getValue(), x + width + width / 8, y + height + sh2);
 			}
 		} else if (position == 2) {
 			if (first == false) {
@@ -528,30 +421,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term3.setMoveCd(x, y, true);
 				term2.setMoveCd(x + width - width / 12, y, true);
 				term1.setMoveCd(x, y + height - height / 8, true);
-				term0.setMoveCd(x + width - width / 12,
-						y + height - height / 8, true);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term0.setMoveCd(x + width - width / 12, y + height - height / 8, true);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term3.getValue(), x - height / 8 - sw3, y);
 				g.drawString(term2.getValue(), x + width + height / 8, y);
-				g.drawString(term1.getValue(), x - height / 8 - sw1, y + height
-						+ sh1);
-				g.drawString(term0.getValue(), x + width + height / 8, y
-						+ height + sh0);
+				g.drawString(term1.getValue(), x - height / 8 - sw1, y + height + sh1);
+				g.drawString(term0.getValue(), x + width + height / 8, y + height + sh0);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
@@ -561,30 +443,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term2.setMoveCd(x, y, true);
 				term3.setMoveCd(x + width - width / 12, y, true);
 				term0.setMoveCd(x, y + height - height / 8, true);
-				term1.setMoveCd(x + width - width / 12,
-						y + height - height / 8, true);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term1.setMoveCd(x + width - width / 12, y + height - height / 8, true);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term2.getValue(), x - height / 8 - sw2, y);
 				g.drawString(term3.getValue(), x + width + height / 8, y);
-				g.drawString(term0.getValue(), x - height / 8 - sw0, y + height
-						+ sh0);
-				g.drawString(term1.getValue(), x + width + height / 8, y
-						+ height + sh1);
+				g.drawString(term0.getValue(), x - height / 8 - sw0, y + height + sh0);
+				g.drawString(term1.getValue(), x + width + height / 8, y + height + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -594,30 +465,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term1.setMoveCd(x, y, true);
 				term0.setMoveCd(x + width - width / 12, y, true);
 				term3.setMoveCd(x, y + height - height / 8, true);
-				term2.setMoveCd(x + width - width / 12,
-						y + height - height / 8, true);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term2.setMoveCd(x + width - width / 12, y + height - height / 8, true);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term1.getValue(), x - height / 8 - sw1, y);
 				g.drawString(term0.getValue(), x + width + height / 8, y);
-				g.drawString(term3.getValue(), x - height / 8 - sw3, y + height
-						+ sh3);
-				g.drawString(term2.getValue(), x + width + height / 8, y
-						+ height + sh2);
+				g.drawString(term3.getValue(), x - height / 8 - sw3, y + height + sh3);
+				g.drawString(term2.getValue(), x + width + height / 8, y + height + sh2);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -627,30 +487,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term0.setMoveCd(x, y, true);
 				term1.setMoveCd(x + width - width / 12, y, true);
 				term2.setMoveCd(x, y + height - height / 8, true);
-				term3.setMoveCd(x + width - width / 12,
-						y + height - height / 8, true);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term3.setMoveCd(x + width - width / 12, y + height - height / 8, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term0.getValue(), x - height / 8 - sw0, y);
 				g.drawString(term1.getValue(), x + width + height / 8, y);
-				g.drawString(term2.getValue(), x - height / 8 - sw2, y + height
-						+ sh2);
-				g.drawString(term3.getValue(), x + width + height / 8, y
-						+ height + sh3);
+				g.drawString(term2.getValue(), x - height / 8 - sw2, y + height + sh2);
+				g.drawString(term3.getValue(), x + width + height / 8, y + height + sh3);
 			}
 		} else if (position == 3) {
 			if (first == false) {
@@ -684,30 +533,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term1.setMoveCd(x, y, true);
 				term3.setMoveCd(x + width - width / 8, y, true);
 				term0.setMoveCd(x, y + height - height / 12, true);
-				term2.setMoveCd(x + width - width / 8,
-						y + height - height / 12, true);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term2.setMoveCd(x + width - width / 8, y + height - height / 12, true);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term1.getValue(), x - width / 8 - sw1, y);
 				g.drawString(term3.getValue(), x + width + width / 8, y);
-				g.drawString(term0.getValue(), x - width / 8 - sw0, y + height
-						+ sh0);
-				g.drawString(term2.getValue(), x + width + width / 8, y
-						+ height + sh2);
+				g.drawString(term0.getValue(), x - width / 8 - sw0, y + height + sh0);
+				g.drawString(term2.getValue(), x + width + width / 8, y + height + sh2);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
@@ -717,30 +555,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term0.setMoveCd(x, y, true);
 				term2.setMoveCd(x + width - width / 8, y, true);
 				term1.setMoveCd(x, y + height - height / 12, true);
-				term3.setMoveCd(x + width - width / 8,
-						y + height - height / 12, true);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term3.setMoveCd(x + width - width / 8, y + height - height / 12, true);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term0.getValue(), x - width / 8 - sw0, y);
 				g.drawString(term2.getValue(), x + width + width / 8, y);
-				g.drawString(term1.getValue(), x - width / 8 - sw1, y + height
-						+ sh1);
-				g.drawString(term3.getValue(), x + width + width / 8, y
-						+ height + sh3);
+				g.drawString(term1.getValue(), x - width / 8 - sw1, y + height + sh1);
+				g.drawString(term3.getValue(), x + width + width / 8, y + height + sh3);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -750,30 +577,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term3.setMoveCd(x, y, true);
 				term1.setMoveCd(x + width - width / 8, y, true);
 				term2.setMoveCd(x, y + height - height / 12, true);
-				term0.setMoveCd(x + width - width / 8,
-						y + height - height / 12, true);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term0.setMoveCd(x + width - width / 8, y + height - height / 12, true);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term3.getValue(), x - width / 8 - sw3, y);
 				g.drawString(term1.getValue(), x + width + width / 8, y);
-				g.drawString(term2.getValue(), x - width / 8 - sw2, y + height
-						+ sh2);
-				g.drawString(term0.getValue(), x + width + width / 8, y
-						+ height + sh0);
+				g.drawString(term2.getValue(), x - width / 8 - sw2, y + height + sh2);
+				g.drawString(term0.getValue(), x + width + width / 8, y + height + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -783,30 +599,19 @@ public class ELNComponentVoltageControlledCurrentSource extends
 				term2.setMoveCd(x, y, true);
 				term0.setMoveCd(x + width - width / 8, y, true);
 				term3.setMoveCd(x, y + height - height / 12, true);
-				term1.setMoveCd(x + width - width / 8,
-						y + height - height / 12, true);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setW(0.0);
-				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setW(1.0);
-				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0)))
-						.setH(0.5);
+				term1.setMoveCd(x + width - width / 8, y + height - height / 12, true);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term2.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term0.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setW(0.0);
+				((ELNConnectingPoint) (term3.getTGConnectingPointAtIndex(0))).setH(0.5);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setW(1.0);
+				((ELNConnectingPoint) (term1.getTGConnectingPointAtIndex(0))).setH(0.5);
 				g.drawString(term2.getValue(), x - width / 8 - sw2, y);
 				g.drawString(term0.getValue(), x + width + width / 8, y);
-				g.drawString(term3.getValue(), x - width / 8 - sw3, y + height
-						+ sh3);
-				g.drawString(term1.getValue(), x + width + width / 8, y
-						+ height + sh1);
+				g.drawString(term3.getValue(), x - width / 8 - sw3, y + height + sh3);
+				g.drawString(term1.getValue(), x + width + width / 8, y + height + sh1);
 			}
 		}
 		g.setColor(c);
@@ -820,40 +625,27 @@ public class ELNComponentVoltageControlledCurrentSource extends
 		int[] ptx1 = { x, x + 2 * width / 6 };
 		int[] pty1 = { y + height - height / 16, y + height - height / 16 };
 		g.drawPolygon(ptx1, pty1, 2);
-		int[] ptx2 = { x + width, x + 4 * width / 6, x + 4 * width / 6,
-				x + 3 * width / 6, x + 4 * width / 6, x + 4 * width / 6,
-				x + width, x + 4 * width / 6, x + 4 * width / 6,
-				x + 5 * width / 6, x + 3 * width / 6, x + 5 * width / 6,
-				x + 4 * width / 6, x + 4 * width / 6 };
-		int[] pty2 = { y + height / 16, y + height / 16, y + height / 4,
-				y + 2 * height / 4, y + 3 * height / 4,
-				y + height - height / 16, y + height - height / 16,
-				y + height - height / 16, y + 3 * height / 4,
-				y + 2 * height / 4, y + 2 * height / 4, y + 2 * height / 4,
-				y + height / 4, y + height / 16 };
+		int[] ptx2 = { x + width, x + 4 * width / 6, x + 4 * width / 6, x + 3 * width / 6, x + 4 * width / 6,
+				x + 4 * width / 6, x + width, x + 4 * width / 6, x + 4 * width / 6, x + 5 * width / 6,
+				x + 3 * width / 6, x + 5 * width / 6, x + 4 * width / 6, x + 4 * width / 6 };
+		int[] pty2 = { y + height / 16, y + height / 16, y + height / 4, y + 2 * height / 4, y + 3 * height / 4,
+				y + height - height / 16, y + height - height / 16, y + height - height / 16, y + 3 * height / 4,
+				y + 2 * height / 4, y + 2 * height / 4, y + 2 * height / 4, y + height / 4, y + height / 16 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + 2 * width / 6 - width / 12 - width / 24,
-				x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12,
-				x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12,
+		int[] ptx3 = { x + 2 * width / 6 - width / 12 - width / 24, x + 2 * width / 6 - width / 12,
+				x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12,
 				x + 2 * width / 6 - width / 24 };
-		int[] pty3 = { y + height / 4, y + height / 4,
-				y + height / 4 - height / 16, y + height / 4 + height / 16,
+		int[] pty3 = { y + height / 4, y + height / 4, y + height / 4 - height / 16, y + height / 4 + height / 16,
 				y + height / 4, y + height / 4 };
 		g.drawPolygon(ptx3, pty3, 6);
-		int[] ptx4 = { x + 2 * width / 6 - width / 12 - width / 24,
-				x + 2 * width / 6 - width / 24 };
+		int[] ptx4 = { x + 2 * width / 6 - width / 12 - width / 24, x + 2 * width / 6 - width / 24 };
 		int[] pty4 = { y + height - height / 4, y + height - height / 4 };
 		g.drawPolygon(ptx4, pty4, 2);
-		int[] ptx5 = { x + 5 * width / 6 + width / 12 + width / 24,
-				x + 5 * width / 6 + width / 12 + width / 24,
-				x + 5 * width / 6 + width / 12,
-				x + 5 * width / 6 + width / 12 + width / 24,
-				x + 5 * width / 6 + width / 6,
-				x + 5 * width / 6 + width / 12 + width / 24 };
-		int[] pty5 = { y + height / 4, y + 3 * height / 4 - height / 8,
-				y + 3 * height / 4 - height / 8, y + 3 * height / 4,
-				y + 3 * height / 4 - height / 8,
-				y + 3 * height / 4 - height / 8 };
+		int[] ptx5 = { x + 5 * width / 6 + width / 12 + width / 24, x + 5 * width / 6 + width / 12 + width / 24,
+				x + 5 * width / 6 + width / 12, x + 5 * width / 6 + width / 12 + width / 24,
+				x + 5 * width / 6 + width / 6, x + 5 * width / 6 + width / 12 + width / 24 };
+		int[] pty5 = { y + height / 4, y + 3 * height / 4 - height / 8, y + 3 * height / 4 - height / 8,
+				y + 3 * height / 4, y + 3 * height / 4 - height / 8, y + 3 * height / 4 - height / 8 };
 		g.drawPolygon(ptx5, pty5, 6);
 		g.fillPolygon(ptx5, pty5, 6);
 	}
@@ -865,39 +657,26 @@ public class ELNComponentVoltageControlledCurrentSource extends
 		int[] ptx1 = { x, x + 2 * width / 6 };
 		int[] pty1 = { y + height - height / 16, y + height - height / 16 };
 		g.drawPolygon(ptx1, pty1, 2);
-		int[] ptx2 = { x + width, x + 4 * width / 6, x + 4 * width / 6,
-				x + 3 * width / 6, x + 4 * width / 6, x + 4 * width / 6,
-				x + width, x + 4 * width / 6, x + 4 * width / 6,
-				x + 5 * width / 6, x + 3 * width / 6, x + 5 * width / 6,
-				x + 4 * width / 6, x + 4 * width / 6 };
-		int[] pty2 = { y + height / 16, y + height / 16, y + height / 4,
-				y + 2 * height / 4, y + 3 * height / 4,
-				y + height - height / 16, y + height - height / 16,
-				y + height - height / 16, y + 3 * height / 4,
-				y + 2 * height / 4, y + 2 * height / 4, y + 2 * height / 4,
-				y + height / 4, y + height / 16 };
+		int[] ptx2 = { x + width, x + 4 * width / 6, x + 4 * width / 6, x + 3 * width / 6, x + 4 * width / 6,
+				x + 4 * width / 6, x + width, x + 4 * width / 6, x + 4 * width / 6, x + 5 * width / 6,
+				x + 3 * width / 6, x + 5 * width / 6, x + 4 * width / 6, x + 4 * width / 6 };
+		int[] pty2 = { y + height / 16, y + height / 16, y + height / 4, y + 2 * height / 4, y + 3 * height / 4,
+				y + height - height / 16, y + height - height / 16, y + height - height / 16, y + 3 * height / 4,
+				y + 2 * height / 4, y + 2 * height / 4, y + 2 * height / 4, y + height / 4, y + height / 16 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + 2 * width / 6 - width / 12 - width / 24,
-				x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12,
-				x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12,
+		int[] ptx3 = { x + 2 * width / 6 - width / 12 - width / 24, x + 2 * width / 6 - width / 12,
+				x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12,
 				x + 2 * width / 6 - width / 24 };
-		int[] pty3 = { y + height - height / 4, y + height - height / 4,
-				y + height - height / 4 + height / 16,
-				y + height - height / 4 - height / 16, y + height - height / 4,
-				y + height - height / 4 };
+		int[] pty3 = { y + height - height / 4, y + height - height / 4, y + height - height / 4 + height / 16,
+				y + height - height / 4 - height / 16, y + height - height / 4, y + height - height / 4 };
 		g.drawPolygon(ptx3, pty3, 6);
-		int[] ptx4 = { x + 2 * width / 6 - width / 12 - width / 24,
-				x + 2 * width / 6 - width / 24 };
+		int[] ptx4 = { x + 2 * width / 6 - width / 12 - width / 24, x + 2 * width / 6 - width / 24 };
 		int[] pty4 = { y + height / 4, y + height / 4 };
 		g.drawPolygon(ptx4, pty4, 2);
-		int[] ptx5 = { x + 5 * width / 6 + width / 12 + width / 24,
-				x + 5 * width / 6 + width / 12 + width / 24,
-				x + 5 * width / 6 + width / 12,
-				x + 5 * width / 6 + width / 12 + width / 24,
-				x + 5 * width / 6 + width / 6,
-				x + 5 * width / 6 + width / 12 + width / 24 };
-		int[] pty5 = { y + 3 * height / 4, y + height / 4 + height / 8,
-				y + height / 4 + height / 8, y + height / 4,
+		int[] ptx5 = { x + 5 * width / 6 + width / 12 + width / 24, x + 5 * width / 6 + width / 12 + width / 24,
+				x + 5 * width / 6 + width / 12, x + 5 * width / 6 + width / 12 + width / 24,
+				x + 5 * width / 6 + width / 6, x + 5 * width / 6 + width / 12 + width / 24 };
+		int[] pty5 = { y + 3 * height / 4, y + height / 4 + height / 8, y + height / 4 + height / 8, y + height / 4,
 				y + height / 4 + height / 8, y + height / 4 + height / 8 };
 		g.drawPolygon(ptx5, pty5, 6);
 		g.fillPolygon(ptx5, pty5, 6);
@@ -910,38 +689,26 @@ public class ELNComponentVoltageControlledCurrentSource extends
 		int[] ptx1 = { x + 4 * width / 6, x + width };
 		int[] pty1 = { y + height - height / 16, y + height - height / 16 };
 		g.drawPolygon(ptx1, pty1, 2);
-		int[] ptx2 = { x, x + 2 * width / 6, x + 2 * width / 6, x + width / 6,
-				x + 2 * width / 6, x + 2 * width / 6, x, x + 2 * width / 6,
-				x + 2 * width / 6, x + 3 * width / 6, x + width / 6,
-				x + 3 * width / 6, x + 2 * width / 6, x + 2 * width / 6 };
-		int[] pty2 = { y + height / 16, y + height / 16, y + height / 4,
-				y + 2 * height / 4, y + 3 * height / 4,
-				y + height - height / 16, y + height - height / 16,
-				y + height - height / 16, y + 3 * height / 4,
-				y + 2 * height / 4, y + 2 * height / 4, y + 2 * height / 4,
-				y + height / 4, y + height / 16 };
+		int[] ptx2 = { x, x + 2 * width / 6, x + 2 * width / 6, x + width / 6, x + 2 * width / 6, x + 2 * width / 6, x,
+				x + 2 * width / 6, x + 2 * width / 6, x + 3 * width / 6, x + width / 6, x + 3 * width / 6,
+				x + 2 * width / 6, x + 2 * width / 6 };
+		int[] pty2 = { y + height / 16, y + height / 16, y + height / 4, y + 2 * height / 4, y + 3 * height / 4,
+				y + height - height / 16, y + height - height / 16, y + height - height / 16, y + 3 * height / 4,
+				y + 2 * height / 4, y + 2 * height / 4, y + 2 * height / 4, y + height / 4, y + height / 16 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + 4 * width / 6 + width / 24,
-				x + 4 * width / 6 + width / 12, x + 4 * width / 6 + width / 12,
+		int[] ptx3 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12, x + 4 * width / 6 + width / 12,
 				x + 4 * width / 6 + width / 12, x + 4 * width / 6 + width / 12,
 				x + 4 * width / 6 + width / 12 + width / 24 };
-		int[] pty3 = { y + height - height / 4, y + height - height / 4,
-				y + height - height / 4 + height / 16,
-				y + height - height / 4 - height / 16, y + height - height / 4,
-				y + height - height / 4 };
+		int[] pty3 = { y + height - height / 4, y + height - height / 4, y + height - height / 4 + height / 16,
+				y + height - height / 4 - height / 16, y + height - height / 4, y + height - height / 4 };
 		g.drawPolygon(ptx3, pty3, 6);
-		int[] ptx4 = { x + 4 * width / 6 + width / 24,
-				x + 4 * width / 6 + width / 12 + width / 24 };
+		int[] ptx4 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12 + width / 24 };
 		int[] pty4 = { y + height / 4, y + height / 4 };
 		g.drawPolygon(ptx4, pty4, 2);
-		int[] ptx5 = { x + width / 6 - width / 12 - width / 24,
-				x + width / 6 - width / 12 - width / 24,
-				x + width / 6 - width / 12,
-				x + width / 6 - width / 12 - width / 24,
-				x + width / 6 - width / 6,
+		int[] ptx5 = { x + width / 6 - width / 12 - width / 24, x + width / 6 - width / 12 - width / 24,
+				x + width / 6 - width / 12, x + width / 6 - width / 12 - width / 24, x + width / 6 - width / 6,
 				x + width / 6 - width / 12 - width / 24 };
-		int[] pty5 = { y + 3 * height / 4, y + height / 4 + height / 8,
-				y + height / 4 + height / 8, y + height / 4,
+		int[] pty5 = { y + 3 * height / 4, y + height / 4 + height / 8, y + height / 4 + height / 8, y + height / 4,
 				y + height / 4 + height / 8, y + height / 4 + height / 8 };
 		g.drawPolygon(ptx5, pty5, 6);
 		g.fillPolygon(ptx5, pty5, 6);
@@ -954,39 +721,27 @@ public class ELNComponentVoltageControlledCurrentSource extends
 		int[] ptx1 = { x + 4 * width / 6, x + width };
 		int[] pty1 = { y + height - height / 16, y + height - height / 16 };
 		g.drawPolygon(ptx1, pty1, 2);
-		int[] ptx2 = { x, x + 2 * width / 6, x + 2 * width / 6, x + width / 6,
-				x + 2 * width / 6, x + 2 * width / 6, x, x + 2 * width / 6,
-				x + 2 * width / 6, x + 3 * width / 6, x + width / 6,
-				x + 3 * width / 6, x + 2 * width / 6, x + 2 * width / 6 };
-		int[] pty2 = { y + height / 16, y + height / 16, y + height / 4,
-				y + 2 * height / 4, y + 3 * height / 4,
-				y + height - height / 16, y + height - height / 16,
-				y + height - height / 16, y + 3 * height / 4,
-				y + 2 * height / 4, y + 2 * height / 4, y + 2 * height / 4,
-				y + height / 4, y + height / 16 };
+		int[] ptx2 = { x, x + 2 * width / 6, x + 2 * width / 6, x + width / 6, x + 2 * width / 6, x + 2 * width / 6, x,
+				x + 2 * width / 6, x + 2 * width / 6, x + 3 * width / 6, x + width / 6, x + 3 * width / 6,
+				x + 2 * width / 6, x + 2 * width / 6 };
+		int[] pty2 = { y + height / 16, y + height / 16, y + height / 4, y + 2 * height / 4, y + 3 * height / 4,
+				y + height - height / 16, y + height - height / 16, y + height - height / 16, y + 3 * height / 4,
+				y + 2 * height / 4, y + 2 * height / 4, y + 2 * height / 4, y + height / 4, y + height / 16 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + 4 * width / 6 + width / 24,
-				x + 4 * width / 6 + width / 12, x + 4 * width / 6 + width / 12,
+		int[] ptx3 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12, x + 4 * width / 6 + width / 12,
 				x + 4 * width / 6 + width / 12, x + 4 * width / 6 + width / 12,
 				x + 4 * width / 6 + width / 12 + width / 24 };
-		int[] pty3 = { y + height / 4, y + height / 4,
-				y + height / 4 - height / 16, y + height / 4 + height / 16,
+		int[] pty3 = { y + height / 4, y + height / 4, y + height / 4 - height / 16, y + height / 4 + height / 16,
 				y + height / 4, y + height / 4 };
 		g.drawPolygon(ptx3, pty3, 6);
-		int[] ptx4 = { x + 4 * width / 6 + width / 24,
-				x + 4 * width / 6 + width / 12 + width / 24 };
+		int[] ptx4 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12 + width / 24 };
 		int[] pty4 = { y + height - height / 4, y + height - height / 4 };
 		g.drawPolygon(ptx4, pty4, 2);
-		int[] ptx5 = { x + width / 6 - width / 12 - width / 24,
-				x + width / 6 - width / 12 - width / 24,
-				x + width / 6 - width / 12,
-				x + width / 6 - width / 12 - width / 24,
-				x + width / 6 - width / 6,
+		int[] ptx5 = { x + width / 6 - width / 12 - width / 24, x + width / 6 - width / 12 - width / 24,
+				x + width / 6 - width / 12, x + width / 6 - width / 12 - width / 24, x + width / 6 - width / 6,
 				x + width / 6 - width / 12 - width / 24 };
-		int[] pty5 = { y + height / 4, y + 3 * height / 4 - height / 8,
-				y + 3 * height / 4 - height / 8, y + 3 * height / 4,
-				y + 3 * height / 4 - height / 8,
-				y + 3 * height / 4 - height / 8 };
+		int[] pty5 = { y + height / 4, y + 3 * height / 4 - height / 8, y + 3 * height / 4 - height / 8,
+				y + 3 * height / 4, y + 3 * height / 4 - height / 8, y + 3 * height / 4 - height / 8 };
 		g.drawPolygon(ptx5, pty5, 6);
 		g.fillPolygon(ptx5, pty5, 6);
 	}
@@ -998,41 +753,27 @@ public class ELNComponentVoltageControlledCurrentSource extends
 		int[] ptx1 = { x + width - width / 16, x + width - width / 16 };
 		int[] pty1 = { y, y + 2 * height / 6 };
 		g.drawPolygon(ptx1, pty1, 2);
-		int[] ptx2 = { x + width / 16, x + width / 16, x + width / 4,
-				x + 2 * width / 4, x + 3 * width / 4, x + width - width / 16,
-				x + width - width / 16, x + width - width / 16,
-				x + 3 * width / 4, x + 2 * width / 4, x + 2 * width / 4,
-				x + 2 * width / 4, x + width / 4, x + width / 16 };
-		int[] pty2 = { y + height, y + 4 * height / 6, y + 4 * height / 6,
-				y + 3 * height / 6, y + 4 * height / 6, y + 4 * height / 6,
-				y + height, y + 4 * height / 6, y + 4 * height / 6,
-				y + 5 * height / 6, y + 3 * height / 6, y + 5 * height / 6,
-				y + 4 * height / 6, y + 4 * height / 6 };
+		int[] ptx2 = { x + width / 16, x + width / 16, x + width / 4, x + 2 * width / 4, x + 3 * width / 4,
+				x + width - width / 16, x + width - width / 16, x + width - width / 16, x + 3 * width / 4,
+				x + 2 * width / 4, x + 2 * width / 4, x + 2 * width / 4, x + width / 4, x + width / 16 };
+		int[] pty2 = { y + height, y + 4 * height / 6, y + 4 * height / 6, y + 3 * height / 6, y + 4 * height / 6,
+				y + 4 * height / 6, y + height, y + 4 * height / 6, y + 4 * height / 6, y + 5 * height / 6,
+				y + 3 * height / 6, y + 5 * height / 6, y + 4 * height / 6, y + 4 * height / 6 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + width - width / 4, x + width - width / 4,
-				x + width - width / 4 + width / 16,
-				x + width - width / 4 - width / 16, x + width - width / 4,
-				x + width - width / 4 };
-		int[] pty3 = { y + 2 * height / 6 - height / 12 - height / 24,
-				y + 2 * height / 6 - height / 12,
-				y + 2 * height / 6 - height / 12,
-				y + 2 * height / 6 - height / 12,
-				y + 2 * height / 6 - height / 12,
+		int[] ptx3 = { x + width - width / 4, x + width - width / 4, x + width - width / 4 + width / 16,
+				x + width - width / 4 - width / 16, x + width - width / 4, x + width - width / 4 };
+		int[] pty3 = { y + 2 * height / 6 - height / 12 - height / 24, y + 2 * height / 6 - height / 12,
+				y + 2 * height / 6 - height / 12, y + 2 * height / 6 - height / 12, y + 2 * height / 6 - height / 12,
 				y + 2 * height / 6 - height / 24 };
 		g.drawPolygon(ptx3, pty3, 6);
 		int[] ptx4 = { x + width / 4, x + width / 4 };
-		int[] pty4 = { y + 2 * height / 6 - height / 12 - height / 24,
-				y + 2 * height / 6 - height / 24 };
+		int[] pty4 = { y + 2 * height / 6 - height / 12 - height / 24, y + 2 * height / 6 - height / 24 };
 		g.drawPolygon(ptx4, pty4, 2);
-		int[] ptx5 = { x + 3 * width / 4, x + width / 4 + width / 8,
-				x + width / 4 + width / 8, x + width / 4,
+		int[] ptx5 = { x + 3 * width / 4, x + width / 4 + width / 8, x + width / 4 + width / 8, x + width / 4,
 				x + width / 4 + width / 8, x + width / 4 + width / 8 };
-		int[] pty5 = { y + 5 * height / 6 + height / 12 + height / 24,
-				y + 5 * height / 6 + height / 12 + height / 24,
-				y + 5 * height / 6 + height / 12,
-				y + 5 * height / 6 + height / 12 + height / 24,
-				y + 5 * height / 6 + height / 6,
-				y + 5 * height / 6 + height / 12 + height / 24 };
+		int[] pty5 = { y + 5 * height / 6 + height / 12 + height / 24, y + 5 * height / 6 + height / 12 + height / 24,
+				y + 5 * height / 6 + height / 12, y + 5 * height / 6 + height / 12 + height / 24,
+				y + 5 * height / 6 + height / 6, y + 5 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx5, pty5, 6);
 		g.fillPolygon(ptx5, pty5, 6);
 	}
@@ -1044,40 +785,26 @@ public class ELNComponentVoltageControlledCurrentSource extends
 		int[] ptx1 = { x + width - width / 16, x + width - width / 16 };
 		int[] pty1 = { y + 4 * height / 6, y + height };
 		g.drawPolygon(ptx1, pty1, 2);
-		int[] ptx2 = { x + width / 16, x + width / 16, x + width / 4,
-				x + 2 * width / 4, x + 3 * width / 4, x + width - width / 16,
-				x + width - width / 16, x + width - width / 16,
-				x + 3 * width / 4, x + 2 * width / 4, x + 2 * width / 4,
-				x + 2 * width / 4, x + width / 4, x + width / 16 };
-		int[] pty2 = { y, y + 2 * height / 6, y + 2 * height / 6,
-				y + height / 6, y + 2 * height / 6, y + 2 * height / 6, y,
-				y + 2 * height / 6, y + 2 * height / 6, y + 3 * height / 6,
-				y + height / 6, y + 3 * height / 6, y + 2 * height / 6,
-				y + 2 * height / 6 };
+		int[] ptx2 = { x + width / 16, x + width / 16, x + width / 4, x + 2 * width / 4, x + 3 * width / 4,
+				x + width - width / 16, x + width - width / 16, x + width - width / 16, x + 3 * width / 4,
+				x + 2 * width / 4, x + 2 * width / 4, x + 2 * width / 4, x + width / 4, x + width / 16 };
+		int[] pty2 = { y, y + 2 * height / 6, y + 2 * height / 6, y + height / 6, y + 2 * height / 6,
+				y + 2 * height / 6, y, y + 2 * height / 6, y + 2 * height / 6, y + 3 * height / 6, y + height / 6,
+				y + 3 * height / 6, y + 2 * height / 6, y + 2 * height / 6 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + width - width / 4, x + width - width / 4,
-				x + width - width / 4 + width / 16,
-				x + width - width / 4 - width / 16, x + width - width / 4,
-				x + width - width / 4 };
-		int[] pty3 = { y + 4 * height / 6 + height / 24,
-				y + 4 * height / 6 + height / 12,
-				y + 4 * height / 6 + height / 12,
-				y + 4 * height / 6 + height / 12,
-				y + 4 * height / 6 + height / 12,
+		int[] ptx3 = { x + width - width / 4, x + width - width / 4, x + width - width / 4 + width / 16,
+				x + width - width / 4 - width / 16, x + width - width / 4, x + width - width / 4 };
+		int[] pty3 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12,
+				y + 4 * height / 6 + height / 12, y + 4 * height / 6 + height / 12, y + 4 * height / 6 + height / 12,
 				y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx3, pty3, 6);
 		int[] ptx4 = { x + width / 4, x + width / 4 };
-		int[] pty4 = { y + 4 * height / 6 + height / 24,
-				y + 4 * height / 6 + height / 12 + height / 24 };
+		int[] pty4 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx4, pty4, 2);
-		int[] ptx5 = { x + 3 * width / 4, x + width / 4 + width / 8,
-				x + width / 4 + width / 8, x + width / 4,
+		int[] ptx5 = { x + 3 * width / 4, x + width / 4 + width / 8, x + width / 4 + width / 8, x + width / 4,
 				x + width / 4 + width / 8, x + width / 4 + width / 8 };
-		int[] pty5 = { y + height / 6 - height / 12 - height / 24,
-				y + height / 6 - height / 12 - height / 24,
-				y + height / 6 - height / 12,
-				y + height / 6 - height / 12 - height / 24,
-				y + height / 6 - height / 6,
+		int[] pty5 = { y + height / 6 - height / 12 - height / 24, y + height / 6 - height / 12 - height / 24,
+				y + height / 6 - height / 12, y + height / 6 - height / 12 - height / 24, y + height / 6 - height / 6,
 				y + height / 6 - height / 12 - height / 24 };
 		g.drawPolygon(ptx5, pty5, 6);
 		g.fillPolygon(ptx5, pty5, 6);
@@ -1090,39 +817,26 @@ public class ELNComponentVoltageControlledCurrentSource extends
 		int[] ptx1 = { x + width - width / 16, x + width - width / 16 };
 		int[] pty1 = { y + 4 * height / 6, y + height };
 		g.drawPolygon(ptx1, pty1, 2);
-		int[] ptx2 = { x + width / 16, x + width / 16, x + width / 4,
-				x + 2 * width / 4, x + 3 * width / 4, x + width - width / 16,
-				x + width - width / 16, x + width - width / 16,
-				x + 3 * width / 4, x + 2 * width / 4, x + 2 * width / 4,
-				x + 2 * width / 4, x + width / 4, x + width / 16 };
-		int[] pty2 = { y, y + 2 * height / 6, y + 2 * height / 6,
-				y + height / 6, y + 2 * height / 6, y + 2 * height / 6, y,
-				y + 2 * height / 6, y + 2 * height / 6, y + 3 * height / 6,
-				y + height / 6, y + 3 * height / 6, y + 2 * height / 6,
-				y + 2 * height / 6 };
+		int[] ptx2 = { x + width / 16, x + width / 16, x + width / 4, x + 2 * width / 4, x + 3 * width / 4,
+				x + width - width / 16, x + width - width / 16, x + width - width / 16, x + 3 * width / 4,
+				x + 2 * width / 4, x + 2 * width / 4, x + 2 * width / 4, x + width / 4, x + width / 16 };
+		int[] pty2 = { y, y + 2 * height / 6, y + 2 * height / 6, y + height / 6, y + 2 * height / 6,
+				y + 2 * height / 6, y, y + 2 * height / 6, y + 2 * height / 6, y + 3 * height / 6, y + height / 6,
+				y + 3 * height / 6, y + 2 * height / 6, y + 2 * height / 6 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + width / 4, x + width / 4,
-				x + width / 4 - width / 16, x + width / 4 + width / 16,
+		int[] ptx3 = { x + width / 4, x + width / 4, x + width / 4 - width / 16, x + width / 4 + width / 16,
 				x + width / 4, x + width / 4 };
-		int[] pty3 = { y + 4 * height / 6 + height / 24,
-				y + 4 * height / 6 + height / 12,
-				y + 4 * height / 6 + height / 12,
-				y + 4 * height / 6 + height / 12,
-				y + 4 * height / 6 + height / 12,
+		int[] pty3 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12,
+				y + 4 * height / 6 + height / 12, y + 4 * height / 6 + height / 12, y + 4 * height / 6 + height / 12,
 				y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx3, pty3, 6);
 		int[] ptx4 = { x + width - width / 4, x + width - width / 4 };
-		int[] pty4 = { y + 4 * height / 6 + height / 24,
-				y + 4 * height / 6 + height / 12 + height / 24 };
+		int[] pty4 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx4, pty4, 2);
-		int[] ptx5 = { x + width / 4, x + 3 * width / 4 - width / 8,
-				x + 3 * width / 4 - width / 8, x + 3 * width / 4,
+		int[] ptx5 = { x + width / 4, x + 3 * width / 4 - width / 8, x + 3 * width / 4 - width / 8, x + 3 * width / 4,
 				x + 3 * width / 4 - width / 8, x + 3 * width / 4 - width / 8 };
-		int[] pty5 = { y + height / 6 - height / 12 - height / 24,
-				y + height / 6 - height / 12 - height / 24,
-				y + height / 6 - height / 12,
-				y + height / 6 - height / 12 - height / 24,
-				y + height / 6 - height / 6,
+		int[] pty5 = { y + height / 6 - height / 12 - height / 24, y + height / 6 - height / 12 - height / 24,
+				y + height / 6 - height / 12, y + height / 6 - height / 12 - height / 24, y + height / 6 - height / 6,
 				y + height / 6 - height / 12 - height / 24 };
 		g.drawPolygon(ptx5, pty5, 6);
 		g.fillPolygon(ptx5, pty5, 6);
@@ -1135,40 +849,27 @@ public class ELNComponentVoltageControlledCurrentSource extends
 		int[] ptx1 = { x + width - width / 16, x + width - width / 16 };
 		int[] pty1 = { y, y + 2 * height / 6 };
 		g.drawPolygon(ptx1, pty1, 2);
-		int[] ptx2 = { x + width / 16, x + width / 16, x + width / 4,
-				x + 2 * width / 4, x + 3 * width / 4, x + width - width / 16,
-				x + width - width / 16, x + width - width / 16,
-				x + 3 * width / 4, x + 2 * width / 4, x + 2 * width / 4,
-				x + 2 * width / 4, x + width / 4, x + width / 16 };
-		int[] pty2 = { y + height, y + 4 * height / 6, y + 4 * height / 6,
-				y + 3 * height / 6, y + 4 * height / 6, y + 4 * height / 6,
-				y + height, y + 4 * height / 6, y + 4 * height / 6,
-				y + 5 * height / 6, y + 3 * height / 6, y + 5 * height / 6,
-				y + 4 * height / 6, y + 4 * height / 6 };
+		int[] ptx2 = { x + width / 16, x + width / 16, x + width / 4, x + 2 * width / 4, x + 3 * width / 4,
+				x + width - width / 16, x + width - width / 16, x + width - width / 16, x + 3 * width / 4,
+				x + 2 * width / 4, x + 2 * width / 4, x + 2 * width / 4, x + width / 4, x + width / 16 };
+		int[] pty2 = { y + height, y + 4 * height / 6, y + 4 * height / 6, y + 3 * height / 6, y + 4 * height / 6,
+				y + 4 * height / 6, y + height, y + 4 * height / 6, y + 4 * height / 6, y + 5 * height / 6,
+				y + 3 * height / 6, y + 5 * height / 6, y + 4 * height / 6, y + 4 * height / 6 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + width / 4, x + width / 4,
-				x + width / 4 - width / 16, x + width / 4 + width / 16,
+		int[] ptx3 = { x + width / 4, x + width / 4, x + width / 4 - width / 16, x + width / 4 + width / 16,
 				x + width / 4, x + width / 4 };
-		int[] pty3 = { y + 2 * height / 6 - height / 12 - height / 24,
-				y + 2 * height / 6 - height / 12,
-				y + 2 * height / 6 - height / 12,
-				y + 2 * height / 6 - height / 12,
-				y + 2 * height / 6 - height / 12,
+		int[] pty3 = { y + 2 * height / 6 - height / 12 - height / 24, y + 2 * height / 6 - height / 12,
+				y + 2 * height / 6 - height / 12, y + 2 * height / 6 - height / 12, y + 2 * height / 6 - height / 12,
 				y + 2 * height / 6 - height / 24 };
 		g.drawPolygon(ptx3, pty3, 6);
 		int[] ptx4 = { x + width - width / 4, x + width - width / 4 };
-		int[] pty4 = { y + 2 * height / 6 - height / 12 - height / 24,
-				y + 2 * height / 6 - height / 24 };
+		int[] pty4 = { y + 2 * height / 6 - height / 12 - height / 24, y + 2 * height / 6 - height / 24 };
 		g.drawPolygon(ptx4, pty4, 2);
-		int[] ptx5 = { x + width / 4, x + 3 * width / 4 - width / 8,
-				x + 3 * width / 4 - width / 8, x + 3 * width / 4,
+		int[] ptx5 = { x + width / 4, x + 3 * width / 4 - width / 8, x + 3 * width / 4 - width / 8, x + 3 * width / 4,
 				x + 3 * width / 4 - width / 8, x + 3 * width / 4 - width / 8 };
-		int[] pty5 = { y + 5 * height / 6 + height / 12 + height / 24,
-				y + 5 * height / 6 + height / 12 + height / 24,
-				y + 5 * height / 6 + height / 12,
-				y + 5 * height / 6 + height / 12 + height / 24,
-				y + 5 * height / 6 + height / 6,
-				y + 5 * height / 6 + height / 12 + height / 24 };
+		int[] pty5 = { y + 5 * height / 6 + height / 12 + height / 24, y + 5 * height / 6 + height / 12 + height / 24,
+				y + 5 * height / 6 + height / 12, y + 5 * height / 6 + height / 12 + height / 24,
+				y + 5 * height / 6 + height / 6, y + 5 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx5, pty5, 6);
 		g.fillPolygon(ptx5, pty5, 6);
 	}
@@ -1225,8 +926,7 @@ public class ELNComponentVoltageControlledCurrentSource extends
 		return new String(sb);
 	}
 
-	public void loadExtraParam(NodeList nl, int decX, int decY, int decId)
-			throws MalformedModelingException {
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
 		try {
 			NodeList nli;
 			Node n1, n2;
@@ -1246,25 +946,16 @@ public class ELNComponentVoltageControlledCurrentSource extends
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("attributes")) {
-								value = Double.parseDouble(elt
-										.getAttribute("value"));
+								value = Double.parseDouble(elt.getAttribute("value"));
 								unit = elt.getAttribute("unit");
-								position = Integer.parseInt(elt
-										.getAttribute("position"));
-								width = Integer.parseInt(elt
-										.getAttribute("width"));
-								height = Integer.parseInt(elt
-										.getAttribute("height"));
-								fv_0_2 = Boolean.parseBoolean(elt
-										.getAttribute("fv_0_2"));
-								fv_1_3 = Boolean.parseBoolean(elt
-										.getAttribute("fv_1_3"));
-								fh_0_2 = Boolean.parseBoolean(elt
-										.getAttribute("fh_0_2"));
-								fh_1_3 = Boolean.parseBoolean(elt
-										.getAttribute("fh_1_3"));
-								first = Boolean.parseBoolean(elt
-										.getAttribute("first"));
+								position = Integer.parseInt(elt.getAttribute("position"));
+								width = Integer.parseInt(elt.getAttribute("width"));
+								height = Integer.parseInt(elt.getAttribute("height"));
+								fv_0_2 = Boolean.parseBoolean(elt.getAttribute("fv_0_2"));
+								fv_1_3 = Boolean.parseBoolean(elt.getAttribute("fv_1_3"));
+								fh_0_2 = Boolean.parseBoolean(elt.getAttribute("fh_0_2"));
+								fh_1_3 = Boolean.parseBoolean(elt.getAttribute("fh_1_3"));
+								first = Boolean.parseBoolean(elt.getAttribute("first"));
 								setVal(value);
 								setUnit(unit);
 								setPosition(position);
@@ -1285,8 +976,7 @@ public class ELNComponentVoltageControlledCurrentSource extends
 		}
 	}
 
-	public void addActionToPopupMenu(JPopupMenu componentMenu,
-			ActionListener menuAL, int x, int y) {
+	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 		componentMenu.addSeparator();
 
 		JMenuItem rotateright = new JMenuItem("Rotate right 90\u00b0");
