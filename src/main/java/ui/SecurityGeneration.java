@@ -512,7 +512,7 @@ public class SecurityGeneration implements Runnable {
 
 
             TGConnectingPoint p2 = cpu.findFirstFreeTGConnectingPoint(true, true);
-            p1.setFree(false);
+            p2.setFree(false);
             connect.setP1(p2);
             archPanel.addComponent(connect, cpu.getX() + 100, cpu.getY() + 100, false, true);
             //Connect Bus and HWA
@@ -523,7 +523,7 @@ public class SecurityGeneration implements Runnable {
             connect.setP2(p1);
 
             p2 = hwa.findFirstFreeTGConnectingPoint(true, true);
-            p1.setFree(false);
+            p2.setFree(false);
             connect.setP1(p2);
 
             archPanel.addComponent(connect, cpu.getX() + 100, cpu.getY() + 100, false, true);
@@ -535,7 +535,7 @@ public class SecurityGeneration implements Runnable {
             connect.setP2(p1);
 
             p2 = mem.findFirstFreeTGConnectingPoint(true, true);
-            p1.setFree(false);
+            p2.setFree(false);
             connect.setP1(p2);
             archPanel.addComponent(connect, cpu.getX() + 100, cpu.getY() + 100, false, true);
         }
