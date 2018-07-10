@@ -42,7 +42,6 @@ package ui;
 import myutil.GraphicLib;
 import ui.syscams.*;
 import ui.util.IconManager;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -51,7 +50,7 @@ import java.util.Vector;
 
 /**
  * Class SysCAMSComponentDesignPanel 
- * Managenemt of SystemC-AMS component-based design panels 
+ * Management of SystemC-AMS component-based design panels 
  * Creation: 22/04/2018
  * @version 1.0 22/04/2018
  * @author Irina Kit Yan LEE
@@ -82,9 +81,9 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 	}
 
 	public void init() {
-        	mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
+		mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
 	}
-	
+
 	public String saveHeaderInXml(String extensionToName) {
 		if (extensionToName == null) {
 			return "<Modeling type=\"SystemC-AMS\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
@@ -127,11 +126,26 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 	public String[] getAllInDE(String nameOfComponent) {
 		return syscamsctdp.getAllInDE(nameOfComponent);
 	}
-	
+
+	public boolean canFirstDiagramBeMoved() {
+		return true;
+	}
+
+	public boolean removeEnabled(int index) {
+		return panels.size() > 1;
+	}
+
+	public boolean renameEnabled(int index) {
+		if (panels.size() == 0) {
+			return false;
+		}
+		return (panels.elementAt(index) instanceof SysCAMSComponentTaskDiagramPanel);
+	}
+
 	public boolean isSystemCAMSEnabled() {
-    		return true;
-    	}
-	
+		return true;
+	}
+
 	public boolean addSysCAMS(String s) {
 		SysCAMSComponentTaskDiagramToolBar ardtb = new SysCAMSComponentTaskDiagramToolBar(mgui);
 		toolbars.add(ardtb);
@@ -139,7 +153,6 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 		toolBarPanel = new JPanel();
 		toolBarPanel.setLayout(new BorderLayout());
 
-		//Class diagram
 		syscamsctdp = new SysCAMSComponentTaskDiagramPanel(mgui, ardtb);
 		syscamsctdp.setName(s);
 		syscamsctdp.tp = this;
@@ -148,7 +161,7 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 		JScrollDiagramPanel jsp = new JScrollDiagramPanel(syscamsctdp);
 		syscamsctdp.jsp = jsp;
 		jsp.setWheelScrollingEnabled(true);
-		jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
+		jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
 		toolBarPanel.add(ardtb, BorderLayout.NORTH);
 		toolBarPanel.add(jsp, BorderLayout.CENTER);
 		tabbedPane.addTab(s, IconManager.imgic84, toolBarPanel, "Opens SysCAMS component diagram");
@@ -157,6 +170,5 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 		toolBarPanel.setLayout(new BorderLayout());
 
 		return true;
-    	}
+	}
 }
-
