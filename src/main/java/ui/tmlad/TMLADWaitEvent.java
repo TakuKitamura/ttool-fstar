@@ -216,6 +216,8 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
 
     }
 
+	
+
     public String getEventName() {
         return eventName;
     }
@@ -244,6 +246,12 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
             }
         }
         return "";
+    }
+    
+    public void setParam(String param, int index){
+		if (index < nParam){
+			params[index] = param;
+		}
     }
 
     public int realNbOfParams() {
