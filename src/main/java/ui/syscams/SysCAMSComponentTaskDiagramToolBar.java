@@ -46,7 +46,8 @@ import javax.swing.*;
 
 /**
  * Class SysCAMSComponentTaskDiagramToolBar 
- * Implements the toolbar to be used in conjunction with the panel of a SystemC-AMS diagram Creation: 22/04/2018
+ * Implements the toolbar to be used in conjunction with the panel of a SystemC-AMS diagram 
+ * Creation: 22/04/2018
  * @version 1.0 22/04/2018
  * @author Irina Kit Yan LEE
  * @see SysCAMSComponentTaskDiagramPanel
@@ -74,7 +75,8 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.CAMS_PORT_CONVERTER].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_CLUSTER].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_GENCODE].setEnabled(b);
-
+		mgui.actions[TGUIAction.CAMS_BLOCK_GPIO2VCI].setEnabled(b);
+		
 		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
@@ -112,19 +114,21 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 
 		button = this.add(mgui.actions[TGUIAction.CAMS_BLOCK_DE]);
 		button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.CAMS_BLOCK_GPIO2VCI]);
+		button.addMouseListener(mgui.mouseHandler);
 
 		button = this.add(mgui.actions[TGUIAction.CAMS_PORT_DE]);
 		button.addMouseListener(mgui.mouseHandler);
 
 		this.addSeparator();
-
+		
 		button = this.add(mgui.actions[TGUIAction.CAMS_CONNECTOR]);
 		button.addMouseListener(mgui.mouseHandler);
-
+		
 		this.addSeparator();
-
+		
 		button = this.add(mgui.actions[TGUIAction.CAMS_GENCODE]);
 		button.addMouseListener(mgui.mouseHandler);
 	}
 }
-

@@ -45,11 +45,9 @@ import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogSysCAMSBlockDE;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -60,7 +58,7 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
  */
 
-public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, WithAttributes {
+public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
 	private int period;
 	private String time;
 	
@@ -69,12 +67,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
     private int currentFontSize = -1;
     private Color myColor;
 
-	private boolean isAttacker=false;
-
-    // Attributes
-    public HashMap<String, Integer> attrMap = new HashMap<String, Integer>();
-    public String mappingName;
-    private int textX = 15; // border for ports
+    private int textX = 15;
     private double dtextX = 0.0;
 
     public String oldValue;
@@ -126,10 +119,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
         
         if (this.rescaled && !this.tdp.isScaled()) {
             this.rescaled = false;
-            // Must set the font size...
-            // Incrementally find the biggest font not greater than max_font size
-            // If font is less than min_font, no text is displayed
-
             int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
             f = f.deriveFont((float) maxCurrentFontSize);
 
@@ -151,7 +140,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
             f = f.deriveFont(this.currentFontSize);
     	}
 
-        // Zoom is assumed to be computed
         Color c = g.getColor();
         g.drawRect(x, y, width, height);
         if ((width > 2) && (height > 2)) {
@@ -160,7 +148,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
             g.setColor(c);
         }
 
-    	// Set font size
         int attributeFontSize = this.currentFontSize * 5 / 6;
         g.setFont(f.deriveFont((float) attributeFontSize));
         g.setFont(f);
@@ -186,25 +173,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
         g.setFont(fold);
     }
-     public void drawVerification(Graphics g, int x, int y, int checkConfStatus){
-        Color c = g.getColor();
-        Color c1;
-        switch(checkConfStatus) {
-        case TAttribute.CONFIDENTIALITY_OK:
-            c1 = Color.green;
-            break;
-        case TAttribute.CONFIDENTIALITY_KO:
-            c1 = Color.red;
-            break;
-        default:
-            return;
-        }
-		g.drawOval(x-10, y-10, 6, 9);
-		g.setColor(c1);
-		g.fillRect(x-12, y-5, 9, 7);
-		g.setColor(c);
-		g.drawRect(x-12, y-5, 9, 7);
-    }
 
     public void rescale(double scaleFactor){
         dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
@@ -220,22 +188,15 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
         return null;
     }
 
-	public boolean isAttacker(){
-		return isAttacker;
-	}
-
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
     	// On the name ?
         if (_y <= (y + currentFontSize + textX)) {
-            //TraceManager.addDev("Edit on double click x=" + _x + " y=" + _y);
             oldValue = value;
             String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
                                                            JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
                                                            null,
                                                            getValue());
             if ((s != null) && (s.length() > 0)) {
-                // Check whether this name is already in use, or not
-
                 if (!TAttribute.isAValidId(s, false, false)) {
                     JOptionPane.showMessageDialog(frame,
                                                   "Could not change the name of the component: the new name is not a valid name",
@@ -252,14 +213,9 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
                         return false;
                     }
                 }
-
-
-                //TraceManager.addDev("Set value with change");
     			setComponentName(s);
                 setValueWithChange(s);
-				isAttacker = s.contains("Attacker");
                 rescaled = true;
-                //TraceManager.addDev("return true");
                 return true;
 
             }
@@ -292,11 +248,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-        //TraceManager.addDev("Add swallow component");
-        // Choose its position
-        // Make it an internal component
-        // It's one of my son
-        //Set its coordinates
         if (tgc instanceof SysCAMSPortDE) {
             tgc.setFather(this);
             tgc.setDrawingZone(true);
@@ -325,7 +276,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
     public void resizeWithFather() {
         if ((father != null) && (father instanceof SysCAMSCompositeComponent)) {
-            // Too large to fit in the father? -> resize it!
             resizeToFatherSize();
 
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
@@ -335,9 +285,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-			sb.append("<Data isAttacker=\"");
-            sb.append(isAttacker() ? "Yes": "No");
-	        sb.append("\" />\n");
             sb.append("<Attribute period=\"");
             sb.append(getPeriod());
             sb.append("\" time=\"" + getTime());
@@ -363,9 +310,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
                         n2 = nli.item(j);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
-							if (elt.getTagName().equals("Data")) {
-                                isAttacker = elt.getAttribute("isAttacker").equals("Yes");
-							}
                             if (elt.getTagName().equals("Attribute")) {
                                 period = Integer.decode(elt.getAttribute("period")).intValue();
                                 time = elt.getAttribute("time");
@@ -424,10 +368,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
 	public void setPeriod(int _period) {
 		period = _period;
-	}
-
-	public String getAttributes() {
-		return null;
 	}
 
 	public String getTime() {

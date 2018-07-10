@@ -39,13 +39,8 @@
 package ui.syscams;
 
 import myutil.GraphicLib;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
-import ui.window.JDialogSysCAMSBlockDE;
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -58,14 +53,13 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
  */
 
-public class SysCAMSBlockGPIO2VCI extends TGCScalableWithInternalComponent implements SwallowedTGComponent {
-
+public class SysCAMSBlockGPIO2VCI extends TGCScalableWithInternalComponent implements SwallowTGComponent {
 	private int maxFontSize = 14;
     private int minFontSize = 4;
     private int currentFontSize = -1;
     private Color myColor;
 
-    private int textX = 15;
+    private int textX = 15; 
     private double dtextX = 0.0;
 
     public String oldValue;
@@ -97,7 +91,7 @@ public class SysCAMSBlockGPIO2VCI extends TGCScalableWithInternalComponent imple
 
     	value = "Block_GPIO2VCI";
         name = "Primitive component - Block GPIO2VCI";
-
+        
         myImageIcon = IconManager.imgic1202;
 
         actionOnAdd();
@@ -143,6 +137,18 @@ public class SysCAMSBlockGPIO2VCI extends TGCScalableWithInternalComponent imple
             g.setColor(c);
         }
 
+        int attributeFontSize = this.currentFontSize * 5 / 6;
+        g.setFont(f.deriveFont((float) attributeFontSize));
+        g.setFont(f);
+        w = g.getFontMetrics().stringWidth(value);
+        if (w > (width - 2 * textX)) {
+        	g.setFont(f.deriveFont(Font.BOLD));
+            g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+        } else {
+        	g.setFont(f.deriveFont(Font.BOLD));
+            g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
+        }
+
         g.setFont(fold);
     }
 
@@ -162,6 +168,17 @@ public class SysCAMSBlockGPIO2VCI extends TGCScalableWithInternalComponent imple
 
     public int getType() {
 		return TGComponentManager.CAMS_BLOCK_GPIO2VCI;
+    }
+
+    public void wasSwallowed() {
+        myColor = null;
+    }
+
+    public void wasUnswallowed() {
+        myColor = null;
+        setFather(null);
+        TDiagramPanel tdp = getTDiagramPanel();
+        setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
     }
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {

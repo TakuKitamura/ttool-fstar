@@ -60,7 +60,7 @@ import java.awt.*;
  * @author Irina Kit Yan LEE
  */
 
-public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference, WithAttributes {
+public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference {
     protected Color myColor;
     protected int orientation;
 	private int maxFontSize = 14;
@@ -75,13 +75,10 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     protected int oldTypep = typep;
     public String commName;
 
-    private int textX = 15; // border for ports
+    private int textX = 15;
     private double dtextX = 0.0;
     protected int decPoint = 3;
 
-    protected boolean conflict = false;
-    protected String conflictMessage;
-    
     private ImageIcon portImageIconTDF, portImageIconDE;
     private ImageIcon portImageIconW, portImageIconE, portImageIconN, portImageIconS;
     
@@ -119,7 +116,6 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         portImageIconN = IconManager.imgic8004; 
         portImageIconS = IconManager.imgic8005; 
         
-        // Initialization of port attributes
         if (this instanceof SysCAMSPortTDF) {
         	((SysCAMSPortTDF) this).setPeriod(-1);
         	((SysCAMSPortTDF) this).setTime("");
@@ -159,7 +155,6 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         Font fold = f;
         
     	if ((x != oldx) | (oldy != y)) {
-            // Component has moved!
             manageMove();
             oldx = x;
             oldy = y;
@@ -167,10 +162,6 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
 
     	if (this.rescaled && !this.tdp.isScaled()) {
             this.rescaled = false;
-            // Must set the font size...
-            // Incrementally find the biggest font not greater than max_font size
-            // If font is less than min_font, no text is displayed
-
             int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
             f = f.deriveFont((float) maxCurrentFontSize);
 
@@ -192,7 +183,6 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
             f = f.deriveFont(this.currentFontSize);
     	}
 
-        // Zoom is assumed to be computed
         Color c = g.getColor();
         g.setColor(c);
          
@@ -236,6 +226,12 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         		g.drawImage(portImageIconDE.getImage(), x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, null);
         	}
         }
+        if ((tgc != null) && (tgc instanceof SysCAMSBlockGPIO2VCI)) {
+        	if (tgc instanceof SysCAMSBlockGPIO2VCI && this instanceof SysCAMSPortDE) {
+        		g.drawRect(x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, portImageIconDE.getIconWidth(), portImageIconDE.getIconHeight());
+        		g.drawImage(portImageIconDE.getImage(), x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, null);
+        	}
+        }
         if ((tgc != null) && (tgc instanceof SysCAMSBlockTDF)) {
         	if (tgc instanceof SysCAMSBlockTDF && this instanceof SysCAMSPortConverter) {
         		switch(currentOrientation) {
@@ -259,7 +255,6 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         	}
         }
         
-    	// Set font size
         int attributeFontSize = this.currentFontSize * 5 / 6;
         g.setFont(f.deriveFont((float) attributeFontSize));
         g.setFont(f);
@@ -267,11 +262,7 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     	g.drawString(commName, x, y-1);
 
         g.setFont(fold);
-
-        drawParticularity(g);
     }
-
-    public abstract void drawParticularity(Graphics g);
 
     public void manageMove() {
         if (father != null) {
@@ -289,7 +280,6 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         }
     }
 
-    // TGConnecting points ..
     public void setOrientation(int orientation) {
         currentOrientation = orientation;
         double w0, h0;
@@ -350,14 +340,18 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
 
     public void resizeWithFather() {
         if ((father != null) && (father instanceof SysCAMSBlockTDF)) {
-            // Too large to fit in the father? -> resize it!
             setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
             setMoveCd(x, y);
             oldx = -1;
             oldy = -1;
         }
         if ((father != null) && (father instanceof SysCAMSBlockDE)) {
-        	// Too large to fit in the father? -> resize it!
+        	setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
+        	setMoveCd(x, y);
+        	oldx = -1;
+        	oldy = -1;
+        }
+        if ((father != null) && (father instanceof SysCAMSBlockGPIO2VCI)) {
         	setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
         	setMoveCd(x, y);
         	oldx = -1;
@@ -509,36 +503,5 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     
     public int getDefaultConnector() {
         return TGComponentManager.CAMS_CONNECTOR;
-    }
-
-    public String getAttributes() {
-        String attr = "";
-        if (getOrigin() == 1) {
-            attr += "out ";
-        } else if (getOrigin() == 0) {
-            attr += "in ";
-        }
-        attr += getPortTypeName() + ": ";
-        attr += getPortName() + "\n";
-        attr += "B";
-        if (getOrigin() == 1) {
-            attr += "W\n";
-        } else if (getOrigin() == 0) {
-            attr += "R\n";
-        }
-        if (conflict) {
-            attr += "Error in path=" + conflictMessage;
-        }
-        return attr;
-    }
-    
-    public boolean getConflict() {
-        return conflict;
-    }
-
-    public void setConflict(boolean _conflict, String _msg) {
-        conflict = _conflict;
-        myColor = null;
-        conflictMessage = _msg;
     }
 }

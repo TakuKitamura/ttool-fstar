@@ -58,8 +58,7 @@ public class SysCAMSPortTDF extends SysCAMSPrimitivePort {
 	private int delay;
 	private String TDFType;
 	
-	public SysCAMSPortTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-			TDiagramPanel _tdp) {
+	public SysCAMSPortTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 	}
 	

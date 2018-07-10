@@ -577,7 +577,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
                 TraceManager.addDev("Path error:" + path.getErrorMessage());
                 faultyPaths.add(path);
             }
-            path.setColor();
         }
         return faultyPaths;
     }
@@ -912,4 +911,3 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
         return terms;
     }
 }
-
