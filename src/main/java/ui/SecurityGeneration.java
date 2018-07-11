@@ -1000,6 +1000,7 @@ public class SecurityGeneration implements Runnable {
                     wr = new TMLADWriteChannel(xpos, ypos + yShift, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
                     wr.setChannelName("data_" + chanName + "_" + task.getName().split("__")[1]);
                     wr.setSecurityContext(channelSecMap.get(chanName));
+                    wr.makeValue();
                     tad.addComponent(wr, xpos, ypos + yShift, false, true);
 
 					//Add connector between request and write
