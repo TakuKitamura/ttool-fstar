@@ -61,306 +61,412 @@ import java.util.LinkedList;
 public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
 	private int period;
 	private String time;
-	
+	private String code;
+
 	private int maxFontSize = 14;
-    private int minFontSize = 4;
-    private int currentFontSize = -1;
-    private Color myColor;
+	private int minFontSize = 4;
+	private int currentFontSize = -1;
+	private Color myColor;
 
-    private int textX = 15;
-    private double dtextX = 0.0;
+	private int textX = 15;
+	private double dtextX = 0.0;
 
-    public String oldValue;
-    
-    public SysCAMSBlockDE(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+	public String oldValue;
 
-        initScaling(200, 150);
+	public SysCAMSBlockDE(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        oldScaleFactor = tdp.getZoom();
-        dtextX = textX * oldScaleFactor;
-        textX = (int)dtextX;
-        dtextX = dtextX - textX;
+		initScaling(200, 150);
 
-        minWidth = 1;
-        minHeight = 1;
+		oldScaleFactor = tdp.getZoom();
+		dtextX = textX * oldScaleFactor;
+		textX = (int)dtextX;
+		dtextX = dtextX - textX;
 
-        nbConnectingPoint = 0;
+		minWidth = 1;
+		minHeight = 1;
 
-        addTGConnectingPointsComment();
+		nbConnectingPoint = 0;
 
-        nbInternalTGComponent = 0;
+		addTGConnectingPointsComment();
 
-        moveable = true;
-        multieditable = true;
-        editable = true;
-        removable = true;
-        userResizable = true;
+		nbInternalTGComponent = 0;
 
-    	value = tdp.findSysCAMSPrimitiveComponentName("Block_DE_");
-        name = "Primitive component - Block DE";
-        
-        setPeriod(-1);
-        setTime("");
-        
-        myImageIcon = IconManager.imgic1202;
+		moveable = true;
+		multieditable = true;
+		editable = true;
+		removable = true;
+		userResizable = true;
 
-        actionOnAdd();
-    }
+		value = tdp.findSysCAMSPrimitiveComponentName("Block_DE_");
+		name = "Primitive component - Block DE";
 
-    public void internalDrawing(Graphics g) {
-        int w;
-        Font f = g.getFont();
-        Font fold = f;
+		setPeriod(-1);
+		setTime("");
+		setCode("");
 
-        if (myColor == null) {
-        	myColor = Color.white;
-        }
-        
-        if (this.rescaled && !this.tdp.isScaled()) {
-            this.rescaled = false;
-            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
-            f = f.deriveFont((float) maxCurrentFontSize);
+		myImageIcon = IconManager.imgic1202;
 
-            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
-            	if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
-            		break;
-            	}
-                maxCurrentFontSize--;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
+		actionOnAdd();
+	}
 
-            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
-                maxCurrentFontSize++;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
-            g.setFont(f);
-            this.currentFontSize = maxCurrentFontSize;
-        } else {
-            f = f.deriveFont(this.currentFontSize);
-    	}
+	public void internalDrawing(Graphics g) {
+		int w;
+		Font f = g.getFont();
+		Font fold = f;
 
-        Color c = g.getColor();
-        g.drawRect(x, y, width, height);
-        if ((width > 2) && (height > 2)) {
-            g.setColor(myColor);
-            g.fillRect(x+1, y+1, width-1, height-1);
-            g.setColor(c);
-        }
+		if (myColor == null) {
+			myColor = Color.white;
+		}
 
-        int attributeFontSize = this.currentFontSize * 5 / 6;
-        g.setFont(f.deriveFont((float) attributeFontSize));
-        g.setFont(f);
-        w = g.getFontMetrics().stringWidth(value);
-        if (w > (width - 2 * textX)) {
-        	g.setFont(f.deriveFont(Font.BOLD));
-            g.drawString(value, x + textX + 1, y + currentFontSize + textX);
-            g.setFont(f.deriveFont(Font.PLAIN));
-            if (this.getPeriod() != -1) { 
+		if (this.rescaled && !this.tdp.isScaled()) {
+			this.rescaled = false;
+			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+			f = f.deriveFont((float) maxCurrentFontSize);
+
+			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+				if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
+					break;
+				}
+				maxCurrentFontSize--;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
+
+			if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+				maxCurrentFontSize++;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
+			g.setFont(f);
+			this.currentFontSize = maxCurrentFontSize;
+		} else {
+			f = f.deriveFont(this.currentFontSize);
+		}
+
+		Color c = g.getColor();
+		g.drawRect(x, y, width, height);
+		if ((width > 2) && (height > 2)) {
+			g.setColor(myColor);
+			g.fillRect(x+1, y+1, width-1, height-1);
+			g.setColor(c);
+		}
+
+		int attributeFontSize = this.currentFontSize * 5 / 6;
+		g.setFont(f.deriveFont((float) attributeFontSize));
+		g.setFont(f);
+		w = g.getFontMetrics().stringWidth(value);
+		if (w > (width - 2 * textX)) {
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+			g.setFont(f.deriveFont(Font.PLAIN));
+			if (this.getPeriod() != -1) { 
 				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
 				g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
 			}
-        } else {
-        	g.setFont(f.deriveFont(Font.BOLD));
-            g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
-            g.setFont(f.deriveFont(Font.PLAIN));
-        	if (this.getPeriod() != -1) { 
+		} else {
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
+			g.setFont(f.deriveFont(Font.PLAIN));
+			if (this.getPeriod() != -1) { 
 				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
 				w = g.getFontMetrics().stringWidth(s);
 				g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
 			}
-        }
+		}
 
-        g.setFont(fold);
-    }
+		g.setFont(fold);
+	}
 
-    public void rescale(double scaleFactor){
-        dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
-        textX = (int)(dtextX);
-        dtextX = dtextX - textX;
-        super.rescale(scaleFactor);
-    }
+	public void rescale(double scaleFactor){
+		dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
+		textX = (int)(dtextX);
+		dtextX = dtextX - textX;
+		super.rescale(scaleFactor);
+	}
 
-    public TGComponent isOnOnlyMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
+	public TGComponent isOnOnlyMe(int _x, int _y) {
+		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+			return this;
+		}
+		return null;
+	}
 
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
-    	// On the name ?
-        if (_y <= (y + currentFontSize + textX)) {
-            oldValue = value;
-            String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
-                                                           JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
-                                                           null,
-                                                           getValue());
-            if ((s != null) && (s.length() > 0)) {
-                if (!TAttribute.isAValidId(s, false, false)) {
-                    JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the component: the new name is not a valid name",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
-                    return false;
-                }
-                if (oldValue.compareTo(s) != 0) {
-                    if (((SysCAMSComponentTaskDiagramPanel)(tdp)).nameBlockTDFComponentInUse(oldValue, s)) {
-                        JOptionPane.showMessageDialog(frame,
-                                                      "Error: the name is already in use",
-                                                      "Name modification",
-                                                      JOptionPane.ERROR_MESSAGE);
-                        return false;
-                    }
-                }
-    			setComponentName(s);
-                setValueWithChange(s);
-                rescaled = true;
-                return true;
+	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+		// On the name ?
+		if (_y <= (y + currentFontSize + textX)) {
+			oldValue = value;
+			String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
+					JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
+					null,
+					getValue());
+			if ((s != null) && (s.length() > 0)) {
+				if (!TAttribute.isAValidId(s, false, false)) {
+					JOptionPane.showMessageDialog(frame,
+							"Could not change the name of the component: the new name is not a valid name",
+							"Error",
+							JOptionPane.INFORMATION_MESSAGE);
+					return false;
+				}
+				if (oldValue.compareTo(s) != 0) {
+					if (((SysCAMSComponentTaskDiagramPanel)(tdp)).nameBlockTDFComponentInUse(oldValue, s)) {
+						JOptionPane.showMessageDialog(frame,
+								"Error: the name is already in use",
+								"Name modification",
+								JOptionPane.ERROR_MESSAGE);
+						return false;
+					}
+				}
+				setComponentName(s);
+				setValueWithChange(s);
+				rescaled = true;
+				return true;
 
-            }
-            return false;
-        }
-        
-    	JDialogSysCAMSBlockDE jde = new JDialogSysCAMSBlockDE(this);
-    	jde.setVisible(true);
-        rescaled = true;
-        return true;
-    }
+			}
+			return false;
+		}
 
-    public int getType() {
+		JDialogSysCAMSBlockDE jde = new JDialogSysCAMSBlockDE(this);
+		jde.setVisible(true);
+		rescaled = true;
+		return true;
+	}
+
+	public int getType() {
 		return TGComponentManager.CAMS_BLOCK_DE;
-    }
+	}
 
-    public void wasSwallowed() {
-        myColor = null;
-    }
+	public void wasSwallowed() {
+		myColor = null;
+	}
 
-    public void wasUnswallowed() {
-        myColor = null;
-        setFather(null);
-        TDiagramPanel tdp = getTDiagramPanel();
-        setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
-    }
+	public void wasUnswallowed() {
+		myColor = null;
+		setFather(null);
+		TDiagramPanel tdp = getTDiagramPanel();
+		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+	}
 
-    public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        return tgc instanceof SysCAMSPortDE;
-    }
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		return tgc instanceof SysCAMSPortDE;
+	}
 
-    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-        if (tgc instanceof SysCAMSPortDE) {
-            tgc.setFather(this);
-            tgc.setDrawingZone(true);
-            tgc.resizeWithFather();
-            addInternalComponent(tgc, 0);
-            return true;
-        }
-        return false;
-    }
+	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+		if (tgc instanceof SysCAMSPortDE) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		return false;
+	}
 
-    public void removeSwallowedTGComponent(TGComponent tgc) {
-        removeInternalComponent(tgc);
-    }
+	public void removeSwallowedTGComponent(TGComponent tgc) {
+		removeInternalComponent(tgc);
+	}
 
-    public void hasBeenResized() {
-        rescaled = true;
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof SysCAMSPortDE) {
-                tgcomponent[i].resizeWithFather();
-            }
-        }
-        if (getFather() != null) {
-            resizeWithFather();
-        }
-    }
+	public void hasBeenResized() {
+		rescaled = true;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSPortDE) {
+				tgcomponent[i].resizeWithFather();
+			}
+		}
+		if (getFather() != null) {
+			resizeWithFather();
+		}
+	}
 
-    public void resizeWithFather() {
-        if ((father != null) && (father instanceof SysCAMSCompositeComponent)) {
-            resizeToFatherSize();
+	public void resizeWithFather() {
+		if ((father != null) && (father instanceof SysCAMSCompositeComponent)) {
+			resizeToFatherSize();
 
-            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-            setMoveCd(x, y);
-        }
-    }
+			setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+			setMoveCd(x, y);
+		}
+	}
 
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Attribute period=\"");
-        sb.append(getPeriod());
-        sb.append("\" time=\"" + getTime());
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
+	protected String translateExtraParam() {
+		StringBuffer sb = new StringBuffer("<extraparam>\n");
+		sb.append("<Attribute period=\"");
+		sb.append(getPeriod());
+		sb.append("\" time=\"" + getTime());
+		sb.append("\" code=\"" + encode(getCode()));
+		sb.append("\" />\n");
+		sb.append("</extraparam>\n");
+		return new String(sb);
+	}
 
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
-            int period;
-            String time;
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("Attribute")) {
-                                period = Integer.decode(elt.getAttribute("period")).intValue();
-                                time = elt.getAttribute("time");
-                                setPeriod(period);
-                                setTime(time);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-    }
+	public StringBuffer encode(String data) {
+		StringBuffer databuf = new StringBuffer(data);
+		StringBuffer buffer = new StringBuffer("");
+		for(int pos = 0; pos != data.length(); pos++) {
+			char c = databuf.charAt(pos);
+			switch(c) {
+			case '&' :  
+				buffer.append("&amp;");       
+				break;
+			case '\"' : 
+				buffer.append("&quot;");      
+				break;
+			case '\'' : 
+				buffer.append("&apos;");      
+				break;
+			case '<' :  
+				buffer.append("&lt;");        
+				break;
+			case '>' :  
+				buffer.append("&gt;");        
+				break;
+			default :   
+				buffer.append(databuf.charAt(pos)); 
+				break;
+			}
+		}
+		return buffer;
+	}
 
-    public int getCurrentFontSize() {
-        return currentFontSize;
-    }
+	public StringBuffer decode(String data) {
+		StringBuffer databuf = new StringBuffer(data);
+		StringBuffer buffer = new StringBuffer("");
+		int endline = 0;
+		int nb_arobase = 0;
+		int condition = 0;
 
-    public java.util.List<SysCAMSPortDE> getAllDEOriginPorts() {
-        return getAllPorts(1, 1);
-    }
+		for(int pos = 0; pos != data.length(); pos++) {
+			char c = databuf.charAt(pos);
+			switch(c) {
+			case '\n' :
+				break;
+			case '\t' :
+				break;
+			case '{'  : 
+				buffer.append("{\n"); 
+				endline = 1;
+				nb_arobase++;
+				break;
+			case '}'  : 
+				if (nb_arobase == 1) {
+					buffer.append("}\n"); 
+					endline = 0;
+				} else {
+					int i = nb_arobase;
+					while (i > 1) {
+						buffer.append("\t");
+						i--;
+					}
+					buffer.append("}\n"); 
+					endline = 1;
+				}
+				nb_arobase--;
+				break;
+			case ';'  :
+				if (condition == 1) {
+					buffer.append(";");
+				} else {
+					buffer.append(";\n");
+					endline = 1;
+				}
+				break;
+			case ' '  :
+				if (endline == 0) {
+					buffer.append(databuf.charAt(pos)); 
+				}
+				break;
+			case '(' :
+				buffer.append("(");
+				condition = 1;
+				break;
+			case ')' :
+				buffer.append(")");
+				condition = 0;
+				break;
+			default   : 
+				if (endline == 1) {
+					endline = 0;
+					int i = nb_arobase;
+					while (i >= 1) {
+						buffer.append("\t");
+						i--;
+					}
+				}
+				buffer.append(databuf.charAt(pos)); 
+				break;
+			}
+		}
+		return buffer;
+	}
 
-    public java.util.List<SysCAMSPortDE> getAllDEDestinationPorts() {
-        return getAllPorts(1, 0);
-    }
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+		try {
+			NodeList nli;
+			Node n1, n2;
+			Element elt;
 
-    public java.util.List<SysCAMSPortDE> getAllPorts(int _type, int _isOrigin) {
-    	java.util.List<SysCAMSPortDE> ret = new LinkedList<SysCAMSPortDE>();
-    	SysCAMSPortDE port;
+			int period;
+			String time, code;
 
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof SysCAMSPortDE) {
-                port = (SysCAMSPortDE)tgcomponent[i];
-                if ((port.getPortType() == _type) && (port.getOrigin() == _isOrigin)) {
-                    ret.add(port);
-                }
-            }
-        }
-        return ret;
-    }
+			for(int i=0; i<nl.getLength(); i++) {
+				n1 = nl.item(i);
+				if (n1.getNodeType() == Node.ELEMENT_NODE) {
+					nli = n1.getChildNodes();
+					for(int j=0; j<nli.getLength(); j++) {
+						n2 = nli.item(j);
+						if (n2.getNodeType() == Node.ELEMENT_NODE) {
+							elt = (Element) n2;
+							if (elt.getTagName().equals("Attribute")) {
+								period = Integer.decode(elt.getAttribute("period")).intValue();
+								time = elt.getAttribute("time");
+								code = elt.getAttribute("code");
+								setPeriod(period);
+								setTime(time);
+								code = decode(code).toString();
+								setCode(code);
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new MalformedModelingException();
+		}
+	}
 
-    public java.util.List<SysCAMSPortDE> getAllInternalPortsDE() {
-    	java.util.List<SysCAMSPortDE> list = new ArrayList<SysCAMSPortDE>();
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof SysCAMSPortDE) {
-                list.add((SysCAMSPortDE)(tgcomponent[i]));
-            }
-        }
-        return list;
-    }
+	public int getCurrentFontSize() {
+		return currentFontSize;
+	}
+
+	public java.util.List<SysCAMSPortDE> getAllDEOriginPorts() {
+		return getAllPorts(1, 1);
+	}
+
+	public java.util.List<SysCAMSPortDE> getAllDEDestinationPorts() {
+		return getAllPorts(1, 0);
+	}
+
+	public java.util.List<SysCAMSPortDE> getAllPorts(int _type, int _isOrigin) {
+		java.util.List<SysCAMSPortDE> ret = new LinkedList<SysCAMSPortDE>();
+		SysCAMSPortDE port;
+
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSPortDE) {
+				port = (SysCAMSPortDE)tgcomponent[i];
+				if ((port.getPortType() == _type) && (port.getOrigin() == _isOrigin)) {
+					ret.add(port);
+				}
+			}
+		}
+		return ret;
+	}
+
+	public java.util.List<SysCAMSPortDE> getAllInternalPortsDE() {
+		java.util.List<SysCAMSPortDE> list = new ArrayList<SysCAMSPortDE>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSPortDE) {
+				list.add((SysCAMSPortDE)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
 
 	public int getPeriod() {
 		return period;
@@ -376,5 +482,13 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
 	public void setTime(String _time) {
 		time = _time;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String _code) {
+		code = _code;
 	}
 }

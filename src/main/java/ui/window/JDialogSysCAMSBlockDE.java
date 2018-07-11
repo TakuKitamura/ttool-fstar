@@ -39,30 +39,11 @@
 package ui.window;
 
 import ui.syscams.*;
-import ui.util.IconManager;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
+import ui.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
 
 /**
  * Class JDialogSystemCAMSBlockDE 
@@ -76,25 +57,24 @@ import javax.swing.KeyStroke;
 
 public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
-	/** Access to ActionPerformed **/
 	private JTextField nameTextField;
 	private JTextField periodTextField;
 	private String listPeriodString[];
 	private JComboBox<String> periodComboBoxString;
 
-	/** Parameters **/
+	private JPanel processMainPanel;
+	private JTextArea processCodeTextArea;
+	private String finalString;
+
 	private SysCAMSBlockDE block;
 
-	/** Constructor **/
 	public JDialogSysCAMSBlockDE(SysCAMSBlockDE block) {
-		/** Set JDialog **/
 		this.setTitle("Setting DE Block Attributes");
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setAlwaysOnTop(true);
 		this.setResizable(false);
 
-		/** Parameters **/
 		this.block = block;
 
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
@@ -107,14 +87,92 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 		dialog();
 	}
 
+	public StringBuffer encode(String data) {
+		StringBuffer databuf = new StringBuffer(data);
+		StringBuffer buffer = new StringBuffer("");
+		int endline = 0;
+		int nb_arobase = 0;
+		int condition = 0;
+
+		for (int pos = 0; pos != data.length(); pos++) {
+			char c = databuf.charAt(pos);
+			switch (c) {
+			case '\n':
+				break;
+			case '\t':
+				break;
+			case '{':
+				buffer.append("{\n");
+				endline = 1;
+				nb_arobase++;
+				break;
+			case '}':
+				if (nb_arobase == 1) {
+					buffer.append("}\n");
+					endline = 0;
+				} else {
+					int i = nb_arobase;
+					while (i >= 1) {
+						buffer.append("\t");
+						i--;
+					}
+					buffer.append("}\n");
+					endline = 1;
+				}
+				nb_arobase--;
+				break;
+			case ';':
+				if (condition == 1) {
+					buffer.append(";");
+				} else {
+					buffer.append(";\n");
+					endline = 1;
+				}
+				break;
+			case ' ':
+				if (endline == 0) {
+					buffer.append(databuf.charAt(pos));
+				}
+				break;
+			case '(':
+				buffer.append("(");
+				condition = 1;
+				break;
+			case ')':
+				buffer.append(")");
+				condition = 0;
+				break;
+			default:
+				if (endline == 1) {
+					endline = 0;
+					int i = nb_arobase;
+					while (i >= 1) {
+						buffer.append("\t");
+						i--;
+					}
+				}
+				buffer.append(databuf.charAt(pos));
+				break;
+			}
+		}
+		return buffer;
+	}
+
 	public void dialog() {
-		/** JPanel **/
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		this.add(mainPanel);
 
-		/** JTabbedPane **/
 		JPanel attributesMainPanel = new JPanel();
-		mainPanel.add(attributesMainPanel, BorderLayout.NORTH); 
+		if (block.getFather() != null) {
+			JTabbedPane tabbedPane = new JTabbedPane();
+			processMainPanel = new JPanel();
+			tabbedPane.add("Attributes", attributesMainPanel);
+			tabbedPane.add("Process Code", processMainPanel);
+
+			mainPanel.add(tabbedPane, BorderLayout.NORTH); 
+		} else {
+			mainPanel.add(attributesMainPanel, BorderLayout.NORTH); 
+		}
 
 		// --- Attributes ---//
 		attributesMainPanel.setLayout(new BorderLayout());
@@ -183,6 +241,40 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
 		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); 
 
+		// --- ProcessCode ---//
+		if (block.getFather() != null) {
+			processMainPanel.setLayout(new BorderLayout());
+
+			Box codeBox = Box.createVerticalBox();
+			codeBox.setBorder(BorderFactory.createTitledBorder("Behavior function of TDF block"));
+
+			JPanel codeBoxPanel = new JPanel(new BorderLayout());
+
+			StringBuffer stringbuf = encode(block.getCode());
+			String beginString = stringbuf.toString();
+			finalString = beginString.replaceAll("\t}", "}");
+
+			processCodeTextArea = new JTextArea(finalString);
+			processCodeTextArea.setSize(100, 100);
+			processCodeTextArea.setTabSize(2);
+
+			processCodeTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
+			processCodeTextArea.setLineWrap(true);
+			processCodeTextArea.setWrapStyleWord(true);
+
+			JScrollPane processScrollPane = new JScrollPane(processCodeTextArea);
+			processScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			processScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+			processScrollPane.setPreferredSize(new Dimension(200, 200));
+			processScrollPane.setBorder(new EmptyBorder(15, 10, 15, 10));
+
+			codeBoxPanel.add(processScrollPane, BorderLayout.SOUTH);
+
+			codeBox.add(codeBoxPanel);
+			processMainPanel.add(codeBox, BorderLayout.PAGE_START);
+		}
+
+		// -- Button -- /
 		JPanel downPanel = new JPanel(new FlowLayout());
 
 		JButton saveCloseButton = new JButton("Save and close");
@@ -206,10 +298,8 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if ("Save_Close".equals(e.getActionCommand())) {
-			/** Save the name of the block into listNameTDF **/
 			block.setValue(new String(nameTextField.getText()));
 
-			/** Save the period of the block into listPeriodTmTDF **/
 			if (!(periodTextField.getText().isEmpty())) {
 				Boolean periodValueInteger = false;
 				try {
@@ -228,6 +318,10 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 			} else {
 				block.setPeriod(-1);
 				block.setTime("");
+			}
+
+			if (block.getFather() != null) {
+				block.setCode(processCodeTextArea.getText());
 			}
 
 			this.dispose();
