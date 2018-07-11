@@ -6125,7 +6125,7 @@ memloop:
 			String name;
 
 			name = elt.getAttribute("name");
-			//TraceManager.addDev("Loading SMD of:" + name);
+			TraceManager.addDev("Loading SMD of:" + name);
 			AvatarSMDPanel asmdp = mgui.getAvatarSMDPanel(indexDesign, name);
 
 			if (asmdp == null) {

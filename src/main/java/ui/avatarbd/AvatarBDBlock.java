@@ -605,20 +605,24 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 JOptionPane.INFORMATION_MESSAGE);
                         return false;
                     }
-
+                    
                     setValue(s);
                     recalculateSize();
 
+                    if (!(tdp.actionOnDoubleClick(this))) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the name of the Block: this name is already in use",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        setValue(oldValue);
+                        return false;
+                    }
+
+
+
                 }
 
-                /*if (!(tdp.actionOnDoubleClick(this))) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the Requirement: this name is already in use",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    setValue(oldValue);
-                    return false;
-                }*/
+
 
                 // Setting stereotype
                 s = dialog.getStereotype().trim();

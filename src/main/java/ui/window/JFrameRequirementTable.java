@@ -83,7 +83,7 @@ public class JFrameRequirementTable extends JFrame implements ActionListener /*,
     //private JStatisticsPanel jstat;
 
     //private java.util.List<JScrollPane> panes;
-    private JButton buttonGenerate, buttonGenerateCSV;
+    private JButton refresh, buttonGenerate, buttonGenerateCSV;
 
     //private JTextField eq, sw, tr, li, pa;
 
@@ -124,6 +124,8 @@ public class JFrameRequirementTable extends JFrame implements ActionListener /*,
 
         JButton button1 = new JButton("Close", IconManager.imgic27);
         button1.addActionListener(this);
+        JButton refresh = new JButton("Refresh", IconManager.imgic16);
+        refresh.addActionListener(this);
         buttonGenerate = new JButton("Generate HTML doc.", IconManager.imgic29);
         buttonGenerate.addActionListener(this);
         buttonGenerateCSV = new JButton("Generate CSV doc.", IconManager.imgic29);
@@ -236,6 +238,8 @@ public class JFrameRequirementTable extends JFrame implements ActionListener /*,
         if (command.equals("Close")) {
             dispose();
             return;
+        } else if (evt.getSource() == refresh) {
+            repaint();
         } else if (evt.getSource() == buttonGenerate) {
 
             // Compute path
