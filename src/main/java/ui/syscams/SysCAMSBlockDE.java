@@ -285,10 +285,10 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Attribute period=\"");
-        sb.append(getPeriod());
-        sb.append("\" time=\"" + getTime());
-        sb.append("\" />\n");
+            sb.append("<Attribute period=\"");
+            sb.append(getPeriod());
+            sb.append("\" time=\"" + getTime());
+            sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
