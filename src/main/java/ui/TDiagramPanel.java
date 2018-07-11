@@ -2254,6 +2254,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
+
     // operations
     public void removeComponent(TGComponent tgc) {
         fatherOfRemoved = tgc.getFather();

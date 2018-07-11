@@ -118,6 +118,46 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
           }*/
         return false;
     }
+    
+    
+	public void replaceArchComponent(TGComponent tgc, TGComponent newtgc){
+		fatherOfRemoved = tgc.getFather();
+
+        for (TGComponent t : this.componentList) {
+            if (t == tgc) {  
+                //Reroute connectors to new component
+            	for (int i = 0; i < tgc.getNbConnectingPoint(); i++) {
+            		TGConnectingPoint cp = tgc.tgconnectingPointAtIndex(i);
+            		Iterator<TGComponent> iterator = this.componentList.iterator();
+            		while (iterator.hasNext()) {
+
+                		TGComponent tconn = iterator.next();
+                		if (tconn instanceof TMLArchiConnectorNode) {
+                    		TMLArchiConnectorNode tgcon = (TMLArchiConnectorNode) tconn;
+                    		if (cp == tgcon.getTGConnectingPointP1()){
+                    			tgcon.setP1(newtgc.findFirstFreeTGConnectingPoint(true, true));
+                    			tgcon.getTGConnectingPointP1().setFree(false);
+                    		}
+                    		if (cp == tgcon.getTGConnectingPointP2()) {
+                    			tgcon.setP2(newtgc.findFirstFreeTGConnectingPoint(true, true));
+                 			    tgcon.getTGConnectingPointP2().setFree(false);
+                        	}
+                       	}
+                    }
+                }
+            }
+       }
+                
+       componentList.remove(tgc);
+       actionOnRemove(tgc);
+       tgc.actionOnRemove();
+       componentList.add(newtgc);
+       actionOnRemove(newtgc);
+       newtgc.actionOnRemove();
+       return;
+         
+        
+	}
 
     public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
