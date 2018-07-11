@@ -840,7 +840,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_AVATAR_SIM] = new TAction("avatar-simu", "Interactive simulation", IconManager.imgic18, IconManager.imgic18, "Interactive simulation",  "Interactive simulation of the AVATAR design under edition", '2');
         actions[ACT_AVATAR_FV_UPPAAL] = new TAction("avatar-formal-verification-uppaal", "Safety formal verification with UPPAAL (Safety)", IconManager.imgic86, IconManager.imgic86, "Formal verification with UPPAAL (Safety)",  "Formal verification with UPPAAL (Safety) of the AVATAR design under edition", '3');
         actions[ACT_AVATAR_FV_PROVERIF] = new TAction("avatar-formal-verification-proverif", "Security verification (ProVerif)", IconManager.imgic88, IconManager.imgic88, "Security verification (ProVerif)",  "Security formal verification (with ProVerif)", '4');
-        actions[ACT_AVATAR_FV_STATICANALYSIS] = new TAction("avatar-formal-verification-staticanalysis", "Safety analysis (invariants)", IconManager.imgic96, IconManager.imgic96, "Safaty analysis (invariants)",  "Safety analysis using the invariant tecnique", '5');
+        actions[ACT_AVATAR_FV_STATICANALYSIS] = new TAction("avatar-formal-verification-staticanalysis", "Safety analysis (invariants)",
+                IconManager.imgic96, IconManager.imgic96, "Safaty analysis (invariants)",  "Safety analysis using the invariant technique", '5');
         actions[ACT_AVATAR_EXECUTABLE_GENERATION] = new TAction("avatar-executable-generation", "Code generation" , IconManager.imgic94, IconManager.imgic94, "Code generation",  "Generation of C-POSIX executable code from AVATAR design under edition", '6');
 
 
