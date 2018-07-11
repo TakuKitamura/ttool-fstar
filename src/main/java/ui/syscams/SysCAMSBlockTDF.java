@@ -478,7 +478,9 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 								String[] splitb = listTypedef.split("\\|");
 								DefaultListModel<String> listb = new DefaultListModel<String>();
 								for (String s : splitb) {
-									listb.addElement(s);
+									if (!s.equals("")) {
+										listb.addElement(s);
+									}
 								}
 								setListTypedef(listb);
 							}
