@@ -62,8 +62,8 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 	private String listPeriodString[];
 	private JComboBox<String> periodComboBoxString;
 
-	private JPanel processMainPanel;
-	private JTextArea processCodeTextArea;
+	private JPanel codeMainPanel;
+	private JTextArea codeTextArea;
 	private String finalString;
 
 	private SysCAMSBlockDE block;
@@ -165,9 +165,9 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 		JPanel attributesMainPanel = new JPanel();
 		if (block.getFather() != null) {
 			JTabbedPane tabbedPane = new JTabbedPane();
-			processMainPanel = new JPanel();
+			codeMainPanel = new JPanel();
 			tabbedPane.add("Attributes", attributesMainPanel);
-			tabbedPane.add("Process Code", processMainPanel);
+			tabbedPane.add("Process Code", codeMainPanel);
 
 			mainPanel.add(tabbedPane, BorderLayout.NORTH); 
 		} else {
@@ -243,10 +243,10 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
 		// --- ProcessCode ---//
 		if (block.getFather() != null) {
-			processMainPanel.setLayout(new BorderLayout());
+			codeMainPanel.setLayout(new BorderLayout());
 
 			Box codeBox = Box.createVerticalBox();
-			codeBox.setBorder(BorderFactory.createTitledBorder("Behavior function of TDF block"));
+			codeBox.setBorder(BorderFactory.createTitledBorder("Method of DE block"));
 
 			JPanel codeBoxPanel = new JPanel(new BorderLayout());
 
@@ -254,24 +254,24 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 			String beginString = stringbuf.toString();
 			finalString = beginString.replaceAll("\t}", "}");
 
-			processCodeTextArea = new JTextArea(finalString);
-			processCodeTextArea.setSize(100, 100);
-			processCodeTextArea.setTabSize(2);
+			codeTextArea = new JTextArea(finalString);
+			codeTextArea.setSize(100, 100);
+			codeTextArea.setTabSize(2);
 
-			processCodeTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
-			processCodeTextArea.setLineWrap(true);
-			processCodeTextArea.setWrapStyleWord(true);
+			codeTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
+			codeTextArea.setLineWrap(true);
+			codeTextArea.setWrapStyleWord(true);
 
-			JScrollPane processScrollPane = new JScrollPane(processCodeTextArea);
-			processScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-			processScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-			processScrollPane.setPreferredSize(new Dimension(200, 200));
-			processScrollPane.setBorder(new EmptyBorder(15, 10, 15, 10));
+			JScrollPane codeScrollPane = new JScrollPane(codeTextArea);
+			codeScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			codeScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+			codeScrollPane.setPreferredSize(new Dimension(200, 200));
+			codeScrollPane.setBorder(new EmptyBorder(15, 10, 15, 10));
 
-			codeBoxPanel.add(processScrollPane, BorderLayout.SOUTH);
+			codeBoxPanel.add(codeScrollPane, BorderLayout.SOUTH);
 
 			codeBox.add(codeBoxPanel);
-			processMainPanel.add(codeBox, BorderLayout.PAGE_START);
+			codeMainPanel.add(codeBox, BorderLayout.PAGE_START);
 		}
 
 		// -- Button -- /
@@ -321,7 +321,7 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 			}
 
 			if (block.getFather() != null) {
-				block.setCode(processCodeTextArea.getText());
+				block.setCode(codeTextArea.getText());
 			}
 
 			this.dispose();

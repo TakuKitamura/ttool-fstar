@@ -58,22 +58,35 @@ import syscamstranslator.*;
 */
 
 public class Header {
-	static private String headerPrimitive;
+	static private String headerPrimitiveTDF;
+	static private String headerPrimitiveDE;
 	static private String headerCluster;
+	
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
 	Header() {}
 
-	public static String getPrimitiveHeader(SysCAMSTBlockTDF tdf) {
+	public static String getPrimitiveHeaderTDF(SysCAMSTBlockTDF tdf) {
 		if (tdf != null) {
-			headerPrimitive = "#ifndef " + tdf.getName().toUpperCase() + "_H"+ CR 
+			headerPrimitiveTDF = "#ifndef " + tdf.getName().toUpperCase() + "_H"+ CR 
 					+ "#define " + tdf.getName().toUpperCase() + "_H" + CR2
 					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc-ams>" + CR2;
 		} else {
-			headerPrimitive = "";
+			headerPrimitiveTDF = "";
 		}
-		return headerPrimitive;
+		return headerPrimitiveTDF;
+	}
+	
+	public static String getPrimitiveHeaderDE(SysCAMSTBlockDE de) {
+		if (de != null) {
+			headerPrimitiveDE = "#ifndef " + de.getName().toUpperCase() + "_H"+ CR 
+					+ "#define " + de.getName().toUpperCase() + "_H" + CR2
+					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc>" + CR2;
+		} else {
+			headerPrimitiveDE = "";
+		}
+		return headerPrimitiveDE;
 	}
 	
 	public static String getClusterHeader(SysCAMSTCluster cluster) {

@@ -305,6 +305,19 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 		return ll;
 	}
 	
+	public java.util.List<SysCAMSBlockDE> getAllBlockDEComponents() {
+		ArrayList<SysCAMSBlockDE> ll = new ArrayList<SysCAMSBlockDE>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
+				ll.addAll(((SysCAMSCompositeComponent)tgcomponent[i]).getAllBlockDEComponents());
+			}
+			if (tgcomponent[i] instanceof SysCAMSBlockDE) {
+				ll.add(((SysCAMSBlockDE)(tgcomponent[i])));
+			}
+		}
+		return ll;
+	}
+	
 	public void getAllCompositeComponents(ArrayList<String> list, String _name) {
 		String s;
 		SysCAMSCompositeComponent syscamscc;

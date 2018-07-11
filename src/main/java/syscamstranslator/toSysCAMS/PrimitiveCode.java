@@ -58,13 +58,14 @@ import syscamstranslator.*;
  */
 
 public class PrimitiveCode {
-	static private String corpsPrimitive;
+	static private String corpsPrimitiveTDF;
+	static private String corpsPrimitiveDE;
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
 	PrimitiveCode() {}
 
-	public static String getPrimitiveCode(SysCAMSTBlockTDF tdf) {
+	public static String getPrimitiveCodeTDF(SysCAMSTBlockTDF tdf) {
 		if (tdf != null) {
 			LinkedList<SysCAMSTPortTDF> tdfports = tdf.getPortTDF();
 			LinkedList<SysCAMSTPortConverter> convports = tdf.getPortConverter();
@@ -72,24 +73,24 @@ public class PrimitiveCode {
 			int cpt2 = 0;
 
 			if ((!tdf.getTypeTemplate().equals("")) || (!tdf.getNameTemplate().equals("")))  {
-				corpsPrimitive = "template<" + tdf.getTypeTemplate() + " " + tdf.getNameTemplate() + ">" + CR;
+				corpsPrimitiveTDF = "template<" + tdf.getTypeTemplate() + " " + tdf.getNameTemplate() + ">" + CR;
 			}
 			//corpsPrimitive = "SCA_TDF_MODULE(" + tdf.getName() + ") {" + CR2;
-			corpsPrimitive = corpsPrimitive + "class " + tdf.getName() + " : public sca_tdf::sca_module {" + CR2 + "public:" + CR;
+			corpsPrimitiveTDF = corpsPrimitiveTDF + "class " + tdf.getName() + " : public sca_tdf::sca_module {" + CR2 + "public:" + CR;
 
 			if (!tdf.getListTypedef().isEmpty()) {
 				for (int i = 0; i < tdf.getListTypedef().getSize(); i++) {
 					String select = tdf.getListTypedef().get(i);
 					String[] split = select.split(" : ");
-					corpsPrimitive = corpsPrimitive + "\ttypedef " + split[1] + "<" + tdf.getNameTemplate() + "> " + split[0] + ";" + CR;
+					corpsPrimitiveTDF = corpsPrimitiveTDF + "\ttypedef " + split[1] + "<" + tdf.getNameTemplate() + "> " + split[0] + ";" + CR;
 					if (i == tdf.getListTypedef().getSize()-1) {
-						corpsPrimitive = corpsPrimitive + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + CR;
 					}
 				}
 			}
 			
 			if (tdf.getListStruct().getSize() != 0) {
-				corpsPrimitive = corpsPrimitive + "\tstruct parameters {" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\tstruct parameters {" + CR;
 
 				String identifier, value, type;
 				for (int i = 0; i < tdf.getListStruct().size(); i++) {
@@ -104,10 +105,10 @@ public class PrimitiveCode {
 					} else {
 						type = splitc[0];
 					}
-					corpsPrimitive = corpsPrimitive + "\t\t" + type + " " + identifier + ";" + CR;
+					corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + type + " " + identifier + ";" + CR;
 				}
 
-				corpsPrimitive = corpsPrimitive + "\t\tparameters()" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\tparameters()" + CR;
 
 				for (int i = 0; i < tdf.getListStruct().size(); i++) {
 					String select = tdf.getListStruct().get(i);
@@ -122,61 +123,61 @@ public class PrimitiveCode {
 						type = splitc[0];
 					}
 					if (i == 0) {
-						corpsPrimitive = corpsPrimitive + "\t\t: " + identifier + "(" + value + ")" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t: " + identifier + "(" + value + ")" + CR;
 					} 
 					if ((i > 0) && (i < tdf.getListStruct().getSize()-1)) {
-						corpsPrimitive = corpsPrimitive + "\t\t, " + identifier + "(" + value + ")" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
 					if (i == tdf.getListStruct().getSize()-1) {
-						corpsPrimitive = corpsPrimitive + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
 					}
 				}
-				corpsPrimitive = corpsPrimitive + "\t};" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t};" + CR;
 			}
 
 			if (!tdfports.isEmpty()) {
-				corpsPrimitive = corpsPrimitive + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + CR;
 				for (SysCAMSTPortTDF t : tdfports) {
 					if (t.getOrigin() == 0) {
-						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_in<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
 					} else if (t.getOrigin() == 1) {
-						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_out<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
 					}
 				}
 			}
 			if (!convports.isEmpty()) {
-				corpsPrimitive = corpsPrimitive + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + CR;
 				for (SysCAMSTPortConverter conv : convports) {
 					if (conv.getOrigin() == 0) {
-						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
 					} else if (conv.getOrigin() == 1) {
-						corpsPrimitive = corpsPrimitive + "\tsca_tdf::sca_de::sca_out<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
 					}
 				}
 			}
 
 			//corpsPrimitive = corpsPrimitive + CR + "\t// Constructor" + CR + "\tSCA_CTOR(" + tdf.getName() + ")" + CR;
-			corpsPrimitive = corpsPrimitive + CR + "\texplicit " + tdf.getName() + "(sc_core::sc_module_name nm";
+			corpsPrimitiveTDF = corpsPrimitiveTDF + CR + "\texplicit " + tdf.getName() + "(sc_core::sc_module_name nm";
 
 			if (tdf.getListStruct().getSize() != 0) {
-				corpsPrimitive = corpsPrimitive + ", const parameters& p = parameters())" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + ", const parameters& p = parameters())" + CR;
 			} else {
-				corpsPrimitive = corpsPrimitive + ")" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + ")" + CR;
 			}
 
 			if (!tdfports.isEmpty() || !convports.isEmpty() || !tdf.getListStruct().isEmpty()) {
-				corpsPrimitive = corpsPrimitive + "\t: ";
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t: ";
 				if (!tdfports.isEmpty()) {
 					for (int i = 0; i < tdfports.size(); i++) {
 						if (tdfports.size() > 1) {
 							if (cpt == 0) {
-								corpsPrimitive = corpsPrimitive + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")" + CR;
+								corpsPrimitiveTDF = corpsPrimitiveTDF + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")" + CR;
 								cpt++;
 							} else {
-								corpsPrimitive = corpsPrimitive + "\t, " + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")" + CR;
+								corpsPrimitiveTDF = corpsPrimitiveTDF + "\t, " + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")" + CR;
 							}
 						} else {
-							corpsPrimitive = corpsPrimitive + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")" + CR;
 							cpt++;
 						}
 					}
@@ -185,13 +186,13 @@ public class PrimitiveCode {
 					for (int i = 0; i < convports.size(); i++) {
 						if (convports.size() > 1) {
 							if (cpt == 0) {
-								corpsPrimitive = corpsPrimitive + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")" + CR;
+								corpsPrimitiveTDF = corpsPrimitiveTDF + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")" + CR;
 								cpt++;
 							} else {
-								corpsPrimitive = corpsPrimitive + "\t, " + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")" + CR;
+								corpsPrimitiveTDF = corpsPrimitiveTDF + "\t, " + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")" + CR;
 							}
 						} else {
-							corpsPrimitive = corpsPrimitive + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")" + CR;
 							cpt++;
 						}
 					}
@@ -204,60 +205,60 @@ public class PrimitiveCode {
 						identifier = splita[0];
 						if (tdf.getListStruct().getSize() > 1) {
 							if (cpt == 0) {
-								corpsPrimitive = corpsPrimitive + identifier + "(p." + identifier + ")" + CR;
+								corpsPrimitiveTDF = corpsPrimitiveTDF + identifier + "(p." + identifier + ")" + CR;
 								cpt++;
 							} else {
-								corpsPrimitive = corpsPrimitive + "\t, " + identifier + "(p." + identifier + ")" + CR;
+								corpsPrimitiveTDF = corpsPrimitiveTDF + "\t, " + identifier + "(p." + identifier + ")" + CR;
 							}
 						} else {
-							corpsPrimitive = corpsPrimitive + identifier + "(p." + identifier + ")" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + identifier + "(p." + identifier + ")" + CR;
 							cpt++;
 						}
 					}
 				}
-				corpsPrimitive = corpsPrimitive + "\t{}" + CR2 + "protected:" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t{}" + CR2 + "protected:" + CR;
 			}
 
 			if (tdf.getPeriod() != -1) {
-				corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_MS);" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_MS);" + CR;
 				cpt2++;
 			}	
 			if (cpt2 > 0) {
 				for (SysCAMSTPortTDF t : tdfports) {
 					if (t.getPeriod() != -1) {
-						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
 					} 
 					if (t.getRate() != -1) {
-						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
 					} 
 					if (t.getDelay() != -1) {
-						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
 					} 
 				}
 			} else {
 				for (SysCAMSTPortTDF t : tdfports) {
 					if (t.getPeriod() != -1) {
 						if (cpt2 == 0) {
-							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
 							cpt2++;
 						} else {
-							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
 						}
 					} 
 					if (t.getRate() != -1) {
 						if (cpt2 == 0) {
-							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
 							cpt2++;
 						} else {
-							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
 						}
 					} 
 					if (t.getDelay() != -1) {
 						if (cpt2 == 0) {
-							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
 							cpt2++;
 						} else {
-							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
 						}
 					} 
 				}
@@ -265,46 +266,46 @@ public class PrimitiveCode {
 			if (cpt2 > 0) {
 				for (SysCAMSTPortConverter t : convports) {
 					if (t.getPeriod() != -1) {
-						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
 					} 
 					if (t.getRate() != -1) {
-						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
 					} 
 					if (t.getDelay() != -1) {
-						corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
 					} 
 				}
 			} else {
 				for (SysCAMSTPortConverter t : convports) {
 					if (t.getPeriod() != -1) {
 						if (cpt2 == 0) {
-							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
 							cpt2++;
 						} else {
-							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
 						}
 					} 
 					if (t.getRate() != -1 && cpt2 == 0) {
 						if (cpt2 == 0) {
-							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
 							cpt2++;
 						} else {
-							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
 						}
 					} 
 					if (t.getDelay() != -1 && cpt2 == 0) {
 						if (cpt2 == 0) {
-							corpsPrimitive = corpsPrimitive + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
 							cpt2++;
 						} else {
-							corpsPrimitive = corpsPrimitive + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
 						}
 					} 
 				}
 			}
 
 			if (cpt2 > 0) {
-				corpsPrimitive = corpsPrimitive + "\t}" + CR2;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t}" + CR2;
 			}
 
 			StringBuffer pcbuf = new StringBuffer(tdf.getProcessCode());
@@ -341,10 +342,10 @@ public class PrimitiveCode {
 
 			String pc = buffer.toString();
 
-			corpsPrimitive = corpsPrimitive + "\t" + pc + CR;
+			corpsPrimitiveTDF = corpsPrimitiveTDF + "\t" + pc + CR;
 
 			if (tdf.getListStruct().getSize() != 0) {
-				corpsPrimitive = corpsPrimitive + "private:" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "private:" + CR;
 
 				String identifier, type, constant;
 				for (int i = 0; i < tdf.getListStruct().size(); i++) {
@@ -361,16 +362,154 @@ public class PrimitiveCode {
 						type = splitc[0];
 					}
 					if (constant.equals("")) {
-						corpsPrimitive = corpsPrimitive + "\t" + type + " " + identifier + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t" + type + " " + identifier + ";" + CR;
 					} else {
-						corpsPrimitive = corpsPrimitive + "\t" + constant + " " + type + " " + identifier + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t" + constant + " " + type + " " + identifier + ";" + CR;
 					}
 				}
 			}
-			corpsPrimitive = corpsPrimitive + "};" + CR2 + "#endif" + " // " + tdf.getName().toUpperCase() + "_H";
+			corpsPrimitiveTDF = corpsPrimitiveTDF + "};" + CR2 + "#endif" + " // " + tdf.getName().toUpperCase() + "_H";
 		} else {
-			corpsPrimitive = "";
+			corpsPrimitiveTDF = "";
 		}
-		return corpsPrimitive;
+		return corpsPrimitiveTDF;
+	}
+	
+	public static String getPrimitiveCodeDE(SysCAMSTBlockDE de) {
+		if (de != null) {
+			LinkedList<SysCAMSTPortDE> deports = de.getPortDE();
+			int cpt = 0;
+//			int cpt2 = 0;
+
+			corpsPrimitiveDE = corpsPrimitiveDE + "class " + de.getName() + " : public sca_core::sca_module {" + CR2 + "public:" + CR;
+			
+			if (!deports.isEmpty()) {
+				corpsPrimitiveDE = corpsPrimitiveDE + CR;
+				for (SysCAMSTPortDE t : deports) {
+					if (t.getOrigin() == 0) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\tsca_core::sca_in<" + t.getDEType() + "> " + t.getName() + ";" + CR;
+					} else if (t.getOrigin() == 1) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\tsca_core::sca_out<" + t.getDEType() + "> " + t.getName() + ";" + CR;
+					}
+				}
+			}
+
+			corpsPrimitiveDE = corpsPrimitiveDE + CR + "\tSC_HAS_PROCESS(" + de.getName() + ");" + CR + 
+					"\texplicit " + de.getName() + "(sc_core::sc_module_name nm)" + CR;
+
+			if (!deports.isEmpty()) {
+				corpsPrimitiveDE = corpsPrimitiveDE + "\t: ";
+				if (!deports.isEmpty()) {
+					for (int i = 0; i < deports.size(); i++) {
+						if (deports.size() > 1) {
+							if (cpt == 0) {
+								corpsPrimitiveDE = corpsPrimitiveDE + deports.get(i).getName() + "(\"" + deports.get(i).getName() + "\")" + CR;
+								cpt++;
+							} else {
+								corpsPrimitiveDE = corpsPrimitiveDE + "\t, " + deports.get(i).getName() + "(\"" + deports.get(i).getName() + "\")" + CR;
+							}
+						} else {
+							corpsPrimitiveDE = corpsPrimitiveDE + deports.get(i).getName() + "(\"" + deports.get(i).getName() + "\")" + CR;
+							cpt++;
+						}
+					}
+				}
+			}
+			
+			if (!de.getCode().equals("")) {
+				corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + block.getNameFn() + ");" + CR;
+			} else {
+				corpsPrimitiveDE = corpsPrimitiveDE + "\t{}" + CR2;
+			}
+
+//			if (de.getPeriod() != -1) {
+//				corpsPrimitiveDE = corpsPrimitiveDE + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + de.getPeriod() + ", sc_core::SC_MS);" + CR;
+//				cpt2++;
+//			}	
+			
+//			if (cpt2 > 0) {
+//				for (SysCAMSTPortDE t : deports) {
+//					if (t.getPeriod() != -1) {
+//						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+//					} 
+//					if (t.getRate() != -1) {
+//						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+//					} 
+//					if (t.getDelay() != -1) {
+//						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+//					} 
+//				}
+//			} else {
+//				for (SysCAMSTPortDE t : deports) {
+//					if (t.getPeriod() != -1) {
+//						if (cpt2 == 0) {
+//							corpsPrimitiveDE = corpsPrimitiveDE + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+//							cpt2++;
+//						} else {
+//							corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+//						}
+//					} 
+//					if (t.getRate() != -1) {
+//						if (cpt2 == 0) {
+//							corpsPrimitiveDE = corpsPrimitiveDE + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+//							cpt2++;
+//						} else {
+//							corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+//						}
+//					} 
+//					if (t.getDelay() != -1) {
+//						if (cpt2 == 0) {
+//							corpsPrimitiveDE = corpsPrimitiveDE + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+//							cpt2++;
+//						} else {
+//							corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+//						}
+//					} 
+//				}
+//			}
+
+//			if (cpt2 > 0) {
+//				corpsPrimitiveDE = corpsPrimitiveDE + "\t}" + CR2;
+//			}
+
+			StringBuffer pcbuf = new StringBuffer(de.getCode());
+			StringBuffer buffer = new StringBuffer("");
+			int tab = 0;
+			int begin = 0;
+
+			for(int pos = 0; pos != de.getCode().length(); pos++) {
+				char c = pcbuf.charAt(pos);
+				switch(c) {
+				case '\t':  
+					begin = 1;
+					tab++;
+					break;
+				default:  
+					if (begin == 1) {
+						int i = tab;
+						while (i >= 0) {
+							buffer.append("\t"); 
+							i--;
+						}
+						buffer.append(pcbuf.charAt(pos)); 	
+						begin = 0;
+						tab = 0;
+					} else {
+						if (c == '}') {
+							buffer.append("\t"); 
+						}
+						buffer.append(pcbuf.charAt(pos)); 	
+					}
+					break;
+				}
+			}
+
+			String pc = buffer.toString();
+
+			corpsPrimitiveDE = corpsPrimitiveDE + "\t" + pc + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
+		} else {
+			corpsPrimitiveDE = "";
+		}
+		return corpsPrimitiveDE;
 	}
 }

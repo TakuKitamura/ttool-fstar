@@ -130,13 +130,27 @@ public class TopCellGenerator {
 	public void saveFileBlockTDF(String path, SysCAMSTCluster c) {
 		String header, code;
 		LinkedList<SysCAMSTBlockTDF> tdf = c.getBlockTDF();
+		LinkedList<SysCAMSTBlockDE> de = c.getBlockDE();
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
 				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
-				header = Header.getPrimitiveHeader(t);
+				header = Header.getPrimitiveHeaderTDF(t);
 				fw.write(header);
-				code = PrimitiveCode.getPrimitiveCode(t);
+				code = PrimitiveCode.getPrimitiveCodeTDF(t);
+				fw.write(code);
+				fw.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		for (SysCAMSTBlockDE t : de) {
+			try {
+				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
+				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
+				header = Header.getPrimitiveHeaderDE(t);
+				fw.write(header);
+				code = PrimitiveCode.getPrimitiveCodeDE(t);
 				fw.write(code);
 				fw.close();
 			} catch (Exception ex) {

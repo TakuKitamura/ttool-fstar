@@ -97,8 +97,9 @@ public class SysCAMSPanelTranslator {
 
 				String blockDEName = blockDE.getValue();
 				int periodBlock = blockDE.getPeriod();
+				String code = blockDE.getCode();
 
-				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, periodBlock);
+				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, periodBlock, code);
 
 				List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 				for (int i = 0; i < portsDE.size(); i++) {
@@ -128,6 +129,7 @@ public class SysCAMSPanelTranslator {
 				SysCAMSTCluster syscamsCluster = new SysCAMSTCluster(clusterName);
 
 				List<SysCAMSBlockTDF> blocksTDF = cluster.getAllBlockTDFComponents();
+				List<SysCAMSBlockDE> blocksDE = cluster.getAllBlockDEComponents();
 				for (int i = 0; i < blocksTDF.size(); i++) {
 					SysCAMSBlockTDF blockTDF = blocksTDF.get(i);
 
@@ -180,6 +182,37 @@ public class SysCAMSPanelTranslator {
 					syscamsMap.put(blockTDF, syscamsBlockTDF);
 					syscamsCluster.addBlockTDF(syscamsBlockTDF);
 					syscamsComponents.add(syscamsBlockTDF);
+				}
+				for (int i = 0; i < blocksDE.size(); i++) {
+					SysCAMSBlockDE blockDE = (SysCAMSBlockDE) dp;
+
+					String blockDEName = blockDE.getValue();
+					int periodBlock = blockDE.getPeriod();
+					String code = blockDE.getCode();
+
+					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, periodBlock, code);
+
+					List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
+					for (int j = 0; j < portsDE.size(); j++) {
+						SysCAMSPortDE portDE = portsDE.get(j);
+
+						String portName = portDE.getPortName();
+						int periodPort = portDE.getPeriod();
+						String time = portDE.getTime();
+						int rate = portDE.getRate();
+						int delay = portDE.getDelay();
+						String type = portDE.getDEType();
+						int origin = portDE.getOrigin();
+
+						SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, periodPort, time, rate, delay, origin, type, syscamsBlockDE);
+
+						syscamsMap.put(portDE, syscamsPortDE);
+						syscamsBlockDE.addPortDE(syscamsPortDE);
+						syscamsComponents.add(syscamsPortDE);
+					}	
+					syscamsMap.put(blockDE, syscamsBlockDE);
+					syscamsCluster.addBlockDE(syscamsBlockDE);
+					syscamsComponents.add(syscamsBlockDE);
 				}
 				syscamsMap.put(cluster, syscamsCluster);
 				syscamsComponents.add(syscamsCluster);
