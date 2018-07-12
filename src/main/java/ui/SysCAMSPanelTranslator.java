@@ -96,24 +96,27 @@ public class SysCAMSPanelTranslator {
 				SysCAMSBlockDE blockDE = (SysCAMSBlockDE) dp;
 
 				String blockDEName = blockDE.getValue();
-				int periodBlock = blockDE.getPeriod();
+//				int periodBlock = blockDE.getPeriod();
+				String nameFn = blockDE.getNameFn();
 				String code = blockDE.getCode();
 
-				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, periodBlock, code);
+				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, nameFn, code);
 
 				List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 				for (int i = 0; i < portsDE.size(); i++) {
 					SysCAMSPortDE portDE = portsDE.get(i);
 
 					String portName = portDE.getPortName();
-					int periodPort = portDE.getPeriod();
-					String time = portDE.getTime();
-					int rate = portDE.getRate();
-					int delay = portDE.getDelay();
+//					int periodPort = portDE.getPeriod();
+//					String time = portDE.getTime();
+//					int rate = portDE.getRate();
+//					int delay = portDE.getDelay();
 					String type = portDE.getDEType();
 					int origin = portDE.getOrigin();
+					boolean sensitive = portDE.getSensitive();
+					String sensitiveMethod = portDE.getSensitiveMethod();
 
-					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, periodPort, time, rate, delay, origin, type, syscamsBlockDE);
+					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, type, sensitive, sensitiveMethod, syscamsBlockDE);
 
 					syscamsMap.put(portDE, syscamsPortDE);
 					syscamsBlockDE.addPortDE(syscamsPortDE);
@@ -184,27 +187,30 @@ public class SysCAMSPanelTranslator {
 					syscamsComponents.add(syscamsBlockTDF);
 				}
 				for (int i = 0; i < blocksDE.size(); i++) {
-					SysCAMSBlockDE blockDE = (SysCAMSBlockDE) dp;
-
+					SysCAMSBlockDE blockDE = blocksDE.get(i);
+					
 					String blockDEName = blockDE.getValue();
-					int periodBlock = blockDE.getPeriod();
+//					int periodBlock = blockDE.getPeriod();
+					String nameFn = blockDE.getNameFn();
 					String code = blockDE.getCode();
 
-					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, periodBlock, code);
+					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, nameFn, code);
 
 					List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 					for (int j = 0; j < portsDE.size(); j++) {
 						SysCAMSPortDE portDE = portsDE.get(j);
 
 						String portName = portDE.getPortName();
-						int periodPort = portDE.getPeriod();
-						String time = portDE.getTime();
-						int rate = portDE.getRate();
-						int delay = portDE.getDelay();
+//						int periodPort = portDE.getPeriod();
+//						String time = portDE.getTime();
+//						int rate = portDE.getRate();
+//						int delay = portDE.getDelay();
 						String type = portDE.getDEType();
 						int origin = portDE.getOrigin();
+						boolean sensitive = portDE.getSensitive();
+						String sensitiveMethod = portDE.getSensitiveMethod();
 
-						SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, periodPort, time, rate, delay, origin, type, syscamsBlockDE);
+						SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, type, sensitive, sensitiveMethod, syscamsBlockDE);
 
 						syscamsMap.put(portDE, syscamsPortDE);
 						syscamsBlockDE.addPortDE(syscamsPortDE);

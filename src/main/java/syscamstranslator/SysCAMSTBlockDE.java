@@ -50,24 +50,30 @@ import java.util.LinkedList;
 
 public class SysCAMSTBlockDE extends SysCAMSTComponent {
 	private String name;
-	private int period;
+//	private int period;
+	private String nameFn;
 	private String code;
 	
 	private LinkedList<SysCAMSTPortDE> portDE;
 	
-	public SysCAMSTBlockDE(String _name, int _period, String _code) {
+	public SysCAMSTBlockDE(String _name, String _nameFn, String _code) {
 		name = _name;
-		period = _period;
+//		period = _period;
+		nameFn = _nameFn;
 		code = _code;
 		portDE = new LinkedList<SysCAMSTPortDE>();
 	}
 
-	public int getPeriod() {
-		return period;
-	}
+//	public int getPeriod() {
+//		return period;
+//	}
 
 	public String getName() {
 		return name;
+	}
+
+	public String getNameFn() {
+		return nameFn;
 	}
 
 	public String getCode() {

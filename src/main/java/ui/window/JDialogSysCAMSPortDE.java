@@ -281,6 +281,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 			sensitiveComboBoxString.setSelectedIndex(1);
 		}
 		sensitiveComboBoxString.setActionCommand("Sensitive_method");
+		sensitiveComboBoxString.setEnabled(port.getSensitive());
 		sensitiveComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(15, 10, 5, 10), 0, 0);
@@ -310,6 +311,13 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if ("Sensitive".equals(e.getActionCommand())) {
+			if (sensitiveRadioButton.isSelected() == true) {
+				sensitiveComboBoxString.setEnabled(true);
+			} else {
+				sensitiveComboBoxString.setEnabled(false);
+			}
+		}
 		if ("Save_Close".equals(e.getActionCommand())) {
 			port.setPortName(new String(nameTextField.getText()));
 

@@ -59,8 +59,9 @@ import java.util.LinkedList;
  */
 
 public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
-	private int period;
-	private String time;
+//	private int period;
+//	private String time;
+	private String nameFn;
 	private String code;
 
 	private int maxFontSize = 14;
@@ -101,8 +102,9 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		value = tdp.findSysCAMSPrimitiveComponentName("Block_DE_");
 		name = "Primitive component - Block DE";
 
-		setPeriod(-1);
-		setTime("");
+//		setPeriod(-1);
+//		setTime("");
+		setNameFn("");
 		setCode("");
 
 		myImageIcon = IconManager.imgic1202;
@@ -158,19 +160,19 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 			g.setFont(f.deriveFont(Font.BOLD));
 			g.drawString(value, x + textX + 1, y + currentFontSize + textX);
 			g.setFont(f.deriveFont(Font.PLAIN));
-			if (this.getPeriod() != -1) { 
-				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
-				g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
-			}
+//			if (this.getPeriod() != -1) { 
+//				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
+//				g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
+//			}
 		} else {
 			g.setFont(f.deriveFont(Font.BOLD));
 			g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
 			g.setFont(f.deriveFont(Font.PLAIN));
-			if (this.getPeriod() != -1) { 
-				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
-				w = g.getFontMetrics().stringWidth(s);
-				g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
-			}
+//			if (this.getPeriod() != -1) { 
+//				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
+//				w = g.getFontMetrics().stringWidth(s);
+//				g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
+//			}
 		}
 
 		g.setFont(fold);
@@ -287,9 +289,9 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
-		sb.append("<Attribute period=\"");
-		sb.append(getPeriod());
-		sb.append("\" time=\"" + getTime());
+		sb.append("<Attribute name_function=\"" + getNameFn());
+//		sb.append(getPeriod());
+//		sb.append("\" time=\"" + getTime());
 		sb.append("\" code=\"" + encode(getCode()));
 		sb.append("\" />\n");
 		sb.append("</extraparam>\n");
@@ -403,7 +405,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 			Element elt;
 
 			int period;
-			String time, code;
+			String time, code, nameFn;
 
 			for(int i=0; i<nl.getLength(); i++) {
 				n1 = nl.item(i);
@@ -414,11 +416,13 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("Attribute")) {
-								period = Integer.decode(elt.getAttribute("period")).intValue();
-								time = elt.getAttribute("time");
+//								period = Integer.decode(elt.getAttribute("period")).intValue();
+//								time = elt.getAttribute("time");
 								code = elt.getAttribute("code");
-								setPeriod(period);
-								setTime(time);
+								nameFn = elt.getAttribute("name_function");
+//								setPeriod(period);
+//								setTime(time);
+								setNameFn(nameFn);
 								code = decode(code).toString();
 								setCode(code);
 							}
@@ -468,27 +472,35 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		return list;
 	}
 
-	public int getPeriod() {
-		return period;
-	}
+//	public int getPeriod() {
+//		return period;
+//	}
+//
+//	public void setPeriod(int _period) {
+//		period = _period;
+//	}
+//
+//	public String getTime() {
+//		return time;
+//	}
+//
+//	public void setTime(String _time) {
+//		time = _time;
+//	}
 
-	public void setPeriod(int _period) {
-		period = _period;
-	}
-
-	public String getTime() {
-		return time;
-	}
-
-	public void setTime(String _time) {
-		time = _time;
-	}
-
-	public String getCode() {
-		return code;
+	public void setNameFn(String nameFn) {
+		this.nameFn = nameFn;
 	}
 
 	public void setCode(String _code) {
 		code = _code;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+
+	public String getNameFn() {
+		return nameFn;
 	}
 }

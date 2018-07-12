@@ -66,6 +66,8 @@ public class PrimitiveCode {
 	PrimitiveCode() {}
 
 	public static String getPrimitiveCodeTDF(SysCAMSTBlockTDF tdf) {
+		corpsPrimitiveTDF = "";
+		
 		if (tdf != null) {
 			LinkedList<SysCAMSTPortTDF> tdfports = tdf.getPortTDF();
 			LinkedList<SysCAMSTPortConverter> convports = tdf.getPortConverter();
@@ -73,7 +75,7 @@ public class PrimitiveCode {
 			int cpt2 = 0;
 
 			if ((!tdf.getTypeTemplate().equals("")) || (!tdf.getNameTemplate().equals("")))  {
-				corpsPrimitiveTDF = "template<" + tdf.getTypeTemplate() + " " + tdf.getNameTemplate() + ">" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "template<" + tdf.getTypeTemplate() + " " + tdf.getNameTemplate() + ">" + CR;
 			}
 			//corpsPrimitive = "SCA_TDF_MODULE(" + tdf.getName() + ") {" + CR2;
 			corpsPrimitiveTDF = corpsPrimitiveTDF + "class " + tdf.getName() + " : public sca_tdf::sca_module {" + CR2 + "public:" + CR;
@@ -169,7 +171,7 @@ public class PrimitiveCode {
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t: ";
 				if (!tdfports.isEmpty()) {
 					for (int i = 0; i < tdfports.size(); i++) {
-						if (tdfports.size() > 1) {
+						if (tdfports.size() >= 1) {
 							if (cpt == 0) {
 								corpsPrimitiveTDF = corpsPrimitiveTDF + tdfports.get(i).getName() + "(\"" + tdfports.get(i).getName() + "\")" + CR;
 								cpt++;
@@ -184,7 +186,7 @@ public class PrimitiveCode {
 				}
 				if (!convports.isEmpty()) {
 					for (int i = 0; i < convports.size(); i++) {
-						if (convports.size() > 1) {
+						if (convports.size() >= 1) {
 							if (cpt == 0) {
 								corpsPrimitiveTDF = corpsPrimitiveTDF + convports.get(i).getName() + "(\"" + convports.get(i).getName() + "\")" + CR;
 								cpt++;
@@ -376,6 +378,8 @@ public class PrimitiveCode {
 	}
 	
 	public static String getPrimitiveCodeDE(SysCAMSTBlockDE de) {
+		corpsPrimitiveDE = "";
+		
 		if (de != null) {
 			LinkedList<SysCAMSTPortDE> deports = de.getPortDE();
 			int cpt = 0;
@@ -416,8 +420,28 @@ public class PrimitiveCode {
 				}
 			}
 			
+			boolean sensitive = false, method = false;
 			if (!de.getCode().equals("")) {
-				corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + block.getNameFn() + ");" + CR;
+				corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
+				method = true;
+			} 
+			
+			for (SysCAMSTPortDE t : deports) {
+				if (t.getSensitive() == true) {
+					if (method == false) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR;
+					} 
+					corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + t.getName() + ".";
+					if (t.getSensitiveMethod().equals("positive")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "pos()" + CR;
+					} else if (t.getSensitiveMethod().equals("negative")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "neg()" + CR;						
+					}
+					sensitive = true;
+				}
+			}
+			if (sensitive == true || method == true) {
+				corpsPrimitiveDE = corpsPrimitiveDE + "\t}" + CR2;
 			} else {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t{}" + CR2;
 			}

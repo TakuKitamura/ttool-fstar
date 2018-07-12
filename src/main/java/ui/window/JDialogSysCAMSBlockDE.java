@@ -58,9 +58,11 @@ import javax.swing.border.*;
 public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
 	private JTextField nameTextField;
-	private JTextField periodTextField;
-	private String listPeriodString[];
-	private JComboBox<String> periodComboBoxString;
+//	private JTextField periodTextField;
+//	private String listPeriodString[];
+//	private JComboBox<String> periodComboBoxString;
+	private JTextField nameFnTextField;
+	private JButton nameFnButton;
 
 	private JPanel codeMainPanel;
 	private JTextArea codeTextArea;
@@ -167,7 +169,7 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 			JTabbedPane tabbedPane = new JTabbedPane();
 			codeMainPanel = new JPanel();
 			tabbedPane.add("Attributes", attributesMainPanel);
-			tabbedPane.add("Process Code", codeMainPanel);
+			tabbedPane.add("Method Code", codeMainPanel);
 
 			mainPanel.add(tabbedPane, BorderLayout.NORTH); 
 		} else {
@@ -202,40 +204,40 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 		gridBag.setConstraints(nameTextField, constraints);
 		attributesBoxPanel.add(nameTextField);
 
-		JLabel periodLabel = new JLabel("Period Tm : ");
-		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 15, 10), 0, 0);
-		gridBag.setConstraints(periodLabel, constraints);
-		attributesBoxPanel.add(periodLabel);
-
-		if (block.getPeriod() == -1) { 
-			periodTextField = new JTextField(10);
-		} else {
-			periodTextField = new JTextField("" + block.getPeriod(), 10);
-		}
-		constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 15, 10), 0, 0);
-		gridBag.setConstraints(periodTextField, constraints);
-		attributesBoxPanel.add(periodTextField);
-
-		listPeriodString = new String[3];
-		listPeriodString[0] = "us";
-		listPeriodString[1] = "ms";
-		listPeriodString[2] = "s";
-		periodComboBoxString = new JComboBox<String>(listPeriodString);
-		if (block.getTime().equals("") || block.getTime().equals("us")) {
-			periodComboBoxString.setSelectedIndex(0);
-		} else if (block.getTime().equals("ms")) {
-			periodComboBoxString.setSelectedIndex(1);
-		} else if (block.getTime().equals("s")) {
-			periodComboBoxString.setSelectedIndex(2);
-		}
-		periodComboBoxString.setActionCommand("time");
-		periodComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 15, 10), 0, 0);
-		gridBag.setConstraints(periodComboBoxString, constraints);
-		attributesBoxPanel.add(periodComboBoxString);
+//		JLabel periodLabel = new JLabel("Period Tm : ");
+//		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+//				new Insets(5, 10, 15, 10), 0, 0);
+//		gridBag.setConstraints(periodLabel, constraints);
+//		attributesBoxPanel.add(periodLabel);
+//
+//		if (block.getPeriod() == -1) { 
+//			periodTextField = new JTextField(10);
+//		} else {
+//			periodTextField = new JTextField("" + block.getPeriod(), 10);
+//		}
+//		constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+//				new Insets(5, 10, 15, 10), 0, 0);
+//		gridBag.setConstraints(periodTextField, constraints);
+//		attributesBoxPanel.add(periodTextField);
+//
+//		listPeriodString = new String[3];
+//		listPeriodString[0] = "us";
+//		listPeriodString[1] = "ms";
+//		listPeriodString[2] = "s";
+//		periodComboBoxString = new JComboBox<String>(listPeriodString);
+//		if (block.getTime().equals("") || block.getTime().equals("us")) {
+//			periodComboBoxString.setSelectedIndex(0);
+//		} else if (block.getTime().equals("ms")) {
+//			periodComboBoxString.setSelectedIndex(1);
+//		} else if (block.getTime().equals("s")) {
+//			periodComboBoxString.setSelectedIndex(2);
+//		}
+//		periodComboBoxString.setActionCommand("time");
+//		periodComboBoxString.addActionListener(this);
+//		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+//				new Insets(5, 10, 15, 10), 0, 0);
+//		gridBag.setConstraints(periodComboBoxString, constraints);
+//		attributesBoxPanel.add(periodComboBoxString);
 
 		attributesBox.add(attributesBoxPanel);
 
@@ -250,6 +252,21 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
 			JPanel codeBoxPanel = new JPanel(new BorderLayout());
 
+			JPanel nameFnGrid = new JPanel(new GridLayout(1, 3));
+			
+			JLabel nameFnLabel = new JLabel("Name of the method : ");
+			nameFnGrid.add(nameFnLabel);
+			
+			nameFnTextField = new JTextField(block.getNameFn());
+			nameFnGrid.add(nameFnTextField);
+			
+			nameFnButton = new JButton("OK");
+			nameFnButton.setActionCommand("OK");
+			nameFnButton.addActionListener(this);
+			nameFnGrid.add(nameFnButton);
+			
+			codeBoxPanel.add(nameFnGrid, BorderLayout.NORTH);
+			
 			StringBuffer stringbuf = encode(block.getCode());
 			String beginString = stringbuf.toString();
 			finalString = beginString.replaceAll("\t}", "}");
@@ -297,30 +314,42 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if ("OK".equals(e.getActionCommand())) {
+			if (!nameFnTextField.getText().equals("")) {
+				codeTextArea.setText("void " + nameFnTextField.getText() + "() {\n\n}");
+			} else {
+				JDialog msg = new JDialog(this);
+				msg.setLocationRelativeTo(null);
+				JOptionPane.showMessageDialog(msg, "This method has no name. Please add a name for this method.", "Warning !",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		}
+		
 		if ("Save_Close".equals(e.getActionCommand())) {
 			block.setValue(new String(nameTextField.getText()));
 
-			if (!(periodTextField.getText().isEmpty())) {
-				Boolean periodValueInteger = false;
-				try {
-					Integer.parseInt(periodTextField.getText());
-				} catch (NumberFormatException e1) {
-					JDialog msg = new JDialog(this);
-					msg.setLocationRelativeTo(null);
-					JOptionPane.showMessageDialog(msg, "Period Tm is not a Integer", "Warning !",
-							JOptionPane.WARNING_MESSAGE);
-					periodValueInteger = true;
-				}
-				if (periodValueInteger == false) {
-					block.setPeriod(Integer.parseInt(periodTextField.getText()));
-					block.setTime((String) periodComboBoxString.getSelectedItem());
-				}
-			} else {
-				block.setPeriod(-1);
-				block.setTime("");
-			}
+//			if (!(periodTextField.getText().isEmpty())) {
+//				Boolean periodValueInteger = false;
+//				try {
+//					Integer.parseInt(periodTextField.getText());
+//				} catch (NumberFormatException e1) {
+//					JDialog msg = new JDialog(this);
+//					msg.setLocationRelativeTo(null);
+//					JOptionPane.showMessageDialog(msg, "Period Tm is not a Integer", "Warning !",
+//							JOptionPane.WARNING_MESSAGE);
+//					periodValueInteger = true;
+//				}
+//				if (periodValueInteger == false) {
+//					block.setPeriod(Integer.parseInt(periodTextField.getText()));
+//					block.setTime((String) periodComboBoxString.getSelectedItem());
+//				}
+//			} else {
+//				block.setPeriod(-1);
+//				block.setTime("");
+//			}
 
 			if (block.getFather() != null) {
+				block.setNameFn(nameFnTextField.getText());
 				block.setCode(codeTextArea.getText());
 			}
 

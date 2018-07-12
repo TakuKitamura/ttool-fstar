@@ -49,23 +49,27 @@ package syscamstranslator;
 public class SysCAMSTPortDE extends SysCAMSTComponent {
 
 	private String name;
-	private int period;
-	private String time;
-	private int rate;
-	private int delay;
+//	private int period;
+//	private String time;
+//	private int rate;
+//	private int delay;
 	private int origin;
 	private String DEType;
+	private boolean sensitive;
+	private String sensitiveMethod;
 	
 	private SysCAMSTBlockDE blockDE;
 	
-	public SysCAMSTPortDE(String _name, int _period, String _time, int _rate, int _delay, int _origin, String _DEType, SysCAMSTBlockDE _blockDE) {
+	public SysCAMSTPortDE(String _name, int _origin, String _DEType, boolean _sensitive, String _sensitiveMethod, SysCAMSTBlockDE _blockDE) {
 		name = _name;
-		period = _period;
-		time = _time;
-		rate = _rate;
-		delay = _delay;
+//		period = _period;
+//		time = _time;
+//		rate = _rate;
+//		delay = _delay;
 		origin = _origin;
 		DEType = _DEType;
+		sensitive = _sensitive;
+		sensitiveMethod = _sensitiveMethod;
 		blockDE = _blockDE;
 	}
 
@@ -73,21 +77,21 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 		return name;
 	}
 
-	public int getPeriod() {
-		return period;
-	}
-
-	public String getTime() {
-		return time;
-	}
-
-	public int getRate() {
-		return rate;
-	}
-
-	public int getDelay() {
-		return delay;
-	}
+//	public int getPeriod() {
+//		return period;
+//	}
+//
+//	public String getTime() {
+//		return time;
+//	}
+//
+//	public int getRate() {
+//		return rate;
+//	}
+//
+//	public int getDelay() {
+//		return delay;
+//	}
 
 	public int getOrigin() {
 		return origin;
@@ -95,6 +99,14 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 
 	public String getDEType() {
 		return DEType;
+	}
+
+	public boolean getSensitive() {
+		return sensitive;
+	}
+
+	public String getSensitiveMethod() {
+		return sensitiveMethod;
 	}
 
 	public SysCAMSTBlockDE getBlockTDF() {
