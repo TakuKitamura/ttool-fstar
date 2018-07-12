@@ -40,6 +40,7 @@ package ui.eln;
 
 import myutil.GraphicLib;
 import ui.*;
+import ui.eln.sca_eln.ELNComponentCapacitor;
 import ui.eln.sca_eln.ELNComponentNodeRef;
 
 import java.awt.*;
