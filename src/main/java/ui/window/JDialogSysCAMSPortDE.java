@@ -42,12 +42,14 @@ import ui.syscams.*;
 import ui.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 /**
- * Class JDialogSystemCAMSPortDE Dialog for managing of SystemC-AMS DE Port
+ * Class JDialogSystemCAMSPortDE 
+ * Dialog for managing of SystemC-AMS DE Port
  * Creation: 07/05/2018
- * 
  * @version 1.0 07/05/2018
  * @author Irina Kit Yan LEE
  */
@@ -61,7 +63,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 	// private JComboBox<String> periodComboBoxString;
 	// private JTextField rateTextField;
 	// private JTextField delayTextField;
-	private String listTypeString[];
+	private ArrayList<String> listArrayTypeString;
 	private JComboBox<String> typeComboBoxString;
 	private String listOriginString[];
 	private JComboBox<String> originComboBoxString;
@@ -209,26 +211,44 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		gridBag.setConstraints(typeLabel, constraints);
 		boxPanel.add(typeLabel);
 
-		listTypeString = new String[3];
-		listTypeString[0] = "int";
-		listTypeString[1] = "bool";
-		listTypeString[2] = "double";
-		typeComboBoxString = new JComboBox<String>(listTypeString);
-		if (port.getDEType().equals("") || port.getDEType().equals("int")) {
-			typeComboBoxString.setSelectedIndex(0);
+		listArrayTypeString = new ArrayList<String>();
+		listArrayTypeString.add("int");
+		listArrayTypeString.add("bool");
+		listArrayTypeString.add("double");
+		if (port.getFather() != null) {
+			if (port.getFather() instanceof SysCAMSBlockDE) {
+				if (!((SysCAMSBlockDE) port.getFather()).getListTypedef().isEmpty()) {
+					for (int i = 0; i < ((SysCAMSBlockDE) port.getFather()).getListTypedef().getSize(); i++) {
+						String select = ((SysCAMSBlockDE) port.getFather()).getListTypedef().get(i);
+						String[] split = select.split(" : ");
+						listArrayTypeString.add(split[0]);
+					}
+				}
+				if ((!((SysCAMSBlockDE) port.getFather()).getNameTemplate().equals("")) && (!((SysCAMSBlockDE) port.getFather()).getTypeTemplate().equals("")) 
+						&& ((SysCAMSBlockDE) port.getFather()).getListTypedef().isEmpty()) {
+					listArrayTypeString.add("sc_dt::sc_int<"+((SysCAMSBlockDE) port.getFather()).getNameTemplate()+">");
+				}
+			}
 		}
-		if (port.getDEType().equals("bool")) {
-			typeComboBoxString.setSelectedIndex(1);
+		typeComboBoxString = new JComboBox<String>();
+		for (int i = 0; i < listArrayTypeString.size(); i++) {
+			typeComboBoxString.addItem(listArrayTypeString.get(i));
 		}
-		if (port.getDEType().equals("double")) {
-			typeComboBoxString.setSelectedIndex(2);
+		for (int i = 0; i < listArrayTypeString.size(); i++) {
+			if (port.getDEType().equals("")) {
+				typeComboBoxString.setSelectedIndex(0);
+			}
+			if (port.getDEType().equals(listArrayTypeString.get(i))) {
+				typeComboBoxString.setSelectedIndex(i);
+			}
 		}
-		typeComboBoxString.setActionCommand("type");
 		typeComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+		constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0,
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(typeComboBoxString, constraints);
-		boxPanel.add(typeComboBoxString);
+		boxPanel.add(typeComboBoxString); 
 
 		JLabel orginLabel = new JLabel("Origin : ");
 		constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,

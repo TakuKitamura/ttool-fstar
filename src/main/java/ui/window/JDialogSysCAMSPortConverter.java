@@ -56,8 +56,6 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 
 public class JDialogSysCAMSPortConverter extends JDialog implements ActionListener {
-
-	/** Access to ActionPerformed **/
 	private JTextField nameTextField;
 	private JTextField periodTextField;
 	private String listPeriodString[];
@@ -69,19 +67,15 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 	private String listOriginString[];
 	private JComboBox<String> originComboBoxString;
 
-	/** Parameters **/
 	private SysCAMSPortConverter port;
 
-	/** Constructor **/
 	public JDialogSysCAMSPortConverter(SysCAMSPortConverter port) {
-		/** Set JDialog **/
 		this.setTitle("Setting Converter Ports");
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setAlwaysOnTop(true);
 		this.setResizable(false);
 
-		/** Parameters **/
 		this.port = port;
 
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
@@ -95,7 +89,6 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 	}
 
 	public void dialog() {
-		/** JPanel **/
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		this.add(mainPanel);
 
@@ -233,6 +226,10 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 						listArrayTypeString.add(split[0]);
 					}
 				}
+				if ((!((SysCAMSBlockTDF) port.getFather()).getNameTemplate().equals("")) && (!((SysCAMSBlockTDF) port.getFather()).getTypeTemplate().equals("")) 
+						&& ((SysCAMSBlockTDF) port.getFather()).getListTypedef().isEmpty()) {
+					listArrayTypeString.add("sc_dt::sc_int<"+((SysCAMSBlockTDF) port.getFather()).getNameTemplate()+">");
+				}
 			}
 		}
 		typeComboBoxString = new JComboBox<String>();
@@ -253,7 +250,7 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 				GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(typeComboBoxString, constraints);
-		boxPanel.add(typeComboBoxString);
+		boxPanel.add(typeComboBoxString); 
 
 		JLabel orginLabel = new JLabel("Origin : ");
 		constraints = new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0,
