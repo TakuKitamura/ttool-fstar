@@ -433,9 +433,9 @@ public class PrimitiveCode {
 					} 
 					corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + t.getName() + ".";
 					if (t.getSensitiveMethod().equals("positive")) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "pos()" + CR;
+						corpsPrimitiveDE = corpsPrimitiveDE + "pos();" + CR;
 					} else if (t.getSensitiveMethod().equals("negative")) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "neg()" + CR;						
+						corpsPrimitiveDE = corpsPrimitiveDE + "neg();" + CR;						
 					}
 					sensitive = true;
 				}
