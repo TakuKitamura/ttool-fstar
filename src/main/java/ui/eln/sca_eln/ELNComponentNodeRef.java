@@ -45,6 +45,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.eln.ELNConnectingPoint;
+import ui.eln.ELNModule;
 import ui.window.JDialogELNComponentNodeRef;
 import javax.swing.*;
 import java.awt.*;
@@ -561,5 +562,25 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 
 	public void setFirst(boolean _first) {
 		first = _first;
+	}
+	
+	public void resizeWithFather() {
+		if ((father != null) && (father instanceof ELNModule)) {
+			resizeToFatherSize();
+
+			setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+			setMoveCd(x, y);
+		}
+	}
+	
+	public void wasSwallowed() {
+		myColor = null;
+	}
+
+	public void wasUnswallowed() {
+		myColor = null;
+		setFather(null);
+		TDiagramPanel tdp = getTDiagramPanel();
+		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
 	}
 }

@@ -948,4 +948,24 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 			}
 		}
 	}
+	
+	public void resizeWithFather() {
+		if ((father != null) && (father instanceof ELNModule)) {
+			resizeToFatherSize();
+
+			setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+			setMoveCd(x, y);
+		}
+	}
+	
+	public void wasSwallowed() {
+		myColor = null;
+	}
+
+	public void wasUnswallowed() {
+		myColor = null;
+		setFather(null);
+		TDiagramPanel tdp = getTDiagramPanel();
+		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+	}
 }
