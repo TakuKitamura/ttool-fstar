@@ -130,7 +130,7 @@ public class PrimitiveCode {
 					if ((i > 0) && (i < tdf.getListStruct().getSize()-1)) {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
-					if (i == tdf.getListStruct().getSize()-1) {
+					if (i == tdf.getListStruct().getSize()-1 && i != 0) {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
 					}
 				}
@@ -222,7 +222,7 @@ public class PrimitiveCode {
 			}
 
 			if (tdf.getPeriod() != -1) {
-				corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_MS);" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_" + tdf.getTime().toUpperCase() + CR;
 				cpt2++;
 			}	
 			if (cpt2 > 0) {
@@ -383,10 +383,71 @@ public class PrimitiveCode {
 		if (de != null) {
 			LinkedList<SysCAMSTPortDE> deports = de.getPortDE();
 			int cpt = 0;
-//			int cpt2 = 0;
+			int cpt2 = 0;
 
+			if ((!de.getTypeTemplate().equals("")) || (!de.getNameTemplate().equals("")))  {
+				corpsPrimitiveDE = corpsPrimitiveDE + "template<" + de.getTypeTemplate() + " " + de.getNameTemplate() + ">" + CR;
+			}
+			//corpsPrimitive = "SCA_TDF_MODULE(" + de.getName() + ") {" + CR2;
 			corpsPrimitiveDE = corpsPrimitiveDE + "class " + de.getName() + " : public sca_core::sca_module {" + CR2 + "public:" + CR;
+
+			if (!de.getListTypedef().isEmpty()) {
+				for (int i = 0; i < de.getListTypedef().getSize(); i++) {
+					String select = de.getListTypedef().get(i);
+					String[] split = select.split(" : ");
+					corpsPrimitiveDE = corpsPrimitiveDE + "\ttypedef " + split[1] + "<" + de.getNameTemplate() + "> " + split[0] + ";" + CR;
+					if (i == de.getListTypedef().getSize()-1) {
+						corpsPrimitiveDE = corpsPrimitiveDE + CR;
+					}
+				}
+			}
 			
+			if (de.getListStruct().getSize() != 0) {
+				corpsPrimitiveDE = corpsPrimitiveDE + "\tstruct parameters {" + CR;
+
+				String identifier, value, type;
+				for (int i = 0; i < de.getListStruct().size(); i++) {
+					String select = de.getListStruct().get(i);
+					String[] splita = select.split(" = ");
+					identifier = splita[0];
+					String[] splitb = splita[1].split(" : ");
+					value = splitb[0];
+					String[] splitc = splitb[1].split(" ");
+					if (splitc[0].equals("const")) {
+						type = splitc[1];
+					} else {
+						type = splitc[0];
+					}
+					corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + type + " " + identifier + ";" + CR;
+				}
+
+				corpsPrimitiveDE = corpsPrimitiveDE + "\t\tparameters()" + CR;
+
+				for (int i = 0; i < de.getListStruct().size(); i++) {
+					String select = de.getListStruct().get(i);
+					String[] splita = select.split(" = ");
+					identifier = splita[0];
+					String[] splitb = splita[1].split(" : ");
+					value = splitb[0];
+					String[] splitc = splitb[1].split(" ");
+					if (splitc[0].equals("const")) {
+						type = splitc[1];
+					} else {
+						type = splitc[0];
+					}
+					if (i == 0) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t: " + identifier + "(" + value + ")" + CR;
+					} 
+					if ((i > 0) && (i < de.getListStruct().getSize()-1)) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR;
+					} 
+					if (i == de.getListStruct().getSize()-1 && i != 0) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
+					}
+				}
+				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR;
+			}
+
 			if (!deports.isEmpty()) {
 				corpsPrimitiveDE = corpsPrimitiveDE + CR;
 				for (SysCAMSTPortDE t : deports) {
@@ -399,13 +460,19 @@ public class PrimitiveCode {
 			}
 
 			corpsPrimitiveDE = corpsPrimitiveDE + CR + "\tSC_HAS_PROCESS(" + de.getName() + ");" + CR + 
-					"\texplicit " + de.getName() + "(sc_core::sc_module_name nm)" + CR;
+			"\texplicit " + de.getName() + "(sc_core::sc_module_name nm";
 
-			if (!deports.isEmpty()) {
+			if (de.getListStruct().getSize() != 0) {
+				corpsPrimitiveDE = corpsPrimitiveDE + ", const parameters& p = parameters())" + CR;
+			} else {
+				corpsPrimitiveDE = corpsPrimitiveDE + ")" + CR;
+			}
+
+			if (!deports.isEmpty() || !de.getListStruct().isEmpty()) {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t: ";
 				if (!deports.isEmpty()) {
 					for (int i = 0; i < deports.size(); i++) {
-						if (deports.size() > 1) {
+						if (deports.size() >= 1) {
 							if (cpt == 0) {
 								corpsPrimitiveDE = corpsPrimitiveDE + deports.get(i).getName() + "(\"" + deports.get(i).getName() + "\")" + CR;
 								cpt++;
@@ -418,8 +485,27 @@ public class PrimitiveCode {
 						}
 					}
 				}
+				String identifier;
+				if (!de.getListStruct().isEmpty()) {
+					for (int i = 0; i < de.getListStruct().size(); i++) {
+						String select = de.getListStruct().get(i);
+						String[] splita = select.split(" = ");
+						identifier = splita[0];
+						if (de.getListStruct().getSize() >= 1) {
+							if (cpt == 0) {
+								corpsPrimitiveDE = corpsPrimitiveDE + identifier + "(p." + identifier + ")" + CR;
+								cpt++;
+							} else {
+								corpsPrimitiveDE = corpsPrimitiveDE + "\t, " + identifier + "(p." + identifier + ")" + CR;
+							}
+						} else {
+							corpsPrimitiveDE = corpsPrimitiveDE + identifier + "(p." + identifier + ")" + CR;
+							cpt++;
+						}
+					}
+				}
 			}
-			
+
 			boolean sensitive = false, method = false;
 			if (!de.getCode().equals("")) {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
@@ -445,57 +531,7 @@ public class PrimitiveCode {
 			} else {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t{}" + CR2;
 			}
-
-//			if (de.getPeriod() != -1) {
-//				corpsPrimitiveDE = corpsPrimitiveDE + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + de.getPeriod() + ", sc_core::SC_MS);" + CR;
-//				cpt2++;
-//			}	
 			
-//			if (cpt2 > 0) {
-//				for (SysCAMSTPortDE t : deports) {
-//					if (t.getPeriod() != -1) {
-//						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
-//					} 
-//					if (t.getRate() != -1) {
-//						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
-//					} 
-//					if (t.getDelay() != -1) {
-//						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
-//					} 
-//				}
-//			} else {
-//				for (SysCAMSTPortDE t : deports) {
-//					if (t.getPeriod() != -1) {
-//						if (cpt2 == 0) {
-//							corpsPrimitiveDE = corpsPrimitiveDE + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
-//							cpt2++;
-//						} else {
-//							corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
-//						}
-//					} 
-//					if (t.getRate() != -1) {
-//						if (cpt2 == 0) {
-//							corpsPrimitiveDE = corpsPrimitiveDE + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
-//							cpt2++;
-//						} else {
-//							corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
-//						}
-//					} 
-//					if (t.getDelay() != -1) {
-//						if (cpt2 == 0) {
-//							corpsPrimitiveDE = corpsPrimitiveDE + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
-//							cpt2++;
-//						} else {
-//							corpsPrimitiveDE = corpsPrimitiveDE + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
-//						}
-//					} 
-//				}
-//			}
-
-//			if (cpt2 > 0) {
-//				corpsPrimitiveDE = corpsPrimitiveDE + "\t}" + CR2;
-//			}
-
 			StringBuffer pcbuf = new StringBuffer(de.getCode());
 			StringBuffer buffer = new StringBuffer("");
 			int tab = 0;
@@ -529,8 +565,33 @@ public class PrimitiveCode {
 			}
 
 			String pc = buffer.toString();
+			corpsPrimitiveDE = corpsPrimitiveDE + "protected:" + CR + "\t" + pc + CR;
 
-			corpsPrimitiveDE = corpsPrimitiveDE + "\t" + pc + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
+			if (de.getListStruct().getSize() != 0) {
+				corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR;
+
+				String identifier, type, constant;
+				for (int i = 0; i < de.getListStruct().size(); i++) {
+					String select = de.getListStruct().get(i);
+					String[] splita = select.split(" = ");
+					identifier = splita[0];
+					String[] splitb = splita[1].split(" : ");
+					String[] splitc = splitb[1].split(" ");
+					if (splitc[0].equals("const")) {
+						constant = splitc[0];
+						type = splitc[1];
+					} else {
+						constant = "";
+						type = splitc[0];
+					}
+					if (constant.equals("")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t" + type + " " + identifier + ";" + CR;
+					} else {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t" + constant + " " + type + " " + identifier + ";" + CR;
+					}
+				}
+			}
+			corpsPrimitiveDE = corpsPrimitiveDE + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
 		} else {
 			corpsPrimitiveDE = "";
 		}

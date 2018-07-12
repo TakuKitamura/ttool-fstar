@@ -21,7 +21,7 @@ public:
 protected:
 	void processing() {
 	}
-   
+      
 };
 
 #endif // BLOCK_TDF_0_H
