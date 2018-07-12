@@ -605,7 +605,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 JOptionPane.INFORMATION_MESSAGE);
                         return false;
                     }
-                    
+
                     setValue(s);
                     recalculateSize();
 

@@ -61,7 +61,7 @@ public class IconManager {
     //Added by Solange
     public static Image img0, img1;
 
-    public static ImageIcon imgic13, imgic14, imgic15, imgic16, imgic17, imgic18, imgic19;
+    public static ImageIcon imgic13, imgic14, imgic15, imgic16, imgic16_1, imgic17, imgic18, imgic19;
     public static ImageIcon imgic20, imgic21, imgic22, imgic23, imgic24, imgic25, imgic26, imgic27, imgic28, imgic29;
     public static ImageIcon imgic20_proj, imgic21_proj, imgic22_proj, imgic23_proj, imgic22_net, imgic23_net;
 
@@ -208,6 +208,7 @@ public class IconManager {
     private static String icon15 = "activitydiagram.gif";
 
     private static String icon16 = "toolbarButtonGraphics/general/Refresh16.gif";
+    private static String icon16_1 = "toolbarButtonGraphics/general/Refresh24.gif";
 
     private static String icon17 = "iod.gif";
     private static String icon18 = "sd.gif";
@@ -729,6 +730,7 @@ public class IconManager {
         imgic14 = getIcon(icon14);
         imgic15 = getIcon(icon15);
         imgic16 = getIcon(icon16);
+        imgic16_1 = getIcon(icon16_1);
         imgic17 = getIcon(icon17);
         imgic18 = getIcon(icon18);
         imgic19 = getIcon(icon19);
