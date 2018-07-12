@@ -252,20 +252,33 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 
 			JPanel codeBoxPanel = new JPanel(new BorderLayout());
 
-			JPanel nameFnGrid = new JPanel(new GridLayout(1, 3));
+			GridBagLayout nameGridBag = new GridBagLayout();
+			GridBagConstraints nameConstraints = new GridBagConstraints();
+			JPanel namePanel = new JPanel();
+			namePanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+			namePanel.setLayout(nameGridBag);
+
+			JLabel nameFnLabel = new JLabel("Name of the method :");
+			nameConstraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(5, 10, 5, 10), 0, 0);
+			nameGridBag.setConstraints(nameFnLabel, nameConstraints);
+			namePanel.add(nameFnLabel);
 			
-			JLabel nameFnLabel = new JLabel("Name of the method : ");
-			nameFnGrid.add(nameFnLabel);
-			
-			nameFnTextField = new JTextField(block.getNameFn());
-			nameFnGrid.add(nameFnTextField);
+			nameFnTextField = new JTextField(block.getNameFn(), 20);
+			nameConstraints = new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(5, 10, 5, 10), 0, 0);
+			nameGridBag.setConstraints(nameFnTextField, nameConstraints);
+			namePanel.add(nameFnTextField);
 			
 			nameFnButton = new JButton("OK");
 			nameFnButton.setActionCommand("OK");
 			nameFnButton.addActionListener(this);
-			nameFnGrid.add(nameFnButton);
+			nameConstraints = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(5, 10, 5, 10), 0, 0);
+			nameGridBag.setConstraints(nameFnButton, nameConstraints);
+			namePanel.add(nameFnButton);
 			
-			codeBoxPanel.add(nameFnGrid, BorderLayout.NORTH);
+			codeBoxPanel.add(namePanel, BorderLayout.NORTH);
 			
 			StringBuffer stringbuf = encode(block.getCode());
 			String beginString = stringbuf.toString();
