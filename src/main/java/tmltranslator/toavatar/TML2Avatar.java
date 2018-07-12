@@ -1481,7 +1481,7 @@ public class TML2Avatar {
             this.avspec = new AvatarSpecification("spec", null);
         }
         attrsToCheck.clear();
-        //tmlmodel.removeForksAndJoins();
+        tmlmodel.removeForksAndJoins();
         //Only set the loop limit if it's a number
         String pattern = "^[0-9]{1,2}$";
         Pattern r = Pattern.compile(pattern);

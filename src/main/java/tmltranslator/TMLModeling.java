@@ -50,6 +50,7 @@ import myutil.TraceManager;
 import proverifspec.ProVerifOutputAnalyzer;
 import proverifspec.ProVerifQueryAuthResult;
 import proverifspec.ProVerifQueryResult;
+import proverifspec.ProVerifResultTrace;
 import ui.TAttribute;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLCPrimitivePort;
@@ -806,6 +807,12 @@ public class TMLModeling<E> {
                     if (port.checkConf && !invalidate){
                         port.checkConfStatus = r;
                         port.mappingName= mappingName;
+                        //Add Result Trace also
+                        ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
+                        if (trace !=null){
+                        	port.setResultTrace(trace);
+                        	port.setPragmaString(pragma.toString());
+                        }
                     }
                 }
             }
@@ -857,14 +864,16 @@ public class TMLModeling<E> {
                 }
             }*/
         }
+        //
     }
 	public TGComponent getTGComponent(){
 		return (TGComponent) getTasks().get(0).getReferenceObject();
 	}
 
 
-    public void backtraceAuthenticity(Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authenticityResults, String mappingName) {
+    public void backtraceAuthenticity(ProVerifOutputAnalyzer pvoa, String mappingName) {
         //        TraceManager.addDev("Backtracing Authenticity");
+        Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authenticityResults = pvoa.getAuthenticityResults();
         for (AvatarPragmaAuthenticity pragma: authenticityResults.keySet()) {
             ProVerifQueryAuthResult result = authenticityResults.get(pragma);
             // TODO: deal directly with pragma instead of s
@@ -885,6 +894,11 @@ public class TMLModeling<E> {
                         if (port.checkAuth){
                             port.checkStrongAuthStatus = 3;
                             port.mappingName= mappingName;
+                            ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
+                        	if (trace !=null){
+                        		port.setResultTrace(trace);
+                        		port.setPragmaString(pragma.toString());
+                        	}
                         }
                     }
                 }
@@ -932,6 +946,11 @@ public class TMLModeling<E> {
                                     port.checkStrongAuthStatus = 3;
                                     TraceManager.addDev("not verified " + signalName);
                                     port.secName= signalName;
+                                    ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
+                        			if (trace !=null){
+                        				port.setResultTrace(trace);
+                        				port.setPragmaString(pragma.toString());
+                        			}
                                 }
                             }
                         }
@@ -958,6 +977,11 @@ public class TMLModeling<E> {
                                     if (port.checkAuth){
                                         port.checkWeakAuthStatus = 3;
                                         port.secName= signalName;
+                                        ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
+                        				if (trace !=null){
+                        					port.setResultTrace(trace);
+                        					port.setPragmaString(pragma.toString());
+  					                      }
                                     }
                                 }
                             }
@@ -976,7 +1000,12 @@ public class TMLModeling<E> {
                             if (port.checkAuth){
                                 port.checkWeakAuthStatus = 2;
                                 port.mappingName= mappingName;
-                            }
+                                ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
+                        		if (trace !=null){
+                        			port.setResultTrace(trace);
+                        			port.setPragmaString(pragma.toString());
+                        		}
+	                        }
                         }
                     }
                     signalName = s.split("_reqData")[0];
@@ -1028,6 +1057,11 @@ public class TMLModeling<E> {
                                     if (port.checkAuth){
                                         port.checkWeakAuthStatus = 2;
                                         port.secName= signalName;
+                                        ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
+                        				if (trace !=null){
+                        					port.setResultTrace(trace);
+                				        	port.setPragmaString(pragma.toString());
+ 				                       }
                                     }
                                 }
                             }
@@ -1054,6 +1088,11 @@ public class TMLModeling<E> {
                                         if (port.checkAuth){
                                             port.checkWeakAuthStatus = 2;
                                             port.secName= signalName;
+                                            ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
+                       						if (trace !=null){
+                        						port.setResultTrace(trace);
+                        						port.setPragmaString(pragma.toString());
+                        					}
                                         }
                                     }
                                 }
@@ -1076,6 +1115,11 @@ public class TMLModeling<E> {
                         if (port.checkAuth){
                             port.checkStrongAuthStatus = 2;
                             port.mappingName= mappingName;
+                            ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
+                        	if (trace !=null){
+                        		port.setResultTrace(trace);
+                        		port.setPragmaString(pragma.toString());
+                        	}
                         }
                     }
                 }
@@ -1128,9 +1172,14 @@ public class TMLModeling<E> {
                         if (channel!=null){
                             for (TMLCPrimitivePort port:channel.ports){
                              //   TraceManager.addDev("adding to port " + channelName);
-                                if (port.checkAuth){
+                            	if (port.checkAuth){
                                     port.checkStrongAuthStatus = 2;
                                     port.secName= signalName;
+                                    ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
+                        			if (trace !=null){
+                        				port.setResultTrace(trace);
+                        				port.setPragmaString(pragma.toString());
+                        			}
                                 }
                             }
                         }
@@ -1158,6 +1207,11 @@ public class TMLModeling<E> {
                                     if (port.checkAuth){
                                         port.checkStrongAuthStatus = 2;
                                         port.secName= signalName;
+                        				ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
+                        				if (trace !=null){
+                        					port.setResultTrace(trace);
+                        					port.setPragmaString(pragma.toString());
+                        				}                                        
                                     }
                                 }
                             }
@@ -1181,6 +1235,8 @@ public class TMLModeling<E> {
                     port.checkStrongAuthStatus = 1;
                     port.checkWeakAuthStatus=1;
                 }
+                port.setResultTrace(null);
+                port.setPragmaString("");
             }
         }
         for (TMLRequest req: getRequests()){
