@@ -52,7 +52,7 @@ import java.util.LinkedList;
 
 /**
  * Class SysCAMSBlockTDF
- * Primitive Component. To be used in SystemC-AMSdiagrams
+ * Primitive Component. To be used in SystemC-AMS diagrams
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
