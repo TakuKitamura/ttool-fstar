@@ -97,10 +97,15 @@ public class SysCAMSPanelTranslator {
 
 				String blockDEName = blockDE.getValue();
 //				int periodBlock = blockDE.getPeriod();
-				String nameFn = blockDE.getNameFn();
-				String code = blockDE.getCode();
+//				String time = blockDE.getTime();
+//				String nameFn = blockDE.getNameFn();
+//				String code = blockDE.getCode();
+//				DefaultListModel<String> listStruct = blockDE.getListStruct();
+//				String nameTemplate = blockDE.getNameTemplate();
+//				String typeTemplate = blockDE.getTypeTemplate();
+//				DefaultListModel<String> listTypedef = blockDE.getListTypedef();
 
-				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, nameFn, code);
+				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, "", "", null, "", "", null, null);
 
 				List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 				for (int i = 0; i < portsDE.size(); i++) {
@@ -138,13 +143,14 @@ public class SysCAMSPanelTranslator {
 
 					String blockTDFName = blockTDF.getValue();
 					int periodBlock = blockTDF.getPeriod();
+					String time = blockTDF.getTime();
 					String processCode = blockTDF.getProcessCode();
 					DefaultListModel<String> listStruct = blockTDF.getListStruct();
 					String nameTemplate = blockTDF.getNameTemplate();
 					String typeTemplate = blockTDF.getTypeTemplate();
 					DefaultListModel<String> listTypedef = blockTDF.getListTypedef();
 
-					SysCAMSTBlockTDF syscamsBlockTDF = new SysCAMSTBlockTDF(blockTDFName, periodBlock, processCode, listStruct, nameTemplate, typeTemplate, listTypedef, syscamsCluster);				
+					SysCAMSTBlockTDF syscamsBlockTDF = new SysCAMSTBlockTDF(blockTDFName, periodBlock, time, processCode, listStruct, nameTemplate, typeTemplate, listTypedef, syscamsCluster);				
 
 					List<SysCAMSPortTDF> portsTDF = blockTDF.getAllInternalPortsTDF();
 					for (int j = 0; j < portsTDF.size(); j++) {
@@ -191,10 +197,15 @@ public class SysCAMSPanelTranslator {
 					
 					String blockDEName = blockDE.getValue();
 //					int periodBlock = blockDE.getPeriod();
+//					String time = blockDE.getTime();
 					String nameFn = blockDE.getNameFn();
 					String code = blockDE.getCode();
+					DefaultListModel<String> listStruct = blockDE.getListStruct();
+					String nameTemplate = blockDE.getNameTemplate();
+					String typeTemplate = blockDE.getTypeTemplate();
+					DefaultListModel<String> listTypedef = blockDE.getListTypedef();
 
-					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, nameFn, code);
+					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, nameFn, code, listStruct, nameTemplate, typeTemplate, listTypedef, syscamsCluster);
 
 					List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 					for (int j = 0; j < portsDE.size(); j++) {

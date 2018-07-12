@@ -51,9 +51,9 @@ import javax.swing.DefaultListModel;
 */
 
 public class SysCAMSTBlockTDF extends SysCAMSTComponent {
-
 	private String name;
 	private int period;
+	private String time;
 	private String processCode;
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
@@ -65,9 +65,10 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	private LinkedList<SysCAMSTPortTDF> portTDF;
 	private LinkedList<SysCAMSTPortConverter> portConverter;
 	
-	public SysCAMSTBlockTDF(String _name, int _period, String _processCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
+	public SysCAMSTBlockTDF(String _name, int _period, String _time, String _processCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
 		name = _name;
 		period = _period;
+		time = _time;
 		processCode = _processCode;
 		listStruct = _listStruct;
 		nameTemplate = _nameTemplate;
@@ -78,16 +79,20 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 		portConverter = new LinkedList<SysCAMSTPortConverter>();
 	}
 
+	public String getName() {
+		return name;
+	}
+	
 	public int getPeriod() {
 		return period;
+	}
+	
+	public String getTime() {
+		return time;
 	}
 
 	public String getProcessCode() {
 		return processCode;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public DefaultListModel<String> getListStruct() {

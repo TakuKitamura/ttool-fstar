@@ -46,6 +46,7 @@ import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogSysCAMSBlockDE;
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -63,6 +64,10 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 //	private String time;
 	private String nameFn;
 	private String code;
+	private DefaultListModel<String> listStruct;
+	private String nameTemplate;
+	private String typeTemplate;
+	private DefaultListModel<String> listTypedef;
 
 	private int maxFontSize = 14;
 	private int minFontSize = 4;
@@ -106,6 +111,10 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 //		setTime("");
 		setNameFn("");
 		setCode("");
+		setListStruct(new DefaultListModel<String>());
+		setNameTemplate("");
+		setTypeTemplate("");
+		setListTypedef(new DefaultListModel<String>());
 
 		myImageIcon = IconManager.imgic1202;
 
@@ -293,11 +302,28 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 //		sb.append(getPeriod());
 //		sb.append("\" time=\"" + getTime());
 		sb.append("\" code=\"" + encode(getCode()));
+		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
+		sb.append("\" nameTemplate=\"" + getNameTemplate());
+		sb.append("\" typeTemplate=\"" + getTypeTemplate());
+		sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
 		sb.append("\" />\n");
 		sb.append("</extraparam>\n");
 		return new String(sb);
 	}
 
+	public String splitParameters(DefaultListModel<String> listStruct) {
+		String s = "";
+
+		for (int i = 0; i < listStruct.getSize(); i++) {
+			if (i < listStruct.getSize()-1) {
+				s = s + listStruct.get(i) + "|";
+			} else {
+				s = s + listStruct.get(i);
+			}
+		}
+		return s;
+	}
+	
 	public StringBuffer encode(String data) {
 		StringBuffer databuf = new StringBuffer(data);
 		StringBuffer buffer = new StringBuffer("");
@@ -405,7 +431,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 			Element elt;
 
 			int period;
-			String time, code, nameFn;
+			String code, nameFn, listStruct, nameTemplate, typeTemplate, listTypedef;
 
 			for(int i=0; i<nl.getLength(); i++) {
 				n1 = nl.item(i);
@@ -420,11 +446,33 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 //								time = elt.getAttribute("time");
 								code = elt.getAttribute("code");
 								nameFn = elt.getAttribute("name_function");
+								listStruct = elt.getAttribute("listStruct");
+								nameTemplate = elt.getAttribute("nameTemplate");
+								typeTemplate = elt.getAttribute("typeTemplate");
+								listTypedef = elt.getAttribute("listTypedef");
 //								setPeriod(period);
 //								setTime(time);
 								setNameFn(nameFn);
 								code = decode(code).toString();
 								setCode(code);
+								String[] splita = listStruct.split("\\|");
+								DefaultListModel<String> lista = new DefaultListModel<String>();
+								for (String s : splita) {
+									if (!s.equals("")) {
+										lista.addElement(s);
+									}
+								}
+								setListStruct(lista);
+								setNameTemplate(nameTemplate);
+								setTypeTemplate(typeTemplate);
+								String[] splitb = listTypedef.split("\\|");
+								DefaultListModel<String> listb = new DefaultListModel<String>();
+								for (String s : splitb) {
+									if (!s.equals("")) {
+										listb.addElement(s);
+									}
+								}
+								setListTypedef(listb);
 							}
 						}
 					}
@@ -502,5 +550,37 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
 	public String getNameFn() {
 		return nameFn;
+	}
+	
+	public DefaultListModel<String> getListStruct() {
+		return listStruct;
+	}
+
+	public void setListStruct(DefaultListModel<String> _listStruct) {
+		listStruct = _listStruct;
+	}
+
+	public String getNameTemplate() {
+		return nameTemplate;
+	}
+
+	public void setNameTemplate(String _nameTemplate) {
+		nameTemplate = _nameTemplate;
+	}
+
+	public String getTypeTemplate() {
+		return typeTemplate;
+	}
+
+	public void setTypeTemplate(String _typeTemplate) {
+		typeTemplate = _typeTemplate;
+	}
+
+	public DefaultListModel<String> getListTypedef() {
+		return listTypedef;
+	}
+
+	public void setListTypedef(DefaultListModel<String> _listTypedef) {
+		listTypedef = _listTypedef;
 	}
 }

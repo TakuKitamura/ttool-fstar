@@ -58,7 +58,7 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
  */
 
-public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, WithAttributes {
+public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
 	private int period;
 	private String time;
 	private String processCode;
@@ -107,8 +107,8 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		name = "Primitive component - Block TDF";
 
 		setPeriod(-1);
-		setProcessCode("void processing() {\n\n}");
 		setTime("");
+		setProcessCode("void processing() {\n\n}");
 		setListStruct(new DefaultListModel<String>());
 		setNameTemplate("");
 		setTypeTemplate("");
@@ -565,24 +565,12 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		return list;
 	}
 
-	public String getProcessCode() {
-		return processCode;
-	}
-
-	public void setProcessCode(String _processCode) {
-		processCode = _processCode;
-	}
-
 	public int getPeriod() {
 		return period;
 	}
 
 	public void setPeriod(int _period) {
 		period = _period;
-	}
-
-	public String getAttributes() {
-		return null;
 	}
 
 	public String getTime() {
@@ -593,6 +581,14 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		time = _time;
 	}
 
+	public String getProcessCode() {
+		return processCode;
+	}
+
+	public void setProcessCode(String _processCode) {
+		processCode = _processCode;
+	}
+	
 	public DefaultListModel<String> getListStruct() {
 		return listStruct;
 	}

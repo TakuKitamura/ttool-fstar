@@ -40,12 +40,12 @@ package ui.window;
 
 import ui.syscams.*;
 import ui.util.*;
-import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.border.*;
+import javax.swing.event.*;
 
 /**
  * Class JDialogSystemCAMSBlockTDF 
@@ -73,11 +73,9 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 	private JList<String> structList;
 	private DefaultListModel<String> structListModel;
 	private boolean structBool = false;
-
 	private JTextField nameTemplateTextField;
 	private String listTypeTemplateString[];
 	private JComboBox<String> typeTemplateComboBoxString;
-
 	private JTextField nameTypedefTextField;
 	private String listTypeTypedefString[];
 	private JComboBox<String> typeTypedefComboBoxString;
@@ -626,8 +624,8 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		this.getRootPane().setDefaultButton(saveCloseButton);
 		pack();
+		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 
 	public void actionPerformed(ActionEvent e) {
