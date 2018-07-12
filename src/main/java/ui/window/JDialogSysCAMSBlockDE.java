@@ -248,7 +248,7 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener {
 			codeMainPanel.setLayout(new BorderLayout());
 
 			Box codeBox = Box.createVerticalBox();
-			codeBox.setBorder(BorderFactory.createTitledBorder("Method of DE block"));
+			codeBox.setBorder(BorderFactory.createTitledBorder("Behavior function of DE block"));
 
 			JPanel codeBoxPanel = new JPanel(new BorderLayout());
 
