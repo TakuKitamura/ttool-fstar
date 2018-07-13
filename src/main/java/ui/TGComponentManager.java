@@ -410,6 +410,7 @@ public class TGComponentManager {
 
     // AVATAR RD -> starts at 5200
     public static final int AVATARRD_REQUIREMENT = 5200;
+    public static final int AVATARRD_REQUIREMENT_REFERENCE = 5208;
     public static final int AVATARRD_PROPERTY = 5201;
     public static final int AVATARRD_ELEMENT_REFERENCE = 5207;
     public static final int AVATARRD_DERIVE_CONNECTOR = 5202;
@@ -418,6 +419,7 @@ public class TGComponentManager {
     public static final int AVATARRD_VERIFY_CONNECTOR = 5203;
     public static final int AVATARRD_COPY_CONNECTOR = 5204;
     public static final int AVATARRD_COMPOSITION_CONNECTOR = 5205;
+
 
     // AVATAR AMD -> starts at 5250
     public static final int AVATARMAD_ASSUMPTION = 5250;
@@ -589,6 +591,9 @@ public class TGComponentManager {
 
             case AVATARRD_REQUIREMENT:
                 tgc = new AvatarRDRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARRD_REQUIREMENT_REFERENCE:
+                tgc = new AvatarRDRequirementReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case AVATARRD_PROPERTY:
                 tgc = new AvatarRDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1551,6 +1556,8 @@ public class TGComponentManager {
             // AVATAR RD
         } else if (tgc instanceof AvatarRDRequirement) {
             return AVATARRD_REQUIREMENT;
+        } else if (tgc instanceof AvatarRDRequirementReference) {
+            return AVATARRD_REQUIREMENT_REFERENCE;
         } else if (tgc instanceof AvatarRDProperty) {
             return AVATARRD_PROPERTY;
         } else if (tgc instanceof AvatarRDElementReference) {

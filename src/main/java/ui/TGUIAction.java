@@ -416,6 +416,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ARD_SATISFY_CONNECTOR = 422;
     public static final int ARD_COPY_CONNECTOR = 305;
     public static final int ARD_COMPOSITION_CONNECTOR = 306;
+    public static final int ARD_REQUIREMENT_REFERENCE = 481;
 
     // AVATAR Assumptions
     public static final int AMAD_EDIT = 370;
@@ -636,7 +637,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 481;
+    public static final int NB_ACTION = 482;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1259,6 +1260,7 @@ public class TGUIAction extends AbstractAction {
         // AVATAR Requirement Diagrams
         actions[ARD_EDIT] = new TAction("edit-ard-diagram", "Edit Requirement Diagram", IconManager.imgic100, IconManager.imgic101, "Edit Requirement Diagram", "Make it possible to edit the currently opened Requirement Diagram", 0);
         actions[ARD_REQUIREMENT] = new TAction("add-ard-requirement", "Add a requirement", IconManager.imgic5006, IconManager.imgic5006, "Requirement", "Add a requirement to the currently opened requirement diagram", 0);
+        actions[ARD_REQUIREMENT_REFERENCE] = new TAction("add-ard-requirement-reference", "Add a reference to a requirement", IconManager.imgic5074, IconManager.imgic5074, "Requirement Reference", "Add a requirement reference to the currently opened requirement diagram", 0);
         actions[ARD_PROPERTY] = new TAction("add-ard-property", "Add a property", IconManager.imgic5008, IconManager.imgic5008, "Property", "Add a reference to a property of the currently opened requirement diagram", 0);
         actions[ARD_ELEMENT_REFERENCE] = new TAction("add-ard-element-reference", "Add a reference to an element", IconManager.imgic5068, IconManager.imgic5068, "Element Reference", "Add a reference to an element of the currently opened requirement diagram", 0);
         actions[ARD_DERIVE_CONNECTOR] = new TAction("add-ard-derive", "Add a <<deriveReqt>> link", IconManager.imgic1008, IconManager.imgic1008, "DeriveReqt", "Add a <<deriveReqt>> link between two requirements of the currently opened requirement diagram", 0);
