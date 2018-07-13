@@ -92,7 +92,30 @@ public class SysCAMSPanelTranslator {
 		}	
 
 		for (TGComponent dp : list) {
-			if (dp instanceof SysCAMSBlockDE) {
+			if (dp instanceof SysCAMSBlockGPIO2VCI) {
+				SysCAMSBlockGPIO2VCI blockGPIO2VCI = (SysCAMSBlockGPIO2VCI) dp;
+
+				SysCAMSTBlockGPIO2VCI syscamsBlockGPIO2VCI = new SysCAMSTBlockGPIO2VCI();
+
+				List<SysCAMSPortDE> portsDE = blockGPIO2VCI.getAllInternalPortsDE();
+				for (int i = 0; i < portsDE.size(); i++) {
+					SysCAMSPortDE portDE = portsDE.get(i);
+
+					String portName = portDE.getPortName();
+					String type = portDE.getDEType();
+					int origin = portDE.getOrigin();
+					boolean sensitive = portDE.getSensitive();
+					String sensitiveMethod = portDE.getSensitiveMethod();
+
+					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, type, sensitive, sensitiveMethod, syscamsBlockGPIO2VCI);
+
+					syscamsMap.put(portDE, syscamsPortDE);
+					syscamsBlockGPIO2VCI.addPortDE(syscamsPortDE);
+					syscamsComponents.add(syscamsPortDE);
+				}	
+				syscamsMap.put(blockGPIO2VCI, syscamsBlockGPIO2VCI);
+				syscamsComponents.add(syscamsBlockGPIO2VCI);
+			} else if (dp instanceof SysCAMSBlockDE) {
 				SysCAMSBlockDE blockDE = (SysCAMSBlockDE) dp;
 
 				String blockDEName = blockDE.getValue();
