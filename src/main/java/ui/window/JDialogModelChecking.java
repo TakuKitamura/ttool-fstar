@@ -86,7 +86,7 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
 
         if ((validated == null) || (ignored == null)) {
             val = makeNewVal(componentList);
-            //System.out.println("Val size: " + val.size() + "component list:" + componentList.size());
+            //
             ign = new LinkedList<TClassInterface>();
         } else {
             val = validated;

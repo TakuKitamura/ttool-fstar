@@ -652,6 +652,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return attr;
     }
 
+    public TMLCPath findPathWith(TGComponent tgc) {
+        return ((TMLComponentTaskDiagramPanel)tdp).findPathWith(tgc);
+    }
+
 
     /*public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_NODE_TMLARCHI;

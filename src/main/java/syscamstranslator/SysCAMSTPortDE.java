@@ -39,6 +39,8 @@
 package syscamstranslator;
 
 /**
+ * Class SysCAMSTPortDE
+ * Parameters of a SystemC-AMS port DE
  * Creation: 07/05/2018
  * @version 1.0 07/05/2018
  * @author Irina Kit Yan LEE
@@ -47,21 +49,27 @@ package syscamstranslator;
 public class SysCAMSTPortDE extends SysCAMSTComponent {
 
 	private String name;
-	private int period;
-	private int rate;
-	private int delay;
+//	private int period;
+//	private String time;
+//	private int rate;
+//	private int delay;
 	private int origin;
 	private String DEType;
+	private boolean sensitive;
+	private String sensitiveMethod;
 	
 	private SysCAMSTBlockDE blockDE;
 	
-	public SysCAMSTPortDE(String _name, int _period, int _rate, int _delay, int _origin, String _DEType, SysCAMSTBlockDE _blockDE) {
+	public SysCAMSTPortDE(String _name, int _origin, String _DEType, boolean _sensitive, String _sensitiveMethod, SysCAMSTBlockDE _blockDE) {
 		name = _name;
-		period = _period;
-		rate = _rate;
-		delay = _delay;
+//		period = _period;
+//		time = _time;
+//		rate = _rate;
+//		delay = _delay;
 		origin = _origin;
 		DEType = _DEType;
+		sensitive = _sensitive;
+		sensitiveMethod = _sensitiveMethod;
 		blockDE = _blockDE;
 	}
 
@@ -69,55 +77,39 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 		return name;
 	}
 
-	public void setName(String _name) {
-		name = _name;
-	}
-
-	public int getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(int _period) {
-		period = _period;
-	}
-
-	public int getRate() {
-		return rate;
-	}
-
-	public void setRate(int _rate) {
-		rate = _rate;
-	}
-
-	public int getDelay() {
-		return delay;
-	}
-
-	public void setDelay(int _delay) {
-		delay = _delay;
-	}
+//	public int getPeriod() {
+//		return period;
+//	}
+//
+//	public String getTime() {
+//		return time;
+//	}
+//
+//	public int getRate() {
+//		return rate;
+//	}
+//
+//	public int getDelay() {
+//		return delay;
+//	}
 
 	public int getOrigin() {
 		return origin;
-	}
-
-	public void setOrigin(int _origin) {
-		origin = _origin;
 	}
 
 	public String getDEType() {
 		return DEType;
 	}
 
-	public void setDEType(String _DEType) {
-		DEType = _DEType;
+	public boolean getSensitive() {
+		return sensitive;
+	}
+
+	public String getSensitiveMethod() {
+		return sensitiveMethod;
 	}
 
 	public SysCAMSTBlockDE getBlockTDF() {
 		return blockDE;
-	}
-
-	public void setBlockDE(SysCAMSTBlockDE _blockDE) {
-		blockDE = _blockDE;
 	}
 }

@@ -113,7 +113,7 @@ public class NCLink extends NCElement  {
 		NCCapacityUnit unit = new NCCapacityUnit();
 		unit.setUnit(getCapacityUnit().getStringUnit());
 		link.setCapacity(capacity);
-		//System.out.println("capacity = " + capacity);
+		//
 		link.setCapacityUnit(unit);
 		link.setLinkedElement2(le1);
 		link.setLinkedElement1(le2);

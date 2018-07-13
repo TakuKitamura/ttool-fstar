@@ -62,28 +62,28 @@ public class AvatarRDConnectingPointDerive extends  TGConnectingPointWidthHeight
     }
 
     public boolean isCompatibleWith(int type) {
-        //System.out.println("is compatible with " + type);
+        //
         if (type == TGComponentManager.AVATARRD_DERIVE_CONNECTOR) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
 
         if (type == TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
 
         if (type == TGComponentManager.AVATARRD_COPY_CONNECTOR) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
 
         if (type == TGComponentManager.AVATARRD_REFINE_CONNECTOR) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
         //System.out.pr
-        //System.out.println("is compatible with:false");
+        //
         return false;
     }
 

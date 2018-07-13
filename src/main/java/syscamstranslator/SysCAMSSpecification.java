@@ -42,9 +42,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
-* Creation: 14/05/2018
-* @version 1.0 14/05/2018
-* @author Irina Kit Yan LEE
+ * Class SysCAMSSpecification
+ * List and number of all the elements in a SystemC-AMS diagram
+ * Creation: 14/05/2018
+ * @version 1.0 14/05/2018
+ * @author Irina Kit Yan LEE
 */
 
 public class SysCAMSSpecification{
@@ -123,6 +125,16 @@ public class SysCAMSSpecification{
     	}
     	return portsDE;
     }
+    
+    public LinkedList<SysCAMSTConnector> getAllConnector(){
+    	LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+    	for (SysCAMSTConnector con : connectors) {
+    		if (con instanceof SysCAMSTConnector) {
+    			cons.add(con);
+    		}
+    	}
+    	return cons;
+    }
    
     public int getNbBlockTDF(){
       return (getAllBlockTDF()).size();
@@ -146,5 +158,9 @@ public class SysCAMSSpecification{
 
     public int getNbPortDE(){
       return (getAllPortDE()).size();
+    }
+    
+    public int getNbConnector(){
+    	return (getAllConnector()).size();
     }
 }

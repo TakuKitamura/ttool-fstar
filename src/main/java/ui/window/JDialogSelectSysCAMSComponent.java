@@ -43,7 +43,6 @@ import ui.TGComponent;
 import ui.syscams.SysCAMSBlockDE;
 import ui.syscams.SysCAMSBlockTDF;
 import ui.syscams.SysCAMSCompositeComponent;
-import ui.syscams.SysCAMSRemoteCompositeComponent;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -124,11 +123,6 @@ public class JDialogSelectSysCAMSComponent extends JDialogBase implements Action
             if (tgc instanceof SysCAMSBlockDE) {
             	cs.add(tgc);
             }
-
-            if (tgc instanceof SysCAMSRemoteCompositeComponent) {
-//            	cs.addAll(((SysCAMSRemoteCompositeComponent)tgc).getAllBlockDEComponents());
-                cs.addAll(((SysCAMSRemoteCompositeComponent)tgc).getAllBlockTDFComponents());
-            }
         }
     }
 
@@ -138,7 +132,7 @@ public class JDialogSelectSysCAMSComponent extends JDialogBase implements Action
 
         for(int i=0; i<list.size(); i++) {
             tgc = list.get(i);
-            //System.out.println(tgc);
+            //
             if (tgc instanceof SysCAMSBlockTDF) {
                 v.addElement(tgc);
             }
@@ -170,7 +164,7 @@ public class JDialogSelectSysCAMSComponent extends JDialogBase implements Action
             
             if (((tgc instanceof SysCAMSBlockTDF) || (tgc instanceof SysCAMSBlockDE)) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
                 added.addElement( tgc ) ;
-                //System.out.println("New element");
+                //
             }
         }
     }
@@ -421,3 +415,4 @@ public class JDialogSelectSysCAMSComponent extends JDialogBase implements Action
         return optimized;
     }
 }
+

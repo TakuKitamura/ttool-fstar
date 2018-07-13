@@ -37,8 +37,6 @@
  */
 
 
-
-
 package remotesimulation;
 
 import java.util.ArrayList;
@@ -48,8 +46,9 @@ import java.util.ArrayList;
  * Class CommandParser
  * For managing commands the C++ simulator
  * Creation: 16/04/2009
- * @version 1.1 16/04/2009
+ *
  * @author Ludovic APVRILLE
+ * @version 1.1 16/04/2009
  */
 public class CommandParser {
     ArrayList<SimulationCommand> commandList;
@@ -95,19 +94,19 @@ public class CommandParser {
     }
 
     public String getHelp(String cmd) {
-        //System.out.println("calculating help on cmd");
+        //TraceManager.addDev("calculating help on cmd");
         StringBuffer sb = new StringBuffer("");
         boolean commandFound = false;
         int i;
 
-        for(SimulationCommand sc: commandList) {
+        for (SimulationCommand sc : commandList) {
             if (sc.userCommand.equals(cmd) || sc.alias.equals(cmd)) {
                 sb.append(sc.getSynopsis() + "\n" + sc.help + "\n");
                 if (sc.hasAlias()) {
                     sb.append("alias: " + sc.alias + "\n");
                 }
                 sb.append("code: " + sc.simulatorCommand);
-                //System.out.println("Command found" + sc.help);
+                //TraceManager.addDev("Command found" + sc.help);
                 commandFound = true;
             }
         }
@@ -135,9 +134,9 @@ public class CommandParser {
         int cpt = 0;
 
         String cmds[] = cmd.split(" ");
-        //  System.out.println("cmd " + cmd + " has " + cmds.length + " elements");
+        //  TraceManager.addDev("cmd " + cmd + " has " + cmds.length + " elements");
 
-        for(SimulationCommand sc: commandList) {
+        for (SimulationCommand sc : commandList) {
             // Same command name?
             if (sc.userCommand.equals(cmds[0]) || sc.alias.equals(cmds[0])) {
                 // Compatible arguments?
@@ -148,7 +147,7 @@ public class CommandParser {
                     index = -2;
                 }
             }
-            cpt ++;
+            cpt++;
         }
 
         if (index < 0) {
@@ -173,7 +172,7 @@ public class CommandParser {
     public String getCommandList() {
         int cpt = 0;
         StringBuffer sb = new StringBuffer("");
-        for(SimulationCommand sc: commandList) {
+        for (SimulationCommand sc : commandList) {
             if (cpt == 1) {
                 cpt = 0;
                 sb.append("\n");
@@ -183,7 +182,7 @@ public class CommandParser {
             } else {
                 sb.append(sc.userCommand + "/" + sc.alias + " ");
             }
-            cpt ++;
+            cpt++;
         }
         return sb.toString();
     }
@@ -320,7 +319,7 @@ public class CommandParser {
         // rawcmd
         params = new int[5];
         paramNames = new String[5];
-        for(i=0; i<5; i++) {
+        for (i = 0; i < 5; i++) {
             params[i] = 4;
             paramNames[i] = "param #" + i;
         }
@@ -485,19 +484,13 @@ public class CommandParser {
         params = new int[2];
         paramNames = new String[2];
         params[0] = 1;
-        paramNames[0]="Checkpoint 1 id";
+        paramNames[0] = "Checkpoint 1 id";
         params[1] = 1;
         paramNames[1] = "Checkpoint2 id";
         sc = new SimulationCommand("calculate-latencies", "cl", "23", params, paramNames, "Calculate latencies between checkpoints");
         commandList.add(sc);
 
     }
-
-
-
-
-
-
 
 
 }

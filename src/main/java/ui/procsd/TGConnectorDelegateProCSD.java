@@ -62,8 +62,8 @@ public  class TGConnectorDelegateProCSD extends TGConnectorProCSD {
         
     public TGConnectorDelegateProCSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, new Vector<Point>(0));
-       // System.out.println("constructor"); 
-       // System.out.println("list points "+_listPoint.toString());
+       // 
+       // 
         myImageIcon = IconManager.imgic202;
         automaticDrawing = false;
         
@@ -85,7 +85,7 @@ public void internalDrawing(Graphics g) {
         if (nbInternalTGComponent>0) {
             p3 = tgcomponent[0];
             p4 = tgcomponent[0];
-            //System.out.println("p3.x " + p3.getX() + " p3.y " + p3.getY());
+            //
             drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
             
             for(int i=0; i<nbInternalTGComponent-1; i++) {

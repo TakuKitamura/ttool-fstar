@@ -45,6 +45,7 @@ package ui;
 //import java.awt.*;
 //import javax.swing.*;
 
+import myutil.TraceManager;
 import sddescription.*;
 import translator.CheckingError;
 import ui.iod.*;
@@ -117,7 +118,7 @@ public class AnalysisPanelTranslator {
         for(i=0; i<ap.panels.size(); i++) {
             thmsc = ap.panels.elementAt(i);
             if (thmsc instanceof InteractionOverviewDiagramPanel) {
-                System.out.println("Dealing with " + thmsc.getName());
+                TraceManager.addDev("Dealing with " + thmsc.getName());
                 iodsPanels.add( (InteractionOverviewDiagramPanel) thmsc);
                 node = new HMSCNode("n"+nodeCounter + "choice_refiod", HMSCNode.CHOICE);
                 iodsNodes.add(node);
@@ -132,7 +133,7 @@ public class AnalysisPanelTranslator {
             thmsc = ap.panels.elementAt(i);
             listE = new CorrespondanceTGElement();
             if (thmsc instanceof InteractionOverviewDiagramPanel) {
-                System.out.println("Managing " + thmsc.getName());
+                TraceManager.addDev("Managing " + thmsc.getName());
                 list = thmsc.getComponentList();
                 iterator = list.listIterator();
                 while(iterator.hasNext()) {
@@ -146,10 +147,10 @@ public class AnalysisPanelTranslator {
                         node = new HMSCNode("n"+nodeCounter + "parallel", HMSCNode.PARALLEL);
                     } else if (tgc instanceof IODPreemption) {
                         node = new HMSCNode("n"+nodeCounter + "preempt", HMSCNode.PREEMPT);
-                        //System.out.println(" --------------> Preempt");
+                        //TraceManager.addDev(" --------------> Preempt");
                     } else if (tgc instanceof IODSequence) {
                         node = new HMSCNode("n"+nodeCounter + "sequence", HMSCNode.SEQUENCE);
-                        //System.out.println(" --------------> Sequence");
+                        //TraceManager.addDev(" --------------> Sequence");
                     } else if (tgc instanceof IODRefIOD) {
                         action = (((IODRefIOD)tgc).getAction());
                         thmsctmp = mgui.getIODiagramPanel(ap, action);
@@ -194,7 +195,7 @@ public class AnalysisPanelTranslator {
                         test = false;
                         j = iodsPanels.indexOf(thmsc);
                         if (j != -1) {
-                            //System.out.println("Node = sequence instead of start");
+                            //TraceManager.addDev("Node = sequence instead of start");
                             node = iodsNodes.elementAt(j);
                         } else {
                             test = true;
@@ -234,7 +235,7 @@ public class AnalysisPanelTranslator {
                         tgco = thmsc.findTGConnectorStartingAt(p);
                         if (tgco != null) {
                             // Identification of connected component
-                            //System.out.println("tgc=" + tgc.getName() + ": " + j);
+                            //TraceManager.addDev("tgc=" + tgc.getName() + ": " + j);
                             tgc2 = null;
                             for(k=0; k<list.size(); k++) {
                                 tgc3 = list.get(k);
@@ -249,7 +250,7 @@ public class AnalysisPanelTranslator {
                                 elt2 = listE.getHMSCElement(tgc2);
                                 
                                 if ((elt1 != null) && (elt2 != null)) {
-                                    //System.out.println("Adding a link");
+                                    //TraceManager.addDev("Adding a link");
                                     if ((elt1 instanceof MSC) && (elt2 instanceof MSC)) {
                                         // must include a choice node between
                                         node = new HMSCNode("n"+nodeCounter, HMSCNode.CHOICE);
@@ -269,16 +270,16 @@ public class AnalysisPanelTranslator {
                                         nodeCounter++;
                                         ((HMSCNode)elt1).addNextNode(nodeTmp);
                                         nodeTmp.addNextMSC((MSC)elt2);
-                                        //System.out.println("Adding link to MSC " + ((MSC)elt2).getName());
+                                        //TraceManager.addDev("Adding link to MSC " + ((MSC)elt2).getName());
                                     }
                                     
                                     if ((elt1 instanceof HMSCNode) && (elt2 instanceof HMSCNode)) {
                                         ((HMSCNode)elt1).addNextNode((HMSCNode)elt2);
-                                        //System.out.println("Adding link to Node " + ((HMSCNode)elt2).getName());
+                                        //TraceManager.addDev("Adding link to Node " + ((HMSCNode)elt2).getName());
                                     }
                                     
                                     if (tgc instanceof IODChoice) {
-                                        //System.out.println("*** IODCHOICE ***");
+                                        //TraceManager.addDev("*** IODCHOICE ***");
                                         
                                         if (((IODChoice)tgc).hasUnvalidGuards()) {
                                             String s = ((IODChoice)tgc).getUnvalidGuards();
@@ -291,10 +292,10 @@ public class AnalysisPanelTranslator {
                                         
                                         node = listE.getNodeAt(ii);
                                 /*if (elt2 instanceof MSC){
-                                    System.out.println("Adding a MSC guard #" + (j-1) + " g=" + ((IODChoice)tgc).getGuard(j-1) + " on node " + node.getName());
+                                    TraceManager.addDev("Adding a MSC guard #" + (j-1) + " g=" + ((IODChoice)tgc).getGuard(j-1) + " on node " + node.getName());
                                     node.addMSCGuard(((IODChoice)tgc).getGuard(j-1));
                                 } else {*/
-                                        //System.out.println("Adding a Node guard #" + (j-1) + " g=" + ((IODChoice)tgc).getGuard(j-1) + " on node " + node.getName());
+                                        //TraceManager.addDev("Adding a Node guard #" + (j-1) + " g=" + ((IODChoice)tgc).getGuard(j-1) + " on node " + node.getName());
                                         node.addNodeGuard(((IODChoice)tgc).getGuard(j-1));
                                 /*}*/
                                     }
@@ -346,16 +347,16 @@ public class AnalysisPanelTranslator {
     private void translateMSCFromPanel(HMSC hmsc, MSC msc, SequenceDiagramPanel sdp) throws AnalysisSyntaxException {
         CorrespondanceTGElement correspondance = new CorrespondanceTGElement(); // evt <-> tgcomponent
         
-        //System.out.println("Necessary instances for msc " + msc.getName());
+        //TraceManager.addDev("Necessary instances for msc " + msc.getName());
         createAllNecessaryInstances(hmsc, sdp);
         
-        //System.out.println("Evts of " + msc.getName());
+        //TraceManager.addDev("Evts of " + msc.getName());
         createEvt(hmsc, msc, sdp, correspondance);
         
-        //System.out.println("Time constraints of " + msc.getName());
+        //TraceManager.addDev("Time constraints of " + msc.getName());
         createTimeConstraints(hmsc, msc, sdp, correspondance);
         
-        //System.out.println("Order events for " + msc.getName());
+        //TraceManager.addDev("Order events for " + msc.getName());
         createEvtsOrder(hmsc, msc, sdp, correspondance);
         
     }
@@ -439,7 +440,7 @@ public class AnalysisPanelTranslator {
                         }
                     } else if (internal instanceof SDGuard) {
                         s = ((SDGuard)internal).getGuard().trim();
-                        System.out.println("New guard evt: " + s);
+                        TraceManager.addDev("New guard evt: " + s);
 						if (s.compareTo("else") == 0) {
 							evt = new Evt(Evt.ELSE_GUARD, s, ins);
 						} else if (s.compareTo("end") == 0) {
@@ -510,7 +511,7 @@ public class AnalysisPanelTranslator {
                         msc.addLinkEvts(le);
                         
                     } else if (tgc instanceof TGConnectorMessageSyncSD) {
-                        //System.out.println("**************** Synchronous message ************************");
+                        //TraceManager.addDev("**************** Synchronous message ************************");
 						if (!((TGConnectorMessageSyncSD)(tgc)).isMessageWellFormed()) {
 							throw new AnalysisSyntaxException("Badly formatted synchronous exchange:" + ((TGConnectorMessageSyncSD)(tgc)).getMessage() +" in instance "+ sdi1.getInstanceName() + " in sequence diagram " + sdp.getName());
 						}
@@ -555,7 +556,7 @@ public class AnalysisPanelTranslator {
         // internal component of instances
         while(iterator.hasNext()) {
             tgc = iterator.next();
-            //System.out.println("i=" + i);
+            //TraceManager.addDev("i=" + i);
             
             if (tgc instanceof SDInstance) {
                 sdi1 = (SDInstance)tgc;
@@ -566,7 +567,7 @@ public class AnalysisPanelTranslator {
                 
                 for(j=0; j<tgc.getNbInternalTGComponent(); j++) {
                     internal = tgc.getInternalTGComponent(j);
-                    //System.out.println("j=" + j);
+                    //TraceManager.addDev("j=" + j);
                     
                     if (internal instanceof SDAbsoluteTimeConstraint) {
                         tgc1 = sdi1.getTGComponentActionCloserTo(internal);
@@ -598,13 +599,13 @@ public class AnalysisPanelTranslator {
                         msc.addTimeConstraint(tc);
                         
                     } else if (internal instanceof SDRelativeTimeConstraint) {
-                        //System.out.println("Relative time constraint");
+                        //TraceManager.addDev("Relative time constraint");
                         TGConnectorRelativeTimeSD tgcort = sdp.firstAndConnectedSDRelativeTimeConstraint(internal);
-                        //System.out.println("tgcort=" + tgcort);
+                        //TraceManager.addDev("tgcort=" + tgcort);
                         
                         if (tgcort != null){
                             TGComponent internal2 = sdp.getSecondTGComponent(tgcort);
-                            //System.out.println("internal2=" + internal2);
+                            //TraceManager.addDev("internal2=" + internal2);
                             
                             if (internal2 instanceof SDRelativeTimeConstraint) {
                                 tgc4 = internal2.getTopFather();
@@ -614,7 +615,7 @@ public class AnalysisPanelTranslator {
                                 sdi2 = (SDInstance)tgc4;
                                 evts = getEvts((SDRelativeTimeConstraint)internal, (SDRelativeTimeConstraint)internal2, sdp, sdi1, sdi2, correspondance);
                                 
-                                //System.out.println("evt1=" + evts[0] + "evt2=" + evts[1]);
+                                //TraceManager.addDev("evt1=" + evts[0] + "evt2=" + evts[1]);
                                 
                                 if (evts != null) {
                                     try {
@@ -633,7 +634,7 @@ public class AnalysisPanelTranslator {
                                     
                                     tc = new TimeConstraint(evts[0], evts[1], min_tc, max_tc);
                                     msc.addTimeConstraint(tc);
-                                    //System.out.println("new relative tc = " + tc);
+                                    //TraceManager.addDev("new relative tc = " + tc);
                                     
                                 } else {
                                     throw new AnalysisSyntaxException("Relative timing constraint " + tgcort.getValue() + ": null events" );
@@ -649,11 +650,11 @@ public class AnalysisPanelTranslator {
     
     // Assumes that internal is effectively connected
     public Evt[] getEvts(SDRelativeTimeConstraint tc1, SDRelativeTimeConstraint tc2, SequenceDiagramPanel sdp, SDInstance sdi1, SDInstance sdi2, CorrespondanceTGElement correspondance) {
-        //System.out.println("get1");
+        //TraceManager.addDev("get1");
         Evt evt1 = getEvt(tc1, sdp, sdi1, correspondance);
-        //System.out.println("get2");
+        //TraceManager.addDev("get2");
         Evt evt2 = getEvt(tc2, sdp, sdi2, correspondance);
-        //System.out.println("get3");
+        //TraceManager.addDev("get3");
         if ((evt1 != null) && (evt2 != null)) {
             Evt [] evts = new Evt[2];
             evts[0] = evt1;
@@ -669,30 +670,30 @@ public class AnalysisPanelTranslator {
         //Evt evt;
         TGComponent tgc;
         
-        //System.out.println("GetEvt 1");
+        //TraceManager.addDev("GetEvt 1");
         // is-it connected to a message action ?
         tgco = sdp.messageActionCloserTo(tc1, sdi);
         if (tgco instanceof TGConnectorMessageSD) {
             p = sdp.TGConnectingPointActionCloserTo(tc1, tgco, sdi);
-            //System.out.println("GetEvt 2");
+            //TraceManager.addDev("GetEvt 2");
             if (p == null) {
                 return null;
             }
             
-            //System.out.println("GetEvt 3");
+            //TraceManager.addDev("GetEvt 3");
             if (p==tgco.getTGConnectingPointP1()) {
                 // sending message event
-                //System.out.println("GetEvt 4");
+                //TraceManager.addDev("GetEvt 4");
                 return correspondance.getSendingMsgEvt(tgco);
             } else {
-                //System.out.println("GetEvt 5");
+                //TraceManager.addDev("GetEvt 5");
                 return correspondance.getReceivingMsgEvt(tgco);
             }
             
         }
         
         // other action? -> not yet implemented
-        //System.out.println("Others relative");
+        //TraceManager.addDev("Others relative");
         tgc = sdp.getActionCloserTo(tc1.getY(), sdi);
         
         if (tgc instanceof SDActionState) {
@@ -707,24 +708,24 @@ public class AnalysisPanelTranslator {
         TGConnectingPoint p;
         //Evt evt;
         
-        //System.out.println("GetEvt 1");
+        //TraceManager.addDev("GetEvt 1");
         // is-it connected to a message action ?
         
         if (tgc instanceof TGConnectorMessageSD) {
             tgco = (TGConnector)tgc;
             p = sdp.TGConnectingPointActionCloserTo(sdatc, tgco, sdi);
-            //System.out.println("GetEvt 2");
+            //TraceManager.addDev("GetEvt 2");
             if (p == null) {
                 return null;
             }
             
-            //System.out.println("GetEvt 3");
+            //TraceManager.addDev("GetEvt 3");
             if (p==tgco.getTGConnectingPointP1()) {
                 // sending message event
-                //System.out.println("GetEvt 4");
+                //TraceManager.addDev("GetEvt 4");
                 return correspondance.getSendingMsgEvt(tgco);
             } else {
-                //System.out.println("GetEvt 5");
+                //TraceManager.addDev("GetEvt 5");
                 return correspondance.getReceivingMsgEvt(tgco);
             }
             
@@ -732,7 +733,7 @@ public class AnalysisPanelTranslator {
         
         // other action? -> not yet implemented
         // get closer actions -> internal actions or variable increment
-        //System.out.println("Others absolute");
+        //TraceManager.addDev("Others absolute");
         tgc = sdp.getActionCloserTo(sdatc.getY(), sdi);
         
         if (tgc instanceof SDActionState) {
@@ -801,10 +802,10 @@ public class AnalysisPanelTranslator {
         }
         iterator = orderedy.listIterator();
         
-        //System.out.println("Order on " + msc.getName() + " and on instance " + sdi.getValue());
+        //TraceManager.addDev("Order on " + msc.getName() + " and on instance " + sdi.getValue());
         while(iterator.hasNext()) {
             evt = iterator.next();
-            //System.out.println("Evt=" + evt.getActionId());
+            //TraceManager.addDev("Evt=" + evt.getActionId());
         }
         //events in the same coregion are regrouped:
         
@@ -825,8 +826,8 @@ public class AnalysisPanelTranslator {
             evt = iterator.next();
             // in same coregion
             if ((lastEvt.y == evt.y) || (sdi.isInSameCoregion(lastEvt.y, evt.y))) {
-                //System.out.println("evt evt=" + evt.getActionId() + " and lastEvt=" + lastEvt.getActionId() + " are in the same coregion / y");
-                //System.out.println("evt evty=" + evt.y + " and lastEvt=" + lastEvt.y);
+                //TraceManager.addDev("evt evt=" + evt.getActionId() + " and lastEvt=" + lastEvt.getActionId() + " are in the same coregion / y");
+                //TraceManager.addDev("evt evty=" + evt.y + " and lastEvt=" + lastEvt.y);
                 ll.add(evt);
                 lastEvt = evt;
             } else {
@@ -859,7 +860,7 @@ public class AnalysisPanelTranslator {
                 while(iterator3.hasNext()) {
                     evt1 = iterator3.next();
                     order = new Order(evt1, evt);
-                    //System.out.println("New order between " + evt1.getActionId() + " and " + evt.getActionId());
+                    //TraceManager.addDev("New order between " + evt1.getActionId() + " and " + evt.getActionId());
                     msc.addOrder(order);
                 }
             }

@@ -50,9 +50,12 @@ import ui.*;
 import ui.avatarsmd.AvatarSMDPanel;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarBlock;
+import ui.window.JDialogIDAndStereotype;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -70,8 +73,13 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     private static String GLOBAL_CODE_INFO = "(block code)";
 
     private int textY1 = 3;
+
     private static String stereotype = "block";
     private static String stereotypeCrypto = "cryptoblock";
+
+    protected static ArrayList<String> BLOCK_TYPE_STR = new ArrayList<String>(Arrays.asList("block", "cryptoblock"));
+    protected static ArrayList<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_BLOCK));
+    private int typeStereotype = 0; // <<block>> by default
 
     private int maxFontSize = 12;
     private int minFontSize = 4;
@@ -87,7 +95,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     private int iconSize = 15;
     private boolean iconIsDrawn = false;
 
-    private boolean isCryptoBlock = false;
+
 
 
     // TAttribute, AvatarMethod, AvatarSignal
@@ -178,7 +186,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         graph.drawRect(this.x, this.y, this.width, this.height);
 
         // Draw inner rectangle
-        graph.setColor(ColorManager.AVATAR_BLOCK);
+        //graph.setColor(ColorManager.AVATAR_BLOCK);
+        graph.setColor(BLOCK_TYPE_COLOR.get(typeStereotype));
         graph.fillRect(this.x + 1, this.y + 1, this.width - 1, this.height - 1);
         graph.setColor(c);
 
@@ -202,11 +211,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         Font font = graph.getFont();
 
-        String ster;
-        if (!this.isCryptoBlock)
-            ster = "<<" + stereotype + ">>";
-        else
-            ster = "<<" + stereotypeCrypto + ">>";
+
+        String ster = BLOCK_TYPE_STR.get(typeStereotype);
 
         if (this.rescaled && !this.tdp.isScaled()) {
             this.rescaled = false;
@@ -260,7 +266,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             graph.drawString(ster, this.x + (this.width - w) / 2, this.y + h);
         else {
             // try to draw with "..." instead
-            if (!this.isCryptoBlock)
+            if (!this.isCryptoBlock())
                 ster = stereotype;
             else
                 ster = stereotypeCrypto;
@@ -567,45 +573,84 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
         // On the name ?
         if ((limitName == -1 && _y <= y + 2 * currentFontSize) || _y < limitName) {
+            JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Block ID", BLOCK_TYPE_STR.toArray(new String[0]), getValue
+                    (), typeStereotype,  BLOCK_TYPE_COLOR.toArray(new Color[0]), ColorManager.AVATAR_BLOCK);
+            //dialog.setSize(400, 300);
+            GraphicLib.centerOnParent(dialog, 400, 300);
+            // dialog.show(); // blocked until dialog has been closed
             oldValue = value;
+            dialog.setVisible(true);
 
-            //String text = getName() + ": ";
-            String s = (String) JOptionPane.showInputDialog(frame, "Block name",
-                    "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                    null,
-                    getValue());
+            if (dialog.hasBeenCancelled()) {
+                return false;
+            }
 
-            if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+            String s = dialog.getName();
+
+            if ((s != null) && (s.length() > 0)){
                 //boolean b;
-                if (!TAttribute.isAValidId(s, false, false)) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the Block: the new name is not a valid name",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    return false;
+                if (!s.equals(oldValue)) {
+                    if (!TAttribute.isAValidId(s, false, false)) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the name of the Block: the new name is not a valid name",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+
+                    if (!tdp.isAvatarBlockNameUnique(s)) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the name of the Block: the new name is already in use",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+
+                    setValue(s);
+                    recalculateSize();
+
                 }
 
-                if (!tdp.isAvatarBlockNameUnique(s)) {
+                /*if (!(tdp.actionOnDoubleClick(this))) {
                     JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the Block: the new name is already in use",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    return false;
-                }
-
-                setValue(s);
-                recalculateSize();
-
-                if (tdp.actionOnDoubleClick(this)) {
-                    return true;
-                } else {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the Block: frame error",
+                            "Could not change the name of the Requirement: this name is already in use",
                             "Error",
                             JOptionPane.INFORMATION_MESSAGE);
                     setValue(oldValue);
+                    return false;
+                }*/
+
+                // Setting stereotype
+                s = dialog.getStereotype().trim();
+
+                if (!TAttribute.isAValidId(s, false, false)) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not use the new stereotype: the new stereotype name is not valid",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return false;
                 }
+
+                int rgb = dialog.getColor();
+
+                TraceManager.addDev("RGBColor:" + rgb + " vs default color:" + ColorManager.AVATAR_BLOCK.getRGB());
+
+                addStereotype(s, rgb);
+
+                TraceManager.addDev("My stereotype=" + BLOCK_TYPE_STR.get(typeStereotype) + " color=" + BLOCK_TYPE_COLOR.get(typeStereotype).getRGB());
+
+
+                if (isCryptoBlock()) {
+                    addCryptoElements();
+                } else {
+                    removeCryptoElements();
+                }
+
+                return true;
+
             }
+
+
             return false;
         }
 
@@ -737,7 +782,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             return false;
         }
 
-        //System.out.println("Add swallow component");
+        //
         // Choose its position
 
         // Make it an internal component
@@ -748,7 +793,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         //Set its coordinates
         if (tgc instanceof AvatarBDBlock) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
+            //
             tgc.resizeWithFather();
             //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
             //tgc.setCd(x, y);
@@ -802,7 +847,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<CryptoBlock value=\"" + isCryptoBlock + "\" />\n");
+        sb.append("<blockType data=\"");
+        sb.append(BLOCK_TYPE_STR.get(typeStereotype));
+        sb.append("\" color=\"");
+        sb.append(BLOCK_TYPE_COLOR.get(typeStereotype).getRGB());
+        sb.append("\" />\n");
+        sb.append("<CryptoBlock value=\"" + isCryptoBlock() + "\" />\n");
         for (TAttribute a : this.myAttributes) {
             sb.append("<Attribute access=\"");
             sb.append(a.getAccess());
@@ -862,30 +912,30 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             //boolean mustAddCryptoFunctions = false;
 
 
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
 
             //TraceManager.addDev("LEP Begin Block  = " + this + " trace=");
             //Thread.currentThread().dumpStack();
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("CryptoBlock")) {
                                 crypt = elt.getAttribute("value");
                                 if (crypt.compareTo("true") == 0) {
-                                    isCryptoBlock = true;
+
                                 }
                             }
                             if (elt.getTagName().equals("Attribute")) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 access = Integer.decode(elt.getAttribute("access")).intValue();
                                 type = Integer.decode(elt.getAttribute("type")).intValue();
                                 try {
@@ -909,8 +959,32 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                     this.myAttributes.add(ta);
                                 }
                             }
+                            if (elt.getTagName().equals("blockType")) {
+                                //
+                                s = elt.getAttribute("data");
+                                String tmp3 = elt.getAttribute("color");
+                                TraceManager.addDev("stereotype=" + s + " color=" + tmp3);
+                                int rgb = ColorManager.AVATAR_REQUIREMENT_TOP.getRGB();
+                                try {
+                                    rgb = Integer.decode(tmp3).intValue();
+                                } catch (Exception e) {
+                                }
+                                if (s.equals("null")) {
+                                    typeStereotype = 0;
+                                } else {
+                                    try {
+                                        typeStereotype = Integer.decode(s).intValue(); // default stereo: old way
+                                    } catch (Exception e) {
+                                        addStereotype(s, rgb);
+                                    }
+                                }
+                                if (typeStereotype > (BLOCK_TYPE_STR.size() - 1)) {
+                                    typeStereotype = 0;
+                                }
+
+                            }
                             if (elt.getTagName().equals("Method")) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 method = elt.getAttribute("value");
 
                                 if (method.equals("null")) {
@@ -925,7 +999,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
                                 //TraceManager.addDev("Method = " + method + ". Starting with aencrypt?");
                                 if (method.startsWith("bool verifyMAC(")) {
-                                    isCryptoBlock = true;
+                                    typeStereotype = 1;
+
                                     //TraceManager.addDev("Add crypto methods");
                                     //addCryptoElements();
                                 }
@@ -939,7 +1014,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 }
                             }
                             if (elt.getTagName().equals("Signal")) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 signal = elt.getAttribute("value");
                                 attached = elt.getAttribute("attached");
 
@@ -957,7 +1032,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 }
                             }
                             if (elt.getTagName().equals("globalCode")) {
-                                //System.out.println("Analyzing line");
+                                //
                                 s = elt.getAttribute("value");
                                 if (s.equals("null")) {
                                     s = "";
@@ -986,6 +1061,34 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         //TraceManager.addDev("LEP End Block  = " + this);
 
+    }
+
+    public boolean addStereotype(String s, int rgb) {
+        TraceManager.addDev("Adding stereotype for " + s + " with color " + rgb);
+        int index = -1;
+        String sLower = s.toLowerCase();
+        for (int i=0; i<BLOCK_TYPE_STR.size(); i++) {
+            if (BLOCK_TYPE_STR.get(i).toLowerCase().compareTo(sLower) == 0) {
+                index = i;
+                break;
+            }
+        }
+
+        // Found stereotype
+        if (index != -1) {
+            typeStereotype = index;
+            if (index > 0) {
+                BLOCK_TYPE_COLOR.set(index, new Color(rgb));
+            }
+            return false;
+
+            // Must add a new stereotype
+        } else {
+            BLOCK_TYPE_STR.add(s);
+            BLOCK_TYPE_COLOR.add(new Color(rgb));
+            typeStereotype = BLOCK_TYPE_STR.size()-1;
+            return true;
+        }
     }
 
     public String getBlockName() {
@@ -1205,7 +1308,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         _id = _id.trim();
         //TraceManager.addDev("Searching for signal with id=" + _id);
         for (AvatarSignal as : this.mySignals) {
-            //	System.out.println(as.getId() + " "
+            //	
             if (as.getId().compareTo(_id) == 0)
                 return as;
         }
@@ -1229,18 +1332,18 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 
     public boolean isCryptoBlock() {
-        return isCryptoBlock;
+        return typeStereotype == 1;
     }
 
     public void removeCryptoElements() {
-        isCryptoBlock = false;
+        typeStereotype = 0;
 
         for (String method : AvatarMethod.cryptoMethods)
             this.removeMethodIfApplicable(method);
     }
 
     public void addCryptoElements() {
-        isCryptoBlock = true;
+        typeStereotype = 1;
 
         for (String method : AvatarMethod.cryptoMethods)
             this.addMethodIfApplicable(method);

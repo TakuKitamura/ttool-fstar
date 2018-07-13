@@ -77,9 +77,9 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
         //oldp1 = null;
         //oldp2 = null;
 
-        //System.out.println("Action on add from connector");
+        //
         //actionOnAdd();
-        //System.out.println("Action on add done from connector");
+        //
     }
 
     /*public boolean editOndoubleClick(JFrame frame) {
@@ -140,7 +140,7 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
             g.drawLine(x1, y1, x2, y2);
             return;
         } catch (Exception e) {
-            //System.out.println("Exception " + e.getMessage());
+            //
         }
         g.drawLine(x1, y1, x2, y2);
 
@@ -151,13 +151,13 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
     }
 
     public void rescale(double scaleFactor){
-        //System.out.println("Rescale connector");
+        //
         int xx, yy;
 
         for(int i=0; i<nbInternalTGComponent; i++) {
             xx = tgcomponent[i].getX();
             yy = tgcomponent[i].getY();
-            //System.out.println("Internal comp xx= " + xx + "  y==" + yy);
+            //
             tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
             tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
             xx = (int)(tgcomponent[i].dx);
@@ -167,7 +167,7 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
 
             tgcomponent[i].setCd(xx, yy);
 
-            //System.out.println("Internal comp xx= " + xx + "  y==" + yy);
+            //
         }
 
         oldScaleFactor = scaleFactor;
@@ -179,17 +179,17 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
     }
 
     public void specificActionAfterAdd() {
-        //System.out.println("Specific action after add");
+        //
         ((TMLComponentTaskDiagramPanel)tdp).updatePorts();
     }
 
     public void specificActionAfterMove() {
-        //System.out.println("Specific action after move");
+        //
         ((TMLComponentTaskDiagramPanel)tdp).updatePorts();
     }
 
     /*public void structureChanged() {
-      System.out.println("Structure changed");
+      
       ((TMLComponentTaskDiagramPanel)tdp).updatePorts();
       }*/
 
@@ -203,7 +203,7 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
       }*/
 
     /*public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-    //System.out.println("*** load extra synchro ***");
+    //
     try {
 
     NodeList nli;
@@ -214,12 +214,12 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
 
     for(int i=0; i<nl.getLength(); i++) {
     n1 = nl.item(i);
-    //System.out.println(n1);
+    //
     if (n1.getNodeType() == Node.ELEMENT_NODE) {
     nli = n1.getChildNodes();
     for(int j=0; i<nli.getLength(); i++) {
     n2 = nli.item(i);
-    //System.out.println(n2);
+    //
     if (n2.getNodeType() == Node.ELEMENT_NODE) {
     elt = (Element) n2;
     if (elt.getTagName().equals("info")) {

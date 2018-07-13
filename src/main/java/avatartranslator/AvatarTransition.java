@@ -63,7 +63,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     public static final int TYPE_METHODONLY = 4;
     public static final int TYPE_ACTION_AND_METHOD = 5;
 
-    public static final double DEFAULT_PROBABILITY = 0.5;
+    public static final double DEFAULT_PROBABILITY = 1; // In fact the weight
 
     public int type = UNDEFINED;
 

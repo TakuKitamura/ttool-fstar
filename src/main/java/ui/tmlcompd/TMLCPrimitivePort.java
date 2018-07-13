@@ -170,7 +170,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             oldy = y;
         }
 
-        //System.out.println("NbTGConnectingPoint=" + nbConnectingPoint);
+        //
         calculatePortColor();
 
         if (rescaled) {
@@ -304,9 +304,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         int ft = 10;
         if ((tgc != null) && (tgc instanceof TMLCPrimitiveComponent)) {
             ft = ((TMLCPrimitiveComponent)tgc).getCurrentFontSize();
-            //System.out.println("Got ft");
+            //
         }
-        //System.out.println("ft=" + ft);
+        //
         int w;
         Font f = g.getFont();
         Font fold = f;
@@ -456,9 +456,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     }
 
     public void manageMove() {
-        //System.out.println("Manage move!");
+        //
         if (father != null) {
-            //System.out.println("Has a father!");
+            //
             Point p = GraphicLib.putPointOnRectangle(x+(width/2), y+(height/2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
 
             x = p.x - width/2;
@@ -526,11 +526,11 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     }
 
     public void resizeWithFather() {
-        //System.out.println("Resize port with father");
+        //
         if ((father != null) && (father instanceof TMLCPrimitiveComponent)) {
             // Too large to fit in the father? -> resize it!
             //resizeToFatherSize();
-            //System.out.println("Setcd rectangle");
+            //
             setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
             setMoveCd(x, y);
             oldx = -1;
@@ -539,7 +539,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-        //System.out.println("Double click!");
+        //
         //String oldValue = valueOCL;
         int oldSample = maxSamples;
         //   int oldWidthSample = widthSamples;
@@ -555,7 +555,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         }
         Vector<TGComponent> refs = new Vector<TGComponent>();
         for (TGComponent req: tdp.getMGUI().getAllRequirements()){
-            //System.out.println("req " + req);
+            //
             if (req instanceof AvatarRDRequirement){
                 refs.add(req);
             }
@@ -668,9 +668,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         sb.append("\" checkStrongAuthStatus=\"" + checkStrongAuthStatus);
         sb.append("\" />\n");
         for(int i=0; i<nbMaxAttribute; i++) {
-            //System.out.println("Attribute:" + i);
+            //
             a = list[i];
-            //System.out.println("Attribute:" + i + " = " + a.getId());
+            //
             //val = val + a + "\n";
             sb.append("<Type");
             sb.append(" type=\"");
@@ -696,21 +696,21 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
             int nbAttribute = 0;
 
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if ((elt.getTagName().equals("Type")) && (nbAttribute < nbMaxAttribute)) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 typeAtt = Integer.decode(elt.getAttribute("type")).intValue();
                                 try {
                                     typeOther = elt.getAttribute("typeOther");
@@ -727,12 +727,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                             if (elt.getTagName().equals("Prop")) {
                                 commName = elt.getAttribute("commName");
                                 try {
-                                    //System.out.println("Setting type");
+                                    //
                                     typep = Integer.decode(elt.getAttribute("commType")).intValue();
-                                    //System.out.println("Setting type type=" + type);
-                                    //System.out.println("Setting max");
+                                    //
+                                    //
                                     maxSamples = Integer.decode(elt.getAttribute("maxSamples")).intValue();
-                                    //System.out.println("Setting width");
+                                    //
                                     widthSamples = Integer.decode(elt.getAttribute("widthSamples")).intValue();
 
                                 } catch (Exception e) {
@@ -836,6 +836,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_PORT_TMLC;
     }
+
 
     public String getAttributes() {
         String attr = "";

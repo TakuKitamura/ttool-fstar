@@ -39,10 +39,7 @@
 
 package myutil;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
+import java.io.*;
 
 
 /**
@@ -138,14 +135,16 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     public static String loadFileData(File file) {
-        byte[] ba;
+        char[] ba;
         try {
+            InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "UTF8");
             FileInputStream fis = new FileInputStream(file);
             int nb = fis.available();
 
-            ba = new byte[nb];
-            fis.read(ba);
+            ba = new char[nb];
+            isr.read(ba, 0, nb);
             fis.close();
+            isr.close();
         } catch (Exception e) {
             return null;
         }
@@ -219,7 +218,6 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
             return false;
         }
         String fileName = f.getAbsolutePath();
-        //System.out.println(fileName);
         return fileName.endsWith("." + extension);
     }
 
@@ -311,7 +309,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
         // if the directory does not exist, create it
         if (!theDir.exists()) {
-                theDir.mkdir();
+            theDir.mkdir();
         }
 
     }

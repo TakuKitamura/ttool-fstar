@@ -170,7 +170,7 @@ public class NCTraffic extends NCElement  {
 		traffic.setMaxPacketSize(maxPacketSize);
 		traffic.setPriority(priority);
 		traffic.setDeadlineUnit(unit);
-		//System.out.println("Traffic unit=" + traffic.getDeadlineUnit().getStringUnit());
+		//
 		return traffic;
 	}
 }

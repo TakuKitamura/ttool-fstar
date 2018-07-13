@@ -47,6 +47,7 @@ import automata.Transition;
 import myutil.Conversion;
 import myutil.FileException;
 import myutil.FileUtils;
+import myutil.TraceManager;
 import tmltranslator.*;
 
 import java.util.LinkedList;
@@ -91,7 +92,7 @@ public class TML2AUT {
             aut = iterator.next();
             name = aut.getName() + "." + AUT_EXTENSION;
             ll.add(name);
-            System.out.println("File: " + path + aut.getName() + "." + AUT_EXTENSION);
+            TraceManager.addDev("File: " + path + aut.getName() + "." + AUT_EXTENSION);
             FileUtils.saveFile(path + aut.getName() + "." + AUT_EXTENSION, aut.toAUT());
         }
         return ll;
@@ -105,8 +106,8 @@ public class TML2AUT {
         
         while(iterator.hasNext()) {
             aut = iterator.next();
-            System.out.println("Automata: " + aut.getName());
-            System.out.println(aut.toAUT());
+            TraceManager.addDev("Automata: " + aut.getName());
+            TraceManager.addDev(aut.toAUT());
         }
     }
     
@@ -305,14 +306,14 @@ public class TML2AUT {
             if (choice.getNbGuard() !=0 ) {
                 int index1 = choice.getElseGuard(), index2 = choice.getAfterGuard();
                 if (index2 != -1) {
-                    //System.out.println("Managing after");
+                    //TraceManager.addDev("Managing after");
                     s = aut.newState();
                     newEndState = s;
                     generateAUTTMLTask(aut, task, elt.getNextElement(index2), s, endState);
                 }
                 
                 for(i=0; i<choice.getNbGuard(); i++) {
-                    //System.out.println("Get guards i=" + i);
+                    //TraceManager.addDev("Get guards i=" + i);
                     s = aut.newState();
                     if (i==index1) {
                         /* else guard */
@@ -338,7 +339,7 @@ public class TML2AUT {
             
             // Sequence
         } else if (elt instanceof TMLSequence) {
-            //System.out.println("TML sequence !");
+            //TraceManager.addDev("TML sequence !");
             tmlseq = (TMLSequence)elt;
             
             if (tmlseq.getNbNext() == 0) {
@@ -361,7 +362,7 @@ public class TML2AUT {
                 }
             }
         } else {
-            System.out.println("Element " + elt + " is not managed by AUT format");
+            TraceManager.addDev("Element " + elt + " is not managed by AUT format");
         }
     }
     

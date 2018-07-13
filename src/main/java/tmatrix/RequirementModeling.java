@@ -123,11 +123,11 @@ public class RequirementModeling {
                         } else if ((cpt == 1) && (rdp.isLinkedByVerifyTo(tgc, r))) {
                             // Good observer!
                             // So ... parse all observed diagrams -> for the one found -> add a line in the matrix
-                            //System.out.println("Getting diagram names for " + ro.getDiagramNames());
+                            //
                             tab = ro.getDiagramNames();
                             
                             for(j=0; j<tab.length; j++) {
-                                //System.out.println("Diagram name = " + tab[j]);
+                                //
                                 rs = new Requirements();
                                 rs.req = r;
                                 rs.ro = ro;
@@ -164,7 +164,7 @@ public class RequirementModeling {
                 //sizee = errors.size();
                 buildTURTLEModelingFromTURTLEPanel(reqs, tp);
                 /*if (errors.size() != sizee) {
-                    System.out.println("New errors!!");
+                    
                 }*/
                 reqs.tm = updateTURTLEModeling(reqs.tm, reqs);
                 reqs.tm.simplify();
@@ -183,7 +183,7 @@ public class RequirementModeling {
         while(iterator.hasNext()) {
             reqs = iterator.next();
             if (reqs.tm != null) {
-                System.out.println("Generating a formal specification for " + reqs.ro.getValue());
+                
                 TURTLETranslator tt = new TURTLETranslator(reqs.tm);
                 reqs.formalSpec = tt.generateRTLOTOS();
                 warnings.addAll(tt.getWarnings());
@@ -204,7 +204,7 @@ public class RequirementModeling {
     }
     
     public void printMatrix() {
-        System.out.println("Matrix:\n-------\n" + toString() + "\n-------");
+        
     }
     
     public int nbOfElements() {
@@ -268,7 +268,7 @@ public class RequirementModeling {
             
             reqs.tm = tm;
         } else if (tp instanceof DesignPanel) {
-            System.out.println("Dealing with a design panel ...");
+            
             //MasterGateManager.reinitNameRestriction();
             DesignPanel dp = (DesignPanel)tp;
             // Builds a TURTLE modeling from diagrams
@@ -281,7 +281,7 @@ public class RequirementModeling {
        //     listE = dpt.getCorrespondanceTGElement();
             errors = dpt.getErrors();
             if ((errors != null) && (errors.size()>0)) {
-                //System.out.println("Errors 1");
+                //
                 return;
             }
             
@@ -291,7 +291,7 @@ public class RequirementModeling {
             errorstmp = tmc.syntaxAnalysisChecking();
             
             if ((errorstmp != null) && (errorstmp.size() > 0)){
-                //System.out.println("Errors 2");
+                //
                 errors.addAll(errorstmp);
             }
             
@@ -306,7 +306,7 @@ public class RequirementModeling {
         //int index1;
         String[] actions;
         
-        //System.out.println("Generating for " + text);
+        //
         
         // BEFORE_T
         if (text.indexOf("BEFORE_T") != -1) {
@@ -391,7 +391,7 @@ public class RequirementModeling {
         int index1 = text.indexOf(word);
         String s1 = text.substring(0, index1) + text.substring(index1+word.length()+1, text.length());
         s1 = s1.trim();
-        System.out.println("s1=" + s1);
+        
         String [] actions = extractData(s1);
         //print(actions);
         if (actions.length != (action + time)) {
@@ -485,7 +485,7 @@ public class RequirementModeling {
         Gate gv = t.addNewGateIfApplicable(reqs.req.getViolatedAction());
         Gate gaction0 = t.addNewGateIfApplicable("obs__" + actions[0]);
         
-        //System.out.println("Action0=" + actions[0] + "Action1=" + actions[1]);
+        //
         Gate gaction1 = t.addNewGateIfApplicable("obs__" + actions[1]);
         
         // Making Activity diagram
@@ -541,7 +541,7 @@ public class RequirementModeling {
         Gate gv = t.addNewGateIfApplicable(reqs.req.getViolatedAction());
         Gate gaction0 = t.addNewGateIfApplicable("obs__" + actions[0]);
         
-        //System.out.println("Action0=" + actions[0] + "Action1=" + actions[1]);
+        //
         Gate gaction1 = t.addNewGateIfApplicable("obs__" + actions[1]);
         
         // Making Activity diagram
@@ -593,7 +593,7 @@ public class RequirementModeling {
         Gate gv = t.addNewGateIfApplicable(reqs.req.getViolatedAction());
         Gate gaction0 = t.addNewGateIfApplicable("obs__" + actions[0]);
         
-        //System.out.println("Action0=" + actions[0] + "Action1=" + actions[1]);
+        //
         Gate gaction1 = t.addNewGateIfApplicable("obs__" + actions[1]);
         
         // Making Activity diagram
@@ -636,7 +636,7 @@ public class RequirementModeling {
         Gate gv = t.addNewGateIfApplicable(reqs.req.getViolatedAction());
         Gate gaction0 = t.addNewGateIfApplicable("obs__" + actions[0]);
         
-        //System.out.println("Action0=" + actions[0] + "Action1=" + actions[1]);
+        //
         Gate gaction1 = t.addNewGateIfApplicable("obs__" + actions[1]);
         
         // Making Activity diagram
@@ -696,7 +696,7 @@ public class RequirementModeling {
         Gate gv = t.addNewGateIfApplicable(reqs.req.getViolatedAction());
         Gate gaction0 = t.addNewGateIfApplicable("obs__" + actions[0]);
         
-        //System.out.println("Action0=" + actions[0] + "Action1=" + actions[1]);
+        //
         Gate gaction1 = t.addNewGateIfApplicable("obs__" + actions[1]);
         
         // Making Activity diagram
@@ -761,7 +761,7 @@ public class RequirementModeling {
         Gate gv = t.addNewGateIfApplicable(reqs.req.getViolatedAction());
         Gate gaction0 = t.addNewGateIfApplicable("obs__" + actions[0]);
         
-        //System.out.println("Action0=" + actions[0] + "Action1=" + actions[1]);
+        //
         Gate gaction1 = t.addNewGateIfApplicable("obs__" + actions[1]);
         
         // Making Activity diagram
@@ -811,7 +811,7 @@ public class RequirementModeling {
         Gate gv = t.addNewGateIfApplicable(reqs.req.getViolatedAction());
         Gate gaction0 = t.addNewGateIfApplicable("obs__" + actions[0]);
         
-        //System.out.println("Action0=" + actions[0] + "Action1=" + actions[1]);
+        //
         Gate gaction1 = t.addNewGateIfApplicable("obs__" + actions[1]);
         
         // Making Activity diagram
@@ -885,17 +885,17 @@ public class RequirementModeling {
     }
     
     public void manageCriticality(TURTLEModeling tm, Requirements reqs, TClass t, ActivityDiagram ad, String[] actions, int nbActions,  ADComponent actionv, ADComponent tgc2) {
-        System.out.println("Managing criticality for observer " + reqs.ro.getName());
+        
         if (reqs.req.getCriticality() == Requirement.LOW) {
             // LOW
             // If action is violated -> generate an error action an reloop on the observer
-            System.out.println("Criticality: LOW");
+            
             actionv.addNext(tgc2);
             
         } else if (reqs.req.getCriticality() == Requirement.MEDIUM) {
             // MEDIUM
             // if action is violated -> generate an error action, preempt all objects concerned with observation, and stop
-            System.out.println("Criticality: MEDIUM");
+            
             ADStop adstop; 
             ADParallel adpar = new ADParallel();
             Vector<TClass> tclasses = new Vector<TClass>();
@@ -930,7 +930,7 @@ public class RequirementModeling {
         } else {
             // HIGH
             // if action is violated, preempt all objects
-            System.out.println("Criticality: HIGH");
+            
             ADStop adstop; 
             ADParallel adpar = new ADParallel();
             Gate g, go;
@@ -978,7 +978,7 @@ public class RequirementModeling {
     
     public void print(String []actions) {
         for(int i=0; i<actions.length; i++) {
-            System.out.println(i + ":" + actions[i]);
+            
         }
     }
     
@@ -986,7 +986,7 @@ public class RequirementModeling {
         int i1 = Integer.decode(s1).intValue();
         int i2 = Integer.decode(s2).intValue();
         int i3 = i1 - i2;
-        //System.out.println("i3=" + i3 + " i2=" + i2 + " i1=" + i1);
+        //
         return Integer.toString(i3);
     }
 }

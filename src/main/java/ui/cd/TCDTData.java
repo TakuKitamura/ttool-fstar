@@ -172,7 +172,7 @@ public class TCDTData extends TGCWithInternalComponent {
     }*/
     
     public void recalculateSize() {
-        //System.out.println("Recalculate size of " + this);
+        //
         int i;//, j;
      
         for(i=0; i<nbInternalTGComponent; i++) {
@@ -207,7 +207,7 @@ public class TCDTData extends TGCWithInternalComponent {
             return minWidth;
         }
         int size = (int)(graphics.getFontMetrics().getStringBounds(value, graphics).getWidth() + iconSize + 5);
-        //System.out.println("size=" + size);
+        //
         minDesiredWidth = Math.max(size, minWidth);
         return minDesiredWidth;
     }

@@ -97,7 +97,7 @@ public class TMLMappingTextSpecification<E> {
             tmlatxt.saveFile(path, filename + ".tarchi");
         }
 
-        //System.out.println("Saving mapping files in " + path + filename + ".tmap");
+        //TraceManager.addDev("Saving mapping files in " + path + filename + ".tmap");
         String header = makeHeader(filename);
         FileUtils.saveFile(path + filename + ".tmap", indent(header + spec));
     }
@@ -134,7 +134,7 @@ public class TMLMappingTextSpecification<E> {
             dec -= nbClose * _nbDec;
             tmp = Conversion.addHead(tmp.trim(), ' ', dec);
             dec += nbOpen * _nbDec;
-            //System.out.println("dec=" + dec);
+            //TraceManager.addDev("dec=" + dec);
             output += tmp + "\n";
         }
         _toIndent = output;
@@ -156,9 +156,9 @@ public class TMLMappingTextSpecification<E> {
         for (int i = 0; i < array.length; i++) {
             if (_tmp.startsWith(array[i])) {
                 tmp = _tmp.substring(array[i].length(), _tmp.length());
-                //System.out.println("tmp=" + tmp + " _tmp" + _tmp + " array=" + array[i]);
+                //TraceManager.addDev("tmp=" + tmp + " _tmp" + _tmp + " array=" + array[i]);
                 if ((tmp.length() == 0) || (tmp.charAt(0) == ' ') || (tmp.charAt(0) == '(') || (tmp.charAt(0) == '\n')) {
-                    //System.out.println("Returning 1!!");
+                    //TraceManager.addDev("Returning 1!!");
                     return 1;
                 }
             }
@@ -392,10 +392,10 @@ public class TMLMappingTextSpecification<E> {
         spec = Conversion.removeComments(spec);
         spec = applyInclude(spec, path);
 
-        //System.out.println(spec);
+        //TraceManager.addDev(spec);
 
         TMLModeling<E> tmlm = makeTMLModeling();
-        //System.out.println("TML modeling:" + tmlm);
+        //TraceManager.addDev("TML modeling:" + tmlm);
 
         TMLArchitecture tarchi = makeArchitectureModeling();
 
@@ -545,17 +545,17 @@ public class TMLMappingTextSpecification<E> {
             while ((s = br.readLine()) != null) {
                 if (s != null) {
                     s = s.trim();
-                    //System.out.println("s=" + s);
+                    //TraceManager.addDev("s=" + s);
                     s = removeUndesiredWhiteSpaces(s, lineNb);
                     s1 = Conversion.replaceAllString(s, "\t", " ");
                     s1 = Conversion.replaceRecursiveAllString(s1, "  ", " ");
-                    //System.out.println("s1=" + s1);
+                    //TraceManager.addDev("s1=" + s1);
                     if (s1 != null) {
                         split = s1.split("\\s");
                         if (split.length > 0) {
-                            //System.out.println("analyse");
+                            //TraceManager.addDev("analyse");
                             analyseInstruction(s, lineNb, split);
-                            //System.out.println("end analyse");
+                            //TraceManager.addDev("end analyse");
                         }
                     }
 
@@ -563,7 +563,7 @@ public class TMLMappingTextSpecification<E> {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception when reading specification: " + e.getMessage());
+            TraceManager.addDev("Exception when reading specification: " + e.getMessage());
             addError(0, lineNb, 0, "Exception when reading specification", null);
         }
     }
@@ -722,15 +722,15 @@ public class TMLMappingTextSpecification<E> {
                 case 4:
                     if (!isAValidId(getEvtId(_split[_parameter]))) {
                         err = true;
-                        //System.out.println("Unvalid id");
+                        //TraceManager.addDev("Unvalid id");
                     } else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
-                        //System.out.println("Unvalid param");
+                        //TraceManager.addDev("Unvalid param");
                         err = true;
                     }
                     break;
                 case 5:
                     if (!(_split[_parameter].equals("="))) {
-                        //System.out.println("Error of =");
+                        //TraceManager.addDev("Error of =");
                         err = true;
                     }
                     break;
@@ -823,7 +823,7 @@ public class TMLMappingTextSpecification<E> {
     }
 
     private String getParams(String _input) {
-        //System.out.println("input=" + _input);
+        //TraceManager.addDev("input=" + _input);
         int index0 = _input.indexOf('(');
         int index1 = _input.indexOf(')');
         if ((index0 == -1) || (index1 == -1)) {
@@ -862,7 +862,7 @@ public class TMLMappingTextSpecification<E> {
                                 s1 = split[1];
                                 if ((s1.charAt(0) == '\"') && (s1.charAt(s1.length() - 1) == '\"')) {
                                     s1 = s1.substring(1, s1.length() - 1).trim();
-                                    //System.out.println("Loading file:" + path + s1);
+                                    //TraceManager.addDev("Loading file:" + path + s1);
                                     try {
                                         content = FileUtils.loadFile(path + s1);
                                         output += content + CR;
@@ -883,7 +883,7 @@ public class TMLMappingTextSpecification<E> {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception when reading specification: " + e.getMessage());
+            TraceManager.addDev("Exception when reading specification: " + e.getMessage());
             addError(0, lineNb, 0, "Exception when reading specification", null);
         }
 

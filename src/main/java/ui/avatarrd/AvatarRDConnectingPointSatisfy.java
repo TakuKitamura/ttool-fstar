@@ -62,14 +62,14 @@ public class AvatarRDConnectingPointSatisfy extends  TGConnectingPointWidthHeigh
     }
 
     public boolean isCompatibleWith(int type) {
-        //System.out.println("is compatible with " + type);
+        //
         if (type == TGComponentManager.AVATARRD_SATISFY_CONNECTOR) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
 
         //System.out.pr
-        //System.out.println("is compatible with:false");
+        //
         return false;
     }
 

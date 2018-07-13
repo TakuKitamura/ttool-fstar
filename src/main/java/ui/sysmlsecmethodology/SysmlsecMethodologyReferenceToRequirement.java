@@ -60,11 +60,13 @@ public class SysmlsecMethodologyReferenceToRequirement extends SysmlsecMethodolo
 
         initScaling(200, 70);
 
-        nbConnectingPoint = 3;
+        nbConnectingPoint = 5;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 1.0, 0.5, TGConnectingPoint.WEST);
         connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 1.0, TGConnectingPoint.WEST);
         connectingPoint[2] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 1.0, TGConnectingPoint.WEST);
+        connectingPoint[3] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 0.0, TGConnectingPoint.WEST);
+        connectingPoint[4] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.3, 0.0, TGConnectingPoint.WEST);
 
         typeOfReference = REQUIREMENT;
 

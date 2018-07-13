@@ -331,7 +331,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 				    docSvg += "<center><img src=\"img_" + i + "_" + j + ".svg\" align=\"middle\" title=\"" + subTitle + "\"></center>\n";
                 }
                 catch (Exception e) {
-                    System.out.println("Image (" + i + ", " + j + ") could not be captured");
+                    
                     e.printStackTrace();
                 }
                 
@@ -346,7 +346,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
             FileUtils.saveFile(path+fileName, doc);	    
         } catch (FileException fe) {
         	fe.printStackTrace();
-            System.out.println("HTML file could not be saved");
+            
 
             return false;
         }
@@ -355,7 +355,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
             FileUtils.saveFile(path+fileNameSvg, docSvg);	    
         } catch (FileException fe) {
         	fe.printStackTrace();
-        	System.out.println("HTML file with svg img could not be saved");
+        	
 
         	return false;
         }
@@ -364,7 +364,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
             FileUtils.saveFile(path+texFileName, mainLatexDoc);	    
         } catch (FileException fe) {
         	fe.printStackTrace();
-            System.out.println("Main latex file could not be saved");
+            
 
             return false;
         }
@@ -373,7 +373,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
             FileUtils.saveFile(path+texIncludeFileName, includeLatexDoc);	    
         } catch (FileException fe) {
         	fe.printStackTrace();
-            System.out.println("Include latex file could not be saved");
+            
 
         	return false;
         }
@@ -382,7 +382,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
             FileUtils.saveFile(path+texFileNameSvg, mainLatexDocSvg);	    
         } catch (FileException fe) {
         	fe.printStackTrace();
-            System.out.println("Main latex svg file could not be saved");
+            
 
             return false;
         }
@@ -391,7 +391,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
             FileUtils.saveFile(path+texIncludeFileNameSvg, includeLatexDocSvg);	    
         } catch (FileException fe) {
         	fe.printStackTrace();
-            System.out.println("include latex svg file could not be saved");
+            
 
             return false;
         }

@@ -62,7 +62,7 @@ public class UseCaseDiagramPanel extends TDiagramPanel {
     }
 
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        //System.out.println("Action");
+        //
         /*if (tgc instanceof TCDTClass) {
           TCDTClass t = (TCDTClass)tgc;
           return mgui.newTClassName(t.oldValue, t.getValue());

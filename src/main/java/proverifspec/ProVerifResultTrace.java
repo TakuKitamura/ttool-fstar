@@ -124,7 +124,7 @@ public class ProVerifResultTrace {
         public void describeAsTMLSDTransaction(BufferedWriter writer, int step) throws IOException
         {
             writer.write("#" + step + " time=0.000000000 block=" + this.from + " blockdestination=" + this.to + " type=synchro channel=" + this.channel + " params=\"" + this.message.replaceAll(",", ", ") + "\"");
-	//		System.out.println("#" + step + " time=0.000000000 block=" + this.from + " blockdestination=" + this.to + " type=synchro channel=" + this.channel + " params=\"" + this.message.replaceAll(",", ", ") + "\"");
+	//		TraceManager.addDev("#" + step + " time=0.000000000 block=" + this.from + " blockdestination=" + this.to + " type=synchro channel=" + this.channel + " params=\"" + this.message.replaceAll(",", ", ") + "\"");
             writer.newLine();
             writer.flush();
         }

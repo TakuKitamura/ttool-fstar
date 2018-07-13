@@ -143,12 +143,12 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 				if (s.startsWith("(")) {
 					array = AUTGraph.decodeLine(s);
 					si1 = foundStatisticsItem(array[1]);
-					//System.out.println("Toto1");
+					//
 					if (si1 == null) {
 						si1 = new StatisticsItem(array[1]);
 						statisticData.add(si1);
 					}
-					//System.out.println("Toto2");
+					//
 					si1.increaseOccurence();
 					si1.addOriginDestination(Integer.decode(array[0]).intValue(), Integer.decode(array[2]).intValue());
 
@@ -156,7 +156,7 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 
 			}
 		} catch (Exception e) {
-			System.out.println("Exception stm0" + e.getMessage());
+			
 		}
 		Collections.sort(statisticData);
 	}
@@ -184,22 +184,22 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 				}
 				
 				percentage = ((i+1) * 100) / nb;
-				//System.out.println("percentage = " + percentage);
+				//
 				tr = graph.getAUTTransition(i);
 
 				si1 = foundStatisticsItem(tr.transition);
-				//System.out.println("Toto1");
+				//
 				if (si1 == null) {
 					si1 = new StatisticsItem(tr.transition);
 					statisticData.add(si1);
 				}
-				//System.out.println("Toto2");
+				//
 				si1.increaseOccurence();
 				si1.addOriginDestination(tr.origin, tr.destination);
 
 			}
 		} catch (Exception e) {
-			System.out.println("Exception stm1" + e.getMessage());
+			
 		}
 		Collections.sort(statisticData);
 	}
@@ -208,7 +208,7 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 		StatisticsItem si;
 
 		for(int i=0; i<statisticData.size(); i++) {
-			//System.out.println("i=" + i);
+			//
 			si = statisticData.elementAt(i);
 			if (si.getName().compareTo(name) == 0) {
 				return si;

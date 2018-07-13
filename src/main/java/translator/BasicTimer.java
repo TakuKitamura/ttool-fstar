@@ -153,7 +153,7 @@ public  class BasicTimer extends TClass {
     
     
     public void removeReset() {
-        System.out.println("Modifying activity diagram -> no reset");
+        
         ADStart ads = new ADStart();
         ActivityDiagram ad = new ActivityDiagram(ads);
         

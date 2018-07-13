@@ -12,7 +12,7 @@ public abstract class AbstractUITest extends AbstractTest {
 	
 	protected AbstractUITest() {
 		IconManager.loadImg();
-		mainGui = new MainGUI(false, false, false, false, false, false, false, false, false, true, false, false);
+		mainGui = new MainGUI(false,false, false, false, false, false, false, false, false, false, true, false, false);
 		mainGui.build();
 		PluginManager.pluginManager = new PluginManager();
 	}

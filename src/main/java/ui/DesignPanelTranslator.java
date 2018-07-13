@@ -42,6 +42,7 @@
 package ui;
 
 import myutil.Conversion;
+import myutil.TraceManager;
 import translator.*;
 import ui.ad.*;
 import ui.cd.*;
@@ -144,7 +145,7 @@ public class DesignPanelTranslator {
     }
 
     private void addTClassFromTClassInterface(TClassInterface tgc, TDiagramPanel diag, ClassDiagramPanelInterface tdp, String preName, TURTLEModeling tm) {
-        //System.out.println("Adding TClass: " + tgc.getClassName());
+        //TraceManager.addDev("Adding TClass: " + tgc.getClassName());
         TClass t = new TClass(preName + tgc.getClassName(), tgc.isStart());
 
         int j;
@@ -169,7 +170,7 @@ public class DesignPanelTranslator {
                 p = new Param(a.getId(), Param.QUEUE_NAT, a.getInitialValue());
                 p.setAccess(a.getAccessString());
                 t.addParameter(p);
-                //System.out.println("Adding queuenat parameter");
+                //TraceManager.addDev("Adding queuenat parameter");
             }
 
             if (a.getType() == TAttribute.ARRAY_NAT) {
@@ -190,7 +191,7 @@ public class DesignPanelTranslator {
                 p = new Param(a.getId() + "__size", Param.NAT, a.getInitialValue());
                 p.setAccess(a.getAccessString());
                 t.addParameter(p);
-                //System.out.println("Adding queuenat parameter");
+                //TraceManager.addDev("Adding queuenat parameter");
             }
 
             if (a.getType() == TAttribute.OTHER) {
@@ -232,7 +233,7 @@ public class DesignPanelTranslator {
     }
 
     private void addTDataAttributes(TAttribute a, TClass t, ClassDiagramPanelInterface tdp, TURTLEModeling tm) {
-        //System.out.println("Find data: " + a.getId() + " getTypeOther=" + a.getTypeOther());
+        //TraceManager.addDev("Find data: " + a.getId() + " getTypeOther=" + a.getTypeOther());
         if (tdp instanceof TClassDiagramPanel) {
             TCDTData tdata  = ((TClassDiagramPanel)tdp).findTData(a.getTypeOther());
             if (tdata == null) {
@@ -292,10 +293,10 @@ public class DesignPanelTranslator {
 
         int indexTdp = panels.indexOf(tdp);
         if (indexTdp > -1) {
-            System.out.println("Found similar activity diagram for " + t.getName());
+            TraceManager.addDev("Found similar activity diagram for " + t.getName());
             t.setActivityDiagram(activities.get(indexTdp).duplicate(t));
 
-            //System.out.println("AD of " + t.getName() + "=");
+            //TraceManager.addDev("AD of " + t.getName() + "=");
             //t.getActivityDiagram().print();
 
             // Must fill correspondances!
@@ -307,7 +308,7 @@ public class DesignPanelTranslator {
                 ad1 = activities.get(indexTdp).get(adi);
                 tgcad = listE.getTG(ad1);
                 if (tgcad != null ){
-                    //System.out.println("Adding correspondance for " + ad0);
+                    //TraceManager.addDev("Adding correspondance for " + ad0);
                     listE.addCor(ad0, tgcad);
                 }
             }
@@ -385,7 +386,7 @@ public class DesignPanelTranslator {
         activities.add(ad);
 
 
-        //System.out.println("Making activity diagram of " + t.getName());
+        //TraceManager.addDev("Making activity diagram of " + t.getName());
 
         // Creation of other elements
         iterator = list.listIterator();
@@ -401,27 +402,27 @@ public class DesignPanelTranslator {
                     s = s.substring(0, s.length()-1);
                 }
                 nbActions = Conversion.nbChar(s, ';') + 1;
-                //System.out.println("Nb Actions in state: " + nbActions);
+                //TraceManager.addDev("Nb Actions in state: " + nbActions);
 
                 s = TURTLEModeling.manageDataStructures(t, s);
 
                 g = t.getGateFromActionState(s);
                 p = t.getParamFromActionState(s);
                 if ((g != null) && (nbActions == 1)){
-                    //System.out.println("Action state with gate found " + g.getName() + " value:" + t.getActionValueFromActionState(s));
+                    //TraceManager.addDev("Action state with gate found " + g.getName() + " value:" + t.getActionValueFromActionState(s));
                     adag = new ADActionStateWithGate(g);
                     ad.addElement(adag);
                     s1 = t.getActionValueFromActionState(s);
-                    //System.out.println("s1=" + s1);
+                    //TraceManager.addDev("s1=" + s1);
                     /*if (s1 == null) {
-                      System.out.println("oh ho !");
+                      TraceManager.addDev("oh ho !");
                       }*/
-                    //System.out.println("Adding type");
+                    //TraceManager.addDev("Adding type");
                     s1 = TURTLEModeling.manageGateDataStructures(t, s1);
 
-                    //System.out.println("hi");
+                    //TraceManager.addDev("hi");
                     if (s1 == null) {
-                        //System.out.println("ho");
+                        //TraceManager.addDev("ho");
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Invalid expression: " + t.getActionValueFromActionState(s));
                         ce.setTClass(t);
                         ce.setTGComponent(tgc);
@@ -434,12 +435,12 @@ public class DesignPanelTranslator {
                         s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
 
                         adag.setActionValue(s1);
-                        //System.out.println("Adding correspondance tgc=" + tgc +  "adag=" + adag);
+                        //TraceManager.addDev("Adding correspondance tgc=" + tgc +  "adag=" + adag);
                         listE.addCor(adag, tgc);
                         listB.addCor(adag, tgc);
                     }
                 } else if ((p != null) && (nbActions == 1)){
-                    //System.out.println("Action state with param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
+                    //TraceManager.addDev("Action state with param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
                     if (t.getExprValueFromActionState(s).trim().startsWith("=")) {
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, s + " should not start with a '=='");
                         ce.setTClass(t);
@@ -456,7 +457,7 @@ public class DesignPanelTranslator {
                     tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
 
                 } else if ((p != null) && (nbActions > 1)){
-                    //System.out.println("Action state with multi param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
+                    //TraceManager.addDev("Action state with multi param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
                     // Checking params
                     UICheckingError ce;
                  //   Vector v;
@@ -544,7 +545,7 @@ public class DesignPanelTranslator {
 
                             listE.addCor(adtmp, tgc);
                         } else {
-                            //System.out.println("Unknown param 0 or 1");
+                            //TraceManager.addDev("Unknown param 0 or 1");
                             UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (2) (" + s + "): \"" + s + "\" is not a correct expression");
                             ce.setTClass(t);
                             ce.setTGComponent(tgc);
@@ -554,7 +555,7 @@ public class DesignPanelTranslator {
                         }
 
                     } else {
-                        //System.out.println("Unknown param");
+                        //TraceManager.addDev("Unknown param");
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (2) (" + s + "): \"" + s + "\" is not a correct expression");
                         ce.setTClass(t);
                         ce.setTGComponent(tgc);
@@ -562,13 +563,13 @@ public class DesignPanelTranslator {
                         addCheckingError(ce);
                         tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
                     }
-                    //System.out.println("Bad action state found " + s);
+                    //TraceManager.addDev("Bad action state found " + s);
                 }
 
             } else if (tgc instanceof TADTimeCapture) {
                 p = t.getParamByName(tgc.getValue().trim());
                 if (p != null){
-                    System.out.println("Time capture with param " + p.getName());
+                    TraceManager.addDev("Time capture with param " + p.getName());
                     adtc = new ADTimeCapture(p);
                     ad.addElement(adtc);
                     ((TADTimeCapture)tgc).setStateAction(ErrorHighlight.ATTRIBUTE);
@@ -616,7 +617,7 @@ public class DesignPanelTranslator {
                     }
                 } catch (Exception e) {
                     // Index is not an absolute value
-                    System.out.println("Index is not an absolute value");
+                    TraceManager.addDev("Index is not an absolute value");
                     Gate error = t.addNewGateIfApplicable("arrayOverflow");
 
                     ADChoice choice1 = new ADChoice();
@@ -658,7 +659,7 @@ public class DesignPanelTranslator {
                             ags.setStateAction(ErrorHighlight.UNKNOWN);
                         } else {
                             for(int i=0; i<size; i++) {
-                                //System.out.println("Adding guard: [" + basicGuard + "== " + i + "]");
+                                //TraceManager.addDev("Adding guard: [" + basicGuard + "== " + i + "]");
                                 choice1.addGuard("[" + basicGuard + " == " + i + "]");
                                 adap = new ADActionStateWithParam(p);
                                 ad.addElement(adap);
@@ -703,7 +704,7 @@ public class DesignPanelTranslator {
 
                 } catch (Exception e) {
                     // Index is not an absolute value
-                    //System.out.println("Set: Index is not an absolute value");
+                    //TraceManager.addDev("Set: Index is not an absolute value");
                     Gate error = t.addNewGateIfApplicable("arrayOverflow");
 
                     ADChoice choice1 = new ADChoice();
@@ -735,7 +736,7 @@ public class DesignPanelTranslator {
                         }
 
                         for(int i=0; i<size; i++) {
-                            //System.out.println("Adding guard: [" + basicGuard + "== " + i + "]");
+                            //TraceManager.addDev("Adding guard: [" + basicGuard + "== " + i + "]");
                             p = t.getParamByName(ass.getArray() + "__" + i);
                             adap = null;
                             if (p == null) {
@@ -820,10 +821,10 @@ public class DesignPanelTranslator {
                     ad.addElement(adtlo);
                     adtlo.setLatency("0");
                     s1 = t.getActionValueFromActionState(s);
-                    //System.out.println("Adding type");
+                    //TraceManager.addDev("Adding type");
                     s1 = TURTLEModeling.manageGateDataStructures(t, s1);
                     s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-                    //System.out.println("Adding type done");
+                    //TraceManager.addDev("Adding type done");
                     adtlo.setAction(s1);
                     adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOffer)tgc).getDelay()));
                     listE.addCor(adtlo, tgc);
@@ -835,7 +836,7 @@ public class DesignPanelTranslator {
                     ce.setTDiagramPanel(tdp);
                     addCheckingError(ce);
                     ((TADTimeLimitedOffer)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
-                    //System.out.println("Bad time limited offer found " + s);
+                    //TraceManager.addDev("Bad time limited offer found " + s);
                 }
             } else if (tgc instanceof TADTimeLimitedOfferWithLatency) {
                 s = ((TADTimeLimitedOfferWithLatency)tgc).getAction();
@@ -845,10 +846,10 @@ public class DesignPanelTranslator {
                     ad.addElement(adtlo);
                     adtlo.setLatency(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOfferWithLatency)tgc).getLatency()));
                     s1 = t.getActionValueFromActionState(s);
-                    //System.out.println("Adding type");
+                    //TraceManager.addDev("Adding type");
                     s1 = TURTLEModeling.manageGateDataStructures(t, s1);
                     s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-                    //System.out.println("Adding type done");
+                    //TraceManager.addDev("Adding type done");
                     adtlo.setAction(s1);
                     adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOfferWithLatency)tgc).getDelay()));
                     listE.addCor(adtlo, tgc);
@@ -860,7 +861,7 @@ public class DesignPanelTranslator {
                     ce.setTDiagramPanel(tdp);
                     addCheckingError(ce);
                     ((TADTimeLimitedOfferWithLatency)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
-                    //System.out.println("Bad time limited offer found " + s);
+                    //TraceManager.addDev("Bad time limited offer found " + s);
                 }
 
                 // TURTLE-OS AD
@@ -918,7 +919,7 @@ public class DesignPanelTranslator {
                         adag.setActionValue(s);
                     }
                 }
-                //System.out.println("Nb Actions in state: " + nbActions);
+                //TraceManager.addDev("Nb Actions in state: " + nbActions);
             }
         }
 
@@ -971,7 +972,7 @@ public class DesignPanelTranslator {
                 if ((tgc1 != null) && (tgc2 != null)) {
                     //ADComponent ad1, ad2;
 
-                    //System.out.println("tgc1 = " + tgc1.getValue() + " tgc2= "+ tgc2.getValue());
+                    //TraceManager.addDev("tgc1 = " + tgc1.getValue() + " tgc2= "+ tgc2.getValue());
 
                     ad1 = listE.getADComponentByIndex(tgc1, tdp.count);
                     if ((tgc2 instanceof TADArrayGetState) || (tgc2 instanceof TADArraySetState) || (tgc2 instanceof TADActionState)) {
@@ -980,10 +981,10 @@ public class DesignPanelTranslator {
                         ad2 = listE.getADComponentByIndex(tgc2, tdp.count);
                     }
 
-                    //System.out.println("ad1 = " + ad1 + " ad2= "+ ad2);
+                    //TraceManager.addDev("ad1 = " + ad1 + " ad2= "+ ad2);
 
                     if ((ad1 == null) || (ad2 == null)) {
-                        //System.out.println("Correspondance issue");
+                        //TraceManager.addDev("Correspondance issue");
                     }
                     int index = 0;
                     if ((ad1 != null ) && (ad2 != null)) {
@@ -1020,7 +1021,7 @@ public class DesignPanelTranslator {
                                             }
                                         }
                                     }
-                                    //System.out.println("Real guard=" + realGuard + "k=" + k + " index=" + index);
+                                    //TraceManager.addDev("Real guard=" + realGuard + "k=" + k + " index=" + index);
                                 }
 
                                 if (realGuard.length() == 0) {
@@ -1028,7 +1029,7 @@ public class DesignPanelTranslator {
                                 } else {
                                     myguard = "[not(" + realGuard + ")]";
                                 }
-                                System.out.println("My guard=" + myguard);
+                                TraceManager.addDev("My guard=" + myguard);
                             }
                             ((ADChoice)ad1).addGuard(myguard);
                             ad1.addNext(ad2);
@@ -1042,7 +1043,7 @@ public class DesignPanelTranslator {
                             ad1.addNext(ad2);
                         } else {
                             ad1.addNextAtIndex(ad2, index);
-                            //System.out.println("Adding connector from " + ad1 + " to " + ad2);
+                            //TraceManager.addDev("Adding connector from " + ad1 + " to " + ad2);
                         }
                     }
                 }
@@ -1054,7 +1055,7 @@ public class DesignPanelTranslator {
         // Remove all elements not reachable from start state
         int sizeb = ad.size();
 
-        System.out.println("Removing non reachable elements in t:" + t.getName());
+        TraceManager.addDev("Removing non reachable elements in t:" + t.getName());
         ad.removeAllNonReferencedElts();
 
         int sizea = ad.size();
@@ -1064,7 +1065,7 @@ public class DesignPanelTranslator {
             ce.setTGComponent(null);
             ce.setTDiagramPanel(tdp);
             addWarning(ce);
-            //System.out.println("Non reachable elements have been removed in " + t.getName());
+            //TraceManager.addDev("Non reachable elements have been removed in " + t.getName());
         }
 
         //ad.replaceAllADActionStatewithMultipleParam(listE);
@@ -1117,7 +1118,7 @@ public class DesignPanelTranslator {
                 }
 
                 tm.addRelation(r);
-                //System.out.println("Adding " + Relation.translation(type) + " relation between " + tc1.getName() + " and " + tc2.getName());
+                //TraceManager.addDev("Adding " + Relation.translation(type) + " relation between " + tc1.getName() + " and " + tc2.getName());
 
                 // if tgco is a synchro operator -> synchronizations gates
                 if (tco instanceof TCDSynchroOperator)
@@ -1164,7 +1165,7 @@ public class DesignPanelTranslator {
 
             if ((g1 != null) && (g2 != null)) {
                 r.addGates(g1, g2);
-                //System.out.println("Adding gates " + g1.getName() + " = " + g2.getName());
+                //TraceManager.addDev("Adding gates " + g1.getName() + " = " + g2.getName());
             }
         }
     }

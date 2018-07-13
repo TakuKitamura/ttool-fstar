@@ -80,9 +80,9 @@ public class ProVerifOutputAnalyzer {
     private final static String typedWeakNonAuth = "(even event(authenticity" + AVATAR2ProVerif.ATTR_DELIM;
     private final static String untypedWeakNonAuth = "(even ev:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
     private final static String typedAuthSplit = "==> inj-event(authenticity" + AVATAR2ProVerif.ATTR_DELIM;
-    private final static String typedWeakAuthSplit = "==> event(authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    //private final static String typedWeakAuthSplit = "==> event(authenticity" + AVATAR2ProVerif.ATTR_DELIM;
     private final static String untypedAuthSplit = "==> evinj:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
-    private final static String untypedWeakAuthSplit = "==> ev:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
+    //private final static String untypedWeakAuthSplit = "==> ev:authenticity" + AVATAR2ProVerif.ATTR_DELIM;
 
     private ConcurrentHashMap<AvatarPragma, ProVerifQueryResult> results;
     private LinkedList<String> errors;
@@ -136,7 +136,7 @@ public class ProVerifOutputAnalyzer {
             {
                 if (str.isEmpty())
                     continue;
-                
+
                 Matcher m = procPattern.matcher(str);
 
                 if (isInTrace && (str.startsWith("A more detailed") || str.startsWith("Could not find")))
@@ -166,6 +166,8 @@ public class ProVerifOutputAnalyzer {
                 {
                     // Remove 'RESULT ' at the begining
                     str = str.substring(7);
+                    
+                    
                     ProVerifQueryResult result = new ProVerifQueryResult(true, true);
 
                     // This concerns an enteringState event
@@ -246,7 +248,9 @@ public class ProVerifOutputAnalyzer {
                             {
                                 if (pragma instanceof AvatarPragmaSecret)
                                 {
+
                                     String trueName = this.avatar2proverif.getTrueName(((AvatarPragmaSecret) pragma).getArg());
+                                    
                                     if (trueName != null && trueName.equals(attributeName))
                                     {
                                         this.results.put(pragma, result);
@@ -433,7 +437,7 @@ public class ProVerifOutputAnalyzer {
         return this.results;
     }
 
-    public HashMap<AvatarPragmaSecret, ProVerifQueryResult> getConfidentialityResults()
+    public Map<AvatarPragmaSecret, ProVerifQueryResult> getConfidentialityResults()
     {
         if (this.results == null)
             return null;
@@ -451,12 +455,12 @@ public class ProVerifOutputAnalyzer {
         return resultMap;
     }
 
-    public HashMap<AvatarPragmaReachability, ProVerifQueryResult> getReachabilityResults()
+    public Map<AvatarPragmaReachability, ProVerifQueryResult> getReachabilityResults()
     {
         if (this.results == null)
             return null;
 
-        HashMap<AvatarPragmaReachability, ProVerifQueryResult> resultMap = new HashMap<AvatarPragmaReachability, ProVerifQueryResult> ();
+        Map<AvatarPragmaReachability, ProVerifQueryResult> resultMap = new HashMap<AvatarPragmaReachability, ProVerifQueryResult> ();
 
         for (AvatarPragma pragma: this.results.keySet())
         {
@@ -469,12 +473,12 @@ public class ProVerifOutputAnalyzer {
         return resultMap;
     }
 
-    public HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> getAuthenticityResults()
+    public Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> getAuthenticityResults()
     {
         if (this.results == null)
             return null;
 
-        HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> resultMap = new HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> ();
+        Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> resultMap = new HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> ();
 
         for (AvatarPragma pragma: this.results.keySet())
         {
@@ -487,7 +491,7 @@ public class ProVerifOutputAnalyzer {
         return resultMap;
     }
 
-    public LinkedList<String> getErrors() {
+    public List<String> getErrors() {
         synchronized(errors) {
             return errors;
         }

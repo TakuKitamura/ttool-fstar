@@ -130,7 +130,7 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
 			int w0;
 			f = f.deriveFont((float)maxCurrentFontSize);
 			g.setFont(f);
-			//System.out.println("max current font size:" + maxCurrentFontSize);
+			//
 			while(maxCurrentFontSize > (minFontSize-1)) {
 				w0 = g.getFontMetrics().stringWidth(value);
 				w0 = Math.max(w0, g.getFontMetrics().stringWidth(STEREOTYPES[0]));
@@ -193,12 +193,12 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
         int w  = g.getFontMetrics().stringWidth(value);
 		int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
 		
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+        //
         if (w1 != width) { 
             width = w1;
             resizeWithFather();
         }
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+        //
     }*/
     
 

@@ -292,7 +292,11 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
                     cptTotal ++;
                 }
             }
-            middleX = middleX / cptTotal;
+            if (cptTotal > 0) {
+                middleX = middleX / cptTotal;
+            } else  {
+                return;
+            }
         }
 
         //TraceManager.addDev("Adding instances to last SD Step 3");

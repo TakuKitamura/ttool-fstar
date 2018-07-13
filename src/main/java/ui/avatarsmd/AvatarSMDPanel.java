@@ -147,7 +147,7 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
         
         v.add(tgc);
         
-        //System.out.println("Nb of nexts: " + tgc.getNbNext());
+        //
         if (!(tgc instanceof AvatarSMDStartState)) {
             for(i=0; i<tgc.getNbNext(); i++) {
                 tgc1 = getNextTGComponent(tgc, i);
@@ -170,7 +170,7 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 	public void setConnectorsToFront() {
 		TGComponent tgc;
 		
-		//System.out.println("list size=" + componentList.size());
+		//
 		
         Iterator<TGComponent> iterator = componentList.listIterator();
         
@@ -184,9 +184,9 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 			}
 		}
 		
-		//System.out.println("Putting to back ...");
+		//
 		for(TGComponent tgc1: list) {
-			//System.out.println("Putting to back: " + tgc1);
+			//
 			componentList.remove(tgc1);
 			componentList.add(tgc1);
 		}

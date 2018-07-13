@@ -527,7 +527,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     @Override
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
-        //System.out.println("Actions");
+        //
 
         // Compare the action command to the known actions.
         updateInteractiveSimulation();

@@ -73,7 +73,7 @@ public  class TGConnectorInteraction extends TGConnector {
     }
     
     public int getType() {
-        //System.out.println("Ask for my type !");
+        //
         return TGComponentManager.CONNECTOR_INTERACTION;
     }
 }

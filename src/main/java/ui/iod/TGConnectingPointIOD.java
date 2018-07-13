@@ -60,12 +60,12 @@ public class TGConnectingPointIOD extends  TGConnectingPointWidthHeight{
     }
     
     public boolean isCompatibleWith(int type) {
-        //System.out.println("is compatible with " + type);
+        //
         if (type == TGComponentManager.CONNECTOR_INTERACTION) {
-            //System.out.println("is compatible with:true");
+            //
             return true;
         }
-        //System.out.println("is compatible with:false");
+        //
         return false;
     }
     

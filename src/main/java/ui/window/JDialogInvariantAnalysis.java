@@ -845,7 +845,7 @@ public class JDialogInvariantAnalysis extends JDialog implements ActionListener,
         checkMode();
         setButtons();
         
-        //System.out.println("Selected item=" + selectedItem);
+        //
          
     	 TraceManager.addDev("Invariants thread completed");
     }

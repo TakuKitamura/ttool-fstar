@@ -138,7 +138,7 @@ public class FaultTreeDiagramPanel extends TDiagramPanel implements TDPWithAttri
     public void setConnectorsToFront() {
         TGComponent tgc;
 
-        //System.out.println("list size=" + componentList.size());
+        //
 
         Iterator iterator = componentList.listIterator();
 
@@ -151,9 +151,9 @@ public class FaultTreeDiagramPanel extends TDiagramPanel implements TDPWithAttri
             }
         }
 
-        //System.out.println("Putting to back ...");
+        //
         for(TGComponent tgc1: list) {
-            //System.out.println("Putting to back: " + tgc1);
+            //
             componentList.remove(tgc1);
             componentList.add(tgc1);
         }

@@ -102,7 +102,7 @@ public class TClassLinkNode extends TClass {
         ActivityDiagram ad = getActivityDiagram();
         ADJunction adj1 = new ADJunction();
         
-        //System.out.println("Call=" + call);
+        //
         ADActionStateWithGate ad1 = new ADActionStateWithGate(g1);
         ad1.setActionValue(call);
         
@@ -114,7 +114,7 @@ public class TClassLinkNode extends TClass {
         ADActionStateWithGate ad2 = new ADActionStateWithGate(g2);
         call = Conversion.replaceAllChar(call, '?', "!");
         call = Conversion.replaceOp(call, ":nat", "");
-        //System.out.println("Call=" + call);
+        //
         ad2.setActionValue(call);
         
         ADStop adstop = new ADStop();

@@ -205,7 +205,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 
         if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
             currentFontSize = tdp.getFontSize();
-            //System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
+            //
             myFont = f.deriveFont((float)currentFontSize);
             myFontB = myFont.deriveFont(Font.BOLD);
 
@@ -468,8 +468,8 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
             text = "";
             String s;
 
-            //System.out.println("Loading tclass " + getValue());
-            //System.out.println(nl.toString());
+            //
+            //
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -480,7 +480,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("textline")) {
-                                //System.out.println("Analyzing line0");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     s = "";
@@ -488,7 +488,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                                 text += GTURTLEModeling.decodeString(s) + "\n";
 
                             } else if (elt.getTagName().equals("type")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     type = 0;
@@ -504,7 +504,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                                 }
 
                             } else if (elt.getTagName().equals("durability")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     durability = 0;
@@ -520,7 +520,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                                 }
 
                             } else if (elt.getTagName().equals("source")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     source = 0;
@@ -536,7 +536,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                                 }
 
                             } else if (elt.getTagName().equals("status")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     status = 0;
@@ -552,7 +552,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                                 }
 
                             } else if (elt.getTagName().equals("limitation")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     limitation = 0;
@@ -568,7 +568,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                                 }
 
                             }
-                            //System.out.println("Analyzing line4");
+                            //
                         }
                     }
                 }
@@ -614,7 +614,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
       }
 
       public int getCriticality() {
-      //System.out.println("Criticality=" + criticality);
+      //
       if (criticality.compareTo("High") == 0) {
       return AvatarRDRequirement.HIGH;
       } else if (criticality.compareTo("Medium") == 0) {
@@ -632,7 +632,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
     }
 
     public void autoAdjust(int mode) {
-        //System.out.println("Auto adjust in mode = " + mode);
+        //
 
         if (graphics == null) {
             return;

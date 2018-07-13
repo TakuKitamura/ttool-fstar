@@ -36,14 +36,12 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.AvatarSignal;
 import ui.util.IconManager;
 import ui.TGComponent;
+import myutil.TraceManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,6 +50,8 @@ import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
+
+
 /**
  * Class JDialogAvatarSignal
  * Dialog for managing several string components
@@ -100,6 +100,7 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
         pack();
     }
 
+
     private void makeSignals() {
         showSignals = new LinkedList<String> ();
         realSignals = new LinkedList<AvatarSignal> ();
@@ -112,8 +113,10 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
     }
 
 
+
     private void myInitComponents() {
     }
+
 
     private void initComponents() {
         Container c = getContentPane();
@@ -140,18 +143,12 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         c1.fill = GridBagConstraints.BOTH;
         c1.gridheight = 1;
-        listSignals = new JComboBox<String>(showSignals.toArray (new String[0]));
+        c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel(" "), c1);
 
         // Combo box
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        listSignals = new JComboBox<String> (showSignals.toArray (new String[0]));
+        listSignals = new JComboBox<String> (showSignals.toArray (new String[showSignals.size()]));
         panel1.add(listSignals, c1);
 
 
@@ -176,29 +173,18 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		refChecks = new JComboBox<TGComponent>(refs);
 		refChecks.insertItemAt(null, 0);
-		if (reference!=null){
+		TraceManager.addDev("Reference=" + reference);
+		if (reference != null){
 			refChecks.setSelectedItem(reference);
-		}
+		} else {
+		    refChecks.setSelectedIndex(0);
+        }
 		panel1.add(refChecks,c1);
-
-
-        // main panel;
-        /*c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row*/
 
         c.add(panel1, BorderLayout.CENTER);
 
-
-
-
-        //c0.gridwidth = 1;
-        //c0.gridheight = 1;
-        //c0.fill = GridBagConstraints.HORIZONTAL;
-
-        initButtons(c, this);
+        JPanel buttons = initBasicButtons(this);
+        c.add(buttons, BorderLayout.SOUTH);
     }
 
     public void	actionPerformed(ActionEvent evt)  {

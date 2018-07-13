@@ -153,7 +153,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         // Icon
         //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
         g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
 
         c = g.getColor();
 
@@ -217,7 +217,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 			}
 		}
 
-        JDialogBUSNode dialog = new JDialogBUSNode(frame, "Setting VGMN attributes", this, attacks);
+        JDialogBUSNode dialog = new JDialogBUSNode(frame, "Setting Bus Attributes", this, attacks);
        // dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
         dialog.setVisible( true ); // blocked until dialog has been closed
@@ -351,7 +351,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             NodeList nli;
             Node n1, n2;
@@ -360,12 +360,12 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
             String sstereotype = null, snodeName = null;
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {

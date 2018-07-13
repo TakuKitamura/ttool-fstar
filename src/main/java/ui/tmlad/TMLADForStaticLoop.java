@@ -145,12 +145,12 @@ public class TMLADForStaticLoop extends TGCWithoutInternalComponent implements E
             s = s.trim();
         }
 
-        //System.out.println("emptytext=" + emptyText);
+        //
 
         if ((s != null) && (s.length() > 0) && (s.matches("\\d*"))) {
             setValue(s);
             makeValueLoop();
-            //System.out.println("Value ok");
+            //
             return true;
         }
 

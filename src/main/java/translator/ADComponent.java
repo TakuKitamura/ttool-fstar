@@ -106,7 +106,7 @@ public abstract class ADComponent implements Cloneable {
     }
 	
 	public void removeAllNextAfter(int index) {
-		System.out.println("Removing all nexts on " + toString()); 
+		
 		for(int i=index+1; i<getNbNext(); i++){
 			removeNext(i);
 			i--;
@@ -154,13 +154,13 @@ public abstract class ADComponent implements Cloneable {
     }
     
     public void updateNext(ADComponent oldOne, ADComponent newOne) {
-        //System.out.println("Checking nexts in " + toString());
+        //
         ADComponent adc1;
         for(int i=0; i<next.size(); i++) {
             adc1 = next.elementAt(i);
-            //System.out.println("Next = " + adc1.toString());
+            //
             if (adc1 == oldOne) {
-                //System.out.println("found relink in " + this);
+                //
                 next.insertElementAt(newOne, i);
                 next.removeElement(oldOne);
             }

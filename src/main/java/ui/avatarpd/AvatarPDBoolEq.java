@@ -137,7 +137,7 @@ public class AvatarPDBoolEq extends AvatarPDToggle implements ConstraintListInte
 			int w0, w1, w2;
 			f = f.deriveFont((float)maxCurrentFontSize);
 			g.setFont(f);
-			//System.out.println("max current font size:" + maxCurrentFontSize);
+			//
 			while(maxCurrentFontSize > (minFontSize-1)) {
 				w0 = g.getFontMetrics().stringWidth(value);
 				w1 = g.getFontMetrics().stringWidth(ster);

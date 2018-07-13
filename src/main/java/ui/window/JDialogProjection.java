@@ -164,7 +164,7 @@ public class JDialogProjection extends JDialog implements ActionListener, ListSe
     }
 
     private void initGates(TURTLEModeling tm) {
-        //System.out.println("*** init gates tm ***");
+        //
         gatesIgnored = new LinkedList<TClassAndGateDS>();
         gatesProjected = new LinkedList<TClassAndGateDS>();
 
@@ -631,7 +631,7 @@ public class JDialogProjection extends JDialog implements ActionListener, ListSe
 
             mgui.gtm.reinitRGAUTPROJDOT();
             jta.append("Modifying original RG\n");
-            //System.out.println("Input data = " + inputData);
+            //
 
             autproj = mgui.gtm.performProjection(inputData, gatesProjected);
 
@@ -641,7 +641,7 @@ public class JDialogProjection extends JDialog implements ActionListener, ListSe
                 jta.append("\nRemoving ignored gates\n");
                 if (isAldebaranSelected) {
 
-                    //System.out.println("Output data = " + autproj);
+                    //
 
                     //jta.append(autproj);
 

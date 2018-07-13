@@ -60,9 +60,12 @@ import java.awt.*;
  * @author Irina Kit Yan LEE
  */
 
-public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference, WithAttributes {
+public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference {
     protected Color myColor;
     protected int orientation;
+	private int maxFontSize = 14;
+    private int minFontSize = 4;
+    private int currentFontSize = -1;
     protected int oldx, oldy;
     protected int halfwidth = 13;
     protected int currentOrientation = GraphicLib.NORTH;
@@ -72,11 +75,10 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     protected int oldTypep = typep;
     public String commName;
 
+    private int textX = 15;
+    private double dtextX = 0.0;
     protected int decPoint = 3;
 
-    protected boolean conflict = false;
-    protected String conflictMessage;
-    
     private ImageIcon portImageIconTDF, portImageIconDE;
     private ImageIcon portImageIconW, portImageIconE, portImageIconN, portImageIconS;
     
@@ -85,15 +87,15 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
 
         initScaling(2*halfwidth, 2*halfwidth);
 
+        dtextX = textX * oldScaleFactor;
+        textX = (int)dtextX;
+        dtextX = dtextX - textX;
+        
         minWidth = 1;
         minHeight = 1;
 
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[1];
-		for (int i=0; i<1; i++) {
-			connectingPoint[i] = new SysCAMSPortConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-		}
-        
+        initConnectingPoint(true, true, 1);
+                
         addTGConnectingPointsComment();
 
         nbInternalTGComponent = 0;
@@ -104,8 +106,8 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         userResizable = false;
         commName = "port";
         makeValue();
-        setName("Primitive port");
-
+        name = "Primitive port - " + getPortTypeName();
+        
         myImageIcon = IconManager.imgic1206;
         portImageIconTDF = IconManager.imgic8000;
         portImageIconDE = IconManager.imgic8001;
@@ -114,21 +116,25 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         portImageIconN = IconManager.imgic8004; 
         portImageIconS = IconManager.imgic8005; 
         
-        // Initialization of port attributes
         if (this instanceof SysCAMSPortTDF) {
-        	((SysCAMSPortTDF) this).setPeriod(0);
-        	((SysCAMSPortTDF) this).setRate(0);
-        	((SysCAMSPortTDF) this).setDelay(0);
+        	((SysCAMSPortTDF) this).setPeriod(-1);
+        	((SysCAMSPortTDF) this).setTime("");
+        	((SysCAMSPortTDF) this).setRate(-1);
+        	((SysCAMSPortTDF) this).setDelay(-1);
         	((SysCAMSPortTDF) this).setTDFType("int");
         } else if (this instanceof SysCAMSPortDE) {
-        	((SysCAMSPortDE) this).setPeriod(0);
-        	((SysCAMSPortDE) this).setRate(0);
-        	((SysCAMSPortDE) this).setDelay(0);
+//        	((SysCAMSPortDE) this).setPeriod(-1);
+//        	((SysCAMSPortDE) this).setTime("");
+//        	((SysCAMSPortDE) this).setRate(-1);
+//        	((SysCAMSPortDE) this).setDelay(-1);
         	((SysCAMSPortDE) this).setDEType("int");
+        	((SysCAMSPortDE) this).setSensitive(false);
+        	((SysCAMSPortDE) this).setSensitiveMethod("");
         } else if (this instanceof SysCAMSPortConverter) {
-        	((SysCAMSPortConverter) this).setPeriod(0);
-        	((SysCAMSPortConverter) this).setDelay(0);
-        	((SysCAMSPortConverter) this).setRate(0);
+        	((SysCAMSPortConverter) this).setPeriod(-1);
+        	((SysCAMSPortConverter) this).setTime("");
+        	((SysCAMSPortConverter) this).setDelay(-1);
+        	((SysCAMSPortConverter) this).setRate(-1);
         	((SysCAMSPortConverter) this).setConvType("int");
         }
     }
@@ -147,21 +153,68 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     }
 
     public void internalDrawing(Graphics g) {
-        if ((x != oldx) | (oldy != y)) {
-            // Component has moved!
+        Font f = g.getFont();
+        Font fold = f;
+        
+    	if ((x != oldx) | (oldy != y)) {
             manageMove();
             oldx = x;
             oldy = y;
         }
 
-        if (rescaled) {
-            rescaled = false;
-        }
+    	if (this.rescaled && !this.tdp.isScaled()) {
+            this.rescaled = false;
+            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+            f = f.deriveFont((float) maxCurrentFontSize);
 
-        // Zoom is assumed to be computed
+            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+            	if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
+            		break;
+            	}
+                maxCurrentFontSize--;
+                f = f.deriveFont((float) maxCurrentFontSize);
+            }
+
+            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+                maxCurrentFontSize++;
+                f = f.deriveFont((float) maxCurrentFontSize);
+            }
+            g.setFont(f);
+            this.currentFontSize = maxCurrentFontSize;
+        } else {
+            f = f.deriveFont(this.currentFontSize);
+    	}
+
         Color c = g.getColor();
         g.setColor(c);
          
+        if (this instanceof SysCAMSPortTDF) {
+        	g.drawRect(x+width/2-portImageIconTDF.getIconWidth()/2, y+height/2-portImageIconTDF.getIconHeight()/2, portImageIconTDF.getIconWidth(), portImageIconTDF.getIconHeight());
+    		g.drawImage(portImageIconTDF.getImage(), x+width/2-portImageIconTDF.getIconWidth()/2, y+height/2-portImageIconTDF.getIconHeight()/2, null);
+        } else if (this instanceof SysCAMSPortConverter) {
+        	switch(currentOrientation) {
+            case GraphicLib.NORTH:
+        		g.drawRect(x-1+width/2-portImageIconN.getIconWidth()/2, y-1+height/2-portImageIconN.getIconHeight()/2, portImageIconN.getIconWidth()+2, portImageIconN.getIconHeight()+2);
+         		g.drawImage(portImageIconN.getImage(), x+width/2-portImageIconN.getIconWidth()/2, y+height/2-portImageIconN.getIconHeight()/2, null);
+            	break;
+            case GraphicLib.SOUTH:
+        		g.drawRect(x+width/2-portImageIconS.getIconWidth()/2, y+height/2-portImageIconS.getIconHeight()/2, portImageIconS.getIconWidth(), portImageIconS.getIconHeight());
+         		g.drawImage(portImageIconS.getImage(), x+width/2-portImageIconS.getIconWidth()/2, y+height/2-portImageIconS.getIconHeight()/2, null);
+            	break;
+            case GraphicLib.WEST:
+        		g.drawRect(x+width/2-portImageIconW.getIconWidth()/2, y+height/2-portImageIconW.getIconHeight()/2, portImageIconW.getIconWidth(), portImageIconW.getIconHeight());
+         		g.drawImage(portImageIconW.getImage(), x+width/2-portImageIconW.getIconWidth()/2, y+height/2-portImageIconW.getIconHeight()/2, null);
+            	break;
+            case GraphicLib.EAST:
+            default:
+        		g.drawRect(x+width/2-portImageIconE.getIconWidth()/2, y+height/2-portImageIconE.getIconHeight()/2, portImageIconE.getIconWidth(), portImageIconE.getIconHeight());
+         		g.drawImage(portImageIconE.getImage(), x+width/2-portImageIconE.getIconWidth()/2, y+height/2-portImageIconE.getIconHeight()/2, null);
+            }
+        } else if (this instanceof SysCAMSPortDE) {
+        	g.drawRect(x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, portImageIconDE.getIconWidth(), portImageIconDE.getIconHeight());
+    		g.drawImage(portImageIconDE.getImage(), x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, null);
+    	}
+        
         TGComponent tgc = getFather();
         if ((tgc != null) && (tgc instanceof SysCAMSBlockTDF)) {
         	if (tgc instanceof SysCAMSBlockTDF && this instanceof SysCAMSPortTDF) {
@@ -171,6 +224,12 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         }
         if ((tgc != null) && (tgc instanceof SysCAMSBlockDE)) {
         	if (tgc instanceof SysCAMSBlockDE && this instanceof SysCAMSPortDE) {
+        		g.drawRect(x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, portImageIconDE.getIconWidth(), portImageIconDE.getIconHeight());
+        		g.drawImage(portImageIconDE.getImage(), x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, null);
+        	}
+        }
+        if ((tgc != null) && (tgc instanceof SysCAMSBlockGPIO2VCI)) {
+        	if (tgc instanceof SysCAMSBlockGPIO2VCI && this instanceof SysCAMSPortDE) {
         		g.drawRect(x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, portImageIconDE.getIconWidth(), portImageIconDE.getIconHeight());
         		g.drawImage(portImageIconDE.getImage(), x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, null);
         	}
@@ -198,31 +257,14 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         	}
         }
         
-        int ft = 10;
-        if ((tgc != null) && (tgc instanceof SysCAMSBlockTDF)) {
-            ft = ((SysCAMSBlockTDF)tgc).getCurrentFontSize();
-        }
-        if ((tgc != null) && (tgc instanceof SysCAMSBlockDE)) {
-        	ft = ((SysCAMSBlockDE)tgc).getCurrentFontSize();
-        }
-        int w;
-        Font f = g.getFont();
-        Font fold = f;
-
-        int si = Math.min(8, (int)((float)ft - 2));
-        f = f.deriveFont((float)si);
+        int attributeFontSize = this.currentFontSize * 5 / 6;
+        g.setFont(f.deriveFont((float) attributeFontSize));
         g.setFont(f);
-        w = g.getFontMetrics().stringWidth(commName);
-        if (w < ((int)(width * 1.5))) {
-            g.drawString(commName, x, y-1);
-        }
+    	g.setFont(f.deriveFont(Font.BOLD));
+    	g.drawString(commName, x, y-1);
 
         g.setFont(fold);
-
-        drawParticularity(g);
     }
-
-    public abstract void drawParticularity(Graphics g);
 
     public void manageMove() {
         if (father != null) {
@@ -240,7 +282,6 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         }
     }
 
-    // TGConnecting points ..
     public void setOrientation(int orientation) {
         currentOrientation = orientation;
         double w0, h0;
@@ -301,14 +342,18 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
 
     public void resizeWithFather() {
         if ((father != null) && (father instanceof SysCAMSBlockTDF)) {
-            // Too large to fit in the father? -> resize it!
             setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
             setMoveCd(x, y);
             oldx = -1;
             oldy = -1;
         }
         if ((father != null) && (father instanceof SysCAMSBlockDE)) {
-        	// Too large to fit in the father? -> resize it!
+        	setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
+        	setMoveCd(x, y);
+        	oldx = -1;
+        	oldy = -1;
+        }
+        if ((father != null) && (father instanceof SysCAMSBlockGPIO2VCI)) {
         	setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
         	setMoveCd(x, y);
         	oldx = -1;
@@ -342,18 +387,23 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
         
         if (this instanceof SysCAMSPortTDF) {
         	sb.append("\" period=\"" + ((SysCAMSPortTDF) this).getPeriod());
+        	sb.append("\" time=\"" + ((SysCAMSPortTDF) this).getTime());
         	sb.append("\" rate=\"" + ((SysCAMSPortTDF) this).getRate());
         	sb.append("\" delay=\"" + ((SysCAMSPortTDF) this).getDelay());
         	sb.append("\" type=\"" + ((SysCAMSPortTDF) this).getTDFType());
         }
         if (this instanceof SysCAMSPortDE) {
-        	sb.append("\" period=\"" + ((SysCAMSPortDE) this).getPeriod());
-        	sb.append("\" rate=\"" + ((SysCAMSPortDE) this).getRate());
-        	sb.append("\" delay=\"" + ((SysCAMSPortDE) this).getDelay());
+//        	sb.append("\" period=\"" + ((SysCAMSPortDE) this).getPeriod());
+//        	sb.append("\" time=\"" + ((SysCAMSPortDE) this).getTime());
+//        	sb.append("\" rate=\"" + ((SysCAMSPortDE) this).getRate());
+//        	sb.append("\" delay=\"" + ((SysCAMSPortDE) this).getDelay());
         	sb.append("\" type=\"" + ((SysCAMSPortDE) this).getDEType());
+        	sb.append("\" sensitive=\"" + ((SysCAMSPortDE) this).getSensitive());
+        	sb.append("\" sensitive_method=\"" + ((SysCAMSPortDE) this).getSensitiveMethod());
         }
         if (this instanceof SysCAMSPortConverter) {
         	sb.append("\" period=\"" + ((SysCAMSPortConverter) this).getPeriod());
+        	sb.append("\" time=\"" + ((SysCAMSPortConverter) this).getTime());
         	sb.append("\" rate=\"" + ((SysCAMSPortConverter) this).getRate());
         	sb.append("\" delay=\"" + ((SysCAMSPortConverter) this).getDelay());
         	sb.append("\" type=\"" + ((SysCAMSPortConverter) this).getConvType());
@@ -370,7 +420,8 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
             Element elt;
             
             int period, rate, delay;
-            String type; 
+            String type, time, sensitiveMethod; 
+            Boolean sensitive;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -384,24 +435,38 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
                                 commName = elt.getAttribute("commName");
                                 typep = Integer.decode(elt.getAttribute("commType")).intValue();
                                 isOrigin = Integer.decode(elt.getAttribute("origin")).intValue();
-                                period = Integer.decode(elt.getAttribute("period")).intValue();
-                                rate = Integer.decode(elt.getAttribute("rate")).intValue();
-                                delay = Integer.decode(elt.getAttribute("delay")).intValue();
-                                type = elt.getAttribute("type");
-                                setPortName(commName);
-                                if (this instanceof SysCAMSPortTDF) {
-                                	((SysCAMSPortTDF)this).setPeriod(period);
-                                	((SysCAMSPortTDF)this).setRate(rate);
-                                	((SysCAMSPortTDF)this).setDelay(delay);
-                                	((SysCAMSPortTDF)this).setTDFType(type);
-                                } else if (this instanceof SysCAMSPortDE) {
-                                	((SysCAMSPortDE)this).setPeriod(period);
-                                	((SysCAMSPortDE)this).setRate(rate);
-                                	((SysCAMSPortDE)this).setDelay(delay);
-                                	((SysCAMSPortDE)this).setDEType(type);
-                                } else if (this instanceof SysCAMSPortConverter) {
-                                	((SysCAMSPortConverter)this).setPeriod(period);
-                                	((SysCAMSPortConverter)this).setRate(rate);
+								setPortName(commName);
+								if (this instanceof SysCAMSPortTDF) {
+									period = Integer.decode(elt.getAttribute("period")).intValue();
+									time = elt.getAttribute("time");
+									rate = Integer.decode(elt.getAttribute("rate")).intValue();
+									delay = Integer.decode(elt.getAttribute("delay")).intValue();
+									type = elt.getAttribute("type");
+									((SysCAMSPortTDF) this).setPeriod(period);
+									((SysCAMSPortTDF) this).setTime(time);
+									((SysCAMSPortTDF) this).setRate(rate);
+									((SysCAMSPortTDF) this).setDelay(delay);
+									((SysCAMSPortTDF) this).setTDFType(type);
+								} else if (this instanceof SysCAMSPortDE) {
+									// ((SysCAMSPortDE)this).setPeriod(period);
+									// ((SysCAMSPortDE)this).setTime(time);
+									// ((SysCAMSPortDE)this).setRate(rate);
+									// ((SysCAMSPortDE)this).setDelay(delay);
+									type = elt.getAttribute("type");
+									sensitive = Boolean.parseBoolean(elt.getAttribute("sensitive"));
+									sensitiveMethod = elt.getAttribute("sensitive_method");
+									((SysCAMSPortDE) this).setDEType(type);
+									((SysCAMSPortDE) this).setSensitive(sensitive);
+									((SysCAMSPortDE) this).setSensitiveMethod(sensitiveMethod);
+								} else if (this instanceof SysCAMSPortConverter) {
+									period = Integer.decode(elt.getAttribute("period")).intValue();
+									time = elt.getAttribute("time");
+									rate = Integer.decode(elt.getAttribute("rate")).intValue();
+									delay = Integer.decode(elt.getAttribute("delay")).intValue();
+									type = elt.getAttribute("type");
+									((SysCAMSPortConverter) this).setPeriod(period);
+									((SysCAMSPortConverter) this).setTime(time);
+									((SysCAMSPortConverter) this).setRate(rate);
                                 	((SysCAMSPortConverter)this).setDelay(delay);
                                 	((SysCAMSPortConverter)this).setConvType(type);
                                 }
@@ -417,7 +482,7 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     }
 
     public void makeValue() {
-        value = getPortTypeName() + " " + getPortName();
+        value = getPortName();
     }
 
     public String getPortName() {
@@ -452,37 +517,6 @@ public abstract class SysCAMSPrimitivePort extends TGCScalableWithInternalCompon
     }
     
     public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_PORT_TMLC;
-    }
-
-    public String getAttributes() {
-        String attr = "";
-        if (getOrigin() == 1) {
-            attr += "out ";
-        } else if (getOrigin() == 0) {
-            attr += "in ";
-        }
-        attr += getPortTypeName() + ": ";
-        attr += getPortName() + "\n";
-        attr += "B";
-        if (getOrigin() == 1) {
-            attr += "W\n";
-        } else if (getOrigin() == 0) {
-            attr += "R\n";
-        }
-        if (conflict) {
-            attr += "Error in path=" + conflictMessage;
-        }
-        return attr;
-    }
-    
-    public boolean getConflict() {
-        return conflict;
-    }
-
-    public void setConflict(boolean _conflict, String _msg) {
-        conflict = _conflict;
-        myColor = null;
-        conflictMessage = _msg;
+        return TGComponentManager.CAMS_CONNECTOR;
     }
 }

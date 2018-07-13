@@ -255,7 +255,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 		
 		// On the name ?
 		if ((displayText) && (_y <= (y + currentFontSize + textX))) {
-			//System.out.println("Edit on double click x=" + _x + " y=" + _y);
+			//
 			oldValue = value;
 			String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
 			JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
@@ -279,10 +279,10 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 						JOptionPane.ERROR_MESSAGE);
 					return false;
 				} else {
-					//System.out.println("Set value with change");
+					//
 					setValueWithChange(s);
 					rescaled = true;
-					//System.out.println("return true");
+					//
 					return true;
 				}
 			}
@@ -371,13 +371,13 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
     
     protected String translateExtraParam() {
         TAttribute a;
-		//System.out.println("Loading extra params of " + value);
+		//
         //value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for(int i=0; i<myAttributes.size(); i++) {
-            //System.out.println("Attribute:" + i);
+            //
             a = myAttributes.get (i);
-            //System.out.println("Attribute:" + i + " = " + a.getId());
+            //
             //value = value + a + "\n";
             sb.append("<Attribute access=\"");
             sb.append(a.getAccess());
@@ -405,21 +405,21 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
             String typeOther;
             String id, valueAtt;
             
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Attribute")) {
-                                //System.out.println("Analyzing attribute");
+                                //
                                 access = Integer.decode(elt.getAttribute("access")).intValue();
                                 type = Integer.decode(elt.getAttribute("type")).intValue();
                                 try {
@@ -434,7 +434,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
                                     valueAtt = "";
                                 }
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
-                                    //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
+                                    //
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     myAttributes.add (ta);
                                 }

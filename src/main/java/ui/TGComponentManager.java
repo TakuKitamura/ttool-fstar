@@ -59,6 +59,9 @@ import ui.dd.TDDNode;
 import ui.dd.TGConnectorLinkNode;
 import ui.diplodocusmethodology.*;
 import ui.ebrdd.*;
+import ui.eln.*;
+import ui.eln.sca_eln.*;
+import ui.eln.sca_eln_sca_tdf.*;
 import ui.ftd.*;
 import ui.iod.*;
 import ui.ncdd.*;
@@ -341,7 +344,25 @@ public class TGComponentManager {
     public static final int CAMS_PORT_DE = 1605;
     public static final int CAMS_PORT_CONVERTER = 1606;
     public static final int CAMS_CLUSTER = 1607;
+    public static final int CAMS_BLOCK_GPIO2VCI = 1608;
 
+    // ELN
+    public static final int ELN_CONNECTOR = 1610;
+    public static final int ELN_PORT_TERMINAL = 1611;
+    public static final int ELN_RESISTOR = 1612;
+    public static final int ELN_CAPACITOR = 1613;
+    public static final int ELN_INDUCTOR = 1614;
+    public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 1615;
+    public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 1616;
+    public static final int ELN_IDEAL_TRANSFORMER = 1617;
+    public static final int ELN_TRANSMISSION_LINE = 1618;
+    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 1619;
+    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 1620;
+    public static final int ELN_NODE_REF = 1621;
+    public static final int ELN_TDF_VOLTAGE_SINK = 1622;
+    public static final int ELN_TDF_CURRENT_SINK = 1623;
+    public static final int ELN_MODULE = 1624;
+    
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
     public static final int PROSMD_STOP_STATE = 2001;
@@ -461,6 +482,7 @@ public class TGComponentManager {
     public static final int ADD_CHANNELARTIFACT = 5362;
     public static final int ADD_VGMNNODE = 5363;
     public static final int ADD_CROSSBARNODE = 5364;
+    public static final int ADD_CLUSTERNODE = 5365;
 
     // AVATAR CD -> starts at 5400
     public static final int ACD_BLOCK = 5400;
@@ -507,6 +529,7 @@ public class TGComponentManager {
     public static final int SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW = 5710;
     public static final int SYSMLSEC_METHODOLOGY_REF_CP_VIEW = 5711;
     public static final int SYSMLSEC_METHODOLOGY_REF_ATTACK = 5712;
+    public static final int SYSMLSEC_METHODOLOGY_REF_FAULT = 5719;
     public static final int SYSMLSEC_METHODOLOGY_CONNECTOR = 5718;
 
     // PLUGIN
@@ -727,6 +750,9 @@ public class TGComponentManager {
             case ADD_CHANNELARTIFACT:
                 tgc = new ADDChannelArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+            case ADD_CLUSTERNODE:
+                tgc = new ADDClusterNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 
             //AVATAR Methodology
             case AVATARMETHODOLOGY_REF_ASSUMPTIONS:
@@ -784,6 +810,9 @@ public class TGComponentManager {
                 break;
             case SYSMLSEC_METHODOLOGY_REF_ATTACK:
                 tgc = new SysmlsecMethodologyReferenceToAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case SYSMLSEC_METHODOLOGY_REF_FAULT:
+                tgc = new SysmlsecMethodologyReferenceToFault(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case SYSMLSEC_METHODOLOGY_DIAGRAM_NAME:
                 tgc = new SysmlsecMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1251,6 +1280,52 @@ public class TGComponentManager {
             case CAMS_CLUSTER:
             	tgc = new SysCAMSCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
+            case CAMS_BLOCK_GPIO2VCI:
+            	tgc = new SysCAMSBlockGPIO2VCI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            // ELN
+            case ELN_PORT_TERMINAL:
+            	tgc = new ELNPortTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_RESISTOR:
+            	tgc = new ELNComponentResistor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_CAPACITOR:
+            	tgc = new ELNComponentCapacitor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_INDUCTOR:
+            	tgc = new ELNComponentInductor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE:
+            	tgc = new ELNComponentVoltageControlledVoltageSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE:
+            	tgc = new ELNComponentVoltageControlledCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_IDEAL_TRANSFORMER: 
+            	tgc = new ELNComponentIdealTransformer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_TRANSMISSION_LINE:
+            	tgc = new ELNComponentTransmissionLine(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_INDEPENDENT_VOLTAGE_SOURCE:
+            	tgc = new ELNComponentIndependentVoltageSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_INDEPENDENT_CURRENT_SOURCE: 
+            	tgc = new ELNComponentIndependentCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;	
+            case ELN_NODE_REF: 
+            	tgc = new ELNComponentNodeRef(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_TDF_VOLTAGE_SINK: 
+            	tgc = new ELNComponentVoltageSinkTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_TDF_CURRENT_SINK: 
+            	tgc = new ELNComponentCurrentSinkTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_MODULE: 
+            	tgc = new ELNModule(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
             // Communication patterns + SD
             case TMLCP_CHOICE:
                 tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1522,6 +1597,8 @@ public class TGComponentManager {
             return SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW;
         } else if (tgc instanceof SysmlsecMethodologyReferenceToAttack) {
             return SYSMLSEC_METHODOLOGY_REF_ATTACK;
+        } else if (tgc instanceof SysmlsecMethodologyReferenceToFault) {
+            return SYSMLSEC_METHODOLOGY_REF_FAULT;
 
 
             // AVATAR MAD
@@ -1645,8 +1722,42 @@ public class TGComponentManager {
         	return CAMS_PORT_CONVERTER;
         } else if (tgc instanceof SysCAMSCompositeComponent) {
         	return CAMS_CLUSTER;
+        } else if (tgc instanceof SysCAMSBlockGPIO2VCI) {
+        	return CAMS_BLOCK_GPIO2VCI;
 
-            // Others
+        	// ELN
+        } else if (tgc instanceof ELNConnector) {
+        	return ELN_CONNECTOR;	
+        } else if (tgc instanceof ELNPortTerminal) {
+        	return ELN_PORT_TERMINAL;	
+        } else if (tgc instanceof ELNComponentResistor) {
+        	return ELN_RESISTOR;
+        } else if (tgc instanceof ELNComponentCapacitor) {
+        	return ELN_CAPACITOR;
+        } else if (tgc instanceof ELNComponentInductor) {
+        	return ELN_INDUCTOR;
+        } else if (tgc instanceof ELNComponentInductor) {
+        	return ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE;
+        } else if (tgc instanceof ELNComponentInductor) {
+        	return ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE;
+        } else if (tgc instanceof ELNComponentIdealTransformer) {
+        	return ELN_IDEAL_TRANSFORMER;
+        } else if (tgc instanceof ELNComponentTransmissionLine) {
+        	return ELN_TRANSMISSION_LINE;
+        } else if (tgc instanceof ELNComponentIndependentVoltageSource) {
+        	return ELN_INDEPENDENT_VOLTAGE_SOURCE;
+        } else if (tgc instanceof ELNComponentIndependentCurrentSource) {
+        	return ELN_INDEPENDENT_CURRENT_SOURCE;
+        } else if (tgc instanceof ELNComponentNodeRef) {
+        	return ELN_NODE_REF;
+        } else if (tgc instanceof ELNComponentVoltageSinkTDF) {
+        	return ELN_TDF_VOLTAGE_SINK;
+        } else if (tgc instanceof ELNComponentCurrentSinkTDF) {
+        	return ELN_TDF_CURRENT_SINK;
+        } else if (tgc instanceof ELNModule) {
+        	return ELN_MODULE;
+        	
+        	// Others
         } else if (tgc instanceof TADDeterministicDelay) {
             return TAD_DETERMINISTIC_DELAY;
         } else if (tgc instanceof TADParallel) {
@@ -2152,11 +2263,6 @@ public class TGComponentManager {
                 tgc = new SysmlsecMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
 
-            //     // System C-AMS
-            // case CAMS_CONNECTOR:
-            //     tgc = new CAMSBlockConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            //     break;
-
             // AVATAR MAD
             case AVATARMAD_COMPOSITION_CONNECTOR:
                 tgc = new AvatarMADCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
@@ -2244,31 +2350,31 @@ public class TGComponentManager {
                 break;
             case CONNECTOR_INTERACTION:
                 tgc = new TGConnectorInteraction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_ASYNC_SD:
                 tgc = new ui.sd.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_SYNC_SD:
                 tgc = new ui.sd.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_RELATIVE_TIME_SD:
                 tgc = new ui.sd.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_ASYNC_SDZV:
                 tgc = new ui.sd2.TGConnectorMessageAsyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_MESSAGE_SYNC_SDZV:
                 tgc = new ui.sd2.TGConnectorMessageSyncSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
             case CONNECTOR_RELATIVE_TIME_SDZV:
                 tgc = new ui.sd2.TGConnectorRelativeTimeSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                //System.out.println("Connector interaction");
+                //TraceManager.addDev("Connector interaction");
                 break;
 
             case CONNECTOR_ACTOR_UCD:
@@ -2343,6 +2449,9 @@ public class TGComponentManager {
                 break;
             case CAMS_CONNECTOR:
             	tgc = new SysCAMSPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+            	break;
+            case ELN_CONNECTOR:
+            	tgc = new ELNConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
             	break;
             case CONNECTOR_NODE_TMLARCHI:
                 tgc = new TMLArchiConnectorNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);

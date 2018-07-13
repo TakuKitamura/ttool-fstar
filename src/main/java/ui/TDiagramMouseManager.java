@@ -98,16 +98,16 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
     public void mousePressed(MouseEvent e) {
         int selected = tdp.getGUI().getTypeButtonSelected();
 
-        //System.out.println("Titi");
+        //TraceManager.addDev("Titi");
         if (e.getButton() == MouseEvent.BUTTON3) {
-            //System.out.println("toto");
+            //TraceManager.addDev("toto");
         	if (tdp.mode != TDiagramPanel.SELECTED_COMPONENTS) {
         		setSelection(e.getX(), e.getY());
         	}
             tdp.openPopupMenu(e.getX(), e.getY());
         }
 
-        //System.out.println("mode = " + tdp.mode + " selected=" + selected);
+        //TraceManager.addDev("mode = " + tdp.mode + " selected=" + selected);
 
         if ((tdp.mode == TDiagramPanel.SELECTED_COMPONENTS) && (e.getButton() == MouseEvent.BUTTON1) && (tdp.isInSelectedRectangle(e.getX(), e.getY()))){
             tdp.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
@@ -127,7 +127,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
         	//search if an element is pointed
             boolean actionMade = false;
             tgc = tdp.componentPointed();
-            //System.out.println("Working on TGC=" + tgc);
+            //TraceManager.addDev("Working on TGC=" + tgc);
             if (tgc == null) {
                 // making a selection of components
                 tdp.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
@@ -139,7 +139,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                 if (tgc.isUserResizable() && ((resizeInfo=tgc.getResizeZone(e.getX(), e.getY())) != 0)) {
                     actionMade = true;
                     // Resize
-                    //System.out.println("Resize");
+                    //TraceManager.addDev("Resize");
                     tgc.setState(TGState.RESIZING);
                     tgc.updateMinMaxSize();
                     //tdp.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
@@ -158,7 +158,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
 
                 if (!actionMade) {
                     TGConnectingPoint p1;
-                    //System.out.println("Working on TGC=" + tgc);
+                    //TraceManager.addDev("Working on TGC=" + tgc);
                     if (tgc.getDefaultConnector() != -1) {
                         p1 = tgc.getFreeTGConnectingPointAtAndCompatible(e.getX(), e.getY(), tgc.getDefaultConnector());
                         if ((p1 != null) && (p1.isOut())) {
@@ -225,7 +225,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                             tdp.mode = TDiagramPanel.MOVE_CONNECTOR_HEAD;
                             tdp.setConnectorHead(tgco);
                             ((TGConnectingPoint)cde[0]).setFree(true);
-                            //System.out.println("Moving connector head");
+                            //TraceManager.addDev("Moving connector head");
                             if (isOut) {
                                 tdp.highlightOutAndFreeConnectingPoint(e.getX(), e.getY(), tgc.getType());
                             } else {
@@ -276,7 +276,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             tdp.mode = TDiagramPanel.NORMAL;
             tdp.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             if ((oldx != tgc.getX()) || (oldy != tgc.getY())) {
-                //System.out.println("change2");
+                //TraceManager.addDev("change2");
                 tdp.getGUI().changeMade(tdp, TDiagramPanel.MOVE_COMPONENT);
             }
             setSelection(e.getX(), e.getY());
@@ -287,7 +287,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             tdp.mode = TDiagramPanel.NORMAL;
             tdp.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             if ((oldx != tgc.getX()) || (oldy != tgc.getY()) || (oldwidth != tgc.getWidth()) || (oldheight != tgc.getHeight())) {
-                //System.out.println("change2");
+                //TraceManager.addDev("change2");
                 tdp.getGUI().changeMade(tdp, TDiagramPanel.MOVE_COMPONENT);
             }
             setSelection(e.getX(), e.getY());
@@ -335,7 +335,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        //System.out.println("MouseClick: " + e.getClickCount());
+        //TraceManager.addDev("MouseClick: " + e.getClickCount());
 
         //open a Search Dialog with seleted component's value
         if ( (e.getButton() == MouseEvent.BUTTON1) && e.isAltDown()) {
@@ -410,12 +410,12 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
         int selected = tdp.getGUI().getTypeButtonSelected();
 
         if ((selected == TGComponentManager.EDIT) && (e.getClickCount() == 2) && (e.getButton() == MouseEvent.BUTTON1)){
-            //System.out.println("Double click");
+            //TraceManager.addDev("Double click");
             tgc = tdp.componentPointed();
             if (tgc != null) {
-                //System.out.println("Component pointed: " + tgc.getName());
+                //TraceManager.addDev("Component pointed: " + tgc.getName());
                 if (tgc.doubleClick(tdp.getGUI().getFrame(), e.getX(), e.getY())) {
-                    //System.out.println("Change4");
+                    //TraceManager.addDev("Change4");
                     tdp.getGUI().changeMade(tdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
                     tdp.repaint();
                 }
@@ -432,7 +432,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                         tdp.finishAddingConnector(p1);
                         tdp.mode = TDiagramPanel.NORMAL;
                         tdp.getGUI().setEditMode();
-                        //System.out.println("Change3");
+                        //TraceManager.addDev("Change3");
                         tdp.getGUI().changeMade(tdp, TDiagramPanel.NEW_CONNECTOR);
                         tdp.repaint();
                     }
@@ -460,7 +460,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             TGComponent comp = tdp.addComponent(e.getX(), e.getY(), true);
             tdp.autoConnect(comp);
             tdp.getGUI().setEditMode();
-            //System.out.println("change1");
+            //TraceManager.addDev("change1");
             tdp.getGUI().changeMade(tdp, TDiagramPanel.NEW_COMPONENT);
             tdp.repaint();
         }
@@ -663,7 +663,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             tgc.setUserResize(px.x, py.x, px.y, py.y);
             break;
         case 4:
-            //System.out.println("Modify in X");
+            //TraceManager.addDev("Modify in X");
             px = tgc.modifyInX(choicex);
             tgc.setUserResize(px.x, cdy, px.y, cdheight);
             break;

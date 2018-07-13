@@ -1227,19 +1227,19 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
                 TraceManager.addDev("Can't print all results");
                 output += "Can't print all results \n";
             }
-            //System.out.println("Results printed");
+            //
             if (config.printResultsSummary("", true, true) != 0) {
                 TraceManager.addDev("Can't print result summary");
                 output += "Can't print result summary \n";
             }
-            //System.out.println("Results summary printed");
+            //
             //jp1.setSelectedIndex(1);
             outputText.setText(output + "\n" + config.overallResults);
             newResultsButton.setEnabled(true);
 
             //}
             //} catch (Exception e){
-            //    System.out.println(e);
+            //    
             //}
         } else if (newResultsButton.isSelected()) {
             double[] tap = new double[]{JSMinSimulationDuration.getValue(), JSAverageSimulationDuration.getValue(), JSMaxSimulationDuration.getValue(), JSArchitectureComplexity.getValue(), JSMinCPUUsage.getValue(), JSAverageCPUUsage.getValue(), JSMaxCPUUsage.getValue(), JSMinBusUsage.getValue(), JSAverageBusUsage.getValue(), JSMaxBusUsage.getValue(), JSMinBusContention.getValue(), JSAverageBusContention.getValue(), JSMaxBusContention.getValue()};
@@ -1250,7 +1250,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
                 output += "Error changing values";
 
             }
-            //System.out.println(tap[0]);
+            //
             if (config.printResultsSummary("", true, true) != 0) {
                 TraceManager.addDev("Can't print result summary");
                 output += "Can't print result summary \n";
@@ -1266,7 +1266,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
         handleStartButton();
 
 
-        //System.out.println("Selected item=" + selectedItem);
+        //
     }
 
     protected String processCmd(String cmd) throws LauncherException {

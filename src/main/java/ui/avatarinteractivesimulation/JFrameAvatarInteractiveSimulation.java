@@ -37,17 +37,20 @@
  */
 
 
-
-
 package ui.avatarinteractivesimulation;
 
 import avatartranslator.*;
 import avatartranslator.directsimulation.*;
 import common.ConfigurationTTool;
-import myutil.*;
+import myutil.FileUtils;
+import myutil.GraphicLib;
+import myutil.TableSorter;
+import myutil.TraceManager;
+import myutilsvg.SVGGeneration;
 import ui.*;
 import ui.avatarbd.AvatarBDPortConnector;
-import ui.interactivesimulation.*;
+import ui.interactivesimulation.LatencyTableModel;
+import ui.interactivesimulation.SimulationLatency;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -59,33 +62,20 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.Vector;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Collections;
-
-
-import java.io.Writer;
+import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.io.IOException;
-
-import org.apache.batik.svggen.SVGGraphics2D;
-import org.apache.batik.dom.GenericDOMImplementation;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.DOMImplementation;
+import java.io.Writer;
+import java.util.*;
+import java.util.List;
 
 /**
  * Class JFrameAvatarInteractiveSimulation
  * Creation: 21/01/2011
  * version 1.0 21/01/2011
+ *
  * @author Ludovic APVRILLE
  */
-public  class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener, WindowListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
+public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener, WindowListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
     private static int TRACED_TRANSACTIONS = 1000;
     private static int LAST_TRANSACTIONS = 0;
 
@@ -139,7 +129,6 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     private int invokedLater = 0;
 
     private int totalNbOfElements = -1;
-
 
 
     //private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
@@ -207,7 +196,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     private int busyMode = 0; // Mode of AvatarSpecificationSimulation
 
     // For managing actions
-    public AvatarInteractiveSimulationActions [] actions;
+    public AvatarInteractiveSimulationActions[] actions;
     public MouseHandler mouseHandler;
     public KeyListener keyHandler;
 
@@ -251,6 +240,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     private Map<String, List<String>> transTimes = new HashMap<String, List<String>>(); //Map of each checked element: all transaction times
     private JScrollPane jspLatency;
 
+
     public JFrameAvatarInteractiveSimulation(/*Frame _f,*/ MainGUI _mgui, String _title, AvatarSpecification _avspec) {
         super(_title);
 
@@ -260,7 +250,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         avspec = _avspec;
 
         addWindowListener(this);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE );
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setIconImage(IconManager.img5100);
         setBackground(Color.WHITE);
 
@@ -272,25 +262,24 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         initActions();
 
         initSimulation();
-        for (String id: _avspec.checkedIDs){
+        for (String id : _avspec.checkedIDs) {
             // checkedTransactions.add(id);
             transTimes.put(id, new ArrayList<String>());
         }
-        for (AvatarPragmaLatency latencyPragma: _avspec.getLatencyPragmas()){
-            for (String id1: latencyPragma.getId1()){
-                for (String id2: latencyPragma.getId2()){
-                    if (!nameLatencyMap.containsKey(id1 + "--"+id2)){
+        for (AvatarPragmaLatency latencyPragma : _avspec.getLatencyPragmas()) {
+            for (String id1 : latencyPragma.getId1()) {
+                for (String id2 : latencyPragma.getId2()) {
+                    if (!nameLatencyMap.containsKey(id1 + "--" + id2)) {
                         SimulationLatency sl = new SimulationLatency();
                         sl.setTransaction1(id1);
                         sl.setTransaction2(id2);
                         sl.addPragma(latencyPragma);
-                        nameLatencyMap.put(id1 + "--"+id2, sl);
+                        nameLatencyMap.put(id1 + "--" + id2, sl);
                         latencies.add(sl);
                         //toCheck.add(latencyPragma.getId1().get(0) + "--"+latencyPragma.getId2().get(0));
                         updateTransactionsTable();
-                    }
-                    else {
-                        nameLatencyMap.get(id1 + "--"+id2).addPragma(latencyPragma);
+                    } else {
+                        nameLatencyMap.get(id1 + "--" + id2).addPragma(latencyPragma);
                     }
                 }
             }
@@ -305,7 +294,6 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         nbOfAllExecutedElements = 0;
         resetMetElements();
         ass = new AvatarSpecificationSimulation(avspec, this);
-
 
 
         //ass.initialize();
@@ -347,11 +335,10 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
                 // Use probabilities
                 double sumProb = 0.0;
-                for (AvatarSimulationPendingTransaction pt: ll) {
+                for (AvatarSimulationPendingTransaction pt : ll) {
                     //TraceManager.addDev("prob=" + pt.probability);
                     sumProb += pt.probability;
                 }
-
 
 
                 double rand2 = Math.random() * sumProb;
@@ -360,22 +347,22 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
                 double prob = 0.0;
                 int index = 0;
-                for (AvatarSimulationPendingTransaction pt: ll) {
+                for (AvatarSimulationPendingTransaction pt : ll) {
                     prob += pt.probability;
                     //TraceManager.addDev("rand=" + rand2 + " prob=" + prob + " pt.probability=" + pt.probability);
                     if (rand2 < prob) {
                         listPendingTransactions.setSelectedIndex(index);
                         break;
                     }
-                    index ++;
+                    index++;
                 }
-
 
 
             } else {
                 listPendingTransactions.setListData(new Vector<AvatarSimulationPendingTransaction>());
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         //TraceManager.addDev("Simulation is already running -> end of code:" + Thread.currentThread());
     }
@@ -394,8 +381,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     }
 
 
-
-    private JLabel createStatusBar()  {
+    private JLabel createStatusBar() {
         statuss = new JLabel("Ready...");
         statuss.setForeground(ColorManager.InteractiveSimulationText);
         statuss.setBorder(BorderFactory.createEtchedBorder());
@@ -406,7 +392,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         JPanel jp01, jp02;
         //jp01.setPreferredSize(new Dimension(375, 400));
         GridBagLayout gridbag01;
-        GridBagConstraints c01 ;
+        GridBagConstraints c01;
 
         //cp = new CommandParser();
 
@@ -416,7 +402,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         //framePanel.setBackground(ColorManager.InteractiveSimulationBackground);
         //framePanel.setForeground(new Color(255, 166, 38));
 
-        //System.out.println("Button start created");
+        //
         //buttonStart = new JButton(actions[InteractiveSimulationActions.ACT_RUN_SIMU]);
         buttonStopAndClose = new JButton(actions[AvatarInteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL]);
         //buttonStopAndClose = new JButton(buttonStopAndCloseS, IconManager.imgic27);
@@ -471,7 +457,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
           //jsp.setColumnHeaderView(100);
           //jsp.setRowHeaderView(30);
           //jsp.setMaximumSize(new Dimension(800, 400));*/
-        JPanel lowerPartPanel = new JPanel(); lowerPartPanel.setLayout(new BorderLayout());
+        JPanel lowerPartPanel = new JPanel();
+        lowerPartPanel.setLayout(new BorderLayout());
         sdpanel = new AvatarSpecificationSimulationSDPanel(ass);
         sdpanel.setShowHiddenStates(false);
         //ass.setName("Interaction Overview Diagram");
@@ -479,7 +466,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         sdpanel.setMyScrollPanel(jsp);
         jsp.setWheelScrollingEnabled(true);
         //jsp.setPreferredSize(new Dimension(800, 400));
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
         lowerPartPanel.add(jsp, BorderLayout.CENTER);
 
         // Commands
@@ -522,7 +509,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         listPendingTransactions = new JList<AvatarSimulationPendingTransaction>();
         //listPendingTransactions.setPreferredSize(new Dimension(400, 300));
-        listPendingTransactions.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION );
+        listPendingTransactions.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         listPendingTransactions.addListSelectionListener(this);
         JScrollPane scrollPane1 = new JScrollPane(listPendingTransactions);
         scrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -690,73 +677,76 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         traceInSD.addItemListener(this);
         traceInSD.setSelected(true);
         jp01.add(new JLabel("# of transactions:"), c01);
-        displayedTransactionsText = new JTextField(""+TRACED_TRANSACTIONS, 10);
+        displayedTransactionsText = new JTextField("" + TRACED_TRANSACTIONS, 10);
         jp01.add(displayedTransactionsText, c01);
         //displayedTransactionsText.addActionListener(this);
         displayedTransactionsText.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
-                    warn();
-                }
-                public void removeUpdate(DocumentEvent e) {
-                    warn();
-                }
-                public void insertUpdate(DocumentEvent e) {
-                    warn();
-                }
+            public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
 
-                public void warn() {
-                    try {
-                        int nb = Integer.parseInt(displayedTransactionsText.getText());
-                        if ((nb > 0) && (nb <= 100000)){
-                            statuss.setText("Nb of traced transactions modified to: " + nb);
-                            if (sdpanel != null) {
-                                sdpanel.setNbOfDrawnTransactions(nb);
-                                if (sdpanel.isVisible()) {
-                                    sdpanel.repaint();
-                                }
+            public void removeUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void warn() {
+                try {
+                    int nb = Integer.parseInt(displayedTransactionsText.getText());
+                    if ((nb > 0) && (nb <= 100000)) {
+                        statuss.setText("Nb of traced transactions modified to: " + nb);
+                        if (sdpanel != null) {
+                            sdpanel.setNbOfDrawnTransactions(nb);
+                            if (sdpanel.isVisible()) {
+                                sdpanel.repaint();
                             }
-                            return;
                         }
-                    } catch (Exception e) {
+                        return;
                     }
-                    statuss.setText("Unknown / bad number: " + displayedTransactionsText.getText());
+                } catch (Exception e) {
                 }
-            });
+                statuss.setText("Unknown / bad number: " + displayedTransactionsText.getText());
+            }
+        });
         jp01.add(new JLabel("Index of last trans.:"), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-        lastTransactionsText = new JTextField(""+LAST_TRANSACTIONS, 10);
+        lastTransactionsText = new JTextField("" + LAST_TRANSACTIONS, 10);
         jp01.add(lastTransactionsText, c01);
         //displayedTransactionsText.addActionListener(this);
         lastTransactionsText.getDocument().addDocumentListener(new DocumentListener() {
-                public void changedUpdate(DocumentEvent e) {
-                    warn();
-                }
-                public void removeUpdate(DocumentEvent e) {
-                    warn();
-                }
-                public void insertUpdate(DocumentEvent e) {
-                    warn();
-                }
+            public void changedUpdate(DocumentEvent e) {
+                warn();
+            }
 
-                public void warn() {
-                    try {
-                        int nb = Integer.parseInt(lastTransactionsText.getText());
-                        if (nb > -1){
-                            statuss.setText("Index of last transation modified to: " + nb);
-                            if (sdpanel != null) {
-                                sdpanel.setLastDrawnTransactions(nb);
-                                if (sdpanel.isVisible()) {
-                                    sdpanel.repaint();
-                                }
+            public void removeUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                warn();
+            }
+
+            public void warn() {
+                try {
+                    int nb = Integer.parseInt(lastTransactionsText.getText());
+                    if (nb > -1) {
+                        statuss.setText("Index of last transation modified to: " + nb);
+                        if (sdpanel != null) {
+                            sdpanel.setLastDrawnTransactions(nb);
+                            if (sdpanel.isVisible()) {
+                                sdpanel.repaint();
                             }
-                            return;
                         }
-                    } catch (Exception e) {
+                        return;
                     }
-                    statuss.setText("Unknown / bad number: " + lastTransactionsText.getText());
+                } catch (Exception e) {
                 }
-            });
-
+                statuss.setText("Unknown / bad number: " + lastTransactionsText.getText());
+            }
+        });
 
 
         c01.gridwidth = 1;
@@ -863,8 +853,6 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         transactionPanel.add(jspTransactionInfo, BorderLayout.CENTER);
 
 
-
-
         // Met elements
         metElementsPanel = new JPanel();
         metElementsPanel.setLayout(new BorderLayout());
@@ -898,7 +886,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         c.gridheight = 1;
 
         displayedBlocks = new Vector<JCheckBox>();
-        for(AvatarSimulationBlock block: ass.getSimulationBlocks()) {
+        for (AvatarSimulationBlock block : ass.getSimulationBlocks()) {
             JCheckBox jcb = new JCheckBox(block.getName(), true);
             block.selected = true;
             jcb.addActionListener(this);
@@ -924,23 +912,23 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         c0.gridwidth = GridBagConstraints.REMAINDER;
         latencyPanel.add(new JLabel("Latencies shown in number of cycles w.r.t. the main clock"), c0);
 
-        c0.gridwidth=1;
-        c0.gridheight=1;
-        latencyPanel.add(new JLabel("Checkpoint 1:"),c0);
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        latencyPanel.add(new JLabel("Checkpoint 1:"), c0);
         c0.gridwidth = GridBagConstraints.REMAINDER;
         Vector<String> transactions = new Vector<String>(transTimes.keySet());
         transaction1 = new JComboBox<String>(transactions);
         latencyPanel.add(transaction1, c0);
 
-        c0.gridwidth=1;
-        latencyPanel.add(new JLabel("Checkpoint 2:"),c0);
-        c0.gridwidth= GridBagConstraints.REMAINDER;
+        c0.gridwidth = 1;
+        latencyPanel.add(new JLabel("Checkpoint 2:"), c0);
+        c0.gridwidth = GridBagConstraints.REMAINDER;
         transaction2 = new JComboBox<String>(transactions);
         latencyPanel.add(transaction2, c0);
 
 
         addLatencyCheckButton = new JButton(actions[AvatarInteractiveSimulationActions.ACT_ADD_LATENCY]);
-        latencyPanel.add(addLatencyCheckButton,c0);
+        latencyPanel.add(addLatencyCheckButton, c0);
         latm = new LatencyTableModel();
         latm.setData(latencies);
         sorterPI = new TableSorter(latm);
@@ -961,8 +949,8 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 }
                 });*/
         sorterPI.setTableHeader(latTable.getTableHeader());
-        ((latTable.getColumnModel()).getColumn(0)).setPreferredWidth(700);
-        ((latTable.getColumnModel()).getColumn(1)).setPreferredWidth(700);
+        ((latTable.getColumnModel()).getColumn(0)).setPreferredWidth(400);
+        ((latTable.getColumnModel()).getColumn(1)).setPreferredWidth(400);
         ((latTable.getColumnModel()).getColumn(2)).setPreferredWidth(100);
         ((latTable.getColumnModel()).getColumn(3)).setPreferredWidth(100);
         ((latTable.getColumnModel()).getColumn(4)).setPreferredWidth(100);
@@ -971,10 +959,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         jspLatency = new JScrollPane(latTable);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
-        jspLatency.setMinimumSize(new Dimension(450, 100));
-        jspLatency.setPreferredSize(new Dimension(450, 100));
+        jspLatency.setMinimumSize(new Dimension(1200, 100));
+        jspLatency.setPreferredSize(new Dimension(1200, 100));
         latencyPanel.add(jspLatency, c0);
-
 
 
         //        updateLatencyButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_LATENCY]);
@@ -1016,7 +1003,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         // Making vector of fifos
         AvatarInteractiveSimulationFIFOData fifo;
         fifos = new Vector<AvatarInteractiveSimulationFIFOData>();
-        for(AvatarRelation ar: avspec.getRelations()) {
+        for (AvatarRelation ar : avspec.getRelations()) {
             if (ar.isAsynchronous()) {
                 fifo = new AvatarInteractiveSimulationFIFOData(ar);
                 fifos.add(fifo);
@@ -1076,9 +1063,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     }
 
-    private     void initActions() {
+    private void initActions() {
         actions = new AvatarInteractiveSimulationActions[AvatarInteractiveSimulationActions.NB_ACTION];
-        for(int i=0; i<AvatarInteractiveSimulationActions.NB_ACTION; i++) {
+        for (int i = 0; i < AvatarInteractiveSimulationActions.NB_ACTION; i++) {
             actions[i] = new AvatarInteractiveSimulationActions(i);
             actions[i].addActionListener(this);
             //actions[i].addKeyListener(this);
@@ -1090,7 +1077,6 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         //taskIDs = makeTasksIDs();
         //chanIDs = makeChanIDs();
     }
-
 
 
     public void setComponents() {
@@ -1152,7 +1138,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         }
         //      latencies.clear();
         transTimes.clear();
-        for (String id: avspec.checkedIDs){
+        for (String id : avspec.checkedIDs) {
             transTimes.put(id, new ArrayList<String>());
         }
         //ass.killSimulation();
@@ -1164,13 +1150,16 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     }
 
 
-    public void mouseClicked(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {
+    }
 
-    public void mouseEntered(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+    }
 
-    public void mouseExited(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {
+    }
 
-    public void mousePressed(MouseEvent e){
+    public void mousePressed(MouseEvent e) {
         /*if (e.getSource() == sendTextCommand) {
           if (sendTextCommand.isEnabled()) {
           sendCommand();
@@ -1193,7 +1182,6 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     public void printSeparator() {
         jta.append("-------------------------------------------------------------\n");
     }
-
 
 
     public void setMode(int _mode) {
@@ -1230,45 +1218,45 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     }
 
     public void setAll() {
-        boolean b= true;
+        boolean b = true;
 
-        switch(busyMode) {
-        case AvatarSpecificationSimulation.DONT_EXECUTE:
-            actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(true);
-            actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
-            actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(true);
-            actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
-            actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
+        switch (busyMode) {
+            case AvatarSpecificationSimulation.DONT_EXECUTE:
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
 
-            b = true;
-            break;
-        case AvatarSpecificationSimulation.GATHER:
-        case AvatarSpecificationSimulation.EXECUTE:
-            actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
-            actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
-            actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
-            actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(false);
-            actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(true);
-            b = false;
-            break;
-        case AvatarSpecificationSimulation.TERMINATED:
-            actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
-            actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
-            actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
-            actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
-            actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
-            b = true;
-            break;
-        case AvatarSpecificationSimulation.INITIALIZE:
-        case AvatarSpecificationSimulation.RESET:
-        case AvatarSpecificationSimulation.KILLED:
-            actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
-            actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
-            actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
-            actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
-            actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
-            b = true;
-            break;
+                b = true;
+                break;
+            case AvatarSpecificationSimulation.GATHER:
+            case AvatarSpecificationSimulation.EXECUTE:
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(true);
+                b = false;
+                break;
+            case AvatarSpecificationSimulation.TERMINATED:
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
+                b = true;
+                break;
+            case AvatarSpecificationSimulation.INITIALIZE:
+            case AvatarSpecificationSimulation.RESET:
+            case AvatarSpecificationSimulation.KILLED:
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
+                b = true;
+                break;
         }
 
         actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].setEnabled(b);
@@ -1316,7 +1304,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         if (down != null) {
             delete.setEnabled(b && (asyncmsgs.getSelectedIndex() > -1));
             up.setEnabled(b && (asyncmsgs.getSelectedIndex() > 0));
-            down.setEnabled(b && (asyncmsgs.getSelectedIndex() > -1) && (asyncmsgs.getSelectedIndex() < (nbOfAsyncMsgs-1   )));
+            down.setEnabled(b && (asyncmsgs.getSelectedIndex() > -1) && (asyncmsgs.getSelectedIndex() < (nbOfAsyncMsgs - 1)));
         }
     }
 
@@ -1325,54 +1313,54 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     }
 
     public void setLabelColors() {
-        if ((time !=null) && (status != null) && (info != null) && (coverage != null)) {
+        if ((time != null) && (status != null) && (info != null) && (coverage != null)) {
             String oldTime = time.getText();
             int index = oldTime.indexOf("(");
             if (index != -1) {
                 oldTime = oldTime.substring(0, index).trim();
             }
-            String newTime = ""+ass.getClockValue();
+            String newTime = "" + ass.getClockValue();
             if (oldTime.compareTo(newTime) != 0) {
                 newTime += " (before:" + oldTime + ")";
             }
             time.setText(newTime);
             if (ass.getAllTransactions() != null) {
-                info.setText(""+ass.getAllTransactions().size());
+                info.setText("" + ass.getAllTransactions().size());
             } else {
                 info.setText("0");
             }
-            switch(busyMode) {
-            case AvatarSpecificationSimulation.DONT_EXECUTE:
-                status.setText("Stopped");
-                status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
-                time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
-                info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
-                coverage.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
-                break;
-            case AvatarSpecificationSimulation.GATHER:
-            case AvatarSpecificationSimulation.EXECUTE:
-            case AvatarSpecificationSimulation.RESET:
-            case AvatarSpecificationSimulation.INITIALIZE:
-                status.setText("Running...");
-                status.setForeground(ColorManager.InteractiveSimulationText_BUSY);
-                time.setForeground(ColorManager.InteractiveSimulationText_BUSY);
-                info.setForeground(ColorManager.InteractiveSimulationText_BUSY);
-                coverage.setForeground(ColorManager.InteractiveSimulationText_BUSY);
-                break;
-            case AvatarSpecificationSimulation.TERMINATED:
-                status.setText("Terminated");
-                status.setForeground(ColorManager.InteractiveSimulationText_TERM);
-                time.setForeground(ColorManager.InteractiveSimulationText_TERM);
-                info.setForeground(ColorManager.InteractiveSimulationText_TERM);
-                coverage.setForeground(ColorManager.InteractiveSimulationText_TERM);
-                break;
-            case AvatarSpecificationSimulation.KILLED:
-                status.setText("killed");
-                status.setForeground(ColorManager.InteractiveSimulationText_TERM);
-                time.setForeground(ColorManager.InteractiveSimulationText_TERM);
-                info.setForeground(ColorManager.InteractiveSimulationText_TERM);
-                coverage.setForeground(ColorManager.InteractiveSimulationText_TERM);
-                break;
+            switch (busyMode) {
+                case AvatarSpecificationSimulation.DONT_EXECUTE:
+                    status.setText("Stopped");
+                    status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+                    time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+                    info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+                    coverage.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+                    break;
+                case AvatarSpecificationSimulation.GATHER:
+                case AvatarSpecificationSimulation.EXECUTE:
+                case AvatarSpecificationSimulation.RESET:
+                case AvatarSpecificationSimulation.INITIALIZE:
+                    status.setText("Running...");
+                    status.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+                    time.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+                    info.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+                    coverage.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+                    break;
+                case AvatarSpecificationSimulation.TERMINATED:
+                    status.setText("Terminated");
+                    status.setForeground(ColorManager.InteractiveSimulationText_TERM);
+                    time.setForeground(ColorManager.InteractiveSimulationText_TERM);
+                    info.setForeground(ColorManager.InteractiveSimulationText_TERM);
+                    coverage.setForeground(ColorManager.InteractiveSimulationText_TERM);
+                    break;
+                case AvatarSpecificationSimulation.KILLED:
+                    status.setText("killed");
+                    status.setForeground(ColorManager.InteractiveSimulationText_TERM);
+                    time.setForeground(ColorManager.InteractiveSimulationText_TERM);
+                    info.setForeground(ColorManager.InteractiveSimulationText_TERM);
+                    coverage.setForeground(ColorManager.InteractiveSimulationText_TERM);
+                    break;
             }
         }
     }
@@ -1399,12 +1387,12 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     public void resetMetElements() {
         if (avspec.getReferenceObject() instanceof AvatarDesignPanel) {
-            ((AvatarDesignPanel)(avspec.getReferenceObject())).resetMetElements();
+            ((AvatarDesignPanel) (avspec.getReferenceObject())).resetMetElements();
 
         } else if (avspec.getReferenceObject() instanceof AttackTreePanel) {
-            ((AttackTreePanel)(avspec.getReferenceObject())).resetMetElements();
+            ((AttackTreePanel) (avspec.getReferenceObject())).resetMetElements();
         } else if (avspec.getReferenceObject() instanceof FaultTreePanel) {
-            ((FaultTreePanel)(avspec.getReferenceObject())).resetMetElements();
+            ((FaultTreePanel) (avspec.getReferenceObject())).resetMetElements();
         }
 
         if (coverage != null) {
@@ -1413,21 +1401,21 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
     }
 
     public void updateMetElements() {
-        Hashtable<AvatarStateMachineElement, Integer> hashOfAllElements  = AvatarSimulationTransaction.hashOfAllElements;
+        Hashtable<AvatarStateMachineElement, Integer> hashOfAllElements = AvatarSimulationTransaction.hashOfAllElements;
         TGComponent tgc;
         Object o;
 
 
-        if ((totalNbOfElements == -1) && (ass != null)){
+        if ((totalNbOfElements == -1) && (ass != null)) {
             totalNbOfElements = 0;
             Vector<Object> mettableElements = new Vector<Object>();
-            for(AvatarSimulationBlock asb: ass.getSimulationBlocks()) {
+            for (AvatarSimulationBlock asb : ass.getSimulationBlocks()) {
                 AvatarBlock ab = asb.getBlock();
                 if (ab != null) {
                     //if (!(ab.getName().startsWith("Timer__"))) {
                     AvatarStateMachine asm = ab.getStateMachine();
                     if (asm != null) {
-                        for(AvatarStateMachineElement elt: asm.getListOfElements()) {
+                        for (AvatarStateMachineElement elt : asm.getListOfElements()) {
                             Object obj = elt.getReferenceObject();
                             if (obj != null) {
 
@@ -1461,19 +1449,19 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             //int total = 0;
             //int totalMet = 0;
             //TraceManager.addDev("Parsing array of elements: " + objs.length);
-            for(int i=0; i<objs.length; i++) {
+            for (int i = 0; i < objs.length; i++) {
                 o = objs[i];
                 //TraceManager.addDev("objs: " + o);
-                Object oo = ((AvatarStateMachineElement)o).getReferenceObject();
+                Object oo = ((AvatarStateMachineElement) o).getReferenceObject();
                 if (oo != null) {
-                    tgc = (TGComponent)oo;
+                    tgc = (TGComponent) oo;
                     /*if (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
                       total ++;
                       }*/
                     //TraceManager.addDev("TGComponent: " + tgc);
                     int met = hashOfAllElements.get(o).intValue();
                     if ((met > 0) && (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0)) {
-                        total ++;
+                        total++;
                     }
                     tgc.setAVATARMet(met);
                     //total ++;
@@ -1487,29 +1475,31 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             nbOfAllExecutedElements = hashOfAllElements.hashCode();
             if ((totalNbOfElements != -1)) {
                 //TraceManager.addDev("totalMet=" + hashOfAllElements.size() + " total=" + totalNbOfElements);
-                double cov = (total*1000.0)/totalNbOfElements;
+                double cov = (total * 1000.0) / totalNbOfElements;
                 cov = Math.floor(cov);
                 coverageVal = cov / 10;
-                if(coverage != null) {
-                    coverage.setText(""+  coverageVal + "%");
+                if (coverage != null) {
+                    coverage.setText("" + coverageVal + "%");
                 }
             }
         }
         //nbOfAllExecutedElements = hashOfAllElements.hashCode();
     }
 
-    public void addLatency(){
+    public void addLatency() {
         SimulationLatency sl = new SimulationLatency();
-        sl.setTransaction1(transaction1.getSelectedItem().toString());
-        sl.setTransaction2(transaction2.getSelectedItem().toString());
-        nameLatencyMap.put(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString(), sl);
-        latencies.add(sl);
-        //        toCheck.add(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString());
-        updateTransactionsTable();
+        if (transaction1.getSelectedItem() != null && transaction2.getSelectedItem() != null) {
+            sl.setTransaction1(transaction1.getSelectedItem().toString());
+            sl.setTransaction2(transaction2.getSelectedItem().toString());
+            nameLatencyMap.put(transaction1.getSelectedItem().toString() + "--" + transaction2.getSelectedItem().toString(), sl);
+            latencies.add(sl);
+            //        toCheck.add(transaction1.getSelectedItem().toString()+"--"+transaction2.getSelectedItem().toString());
+            updateTransactionsTable();
+        }
     }
 
-    public void resetLatencies(){
-        for (SimulationLatency latency: latencies){
+    public void resetLatencies() {
+        for (SimulationLatency latency : latencies) {
             latency.setMinTime("N/A");
             latency.setMaxTime("N/A");
             latency.setAverageTime("N/A");
@@ -1521,70 +1511,70 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         if (transactiontm != null) {
             transactiontm.fireTableStructureChanged();
         }
-        if (ass!=null && latm!=null){
+        if (ass != null && latm != null) {
             resetLatencies();
-            if (ass.getAllTransactions()!=null){
-                for (AvatarSimulationTransaction trans: ass.getAllTransactions()){
+            if (ass.getAllTransactions() != null) {
+                for (AvatarSimulationTransaction trans : ass.getAllTransactions()) {
                     if ((trans.executedElement != null) && (trans.executedElement.getReferenceObject() != null)) {
                         //                        String id = ((TGComponent)trans.executedElement.getReferenceObject()).getName() + ":"+Integer.toString(trans.executedElement.getID());
                         String id = Integer.toString(trans.executedElement.getID());
-                        //  System.out.println(id + " " + transTimes.keySet());
-                        //  System.out.println("transaction " + trans.executedElement.getID() + " " + trans.initialClockValue);
-                        String key="";
-                        for (String s: transTimes.keySet()){
+                        //  
+                        //  
+                        String key = "";
+                        for (String s : transTimes.keySet()) {
                             String tmpid = s.split(":")[1];
-                            if (id.equals(tmpid)){
-                                key=s;
+                            if (id.equals(tmpid)) {
+                                key = s;
                             }
                         }
-                        if (transTimes.containsKey(key)){
-                            if (!transTimes.get(key).contains(Long.toString(trans.initialClockValue))){
+                        if (transTimes.containsKey(key)) {
+                            if (!transTimes.get(key).contains(Long.toString(trans.initialClockValue))) {
                                 transTimes.get(key).add(Long.toString(trans.initialClockValue));
                             }
                         }
                     }
                 }
             }
-            //  System.out.println(transTimes);
-            for (String st1:transTimes.keySet()){
-                for (String st2:transTimes.keySet()){
-                    if (st1!=st2 && nameLatencyMap.containsKey(st1 +"--"+st2)){
-                        SimulationLatency sl = nameLatencyMap.get(st1 +"--"+st2);
-                        if (transTimes.get(st1) !=null && transTimes.get(st2)!=null){
+            //  
+            for (String st1 : transTimes.keySet()) {
+                for (String st2 : transTimes.keySet()) {
+                    if (st1 != st2 && nameLatencyMap.containsKey(st1 + "--" + st2)) {
+                        SimulationLatency sl = nameLatencyMap.get(st1 + "--" + st2);
+                        if (transTimes.get(st1) != null && transTimes.get(st2) != null) {
                             ArrayList<Integer> minTimes = new ArrayList<Integer>();
                             /*SimulationLatency sl = new SimulationLatency();
                               sl.setTransaction1(st1);
                               sl.setTransaction2(st2);*/
-                            for(String time1: transTimes.get(st1)){
+                            for (String time1 : transTimes.get(st1)) {
                                 //Find the first subsequent transaction
                                 int time = Integer.MAX_VALUE;
-                                for (String time2: transTimes.get(st2)){
+                                for (String time2 : transTimes.get(st2)) {
                                     int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
-                                    if (diff < time && diff >=0){
-                                        time=diff;
+                                    if (diff < time && diff >= 0) {
+                                        time = diff;
                                     }
                                 }
-                                if (time!=Integer.MAX_VALUE){
+                                if (time != Integer.MAX_VALUE) {
                                     minTimes.add(time);
                                 }
                             }
-                            //  System.out.println(transTimes.get(st1) + " " + transTimes.get(st2) + " " + minTimes);
-                            if (minTimes.size()>0){
-                                int sum=0;
+                            //  
+                            if (minTimes.size() > 0) {
+                                int sum = 0;
                                 sl.setMinTime(Integer.toString(Collections.min(minTimes)));
                                 sl.setMaxTime(Integer.toString(Collections.max(minTimes)));
-                                for (int time: minTimes){
-                                    sum+=time;
+                                for (int time : minTimes) {
+                                    sum += time;
                                 }
-                                double average = (double) sum/ (double) minTimes.size();
-                                double stdev =0.0;
-                                for (int time:minTimes){
-                                    stdev +=(time - average)*(time-average);
+                                double average = (double) sum / (double) minTimes.size();
+                                double stdev = 0.0;
+                                for (int time : minTimes) {
+                                    stdev += (time - average) * (time - average);
                                 }
-                                stdev= stdev/minTimes.size();
+                                stdev = stdev / minTimes.size();
                                 stdev = Math.sqrt(stdev);
-                                sl.setAverageTime(String.format("%.1f",average));
-                                sl.setStDev(String.format("%.1f",stdev));
+                                sl.setAverageTime(String.format("%.1f", average));
+                                sl.setStDev(String.format("%.1f", stdev));
                                 mgui.addLatencyVals(Integer.valueOf(st2.split(":")[1]), new String[]{st1, Integer.toString(Collections.max(minTimes))});
                             }
                             //                          latencies.add(sl);
@@ -1597,16 +1587,16 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 }
             }
 
-            if (latm !=null && latencies.size()>0){
+            if (latm != null && latencies.size() > 0) {
                 latm.setData(latencies);
-                ((AvatarDesignPanel)(avspec.getReferenceObject())).modelBacktracingLatency(latencies);
+                ((AvatarDesignPanel) (avspec.getReferenceObject())).modelBacktracingLatency(latencies);
             }
         }
     }
 
 
     public String[] getFirstMessagesOnEachConnectorSide(AvatarBDPortConnector conn) {
-        String []messages = new String[2];
+        String[] messages = new String[2];
         messages[0] = null;
         messages[1] = null;
         boolean b0, b1;
@@ -1619,8 +1609,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             return messages;
         }
 
-        b0 = false; b1 = false;
-        for(AvatarSimulationAsynchronousTransaction msg: lastAsyncmsgs) {
+        b0 = false;
+        b1 = false;
+        for (AvatarSimulationAsynchronousTransaction msg : lastAsyncmsgs) {
             ar = msg.getRelation();
             if (ar.hasReferenceObject(conn)) {
                 ab = ar.getInBlock(msg.getIndex());
@@ -1660,18 +1651,18 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             lastAsyncmsgs = new Vector<>(ass.getAsynchronousMessages());
 
             if (fifos != null) {
-                for(AvatarInteractiveSimulationFIFOData fifo: fifos) {
-                    fifo.nb=0;
+                for (AvatarInteractiveSimulationFIFOData fifo : fifos) {
+                    fifo.nb = 0;
                 }
             }
 
             if (lastAsyncmsgs != null) {
 
                 if (lastAsyncmsgs.size() > 0) {
-                    for(AvatarSimulationAsynchronousTransaction msg: lastAsyncmsgs) {
-                        for(AvatarInteractiveSimulationFIFOData fifo0: fifos) {
+                    for (AvatarSimulationAsynchronousTransaction msg : lastAsyncmsgs) {
+                        for (AvatarInteractiveSimulationFIFOData fifo0 : fifos) {
                             if (fifo0.fifo == msg.getRelation()) {
-                                fifo0.nb ++;
+                                fifo0.nb++;
                                 break;
                             }
                         }
@@ -1687,13 +1678,12 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 }
 
 
-
                 if (asyncmsgs != null) {
-                    AvatarInteractiveSimulationFIFOData currentFifo = (AvatarInteractiveSimulationFIFOData)(comboFIFOs.getSelectedItem());
+                    AvatarInteractiveSimulationFIFOData currentFifo = (AvatarInteractiveSimulationFIFOData) (comboFIFOs.getSelectedItem());
                     if (currentFifo != null) {
                         nbOfAsyncMsgs = 0;
                         Vector<AvatarSimulationAsynchronousTransaction> vectorForList = new Vector<AvatarSimulationAsynchronousTransaction>();
-                        for(AvatarSimulationAsynchronousTransaction as: lastAsyncmsgs) {
+                        for (AvatarSimulationAsynchronousTransaction as : lastAsyncmsgs) {
                             if (as.getRelation() == currentFifo.fifo) {
                                 vectorForList.add(as);
                                 nbOfAsyncMsgs++;
@@ -1715,11 +1705,11 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 runningTGComponents.clear();
                 AvatarStateMachineElement asme;
                 TGComponent tgc;
-                for(AvatarSimulationBlock block: ass.getSimulationBlocks()) {
+                for (AvatarSimulationBlock block : ass.getSimulationBlocks()) {
                     asme = block.getCurrentAvatarElement();
                     if (asme != null) {
                         // Search for corresponding element in avatar spec
-                        tgc = (TGComponent)(asme.getReferenceObject());
+                        tgc = (TGComponent) (asme.getReferenceObject());
                         if (tgc != null) {
                             //TraceManager.addDev("Found an object:" + tgc);
                             runningTGComponents.add(tgc);
@@ -1768,10 +1758,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         } else {
             // Using model directory
             String path = mgui.getModelFileFullPath();
-            fileName = path.substring(0,path.lastIndexOf(File.separator)+1) + fileName;
+            fileName = path.substring(0, path.lastIndexOf(File.separator) + 1) + fileName;
             TraceManager.addDev("New Filename = " + fileName);
         }
-
 
 
         boolean ok = true;
@@ -1785,9 +1774,9 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         if (!ok) {
             JOptionPane.showMessageDialog(this,
-                                          "The capture could not be performed: the file name or path is not valid",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The capture could not be performed: the file name or path is not valid",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -1797,16 +1786,16 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                                          "The simulation trace in text format could not be saved: " + e.getMessage(),
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The simulation trace in text format could not be saved: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         JOptionPane.showMessageDialog(this,
-                                      "Simulation trace was saved in " + fileName,
-                                      "Error",
-                                      JOptionPane.INFORMATION_MESSAGE);
+                "Simulation trace was saved in " + fileName,
+                "Error",
+                JOptionPane.INFORMATION_MESSAGE);
 
         //ass.printExecutedTransactions();
     }
@@ -1814,6 +1803,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     public void actSaveSvg() {
         TraceManager.addDev("Saving in svg format");
+
 
         // Testing file for save
 
@@ -1848,11 +1838,12 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             return;
         }
 
-        newSVGSave("NEW" + fileName);
+        SVGGeneration gen = new SVGGeneration();
+        gen.saveInSVG(sdpanel, fileName);
+        //newSVGSave(fileName);
 
 
-
-      StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+        /*StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
         sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
 
@@ -1874,25 +1865,25 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                                          "The capture could not be performed: " + e.getMessage(),
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "The capture could not be performed: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         JOptionPane.showMessageDialog(this,
-                                      "The capture was performed in " + fileName,
-                                      "Error",
-                                      JOptionPane.INFORMATION_MESSAGE);
+                "The capture was performed in " + fileName,
+                "Error",
+                JOptionPane.INFORMATION_MESSAGE);
 
         //TraceManager.addDev("Svg=" + sb.toString());
 
-        //return sb.toString();
+        //return sb.toString();*/
 
     }
 
     // FileName must be valid
-    private void newSVGSave(String fileName) {
+    /*private void newSVGSave(String fileName) {
         TraceManager.addDev("New SVG save in " + fileName);
         // Get a DOMImplementation.
         DOMImplementation domImpl =
@@ -1906,15 +1897,21 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
 
         // Ask the test to render into the SVG Graphics2D implementation.
-        /*TestSVGGen test = new TestSVGGen();
-        test.paint(svgGenerator);
+        sdpanel.paint(svgGenerator);
+
 
         // Finally, stream out SVG to the standard output using
         // UTF-8 encoding.
         boolean useCSS = true; // we want to use CSS style attributes
-        Writer out = new OutputStreamWriter(System.out, "UTF-8");
-        svgGenerator.stream(out, useCSS);*/
-    }
+        try {
+            File fileSave = new File(fileName);
+            FileOutputStream fos = new FileOutputStream(fileSave);
+            Writer out = new OutputStreamWriter(fos, "UTF-8");
+            svgGenerator.stream(out, useCSS);
+        } catch (Exception e) {
+            TraceManager.addDev("SVG generation failed: " + e.getMessage());
+        }
+    }*/
 
     public void actSaveSDPNG() {
         //Saving PNG file;
@@ -1923,7 +1920,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         bi = sdpanel.performCapture();
 
-        String filePath="";
+        String filePath = "";
         if (ConfigurationTTool.isConfigured(ConfigurationTTool.IMGPath)) {
             filePath += ConfigurationTTool.IMGPath;
             if (!filePath.endsWith(File.separator)) {
@@ -1931,7 +1928,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             }
         } else {
             String path = mgui.getModelFileFullPath();
-            filePath = path.substring(0,path.lastIndexOf(File.separator)+1);
+            filePath = path.substring(0, path.lastIndexOf(File.separator) + 1);
         }
 
         if ((saveFileName.getText() != null) && (saveFileName.getText().length() > 0)) {
@@ -1947,10 +1944,10 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     public void deleteAsyncMsg() {
         //TraceManager.addDev("Deleting async msg");
-        if ((ass != null) && (!isBusy())){
+        if ((ass != null) && (!isBusy())) {
             int index = asyncmsgs.getSelectedIndex();
             if (index > -1) {
-                boolean pendingModified = ass.removeAsyncMessage(((AvatarInteractiveSimulationFIFOData)(comboFIFOs.getSelectedItem())).fifo, index);
+                boolean pendingModified = ass.removeAsyncMessage(((AvatarInteractiveSimulationFIFOData) (comboFIFOs.getSelectedItem())).fifo, index);
                 updateAsynchronousChannels();
                 if (pendingModified) {
                     updatePending();
@@ -1962,12 +1959,12 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     public void upAsyncMsg() {
         //TraceManager.addDev("Up async msg");
-        if ((ass != null) && (!isBusy())){
+        if ((ass != null) && (!isBusy())) {
             int index = asyncmsgs.getSelectedIndex();
             if (index > 0) {
-                ass.moveAsyncMessage(((AvatarInteractiveSimulationFIFOData)(comboFIFOs.getSelectedItem())).fifo, index ,index-1);
+                ass.moveAsyncMessage(((AvatarInteractiveSimulationFIFOData) (comboFIFOs.getSelectedItem())).fifo, index, index - 1);
                 updateAsynchronousChannels();
-                asyncmsgs.setSelectedIndex(index-1);
+                asyncmsgs.setSelectedIndex(index - 1);
             }
         }
 
@@ -1977,24 +1974,24 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
     public void downAsyncMsg() {
         //TraceManager.addDev("Down async msg");
-        if ((ass != null) && (!isBusy())){
+        if ((ass != null) && (!isBusy())) {
             int index = asyncmsgs.getSelectedIndex();
             if (index > -1) {
                 //TraceManager.addDev("Moving from  index: " + index + " to: " + (index+1));
-                ass.moveAsyncMessage(((AvatarInteractiveSimulationFIFOData)(comboFIFOs.getSelectedItem())).fifo, index, index+1);
+                ass.moveAsyncMessage(((AvatarInteractiveSimulationFIFOData) (comboFIFOs.getSelectedItem())).fifo, index, index + 1);
                 updateAsynchronousChannels();
                 //TraceManager.addDev("Selecting list at index:" + index);
                 asyncmsgs.repaint();
-                asyncmsgs.setSelectedIndex(index+1);
+                asyncmsgs.setSelectedIndex(index + 1);
             }
         }
         //printFullList();
     }
 
     public void printFullList() {
-        int  i = 0;
+        int i = 0;
         if (ass != null) {
-            for(AvatarSimulationAsynchronousTransaction tr: ass.getAsynchronousMessages()) {
+            for (AvatarSimulationAsynchronousTransaction tr : ass.getAsynchronousMessages()) {
                 TraceManager.addDev("#" + i + "\t: " + tr);
                 i++;
             }
@@ -2003,78 +2000,79 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
 
     // Mouse management
-    public void mouseReleased(MouseEvent e) {}
-
+    public void mouseReleased(MouseEvent e) {
+    }
 
 
     /**
      * This adapter is constructed to handle mouse over component events.
      */
-    private class MouseHandler extends MouseAdapter  {
+    private class MouseHandler extends MouseAdapter {
 
         private JLabel label;
 
         /**
          * ctor for the adapter.
+         *
          * @param label the JLabel which will recieve value of the
          *              Action.LONG_DESCRIPTION key.
          */
-        public MouseHandler(JLabel label)  {
+        public MouseHandler(JLabel label) {
             setLabel(label);
         }
 
-        public void setLabel(JLabel label)  {
+        public void setLabel(JLabel label) {
             this.label = label;
         }
 
-        public void mouseEntered(MouseEvent evt)  {
-            if (evt.getSource() instanceof AbstractButton)  {
-                AbstractButton button = (AbstractButton)evt.getSource();
+        public void mouseEntered(MouseEvent evt) {
+            if (evt.getSource() instanceof AbstractButton) {
+                AbstractButton button = (AbstractButton) evt.getSource();
                 Action action = button.getAction();
-                if (action != null)  {
-                    String message = (String)action.getValue(Action.LONG_DESCRIPTION);
+                if (action != null) {
+                    String message = (String) action.getValue(Action.LONG_DESCRIPTION);
                     label.setText(message);
                 }
             }
         }
     }
 
-    public void actionPerformed(ActionEvent evt)  {
+    public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
         //TraceManager.addDev("Command:" + command);
 
-        if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].getActionCommand()))  {
+        if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].getActionCommand())) {
             runSimulation();
             //TraceManager.addDev("Start simulation!");
-        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].getActionCommand()))  {
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].getActionCommand())) {
             runXCommands();
 
-        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand()))  {
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
             stopSimulation();
 
-        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].getActionCommand()))  {
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].getActionCommand())) {
             backwardOneTransaction();
 
-        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand()))  {
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand())) {
             resetSimulation();
 
-        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand()))  {
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand())) {
             close();
             return;
 
-        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand()))  {
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand())) {
             actSaveTxt();
             return;
 
-        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].getActionCommand()))  {
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].getActionCommand())) {
             actSaveSDPNG();
             return;
 
-        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG].getActionCommand()))  {
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG].getActionCommand())) {
             actSaveSvg();
             return;
 
-        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_ZOOM_IN].getActionCommand()))  {
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_ZOOM_IN].getActionCommand())) {
             zoomIn();
             return;
 
@@ -2102,23 +2100,23 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                     ass.forceRandom(-1);
                 }
             }
-        } else if  (evt.getSource() == comboFIFOs) {
+        } else if (evt.getSource() == comboFIFOs) {
             updateAsynchronousChannels();
             setDeleteUpDown();
-        } else if (evt.getSource() == delete)  {
+        } else if (evt.getSource() == delete) {
             deleteAsyncMsg();
             return;
-        } else if (evt.getSource() == up)  {
+        } else if (evt.getSource() == up) {
             TraceManager.addDev("Source = up");
             upAsyncMsg();
-        } else if (evt.getSource() == down)  {
+        } else if (evt.getSource() == down) {
             TraceManager.addDev("Source = up");
             downAsyncMsg();
         }
 
         // Check for source of jcheckbox
         int index = 0;
-        for(JCheckBox jcb: displayedBlocks) {
+        for (JCheckBox jcb : displayedBlocks) {
             if (evt.getSource() == jcb) {
                 ass.getSimulationBlocks().get(index).selected = jcb.isSelected();
                 TraceManager.addDev("Block " + ass.getSimulationBlocks().get(index) + " is now " + ass.getSimulationBlocks().get(index).selected);
@@ -2126,7 +2124,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                 sdpanel.repaint();
                 return;
             }
-            index ++;
+            index++;
         }
     }
 
@@ -2145,14 +2143,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
         if (index > -1) {
             try {
                 AvatarSimulationPendingTransaction aspt = listPendingTransactions.getSelectedValue();
-                selectedComponentForTransaction1 = (TGComponent)(aspt.elementToExecute.getReferenceObject());
+                selectedComponentForTransaction1 = (TGComponent) (aspt.elementToExecute.getReferenceObject());
                 selectedComponentForTransaction2 = null;
                 if ((selectedComponentForTransaction1 == null) && (aspt.linkedTransaction != null)) {
                     //TraceManager.addDev("Adding reference object: " + aspt.linkedTransaction.elementToExecute.getReferenceObject());
-                    selectedComponentForTransaction1 = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
+                    selectedComponentForTransaction1 = (TGComponent) (aspt.linkedTransaction.elementToExecute.getReferenceObject());
                     selectedComponentForTransaction2 = null;
                 } else if (aspt.linkedTransaction != null) {
-                    selectedComponentForTransaction2 = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
+                    selectedComponentForTransaction2 = (TGComponent) (aspt.linkedTransaction.elementToExecute.getReferenceObject());
                 }
                 if (!(busyMode == AvatarSpecificationSimulation.GATHER) && !(busyMode == AvatarSpecificationSimulation.EXECUTE)) {
                     ass.setIndexSelectedTransaction(listPendingTransactions.getSelectedIndex());
@@ -2167,12 +2165,12 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
                         mgui.refreshCurrentPanel();
                     }
                 }
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 TraceManager.addDev("Exception selected component");
                 selectedComponentForTransaction1 = null;
                 selectedComponentForTransaction2 = null;
                 if (openDiagram.isSelected()) {
-                    if ((previousBlock != null) &&  (animate.isSelected())){
+                    if ((previousBlock != null) && (animate.isSelected())) {
                         mgui.openAVATARSMD(previousBlock.getName());
                     } else {
                         mgui.refreshCurrentPanel();
@@ -2214,7 +2212,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             ass.setExecuteEmptyTransition(executeEmptyTransition.isSelected());
         } else if (e.getSource() == executeStateEntering) {
             ass.setExecuteStateEntering(executeStateEntering.isSelected());
-        } else if  (e.getSource() == traceInSD) {
+        } else if (e.getSource() == traceInSD) {
             if (sdpanel != null) {
                 sdpanel.setTrace(traceInSD.isSelected());
                 sdpanel.repaint();

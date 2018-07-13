@@ -142,32 +142,32 @@ public class Conversion {
             return s;
         }
 
-        //System.out.println("\nMust analyze:" + s);
+        //TraceManager.addDev("\nMust analyze:" + s);
         while((index = s.indexOf(input)) > -1 ) {
-            //System.out.println("Analyzing:" + s);
+            //TraceManager.addDev("Analyzing:" + s);
             if (index == 0) {
                 b1 = false;
             } else {
-                //System.out.println("substring = " + s.substring(index-1, index));
+                //TraceManager.addDev("substring = " + s.substring(index-1, index));
                 b1 = s.substring(index-1, index).matches("\\w*");
             }
             if ((index+input.length()) == s.length()) {
                 b2 = false;
             } else {
-                //System.out.println("substring = " + s.substring(index+1, index+2));
+                //TraceManager.addDev("substring = " + s.substring(index+1, index+2));
                 b2 = s.substring(index+input.length(), index+input.length()+1).matches("\\w*");
             }
 
             if (!b1 && !b2) {
                 output += s.substring(0, index) + snew;
                 s = s.substring(index + input.length());
-                //System.out.println("modifying");
+                //TraceManager.addDev("modifying");
             } else {
                 output += s.substring(0, index+input.length());
                 s = s.substring(index + input.length());
             }
         }
-        //System.out.println("result=" + output + s);
+        //TraceManager.addDev("result=" + output + s);
         return output + s;
     }
 
@@ -177,12 +177,12 @@ public class Conversion {
         String s1, s2;
 
         while ((index1 = locateBinaryOperator(_input, _binary)) > -1) {
-            //System.out.println("binary located at index:" + index1);
+            //TraceManager.addDev("binary located at index:" + index1);
             s1 = _input.substring(_binary.length() + index1 + 1, extractComma(index1, _input, _binary));
-            //System.out.println("s1=" + s1);
+            //TraceManager.addDev("s1=" + s1);
             index2 = extractLastParenthesis(index1, _input, _binary);
             s2 = _input.substring(extractComma(index1, _input, _binary) + 1, index2);
-            //System.out.println("s2=" + s2);
+            //TraceManager.addDev("s2=" + s2);
             _input = _input.substring(0, index1) + "((" + s1 + ")" + _unary + "(" + s2 + "))" + _input.substring(index2+1,_input.length());
         }
 
@@ -198,7 +198,7 @@ public class Conversion {
 
         while(cpt < _input.length()) {
             c = _input.charAt(cpt);
-            //System.out.println("c=" + c + " cpt=" + cpt);
+            //TraceManager.addDev("c=" + c + " cpt=" + cpt);
             if (c == '(') {
                 paren ++;
             }
@@ -244,10 +244,10 @@ public class Conversion {
         boolean b1;
         int cpt = 0;
 
-        //System.out.println("locate");
+        //TraceManager.addDev("locate");
 
         if ((index = _input.indexOf(_binary+"(")) > -1) {
-            //System.out.println("May have found one " + _binary + " in " + _input);
+            //TraceManager.addDev("May have found one " + _binary + " in " + _input);
             if (index == 0) {
                 b1 = false;
             } else {
@@ -257,7 +257,7 @@ public class Conversion {
             if (!b1) {
                 return index + cpt;
             } else {
-                //System.out.println("Wrong one");
+                //TraceManager.addDev("Wrong one");
                 cpt = index + _binary.length();
                 _input = _input.substring(index+_binary.length(), _input.length());
             }
@@ -301,10 +301,10 @@ public class Conversion {
         int index, index1;
 
         for(int i=0; i<nb; i++) {
-            //System.out.println("1 c.s=" + s);
+            //TraceManager.addDev("1 c.s=" + s);
             index = s.indexOf(c);
             s = s.substring(index+1, s.length());
-            //System.out.println("2 c.s=" + s);
+            //TraceManager.addDev("2 c.s=" + s);
             index1 = s.indexOf(c);
             if (index1 == -1) {
                 index1 = s.length();
@@ -337,7 +337,7 @@ public class Conversion {
     }
 
     public static String replaceOp(String s, String from, String to) {
-        //System.out.println("Replace op s=" + s + " from=" + from + " to=" + to);
+        //TraceManager.addDev("Replace op s=" + s + " from=" + from + " to=" + to);
         int fromIndex = 0;
         int index;
     //    int len;
@@ -396,7 +396,7 @@ public class Conversion {
                 _input = "";
             }
 
-            //System.out.println("tmp = " + tmp);
+            //TraceManager.addDev("tmp = " + tmp);
             nbOpen = nbOf(tmp, '{');
             nbClose = nbOf(tmp, '}');
             dec -= nbClose * _nbDec;
@@ -478,7 +478,7 @@ public class Conversion {
                 } else {
                     inString = !inString;
                 }
-                //System.out.println("Found guillemet: instring=" + inString);
+                //TraceManager.addDev("Found guillemet: instring=" + inString);
             }
 
             if((c == '\'') && (inString == false)){
@@ -519,15 +519,15 @@ public class Conversion {
                     // Beginning of line comment
                     ret += input.substring(0, index-2);
                     input = input.substring(index, input.length());
-                    //System.out.println("ret=" + ret);
-                    //System.out.println("beg of input=" + input.substring(0, Math.min(5, input.length())));
+                    //TraceManager.addDev("ret=" + ret);
+                    //TraceManager.addDev("beg of input=" + input.substring(0, Math.min(5, input.length())));
 
                     index1 = input.indexOf("\n");
                     if (index1 == -1) {
                         return ret;
                     }
                     input = input.substring(index1, input.length());
-                    //System.out.println("beg of input=" + input.substring(0, Math.min(5, input.length())));
+                    //TraceManager.addDev("beg of input=" + input.substring(0, Math.min(5, input.length())));
                     index = 0;
                     isSlashed = false;
                 }

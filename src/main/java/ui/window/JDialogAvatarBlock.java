@@ -759,7 +759,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
                     if (j == TAttribute.OTHER) {
                         a = new TAttribute(i, s, value, o2.toString());
                         a.isAvatar = true;
-                        //System.out.println("New attribute: " + o2.toString());
+                        //
                     } else {
                         a = new TAttribute(i, s, value, j);
                         a.isAvatar = true;
@@ -1086,7 +1086,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         String s;
         for (int i = 0; i < jcb.getItemCount(); i++) {
             s = jcb.getItemAt(i);
-            //System.out.println("String found: *" + s + "* *" + text + "*");
+            //
             if (s.equals(text)) {
                 jcb.setSelectedIndex(i);
                 return;

@@ -46,12 +46,12 @@ package ui.util;
  * Creation: 01/12/2003
  *
  * @author Ludovic APVRILLE
- * @version 1.1 29/01/2004
+ * @version 1.2 21/06/2018
  */
 public class DefaultText {
 
-    public static String BUILD = "12659";
-    public static String DATE = "2018/05/09 18:25:03 CET";
+    public static String BUILD = "12692";
+    public static String DATE = "2018/07/11 02:01:55 CET";
 
     public static StringBuffer sbAbout = makeAbout();
 

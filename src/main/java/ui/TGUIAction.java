@@ -283,7 +283,26 @@ public class TGUIAction extends AbstractAction {
     public static final int CAMS_PORT_DE = 478;
     public static final int CAMS_PORT_CONVERTER = 479;
     public static final int CAMS_CLUSTER = 480;
-
+    public static final int CAMS_GENCODE = 481;
+    public static final int CAMS_BLOCK_GPIO2VCI = 497;
+    
+    // ELN
+    public static final int ELN_EDIT = 482;
+    public static final int ELN_CONNECTOR = 483;
+    public static final int ELN_RESISTOR = 484;
+    public static final int ELN_CAPACITOR = 485;
+    public static final int ELN_INDUCTOR = 486;
+    public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 487;
+    public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 488;
+    public static final int ELN_IDEAL_TRANSFORMER = 489; 
+    public static final int ELN_TRANSMISSION_LINE = 490; 
+    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 491; 
+    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 492; 
+    public static final int ELN_NODE_REF = 494; 
+    public static final int ELN_TDF_VOLTAGE_SINK = 495; 
+    public static final int ELN_TDF_CURRENT_SINK = 496; 
+    public static final int ELN_MODULE = 498; 
+    
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
     public static final int EBRDD_START = 273;
@@ -445,6 +464,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ADD_CHANNELARTIFACT = 411;
     public static final int ADD_VGMNNODE = 401;
     public static final int ADD_CROSSBARNODE = 421;
+    public static final int ADD_CLUSTERNODE = 493;
 
     // -------------------------------------------------------------
     public static final int DEPLOY_AVATAR_DIAGRAM = 418;
@@ -636,7 +656,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 481;
+    public static final int NB_ACTION = 499;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -655,6 +675,41 @@ public class TGUIAction extends AbstractAction {
         putValue(Action.LONG_DESCRIPTION, _t.LONG_DESCRIPTION);
     }
 
+    public TGUIAction(int id, String name) {
+        if (actions[0] == null) {
+            init();
+        }
+        if (actions[id] == null) {
+            return ;
+        }
+
+        putValue(Action.ACTION_COMMAND_KEY, name);
+
+        putValue(Action.NAME, name);
+        putValue(Action.SMALL_ICON, actions[id].SMALL_ICON);
+        putValue(LARGE_ICON, actions[id].LARGE_ICON);
+        putValue(Action.SHORT_DESCRIPTION, name);
+        putValue(Action.LONG_DESCRIPTION, name);
+        //putValue(Action.MNEMONIC_KEY, new Integer(actions[id].MNEMONIC_KEY));
+        if (actions[id].MNEMONIC_KEY != 0) {
+            if (actions[id].hasControl) {
+                putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY, java.awt.event.InputEvent.CTRL_MASK));
+            } else {
+                if ((actions[id].MNEMONIC_KEY >= 37 && actions[id].MNEMONIC_KEY <= 40) || actions[id].MNEMONIC_KEY == KeyEvent.VK_DELETE) //handling for arrow and delete keys
+                    putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].MNEMONIC_KEY, 0));
+                else
+                    putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY));
+            }
+        }
+
+        if ((id == EXTERNAL_ACTION_1) && (ConfigurationTTool.ExternalCommand1 != null) && (ConfigurationTTool.ExternalCommand1.length()) > 0) {
+            setLongDescription(EXTERNAL_ACTION_1, ConfigurationTTool.ExternalCommand1);
+        }
+        if ((id == EXTERNAL_ACTION_2) && (ConfigurationTTool.ExternalCommand2 != null) && (ConfigurationTTool.ExternalCommand2.length()) > 0) {
+            setLongDescription(EXTERNAL_ACTION_2, ConfigurationTTool.ExternalCommand2);
+        }
+    }
+
     public TGUIAction(int id) {
         if (actions[0] == null) {
             init();
@@ -662,6 +717,7 @@ public class TGUIAction extends AbstractAction {
         if (actions[id] == null) {
             return ;
         }
+
 
         putValue(Action.NAME, actions[id].NAME);
         putValue(Action.SMALL_ICON, actions[id].SMALL_ICON);
@@ -902,7 +958,7 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_ICUNODE] = new TAction("add-add-icunode", "Add an ICU", IconManager.imgic1112, IconManager.imgic1112, "ICU", "Add a ICU node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_COPROMWMRNODE] = new TAction("add-add-copromwmrnode", "Add a MWMR Copro", IconManager.imgic1114, IconManager.imgic1114, "MWMR Copro", "Add a DMA node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_TIMERNODE] = new TAction("add-add-timernode", "Add a Timer", IconManager.imgic1116, IconManager.imgic1116, "Timer", "Add a timer node to the currently opened AVATAR deployment diagram", 0);
-
+        actions[ADD_CLUSTERNODE] = new TAction("add-add-clusternode", "Add a Cluster", IconManager.imgic8006, IconManager.imgic8006, "Cluster", "Add a cluster node to the currently opened AVATAR deployment diagram", 0);
 
         actions[TCD_PARALLEL_OPERATOR] = new TAction("add-parallel-operator", "Add Parallel composition operator", IconManager.imgic112, IconManager.imgic112, "Parallel composition operator", "Add a Parallel composition operator to the currently opened class diagram", 0);
         actions[TCD_CONNECTOR_ATTRIBUTE] = new TAction("add-attribute-connector", "Connects an association to a composition operator", IconManager.imgic108, IconManager.imgic108, "Attributes an association with a composition operator", "Adds a connector between an association and a composition operator to the currently opened class diagram", 0);
@@ -1093,16 +1149,34 @@ public class TGUIAction extends AbstractAction {
         actions[TMLSD_CONTROLLER_INSTANCE] = new TAction("add-controller-instance-tmlsd", "Controller instance", IconManager.imgic500, IconManager.imgic500, "Controller instance", "Add a controller instance to the currently opened communication pattern sequence diagram", 0);
         actions[TMLSD_ACTION_STATE] = new TAction("add-action-tmlsd", "Action state", IconManager.imgic512, IconManager.imgic512, "Action state", "Add an action state to the currently opened communication pattern sequence diagram", 0);
 
-        //System C-AMS
+        // System C-AMS
         actions[CAMS_EDIT] = new TAction("add-action-C-AMS", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened SystemC-AMS diagram", 0);
-        actions[CAMS_BLOCK_TDF] = new TAction("C-AMS-block-TDF", "Add a TDF block", IconManager.imgic5000, IconManager.imgic5000, "TDF block", "Add a TDF block to the currently opened SystemC-AMS Diagram", 0);
-        actions[CAMS_BLOCK_DE] = new TAction("C-AMS-block-DE", "Add a DE block", IconManager.imgic5000, IconManager.imgic5000, "DE block", "Add a DE block to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_BLOCK_TDF] = new TAction("C-AMS-block-TDF", "Add a TDF block", IconManager.imgic8007, IconManager.imgic8007, "TDF block", "Add a TDF block to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_BLOCK_DE] = new TAction("C-AMS-block-DE", "Add a DE block", IconManager.imgic8008, IconManager.imgic8008, "DE block", "Add a DE block to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_CONNECTOR] = new TAction("C-AMS-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_PORT_TDF] = new TAction("C-AMS-port-TDF", "Add a TDF port", IconManager.imgic8000, IconManager.imgic8000, "TDF port", "Add a TDF port to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_PORT_DE] = new TAction("C-AMS-port-DE", "Add a DE port", IconManager.imgic8001, IconManager.imgic8001, "DE port", "Add a DE port to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_PORT_CONVERTER] = new TAction("C-AMS-port-converter", "Add a converter port", IconManager.imgic8003, IconManager.imgic8003, "Converter port", "Add a converter port to the currently opened SystemC-AMS Diagram", 0);
-        actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic5000, IconManager.imgic5000, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic8006, IconManager.imgic8006, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
+        actions[CAMS_GENCODE] = new TAction("GENCODE", "GENCODE",IconManager.imgic94, IconManager.imgic94, "Generate SystemC-AMS code", "SystemC-AMS diagram without check syntax", 0);
+        actions[CAMS_BLOCK_GPIO2VCI] = new TAction("C-AMS-block-GPIO2VCI", "Add a block GPIO2VCI",IconManager.imgic8009, IconManager.imgic8009, "GPIO2VCI block", "Add a GPIO2VCI block to the currently opened SystemC-AMS Diagram", 0);
 
+        // ELN
+        actions[ELN_EDIT] = new TAction("add-action-eln", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened ELN diagram", 0);
+        actions[ELN_CONNECTOR] = new TAction("eln-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened ELN Diagram", 0);
+        actions[ELN_RESISTOR] = new TAction("eln-resistor", "Add a resistor", IconManager.imgic8020, IconManager.imgic8020, "Resistor", "Add a resistor to the currently opened ELN Diagram", 0);
+        actions[ELN_CAPACITOR] = new TAction("eln-capacitor", "Add a capacitor", IconManager.imgic8021, IconManager.imgic8021, "Capacitor", "Add a capacitor to the currently opened ELN Diagram", 0);
+        actions[ELN_INDUCTOR] = new TAction("eln-inductor", "Add a inductor", IconManager.imgic8022, IconManager.imgic8022, "Self", "Add a inductor to the currently opened ELN Diagram", 0);
+        actions[ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE] = new TAction("eln-VCVS", "Add a voltage controlled voltage source", IconManager.imgic8023, IconManager.imgic8023, "Voltage controlled voltage source", "Add a voltage controlled voltage source to the currently opened ELN Diagram", 0);
+        actions[ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE] = new TAction("eln-VCCS", "Add a voltage controlled current source", IconManager.imgic8024, IconManager.imgic8024, "Voltage controlled current source", "Add a voltage controlled current source to the currently opened ELN Diagram", 0);
+        actions[ELN_IDEAL_TRANSFORMER] = new TAction("eln-ideal-transformer", "Add a ideal transformer", IconManager.imgic8025, IconManager.imgic8025, "Ideal transformer", "Add a ideal transformer to the currently opened ELN Diagram", 0);
+        actions[ELN_TRANSMISSION_LINE] = new TAction("eln-transmission-line", "Add a transmission line", IconManager.imgic8026, IconManager.imgic8026, "Transmission line", "Add a transmission line to the currently opened ELN Diagram", 0);
+        actions[ELN_INDEPENDENT_VOLTAGE_SOURCE] = new TAction("eln-vsource", "Add a independent voltage source", IconManager.imgic8027, IconManager.imgic8027, "Independent voltage source", "Add a independent voltage source to the currently opened ELN Diagram", 0);
+        actions[ELN_INDEPENDENT_CURRENT_SOURCE] = new TAction("eln-isource", "Add a independent current source", IconManager.imgic8028, IconManager.imgic8028, "Independent current source", "Add a independent current source to the currently opened ELN Diagram", 0);
+        actions[ELN_NODE_REF] = new TAction("eln-node-ref", "Add a reference node", IconManager.imgic8029, IconManager.imgic8029, "Reference node", "Add a reference node to the currently opened ELN Diagram", 0);        
+        actions[ELN_TDF_VOLTAGE_SINK] = new TAction("eln-tdf-vsink", "Add a conversion voltage to a TDF output signal", IconManager.imgic8030, IconManager.imgic8030, "Converts voltage to a TDF output signal", "Add a converts voltage to a TDF output signal to the currently opened ELN Diagram", 0);
+        actions[ELN_TDF_CURRENT_SINK] = new TAction("eln-tdf-isink", "Add a conversion current to a TDF output signal", IconManager.imgic8031, IconManager.imgic8031, "Converts current to a TDF output signal", "Add a converts current to a TDF output signal to the currently opened ELN Diagram", 0);
+        actions[ELN_MODULE] = new TAction("eln-module", "Add a SystemC module", IconManager.imgic8006, IconManager.imgic8006, "SystemC module", "Add a SystemC module to the currently opened ELN Diagram", 0);
 
         //ProActive State Machine Diagram
         actions[PROSMD_EDIT] = new TAction("edit-prosmd-diagram", "Edit ProActive state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit ProActive state machine diagram", "Make it possible to edit the currently opened ProActive state machine diagram", 0);
@@ -1296,7 +1370,6 @@ public class TGUIAction extends AbstractAction {
     }
 
     public void actionPerformed(ActionEvent evt)  {
-        //System.out.println("Action performed");
         if (listeners != null) {
             Object[] listenerList = listeners.getListenerList();
 

@@ -168,7 +168,7 @@ public class IODRefSD extends TGCOneLineText {
 
 	/*public boolean editOndoubleClick(JFrame frame) {
 		
-		//System.out.println("Double click");
+		//
      String text = getName() + ": ";
     if( hasFather() ) {
 			text = getTopLevelName() + " / " + text;

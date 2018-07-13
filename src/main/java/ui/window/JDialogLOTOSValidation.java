@@ -394,7 +394,7 @@ public class JDialogLOTOSValidation extends JDialog implements ActionListener, R
 				//jta.append("\nConverting 1\n");
 				jta.append("\n(Actions on graph are being modified to be human-readable)\n");
 				data1 = mgui.gtm.convertCADP_AUT_to_RTL_AUT(data, max);
-				//System.out.println("data1 = " + data1);
+				//
 				if (data1 == null) {
 					jta.append("\nGraph is larger than the maximum specified size.\nThe graph is being saved to be used with text commands only.");
 					mgui.gtm.setRGAut(data);
@@ -404,7 +404,7 @@ public class JDialogLOTOSValidation extends JDialog implements ActionListener, R
 				} else {
 					data = data1;
 					//jta.append("\nConverting 2\n");
-					//System.out.println("graph AUT=" + data);
+					//
 					mgui.gtm.setRGAut(data);
 					//jta.append("\nConverting 3\n");
 					data2 = mgui.saveRGAut();
@@ -435,7 +435,7 @@ public class JDialogLOTOSValidation extends JDialog implements ActionListener, R
 						cmd1 = cmdBcgio + " -aldebaran " + fileName + ".aut" + " -fc2 " + fileName + ".fc2";
 						data = processCmd(cmd1);
 						data = rshc.getFileData(fileName + ".fc2");
-						//System.out.println("Got data!");
+						//
 						mgui.gtm.saveInFile(new File(path, fileName + ".fc2"), data);*/
 						jta.append("\nConverting to fc2\n");
 						//rshc.sendFileData(fileName + ".aut", data);

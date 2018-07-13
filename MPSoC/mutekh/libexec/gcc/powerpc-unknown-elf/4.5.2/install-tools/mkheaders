@@ -53,7 +53,7 @@ if [ x$1 != x ] ; then
   prefix=$1
   shift
 else
-  prefix=/users/cao/genius/Prog/mutekh
+  prefix=/users/enseig/genius/TTool/MPSoC/mutekh
 fi
 
 # Allow for alternate isysroot in which to find headers

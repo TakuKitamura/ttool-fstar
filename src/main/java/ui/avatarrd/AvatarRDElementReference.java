@@ -148,7 +148,7 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent i
 
         if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
             currentFontSize = tdp.getFontSize();
-            //System.out.println("Rescaled, font size = " + currentFontSize + " height=" + height);
+            //
             myFont = f.deriveFont((float)currentFontSize);
             myFontB = myFont.deriveFont(Font.BOLD);
 
@@ -268,7 +268,7 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent i
     }
 
     public void autoAdjust(int mode) {
-        //System.out.println("Auto adjust in mode = " + mode);
+        //
 
         if (graphics == null) {
             return;

@@ -105,7 +105,12 @@ public class InteractiveSimulationActions extends AbstractAction {
     public static final int ACT_ANALYSIS_RG = 30;
     public static final int ACT_VIEW_RG = 31;
     public static final int ACT_SHOW_TRACE = 36;
-    public static final int NB_ACTION = 37;
+
+    public static final int ACT_QUIT_SD_WINDOW = 37;
+    public static final int ACT_SAVE_SD_SVG = 38;
+
+
+    public static final int NB_ACTION = 39;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -191,6 +196,8 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_ADD_LATENCY] = new TAction("add-latency", "Measure Latency", null, null, "Measure Latency", "Measure Latency", '0');
 		actions[ACT_SHOW_TRACE] = new TAction("show-trace", "Show Simulation Traces", IconManager.imgic7007, IconManager.imgic7007, "Show Simulation Traces", "Show Simulation Traces", '0');
 
+        actions[ACT_QUIT_SD_WINDOW] = new TAction("close-sdpanel", "Close Window", IconManager.imgic27, IconManager.imgic27, "Close window", "Close this window", 'Q');
+        actions[ACT_SAVE_SD_SVG] = new TAction("svg-sdpanel", "Save in SVG Format", IconManager.imgic1310, IconManager.imgic1310, "Save in SVG Format", "Save as SVG file", 'S');
 
     }
 
@@ -208,7 +215,7 @@ public class InteractiveSimulationActions extends AbstractAction {
     }
 
     public void actionPerformed(ActionEvent evt)  {
-        //System.out.println("Action performed");
+        //
         if (listeners != null) {
             Object[] listenerList = listeners.getListenerList();
 

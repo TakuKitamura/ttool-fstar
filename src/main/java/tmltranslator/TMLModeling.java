@@ -44,6 +44,7 @@ package tmltranslator;
 import avatartranslator.AvatarAttribute;
 import avatartranslator.AvatarPragmaAuthenticity;
 import avatartranslator.AvatarPragmaSecret;
+import avatartranslator.AvatarPragmaReachability;
 import myutil.Conversion;
 import myutil.TraceManager;
 import proverifspec.ProVerifOutputAnalyzer;
@@ -238,7 +239,7 @@ public class TMLModeling<E> {
             s = s.substring(index, s.length());
         }
         hashCode = s.hashCode();
-        //System.out.println("TML hashcode = " + hashCode);
+        //TraceManager.addDev("TML hashcode = " + hashCode);
     }
 
     public int getHashCode() {
@@ -361,7 +362,7 @@ public class TMLModeling<E> {
 
         while(iterator.hasNext()) {
             request = iterator.next();
-            //System.out.println("Request=" +request.getName() + " name=" + name);
+            //TraceManager.addDev("Request=" +request.getName() + " name=" + name);
             if (request.getName().compareTo(name) == 0) {
                 return request;
             }
@@ -756,10 +757,11 @@ public class TMLModeling<E> {
     }
 
     public void backtrace(ProVerifOutputAnalyzer pvoa, String mappingName){
-        //System.out.println("Backtracing Confidentiality");
-        HashMap<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+        //TraceManager.addDev("Backtracing Confidentiality");
+        Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
 
         for (AvatarPragmaSecret pragma: confResults.keySet()) {
+        //	System.out.println("pragma "  +pragma);
             ProVerifQueryResult result = confResults.get(pragma);
             if (!result.isProved())
                 continue;
@@ -768,9 +770,40 @@ public class TMLModeling<E> {
             AvatarAttribute attr = pragma.getArg();
 
             TMLChannel channel = getChannelByShortName(attr.getName().replaceAll("_chData",""));
+            boolean invalidate=false;
+            //If an attribute is confidential because it has never been sent on that channel, do not backtrace that result since it is misleading
             if (channel!=null){
+            	//Mark the result only if the writechannel operator is reachable
+            	Map<AvatarPragmaReachability, ProVerifQueryResult> reachResults = pvoa.getReachabilityResults();
+            	if (reachResults.size()>0){
+	            	for (AvatarPragmaReachability reachPragma: reachResults.keySet()){
+    	        		if (reachPragma.getState().getName().equals("aftersignalstate_reachannel_"+channel.getName())){
+    	        			if (!reachResults.get(reachPragma).isSatisfied()){
+    	        				invalidate=true;
+    	        			}	
+            			}
+            		}
+            	}
+            	//Next check if there exists a writechannel operator that sends unencrypted data
+            	boolean found=false;
+            	for (TMLTask task: getTasks()){
+            		TMLActivity act = task.getActivityDiagram();
+            		for (TMLActivityElement elem: act.getElements()){
+            			if (elem instanceof TMLWriteChannel){
+            				TMLWriteChannel wr = (TMLWriteChannel) elem;
+            				if(wr.getChannel(0).getName().equals(channel.getName())){
+            					if (wr.securityPattern==null){
+            						found=true;
+            					}
+            				}
+            			}
+            		}
+            	}
+            	if (!found){
+            		invalidate=true;
+            	}
                 for (TMLCPrimitivePort port:channel.ports){
-                    if (port.checkConf){
+                    if (port.checkConf && !invalidate){
                         port.checkConfStatus = r;
                         port.mappingName= mappingName;
                     }
@@ -796,6 +829,7 @@ public class TMLModeling<E> {
                     ev.port2.mappingName=mappingName;
                 }
             }
+            
             List<String> channels=secChannelMap.get(attr.getName());
             if (channels != null) {
                 for (String channelName: channels) {
@@ -810,7 +844,7 @@ public class TMLModeling<E> {
                     }
                 }
             }
-            for (TMLTask t:getTasks()){
+            /*for (TMLTask t:getTasks()){
                 if (t.getReferenceObject()==null){
                     continue;
                 }
@@ -821,7 +855,7 @@ public class TMLModeling<E> {
                         if (a.getId().equals(attr.getName()))
                             a.setConfidentialityVerification(result.isSatisfied() ? TAttribute.CONFIDENTIALITY_OK : TAttribute.CONFIDENTIALITY_KO);
                 }
-            }
+            }*/
         }
     }
 	public TGComponent getTGComponent(){
@@ -829,8 +863,8 @@ public class TMLModeling<E> {
 	}
 
 
-    public void backtraceAuthenticity(HashMap<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authenticityResults, String mappingName) {
-        //        System.out.println("Backtracing Authenticity");
+    public void backtraceAuthenticity(Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authenticityResults, String mappingName) {
+        //        TraceManager.addDev("Backtracing Authenticity");
         for (AvatarPragmaAuthenticity pragma: authenticityResults.keySet()) {
             ProVerifQueryAuthResult result = authenticityResults.get(pragma);
             // TODO: deal directly with pragma instead of s
@@ -896,7 +930,7 @@ public class TMLModeling<E> {
                             for (TMLCPrimitivePort port:channel.ports){
                                 if (port.checkAuth && port.checkStrongAuthStatus==1){
                                     port.checkStrongAuthStatus = 3;
-                                    System.out.println("not verified " + signalName);
+                                    TraceManager.addDev("not verified " + signalName);
                                     port.secName= signalName;
                                 }
                             }
@@ -912,7 +946,7 @@ public class TMLModeling<E> {
                     for (String channelName: channels){
                         if (channelName.contains("retData_") || channelName.contains("data_")){
                             channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
-                            String header= channelName.split("__retData_")[0];
+                            //String header= channelName.split("__retData_")[0];
                             for (TMLTask t: getTasks()){
                                 if (channelName.contains(t.getName().split("__")[1])){
                                     channelName = channelName.replace("_"+t.getName().split("__")[1],"");
@@ -978,7 +1012,7 @@ public class TMLModeling<E> {
                         }
                     }
                     signalName = s.toString().split("__decrypt")[0];
-                    System.out.println("signalName " +signalName);
+
                     /*for (TMLTask t: getTasks()){
                       if (signalName.contains(t.getName())){
                       signalName = signalName.replace(t.getName()+"__","");
@@ -1008,7 +1042,7 @@ public class TMLModeling<E> {
                         for (String channelName: channels){
                             if (channelName.contains("retData_") || channelName.contains("data_")){
                                 channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
-                                String header= channelName.split("__retData_")[0];
+                                //String header= channelName.split("__retData_")[0];
                                 for (TMLTask t: getTasks()){
                                     if (channelName.contains(t.getName().split("__")[1])){
                                         channelName = channelName.replace("_"+t.getName().split("__")[1],"");
@@ -1085,15 +1119,15 @@ public class TMLModeling<E> {
                   }
                   }*/
                 signalName=signalName.split("__")[1];
-                System.out.println("secpattern " + signalName);
+             //   TraceManager.addDev("secpattern " + signalName);
                 List<String> channels=secChannelMap.get(signalName);
-                System.out.println("secpattern channels " + channels);
+               // TraceManager.addDev("secpattern channels " + channels);
                 if (channels!=null) {
                     for (String channelName: channels) {
                         channel = getChannelByShortName(channelName);
                         if (channel!=null){
                             for (TMLCPrimitivePort port:channel.ports){
-                                System.out.println("adding to port " + channelName);
+                             //   TraceManager.addDev("adding to port " + channelName);
                                 if (port.checkAuth){
                                     port.checkStrongAuthStatus = 2;
                                     port.secName= signalName;
@@ -1112,7 +1146,7 @@ public class TMLModeling<E> {
                     for (String channelName: channels){
                         if (channelName.contains("retData_") || channelName.contains("data_")){
                             channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
-                            String header= channelName.split("__retData_")[0];
+                            //String header= channelName.split("__retData_")[0];
                             for (TMLTask t: getTasks()){
                                 if (channelName.contains(t.getName().split("__")[1])){
                                     channelName = channelName.replace("_"+t.getName().split("__")[1],"");
@@ -1266,10 +1300,42 @@ public class TMLModeling<E> {
         return ll;
     }
 
+    public List<TMLEvent> getEventsToMe(TMLTask task) {
+        TMLEvent evt;
+
+        List<TMLEvent> ll = new LinkedList<TMLEvent>();
+
+        // Must search the task for event operator, check the request for destination class
+        Iterator<TMLEvent> iterator = getListIteratorEvents();
+
+        while (iterator.hasNext()) {
+
+            evt = iterator.next();
+            //TraceManager.addDev("Considering event:" + evt.getName());
+
+            if (evt.hasDestinationTask(task)) {
+                ll.add(evt);
+            }
+        }
+
+        return ll;
+    }
+
     public TMLChannel getChannelToMe(TMLTask task) {
         List<TMLChannel> ll = getChannelsToMe(task);
 
         if ((ll == null) || (ll.size() == 0)) {
+            return null;
+        }
+
+        return ll.get(0);
+    }
+
+    public TMLEvent getEventToMe(TMLTask task) {
+        List<TMLEvent> ll = getEventsToMe(task);
+
+        if ((ll == null) || (ll.size() == 0)) {
+            TraceManager.addDev("Returning null event");
             return null;
         }
 
@@ -1491,24 +1557,24 @@ public class TMLModeling<E> {
         String name;
         TMLError error;
 
-        //System.out.println("Analyzing attributes in " + task.getName());
+        //TraceManager.addDev("Analyzing attributes in " + task.getName());
         for(i=0; i<attributes.size(); i++) {
             attr = attributes.get(i);
-            //System.out.println("Analyzing p=" + p.getName() + " i=" + i);
+            //TraceManager.addDev("Analyzing p=" + p.getName() + " i=" + i);
 
             if (attr.isNat() || attr.isBool()) {
-                //System.out.println("Getting usage");
+                //TraceManager.addDev("Getting usage");
                 name = attr.getName();
                 if (!(name.startsWith("arg")) && (name.endsWith("__req"))) {
                     //if ((name.compareTo("arg1__req") != 0) && (name.compareTo("arg2__req") != 0) && (name.compareTo("arg3__req") != 0)){
                     usage = getUsageOfAttribute(task, activity, attr);
-                    //System.out.println("End getting usage");
+                    //TraceManager.addDev("End getting usage");
                     if (usage == 0) {
                         error = new TMLError(TMLError.WARNING_BEHAVIOR);
                         error.message = "Attribute " + attr.getName() + " of TML task " + task.getName() + " is never used -> removing it";
                         error.task = task;
                         warnings.add(error);
-                        //System.out.println("Attribute " + attr.getName() + " of TML task " + task.getName() + " is never used -> removing it");
+                        //TraceManager.addDev("Attribute " + attr.getName() + " of TML task " + task.getName() + " is never used -> removing it");
                         attributes.remove(i);
                         i=-1;
                     } else if (usage ==1) {
@@ -1516,7 +1582,7 @@ public class TMLModeling<E> {
                         error.message = "Attribute " + attr.getName() + " of TML task " + task.getName() + " is constant -> putting its value in expression where it is used, and removing it from the task";
                         error.task = task;
                         warnings.add(error);
-                        //System.out.println("Attribute " + attr.getName() + " of TML task " + task.getName() + " is constant -> putting its value in expression where it is used, and removing it from the task");
+                        //TraceManager.addDev("Attribute " + attr.getName() + " of TML task " + task.getName() + " is constant -> putting its value in expression where it is used, and removing it from the task");
                         replaceAttributeWithItsValue(task, activity, attr);
                         attributes.remove(i);
                         i=-1;
@@ -1524,7 +1590,7 @@ public class TMLModeling<E> {
                 }
             }
         }
-        //System.out.println("End analyzing attributes in " + task.getName());
+        //TraceManager.addDev("End analyzing attributes in " + task.getName());
     }
 
     // Returns how a given parameter is used in a class
@@ -1556,7 +1622,7 @@ public class TMLModeling<E> {
 
         for(i=0; i<activity.nElements(); i++) {
             element = activity.get(i);
-            //System.out.println("Before element: " + element + " usage=" + usage);
+            //TraceManager.addDev("Before element: " + element + " usage=" + usage);
 
             if (element instanceof TMLActionState) {
                 tmlas = (TMLActionState)element;
@@ -1565,7 +1631,7 @@ public class TMLModeling<E> {
                 if (index != -1) {
                     s0 = s.substring(0, index);
                     s0 = " " + s0.trim() + " ";
-                    //System.out.println("s0=" + s0 + " name=" + name);
+                    //TraceManager.addDev("s0=" + s0 + " name=" + name);
                     if (s0.compareTo(name) == 0) {
                         return 2;
                     }
@@ -1644,7 +1710,7 @@ public class TMLModeling<E> {
                     }
 
                     if (usage == 0) {
-                        //System.out.println("Analyzing condition of loop");
+                        //TraceManager.addDev("Analyzing condition of loop");
                         usage = analyzeStringWithParam(tmlloop.getCondition(), name);
                     }
                 }
@@ -1690,7 +1756,7 @@ public class TMLModeling<E> {
                     }
                 }
             }
-            //System.out.println("After element: " + element + " usage=" + usage);
+            //TraceManager.addDev("After element: " + element + " usage=" + usage);
         }
         return usage;
     }
@@ -2173,14 +2239,14 @@ public class TMLModeling<E> {
         TMLReadChannel read = new TMLReadChannel("ReadOfFork", null);
         forkActivity.addElement(read);
         read.addChannel(_ch);
-        read.setNbOfSamples("1");
+        read.setNbOfSamples("" + _ch.getNumberOfSamples());
 
         TMLWriteChannel []writes = new TMLWriteChannel[nb];
 
         for(i=0; i<nb; i++) {
             writes[i] = new TMLWriteChannel("WriteOfFork" + SEP1 + i, null);
             writes[i].addChannel(chans[i]);
-            writes[i].setNbOfSamples("1");
+            writes[i].setNbOfSamples("" + _ch.getNumberOfSamples());
             forkActivity.addElement(writes[i]);
         }
 
@@ -2250,7 +2316,7 @@ public class TMLModeling<E> {
         TMLForLoop junction = new TMLForLoop("junctionOfFork", null);
         junction.setInit("fork" + SEP1 + "i=0");
         junction.setCondition("fork" + SEP1 + "i<1");
-        junction.setIncrement("fork" + SEP1 + "i=fork__i");
+        junction.setIncrement("fork" + SEP1 + "i=0");
         TMLAttribute attr = new TMLAttribute("fork" + SEP1 + "i", "fork" + SEP1 +"i", new TMLType(TMLType.NATURAL), "0");
         forkTask.addAttribute(attr);
         forkActivity.addElement(junction);
@@ -2368,13 +2434,13 @@ public class TMLModeling<E> {
         TMLWriteChannel write = new TMLWriteChannel("WriteOfJoin", null);
         joinActivity.addElement(write);
         write.addChannel(_ch);
-        write.setNbOfSamples("1");
+        write.setNbOfSamples("" + _ch.getNumberOfSamples());
 
         TMLReadChannel []reads = new TMLReadChannel[nb];
         for(i=0; i<nb; i++) {
             reads[i] = new TMLReadChannel("ReadOfJoin" + SEP1 + i, null);
             reads[i].addChannel(chans[i]);
-            reads[i].setNbOfSamples("1");
+            reads[i].setNbOfSamples("" + _ch.getNumberOfSamples());
             joinActivity.addElement(reads[i]);
         }
 

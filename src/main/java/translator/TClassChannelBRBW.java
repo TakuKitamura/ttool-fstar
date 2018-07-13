@@ -60,7 +60,7 @@ public class TClassChannelBRBW extends TClass {
     }
 
     public void makeTClass(int max, boolean _lossy, int _percentage, int _maxNbOfLoss) {
-        //System.out.println("toto1");
+        //
         
         Gate read, write, loss = null, notloss = null;
         ADActionStateWithGate acread, acwrite, aclost, acnotlost;

@@ -100,7 +100,7 @@ public  class TGConnectorLinkNode extends TGConnector {
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-        //System.out.println("Double click");
+        //
         String oldDelay = delay;
         String oldLossRate = lossRate;
         int oldImplementation = implementation;
@@ -111,7 +111,7 @@ public  class TGConnectorLinkNode extends TGConnector {
         updateListGateNode();
         Vector<ArtifactTClassGate> llist = leftListNotUsed();
         Vector<ArtifactTClassGate> rlist = rightListNotUsed();
-        //System.out.println("Vector size: l=" + llist.size() + " r=" + rlist.size());
+        //
         //Vector v = tdp.getAllNotSelectedGatesFromNode(list);
         
         JDialogLinkNode jdln = new JDialogLinkNode(frame, delay, lossRate, implementation, oport, dport, llist, rlist, list);
@@ -229,7 +229,7 @@ public  class TGConnectorLinkNode extends TGConnector {
     }
     
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-        //System.out.println("Extra");
+        //
         if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2)-maxWidthValue/2, ((p1.getY() + p2.getY()) / 2) - 11 - (values.length*h)/2, maxWidthValue, heightValue)) {
             return this;
         }
@@ -256,7 +256,7 @@ public  class TGConnectorLinkNode extends TGConnector {
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             
             NodeList nli;
@@ -267,12 +267,12 @@ public  class TGConnectorLinkNode extends TGConnector {
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
@@ -405,7 +405,7 @@ public  class TGConnectorLinkNode extends TGConnector {
     }
     
     private Vector<ArtifactTClassGate> listNotUsed(TGComponent tgc) {
-        //System.out.println("List not used, component=" + tgc.getName());
+        //
         Vector<ArtifactTClassGate> v = new Vector<>();
         if (tgc == null) {
             return v;
@@ -421,7 +421,7 @@ public  class TGConnectorLinkNode extends TGConnector {
         // list all artifacts of the node
         Vector listArtifacts = tdd.getArtifactList();
         
-        //System.out.println("list artifact size=" + listArtifacts.size());
+        //
         
         // For each artifact, we check whether it is free or not -> if yes, it is added to the list
         TDDArtifact tart;
@@ -430,7 +430,7 @@ public  class TGConnectorLinkNode extends TGConnector {
         for(int i=0; i<listArtifacts.size(); i++) {
             tart = (TDDArtifact)(listArtifacts.elementAt(i));
             listAtg = tart.getListOfATG();
-            //System.out.println("artifact=" + tart.getValue() + " nb of gates =" + listAtg.size());
+            //
             for(int j=0; j<listAtg.size(); j++) {
                 atg = (ArtifactTClassGate)(listAtg.elementAt(j));
                 //if (tdp.isFree(atg)) {
@@ -444,7 +444,7 @@ public  class TGConnectorLinkNode extends TGConnector {
     }
     
     public void loadExtraParamGate(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             
             NodeList nli;
@@ -457,14 +457,14 @@ public  class TGConnectorLinkNode extends TGConnector {
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
 
                     // Issue #17 copy-paste error on j index
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("infogate")) {

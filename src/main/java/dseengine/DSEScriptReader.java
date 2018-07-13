@@ -459,7 +459,7 @@ public class DSEScriptReader implements Runnable {
 	
 	public void run() {
 		int progression;
-		//System.out.println("Running progression");
+		//
 		while(config != null) {
 			try  {
 				Thread.currentThread().sleep(50);
@@ -468,7 +468,7 @@ public class DSEScriptReader implements Runnable {
 			try {
 				if (config != null) {
 					progression = config.getProgression();
-					//System.out.println("Printing progression= " + progression);
+					//
 					printProgression(progression);
 				}
 			} catch (Exception e) {

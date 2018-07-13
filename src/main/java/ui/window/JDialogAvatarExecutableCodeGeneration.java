@@ -292,7 +292,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         versionCodeGenerator.setSelectedIndex(selectedItem);
         versionCodeGenerator.addActionListener(this);
         jp01.add(versionCodeGenerator, c01);
-        //System.out.println("selectedItem=" + selectedItem);
+        //
 
         //devmode = new JCheckBox("Development version of the simulator");
         //devmode.setSelected(true);
@@ -628,7 +628,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
                     testGo();
 
                     selectedUnit = units.getSelectedIndex();
-                    //System.out.println("Selected item=" + selectedItem);
+                    //
                     AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
 
                     // Generating code
@@ -772,7 +772,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
             testGo();
 
             selectedUnit = units.getSelectedIndex();
-            //System.out.println("Selected item=" + selectedItem);
+            //
             AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
 
             // Generating code
@@ -893,7 +893,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         checkMode();
         setButtons();
 
-        //System.out.println("Selected item=" + selectedItem);
+        //
     }
 
     protected void processCmd(String cmd, JTextArea _jta) throws LauncherException {

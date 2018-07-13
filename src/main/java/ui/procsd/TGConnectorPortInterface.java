@@ -69,7 +69,7 @@ public class TGConnectorPortInterface extends TGConnectorAttribute{
 	
 	public boolean actionOnAdd()
 	{
-		//System.out.println("Added: connector from  "+p1.getFather().toString()+" to "+p2.getFather().toString() );
+		//
 		
 		ProCSDInterface theInterface=null;
 		ProCSDPort thePort=null;
@@ -90,7 +90,7 @@ public class TGConnectorPortInterface extends TGConnectorAttribute{
 		if ( (thePort==null)||(theInterface==null) ) return false;
 		
 	
-	//	System.out.println("Added: connector from  "+thePort.toString()+" to "+theInterface.toString() );
+	//	
 		thePort.setMyInterface(theInterface);
 		
 		theInterface.setMyConnector(this);
@@ -149,12 +149,12 @@ public class TGConnectorPortInterface extends TGConnectorAttribute{
 	            
 	            for(int i=0; i<nl.getLength(); i++) {
 	                n1 = nl.item(i);
-	                //System.out.println(n1);
+	                //
 	                if (n1.getNodeType() == Node.ELEMENT_NODE) {
 	                    nli = n1.getChildNodes();
 	                    for(int j=0; j<nli.getLength(); j++) {
 	                        n2 = nli.item(j);
-	                        //System.out.println(n2);
+	                        //
 	                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
 	                            elt = (Element) n2;
 	                            

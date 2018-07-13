@@ -36,22 +36,16 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
 import ui.avatardd.ADDMemoryNode;
+import ui.avatardd.ADDRAMNode;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-//import javax.swing.event.*;
-//import java.util.*;
-
 
 /**
  * Class JDialogADDMemoryNode
@@ -60,13 +54,17 @@ import java.awt.event.ActionListener;
  * @version 1.0 21/08/2014
  * @author Ludovic APVRILLE
  */
+
 public class JDialogADDMemoryNode extends JDialogBase implements ActionListener  {
 
     //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
     private static String[] tracemodeTab = {"VCI logger","VCI stats"};
     private boolean regularClose;
     
-    private JPanel panel2;
+    private JPanel panel2, panel3;
+    private JTabbedPane tabbedPane;
+	private JTextArea processCodeTextArea;
+	private String finalString;
     private Frame frame;
     private ADDMemoryNode node;
     
@@ -81,18 +79,91 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
     protected JTextField dataSize;
     protected JTextField monitored;	
     
+    private String memoryName;
+    
     /** Creates new form  */
     public JDialogADDMemoryNode(Frame _frame, String _title, ADDMemoryNode _node) {
         super(_frame, _title, true);
         frame = _frame;
         node = _node;
+        memoryName = _title.split(" ")[1];
         
         initComponents();
         myInitComponents();
         pack();
     }
     
-    private void myInitComponents() {
+    private void myInitComponents() {}
+    
+    public StringBuffer encode(String data) {
+    	StringBuffer databuf = new StringBuffer(data);
+    	StringBuffer buffer = new StringBuffer("");
+    	int endline = 0;
+    	int nb_arobase = 0;
+    	int condition = 0;
+    	
+        for(int pos = 0; pos != data.length(); pos++) {
+        	char c = databuf.charAt(pos);
+            switch(c) {
+                case '\n' :
+                	break;
+                case '\t' :
+                	break;
+                case '{'  : 
+                	buffer.append("{\n"); 
+                	endline = 1;
+                	nb_arobase++;
+                	break;
+                case '}'  : 
+                	if (nb_arobase == 1) {
+                		buffer.append("}\n"); 
+                		endline = 0;
+                	} else {
+                		int i = nb_arobase;
+                		while (i >= 1) {
+                			buffer.append("\t");
+                			i--;
+                		}
+                		buffer.append("}\n"); 
+                		endline = 1;
+                	}
+                	nb_arobase--;
+                	break;
+                case ';'  :
+                	if (condition == 1) {
+                		buffer.append(";");
+                	} else {
+                		buffer.append(";\n");
+                		endline = 1;
+                	}
+                	break;
+                case ' '  :
+                	if (endline == 0) {
+                		buffer.append(databuf.charAt(pos)); 
+                	}
+                	break;
+                case '(' :
+                	buffer.append("(");
+                	condition = 1;
+                	break;
+                case ')' :
+                	buffer.append(")");
+                	condition = 0;
+                	break;
+                default   : 
+                	if (endline == 1) {
+                		endline = 0;
+                		int i = nb_arobase;
+                		while (i >= 1) {
+                			buffer.append("\t");
+                			i--;
+                		}
+                	}
+                	buffer.append(databuf.charAt(pos)); 
+                	break;
+            }
+        }
+        return buffer;
     }
     
     private void initComponents() {
@@ -109,11 +180,23 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
+        if (memoryName.equals("RAM")) {
+			panel3 = new JPanel();
+	        panel3.setLayout(new BorderLayout());
+			panel3.setBorder(new javax.swing.border.TitledBorder("C Code"));
+			panel3.setPreferredSize(new Dimension(400, 200));
+        }
         
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Memory attributes"));
         panel2.setPreferredSize(new Dimension(400, 200));
+        
+        if (memoryName.equals("RAM")) {
+        	tabbedPane = new JTabbedPane();
+        	tabbedPane.add("Attributes", panel2);
+			tabbedPane.add("C Code", panel3);
+        }
         
 		c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -126,14 +209,12 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
 		panel2.add(nodeName, c1);
- 
         
         c2.gridwidth = 1;
         c2.gridheight = 1;
         c2.weighty = 1.0;
         c2.weightx = 1.0;
         c2.fill = GridBagConstraints.HORIZONTAL;
-      
         
         c2.gridwidth = 1;
         panel2.add(new JLabel("Index:"), c2);
@@ -147,27 +228,54 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
         dataSize = new JTextField(""+node.getDataSize(), 15);
         panel2.add(dataSize, c2);
         
-	/*		c2.gridwidth = 1;
+        /*c2.gridwidth = 1;
         panel2.add(new JLabel("Monitored:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         monitored = new JTextField(""+node.getMonitored(), 15);
         panel2.add(monitored, c2);*/
 
-	c2.gridwidth = 1;
+        c2.gridwidth = 1;
         panel2.add(new JLabel("Monitored:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
-	tracemode = new JComboBox<>(tracemodeTab);
+        tracemode = new JComboBox<>(tracemodeTab);
         tracemode.setSelectedIndex(selectedTracemode);
         tracemode.addActionListener(this);
         panel2.add(tracemode, c2);
+        
+        if (memoryName.equals("RAM")) {
+			panel3.add(new JLabel("Behavior function of RAM : "), BorderLayout.NORTH);
+			StringBuffer stringbuf = encode(node.getProcessCode());
+			String beginString = stringbuf.toString();
+			finalString = beginString.replaceAll("\t}", "}");
+			
+			processCodeTextArea = new JTextArea(finalString);
+			processCodeTextArea.setSize(100, 100);
+			processCodeTextArea.setTabSize(2);
+	
+			processCodeTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
+			processCodeTextArea.setLineWrap(true);
+			processCodeTextArea.setWrapStyleWord(true);
+	
+			JScrollPane processScrollPane = new JScrollPane(processCodeTextArea);
+			processScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			processScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+			processScrollPane.setPreferredSize(new Dimension(200, 150));
+	
+			panel3.add(processScrollPane, BorderLayout.SOUTH);
+        }
         
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c.add(panel2, c0);
+        
+        if (memoryName.equals("RAM")) {
+            c.add(tabbedPane, c0);
+    	} else {
+    		c.add(panel2, c0);
+    	}
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
@@ -177,16 +285,20 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
     }
     
     public void	actionPerformed(ActionEvent evt)  {
-       /* if (evt.getSource() == typeBox) {
+    	/*if (evt.getSource() == typeBox) {
             boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
             initialValue.setEnabled(b);
             return;
         }*/
-	if (evt.getSource() == tracemode) {
-           selectedTracemode = tracemode.getSelectedIndex();                   
-	}
+		if (evt.getSource() == tracemode) {
+	           selectedTracemode = tracemode.getSelectedIndex();                   
+		}
         
         String command = evt.getActionCommand();
+        
+        if (memoryName.equals("RAM")) {
+        	node.setProcessCode(processCodeTextArea.getText());
+        }
         
         // Compare the action command to the known actions.
         if (command.equals("Save and Close"))  {
@@ -222,10 +334,8 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
     }
 
     public int getMonitored() {
-	//return tracemodeTab[tracemode.getSelectedIndex()];
-	return tracemode.getSelectedIndex();
+    	//return tracemodeTab[tracemode.getSelectedIndex()];
+    	return tracemode.getSelectedIndex();
         //return monitored.getText();
     }
-    
-    
 }

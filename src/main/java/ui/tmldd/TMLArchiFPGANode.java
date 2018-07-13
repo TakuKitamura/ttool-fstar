@@ -154,7 +154,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
 
         // Icon
         g.drawImage(IconManager.imgic1120.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 
     public TGComponent isOnOnlyMe(int x1, int y1) {
@@ -419,7 +419,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
 
             NodeList nli;
@@ -430,7 +430,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1); if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
+                //
 
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
@@ -438,7 +438,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
                     // Issue #17 copy-paste error on j index
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {

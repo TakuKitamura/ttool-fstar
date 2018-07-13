@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "debug.h"
+#include "include/debug.h"
 
 
 #define DEBUG_ON 1

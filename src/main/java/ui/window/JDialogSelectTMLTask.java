@@ -105,7 +105,7 @@ public class JDialogSelectTMLTask extends JDialogBase implements ActionListener,
         
         for(int i=0; i<list.size(); i++) {
             tgc = list.get(i);
-            //System.out.println(tgc);
+            //
             if (tgc instanceof TMLTaskOperator) {
                 v.addElement(tgc);
             }
@@ -135,7 +135,7 @@ public class JDialogSelectTMLTask extends JDialogBase implements ActionListener,
             
             if ((tgc instanceof TMLTaskOperator) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
                 added.addElement(tgc);
-                //System.out.println("New element");
+                //
             }
         }
     }

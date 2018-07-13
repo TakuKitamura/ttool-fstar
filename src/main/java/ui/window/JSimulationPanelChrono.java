@@ -93,7 +93,7 @@ public class JSimulationPanelChrono extends JPanel implements JSimulationPanelIn
         
         trace = _trace;
         size = trace.size();
-        //System.out.println("We've got " + size + " actions t odisplay");
+        //
         
         maxAction = calculateMaxAction();
         

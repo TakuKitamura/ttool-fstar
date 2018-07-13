@@ -80,7 +80,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     }
 
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        //System.out.println("Action");
+        //
         /*if (tgc instanceof TCDTClass) {
           TCDTClass t = (TCDTClass)tgc;
           return mgui.newTClassName(tp, t.oldValue, t.getValue());
@@ -102,7 +102,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           TCDTClass tgcc = (TCDTClass)(tgc);
-          //System.out.println(" *** add tclass *** name=" + tgcc.getClassName());
+          //
           mgui.addTClass(tp, tgcc.getClassName());
           return true;
           }*/
@@ -118,6 +118,46 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
           }*/
         return false;
     }
+    
+    
+	public void replaceArchComponent(TGComponent tgc, TGComponent newtgc){
+		fatherOfRemoved = tgc.getFather();
+
+        for (TGComponent t : this.componentList) {
+            if (t == tgc) {  
+                //Reroute connectors to new component
+            	for (int i = 0; i < tgc.getNbConnectingPoint(); i++) {
+            		TGConnectingPoint cp = tgc.tgconnectingPointAtIndex(i);
+            		Iterator<TGComponent> iterator = this.componentList.iterator();
+            		while (iterator.hasNext()) {
+
+                		TGComponent tconn = iterator.next();
+                		if (tconn instanceof TMLArchiConnectorNode) {
+                    		TMLArchiConnectorNode tgcon = (TMLArchiConnectorNode) tconn;
+                    		if (cp == tgcon.getTGConnectingPointP1()){
+                    			tgcon.setP1(newtgc.findFirstFreeTGConnectingPoint(true, true));
+                    			tgcon.getTGConnectingPointP1().setFree(false);
+                    		}
+                    		if (cp == tgcon.getTGConnectingPointP2()) {
+                    			tgcon.setP2(newtgc.findFirstFreeTGConnectingPoint(true, true));
+                 			    tgcon.getTGConnectingPointP2().setFree(false);
+                        	}
+                       	}
+                    }
+                }
+            }
+       }
+                
+       componentList.remove(tgc);
+       actionOnRemove(tgc);
+       tgc.actionOnRemove();
+       componentList.add(newtgc);
+       actionOnRemove(newtgc);
+       newtgc.actionOnRemove();
+       return;
+         
+        
+	}
 
     public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
@@ -174,25 +214,25 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 
     public void loadExtraParameters(Element elt) {
         String s;
-        //System.out.println("Extra parameter");
+        //
         try {
             s = elt.getAttribute("attributes");
-            //System.out.println("S=" + s);
+            //
             int attr = Integer.decode(s).intValue();
             setAttributes(attr % 3);
         } catch (Exception e) {
             // Model was saved in an older version of TTool
-            //System.out.println("older format");
+            //
             setAttributes(0);
         }
 
         try {
             s = elt.getAttribute("masterClockFrequency");
-            //System.out.println("S=" + s);
+            //
             masterClockFrequency = Math.abs(Integer.decode(s).intValue());
         } catch (Exception e) {
             // Model was saved in an older version of TTool
-            //System.out.println("older format");
+            //
             masterClockFrequency = 200;
         }
     }
@@ -302,10 +342,10 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
             if ((node instanceof TMLArchiCPUNode) || (node instanceof TMLArchiHWANode)) {
                 if (node instanceof TMLArchiCPUNode) {
                     v =  ((TMLArchiCPUNode)(node)).getArtifactList();
-                    //System.out.println("CPU:" + node.getName() +  " v:" + v.size());
+                    //
                 } else {
                     v =  ((TMLArchiHWANode)(node)).getArtifactList();
-                    //System.out.println("HWA:" + node.getName() + " v:" + v.size());
+                    //
                 }
 
                 for(i=0; i<v.size(); i++) {

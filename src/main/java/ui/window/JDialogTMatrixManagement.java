@@ -213,7 +213,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
 
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
-        //System.out.println("Actions");
+        //
 
         // Compare the action command to the known actions.
         if (command.equals("Check")) {
@@ -508,7 +508,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
         private void checkForPopup(MouseEvent e) {
             if (e.isPopupTrigger()) {
                 Component c = e.getComponent();
-                //System.out.println("e =" + e + " Component=" + c);
+                //
                 updateMenu(e.getPoint());
                 menu.show(c, e.getX(), e.getY());
             }
@@ -540,7 +540,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
 
 
         private void updateMenu(Point p) {
-            //System.out.println("UpdateMenu index=" + index);
+            //
             jtable = jdtmm.getJTable();
             // None is selected -> everything is set to pointed row
 

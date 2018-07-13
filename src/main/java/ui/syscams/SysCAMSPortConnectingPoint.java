@@ -59,6 +59,6 @@ public class SysCAMSPortConnectingPoint extends TGConnectingPointWidthHeight{
     }
     
     public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_PORT_TMLC;
+        return type == TGComponentManager.CAMS_CONNECTOR;
     }
 }

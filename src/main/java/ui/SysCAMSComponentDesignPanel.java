@@ -42,7 +42,6 @@ package ui;
 import myutil.GraphicLib;
 import ui.syscams.*;
 import ui.util.IconManager;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -51,7 +50,7 @@ import java.util.Vector;
 
 /**
  * Class SysCAMSComponentDesignPanel 
- * Managenemt of SystemC-AMS component-based design panels 
+ * Management of SystemC-AMS component-based design panels 
  * Creation: 22/04/2018
  * @version 1.0 22/04/2018
  * @author Irina Kit Yan LEE
@@ -67,12 +66,9 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 	public SysCAMSComponentDesignPanel(MainGUI _mgui) {
 		super(_mgui);
 
-		// Issue #41 Ordering of tabbed panes
-		tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+		tabbedPane = GraphicLib.createTabbedPane();
 
 		cl = new ChangeListener() {
-
-			@Override
 			public void stateChanged(ChangeEvent e) {
 				mgui.paneDesignAction(e);
 			}
@@ -81,36 +77,11 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 		tabbedPane.addChangeListener(cl);
 		tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
 
-		// Issue #41: Ordering of tabbed panes
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 	}
 
 	public void init() {
-
-		// Toolbar
-		SysCAMSComponentTaskDiagramToolBar toolBarSysCAMS = new SysCAMSComponentTaskDiagramToolBar(mgui);
-		toolbars.add(toolBarSysCAMS);
-
-		toolBarPanel = new JPanel();
-		toolBarPanel.setLayout(new BorderLayout());
-
-		// Diagram
-		syscamsctdp = new SysCAMSComponentTaskDiagramPanel(mgui, toolBarSysCAMS);
-		syscamsctdp.setName("SystemC-AMS Component Diagram");
-		syscamsctdp.tp = this;
-		tdp = syscamsctdp;
-		panels.add(syscamsctdp); // Always first in list
-		JScrollDiagramPanel jsp = new JScrollDiagramPanel(syscamsctdp);
-		syscamsctdp.jsp = jsp;
-		jsp.setWheelScrollingEnabled(true);
-		jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-		toolBarPanel.add(toolBarSysCAMS, BorderLayout.NORTH);
-		toolBarPanel.add(jsp, BorderLayout.CENTER);
-		tabbedPane.addTab("SystemC-AMS Component Diagram", IconManager.imgic1208, toolBarPanel,
-				"Opens SysCAMS component diagram");
-		tabbedPane.setSelectedIndex(0);
-
-		mgui.changeMade(syscamsctdp, TDiagramPanel.NEW_COMPONENT);
+		mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
 	}
 
 	public String saveHeaderInXml(String extensionToName) {
@@ -135,33 +106,9 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 	public SysCAMSBlockDE getBlockDEComponentByName(String _name) {
 		return syscamsctdp.getBlockDEComponentByName(_name);
 	}
-	//
-	// public String[] getCompOutChannels(){
-	// return syscamsctdp.getCompOutChannels();
-	// }
-	//
-	// public String[] getCompInChannels(){
-	// return syscamsctdp.getCompInChannels();
-	// }
-	//
-	// public java.util.List<String> getAllSysCAMSCommunicationNames(String _name) {
-	// return syscamsctdp.getAllSysCAMSCommunicationNames(_name);
-	// }
-	//
-	// public java.util.List<String> getAllSysCAMSInputPorts( String _name ) {
-	// return syscamsctdp.getAllSysCAMSInputPorts( _name );
-	// }
 
 	public java.util.List<String> getAllCompositeComponent(String _name) {
 		return syscamsctdp.getAllCompositeComponent(_name);
-	}
-
-	public Vector<String> getAllSysCAMSTasksAttributes() {
-		return syscamsctdp.getAllSysCAMSTasksAttributes();
-	}
-
-	public java.util.List<String> getAllSysCAMSTaskNames(String _name) {
-		return syscamsctdp.getAllSysCAMSTaskNames(_name);
 	}
 
 	public String[] getAllOutTDF(String nameOfComponent) {
@@ -178,5 +125,50 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 
 	public String[] getAllInDE(String nameOfComponent) {
 		return syscamsctdp.getAllInDE(nameOfComponent);
+	}
+
+	public boolean canFirstDiagramBeMoved() {
+		return true;
+	}
+
+	public boolean removeEnabled(int index) {
+		return panels.size() > 1;
+	}
+
+	public boolean renameEnabled(int index) {
+		if (panels.size() == 0) {
+			return false;
+		}
+		return (panels.elementAt(index) instanceof SysCAMSComponentTaskDiagramPanel);
+	}
+
+	public boolean isSystemCAMSEnabled() {
+		return true;
+	}
+
+	public boolean addSysCAMS(String s) {
+		SysCAMSComponentTaskDiagramToolBar ardtb = new SysCAMSComponentTaskDiagramToolBar(mgui);
+		toolbars.add(ardtb);
+
+		toolBarPanel = new JPanel();
+		toolBarPanel.setLayout(new BorderLayout());
+
+		syscamsctdp = new SysCAMSComponentTaskDiagramPanel(mgui, ardtb);
+		syscamsctdp.setName(s);
+		syscamsctdp.tp = this;
+		tdp = syscamsctdp;
+		panels.add(syscamsctdp);
+		JScrollDiagramPanel jsp = new JScrollDiagramPanel(syscamsctdp);
+		syscamsctdp.jsp = jsp;
+		jsp.setWheelScrollingEnabled(true);
+		jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+		toolBarPanel.add(ardtb, BorderLayout.NORTH);
+		toolBarPanel.add(jsp, BorderLayout.CENTER);
+		tabbedPane.addTab(s, IconManager.imgic84, toolBarPanel, "Opens SysCAMS component diagram");
+		tabbedPane.setSelectedIndex(0);
+		JPanel toolBarPanel = new JPanel();
+		toolBarPanel.setLayout(new BorderLayout());
+
+		return true;
 	}
 }

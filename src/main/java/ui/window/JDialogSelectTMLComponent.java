@@ -134,7 +134,7 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
 
         for (int i = 0; i < list.size(); i++) {
             tgc = list.get(i);
-            //System.out.println(tgc);
+            //
             if (tgc instanceof TMLCPrimitiveComponent) {
                 v.addElement(tgc);
             }
@@ -163,7 +163,7 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
 
             if ((tgc instanceof TMLCPrimitiveComponent) && (!added.contains(tgc)) && (!notSource.contains(tgc))) {
                 added.addElement(tgc);
-                //System.out.println("New element");
+                //
             }
         }
     }

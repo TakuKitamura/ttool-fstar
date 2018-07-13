@@ -125,7 +125,7 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicE
 		
         //g.drawRoundRect(x, y, width, height, arc, arc);
 		Color c = g.getColor();
-		//System.out.println("Color=" + c);
+		//
 		
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);

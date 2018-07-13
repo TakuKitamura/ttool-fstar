@@ -37,24 +37,30 @@ namespace soclib { namespace caba {
 
 ////////////////////////////
 template<typename vci_param>
-VciVgsb<vci_param>::VciVgsb (	sc_module_name 		name,
-                        	MappingTable 		&maptab,
-                        	size_t 			nb_master,
-                        	size_t 			nb_slave)
+VciVgsb<vci_param>::VciVgsb ( sc_module_name    name,
+                       	      MappingTable      &maptab,
+                              size_t            nb_master,
+                              size_t            nb_target,
+                              size_t            default_target_id )
     : sc_core::sc_module(name),
-      r_fsm("r_fsm"),
-      r_initiator_index("r_initiator_index"),
-      r_target_index("r_target_index"),
-      r_vci_counter(soclib::common::alloc_elems<sc_signal<uint32_t> >("r_vci_counter", nb_master, nb_slave)),
-      r_cycle("r_cycle"),
-      m_routing_table(maptab.getRoutingTable( IntTab() ) ),
-      m_nb_initiator(nb_master),
-      m_nb_target(nb_slave),
-      p_clk("clk"),
-      p_resetn("resetn"),
-      p_to_target(soclib::common::alloc_elems<soclib::caba::VciInitiator<vci_param> >("p_to_target", nb_slave)),
-      p_to_initiator(soclib::common::alloc_elems<soclib::caba::VciTarget<vci_param> >("p_to_initiator", nb_master))
+      r_fsm( "r_fsm" ),
+      r_initiator_index( "r_initiator_index" ),
+      r_target_index( "r_target_index" ),
+      r_vci_counter(alloc_elems<sc_signal<uint32_t> >("r_vci_counter", nb_master, nb_target)),
+      r_cycle( "r_cycle" ),
+      m_routing_table( maptab.getGlobalIndexFromAddress( default_target_id) ),
+      m_nb_initiator( nb_master ),
+      m_nb_target( nb_target ),
+      p_clk( "clk" ),
+      p_resetn( "resetn" ),
+      p_to_target( alloc_elems<VciInitiator<vci_param> >("p_to_target", nb_target) ),
+      p_to_initiator( alloc_elems<VciTarget<vci_param> >("p_to_initiator", nb_master) )
 {
+    std::cout << "  - Building VciVgsb : " << name << std::dec << std::endl
+              << "    => targets        = "  << nb_target << std::endl
+              << "    => initiators     = "  << nb_master << std::endl
+              << "    => default target = "  << default_target_id << std::endl;
+
 	SC_METHOD(transition);
 	dont_initialize();
 	sensitive << p_clk.pos();
@@ -62,7 +68,7 @@ VciVgsb<vci_param>::VciVgsb (	sc_module_name 		name,
 	SC_METHOD(genMealy_rspval);
 	dont_initialize();
 	sensitive << p_clk.neg();
-	for ( size_t i=0 ; i<nb_slave  ; i++ ) sensitive << p_to_target[i];
+	for ( size_t i=0 ; i<nb_target  ; i++ ) sensitive << p_to_target[i];
 
 	SC_METHOD(genMealy_rspack);
 	dont_initialize();
@@ -77,9 +83,9 @@ VciVgsb<vci_param>::VciVgsb (	sc_module_name 		name,
 	SC_METHOD(genMealy_cmdack);
 	dont_initialize();
 	sensitive << p_clk.neg();
-	for ( size_t i=0 ; i<nb_slave  ; i++ ) sensitive << p_to_target[i];
+	for ( size_t i=0 ; i<nb_target  ; i++ ) sensitive << p_to_target[i];
 
-	if ( !m_routing_table.isAllBelow( nb_slave ) ) {
+	if ( !m_routing_table.isAllBelow( nb_target ) ) {
 		std::cout << "error in vci_gsb component" << std::endl;
 		std::cout << "one target index is larger than the number of targets" << std::endl;
 		exit(0);

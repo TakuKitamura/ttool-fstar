@@ -168,7 +168,7 @@ public class ProactiveDesignPanel extends TURTLEPanel {
 //    	for (int k=0;k<panels.size();k++)
 //    	{
 //    		TDiagramPanel tg=(TDiagramPanel)panels.get(k);
-//    		//System.out.println(tg.toString()+"\n");
+//    		//
 //    	}
     	
         // Ensure that s is unique

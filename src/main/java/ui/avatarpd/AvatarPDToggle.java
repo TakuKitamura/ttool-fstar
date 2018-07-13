@@ -97,17 +97,17 @@ public abstract class  AvatarPDToggle extends TGCScalableWithInternalComponent {
 		int w2 = g.getFontMetrics().stringWidth(getFullToggle());
 		w2 = Math.max(w, (int)((w2 + 4)/(1-decXToggle)));
 		int w1 = Math.max((int)(minWidth*tdp.getZoom()), w2 + 2 * textX );
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
+        //
         if (w1 != width) { 
             width = w1;
             resizeWithFather();
         }
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
+        //
     }
     
     public void resizeWithFather() {
         if ((father != null) && (father instanceof AvatarPDBlock)) {
-            //System.out.println("cdRect comp");
+            //
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
             setMoveCd(x, y);
@@ -162,21 +162,21 @@ public abstract class  AvatarPDToggle extends TGCScalableWithInternalComponent {
 			
 			valueChanged = true;
             
-            //System.out.println("Loading attributes");
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Toggle")) {
-                                //System.out.println("Analyzing attribute");
+                                //
 								
                                 s = elt.getAttribute("value");
 								if (s!=null) {

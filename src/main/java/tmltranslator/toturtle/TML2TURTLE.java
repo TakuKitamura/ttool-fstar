@@ -37,16 +37,12 @@
  */
 
 
-
-
-
 package tmltranslator.toturtle;
 
 import myutil.Conversion;
 import myutil.TraceManager;
 import tmltranslator.*;
 import translator.*;
-import translator.CheckingError;
 
 import java.util.Iterator;
 import java.util.Vector;
@@ -55,8 +51,9 @@ import java.util.Vector;
 /**
  * Class TML2TURTLE
  * Creation: 01/12/2005
- * @version 1.0 01/12/2005
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 01/12/2005
  */
 public class TML2TURTLE {
 
@@ -64,7 +61,7 @@ public class TML2TURTLE {
 
     private static String nameChannelNBRNBW = "ChannelNBRNBW__";
     private static String nameChannelBRNBW = "ChannelBRNBW__";
-  //  private static String nameChannelBRBW = "ChannelBRBW__";
+    //  private static String nameChannelBRBW = "ChannelBRBW__";
 
     private static String nameEvent = "Event__";
 
@@ -77,7 +74,7 @@ public class TML2TURTLE {
     private int nbClass;
 
     public TML2TURTLE(TMLModeling<?> _tmlmodeling) {
-        //System.out.println("New TURTLE modeling");
+        //TraceManager.addDev("New TURTLE modeling");
         tmlmodeling = _tmlmodeling;
     }
 
@@ -87,7 +84,7 @@ public class TML2TURTLE {
 
 
     public TURTLEModeling generateTURTLEModeling() {
-        //System.out.println("generate TM");
+        //TraceManager.addDev("generate TM");
         tmlmodeling.removeAllRandomSequences();
 
         tm = new TURTLEModeling();
@@ -115,13 +112,13 @@ public class TML2TURTLE {
         TMLTask task;
         TClass tcl;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             task = iterator.next();
 
             tcl = new TClass(task.getName(), true);
             tm.addTClass(tcl);
             tcl.setActivityDiagram(new ActivityDiagram());
-            nbClass ++;
+            nbClass++;
             makeAttributes(task, tcl);
         }
     }
@@ -134,36 +131,36 @@ public class TML2TURTLE {
         TClassChannelBRBW tch3;
         String name;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             channel = iterator.next();
             name = getChannelString(channel);
-            switch(channel.getType()) {
-            case TMLChannel.BRNBW:
-                tch1 = new TClassChannelBRNBW(name, channel.getName());
-                tch1.makeTClass(channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
-                tm.addTClass(tch1);
-                break;
-            case TMLChannel.BRBW:
-                tch3 = new TClassChannelBRBW(name, channel.getName());
-                tch3.makeTClass(channel.getMax(), channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
-                tm.addTClass(tch3);
-                break;
-            default:
-                tch2 = new TClassChannelNBRNBW(name, channel.getName());
-                tch2.makeTClass(channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
-                tm.addTClass(tch2);
+            switch (channel.getType()) {
+                case TMLChannel.BRNBW:
+                    tch1 = new TClassChannelBRNBW(name, channel.getName());
+                    tch1.makeTClass(channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
+                    tm.addTClass(tch1);
+                    break;
+                case TMLChannel.BRBW:
+                    tch3 = new TClassChannelBRBW(name, channel.getName());
+                    tch3.makeTClass(channel.getMax(), channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
+                    tm.addTClass(tch3);
+                    break;
+                default:
+                    tch2 = new TClassChannelNBRNBW(name, channel.getName());
+                    tch2.makeTClass(channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
+                    tm.addTClass(tch2);
             }
         }
     }
 
     private String getChannelString(TMLChannel channel) {
         String name;
-        switch(channel.getType()) {
-        case TMLChannel.BRNBW:
-            name = nameChannelBRNBW + channel.getName();
-            break;
-        default:
-            name = nameChannelNBRNBW + channel.getName();
+        switch (channel.getType()) {
+            case TMLChannel.BRNBW:
+                name = nameChannelBRNBW + channel.getName();
+                break;
+            default:
+                name = nameChannelNBRNBW + channel.getName();
         }
         return name;
     }
@@ -175,7 +172,7 @@ public class TML2TURTLE {
         TClassEventFinite tcef;
         TClassEventFiniteBlocking tcefb;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             event = iterator.next();
             TraceManager.addDev("Making event");
             if (event.isInfinite()) {
@@ -219,11 +216,11 @@ public class TML2TURTLE {
         Iterator<TMLTask> ite;
         TMLTask task;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             request = iterator.next();
             tcr = new TClassRequest(nameRequest + request.getName(), request.getName(), request.getNbOfParams());
             ite = request.getOriginTasks().listIterator();
-            while(ite.hasNext()) {
+            while (ite.hasNext()) {
                 task = ite.next();
                 tcr.addWriteGate(task.getName());
             }
@@ -236,11 +233,11 @@ public class TML2TURTLE {
     private void createADOfTClasses() {
         TClass t;
 
-        for(int i=0; i<nbClass; i++) {
+        for (int i = 0; i < nbClass; i++) {
             t = tm.getTClassAtIndex(i);
-            //System.out.println("Create AD");
+            //TraceManager.addDev("Create AD");
             createADOfTClass(t, tmlmodeling.getTasks().get(i));
-            //System.out.println("End create AD");
+            //TraceManager.addDev("End create AD");
         }
     }
 
@@ -249,15 +246,15 @@ public class TML2TURTLE {
         Vector<ADComponent> newElements = new Vector<ADComponent>(); // elements of AD
         Vector<TMLActivityElement> baseElements = new Vector<TMLActivityElement>(); // elements of basic task
 
-        //System.out.println("Making AD of " + tclass.getName());
+        //TraceManager.addDev("Making AD of " + tclass.getName());
         translateAD(newElements, baseElements, tclass, task, task.getActivityDiagram().getFirst(), null, null);
 
         // DANGER: if task may be requested, the AD must be modified!!!!
-        //System.out.println("task requested?");
+        //TraceManager.addDev("task requested?");
         if (task.isRequested()) {
             setADRequested(tclass, task);
         }
-        //System.out.println("end task requested?");
+        //TraceManager.addDev("end task requested?");
 
         setGatesToTask(tclass, task);
     }
@@ -299,13 +296,13 @@ public class TML2TURTLE {
 
         // START STATE
 
-        //System.out.println("Call to TMLE=" + tmle.toString());
+        //TraceManager.addDev("Call to TMLE=" + tmle.toString());
         try {
 
             if (tmle instanceof TMLStartState) {
                 adc = tclass.getActivityDiagram().getStartState();
                 baseElements.add(tmle);
-                newElements.add( adc );
+                newElements.add(adc);
                 adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adc, adjunc);
                 adc.addNext(adc1);
                 return adc;
@@ -320,7 +317,7 @@ public class TML2TURTLE {
 
                 // EXECIInterval
             } else if (tmle instanceof TMLActionState) {
-                action = ((TMLActionState)tmle).getAction();
+                action = ((TMLActionState) tmle).getAction();
                 // Eliminate cout <<
                 if (printAnalyzer(action)) {
                     adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous, adjunc);
@@ -346,20 +343,20 @@ public class TML2TURTLE {
 
                 // CHOICE
             } else if (tmle instanceof TMLChoice) {
-                //System.out.println("TML Choice!");
-                tmlchoice = (TMLChoice)tmle;
+                //TraceManager.addDev("TML Choice!");
+                tmlchoice = (TMLChoice) tmle;
                 adchoice = new ADChoice();
                 newElements.add(adchoice);
                 baseElements.add(tmle);
                 tclass.getActivityDiagram().add(adchoice);
 
-                //System.out.println("Get guards nb=" + tmlchoice.getNbGuard());
+                //TraceManager.addDev("Get guards nb=" + tmlchoice.getNbGuard());
                 //String guard = "";
 
-                if (tmlchoice.getNbGuard() !=0 ) {
+                if (tmlchoice.getNbGuard() != 0) {
                     int index1 = tmlchoice.getElseGuard(), index2 = tmlchoice.getAfterGuard();
                     if (index2 != -1) {
-                        //System.out.println("Managing after");
+                        //TraceManager.addDev("Managing after");
                         adj = new ADJunction();
                         adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(index2), adchoice, adj);
                         tclass.getActivityDiagram().add(adj);
@@ -367,10 +364,10 @@ public class TML2TURTLE {
                         adj = adjunc;
                     }
 
-                    for(i=0; i<tmlchoice.getNbGuard(); i++) {
-                        //System.out.println("Get guards i=" + i);
-                        //System.out.println("ADjunc=" + adjunc);
-                        if (i==index1) {
+                    for (i = 0; i < tmlchoice.getNbGuard(); i++) {
+                        //TraceManager.addDev("Get guards i=" + i);
+                        //TraceManager.addDev("ADjunc=" + adjunc);
+                        if (i == index1) {
                             /* else guard */
                             action = modifyString(tmlchoice.getValueOfElse());
                         } else {
@@ -383,9 +380,9 @@ public class TML2TURTLE {
                         }
                         adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i), adchoice, adj);
                         if (adc1 == null) {
-                            //System.out.println("Null adc1");
+                            //TraceManager.addDev("Null adc1");
                         } else {
-                            //System.out.println("adc1 = " +adc1);
+                            //TraceManager.addDev("adc1 = " +adc1);
                         }
                         g = tclass.addNewGateIfApplicable("branching");
                         adag = new ADActionStateWithGate(g);
@@ -395,19 +392,19 @@ public class TML2TURTLE {
                         adchoice.addGuard(action);
                         adchoice.addNext(adag);
                     }
-                    //System.out.println("Return adchoice ...");
+                    //TraceManager.addDev("Return adchoice ...");
                     return adchoice;
                 } else {
                     return endOfActivity(newElements, baseElements, tclass, adjunc);
                 }
 
             } else if (tmle instanceof TMLSelectEvt) {
-                tmlselectevt = (TMLSelectEvt)(tmle);
+                tmlselectevt = (TMLSelectEvt) (tmle);
                 adchoice = new ADChoice();
                 newElements.add(adchoice);
                 baseElements.add(tmle);
                 tclass.getActivityDiagram().add(adchoice);
-                for(i=0; i<tmlselectevt.getNbNext(); i++) {
+                for (i = 0; i < tmlselectevt.getNbNext(); i++) {
                     adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i), adchoice, adjunc);
                     adchoice.addNext(adc1);
                     adchoice.addGuard("[]");
@@ -421,7 +418,7 @@ public class TML2TURTLE {
                 baseElements.add(tmle);
                 tclass.getActivityDiagram().add(addelay);
                 adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), addelay, adjunc);
-                addelay.setValue(modifyString(((TMLExecI)tmle).getAction()));
+                addelay.setValue(modifyString(((TMLExecI) tmle).getAction()));
                 addelay.addNext(adc1);
                 return addelay;
 
@@ -432,7 +429,7 @@ public class TML2TURTLE {
                 baseElements.add(tmle);
                 tclass.getActivityDiagram().add(adinterval);
                 adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adinterval, adjunc);
-                adinterval.setValue(modifyString(((TMLExecIInterval)tmle).getMinDelay()), modifyString(((TMLExecIInterval)tmle).getMaxDelay()));
+                adinterval.setValue(modifyString(((TMLExecIInterval) tmle).getMinDelay()), modifyString(((TMLExecIInterval) tmle).getMaxDelay()));
                 adinterval.addNext(adc1);
                 return adinterval;
 
@@ -443,7 +440,7 @@ public class TML2TURTLE {
                 baseElements.add(tmle);
                 tclass.getActivityDiagram().add(addelay);
                 adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), addelay, adjunc);
-                addelay.setValue(modifyString(((TMLExecC)tmle).getAction()));
+                addelay.setValue(modifyString(((TMLExecC) tmle).getAction()));
                 addelay.addNext(adc1);
                 return addelay;
 
@@ -454,7 +451,7 @@ public class TML2TURTLE {
                 baseElements.add(tmle);
                 tclass.getActivityDiagram().add(adinterval);
                 adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adinterval, adjunc);
-                adinterval.setValue(modifyString(((TMLExecCInterval)tmle).getMinDelay()), modifyString(((TMLExecCInterval)tmle).getMaxDelay()));
+                adinterval.setValue(modifyString(((TMLExecCInterval) tmle).getMinDelay()), modifyString(((TMLExecCInterval) tmle).getMaxDelay()));
                 adinterval.addNext(adc1);
                 return adinterval;
 
@@ -465,13 +462,13 @@ public class TML2TURTLE {
                 baseElements.add(tmle);
                 tclass.getActivityDiagram().add(adinterval);
                 adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adinterval, adjunc);
-                adinterval.setValue(modifyString(((TMLDelay)tmle).getMinDelay()), modifyString(((TMLDelay)tmle).getMaxDelay()));
+                adinterval.setValue(modifyString(((TMLDelay) tmle).getMinDelay()), modifyString(((TMLDelay) tmle).getMaxDelay()));
                 adinterval.addNext(adc1);
                 return adinterval;
 
                 // TMLRandom
             } else if (tmle instanceof TMLRandom) {
-                tmlrandom = (TMLRandom)tmle;
+                tmlrandom = (TMLRandom) tmle;
 
                 parameter0 = tclass.addNewParamIfApplicable("min__random", Param.NAT, "0");
                 parameter1 = tclass.addNewParamIfApplicable("max__random", Param.NAT, "0");
@@ -524,12 +521,12 @@ public class TML2TURTLE {
 
                 // TMLFORLOOP
             } else if (tmle instanceof TMLForLoop) {
-                tmlforloop = (TMLForLoop)tmle;
+                tmlforloop = (TMLForLoop) tmle;
                 action = modifyString(tmlforloop.getInit());
-                //System.out.println("FOR action = " + action);
+                //TraceManager.addDev("FOR action = " + action);
                 parameter = null;
                 if ((action.length() == 0) || ((parameter = paramAnalyzer(action, tclass)) != null)) {
-                    //System.out.println("parameter1 ok");
+                    //TraceManager.addDev("parameter1 ok");
                     if (action.length() != 0) {
                         adacparam1 = new ADActionStateWithParam(parameter);
                         adacparam1.setActionValue(getActionValueParam(action, tclass));
@@ -540,7 +537,7 @@ public class TML2TURTLE {
                     action = modifyString(tmlforloop.getIncrement());
                     parameter = null;
                     if ((action.length() == 0) || ((parameter = paramAnalyzer(action, tclass)) != null)) {
-                        //System.out.println("New loop");
+                        //TraceManager.addDev("New loop");
                         if (action.length() != 0) {
                             adacparam2 = new ADActionStateWithParam(parameter);
                             adacparam2.setActionValue(getActionValueParam(action, tclass));
@@ -616,8 +613,8 @@ public class TML2TURTLE {
 
                 // TML Sequence
             } else if (tmle instanceof TMLSequence) {
-                //System.out.println("TML sequence !");
-                tmlseq = (TMLSequence)tmle;
+                //TraceManager.addDev("TML sequence !");
+                tmlseq = (TMLSequence) tmle;
 
                 if (tmlseq.getNbNext() == 0) {
                     return endOfActivity(newElements, baseElements, tclass, adjunc);
@@ -625,19 +622,19 @@ public class TML2TURTLE {
 
 
                 if (tmlseq.getNbNext() == 1) {
-                    return  translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous, adjunc);
+                    return translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous, adjunc);
                 }
 
                 tmlseq.sortNexts();
                 // At least 2 next elements
                 adj2 = null;
                 adc2 = null;
-                for(i=1; i<tmlseq.getNbNext(); i++) {
+                for (i = 1; i < tmlseq.getNbNext(); i++) {
                     adj1 = new ADJunction();
                     if (adj2 == null) {
-                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i-1), previous, adj1);
+                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i - 1), previous, adj1);
                     } else {
-                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i-1), adj2, adj1);
+                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i - 1), adj2, adj1);
                     }
                     if (adj2 == null) {
                         adc2 = adc1;
@@ -650,14 +647,14 @@ public class TML2TURTLE {
                     tclass.getActivityDiagram().add(adj1);
                     adj2 = adj1;
                 }
-                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(tmlseq.getNbNext()-1), previous, adjunc);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(tmlseq.getNbNext() - 1), previous, adjunc);
                 //tclass.getActivityDiagram().add(adc1);
                 adj2.addNext(adc1);
                 return adc2;
 
                 // TML Read Channel
             } else if (tmle instanceof TMLReadChannel) { // READ MUST BE MODIFIED
-                acch = (TMLActivityElementChannel)tmle;
+                acch = (TMLActivityElementChannel) tmle;
 
                 if ((acch.getNbOfSamples().trim().compareTo("1")) == 0) {
                     g = addGateChannel("rd", acch, 0, tclass);
@@ -716,17 +713,17 @@ public class TML2TURTLE {
 
                 // TMLSendEvent
             } else if (tmle instanceof TMLSendEvent) {
-                acevt = (TMLActivityElementEvent)tmle;
+                acevt = (TMLActivityElementEvent) tmle;
                 g = tclass.addNewGateIfApplicable("notify__" + acevt.getEvent().getName());
                 TClass tcl = tm.getTClassWithName(nameEvent + acevt.getEvent().getName());
-                g1 = ((TClassEventCommon)(tcl)).getGateWrite();
+                g1 = ((TClassEventCommon) (tcl)).getGateWrite();
                 tm.addSynchroRelation(tclass, g, tcl, g1);
 
                 adacparam2 = null;
                 adacparam = null;
                 adag = new ADActionStateWithGate(g);
                 action = "";
-                for (i=0; i<acevt.getNbOfParams(); i++) {
+                for (i = 0; i < acevt.getNbOfParams(); i++) {
                     if (acevt.getParam(i).length() > 0) {
                         if (!Conversion.isNumeralOrId(acevt.getParam(i))) {
                             tmp = "ntmp__" + i;
@@ -771,22 +768,22 @@ public class TML2TURTLE {
 
                 // TMLSendRequest
             } else if (tmle instanceof TMLSendRequest) {
-                tmlreq = (TMLSendRequest)tmle;
+                tmlreq = (TMLSendRequest) tmle;
                 g = tclass.addNewGateIfApplicable("sendReq__" + tmlreq.getRequest().getName() + "__" + task.getName());
                 TClass tcl = tm.getTClassWithName(nameRequest + tmlreq.getRequest().getName());
                 //g1 = tcl.getGateByName("sendReq");
                 //int index = tmlreq.getRequest().getOriginTasks().indexOf(task);
-                //System.out.println("task=" + task.getName() + " index=" + index);
+                //TraceManager.addDev("task=" + task.getName() + " index=" + index);
                 //g1 = (Gate)(((TClassRequest)tcl).getGatesWrite().get(index));
-                g1 = ((TClassRequest)tcl).getGateWrite(task.getName());
-                //System.out.println("task=" + task.getName() + " index=" + index + "gate=" + g.getName());
+                g1 = ((TClassRequest) tcl).getGateWrite(task.getName());
+                //TraceManager.addDev("task=" + task.getName() + " index=" + index + "gate=" + g.getName());
                 tm.addSynchroRelation(tclass, g, tcl, g1);
 
                 adacparam2 = null;
                 adacparam = null;
                 adag = new ADActionStateWithGate(g);
                 action = "";
-                for (i=0; i<tmlreq.getNbOfParams(); i++) {
+                for (i = 0; i < tmlreq.getNbOfParams(); i++) {
                     if (tmlreq.getParam(i).length() > 0) {
                         if (!Conversion.isNumeralOrId(tmlreq.getParam(i))) {
                             tmp = "ntmp__" + i;
@@ -831,15 +828,15 @@ public class TML2TURTLE {
 
                 // TMLWaitEvent
             } else if (tmle instanceof TMLWaitEvent) {
-                acevt = (TMLActivityElementEvent)tmle;
+                acevt = (TMLActivityElementEvent) tmle;
                 g = tclass.addNewGateIfApplicable("wait__" + acevt.getEvent().getName());
                 TClass tcl = tm.getTClassWithName(nameEvent + acevt.getEvent().getName());
-                g1 = ((TClassEventCommon)(tcl)).getGateRead();
+                g1 = ((TClassEventCommon) (tcl)).getGateRead();
                 tm.addSynchroRelation(tclass, g, tcl, g1);
 
                 adag = new ADActionStateWithGate(g);
                 action = "";
-                for (i=0; i<acevt.getNbOfParams(); i++) {
+                for (i = 0; i < acevt.getNbOfParams(); i++) {
                     if (acevt.getParam(i).length() > 0) {
                         action += "?" + modifyString(acevt.getParam(i)) + ":" + TMLType.getLOTOSStringType(acevt.getEvent().getType(i).getType());
                     }
@@ -855,10 +852,10 @@ public class TML2TURTLE {
 
                 // TMLNotifiedEvent
             } else if (tmle instanceof TMLNotifiedEvent) {
-                acevt = (TMLActivityElementEvent)tmle;
+                acevt = (TMLActivityElementEvent) tmle;
                 g = tclass.addNewGateIfApplicable("notified__" + acevt.getEvent().getName());
                 TClass tcl = tm.getTClassWithName(nameEvent + acevt.getEvent().getName());
-                g1 = ((TClassEventCommon)(tcl)).getGateSize();
+                g1 = ((TClassEventCommon) (tcl)).getGateSize();
 
                 if (g1 == null) {
                     return null;
@@ -879,14 +876,14 @@ public class TML2TURTLE {
 
                 // TMLWriteChannel
             } else if (tmle instanceof TMLWriteChannel) {
-                acch = (TMLActivityElementChannel)tmle;
+                acch = (TMLActivityElementChannel) tmle;
                 if ((acch.getNbOfSamples().trim().compareTo("1")) == 0) {
                     adag = null;
                     adagtmp = null;
-                    for(int k=0; k<acch.getNbOfChannels(); k++) {
+                    for (int k = 0; k < acch.getNbOfChannels(); k++) {
                         g = addGateChannel("wr", acch, k, tclass);
                         TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(k)));
-                        g1 = tcl.getGateByName("wr__"+acch.getChannel(k).getName());
+                        g1 = tcl.getGateByName("wr__" + acch.getChannel(k).getName());
                         tm.addSynchroRelation(tclass, g, tcl, g1);
                         adag = new ADActionStateWithGate(g);
                         adag.setActionValue("");
@@ -907,13 +904,13 @@ public class TML2TURTLE {
                     adchoice = null;
                     adacparam2 = null;
 
-                    for(int k=0; k<acch.getNbOfChannels(); k++) {
+                    for (int k = 0; k < acch.getNbOfChannels(); k++) {
 
                         adacparam = new ADActionStateWithParam(parameter);
                         adacparam.setActionValue(acch.getNbOfSamples());
                         tclass.getActivityDiagram().add(adacparam);
 
-                        if (k ==0) {
+                        if (k == 0) {
                             newElements.add(adacparam);
                             baseElements.add(tmle);
                             adacparam2 = adacparam;
@@ -936,7 +933,7 @@ public class TML2TURTLE {
 
                         g = addGateChannel("wr", acch, k, tclass);
                         TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(k)));
-                        g1 = tcl.getGateByName("wr__"+acch.getChannel(k).getName());
+                        g1 = tcl.getGateByName("wr__" + acch.getChannel(k).getName());
                         tm.addSynchroRelation(tclass, g, tcl, g1);
 
                         adag = new ADActionStateWithGate(g);
@@ -947,7 +944,7 @@ public class TML2TURTLE {
 
                         adag.addNext(adacparam1);
 
-                        if (k == (acch.getNbOfChannels()-1)) {
+                        if (k == (acch.getNbOfChannels() - 1)) {
                             adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam1, adjunc);
                             adchoice.addNext(adc1);
                         }
@@ -1007,7 +1004,7 @@ public class TML2TURTLE {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception in AD diagram analysis -> " + e.getMessage());
+            TraceManager.addDev("Exception in AD diagram analysis -> " + e.getMessage());
             return null;
         }
 
@@ -1015,19 +1012,19 @@ public class TML2TURTLE {
 
     }
 
-    private void  setADRequested(TClass tclass, TMLTask task) {
+    private void setADRequested(TClass tclass, TMLTask task) {
         // attributes
         int n = task.getRequest().getNbOfParams();
         int i;
         //String type;
 
-        for(i=0; i<n; i++) {
+        for (i = 0; i < n; i++) {
             switch (task.getRequest().getType(i).getType()) {
-            case TMLType.NATURAL:
-                tclass.addNewParamIfApplicable("arg" + (i+1) + "__req", "nat", "0");
-                break;
-            default:
-                tclass.addNewParamIfApplicable("arg" + (i+1) + "__req", "bool", "0");
+                case TMLType.NATURAL:
+                    tclass.addNewParamIfApplicable("arg" + (i + 1) + "__req", "nat", "0");
+                    break;
+                default:
+                    tclass.addNewParamIfApplicable("arg" + (i + 1) + "__req", "bool", "0");
             }
         }
 
@@ -1042,22 +1039,23 @@ public class TML2TURTLE {
 
         g = tclass.addNewGateIfApplicable("waitReq__" + task.getRequest().getName());
         TClass tcl = tm.getTClassWithName(nameRequest + task.getRequest().getName());
-        g1 = ((TClassRequest)(tcl)).getGateRead();
+        g1 = ((TClassRequest) (tcl)).getGateRead();
         tm.addSynchroRelation(tclass, g, tcl, g1);
 
         adag = new ADActionStateWithGate(g);
         action = "";
-        for (i=0; i<task.getRequest().getNbOfParams(); i++) {
-            action += "?arg" + (i+1) + "__req:nat";
+        for (i = 0; i < task.getRequest().getNbOfParams(); i++) {
+            action += "?arg" + (i + 1) + "__req:nat";
         }
         adag.setActionValue(action);
 
         // Search for all adcomponents which next is a stop ... Replace this next to a next to the first adjunction
-        //System.out.println("Remove all elements ..");
+        //TraceManager.addDev("Remove all elements ..");
         try {
             tm.removeAllElement(Class.forName("translator.ADStop"), adj, tclass.getActivityDiagram());
-        } catch (ClassNotFoundException cnfe ) {}
-        //System.out.println("All elements removed ...");
+        } catch (ClassNotFoundException cnfe) {
+        }
+        //TraceManager.addDev("All elements removed ...");
         tclass.getActivityDiagram().add(adag);
         tclass.getActivityDiagram().add(adj);
 
@@ -1070,7 +1068,7 @@ public class TML2TURTLE {
 
     }
 
-    private void  setGatesToTask(TClass tclass, TMLTask task) {
+    private void setGatesToTask(TClass tclass, TMLTask task) {
         setGatesEvt(tclass, task);
         setGatesRequest(tclass, task);
         setGatesChannel(tclass, task);
@@ -1082,13 +1080,13 @@ public class TML2TURTLE {
         Gate g, g1;
         TClass tcl;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             event = iterator.next();
 
             if (task == event.getOriginTask()) {
                 g = tclass.addNewGateIfApplicable("notify__" + event.getName());
                 tcl = tm.getTClassWithName(nameEvent + event.getName());
-                g1 = ((TClassEventCommon)(tcl)).getGateWrite();
+                g1 = ((TClassEventCommon) (tcl)).getGateWrite();
                 tm.addSynchroRelation(tclass, g, tcl, g1);
             }
 
@@ -1096,13 +1094,13 @@ public class TML2TURTLE {
                 //Wait
                 g = tclass.addNewGateIfApplicable("wait__" + event.getName());
                 tcl = tm.getTClassWithName(nameEvent + event.getName());
-                g1 = ((TClassEventCommon)(tcl)).getGateRead();
+                g1 = ((TClassEventCommon) (tcl)).getGateRead();
                 tm.addSynchroRelation(tclass, g, tcl, g1);
 
                 // Notified
                 g = tclass.addNewGateIfApplicable("notified__" + event.getName());
                 tcl = tm.getTClassWithName(nameEvent + event.getName());
-                g1 = ((TClassEventCommon)(tcl)).getGateSize();
+                g1 = ((TClassEventCommon) (tcl)).getGateSize();
                 tm.addSynchroRelation(tclass, g, tcl, g1);
             }
         }
@@ -1115,16 +1113,16 @@ public class TML2TURTLE {
         TClass tcl;
         int index;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             request = iterator.next();
             g = tclass.addNewGateIfApplicable("sendReq__" + request.getName() + "__" + task.getName());
             tcl = tm.getTClassWithName(nameRequest + request.getName());
             //g1 = tcl.getGateByName("sendReq");
             index = request.getOriginTasks().indexOf(task);
             if (index != -1) {
-                //System.out.println("task=" + task.getName() + " index=" + index);
-                g1 = ((TClassRequest)tcl).getGatesWrite().get(index);
-                //System.out.println("task=" + task.getName() + " index=" + index + "gate=" + g.getName());
+                //TraceManager.addDev("task=" + task.getName() + " index=" + index);
+                g1 = ((TClassRequest) tcl).getGatesWrite().get(index);
+                //TraceManager.addDev("task=" + task.getName() + " index=" + index + "gate=" + g.getName());
                 tm.addSynchroRelation(tclass, g, tcl, g1);
             }
         }
@@ -1138,20 +1136,20 @@ public class TML2TURTLE {
         //int index;
         //String name;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             channel = iterator.next();
 
             if (task == channel.getOriginTask()) {
                 g = tclass.addNewGateIfApplicable("wr__" + channel.getName());
                 tcl = tm.getTClassWithName(getChannelString(channel));
-                g1 = tcl.getGateByName("wr__"+channel.getName());
+                g1 = tcl.getGateByName("wr__" + channel.getName());
                 tm.addSynchroRelation(tclass, g, tcl, g1);
             }
 
             if (task == channel.getDestinationTask()) {
                 g = tclass.addNewGateIfApplicable("rd__" + channel.getName());
                 tcl = tm.getTClassWithName(getChannelString(channel));
-                g1 = tcl.getGateByName("rd__"+channel.getName());
+                g1 = tcl.getGateByName("rd__" + channel.getName());
                 tm.addSynchroRelation(tclass, g, tcl, g1);
 
             }
@@ -1162,7 +1160,7 @@ public class TML2TURTLE {
         if (adjunc == null) {
             ADStop adstop = new ADStop();
             newElements.add(adstop);
-            
+
             // DB Issue #17: This is not a type that can be added to this list
             //baseElements.add(adstop);
             tclass.getActivityDiagram().add(adstop);
@@ -1188,7 +1186,7 @@ public class TML2TURTLE {
         _input = Conversion.replaceAllString(_input, ">>", "/");
 
         // Replaces &&, || and !
-        _input = Conversion.replaceAllString(_input,"&&", "and");
+        _input = Conversion.replaceAllString(_input, "&&", "and");
         _input = Conversion.replaceAllString(_input, "||", "or");
         _input = Conversion.replaceAllString(_input, "!", "not");
         _input = Conversion.replaceAllStringNonAlphanumerical(_input, "i", "i_0");
@@ -1201,15 +1199,15 @@ public class TML2TURTLE {
         TMLAttribute tmla;
         //Param para;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             tmla = iterator.next();
             switch (tmla.type.getType()) {
-            case TMLType.NATURAL:
-                //System.out.println("Adding nat attribute:" + modifyString(tmla.name));
-                tcl.addNewParamIfApplicable(modifyString(tmla.name), "nat", modifyString(tmla.initialValue));
-                break;
-            default:
-                tcl.addNewParamIfApplicable(modifyString(tmla.name), "bool", modifyString(tmla.initialValue));
+                case TMLType.NATURAL:
+                    //TraceManager.addDev("Adding nat attribute:" + modifyString(tmla.name));
+                    tcl.addNewParamIfApplicable(modifyString(tmla.name), "nat", modifyString(tmla.initialValue));
+                    break;
+                default:
+                    tcl.addNewParamIfApplicable(modifyString(tmla.name), "bool", modifyString(tmla.initialValue));
             }
         }
     }
@@ -1257,13 +1255,13 @@ public class TML2TURTLE {
             }
         }
 
-        return action = action.substring(index+1, action.length()).trim();
+        return action = action.substring(index + 1, action.length()).trim();
     }
 
     private String removeLastSemicolon(String action) {
         action = action.trim();
-        if (action.charAt(action.length()-1) == ';') {
-            return action.substring(0, action.length()-1);
+        if (action.charAt(action.length() - 1) == ';') {
+            return action.substring(0, action.length() - 1);
         }
         return action;
     }

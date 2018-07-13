@@ -54,6 +54,7 @@ public class TMLActivityElementChannel extends TMLActivityElement {
     protected ArrayList<TMLChannel> channels;
     protected String nbOfSamples;
 	private boolean isAttacker;
+	protected boolean isEncForm; //If the Cryptographic 
 
     public TMLActivityElementChannel(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -88,7 +89,14 @@ public class TMLActivityElementChannel extends TMLActivityElement {
     public String getNbOfSamples() {
         return nbOfSamples;
     }
-
+    
+    public boolean getEncForm(){
+    	return isEncForm;
+    }
+	public void setEncForm(boolean form){
+		isEncForm = form;
+	}
+	
     public void replaceChannelWith(TMLChannel oldChan, TMLChannel newChan) {
         if (channels.contains(oldChan)) {
             channels.remove(oldChan);

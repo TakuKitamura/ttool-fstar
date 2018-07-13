@@ -141,7 +141,7 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
 		// Icon
 		
 		g.drawImage(IconManager.imgic7001.getImage(), x + 4, y + 4, null);
-		g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+		//g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
     
     public TGComponent isOnOnlyMe(int x1, int y1) {
@@ -230,7 +230,7 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
+        //
         try {
             
             NodeList nli;
@@ -241,12 +241,12 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //System.out.println(n1);
+                //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //System.out.println(n2);
+                        //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {

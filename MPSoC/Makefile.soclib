@@ -1,1 +1,0 @@
-objs = main.o MotorControl.o TemperatureSensor.o DistanceSensor.o MainControl.o 

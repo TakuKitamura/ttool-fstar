@@ -1,7 +1,8 @@
 ## Variable that points to SystemC installation path
 
 
-INCDIR = -I. -I$(SRCS_base_DIR) -I$(SRCS_base_DIRSRC) -I$(SRCS_generated_DIR)
+#INCDIR = -I. -I$(SRCS_base_DIR) -I$(SRCS_base_DIRSRC) -I$(SRCS_generated_DIR)
+INCDIR = -I. -I$(SRCS_generated_DIR)
 LIBDIR = -L. -L.. 
 LIBS   =  -lm $(EXTRA_LIBS)
 

@@ -237,7 +237,7 @@ public class JDialogUPPAALGeneration extends JDialog implements ActionListener, 
 
     public void actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
-        //System.out.println("Actions");
+        //
 
         // Compare the action command to the known actions.
         if (command.equals("Start"))  {
@@ -348,7 +348,7 @@ public class JDialogUPPAALGeneration extends JDialog implements ActionListener, 
                 } else {
                     jta.append("UPPAAL code was NOT optimized since the TIF specification is NOT regular\n");
                 }
-                System.out.println("Regularity done");
+                
             }
             if (result) {
                 jta.append("UPPAAL code generated in " + pathCode);

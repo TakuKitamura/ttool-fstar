@@ -132,7 +132,7 @@ public class TClassRequest extends TClass implements FIFOTClass{
     }
 
     public void makeTClass() {
-        //System.out.println("toto1");
+        //
         
 
         Gate forward, g;

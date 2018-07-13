@@ -157,8 +157,8 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
             Element elt;
 			String s;
             
-            //System.out.println("Loading tclass " + getValue());
-            //System.out.println(nl.toString());
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -170,7 +170,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
                             elt = (Element) n2;
                             if (elt.getTagName().equals("oldVersion")) {
                                
-                                //System.out.println("Analyzing line2");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     oldVersion = 0;
@@ -184,7 +184,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
 								
 								
                            } else if (elt.getTagName().equals("newVersion")) {
-                                //System.out.println("Analyzing line2");
+                                //
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
                                     newVersion = 1;
@@ -198,7 +198,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
 							
 								
                            }
-								//System.out.println("Analyzing line4");
+								//
                         }
                     }
                 }

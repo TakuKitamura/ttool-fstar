@@ -39,6 +39,8 @@
 package syscamstranslator;
 
 /**
+ * Class SysCAMSTPortTDF
+ * Parameters of a SystemC-AMS port TDF
  * Creation: 07/05/2018
  * @version 1.0 07/05/2018
  * @author Irina Kit Yan LEE
@@ -48,6 +50,7 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 
 	private String name;
 	private int period;
+	private String time;
 	private int rate;
 	private int delay;
 	private int origin;
@@ -55,9 +58,10 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 	
 	private SysCAMSTBlockTDF blockTDF;
 	
-	public SysCAMSTPortTDF(String _name, int _period, int _rate, int _delay, int _origin, String _TDFType, SysCAMSTBlockTDF _blockTDF) {
+	public SysCAMSTPortTDF(String _name, int _period, String _time, int _rate, int _delay, int _origin, String _TDFType, SysCAMSTBlockTDF _blockTDF) {
 		name = _name;
 		period = _period;
+		time = _time;
 		rate = _rate;
 		delay = _delay;
 		origin = _origin;
@@ -69,55 +73,31 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 		return name;
 	}
 
-	public void setName(String _name) {
-		name = _name;
-	}
-
 	public int getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(int _period) {
-		period = _period;
+	public String getTime() {
+		return time;
 	}
 
 	public int getRate() {
 		return rate;
 	}
 
-	public void setRate(int _rate) {
-		rate = _rate;
-	}
-
 	public int getDelay() {
 		return delay;
-	}
-
-	public void setDelay(int _delay) {
-		delay = _delay;
 	}
 
 	public int getOrigin() {
 		return origin;
 	}
 
-	public void setOrigin(int _origin) {
-		origin = _origin;
-	}
-
 	public String getTDFType() {
 		return TDFType;
 	}
 
-	public void setTDFType(String _TDFType) {
-		TDFType = _TDFType;
-	}
-
-	public synchronized SysCAMSTBlockTDF getBlockTDF() {
+	public SysCAMSTBlockTDF getBlockTDF() {
 		return blockTDF;
-	}
-
-	public synchronized void setBlockTDF(SysCAMSTBlockTDF _blockTDF) {
-		blockTDF = _blockTDF;
 	}
 }

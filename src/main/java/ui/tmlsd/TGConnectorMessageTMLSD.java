@@ -104,7 +104,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 	}
 
 	public boolean isMessageWellFormed() {
-		//System.out.println("Analyzing message:" + value);
+		//
 
 		int index0 = value.indexOf('(');
 		String name;
@@ -135,7 +135,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 		String[] params = tmp.split(",");
 		for(int i=0; i<nParam; i++) {
 			tmp = params[i].trim();
-			//System.out.println("First=" + tmp);
+			//
 			if (!TAttribute.isAValidId(tmp, false, false)) {
 				return false;
 			}
@@ -204,7 +204,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 	}
 
 	public TGComponent extraIsOnOnlyMe(int x1, int y1) {  
-		//System.out.println("Extra");
+		//
 		if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5 - heightValue, widthValue, heightValue)) {
 			return this;
 		}
@@ -230,7 +230,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 
 	@Override
 	public void loadExtraParam( NodeList nl, int decX, int decY, int decId ) throws MalformedModelingException{
-		//System.out.println("*** load extra synchro ***");
+		//
 		try {
 			NodeList nli;
 			Node n1, n2;
@@ -241,12 +241,12 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 
 			for( int i = 0; i < nl.getLength(); i++ ) {
 				n1 = nl.item(i);
-				//System.out.println(n1);
+				//
 				if( n1.getNodeType() == Node.ELEMENT_NODE ) {
 					nli = n1.getChildNodes();
 					for( int j = 0; j < nli.getLength(); j++ ) {
 						n2 = nli.item(j);
-						//System.out.println(n2);
+						//
 						if( n2.getNodeType() == Node.ELEMENT_NODE ) {
 							elt = (Element) n2;
 							//TraceManager.addDev( "I am analyzing " + elt.getTagName() );	

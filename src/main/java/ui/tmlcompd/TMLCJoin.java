@@ -45,6 +45,7 @@ import myutil.GraphicLib;
 import ui.*;
 import ui.util.IconManager;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -56,8 +57,10 @@ import java.awt.*;
  */
 public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
     protected int radius = 11;
-    protected int decPoint = 3;
+    // value Indicates the number of samples being read in each
+    // input before being written in output channels
 
+    protected boolean isChannel = false;
 
     public TMLCJoin(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -82,9 +85,11 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
 
         nbInternalTGComponent = 0;
 
+        editable = true;
 
 
-        value = "J";
+
+        value = "1";
         name = "Composite port";
 
         //insides = new ArrayList<TMLCPrimitivePort>();
@@ -107,7 +112,7 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
 
         // Draw arrow showing the connection if necessary
         //if (outp != null ){
-        //      System.out.println("non null outp CurrentOrientation=" + currentOrientation);
+        //      
         //}
 
 
@@ -140,6 +145,45 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
 
     }
 
+    public boolean editOndoubleClick(JFrame frame) {
+        if (isChannel) {
+            String oldValue = value;
+            String s = (String) JOptionPane.showInputDialog(frame, "Nb of samples (positive int): ",
+                    "Nb of samples per round", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null,
+                    getValue());
+            if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+                try {
+                    int testI = Integer.decode(s).intValue();
+                    if (testI > 0) {
+                        value = s;
+                    } else {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the number of samples: the number must be >0",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not change the number of samples: " + s + " is not a number",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+
+            }
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(frame,
+                    "Only data channel joins can be configured",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        }
+
+    }
+
 
 
 
@@ -148,27 +192,19 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
         return TGComponentManager.TMLCTD_JOIN;
     }
 
+    public int getNumberOfSamples() {
+        try {
+            return Integer.decode(value).intValue();
+        } catch (Exception e) {
+            value = "1";
+            return 1;
+        }
+    }
 
+    public void setAsChannel(boolean b) {
+        isChannel = b;
+    }
 
-    /*public String getAttributeList() {
-      if (conflict) {
-      return conflictMessage;
-      }
-
-      String s = "";
-      if (inp != null) {
-      s = s + inp.getAttributeList();
-      if (outp != null) {
-      s = s + "\n";
-      }
-      }
-
-      if (outp != null) {
-      s = s + outp.getAttributeList();
-      }
-
-      return s;
-      }*/
 
 
 

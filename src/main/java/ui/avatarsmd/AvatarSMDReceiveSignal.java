@@ -145,7 +145,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		
         //g.drawRoundRect(x, y, width, height, arc, arc);
 		Color c = g.getColor();
-		//System.out.println("Color=" + c);
+		//
 		
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
@@ -175,7 +175,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		   
         //g.drawString("sig()", x+(width-w) / 2, y);
         g.drawString(value, x + linebreak + textX1, y + textY);
-		//System.out.println(getDIPLOID());
+		//
 		if (getCheckLatency()){
 			ConcurrentHashMap<String, String> latency =tdp.getMGUI().getLatencyVals(getAVATARID());
 			if (latency!=null){
@@ -246,7 +246,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 							if (sig1.replaceAll(": ","-").trim().equalsIgnoreCase(s.split(":")[0].trim())){
 								//Compare times
 								int tActual=Integer.valueOf(latencyVals.get(s));
-								//System.out.println(refNum + " " + tActual);
+								//
 								if (refNum>0){
 									if (lessThan){
 										if (tActual < refNum){
@@ -270,10 +270,10 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 					}
 				}
 				if (reference instanceof TMLADReadChannel){
-				//	System.out.println("ref " + reference.toString().split(": ")[1].split("\\(")[0] + " " + s.split("-")[1].split(":")[0]);
+				//	
 					TMLADReadChannel rc = (TMLADReadChannel) reference;
 					ConcurrentHashMap<String, String> refLats =rc.getLatencyMap();
-					//System.out.println("referencelats " + refLats);
+					//
 					for (String checkpoint:refLats.keySet()){
 						if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split("channel:")[1].split(" ")[0])){
 							String time=refLats.get(checkpoint);
@@ -362,7 +362,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 	
     
     public boolean editOndoubleClick(JFrame frame) {
-    //	System.out.println("reference " + reference);
+    //	
 		LinkedList<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
 		TraceManager.addDev("Nb of signals:" + signals.size());
 		
@@ -370,7 +370,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		ArrayList<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
 		Vector<TGComponent> refs = new Vector<TGComponent>();
 		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
-            //System.out.println("req " + req);
+            //
             if (req instanceof AvatarRDRequirement){
                 refs.add(((AvatarRDRequirement) req));
             }

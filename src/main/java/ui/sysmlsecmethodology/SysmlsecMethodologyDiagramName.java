@@ -71,6 +71,7 @@ public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalCo
     protected final static int PROVERIF = 2;
     protected final static int INVARIANTS = 3;
     protected final static int PROTO = 4;
+    protected final static int INTERNAL_MODEL_CHECKER = 14;
 
     protected final static int SIM_ANIM_APP_DIPLO = 5;
     protected final static int SIM_TRACE_APP_DIPLO = 6;
@@ -87,8 +88,8 @@ public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalCo
 
     protected final String[] SHORT_ACTION_NAMES = {
         "simu", "upp", "proverif", "inv",
-        "code-gen", "sim-trace", "upp", "lot", "tml",
-        "fv", "sim-trace", "tmap", "sim-anim", "sim-anim"};
+        "code-gen", "sim-anim", "sim-trace", "lot", "upp", "tml",
+        "fv", "sim-trace", "sim-anim", "tmap", "RG"};
 
     protected final String[] LONG_ACTION_NAMES = {
         /*0*/ "Simulation and animate the model",
@@ -104,7 +105,9 @@ public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalCo
         "Simulate a DIPLODOCUS mapping model",
         "Generate a TMAP/TARCHI/TML text dscription of a DIPLODOCUS mapping model",
         "Simulate and animate DIPLODOCUS functional models",
-        "Simulate and animate DIPLODOCUS mapping models"
+        "Simulate and animate DIPLODOCUS mapping models",
+            "Use internal model checker to generate a RG, or evaluate reachability properties"
+
     };
 
     protected int[] validations;

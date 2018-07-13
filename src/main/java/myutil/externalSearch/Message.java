@@ -37,8 +37,9 @@
  */
 
 
-
 package myutil.externalSearch;
+
+import myutil.TraceManager;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -46,30 +47,28 @@ import java.io.*;
 import java.util.ArrayList;
 
 
-
 //Message format
-
-
 
 
 /**
  * JDialogSearchBox
  * unity message for client and server
- *
+ * <p>
  * CMD Options Values
- *  CMD : A string of command, for example : search, detail, stats
+ * CMD : A string of command, for example : search, detail, stats
  * search : search with keywords
  * detail : clients send CVE-ID and get back all information
  * stats : -> Images
- *  Options and Values ArrayLists,
- *      "Options" contains names
- *      "Values" contains values respectively
+ * Options and Values ArrayLists,
+ * "Options" contains names
+ * "Values" contains values respectively
  * RequestMessage
  * AnswerMessage
- *
+ * <p>
  * Creation: 22/03/2015
- * @version 1.0 11/03/2015
+ *
  * @author Dan VO
+ * @version 1.0 11/03/2015
  */
 public class Message implements Serializable {
 
@@ -84,7 +83,6 @@ public class Message implements Serializable {
 
     public static String SUC_CREATE_REQ_MESSAGE = "The request message is created\n";
     public static String SUC_CREATE_ANS_MESSAGE = "The answer message is created\n";
-
 
 
     public static String OPTION_KEY_WORDS = "keywords";
@@ -113,45 +111,46 @@ public class Message implements Serializable {
     private ArrayList<String> values;
 
 
-
     //Constructors
 
-    public Message(ArrayList<Object> content){
+    public Message(ArrayList<Object> content) {
         this.content = content;
     }
-    public Message()
-    {
+
+    public Message() {
         this.content = null;
         this.options = new ArrayList<>();
         this.values = new ArrayList<>();
     }
 
-    public Message(String cmd){
+    public Message(String cmd) {
         this.cmd = cmd;
         this.options = new ArrayList<>();
         this.values = new ArrayList<>();
     }
 
-    public  Message(String cmd, ArrayList<String> options , ArrayList<String> values){
+    public Message(String cmd, ArrayList<String> options, ArrayList<String> values) {
 
         this.cmd = cmd;
         this.options = options;
         this.values = values;
 
     }
-    public void addOptionValueMessage (String option, String value){
+
+    public void addOptionValueMessage(String option, String value) {
         this.options.add(option);
         this.values.add(value);
     }
 
-    public void addKeywordMessage(String value){
-        this.addOptionValueMessage("keyword",value);
+    public void addKeywordMessage(String value) {
+        this.addOptionValueMessage("keyword", value);
     }
 
     //Get value of cmd
     public String getCmd() {
         return cmd;
     }
+
     //Get value of content
     public ArrayList<Object> getContent() {
         return content;
@@ -186,13 +185,6 @@ public class Message implements Serializable {
         this.values = values;
     }
 
-    //Create a request message for clients
-    public void createRequestMessage(String cmd, ArrayList<String> options, ArrayList<String> values)
-    {
-        this.cmd = cmd;
-        this.options = options;
-        this.values = values;
-    }
 
     //Create an answer for server to send to the client
     public void createAnswerMessage(String cmd, ArrayList<Object> content) {
@@ -201,24 +193,19 @@ public class Message implements Serializable {
     }
 
 
-
-    public ArrayList<Object> parseMessage(Message msg)
-    {
+    public ArrayList<Object> parseMessage(Message msg) {
         return msg.content;
     }
 
 
-    public static byte[] convertImageToByte(Message msg){
+    public static byte[] convertImageToByte(Message msg) {
         byte[] imgByte = null;
         BufferedImage img;
 
         try {
-            if(msg.getCmd().equals("stat"))
-            {
+            if (msg.getCmd().equals("stat")) {
                 img = ImageIO.read(new File(PIC_SRC_STAT));
-            }
-            else
-            {
+            } else {
                 img = ImageIO.read(new File(PIC_SRC_HIST));
             }
 
@@ -230,38 +217,33 @@ public class Message implements Serializable {
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            System.out.println("Image can't not be found!\n");
+            TraceManager.addDev("Image can't not be found!\n");
         }
 
-        System.out.println("Image has been converted successfully!");
+        TraceManager.addDev("Image has been converted successfully!");
 
         return imgByte;
     }
 
     //a function to convert a string byte to an image
-    public static void convertByteToImage(byte[] imgByte,Message msg){
+    public static void convertByteToImage(byte[] imgByte, Message msg) {
 
-        if (imgByte != null){
+        if (imgByte != null) {
 
             InputStream inStream = new ByteArrayInputStream(imgByte);
             try {
                 BufferedImage img = ImageIO.read(inStream);
-                if(msg.getCmd().equals(RESULT_STATISTIC))
-                {
+                if (msg.getCmd().equals(RESULT_STATISTIC)) {
                     ImageIO.write(img, "png", new File(PIC_DES_STAT));
-                }
-                else
-                {
+                } else {
                     ImageIO.write(img, "png", new File(PIC_DES_HIST));
                 }
-                System.out.println("Image has been created successfully!\n");
+                TraceManager.addDev("Image has been created successfully!\n");
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                System.out.println("Image can't not be created!\n");
+                TraceManager.addDev("Image can't not be created!\n");
             }
-        }
-
-        else System.out.print("Image can't not be created!");
+        } else System.out.print("Image can't not be created!");
     }
 }

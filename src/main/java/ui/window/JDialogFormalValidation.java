@@ -264,7 +264,7 @@ public class JDialogFormalValidation extends JDialog implements ActionListener, 
     
     public void	actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
-        //System.out.println("Actions");
+        //
         
         // Compare the action command to the known actions.
         if (command.equals("Start"))  {
@@ -435,7 +435,7 @@ public class JDialogFormalValidation extends JDialog implements ActionListener, 
                 
                 rshc.sendFileData(fileDTA, data);
                 
-                //System.out.println("Starting piped processes");
+                //
                 
                 //data = processCmd(cmd2);
                 data = processPipedCmd(cmd2, cmd3);

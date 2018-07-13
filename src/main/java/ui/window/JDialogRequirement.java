@@ -47,6 +47,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 //import javax.swing.event.*;
 //import java.util.*;
@@ -74,6 +76,10 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
     private String text;
 	private String id;
     private int type;
+
+    protected ArrayList<String> extraParamIDs, extraParamValues;
+    protected JTextArea jtaAttributes;
+    //protected ArrayList<JTextField> extraParamTextFieldIDs, extraParamTextFieldValues;
     
     // Panel1
     protected JTextArea jta;
@@ -85,7 +91,8 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
     private JTextField idBox, violatedActionBox, attackTreeNodeBox, referenceElementsBox;
     
     /** Creates new form  */
-    public JDialogRequirement(Frame _frame, String _title, String _id, String _text, String _kind, String _criticality, String _violatedAction, int _type, String _attackTreeNode, String _referenceElements) {
+    public JDialogRequirement(Frame _frame, String _title, String _id, String _text, String _kind, String _criticality, String _violatedAction, int
+            _type, String _attackTreeNode, String _referenceElements, ArrayList<String> _extraParamIDs, ArrayList<String> _extraParamValues) {
         super(_frame, _title, true);
         frame = _frame;
 		id = _id;
@@ -96,6 +103,11 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
         type = _type;
 		attackTreeNode = _attackTreeNode;
 		referenceElements = _referenceElements;
+
+		extraParamIDs = _extraParamIDs;
+		extraParamValues = _extraParamValues;
+        //extraParamTextFieldIDs = new ArrayList<JTextField>();
+        //extraParamTextFieldValues = new ArrayList<JTextField>();
         
         initComponents();
         myInitComponents();
@@ -164,11 +176,26 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
         jta.setTabSize(3);
         jta.append(text);
         jta.setFont(new Font("times", Font.PLAIN, 12));
-       
+
+
         JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         //jsp.setPreferredSize(new Dimension(300, 200));
         panel1.add(jsp, c1);
         //}
+
+        panel1.add(new JLabel("Extra attributes. ID:Value (in one line)"), c1);
+        jtaAttributes = new JTextArea();
+        jtaAttributes.setEditable(true);
+        jtaAttributes.setMargin(new Insets(10, 10, 10, 10));
+        jtaAttributes.setTabSize(3);
+        for(int k=0; k<extraParamIDs.size(); k++) {
+            jtaAttributes.append(extraParamIDs.get(k)+ ": " + extraParamValues.get(k));
+        }
+        jtaAttributes.setFont(new Font("times", Font.PLAIN, 12));
+
+        jsp = new JScrollPane(jtaAttributes, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        //jsp.setPreferredSize(new Dimension(300, 200));
+        panel1.add(jsp, c1);
         
         // Panel2
         c2.gridwidth = 1;
@@ -355,6 +382,10 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
     
     public String getReferenceElements() {
         return referenceElementsBox.getText();
+    }
+
+    public String getExtraAttributes() {
+        return jtaAttributes.getText();
     }
     
 }

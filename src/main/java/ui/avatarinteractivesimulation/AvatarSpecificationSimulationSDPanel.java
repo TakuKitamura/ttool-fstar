@@ -178,7 +178,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
         repaint();
     }
 
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         if (!trace) {
             g.clearRect(0, 0, getWidth(), getHeight());
             return;

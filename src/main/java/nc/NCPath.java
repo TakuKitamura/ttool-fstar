@@ -77,7 +77,7 @@ public class NCPath extends NCElement {
 	
 	public String getLinksString() {
 		String tmp = "";
-		//System.out.println("switch size:" + switches.size() + " link: " + links.size());
+		//
 		for(NCLink link: links) {
 			tmp += link.getName() + " ";
 		}

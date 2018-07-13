@@ -120,7 +120,7 @@ public  class TGConnectorTMLAssociationNav extends TGConnector {
    
     
     public void pointHasBeenRemoved(TGCPointOfConnector tgc) {
-        System.out.println("Internal Points:" + nbInternalTGComponent);
+        
         
         int i, index = 0;
         TGConnectingPointTwoFathers cp1, cp2;

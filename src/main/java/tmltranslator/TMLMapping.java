@@ -811,8 +811,9 @@ public class TMLMapping<E> {
         }
 
         TMLChannel chan;
+        TMLEvent evt;
 
-        //TraceManager.addDev("Number of tasks after remove fork/join: " + tmlm.getTasks().size());
+        TraceManager.addDev("Number of tasks after remove fork/join: " + tmlm.getTasks().size());
 
 
         // We map the forked tasks to their origin node, and the join ones to their destination node
@@ -827,16 +828,30 @@ public class TMLMapping<E> {
                         if ((origin != null) && (isTaskMapped(origin))) {
                             HwExecutionNode node = (HwExecutionNode) (getHwNodeOf(origin));
                             if (node != null) {
-                                //TraceManager.addDev("\n\nMapping fork task " + task.getName() + " to " + node.getName());
+                                TraceManager.addDev("\n\nMapping fork task " + task.getName() + " to " + node.getName());
                                 addTaskToHwExecutionNode(task, node);
                             }
                         }
+                    } else {
+                        evt = tmlm.getEventToMe(task);
+                        TraceManager.addDev("Event that we found:" + evt.getName());
+                        if (evt != null) {
+                            TMLTask origin = evt.getOriginTask();
+                            if ((origin != null) && (isTaskMapped(origin))) {
+                                HwExecutionNode node = (HwExecutionNode) (getHwNodeOf(origin));
+                                if (node != null) {
+                                    TraceManager.addDev("\n\nMapping fork task " + task.getName() + " to " + node.getName());
+                                    addTaskToHwExecutionNode(task, node);
+                                }
+                            }
+                        }
                     }
+
                 } else {
-                    //TraceManager.addDev("\n\nFORKTASK is  mapped: " + task.getName());
+                    TraceManager.addDev("\n\nFORKTASK is  mapped: " + task.getName());
                 }
             } else {
-                //TraceManager.addDev("Non fork task found: " + task.getName());
+                TraceManager.addDev("Non fork task found: " + task.getName());
             }
             if (task.getName().startsWith("JOINTASK_")) {
                 if (!isTaskMapped(task)) {
@@ -1063,7 +1078,7 @@ public class TMLMapping<E> {
         write.addNext(stopWrite);
 
         // All mapping to be done
-        // Map DMA task to the DMA nod eof the CPLib
+        // Map DMA task to the DMA node of the CPLib
         addTaskToHwExecutionNode(dmaTask, node);
 
 

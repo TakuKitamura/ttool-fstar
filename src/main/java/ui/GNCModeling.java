@@ -93,7 +93,7 @@ public class GNCModeling  {
 			manageParameters();
 		}
 		
-		//System.out.println("NC XML:\n" + ncs.toXML());
+		//
 		
         return ncs;
     }
@@ -155,7 +155,7 @@ public class GNCModeling  {
 				eq = new NCEquipment();
 				eq.setName(node.getName());
 				eq.setSchedulingPolicy(node.getSchedulingPolicy());
-				System.out.println("type=" + node.getNodeType());
+				
 				eq.setType(node.getNodeType());
 				ncs.equipments.add(eq);
 			/*}*/
@@ -353,7 +353,7 @@ public class GNCModeling  {
 	}
 	
 	private void addPaths() {
-		System.out.println("Adding paths");
+		
 		// Consider each traffic
 		// For each traffic, its builds a tree
 		// Then, its generates the corresponding paths
@@ -369,7 +369,7 @@ public class GNCModeling  {
 		
 		while(iterator.hasNext()) {
 			arti = (NCTrafficArtifact)(iterator.next());
-			System.out.println("Considering traffic: " + arti.getValue()); 
+			
 			tr = ncs.getTrafficByName(arti.getValue());
 			if (tr == null) {
 				return;
@@ -406,7 +406,7 @@ public class GNCModeling  {
 		NCLink ncl;
 		
 		if (tree.isLeaf()) {
-			//System.out.println("Found path");
+			//
 			NCPath path = new NCPath();
 			path.traffic = traffic;
 			path.origin = origin;
@@ -420,7 +420,7 @@ public class GNCModeling  {
 			}
 			path.destination = (NCEquipment)ncle;
 			ncsw = null;
-			System.out.println("nb of switches:" + list.size());
+			
 			for(String s: list) {
 				ncle = ncs.getNCLinkedElementByName(s);
 				if (ncle instanceof NCSwitch) {
@@ -468,24 +468,24 @@ public class GNCModeling  {
 					checkingErrors.add(ce);
 					return;
 				}
-			//System.out.println("Adding path");
+			//
 			path.setName("path" + PATH_INDEX);
 			PATH_INDEX++;
 			ncs.paths.add(path);
-			System.out.println("nb of switches:" + path.switches.size());
-			System.out.println("nb of links:" + path.links.size());
+			
+			
 			
 			// not a leaf
 		} else {
 			sw = (NCSwitchNode)(tree.getElement());
 			TreeCell next = new TreeCell();
-			//System.out.println("Adding to path: " + sw.getName());
+			//
 			list.add(sw.getName());
 			for(int i=0; i<tree.getNbOfChildren(); i++) {
 				next = tree.getChildrenByIndex(i);
 				exploreTree(next, list, origin, traffic);
 			}
-			//System.out.println("Removing from path: " + sw.getName());
+			//
 			list.remove(list.size()-1);
 		}
 	}
@@ -532,7 +532,7 @@ public class GNCModeling  {
 		ret = buildTreeFromSwitch(tree, tree, listsw.get(0), lk, arti);
 		
 		// print tree
-		System.out.println(tree.toString());
+		
 		
 		if (ret < 0) {
 			return ret;
@@ -574,7 +574,7 @@ public class GNCModeling  {
 		// Get all routes concerning that traffic on that switch
 		ArrayList<NCRoute> routes = ncdp.getAllRoutesFor(sw, arti);
 		
-		//System.out.println("toto0");
+		//
 		
 		// Get all next swithes, according to routes, and fill the tree
 		// Verify that there is at least one possibile route
@@ -612,10 +612,10 @@ public class GNCModeling  {
 		}
 		
 		for(NCRoute route: routes) {
-			System.out.println("Considering route:" + route.toString()+  " vs input route=" + lkname);
+			
 			if (route.inputInterface.equals(lkname)) {
 				// Must check that two routes don't have the same output interface
-				//System.out.println("toto1");
+				//
 				error = false;
 				for(NCRoute route1: computed) {
 					if ((route1 != route) && (route1.outputInterface.equals(route.outputInterface))) {
@@ -628,7 +628,7 @@ public class GNCModeling  {
 				}
 				computed.add(route);
 				
-				//System.out.println("toto2");
+				//
 				// Is it an existing output interface?
 				if (error == false) {
 					link = ncs.hasLinkWith(sw.getNodeName(), route.outputInterface);
@@ -638,7 +638,7 @@ public class GNCModeling  {
 						ce.setTGComponent(sw);
 						warnings.add(ce);	
 					} else {
-						//System.out.println("toto3");
+						//
 						// Is the destination equipment a switch that is in the tree already?
 						// If so, there is a cycle -> ignoring route
 						if (link.getLinkedElement1().getName().equals(sw.getNodeName())) {
@@ -647,7 +647,7 @@ public class GNCModeling  {
 							ncle = link.getLinkedElement1();
 						}
 						
-						//System.out.println("toto4");
+						//
 						// Is the next of the route an equipment?
 						if (ncle instanceof NCEquipment) {
 							ncen = ncdp.getEquipmentByName(ncle.getName());
@@ -658,7 +658,7 @@ public class GNCModeling  {
 								checkingErrors.add(ce);	
 							} else {
 								// Adding an equipment -> leaf of the tree
-								//System.out.println("Adding a leaf: " + ncle.getName());
+								//
 								cell = new TreeCell();
 								cell.setElement(ncen);
 								tree.addChildren(cell);
@@ -686,9 +686,9 @@ public class GNCModeling  {
 									checkingErrors.add(ce);	
 								} else {
 									// Recursive call
-									//System.out.println("Adding a switch: " + ncsn.getNodeName());
+									//
 									buildTreeFromSwitch(root, cell, ncsn, nextArriving, arti);
-									//System.out.println("Ending adding a switch: " + ncsn.getNodeName());
+									//
 								}
 								//}
 						}
@@ -803,7 +803,7 @@ public class GNCModeling  {
 									for(i=0; i<parameter1; i++) {
 										tr1 = path.traffic.cloneTraffic();
 										tr1.setName(path.traffic.getName() + "__" + i);
-										//System.out.println("Traffic " + tr1.getName() + " unit after=" + tr1.getDeadlineUnit().getStringUnit());
+										//
 										ncs.traffics.add(tr1);
 									}
 									
@@ -821,7 +821,7 @@ public class GNCModeling  {
 												path1.destination = nceq2;
 												newPaths.add(path1);
 											} else {
-												System.out.println("null");
+												
 											}
 										}
 									}

@@ -2,15 +2,15 @@
 #include <pthread.h>
 #include <time.h>
 
-#include "request_manager.h"
-#include "request.h"
-#include "myerrors.h"
-#include "debug.h"
-#include "mytimelib.h"
-#include "random.h"
-#include "asyncchannel.h"
-#include "syncchannel.h"
-#include "tracemanager.h"
+#include "include/request_manager.h"
+#include "include/request.h"
+#include "include/myerrors.h"
+#include "include/debug.h"
+#include "include/mytimelib.h"
+#include "include/random.h"
+#include "include/asyncchannel.h"
+#include "include/syncchannel.h"
+#include "include/tracemanager.h"
 
 void executeSendSyncTransaction(request *req) {
   int cpt;

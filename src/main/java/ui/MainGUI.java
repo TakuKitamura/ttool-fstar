@@ -105,9 +105,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static myutil.FileUtils.checkFileForOpen;
 
 // AVATAR
 
@@ -135,6 +138,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public static boolean experimentalOn;
     public static boolean avatarOnly;
     public static boolean turtleOn;
+    public static boolean openLast;
 
     public boolean isxml = false;
 
@@ -147,7 +151,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public JFrame frame; //Main Frame
     public Container framePanel; //Main pane
     public Container panelForTab, panelForTree; //panelForAnalysisTab; //panelForDesignTab;
-    public JSplitPane split;
+    public JSplitPane split, split1;
 
     // Multi analysis / design / deployment
     public Vector<TURTLEPanel> tabs;
@@ -163,6 +167,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     // Actions
     public TGUIAction[] actions;
+    public TGUIAction[] actionsLast;
     public MouseHandler mouseHandler;
     public KeyListener keyHandler;
 
@@ -336,8 +341,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     //public static PluginManager pluginManager;
 
 
-    public MainGUI(boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
+    public MainGUI(boolean _openLast, boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn,
+                   boolean
+            _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
             _avatarOnly, boolean _experimental) {
+        openLast = _openLast;
+        TraceManager.addDev("openLast=" + openLast);
         turtleOn = _turtleOn;
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
@@ -376,7 +385,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return avatarOn;
     }
 
-
+    public boolean isSystemcOn() {
+    	return systemcOn;
+    }
+    
     public void build() {
         // Swing look and feel
 
@@ -513,21 +525,33 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         scrollPane.setMinimumSize(new Dimension(25, 200));
         jbp = new JBirdPanel(this);
         jbp.setPreferredSize(new Dimension(200, 200));
-        JSplitPane split1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, scrollPane, jbp);
+        split1 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, scrollPane, jbp);
 
-        //split1.setLastDividerLocation(500);
+        //split1.setDividerLocation(700);
+        split1.setResizeWeight(0.1);
+        //split1.setOneTouchExpandable(true);
         //panelForTree.add(scrollPane, BorderLayout.CENTER);
 
         split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, split1, panelForTab);
         framePanel.add(split, BorderLayout.CENTER);
+        split.setDividerLocation(250);
+        split1.setResizeWeight(0.9);
+        split.setOneTouchExpandable(true);
         //split1.resetToPreferredSizes();
 
         // Creating menus
         jmenubarturtle = new JMenuBarTurtle(this);
         frame.setJMenuBar(jmenubarturtle);
 
-        //split1.setLastDividerLocation(split1.getHeight() * 4 / 5);
-        //split1.setLastDividerLocation(900);
+        // if openLast, must open the latest specification (if it exists)
+        if ((ConfigurationTTool.LastOpenFileDefined) && (openLast)) {
+            openLastProject();
+            dtree.update();
+            //split1.setDividerLocation(600);
+            //split.setDividerLocation(220);
+        }
+
+        //
 
         // ToolBar
         //toolbarDesign = new Vector();
@@ -546,6 +570,16 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             actions[i].addActionListener(this);
             //actions[i].addKeyListener(this);
         }
+        actionsLast = new TGUIAction[ConfigurationTTool.NB_LAST_OPEN_FILE];
+        for (int j = 0; j < actionsLast.length; j++) {
+            actionsLast[j] = new TGUIAction(TGUIAction.ACT_OPEN_LAST, "Open recent: " + ConfigurationTTool.LastOpenFiles[j]);
+            actionsLast[j].addActionListener(this);
+            //actions[i].addKeyListener(this);
+        }
+        if (jmenubarturtle != null) {
+            jmenubarturtle.makeFileMenu(this);
+        }
+
     }
 
     public String getTitle() {
@@ -1075,6 +1109,22 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
 
+    public int addELNDesignPanel(String name, int index) { 
+    	if (index == -1) {
+    		index = tabs.size();
+    	}
+    	ELNDesignPanel elndp = new ELNDesignPanel(this);
+    	tabs.add(index, elndp);
+    	mainTabbedPane.add(elndp.tabbedPane, index);
+    	mainTabbedPane.setToolTipTextAt(index, "Open ELN design diagrams");
+    	mainTabbedPane.setTitleAt(index, name);
+    	mainTabbedPane.setIconAt(index, IconManager.imgic60);
+    	//mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+    	elndp.init();
+    	//ystem.out.println("Design added");
+    	return index;
+    }
+
     //Return the list of all the TMLArchiDiagramPanels
     public Vector<TMLArchiPanel> getTMLArchiDiagramPanels() {
 
@@ -1469,12 +1519,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
 
-		public int createSysCAMSComponentDesign(String name) {
+	public int createSysCAMSComponentDesign(String name) {
         int index = addSysCAMSComponentDesignPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
         return index;
     }
 
+	public int createELN(String name) {
+        int index = addELNDesignPanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+	
     public int createADD(String name) {
         int index = addADDPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
@@ -1690,6 +1746,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
         frame.setVisible(true);
+
+        //split1.setDividerLocation(0.90);
+        //split.setDividerLocation(0.2);
+
+
+
     }
 
     public void newTurtleModeling() {
@@ -1862,13 +1924,22 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //frame.repaint();
     }
 
-     public void newSysCAMS() {
+	public void newSysCAMS() {
         //TraceManager.addDev("NEW DESIGN");
         addSysCAMSComponentDesignPanel("SystemC_AMS", -1);
-        tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
+        //tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
         //frame.repaint();
+    }
+    
+    public void newELN() {
+    	//TraceManager.addDev("NEW DESIGN");
+    	addELNDesignPanel("ELN", -1);
+    	tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
+    	mainTabbedPane.setSelectedIndex(tabs.size() - 1);
+    	//paneAction(null);
+    	//frame.repaint();
     }
 
     public void newADD() {
@@ -2357,6 +2428,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void updateLastOpenFile(File file) {
         if (ConfigurationTTool.LastOpenFileDefined) {
+
+
             ConfigurationTTool.LastOpenFile = file.getPath();
             if (ConfigurationTTool.LastOpenFile.contains(".ttool" + File.separator)) {
                 int last = 0;
@@ -2368,6 +2441,29 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
             // Change name of action
             actions[TGUIAction.ACT_OPEN_LAST].setName(TGUIAction.ACT_OPEN_LAST, ConfigurationTTool.LastOpenFile);
+
+            // is the new name already in the list of opened files?
+            for(int i=0; i<ConfigurationTTool.LastOpenFiles.length; i++) {
+                if (ConfigurationTTool.LastOpenFiles[i].compareTo(ConfigurationTTool.LastOpenFile) == 0) {
+                    ConfigurationTTool.LastOpenFiles[i] = "";
+                }
+            }
+
+            // Dec all files
+            ConfigurationTTool.decLastFiles();
+            ConfigurationTTool.LastOpenFiles[0] = ConfigurationTTool.LastOpenFile;
+
+            // We need to update the actions
+            for (int j = 0; j < actionsLast.length; j++) {
+                actionsLast[j] = new TGUIAction(TGUIAction.ACT_OPEN_LAST, "Open recent: " + ConfigurationTTool.LastOpenFiles[j]);
+                actionsLast[j].addActionListener(this);
+                //actions[i].addKeyListener(this);
+            }
+
+            if (jmenubarturtle != null) {
+                jmenubarturtle.makeFileMenu(this);
+            }
+
         }
     }
 
@@ -2391,7 +2487,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 byte[] ba = new byte[nb];
                 fis.read(ba);
                 fis.close();
-                s = new String(ba);
+                s = new String(ba, "UTF-8");
+
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
@@ -2561,60 +2658,73 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            file = jfc.getSelectedFile();
-            openProjectFromFile(file);
+            File tmpFile = jfc.getSelectedFile();
+            openProjectFromFile(tmpFile);
         }
 
     }
 
     public void openProjectFromFile(File _f) {
+        String data = null;
+        File tmpFile;
+
         if (FileUtils.getExtension(_f).equals("ttool")) {
-            dir = _f;
-            SpecConfigTTool.setDirConfig(dir);
-            String filename = dir.getAbsolutePath() + "/" + dir.getName().replaceAll(".ttool", ".xml");
-            file = new File(filename);
-            config = new File(dir.getAbsolutePath() + "/project_config.xml");
-            try {
-                SpecConfigTTool.loadConfigFile(config);
-            } catch (MalformedConfigurationException e) {
-                System.err.println(e.getMessage() + " : Can't load config file.");
-            }
+            File tmpDir = _f;
+            //SpecConfigTTool.setDirConfig(dir);
+            String filename = tmpDir.getAbsolutePath() + "/" + tmpDir.getName().replaceAll(".ttool", ".xml");
+            tmpFile = new File(filename);
         } else {
-            dir = null;
-            config = null;
-            SpecConfigTTool.setBasicConfig(systemcOn);
-            file = _f;
+            tmpFile = _f;
         }
 
-        if (checkFileForOpen(file)) {
-            String s = null;
+        if (!checkFileForOpen(tmpFile)) {
+            JOptionPane.showMessageDialog(frame, "File " + tmpFile.getAbsolutePath() +  " could not be opened ", "File Error", JOptionPane
+                    .INFORMATION_MESSAGE);
+            return;
+        }
 
+        try {
+            FileInputStream fis = new FileInputStream(tmpFile);
+            int nb = fis.available();
+
+            byte[] ba = new byte[nb];
+            fis.read(ba);
+            fis.close();
+            data = new String(ba, "UTF-8");
+            //TraceManager.addDev("Mode:" + s);
+        } catch (Exception e) {
+            //TraceManager.addDev("Open file error");
+            JOptionPane.showMessageDialog(frame, "File " + tmpFile.getAbsolutePath() + " could not be opened", "File Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        if (FileUtils.getExtension(_f).equals("ttool")) {
+            File tmpDir = _f;
+            config = new File(tmpDir.getAbsolutePath() + "/project_config.xml");
             try {
-                FileInputStream fis = new FileInputStream(file);
-                int nb = fis.available();
-
-                byte[] ba = new byte[nb];
-                fis.read(ba);
-                fis.close();
-                s = new String(ba);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
-                return;
+                    SpecConfigTTool.loadConfigFile(config);
+            } catch (MalformedConfigurationException e) {
+                    System.err.println(e.getMessage() + " : Can't load config file.");
             }
+            SpecConfigTTool.setDirConfig(tmpDir);
+        }
 
-            // close current modeling
-            closeTurtleModeling();
+        file = tmpFile;
 
-            // open the new TURTLE modeling
-            newTurtleModeling();
+        // close current modeling
+        closeTurtleModeling();
+
+        // open the new TURTLE modeling
+        newTurtleModeling();
 
             //            gtm.enableUndo(false);
 
             // Update configuration
-            updateLastOpenFile(file);
+        updateLastOpenFile(file);
 
             // Issue #41: Moved to common method
-            loadModels(s, "loaded");
+        loadModels(data, "loaded");
             //            // load the new TURTLE modeling
             //            try {
             //                gtm.loadModelingFromXML(s);
@@ -2634,12 +2744,16 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             //            gtm.enableUndo(true);
             //            gtm.saveOperation(getCurrentSelectedPoint());
             //            dtree.forceUpdate();
-            if (getCurrentTDiagramPanel() != null)
-                getCurrentTDiagramPanel().repaint();
-        }
+        if (getCurrentTDiagramPanel() != null)
+            getCurrentTDiagramPanel().repaint();
+
     }
 
     public void openLastProject() {
+        openLastProject(0);
+    }
+
+    public void openLastProject(int id) {
         // Check if a current modeling is opened
         boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
         if (b) {
@@ -2648,7 +2762,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
         }
 
-        file = new File(ConfigurationTTool.LastOpenFile);
+        file = new File(ConfigurationTTool.LastOpenFiles[id]);
 
         if (checkFileForOpen(file)) {
             String s = null;
@@ -2682,7 +2796,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 byte[] ba = new byte[nb];
                 fis.read(ba);
                 fis.close();
-                s = new String(ba);
+                s = new String(ba, "UTF-8");
+                //TraceManager.addDev("Model:" + s);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
                 return;
@@ -2697,6 +2812,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             gtm.enableUndo(false);
 
             // Issue #41: Moved to common method
+            updateLastOpenFile(file);
             loadModels(s, "loaded");
             //TraceManager.addDev("Loading");
             // load the new TURTLE modeling
@@ -2743,9 +2859,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
 
             }
-        } catch (MalformedModelingException mme) {
+        } catch (Exception mme) {
             JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            frame.setTitle("TToolt: unnamed project");
+            frame.setTitle("TTool: unnamed project");
         }
 
         gtm.enableUndo(true);
@@ -3428,6 +3544,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return false;
     }
 
+	public void issueError(String error, String title){
+		JOptionPane.showMessageDialog(frame,
+                    error,
+                    title,
+                    JOptionPane.INFORMATION_MESSAGE);
+	}
+
     public boolean checkModelingSyntax(TURTLEPanel tp, boolean automatic) {
         //String msg = "";
         boolean b = false;
@@ -3751,7 +3874,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame,
                                 "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
                                 "Syntax analysis successful on TML designs",
@@ -3789,7 +3912,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame,
                                 "0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
                                 "Syntax analysis successful on TML designs",
@@ -3842,6 +3965,44 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         			}
         		}
         	}
+        } else if (tp instanceof ELNDesignPanel) {
+        	ELNDesignPanel elndp = (ELNDesignPanel) tp;
+        	JDialogSelectELNComponent.validated = elndp.validated;
+        	JDialogSelectELNComponent.ignored = elndp.ignored;
+        	Vector<TGComponent> ELNComponentsToValidate = new Vector<TGComponent>();
+        	JDialogSelectELNComponent jdselnc = new JDialogSelectELNComponent(frame, ELNComponentsToValidate, elndp.elndp.getComponentList(), "Choosing ELN components to validate");
+        	if (!automatic) {
+        		GraphicLib.centerOnParent(jdselnc);
+        		jdselnc.setVisible(true); // Blocked until dialog has been closed
+        	} else {
+        		jdselnc.closeDialog();
+        	}
+        	if (ELNComponentsToValidate.size() > 0) {
+        		elndp.validated = JDialogSelectELNComponent.validated;
+        		elndp.ignored = JDialogSelectELNComponent.ignored;
+//        		b = gtm.translateSysCAMSComponentDesign(syscamsComponentsToValidate, syscamscdp, jdssyscamsc.getOptimize());
+        		expandToWarnings();
+        		expandToErrors();
+        		if (b) {
+        			//setMode(MainGUI.MODEL_OK);
+        			setMode(MainGUI.GEN_SYSTEMC_OK);
+        			setMode(MainGUI.MODEL_OK);
+        			ret = true;
+        			if (!automatic) {
+        				JOptionPane.showMessageDialog(frame,
+        						"0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate make proofs (safety, security and performance) or generate executable code",
+        						"Syntax analysis successful on ELN designs",
+        						JOptionPane.INFORMATION_MESSAGE);
+        			}
+        		} else {
+        			if (!automatic) {
+        				JOptionPane.showMessageDialog(frame,
+        						"The ELN design contains several errors",
+        						"Syntax analysis failed",
+        						JOptionPane.INFORMATION_MESSAGE);
+        			}
+        		}
+        	}
         } else if (tp instanceof TMLArchiPanel) {
             tmlap = (TMLArchiPanel) tp;
             JDialogSelectTMLNodes.validated = tmlap.validated;
@@ -3868,7 +4029,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame,
                                 "0 error, " + getCheckingWarnings().size() + " warning(s). You can now perform verifications (safety, security, performance) or generate executable code",
                                 "Syntax analysis successful on TML mapping",
@@ -3910,7 +4071,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     setMode(MainGUI.GEN_SYSTEMC_OK);
                     setMode(MainGUI.MODEL_OK);
                     ret = true;
-                    if (!automatic) {
+                    if ((!automatic) && (getCheckingWarnings().size() > 0)){
                         JOptionPane.showMessageDialog(frame, "0 error, " + getCheckingWarnings().size() +
                                         " warning(s). You can now perform verifications (safety, security, performance) or generate executable code",
                                 "Syntax analysis successful on TML mapping",
@@ -4171,7 +4332,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
         TMLComponentDesignPanel tmlcomp = (TMLComponentDesignPanel) tp;
         String name = getCurrentTDiagramPanel().getName();
-        System.out.println("Name " + name);
+        
         return tmlcomp.getAllOutChannels(name);
     }
 
@@ -4613,7 +4774,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void avatarUPPAALVerification() {
-        TraceManager.addDev("Avatar uppaal fv");
+        //TraceManager.addDev("Avatar uppaal fv");
         boolean result = gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
         if (result) {
             formalValidation(true);
@@ -4764,7 +4925,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
         JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(), SpecConfigTTool.TGraphPath, experimentalOn);
         // jmc.setSize(550, 600);
-        GraphicLib.centerOnParent(jmc, 550, 600);
+        GraphicLib.centerOnParent(jmc, 650, 600);
         jmc.setVisible(true);
     }
 
@@ -6098,6 +6259,21 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     	return ll;
     }
 
+    public List<TGComponent> getAllELNComponents() {
+    	TURTLEPanel tp;
+    	List<TGComponent> ll = new LinkedList<TGComponent>();
+    	
+    	for (int i = 0; i < tabs.size(); i++) {
+    		tp = tabs.elementAt(i);
+    		
+    		if (tp instanceof ELNDesignPanel) {
+    			ll.addAll(((ELNDesignPanel) tp).elndp.getComponentList());
+    		}
+    	}
+    	
+    	return ll;
+    }
+
     public ArrayList<SysCAMSComponentTaskDiagramPanel> getAllPanelsReferencingSysCAMSCompositeComponent(SysCAMSCompositeComponent syscamscc) {
         TURTLEPanel tp;
         ArrayList<SysCAMSComponentTaskDiagramPanel> foundPanels = new ArrayList<SysCAMSComponentTaskDiagramPanel>();
@@ -6279,25 +6455,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return ((TMLComponentDesignPanel) (tp)).tmlctdp.getCompositeComponentByName(componentName);
     }
 
-		public SysCAMSCompositeComponent getSysCAMSCompositeComponent(String name) {
-    	int index = name.indexOf("::");
-    	if (index == -1) {
-    		return null;
-    	}
-    	
-    	String panelName = name.substring(0, index);
-    	String componentName = name.substring(index + 2, name.length());
-    	
-    	TURTLEPanel tp = getTURTLEPanel(panelName);
-    	
-    	if ((tp == null) || (!(tp instanceof SysCAMSComponentDesignPanel))) {
-    		return null;
-    	}
-    	
-    	return ((SysCAMSComponentDesignPanel) (tp)).syscamsctdp.getCompositeComponentByName(componentName);
-    }
-
-
     public AvatarSMDPanel getAvatarSMDPanel(int indexDesign, String name) {
 
         TURTLEPanel tp = tabs.elementAt(indexDesign);
@@ -6412,10 +6569,15 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         tp.tabbedPane.setTitleAt(0, name);
     }
 
-		public void setSysCAMSComponentTaskDiagramName(int indexDesign, String name) {
+	public void setSysCAMSComponentTaskDiagramName(int indexDesign, String name) {
     	TURTLEPanel tp = tabs.elementAt(indexDesign);
     	tp.tabbedPane.setTitleAt(0, name);
     }
+	
+	public void setELNDiagramName(int indexDesign, String name) {
+		TURTLEPanel tp = tabs.elementAt(indexDesign);
+		tp.tabbedPane.setTitleAt(0, name);
+	}
 
     public void setTMLArchitectureDiagramName(int indexDesign, String name) {
         TURTLEPanel tp = tabs.elementAt(indexDesign);
@@ -7107,7 +7269,20 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         setPanelMode();
         return true;
     }
+    
+    public boolean createSysCAMS(int index, String s) {
+        return createSysCAMS(tabs.elementAt(index), s);
+    }
 
+    public boolean createSysCAMS(TURTLEPanel tp, String s) {
+        if (!(tp instanceof SysCAMSComponentDesignPanel)) {
+            return false;
+        }
+
+        ((SysCAMSComponentDesignPanel) tp).addSysCAMS(s);
+        setPanelMode();
+        return true;
+    }
 
     public boolean isRequirementCreated(int index, String s) {
         return isRequirementCreated(tabs.elementAt(index), s);
@@ -7209,7 +7384,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     }
 
-
+    public SysCAMSComponentTaskDiagramPanel getSysCAMSPanel(int index, int indexTab, String s) {
+    	TURTLEPanel tp = tabs.elementAt(index);
+    	return getSysCAMSPanel(tp, indexTab, s);
+    }
+    
+    public SysCAMSComponentTaskDiagramPanel getSysCAMSPanel(TURTLEPanel tp, int indexTab, String s) {
+    	if (tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+    		return (SysCAMSComponentTaskDiagramPanel) (tp.panelAt(indexTab));
+    	}
+    	return null;
+    }
+    
     public AvatarRDPanel getAvatarRDPanel(int index, int indexTab, String s) {
         TURTLEPanel tp = tabs.elementAt(index);
         return getAvatarRDPanel(tp, indexTab, s);
@@ -7457,7 +7643,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
         index = tp.tabbedPane.getSelectedIndex();
 
-        TraceManager.addDev("TP Panel: " + tp + " index=" + index);
+        //TraceManager.addDev("TP Panel: " + tp + " index=" + index);
 
         if (index < tp.panels.size() - 1) {
             setMode(FORWARD_DIAG);
@@ -7979,7 +8165,14 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             gtm.loadModelingFromXML(s);
             changeMade(null, -1);
         } catch (MalformedModelingException mme) {
-            JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported file) ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported xml format) ", "Error when loading modeling",
+                    JOptionPane
+                    .INFORMATION_MESSAGE);
+            frame.setTitle("TTool: unamed project");
+        } catch (UnsupportedEncodingException mme) {
+            JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported encoding format) ", "Error when loading modeling",
+                    JOptionPane
+                            .INFORMATION_MESSAGE);
             frame.setTitle("TTool: unamed project");
         }
 
@@ -8350,6 +8543,48 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     //--------------------end DDD------------------------------------------------
 
+    public Vector<SysCAMSComponentTaskDiagramPanel> getListSysCAMSPanel() {
+    	Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagram = new Vector<SysCAMSComponentTaskDiagramPanel>(); 
+    	TURTLEPanel tp = getTURTLEPanel("SystemC_AMS");
+    	if (tp != null) {
+    		Vector<TDiagramPanel> ps = tp.panels;
+    		for (TDiagramPanel panel : ps) {
+    			if (panel instanceof SysCAMSComponentTaskDiagramPanel) {
+    				syscamsDiagram.add((SysCAMSComponentTaskDiagramPanel) panel);
+    			}
+    		}
+    		if (syscamsDiagram.size() == 0) 
+    			System.err.println("No SysCAMS Panel found : MainGUI.getSysCAMSPanel()");
+    		return syscamsDiagram;
+    	} else {
+    		JDialog msg = new JDialog();
+    		msg.setLocationRelativeTo(null);
+    		JOptionPane.showMessageDialog(msg, "There is no Systemc-AMS panel. Please add one.", "Warning !",
+    				JOptionPane.WARNING_MESSAGE);
+    		return null;
+    	}
+    }
+    
+    public SysCAMSComponentTaskDiagramPanel getFirstSysCAMSPanelFound() {
+    	SysCAMSComponentTaskDiagramPanel syscamsdp = null;
+        for (int i = 0; i < tabs.size(); i++)
+            if (tabs.get(i) instanceof SysCAMSComponentDesignPanel) {
+                syscamsdp = ((SysCAMSComponentDesignPanel) tabs.get(i)).syscamsctdp;
+            }
+        if (syscamsdp == null)
+            System.err.println("No SysCAMS Panel Found : MainGUI.getFirstSysCAMSPanelFound()");
+        return syscamsdp;
+    }
+    
+    public void syscamsExecutableCodeGeneration() {
+        JDialogSysCAMSExecutableCodeGeneration jgen = new JDialogSysCAMSExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution",
+                "../SysCAMSGenerationCode/");
+   
+        GraphicLib.centerOnParent(jgen, 500, 450);
+        jgen.setVisible(true);
+        dtree.toBeUpdated();
+    }
+    
     public boolean selectMainTab(String id) {
         TURTLEPanel tp;
 
@@ -8514,19 +8749,19 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public synchronized void addLatencyVals(int id, String[] latency) {
         if (latencyMap != null) {
-            //System.out.println("Adding latency...");
+            //
             if (!latencyMap.containsKey(id)) {
                 ConcurrentHashMap<String, String> map = new ConcurrentHashMap<String, String>();
                 latencyMap.put(id, map);
             }
             latencyMap.get(id).put(latency[0], latency[1]);
-            //System.out.println(latencyMap);
+            //
         }
-        //      System.out.println(latencyMap);
+        //      
     }
 
     public synchronized ConcurrentHashMap<String, String> getLatencyVals(int id) {
-        //      System.out.println(id + " " + latencyMap);
+        //      
         if (latencyMap != null) {
             return latencyMap.get(id);
         }
@@ -8890,7 +9125,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         private JPopupMenu menu;
 
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement/*, newTMLDesign*/, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
-                newNCDesign, sort, clone, newAttackTree, newFaultTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSysCAMS;
+        		newNCDesign, sort, clone, newAttackTree, newFaultTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSysCAMS, newELN;
         private JMenuItem newAVATARAnalysis;
 
         public PopupListener(MainGUI _mgui) {
@@ -8948,7 +9183,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             newTMLComponentDesign = createMenuItem("New Partitioning - Functional view");
             newTMLArchi = createMenuItem("New Partitioning - Architecture and Mapping");
             newTMLCP = createMenuItem("New Partitioning - Communication Pattern");
-            newSysCAMS = createMenuItem("New SystemC-AMS Block Diagram"); //ajout CD
+            newSysCAMS = createMenuItem("New SystemC-AMS Block Diagram");
+            newELN = createMenuItem("New ELN Diagram"); 
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
             newNCDesign = createMenuItem("New Network Calculus Design");
@@ -9036,6 +9272,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     menu.add(newTMLArchi);
                     menu.addSeparator();
                     menu.add(newSysCAMS);
+                    menu.add(newELN);
                     menu.addSeparator();
                 }
             }
@@ -9186,7 +9423,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 } else if (e.getSource() == newSysCAMS) {
                     ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newSysCAMS();
-                }
+                } else if (e.getSource() == newELN) {
+	            	ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
+	            	mgui.newELN();
+	            }
             }
         };
     }
@@ -9232,3 +9472,4 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return tmlap;
     }
 } // Class MainGUI
+

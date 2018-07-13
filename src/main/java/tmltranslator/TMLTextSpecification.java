@@ -47,11 +47,17 @@ import myutil.FileException;
 import myutil.FileUtils;
 import myutil.TraceManager;
 
+import tmltranslator.SecurityPattern;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
+
+
 
 import common.SpecConfigTTool;
 
@@ -68,6 +74,15 @@ public class TMLTextSpecification<E> {
     public final static String CR2 = "\n\n";
     public final static String SC = ";";
     public final static String C = ",";
+    
+    
+	public final static String AENCRYPT="AE";
+	public final static String SENCRYPT="SE";
+	public final static String MAC="MAC";
+	public final static String NONCE="NONCE";
+	public final static String HASH="HASH";
+	public final static String ADV="ADV";
+	
 
     private String spec;
     private String title;
@@ -85,6 +100,8 @@ public class TMLTextSpecification<E> {
     private TMLActivityElement tmlae;
     private ArrayList<TMLParserSaveElt> parses;
 
+    private Map<String, SecurityPattern> securityPatternMap = new HashMap<String, SecurityPattern>();
+
     private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "LOSSYCHANNEL", "LOSSYEVENT", "LOSSYREQUEST", "BRBW", "NBRNBW",
                                         "BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ORIF", "ENDIF", "FOR", "ENDFOR",
                                         "SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM",
@@ -95,6 +112,10 @@ public class TMLTextSpecification<E> {
 
     private String beginArray[] = {"TASK", "FOR", "IF", "ELSE", "ORIF", "SELECTEVT", "CASE", "RAND", "CASERAND", "RANDOMSEQ", "SEQ"};
     private String endArray[] = {"ENDTASK", "ENDFOR", "ENDIF", "ELSE", "ORIF", "ENDSELECTEVT", "ENDCASE", "ENDRAND", "ENDCASERAND", "ENDRANDOMSEQ", "ENDSEQ"};
+
+// New argument to be added on EXECC for security: CC_name Type Encrypt_complexity Decrypt_Complexity Overhead Size Nonce Key
+// New argument on Read/Write Channels: CC_name
+
 
     public TMLTextSpecification(String _title) {
         title = _title;
@@ -185,15 +206,22 @@ public class TMLTextSpecification<E> {
     public String toString() {
         return spec;
     }
+    
+
 
     public String toTextFormat(TMLModeling<E> tmlm) {
 	tmlm.removeForksAndJoins();
         tmlm.sortByName();
         spec = makeDeclarations(tmlm);
+        //Set up Cryptographic Configurations
+        
         spec += makeTasks(tmlm);
         indent();
         return spec;
     }
+
+
+
 
     public String makeDeclarations(TMLModeling<E> tmlm) {
         int i;
@@ -344,7 +372,31 @@ public class TMLTextSpecification<E> {
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLExecC) {
-            code = "EXECC" + SP + modifyString(((TMLExecC)elt).getAction()) + CR;
+        	if (elt.securityPattern==null){
+	            code = "EXECC" + SP + modifyString(((TMLExecC)elt).getAction()) + CR;
+	        }
+	        else {
+	        	String type="";
+	        	if (elt.securityPattern.type.equals("Asymmetric Encryption")){
+	        		type = AENCRYPT;
+	        	}
+	        	else if (elt.securityPattern.type.equals("Symmetric Encryption")){
+	        		type = SENCRYPT;
+	        	}
+	        	else if (elt.securityPattern.type.equals("MAC")){
+	        		type = MAC;
+	        	}
+	        	else if (elt.securityPattern.type.equals("Nonce")){
+	        		type = NONCE;
+	        	}
+	        	else if (elt.securityPattern.type.equals("Hash")){
+	        		type = HASH;
+	        	}	        		        	
+	        	else {
+	        		type = ADV;
+	        	}	        	
+	        	code = "EXECC" + SP +  modifyString(((TMLExecC)elt).getAction()) + SP + elt.securityPattern.name + SP + type + SP + elt.securityPattern.encTime + SP + elt.securityPattern.decTime + SP + elt.securityPattern.overhead + SP + elt.securityPattern.size + SP + elt.securityPattern.nonce + SP + elt.securityPattern.key+   CR;
+	        }
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLExecCInterval) {
@@ -387,12 +439,23 @@ public class TMLTextSpecification<E> {
             for(int k=0; k<tmlch.getNbOfChannels(); k++) {
                 code = code + tmlch.getChannel(k).getName() + SP;
             }
-            code = code + modifyString(tmlch.getNbOfSamples()) + CR;
+            code = code + modifyString(tmlch.getNbOfSamples());
+            if (elt.securityPattern!=null){
+            	code = code + SP + elt.securityPattern.name + CR;
+            }
+            else {
+            	code = code + CR;
+            }
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLReadChannel) {
             tmlch = (TMLActivityElementChannel)elt;
-            code = "READ " + tmlch.getChannel(0).getName() + SP + modifyString(tmlch.getNbOfSamples()) + CR;
+            if (elt.securityPattern==null){      
+            	code = "READ " + tmlch.getChannel(0).getName() + SP + modifyString(tmlch.getNbOfSamples()) + CR;
+            }
+            else {
+            	code = "READ " + tmlch.getChannel(0).getName() + SP + modifyString(tmlch.getNbOfSamples()) + SP + elt.securityPattern.name + CR;     	
+            }
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLSendEvent) {
@@ -595,6 +658,35 @@ public class TMLTextSpecification<E> {
 
         parses = new ArrayList<TMLParserSaveElt>();
 
+		//Start by reading once and creating all Cryptographic Configuration
+		 try {
+            while((s = br.readLine()) != null) {
+                if (s != null) {
+                    s = s.trim();
+                    //TraceManager.addDev("s=" + s);
+                    s = removeUndesiredWhiteSpaces(s, lineNb);
+                    s1 = Conversion.replaceAllString(s, "\t", " ");
+                    s1 = Conversion.replaceRecursiveAllString(s1, "  ", " ");
+                    //TraceManager.addDev("s1=" + s1);
+                    if (s1 != null) {
+                        split = s1.split("\\s");
+                        if (split.length > 0) {
+                            findSec(split);
+                            
+                        }
+                    }
+
+                    lineNb++;
+                }
+            }
+		
+		} catch (Exception e){
+            TraceManager.addError("Exception when reading specification: " + e.getMessage());
+            addError(0, lineNb, 0, "Exception when reading specification");
+		}
+		
+		lineNb=0;
+		br = new BufferedReader(new StringReader(spec));
         try {
             while((s = br.readLine()) != null) {
                 if (s != null) {
@@ -621,6 +713,38 @@ public class TMLTextSpecification<E> {
             addError(0, lineNb, 0, "Exception when reading specification");
         }
     }
+
+	public void findSec(String[] _split){
+		if (isInstruction(_split[0],"EXECC")){
+			if (_split.length>4){
+				String ccName = _split[3];
+				String type = _split[4];
+				String stringType="";
+				if (type.equals(AENCRYPT)){
+					stringType="Symmetric Encryption";		
+				}
+				else if (type.equals(SENCRYPT)){
+					stringType="Symmetric Encryption";
+				}
+				else if (type.equals(HASH)){
+					stringType = "Hash";
+				}
+				else if (type.equals(MAC)){
+					stringType = "MAC";
+				}
+				else if (type.equals(NONCE)){
+					stringType = "Nonce";
+				}
+				else if (type.equals(ADV)){
+					stringType = "Advanced";
+				}
+				if (!stringType.equals("")){
+					SecurityPattern sp = new SecurityPattern(ccName, stringType, _split[6], _split[7], _split[4], _split[5], _split[8], "", _split[9]);
+					securityPatternMap.put(ccName, sp);
+				}
+			}
+		}
+	}
 
     public void addError(int _type, int _lineNb, int _charNb, String _msg) {
         TMLTXTError error = new TMLTXTError(_type);
@@ -1213,8 +1337,8 @@ public class TMLTextSpecification<E> {
             inTaskDec = false;
          //   inTaskBehavior = true;
 
-            if (_split.length != 3) {
-                error = "A READ operation must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+            if (_split.length != 3 && _split.length!= 4) {
+                error = "A READ operation must be declared with exactly 3 or 4 parameters, and not " + (_split.length - 1) ;
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1245,6 +1369,13 @@ public class TMLTextSpecification<E> {
             tmlrch.setNbOfSamples(_split[2]);
             task.getActivityDiagram().addElement(tmlrch);
             tmlae.addNext(tmlrch);
+                        
+            if (_split.length==4){
+            	if (securityPatternMap.containsKey(_split[3])){
+            		tmlrch.securityPattern = securityPatternMap.get(_split[3]); 
+            	}
+			}		
+            
             tmlae = tmlrch;
 
         } // READ
@@ -1263,8 +1394,10 @@ public class TMLTextSpecification<E> {
             inTaskDec = false;
          //   inTaskBehavior = true;
 
-            if (_split.length < 3) {
-                error = "A WRITE operation must be declared with at most 3 parameters, and not " + (_split.length - 1) ;
+	
+			
+            if (_split.length > 5 || _split.length <2) {
+                error = "A WRITE operation must be declared with at most 4 parameters, and not " + (_split.length - 1) ;
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1275,29 +1408,56 @@ public class TMLTextSpecification<E> {
 
 	    //TraceManager.addDev("Handling write channel 1");
             TMLWriteChannel tmlwch = new TMLWriteChannel(_split[1], null);
-            for(int k=0; k<_split.length-2; k++) {
-		//TraceManager.addDev("Handling write channel 1.1");
-                ch = tmlm.getChannelByName(_split[1+k]);
-                if (ch == null ){
-                    error = "Undeclared channel: " +  _split[1+k];
-                    addError(0, _lineNb, 0, error);
-                    return -1;
-                }
-		//TraceManager.addDev("Handling write channel 1.2 for task: " + task.getName());
-                if (!(ch.hasOriginTask(task))){		    
-		    error = "WRITE operations must be done only in origin task(s). Should be in task(s): " + ch.getNameOfOriginTasks();		    
-                    addError(0, _lineNb, 0, error);
-                    return -1;
-                }
-		//TraceManager.addDev("Handling write channel 1.3");
+            if (_split.length>3){
+            	if (securityPatternMap.containsKey(_split[_split.length-1])){
+            		tmlwch.securityPattern = securityPatternMap.get(_split[_split.length-1]); 
+            	}
+            	for(int k=0; k<_split.length-3; k++) {
+				//TraceManager.addDev("Handling write channel 1.1");
+                	ch = tmlm.getChannelByName(_split[1+k]);
+                	if (ch == null ){
+                    	error = "Undeclared channel: " +  _split[1+k];
+                   		addError(0, _lineNb, 0, error);
+                    	return -1;
+                	}
+					//TraceManager.addDev("Handling write channel 1.2 for task: " + task.getName());
+                	if (!(ch.hasOriginTask(task))){		    
+		    		error = "WRITE operations must be done only in origin task(s). Should be in task(s): " + ch.getNameOfOriginTasks();		    
+                	    addError(0, _lineNb, 0, error);
+                	    return -1;
+                	}
+					//TraceManager.addDev("Handling write channel 1.3");
 
-                tmlwch.addChannel(ch);
-            }
+                	tmlwch.addChannel(ch);
+            	}
+			}		    
+            else {
+            
+            	for(int k=0; k<_split.length-2; k++) {
+				//TraceManager.addDev("Handling write channel 1.1");
+                	ch = tmlm.getChannelByName(_split[1+k]);
+                	if (ch == null ){
+                    	error = "Undeclared channel: " +  _split[1+k];
+                   		addError(0, _lineNb, 0, error);
+                    	return -1;
+                	}
+					//TraceManager.addDev("Handling write channel 1.2 for task: " + task.getName());
+                	if (!(ch.hasOriginTask(task))){		    
+		    		error = "WRITE operations must be done only in origin task(s). Should be in task(s): " + ch.getNameOfOriginTasks();		    
+                	    addError(0, _lineNb, 0, error);
+                	    return -1;
+                	}
+					//TraceManager.addDev("Handling write channel 1.3");
 
-	    //TraceManager.addDev("Handling write channel 2");
+                	tmlwch.addChannel(ch);
+            	}
+			}
+	    	//TraceManager.addDev("Handling write channel 2");
             tmlwch.setNbOfSamples(_split[2]);
             task.getActivityDiagram().addElement(tmlwch);
             tmlae.addNext(tmlwch);
+            
+
             tmlae = tmlwch;
 
         } // WRITE
@@ -2301,26 +2461,37 @@ public class TMLTextSpecification<E> {
             inTask = true;
             inTaskDec = false;
       //     inTaskBehavior = true;
-
-            if ((_split.length < 2) ||(_split.length > 4)) {
-                error = "An EXECC operation must be declared with 1 or 2 parameters, and not " + (_split.length - 1) ;
-                addError(0, _lineNb, 0, error);
-                return -1;
-            }
-
-            if (_split.length == 2) {
-                TMLExecC execc = new TMLExecC("execc", null);
-                execc.setAction(_split[1]);
-                tmlae.addNext(execc);
-                task.getActivityDiagram().addElement(execc);
-                tmlae = execc;
-            } else {
-                TMLExecCInterval execci = new TMLExecCInterval("execci", null);
-                execci.setMinDelay(_split[1]);
-                execci.setMaxDelay(_split[2]);
-                tmlae.addNext(execci);
-                task.getActivityDiagram().addElement(execci);
-                tmlae = execci;
+      		if (_split.length>4){
+ 				if (securityPatternMap.containsKey(_split[2])){
+ 					//Security operation
+ 					TMLExecC execc = new TMLExecC("execc", null);
+            	    execc.setAction(_split[1]);
+            	    execc.securityPattern = securityPatternMap.get(_split[2]);
+            	    tmlae.addNext(execc);
+            	    task.getActivityDiagram().addElement(execc);
+            	    tmlae = execc;
+ 				}
+ 			}
+			else {
+	            if ((_split.length < 2) ||(_split.length > 4)) {
+	                error = "An EXECC operation must be declared with 1, 2 parameters, and not " + (_split.length - 1) ;
+	                addError(0, _lineNb, 0, error);
+	                return -1;
+	            }
+            	if (_split.length == 2) {
+            	    TMLExecC execc = new TMLExecC("execc", null);
+            	    execc.setAction(_split[1]);
+            	    tmlae.addNext(execc);
+            	    task.getActivityDiagram().addElement(execc);
+            	    tmlae = execc;
+            	} else {
+            	    TMLExecCInterval execci = new TMLExecCInterval("execci", null);
+            	    execci.setMinDelay(_split[1]);
+            	    execci.setMaxDelay(_split[2]);
+            	    tmlae.addNext(execci);
+            	    task.getActivityDiagram().addElement(execci);
+            	    tmlae = execci;
+            	}
             }
         } // EXECC
 

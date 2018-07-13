@@ -1,8 +1,8 @@
 #include <stdlib.h>
 
-#include "message.h"
-#include "asyncchannel.h"
-#include "myerrors.h"
+#include "include/message.h"
+#include "include/asyncchannel.h"
+#include "include/myerrors.h"
 
 #include "mwmr.h"
 

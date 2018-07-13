@@ -66,7 +66,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        //System.out.println("Action");
+        //
         if (tgc instanceof TMLTaskOperator) {
             TMLTaskOperator t = (TMLTaskOperator)tgc;
             return mgui.newTMLTaskName(tp, t.oldValue, t.getValue());
@@ -80,10 +80,10 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
     }
     
     public boolean actionOnAdd(TGComponent tgc) {
-        //System.out.println("Action on add!");
+        //
         if (tgc instanceof TMLTaskOperator) {
             TMLTaskOperator tmlt = (TMLTaskOperator)(tgc);
-            //System.out.println(" *** add tclass *** name=" + tmlt.getTaskName());
+            //
             mgui.addTMLTask(tp, tmlt.getTaskName());
             return true;
         } else if (tgc instanceof TMLChannelOperator) {
@@ -185,9 +185,9 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
     public TMLTaskInterface getTask1ToWhichIamConnected(TMLCompositionOperator co) {
         TGConnectorTMLAssociationNav tgctmlan = getTGConnectorAssociationOf(co);
         TGComponent tgc;
-        //System.out.println("tmlan t1?");
+        //
         if (tgctmlan != null) {
-            //System.out.println("tmlan found t1");
+            //
             tgc = getTopComponentToWhichBelongs(tgctmlan.getTGConnectingPointP1());
             if ((tgc != null) && (tgc instanceof TMLTaskInterface)) {
                 return (TMLTaskInterface) tgc;
@@ -199,9 +199,9 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
     public TMLTaskInterface getTask2ToWhichIamConnected(TMLCompositionOperator co) {
         TGConnectorTMLAssociationNav tgctmlan = getTGConnectorAssociationOf(co);
         TGComponent tgc;
-        //System.out.println("tmlan t2?");
+        //
         if (tgctmlan != null) {
-            //System.out.println("tmlan found t2");
+            //
             tgc = getTopComponentToWhichBelongs(tgctmlan.getTGConnectingPointP2());
             if ((tgc != null) && (tgc instanceof TMLTaskInterface)) {
                 return (TMLTaskInterface) tgc;
@@ -218,14 +218,14 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
         TGComponent tgc;
         
         for(i=0; i<tcd.getNbConnectingPoint(); i++) {
-            //System.out.println("titi");
+            //
             p1 = tcd.tgconnectingPointAtIndex(i);
             tgco = getConnectorConnectedTo(p1);
             if (tgco != null) {
-                //System.out.println("Found tgco");
+                //
             }
             if ((tgco != null) && (tgco instanceof TGConnectorTMLCompositionOperator)){
-                //System.out.println("toto");
+                //
                 tgcoco = (TGConnectorTMLCompositionOperator)tgco;
                 if (p1 == tgcoco.getTGConnectingPointP1()) {
                     p2 = tgcoco.getTGConnectingPointP2();
@@ -236,7 +236,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
                 // p2 now contains the connecting point of a association
                 tgc = getComponentToWhichBelongs(p2);
                 if ((tgc != null) && (!p2.isFree()) && (tgc instanceof TGConnectorTMLAssociationNav)) {
-                     //System.out.println("tutu");
+                     //
                     return (TGConnectorTMLAssociationNav)tgc;
                 }
             }
@@ -335,10 +335,10 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
     
     public void loadExtraParameters(Element elt) {
         String s;
-        //System.out.println("Extra parameter");
+        //
         try {
             s = elt.getAttribute("channels");
-            //System.out.println("S=" + s);
+            //
             if (s.compareTo("false") ==0) {
                 setChannelsVisible(false);
             } else {
@@ -359,7 +359,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
             
         } catch (Exception e) {
             // Model was saved in an older version of TTool
-            //System.out.println("older format");
+            //
             setChannelsVisible(true);
             setEventsVisible(true);
             setRequestsVisible(true);

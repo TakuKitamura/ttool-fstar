@@ -40,75 +40,94 @@ package syscamstranslator;
 
 import java.util.LinkedList;
 
+import javax.swing.DefaultListModel;
+
 /**
+ * Class SysCAMSTBlockTDF
+ * Parameters of a SystemC-AMS block TDF
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
 */
 
 public class SysCAMSTBlockTDF extends SysCAMSTComponent {
-
-	private String blockTDFName;
+	private String name;
 	private int period;
+	private String time;
 	private String processCode;
+	private DefaultListModel<String> listStruct;
+	private String nameTemplate;
+	private String typeTemplate;
+	private DefaultListModel<String> listTypedef;
 	
 	private SysCAMSTCluster cluster;
 	
 	private LinkedList<SysCAMSTPortTDF> portTDF;
 	private LinkedList<SysCAMSTPortConverter> portConverter;
 	
-	public SysCAMSTBlockTDF(String _blockTDFName, int _period, String _processCode, SysCAMSTCluster _cluster) {
-		blockTDFName = _blockTDFName;
+	public SysCAMSTBlockTDF(String _name, int _period, String _time, String _processCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
+		name = _name;
 		period = _period;
+		time = _time;
 		processCode = _processCode;
+		listStruct = _listStruct;
+		nameTemplate = _nameTemplate;
+		typeTemplate = _typeTemplate;
+		listTypedef = _listTypedef;
 		cluster = _cluster;
+		portTDF = new LinkedList<SysCAMSTPortTDF>();
+		portConverter = new LinkedList<SysCAMSTPortConverter>();
 	}
 
+	public String getName() {
+		return name;
+	}
+	
 	public int getPeriod() {
 		return period;
 	}
-
-	public void setPeriod(int _period) {
-		period = _period;
+	
+	public String getTime() {
+		return time;
 	}
 
 	public String getProcessCode() {
 		return processCode;
 	}
 
-	public void setProcessCode(String _processCode) {
-		processCode = _processCode;
+	public DefaultListModel<String> getListStruct() {
+		return listStruct;
 	}
 
-	public String getBlockTDFName() {
-		return blockTDFName;
+	public String getNameTemplate() {
+		return nameTemplate;
 	}
 
-	public void setBlockTDFName(String _blockTDFName) {
-		blockTDFName = _blockTDFName;
+	public String getTypeTemplate() {
+		return typeTemplate;
+	}
+
+	public DefaultListModel<String> getListTypedef() {
+		return listTypedef;
 	}
 
 	public SysCAMSTCluster getCluster() {
 		return cluster;
 	}
 
-	public void setCluster(SysCAMSTCluster _cluster) {
-		cluster = _cluster;
+	public LinkedList<SysCAMSTPortTDF> getPortTDF(){
+		return portTDF;
 	}
 
-    public LinkedList<SysCAMSTPortTDF> getPortTDF(){
-    	return portTDF;
-    }
+	public void addPortTDF(SysCAMSTPortTDF tdf){
+		portTDF.add(tdf);
+	}
 
-    public void addPortTDF(SysCAMSTPortTDF tdf){
-    	portTDF.add(tdf);
-    }
-    
-    public LinkedList<SysCAMSTPortConverter> getPortConverter(){
-    	return portConverter;
-    }
+	public LinkedList<SysCAMSTPortConverter> getPortConverter(){
+		return portConverter;
+	}
 
-    public void addPortConverter(SysCAMSTPortConverter converter){
-    	portConverter.add(converter);
-    }
+	public void addPortConverter(SysCAMSTPortConverter converter){
+		portConverter.add(converter);
+	}
 }

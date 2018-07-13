@@ -54,12 +54,12 @@ public class TClassBasicFIFO extends TClassBuffer {
     }
 	
     public void makeTClass() {
-        //System.out.println("toto1");
+        //
         if ((paramInForExchange.size() == 0) && (paramOutForExchange.size() == 0)) {
             return;
         }
         
-        //System.out.println("toto2");
+        //
         Param cpt = new Param("cpt", Param.NAT, "0");
         addParameter(cpt);
         

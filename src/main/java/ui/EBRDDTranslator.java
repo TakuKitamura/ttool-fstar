@@ -104,7 +104,7 @@ public class EBRDDTranslator {
 	}
 	
 	public EBRDD generateEBRDD(EBRDDPanel ebrddp, String _name) {
-		System.out.println("Name=" + _name);
+		
 		ebrdd = new EBRDD(_name);
 		
 		// Search for start state
@@ -173,7 +173,7 @@ public class EBRDDTranslator {
 						tt = new TMLType(TMLType.OTHER);
 					}
 					attr = new EBRDDAttribute(ta.getId(), ta.getInitialValue(), tt);
-					System.out.println("Adding attribute :" + ta.getId());
+					
 					if (!ebrdd.addAttribute(attr)) {
 						UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Duplicate declaration for variable " + ta.getId());
 						ce.setTDiagramPanel(ebrddp);
@@ -247,7 +247,7 @@ public class EBRDDTranslator {
 						tgc1 = tgc.getInternalTGComponent(i);
 						
 						if (tgc1 instanceof ui.ebrdd.EBRDDESO) {
-							System.out.println("ESO found");
+							
 							esotgc = (ui.ebrdd.EBRDDESO)tgc1;
 							eso = new req.ebrdd.ESO("ESO"+cpt, esotgc);
 							listE.addCor(eso, esotgc);
@@ -259,7 +259,7 @@ public class EBRDDTranslator {
 							erc.addTreeElement(eso);
 							
 						} else if (tgc1 instanceof ui.ebrdd.EBRDDERB) {
-							System.out.println("ERB found");
+							
 							erbtgc = (ui.ebrdd.EBRDDERB)tgc1;
 							erb = new req.ebrdd.ERB("ERB" + cpt, erbtgc);
 							listE.addCor(erb, erbtgc);
@@ -314,7 +314,7 @@ public class EBRDDTranslator {
                     ebg2 = listE.getEBRDDGeneralComponent(tgc2);
                     if ((ebg1 != null ) && (ebg2 != null)) {
 						if ((ebg1 instanceof EBRDDComponent) && (ebg2 instanceof EBRDDComponent)) {
-							System.out.println("Adding link");
+							
 							eb1 = (EBRDDComponent)ebg1;
 							eb2 = (EBRDDComponent)ebg2;
 							//Special case if "for loop" or if "choice"
@@ -328,26 +328,26 @@ public class EBRDDTranslator {
 								}
 							} else if (eb1 instanceof req.ebrdd.EBRDDChoice) {
 								index = tgc1.indexOf(p1) - 1;
-								//System.out.println("Adding next:" + ae2);
+								//
 								eb1.addNext(eb2);
-								//System.out.println("Adding guard:" + ((TMLADChoice)tgc1).getGuard(index));
+								//
 								((req.ebrdd.EBRDDChoice)eb1).addGuard(((ui.ebrdd.EBRDDChoice)tgc1).getGuard(index));
 							} else if (eb1 instanceof req.ebrdd.EBRDDSequence) {
 								index = tgc1.indexOf(p1) - 1;
 								((req.ebrdd.EBRDDSequence)eb1).addIndex(index);
 								eb1.addNext(eb2);
-								//System.out.println("Adding " + ae2 + " at index " + index);
+								//
 							} else {
 								eb1.addNext(eb2);
 							}
 						} else if ((ebg1 instanceof ERCElement) && (ebg2 instanceof ERCElement)) {
-							//System.out.println("ERCElements!");
+							//
 							if ((ebg1 instanceof req.ebrdd.ESO) && (tgco instanceof TGConnectorEBRDDERC)) {
 								index = tgc1.indexOf(p1) - 1;
 								((req.ebrdd.ESO)ebg1).addIndex(index);
 								((req.ebrdd.ESO)ebg1).addSon((ERCElement)ebg2);
 								((ERCElement)ebg2).setNegated(tgco.getNegation());
-								System.out.println("ESO: Adding son: " + ebg2);
+								
 							}
 						}
                     }
@@ -412,7 +412,7 @@ public class EBRDDTranslator {
 			ce.setTGComponent(null);
 			ce.setTDiagramPanel(ebrddp);
 			addWarning(ce);
-			//System.out.println("Non reachable elements have been removed in " + t.getName());
+			//
 		}
 		
 		
@@ -420,7 +420,7 @@ public class EBRDDTranslator {
 		
 		
 		
-		System.out.println("EBRDD generated");
+		
 		
 		return ebrdd;
 	}
