@@ -65,6 +65,7 @@ import ui.syscams.SysCAMSRecordComponent;
 import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLCPrimitivePort;
 import ui.tmlcompd.TMLCRecordComponent;
 import ui.window.JDialogCode;
 import ui.window.JDialogNote;
@@ -131,6 +132,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide, search, enableDisable, setAsCryptoBlock, setAsRegularBlock;
     protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex, checkLatency;
     protected JMenuItem gotoReference;
+    protected JMenuItem showProVerifTrace;
     protected JMenuItem breakpoint;
     protected JMenuItem paste, insertLibrary, upX, upY, downX, downY, fitToContent, backToMainDiagram;
     protected JMenuItem cut, copy, saveAsLibrary, captureSelected;
@@ -1454,6 +1456,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         componentMenu.add(checkInvariant);
         componentMenu.add(checkLatency);
         componentMenu.add(gotoReference);
+        componentMenu.add(showProVerifTrace);
         componentMenu.add(checkMasterMutex);
         componentMenu.add(breakpoint);
 
@@ -1569,6 +1572,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         gotoReference = new JMenuItem("Go to reference");
         gotoReference.addActionListener(menuAL);
+        
+        showProVerifTrace= new JMenuItem("Show ProVerif Trace");
+        showProVerifTrace.addActionListener(menuAL);
 
         search = new JMenuItem("External Search");
         search.addActionListener(menuAL);
@@ -1848,7 +1854,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
             }
         }
-
+        
+        if (e.getSource() == showProVerifTrace) {
+        	if (componentPopup instanceof TMLCPrimitivePort){
+        		((TMLCPrimitivePort) componentPopup).showTrace();
+        	}
+        }
+        
         if (e.getSource() == checkMasterMutex) {
 
             if (componentPopup instanceof CheckableInvariant) {
@@ -2101,6 +2113,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             gotoReference.setEnabled(false);
 
         }
+        
+        if (componentPointed instanceof TMLCPrimitivePort){
+        	showProVerifTrace.setEnabled(true);
+        } else {
+        	showProVerifTrace.setEnabled(false);
+        }
+        
 
         if (componentPointed instanceof CheckableInvariant) {
             checkInvariant.setEnabled(true);

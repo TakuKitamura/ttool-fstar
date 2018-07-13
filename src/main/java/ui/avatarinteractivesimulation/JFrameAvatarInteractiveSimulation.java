@@ -905,7 +905,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
         // Latencies
         latencyPanel = new JPanel();
-        infoTab.addTab("Latencies", IconManager.imgic1202, latencyPanel, "Latencies");
+        infoTab.addTab("Latencies", IconManager.imgic1202, new JScrollPane(latencyPanel), "Latencies");
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         latencyPanel.setLayout(gridbag0);
@@ -955,8 +955,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         ((latTable.getColumnModel()).getColumn(3)).setPreferredWidth(100);
         ((latTable.getColumnModel()).getColumn(4)).setPreferredWidth(100);
         ((latTable.getColumnModel()).getColumn(5)).setPreferredWidth(100);
-        latTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jspLatency = new JScrollPane(latTable);
+      //  latTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jspLatency = new JScrollPane(latTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
         jspLatency.setMinimumSize(new Dimension(1200, 100));

@@ -59,6 +59,18 @@ import ui.tmlad.TMLADNotifiedEvent;
 import ui.tmldd.TMLArchiCPNode;
 import ui.tmldd.TMLArchiPortArtifact;
 
+import proverifspec.ProVerifResultTrace;
+import proverifspec.ProVerifResultTraceStep;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import ui.interactivesimulation.JFrameSimulationSDPanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
@@ -108,14 +120,22 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     public static int TOCHECK = 1;
     public static int CHECKED_CONF = 2;
     public static int CHECKED_UNCONF = 3;
+        
+    //ProVerifTrace
+    String pragma;
+    ProVerifResultTrace resTrace;
+    
 
     public String mappingName="???";
     protected int decPoint = 3;
+
 
     protected boolean conflict = false;
     protected String conflictMessage;
     protected String dataFlowType = "VOID";
     protected String associatedEvent = "VOID";
+    
+
 
     public int verification;
     
@@ -454,6 +474,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             g.drawRect(x-lockwidth*3/2, y+lockheight/2+yoffset, lockwidth, lockheight);
         }
     }
+    
+    
 
     public void manageMove() {
         //
@@ -624,7 +646,42 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
         ((TMLComponentTaskDiagramPanel)tdp).updatePorts();
 
+
         return true;
+    }
+    
+    public void showTrace(){
+    	//Show Result trace
+		PipedOutputStream pos = new PipedOutputStream();
+        try {
+        	PipedInputStream pis = new PipedInputStream(pos, 4096);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(pos));
+
+            JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, tdp.getMGUI(), pragma);
+            jfssdp.setIconImage(IconManager.img8);
+            GraphicLib.centerOnParent(jfssdp, 600, 600);
+            jfssdp.setFileReference(new BufferedReader(new InputStreamReader(pis)));
+            jfssdp.setVisible(true);
+                        //jfssdp.setModalExclusionType(ModalExclusionType
+                          //      .APPLICATION_EXCLUDE);
+            jfssdp.toFront();
+
+                        // TraceManager.addDev("\n--- Trace ---");
+            int i = 0;
+            for (ProVerifResultTraceStep step : resTrace.getTrace()) {
+            	step.describeAsTMLSDTransaction(bw, i);
+                i++;
+            }
+            bw.close();
+        } catch (IOException e) {
+        	TraceManager.addDev("Error when writing trace step SD transaction");
+        } finally {
+        	try {
+        		pos.close();
+            } catch (IOException ignored) {
+        	}
+        }
+
     }
 
     protected String translateExtraParam() {
@@ -966,6 +1023,14 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         }
         return true;
     }
+    
+    public void setResultTrace(ProVerifResultTrace trace){
+    	resTrace = trace;
+    }
+
+	public void setPragmaString(String str){
+		pragma=str;
+	}
 
     public void setPortName(String s) {
         for (TURTLEPanel tp : tdp.getMainGUI().tabs) {
