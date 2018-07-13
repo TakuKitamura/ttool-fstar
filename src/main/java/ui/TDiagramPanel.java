@@ -52,6 +52,7 @@ import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
 import ui.cd.*;
 import ui.ftd.FTDFault;
+import ui.eln.*;
 import ui.eln.sca_eln.*;
 import ui.syscams.*;
 import ui.ncdd.NCEqNode;
@@ -2603,6 +2604,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
                     || (o instanceof SysCAMSBlockDE && this.checkSysCAMSBlockDEComponent((SysCAMSBlockDE) o, name))
                     || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
+                    || (o instanceof ELNModule && this.checkELNModule((ELNModule) o, name))
                     || (o instanceof ELNComponentNodeRef && this.checkELNComponentNodeRef((ELNComponentNodeRef) o, name))
                     || (o instanceof ELNComponentResistor && this.checkELNComponentResistor((ELNComponentResistor) o, name))
                     || (o instanceof ELNComponentCapacitor && this.checkELNComponentCapacitor((ELNComponentCapacitor) o, name))
@@ -2676,6 +2678,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         	return false;
         }
 
+        public boolean checkELNModule(ELNModule o, String name) {
+        	return false;
+        }
+        
         public boolean checkELNComponentNodeRef(ELNComponentNodeRef o, String name) {
         	return false;
         }
@@ -2867,6 +2873,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public String findELNComponentName(String name) {
     	return this.findGoodName(name, new NameChecker() {
+    		public boolean checkELNModule(ELNModule o, String name) {
+    			return o.getValue().equals(name);
+    		}
     		public boolean checkELNComponentNodeRef(ELNComponentNodeRef o, String name) {
     			return o.getValue().equals(name);
     		}

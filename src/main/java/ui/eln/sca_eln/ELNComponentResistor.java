@@ -509,8 +509,8 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 		sb.append("\" unit=\"");
 		sb.append(encode(unit));
 		sb.append("\" position=\"" + position);
-		sb.append("\" width=\"" + width);
-		sb.append("\" height=\"" + height);
+		sb.append("\" width=\"" + Math.max(width, height));
+		sb.append("\" height=\"" + Math.min(width, height));
 		sb.append("\" fv_0_2=\"" + fv_0_2);
 		sb.append("\" fv_1_3=\"" + fv_1_3);
 		sb.append("\" fh_0_2=\"" + fh_0_2);
@@ -554,8 +554,13 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 								setVal(value);
 								setUnit(unit);
 								setPosition(position);
-								this.width = width;
-								this.height = height;
+								if (position == 0 || position == 2) {
+									this.height = width;
+									this.width = height;
+								} else if (position == 1 || position == 3) {
+									this.width = width;
+									this.height = height;
+								}
 								setFv_0_2(fv_0_2);
 								setFv_1_3(fv_1_3);
 								setFh_0_2(fh_0_2);

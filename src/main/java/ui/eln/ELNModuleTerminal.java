@@ -48,14 +48,14 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Class ELNPortTerminal
+ * Class ELNModuleTerminal
  * Primitive port. To be used in ELN diagrams
  * Creation: 13/07/2018
  * @version 1.0 13/07/2018
  * @author Irina Kit Yan LEE
  */
 
-public class ELNPortTerminal extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference {
+public class ELNModuleTerminal extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference {
     protected Color myColor;
     protected int orientation;
 	private int maxFontSize = 14;
@@ -65,11 +65,13 @@ public class ELNPortTerminal extends TGCScalableWithInternalComponent implements
     protected int halfwidth = 5;
     protected int currentOrientation = GraphicLib.NORTH;
 
+    private int isOrigin = -1;
+
     private int textX = 15;
     private double dtextX = 0.0;
     protected int decPoint = 3;
 
-    public ELNPortTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public ELNModuleTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         initScaling(2*halfwidth, 2*halfwidth);
@@ -87,7 +89,7 @@ public class ELNPortTerminal extends TGCScalableWithInternalComponent implements
 
         nbInternalTGComponent = 0;
 
-        moveable = false;
+        moveable = true;
         editable = true;
         removable = true;
         userResizable = false;
@@ -113,6 +115,7 @@ public class ELNPortTerminal extends TGCScalableWithInternalComponent implements
         Font fold = f;
         
     	if ((x != oldx) | (oldy != y)) {
+            manageMove();
             oldx = x;
             oldy = y;
         }
@@ -140,12 +143,57 @@ public class ELNPortTerminal extends TGCScalableWithInternalComponent implements
             f = f.deriveFont(this.currentFontSize);
     	}
 
-        Color c = g.getColor();
-        g.setColor(c);
-        g.drawRect(x, y, width, height);
-        g.setColor(Color.black);
-        g.fillRect(x, y, width, height);
-        g.setFont(fold);
+    	Color c = g.getColor();
+    	g.setColor(c);
+    	g.drawRect(x, y, width, height);
+    	g.setColor(Color.black);
+    	g.fillRect(x, y, width, height);
+    	g.setFont(fold);
+    }
+
+    public void manageMove() {
+        if (father != null) {
+            Point p = GraphicLib.putPointOnRectangle(x+(width/2), y+(height/2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
+
+            x = p.x - width/2;
+            y = p.y - height/2;
+
+            setMoveCd(x, y);
+
+            int orientation = GraphicLib.getCloserOrientation(x+(width/2), y+(height/2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
+            if (orientation != currentOrientation) {
+                setOrientation(orientation);
+            }
+        }
+    }
+
+    public void setOrientation(int orientation) {
+        currentOrientation = orientation;
+        double w0, h0;
+
+        switch(orientation) {
+        case GraphicLib.NORTH:
+            w0 = 0.5;
+            h0 = 1.0;
+            break;
+        case GraphicLib.WEST:
+            w0 = 1.0;
+            h0 = 0.5;
+            break;
+        case GraphicLib.SOUTH:
+            w0 = 0.5;
+            h0 = 0.0;
+            break;
+        case GraphicLib.EAST:
+        default:
+            w0 = 0.0;
+            h0 = 0.5;
+        }
+
+        for (int i=0; i<1; i++) {
+            ((ELNConnectingPoint) connectingPoint[i]).setW(w0);
+            ((ELNConnectingPoint) connectingPoint[i]).setH(h0);
+        }
     }
 
     public TGComponent isOnOnlyMe(int _x, int _y) {
@@ -156,7 +204,7 @@ public class ELNPortTerminal extends TGCScalableWithInternalComponent implements
     }
     
 	public int getType() {
-		return TGComponentManager.ELN_PORT_TERMINAL;
+		return TGComponentManager.ELN_MODULE_TERMINAL;
 	}
 
     public void wasSwallowed() {
@@ -171,16 +219,16 @@ public class ELNPortTerminal extends TGCScalableWithInternalComponent implements
     }
 
     public void resizeWithFather() {
-        if ((father != null) && (father instanceof ELNComponent)) {
-            setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
-            setMoveCd(x, y);
-            oldx = -1;
-            oldy = -1;
+        if ((father != null) && (father instanceof ELNModule)) {
+        	setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
+        	setMoveCd(x, y);
+        	oldx = -1;
+        	oldy = -1;
         }
     }
 
     public boolean editOndoubleClick(JFrame frame) {
-		JDialogELNPortTerminal jde = new JDialogELNPortTerminal(this);
+		JDialogELNModuleTerminal jde = new JDialogELNModuleTerminal(this);
 		jde.setVisible(true);
 		return true;
 	}
@@ -222,6 +270,14 @@ public class ELNPortTerminal extends TGCScalableWithInternalComponent implements
 		}
 	}
 
+    public int getOrigin() {
+    	return isOrigin;
+    }
+    
+    public void setOrigin(int orig) {
+    	isOrigin = orig;
+    }
+    
     public int getDefaultConnector() {
         return TGComponentManager.ELN_CONNECTOR;
     }
