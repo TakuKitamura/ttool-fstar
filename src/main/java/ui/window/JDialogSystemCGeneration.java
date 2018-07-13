@@ -922,7 +922,11 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         rshc.writeCommandMessages(textAreaWriter);
 
-        return okReturnCode == null || okReturnCode.equals(rshc.getProcessReturnCode());
+        try {
+            return ((okReturnCode == null) || okReturnCode.equals(rshc.getProcessReturnCode()));
+        } catch (Exception e) {
+            return false;
+        }
     }
     //
     //    protected void checkMode() {

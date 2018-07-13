@@ -3044,7 +3044,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         createFileDialog();
 
-        return mainSave();
+        boolean b = mainSave();
+
+        if (b) {
+            updateLastOpenFile(file);
+        }
+
+        return b;
 
     }
 
@@ -3065,6 +3071,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             dir = null;
             config = null;
             SpecConfigTTool.setBasicConfig(systemcOn);
+            updateLastOpenFile(file);
         }
         return b;
     }
