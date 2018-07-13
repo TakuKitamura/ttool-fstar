@@ -58,7 +58,7 @@ import java.awt.event.ActionListener;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentIdealTransformer extends TGCScalableWithInternalComponent implements ActionListener, SwallowTGComponent, ELNComponent {
+public class ELNComponentIdealTransformer extends TGCScalableWithInternalComponent implements ActionListener, SwallowTGComponent, SwallowedTGComponent, ELNComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -1018,6 +1018,10 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 			if (tgcomponent[i] instanceof ELNPortTerminal) {
 				tgcomponent[i].resizeWithFather();
 			}
+		}
+		
+		if (getFather() != null) {
+			resizeWithFather();
 		}
 	}
 	

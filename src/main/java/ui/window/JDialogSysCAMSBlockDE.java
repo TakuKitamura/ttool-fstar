@@ -46,6 +46,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
+
 /**
  * Class JDialogSystemCAMSBlockDE 
  * Dialog for managing of SystemC-AMS DE Block

@@ -504,35 +504,6 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 		return null;
 	}
 
-	public void hideConnectors() {
-		Iterator<TGComponent> iterator = componentList.listIterator();
-		SysCAMSPortConnector connector;
-		TGComponent tgc;
-		TGComponent tgc1;
-		TGComponent tgc2;
-
-		while (iterator.hasNext()) {
-			tgc = iterator.next();
-
-			if (tgc instanceof SysCAMSPortConnector) {
-				connector = (SysCAMSPortConnector) tgc;
-				tgc1 = getComponentToWhichBelongs(connector.getTGConnectingPointP1());
-				tgc2 = getComponentToWhichBelongs(connector.getTGConnectingPointP2());
-				if ((tgc1 != null) && (tgc2 != null)) {
-					if (tgc1.hasAnHiddenAncestor()) {
-						tgc.setHidden(true);
-					} else {
-						if (tgc2.hasAnHiddenAncestor()) {
-							tgc.setHidden(true);
-						} else {
-							tgc.setHidden(false);
-						}
-					}
-				}
-			}
-		}
-	}
-
 	public void loadExtraParameters(Element elt) {
 	}
 

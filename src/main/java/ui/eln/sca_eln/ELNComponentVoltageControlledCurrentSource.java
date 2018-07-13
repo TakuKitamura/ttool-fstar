@@ -58,7 +58,7 @@ import java.awt.event.ActionListener;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithInternalComponent implements ActionListener, SwallowTGComponent, ELNComponent {
+public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithInternalComponent implements ActionListener, SwallowTGComponent, SwallowedTGComponent, ELNComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -1136,6 +1136,10 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 			if (tgcomponent[i] instanceof ELNPortTerminal) {
 				tgcomponent[i].resizeWithFather();
 			}
+		}
+		
+		if (getFather() != null) {
+			resizeWithFather();
 		}
 	}
 	

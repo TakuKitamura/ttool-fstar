@@ -40,14 +40,20 @@ package ui.eln;
 
 import myutil.GraphicLib;
 import ui.*;
-import ui.eln.sca_eln.ELNComponentCapacitor;
 import ui.eln.sca_eln.ELNComponentNodeRef;
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
+import ui.util.IconManager;
+import ui.window.JDialogELNComponentCapacitor;
+import ui.window.JDialogELNModule;
 
 import java.awt.*;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
- * Class ELNComponentCapacitor 
- * Capacitor to be used in ELN diagrams 
+ * Class ELNModule 
+ * Module to be used in ELN diagrams 
  * Creation: 12/06/2018
  * @version 1.0 12/06/2018
  * @author Irina Kit Yan LEE
@@ -63,12 +69,13 @@ public class ELNModule extends TGCScalableWithInternalComponent	implements Swall
 	private int textX = 15;
 	private double dtextX = 0.0;
 	protected int decPoint = 3;
-
+	
 	public ELNModule(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(250, 200);
 		
+		oldScaleFactor = tdp.getZoom();
 		dtextX = textX * oldScaleFactor;
 		textX = (int) dtextX;
 		dtextX = dtextX - textX;
@@ -79,9 +86,10 @@ public class ELNModule extends TGCScalableWithInternalComponent	implements Swall
 		addTGConnectingPointsComment();
 
 		moveable = true;
+		multieditable = true;
 		editable = true;
 		removable = true;
-		userResizable = false;
+		userResizable = true;
 		value = tdp.findELNComponentName("Module_");
 	}
 
@@ -142,6 +150,13 @@ public class ELNModule extends TGCScalableWithInternalComponent	implements Swall
 		g.setFont(fold);
 	}
 
+	public void rescale(double scaleFactor){
+		dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
+		textX = (int)(dtextX);
+		dtextX = dtextX - textX; 
+		super.rescale(scaleFactor);
+	}
+	
 	public TGComponent isOnOnlyMe(int _x, int _y) {
 		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
 			return this;
@@ -151,6 +166,38 @@ public class ELNModule extends TGCScalableWithInternalComponent	implements Swall
 
 	public int getType() {
 		return TGComponentManager.ELN_MODULE;
+	}
+	
+	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+		// On the name ?
+		if (_y <= (y + currentFontSize + textX)) {
+			String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
+					JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
+					null,
+					getValue());
+			if ((s != null) && (s.length() > 0)) {
+
+				if (!TAttribute.isAValidId(s, false, false)) {
+					JOptionPane.showMessageDialog(frame,
+							"Could not change the name of the component: the new name is not a valid name",
+							"Error",
+							JOptionPane.INFORMATION_MESSAGE);
+					return false;
+				}
+				setComponentName(s);
+				setValueWithChange(s);
+				setValue(s);
+				rescaled = true;
+				return true;
+
+			}
+			return false;
+		}
+		
+		JDialogELNModule jde = new JDialogELNModule(this);
+		jde.setVisible(true);
+		rescaled = true;
+		return true;
 	}
 
 	public int getDefaultConnector() {

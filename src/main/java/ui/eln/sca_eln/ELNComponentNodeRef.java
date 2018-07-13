@@ -60,7 +60,7 @@ import java.awt.event.ActionListener;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implements ActionListener {
+public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implements SwallowedTGComponent, ActionListener {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
