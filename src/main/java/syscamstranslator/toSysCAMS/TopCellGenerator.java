@@ -97,7 +97,7 @@ public class TopCellGenerator {
 
 	public void saveFile(String path) {
 		LinkedList<SysCAMSTCluster> clusters = TopCellGenerator.syscams.getAllCluster();
-		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnector();
+		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnectorCluster();
 		
 		String top, makefile;
 		
