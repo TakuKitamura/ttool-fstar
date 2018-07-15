@@ -348,21 +348,20 @@ public class TGComponentManager {
 
     // ELN
     public static final int ELN_CONNECTOR = 1610;
-    public static final int ELN_PORT_TERMINAL = 1611;
-    public static final int ELN_RESISTOR = 1612;
-    public static final int ELN_CAPACITOR = 1613;
-    public static final int ELN_INDUCTOR = 1614;
-    public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 1615;
-    public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 1616;
-    public static final int ELN_IDEAL_TRANSFORMER = 1617;
-    public static final int ELN_TRANSMISSION_LINE = 1618;
-    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 1619;
-    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 1620;
-    public static final int ELN_NODE_REF = 1621;
-    public static final int ELN_TDF_VOLTAGE_SINK = 1622;
-    public static final int ELN_TDF_CURRENT_SINK = 1623;
-    public static final int ELN_MODULE = 1624;
-    public static final int ELN_MODULE_TERMINAL = 1625;
+    public static final int ELN_RESISTOR = 1611;
+    public static final int ELN_CAPACITOR = 1612;
+    public static final int ELN_INDUCTOR = 1613;
+    public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 1614;
+    public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 1615;
+    public static final int ELN_IDEAL_TRANSFORMER = 1616;
+    public static final int ELN_TRANSMISSION_LINE = 1617;
+    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 1618;
+    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 1619;
+    public static final int ELN_NODE_REF = 1620;
+    public static final int ELN_TDF_VOLTAGE_SINK = 1621;
+    public static final int ELN_TDF_CURRENT_SINK = 1622;
+    public static final int ELN_MODULE = 1623;
+    public static final int ELN_MODULE_TERMINAL = 1624;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -1285,9 +1284,6 @@ public class TGComponentManager {
             	tgc = new SysCAMSBlockGPIO2VCI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             // ELN
-            case ELN_PORT_TERMINAL:
-            	tgc = new ELNPortTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
             case ELN_RESISTOR:
             	tgc = new ELNComponentResistor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;	
@@ -1732,8 +1728,6 @@ public class TGComponentManager {
         	// ELN
         } else if (tgc instanceof ELNConnector) {
         	return ELN_CONNECTOR;	
-        } else if (tgc instanceof ELNPortTerminal) {
-        	return ELN_PORT_TERMINAL;	
         } else if (tgc instanceof ELNComponentResistor) {
         	return ELN_RESISTOR;
         } else if (tgc instanceof ELNComponentCapacitor) {
