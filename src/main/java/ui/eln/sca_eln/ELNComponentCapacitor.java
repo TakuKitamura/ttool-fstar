@@ -182,9 +182,9 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
-						y + height / 2 + height / 2 + sh0);
+						y + height / 2 + height / 4 + sh0);
 				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
-						y + height / 2 + height / 2 + sh1);
+						y + height / 2 + height / 4 + sh1);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
@@ -195,9 +195,9 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
-						y + height / 2 + height / 2 + sh1);
+						y + height / 2 + height / 4 + sh1);
 				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
-						y + height / 2 + height / 2 + sh0);
+						y + height / 2 + height / 4 + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -208,9 +208,9 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
-						y + height / 2 + height / 2 + sh0);
+						y + height / 2 + height / 4 + sh0);
 				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
-						y + height / 2 + height / 2 + sh1);
+						y + height / 2 + height / 4 + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -221,9 +221,9 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
-						y + height / 2 + height / 2 + sh1);
+						y + height / 2 + height / 4 + sh1);
 				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
-						y + height / 2 + height / 2 + sh0);
+						y + height / 2 + height / 4 + sh0);
 			}
 		} else if (position == 1) {
 			if (first == false) {
@@ -253,8 +253,8 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 4, y);
+				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 4,
 						y + height + sh1);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -265,8 +265,8 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 4, y);
+				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 4,
 						y + height + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -277,8 +277,8 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 4, y);
+				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 4,
 						y + height + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -289,8 +289,8 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 4, y);
+				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 4,
 						y + height + sh0);
 			}
 		} else if (position == 2) {
@@ -324,9 +324,9 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
-						y + height / 2 + height / 2 + sh1);
+						y + height / 2 + height / 4 + sh1);
 				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
-						y + height / 2 + height / 2 + sh0);
+						y + height / 2 + height / 4 + sh0);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
@@ -337,9 +337,9 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
-						y + height / 2 + height / 2 + sh0);
+						y + height / 2 + height / 4 + sh0);
 				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
-						y + height / 2 + height / 2 + sh1);
+						y + height / 2 + height / 4 + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -350,9 +350,9 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
-						y + height / 2 + height / 2 + sh1);
+						y + height / 2 + height / 4 + sh1);
 				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
-						y + height / 2 + height / 2 + sh0);
+						y + height / 2 + height / 4 + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -363,9 +363,9 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.5);
 				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
-						y + height / 2 + height / 2 + sh0);
+						y + height / 2 + height / 4 + sh0);
 				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
-						y + height / 2 + height / 2 + sh1);
+						y + height / 2 + height / 4 + sh1);
 			}
 		} else if (position == 3) {
 			if (first == false) {
@@ -395,8 +395,8 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 4, y);
+				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 4,
 						y + height + sh0);
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -407,8 +407,8 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 4, y);
+				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 4,
 						y + height + sh1);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -419,8 +419,8 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 2,
+				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 4, y);
+				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 4,
 						y + height + sh0);
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -431,8 +431,8 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent
 				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 2, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 2,
+				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 2 + width / 4, y);
+				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 2 + width / 4,
 						y + height + sh1);
 			}
 		}
