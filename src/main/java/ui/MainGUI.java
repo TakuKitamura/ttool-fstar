@@ -340,6 +340,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     // Plugin management
     //public static PluginManager pluginManager;
 
+    private boolean hidden = false;
 
     public MainGUI(boolean _openLast, boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn,
                    boolean
@@ -9062,7 +9063,19 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             changeMade(tmltdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
         }
     }
+    
+    public void toggleELN() {
+       if (hidden == false) {
+    	   hidden = true;
+       } else {
+    	   hidden = false;
+       }
+    }
 
+    public boolean getHidden() {
+    	return hidden;
+    }
+    
     public boolean isAValidTabName(String name) {
         return name.matches("((\\w)*(\\s)*)*");
     }

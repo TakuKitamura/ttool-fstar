@@ -51,15 +51,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class ELNComponentIndependentCurrentSource 
- * Independent current source to be used in ELN diagrams 
- * Creation: 15/06/2018
+ * Class ELNComponentIndependentCurrentSource Independent current source to be
+ * used in ELN diagrams Creation: 15/06/2018
+ * 
  * @version 1.0 15/06/2018
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentIndependentCurrentSource extends TGCScalableWithInternalComponent
-		implements ActionListener, SwallowedTGComponent, ELNComponent {
+public class ELNComponentIndependentCurrentSource extends
+		TGCScalableWithInternalComponent implements ActionListener,
+		SwallowedTGComponent, ELNComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -70,17 +71,20 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 	private double dtextX = 0.0;
 	protected int decPoint = 3;
 
-	private double initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmplitude;
+	private double initValue, offset, amplitude, frequency, phase, acAmplitude,
+			acPhase, acNoiseAmplitude;
 	private String delay;
 	private String unit0;
 
 	private int position = 0;
-	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false, fh_1_3 = false;
+	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false,
+			fh_1_3 = false;
 	private int old;
 	private boolean first;
 
-	public ELNComponentIndependentCurrentSource(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
-			boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+	public ELNComponentIndependentCurrentSource(int _x, int _y, int _minX,
+			int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+			TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(60, 80);
@@ -121,8 +125,10 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 	public void initPortTerminal(int nb) {
 		nbConnectingPoint = nb;
 		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "p");
-		connectingPoint[1] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "n");
+		connectingPoint[0] = new ELNPortTerminal(this, 0, 0, true, true, 0.0,
+				0.0, "p");
+		connectingPoint[1] = new ELNPortTerminal(this, 0, 0, true, true, 0.0,
+				0.0, "n");
 	}
 
 	public Color getMyColor() {
@@ -132,10 +138,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 	public void internalDrawing(Graphics g) {
 		Font f = g.getFont();
 		Font fold = f;
+		MainGUI mgui = getTDiagramPanel().getMainGUI();
 
 		if (this.rescaled && !this.tdp.isScaled()) {
 			this.rescaled = false;
-			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+			int maxCurrentFontSize = Math.max(
+					0,
+					Math.min(this.height,
+							(int) (this.maxFontSize * this.tdp.getZoom())));
 			f = f.deriveFont((float) maxCurrentFontSize);
 
 			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
@@ -173,7 +183,9 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w) / 2, y - height / 4);
+			if (mgui.getHidden() == false) {
+				g.drawString(value, x + (width - w) / 2, y - height / 4);
+			}
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -185,9 +197,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 3 + width / 6, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 3 + width / 6,
-						y + height + sh1);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ width / 3 + width / 6, y);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ width / 3 + width / 6, y + height + sh1);
+				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
@@ -198,9 +215,15 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(2.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + 2 * width / 3 + width / 6, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + 2 * width / 3 + width / 6,
-						y + height + sh1);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ 2 * width / 3 + width / 6, y);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ 2 * width / 3 + width / 6, y + height
+									+ sh1);
+				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -211,9 +234,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 3 + width / 6, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 3 + width / 6,
-						y + height + sh0);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ width / 3 + width / 6, y);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ width / 3 + width / 6, y + height + sh0);
+				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -224,9 +252,15 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(2.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + 2 * width / 3 + width / 6, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + 2 * width / 3 + width / 6,
-						y + height + sh0);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ 2 * width / 3 + width / 6, y);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ 2 * width / 3 + width / 6, y + height
+									+ sh0);
+				}
 			}
 		} else if (position == 1) {
 			if (first == false) {
@@ -245,7 +279,9 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w) / 2, y - height / 3);
+			if (mgui.getHidden() == false) {
+				g.drawString(value, x + (width - w) / 2, y - height / 3);
+			}
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -257,10 +293,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0 / 3.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
-						y + height / 3 + height / 6 + sh1);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
-						y + height / 3 + height / 6 + sh0);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									- sw1, y + height / 3 + height / 6 + sh1);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ width, y + height / 3 + height / 6 + sh0);
+				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
@@ -271,10 +311,16 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(2.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(2.0 / 3.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
-						y + 2 * height / 3 + height / 6 + sh1);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
-						y + 2 * height / 3 + height / 6 + sh0);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									- sw1, y + 2 * height / 3 + height / 6
+									+ sh1);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ width, y + 2 * height / 3 + height / 6
+									+ sh0);
+				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -285,10 +331,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0 / 3.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
-						y + height / 3 + height / 6 + sh0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
-						y + height / 3 + height / 6 + sh1);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									- sw0, y + height / 3 + height / 6 + sh0);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ width, y + height / 3 + height / 6 + sh1);
+				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -299,10 +349,16 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(2.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(2.0 / 3.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
-						y + 2 * height / 3 + height / 6 + sh0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
-						y + 2 * height / 3 + height / 6 + sh1);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									- sw0, y + 2 * height / 3 + height / 6
+									+ sh0);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ width, y + 2 * height / 3 + height / 6
+									+ sh1);
+				}
 			}
 		} else if (position == 2) {
 			if (first == false) {
@@ -319,7 +375,9 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w) / 2, y - height / 4);
+			if (mgui.getHidden() == false) {
+				g.drawString(value, x + (width - w) / 2, y - height / 4);
+			}
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -331,9 +389,15 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(2.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + 2 * width / 3 + width / 6, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + 2 * width / 3 + width / 6,
-						y + height + sh0);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ 2 * width / 3 + width / 6, y);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ 2 * width / 3 + width / 6, y + height
+									+ sh0);
+				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
@@ -344,9 +408,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 3 + width / 6, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 3 + width / 6,
-						y + height + sh0);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ width / 3 + width / 6, y);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ width / 3 + width / 6, y + height + sh0);
+				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -357,9 +426,15 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(2.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + 2 * width / 3 + width / 6, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + 2 * width / 3 + width / 6,
-						y + height + sh1);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ 2 * width / 3 + width / 6, y);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ 2 * width / 3 + width / 6, y + height
+									+ sh1);
+				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -370,9 +445,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width / 3 + width / 6, y);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width / 3 + width / 6,
-						y + height + sh1);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ width / 3 + width / 6, y);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ width / 3 + width / 6, y + height + sh1);
+				}
 			}
 		} else if (position == 3) {
 			if (first == false) {
@@ -391,7 +471,9 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w) / 2, y - height / 3);
+			if (mgui.getHidden() == false) {
+				g.drawString(value, x + (width - w) / 2, y - height / 3);
+			}
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -403,10 +485,16 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(2.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(2.0 / 3.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
-						y + 2 * height / 3 + height / 6 + sh0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
-						y + 2 * height / 3 + height / 6 + sh1);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									- sw0, y + 2 * height / 3 + height / 6
+									+ sh0);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ width, y + 2 * height / 3 + height / 6
+									+ sh1);
+				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
@@ -417,10 +505,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0 / 3.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
-						y + height / 3 + height / 6 + sh0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
-						y + height / 3 + height / 6 + sh1);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									- sw0, y + height / 3 + height / 6 + sh0);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									+ width, y + height / 3 + height / 6 + sh1);
+				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -431,10 +523,16 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(2.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(2.0 / 3.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
-						y + 2 * height / 3 + height / 6 + sh1);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
-						y + 2 * height / 3 + height / 6 + sh0);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									- sw1, y + 2 * height / 3 + height / 6
+									+ sh1);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ width, y + 2 * height / 3 + height / 6
+									+ sh0);
+				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)
@@ -445,10 +543,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0 / 3.0);
 				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0 / 3.0);
-				g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
-						y + height / 3 + height / 6 + sh1);
-				g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
-						y + height / 3 + height / 6 + sh0);
+				if (mgui.getHidden() == false) {
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[1]).getName(), x
+									- sw1, y + height / 3 + height / 6 + sh1);
+					g.drawString(
+							((ELNPortTerminal) connectingPoint[0]).getName(), x
+									+ width, y + height / 3 + height / 6 + sh0);
+				}
 			}
 		}
 		g.setColor(c);
@@ -467,20 +569,27 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		int[] pty2 = { y + height / 2, y + height / 2 };
 		g.drawPolygon(ptx2, pty2, 2);
 		g.drawOval(x, y + height / 4, 2 * width / 3, height / 2);
-		int[] ptx3 = { x + 2 * width / 3 + width / 6, x + 2 * width / 3 + width / 6,
-				x + 2 * width / 3 + width / 6 - width / 12, x + 2 * width / 3 + width / 6,
-				x + 2 * width / 3 + width / 6 + width / 12, x + 2 * width / 3 + width / 6 };
-		int[] pty3 = { y + height / 4, y + 3 * height / 4 - height / 8, y + 3 * height / 4 - height / 8,
-				y + 3 * height / 4, y + 3 * height / 4 - height / 8, y + 3 * height / 4 - height / 8 };
+		int[] ptx3 = { x + 2 * width / 3 + width / 6,
+				x + 2 * width / 3 + width / 6,
+				x + 2 * width / 3 + width / 6 - width / 12,
+				x + 2 * width / 3 + width / 6,
+				x + 2 * width / 3 + width / 6 + width / 12,
+				x + 2 * width / 3 + width / 6 };
+		int[] pty3 = { y + height / 4, y + 3 * height / 4 - height / 8,
+				y + 3 * height / 4 - height / 8, y + 3 * height / 4,
+				y + 3 * height / 4 - height / 8,
+				y + 3 * height / 4 - height / 8 };
 		g.drawPolygon(ptx3, pty3, 6);
 		g.fillPolygon(ptx3, pty3, 6);
 		g.drawOval(x + width / 3 - width / 12, y, width / 6, height / 8);
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width / 3 - width / 12, y, width / 6, height / 8);
 		g.setColor(c);
-		g.drawOval(x + width / 3 - width / 12, y + height - height / 8, width / 6, height / 8);
+		g.drawOval(x + width / 3 - width / 12, y + height - height / 8,
+				width / 6, height / 8);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width / 3 - width / 12, y + height - height / 8, width / 6, height / 8);
+		g.fillOval(x + width / 3 - width / 12, y + height - height / 8,
+				width / 6, height / 8);
 		g.setColor(c);
 	}
 
@@ -496,10 +605,14 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		int[] pty2 = { y + height / 2, y + height / 2 };
 		g.drawPolygon(ptx2, pty2, 2);
 		g.drawOval(x, y + height / 4, 2 * width / 3, height / 2);
-		int[] ptx3 = { x + 2 * width / 3 + width / 6, x + 2 * width / 3 + width / 6,
-				x + 2 * width / 3 + width / 6 - width / 12, x + 2 * width / 3 + width / 6,
-				x + 2 * width / 3 + width / 6 + width / 12, x + 2 * width / 3 + width / 6 };
-		int[] pty3 = { y + 3 * height / 4, y + height / 4 + height / 8, y + height / 4 + height / 8, y + height / 4,
+		int[] ptx3 = { x + 2 * width / 3 + width / 6,
+				x + 2 * width / 3 + width / 6,
+				x + 2 * width / 3 + width / 6 - width / 12,
+				x + 2 * width / 3 + width / 6,
+				x + 2 * width / 3 + width / 6 + width / 12,
+				x + 2 * width / 3 + width / 6 };
+		int[] pty3 = { y + 3 * height / 4, y + height / 4 + height / 8,
+				y + height / 4 + height / 8, y + height / 4,
 				y + height / 4 + height / 8, y + height / 4 + height / 8 };
 		g.drawPolygon(ptx3, pty3, 6);
 		g.fillPolygon(ptx3, pty3, 6);
@@ -507,9 +620,11 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width / 3 - width / 12, y, width / 6, height / 8);
 		g.setColor(c);
-		g.drawOval(x + width / 3 - width / 12, y + height - height / 8, width / 6, height / 8);
+		g.drawOval(x + width / 3 - width / 12, y + height - height / 8,
+				width / 6, height / 8);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width / 3 - width / 12, y + height - height / 8, width / 6, height / 8);
+		g.fillOval(x + width / 3 - width / 12, y + height - height / 8,
+				width / 6, height / 8);
 		g.setColor(c);
 	}
 
@@ -525,9 +640,11 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		int[] pty2 = { y + height / 2, y + height / 2 };
 		g.drawPolygon(ptx2, pty2, 2);
 		g.drawOval(x + width / 3, y + height / 4, 2 * width / 3, height / 2);
-		int[] ptx3 = { x + width / 6, x + width / 6, x + width / 6 - width / 12, x + width / 6,
+		int[] ptx3 = { x + width / 6, x + width / 6,
+				x + width / 6 - width / 12, x + width / 6,
 				x + width / 6 + width / 12, x + width / 6 };
-		int[] pty3 = { y + 3 * height / 4, y + height / 4 + height / 8, y + height / 4 + height / 8, y + height / 4,
+		int[] pty3 = { y + 3 * height / 4, y + height / 4 + height / 8,
+				y + height / 4 + height / 8, y + height / 4,
 				y + height / 4 + height / 8, y + height / 4 + height / 8 };
 		g.drawPolygon(ptx3, pty3, 6);
 		g.fillPolygon(ptx3, pty3, 6);
@@ -535,9 +652,11 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		g.setColor(Color.WHITE);
 		g.fillOval(x + 2 * width / 3 - width / 12, y, width / 6, height / 8);
 		g.setColor(c);
-		g.drawOval(x + 2 * width / 3 - width / 12, y + height - height / 8, width / 6, height / 8);
+		g.drawOval(x + 2 * width / 3 - width / 12, y + height - height / 8,
+				width / 6, height / 8);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + 2 * width / 3 - width / 12, y + height - height / 8, width / 6, height / 8);
+		g.fillOval(x + 2 * width / 3 - width / 12, y + height - height / 8,
+				width / 6, height / 8);
 		g.setColor(c);
 	}
 
@@ -553,19 +672,24 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		int[] pty2 = { y + height / 2, y + height / 2 };
 		g.drawPolygon(ptx2, pty2, 2);
 		g.drawOval(x + width / 3, y + height / 4, 2 * width / 3, height / 2);
-		int[] ptx3 = { x + width / 6, x + width / 6, x + width / 6 - width / 12, x + width / 6,
+		int[] ptx3 = { x + width / 6, x + width / 6,
+				x + width / 6 - width / 12, x + width / 6,
 				x + width / 6 + width / 12, x + width / 6 };
-		int[] pty3 = { y + height / 4, y + 3 * height / 4 - height / 8, y + 3 * height / 4 - height / 8,
-				y + 3 * height / 4, y + 3 * height / 4 - height / 8, y + 3 * height / 4 - height / 8 };
+		int[] pty3 = { y + height / 4, y + 3 * height / 4 - height / 8,
+				y + 3 * height / 4 - height / 8, y + 3 * height / 4,
+				y + 3 * height / 4 - height / 8,
+				y + 3 * height / 4 - height / 8 };
 		g.drawPolygon(ptx3, pty3, 6);
 		g.fillPolygon(ptx3, pty3, 6);
 		g.drawOval(x + 2 * width / 3 - width / 12, y, width / 6, height / 8);
 		g.setColor(Color.WHITE);
 		g.fillOval(x + 2 * width / 3 - width / 12, y, width / 6, height / 8);
 		g.setColor(c);
-		g.drawOval(x + 2 * width / 3 - width / 12, y + height - height / 8, width / 6, height / 8);
+		g.drawOval(x + 2 * width / 3 - width / 12, y + height - height / 8,
+				width / 6, height / 8);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + 2 * width / 3 - width / 12, y + height - height / 8, width / 6, height / 8);
+		g.fillOval(x + 2 * width / 3 - width / 12, y + height - height / 8,
+				width / 6, height / 8);
 		g.setColor(c);
 	}
 
@@ -581,20 +705,26 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		int[] pty2 = { y, y + 2 * height / 3 };
 		g.drawPolygon(ptx2, pty2, 2);
 		g.drawOval(x + width / 4, y, width / 2, 2 * height / 3);
-		int[] ptx3 = { x + 3 * width / 4, x + width / 4 + width / 8, x + width / 4 + width / 8, x + width / 4,
+		int[] ptx3 = { x + 3 * width / 4, x + width / 4 + width / 8,
+				x + width / 4 + width / 8, x + width / 4,
 				x + width / 4 + width / 8, x + width / 4 + width / 8 };
-		int[] pty3 = { y + 2 * height / 3 + height / 6, y + 2 * height / 3 + height / 6,
-				y + 2 * height / 3 + height / 6 - height / 12, y + 2 * height / 3 + height / 6,
-				y + 2 * height / 3 + height / 6 + height / 12, y + 2 * height / 3 + height / 6 };
+		int[] pty3 = { y + 2 * height / 3 + height / 6,
+				y + 2 * height / 3 + height / 6,
+				y + 2 * height / 3 + height / 6 - height / 12,
+				y + 2 * height / 3 + height / 6,
+				y + 2 * height / 3 + height / 6 + height / 12,
+				y + 2 * height / 3 + height / 6 };
 		g.drawPolygon(ptx3, pty3, 6);
 		g.fillPolygon(ptx3, pty3, 6);
 		g.drawOval(x, y + height / 3 - height / 12, width / 8, height / 6);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height / 3 - height / 12, width / 8, height / 6);
 		g.setColor(c);
-		g.drawOval(x + width - width / 8, y + height / 3 - height / 12, width / 8, height / 6);
+		g.drawOval(x + width - width / 8, y + height / 3 - height / 12,
+				width / 8, height / 6);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 8, y + height / 3 - height / 12, width / 8, height / 6);
+		g.fillOval(x + width - width / 8, y + height / 3 - height / 12,
+				width / 8, height / 6);
 		g.setColor(c);
 	}
 
@@ -610,20 +740,26 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		int[] pty2 = { y + height / 3, y + height };
 		g.drawPolygon(ptx2, pty2, 2);
 		g.drawOval(x + width / 4, y + height / 3, width / 2, 2 * height / 3);
-		int[] ptx3 = { x + 3 * width / 4, x + width / 4 + width / 8, x + width / 4 + width / 8, x + width / 4,
+		int[] ptx3 = { x + 3 * width / 4, x + width / 4 + width / 8,
+				x + width / 4 + width / 8, x + width / 4,
 				x + width / 4 + width / 8, x + width / 4 + width / 8 };
-		int[] pty3 = { y + height / 3 - height / 6, y + height / 3 - height / 6,
-				y + height / 3 - height / 6 - height / 12, y + height / 3 - height / 6,
-				y + height / 3 - height / 6 + height / 12, y + height / 3 - height / 6 };
+		int[] pty3 = { y + height / 3 - height / 6,
+				y + height / 3 - height / 6,
+				y + height / 3 - height / 6 - height / 12,
+				y + height / 3 - height / 6,
+				y + height / 3 - height / 6 + height / 12,
+				y + height / 3 - height / 6 };
 		g.drawPolygon(ptx3, pty3, 6);
 		g.fillPolygon(ptx3, pty3, 6);
 		g.drawOval(x, y + 2 * height / 3 - height / 12, width / 8, height / 6);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + 2 * height / 3 - height / 12, width / 8, height / 6);
 		g.setColor(c);
-		g.drawOval(x + width - width / 8, y + 2 * height / 3 - height / 12, width / 8, height / 6);
+		g.drawOval(x + width - width / 8, y + 2 * height / 3 - height / 12,
+				width / 8, height / 6);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 8, y + 2 * height / 3 - height / 12, width / 8, height / 6);
+		g.fillOval(x + width - width / 8, y + 2 * height / 3 - height / 12,
+				width / 8, height / 6);
 		g.setColor(c);
 	}
 
@@ -639,20 +775,26 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		int[] pty2 = { y + height / 3, y + height };
 		g.drawPolygon(ptx2, pty2, 2);
 		g.drawOval(x + width / 4, y + height / 3, width / 2, 2 * height / 3);
-		int[] ptx3 = { x + width / 4, x + 3 * width / 4 - width / 8, x + 3 * width / 4 - width / 8, x + 3 * width / 4,
+		int[] ptx3 = { x + width / 4, x + 3 * width / 4 - width / 8,
+				x + 3 * width / 4 - width / 8, x + 3 * width / 4,
 				x + 3 * width / 4 - width / 8, x + 3 * width / 4 - width / 8 };
-		int[] pty3 = { y + height / 3 - height / 6, y + height / 3 - height / 6,
-				y + height / 3 - height / 6 - height / 12, y + height / 3 - height / 6,
-				y + height / 3 - height / 6 + height / 12, y + height / 3 - height / 6 };
+		int[] pty3 = { y + height / 3 - height / 6,
+				y + height / 3 - height / 6,
+				y + height / 3 - height / 6 - height / 12,
+				y + height / 3 - height / 6,
+				y + height / 3 - height / 6 + height / 12,
+				y + height / 3 - height / 6 };
 		g.drawPolygon(ptx3, pty3, 6);
 		g.fillPolygon(ptx3, pty3, 6);
 		g.drawOval(x, y + 2 * height / 3 - height / 12, width / 8, height / 6);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + 2 * height / 3 - height / 12, width / 8, height / 6);
 		g.setColor(c);
-		g.drawOval(x + width - width / 8, y + 2 * height / 3 - height / 12, width / 8, height / 6);
+		g.drawOval(x + width - width / 8, y + 2 * height / 3 - height / 12,
+				width / 8, height / 6);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 8, y + 2 * height / 3 - height / 12, width / 8, height / 6);
+		g.fillOval(x + width - width / 8, y + 2 * height / 3 - height / 12,
+				width / 8, height / 6);
 		g.setColor(c);
 	}
 
@@ -668,20 +810,26 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		int[] pty2 = { y, y + 2 * height / 3 };
 		g.drawPolygon(ptx2, pty2, 2);
 		g.drawOval(x + width / 4, y, width / 2, 2 * height / 3);
-		int[] ptx3 = { x + width / 4, x + 3 * width / 4 - width / 8, x + 3 * width / 4 - width / 8, x + 3 * width / 4,
+		int[] ptx3 = { x + width / 4, x + 3 * width / 4 - width / 8,
+				x + 3 * width / 4 - width / 8, x + 3 * width / 4,
 				x + 3 * width / 4 - width / 8, x + 3 * width / 4 - width / 8 };
-		int[] pty3 = { y + 2 * height / 3 + height / 6, y + 2 * height / 3 + height / 6,
-				y + 2 * height / 3 + height / 6 - height / 12, y + 2 * height / 3 + height / 6,
-				y + 2 * height / 3 + height / 6 + height / 12, y + 2 * height / 3 + height / 6 };
+		int[] pty3 = { y + 2 * height / 3 + height / 6,
+				y + 2 * height / 3 + height / 6,
+				y + 2 * height / 3 + height / 6 - height / 12,
+				y + 2 * height / 3 + height / 6,
+				y + 2 * height / 3 + height / 6 + height / 12,
+				y + 2 * height / 3 + height / 6 };
 		g.drawPolygon(ptx3, pty3, 6);
 		g.fillPolygon(ptx3, pty3, 6);
 		g.drawOval(x, y + height / 3 - height / 12, width / 8, height / 6);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height / 3 - height / 12, width / 8, height / 6);
 		g.setColor(c);
-		g.drawOval(x + width - width / 8, y + height / 3 - height / 12, width / 8, height / 6);
+		g.drawOval(x + width - width / 8, y + height / 3 - height / 12,
+				width / 8, height / 6);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 8, y + height / 3 - height / 12, width / 8, height / 6);
+		g.fillOval(x + width - width / 8, y + height / 3 - height / 12,
+				width / 8, height / 6);
 		g.setColor(c);
 	}
 
@@ -697,7 +845,8 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 	}
 
 	public boolean editOndoubleClick(JFrame frame) {
-		JDialogELNComponentIndependentCurrentSource jde = new JDialogELNComponentIndependentCurrentSource(this);
+		JDialogELNComponentIndependentCurrentSource jde = new JDialogELNComponentIndependentCurrentSource(
+				this);
 		jde.setVisible(true);
 		return true;
 	}
@@ -742,7 +891,8 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		return new String(sb);
 	}
 
-	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId)
+			throws MalformedModelingException {
 		try {
 			NodeList nli;
 			Node n1, n2;
@@ -763,22 +913,36 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("attributes")) {
-								initValue = Double.parseDouble(elt.getAttribute("init_value"));
-								offset = Double.parseDouble(elt.getAttribute("offset"));
-								amplitude = Double.parseDouble(elt.getAttribute("amplitude"));
-								frequency = Double.parseDouble(elt.getAttribute("frequency"));
+								initValue = Double.parseDouble(elt
+										.getAttribute("init_value"));
+								offset = Double.parseDouble(elt
+										.getAttribute("offset"));
+								amplitude = Double.parseDouble(elt
+										.getAttribute("amplitude"));
+								frequency = Double.parseDouble(elt
+										.getAttribute("frequency"));
 								unit0 = elt.getAttribute("unit0");
-								phase = Double.parseDouble(elt.getAttribute("phase"));
+								phase = Double.parseDouble(elt
+										.getAttribute("phase"));
 								delay = elt.getAttribute("delay");
-								acAmplitude = Double.parseDouble(elt.getAttribute("ac_amplitude"));
-								acPhase = Double.parseDouble(elt.getAttribute("ac_phase"));
-								acNoiseAmplitude = Double.parseDouble(elt.getAttribute("ac_noise_amplitude"));
-								position = Integer.parseInt(elt.getAttribute("position"));
-								fv_0_2 = Boolean.parseBoolean(elt.getAttribute("fv_0_2"));
-								fv_1_3 = Boolean.parseBoolean(elt.getAttribute("fv_1_3"));
-								fh_0_2 = Boolean.parseBoolean(elt.getAttribute("fh_0_2"));
-								fh_1_3 = Boolean.parseBoolean(elt.getAttribute("fh_1_3"));
-								first = Boolean.parseBoolean(elt.getAttribute("first"));
+								acAmplitude = Double.parseDouble(elt
+										.getAttribute("ac_amplitude"));
+								acPhase = Double.parseDouble(elt
+										.getAttribute("ac_phase"));
+								acNoiseAmplitude = Double.parseDouble(elt
+										.getAttribute("ac_noise_amplitude"));
+								position = Integer.parseInt(elt
+										.getAttribute("position"));
+								fv_0_2 = Boolean.parseBoolean(elt
+										.getAttribute("fv_0_2"));
+								fv_1_3 = Boolean.parseBoolean(elt
+										.getAttribute("fv_1_3"));
+								fh_0_2 = Boolean.parseBoolean(elt
+										.getAttribute("fh_0_2"));
+								fh_1_3 = Boolean.parseBoolean(elt
+										.getAttribute("fh_1_3"));
+								first = Boolean.parseBoolean(elt
+										.getAttribute("first"));
 								setInitValue(initValue);
 								setOffset(offset);
 								setAmplitude(amplitude);
@@ -805,7 +969,8 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		}
 	}
 
-	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+	public void addActionToPopupMenu(JPopupMenu componentMenu,
+			ActionListener menuAL, int x, int y) {
 		componentMenu.addSeparator();
 
 		JMenuItem rotateright = new JMenuItem("Rotate right 90\u00b0");
@@ -1008,7 +1173,8 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		if ((father != null) && (father instanceof ELNModule)) {
 			resizeToFatherSize();
 
-			setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+			setCdRectangle(0, father.getWidth() - getWidth(), 0,
+					father.getHeight() - getHeight());
 			setMoveCd(x, y);
 		}
 	}
@@ -1021,6 +1187,7 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		myColor = null;
 		setFather(null);
 		TDiagramPanel tdp = getTDiagramPanel();
-		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(),
+				tdp.getMaxY());
 	}
 }

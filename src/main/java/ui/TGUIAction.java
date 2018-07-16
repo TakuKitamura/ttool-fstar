@@ -303,6 +303,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ELN_TDF_CURRENT_SINK = 496; 
     public static final int ELN_MODULE = 498; 
     public static final int ELN_MODULE_TERMINAL = 499;
+    public static final int ELN_TOGGLE_ATTR = 500;
     
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
@@ -657,7 +658,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 500;
+    public static final int NB_ACTION = 501;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1179,6 +1180,7 @@ public class TGUIAction extends AbstractAction {
         actions[ELN_TDF_CURRENT_SINK] = new TAction("eln-tdf-isink", "Add a conversion current to a TDF output signal", IconManager.imgic8031, IconManager.imgic8031, "Converts current to a TDF output signal", "Add a converts current to a TDF output signal to the currently opened ELN Diagram", 0);
         actions[ELN_MODULE] = new TAction("eln-module", "Add a SystemC module", IconManager.imgic8006, IconManager.imgic8006, "SystemC module", "Add a SystemC module to the currently opened ELN Diagram", 0);
         actions[ELN_MODULE_TERMINAL] = new TAction("eln-module-terminal", "Add a module terminal", IconManager.imgic8032, IconManager.imgic8032, "Module terminal", "Add a module terminal to the currently opened ELN Diagram", 0);
+        actions[ELN_TOGGLE_ATTR] = new TAction("eln-toggle-attr-command", "Show / hide attributes in ELN", IconManager.imgic138, IconManager.imgic138, "Show / hide element attributes in ELN", "Show / hide attributes to the currently opened ELN Diagram", 0);
 
         //ProActive State Machine Diagram
         actions[PROSMD_EDIT] = new TAction("edit-prosmd-diagram", "Edit ProActive state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit ProActive state machine diagram", "Make it possible to edit the currently opened ProActive state machine diagram", 0);

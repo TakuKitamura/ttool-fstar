@@ -82,6 +82,7 @@ public class ELNDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_MODULE].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_MODULE_TERMINAL].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_TOGGLE_ATTR].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
@@ -151,6 +152,11 @@ public class ELNDiagramToolBar extends TToolBar {
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ELN_CONNECTOR]);
+		button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_TOGGLE_ATTR]);
 		button.addMouseListener(mgui.mouseHandler);
 	}
 }
