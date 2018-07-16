@@ -96,6 +96,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		int w;
 		Font f = g.getFont();
 		Font fold = f;
+		MainGUI mgui = getTDiagramPanel().getMainGUI();
 
 		if (myColor == null) {
 			myColor = Color.white;
@@ -138,10 +139,14 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		w = g.getFontMetrics().stringWidth(value);
 		if (w > (width - 2 * textX)) {
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+			if (mgui.getHidden() == false) {
+				g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+			}
 		} else {
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
+			if (mgui.getHidden() == false) {
+				g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
+			}
 		}
 
 		g.setFont(fold);
