@@ -102,7 +102,7 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
         connectingPoint = new TGConnectingPoint[nb];
         int i;
         for (i=0; i<nbConnectingPoint; i++) {
-            connectingPoint[i] = new ELNConnectingPoint(this, 0, 0, in, out, 0.5, 0.0);
+            connectingPoint[i] = new ELNConnectingPoint(this, 0, 0, in, out, 0.5, 1.0);
         }
     }
 
@@ -144,10 +144,10 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
     	}
 
     	Color c = g.getColor();
+    	g.drawOval(x, y, width, height);
+    	g.setColor(Color.WHITE);
+    	g.fillOval(x, y, width, height);
     	g.setColor(c);
-    	g.drawRect(x, y, width, height);
-    	g.setColor(Color.black);
-    	g.fillRect(x, y, width, height);
     	g.setFont(fold);
     }
 
