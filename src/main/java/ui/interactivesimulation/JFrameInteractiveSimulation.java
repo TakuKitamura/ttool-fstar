@@ -932,7 +932,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         latencyPanel.setLayout(gridbag0);
-        infoTab.addTab("Latency", null, latencyPanel, "Latency Measurements");
+        infoTab.addTab("Latency", null, new JScrollPane(latencyPanel), "Latency Measurements");
         c0.gridwidth = GridBagConstraints.REMAINDER;
 		latencyPanel.add(new JLabel("Latencies shown in number of cycles relative to the main clock"), c0);
 
@@ -1875,6 +1875,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             //                                  for (int i=0; i<elt.getAttributes().getLength(); i++){
                             //                                                  
                             //                                                  }
+                        //    System.out.println("element " + elt);
                             id = null;
                             name = null;
                             command = null;
@@ -1994,7 +1995,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         }
 
                         if (elt.getTagName().compareTo(SIMULATION_TRANS) == 0) {
-
+							//System.out.println("EL " + elt.getAttribute("messageid"));
                             SimulationTransaction st = new SimulationTransaction();
                             st.nodeType = elt.getAttribute("deviceid");
 

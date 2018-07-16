@@ -860,6 +860,10 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         return text;
     }
 
+    public String[] getTexts() {
+        return texts;
+    }
+
     public String getID() {
         return id;
     }
@@ -1140,5 +1144,20 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         }
         return s;
     }
+
+
+    // For references
+    public Color getTopColor() {
+        return REQ_TYPE_COLOR.get(reqType);
+    }
+
+    public ArrayList<String> getExtraParamIDs() {
+        return extraParamIDs;
+    }
+
+    public ArrayList<String> getExtraParamValues() {
+        return extraParamValues;
+    }
+
 
 }

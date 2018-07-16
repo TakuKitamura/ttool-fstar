@@ -283,27 +283,27 @@ public class TGUIAction extends AbstractAction {
     public static final int CAMS_PORT_DE = 478;
     public static final int CAMS_PORT_CONVERTER = 479;
     public static final int CAMS_CLUSTER = 480;
-    public static final int CAMS_GENCODE = 481;
+    public static final int CAMS_GENCODE = 482;
     public static final int CAMS_BLOCK_GPIO2VCI = 497;
     
     // ELN
-    public static final int ELN_EDIT = 482;
-    public static final int ELN_CONNECTOR = 483;
-    public static final int ELN_RESISTOR = 484;
-    public static final int ELN_CAPACITOR = 485;
-    public static final int ELN_INDUCTOR = 486;
-    public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 487;
-    public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 488;
-    public static final int ELN_IDEAL_TRANSFORMER = 489; 
-    public static final int ELN_TRANSMISSION_LINE = 490; 
-    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 491; 
-    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 492; 
-    public static final int ELN_NODE_REF = 494; 
-    public static final int ELN_TDF_VOLTAGE_SINK = 495; 
-    public static final int ELN_TDF_CURRENT_SINK = 496; 
-    public static final int ELN_MODULE = 498; 
-    public static final int ELN_MODULE_TERMINAL = 499;
-    public static final int ELN_TOGGLE_ATTR = 500;
+    public static final int ELN_EDIT = 483;
+    public static final int ELN_CONNECTOR = 484;
+    public static final int ELN_RESISTOR = 485;
+    public static final int ELN_CAPACITOR = 486;
+    public static final int ELN_INDUCTOR = 487;
+    public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 488;
+    public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 489;
+    public static final int ELN_IDEAL_TRANSFORMER = 490; 
+    public static final int ELN_TRANSMISSION_LINE = 491; 
+    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 492; 
+    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 493; 
+    public static final int ELN_NODE_REF = 495; 
+    public static final int ELN_TDF_VOLTAGE_SINK = 496; 
+    public static final int ELN_TDF_CURRENT_SINK = 498; 
+    public static final int ELN_MODULE = 499; 
+    public static final int ELN_MODULE_TERMINAL = 500;
+    public static final int ELN_TOGGLE_ATTR = 501;
     
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
@@ -437,6 +437,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ARD_SATISFY_CONNECTOR = 422;
     public static final int ARD_COPY_CONNECTOR = 305;
     public static final int ARD_COMPOSITION_CONNECTOR = 306;
+    public static final int ARD_REQUIREMENT_REFERENCE = 481;
 
     // AVATAR Assumptions
     public static final int AMAD_EDIT = 370;
@@ -466,7 +467,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ADD_CHANNELARTIFACT = 411;
     public static final int ADD_VGMNNODE = 401;
     public static final int ADD_CROSSBARNODE = 421;
-    public static final int ADD_CLUSTERNODE = 493;
+    public static final int ADD_CLUSTERNODE = 494;
 
     // -------------------------------------------------------------
     public static final int DEPLOY_AVATAR_DIAGRAM = 418;
@@ -658,7 +659,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 501;
+    public static final int NB_ACTION = 502;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -862,7 +863,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_AVATAR_SIM] = new TAction("avatar-simu", "Interactive simulation", IconManager.imgic18, IconManager.imgic18, "Interactive simulation",  "Interactive simulation of the AVATAR design under edition", '2');
         actions[ACT_AVATAR_FV_UPPAAL] = new TAction("avatar-formal-verification-uppaal", "Safety formal verification with UPPAAL (Safety)", IconManager.imgic86, IconManager.imgic86, "Formal verification with UPPAAL (Safety)",  "Formal verification with UPPAAL (Safety) of the AVATAR design under edition", '3');
         actions[ACT_AVATAR_FV_PROVERIF] = new TAction("avatar-formal-verification-proverif", "Security verification (ProVerif)", IconManager.imgic88, IconManager.imgic88, "Security verification (ProVerif)",  "Security formal verification (with ProVerif)", '4');
-        actions[ACT_AVATAR_FV_STATICANALYSIS] = new TAction("avatar-formal-verification-staticanalysis", "Safety analysis (invariants)", IconManager.imgic96, IconManager.imgic96, "Safaty analysis (invariants)",  "Safety analysis using the invariant tecnique", '5');
+        actions[ACT_AVATAR_FV_STATICANALYSIS] = new TAction("avatar-formal-verification-staticanalysis", "Safety analysis (invariants)",
+                IconManager.imgic96, IconManager.imgic96, "Safaty analysis (invariants)",  "Safety analysis using the invariant technique", '5');
         actions[ACT_AVATAR_EXECUTABLE_GENERATION] = new TAction("avatar-executable-generation", "Code generation" , IconManager.imgic94, IconManager.imgic94, "Code generation",  "Generation of C-POSIX executable code from AVATAR design under edition", '6');
 
 
@@ -1300,6 +1302,7 @@ public class TGUIAction extends AbstractAction {
         // AVATAR Requirement Diagrams
         actions[ARD_EDIT] = new TAction("edit-ard-diagram", "Edit Requirement Diagram", IconManager.imgic100, IconManager.imgic101, "Edit Requirement Diagram", "Make it possible to edit the currently opened Requirement Diagram", 0);
         actions[ARD_REQUIREMENT] = new TAction("add-ard-requirement", "Add a requirement", IconManager.imgic5006, IconManager.imgic5006, "Requirement", "Add a requirement to the currently opened requirement diagram", 0);
+        actions[ARD_REQUIREMENT_REFERENCE] = new TAction("add-ard-requirement-reference", "Add a reference to a requirement", IconManager.imgic5074, IconManager.imgic5074, "Requirement Reference", "Add a requirement reference to the currently opened requirement diagram", 0);
         actions[ARD_PROPERTY] = new TAction("add-ard-property", "Add a property", IconManager.imgic5008, IconManager.imgic5008, "Property", "Add a reference to a property of the currently opened requirement diagram", 0);
         actions[ARD_ELEMENT_REFERENCE] = new TAction("add-ard-element-reference", "Add a reference to an element", IconManager.imgic5068, IconManager.imgic5068, "Element Reference", "Add a reference to an element of the currently opened requirement diagram", 0);
         actions[ARD_DERIVE_CONNECTOR] = new TAction("add-ard-derive", "Add a <<deriveReqt>> link", IconManager.imgic1008, IconManager.imgic1008, "DeriveReqt", "Add a <<deriveReqt>> link between two requirements of the currently opened requirement diagram", 0);

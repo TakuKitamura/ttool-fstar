@@ -3079,7 +3079,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         createFileDialog();
 
-        return mainSave();
+        boolean b = mainSave();
+
+        if (b) {
+            updateLastOpenFile(file);
+        }
+
+        return b;
 
     }
 
@@ -3100,6 +3106,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             dir = null;
             config = null;
             SpecConfigTTool.setBasicConfig(systemcOn);
+            updateLastOpenFile(file);
         }
         return b;
     }
@@ -4542,12 +4549,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             gtm.getTMLMapping().getTMLModeling().clearBacktracing();
             gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, getTabName(tp));
             gtm.getTML2Avatar().backtraceReachability(pvoa.getReachabilityResults());
-            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getAuthenticityResults(), getTabName(tp));
+            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa, getTabName(tp));
         } else if (tp instanceof TMLComponentDesignPanel) {
             gtm.getTMLMapping().getTMLModeling().clearBacktracing();
             gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, "Default Mapping");
             gtm.getTML2Avatar().backtraceReachability(pvoa.getReachabilityResults());
-            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getAuthenticityResults(), "Default Mapping");
+            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa, "Default Mapping");
         }
         return;
     }

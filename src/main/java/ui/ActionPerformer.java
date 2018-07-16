@@ -407,6 +407,8 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(mgui.actions[TGUIAction.ARD_REQUIREMENT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARRD_REQUIREMENT);
+        } else if (command.equals(mgui.actions[TGUIAction.ARD_REQUIREMENT_REFERENCE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARRD_REQUIREMENT_REFERENCE);
         } else if (command.equals(mgui.actions[TGUIAction.ARD_PROPERTY].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARRD_PROPERTY);
         } else if (command.equals(mgui.actions[TGUIAction.ARD_ELEMENT_REFERENCE].getActionCommand())) {
