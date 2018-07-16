@@ -164,6 +164,6 @@ public class SysCAMSSpecification{
     }
     
     public int getNbConnector(){
-    	return (getAllConnector()).size();
+    	return (getAllConnectorCluster()).size();
     }
 }

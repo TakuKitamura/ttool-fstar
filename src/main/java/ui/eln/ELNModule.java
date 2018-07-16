@@ -204,10 +204,8 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		if (tgc instanceof ELNComponentNodeRef) {
 			return true;
 		}
-		if (!(tgc.getFather() instanceof ELNModule)) {
-			if (tgc instanceof ELNPortTerminal) {
-				return true;
-			} 
+		if (tgc instanceof ELNModuleTerminal) {
+			return true;
 		}
 		return false;
 	}
@@ -261,19 +259,6 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 	}
 
 	public java.util.List<ELNModuleTerminal> getAllPorts() {
-		java.util.List<ELNModuleTerminal> ret = new LinkedList<ELNModuleTerminal>();
-		ELNModuleTerminal port;
-
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof ELNModuleTerminal) {
-				port = (ELNModuleTerminal)tgcomponent[i];
-					ret.add(port);
-			}
-		}
-		return ret;
-	}
-
-	public java.util.List<ELNModuleTerminal> getAllInternalPorts() {
 		java.util.List<ELNModuleTerminal> list = new ArrayList<ELNModuleTerminal>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof ELNModuleTerminal) {
