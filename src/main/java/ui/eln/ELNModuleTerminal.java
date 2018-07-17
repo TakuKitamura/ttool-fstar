@@ -62,7 +62,6 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
     private int minFontSize = 4;
     private int currentFontSize = -1;
     protected int oldx, oldy;
-    protected int halfwidth = 5;
     protected int currentOrientation = GraphicLib.NORTH;
 
     private int isOrigin = -1;
@@ -74,7 +73,7 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
     public ELNModuleTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(2*halfwidth, 2*halfwidth);
+        initScaling(10, 10);
 
         dtextX = textX * oldScaleFactor;
         textX = (int)dtextX;
@@ -83,7 +82,7 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
         minWidth = 1;
         minHeight = 1;
 
-        initConnectingPoint(true, true, 1);
+        initConnectingPoint(1);
                 
         addTGConnectingPointsComment();
 
@@ -97,13 +96,10 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
         value = "";
     }
 
-    public void initConnectingPoint(boolean in, boolean out, int nb) {
+    public void initConnectingPoint(int nb) {
         nbConnectingPoint = nb;
         connectingPoint = new TGConnectingPoint[nb];
-        int i;
-        for (i=0; i<nbConnectingPoint; i++) {
-            connectingPoint[i] = new ELNConnectingPoint(this, 0, 0, in, out, 0.5, 1.0);
-        }
+        connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
     }
 
     public Color getMyColor() {
