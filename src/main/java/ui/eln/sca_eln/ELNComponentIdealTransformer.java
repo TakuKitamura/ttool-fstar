@@ -49,6 +49,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.RoundRectangle2D;
 
 /**
  * Class ELNComponentIdealTransformer 
@@ -648,9 +649,18 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 				y + 4 * height / 5 + height / 10 };
 		g.drawPolygon(ptx5, pty5, 3);
 		g.fillPolygon(ptx5, pty5, 3);
+		
 		int w = g.getFontMetrics().stringWidth(Double.toString(ratio));
 		int h = g.getFontMetrics().getAscent();
 		g.drawString(Double.toString(ratio), x + (width - w) / 2, y + height + height / 10 + h);
+	
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x + width / 20, y - height / 20, width - width / 10, height + height / 10,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 10, height / 10);
@@ -708,8 +718,17 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 				y + height / 5 - height / 10 };
 		g.drawPolygon(ptx5, pty5, 3);
 		g.fillPolygon(ptx5, pty5, 3);
+	
 		int w = g.getFontMetrics().stringWidth(Double.toString(ratio));
-		g.drawString(Double.toString(ratio), x + (width - w) / 2, y - height / 20);
+		g.drawString(Double.toString(ratio), x + (width - w) / 2, y - height / 10);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x + width / 20, y - height / 20, width - width / 10, height + height / 10,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 10, height / 10);
@@ -765,9 +784,18 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 				y + height / 5 + height / 10 + 2 * height / 5 - height / 10 };
 		g.drawPolygon(ptx5, pty5, 3);
 		g.fillPolygon(ptx5, pty5, 3);
+		
 		int w = g.getFontMetrics().stringWidth(Double.toString(ratio));
 		int h = g.getFontMetrics().getAscent();
 		g.drawString(Double.toString(ratio), x - width / 10 - w, y + height / 2 + h / 2);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x - width / 20, y + height / 20, width + width / 10, height - height / 10,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 10, height / 10);
@@ -823,8 +851,17 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 				y + height / 5 + height / 10 + 2 * height / 5 - height / 10 };
 		g.drawPolygon(ptx5, pty5, 3);
 		g.fillPolygon(ptx5, pty5, 3);
+		
 		int h = g.getFontMetrics().getAscent();
 		g.drawString(Double.toString(ratio), x + width + width / 10, y + height / 2 + h / 2);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x - width / 20, y + height / 20, width + width / 10, height - height / 10,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 10, height / 10);

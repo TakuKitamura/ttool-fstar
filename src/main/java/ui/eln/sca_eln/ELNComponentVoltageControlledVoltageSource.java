@@ -49,6 +49,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.RoundRectangle2D;
 
 /**
  * Class ELNComponentVoltageControlledVoltageSource 
@@ -642,6 +643,14 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 		int[] ptx6 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12 + width / 24 };
 		int[] pty6 = { y + height - height / 4, y + height - height / 4 };
 		g.drawPolygon(ptx6, pty6, 2);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x + width / 24, y - height / 16, width - width / 12, height + height / 8,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 12, height / 8);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 12, height / 8);
@@ -693,6 +702,14 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 		int[] ptx6 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12 + width / 24 };
 		int[] pty6 = { y + height / 4, y + height / 4 };
 		g.drawPolygon(ptx6, pty6, 2);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x + width / 24, y - height / 16, width - width / 12, height + height / 8,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 12, height / 8);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 12, height / 8);
@@ -743,6 +760,14 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 		int[] ptx6 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12 + width / 24 };
 		int[] pty6 = { y + height / 4, y + height / 4 };
 		g.drawPolygon(ptx6, pty6, 2);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x + width / 24, y - height / 16, width - width / 12, height + height / 8,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 12, height / 8);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 12, height / 8);
@@ -793,6 +818,14 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 		int[] ptx6 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12 + width / 24 };
 		int[] pty6 = { y + height - height / 4, y + height - height / 4 };
 		g.drawPolygon(ptx6, pty6, 2);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x + width / 24, y - height / 16, width - width / 12, height + height / 8,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 12, height / 8);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 12, height / 8);
@@ -844,6 +877,14 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 		int[] ptx6 = { x + width / 4, x + width / 4 };
 		int[] pty6 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx6, pty6, 2);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x - width / 16, y + height / 24, width + width / 8, height - height / 12,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 8, height / 12);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 8, height / 12);
@@ -892,6 +933,14 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 				y + 4 * height / 6 + height / 12, y + 4 * height / 6 + height / 12, y + 4 * height / 6 + height / 12,
 				y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx5, pty5, 6);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x - width / 16, y + height / 24, width + width / 8, height - height / 12,
+				10, 10));
+		g2d.dispose();
+		
 		int[] ptx6 = { x + width / 4, x + width / 4 };
 		int[] pty6 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx6, pty6, 2);
@@ -946,6 +995,14 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 		int[] ptx6 = { x + width - width / 4, x + width - width / 4 };
 		int[] pty6 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx6, pty6, 2);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x - width / 16, y + height / 24, width + width / 8, height - height / 12,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 8, height / 12);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 8, height / 12);
@@ -997,6 +1054,14 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 		int[] ptx6 = { x + width - width / 4, x + width - width / 4 };
 		int[] pty6 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx6, pty6, 2);
+		
+		Graphics2D g2d = (Graphics2D) g.create();
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		g2d.setStroke(dashed);
+		g2d.draw(new RoundRectangle2D.Double(x - width / 16, y + height / 24, width + width / 8, height - height / 12,
+				10, 10));
+		g2d.dispose();
+		
 		g.drawOval(x, y, width / 8, height / 12);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 8, height / 12);
