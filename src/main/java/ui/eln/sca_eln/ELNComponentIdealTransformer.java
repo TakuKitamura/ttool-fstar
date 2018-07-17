@@ -51,16 +51,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class ELNComponentIdealTransformer Ideal transformer to be used in ELN
- * diagrams Creation: 13/06/2018
- * 
+ * Class ELNComponentIdealTransformer 
+ * Ideal transformer to be used in ELN diagrams 
+ * Creation: 13/06/2018
  * @version 1.0 13/06/2018
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentIdealTransformer extends
-		TGCScalableWithInternalComponent implements ActionListener,
-		SwallowedTGComponent, ELNComponent {
+public class ELNComponentIdealTransformer extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent, ELNComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -74,14 +72,11 @@ public class ELNComponentIdealTransformer extends
 	private double ratio;
 
 	private int position = 0;
-	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false,
-			fh_1_3 = false;
+	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false, fh_1_3 = false;
 	private int old;
 	private boolean first;
 
-	public ELNComponentIdealTransformer(int _x, int _y, int _minX, int _maxX,
-			int _minY, int _maxY, boolean _pos, TGComponent _father,
-			TDiagramPanel _tdp) {
+	public ELNComponentIdealTransformer(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(100, 100);
@@ -113,14 +108,10 @@ public class ELNComponentIdealTransformer extends
 	public void initPortTerminal(int nb) {
 		nbConnectingPoint = nb;
 		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNPortTerminal(this, 0, 0, true, true, 0.0,
-				0.0, "p1");
-		connectingPoint[1] = new ELNPortTerminal(this, 0, 0, true, true, 0.0,
-				0.0, "p2");
-		connectingPoint[2] = new ELNPortTerminal(this, 0, 0, true, true, 0.0,
-				0.0, "n1");
-		connectingPoint[3] = new ELNPortTerminal(this, 0, 0, true, true, 0.0,
-				0.0, "n2");
+		connectingPoint[0] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "p1");
+		connectingPoint[1] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "p2");
+		connectingPoint[2] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "n1");
+		connectingPoint[3] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "n2");
 	}
 
 	public Color getMyColor() {
@@ -134,10 +125,7 @@ public class ELNComponentIdealTransformer extends
 
 		if (this.rescaled && !this.tdp.isScaled()) {
 			this.rescaled = false;
-			int maxCurrentFontSize = Math.max(
-					0,
-					Math.min(this.height,
-							(int) (this.maxFontSize * this.tdp.getZoom())));
+			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
 			f = f.deriveFont((float) maxCurrentFontSize);
 
 			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
@@ -200,18 +188,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[3]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[3]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- sw0, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- sw2, y + height + height / 20 + sh2);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									+ width, y + height + height / 20 + sh3);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
+							y + height + height / 20 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width,
+							y + height + height / 20 + sh3);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -228,18 +210,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[2]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- sw1, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									- sw3, y + height + height / 20 + sh3);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width, y + height + height / 20 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - sw3,
+							y + height + height / 20 + sh3);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
+							y + height + height / 20 + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -256,18 +232,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- sw2, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- sw0, y + height + height / 20 + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width, y + height + height / 20 + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
+							y + height + height / 20 + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
+							y + height + height / 20 + sh1);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -284,18 +254,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[0]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[0]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									- sw3, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- sw1, y + height + height / 20 + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width, y + height + height / 20 + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - sw3, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
+							y + height + height / 20 + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
+							y + height + height / 20 + sh0);
 				}
 			}
 		} else if (position == 1) {
@@ -338,18 +302,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[1]).setW(19.0 / 20.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- width / 20 - sw2, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									- width / 20 - sw3, y + height + sh3);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width + width / 20, y + height + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - width / 20 - sw2, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - width / 20 - sw3,
+							y + height + sh3);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20,
+							y + height + sh1);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -366,18 +324,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[0]).setW(19.0 / 20.0);
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									- width / 20 - sw3, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- width / 20 - sw2, y + height + sh2);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width + width / 20, y + height + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - width / 20 - sw3, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - width / 20 - sw2,
+							y + height + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20,
+							y + height + sh0);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -394,18 +346,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[3]).setW(19.0 / 20.0);
 				((ELNPortTerminal) connectingPoint[3]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- width / 20 - sw0, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- width / 20 - sw1, y + height + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									+ width + width / 20, y + height + sh3);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1,
+							y + height + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width + width / 20,
+							y + height + sh3);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -422,18 +368,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[2]).setW(19.0 / 20.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- width / 20 - sw1, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- width / 20 - sw0, y + height + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width + width / 20, y + height + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0,
+							y + height + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width + width / 20,
+							y + height + sh2);
 				}
 			}
 		} else if (position == 2) {
@@ -476,18 +416,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[0]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[0]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									- sw3, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- sw1, y + height + height / 20 + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width, y + height + height / 20 + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - sw3, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
+							y + height + height / 20 + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
+							y + height + height / 20 + sh0);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -504,18 +438,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- sw2, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- sw0, y + height + height / 20 + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width, y + height + height / 20 + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
+							y + height + height / 20 + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
+							y + height + height / 20 + sh1);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -532,18 +460,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[2]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- sw1, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									- sw3, y + height + height / 20 + sh3);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width, y + height + height / 20 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - sw3,
+							y + height + height / 20 + sh3);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
+							y + height + height / 20 + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -560,18 +482,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[3]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[3]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- sw0, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- sw2, y + height + height / 20 + sh2);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									+ width, y + height + height / 20 + sh3);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
+							y + height + height / 20 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width,
+							y + height + height / 20 + sh3);
 				}
 			}
 		} else if (position == 3) {
@@ -614,18 +530,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[2]).setW(19.0 / 20.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- width / 20 - sw1, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- width / 20 - sw0, y + height + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width + width / 20, y + height + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0,
+							y + height + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width + width / 20,
+							y + height + sh2);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -642,18 +552,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[3]).setW(19.0 / 20.0);
 				((ELNPortTerminal) connectingPoint[3]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- width / 20 - sw0, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- width / 20 - sw1, y + height + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									+ width + width / 20, y + height + sh3);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1,
+							y + height + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width + width / 20,
+							y + height + sh3);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -670,18 +574,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[0]).setW(19.0 / 20.0);
 				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									- width / 20 - sw3, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- width / 20 - sw2, y + height + sh2);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width + width / 20, y + height + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - width / 20 - sw3, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - width / 20 - sw2,
+							y + height + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20,
+							y + height + sh0);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -698,18 +596,12 @@ public class ELNComponentIdealTransformer extends
 				((ELNPortTerminal) connectingPoint[1]).setW(19.0 / 20.0);
 				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- width / 20 - sw2, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[3]).getName(), x
-									- width / 20 - sw3, y + height + sh3);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width + width / 20, y + height + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - width / 20 - sw2, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - width / 20 - sw3,
+							y + height + sh3);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20,
+							y + height + sh1);
 				}
 			}
 		}
@@ -720,61 +612,45 @@ public class ELNComponentIdealTransformer extends
 	private void rotateTop(Graphics g) {
 		Color c = g.getColor();
 		int[] ptx0 = { x, x + width / 5, x + width / 5, x + width / 5 };
-		int[] pty0 = { y + height / 20, y + height / 20, y + height / 5,
-				y + height / 20 };
+		int[] pty0 = { y + height / 20, y + height / 20, y + height / 5, y + height / 20 };
 		g.drawPolygon(ptx0, pty0, 4);
 		int[] ptx1 = { x, x + width / 5, x + width / 5, x + width / 5 };
-		int[] pty1 = { y + height - height / 20, y + height - height / 20,
-				y + 4 * height / 5, y + height - height / 20 };
+		int[] pty1 = { y + height - height / 20, y + height - height / 20, y + 4 * height / 5,
+				y + height - height / 20 };
 		g.drawPolygon(ptx1, pty1, 4);
-		int[] ptx2 = { x + width, x + 4 * width / 5, x + 4 * width / 5,
-				x + 4 * width / 5 };
-		int[] pty2 = { y + height / 20, y + height / 20, y + height / 5,
-				y + height / 20 };
+		int[] ptx2 = { x + width, x + 4 * width / 5, x + 4 * width / 5, x + 4 * width / 5 };
+		int[] pty2 = { y + height / 20, y + height / 20, y + height / 5, y + height / 20 };
 		g.drawPolygon(ptx2, pty2, 4);
-		int[] ptx3 = { x + width, x + 4 * width / 5, x + 4 * width / 5,
-				x + 4 * width / 5 };
-		int[] pty3 = { y + height - height / 20, y + height - height / 20,
-				y + 4 * height / 5, y + height - height / 20 };
+		int[] ptx3 = { x + width, x + 4 * width / 5, x + 4 * width / 5, x + 4 * width / 5 };
+		int[] pty3 = { y + height - height / 20, y + height - height / 20, y + 4 * height / 5,
+				y + height - height / 20 };
 		g.drawPolygon(ptx3, pty3, 4);
 		g.drawArc(x, y + height / 5, 2 * width / 5, height / 5, 270, 180);
 		g.drawArc(x, y + 2 * height / 5, 2 * width / 5, height / 5, 270, 180);
 		g.drawArc(x, y + 3 * height / 5, 2 * width / 5, height / 5, 270, 180);
-		g.drawArc(x + 3 * width / 5, y + height / 5, 2 * width / 5, height / 5,
-				90, 180);
-		g.drawArc(x + 3 * width / 5, y + 2 * height / 5, 2 * width / 5,
-				height / 5, 90, 180);
-		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, 2 * width / 5,
-				height / 5, 90, 180);
-		g.drawOval(x + 2 * width / 5 - width / 20, y + width / 20, width / 10,
-				width / 10);
-		g.fillOval(x + 2 * width / 5 - width / 20, y + width / 20, width / 10,
-				width / 10);
-		g.drawOval(x + 3 * width / 5 - width / 20, y + width / 20, width / 10,
-				width / 10);
-		g.fillOval(x + 3 * width / 5 - width / 20, y + width / 20, width / 10,
-				width / 10);
-		g.drawArc(x + width / 5 + width / 10, y + 4 * height / 5,
-				2 * width / 5, height / 5, 180, 180);
+		g.drawArc(x + 3 * width / 5, y + height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawArc(x + 3 * width / 5, y + 2 * height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawOval(x + 2 * width / 5 - width / 20, y + width / 20, width / 10, width / 10);
+		g.fillOval(x + 2 * width / 5 - width / 20, y + width / 20, width / 10, width / 10);
+		g.drawOval(x + 3 * width / 5 - width / 20, y + width / 20, width / 10, width / 10);
+		g.fillOval(x + 3 * width / 5 - width / 20, y + width / 20, width / 10, width / 10);
+		g.drawArc(x + width / 5 + width / 10, y + 4 * height / 5, 2 * width / 5, height / 5, 180, 180);
 		int[] ptx4 = { x + width / 5 + width / 10, x + width / 5 + width / 10,
 				x + width / 5 + width / 10 + width / 10 };
-		int[] pty4 = { y + 4 * height / 5 + height / 10 + height / 10,
-				y + 4 * height / 5 + height / 10,
+		int[] pty4 = { y + 4 * height / 5 + height / 10 + height / 10, y + 4 * height / 5 + height / 10,
 				y + 4 * height / 5 + height / 10 };
 		g.drawPolygon(ptx4, pty4, 3);
 		g.fillPolygon(ptx4, pty4, 3);
-		int[] ptx5 = { x + width / 5 + width / 10 + 2 * width / 5,
-				x + width / 5 + width / 10 + 2 * width / 5,
+		int[] ptx5 = { x + width / 5 + width / 10 + 2 * width / 5, x + width / 5 + width / 10 + 2 * width / 5,
 				x + width / 5 + width / 10 + 2 * width / 5 - width / 10 };
-		int[] pty5 = { y + 4 * height / 5 + height / 10 + height / 10,
-				y + 4 * height / 5 + height / 10,
+		int[] pty5 = { y + 4 * height / 5 + height / 10 + height / 10, y + 4 * height / 5 + height / 10,
 				y + 4 * height / 5 + height / 10 };
 		g.drawPolygon(ptx5, pty5, 3);
 		g.fillPolygon(ptx5, pty5, 3);
 		int w = g.getFontMetrics().stringWidth(Double.toString(ratio));
 		int h = g.getFontMetrics().getAscent();
-		g.drawString(Double.toString(ratio), x + (width - w) / 2, y + height
-				+ height / 10 + h);
+		g.drawString(Double.toString(ratio), x + (width - w) / 2, y + height + height / 10 + h);
 		g.drawOval(x, y, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 10, height / 10);
@@ -787,69 +663,53 @@ public class ELNComponentIdealTransformer extends
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
-		g.drawOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.drawOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
 	}
 
 	private void rotateBottom(Graphics g) {
 		Color c = g.getColor();
 		int[] ptx0 = { x, x + width / 5, x + width / 5, x + width / 5 };
-		int[] pty0 = { y + height / 20, y + height / 20, y + height / 5,
-				y + height / 20 };
+		int[] pty0 = { y + height / 20, y + height / 20, y + height / 5, y + height / 20 };
 		g.drawPolygon(ptx0, pty0, 4);
 		int[] ptx1 = { x, x + width / 5, x + width / 5, x + width / 5 };
-		int[] pty1 = { y + height - height / 20, y + height - height / 20,
-				y + 4 * height / 5, y + height - height / 20 };
+		int[] pty1 = { y + height - height / 20, y + height - height / 20, y + 4 * height / 5,
+				y + height - height / 20 };
 		g.drawPolygon(ptx1, pty1, 4);
-		int[] ptx2 = { x + width, x + 4 * width / 5, x + 4 * width / 5,
-				x + 4 * width / 5 };
-		int[] pty2 = { y + height / 20, y + height / 20, y + height / 5,
-				y + height / 20 };
+		int[] ptx2 = { x + width, x + 4 * width / 5, x + 4 * width / 5, x + 4 * width / 5 };
+		int[] pty2 = { y + height / 20, y + height / 20, y + height / 5, y + height / 20 };
 		g.drawPolygon(ptx2, pty2, 4);
-		int[] ptx3 = { x + width, x + 4 * width / 5, x + 4 * width / 5,
-				x + 4 * width / 5 };
-		int[] pty3 = { y + height - height / 20, y + height - height / 20,
-				y + 4 * height / 5, y + height - height / 20 };
+		int[] ptx3 = { x + width, x + 4 * width / 5, x + 4 * width / 5, x + 4 * width / 5 };
+		int[] pty3 = { y + height - height / 20, y + height - height / 20, y + 4 * height / 5,
+				y + height - height / 20 };
 		g.drawPolygon(ptx3, pty3, 4);
 		g.drawArc(x, y + height / 5, 2 * width / 5, height / 5, 270, 180);
 		g.drawArc(x, y + 2 * height / 5, 2 * width / 5, height / 5, 270, 180);
 		g.drawArc(x, y + 3 * height / 5, 2 * width / 5, height / 5, 270, 180);
-		g.drawArc(x + 3 * width / 5, y + height / 5, 2 * width / 5, height / 5,
-				90, 180);
-		g.drawArc(x + 3 * width / 5, y + 2 * height / 5, 2 * width / 5,
-				height / 5, 90, 180);
-		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, 2 * width / 5,
-				height / 5, 90, 180);
-		g.drawOval(x + 2 * width / 5 - width / 20, y + width - width / 20
-				- width / 10, width / 10, width / 10);
-		g.fillOval(x + 2 * width / 5 - width / 20, y + width - width / 20
-				- width / 10, width / 10, width / 10);
-		g.drawOval(x + 3 * width / 5 - width / 20, y + width - width / 20
-				- width / 10, width / 10, width / 10);
-		g.fillOval(x + 3 * width / 5 - width / 20, y + width - width / 20
-				- width / 10, width / 10, width / 10);
-		g.drawArc(x + width / 5 + width / 10, y, 2 * width / 5, height / 5, 0,
-				180);
+		g.drawArc(x + 3 * width / 5, y + height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawArc(x + 3 * width / 5, y + 2 * height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, 2 * width / 5, height / 5, 90, 180);
+		g.drawOval(x + 2 * width / 5 - width / 20, y + width - width / 20 - width / 10, width / 10, width / 10);
+		g.fillOval(x + 2 * width / 5 - width / 20, y + width - width / 20 - width / 10, width / 10, width / 10);
+		g.drawOval(x + 3 * width / 5 - width / 20, y + width - width / 20 - width / 10, width / 10, width / 10);
+		g.fillOval(x + 3 * width / 5 - width / 20, y + width - width / 20 - width / 10, width / 10, width / 10);
+		g.drawArc(x + width / 5 + width / 10, y, 2 * width / 5, height / 5, 0, 180);
 		int[] ptx4 = { x + width / 5 + width / 10, x + width / 5 + width / 10,
 				x + width / 5 + width / 10 + width / 10 };
-		int[] pty4 = { y + height / 5 - height / 10 - height / 10,
-				y + height / 5 - height / 10, y + height / 5 - height / 10 };
+		int[] pty4 = { y + height / 5 - height / 10 - height / 10, y + height / 5 - height / 10,
+				y + height / 5 - height / 10 };
 		g.drawPolygon(ptx4, pty4, 3);
 		g.fillPolygon(ptx4, pty4, 3);
-		int[] ptx5 = { x + width / 5 + width / 10 + 2 * width / 5,
-				x + width / 5 + width / 10 + 2 * width / 5,
+		int[] ptx5 = { x + width / 5 + width / 10 + 2 * width / 5, x + width / 5 + width / 10 + 2 * width / 5,
 				x + width / 5 + width / 10 + 2 * width / 5 - width / 10 };
-		int[] pty5 = { y + height / 5 - height / 10 - height / 10,
-				y + height / 5 - height / 10, y + height / 5 - height / 10 };
+		int[] pty5 = { y + height / 5 - height / 10 - height / 10, y + height / 5 - height / 10,
+				y + height / 5 - height / 10 };
 		g.drawPolygon(ptx5, pty5, 3);
 		g.fillPolygon(ptx5, pty5, 3);
 		int w = g.getFontMetrics().stringWidth(Double.toString(ratio));
-		g.drawString(Double.toString(ratio), x + (width - w) / 2, y - height
-				/ 20);
+		g.drawString(Double.toString(ratio), x + (width - w) / 2, y - height / 20);
 		g.drawOval(x, y, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 10, height / 10);
@@ -862,71 +722,52 @@ public class ELNComponentIdealTransformer extends
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
-		g.drawOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.drawOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
 	}
 
 	private void rotateRight(Graphics g) {
 		Color c = g.getColor();
-		int[] ptx0 = { x + width / 20, x + width / 20, x + width / 5,
-				x + width / 20 };
+		int[] ptx0 = { x + width / 20, x + width / 20, x + width / 5, x + width / 20 };
 		int[] pty0 = { y, y + height / 5, y + height / 5, y + height / 5 };
 		g.drawPolygon(ptx0, pty0, 4);
-		int[] ptx1 = { x + width - width / 20, x + width - width / 20,
-				x + 4 * width / 5, x + width - width / 20 };
+		int[] ptx1 = { x + width - width / 20, x + width - width / 20, x + 4 * width / 5, x + width - width / 20 };
 		int[] pty1 = { y, y + height / 5, y + height / 5, y + height / 5 };
 		g.drawPolygon(ptx1, pty1, 4);
-		int[] ptx2 = { x + width / 20, x + width / 20, x + width / 5,
-				x + width / 20 };
-		int[] pty2 = { y + height, y + 4 * height / 5, y + 4 * height / 5,
-				y + 4 * height / 5 };
+		int[] ptx2 = { x + width / 20, x + width / 20, x + width / 5, x + width / 20 };
+		int[] pty2 = { y + height, y + 4 * height / 5, y + 4 * height / 5, y + 4 * height / 5 };
 		g.drawPolygon(ptx2, pty2, 4);
-		int[] ptx3 = { x + width - width / 20, x + width - width / 20,
-				x + 4 * width / 5, x + width - width / 20 };
-		int[] pty3 = { y + height, y + 4 * height / 5, y + 4 * height / 5,
-				y + 4 * height / 5 };
+		int[] ptx3 = { x + width - width / 20, x + width - width / 20, x + 4 * width / 5, x + width - width / 20 };
+		int[] pty3 = { y + height, y + 4 * height / 5, y + 4 * height / 5, y + 4 * height / 5 };
 		g.drawPolygon(ptx3, pty3, 4);
 		g.drawArc(x + width / 5, y, width / 5, 2 * height / 5, 180, 180);
 		g.drawArc(x + 2 * width / 5, y, width / 5, 2 * height / 5, 180, 180);
 		g.drawArc(x + 3 * width / 5, y, width / 5, 2 * height / 5, 180, 180);
-		g.drawArc(x + width / 5, y + 3 * height / 5, width / 5, 2 * height / 5,
-				0, 180);
-		g.drawArc(x + 2 * width / 5, y + 3 * height / 5, width / 5,
-				2 * height / 5, 0, 180);
-		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, width / 5,
-				2 * height / 5, 0, 180);
-		g.drawOval(x + width - width / 10 - width / 20, y + 2 * height / 5
-				- height / 20, width / 10, height / 10);
-		g.fillOval(x + width - width / 10 - width / 20, y + 2 * height / 5
-				- height / 20, width / 10, height / 10);
-		g.drawOval(x + width - width / 10 - width / 20, y + 3 * height / 5
-				- height / 20, width / 10, height / 10);
-		g.fillOval(x + width - width / 10 - width / 20, y + 3 * height / 5
-				- height / 20, width / 10, height / 10);
-		g.drawArc(x, y + height / 5 + height / 10, width / 5, 2 * height / 5,
-				90, 180);
-		int[] ptx4 = { x + width / 5 - width / 10 - width / 10,
-				x + width / 5 - width / 10, x + width / 5 - width / 10 };
-		int[] pty4 = { y + height / 5 + height / 10,
-				y + height / 5 + height / 10,
+		g.drawArc(x + width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawArc(x + 2 * width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawOval(x + width - width / 10 - width / 20, y + 2 * height / 5 - height / 20, width / 10, height / 10);
+		g.fillOval(x + width - width / 10 - width / 20, y + 2 * height / 5 - height / 20, width / 10, height / 10);
+		g.drawOval(x + width - width / 10 - width / 20, y + 3 * height / 5 - height / 20, width / 10, height / 10);
+		g.fillOval(x + width - width / 10 - width / 20, y + 3 * height / 5 - height / 20, width / 10, height / 10);
+		g.drawArc(x, y + height / 5 + height / 10, width / 5, 2 * height / 5, 90, 180);
+		int[] ptx4 = { x + width / 5 - width / 10 - width / 10, x + width / 5 - width / 10,
+				x + width / 5 - width / 10 };
+		int[] pty4 = { y + height / 5 + height / 10, y + height / 5 + height / 10,
 				y + height / 5 + height / 10 + height / 10 };
 		g.drawPolygon(ptx4, pty4, 3);
 		g.fillPolygon(ptx4, pty4, 3);
-		int[] ptx5 = { x + width / 5 - width / 10 - width / 10,
-				x + width / 5 - width / 10, x + width / 5 - width / 10 };
-		int[] pty5 = { y + height / 5 + height / 10 + 2 * height / 5,
-				y + height / 5 + height / 10 + 2 * height / 5,
+		int[] ptx5 = { x + width / 5 - width / 10 - width / 10, x + width / 5 - width / 10,
+				x + width / 5 - width / 10 };
+		int[] pty5 = { y + height / 5 + height / 10 + 2 * height / 5, y + height / 5 + height / 10 + 2 * height / 5,
 				y + height / 5 + height / 10 + 2 * height / 5 - height / 10 };
 		g.drawPolygon(ptx5, pty5, 3);
 		g.fillPolygon(ptx5, pty5, 3);
 		int w = g.getFontMetrics().stringWidth(Double.toString(ratio));
 		int h = g.getFontMetrics().getAscent();
-		g.drawString(Double.toString(ratio), x - width / 10 - w, y + height / 2
-				+ h / 2);
+		g.drawString(Double.toString(ratio), x - width / 10 - w, y + height / 2 + h / 2);
 		g.drawOval(x, y, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 10, height / 10);
@@ -939,70 +780,51 @@ public class ELNComponentIdealTransformer extends
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
-		g.drawOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.drawOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
 	}
 
 	private void rotateLeft(Graphics g) {
 		Color c = g.getColor();
-		int[] ptx0 = { x + width / 20, x + width / 20, x + width / 5,
-				x + width / 20 };
+		int[] ptx0 = { x + width / 20, x + width / 20, x + width / 5, x + width / 20 };
 		int[] pty0 = { y, y + height / 5, y + height / 5, y + height / 5 };
 		g.drawPolygon(ptx0, pty0, 4);
-		int[] ptx1 = { x + width - width / 20, x + width - width / 20,
-				x + 4 * width / 5, x + width - width / 20 };
+		int[] ptx1 = { x + width - width / 20, x + width - width / 20, x + 4 * width / 5, x + width - width / 20 };
 		int[] pty1 = { y, y + height / 5, y + height / 5, y + height / 5 };
 		g.drawPolygon(ptx1, pty1, 4);
-		int[] ptx2 = { x + width / 20, x + width / 20, x + width / 5,
-				x + width / 20 };
-		int[] pty2 = { y + height, y + 4 * height / 5, y + 4 * height / 5,
-				y + 4 * height / 5 };
+		int[] ptx2 = { x + width / 20, x + width / 20, x + width / 5, x + width / 20 };
+		int[] pty2 = { y + height, y + 4 * height / 5, y + 4 * height / 5, y + 4 * height / 5 };
 		g.drawPolygon(ptx2, pty2, 4);
-		int[] ptx3 = { x + width - width / 20, x + width - width / 20,
-				x + 4 * width / 5, x + width - width / 20 };
-		int[] pty3 = { y + height, y + 4 * height / 5, y + 4 * height / 5,
-				y + 4 * height / 5 };
+		int[] ptx3 = { x + width - width / 20, x + width - width / 20, x + 4 * width / 5, x + width - width / 20 };
+		int[] pty3 = { y + height, y + 4 * height / 5, y + 4 * height / 5, y + 4 * height / 5 };
 		g.drawPolygon(ptx3, pty3, 4);
 		g.drawArc(x + width / 5, y, width / 5, 2 * height / 5, 180, 180);
 		g.drawArc(x + 2 * width / 5, y, width / 5, 2 * height / 5, 180, 180);
 		g.drawArc(x + 3 * width / 5, y, width / 5, 2 * height / 5, 180, 180);
-		g.drawArc(x + width / 5, y + 3 * height / 5, width / 5, 2 * height / 5,
-				0, 180);
-		g.drawArc(x + 2 * width / 5, y + 3 * height / 5, width / 5,
-				2 * height / 5, 0, 180);
-		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, width / 5,
-				2 * height / 5, 0, 180);
-		g.drawOval(x + width / 20, y + 2 * height / 5 - height / 20,
-				width / 10, height / 10);
-		g.fillOval(x + width / 20, y + 2 * height / 5 - height / 20,
-				width / 10, height / 10);
-		g.drawOval(x + width / 20, y + 3 * height / 5 - height / 20,
-				width / 10, height / 10);
-		g.fillOval(x + width / 20, y + 3 * height / 5 - height / 20,
-				width / 10, height / 10);
-		g.drawArc(x + 4 * width / 5, y + height / 5 + height / 10, width / 5,
-				2 * height / 5, 270, 180);
-		int[] ptx4 = { x + 4 * width / 5 + width / 10 + width / 10,
-				x + 4 * width / 5 + width / 10, x + 4 * width / 5 + width / 10 };
-		int[] pty4 = { y + height / 5 + height / 10,
-				y + height / 5 + height / 10,
+		g.drawArc(x + width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawArc(x + 2 * width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawArc(x + 3 * width / 5, y + 3 * height / 5, width / 5, 2 * height / 5, 0, 180);
+		g.drawOval(x + width / 20, y + 2 * height / 5 - height / 20, width / 10, height / 10);
+		g.fillOval(x + width / 20, y + 2 * height / 5 - height / 20, width / 10, height / 10);
+		g.drawOval(x + width / 20, y + 3 * height / 5 - height / 20, width / 10, height / 10);
+		g.fillOval(x + width / 20, y + 3 * height / 5 - height / 20, width / 10, height / 10);
+		g.drawArc(x + 4 * width / 5, y + height / 5 + height / 10, width / 5, 2 * height / 5, 270, 180);
+		int[] ptx4 = { x + 4 * width / 5 + width / 10 + width / 10, x + 4 * width / 5 + width / 10,
+				x + 4 * width / 5 + width / 10 };
+		int[] pty4 = { y + height / 5 + height / 10, y + height / 5 + height / 10,
 				y + height / 5 + height / 10 + height / 10 };
 		g.drawPolygon(ptx4, pty4, 3);
 		g.fillPolygon(ptx4, pty4, 3);
-		int[] ptx5 = { x + 4 * width / 5 + width / 10 + width / 10,
-				x + 4 * width / 5 + width / 10, x + 4 * width / 5 + width / 10 };
-		int[] pty5 = { y + height / 5 + height / 10 + 2 * height / 5,
-				y + height / 5 + height / 10 + 2 * height / 5,
+		int[] ptx5 = { x + 4 * width / 5 + width / 10 + width / 10, x + 4 * width / 5 + width / 10,
+				x + 4 * width / 5 + width / 10 };
+		int[] pty5 = { y + height / 5 + height / 10 + 2 * height / 5, y + height / 5 + height / 10 + 2 * height / 5,
 				y + height / 5 + height / 10 + 2 * height / 5 - height / 10 };
 		g.drawPolygon(ptx5, pty5, 3);
 		g.fillPolygon(ptx5, pty5, 3);
 		int h = g.getFontMetrics().getAscent();
-		g.drawString(Double.toString(ratio), x + width + width / 10, y + height
-				/ 2 + h / 2);
+		g.drawString(Double.toString(ratio), x + width + width / 10, y + height / 2 + h / 2);
 		g.drawOval(x, y, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width / 10, height / 10);
@@ -1015,11 +837,9 @@ public class ELNComponentIdealTransformer extends
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
-		g.drawOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.drawOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
 	}
 
@@ -1035,8 +855,7 @@ public class ELNComponentIdealTransformer extends
 	}
 
 	public boolean editOndoubleClick(JFrame frame) {
-		JDialogELNComponentIdealTransformer jde = new JDialogELNComponentIdealTransformer(
-				this);
+		JDialogELNComponentIdealTransformer jde = new JDialogELNComponentIdealTransformer(this);
 		jde.setVisible(true);
 		return true;
 	}
@@ -1055,8 +874,7 @@ public class ELNComponentIdealTransformer extends
 		return new String(sb);
 	}
 
-	public void loadExtraParam(NodeList nl, int decX, int decY, int decId)
-			throws MalformedModelingException {
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
 		try {
 			NodeList nli;
 			Node n1, n2;
@@ -1075,20 +893,13 @@ public class ELNComponentIdealTransformer extends
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("attributes")) {
-								ratio = Double.parseDouble(elt
-										.getAttribute("ratio"));
-								position = Integer.parseInt(elt
-										.getAttribute("position"));
-								fv_0_2 = Boolean.parseBoolean(elt
-										.getAttribute("fv_0_2"));
-								fv_1_3 = Boolean.parseBoolean(elt
-										.getAttribute("fv_1_3"));
-								fh_0_2 = Boolean.parseBoolean(elt
-										.getAttribute("fh_0_2"));
-								fh_1_3 = Boolean.parseBoolean(elt
-										.getAttribute("fh_1_3"));
-								first = Boolean.parseBoolean(elt
-										.getAttribute("first"));
+								ratio = Double.parseDouble(elt.getAttribute("ratio"));
+								position = Integer.parseInt(elt.getAttribute("position"));
+								fv_0_2 = Boolean.parseBoolean(elt.getAttribute("fv_0_2"));
+								fv_1_3 = Boolean.parseBoolean(elt.getAttribute("fv_1_3"));
+								fh_0_2 = Boolean.parseBoolean(elt.getAttribute("fh_0_2"));
+								fh_1_3 = Boolean.parseBoolean(elt.getAttribute("fh_1_3"));
+								first = Boolean.parseBoolean(elt.getAttribute("first"));
 								setRatio(ratio);
 								setPosition(position);
 								setFv_0_2(fv_0_2);
@@ -1106,8 +917,7 @@ public class ELNComponentIdealTransformer extends
 		}
 	}
 
-	public void addActionToPopupMenu(JPopupMenu componentMenu,
-			ActionListener menuAL, int x, int y) {
+	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 		componentMenu.addSeparator();
 
 		JMenuItem rotateright = new JMenuItem("Rotate right 90\u00b0");
@@ -1238,8 +1048,7 @@ public class ELNComponentIdealTransformer extends
 		if ((father != null) && (father instanceof ELNModule)) {
 			resizeToFatherSize();
 
-			setCdRectangle(0, father.getWidth() - getWidth(), 0,
-					father.getHeight() - getHeight());
+			setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
 			setMoveCd(x, y);
 		}
 	}
@@ -1252,7 +1061,6 @@ public class ELNComponentIdealTransformer extends
 		myColor = null;
 		setFather(null);
 		TDiagramPanel tdp = getTDiagramPanel();
-		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(),
-				tdp.getMaxY());
+		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
 	}
 }

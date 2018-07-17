@@ -59,8 +59,7 @@ import java.awt.geom.RoundRectangle2D;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
-		implements ActionListener, SwallowedTGComponent, ELNComponent {
+public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent, ELNComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -78,8 +77,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 	private int old;
 	private boolean first;
 
-	public ELNComponentCurrentSinkTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-			TGComponent _father, TDiagramPanel _tdp) {
+	public ELNComponentCurrentSinkTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(100, 100);
