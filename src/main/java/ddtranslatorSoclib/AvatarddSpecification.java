@@ -244,6 +244,18 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       return hwas;
       }*/
 
+    public LinkedList<AvatarAmsCluster> getAllAmsCluster(){
+    //int i=0;
+      LinkedList<AvatarAmsCluster> amsClusters = new LinkedList<AvatarAmsCluster>();
+      for (AvatarComponent amsCluster : components )
+        {
+        if (amsCluster instanceof AvatarAmsCluster){      
+        amsClusters.add((AvatarAmsCluster)amsCluster);
+        }
+        }
+      return amsClusters;
+    }
+
     public int getNbCPU(){
       return (getAllCPU()).size();
     }
@@ -270,6 +282,10 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
 
     public int getNbCoproMWMR(){
       return (getAllCoproMWMR()).size();
+    }
+
+    public int getNbAmsCluster(){
+      return (getAllAmsCluster()).size();
     }
 
     // for construction of the central interconnect

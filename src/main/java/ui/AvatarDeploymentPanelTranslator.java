@@ -78,6 +78,7 @@ public class AvatarDeploymentPanelTranslator
     private int nb_target = 6;
 
     private int no_tty = 0;
+    private int no_amsCluster = 0;
 
     private int nb_clusters = 0;
     private List < TGComponent > tgcComponents;
@@ -383,6 +384,21 @@ public class AvatarDeploymentPanelTranslator
 			  avatarComponents.add (avram);
 		      }
 		}
+        else if (dp instanceof ADDClusterNode)
+        {
+            ADDClusterNode amsCluster = (ADDClusterNode) dp;
+
+            String amsClusterName = amsCluster.getNodeName ();
+            System.out.println("****TEST inside ADDclusterNode IF - name: " + amsClusterName);
+            System.out.println("****TEST ADDclusterNode no_amsCluster: " + no_amsCluster);
+            
+            AvatarAmsCluster avamscluster = new AvatarAmsCluster (amsClusterName, no_amsCluster, no_amsCluster);
+            nb_target++;
+            no_amsCluster++;
+            avatarMap.put (dp, avamscluster);
+            avatarComponents.add (avamscluster);
+
+        }
 	  }
 
 

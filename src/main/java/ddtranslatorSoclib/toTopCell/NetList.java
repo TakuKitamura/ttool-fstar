@@ -50,6 +50,7 @@ import ddtranslatorSoclib.AvatarCPU;
 import ddtranslatorSoclib.AvatarCoproMWMR;
 import ddtranslatorSoclib.AvatarRAM;
 import ddtranslatorSoclib.AvatarTTY;
+import ddtranslatorSoclib.AvatarAmsCluster;
 
 public class NetList
 {
@@ -779,6 +780,53 @@ public class NetList
 
 	int p = 0;
 
+    //AMS Cluster Netlist
+    netlist = netlist + "// AMS Cluster netlist" + CR2;
+    i = 0;
+    for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ())
+    {
+        netlist =
+        netlist + amsCluster.getAmsClusterName () + ".p_clk(signal_clk);" + CR;
+        netlist =
+        netlist + amsCluster.getAmsClusterName () + ".p_resetn(signal_resetn);" + CR;
+        netlist =
+        netlist + amsCluster.getAmsClusterName () + ".p_vci(signal_vci_gpio2vci" + i + ");" + CR;
+        netlist =
+        netlist + amsCluster.getAmsClusterName () + ".p_rdata_ams(signal_from_ams" + i + ");" + CR;
+        netlist =
+        netlist + amsCluster.getAmsClusterName () + ".p_wdata_ams(signal_to_ams" + i + ");" + CR2;
+        if (nb_clusters == 0)
+        {
+            if (icn == "vgmn")
+            {
+                netlist =
+                  netlist + "vgmn.p_to_target[" +
+                  amsCluster.getNo_target () + "](signal_vci_gpio2vci" + i +
+                  ");" + CR2;
+            }
+            else
+            {
+                netlist =
+                  netlist + "vgsb.p_to_target[" +
+                  amsCluster.getNo_target () + "](signal_vci_gpio2vci" + i +
+                  ");" + CR2;
+            }
+        }
+
+          //we have a clustered architecture: identify local crossbar 
+        else
+        {
+            for (j = 0; j < nb_clusters; j++)
+            {
+                netlist =
+                  netlist + "crossbar" + j + ".p_to_target[" +
+                  amsCluster.getNo_target () + "](signal_vci_gpio2vci" + j +
+                  ");" + CR2;
+            }
+        }
+        i++;
+    }
+
 	//generate trace file if marked trace option 
 
 	if (tracing)
@@ -865,6 +913,23 @@ public class NetList
 		      }
 		}
 	  }
+
+    i = 0;
+    for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ())
+    {
+
+        netlist +=
+        "sc_trace(tf,signal_vci_gpio2vci" + i +
+        ",\"signal_vci_gpio2vci" + i + "\");" + CR;
+        netlist +=
+        "sc_trace(tf,signal_from_ams" + i +
+        ",\"signal_from_ams" + i + "\");" + CR;
+        netlist +=
+        "sc_trace(tf,signal_to_ams" + i +
+        ",\"signal_to_ams" + i + "\");" + CR;
+        i++;
+    }
+
 	netlist =
 	    netlist +
 	    "  sc_core::sc_start(sc_core::sc_time(0, sc_core::SC_NS));" + CR;

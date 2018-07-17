@@ -167,7 +167,16 @@ public class MappingTable {
       mapping = mapping + "maptab.add(Segment(\"vci_ethernet\",  0xd5000000, 0x00000020, IntTab("+(l+2)+"), false));" + CR;
       mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0xd1200000, 0x00000020, IntTab("+(l+3)+"), false));" + CR2;
       //mapping = mapping + "maptab.add(Segment(\"vci_locks\", 0xC0200000, 0x00000100, IntTab("+(l+4)+"), false));" + CR2;
-    
+      
+//AMS Cluster: TODO: Need to adapt this to new version and improve address calculation.
+      i=l+4; 
+      for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ()) {
+          amsCluster.setNo_target(i);
+          mapping += "maptab.add(Segment(\"gpio2vci"+amsCluster.getNo_amsCluster()+"\" , 0xd"+ 
+            Integer.toHexString(7+amsCluster.getNo_amsCluster()) +
+            "200000, 0x00000010, IntTab(" +amsCluster.getNo_target() +"), false));" + CR;
+          i++;
+      }
 
       /* Instanciation of the MWMR wrappers for hardware accellerators */
       /* The accelerators themselves are specifies on DIPLODOCUS level */

@@ -64,6 +64,7 @@ public class Header
     public static String getHeader ()
     {
 	int with_vgsb = TopCellGenerator.avatardd.getAllBus ().size ();
+    int with_amsCluster = TopCellGenerator.avatardd.getNbAmsCluster();
 
 	header =
 	    "//-------------------------------Header------------------------------------"
@@ -151,6 +152,10 @@ public class Header
 	    "#include \"vci_ethernet.h\"" + CR +
 	    "#include \"vci_rttimer.h\"" + CR + "#include \"vci_logger.h\"" +
 	    CR + "#include \"vci_local_crossbar.h\"" + CR2;
+
+    if (with_amsCluster > 0) {
+        header += "#include \"gpio2vci.h\"" + CR2;
+    }
 
 	header = header + "namespace {" + CR
 	    + "std::vector<std::string> stringArray(" + CR

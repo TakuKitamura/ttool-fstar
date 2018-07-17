@@ -51,6 +51,7 @@ package ddtranslatorSoclib.toTopCell;
 import ddtranslatorSoclib.AvatarCoproMWMR;
 import ddtranslatorSoclib.AvatarRAM;
 import ddtranslatorSoclib.AvatarTTY;
+import ddtranslatorSoclib.AvatarAmsCluster;
 
 public class Signal {
 
@@ -138,41 +139,49 @@ for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()) {
       for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()){
 	  //	signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
 	  //		    + "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;
-	signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + i
+          signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + i
 	  		    + "(\"signal_vci_vciram" + i + "\");" + CR2;	  
-					i++;
+          i++;
       }							
 		i = 0;
 								
 		for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){
 		    //signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;		
-signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2; 
-i++;		
+            signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2; 
+            i++;		
 		}
 			
 		//	signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
 		//	System.out.print("number of processors : " + TopCellGenerator.avatardd.getNbCPU()+"\n");
 
+        i = 0;
+        for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ()) {
+            signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_gpio2vci"+i+"(\"signal_vci_gpio2vci"+i+"\");" + CR;
+            signal = signal + "sc_signal< vci_param::data_t > signal_to_ams"+i+"(\"signal_to_ams"+i+"\");" + CR;
+            signal = signal + "sc_signal< vci_param::data_t > signal_from_ams"+i+"(\"signal_from_ams"+i+"\");" + CR2;
+            i++;
+        }
+  } else {
+        for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM())
+        signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
+            + "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;					i=0;		
+        for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){
+                // signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;		
+            signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2;
+            i++;
+        }
+        int p=0;
+        // if (with_hw_accellerator>0){ //DG 23.08.
 
-  }
-
-  
-
-else{
-    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM())
-	signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
-	    + "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;					i=0;		
-    for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){
-		    // signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;		
-signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2;
-		i++;
-    }
-    int p=0;
-    // if (with_hw_accellerator>0){ //DG 23.08.
-
-
+        i = 0;
+        for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ()) {
+            signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_gpio2vci"+i+"(\"signal_vci_gpio2vci"+i+"\");" + CR; 
+            signal = signal + "sc_signal< vci_param::data_t > signal_to_ams"+i+"(\"signal_to_ams"+i+"\");" + CR;
+            signal = signal + "sc_signal< vci_param::data_t > signal_from_ams"+i+"(\"signal_from_ams"+i+"\");" + CR2;
+            i++;
+        }
     
-}
+  }
 
 return signal;
 	}

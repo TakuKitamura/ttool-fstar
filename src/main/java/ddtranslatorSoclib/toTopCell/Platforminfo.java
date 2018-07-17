@@ -61,6 +61,9 @@ public class Platforminfo
 	int with_vgsb = TopCellGenerator.avatardd.getAllBus ().size ();
 	int nb_hwa = TopCellGenerator.avatardd.getAllCoproMWMR ().size ();
 
+    //Determine if AMS Cluster is present in Avatar DD
+    int with_amsCluster = TopCellGenerator.avatardd.getNbAmsCluster();
+
 	//bus can be other than VGSB (CAN...), for the moment restricted to VGSB
 	String platforminfo = CR;
 	  platforminfo += "use =  [" + CR
@@ -127,6 +130,10 @@ public class Platforminfo
 		      }
 		}
 	  }
+
+    if (with_amsCluster > 0) {
+        platforminfo += "Uses('caba:gpio2vci')," + CR;
+    }
 
 	platforminfo += "Uses('common:elf_file_loader')," + CR
 	    + "Uses('common:plain_file_loader')," + CR

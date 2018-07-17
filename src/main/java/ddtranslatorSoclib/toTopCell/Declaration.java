@@ -581,6 +581,29 @@ public class Declaration
 		}
 	  }
 
+    /** AMS Clusters
+    */
+    if (nb_clusters == 0) 
+    {
+        for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ())
+        {
+            declaration +=
+            "caba::Gpio2Vci<vci_param> " + amsCluster.getAmsClusterName () +
+            "(\"" + amsCluster.getAmsClusterName () + "\", IntTab(" +
+            amsCluster.getNo_target () + "), maptab);" + CR;
+        }
+    } else //nb_clusters != 0
+    {
+        for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ())
+        {
+            declaration +=
+            "caba::Gpio2Vci<vci_param> " + amsCluster.getAmsClusterName () +
+            "(\"" + amsCluster.getAmsClusterName () + "\", IntTab(" +
+            amsCluster.getNo_cluster () + "," + amsCluster.getNo_target () +
+            "), maptab);" + CR;
+        }
+    }
+
 	return declaration;
     }
 
