@@ -186,7 +186,7 @@ public class NetList
 	    netlist = netlist + "  vcifdtrom.end_node();" + CR2;
 
 	    netlist = netlist + "// connect cpu" + CR;
-	    netlist =netlist + " }"+ CR;
+	    //   netlist =netlist + " }"+ CR;
 	  
 	}  
 	else{
@@ -596,6 +596,14 @@ public class NetList
 		no_irq_tty += 6;	//if there is more than one tty, irq >5
 	    }
 
+	//////////////// DMA access
+	//currently short circuited as unused
+	netlist = netlist + "vcidma.p_clk(signal_clk);" + CR;
+	netlist = netlist + "vcidma.p_resetn(signal_resetn);" + CR;
+	netlist = netlist + "vcidma.p_vci_target(signal_vci_dma);" + CR;
+        netlist = netlist + "vcidma.p_vci_initiator(signal_vci_dma);" + CR;
+	netlist = netlist + "vcidma.p_irq(signal_xicu_irq[6]);" + CR;
+	
 	//////////////// fdrom
 
 	netlist = netlist + "{" + CR2;

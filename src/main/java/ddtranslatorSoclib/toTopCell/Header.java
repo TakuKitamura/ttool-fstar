@@ -87,7 +87,7 @@ public class Header
 	    "#include \"vci_ram.h\"" + CR +
 	    "#include \"vci_heterogeneous_rom.h\"" + CR +
 	    "#include \"vci_multi_tty.h\"" + CR
-	    //+ "#include \"vci_locks.h\"" + CR
+	    + "#include \"vci_dma.h\"" + CR
 	    + "#include \"vci_xicu.h\"" + CR + "#include \"vci_mwmr_stats.h\"" + CR;	//DG 20.09.
 	if (with_vgsb > 0)
 	  {

@@ -49,15 +49,15 @@ package ddtranslatorSoclib;
 
 import java.util.LinkedList;
 import java.util.List;
-import ui.tmldd.TMLArchiHWANode;//DG 23.08.
+import ui.tmldd.TMLArchiHWANode;
 public class AvatarddSpecification{
     private List<AvatarComponent> components;
     private List<AvatarConnector> connectors;
     private List<AvatarMappedObject> mappedObjects;
 		
-    private int nb_init = 0;
+    //private int nb_init;
 
-/*there are seven targets which are fixed but invisible to the user of the TTool deployment diagram) :
+/*there are 11 targets which are fixed but invisible to the user of the TTool deployment diagram) :
 
 Targets on RAM0 :
 the text segment (target 0)
@@ -66,15 +66,20 @@ the data segment (target 2)
 
 Other targets :
 the simhelper segment (target 3)
-the icu segment (target 4)
-the timer segment (target 5)
-the fdt segment (target 6)
+the timer segment (target 4)
+the icu segment (target 5)
+the dma segment (target 6)
+the fdt (flattened device tree) segment (target 7)
+the fd segment (target 8)
+the ethernet segment (target 9)
+the block device segment (target 10)
 
-There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) otherwise an error message is printed
+There always is at least one RAM0, TTY and interconnect (Bus or VGMN or crossbar)
 */
 
-/* initialization of counters, there are at least 6 targets */
-    int nb_target;// = 6; 
+/* initialization of counters */
+    int nb_init;
+    int nb_target;
     int nb_mwmr_segments = 0;
 	
     public AvatarddSpecification( List<AvatarComponent> _components, List<AvatarConnector> _connectors, List<AvatarMappedObject> _mappedObjects, int _nb_target, int _nb_init){
@@ -138,14 +143,15 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       for (AvatarComponent cpu : components )
         {
 	    if (cpu instanceof AvatarCPU){
-		cpus.add((AvatarCPU)cpu);		
+		cpus.add((AvatarCPU)cpu);
+		nb_init++;		
 	    }
         }     
       return cpus;
     }
    
     public List<AvatarRAM> getAllRAM(){
-	//int i=0;
+	
     	List<AvatarRAM> rams = new LinkedList<AvatarRAM>();
       
     	for (AvatarComponent ram : components ) {
@@ -173,8 +179,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       for (AvatarComponent vgmn : components )
         {
 	    if (vgmn instanceof AvatarVgmn){		
-            vgmns.add((AvatarVgmn)vgmn);
-	   
+            vgmns.add((AvatarVgmn)vgmn);	   
 	    }
         }
       return vgmns;
@@ -190,6 +195,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
 		
 		crossbars.add((AvatarCrossbar)crossbar);
 		nb_target++;
+		nb_init++;
 	    }
 
         }
@@ -207,8 +213,6 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       return bridges;
       }*/
 
-  
-   
    public int getNbClusters(){      
        return getAllCrossbar().size();
     }
@@ -221,7 +225,8 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
 	    if (copro instanceof AvatarCoproMWMR){
 		
             copros.add((AvatarCoproMWMR)copro);
-	    nb_target++;//DG 9.7. attention not all are target
+	    nb_init++;
+	    nb_target++;
 	    }
         }
       return copros;
@@ -265,7 +270,5 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
     public int getNb_target(){
     return nb_target;
     }
-
-  // etc .....
 
 }
